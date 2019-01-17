@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
 #include <rtl/ustring.hxx>
@@ -31,7 +32,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDDELinksObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScDDELinksObj : public CalcUnoApiTest,
+                      public apitest::XIndexAccess,
+                      public apitest::XNameAccess
 {
 public:
     ScDDELinksObj();
@@ -41,6 +44,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDDELinksObj);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -55,6 +62,7 @@ private:
 
 ScDDELinksObj::ScDDELinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
     , XNameAccess("soffice|"
                   + m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
                   + "!Sheet1.A1")
