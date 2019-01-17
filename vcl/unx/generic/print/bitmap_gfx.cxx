@@ -190,18 +190,26 @@ Ascii85Encoder::ConvertToAscii85 ()
     else
     {
         /* real ascii85 encoding */
-        mpFileBuffer [mnOffset + 4] = (nByteValue % 85) + 33;
+
+        // Of the up to 5 characters to be generated, do not generate the last (4 - mnByte) ones
+        // that correspond to the (4 - mnByte) zero padding bytes added to the input:
+
+        if (mnByte == 4) {
+            mpFileBuffer [mnOffset + 4] = (nByteValue % 85) + 33;
+        }
         nByteValue /= 85;
-        mpFileBuffer [mnOffset + 3] = (nByteValue % 85) + 33;
+        if (mnByte >= 3) {
+            mpFileBuffer [mnOffset + 3] = (nByteValue % 85) + 33;
+        }
         nByteValue /= 85;
-        mpFileBuffer [mnOffset + 2] = (nByteValue % 85) + 33;
+        if (mnByte >= 2) {
+            mpFileBuffer [mnOffset + 2] = (nByteValue % 85) + 33;
+        }
         nByteValue /= 85;
         mpFileBuffer [mnOffset + 1] = (nByteValue % 85) + 33;
         nByteValue /= 85;
         mpFileBuffer [mnOffset + 0] = (nByteValue % 85) + 33;
 
-        // Ignore the last (4 - mnByte) generated characters that correspond to the (4 - mnByte)
-        // zero padding bytes:
         mnColumn += (mnByte + 1);
         mnOffset += (mnByte + 1);
 
