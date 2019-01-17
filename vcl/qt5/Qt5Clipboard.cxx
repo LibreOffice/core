@@ -184,63 +184,92 @@ void VclQt5Clipboard::setContents(
         bool bHasHtml = false, bHasImage = false;
         lcl_peekFormats(aFormats, bHasHtml, bHasImage);
 
-        css::datatransfer::DataFlavor aFlavor;
-        QClipboard* clipboard = QApplication::clipboard();
+        std::unique_ptr<QMimeData> pMimeData(new QMimeData);
 
-        if (bHasImage)
+        // Add html data if present
+        if (bHasHtml)
         {
-            //FIXME: other image formats?
-            aFlavor.MimeType = "image/png";
-            aFlavor.DataType = cppu::UnoType<sal_Int8>::get();
-        }
-        else if (bHasHtml)
-        {
+            css::datatransfer::DataFlavor aFlavor;
             aFlavor.MimeType = "text/html";
-            aFlavor.DataType = cppu::UnoType<sal_Int8>::get();
-        }
-        else
-        {
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-            aFlavor.DataType = cppu::UnoType<OUString>::get();
-        }
+            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
 
-        Any aValue;
-        try
-        {
-            aValue = xTrans->getTransferData(aFlavor);
-        }
-        catch (...)
-        {
-        }
-
-        if (aValue.getValueTypeClass() == TypeClass_STRING)
-        {
-            OUString aString;
-            aValue >>= aString;
-            clipboard->setText(toQString(aString));
-        }
-        else if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
-        {
-            Sequence<sal_Int8> aData;
-            aValue >>= aData;
-
-            if (bHasHtml)
+            Any aValue;
+            try
             {
+                aValue = xTrans->getTransferData(aFlavor);
+            }
+            catch (...)
+            {
+            }
+
+            if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
+            {
+                Sequence<sal_Int8> aData;
+                aValue >>= aData;
+
                 OUString aHtmlAsString(reinterpret_cast<const char*>(aData.getConstArray()),
                                        aData.getLength(), RTL_TEXTENCODING_UTF8);
-                QMimeData* mimeData = new QMimeData;
 
-                mimeData->setHtml(toQString(aHtmlAsString));
-                clipboard->setMimeData(mimeData);
+                pMimeData->setHtml(toQString(aHtmlAsString));
             }
-            else if (bHasImage)
+        }
+
+        // Add image data if present
+        if (bHasImage)
+        {
+            css::datatransfer::DataFlavor aFlavor;
+            //FIXME: other image formats?
+            aFlavor.MimeType = "image/png";
+            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+
+            Any aValue;
+            try
             {
+                aValue = xTrans->getTransferData(aFlavor);
+            }
+            catch (...)
+            {
+            }
+
+            if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
+            {
+                Sequence<sal_Int8> aData;
+                aValue >>= aData;
+
                 QImage image;
                 image.loadFromData(reinterpret_cast<const uchar*>(aData.getConstArray()),
                                    aData.getLength());
-                clipboard->setImage(image);
+
+                pMimeData->setImageData(image);
             }
         }
+
+        // Add text data
+        // TODO: consider checking if text of suitable type is present
+        {
+            css::datatransfer::DataFlavor aFlavor;
+            aFlavor.MimeType = "text/plain;charset=utf-16";
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+
+            Any aValue;
+            try
+            {
+                aValue = xTrans->getTransferData(aFlavor);
+            }
+            catch (...)
+            {
+            }
+
+            if (aValue.getValueTypeClass() == TypeClass_STRING)
+            {
+                OUString aString;
+                aValue >>= aString;
+                pMimeData->setText(toQString(aString));
+            }
+        }
+
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setMimeData(pMimeData.release());
     }
 
     aEv.Contents = getContents();
