@@ -210,7 +210,7 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::TIME;
     if (sType.equalsIgnoreAsciiCase("date"))
         return css::sdbc::DataType::DATE;
-    if (sType.equalsIgnoreAsciiCase("datetime"))
+    if (sType.equalsIgnoreAsciiCase("datetime") || sType.equalsIgnoreAsciiCase("timestamp"))
         return css::sdbc::DataType::TIMESTAMP;
     if (sType.equalsIgnoreAsciiCase("decimal"))
         return css::sdbc::DataType::DECIMAL;
