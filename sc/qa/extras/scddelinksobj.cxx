@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
@@ -40,7 +41,8 @@ class ScDDELinksObj : public CalcUnoApiTest,
                       public apitest::XElementAccess,
                       public apitest::XEnumerationAccess,
                       public apitest::XIndexAccess,
-                      public apitest::XNameAccess
+                      public apitest::XNameAccess,
+                      public apitest::XServiceInfo
 {
 public:
     ScDDELinksObj();
@@ -67,6 +69,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -80,6 +87,7 @@ ScDDELinksObj::ScDDELinksObj()
     , XNameAccess("soffice|"
                   + m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
                   + "!Sheet1.A1")
+    , XServiceInfo("ScDDELinksObj", "com.sun.star.sheet.DDELinks")
 {
 }
 
