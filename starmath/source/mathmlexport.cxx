@@ -861,7 +861,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     const SmNode *pCSup = nullptr;
     const SmNode *pLSub = nullptr;
     const SmNode *pLSup = nullptr;
-    SvXMLElementExport *pThing2 = nullptr;
+    std::unique_ptr<SvXMLElementExport> pThing2;
 
     //if we have prescripts at all then we must use the tensor notation
 
@@ -879,18 +879,18 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
         if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
             && nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MUNDEROVER, true, true));
         }
         else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MUNDER, true, true));
         }
         else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MOVER, true, true));
         }
 
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
@@ -899,7 +899,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
             ExportNodes(pCSub, nLevel+1);
         if (pCSup)
             ExportNodes(pCSup, nLevel+1);
-        delete pThing2;
+        pThing2.reset();
 
         pSub = pNode->GetSubNode(RSUB+1);
         pSup = pNode->GetSubNode(RSUP+1);
@@ -944,39 +944,39 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     }
     else
     {
-        SvXMLElementExport *pThing = nullptr;
+        std::unique_ptr<SvXMLElementExport> pThing;
         if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)) &&
             nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
         {
-            pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MSUBSUP, true, true);
+            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MSUBSUP, true, true));
         }
         else if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)))
         {
-            pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB,
-                true, true);
+            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB,
+                true, true));
         }
         else if (nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
         {
-            pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP,
-                true, true);
+            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP,
+                true, true));
         }
 
         if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
             && nullptr != (pCSup=pNode->GetSubNode(CSUP+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MUNDEROVER, true, true));
         }
         else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MUNDER, true, true));
         }
         else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
-            pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, true, true);
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+                XML_MOVER, true, true));
         }
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
 
@@ -984,13 +984,13 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
             ExportNodes(pCSub, nLevel+1);
         if (pCSup)
             ExportNodes(pCSup, nLevel+1);
-        delete pThing2;
+        pThing2.reset();
 
         if (pSub)
             ExportNodes(pSub, nLevel+1);
         if (pSup)
             ExportNodes(pSup, nLevel+1);
-        delete pThing;
+        pThing.reset();
     }
 }
 
