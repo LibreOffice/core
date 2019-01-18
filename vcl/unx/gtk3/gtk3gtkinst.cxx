@@ -37,6 +37,7 @@
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/syswin.hxx>
@@ -221,7 +222,7 @@ public:
             OUString aStr;
             gchar *pText = gtk_clipboard_wait_for_text(clipboard);
             if (pText)
-                aStr = OUString(pText, rtl_str_getLength(pText), RTL_TEXTENCODING_UTF8);
+                aStr = OUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
             g_free(pText);
             css::uno::Any aRet;
             aRet <<= aStr.replaceAll("\r\n", "\n");
@@ -6514,11 +6515,57 @@ private:
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<int> m_aSeparatorRows;
     gboolean m_bPopupActive;
+    bool m_bAutoComplete;
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
     gulong m_nKeyPressEventSignalId;
     gulong m_nEntryInsertTextSignalId;
     gulong m_nEntryActivateSignalId;
+    gulong m_nEntryFocusOutSignalId;
+    guint m_nAutoCompleteIdleId;
+
+    static gint idleAutoComplete(gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->auto_complete();
+        return false;
+    }
+
+    void auto_complete()
+    {
+        m_nAutoCompleteIdleId = 0;
+        OUString aStartText = get_active_text();
+        int nStartPos, nEndPos;
+        get_entry_selection_bounds(nStartPos, nEndPos);
+        int nMaxSelection = std::max(nStartPos, nEndPos);
+        if (nMaxSelection != aStartText.getLength())
+            return;
+        int nActive = get_active();
+        int nStart = nActive;
+
+        if (nStart == -1)
+            nStart = 0;
+
+        // Try match case insensitive from current position
+        int nPos = starts_with(aStartText, 0, nStart);
+        if (nPos == -1 && nStart != 0)
+        {
+            // Try match case insensitive, but from start
+            nPos = starts_with(aStartText, 0, 0);
+        }
+
+        if (nPos != -1)
+        {
+            OUString aText = get_text(nPos);
+            if (nPos != nActive)
+            {
+                set_active_text(aText);
+                select_entry_region(aText.getLength(), aStartText.getLength());
+            }
+            else
+                select_entry_region(0, aStartText.getLength());
+        }
+    }
 
     static void signalEntryInsertText(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength,
                                       gint* position, gpointer widget)
@@ -6530,18 +6577,27 @@ private:
 
     void signal_entry_insert_text(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength, gint* position)
     {
-        if (!m_aEntryInsertTextHdl.IsSet())
-            return;
-        OUString sText(pNewText, nNewTextLength, RTL_TEXTENCODING_UTF8);
-        const bool bContinue = m_aEntryInsertTextHdl.Call(sText);
-        if (bContinue && !sText.isEmpty())
+        // first filter inserted text
+        if (m_aEntryInsertTextHdl.IsSet())
         {
-            OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
-            g_signal_handlers_block_by_func(pEntry, gpointer(signalEntryInsertText), this);
-            gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
-            g_signal_handlers_unblock_by_func(pEntry, gpointer(signalEntryInsertText), this);
+            OUString sText(pNewText, nNewTextLength, RTL_TEXTENCODING_UTF8);
+            const bool bContinue = m_aEntryInsertTextHdl.Call(sText);
+            if (bContinue && !sText.isEmpty())
+            {
+                OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
+                g_signal_handlers_block_by_func(pEntry, gpointer(signalEntryInsertText), this);
+                gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
+                g_signal_handlers_unblock_by_func(pEntry, gpointer(signalEntryInsertText), this);
+            }
+            g_signal_stop_emission_by_name(pEntry, "insert-text");
         }
-        g_signal_stop_emission_by_name(pEntry, "insert-text");
+        if (m_bAutoComplete)
+        {
+            // now check for autocompletes
+            if (m_nAutoCompleteIdleId)
+                g_source_remove(m_nAutoCompleteIdleId);
+            m_nAutoCompleteIdleId = g_idle_add(reinterpret_cast<GSourceFunc>(idleAutoComplete), this);
+        }
     }
 
     static void signalChanged(GtkComboBox*, gpointer widget)
@@ -6571,7 +6627,26 @@ private:
         }
     }
 
-    static void signalEntryActivate(GtkComboBox*, gpointer widget)
+    static void signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_entry_focus_out();
+    }
+
+    void signal_entry_focus_out()
+    {
+        // if we have an untidy selection on losing focus remove the selection
+        int nStartPos, nEndPos;
+        if (get_entry_selection_bounds(nStartPos, nEndPos))
+        {
+            int nMin = std::min(nStartPos, nEndPos);
+            int nMax = std::max(nStartPos, nEndPos);
+            if (nMin != 0 || nMax != get_active_text().getLength())
+                select_entry_region(0, 0);
+        }
+    }
+
+    static void signalEntryActivate(GtkEntry*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         pThis->signal_entry_activate();
@@ -6611,6 +6686,29 @@ private:
         }
     }
 
+    int starts_with(const OUString& rStr, int col, int nStartRow) const
+    {
+        GtkTreeIter iter;
+        if (!gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, nStartRow))
+            return -1;
+
+        const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+        int nRet = nStartRow;
+        do
+        {
+            gchar* pStr;
+            gtk_tree_model_get(m_pTreeModel, &iter, col, &pStr, -1);
+            OUString aStr(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+            g_free(pStr);
+            const bool bMatch = rI18nHelper.MatchString(rStr, aStr);
+            if (bMatch)
+                return nRet;
+            ++nRet;
+        } while (gtk_tree_model_iter_next(m_pTreeModel, &iter));
+
+        return -1;
+    }
+
     int find(const OUString& rStr, int col) const
     {
         GtkTreeIter iter;
@@ -6639,20 +6737,6 @@ private:
         if (!GTK_IS_ENTRY(pChild))
             return nullptr;
         return GTK_ENTRY(pChild);
-    }
-
-    void setup_completion(GtkEntry* pEntry)
-    {
-        if (gtk_entry_get_completion(pEntry))
-            return;
-        GtkEntryCompletion* pCompletion = gtk_entry_completion_new();
-        gtk_entry_completion_set_model(pCompletion, m_pTreeModel);
-        gtk_entry_completion_set_text_column(pCompletion, 0);
-        gtk_entry_completion_set_inline_selection(pCompletion, true);
-        gtk_entry_completion_set_inline_completion(pCompletion, true);
-        gtk_entry_completion_set_popup_completion(pCompletion, false);
-        gtk_entry_set_completion(pEntry, pCompletion);
-        g_object_unref(pCompletion);
     }
 
     bool separator_function(int nIndex)
@@ -6814,8 +6898,10 @@ public:
         , m_pMenu(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
+        , m_bAutoComplete(false)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
+        , m_nAutoCompleteIdleId(0)
     {
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
         if (!g_list_length(cells))
@@ -6840,15 +6926,17 @@ public:
 
         if (GtkEntry* pEntry = get_entry())
         {
-            setup_completion(pEntry);
+            m_bAutoComplete = true;
             m_nEntryInsertTextSignalId = g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalEntryInsertText), this);
             m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
+            m_nEntryFocusOutSignalId = g_signal_connect(pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
             m_nKeyPressEventSignalId = 0;
         }
         else
         {
             m_nEntryInsertTextSignalId = 0;
             m_nEntryActivateSignalId = 0;
+            m_nEntryFocusOutSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
         install_menu_typeahead();
@@ -7110,12 +7198,7 @@ public:
 
     virtual void set_entry_completion(bool bEnable) override
     {
-        GtkEntry* pEntry = get_entry();
-        assert(pEntry);
-        if (bEnable)
-            setup_completion(pEntry);
-        else
-            gtk_entry_set_completion(pEntry, nullptr);
+        m_bAutoComplete = bEnable;
     }
 
     virtual void disable_notify_events() override
@@ -7124,6 +7207,7 @@ public:
         {
             g_signal_handler_block(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_block(pEntry, m_nEntryFocusOutSignalId);
         }
         else
             g_signal_handler_block(m_pComboBox, m_nKeyPressEventSignalId);
@@ -7140,6 +7224,7 @@ public:
         if (GtkEntry* pEntry = get_entry())
         {
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_unblock(pEntry, m_nEntryFocusOutSignalId);
             g_signal_handler_unblock(pEntry, m_nEntryInsertTextSignalId);
         }
         else
@@ -7183,10 +7268,13 @@ public:
 
     virtual ~GtkInstanceComboBox() override
     {
+        if (m_nAutoCompleteIdleId)
+            g_source_remove(m_nAutoCompleteIdleId);
         if (GtkEntry* pEntry = get_entry())
         {
             g_signal_handler_disconnect(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_disconnect(pEntry, m_nEntryFocusOutSignalId);
         }
         else
             g_signal_handler_disconnect(m_pComboBox, m_nKeyPressEventSignalId);
@@ -7212,6 +7300,7 @@ private:
             GtkWidget* pWidget = m_pTreeView->getWidget();
             if (m_pTreeView->get_selected_index() == -1)
             {
+                m_pTreeView->set_cursor(0);
                 m_pTreeView->select(0);
                 m_xEntry->set_text(m_xTreeView->get_selected_text());
             }
@@ -7264,7 +7353,6 @@ public:
     virtual void set_entry_completion(bool bEnable) override
     {
         assert(!bEnable && "not implemented yet"); (void)bEnable;
-        gtk_entry_set_completion(GTK_ENTRY(m_pEntry->getWidget()), nullptr);
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
