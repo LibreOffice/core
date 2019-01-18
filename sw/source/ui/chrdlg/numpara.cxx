@@ -267,11 +267,13 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 void SwParagraphNumTabPage::DisableOutline()
 {
     m_xOutlineStartBX->set_sensitive(false);
+    m_xOutlineStartBX->set_tooltip_text( SwResId(STR_OUTLINENUMBERING_DISABLED) );
 }
 
 void SwParagraphNumTabPage::DisableNumbering()
 {
     m_xNumberStyleBX->set_sensitive(false);
+    m_xNumberStyleBX->set_tooltip_text( SwResId(STR_OUTLINENUMBERING_DISABLED) );
 }
 
 void SwParagraphNumTabPage::EnableNewStart()
