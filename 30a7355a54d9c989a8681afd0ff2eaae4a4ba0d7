@@ -69,6 +69,42 @@
       "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_8c89e627",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-18T00:53:01Z",
+      "side": 1,
+      "message": "getConfigurableDispatchInformationForSlotMode sounds good.\n\nWould the following be enough documentation?\n\n/** provides information about supported commands for given SfxSlotMode\n\n    \u003cp\u003e\n    This interface can be used to retrieve additional information about\n    supported commands. This interface is normally used by configuration\n    implementations to retrieve SfxSlotMode::MENUCONFIG, TOOLBOXCONFIG\n    and ACCELCONFIG supported commands. SlotMode -1 \n    indicates retrieval of all supported commands.\n    \u003c/p\u003e\n\n    @see enum class SfxSlotMode\n\n    @since LibreOffice 6.3\n */",
+      "parentUuid": "1f485f77_122632b9",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_ac9a626b",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-18T00:53:01Z",
+      "side": 1,
+      "message": "* why use unsinged long instead of long here, when the modelled C++ SfxSlotMode has an underlying type of int, not unsigned int (and unsigned types are problematic in UNO, e.g. because Java doesn\u0027t have them, and should generally be avoided)?\n  I agree long is a better choice.\n\n* would it make sense to duplicate SfxSlotMode as a UNO enum (if SfxSlotMode is supposed to be complete, and not grow new enumerators over time) or a UNO constant group (otherwise)?\n  I do not know.\n\n* ... so 0 has a meaning different from SfxSlotMode::NONE?\n  Changing unsigned long to long would allow -1 to be used for default meaning SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG Would this be acceptable?",
+      "parentUuid": "1f485f77_52514a0e",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
