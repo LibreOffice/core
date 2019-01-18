@@ -835,14 +835,17 @@ bool VCartesianAxis::createTextShapes(
 
         recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
 
+        // Label has multiple lines and the words are broken
         if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
                 && rAxisLabelProperties.fRotationAngleDegree == 0.0
-                && m_aAxisProperties.m_bComplexCategories
                 && lcl_hasWordBreak( pTickInfo->xTextShape ) )
         {
             // Label has multiple lines and belongs to a complex category
             // axis. Rotate 90 degrees to try to avoid overlaps.
-            rAxisLabelProperties.fRotationAngleDegree = 90;
+            if ( m_aAxisProperties.m_bComplexCategories )
+            {
+                rAxisLabelProperties.fRotationAngleDegree = 90;
+            }
             rAxisLabelProperties.bLineBreakAllowed = false;
             m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
             removeTextShapesFromTicks();
