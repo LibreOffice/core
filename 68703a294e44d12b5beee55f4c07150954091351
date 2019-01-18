@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_6f88dc70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-01-18T10:39:24Z",
+      "side": 1,
+      "message": "I\u0027ll try checking if I can reproduce tdf#122689 and if this change fixes it for me.",
+      "parentUuid": "1f485f77_6f9fbcb4",
+      "revId": "68703a294e44d12b5beee55f4c07150954091351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_af3134ef",
         "filename": "vcl/qt5/Qt5Clipboard.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-01-18T10:11:17Z",
       "side": 1,
       "message": "I\u0027ve improved this func as well as isDataFlavour supported here: https://gerrit.libreoffice.org/#/c/65003/\n\nbut I didn\u0027t quite progress with the rest of clipboard goodness, so ... what if I pushed the progress on those two funcs so far and dump the rest of the patch and you\u0027d then rebase?",
+      "revId": "68703a294e44d12b5beee55f4c07150954091351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_4f7d206d",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-01-18T10:39:24Z",
+      "side": 1,
+      "message": "Sure, if it\u0027s needed I\u0027ll rebase my changes.",
+      "parentUuid": "1f485f77_af3134ef",
       "revId": "68703a294e44d12b5beee55f4c07150954091351",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
