@@ -10,14 +10,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkEntryCompletion" id="entrycompletion1">
-    <property name="model">liststore1</property>
-    <property name="text_column">0</property>
-    <property name="inline_completion">True</property>
-    <property name="popup_completion">False</property>
-    <property name="popup_set_width">False</property>
-    <property name="popup_single_match">False</property>
-  </object>
   <object class="GtkDialog" id="ManageBreakpointsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
