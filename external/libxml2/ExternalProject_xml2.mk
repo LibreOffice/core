@@ -22,7 +22,8 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 		&& unset MAKEFLAGS \
-		&& LIB="$(ILIB)" nmake \
+		&& INCLUDE="$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))" \
+		   LIB="$(ILIB)" nmake \
 	,win32)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
