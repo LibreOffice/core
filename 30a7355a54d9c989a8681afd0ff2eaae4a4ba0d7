@@ -123,6 +123,24 @@
       "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_cc2d9ea9",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2019-01-18T09:49:42Z",
+      "side": 1,
+      "message": "I wonder, why do we need to fully expose the SfxSlotMode enum in such a way via a public API (even if \"unpublished\"), given that we only ever want to filter commands by a UI element type. In addition, it isn\u0027t clear to me why there is a need to somehow handle the or-ed case, given that we already have the original XDispatchInformationProvider interface that does, and probably will continue to do this?\n\nWouldn\u0027t it be better to just use here constants from css::ui::UIElementType (and have a separate method for the accel case, or maybe just use UIElementType::UNKNOWN)?",
+      "parentUuid": "1f485f77_acf9424e",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
