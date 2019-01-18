@@ -510,7 +510,7 @@ void DataBrowserModel::swapDataSeries( sal_Int32 nFirstColumnIndex )
         Reference< chart2::XDataSeries > xSeries( m_aColumns[nFirstColumnIndex].m_xDataSeries );
         if( xSeries.is())
         {
-            m_apDialogModel->moveSeries( xSeries, DialogModel::MOVE_DOWN );
+            m_apDialogModel->moveSeries( xSeries, DialogModel::MoveDirection::Down );
             updateFromModel();
         }
     }
