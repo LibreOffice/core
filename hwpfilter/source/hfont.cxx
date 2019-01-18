@@ -47,7 +47,9 @@ void HWPFont::AddFont(int lang, const char *font)
     nfonts = nFonts[lang];
     if (MAXFONTS <= nfonts)
         return;
-    strncpy(fontnames[lang].get() + FONTNAMELEN * nfonts, font, FONTNAMELEN - 1);
+    auto const p = fontnames[lang].get() + FONTNAMELEN * nfonts;
+    strncpy(p, font, FONTNAMELEN - 1);
+    p[FONTNAMELEN - 1] = '\0'; // just in case, even though the array is zero-initialized
     nFonts[lang]++;
 }
 
