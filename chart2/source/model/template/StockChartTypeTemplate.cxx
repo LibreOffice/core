@@ -156,12 +156,12 @@ StockChartTypeTemplate::StockChartTypeTemplate(
 {
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
-        uno::Any( ( eVariant == OPEN_LOW_HI_CLOSE ||
-                        eVariant == VOL_OPEN_LOW_HI_CLOSE )));
+        uno::Any( ( eVariant == StockVariant::Open ||
+                        eVariant == StockVariant::VolumeOpen )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
-        uno::Any( ( eVariant == VOL_LOW_HI_CLOSE ||
-                        eVariant == VOL_OPEN_LOW_HI_CLOSE )));
+        uno::Any( ( eVariant == StockVariant::Volume ||
+                        eVariant == StockVariant::VolumeOpen )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
         uno::Any( bJapaneseStyle ));

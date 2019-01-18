@@ -498,19 +498,19 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
             case TEMPLATE_STOCKLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    StockChartTypeTemplate::LOW_HI_CLOSE, false ));
+                    StockChartTypeTemplate::StockVariant::NONE, false ));
                 break;
             case TEMPLATE_STOCKOPENLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    StockChartTypeTemplate::OPEN_LOW_HI_CLOSE, true ));
+                    StockChartTypeTemplate::StockVariant::Open, true ));
                 break;
             case TEMPLATE_STOCKVOLUMELOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    StockChartTypeTemplate::VOL_LOW_HI_CLOSE, false ));
+                    StockChartTypeTemplate::StockVariant::Volume, false ));
                 break;
             case TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE, true ));
+                    StockChartTypeTemplate::StockVariant::VolumeOpen, true ));
                 break;
 
             //BubbleChart
