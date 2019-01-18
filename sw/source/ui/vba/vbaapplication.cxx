@@ -76,6 +76,26 @@ public:
     virtual void SAL_CALL setMailMergeMainDocumentType( sal_Int32 _mailmergemaindocumenttype ) override;
 
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
+    virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& Whatever1,
+                                            const css::uno::Any& Whatever2,
+                                            const css::uno::Any& Whatever3,
+                                            const css::uno::Any& Whatever4,
+                                            const css::uno::Any& Whatever5,
+                                            const css::uno::Any& Whatever6,
+                                            const css::uno::Any& Whatever7,
+                                            const css::uno::Any& Whatever8,
+                                            const css::uno::Any& Whatever9,
+                                            const css::uno::Any& Whatever10,
+                                            const css::uno::Any& Whatever11,
+                                            const css::uno::Any& Whatever12,
+                                            const css::uno::Any& Whatever13,
+                                            const css::uno::Any& Whatever14,
+                                            const css::uno::Any& Whatever15,
+                                            const css::uno::Any& Whatever16,
+                                            const css::uno::Any& Whatever17,
+                                            const css::uno::Any& Whatever18,
+                                            const css::uno::Any& Whatever19,
+                                            const css::uno::Any& Whatever20 ) override;
     virtual OUString SAL_CALL WindowName() override;
     virtual sal_Bool SAL_CALL ExistingBookmark( const OUString& Name ) override;
     virtual void SAL_CALL MailMergeOpenDataSource(const OUString& Name, const css::uno::Any& Format,
@@ -510,6 +530,31 @@ SwWordBasic::FileOpen( const OUString& Name, const uno::Any& ConfirmConversions,
 
     if (aDocuments >>= rDocuments)
         rDocuments->Open( Name, ConfirmConversions, ReadOnly, AddToMru, PasswordDoc, PasswordDot, Revert, WritePasswordDoc, WritePasswordDot, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any() );
+}
+
+void SAL_CALL
+SwWordBasic::ToolsOptionsView( const css::uno::Any& /*Whatever1*/,
+                               const css::uno::Any& /*Whatever2*/,
+                               const css::uno::Any& /*Whatever3*/,
+                               const css::uno::Any& /*Whatever4*/,
+                               const css::uno::Any& /*Whatever5*/,
+                               const css::uno::Any& /*Whatever6*/,
+                               const css::uno::Any& /*Whatever7*/,
+                               const css::uno::Any& /*Whatever8*/,
+                               const css::uno::Any& /*Whatever9*/,
+                               const css::uno::Any& /*Whatever10*/,
+                               const css::uno::Any& /*Whatever11*/,
+                               const css::uno::Any& /*Whatever12*/,
+                               const css::uno::Any& /*Whatever13*/,
+                               const css::uno::Any& /*Whatever14*/,
+                               const css::uno::Any& /*Whatever15*/,
+                               const css::uno::Any& /*Whatever16*/,
+                               const css::uno::Any& /*Whatever17*/,
+                               const css::uno::Any& /*Whatever18*/,
+                               const css::uno::Any& /*Whatever19*/,
+                               const css::uno::Any& /*Whatever20*/)
+{
+    // ???
 }
 
 OUString SAL_CALL
