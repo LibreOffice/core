@@ -543,13 +543,13 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
 
 void DialogModel::moveSeries(
     const Reference< XDataSeries > & xSeries,
-    eMoveDirection eDirection )
+    MoveDirection eDirection )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
 
     Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
-    DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MOVE_UP );
+    DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Up );
 }
 
 Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(

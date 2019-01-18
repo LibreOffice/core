@@ -99,14 +99,13 @@ public:
         const OUString & aRoleOfSequenceForLabel,
         const css::uno::Reference< css::chart2::XChartType > & xChartType );
 
-    enum eMoveDirection
+    enum class MoveDirection
     {
-        MOVE_DOWN,
-        MOVE_UP
+        Down, Up
     };
 
     void moveSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-                     eMoveDirection eDirection );
+                     MoveDirection eDirection );
 
     /// @return the newly inserted series
     css::uno::Reference<

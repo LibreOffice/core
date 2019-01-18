@@ -664,7 +664,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl, weld::Button&, void)
 
     if (bHasSelectedEntry)
     {
-        m_rDialogModel.moveSeries( pEntry->m_xDataSeries, DialogModel::MOVE_UP );
+        m_rDialogModel.moveSeries( pEntry->m_xDataSeries, DialogModel::MoveDirection::Up );
         setDirty();
         fillSeriesListBox();
         SeriesSelectionChangedHdl(*m_xLB_SERIES);
@@ -684,7 +684,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl, weld::Button&, void)
 
     if (bHasSelectedEntry)
     {
-        m_rDialogModel.moveSeries( pEntry->m_xDataSeries, DialogModel::MOVE_DOWN );
+        m_rDialogModel.moveSeries( pEntry->m_xDataSeries, DialogModel::MoveDirection::Down );
         setDirty();
         fillSeriesListBox();
         SeriesSelectionChangedHdl(*m_xLB_SERIES);
