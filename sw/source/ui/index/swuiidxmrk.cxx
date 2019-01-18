@@ -1225,10 +1225,10 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
         {
             if(bDifferent)
             {
-                SwAuthEntry aNewData;
+                rtl::Reference<SwAuthEntry> xNewData(new SwAuthEntry);
                 for(int i = 0; i < AUTH_FIELD_END; i++)
-                    aNewData.SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
-                pSh->ChangeAuthorityData(&aNewData);
+                    xNewData->SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
+                pSh->ChangeAuthorityData(xNewData.get());
             }
             SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields.makeStringAndClear(), OUString(), 0 );
             aMgr.InsertField( aData );
@@ -1417,8 +1417,7 @@ void SwAuthorMarkPane::InitControls()
     if(bNewEntry || !pField || pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
         return;
 
-    const SwAuthEntry* pEntry = static_cast<SwAuthorityFieldType*>(pField->GetTyp())->
-            GetEntryByHandle(static_cast<SwAuthorityField*>(pField)->GetHandle());
+    const SwAuthEntry* pEntry = static_cast<SwAuthorityField*>(pField)->GetAuthEntry();
 
     OSL_ENSURE(pEntry, "No authority entry found");
     if(!pEntry)
