@@ -1001,9 +1001,10 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                 Reference< XText > xText(xAnnotation->getTextRange());
                 sal_Int32 nLastIndex;
                 sal_Int32 nId = GetAuthorIdAndLastIndex(xAnnotation->getAuthor(), nLastIndex);
-                char cDateTime[32];
+                char cDateTime[sizeof("-32768-65535-65535T65535:65535:65535.4294967295")];
+                    // reserve enough space for hypothetical max length
 
-                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%09" SAL_PRIuUINT32, aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+                snprintf(cDateTime, sizeof cDateTime, "%02" SAL_PRIdINT32 "-%02" SAL_PRIuUINT32 "-%02" SAL_PRIuUINT32 "T%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ".%09" SAL_PRIuUINT32, sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Month), sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes), sal_uInt32(aDateTime.Seconds), aDateTime.NanoSeconds);
 
                 pFS->startElementNS(XML_p, XML_cm,
                                     XML_authorId, I32S(nId),

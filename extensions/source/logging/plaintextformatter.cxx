@@ -79,7 +79,8 @@ namespace logging
 
     OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord )
     {
-        char buffer[ 30 ];
+        char buffer[ sizeof("-32768-65535-65535 65535:65535:65535.4294967295") ];
+            // reserve enough space for hypothetical max length
         const int buffer_size = sizeof( buffer );
         int used = snprintf( buffer, buffer_size, "%10i", static_cast<int>(_rRecord.SequenceNumber) );
         if ( used >= buffer_size || used < 0 )
@@ -94,9 +95,9 @@ namespace logging
         aLogEntry.appendAscii( buffer );
         aLogEntry.append( " " );
 
-        snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
-            static_cast<int>(_rRecord.LogTime.Year), static_cast<int>(_rRecord.LogTime.Month), static_cast<int>(_rRecord.LogTime.Day),
-            static_cast<int>(_rRecord.LogTime.Hours), static_cast<int>(_rRecord.LogTime.Minutes), static_cast<int>(_rRecord.LogTime.Seconds), static_cast<int>(_rRecord.LogTime.NanoSeconds) );
+        snprintf( buffer, buffer_size, "%04" SAL_PRIdINT32 "-%02" SAL_PRIuUINT32 "-%02" SAL_PRIuUINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ".%09" SAL_PRIuUINT32,
+            static_cast<sal_Int32>(_rRecord.LogTime.Year), static_cast<sal_uInt32>(_rRecord.LogTime.Month), static_cast<sal_uInt32>(_rRecord.LogTime.Day),
+            static_cast<sal_uInt32>(_rRecord.LogTime.Hours), static_cast<sal_uInt32>(_rRecord.LogTime.Minutes), static_cast<sal_uInt32>(_rRecord.LogTime.Seconds), _rRecord.LogTime.NanoSeconds );
         aLogEntry.appendAscii( buffer );
         aLogEntry.append( " " );
 
