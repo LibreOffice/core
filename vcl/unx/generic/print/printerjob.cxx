@@ -362,12 +362,11 @@ PrinterJob::StartJob (
     }
 
     // Language Level
-    sal_Char pLevel[16];
-    sal_Int32 nSz = getValueOf(GetPostscriptLevel(&rSetupData), pLevel);
-    pLevel[nSz++] = '\n';
-    pLevel[nSz  ] = '\0';
+    OStringBuffer pLevel;
+    getValueOf(GetPostscriptLevel(&rSetupData), pLevel);
+    pLevel.append('\n');
     WritePS (mpJobHeader.get(), "%%LanguageLevel: ");
-    WritePS (mpJobHeader.get(), pLevel);
+    WritePS (mpJobHeader.get(), pLevel.makeStringAndClear());
 
     // Other
     WritePS (mpJobHeader.get(), "%%DocumentData: Clean7Bit\n");
@@ -587,20 +586,19 @@ PrinterJob::StartPage (const JobData& rJobSetup)
         mnPortraits++;
     }
 
-    sal_Char  pBBox [256];
-    sal_Int32 nChar = 0;
+    OStringBuffer pBBox;
 
-    nChar  = psp::appendStr  ("%%PageBoundingBox: ",    pBBox);
-    nChar += psp::getValueOf (mnLMarginPt,              pBBox + nChar);
-    nChar += psp::appendStr  (" ",                      pBBox + nChar);
-    nChar += psp::getValueOf (mnBMarginPt,              pBBox + nChar);
-    nChar += psp::appendStr  (" ",                      pBBox + nChar);
-    nChar += psp::getValueOf (mnWidthPt  - mnRMarginPt, pBBox + nChar);
-    nChar += psp::appendStr  (" ",                      pBBox + nChar);
-    nChar += psp::getValueOf (mnHeightPt - mnTMarginPt, pBBox + nChar);
-    nChar += psp::appendStr  ("\n",                     pBBox + nChar);
+    psp::appendStr  ("%%PageBoundingBox: ",    pBBox);
+    psp::getValueOf (mnLMarginPt,              pBBox);
+    psp::appendStr  (" ",                      pBBox);
+    psp::getValueOf (mnBMarginPt,              pBBox);
+    psp::appendStr  (" ",                      pBBox);
+    psp::getValueOf (mnWidthPt  - mnRMarginPt, pBBox);
+    psp::appendStr  (" ",                      pBBox);
+    psp::getValueOf (mnHeightPt - mnTMarginPt, pBBox);
+    psp::appendStr  ("\n",                     pBBox);
 
-    WritePS (pPageHeader, pBBox, nChar);
+    WritePS (pPageHeader, pBBox.makeStringAndClear());
 
     /* #i7262# #i65491# write setup only before first page
      *  (to %%Begin(End)Setup, instead of %%Begin(End)PageSetup)
@@ -631,12 +629,11 @@ PrinterJob::EndPage ()
 
     // copy page to paper and write page trailer according to DSC
 
-    sal_Char pTrailer[256];
-    sal_Int32 nChar = 0;
-    nChar  = psp::appendStr ("grestore grestore\n", pTrailer);
-    nChar += psp::appendStr ("showpage\n",          pTrailer + nChar);
-    nChar += psp::appendStr ("%%PageTrailer\n\n",   pTrailer + nChar);
-    WritePS (pPageBody, pTrailer, nChar);
+    OStringBuffer pTrailer;
+    psp::appendStr ("grestore grestore\n", pTrailer);
+    psp::appendStr ("showpage\n",          pTrailer);
+    psp::appendStr ("%%PageTrailer\n\n",   pTrailer);
+    WritePS (pPageBody, pTrailer.makeStringAndClear());
 
     // this page is done for now, close it to avoid having too many open fd's
 
@@ -750,39 +747,38 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob, bool bWr
         bSuccess = writeFeatureList( pFile, rJob, false );
     WritePS (pFile, "%%EndPageSetup\n");
 
-    sal_Char  pTranslate [128];
-    sal_Int32 nChar = 0;
+    OStringBuffer pTranslate;
 
     if( rJob.m_eOrientation == orientation::Portrait )
     {
-        nChar  = psp::appendStr  ("gsave\n[",   pTranslate);
-        nChar += psp::getValueOfDouble (        pTranslate + nChar, mfXScale, 5);
-        nChar += psp::appendStr  (" 0 0 ",      pTranslate + nChar);
-        nChar += psp::getValueOfDouble (        pTranslate + nChar, mfYScale, 5);
-        nChar += psp::appendStr  (" ",          pTranslate + nChar);
-        nChar += psp::getValueOf (mnRMarginPt,  pTranslate + nChar);
-        nChar += psp::appendStr  (" ",          pTranslate + nChar);
-        nChar += psp::getValueOf (mnHeightPt-mnTMarginPt,
-                                  pTranslate + nChar);
-        nChar += psp::appendStr  ("] concat\ngsave\n",
-                                  pTranslate + nChar);
+        psp::appendStr  ("gsave\n[",   pTranslate);
+        psp::getValueOfDouble (        pTranslate, mfXScale, 5);
+        psp::appendStr  (" 0 0 ",      pTranslate);
+        psp::getValueOfDouble (        pTranslate, mfYScale, 5);
+        psp::appendStr  (" ",          pTranslate);
+        psp::getValueOf (mnRMarginPt,  pTranslate);
+        psp::appendStr  (" ",          pTranslate);
+        psp::getValueOf (mnHeightPt-mnTMarginPt,
+                                  pTranslate);
+        psp::appendStr  ("] concat\ngsave\n",
+                                  pTranslate);
     }
     else
     {
-        nChar  = psp::appendStr  ("gsave\n",    pTranslate);
-        nChar += psp::appendStr  ("[ 0 ",       pTranslate + nChar);
-        nChar += psp::getValueOfDouble (        pTranslate + nChar, -mfYScale, 5);
-        nChar += psp::appendStr  (" ",          pTranslate + nChar);
-        nChar += psp::getValueOfDouble (        pTranslate + nChar, mfXScale, 5);
-        nChar += psp::appendStr  (" 0 ",        pTranslate + nChar );
-        nChar += psp::getValueOfDouble (        pTranslate + nChar, mnLMarginPt, 5 );
-        nChar += psp::appendStr  (" ",          pTranslate + nChar);
-        nChar += psp::getValueOf (mnBMarginPt,  pTranslate + nChar );
-        nChar += psp::appendStr ("] concat\ngsave\n",
-                                 pTranslate + nChar);
+        psp::appendStr  ("gsave\n",    pTranslate);
+        psp::appendStr  ("[ 0 ",       pTranslate);
+        psp::getValueOfDouble (        pTranslate, -mfYScale, 5);
+        psp::appendStr  (" ",          pTranslate);
+        psp::getValueOfDouble (        pTranslate, mfXScale, 5);
+        psp::appendStr  (" 0 ",        pTranslate );
+        psp::getValueOfDouble (        pTranslate, mnLMarginPt, 5 );
+        psp::appendStr  (" ",          pTranslate);
+        psp::getValueOf (mnBMarginPt,  pTranslate );
+        psp::appendStr ("] concat\ngsave\n",
+                                 pTranslate);
     }
 
-    WritePS (pFile, pTranslate, nChar);
+    WritePS (pFile, pTranslate.makeStringAndClear());
 
     return bSuccess;
 }
