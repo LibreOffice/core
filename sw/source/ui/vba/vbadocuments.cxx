@@ -106,6 +106,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
+// #TODO# #FIXME# surely we should actually close the document here
 void SAL_CALL
 SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ )
 {
