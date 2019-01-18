@@ -815,8 +815,8 @@ void    SwTOXAuthority::FillText( SwTextNode& rNd,
 bool SwTOXAuthority::equivalent(const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
-            static_cast<SwAuthorityField*>(m_rField.GetField())->GetHandle() ==
-                static_cast<SwAuthorityField*>(static_cast<const SwTOXAuthority&>(rCmp).m_rField.GetField())->GetHandle();
+            static_cast<SwAuthorityField*>(m_rField.GetField())->GetAuthEntry() ==
+                static_cast<SwAuthorityField*>(static_cast<const SwTOXAuthority&>(rCmp).m_rField.GetField())->GetAuthEntry();
 }
 
 bool SwTOXAuthority::sort_lt(const SwTOXSortTabBase& rBase)

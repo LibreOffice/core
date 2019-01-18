@@ -1653,17 +1653,17 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             //#i99069# changes to a bibliography field should change the field type
             SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpField.get());
             SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
-            SwAuthEntry aTempEntry;
+            rtl::Reference<SwAuthEntry> xTempEntry(new SwAuthEntry);
             for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
-                aTempEntry.SetAuthorField( static_cast<ToxAuthorityField>(i),
+                xTempEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
                                 rPar1.getToken( i, TOX_STYLE_DELIMITER ));
-            if( pAuthorityType->ChangeEntryContent( &aTempEntry ) )
+            if( pAuthorityType->ChangeEntryContent( xTempEntry.get() ) )
             {
                 pType->UpdateFields();
                 pSh->SetModified();
             }
 
-            if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
+            if( xTempEntry->GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
                 pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) )
                 bSetPar1 = false; //otherwise it's a new or changed entry, the field needs to be updated
             bSetPar2 = false;

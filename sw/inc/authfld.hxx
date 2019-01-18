@@ -22,27 +22,24 @@
 #include "swdllapi.h"
 #include "fldbas.hxx"
 #include "toxe.hxx"
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <memory>
 #include <vector>
 
-class SwAuthEntry
+class SwAuthEntry : public salhelper::SimpleReferenceObject
 {
     OUString        aAuthFields[AUTH_FIELD_END];
-    sal_uInt16      nRefCount;
 public:
-    SwAuthEntry() : nRefCount(0){}
+    SwAuthEntry() = default;
     SwAuthEntry( const SwAuthEntry& rCopy );
     bool            operator==(const SwAuthEntry& rComp);
 
     inline OUString const & GetAuthorField(ToxAuthorityField ePos) const;
     inline void             SetAuthorField(ToxAuthorityField ePos,
                                             const OUString& rField);
-
-    void            AddRef()                { ++nRefCount; }
-    void            RemoveRef()             { --nRefCount; }
-    sal_uInt16          GetRefCount()           { return nRefCount; }
 };
 
 struct SwTOXSortKey
@@ -55,19 +52,19 @@ struct SwTOXSortKey
 };
 
 typedef std::vector<SwTOXSortKey> SortKeyArr;
-typedef std::vector<std::unique_ptr<SwAuthEntry>> SwAuthDataArr;
+typedef std::vector<rtl::Reference<SwAuthEntry>> SwAuthDataArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*                  m_pDoc;
     SwAuthDataArr           m_DataArr;
-    std::vector<sal_IntPtr> m_SequArr;
-    std::vector<sal_IntPtr> m_SequArrRLHidden; ///< hidden redlines
+    std::vector<SwAuthEntry*> m_SequArr;
+    std::vector<SwAuthEntry*> m_SequArrRLHidden; ///< hidden redlines
     SortKeyArr              m_SortKeyArr;
     sal_Unicode             m_cPrefix;
     sal_Unicode             m_cSuffix;
-    bool                m_bIsSequence :1;
-    bool                m_bSortByDocument :1;
+    bool                    m_bIsSequence :1;
+    bool                    m_bSortByDocument :1;
     LanguageType            m_eLanguage;
     OUString                m_sSortAlgorithm;
 
@@ -83,30 +80,27 @@ public:
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
-    void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
+    void                SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
-    void                RemoveField(sal_IntPtr nHandle);
-    sal_IntPtr          AddField(const OUString& rFieldContents);
-    void                AddField(sal_IntPtr nHandle);
+    void                RemoveField(const SwAuthEntry* nHandle);
+    SwAuthEntry*        AddField(const OUString& rFieldContents);
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
                             m_SequArrRLHidden.clear();
                         }
 
-    const SwAuthEntry*  GetEntryByHandle(sal_IntPtr nHandle) const;
-
     void                GetAllEntryIdentifiers( std::vector<OUString>& rToFill ) const;
-    const SwAuthEntry*  GetEntryByIdentifier(const OUString& rIdentifier) const;
+    SwAuthEntry*        GetEntryByIdentifier(const OUString& rIdentifier) const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
     sal_uInt16          AppendField(const SwAuthEntry& rInsert);
-    sal_IntPtr          GetHandle(sal_uInt16 nPos);
+    SwAuthEntry*        GetFieldByPos(sal_uInt16 nPos);
 
-    sal_uInt16          GetSequencePos(sal_IntPtr nHandle, SwRootFrame const* pLayout);
+    sal_uInt16          GetSequencePos(const SwAuthEntry* pAuthEntry, SwRootFrame const* pLayout);
 
-    bool            IsSequence() const      {return m_bIsSequence;}
+    bool                IsSequence() const      {return m_bIsSequence;}
     void                SetSequence(bool bSet)
                             {
                                 DelSequenceArray();
@@ -121,7 +115,7 @@ public:
     sal_Unicode         GetPrefix() const { return m_cPrefix;}
     sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
-    bool            IsSortByDocument() const {return m_bSortByDocument;}
+    bool                IsSortByDocument() const {return m_bSortByDocument;}
     void                SetSortByDocument(bool bSet)
                             {
                                 DelSequenceArray();
@@ -154,7 +148,7 @@ public:
  */
 class SwAuthorityField : public SwField
 {
-    sal_IntPtr          m_nHandle;
+    rtl::Reference<SwAuthEntry>  m_xAuthEntry;
     mutable sal_IntPtr  m_nTempSequencePos;
     mutable sal_IntPtr  m_nTempSequencePosRLHidden; ///< hidden redlines
 
@@ -169,7 +163,7 @@ public:
     SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField, SwRootFrame const* pLayout) const;
 
     SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
-    SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
+    SwAuthorityField(SwAuthorityFieldType* pType, SwAuthEntry* pAuthEntry);
     virtual ~SwAuthorityField() override;
 
     OUString            GetFieldText(ToxAuthorityField eField) const;
@@ -180,7 +174,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
-    sal_IntPtr          GetHandle() const       { return m_nHandle; }
+    SwAuthEntry*        GetAuthEntry() const       { return m_xAuthEntry.get(); }
 
     virtual OUString GetDescription() const override;
 };

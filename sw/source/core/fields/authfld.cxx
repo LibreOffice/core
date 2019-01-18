@@ -51,7 +51,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
-    : nRefCount(0)
 {
     for(int i = 0; i < AUTH_FIELD_END; ++i)
         aAuthFields[i] = rCopy.aAuthFields[i];
@@ -85,31 +84,24 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
     return new SwAuthorityFieldType(m_pDoc);
 }
 
-void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
+void SwAuthorityFieldType::RemoveField(const SwAuthEntry* nHandle)
 {
     for(SwAuthDataArr::size_type j = 0; j < m_DataArr.size(); ++j)
     {
-        SwAuthEntry* pTemp = m_DataArr[j].get();
-        sal_IntPtr nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pTemp));
-        if(nRet == nHandle)
+        if(m_DataArr[j].get() == nHandle)
         {
-            pTemp->RemoveRef();
-            if(!pTemp->GetRefCount())
-            {
-                m_DataArr.erase(m_DataArr.begin() + j);
-                //re-generate positions of the fields
-                DelSequenceArray();
-            }
+            m_DataArr.erase(m_DataArr.begin() + j);
+            //re-generate positions of the fields
+            DelSequenceArray();
             return;
         }
     }
     OSL_FAIL("Field unknown" );
 }
 
-sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
+SwAuthEntry* SwAuthorityFieldType::AddField(const OUString& rFieldContents)
 {
-    sal_IntPtr nRet = 0;
-    std::unique_ptr<SwAuthEntry> pEntry(new SwAuthEntry);
+    rtl::Reference<SwAuthEntry> pEntry(new SwAuthEntry);
     for( sal_Int32 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
                         rFieldContents.getToken( i, TOX_STYLE_DELIMITER ));
@@ -118,50 +110,15 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
     {
         if (*rpTemp == *pEntry)
         {
-            nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(rpTemp.get()));
-            rpTemp->AddRef();
-            return nRet;
+            return rpTemp.get();
         }
     }
 
     //if it is a new Entry - insert
-    nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pEntry.get()));
-    // FIXME: what is this ref-counting madness on a object owned by the container?
-    pEntry->AddRef();
     m_DataArr.push_back(std::move(pEntry));
     //re-generate positions of the fields
     DelSequenceArray();
-    return nRet;
-}
-
-void SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
-{
-    for (auto &rpTemp : m_DataArr)
-    {
-        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>(static_cast<void*>(rpTemp.get()));
-        if( nTmp == nHandle )
-        {
-            rpTemp->AddRef();
-            //re-generate positions of the fields
-            DelSequenceArray();
-            return;
-        }
-    }
-    OSL_FAIL("SwAuthorityFieldType::AddField(sal_IntPtr) failed");
-}
-
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(sal_IntPtr nHandle) const
-{
-    for (auto &rpTemp : m_DataArr)
-    {
-        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>(static_cast<void const *>(rpTemp.get()));
-        if( nTmp == nHandle )
-        {
-            return rpTemp.get();
-        }
-    }
-    OSL_FAIL( "invalid Handle" );
-    return nullptr;
+    return m_DataArr.back().get();
 }
 
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
@@ -173,7 +130,7 @@ void SwAuthorityFieldType::GetAllEntryIdentifiers(
     }
 }
 
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
+SwAuthEntry* SwAuthorityFieldType::GetEntryByIdentifier(
                                 const OUString& rIdentifier)const
 {
     for (const auto &rpTemp : m_DataArr)
@@ -209,30 +166,21 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     for( SwAuthDataArr::size_type nRet = 0; nRet < m_DataArr.size(); ++nRet )
     {
-        SwAuthEntry* pTemp = m_DataArr[ nRet ].get();
-        if( *pTemp == rInsert )
-        {
-            //ref count unchanged
+        if( *m_DataArr[ nRet ] == rInsert )
             return nRet;
-        }
     }
 
     //if it is a new Entry - insert
-    m_DataArr.push_back(o3tl::make_unique<SwAuthEntry>(rInsert));
+    m_DataArr.push_back(new SwAuthEntry(rInsert));
     return m_DataArr.size()-1;
 }
 
-sal_IntPtr SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
+SwAuthEntry* SwAuthorityFieldType::GetFieldByPos(sal_uInt16 nPos)
 {
-    if( nPos < m_DataArr.size() )
-    {
-        SwAuthEntry* pTemp = m_DataArr[nPos].get();
-        return reinterpret_cast<sal_IntPtr>(static_cast<void*>(pTemp));
-    }
-    return 0;
+    return m_DataArr[nPos].get();
 }
 
-sal_uInt16 SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle,
+sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
         SwRootFrame const*const pLayout)
 {
     //find the field in a sorted array of handles,
@@ -258,7 +206,7 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle,
             if(!pTextField || !pTextField->GetpTextNode())
             {
 #if OSL_DEBUG_LEVEL > 0
-                if(nHandle == static_cast<SwAuthorityField*>(pFormatField->GetField())->GetHandle())
+                if(pAuthEntry == static_cast<SwAuthorityField*>(pFormatField->GetField())->GetAuthEntry())
                     bCurrentFieldWithoutTextNode = true;
 #endif
                 continue;
@@ -326,20 +274,20 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle,
         {
             SwFormatField& rFormatField = static_cast<SwTOXAuthority&>(*pBase).GetFieldFormat();
             SwAuthorityField* pAField = static_cast<SwAuthorityField*>(rFormatField.GetField());
-            m_SequArr.push_back(pAField->GetHandle());
+            m_SequArr.push_back(pAField->GetAuthEntry());
         }
         for (auto & pBase : aSortArrRLHidden)
         {
             SwFormatField& rFormatField = static_cast<SwTOXAuthority&>(*pBase).GetFieldFormat();
             SwAuthorityField* pAField = static_cast<SwAuthorityField*>(rFormatField.GetField());
-            m_SequArrRLHidden.push_back(pAField->GetHandle());
+            m_SequArrRLHidden.push_back(pAField->GetAuthEntry());
         }
     }
     //find nHandle
     auto const& rSequArr(pLayout && pLayout->IsHideRedlines() ? m_SequArrRLHidden : m_SequArr);
     for (std::vector<sal_IntPtr>::size_type i = 0; i < rSequArr.size(); ++i)
     {
-        if (rSequArr[i] == nHandle)
+        if (rSequArr[i] == pAuthEntry)
         {
             return i + 1;
         }
@@ -516,22 +464,21 @@ SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
     , m_nTempSequencePos( -1 )
     , m_nTempSequencePosRLHidden( -1 )
 {
-    m_nHandle = pInitType->AddField( rFieldContents );
+    m_xAuthEntry = pInitType->AddField( rFieldContents );
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
-                                                sal_IntPtr nSetHandle )
+                                    SwAuthEntry* pAuthEntry )
     : SwField( pInitType )
-    , m_nHandle( nSetHandle )
+    , m_xAuthEntry( pAuthEntry )
     , m_nTempSequencePos( -1 )
     , m_nTempSequencePosRLHidden( -1 )
 {
-    pInitType->AddField( m_nHandle );
 }
 
 SwAuthorityField::~SwAuthorityField()
 {
-    static_cast<SwAuthorityFieldType* >(GetTyp())->RemoveField(m_nHandle);
+    static_cast<SwAuthorityFieldType* >(GetTyp())->RemoveField(m_xAuthEntry.get());
 }
 
 OUString SwAuthorityField::ExpandImpl(SwRootFrame const*const pLayout) const
@@ -552,16 +499,15 @@ OUString SwAuthorityField::ConditionalExpandAuthIdentifier(
         sal_IntPtr & rnTempSequencePos(pLayout && pLayout->IsHideRedlines()
                 ? m_nTempSequencePosRLHidden : m_nTempSequencePos);
        if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
-            rnTempSequencePos = pAuthType->GetSequencePos(m_nHandle, pLayout);
+            rnTempSequencePos = pAuthType->GetSequencePos(m_xAuthEntry.get(), pLayout);
         if (0 <= rnTempSequencePos)
             sRet += OUString::number(rnTempSequencePos);
     }
     else
     {
-        const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
-        if(pEntry)
-            sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+        if(m_xAuthEntry)
+            sRet += m_xAuthEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
     if(pAuthType->GetSuffix())
         sRet += OUStringLiteral1(pAuthType->GetSuffix());
@@ -579,16 +525,15 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField,
         sal_IntPtr & rnTempSequencePos(pLayout && pLayout->IsHideRedlines()
                 ? m_nTempSequencePosRLHidden : m_nTempSequencePos);
        if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
-            rnTempSequencePos = pAuthType->GetSequencePos(m_nHandle, pLayout);
+            rnTempSequencePos = pAuthType->GetSequencePos(m_xAuthEntry.get(), pLayout);
         if (0 <= rnTempSequencePos)
             sRet += OUString::number(rnTempSequencePos);
     }
     else
     {
-        const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
-        if(pEntry)
-            sRet += pEntry->GetAuthorField(eField);
+        if(m_xAuthEntry)
+            sRet += m_xAuthEntry->GetAuthorField(eField);
     }
     return sRet;
 }
@@ -596,21 +541,19 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField,
 std::unique_ptr<SwField> SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(GetTyp());
-    return o3tl::make_unique<SwAuthorityField>(pAuthType, m_nHandle);
+    return o3tl::make_unique<SwAuthorityField>(pAuthType, m_xAuthEntry.get());
 }
 
 OUString SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
-    SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(GetTyp());
-    const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( m_nHandle );
-    return pEntry->GetAuthorField( eField );
+    return m_xAuthEntry->GetAuthorField( eField );
 }
 
-void    SwAuthorityField::SetPar1(const OUString& rStr)
+void SwAuthorityField::SetPar1(const OUString& rStr)
 {
     SwAuthorityFieldType* pInitType = static_cast<SwAuthorityFieldType* >(GetTyp());
-    pInitType->RemoveField(m_nHandle);
-    m_nHandle = pInitType->AddField(rStr);
+    pInitType->RemoveField(m_xAuthEntry.get());
+    m_xAuthEntry = pInitType->AddField(rStr);
 }
 
 OUString SwAuthorityField::GetDescription() const
@@ -657,15 +600,14 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
 {
     if(!GetTyp())
         return false;
-    const SwAuthEntry* pAuthEntry = static_cast<SwAuthorityFieldType*>(GetTyp())->GetEntryByHandle(m_nHandle);
-    if(!pAuthEntry)
+    if(!m_xAuthEntry)
         return false;
     Sequence <PropertyValue> aRet(AUTH_FIELD_END);
     PropertyValue* pValues = aRet.getArray();
     for(int i = 0; i < AUTH_FIELD_END; ++i)
     {
         pValues[i].Name = OUString::createFromAscii(aFieldNames[i]);
-        const OUString& sField = pAuthEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
+        const OUString& sField = m_xAuthEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
         if(i == AUTH_FIELD_AUTHORITY_TYPE)
             pValues[i].Value <<= sal_Int16(sField.toInt32());
         else
@@ -686,7 +628,7 @@ static sal_Int32 lcl_Find(const OUString& rFieldName)
 
 bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
 {
-    if(!GetTyp() || !static_cast<SwAuthorityFieldType*>(GetTyp())->GetEntryByHandle(m_nHandle))
+    if(!GetTyp() || !m_xAuthEntry)
         return false;
 
     Sequence <PropertyValue> aParam;
@@ -715,8 +657,8 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
         }
     }
 
-    static_cast<SwAuthorityFieldType*>(GetTyp())->RemoveField(m_nHandle);
-    m_nHandle = static_cast<SwAuthorityFieldType*>(GetTyp())->AddField(sToSet);
+    static_cast<SwAuthorityFieldType*>(GetTyp())->RemoveField(m_xAuthEntry.get());
+    m_xAuthEntry = static_cast<SwAuthorityFieldType*>(GetTyp())->AddField(sToSet);
 
     /* FIXME: it is weird that we always return false here */
     return false;
@@ -728,12 +670,9 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFieldTyp )
                         * pDstTyp = static_cast<SwAuthorityFieldType*>(pFieldTyp);
     if( pSrcTyp != pDstTyp )
     {
-
-        const SwAuthEntry* pEntry = pSrcTyp->GetEntryByHandle( m_nHandle );
-        sal_uInt16 nHdlPos = pDstTyp->AppendField( *pEntry );
-        pSrcTyp->RemoveField( m_nHandle );
-        m_nHandle = pDstTyp->GetHandle( nHdlPos );
-        pDstTyp->AddField( m_nHandle );
+        const SwAuthEntry* pSrcEntry = m_xAuthEntry.get();
+        pDstTyp->AppendField( *pSrcEntry );
+        pSrcTyp->RemoveField( pSrcEntry );
         SwField::ChgTyp( pFieldTyp );
     }
     return pSrcTyp;
