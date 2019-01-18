@@ -50,6 +50,7 @@ interface XApplication : XConnectable
     // Actually write-only but there is no way to say that in UNO IDL.
     // The getter just returns an empty string.
     [attribute] string StatusBar;
+    [attribute] any CustomizationContext;
 
     any CommandBars( [in] any Index );
     any Documents( [in] any Index );
