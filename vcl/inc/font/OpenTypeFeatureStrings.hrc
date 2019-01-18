@@ -40,7 +40,7 @@
 #define STR_FONT_FEATURE_ID_DPNG          NC_("STR_FONT_FEATURE_ID_DPNG", "Diphthongs (Obsolete)")
 #define STR_FONT_FEATURE_ID_EXPT          NC_("STR_FONT_FEATURE_ID_EXPT", "Expert Forms")
 #define STR_FONT_FEATURE_ID_FALT          NC_("STR_FONT_FEATURE_ID_FALT", "Final Glyph on Line Alternates")
-#define STR_FONT_FEATURE_ID_FRAC          NC_("STR_FONT_FEATURE_ID_FRAC", "DIagonal Fractions")
+#define STR_FONT_FEATURE_ID_FRAC          NC_("STR_FONT_FEATURE_ID_FRAC", "Fraction style:")
 #define STR_FONT_FEATURE_ID_FRAC_PARAM_1  NC_("STR_FONT_FEATURE_ID_FRAC_PARAM_1", "Diagonal Fractions")
 #define STR_FONT_FEATURE_ID_FRAC_PARAM_2  NC_("STR_FONT_FEATURE_ID_FRAC_PARAM_2", "Nut Fractions")
 #define STR_FONT_FEATURE_ID_FWID          NC_("STR_FONT_FEATURE_ID_FWID", "Full Widths")
