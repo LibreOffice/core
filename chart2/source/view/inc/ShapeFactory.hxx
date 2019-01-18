@@ -74,7 +74,7 @@ class ShapeFactory
         {m_xShapeFactory = xFactory;}
 
 public:
-    enum StackPosition { Top, Bottom };
+    enum class StackPosition { Top, Bottom };
 
     static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
@@ -261,7 +261,7 @@ public:
             const css::awt::Point& rPosition,
             const tNameSequence& rPropNames,
             const tAnySequence& rPropValues,
-            StackPosition ePos = Top );
+            StackPosition ePos = StackPosition::Top );
 
     css::uno::Reference< css::drawing::XShape >
         createRectangle(

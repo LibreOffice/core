@@ -2087,7 +2087,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
                 "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
     if( xShape.is())
     {
-        if (ePos == Bottom)
+        if (ePos == StackPosition::Bottom)
         {
             uno::Reference<drawing::XShapes2> xTarget2(xTarget, uno::UNO_QUERY);
             if (xTarget2.is())

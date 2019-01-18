@@ -998,7 +998,7 @@ void VLegend::createShapes(
                         aLegendSize,
                         awt::Point(0,0),
                         aLineFillProperties.first,
-                        aLineFillProperties.second, ShapeFactory::Bottom );
+                        aLineFillProperties.second, ShapeFactory::StackPosition::Bottom );
 
             //because of this name this border will be used for marking the legend
             ShapeFactory::setShapeName( xBorder, "MarkHandles" );

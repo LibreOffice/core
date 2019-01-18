@@ -44,12 +44,12 @@ namespace chart
 //The couple can contain all labels for all tickmark depth or just the labels for one single depth or
 //the labels from an coherent range of tick depths (e.g. the major and first minor tickmarks should be handled together).
 //... only allow side by side for different tick depth
-enum AxisLabelStaggering
+enum class AxisLabelStaggering
 {
-      SIDE_BY_SIDE
-    , STAGGER_EVEN
-    , STAGGER_ODD
-    , STAGGER_AUTO
+      SideBySide
+    , StaggerEven
+    , StaggerOdd
+    , StaggerAuto
 };
 
 struct AxisLabelProperties final
