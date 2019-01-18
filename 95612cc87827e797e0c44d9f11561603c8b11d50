@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_6f50dc33",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-01-18T15:25:55Z",
+      "side": 0,
+      "message": "so this var could be local to the if block",
+      "range": {
+        "startLine": 1009,
+        "startChar": 16,
+        "endLine": 1009,
+        "endChar": 28
+      },
+      "revId": "95612cc87827e797e0c44d9f11561603c8b11d50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
