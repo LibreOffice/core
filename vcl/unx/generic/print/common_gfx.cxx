@@ -300,23 +300,23 @@ PrinterGfx::EndSetClipRegion()
 void
 PrinterGfx::DrawRect (const tools::Rectangle& rRectangle )
 {
-    char pRect [128];
-    sal_Int32 nChar = 0;
+    OStringBuffer pRect;
 
-    nChar  = psp::getValueOf (rRectangle.TopLeft().X(),     pRect);
-    nChar += psp::appendStr (" ",                           pRect + nChar);
-    nChar += psp::getValueOf (rRectangle.TopLeft().Y(),     pRect + nChar);
-    nChar += psp::appendStr (" ",                           pRect + nChar);
-    nChar += psp::getValueOf (rRectangle.GetWidth(),        pRect + nChar);
-    nChar += psp::appendStr (" ",                           pRect + nChar);
-    nChar += psp::getValueOf (rRectangle.GetHeight(),       pRect + nChar);
-    nChar += psp::appendStr (" ",                           pRect + nChar);
+    psp::getValueOf (rRectangle.TopLeft().X(),     pRect);
+    psp::appendStr (" ",                           pRect);
+    psp::getValueOf (rRectangle.TopLeft().Y(),     pRect);
+    psp::appendStr (" ",                           pRect);
+    psp::getValueOf (rRectangle.GetWidth(),        pRect);
+    psp::appendStr (" ",                           pRect);
+    psp::getValueOf (rRectangle.GetHeight(),       pRect);
+    psp::appendStr (" ",                           pRect);
+    auto const rect = pRect.makeStringAndClear();
 
     if( maFillColor.Is() )
     {
         PSSetColor (maFillColor);
         PSSetColor ();
-        WritePS (mpPageBody, pRect, nChar);
+        WritePS (mpPageBody, rect);
         WritePS (mpPageBody, "rectfill\n");
     }
     if( maLineColor.Is() )
@@ -324,7 +324,7 @@ PrinterGfx::DrawRect (const tools::Rectangle& rRectangle )
         PSSetColor (maLineColor);
         PSSetColor ();
         PSSetLineWidth ();
-        WritePS (mpPageBody, pRect, nChar);
+        WritePS (mpPageBody, rect);
         WritePS (mpPageBody, "rectstroke\n");
     }
 }
@@ -672,13 +672,12 @@ PrinterGfx::PSSetLineWidth ()
 {
     if( currentState().mfLineWidth != maVirtualStatus.mfLineWidth )
     {
-        char pBuffer[128];
-        sal_Int32 nChar = 0;
+        OStringBuffer pBuffer;
 
         currentState().mfLineWidth = maVirtualStatus.mfLineWidth;
-        nChar  = psp::getValueOfDouble (pBuffer, maVirtualStatus.mfLineWidth, 5);
-        nChar += psp::appendStr (" setlinewidth\n", pBuffer + nChar);
-        WritePS (mpPageBody, pBuffer, nChar);
+        psp::getValueOfDouble (pBuffer, maVirtualStatus.mfLineWidth, 5);
+        psp::appendStr (" setlinewidth\n", pBuffer);
+        WritePS (mpPageBody, pBuffer.makeStringAndClear());
     }
 }
 
@@ -691,30 +690,29 @@ PrinterGfx::PSSetColor ()
     {
         currentState().maColor = rColor;
 
-        char pBuffer[128];
-        sal_Int32 nChar = 0;
+        OStringBuffer pBuffer;
 
         if( mbColor )
         {
-            nChar  = psp::getValueOfDouble (pBuffer,
+            psp::getValueOfDouble (pBuffer,
                                             static_cast<double>(rColor.GetRed()) / 255.0, 5);
-            nChar += psp::appendStr (" ", pBuffer + nChar);
-            nChar += psp::getValueOfDouble (pBuffer + nChar,
+            psp::appendStr (" ", pBuffer);
+            psp::getValueOfDouble (pBuffer,
                                             static_cast<double>(rColor.GetGreen()) / 255.0, 5);
-            nChar += psp::appendStr (" ", pBuffer + nChar);
-            nChar += psp::getValueOfDouble (pBuffer + nChar,
+            psp::appendStr (" ", pBuffer);
+            psp::getValueOfDouble (pBuffer,
                                             static_cast<double>(rColor.GetBlue()) / 255.0, 5);
-            nChar += psp::appendStr (" setrgbcolor\n", pBuffer + nChar );
+            psp::appendStr (" setrgbcolor\n", pBuffer );
         }
         else
         {
             Color aColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
             sal_uInt8 nCol = aColor.GetLuminance();
-            nChar  = psp::getValueOfDouble( pBuffer, static_cast<double>(nCol) / 255.0, 5 );
-            nChar += psp::appendStr( " setgray\n", pBuffer + nChar );
+            psp::getValueOfDouble( pBuffer, static_cast<double>(nCol) / 255.0, 5 );
+            psp::appendStr( " setgray\n", pBuffer );
         }
 
-        WritePS (mpPageBody, pBuffer, nChar);
+        WritePS (mpPageBody, pBuffer.makeStringAndClear());
     }
 }
 
@@ -742,8 +740,7 @@ PrinterGfx::PSSetFont ()
     sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth
                                                  : rCurrent.mnTextHeight;
 
-    sal_Char  pSetFont [256];
-    sal_Int32 nChar = 0;
+    OStringBuffer pSetFont;
 
     // postscript based fonts need reencoding
     if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
@@ -756,43 +753,43 @@ PrinterGfx::PSSetFont ()
                     psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
                                                             rCurrent.maFont);
 
-        nChar += psp::appendStr  ("(",          pSetFont + nChar);
-        nChar += psp::appendStr  (aReencodedFont.getStr(),
-                                                pSetFont + nChar);
-        nChar += psp::appendStr  (") cvn findfont ",
-                                                pSetFont + nChar);
+        psp::appendStr  ("(",          pSetFont);
+        psp::appendStr  (aReencodedFont.getStr(),
+                                                pSetFont);
+        psp::appendStr  (") cvn findfont ",
+                                                pSetFont);
     }
     else
     // tt based fonts mustn't reencode, the encoding is implied by the fontname
     // same for symbol type1 fonts, don't try to touch them
     {
-        nChar += psp::appendStr  ("(",          pSetFont + nChar);
-        nChar += psp::appendStr  (rCurrent.maFont.getStr(),
-                                                pSetFont + nChar);
-        nChar += psp::appendStr  (") cvn findfont ",
-                                                pSetFont + nChar);
+        psp::appendStr  ("(",          pSetFont);
+        psp::appendStr  (rCurrent.maFont.getStr(),
+                                                pSetFont);
+        psp::appendStr  (") cvn findfont ",
+                                                pSetFont);
     }
 
     if( ! rCurrent.mbArtItalic )
     {
-        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-        nChar += psp::appendStr  (" ",          pSetFont + nChar);
-        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
-        nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
+        psp::getValueOf (nTextWidth,   pSetFont);
+        psp::appendStr  (" ",          pSetFont);
+        psp::getValueOf (-nTextHeight, pSetFont);
+        psp::appendStr  (" matrix scale makefont setfont\n", pSetFont);
     }
     else // skew 15 degrees to right
     {
-        nChar += psp::appendStr  ( " [",        pSetFont + nChar);
-        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-        nChar += psp::appendStr  (" 0 ",        pSetFont + nChar);
-        nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*static_cast<double>(nTextWidth), 3 );
-        nChar += psp::appendStr  ( " ",         pSetFont + nChar);
-        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+        psp::appendStr  ( " [",        pSetFont);
+        psp::getValueOf (nTextWidth,   pSetFont);
+        psp::appendStr  (" 0 ",        pSetFont);
+        psp::getValueOfDouble (pSetFont, 0.27*static_cast<double>(nTextWidth), 3 );
+        psp::appendStr  ( " ",         pSetFont);
+        psp::getValueOf (-nTextHeight, pSetFont);
 
-        nChar += psp::appendStr  (" 0 0] makefont setfont\n", pSetFont + nChar);
+        psp::appendStr  (" 0 0] makefont setfont\n", pSetFont);
     }
 
-    WritePS (mpPageBody, pSetFont, nChar);
+    WritePS (mpPageBody, pSetFont.makeStringAndClear());
 
 }
 
@@ -809,33 +806,29 @@ PrinterGfx::PSRotate (sal_Int32 nAngle)
     sal_Int32 nFullAngle  = nPostScriptAngle / 10;
     sal_Int32 nTenthAngle = nPostScriptAngle % 10;
 
-    sal_Char  pRotate [48];
-    sal_Int32 nChar = 0;
+    OStringBuffer pRotate;
 
-    nChar  = psp::getValueOf (nFullAngle,  pRotate);
-    nChar += psp::appendStr (".",          pRotate + nChar);
-    nChar += psp::getValueOf (nTenthAngle, pRotate + nChar);
-    nChar += psp::appendStr (" rotate\n",  pRotate + nChar);
+    psp::getValueOf (nFullAngle,  pRotate);
+    psp::appendStr (".",          pRotate);
+    psp::getValueOf (nTenthAngle, pRotate);
+    psp::appendStr (" rotate\n",  pRotate);
 
-    WritePS (mpPageBody, pRotate, nChar);
+    WritePS (mpPageBody, pRotate.makeStringAndClear());
 }
 
 void
 PrinterGfx::PSPointOp (const Point& rPoint, const sal_Char* pOperator)
 {
-    sal_Char  pPSCommand [48];
-    sal_Int32 nChar = 0;
+    OStringBuffer pPSCommand;
 
-    nChar  = psp::getValueOf (rPoint.X(), pPSCommand);
-    nChar += psp::appendStr  (" ",        pPSCommand + nChar);
-    nChar += psp::getValueOf (rPoint.Y(), pPSCommand + nChar);
-    nChar += psp::appendStr  (" ",        pPSCommand + nChar);
-    nChar += psp::appendStr  (pOperator,  pPSCommand + nChar);
-    nChar += psp::appendStr  ("\n",       pPSCommand + nChar);
+    psp::getValueOf (rPoint.X(), pPSCommand);
+    psp::appendStr  (" ",        pPSCommand);
+    psp::getValueOf (rPoint.Y(), pPSCommand);
+    psp::appendStr  (" ",        pPSCommand);
+    psp::appendStr  (pOperator,  pPSCommand);
+    psp::appendStr  ("\n",       pPSCommand);
 
-    DBG_ASSERT (nChar < 48, "Buffer overflow in PSPointOp");
-
-    WritePS (mpPageBody, pPSCommand);
+    WritePS (mpPageBody, pPSCommand.makeStringAndClear());
 }
 
 void
@@ -918,14 +911,13 @@ void
 PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
                        pspath_t eType, sal_Int32& nColumn)
 {
-    sal_Char  pPath[48] = {0};
+    OStringBuffer pPath;
     sal_Int32 nChar;
 
     // create the hex representation of the dx and dy path shift, store the field
     // width as it is needed for the building the command
-    sal_Int32 nXPrec = getAlignedHexValueOf (rCurrent.X() - rOld.X(), pPath + 1);
-    sal_Int32 nYPrec = getAlignedHexValueOf (rCurrent.Y() - rOld.Y(), pPath + 1 + nXPrec);
-    pPath [ 1 + nXPrec + nYPrec ] = 0;
+    sal_Int32 nXPrec = getAlignedHexValueOf (rCurrent.X() - rOld.X(), pPath);
+    sal_Int32 nYPrec = getAlignedHexValueOf (rCurrent.Y() - rOld.Y(), pPath);
 
     // build the command, it is a char with bit represention 000cxxyy
     // c represents the char, xx and yy repr. the field width of the dx and dy shift,
@@ -948,7 +940,8 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
         default:    OSL_FAIL("invalid y precision in binary path");
     }
     cCmd += 'A';
-    pPath[0] = cCmd;
+    pPath.insert(0, cCmd);
+    auto const path = pPath.makeStringAndClear();
 
     // write the command to file,
     // line breaking at column nMaxTextColumn (80)
@@ -957,15 +950,15 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     {
         sal_Int32 nSegment = nMaxTextColumn - nColumn;
 
-        WritePS (mpPageBody, pPath, nSegment);
+        WritePS (mpPageBody, path.copy(0, nSegment));
         WritePS (mpPageBody, "\n", 1);
-        WritePS (mpPageBody, pPath + nSegment, nChar - nSegment);
+        WritePS (mpPageBody, path.copy(nSegment));
 
         nColumn  = nChar - nSegment;
     }
     else
     {
-        WritePS (mpPageBody, pPath, nChar);
+        WritePS (mpPageBody, path);
 
         nColumn += nChar;
     }
@@ -976,22 +969,21 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
 void
 PrinterGfx::PSScale (double fScaleX, double fScaleY)
 {
-    sal_Char  pScale [48];
-    sal_Int32 nChar = 0;
+    OStringBuffer pScale;
 
-    nChar  = psp::getValueOfDouble (pScale, fScaleX, 5);
-    nChar += psp::appendStr        (" ", pScale + nChar);
-    nChar += psp::getValueOfDouble (pScale + nChar, fScaleY, 5);
-    nChar += psp::appendStr        (" scale\n", pScale + nChar);
+    psp::getValueOfDouble (pScale, fScaleX, 5);
+    psp::appendStr        (" ", pScale);
+    psp::getValueOfDouble (pScale, fScaleY, 5);
+    psp::appendStr        (" scale\n", pScale);
 
-    WritePS (mpPageBody, pScale, nChar);
+    WritePS (mpPageBody, pScale.makeStringAndClear());
 }
 
 /* psshowtext helper routines: draw an hex string for show/xshow */
 void
 PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
 {
-    sal_Char pHexString [128];
+    OStringBuffer pHexString;
     sal_Int32 nChar = 0;
 
     nChar = psp::appendStr ("<", pHexString);
@@ -999,15 +991,15 @@ PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
     {
         if (nChar >= (nMaxTextColumn - 1))
         {
-            nChar += psp::appendStr ("\n", pHexString + nChar);
-            WritePS (mpPageBody, pHexString, nChar);
+            nChar += psp::appendStr ("\n", pHexString);
+            WritePS (mpPageBody, pHexString.makeStringAndClear());
             nChar = 0;
         }
-        nChar += psp::getHexValueOf (static_cast<sal_Int32>(pString[i]), pHexString + nChar);
+        nChar += psp::getHexValueOf (static_cast<sal_Int32>(pString[i]), pHexString);
     }
 
-    nChar += psp::appendStr (">\n", pHexString + nChar);
-    WritePS (mpPageBody, pHexString, nChar);
+    nChar += psp::appendStr (">\n", pHexString);
+    WritePS (mpPageBody, pHexString.makeStringAndClear());
 }
 
 void

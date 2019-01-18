@@ -64,7 +64,7 @@ private:
     osl::File* const mpFile;
     sal_uInt32      mnColumn;
     sal_uInt32      mnOffset;
-    sal_Char        mpFileBuffer[nBufferSize + 16];
+    OStringBuffer   mpFileBuffer;
 
 public:
 
@@ -91,13 +91,13 @@ HexEncoder::~HexEncoder ()
 void
 HexEncoder::WriteAscii (sal_uInt8 nByte)
 {
-    sal_uInt32 nOff = psp::getHexValueOf (nByte, mpFileBuffer + mnOffset);
+    sal_uInt32 nOff = psp::getHexValueOf (nByte, mpFileBuffer);
     mnColumn += nOff;
     mnOffset += nOff;
 
     if (mnColumn >= nLineLength)
     {
-        mnOffset += psp::appendStr ("\n", mpFileBuffer + mnOffset);
+        mnOffset += psp::appendStr ("\n", mpFileBuffer);
         mnColumn = 0;
     }
     if (mnOffset >= nBufferSize)
@@ -115,7 +115,7 @@ HexEncoder::FlushLine ()
 {
     if (mnOffset > 0)
     {
-        WritePS (mpFile, mpFileBuffer, mnOffset);
+        WritePS (mpFile, mpFileBuffer.makeStringAndClear());
         mnOffset = 0;
     }
 }
@@ -133,7 +133,7 @@ private:
 
     sal_uInt32      mnColumn;
     sal_uInt32      mnOffset;
-    sal_Char        mpFileBuffer[nBufferSize + 16];
+    OStringBuffer   mpFileBuffer;
 
     inline void     PutByte (sal_uInt8 nByte);
     inline void     PutEOD ();
@@ -182,7 +182,7 @@ Ascii85Encoder::ConvertToAscii85 ()
     if (nByteValue == 0 && mnByte == 4)
     {
         /* special case of 4 Bytes in row */
-        mpFileBuffer [mnOffset] = 'z';
+        mpFileBuffer.append('z');
 
         mnOffset += 1;
         mnColumn += 1;
@@ -194,21 +194,22 @@ Ascii85Encoder::ConvertToAscii85 ()
         // Of the up to 5 characters to be generated, do not generate the last (4 - mnByte) ones
         // that correspond to the (4 - mnByte) zero padding bytes added to the input:
 
+        auto const pos = mpFileBuffer.getLength();
         if (mnByte == 4) {
-            mpFileBuffer [mnOffset + 4] = (nByteValue % 85) + 33;
+            mpFileBuffer.insert(pos, char((nByteValue % 85) + 33));
         }
         nByteValue /= 85;
         if (mnByte >= 3) {
-            mpFileBuffer [mnOffset + 3] = (nByteValue % 85) + 33;
+            mpFileBuffer.insert(pos, char((nByteValue % 85) + 33));
         }
         nByteValue /= 85;
         if (mnByte >= 2) {
-            mpFileBuffer [mnOffset + 2] = (nByteValue % 85) + 33;
+            mpFileBuffer.insert(pos, char((nByteValue % 85) + 33));
         }
         nByteValue /= 85;
-        mpFileBuffer [mnOffset + 1] = (nByteValue % 85) + 33;
+        mpFileBuffer.insert(pos, char((nByteValue % 85) + 33));
         nByteValue /= 85;
-        mpFileBuffer [mnOffset + 0] = (nByteValue % 85) + 33;
+        mpFileBuffer.insert(pos, char((nByteValue % 85) + 33));
 
         mnColumn += (mnByte + 1);
         mnOffset += (mnByte + 1);
@@ -217,10 +218,9 @@ Ascii85Encoder::ConvertToAscii85 ()
         if (mnColumn > nLineLength)
         {
             sal_uInt32 nEolOff = mnColumn - nLineLength;
-            sal_uInt32 nBufOff = mnOffset - nEolOff;
+            auto const posNl = pos + (mnByte + 1) - nEolOff;
 
-            std::memmove (mpFileBuffer + nBufOff + 1, mpFileBuffer + nBufOff, nEolOff);
-            mpFileBuffer[ nBufOff ] = '\n';
+            mpFileBuffer.insert(posNl, '\n');
 
             mnOffset++;
             mnColumn = nEolOff;
@@ -239,7 +239,7 @@ Ascii85Encoder::WriteAscii (sal_uInt8 nByte)
 
     if (mnColumn >= nLineLength)
     {
-        mnOffset += psp::appendStr ("\n", mpFileBuffer + mnOffset);
+        mnOffset += psp::appendStr ("\n", mpFileBuffer);
         mnColumn = 0;
     }
     if (mnOffset >= nBufferSize)
@@ -257,7 +257,7 @@ Ascii85Encoder::FlushLine ()
 {
     if (mnOffset > 0)
     {
-        WritePS (mpFile, mpFileBuffer, mnOffset);
+        WritePS (mpFile, mpFileBuffer.makeStringAndClear());
         mnOffset = 0;
     }
 }
@@ -476,23 +476,22 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
     sal_uInt32 nWidth  = rArea.GetWidth();
     sal_uInt32 nHeight = rArea.GetHeight();
 
-    sal_Char  pGrayImage [512];
-    sal_Int32 nChar = 0;
+    OStringBuffer pGrayImage;
 
     // image header
-    nChar += psp::getValueOf (nWidth,                           pGrayImage + nChar);
-    nChar += psp::appendStr  (" ",                              pGrayImage + nChar);
-    nChar += psp::getValueOf (nHeight,                          pGrayImage + nChar);
-    nChar += psp::appendStr  (" 8 ",                            pGrayImage + nChar);
-    nChar += psp::appendStr  ("[ 1 0 0 1 0 ",                   pGrayImage + nChar);
-    nChar += psp::getValueOf (nHeight,                          pGrayImage + nChar);
-    nChar += psp::appendStr  ("]",                              pGrayImage + nChar);
-    nChar += psp::appendStr  (" {currentfile ",                 pGrayImage + nChar);
-    nChar += psp::getValueOf (nWidth,                           pGrayImage + nChar);
-    nChar += psp::appendStr  (" string readhexstring pop}\n",   pGrayImage + nChar);
-    nChar += psp::appendStr  ("image\n",                        pGrayImage + nChar);
+    psp::getValueOf (nWidth,                           pGrayImage);
+    psp::appendStr  (" ",                              pGrayImage);
+    psp::getValueOf (nHeight,                          pGrayImage);
+    psp::appendStr  (" 8 ",                            pGrayImage);
+    psp::appendStr  ("[ 1 0 0 1 0 ",                   pGrayImage);
+    psp::getValueOf (nHeight,                          pGrayImage);
+    psp::appendStr  ("]",                              pGrayImage);
+    psp::appendStr  (" {currentfile ",                 pGrayImage);
+    psp::getValueOf (nWidth,                           pGrayImage);
+    psp::appendStr  (" string readhexstring pop}\n",   pGrayImage);
+    psp::appendStr  ("image\n",                        pGrayImage);
 
-    WritePS (mpPageBody, pGrayImage, nChar);
+    WritePS (mpPageBody, pGrayImage.makeStringAndClear());
 
     // image body
     std::unique_ptr<HexEncoder> xEncoder(new HexEncoder (mpPageBody));
@@ -520,8 +519,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
 void
 PrinterGfx::writePS2ImageHeader (const tools::Rectangle& rArea, psp::ImageType nType)
 {
-    sal_Int32 nChar = 0;
-    sal_Char  pImage [512];
+    OStringBuffer pImage;
 
     sal_Int32 nDictType = 0;
     switch (nType)
@@ -533,16 +531,16 @@ PrinterGfx::writePS2ImageHeader (const tools::Rectangle& rArea, psp::ImageType n
         default: break;
     }
 
-    nChar += psp::getValueOf (rArea.GetWidth(),  pImage + nChar);
-    nChar += psp::appendStr  (" ",               pImage + nChar);
-    nChar += psp::getValueOf (rArea.GetHeight(), pImage + nChar);
-    nChar += psp::appendStr  (" ",               pImage + nChar);
-    nChar += psp::getValueOf (nDictType,         pImage + nChar);
-    nChar += psp::appendStr  (" ",               pImage + nChar);
-    nChar += psp::getValueOf (sal_Int32(1),      pImage + nChar); // nCompressType
-    nChar += psp::appendStr  (" psp_imagedict image\n", pImage + nChar);
+    psp::getValueOf (rArea.GetWidth(),  pImage);
+    psp::appendStr  (" ",               pImage);
+    psp::getValueOf (rArea.GetHeight(), pImage);
+    psp::appendStr  (" ",               pImage);
+    psp::getValueOf (nDictType,         pImage);
+    psp::appendStr  (" ",               pImage);
+    psp::getValueOf (sal_Int32(1),      pImage); // nCompressType
+    psp::appendStr  (" psp_imagedict image\n", pImage);
 
-    WritePS (mpPageBody, pImage, nChar);
+    WritePS (mpPageBody, pImage.makeStringAndClear());
 }
 
 void
@@ -564,15 +562,14 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
         case psp::ImageType::PaletteImage:
         {
 
-            sal_Int32 nChar = 0;
-            sal_Char  pImage [4096];
+            OStringBuffer pImage;
 
             const sal_uInt32 nSize = rBitmap.GetPaletteEntryCount();
 
-            nChar += psp::appendStr ("[/Indexed /DeviceRGB ", pImage + nChar);
-            nChar += psp::getValueOf (nSize - 1, pImage + nChar);
-            nChar += psp::appendStr ("\npsp_lzwstring\n", pImage + nChar);
-            WritePS (mpPageBody, pImage, nChar);
+            psp::appendStr ("[/Indexed /DeviceRGB ", pImage);
+            psp::getValueOf (nSize - 1, pImage);
+            psp::appendStr ("\npsp_lzwstring\n", pImage);
+            WritePS (mpPageBody, pImage.makeStringAndClear());
 
             std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
             for (sal_uInt32 i = 0; i < nSize; i++)
