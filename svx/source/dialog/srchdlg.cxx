@@ -1999,23 +1999,14 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     if ( !pSh || !pImpl->pRanges )
         return;
 
-    std::vector<sal_uInt16> aWhRanges;
+    SfxItemPool& rPool = pSh->GetPool();
+    SfxItemSet aSet(rPool, pImpl->pRanges.get());
 
-    const sal_uInt16* pPtr = pImpl->pRanges.get();
-    while (*pPtr)
-    {
-        aWhRanges.push_back(*pPtr++);
-    }
-
-    aWhRanges.push_back(SID_ATTR_PARA_MODEL);
-    aWhRanges.push_back(SID_ATTR_PARA_MODEL);
+    aSet.MergeRange(SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL);
 
     sal_uInt16 nBrushWhich = pSh->GetPool().GetWhich(SID_ATTR_BRUSH);
-    aWhRanges.push_back(nBrushWhich);
-    aWhRanges.push_back(nBrushWhich);
-    aWhRanges.push_back(0);
-    SfxItemPool& rPool = pSh->GetPool();
-    SfxItemSet aSet(rPool, aWhRanges.data());
+    aSet.MergeRange(nBrushWhich, nBrushWhich);
+
     OUString aTxt;
 
     aSet.InvalidateAllItems();
