@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_6ccb4a1e",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-18T08:30:54Z",
+      "side": 1,
+      "message": "Just one more possible thing to consider.\n\nThe change changes the sequence here, when original font is selected back now after SetAverageWidthFactor, when previously it did before. I don\u0027t know if that is relevant (wrt e.g. possible actions inside SetAverageWidthFactor), but I suppose let\u0027s play safe, and enclose the ScopedSelectedHFONT into separate scope here:\n\n    TEXTMETRICW aFontMetric;\n    {\n        HDC hDC \u003d m_pGraphics-\u003egetHDC();\n        ScopedSelectedHFONT(hDC, CreateFontIndirectW(\u0026aLogFont));\n        GetTextMetricsW(hDC, \u0026aFontMetric);\n    }\n\n    SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);",
+      "range": {
+        "startLine": 368,
+        "startChar": 8,
+        "endLine": 368,
+        "endChar": 27
+      },
+      "revId": "9373a83829030df7d696a843c3b5ef668989171e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
