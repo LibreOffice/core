@@ -929,6 +929,7 @@ public:
     virtual int get_active() const override { return m_xTreeView->get_selected_index(); }
     virtual void set_active(int pos) override
     {
+        m_xTreeView->set_cursor(pos);
         m_xTreeView->select(pos);
         m_xEntry->set_text(m_xTreeView->get_selected_text());
     }

@@ -376,34 +376,8 @@ namespace weld
         m_aChangeHdl.Call(*this);
     }
 
-    void EntryTreeView::EntryModifyHdl(weld::Entry& rBox)
+    IMPL_LINK_NOARG(EntryTreeView, ModifyHdl, weld::Entry&, void)
     {
-        OUString sText(rBox.get_text());
-        int nExists = m_xTreeView->find_text(sText);
-        if (nExists != -1)
-        {
-            m_xTreeView->select(nExists);
-            return;
-        }
-
-        m_xTreeView->select(-1);
-        if (sText.isEmpty())
-            return;
-
-        int nCount = m_xTreeView->n_children();
-        for (int i = 0; i < nCount; ++i)
-        {
-            if (m_xTreeView->get_text(i).startsWith(sText))
-            {
-                m_xTreeView->select(i);
-                break;
-            }
-        }
-    }
-
-    IMPL_LINK(EntryTreeView, ModifyHdl, weld::Entry&, rBox, void)
-    {
-        EntryModifyHdl(rBox);
         m_aChangeHdl.Call(*this);
     }
 
