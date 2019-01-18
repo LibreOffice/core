@@ -5827,9 +5827,13 @@ public:
         gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
         // tdf#122786 if we're just formatting a value, then we're done,
         // however if set_text has been called directly we want to update our
-        // value from this new text
+        // value from this new text, but don't want to reformat with that value
         if (!m_bFormatting)
+        {
+            g_signal_handler_block(m_pButton, m_nOutputSignalId);
             gtk_spin_button_update(m_pButton);
+            g_signal_handler_unblock(m_pButton, m_nOutputSignalId);
+        }
         enable_notify_events();
     }
 
