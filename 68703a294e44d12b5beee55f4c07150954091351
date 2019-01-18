@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f485f77_6f9fbcb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-01-18T10:18:08Z",
+      "side": 1,
+      "message": "Also, this might (at least partially) resolve tdf#122689 as well as tdf#122689",
+      "revId": "68703a294e44d12b5beee55f4c07150954091351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_af3134ef",
         "filename": "vcl/qt5/Qt5Clipboard.cxx",
         "patchSetId": 1
