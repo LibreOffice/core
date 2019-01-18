@@ -79,21 +79,32 @@ sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
         if (!pAlgAtom)
             continue;
 
-        if (pAlgAtom->getType() != oox::XML_lin)
-            continue;
-
-        sal_Int32 nDir = oox::XML_fromL;
-        if (pAlgAtom->getMap().count(oox::XML_linDir))
-            nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
-
-        switch (nDir)
+        switch (pAlgAtom->getType())
         {
-            case oox::XML_fromL:
-                nType = oox::XML_rightArrow;
+            case oox::XML_lin:
+            {
+                sal_Int32 nDir = oox::XML_fromL;
+                if (pAlgAtom->getMap().count(oox::XML_linDir))
+                    nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
+
+                switch (nDir)
+                {
+                    case oox::XML_fromL:
+                        nType = oox::XML_rightArrow;
+                        break;
+                    case oox::XML_fromR:
+                        nType = oox::XML_leftArrow;
+                        break;
+                }
                 break;
-            case oox::XML_fromR:
-                nType = oox::XML_leftArrow;
+            }
+            case oox::XML_hierChild:
+            {
+                // TODO <dgm:param type="connRout" val="..."/> should be able
+                // to customize this.
+                nType = oox::XML_bentConnector3;
                 break;
+            }
         }
     }
 
@@ -618,6 +629,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
 
             sal_Int32 nCount = rShape->getChildren().size();
+            double fSpace = 0.3;
 
             if (mnType == XML_hierChild)
             {
@@ -652,7 +664,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromT)
             {
-                aChildSize.Height /= nCount;
+                aChildSize.Height /= (nCount + nCount * fSpace);
             }
             else
                 aChildSize.Width /= nCount;
@@ -672,7 +684,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     continue;
 
                 if (nDir == XML_fromT)
-                    aChildPos.Y += aChildSize.Height;
+                    aChildPos.Y += aChildSize.Height + aChildSize.Height * fSpace;
                 else
                     aChildPos.X += aChildSize.Width;
             }

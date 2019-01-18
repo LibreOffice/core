@@ -796,6 +796,10 @@ void SdImportTestSmartArt::testOrgChart()
     // manager2 has no assistants / employees.
     CPPUNIT_ASSERT_GREATER(aManagerSize.Width, aEmployeeSize.Width + aEmployee2Size.Width);
 
+    // Without the accompanying fix in place, this test would have failed: an
+    // employee was exactly the third of the total height, without any spacing.
+    CPPUNIT_ASSERT_LESS(xGroup->getSize().Height / 3, aEmployeeSize.Height);
+
     xDocShRef->DoClose();
 }
 
