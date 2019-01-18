@@ -76,7 +76,7 @@ static AtkStateType mapState( const uno::Any &rAny )
 extern "C" {
     // rhbz#1001768 - down to horrific problems releasing the solar mutex
     // while destroying a Window - which occurs inside these notifications.
-    static gint
+    static gboolean
     idle_defunc_state_change( AtkObject *atk_obj )
     {
         SolarMutexGuard aGuard;
@@ -90,7 +90,7 @@ extern "C" {
             SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         g_object_unref( G_OBJECT( atk_obj ) );
-        return FALSE;
+        return false;
     }
 }
 

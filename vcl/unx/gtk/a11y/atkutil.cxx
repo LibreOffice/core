@@ -66,7 +66,7 @@ static guint focus_notify_handler = 0;
 
 extern "C" {
 
-static gint
+static gboolean
 atk_wrapper_focus_idle_handler (gpointer data)
 {
     SolarMutexGuard aGuard;
@@ -115,7 +115,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 } // extern "C"

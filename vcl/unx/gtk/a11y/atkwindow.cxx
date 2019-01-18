@@ -122,14 +122,14 @@ init_from_window( AtkObject *accessible, vcl::Window const *pWindow )
 
 /*****************************************************************************/
 
-static gint
+static gboolean
 ooo_window_wrapper_clear_focus(gpointer)
 {
     SolarMutexGuard aGuard;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     atk_focus_tracker_notify( nullptr );
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    return FALSE;
+    return false;
 }
 
 /*****************************************************************************/
@@ -138,7 +138,7 @@ static gboolean
 ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
 {
     g_idle_add( ooo_window_wrapper_clear_focus, nullptr );
-    return FALSE;
+    return false;
 }
 
 static gboolean ooo_tooltip_map( GtkWidget* pToolTip, gpointer )
