@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_af3134ef",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-01-18T10:11:17Z",
+      "side": 1,
+      "message": "I\u0027ve improved this func as well as isDataFlavour supported here: https://gerrit.libreoffice.org/#/c/65003/\n\nbut I didn\u0027t quite progress with the rest of clipboard goodness, so ... what if I pushed the progress on those two funcs so far and dump the rest of the patch and you\u0027d then rebase?",
+      "revId": "68703a294e44d12b5beee55f4c07150954091351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
