@@ -12,16 +12,42 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <QtWidgets/QApplication>
-#include <QtGui/QClipboard>
 #include <QtCore/QBuffer>
 #include <QtCore/QMimeData>
 
 #include <Qt5Clipboard.hxx>
 #include <Qt5Tools.hxx>
+
+#include <map>
+
 namespace
 {
+std::map<OUString, QClipboard::Mode> g_nameToClipboardMap
+    = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
+
+QClipboard::Mode getClipboardTypeFromName(const OUString& aString)
+{
+    // use QClipboard::Clipboard as fallback if requested type isn't found
+    QClipboard::Mode aMode = QClipboard::Clipboard;
+
+    auto iter = g_nameToClipboardMap.find(aString);
+    if (iter != g_nameToClipboardMap.end())
+    {
+        aMode = iter->second;
+    }
+    else
+    {
+        SAL_WARN("vcl.qt5", "Unrecognized clipboard type \""
+                                << aString
+                                << "\" is requested, falling back to QClipboard::Clipboard");
+    }
+
+    return aMode;
+}
+
 void lcl_peekFormats(const css::uno::Sequence<css::datatransfer::DataFlavor>& rFormats,
                      bool& bHasHtml, bool& bHasImage)
 {
@@ -37,12 +63,17 @@ void lcl_peekFormats(const css::uno::Sequence<css::datatransfer::DataFlavor>& rF
 }
 }
 
+Qt5Transferable::Qt5Transferable(QClipboard::Mode aMode)
+    : m_aClipboardMode(aMode)
+{
+}
+
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
     std::vector<css::datatransfer::DataFlavor> aVector;
 
     const QClipboard* clipboard = QApplication::clipboard();
-    const QMimeData* mimeData = clipboard->mimeData();
+    const QMimeData* mimeData = clipboard->mimeData(m_aClipboardMode);
     css::datatransfer::DataFlavor aFlavor;
 
     if (mimeData)
@@ -95,44 +126,49 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aRet;
     const QClipboard* clipboard = QApplication::clipboard();
-    const QMimeData* mimeData = clipboard->mimeData();
+    const QMimeData* mimeData = clipboard->mimeData(m_aClipboardMode);
 
-    if (rFlavor.MimeType == "text/plain;charset=utf-16")
+    if (mimeData)
     {
-        QString clipboardContent = mimeData->text();
-        OUString sContent = toOUString(clipboardContent);
+        if (rFlavor.MimeType == "text/plain;charset=utf-16")
+        {
+            QString clipboardContent = mimeData->text();
+            OUString sContent = toOUString(clipboardContent);
 
-        aRet <<= sContent.replaceAll("\r\n", "\n");
-    }
-    else if (rFlavor.MimeType == "text/html")
-    {
-        QString clipboardContent = mimeData->html();
-        std::string aStr = clipboardContent.toStdString();
-        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
-        aRet <<= aSeq;
-    }
-    else if (rFlavor.MimeType.startsWith("image") && mimeData->hasImage())
-    {
-        QImage image = qvariant_cast<QImage>(mimeData->imageData());
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        sal_Int32 nIndex = rFlavor.MimeType.indexOf('/');
-        OUString sFormat(nIndex != -1 ? rFlavor.MimeType.copy(nIndex + 1) : "png");
+            aRet <<= sContent.replaceAll("\r\n", "\n");
+        }
+        else if (rFlavor.MimeType == "text/html")
+        {
+            QString clipboardContent = mimeData->html();
+            std::string aStr = clipboardContent.toStdString();
+            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
+            aRet <<= aSeq;
+        }
+        else if (rFlavor.MimeType.startsWith("image") && mimeData->hasImage())
+        {
+            QImage image = qvariant_cast<QImage>(mimeData->imageData());
+            QByteArray ba;
+            QBuffer buffer(&ba);
+            sal_Int32 nIndex = rFlavor.MimeType.indexOf('/');
+            OUString sFormat(nIndex != -1 ? rFlavor.MimeType.copy(nIndex + 1) : "png");
 
-        buffer.open(QIODevice::WriteOnly);
-        image.save(&buffer, sFormat.toUtf8().getStr());
+            buffer.open(QIODevice::WriteOnly);
+            image.save(&buffer, sFormat.toUtf8().getStr());
 
-        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
-        aRet <<= aSeq;
+            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
+            aRet <<= aSeq;
+        }
     }
 
     return aRet;
 }
 
-VclQt5Clipboard::VclQt5Clipboard()
+VclQt5Clipboard::VclQt5Clipboard(const OUString& aModeString)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>(
           m_aMutex)
+    , m_aClipboardName(aModeString)
+    , m_aClipboardMode(getClipboardTypeFromName(aModeString))
 {
 }
 
@@ -163,7 +199,7 @@ sal_Bool VclQt5Clipboard::supportsService(const OUString& ServiceName)
 Reference<css::datatransfer::XTransferable> VclQt5Clipboard::getContents()
 {
     if (!m_aContents.is())
-        m_aContents = new Qt5Transferable;
+        m_aContents = new Qt5Transferable(m_aClipboardMode);
 
     return m_aContents;
 }
@@ -180,6 +216,29 @@ void VclQt5Clipboard::setContents(
 
     std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
     datatransfer::clipboard::ClipboardEvent aEv;
+
+    QClipboard* clipboard = QApplication::clipboard();
+
+    switch (m_aClipboardMode)
+    {
+        case QClipboard::Selection:
+            if (!clipboard->supportsSelection())
+            {
+                return;
+            }
+            break;
+
+        case QClipboard::FindBuffer:
+            if (!clipboard->supportsFindBuffer())
+            {
+                return;
+            }
+            break;
+
+        case QClipboard::Clipboard:
+        default:
+            break;
+    }
 
     if (m_aContents.is())
     {
@@ -272,8 +331,7 @@ void VclQt5Clipboard::setContents(
             }
         }
 
-        QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setMimeData(pMimeData.release());
+        clipboard->setMimeData(pMimeData.release(), m_aClipboardMode);
     }
 
     aEv.Contents = getContents();
@@ -288,7 +346,7 @@ void VclQt5Clipboard::setContents(
     }
 }
 
-OUString VclQt5Clipboard::getName() { return OUString("CLIPBOARD"); }
+OUString VclQt5Clipboard::getName() { return m_aClipboardName; }
 
 sal_Int8 VclQt5Clipboard::getRenderingCapabilities() { return 0; }
 
