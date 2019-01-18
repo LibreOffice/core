@@ -253,7 +253,7 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     }
 
     css::uno::Reference<css::uno::XInterface> xClipboard(
-        static_cast<cppu::OWeakObject*>(new VclQt5Clipboard()));
+        static_cast<cppu::OWeakObject*>(new VclQt5Clipboard(sel)));
     m_aClipboards[sel] = xClipboard;
 
     return xClipboard;
