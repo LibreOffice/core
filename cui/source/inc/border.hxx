@@ -102,8 +102,8 @@ protected:
 private:
     SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 
-    std::vector<BitmapEx> m_aShadowImgVec;
-    std::vector<BitmapEx> m_aBorderImgVec;
+    std::vector<Image> m_aShadowImgVec;
+    std::vector<Image> m_aBorderImgVec;
 
     long                nMinValue;  ///< minimum distance
     SwBorderModes       nSWMode;    ///< table, textframe, paragraph
