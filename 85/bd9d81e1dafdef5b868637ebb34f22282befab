@@ -1,0 +1,9 @@
+Code-Review+1: Justin Luth <justin_luth@sil.org>
+Verified+1: Jenkins
+Verified+1: Serge Krot (CIB) <Serge.Krot@cib.de>
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Fri, 18 Jan 2019 19:44:07 +0100
+Reviewed-on: https://gerrit.libreoffice.org/66128
+Project: core
+Branch: refs/heads/master
