@@ -33,7 +33,8 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 		cscript configure.js \
 			iconv=no sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 		&& unset MAKEFLAGS \
-		&& LIB="$(ILIB)" nmake \
+		&& INCLUDE="$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))" \
+		   LIB="$(ILIB)" nmake \
 	,win32)
 endif
 else # OS!=WNT
