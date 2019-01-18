@@ -32,6 +32,8 @@ interface XDocuments : com::sun::star::uno::XInterface
 
     any OpenNoRepairDialog([in] string Filename, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToRecentFiles, [in] any PasswordDocument, [in] any PasswordTemplate, [in] any Revert, [in] any WritePasswordDocument, [in] any WritePasswordTemplate, [in] any Format, [in] any Encoding, [in] any Visible, [in] any OpenAndRepair, [in] any DocumentDirection, [in] any NoEncodingDialog, [in] any XMLTransform);
 
+    any OpenOld([in] string FileName, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToRecentFiles, [in] any PasswordDocument, [in] any PasswordTemplate, [in] any Revert, [in] any WritePasswordDocument, [in] any WritePasswordTemplate, [in] any Format);
+
     void Close([in] any SaveChanges,[in] any OriginalFormat,[in] any RouteDocument);
 };
 

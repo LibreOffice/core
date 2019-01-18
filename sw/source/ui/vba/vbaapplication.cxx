@@ -319,6 +319,17 @@ OUString SAL_CALL SwVbaApplication::getStatusBar()
     return OUString("");
 }
 
+uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
+{
+    return uno::Any(); // ???
+}
+
+void SAL_CALL SwVbaApplication::setCustomizationContext( const uno::Any& _customizationcontext )
+{
+    (void) _customizationcontext;
+    // ???
+}
+
 void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
 {
     // ScVbaAppSettings::setStatusBar() also uses the XStatusIndicator to show this, so maybe that is OK?
