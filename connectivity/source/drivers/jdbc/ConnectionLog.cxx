@@ -98,11 +98,12 @@ namespace comphelper { namespace log { namespace convert
 
     OUString convertLogArgToString( const DateTime& _rDateTime )
     {
-        char buffer[ 30 ];
+        char buffer[ sizeof("-32768-65535-65535 65535:65535:65535.4294967295") ];
+            // reserve enough space for hypothetical max length
         const size_t buffer_size = sizeof( buffer );
-        snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
-            static_cast<int>(_rDateTime.Year), static_cast<int>(_rDateTime.Month), static_cast<int>(_rDateTime.Day),
-            static_cast<int>(_rDateTime.Hours), static_cast<int>(_rDateTime.Minutes), static_cast<int>(_rDateTime.Seconds), static_cast<int>(_rDateTime.NanoSeconds) );
+        snprintf( buffer, buffer_size, "%04" SAL_PRIdINT32 "-%02" SAL_PRIuUINT32 "-%02" SAL_PRIuUINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ".%09" SAL_PRIuUINT32,
+            static_cast<sal_Int32>(_rDateTime.Year), static_cast<sal_uInt32>(_rDateTime.Month), static_cast<sal_uInt32>(_rDateTime.Day),
+            static_cast<sal_uInt32>(_rDateTime.Hours), static_cast<sal_uInt32>(_rDateTime.Minutes), static_cast<sal_uInt32>(_rDateTime.Seconds), _rDateTime.NanoSeconds );
         return OUString::createFromAscii( buffer );
     }
 

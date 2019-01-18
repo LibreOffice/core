@@ -200,8 +200,9 @@ OUString LockFileCommon::GetCurrentLocalTime()
             oslDateTime aDateTime;
             if ( osl_getDateTimeFromTimeValue( &aLocTime, &aDateTime ) )
             {
-                char pDateTime[20];
-                sprintf( pDateTime, "%02d.%02d.%4d %02d:%02d", aDateTime.Day, aDateTime.Month, aDateTime.Year, aDateTime.Hours, aDateTime.Minutes );
+                char pDateTime[sizeof("65535.65535.-32768 65535:65535")];
+                    // reserve enough space for hypothetical max length
+                sprintf( pDateTime, "%02" SAL_PRIuUINT32 ".%02" SAL_PRIuUINT32 ".%4" SAL_PRIdINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32, sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Month), sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes) );
                 aTime = OUString::createFromAscii( pDateTime );
             }
         }

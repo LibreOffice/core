@@ -1822,16 +1822,17 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         aDate = ::dbtools::DBTypeConversion::toDate(thisColVal.getDouble());
                     else
                         aDate = thisColVal;
-                    char s[9];
+                    char s[sizeof("-327686553565535")];
+                        // reserve enough space for hypothetical max length
                     snprintf(s,
                         sizeof(s),
                         "%04d%02d%02d",
-                        static_cast<int>(aDate.Year),
-                        static_cast<int>(aDate.Month),
-                        static_cast<int>(aDate.Day));
+                        static_cast<sal_Int32>(aDate.Year),
+                        static_cast<sal_uInt32>(aDate.Month),
+                        static_cast<sal_uInt32>(aDate.Day));
 
-                    // Exactly 8 bytes to copy:
-                    strncpy(pData,s,sizeof s - 1);
+                    // Exactly 8 bytes to copy (even if s could hypothetically be longer):
+                    memcpy(pData,s,8);
                 } break;
                 case DataType::INTEGER:
                     {
