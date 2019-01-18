@@ -89,6 +89,8 @@ public:
     virtual void SAL_CALL setTop( sal_Int32 _top ) override;
     virtual OUString SAL_CALL getStatusBar() override;
     virtual void SAL_CALL setStatusBar( const OUString& _statusbar ) override;
+    virtual css::uno::Any SAL_CALL getCustomizationContext() override;
+    virtual void SAL_CALL setCustomizationContext( const css::uno::Any& _customizationcontext ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
     virtual void SAL_CALL Resize( sal_Int32 Width, sal_Int32 Height ) override;
