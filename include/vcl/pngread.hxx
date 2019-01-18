@@ -48,7 +48,7 @@ public:
     // retrieve every chunk that resides inside the PNG
     struct ChunkData
     {
-        sal_uInt32 nType;
+        sal_uInt32 nType = 0;
         std::vector<sal_uInt8> aData;
     };
     const std::vector<ChunkData>& GetChunks() const;
