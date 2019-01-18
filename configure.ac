@@ -6540,6 +6540,63 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+dnl At least GCC 8.2 with -O2 (i.e., --enable-optimized) causes a false-positive -Wmaybe-
+dnl uninitialized warning for code like
+dnl
+dnl   OString f();
+dnl   boost::optional<OString> * g(bool b) {
+dnl       boost::optional<OString> o;
+dnl       if (b) o = f();
+dnl       return new boost::optional<OString>(o);
+dnl   }
+dnl
+dnl (as is e.g. present, in a slightly more elaborate form, in
+dnl librdf_TypeConverter::extractNode_NoLock in unoxml/source/rdf/librdf_repository.cxx); the below
+dnl code is meant to be a faithfully stripped-down and self-contained version of the above code:
+HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED=
+if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
+    AC_MSG_CHECKING([whether $CXX might report false -Werror=maybe-uninitialized])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 -Werror -Wmaybe-uninitialized"
+    if test "$ENABLE_OPTIMIZED" = TRUE; then
+        CXXFLAGS="$CXXFLAGS -O2"
+    else
+        CXXFLAGS="$CXXFLAGS -O0"
+    fi
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+            #include <new>
+            void f1(int);
+            struct S1 {
+                ~S1() { f1(n); }
+                int n = 0;
+            };
+            struct S2 {
+                S2() {}
+                S2(S2 const & s) { if (s.init) set(*reinterpret_cast<S1 const *>(s.stg)); }
+                ~S2() { if (init) reinterpret_cast<S1 *>(stg)->S1::~S1(); }
+                void set(S1 s) {
+                    new (stg) S1(s);
+                    init = true;
+                }
+                bool init = false;
+                char stg[sizeof (S1)];
+            } ;
+            S1 f2();
+            S2 * f3(bool b) {
+                S2 o;
+                if (b) o.set(f2());
+                return new S2(o);
+            }
+        ]])], [AC_MSG_RESULT([no])], [
+            HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED=TRUE
+            AC_MSG_RESULT([yes])
+        ])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED])
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
