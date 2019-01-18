@@ -66,7 +66,18 @@ void HWPStyle::SetName(int n, char const *name)
     if (n >= 0 && n < nstyles)
     {
         if (name)
-            strncpy(DATA[n].name, name, MAXSTYLENAME);
+        {
+#if defined __GNUC__ && __GNUC__ == 8 && __GNUC_MINOR__ == 2 && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+            auto const p = DATA[n].name;
+            strncpy(p, name, MAXSTYLENAME);
+            p[MAXSTYLENAME] = '\0'; // just in case, even though the array is zero-initialized
+#if defined __GNUC__ && __GNUC__ == 8 && __GNUC_MINOR__ == 2 && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
+        }
         else
             DATA[n].name[0] = 0;
     }
