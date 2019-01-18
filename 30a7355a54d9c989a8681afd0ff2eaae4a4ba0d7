@@ -105,6 +105,24 @@
       "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_acf9424e",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-18T08:40:30Z",
+      "side": 1,
+      "message": "* Why do you need some default value at all that means SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG; why not pass that or-ed value in calls that want that meaning?\n* If you don\u0027t duplicate the C++ SfxSlotMode enum as a UNOIDL entity (and make the SlotMode parameter reference that entity), you effectively make this XDispachInformationProvider2 an internal, never-to-be-published interface (as we don\u0027t have stability guarantees for the LO internal C++ SfxSlotMode enum that would be needed here if XDispatchInformationProvider2 were a published interface).  That may be just fine (if getConfigurableDispatchInformation2 is something that would conceivably never be called by external code anyway, and is only coded in UNO for technical reasons, because the existing LO-internal code calling it only has a UNO reference available; which appears to be the case here).  (And if there\u0027ll ever be a need, we could still introduce some SlotMode UNOIDL entity and change this, yet unpublished, interface accordingly.  Just make it clear in the documentation that this unpublished interface is only intended for internal use at least for now.)\n* I\u0027d still seek a better name than \"getConfigurableDispatchInformation2\", though.",
+      "parentUuid": "1f485f77_ac9a626b",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
