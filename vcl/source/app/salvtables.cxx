@@ -2035,6 +2035,7 @@ public:
         {
             SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
             m_xTreeView->Select(pEntry, true);
+            m_xTreeView->MakeVisible(pEntry);
         }
         enable_notify_events();
     }
@@ -3417,6 +3418,8 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
             break;
         }
     }
+
+    m_xTreeView->select(nPos);
 
     if (nPos != -1)
     {
