@@ -551,6 +551,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             DocumentToGraphicRenderer aRenderer(xSourceDoc, /*bSelectionOnly=*/false);
 
+            bool bIsWriter = aRenderer.isWriter();
+            bool bIsCalc = aRenderer.isCalc();
+
+            if (!bIsWriter && !bIsCalc)
+            {
+                SAL_WARN( "sfx.doc", "Redaction is supported only for Writer and Calc! (for now...)");
+                return;
+            }
+
             sal_Int32 nPages = aRenderer.getPageCount();
 
             std::vector< GDIMetaFile > aMetaFiles;
@@ -559,7 +568,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
                 ::Point aLogicPos;
-                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos);
+                awt::Point aCalcPageLogicPos;
+                awt::Size aCalcPageContentSize;
+                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos, &aCalcPageLogicPos, &aCalcPageContentSize);
                 // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
                 ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
 
@@ -572,9 +583,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 MapMode aMapMode;
                 aMapMode.SetMapUnit(MapUnit::Map100thMM);
                 // FIXME: This is a temporary hack. Need to figure out a proper way to derive these magic numbers.
-                aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
+                if (bIsWriter)
+                    aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
+                else if (bIsCalc)
+                    rGDIMetaFile.Scale(0.625, 0.625);
+
                 rGDIMetaFile.SetPrefMapMode(aMapMode);
-                rGDIMetaFile.SetPrefSize(aLogic);
+
+                if (bIsCalc)
+                {
+                    double aWidthRatio = ((double)aCalcPageContentSize.Width / aLogic.Width());
+                    rGDIMetaFile.Move(-2325 + aCalcPageLogicPos.X * (aWidthRatio - 0.01), -2100);
+                }
+
+                rGDIMetaFile.SetPrefSize( bIsCalc ? ::Size(aCalcPageContentSize.Width, aCalcPageContentSize.Height) : aLogic );
 
                 aMetaFiles.push_back(rGDIMetaFile);
             }
