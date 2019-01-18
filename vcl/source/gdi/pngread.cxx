@@ -273,6 +273,8 @@ bool PNGReaderImpl::ReadNextChunk()
         PNGReader::ChunkData& rChunkData = *maChunkIter;
 
         // read the chunk header
+        mnChunkLen = 0;
+        mnChunkType = 0;
         mrPNGStream.ReadInt32( mnChunkLen ).ReadUInt32( mnChunkType );
         rChunkData.nType = mnChunkType;
 
