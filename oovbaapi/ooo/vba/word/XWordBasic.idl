@@ -17,6 +17,7 @@ interface XWordBasic
     [attribute] long MailMergeMainDocumentType;
 
     void FileOpen( [in] string Name, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToMru, [in] any PasswordDoc, [in] any PasswordDot, [in] any Revert, [in] any WritePasswordDoc, [in] any WritePasswordDot );
+    void FileSave();
     void ToolsOptionsView( [in] any Whatever1, [in] any Whatever2, [in] any Whatever3, [in] any Whatever4, [in] any Whatever5, [in] any Whatever6, [in] any Whatever7, [in] any Whatever8, [in] any Whatever9, [in] any Whatever10, [in] any Whatever11, [in] any Whatever12, [in] any Whatever13, [in] any Whatever14, [in] any Whatever15, [in] any Whatever16, [in] any Whatever17, [in] any Whatever18, [in] any Whatever19, [in] any Whatever20 );
     string WindowName();
     boolean ExistingBookmark( [in] string Name );
