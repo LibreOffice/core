@@ -1204,37 +1204,18 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     return comphelper::mapKeysToSequence( aCmdHashMap );
 }
 
-namespace
-{
-    //Current c++0x draft (apparently) has std::identity, but not operator()
-    template<typename T> struct SGI_identity
-    {
-        T& operator()(T& x) const { return x; }
-        const T& operator()(const T& x) const { return x; }
-    };
-}
-
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
 {
     std::vector< DispatchInformation > aInformationVector;
-    DispatchInformation aDispatchInfo;
     for (auto const& supportedFeature : m_aSupportedFeatures)
     {
         if ( sal_Int16( supportedFeature.second.GroupId ) == CommandGroup )
         {
-            aDispatchInfo = supportedFeature.second;
-            aInformationVector.push_back( aDispatchInfo );
+            aInformationVector.push_back( supportedFeature.second );
         }
     }
 
-    Sequence< DispatchInformation > aInformation( aInformationVector.size() );
-    std::transform( aInformationVector.begin(),
-        aInformationVector.end(),
-        aInformation.getArray(),
-        SGI_identity< DispatchInformation >()
-    );
-
-    return aInformation;
+    return comphelper::containerToSequence( aInformationVector );
 }
 
 void OGenericUnoController::fillSupportedFeatures()
