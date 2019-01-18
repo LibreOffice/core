@@ -89,33 +89,22 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 {
     mbGrabFocus = true;
     // insert pages
-    std::vector<Image> imgVector;
     OUString aStrTitle;
     SvxIconChoiceCtrlEntry *pEntry;
-    imgVector.emplace_back(StockImage::Yes, RID_SVXBMP_HLINETTP);
-    imgVector.emplace_back(StockImage::Yes, RID_SVXBMP_HLMAILTP);
-    imgVector.emplace_back(StockImage::Yes, RID_SVXBMP_HLDOCTP);
-    imgVector.emplace_back(StockImage::Yes, RID_SVXBMP_HLDOCNTP);
 
-    for(Image &aImage : imgVector )
-    {
-        BitmapEx aBitmap = aImage.GetBitmapEx();
-        aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
-        aImage = Image(aBitmap);
-    }
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP );
-    pEntry = AddTabPage ( HyperLinkPageType::Internet, aStrTitle, imgVector[0], SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::Internet, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLINETTP), SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    pEntry = AddTabPage ( HyperLinkPageType::Mail, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::Mail, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLMAILTP), SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     if (!comphelper::LibreOfficeKit::isActive())
     {
         aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP );
-        pEntry = AddTabPage ( HyperLinkPageType::Document, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
+        pEntry = AddTabPage ( HyperLinkPageType::Document, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLDOCTP), SvxHyperlinkDocTp::Create );
         pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
         aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-        pEntry = AddTabPage ( HyperLinkPageType::NewDocument, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
+        pEntry = AddTabPage ( HyperLinkPageType::NewDocument, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLDOCNTP), SvxHyperlinkNewDocTp::Create );
         pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
     }
 

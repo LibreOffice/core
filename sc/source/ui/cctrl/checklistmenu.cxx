@@ -1098,15 +1098,12 @@ void ScCheckListMenuWindow::packWindow()
 
     float fScaleFactor = GetDPIScaleFactor();
 
-    BitmapEx aSingleSelectBmp(RID_BMP_SELECT_CURRENT);
-    if (fScaleFactor > 1)
-        aSingleSelectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
-    Image aSingleSelect(aSingleSelectBmp);
+    ;
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle->SetPosSizePixel(aPos, aSize);
     maBtnSelectSingle->SetQuickHelpText(ScResId(STR_BTN_SELECT_CURRENT));
-    maBtnSelectSingle->SetModeImage(aSingleSelect);
+    maBtnSelectSingle->SetModeImage(Image(RID_BMP_SELECT_CURRENT));
     maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle->Show();
 

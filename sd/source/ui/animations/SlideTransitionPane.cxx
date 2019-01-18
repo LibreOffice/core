@@ -1159,10 +1159,10 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
                 OUString sImageName("sd/cmd/transition-" + pPreset->getSetId() + ".png");
                 BitmapEx aIcon( sImageName );
                 if ( aIcon.IsEmpty() ) // need a fallback
-                    aIcon = BitmapEx( "sd/cmd/transition-none.png" );
+                    sImageName = "sd/cmd/transition-none.png";
 
                 mpVS_TRANSITION_ICONS->InsertItem(
-                    nPresetOffset + 1, Image( aIcon ), sLabel,
+                    nPresetOffset + 1, Image( sImageName ), sLabel,
                     VALUESET_APPEND, /* show legend */ true );
 
                 m_aNumVariants[ pPreset->getSetId() ] = 1;
