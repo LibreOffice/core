@@ -206,10 +206,10 @@ int main( int argc, char *argv[] )
             strcat( envstr, value );
         }
         putenv( envstr );
-    #ifdef MACOSX
+#ifdef MACOSX
         /* https://bz.apache.org/ooo/show_bug.cgi?id=127965 */
         value = getenv( "PATH" );
-        size = strlen( "PATH" ) + strlen( "=/usr/local/bin" );
+        size = strlen( "PATH" ) + strlen( "=/usr/local/bin" ) + 1;
         if ( value != NULL )
             size += strlen( PATHSEPARATOR ) + strlen( value );
         envstr = (char*) malloc( size );
@@ -220,7 +220,7 @@ int main( int argc, char *argv[] )
         }
         strcat( envstr, "/usr/local/bin" ); /* We are adding at the end */
         putenv( envstr );
-    #endif
+#endif
     }
     else
     {

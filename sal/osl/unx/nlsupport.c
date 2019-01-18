@@ -832,6 +832,8 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen);
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     static char *locale = NULL;
+    char *npath, *opath;
+    int slen;
 
     /* basic thread safeness */
 //    pthread_mutex_lock( &aLocalMutex );
@@ -869,6 +871,26 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     setenv( "LC_ALL", locale, 1);
     setenv("LC_CTYPE", locale, 1 );
     setenv("LANG", locale, 1 );
+
+    /*
+     * This is a hack. We know that we are setting some envvars here
+     * and due to https://bz.apache.org/ooo/show_bug.cgi?id=127965
+     * we need to update PATH on macOS. Doing it here ensures
+     * that it's done but it's not the right location to be doing
+     * this.
+     */
+    opath = getenv ( "PATH" );
+    slen = strlen( "/usr/local/bin" ) + 1;
+    if ( opath != NULL )
+        slen += strlen( ":" ) + strlen( opath );
+    npath = malloc( slen );
+    if ( opath != NULL ) {
+        strcat( npath, opath );
+        strcat( npath, ":" );
+    }
+    strcat( npath, "/usr/local/bin" ); /* We are adding at the end */
+    setenv("PATH", npath, 1 );
+    free(npath);
 
 #ifdef DEBUG
     fprintf( stderr, "nlsupport.c:  _imp_getProcessLocale() returning %s as current locale.\n", locale );

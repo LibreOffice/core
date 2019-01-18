@@ -385,7 +385,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     rtl_String* pstr_env_var  = 0;
 
-    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+    OSL_PRECOND(pustrEnvVar, "osl_clearEnvironment(): Invalid parameter");
 
     rtl_uString2String(
         &pstr_env_var,
