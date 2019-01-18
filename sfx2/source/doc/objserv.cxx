@@ -549,7 +549,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             uno::Reference< lang::XComponent > xSourceDoc( xModel );
 
-            DocumentToGraphicRenderer aRenderer(xSourceDoc, /*bSelectionOnly=*/false);
+            DocumentToGraphicRenderer aRenderer(xSourceDoc, false);
+
+            bool bIsWriter = aRenderer.isWriter();
+            bool bIsCalc = aRenderer.isCalc();
+
+            if (!bIsWriter && !bIsCalc)
+            {
+                SAL_WARN( "sfx.doc", "Redaction is supported only for Writer and Calc! (for now...)");
+                return;
+            }
 
             sal_Int32 nPages = aRenderer.getPageCount();
 
@@ -559,7 +568,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
                 ::Point aLogicPos;
-                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos);
+                ::Point aCalcPageLogicPos;
+                ::Size aCalcPageContentSize;
+                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos, &aCalcPageLogicPos, &aCalcPageContentSize);
                 // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
                 ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
 
@@ -572,9 +583,21 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 MapMode aMapMode;
                 aMapMode.SetMapUnit(MapUnit::Map100thMM);
                 // FIXME: This is a temporary hack. Need to figure out a proper way to derive these magic numbers.
-                aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
+                if (bIsWriter)
+                    aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
+                else if (bIsCalc)
+                    rGDIMetaFile.Scale(0.566, 0.566);
+
                 rGDIMetaFile.SetPrefMapMode(aMapMode);
-                rGDIMetaFile.SetPrefSize(aLogic);
+
+                if (bIsCalc)
+                {
+                    double aWidthRatio = static_cast<double>(aCalcPageContentSize.Width()) / aLogic.Width();
+                    // FIXME: Get rid of these magic numbers. Also watch for floating point rounding errors
+                    rGDIMetaFile.Move(-2400 + aCalcPageLogicPos.X() * (aWidthRatio - 0.0887), -3300 + aCalcPageLogicPos.Y() * 0.64175);
+                }
+
+                rGDIMetaFile.SetPrefSize( bIsCalc ? aCalcPageContentSize : aLogic );
 
                 aMetaFiles.push_back(rGDIMetaFile);
             }
@@ -608,6 +631,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 xShape->setSize(awt::Size(rGDIMetaFile.GetPrefSize().Width(),rGDIMetaFile.GetPrefSize().Height()) );
 
                 xPage->add(xShape);
+
+                // Shapes from Calc have the size of the content instead of the whole standard page (like A4)
+                // so it needs positioning on the draw page
+                if (bIsCalc)
+                    xShape->setPosition(awt::Point(1000,1000));
             }
 
             // Remove the extra page at the beginning

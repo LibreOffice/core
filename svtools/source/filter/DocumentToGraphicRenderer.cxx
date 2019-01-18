@@ -49,7 +49,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     mxController( mxModel->getCurrentController() ),
     mxRenderable (mxDocument, uno::UNO_QUERY ),
     mxToolkit( VCLUnoHelper::CreateToolkit() ),
-    mbIsWriter( false )
+    meDocType( UNKNOWN )
 {
     try
     {
@@ -57,7 +57,13 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
         if (xServiceInfo.is())
         {
             if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
-                mbIsWriter = true;
+                meDocType = WRITER;
+            else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+                meDocType = CALC;
+            else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"))
+                meDocType = IMPRESS;
+            else
+                meDocType = UNKNOWN;
         }
     }
     catch (const uno::Exception&)
@@ -80,7 +86,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
                  * XRenderable::render() it always renders an empty page.
                  * So disable the selection already here. The current page
                  * the cursor is on is rendered. */
-                if (!mbIsWriter)
+                if (!isWriter())
                     maSelection = aViewSelection;
             }
         }
@@ -116,7 +122,7 @@ uno::Any DocumentToGraphicRenderer::getSelection() const
 }
 
 Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
-                                                       Point* pDocumentPosition)
+                                                       Point* pDocumentPosition, Point* pCalcPagePosition, Size* pCalcPageSize)
 {
     Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
 
@@ -135,7 +141,9 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
     renderProperties[3].Value <<= true;
 
     awt::Size aSize;
+    awt::Size aCalcPageSize;
     awt::Point aPos;
+    awt::Point aCalcPos;
 
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
     if (nPages >= nCurrentPage)
@@ -151,12 +159,28 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
             {
                 aResult[nProperty].Value >>= aPos;
             }
+            else if (aResult[nProperty].Name == "CalcPagePos")
+            {
+                aResult[nProperty].Value >>= aCalcPos;
+            }
+            else if (aResult[nProperty].Name == "CalcPageContentSize")
+            {
+                aResult[nProperty].Value >>= aCalcPageSize;
+            }
         }
     }
 
     if (pDocumentPosition)
     {
         *pDocumentPosition = Point(aPos.X, aPos.Y);
+    }
+    if (pCalcPagePosition)
+    {
+        *pCalcPagePosition = Point(aCalcPos.X, aCalcPos.Y);
+    }
+    if (pCalcPageSize)
+    {
+        *pCalcPageSize = Size(aCalcPageSize.Width, aCalcPageSize.Height);
     }
 
     return Size( aSize.Width, aSize.Height );
@@ -246,7 +270,7 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPage()
     if (hasSelection())
         return 1;
 
-    if (mbIsWriter)
+    if (isWriter())
         return getCurrentPageWriter();
 
     /* TODO: other application specific page detection? */
@@ -305,6 +329,30 @@ bool DocumentToGraphicRenderer::isShapeSelected(
         }
     }
     return bShape;
+}
+
+bool DocumentToGraphicRenderer::isWriter() const
+{
+    if (meDocType == WRITER)
+        return true;
+    else
+        return false;
+}
+
+bool DocumentToGraphicRenderer::isCalc() const
+{
+    if (meDocType == CALC)
+        return true;
+    else
+        return false;
+}
+
+bool DocumentToGraphicRenderer::isImpress() const
+{
+    if (meDocType == IMPRESS)
+        return true;
+    else
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

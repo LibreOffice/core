@@ -46,12 +46,19 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
     const css::uno::Reference<css::lang::XComponent>& mxDocument;
 
+    enum DocType {
+            WRITER,
+            CALC,
+            IMPRESS,
+            UNKNOWN
+        };
+
     css::uno::Reference<css::frame::XModel>         mxModel;
     css::uno::Reference<css::frame::XController>    mxController;
     css::uno::Reference<css::view::XRenderable>     mxRenderable;
     css::uno::Reference<css::awt::XToolkit>         mxToolkit;
     css::uno::Any                                   maSelection;
-    bool                                            mbIsWriter;
+    DocType                                         meDocType;
     std::vector<OUString>                           maChapterNames;
 
     bool hasSelection() const;
@@ -77,7 +84,8 @@ public:
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
-    Size getDocumentSizeIn100mm(sal_Int32 nCurrentPage, Point* pDocumentPosition = nullptr);
+    Size getDocumentSizeIn100mm(sal_Int32 nCurrentPage, Point* pDocumentPosition = nullptr,
+                                Point* pCalcPagePosition = nullptr, Size *pCalcPageSize = nullptr);
 
     Graphic renderToGraphic( sal_Int32 nCurrentPage, Size aDocumentSizePixel,
                             Size aTargetSizePixel, Color aPageColor, bool bExtOutDevData);
@@ -92,6 +100,10 @@ public:
             css::uno::Reference< css::drawing::XShapes > & rxShapes,
             css::uno::Reference< css::drawing::XShape > & rxShape,
             const css::uno::Reference< css::frame::XController > & rxController );
+
+    bool isWriter() const;
+    bool isCalc() const;
+    bool isImpress() const;
 };
 
 #endif
