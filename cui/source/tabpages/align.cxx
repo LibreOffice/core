@@ -341,16 +341,9 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
 
-    BitmapEx aBottomLock(RID_SVXBMP_BOTTOMLOCK);
-    BitmapEx aTopLock(RID_SVXBMP_TOPLOCK);
-    BitmapEx aCellLock(RID_SVXBMP_CELLLOCK);
-
-    if( GetDPIScaleFactor() > 1 )
-    {
-        aBottomLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        aTopLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        aCellLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-    }
+    Image aBottomLock(RID_SVXBMP_BOTTOMLOCK);
+    Image aTopLock(RID_SVXBMP_TOPLOCK);
+    Image aCellLock(RID_SVXBMP_CELLLOCK);
 
     Size aItemSize(aBottomLock.GetSizePixel());
 
@@ -358,9 +351,9 @@ void AlignmentTabPage::InitVsRefEgde()
     m_pVsRefEdge->SetStyle( m_pVsRefEdge->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
     m_pVsRefEdge->SetColCount( 3 );
-    m_pVsRefEdge->InsertItem(IID_BOTTOMLOCK, Image(aBottomLock),  m_pFtBotLock->GetText());
-    m_pVsRefEdge->InsertItem(IID_TOPLOCK,    Image(aTopLock),     m_pFtTopLock->GetText());
-    m_pVsRefEdge->InsertItem(IID_CELLLOCK,   Image(aCellLock),    m_pFtCelLock->GetText());
+    m_pVsRefEdge->InsertItem(IID_BOTTOMLOCK, aBottomLock,  m_pFtBotLock->GetText());
+    m_pVsRefEdge->InsertItem(IID_TOPLOCK,    aTopLock,     m_pFtTopLock->GetText());
+    m_pVsRefEdge->InsertItem(IID_CELLLOCK,   aCellLock,    m_pFtCelLock->GetText());
 
     m_pVsRefEdge->SetSizePixel( m_pVsRefEdge->CalcWindowSizePixel( aItemSize ) );
 

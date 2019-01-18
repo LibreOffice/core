@@ -82,10 +82,7 @@ void SdInsertPagesObjsDlg::Reset()
     }
     else
     {
-        Color aColor( COL_WHITE );
-        BitmapEx aBmpText(BMP_DOC_TEXT);
-        //to-do, check if this is already transparent and remove intermedia bitmapex if it is
-        Image aImgText(BitmapEx(aBmpText.GetBitmap(), aColor));
+        Image aImgText(BMP_DOC_TEXT);
         m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 
