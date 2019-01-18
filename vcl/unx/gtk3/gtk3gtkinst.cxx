@@ -5749,6 +5749,7 @@ private:
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
     bool m_bFormatting;
+    bool m_bBlockOutput;
 
     static void signalValueChanged(GtkSpinButton*, gpointer widget)
     {
@@ -5759,6 +5760,8 @@ private:
 
     bool guarded_signal_output()
     {
+        if (m_bBlockOutput)
+            return true;
         m_bFormatting = true;
         bool bRet = signal_output();
         m_bFormatting = false;
@@ -5806,6 +5809,7 @@ public:
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
         , m_bFormatting(false)
+        , m_bBlockOutput(false)
     {
     }
 
@@ -5827,9 +5831,13 @@ public:
         gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
         // tdf#122786 if we're just formatting a value, then we're done,
         // however if set_text has been called directly we want to update our
-        // value from this new text
+        // value from this new text, but don't want to reformat with that value
         if (!m_bFormatting)
+        {
+            m_bBlockOutput = true;
             gtk_spin_button_update(m_pButton);
+            m_bBlockOutput = false;
+        }
         enable_notify_events();
     }
 
