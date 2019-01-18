@@ -346,8 +346,32 @@ bool ConditionAtom::getDecision() const
     case XML_var:
     {
         const dgm::Point* pPoint = getPresNode();
-        if (pPoint && maCond.mnArg == XML_dir)
+        if (!pPoint)
+            break;
+
+        if (maCond.mnArg == XML_dir)
             return compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
+        else if (maCond.mnArg == XML_hierBranch)
+        {
+            sal_Int32 nHierarchyBranch = pPoint->moHierarchyBranch.get(XML_std);
+            if (!pPoint->moHierarchyBranch.has())
+            {
+                // If <dgm:hierBranch> is missing in the current presentation
+                // point, ask the parent.
+                OUString aParent = navigate(mrLayoutNode, XML_presParOf, pPoint->msModelId,
+                                            /*bSourceToDestination*/ false);
+                DiagramData::PointNameMap& rPointNameMap
+                    = mrLayoutNode.getDiagram().getData()->getPointNameMap();
+                auto it = rPointNameMap.find(aParent);
+                if (it != rPointNameMap.end())
+                {
+                    const dgm::Point* pParent = it->second;
+                    if (pParent->moHierarchyBranch.has())
+                        nHierarchyBranch = pParent->moHierarchyBranch.get();
+                }
+            }
+            return compareResult(maCond.mnOp, nHierarchyBranch, maCond.mnVal);
+        }
         break;
     }
 
@@ -595,6 +619,15 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             sal_Int32 nCount = rShape->getChildren().size();
 
+            if (mnType == XML_hierChild)
+            {
+                // Connectors should not influence the size of non-connect
+                // shapes.
+                nCount = std::count_if(
+                    rShape->getChildren().begin(), rShape->getChildren().end(),
+                    [](const ShapePtr& pShape) { return pShape->getSubType() != XML_conn; });
+            }
+
             // A manager node's height should be independent from if it has
             // assistants and employees, compensate for that.
             bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
@@ -632,6 +665,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 pChild->setPosition(aChildPos);
                 pChild->setSize(aChildSize);
                 pChild->setChildSize(aChildSize);
+
+                if (mnType == XML_hierChild && pChild->getSubType() == XML_conn)
+                    // Connectors should not influence the position of
+                    // non-connect shapes.
+                    continue;
+
                 if (nDir == XML_fromT)
                     aChildPos.Y += aChildSize.Height;
                 else

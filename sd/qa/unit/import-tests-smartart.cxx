@@ -721,16 +721,15 @@ void SdImportTestSmartArt::testOrgChart()
     awt::Size aManagerSize = xManagerShape->getSize();
 
     // Make sure that the manager has 2 employees.
-    // Without the accompanying fix in place, this test would have failed with
-    // 'Expected: 2; Actual  : 1'.
     uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 2),
                                                 uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployees.is());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xEmployees->getCount());
+    // 4 children: connector, 1st employee, connector, 2nd employee.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xEmployees->getCount());
 
     uno::Reference<text::XText> xEmployee(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 0), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee"), xEmployee->getString());
@@ -752,7 +751,7 @@ void SdImportTestSmartArt::testOrgChart()
     // the second employee was below the first one.
     uno::Reference<text::XText> xEmployee2(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 3), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee2"), xEmployee2->getString());

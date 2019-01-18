@@ -73,7 +73,6 @@ struct Point
         mnMaxChildren(-1),
         mnPreferredChildren(-1),
         mnDirection(XML_norm),
-        mnHierarchyBranch(XML_std),
         mnResizeHandles(XML_rel),
         mnCustomAngle(-1),
         mnPercentageNeighbourWidth(-1),
@@ -118,7 +117,7 @@ struct Point
     sal_Int32     mnMaxChildren;
     sal_Int32     mnPreferredChildren;
     sal_Int32     mnDirection;
-    sal_Int32     mnHierarchyBranch;
+    OptValue<sal_Int32> moHierarchyBranch;
     sal_Int32     mnResizeHandles;
     sal_Int32     mnCustomAngle;
     sal_Int32     mnPercentageNeighbourWidth;
