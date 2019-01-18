@@ -4270,8 +4270,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (eStage == PRE_INIT)
         rtl_alloc_preInit(true);
-    else if (eStage == SECOND_INIT)
-        rtl_alloc_preInit(false);
 
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
@@ -4473,6 +4471,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage == PRE_INIT)
     {
         comphelper::ThreadPool::getSharedOptimalPool().shutdown();
+        rtl_alloc_preInit(false);
     }
 
     return bInitialized;
