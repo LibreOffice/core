@@ -1484,6 +1484,21 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_nFieldsInHyperlink = 0;
     }
 
+    // end ToX fields
+    for (auto it = m_Fields.rbegin(); it != m_Fields.rend(); )
+    {
+        if (it->bClose && !it->pField)
+        {
+            EndField_Impl( pNode, nPos, *it );
+            it = decltype(m_Fields)::reverse_iterator(m_Fields.erase(it.base() - 1));
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
     DoWriteBookmarksEnd(m_rFinalBookmarksEnd);
     DoWriteBookmarkEndIfExist(nPos);
