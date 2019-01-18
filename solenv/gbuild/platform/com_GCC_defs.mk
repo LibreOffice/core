@@ -79,6 +79,10 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+ifeq ($(HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED),TRUE)
+gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
+endif
+
 gb_CXXFLAGS_Wundef = -Wno-undef
 
 ifeq ($(ENABLE_GDB_INDEX),TRUE)
