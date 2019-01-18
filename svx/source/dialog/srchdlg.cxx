@@ -73,6 +73,8 @@
 #include <cstdlib>
 #include <memory>
 
+#include <svx/xdef.hxx>
+
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
@@ -2016,6 +2018,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     aWhRanges.push_back(0);
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet(rPool, aWhRanges.data());
+    aSet.MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST);
     OUString aTxt;
 
     aSet.InvalidateAllItems();

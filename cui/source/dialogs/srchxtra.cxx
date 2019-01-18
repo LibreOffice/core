@@ -44,7 +44,7 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxIte
     AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, nullptr );
-    AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
+    AddTabPage("background", SvxBkgTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     SvtCJKOptions aCJKOptions;
