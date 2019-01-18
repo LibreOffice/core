@@ -42,6 +42,7 @@ public:
     void testTdf116830();
     void testTdf114163();
     void testTdf108021();
+    void testTdf122800();
     void testTdf116925();
     void testTdf117028();
     void testTdf106390();
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf114163);
     CPPUNIT_TEST(testTdf108021);
+    CPPUNIT_TEST(testTdf122800);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf106390);
@@ -2340,6 +2342,24 @@ void SwLayoutWriter::testTdf108021()
         pXmlDoc,
         "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
         8);
+    // This failed, if the textarray length of the first axis label not 22.
+}
+
+void SwLayoutWriter::testTdf122800()
+{
+    SwDoc* pDoc = createDoc("tdf122800.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
+        9);
     // This failed, if the textarray length of the first axis label not 22.
 }
 
