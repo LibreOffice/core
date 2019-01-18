@@ -167,7 +167,14 @@ SwVbaApplication::getOptions()
 uno::Any SAL_CALL
 SwVbaApplication::CommandBars( const uno::Any& aIndex )
 {
-    return VbaApplicationBase::CommandBars( aIndex );
+    try
+    {
+        return VbaApplicationBase::CommandBars( aIndex );
+    }
+    catch (const uno::RuntimeException&)
+    {
+        return uno::Any();
+    }
 }
 
 uno::Reference< word::XSelection > SAL_CALL
