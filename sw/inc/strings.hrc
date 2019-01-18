@@ -247,6 +247,7 @@
 #define SW_STR_READONLY                         NC_("SW_STR_READONLY", "read-only")
 #define STR_READONLY_PATH                       NC_("STR_READONLY_PATH", "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?")
 #define STR_DOC_STAT                            NC_("STR_DOC_STAT", "Statistics")
+#define STR_OUTLINENUMBERING_DISABLED           NC_("STR_OUTLINENUMBERING_DISABLED","This option is disabled when chapter numbering is assigned to a paragraph style")
 // Statusbar-titles
 #define STR_STATSTR_W4WREAD                     NC_("STR_STATSTR_W4WREAD", "Importing document...")
 #define STR_STATSTR_W4WWRITE                    NC_("STR_STATSTR_W4WWRITE", "Exporting document...")
