@@ -36,20 +36,20 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 namespace chart
 {
 
-enum LegendSymbolStyle
+enum class LegendSymbolStyle
 {
     /** A square box with border.
      */
-    LegendSymbolStyle_BOX,
+    Box,
 
     /** A line like with a symbol.
      */
-    LegendSymbolStyle_LINE,
+    Line,
 
     /** A bordered circle which has the same bounding-box as the
         <member>BOX</member>.
      */
-    LegendSymbolStyle_CIRCLE
+    Circle
 };
 
 struct ViewLegendEntry

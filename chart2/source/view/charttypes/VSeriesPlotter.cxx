@@ -2324,7 +2324,7 @@ bool lcl_HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLine 
 }
 LegendSymbolStyle VSeriesPlotter::getLegendSymbolStyle()
 {
-    return LegendSymbolStyle_BOX;
+    return LegendSymbolStyle::Box;
 }
 
 awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
@@ -2333,7 +2333,7 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     if( m_nDimension==3 )
         return aRet;
 
-    bool bSeriesAllowsLines = (getLegendSymbolStyle() == LegendSymbolStyle_LINE);
+    bool bSeriesAllowsLines = (getLegendSymbolStyle() == LegendSymbolStyle::Line);
     bool bHasLines = false;
     bool bHasDashedLines = false;
     //iterate through all series
@@ -2395,7 +2395,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_LINE:
+        case LegendSymbolStyle::Line:
             ePropType = VLegendSymbolFactory::PropertyType::LineSeries;
             break;
         default:
@@ -2426,7 +2426,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_LINE:
+        case LegendSymbolStyle::Line:
             ePropType = VLegendSymbolFactory::PropertyType::LineSeries;
             break;
         default:
@@ -2567,7 +2567,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                     // create the symbol
                     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-                        xSymbolGroup, LegendSymbolStyle_LINE, xShapeFactory,
+                        xSymbolGroup, LegendSymbolStyle::Line, xShapeFactory,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
                         VLegendSymbolFactory::PropertyType::Line, uno::Any() ));
 

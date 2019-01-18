@@ -87,7 +87,7 @@ void VAxisBase::initAxisLabelProperties( const css::awt::Size& rFontReferenceSiz
     m_aAxisLabelProperties.nNumberFormatKey = m_aAxisProperties.m_nNumberFormatKey;
     m_aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
     if( m_aAxisProperties.m_bComplexCategories && m_aAxisProperties.m_nAxisType == AxisType::CATEGORY )
-        m_aAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
+        m_aAxisLabelProperties.eStaggering = AxisLabelStaggering::SideBySide;
 }
 
 bool VAxisBase::isDateAxis() const

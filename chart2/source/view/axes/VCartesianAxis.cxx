@@ -270,9 +270,9 @@ TickInfo* LabelIterator::firstInfo()
         pTickInfo = m_aPureTickIter.nextInfo();
     if(!pTickInfo)
         return nullptr;
-    if( (m_eAxisLabelStaggering==STAGGER_EVEN && m_bInnerLine)
+    if( (m_eAxisLabelStaggering==AxisLabelStaggering::StaggerEven && m_bInnerLine)
         ||
-        (m_eAxisLabelStaggering==STAGGER_ODD && !m_bInnerLine)
+        (m_eAxisLabelStaggering==AxisLabelStaggering::StaggerOdd && !m_bInnerLine)
         )
     {
         //skip first label
@@ -293,8 +293,8 @@ TickInfo* LabelIterator::nextInfo()
         pTickInfo = m_aPureTickIter.nextInfo();
     while( pTickInfo && !pTickInfo->xTextShape.is() );
 
-    if(  m_eAxisLabelStaggering==STAGGER_EVEN
-      || m_eAxisLabelStaggering==STAGGER_ODD )
+    if(  m_eAxisLabelStaggering==AxisLabelStaggering::StaggerEven
+      || m_eAxisLabelStaggering==AxisLabelStaggering::StaggerOdd )
     {
         //skip one label
         do
@@ -553,7 +553,7 @@ bool canAutoAdjustLabelPlacement(
 bool isAutoStaggeringOfLabelsAllowed(
     const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis )
 {
-    if( rAxisLabelProperties.eStaggering != STAGGER_AUTO )
+    if( rAxisLabelProperties.eStaggering != AxisLabelStaggering::StaggerAuto )
         return false;
     return canAutoAdjustLabelPlacement(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis);
 }
@@ -784,7 +784,7 @@ bool VCartesianAxis::createTextShapes(
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
                 {
                     bIsStaggered = true;
-                    rAxisLabelProperties.eStaggering = STAGGER_EVEN;
+                    rAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
                     pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
                     if( !pLastVisibleNeighbourTickInfo ||
                         !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
@@ -865,7 +865,7 @@ bool VCartesianAxis::createTextShapes(
                         || m_aAxisProperties.m_bTryStaggeringFirst )
                     {
                         bIsStaggered = true;
-                        rAxisLabelProperties.eStaggering = STAGGER_EVEN;
+                        rAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
                         pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
                         if( !pLastVisibleNeighbourTickInfo ||
                             !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
@@ -1650,7 +1650,7 @@ void VCartesianAxis::createMaximumLabels()
 
     AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
     if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )
-        aAxisLabelProperties.eStaggering = STAGGER_EVEN;
+        aAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
 
     aAxisLabelProperties.bOverlapAllowed = true;
     aAxisLabelProperties.bLineBreakAllowed = false;

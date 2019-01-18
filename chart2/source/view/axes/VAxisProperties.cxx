@@ -335,7 +335,7 @@ AxisLabelProperties::AxisLabelProperties()
                         : m_aFontReferenceSize( ChartModelHelper::getDefaultPageSize() )
                         , m_aMaximumSpaceForLabels( 0 , 0, m_aFontReferenceSize.Width, m_aFontReferenceSize.Height )
                         , nNumberFormatKey(0)
-                        , eStaggering( SIDE_BY_SIDE )
+                        , eStaggering( AxisLabelStaggering::SideBySide )
                         , bLineBreakAllowed( false )
                         , bOverlapAllowed( false )
                         , bStackCharacters( false )
@@ -363,16 +363,16 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
             switch(eArrangeOrder)
             {
                 case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
-                    eStaggering = SIDE_BY_SIDE;
+                    eStaggering = AxisLabelStaggering::SideBySide;
                     break;
                 case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
-                    eStaggering = STAGGER_EVEN;
+                    eStaggering = AxisLabelStaggering::StaggerEven;
                     break;
                 case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
-                    eStaggering = STAGGER_ODD;
+                    eStaggering = AxisLabelStaggering::StaggerOdd;
                     break;
                 default:
-                    eStaggering = STAGGER_AUTO;
+                    eStaggering = AxisLabelStaggering::StaggerAuto;
                     break;
             }
         }
@@ -385,14 +385,14 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
 
 bool AxisLabelProperties::isStaggered() const
 {
-    return ( eStaggering == STAGGER_ODD || eStaggering == STAGGER_EVEN );
+    return ( eStaggering == AxisLabelStaggering::StaggerOdd || eStaggering == AxisLabelStaggering::StaggerEven );
 }
 
 void AxisLabelProperties::autoRotate45()
 {
     fRotationAngleDegree = 45;
     bLineBreakAllowed = false;
-    eStaggering = SIDE_BY_SIDE;
+    eStaggering = AxisLabelStaggering::SideBySide;
 }
 
 } //namespace chart

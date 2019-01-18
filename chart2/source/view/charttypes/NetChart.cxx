@@ -87,8 +87,8 @@ bool NetChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*
 LegendSymbolStyle NetChart::getLegendSymbolStyle()
 {
     if( m_bArea )
-        return LegendSymbolStyle_BOX;
-    return LegendSymbolStyle_LINE;
+        return LegendSymbolStyle::Box;
+    return LegendSymbolStyle::Line;
 }
 
 uno::Any NetChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )

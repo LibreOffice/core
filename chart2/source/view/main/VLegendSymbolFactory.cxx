@@ -118,7 +118,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     // create symbol
     try
     {
-        if( eStyle == LegendSymbolStyle_LINE )
+        if( eStyle == LegendSymbolStyle::Line )
         {
             Reference< drawing::XShape > xLine =
                 pShapeFactory->createLine( xResultGroup, awt::Size( rEntryKeyAspectRatio.Width, 0 ),
@@ -165,7 +165,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 }
             }
         }
-        else if( eStyle == LegendSymbolStyle_CIRCLE )
+        else if( eStyle == LegendSymbolStyle::Circle )
         {
             sal_Int32 nSize = std::min( rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height );
             Reference< drawing::XShape > xShape =
@@ -176,7 +176,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 lcl_setPropertiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PropertyType::FilledSeries );
             }
         }
-        else // eStyle == LegendSymbolStyle_BOX
+        else // eStyle == LegendSymbolStyle::Box
         {
             tNameSequence aPropNames;
             tAnySequence aPropValues;

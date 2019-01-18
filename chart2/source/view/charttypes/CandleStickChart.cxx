@@ -56,7 +56,7 @@ bool CandleStickChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimens
 
 LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
 {
-    return LegendSymbolStyle_LINE;
+    return LegendSymbolStyle::Line;
 }
 
 drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
