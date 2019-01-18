@@ -33,12 +33,12 @@ class StockChartTypeTemplate :
         public ::property::OPropertySet
 {
 public:
-    enum StockVariant
+    enum class StockVariant
     {
-        LOW_HI_CLOSE,
-        OPEN_LOW_HI_CLOSE,
-        VOL_LOW_HI_CLOSE,
-        VOL_OPEN_LOW_HI_CLOSE
+        NONE,
+        Open,
+        Volume,
+        VolumeOpen
     };
 
     /** CTOR

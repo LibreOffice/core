@@ -57,10 +57,10 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
 
     // sub-type properties
     const StockChartTypeTemplate::StockVariant eVar( GetStockVariant());
-    const bool bHasOpenValues (( eVar == StockChartTypeTemplate::OPEN_LOW_HI_CLOSE ) ||
-                               ( eVar == StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE ));
-    const bool bHasVolume (( eVar == StockChartTypeTemplate::VOL_LOW_HI_CLOSE ) ||
-                           ( eVar == StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE ));
+    const bool bHasOpenValues (( eVar == StockChartTypeTemplate::StockVariant::Open ) ||
+                               ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ));
+    const bool bHasVolume (( eVar == StockChartTypeTemplate::StockVariant::Volume ) ||
+                           ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ));
     const bool bHasCategories( HasCategories( rArguments, aData ));
 
     // necessary roles for "full series"
@@ -258,12 +258,12 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
     sal_Int32 nNumberOfNecessarySequences = 3;
     // open
     StockChartTypeTemplate::StockVariant eVar( GetStockVariant());
-    if( ( eVar == StockChartTypeTemplate::OPEN_LOW_HI_CLOSE ) ||
-        ( eVar == StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE ))
+    if( ( eVar == StockChartTypeTemplate::StockVariant::Open ) ||
+        ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ))
         ++nNumberOfNecessarySequences;
     // volume
-    bool bHasVolume = (( eVar == StockChartTypeTemplate::VOL_LOW_HI_CLOSE ) ||
-                       ( eVar == StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE ));
+    bool bHasVolume = (( eVar == StockChartTypeTemplate::StockVariant::Volume ) ||
+                       ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ));
 
     // 1. correct number of sub-types
     if( aInterpretedData.Series.getLength() < (bHasVolume ? 2 : 1 ))
