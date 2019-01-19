@@ -342,7 +342,10 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         aStyleSet.SetShadowColor(aStyle.maShadowColor);
         aStyleSet.SetDarkShadowColor(aStyle.maDarkShadowColor);
         aStyleSet.SetButtonTextColor(aStyle.maButtonTextColor);
+        aStyleSet.SetActionButtonTextColor(aStyle.maActionButtonTextColor);
+        aStyleSet.SetDefaultActionButtonTextColor(aStyle.maDefaultActionButtonTextColor);
         aStyleSet.SetButtonRolloverTextColor(aStyle.maButtonRolloverTextColor);
+        aStyleSet.SetActionButtonRolloverTextColor(aStyle.maActionButtonRolloverTextColor);
         aStyleSet.SetRadioCheckTextColor(aStyle.maRadioCheckTextColor);
         aStyleSet.SetGroupTextColor(aStyle.maGroupTextColor);
         aStyleSet.SetLabelTextColor(aStyle.maLabelTextColor);

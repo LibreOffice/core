@@ -239,6 +239,20 @@ namespace toolkit
     }
 
 
+    ::sal_Int32 SAL_CALL WindowStyleSettings::getActionButtonRolloverTextColor()
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        return lcl_getStyleColor( *m_pData, &StyleSettings::GetActionButtonRolloverTextColor );
+    }
+
+
+    void SAL_CALL WindowStyleSettings::setActionButtonRolloverTextColor( ::sal_Int32 _buttonrollovertextcolor )
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        lcl_setStyleColor( *m_pData, &StyleSettings::SetActionButtonRolloverTextColor, _buttonrollovertextcolor );
+    }
+
+
     ::sal_Int32 SAL_CALL WindowStyleSettings::getButtonTextColor()
     {
         StyleMethodGuard aGuard( *m_pData );
@@ -250,6 +264,33 @@ namespace toolkit
     {
         StyleMethodGuard aGuard( *m_pData );
         lcl_setStyleColor( *m_pData, &StyleSettings::SetButtonTextColor, _buttontextcolor );
+    }
+
+    ::sal_Int32 SAL_CALL WindowStyleSettings::getDefaultActionButtonTextColor()
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        return lcl_getStyleColor( *m_pData, &StyleSettings::GetDefaultActionButtonTextColor );
+    }
+
+
+    void SAL_CALL WindowStyleSettings::setDefaultActionButtonTextColor( ::sal_Int32 _buttontextcolor )
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        lcl_setStyleColor( *m_pData, &StyleSettings::SetDefaultActionButtonTextColor, _buttontextcolor );
+    }
+
+
+    ::sal_Int32 SAL_CALL WindowStyleSettings::getActionButtonTextColor()
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        return lcl_getStyleColor( *m_pData, &StyleSettings::GetActionButtonTextColor );
+    }
+
+
+    void SAL_CALL WindowStyleSettings::setActionButtonTextColor( ::sal_Int32 _buttontextcolor )
+    {
+        StyleMethodGuard aGuard( *m_pData );
+        lcl_setStyleColor( *m_pData, &StyleSettings::SetActionButtonTextColor, _buttontextcolor );
     }
 
 

@@ -82,6 +82,9 @@ struct ImplStyleData
     Color                           maActiveTextColor;
     Color                           maAlternatingRowColor;
     Color                           maButtonTextColor;
+    Color                           maDefaultActionButtonTextColor;
+    Color                           maActionButtonTextColor;
+    Color                           maActionButtonRolloverTextColor;
     Color                           maButtonRolloverTextColor;
     Color                           maButtonPressedRolloverTextColor;
     Color                           maCheckedColor;
@@ -483,6 +486,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveTextColor( rData.maActiveTextColor ),
     maAlternatingRowColor( rData.maAlternatingRowColor ),
     maButtonTextColor( rData.maButtonTextColor ),
+    maDefaultActionButtonTextColor( rData.maDefaultActionButtonTextColor ),
+    maActionButtonTextColor( rData.maActionButtonTextColor ),
+    maActionButtonRolloverTextColor( rData.maActionButtonRolloverTextColor ),
     maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
     maButtonPressedRolloverTextColor( rData.maButtonPressedRolloverTextColor ),
     maCheckedColor( rData.maCheckedColor ),
@@ -620,6 +626,9 @@ void ImplStyleData::SetStandardStyles()
     maShadowColor               = COL_GRAY;
     maDarkShadowColor           = COL_BLACK;
     maButtonTextColor           = COL_BLACK;
+    maDefaultActionButtonTextColor = COL_BLACK;
+    maActionButtonTextColor     = COL_BLACK;
+    maActionButtonRolloverTextColor = COL_BLACK;
     maButtonRolloverTextColor   = COL_BLACK;
     maButtonPressedRolloverTextColor = COL_BLACK;
     maRadioCheckTextColor       = COL_BLACK;
@@ -775,6 +784,45 @@ const Color&
 StyleSettings::GetButtonTextColor() const
 {
     return mxData->maButtonTextColor;
+}
+
+void
+StyleSettings::SetDefaultActionButtonTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultActionButtonTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultActionButtonTextColor() const
+{
+    return mxData->maDefaultActionButtonTextColor;
+}
+
+void
+StyleSettings::SetActionButtonTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maActionButtonTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActionButtonTextColor() const
+{
+    return mxData->maActionButtonTextColor;
+}
+
+void
+StyleSettings::SetActionButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maActionButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActionButtonRolloverTextColor() const
+{
+    return mxData->maActionButtonRolloverTextColor;
 }
 
 void
@@ -2220,6 +2268,10 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maShadowColor             == rSet.mxData->maShadowColor)              &&
          (mxData->maDarkShadowColor         == rSet.mxData->maDarkShadowColor)          &&
          (mxData->maButtonTextColor         == rSet.mxData->maButtonTextColor)          &&
+         (mxData->maDefaultActionButtonTextColor == rSet.mxData->maDefaultActionButtonTextColor) &&
+         (mxData->maActionButtonTextColor   == rSet.mxData->maActionButtonTextColor)    &&
+         (mxData->maButtonRolloverTextColor == rSet.mxData->maButtonRolloverTextColor)  &&
+         (mxData->maActionButtonRolloverTextColor == rSet.mxData->maActionButtonRolloverTextColor) &&
          (mxData->maRadioCheckTextColor     == rSet.mxData->maRadioCheckTextColor)      &&
          (mxData->maGroupTextColor          == rSet.mxData->maGroupTextColor)           &&
          (mxData->maLabelTextColor          == rSet.mxData->maLabelTextColor)           &&
