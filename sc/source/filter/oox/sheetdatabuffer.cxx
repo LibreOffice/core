@@ -428,12 +428,12 @@ void SheetDataBuffer::finalizeImport()
 
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
     {
+        if ( it->first == -1 ) // it's a dud skip it
+            continue;
         AddressConverter& rAddrConv = getAddressConverter();
         // get all row ranges for id
         for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
         {
-            if ( it->first == -1 ) // it's a dud skip it
-                continue;
             ScRange aRange( 0, rangeIter->mnFirst, getSheetIndex(),
                             rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast, getSheetIndex() );
 
