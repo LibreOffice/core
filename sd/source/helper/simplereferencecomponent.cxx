@@ -23,8 +23,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <new>
-
 using com::sun::star::uno::RuntimeException;
 using sd::SimpleReferenceComponent;
 

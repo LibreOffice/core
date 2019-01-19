@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <CustomAnimationCloner.hxx>
 
 #include <undoanim.hxx>
@@ -28,6 +27,8 @@
 #include <sdresid.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
+
+namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;

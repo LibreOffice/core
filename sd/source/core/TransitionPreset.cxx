@@ -22,28 +22,19 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#include <vcl/svapp.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/pathoptions.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
-#include <tools/stream.hxx>
 
-#include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
-
-#include <algorithm>
-
-#include <sdpage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;

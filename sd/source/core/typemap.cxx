@@ -19,8 +19,6 @@
 
 #include <config_options.h>
 
-#include <editeng/outliner.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -32,7 +30,6 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <svl/poolitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -44,21 +41,18 @@
 #include <svl/globalnameitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postattr.hxx>
-#include <editeng/editdata.hxx>
-#include <svx/srchdlg.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/svxenum.hxx>
-#include <svx/algitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/grafctrl.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdprcitm.hxx>
+#include <svx/sdmetitm.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
-#include <sdattr.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/memberids.h>
 #include <svx/xftstit.hxx>
@@ -70,8 +64,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xtextit0.hxx>
@@ -84,7 +76,6 @@
 #include <svx/xftshxy.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/drawitem.hxx>
-#include <svl/aeitem.hxx>
 
 // #UndoRedo#
 #include <svl/slstitm.hxx>
@@ -100,7 +91,6 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlinjoit.hxx>
-#include <svx/AffineMatrixItem.hxx>
 #include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP

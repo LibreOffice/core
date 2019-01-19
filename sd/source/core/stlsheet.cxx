@@ -21,18 +21,16 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
 
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
-#include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/svdoattr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
@@ -53,10 +51,8 @@
 #include <app.hrc>
 #include <strings.hxx>
 #include <glob.hxx>
-#include <helpids.h>
 #include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <editeng/boxitem.hxx>
 
 #include <cstddef>
 #include <memory>

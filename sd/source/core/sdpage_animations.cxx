@@ -23,11 +23,8 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/outliner.hxx>
 #include <CustomAnimationCloner.hxx>
-#include <drawdoc.hxx>
+#include <CustomAnimationEffect.hxx>
 #include <sdpage.hxx>
-#include <CustomAnimationPreset.hxx>
-#include <TransitionPreset.hxx>
-#include <undoanim.hxx>
 #include <EffectMigration.hxx>
 
 using namespace ::sd;

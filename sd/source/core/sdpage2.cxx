@@ -21,16 +21,14 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/make_unique.hxx>
 #include <sfx2/docfile.hxx>
-#include <vcl/svapp.hxx>
-#include <editeng/outliner.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
 #include <editeng/outlobj.hxx>
-#include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 #include <com/sun/star/text/XTextCopy.hpp>
+#include <tools/debug.hxx>
+#include <svx/svddef.hxx>
 
 #include <Annotation.hxx>
 #include <notifydocumentevent.hxx>
@@ -41,14 +39,11 @@
 #include <drawdoc.hxx>
 #include <stlpool.hxx>
 #include <pglink.hxx>
-#include <anminfo.hxx>
 
 #include <strings.hxx>
 #include <DrawDocShell.hxx>
 
-#include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
-#include <rtl/strbuf.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
