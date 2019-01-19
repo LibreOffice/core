@@ -151,11 +151,9 @@ void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
         sal_Int32 nCol(0);
         sal_Int32 nRow(-1);
         sal_Int32 nIndex(0);
-        ScDDELinkCells::iterator aItr(aDDELinkTable.begin());
-        ScDDELinkCells::iterator aEndItr(aDDELinkTable.end());
 
         svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
-        while (aItr != aEndItr)
+        for (const auto& rDDELinkCell : aDDELinkTable)
         {
             if (nIndex % nColumns == 0)
             {
@@ -167,15 +165,14 @@ void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 
             SCSIZE nScCol( static_cast< SCSIZE >( nCol ) );
             SCSIZE nScRow( static_cast< SCSIZE >( nRow ) );
-            if( aItr->bEmpty )
+            if( rDDELinkCell.bEmpty )
                 pMatrix->PutEmpty( nScCol, nScRow );
-            else if( aItr->bString )
-                pMatrix->PutString(rPool.intern(aItr->sValue), nScCol, nScRow);
+            else if( rDDELinkCell.bString )
+                pMatrix->PutString(rPool.intern(rDDELinkCell.sValue), nScCol, nScRow);
             else
-                pMatrix->PutDouble( aItr->fValue, nScCol, nScRow );
+                pMatrix->PutDouble( rDDELinkCell.fValue, nScCol, nScRow );
 
             ++nIndex;
-            ++aItr;
         }
 
         GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< sal_uInt16 >( nPosition ), pMatrix );

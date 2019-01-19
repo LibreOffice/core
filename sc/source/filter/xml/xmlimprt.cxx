@@ -891,24 +891,15 @@ bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aVa
 {
     if (pValidations)
     {
-        bool bFound(false);
-        ScMyImportValidations::iterator aItr(pValidations->begin());
-        ScMyImportValidations::iterator aEndItr(pValidations->end());
-        while(aItr != aEndItr && !bFound)
+        auto aItr = std::find_if(pValidations->begin(), pValidations->end(),
+            [&sName](const ScMyImportValidation& rValidation) { return rValidation.sName == sName; });
+        if (aItr != pValidations->end())
         {
-            if (aItr->sName == sName)
-            {
-                // source position must be set as string,
-                // so sBaseCellAddress no longer has to be converted here
-
-                bFound = true;
-            }
-            else
-                ++aItr;
-        }
-        if (bFound)
+            // source position must be set as string,
+            // so sBaseCellAddress no longer has to be converted here
             aValidation = *aItr;
-        return bFound;
+            return true;
+        }
     }
     return false;
 }
@@ -1593,24 +1584,23 @@ void ScXMLImport::SetLabelRanges()
                 table::CellRangeAddress aLabelRange;
                 table::CellRangeAddress aDataRange;
 
-                ScMyLabelRanges::iterator aItr = pMyLabelRanges->begin();
-                while (aItr != pMyLabelRanges->end())
+                for (const auto& rxLabelRange : *pMyLabelRanges)
                 {
                     sal_Int32 nOffset1(0);
                     sal_Int32 nOffset2(0);
                     FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
-                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
-                        ScRangeStringConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
+                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
+                        ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
                     {
-                        if ( (*aItr)->bColumnOrientation )
+                        if ( rxLabelRange->bColumnOrientation )
                             xColRanges->addNew( aLabelRange, aDataRange );
                         else
                             xRowRanges->addNew( aLabelRange, aDataRange );
                     }
-
-                    aItr = pMyLabelRanges->erase(aItr);
                 }
+
+                pMyLabelRanges->clear();
             }
         }
     }

@@ -74,25 +74,13 @@ bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
     bool bGroupStart(false);
     if (!aTableStart.empty())
     {
-        ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
-        sal_Int32 nItrField = aItr->nField;
-        if ( nItrField < nField )
-        {
-            //  when used to find repeated rows at the beginning of a group,
-            //  aTableStart may contain entries before nField. They must be skipped here
-            //  (they will be used for OpenGroups later in the right order).
+        //  when used to find repeated rows at the beginning of a group,
+        //  aTableStart may contain entries before nField. They must be skipped here
+        //  (they will be used for OpenGroups later in the right order).
 
-            ScMyColumnRowGroupVec::iterator aEnd(aTableStart.end());
-            while ( aItr != aEnd && nItrField < nField )
-            {
-                ++aItr;
-                if ( aItr != aEnd )
-                    nItrField = aItr->nField;
-            }
-        }
-
-        if (nItrField == nField)
-            bGroupStart = true;
+        ScMyColumnRowGroupVec::iterator aItr = std::find_if_not(aTableStart.begin(), aTableStart.end(),
+            [&nField](const ScMyColumnRowGroup& rGroup) { return rGroup.nField < nField; });
+        bGroupStart = (aItr != aTableStart.end()) && (aItr->nField == nField);
     }
     return bGroupStart;
 }
@@ -123,13 +111,7 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 
 bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 {
-    bool bGroupEnd(false);
-    if (!aTableEnd.empty())
-    {
-        if (*(aTableEnd.begin()) == nField)
-            bGroupEnd = true;
-    }
-    return bGroupEnd;
+    return (!aTableEnd.empty()) && (aTableEnd.front() == nField);
 }
 
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
@@ -151,12 +133,11 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 {
     sal_Int32 maximum(-1);
-    ScMyFieldGroupVec::iterator i(aTableEnd.begin());
-    while (i != aTableEnd.end())
+    if (!aTableEnd.empty())
     {
+        ScMyFieldGroupVec::iterator i(std::max_element(aTableEnd.begin(), aTableEnd.end()));
         if (*i > maximum)
             maximum = *i;
-        ++i;
     }
     return maximum;
 }

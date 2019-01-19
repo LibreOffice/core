@@ -230,11 +230,9 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pParaAdjust = nullptr;
     XMLPropertyState* pParaAdjustLast = nullptr;
 
-    ::std::vector< XMLPropertyState >::iterator aEndIter(rProperties.end());
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
-         aIter != aEndIter; ++aIter )
+    for( auto& rProperty : rProperties )
     {
-        XMLPropertyState* propertyState = &(*aIter);
+        XMLPropertyState* propertyState = &rProperty;
         if (propertyState->mnIndex != -1)
         {
             switch( getPropertySetMapper()->GetEntryContextId( propertyState->mnIndex ) )
@@ -615,25 +613,23 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        for(; i != endi; ++i)
+        for(const auto& rProperty : rProperties)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetCellStylesPropertySetMapper());
-            sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
+            sal_Int16 nContextID(aPropMapper->GetEntryContextId(rProperty.mnIndex));
             switch (nContextID)
             {
                 case CTF_SC_NUMBERFORMAT :
                 {
                     sal_Int32 nNumberFormat = 0;
-                    if (i->maValue >>= nNumberFormat)
+                    if (rProperty.maValue >>= nNumberFormat)
                     {
                         OUString sAttrValue(rScXMLExport.getDataStyleName(nNumberFormat));
                         if (!sAttrValue.isEmpty())
                         {
                             GetExport().AddAttribute(
-                                aPropMapper->GetEntryNameSpace(i->mnIndex),
-                                aPropMapper->GetEntryXMLName(i->mnIndex),
+                                aPropMapper->GetEntryNameSpace(rProperty.mnIndex),
+                                aPropMapper->GetEntryXMLName(rProperty.mnIndex),
                                 sAttrValue );
                         }
                     }
@@ -644,22 +640,20 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     }
     else if (nFamily == XML_STYLE_FAMILY_TABLE_TABLE)
     {
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        for(; i != endi; ++i)
+        for(const auto& rProperty : rProperties)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetTableStylesPropertySetMapper());
-            sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
+            sal_Int16 nContextID(aPropMapper->GetEntryContextId(rProperty.mnIndex));
             switch (nContextID)
             {
                 case CTF_SC_MASTERPAGENAME :
                 {
                     OUString sName;
-                    if (i->maValue >>= sName)
+                    if (rProperty.maValue >>= sName)
                     {
                         GetExport().AddAttribute(
-                            aPropMapper->GetEntryNameSpace(i->mnIndex),
-                            aPropMapper->GetEntryXMLName(i->mnIndex),
+                            aPropMapper->GetEntryNameSpace(rProperty.mnIndex),
+                            aPropMapper->GetEntryXMLName(rProperty.mnIndex),
                             GetExport().EncodeStyleName( sName ));
                     }
                 }
@@ -681,19 +675,17 @@ void ScXMLAutoStylePoolP::exportStyleContent(
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        for(; i != endi; ++i)
+        for(const auto& rProperty : rProperties)
         {
-            if (i->mnIndex != -1)
+            if (rProperty.mnIndex != -1)
             {
-                sal_Int16 nContextID = rScXMLExport.GetCellStylesPropertySetMapper()->GetEntryContextId(i->mnIndex);
+                sal_Int16 nContextID = rScXMLExport.GetCellStylesPropertySetMapper()->GetEntryContextId(rProperty.mnIndex);
                 switch (nContextID)
                 {
                     case CTF_SC_MAP :
                     {
-                        uno::Reference<container::XIndexAccess> xIndex( i->maValue, uno::UNO_QUERY );
-                           if ( xIndex.is() )
+                        uno::Reference<container::XIndexAccess> xIndex( rProperty.maValue, uno::UNO_QUERY );
+                        if ( xIndex.is() )
                         {
                             sal_Int32 nConditionCount(xIndex->getCount());
                             for (sal_Int32 nCondition = 0; nCondition < nConditionCount; ++nCondition)
