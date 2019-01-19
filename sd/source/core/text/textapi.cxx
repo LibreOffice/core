@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <textapi.hxx>
@@ -33,6 +31,9 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdundo.hxx>
 #include <o3tl/make_unique.hxx>
+
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

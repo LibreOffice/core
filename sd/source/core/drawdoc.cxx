@@ -27,7 +27,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 
-#include <svx/svxids.hrc>
 #include <svl/srchitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
@@ -36,71 +35,51 @@
 #include <unotools/useroptions.hxx>
 #include <officecfg/Office/Impress.hxx>
 
-#include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <Outliner.hxx>
 #include <sdmod.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/fontitem.hxx>
-#include <svl/flagitem.hxx>
-#include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
-#include <editeng/bulletitem.hxx>
-#include <editeng/numitem.hxx>
-#include <svx/svditer.hxx>
 #include <editeng/unolingu.hxx>
 #include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <svx/xtable.hxx>
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <editeng/outlobj.hxx>
-#include <unotools/saveopt.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
-#include <unotools/linguprops.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
 
 #include <editeng/outliner.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <pglink.hxx>
-#include <sdattr.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
 #include <stlpool.hxx>
-#include <sdiocmpt.hxx>
 #include <sdresid.hxx>
-#include <cusshow.hxx>
 #include <customshowlist.hxx>
 #include <DrawDocShell.hxx>
 #include <GraphicDocShell.hxx>
 #include <sdxfer.hxx>
-#include <ViewShell.hxx>
 #include <optsitem.hxx>
 #include <FrameView.hxx>
 #include <undo/undomanager.hxx>
 #include <sdundogr.hxx>
 #include <undopage.hxx>
-#include <tools/tenccvt.hxx>
 #include <vcl/settings.hxx>
 #include <unokywds.hxx>
+
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellChecker1; } } } }
 
 using namespace ::sd;
 using namespace ::com::sun::star;

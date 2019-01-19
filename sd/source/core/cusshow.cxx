@@ -20,13 +20,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <createunocustomshow.hxx>
-#include <sdiocmpt.hxx>
 #include <cusshow.hxx>
-#include <sdpage.hxx>
-#include <drawdoc.hxx>
 #include <customshowlist.hxx>
-
-#include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
 

@@ -18,18 +18,15 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/diagnose.h>
@@ -38,12 +35,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
-#include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 
 #include <tools/debug.hxx>
-#include <rtl/uri.hxx>
-#include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <CustomAnimationPreset.hxx>
@@ -59,7 +53,6 @@ using namespace ::com::sun::star::presentation;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::beans::NamedValue;
 
