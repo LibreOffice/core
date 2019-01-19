@@ -1015,6 +1015,9 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
 
     // Buttons
     style.SetButtonTextColor(aButn);
+    style.SetDefaultActionButtonTextColor(aButn);
+    style.SetActionButtonTextColor(aButn);
+    style.SetActionButtonRolloverTextColor(aButn);
     style.SetButtonRolloverTextColor(aButn);
     style.SetButtonPressedRolloverTextColor(aButn);
 

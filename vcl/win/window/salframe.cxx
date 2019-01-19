@@ -2620,6 +2620,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
+    aStyleSettings.SetDefaultActionButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
+    aStyleSettings.SetActionButtonTextColor( aStyleSettings.GetDefaultActionButtonTextColor() );
+    aStyleSettings.SetActionButtonRolloverTextColor( aStyleSettings.GetActionButtonTextColor() );
     aStyleSettings.SetButtonRolloverTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetButtonPressedRolloverTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetTabTextColor( aStyleSettings.GetButtonTextColor() );
