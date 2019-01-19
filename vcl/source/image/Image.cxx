@@ -57,10 +57,10 @@ Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
 
 Image::Image(const OUString & rFileUrl)
 {
-    sal_Int32 nIndex = 0;
-    if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
+    OUString sImageName;
+    if (rFileUrl.startsWith("private:graphicrepository/", &sImageName))
     {
-        mpImplData = std::make_shared<ImplImage>(rFileUrl.copy(nIndex));
+        mpImplData = std::make_shared<ImplImage>(sImageName);
     }
     else
     {
