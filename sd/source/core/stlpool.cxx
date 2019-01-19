@@ -30,25 +30,23 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <svl/poolitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdshcitm.hxx>
+#include <svx/sdsxyitm.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/cmapitem.hxx>
 #include <svl/hint.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/autokernitem.hxx>
 
-#include <svx/svdattr.hxx>
-#include <editeng/outliner.hxx>
-#include <svx/xtable.hxx>
-#include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/numdef.hxx>
@@ -61,14 +59,12 @@
 #include <strings.hrc>
 #include <glob.hxx>
 #include <drawdoc.hxx>
-#include <sdmod.hxx>
-#include <sdpage.hxx>
-#include <helpids.h>
 #include <svl/itemset.hxx>
 #include <app.hrc>
 #include <strings.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -19,24 +19,16 @@
 
 
 #include <memory>
-#include <cppuhelper/exc_hlp.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <sfx2/docfile.hxx>
-#include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 
 #include <sfx2/fcontnr.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svditer.hxx>
 #include <svl/style.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/weld.hxx>
-#include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -46,11 +38,7 @@
 #include <sdpage.hxx>
 #include <stlpool.hxx>
 #include <sdresid.hxx>
-#include <sdiocmpt.hxx>
-#include <strmname.h>
-#include <anminfo.hxx>
 #include <customshowlist.hxx>
-#include <cusshow.hxx>
 #include <sdxfer.hxx>
 
 #include <unmovss.hxx>

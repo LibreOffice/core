@@ -308,4 +308,87 @@ blacklist:
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-
+    sd/source/core/annotations/AnnotationEnumeration.cxx:
+    # Avoid loplugin:unreffun error
+    - AnnotationEnumeration.hxx
+    sd/source/core/CustomAnimationCloner.cxx:
+    # Avoid loplugin:unreffun error
+    - CustomAnimationCloner.hxx
+    sd/source/core/EffectMigration.cxx:
+    # Needed for UnoType
+    - com/sun/star/presentation/ParagraphTarget.hpp
+    sd/source/core/stlsheet.cxx:
+    # Needed for UnoType
+    - com/sun/star/table/BorderLine.hpp
+    sd/source/core/typemap.cxx:
+    # Needed by sdslots.hxx to build
+    - config_options.h
+    - editeng/boxitem.hxx
+    - editeng/cmapitem.hxx
+    - editeng/colritem.hxx
+    - editeng/contouritem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/langitem.hxx
+    - editeng/lineitem.hxx
+    - editeng/lrspitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/memberids.h
+    - editeng/postitem.hxx
+    - editeng/protitem.hxx
+    - editeng/shdditem.hxx
+    - editeng/sizeitem.hxx
+    - editeng/tstpitem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/wghtitem.hxx
+    - sfx2/frame.hxx
+    - sfx2/msg.hxx
+    - sfx2/tplpitem.hxx
+    - sfx2/zoomitem.hxx
+    - svl/globalnameitem.hxx
+    - svl/lckbitem.hxx
+    - svl/ptitem.hxx
+    - svl/rectitem.hxx
+    - svl/slstitm.hxx
+    - svl/srchitem.hxx
+    - svx/chrtitem.hxx
+    - svx/clipfmtitem.hxx
+    - svx/drawitem.hxx
+    - svx/galleryitem.hxx
+    - svx/hlnkitem.hxx
+    - svx/pageitem.hxx
+    - svx/postattr.hxx
+    - svx/rulritem.hxx
+    - svx/sdmetitm.hxx
+    - svx/sdooitm.hxx
+    - svx/sdprcitm.hxx
+    - svx/sdtfsitm.hxx
+    - svx/xbtmpit.hxx
+    - svx/xfillit0.hxx
+    - svx/xflclit.hxx
+    - svx/xflftrit.hxx
+    - svx/xflhtit.hxx
+    - svx/xftadit.hxx
+    - svx/xftdiit.hxx
+    - svx/xftmrit.hxx
+    - svx/xftouit.hxx
+    - svx/xftshcit.hxx
+    - svx/xftshit.hxx
+    - svx/xftshxy.hxx
+    - svx/xftstit.hxx
+    - svx/xlineit0.hxx
+    - svx/xlinjoit.hxx
+    - svx/xlncapit.hxx
+    - svx/xlnclit.hxx
+    - svx/xlndsit.hxx
+    - svx/xlnedit.hxx
+    - svx/xlnstit.hxx
+    - svx/xlnwtit.hxx
+    - svx/xtextit0.hxx
+    - svx/zoomslideritem.hxx
+    sd/source/core/text/textapi.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx
