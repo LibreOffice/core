@@ -55,10 +55,10 @@ Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 
 Image::Image(const OUString & rFileUrl)
 {
-    sal_Int32 nIndex = 0;
-    if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
+    OUString sImageName;
+    if (rFileUrl.startsWith("private:graphicrepository/", &sImageName))
     {
-        mpImplData.reset(new ImplImage(rFileUrl.copy(nIndex)));
+        mpImplData.reset(new ImplImage(sImageName));
     }
     else
     {
