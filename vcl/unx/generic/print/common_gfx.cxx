@@ -1073,8 +1073,8 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
             {
                 if( aLine.matchIgnoreAsciiCase( "%%BoundingBox:" ) )
                 {
-                    aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
-                    if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )
+                    const sal_Int32 nMatchLen {RTL_CONSTASCII_LENGTH("%%BoundingBox:")};
+                    if( aLine.getLength()>nMatchLen && aLine.indexOf("atend", nMatchLen)<0 )
                     {
                         fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
                         fBottom = StringToDouble( GetCommandLineToken( 1, aLine ) );
@@ -1083,7 +1083,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
                     }
                 }
                 else if( aLine.matchIgnoreAsciiCase( "%%Title:" ) )
-                    aDocTitle = WhitespaceToSpace( aLine.copy( 8 ) );
+                    aDocTitle = WhitespaceToSpace( aLine.copy( RTL_CONSTASCII_LENGTH("%%Title:") ) );
                 else if( aLine.matchIgnoreAsciiCase( "%%EndComments" ) )
                     bEndComments = true;
             }
