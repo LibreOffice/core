@@ -214,17 +214,21 @@ void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
         if (!aLine.isEmpty())
         {
             sal_Int32 nIndex = 0;
-            while (nRow < nHeight)
+            const sal_Int32 nLen {aLine.getLength()};
+            while (nRow<nHeight && nIndex<nLen)
             {
-                const OString aToken(aLine.getToken(0, ',', nIndex));
-                const sal_Int32 nLen = aToken.getLength();
                 bool bProcessed = false;
 
                 nBit = nDigits = nValue = 0;
 
-                for (sal_Int32 n = 0; n < nLen; ++n)
+                while (nIndex<nLen)
                 {
-                    const unsigned char cChar = aToken[n];
+                    const unsigned char cChar = aLine[nIndex];
+
+                    ++nIndex;
+                    if (cChar==',') // sequence completed, ',' already skipped for next loop
+                        break;
+
                     const short         nTable = pHexTable[ cChar ];
 
                     if( rtl::isAsciiHexDigit( cChar ) || !nTable )
@@ -252,9 +256,6 @@ void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
                         nRow++;
                     }
                 }
-
-                if (nIndex == -1)
-                    break;
             }
         }
     }
