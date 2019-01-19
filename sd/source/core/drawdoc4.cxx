@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <Outliner.hxx>
 #include <editeng/outliner.hxx>
@@ -46,10 +45,8 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/bulletitem.hxx>
-#include <svx/xtable.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/svdotext.hxx>
@@ -67,7 +64,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/cmapitem.hxx>
-#include <editeng/memberids.h>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflgrit.hxx>
@@ -84,15 +80,11 @@
 #include <svx/xlnclit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdlayer.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <svl/itempool.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
 #include <sdresid.hxx>
@@ -101,14 +93,14 @@
 #include <strings.hrc>
 #include <glob.hxx>
 #include <stlpool.hxx>
-#include <helpids.h>
-#include <sdiocmpt.hxx>
 #include <shapelist.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/itemset.hxx>
 #include <app.hrc>
 #include <strings.hxx>
+
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -21,9 +21,11 @@
 #define INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
 
 #include "sddllapi.h"
+#include "cusshow.hxx"
 #include <vector>
-
-class SdCustomShow;
+#include <memory>
+#include <algorithm>
+#include <cassert>
 
 class SD_DLLPUBLIC SdCustomShowList
 {

@@ -27,7 +27,6 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editdata.hxx>
-#include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/bulletitem.hxx>
 #include <svx/svdpagv.hxx>
@@ -36,14 +35,11 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
-#include <sfx2/printer.hxx>
-#include <basic/basmgr.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/hint.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <svx/unopage.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -58,7 +54,6 @@
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <basegfx/utils/tools.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/make_unique.hxx>
 #include <xmloff/autolayout.hxx>
@@ -69,14 +64,12 @@
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
-#include <pglink.hxx>
 #include <sdresid.hxx>
 #include <stlsheet.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <bitmaps.hlst>
 #include <glob.hxx>
-#include <helpids.h>
 #include <anminfo.hxx>
 #include <undo/undomanager.hxx>
 #include <undo/undoobjects.hxx>

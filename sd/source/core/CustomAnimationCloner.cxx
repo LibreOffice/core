@@ -34,14 +34,12 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <svx/svditer.hxx>
 
-#include <CustomAnimationCloner.hxx>
 #include <sdpage.hxx>
 
 using namespace ::com::sun::star::uno;

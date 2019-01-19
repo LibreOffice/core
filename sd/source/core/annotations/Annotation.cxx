@@ -21,7 +21,6 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
@@ -32,7 +31,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <unotools/datetime.hxx>
-#include <tools/datetime.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <sfx2/viewsh.hxx>
@@ -45,6 +43,8 @@
 #include <notifydocumentevent.hxx>
 #include <sdpage.hxx>
 #include <textapi.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
