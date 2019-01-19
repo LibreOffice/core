@@ -251,6 +251,15 @@ public:
     void                            SetButtonTextColor( const Color& rColor );
     const Color&                    GetButtonTextColor() const;
 
+    void                            SetDefaultActionButtonTextColor( const Color& rColor );
+    const Color&                    GetDefaultActionButtonTextColor() const;
+
+    void                            SetActionButtonTextColor( const Color& rColor );
+    const Color&                    GetActionButtonTextColor() const;
+
+    void                            SetActionButtonRolloverTextColor( const Color& rColor );
+    const Color&                    GetActionButtonRolloverTextColor() const;
+
     void                            SetButtonRolloverTextColor( const Color& rColor );
     const Color&                    GetButtonRolloverTextColor() const;
 

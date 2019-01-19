@@ -61,8 +61,17 @@ interface XStyleSettings
     /// specifies the color to use for text on buttons which are hovered with the mouse
     [attribute] ::com::sun::star::util::Color ButtonRolloverTextColor;
 
+    /// specifies the color to use for text on action buttons which are hovered with the mouse
+    [attribute] ::com::sun::star::util::Color ActionButtonRolloverTextColor;
+
     /// specifies the color to use for text on buttons
     [attribute] ::com::sun::star::util::Color ButtonTextColor;
+
+    /// specifies the color to use for text on a default action buttons
+    [attribute] ::com::sun::star::util::Color DefaultActionButtonTextColor;
+
+    /// specifies the color to use for text on action buttons
+    [attribute] ::com::sun::star::util::Color ActionButtonTextColor;
 
 
     [attribute] ::com::sun::star::util::Color CheckedColor;
