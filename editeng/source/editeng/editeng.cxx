@@ -2624,7 +2624,7 @@ vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScri
 {
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );
-    return aFont;
+    return std::move(aFont);
 }
 
 SvxFont EditEngine::CreateSvxFontFromItemSet( const SfxItemSet& rItemSet )
