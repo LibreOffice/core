@@ -25,6 +25,9 @@ struct WidgetDrawStyle
     uint32_t maShadowColor;
     uint32_t maDarkShadowColor;
     uint32_t maButtonTextColor;
+    uint32_t maDefaultActionButtonTextColor;
+    uint32_t maActionButtonTextColor;
+    uint32_t maActionButtonRolloverTextColor;
     uint32_t maButtonRolloverTextColor;
     uint32_t maRadioCheckTextColor;
     uint32_t maGroupTextColor;

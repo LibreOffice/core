@@ -62,8 +62,14 @@ namespace toolkit
         virtual void SAL_CALL setActiveTextColor( ::sal_Int32 _activetextcolor ) override;
         virtual ::sal_Int32 SAL_CALL getButtonRolloverTextColor() override;
         virtual void SAL_CALL setButtonRolloverTextColor( ::sal_Int32 _buttonrollovertextcolor ) override;
+        virtual ::sal_Int32 SAL_CALL getActionButtonRolloverTextColor() override;
+        virtual void SAL_CALL setActionButtonRolloverTextColor( ::sal_Int32 _buttonrollovertextcolor ) override;
         virtual ::sal_Int32 SAL_CALL getButtonTextColor() override;
         virtual void SAL_CALL setButtonTextColor( ::sal_Int32 _buttontextcolor ) override;
+        virtual ::sal_Int32 SAL_CALL getDefaultActionButtonTextColor() override;
+        virtual void SAL_CALL setDefaultActionButtonTextColor( ::sal_Int32 _buttontextcolor ) override;
+        virtual ::sal_Int32 SAL_CALL getActionButtonTextColor() override;
+        virtual void SAL_CALL setActionButtonTextColor( ::sal_Int32 _buttontextcolor ) override;
         virtual ::sal_Int32 SAL_CALL getCheckedColor() override;
         virtual void SAL_CALL setCheckedColor( ::sal_Int32 _checkedcolor ) override;
         virtual ::sal_Int32 SAL_CALL getDarkShadowColor() override;

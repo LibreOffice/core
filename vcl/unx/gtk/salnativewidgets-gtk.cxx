@@ -3792,6 +3792,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldTextColor( aTextColor );
     aTextColor = getColor( pStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetButtonTextColor( aTextColor );
+    aStyleSet.SetDefaultActionButtonTextColor( aTextColor );
+    aStyleSet.SetActionButtonTextColor( aTextColor );
+    aStyleSet.SetActionButtonRolloverTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );

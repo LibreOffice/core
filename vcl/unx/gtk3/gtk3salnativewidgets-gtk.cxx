@@ -2964,6 +2964,8 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     ::Color aTextColor = getColor( text_color );
     aStyleSet.SetDialogTextColor( aTextColor );
     aStyleSet.SetButtonTextColor( aTextColor );
+    aStyleSet.SetDefaultActionButtonTextColor(aTextColor);
+    aStyleSet.SetActionButtonTextColor(aTextColor);
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
@@ -2990,6 +2992,8 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     style_context_set_state(pStyle, GTK_STATE_FLAG_PRELIGHT);
     gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
     aTextColor = getColor( text_color );
+    aStyleSet.SetButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetActionButtonRolloverTextColor(aTextColor);
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
     aContextState.restore();
