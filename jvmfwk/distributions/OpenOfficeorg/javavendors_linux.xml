@@ -44,6 +44,8 @@
   <vendor name="Azul Systems, Inc.">
     <minVersion>1.6.0</minVersion>
   </vendor>
- </vendorInfos>
-
+  <vendor name="AdoptOpenJdk">
+    <minVersion>1.8.0</minVersion>
+  </vendor>
+</vendorInfos>
 </javaSelection>
