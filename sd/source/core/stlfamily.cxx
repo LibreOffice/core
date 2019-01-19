@@ -26,14 +26,12 @@
 
 #include <svl/style.hxx>
 
-#include <svx/unoprov.hxx>
 #include <tools/debug.hxx>
 
 #include <strings.hrc>
 #include <stlfamily.hxx>
 #include <stlsheet.hxx>
 #include <sdresid.hxx>
-#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <glob.hxx>
 

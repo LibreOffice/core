@@ -23,7 +23,6 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
 
-#include <AnnotationEnumeration.hxx>
 #include <sdpage.hxx>
 
 using namespace ::com::sun::star::uno;

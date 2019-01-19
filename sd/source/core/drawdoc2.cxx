@@ -17,57 +17,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
-#include <Outliner.hxx>
+#include <sfx2/viewsh.hxx>
 #include <editeng/paperinf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/svdpool.hxx>
 #include <editeng/flditem.hxx>
 
 #include <sfx2/linkmgr.hxx>
-#include <editeng/editdata.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svdoutl.hxx>
+#include <svx/svdlayer.hxx>
 
-#include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/imapobj.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <pglink.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
 #include <stlpool.hxx>
-#include <sdiocmpt.hxx>
 #include <anminfo.hxx>
 #include <imapinfo.hxx>
-#include <cusshow.hxx>
 #include <undo/undomanager.hxx>
 
 #include <DrawDocShell.hxx>
-#include <FrameView.hxx>
 
 #include "PageListWatcher.hxx"
-#include <vcl/virdev.hxx>
-#include <customshowlist.hxx>
 #include <unokywds.hxx>
 
 using namespace ::sd;
