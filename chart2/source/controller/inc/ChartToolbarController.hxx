@@ -39,7 +39,7 @@ public:
     ChartToolbarController(const ChartToolbarController&) = delete;
     const ChartToolbarController& operator=(const ChartToolbarController&) = delete;
 
-    // XToolbarContoller
+    // XToolbarController
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
 
     virtual void SAL_CALL click() override;
