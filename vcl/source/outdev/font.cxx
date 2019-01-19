@@ -878,8 +878,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                 if( !pOutDev )
                 {
                     SAL_WARN_IF(!utl::ConfigManager::IsFuzzing(), "vcl.gdi", "No default window has been set for the application - we really shouldn't be able to get here");
-                    sal_Int32 nIndex = 0;
-                    aFont.SetFamilyName( aSearch.getToken( 0, ';', nIndex ) );
+                    aFont.SetFamilyName( aSearch.getToken( 0, ';' ) );
                 }
                 else
                 {
