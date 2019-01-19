@@ -149,12 +149,9 @@ void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
 
     if (pCurrencyList)
     {
-        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
-        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
-        while (aItr != aEndItr)
+        for (auto& rCurrency : *pCurrencyList)
         {
-            aItr->mpRanges->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
-            ++aItr;
+            rCurrency.mpRanges->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
         }
     }
 }
@@ -163,9 +160,8 @@ void ScMyStyleRanges::SetStylesToRanges(const list<ScRange>& rRanges,
     const OUString* pStyleName, const sal_Int16 nCellType,
     const OUString* pCurrency, ScXMLImport& rImport)
 {
-    list<ScRange>::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
-    for (; itr != itrEnd; ++itr)
-        rImport.SetStyleToRange(*itr, pStyleName, nCellType, pCurrency);
+    for (const auto& rRange : rRanges)
+        rImport.SetStyleToRange(rRange, pStyleName, nCellType, pCurrency);
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport)
@@ -221,14 +217,11 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
     }
     if (pCurrencyList)
     {
-        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
-        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
-        while (aItr != aEndItr)
+        for (const auto& rCurrency : *pCurrencyList)
         {
             list<ScRange> aList;
-            aItr->mpRanges->getRangeList(aList);
-            SetStylesToRanges(aList, pStyleName, util::NumberFormat::CURRENCY, &aItr->sCurrency, rImport);
-            ++aItr;
+            rCurrency.mpRanges->getRangeList(aList);
+            SetStylesToRanges(aList, pStyleName, util::NumberFormat::CURRENCY, &rCurrency.sCurrency, rImport);
         }
     }
 }
@@ -428,12 +421,9 @@ void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
 {
     ScXMLImport::MutexGuard aGuard(rImport);
-    ScMyStylesSet::iterator aItr(aCellStyles.begin());
-    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
-    while (aItr != aEndItr)
+    for (auto& rCellStyle : aCellStyles)
     {
-        aItr->xRanges->InsertCol(nCol, nTab);
-        ++aItr;
+        rCellStyle.xRanges->InsertCol(nCol, nTab);
     }
 }
 
@@ -448,12 +438,9 @@ void ScMyStylesImportHelper::EndTable()
 
 void ScMyStylesImportHelper::SetStylesToRanges()
 {
-    ScMyStylesSet::iterator aItr(aCellStyles.begin());
-    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
-    while (aItr != aEndItr)
+    for (auto& rCellStyle : aCellStyles)
     {
-        aItr->xRanges->SetStylesToRanges(&aItr->sStyleName, rImport);
-        ++aItr;
+        rCellStyle.xRanges->SetStylesToRanges(&rCellStyle.sStyleName, rImport);
     }
     aColDefaultStyles.clear();
     aCellStyles.clear();

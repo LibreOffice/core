@@ -173,11 +173,9 @@ void ScSheetSaveData::StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespac
     // so only a unordered_map of the prefixes is needed.
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
-    NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
-    while (aIter != aEnd)
+    for (const auto& rEntry : rNameHash)
     {
-        maInitialPrefixes.insert( aIter->first );
-        ++aIter;
+        maInitialPrefixes.insert( rEntry.first );
     }
 }
 
@@ -186,70 +184,52 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
     // store the loaded namespaces, so the prefixes in copied stream fragments remain valid
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
-    NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
-    while (aIter != aEnd)
+    for (const auto& [rName, rxEntry] : rNameHash)
     {
         // ignore the initial namespaces
-        if ( maInitialPrefixes.find( aIter->first ) == maInitialPrefixes.end() )
+        if ( maInitialPrefixes.find( rName ) == maInitialPrefixes.end() )
         {
-            const NameSpaceEntry& rEntry = *(aIter->second);
-            maLoadedNamespaces.emplace_back( rEntry.sPrefix, rEntry.sName, rEntry.nKey );
+            maLoadedNamespaces.emplace_back( rxEntry->sPrefix, rxEntry->sName, rxEntry->nKey );
         }
-        ++aIter;
     }
 }
 
 static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const OUString& rName )
 {
-    NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
-    while (aIter != aEnd)
-    {
-        if ( aIter->second->sName == rName )
-            return true;
-
-        ++aIter;
-    }
-    return false;   // not found
+    return std::any_of(rNameHash.begin(), rNameHash.end(),
+        [&rName](const NameSpaceHash::value_type& rEntry) { return rEntry.second->sName == rName; });
 }
 
 bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) const
 {
     // Add the loaded namespaces to the name space map.
 
-    // first loop: only look for conflicts
+    // look for conflicts
     // (if the loaded namespaces were added first, this might not be necessary)
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
-    std::vector<ScLoadedNamespaceEntry>::const_iterator aIter = maLoadedNamespaces.begin();
-    std::vector<ScLoadedNamespaceEntry>::const_iterator aEnd = maLoadedNamespaces.end();
-    while (aIter != aEnd)
-    {
-        NameSpaceHash::const_iterator aHashIter = rNameHash.find( aIter->maPrefix );
-        if ( aHashIter == rNameHash.end() )
-        {
-            if ( lcl_NameInHash( rNameHash, aIter->maName ) )
-            {
-                // a second prefix for the same name would confuse SvXMLNamespaceMap lookup,
-                // so this is also considered a conflict
-                return false;
-            }
-        }
-        else if ( aHashIter->second->sName != aIter->maName )
-        {
+    auto bConflict = std::any_of(maLoadedNamespaces.begin(), maLoadedNamespaces.end(),
+        [&rNameHash](const ScLoadedNamespaceEntry& rLoadedNamespace) {
+            NameSpaceHash::const_iterator aHashIter = rNameHash.find( rLoadedNamespace.maPrefix );
+
             // same prefix, but different name: loaded namespaces can't be used
-            return false;
-        }
-        ++aIter;
-    }
+            bool bNameConflict = (aHashIter != rNameHash.end()) && (aHashIter->second->sName != rLoadedNamespace.maName);
+
+            // a second prefix for the same name would confuse SvXMLNamespaceMap lookup,
+            // so this is also considered a conflict
+            bool bPrefixConflict = (aHashIter == rNameHash.end()) && lcl_NameInHash(rNameHash, rLoadedNamespace.maName);
+
+            return bNameConflict || bPrefixConflict;
+        });
+    if (bConflict)
+        return false;
 
     // only if there were no conflicts, add the entries that aren't in the map already
     // (the key is needed if the same namespace is added later within an element)
-    aIter = maLoadedNamespaces.begin();
-    while (aIter != aEnd)
+    for (const auto& rLoadedNamespace : maLoadedNamespaces)
     {
-        NameSpaceHash::const_iterator aHashIter = rNameHash.find( aIter->maPrefix );
+        NameSpaceHash::const_iterator aHashIter = rNameHash.find( rLoadedNamespace.maPrefix );
         if ( aHashIter == rNameHash.end() )
-            rNamespaces.Add( aIter->maPrefix, aIter->maName, aIter->mnKey );
-        ++aIter;
+            rNamespaces.Add( rLoadedNamespace.maPrefix, rLoadedNamespace.maName, rLoadedNamespace.mnKey );
     }
 
     return true;    // success

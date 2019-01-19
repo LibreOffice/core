@@ -460,22 +460,22 @@ void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
     {
         SvXMLElementExport aElemDPMs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS, true, true);
         rExport.CheckAttrList();
-        for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; ++i)
+        for (const auto& rpMember : rMembers)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, (*i)->GetName());
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rpMember->GetName());
 
             if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
                 // Export display names only for ODF 1.2 extended or later.
-                const boost::optional<OUString> & pLayoutName = (*i)->GetLayoutName();
+                const boost::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
                 if (pLayoutName)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             }
 
             OUStringBuffer sBuffer;
-            ::sax::Converter::convertBool(sBuffer, (*i)->GetIsVisible());
+            ::sax::Converter::convertBool(sBuffer, rpMember->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
-            ::sax::Converter::convertBool(sBuffer, (*i)->GetShowDetails());
+            ::sax::Converter::convertBool(sBuffer, rpMember->GetShowDetails());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
             SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, true, true);
             rExport.CheckAttrList();

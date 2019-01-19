@@ -946,19 +946,13 @@ void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/
                     aGroupDim.SetDateInfo(aInfo, nGroupPart);
                 else
                 {
-                    ::std::vector<ScXMLDataPilotGroup>::const_iterator aItr(aGroups.begin());
-                    ::std::vector<ScXMLDataPilotGroup>::const_iterator aEndItr(aGroups.end());
-                    while (aItr != aEndItr)
+                    for (const auto& rGroup : aGroups)
                     {
-                        ScDPSaveGroupItem aItem(aItr->aName);
-                        ::std::vector<OUString>::const_iterator aMembersItr(aItr->aMembers.begin());
-                        ::std::vector<OUString>::const_iterator aMembersEndItr(aItr->aMembers.end());
-                        while (aMembersItr != aMembersEndItr)
+                        ScDPSaveGroupItem aItem(rGroup.aName);
+                        for (const auto& rMember : rGroup.aMembers)
                         {
-                            aItem.AddElement(*aMembersItr);
-                            ++aMembersItr;
+                            aItem.AddElement(rMember);
                         }
-                        ++aItr;
                         aGroupDim.AddGroupItem(aItem);
                     }
                 }

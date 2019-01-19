@@ -799,13 +799,12 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 aItr = aActions.erase(aItr);
         }
 
-        aItr = aActions.begin();
-        while (aItr != aActions.end())
+        for (const auto& rxAction : aActions)
         {
-            OSL_ENSURE((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
-            SetNewCell(static_cast<ScMyContentAction*>(aItr->get()));
-            aItr = aActions.erase(aItr);
+            OSL_ENSURE(rxAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+            SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()));
         }
+        aActions.clear();
         if (aProtect.getLength())
             pTrack->SetProtection(aProtect);
         else if (pDoc->GetChangeTrack() && pDoc->GetChangeTrack()->IsProtected())

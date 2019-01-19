@@ -376,13 +376,12 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     std::unique_ptr<SfxPoolItem> pPoolItem;
     sal_uInt16 nLastItemID = EE_CHAR_END + 1;
 
-    std::vector<XMLPropertyState>::const_iterator it = rProps.begin(), itEnd = rProps.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rProp : rProps)
     {
-        if (it->mnIndex == -1 || it->mnIndex >= nEntryCount)
+        if (rProp.mnIndex == -1 || rProp.mnIndex >= nEntryCount)
             continue;
 
-        const OUString& rName = xMapper->GetEntryAPIName(it->mnIndex);
+        const OUString& rName = xMapper->GetEntryAPIName(rProp.mnIndex);
         const ScXMLEditAttributeMap::Entry* pEntry = rEditAttrMap.getEntryByAPIName(rName);
         if (!pEntry)
             continue;
@@ -404,7 +403,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxFontItem(pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_WEIGHT:
@@ -414,7 +413,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxWeightItem(WEIGHT_NORMAL, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_FONTHEIGHT:
@@ -424,7 +423,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxFontHeightItem(240, 100, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_ITALIC:
@@ -434,7 +433,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxPostureItem(ITALIC_NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_UNDERLINE:
@@ -442,7 +441,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxUnderlineItem(LINESTYLE_NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_OVERLINE:
@@ -450,7 +449,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxOverlineItem(LINESTYLE_NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_COLOR:
@@ -458,7 +457,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxColorItem(pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_WLM:
@@ -466,7 +465,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxWordLineModeItem(false, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_STRIKEOUT:
@@ -474,7 +473,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxCrossedOutItem(STRIKEOUT_NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_RELIEF:
@@ -482,7 +481,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxCharReliefItem(FontRelief::NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_OUTLINE:
@@ -490,7 +489,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxContourItem(false, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_SHADOW:
@@ -498,7 +497,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxShadowedItem(false, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_KERNING:
@@ -506,7 +505,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxKerningItem(0, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_PAIRKERNING:
@@ -514,7 +513,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxAutoKernItem(false, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_FONTWIDTH:
@@ -522,7 +521,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxCharScaleWidthItem(100, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_ESCAPEMENT:
@@ -530,7 +529,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxEscapementItem(pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_EMPHASISMARK:
@@ -538,7 +537,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxEmphasisMarkItem(FontEmphasisMark::NONE, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_LANGUAGE:
@@ -548,7 +547,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxLanguageItem(LANGUAGE_DONTKNOW, pEntry->mnItemID));
 
-                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+                pPoolItem->PutValue(rProp.maValue, pEntry->mnFlag);
             }
             break;
             default:
@@ -940,12 +939,9 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
     pSheetData->HandleNoteStyles( mxAnnotationData->maStyleName, mxAnnotationData->maTextStyle, rPos );
 
-    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aIter = mxAnnotationData->maContentStyles.begin();
-    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aEnd = mxAnnotationData->maContentStyles.end();
-    while (aIter != aEnd)
+    for (const auto& rContentStyle : mxAnnotationData->maContentStyles)
     {
-        pSheetData->AddNoteContentStyle( aIter->mnFamily, aIter->maName, rPos, aIter->maSelection );
-        ++aIter;
+        pSheetData->AddNoteContentStyle( rContentStyle.mnFamily, rContentStyle.maName, rPos, rContentStyle.maSelection );
     }
 }
 
@@ -957,18 +953,15 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
         LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Tab() );
         uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-        ScMyImpDetectiveObjVec::iterator aItr(pDetectiveObjVec->begin());
-        ScMyImpDetectiveObjVec::iterator aEndItr(pDetectiveObjVec->end());
-        while(aItr != aEndItr)
+        for(const auto& rDetectiveObj : *pDetectiveObjVec)
         {
-            aDetFunc.InsertObject( aItr->eObjType, rPosition, aItr->aSourceRange, aItr->bHasError );
+            aDetFunc.InsertObject( rDetectiveObj.eObjType, rPosition, rDetectiveObj.aSourceRange, rDetectiveObj.bHasError );
             if (xShapesIndex.is())
             {
                 sal_Int32 nShapes = xShapesIndex->getCount();
                 uno::Reference < drawing::XShape > xShape;
                 rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
             }
-            ++aItr;
         }
     }
 }
@@ -1105,17 +1098,11 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             else
             {
                 // This text either has format runs, has field(s), or consists of multiple lines.
-                {
-                    ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
-                    for (; it != itEnd; ++it)
-                        mpEditEngine->QuickSetAttribs((*it)->maItemSet, (*it)->maSelection);
-                }
+                for (const auto& rxFormat : maFormats)
+                    mpEditEngine->QuickSetAttribs(rxFormat->maItemSet, rxFormat->maSelection);
 
-                {
-                    FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
-                    for (; it != itEnd; ++it)
-                        mpEditEngine->QuickInsertField(SvxFieldItem(*(*it)->mpData, EE_FEATURE_FIELD), (*it)->maSelection);
-                }
+                for (const auto& rxField : maFields)
+                    mpEditEngine->QuickInsertField(SvxFieldItem(*rxField->mpData, EE_FEATURE_FIELD), rxField->maSelection);
 
                 // This edit engine uses the SfxItemPool instance returned
                 // from pDoc->GetEditPool() to create the text object, which
