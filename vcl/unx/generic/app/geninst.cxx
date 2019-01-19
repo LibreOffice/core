@@ -65,9 +65,8 @@ OUString SalGenericInstance::getOSVersion()
         if ( fgets ( aVerBuffer, 511, pVersion ) )
         {
             aKernelVer = OUString::createFromAscii( aVerBuffer );
-            sal_Int32 nIndex = 0;
             // "Linux version 3.16.7-29-desktop ..."
-            OUString aVers = aKernelVer.getToken( 2, ' ', nIndex );
+            OUString aVers = aKernelVer.getToken( 2, ' ' );
             // "3.16.7-29-desktop ..."
             sal_Int32 nTooDetailed = aVers.indexOf( '.', 2);
             if (nTooDetailed < 1 || nTooDetailed > 8)
