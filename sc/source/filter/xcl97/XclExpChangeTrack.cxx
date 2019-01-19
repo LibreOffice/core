@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <numeric>
 #include <stdio.h>
 #include <sot/storage.hxx>
 #include <XclExpChangeTrack.hxx>
@@ -139,11 +140,10 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
     bool bValidGUID = false;
     const std::set<OUString>& rStrColl = rChangeTrack.GetUserCollection();
     aViews.reserve(rStrColl.size());
-    std::set<OUString>::const_iterator it = rStrColl.begin(), itEnd = rStrColl.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rStr : rStrColl)
     {
         lcl_GenerateGUID( aGUID, bValidGUID );
-        aViews.emplace_back( *it, aGUID );
+        aViews.emplace_back( rStr, aGUID );
     }
 }
 
@@ -481,10 +481,9 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
 
     pRevLogStrm->write(">");
 
-    auto it = maActions.begin(), itEnd = maActions.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxAction : maActions)
     {
-        (*it)->SaveXml(rStrm);
+        rxAction->SaveXml(rStrm);
     }
 
     pRevLogStrm->write("</")->writeId(XML_revisions)->write(">");
@@ -702,13 +701,12 @@ void XclExpChTrAction::AddDependentContents(
         const ScChangeTrack& rChangeTrack )
 {
     ScChangeActionMap aActionMap;
-    ScChangeActionMap::iterator itChangeAction;
 
     rChangeTrack.GetDependents( const_cast<ScChangeAction*>(&rAction), aActionMap );
-    for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
-        if( itChangeAction->second->GetType() == SC_CAT_CONTENT )
+    for( const auto& rEntry : aActionMap )
+        if( rEntry.second->GetType() == SC_CAT_CONTENT )
             SetAddAction( new XclExpChTrCellContent(
-                *static_cast<const ScChangeActionContent*>(itChangeAction->second), rRoot, rIdBuffer ) );
+                *static_cast<const ScChangeActionContent*>(rEntry.second), rRoot, rIdBuffer ) );
 }
 
 void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
@@ -779,22 +777,22 @@ void XclExpChTrData::WriteFormula( XclExpStream& rStrm, const XclExpChTrTabIdBuf
     OSL_ENSURE( mxTokArr && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
     rStrm << *mxTokArr;
 
-    for( XclExpRefLog::const_iterator aIt = maRefLog.begin(), aEnd = maRefLog.end(); aIt != aEnd; ++aIt )
+    for( const auto& rLogEntry : maRefLog )
     {
-        if( aIt->mpUrl && aIt->mpFirstTab )
+        if( rLogEntry.mpUrl && rLogEntry.mpFirstTab )
         {
-            rStrm << *aIt->mpUrl << sal_uInt8(0x01) << *aIt->mpFirstTab << sal_uInt8(0x02);
+            rStrm << *rLogEntry.mpUrl << sal_uInt8(0x01) << *rLogEntry.mpFirstTab << sal_uInt8(0x02);
         }
         else
         {
-            bool bSingleTab = aIt->mnFirstXclTab == aIt->mnLastXclTab;
+            bool bSingleTab = rLogEntry.mnFirstXclTab == rLogEntry.mnLastXclTab;
             rStrm.SetSliceSize( bSingleTab ? 6 : 8 );
             rStrm << sal_uInt8(0x01) << sal_uInt8(0x02) << sal_uInt8(0x00);
-            rStrm << rTabIdBuffer.GetId( aIt->mnFirstXclTab );
+            rStrm << rTabIdBuffer.GetId( rLogEntry.mnFirstXclTab );
             if( bSingleTab )
                 rStrm << sal_uInt8(0x02);
             else
-                rStrm << sal_uInt8(0x00) << rTabIdBuffer.GetId( aIt->mnLastXclTab );
+                rStrm << sal_uInt8(0x00) << rTabIdBuffer.GetId( rLogEntry.mnLastXclTab );
         }
     }
     rStrm.SetSliceSize( 0 );
@@ -928,15 +926,14 @@ void XclExpChTrCellContent::GetCellData(
                 rpData->mxTokArr = GetFormulaCompiler().CreateFormula(
                     EXC_FMLATYPE_CELL, *pTokenArray, &pFmlCell->aPos, &rRefLog );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
-                std::size_t nSize = rpData->mxTokArr->GetSize() + 3;
-
-                for( XclExpRefLog::const_iterator aIt = rRefLog.begin(), aEnd = rRefLog.end(); aIt != aEnd; ++aIt )
-                {
-                    if( aIt->mpUrl && aIt->mpFirstTab )
-                        nSize += aIt->mpUrl->GetSize() + aIt->mpFirstTab->GetSize() + 2;
-                    else
-                        nSize += (aIt->mnFirstXclTab == aIt->mnLastXclTab) ? 6 : 8;
-                }
+                std::size_t nSize = std::accumulate(rRefLog.begin(), rRefLog.end(),
+                    static_cast<std::size_t>(rpData->mxTokArr->GetSize() + 3),
+                    [](const std::size_t& rSum, const XclExpRefLogEntry& rLogEntry) {
+                        if( rLogEntry.mpUrl && rLogEntry.mpFirstTab )
+                            return rSum + rLogEntry.mpUrl->GetSize() + rLogEntry.mpFirstTab->GetSize() + 2;
+                        else
+                            return rSum + ((rLogEntry.mnFirstXclTab == rLogEntry.mnLastXclTab) ? 6 : 8);
+                    });
                 rpData->nSize = ::std::min< std::size_t >( nSize, 0xFFFF );
                 rXclLength1 = 0x00000052;
                 rXclLength2 = 0x0018;
@@ -1624,9 +1621,8 @@ void XclExpChangeTrack::Write()
         {
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 
-            RecListType::iterator pIter;
-            for(pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
-                (*pIter)->Save(aXclStrm);
+            for(const auto& rxRec : maRecList)
+                rxRec->Save(aXclStrm);
 
             xSvStrm->Commit();
         }
@@ -1670,9 +1666,8 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
     //          contents of XclExpChangeTrack::WriteUserNamesStream()).
     rWorkbookStrm.PushStream( pRevisionHeaders );
 
-    RecListType::iterator pIter;
-    for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
-        (*pIter)->SaveXml(rWorkbookStrm);
+    for (const auto& rxRec : maRecList)
+        rxRec->SaveXml(rWorkbookStrm);
 
     rWorkbookStrm.PopStream();
 }

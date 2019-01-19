@@ -339,22 +339,20 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
     if (!aValidationVec.empty())
     {
         SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, true, true);
-        ScMyValidationVec::iterator aItr(aValidationVec.begin());
-        ScMyValidationVec::iterator aEndItr(aValidationVec.end());
-        while (aItr != aEndItr)
+        for (const auto& rValidation : aValidationVec)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
-            OUString sCondition(GetCondition(rExport, *aItr));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rValidation.sName);
+            OUString sCondition(GetCondition(rExport, rValidation));
             if (!sCondition.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
-                if (aItr->bIgnoreBlanks)
+                if (rValidation.bIgnoreBlanks)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
                 else
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
-                if (aItr->aValidationType == sheet::ValidationType_LIST)
+                if (rValidation.aValidationType == sheet::ValidationType_LIST)
                 {
-                    switch (aItr->nShowList)
+                    switch (rValidation.nShowList)
                     {
                     case sheet::TableValidationVisibility::INVISIBLE:
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_NO);
@@ -370,39 +368,39 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     }
                 }
             }
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), rValidation.aBaseCell));
             SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
-            if (aItr->bShowImputMessage || !aItr->sImputMessage.isEmpty() || !aItr->sImputTitle.isEmpty())
+            if (rValidation.bShowImputMessage || !rValidation.sImputMessage.isEmpty() || !rValidation.sImputTitle.isEmpty())
             {
-                WriteMessage(rExport, aItr->sImputTitle, aItr->sImputMessage, aItr->bShowImputMessage, true);
+                WriteMessage(rExport, rValidation.sImputTitle, rValidation.sImputMessage, rValidation.bShowImputMessage, true);
             }
-            if (aItr->bShowErrorMessage || !aItr->sErrorMessage.isEmpty() || !aItr->sErrorTitle.isEmpty())
+            if (rValidation.bShowErrorMessage || !rValidation.sErrorMessage.isEmpty() || !rValidation.sErrorTitle.isEmpty())
             {
-                switch (aItr->aAlertStyle)
+                switch (rValidation.aAlertStyle)
                 {
                     case sheet::ValidationAlertStyle_INFO :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_INFORMATION);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
+                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_WARNING :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
+                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_STOP :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
+                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_MACRO :
                     {
                         {
                             //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
-                            if (aItr->bShowErrorMessage)
+                            if (rValidation.bShowErrorMessage)
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
                             else
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
@@ -412,13 +410,13 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             // #i47525# for a script URL the type and the property name for the URL
                             // are both "Script", for a simple macro name the type is "StarBasic"
                             // and the property name is "MacroName".
-                            bool bScriptURL = SfxApplication::IsXScriptURL( aItr->sErrorTitle );
+                            bool bScriptURL = SfxApplication::IsXScriptURL( rValidation.sErrorTitle );
 
                             const OUString sScript("Script");
                             uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
                                     { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
                                     { "Library", uno::Any(OUString()) },
-                                    { bScriptURL ? sScript : OUString("MacroName"), uno::Any(aItr->sErrorTitle) }
+                                    { bScriptURL ? sScript : OUString("MacroName"), uno::Any(rValidation.sErrorTitle) }
                                 }));
                             // 2) export the sequence
                             rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
@@ -431,7 +429,6 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     }
                 }
             }
-            ++aItr;
         }
     }
 }
@@ -643,17 +640,13 @@ bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 
 sal_Int32 ScRowFormatRanges::GetMaxRows() const
 {
-    ScMyRowFormatRangesList::const_iterator aItr(aRowFormatRanges.begin());
-    ScMyRowFormatRangesList::const_iterator aEndItr(aRowFormatRanges.end());
     sal_Int32 nMaxRows = MAXROW + 1;
-    if (aItr != aEndItr)
+    if (!aRowFormatRanges.empty())
     {
-        while (aItr != aEndItr)
-        {
-            if ((*aItr).nRepeatRows < nMaxRows)
-                nMaxRows = (*aItr).nRepeatRows;
-            ++aItr;
-        }
+        auto aItr = std::min_element(aRowFormatRanges.begin(), aRowFormatRanges.end(),
+            [](const ScMyRowFormatRange& a, const ScMyRowFormatRange& b) { return a.nRepeatRows < b.nRepeatRows; });
+        if ((*aItr).nRepeatRows < nMaxRows)
+            nMaxRows = (*aItr).nRepeatRows;
     }
     else
     {

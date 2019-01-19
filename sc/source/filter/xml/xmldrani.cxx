@@ -331,15 +331,15 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         aParam.bCaseSens = bSubTotalsIsCaseSensitive;
         aParam.bDoSort = bSubTotalsSortGroups;
         aParam.bAscending = bSubTotalsAscending;
-        std::vector <ScSubTotalRule>::iterator itr = aSubTotalRules.begin(), itrEnd = aSubTotalRules.end();
-        for (size_t nPos = 0; itr != itrEnd; ++itr, ++nPos)
+        size_t nPos = 0;
+        for (const auto& rSubTotalRule : aSubTotalRules)
         {
             if (nPos >= MAXSUBTOTAL)
                 break;
 
-            const uno::Sequence<sheet::SubTotalColumn>& rColumns = itr->aSubTotalColumns;
+            const uno::Sequence<sheet::SubTotalColumn>& rColumns = rSubTotalRule.aSubTotalColumns;
             sal_Int32 nColCount = rColumns.getLength();
-            sal_Int16 nGroupColumn = itr->nSubTotalRuleGroupFieldNumber;
+            sal_Int16 nGroupColumn = rSubTotalRule.nSubTotalRuleGroupFieldNumber;
             aParam.bGroupActive[nPos] = true;
             aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
 
@@ -362,6 +362,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
                 aParam.pSubTotals[nPos] = nullptr;
                 aParam.pFunctions[nPos] = nullptr;
             }
+            ++nPos;
         }
 
         pData->SetSubTotalParam(aParam);

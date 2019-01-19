@@ -95,9 +95,9 @@ void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyShapesContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyShapeList::iterator aItr = aShapeList.begin();
-    while( ( aItr != aShapeList.end() ) && ( aItr->aAddress.Tab() == nSkip ) )
-        aItr = aShapeList.erase(aItr);
+    ScMyShapeList::iterator aItr = std::find_if_not(aShapeList.begin(), aShapeList.end(),
+        [&nSkip](const ScMyShape& rShape) { return rShape.aAddress.Tab() == nSkip; });
+    aShapeList.erase(aShapeList.begin(), aItr);
 }
 
 void ScMyShapesContainer::Sort()
@@ -137,18 +137,16 @@ bool ScMyNoteShapesContainer::GetFirstAddress( ScAddress& rCellAddress )
 
 void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
-    while( (aItr != aNoteShapeList.end()) && (aItr->aPos == rMyCell.maCellAddress) )
-    {
-        aItr = aNoteShapeList.erase(aItr);
-    }
+    ScMyNoteShapeList::iterator aItr = std::find_if_not(aNoteShapeList.begin(), aNoteShapeList.end(),
+        [&rMyCell](const ScMyNoteShape& rNoteShape) { return rNoteShape.aPos == rMyCell.maCellAddress; });
+    aNoteShapeList.erase(aNoteShapeList.begin(), aItr);
 }
 
 void ScMyNoteShapesContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
-    while( (aItr != aNoteShapeList.end() ) && ( aItr->aPos.Tab() == nSkip ) )
-        aItr = aNoteShapeList.erase(aItr);
+    ScMyNoteShapeList::iterator aItr = std::find_if_not(aNoteShapeList.begin(), aNoteShapeList.end(),
+        [&nSkip](const ScMyNoteShape& rNoteShape) { return rNoteShape.aPos.Tab() == nSkip; });
+    aNoteShapeList.erase(aNoteShapeList.begin(), aItr);
 }
 
 void ScMyNoteShapesContainer::Sort()
@@ -231,9 +229,9 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyMergedRangesContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyMergedRangeList::iterator aItr = aRangeList.begin();
-    while( ( aItr != aRangeList.end() ) && ( aItr->aCellRange.aStart.Tab() == nSkip ) )
-        aItr = aRangeList.erase(aItr);
+    ScMyMergedRangeList::iterator aItr = std::find_if_not(aRangeList.begin(), aRangeList.end(),
+        [&nSkip](const ScMyMergedRange& rRange) { return rRange.aCellRange.aStart.Tab() == nSkip; });
+    aRangeList.erase(aRangeList.begin(), aItr);
 }
 
 void ScMyMergedRangesContainer::Sort()
@@ -303,9 +301,9 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyAreaLinksContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyAreaLinkList::iterator aItr = aAreaLinkList.begin();
-    while( ( aItr != aAreaLinkList.end() ) && ( aItr->aDestRange.aStart.Tab() == nSkip ) )
-        aItr = aAreaLinkList.erase(aItr);
+    ScMyAreaLinkList::iterator aItr = std::find_if_not(aAreaLinkList.begin(), aAreaLinkList.end(),
+        [&nSkip](const ScMyAreaLink& rAreaLink) { return rAreaLink.aDestRange.aStart.Tab() == nSkip; });
+    aAreaLinkList.erase(aAreaLinkList.begin(), aItr);
 }
 
 void ScMyAreaLinksContainer::Sort()
@@ -366,9 +364,9 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyEmptyDatabaseRangesContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyEmptyDatabaseRangeList::iterator aItr = aDatabaseList.begin();
-    while( ( aItr != aDatabaseList.end() ) && ( aItr->aStart.Tab() == nSkip ) )
-        aItr = aDatabaseList.erase(aItr);
+    ScMyEmptyDatabaseRangeList::iterator aItr = std::find_if_not(aDatabaseList.begin(), aDatabaseList.end(),
+        [&nSkip](const ScRange& rDatabase) { return rDatabase.aStart.Tab() == nSkip; });
+    aDatabaseList.erase(aDatabaseList.begin(), aItr);
 }
 
 void ScMyEmptyDatabaseRangesContainer::Sort()
@@ -448,9 +446,9 @@ void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyDetectiveObjContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyDetectiveObjList::iterator aItr = aDetectiveObjList.begin();
-    while( ( aItr != aDetectiveObjList.end() ) && ( aItr->aPosition.Tab() == nSkip ) )
-        aItr = aDetectiveObjList.erase(aItr);
+    ScMyDetectiveObjList::iterator aItr = std::find_if_not(aDetectiveObjList.begin(), aDetectiveObjList.end(),
+        [&nSkip](const ScMyDetectiveObj& rDetectiveObj) { return rDetectiveObj.aPosition.Tab() == nSkip; });
+    aDetectiveObjList.erase(aDetectiveObjList.begin(), aItr);
 }
 
 void ScMyDetectiveObjContainer::Sort()
@@ -507,9 +505,9 @@ void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
 
 void ScMyDetectiveOpContainer::SkipTable(SCTAB nSkip)
 {
-    ScMyDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
-    while( (aItr != aDetectiveOpList.end()) && (aItr->aPosition.Tab() == nSkip) )
-        aItr = aDetectiveOpList.erase(aItr);
+    ScMyDetectiveOpList::iterator aItr = std::find_if_not(aDetectiveOpList.begin(), aDetectiveOpList.end(),
+        [&nSkip](const ScMyDetectiveOp& rDetectiveOp) { return rDetectiveOp.aPosition.Tab() == nSkip; });
+    aDetectiveOpList.erase(aDetectiveOpList.begin(), aItr);
 }
 
 void ScMyDetectiveOpContainer::Sort()

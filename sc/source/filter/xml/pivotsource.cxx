@@ -67,11 +67,8 @@ struct SelectedPageProcessor
         if (!pSaveData)
             return;
 
-        PivotTableSources::SelectedPagesType::const_iterator it = rItem.maSelectedPages.begin(), itEnd = rItem.maSelectedPages.end();
-        for (; it != itEnd; ++it)
+        for (const auto& [rDimName, rSelected] : rItem.maSelectedPages)
         {
-            const OUString& rDimName = it->first;
-            const OUString& rSelected = it->second;
             ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(rDimName);
             if (!pDim)
                 continue;
