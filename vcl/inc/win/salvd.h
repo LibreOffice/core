@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_WIN_SALVD_H
 
 #include <sal/config.h>
+#include <win/scoped_gdi.hxx>
 
 #include <memory>
 
@@ -33,7 +34,7 @@ class WinSalVirtualDevice : public SalVirtualDevice
 {
 private:
     HDC                     mhLocalDC;              // HDC or 0 for Cache Device
-    HBITMAP                 mhBmp;                  // Memory Bitmap
+    ScopedHBITMAP           mhBmp;                  // Memory Bitmap
     HBITMAP                 mhDefBmp;               // Default Bitmap
     std::unique_ptr<WinSalGraphics> mpGraphics;     // current VirDev graphics
     WinSalVirtualDevice*    mpNext;                 // next VirDev

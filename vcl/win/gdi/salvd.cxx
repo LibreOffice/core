@@ -30,6 +30,7 @@
 #include <win/salvd.h>
 #include <opengl/win/gdiimpl.hxx>
 #include <sal/log.hxx>
+#include <o3tl/temporary.hxx>
 
 HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
 {
@@ -184,8 +185,8 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )
         DeleteDC( mpGraphics->getHDC() );
-    if( mhBmp )
-        DeleteBitmap( mhBmp );
+
+    mhBmp.reset();
     mpGraphics.reset();
 }
 
@@ -209,35 +210,31 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???
-    else
+
+    HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount,
+                                             &o3tl::temporary<void*>(nullptr));
+    if (!hNewBmp)
     {
-        void *pDummy;
-        HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount, &pDummy);
-        if ( hNewBmp )
-        {
-            mnWidth = nDX;
-            mnHeight = nDY;
-
-            SelectBitmap( getHDC(), hNewBmp );
-            DeleteBitmap( mhBmp );
-            mhBmp = hNewBmp;
-
-            if (mpGraphics)
-            {
-                WinOpenGLSalGraphicsImpl *pImpl;
-                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
-                if (pImpl)
-                    pImpl->Init();
-            }
-            return true;
-        }
-        else
-        {
-            mnWidth = 0;
-            mnHeight = 0;
-            return false;
-        }
+        mnWidth = 0;
+        mnHeight = 0;
+        return false;
     }
+
+    mnWidth = nDX;
+    mnHeight = nDY;
+
+    SelectBitmap(getHDC(), hNewBmp);
+    mhBmp.reset(hNewBmp);
+
+    if (mpGraphics)
+    {
+        WinOpenGLSalGraphicsImpl *pImpl;
+        pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
+        if (pImpl)
+            pImpl->Init();
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
