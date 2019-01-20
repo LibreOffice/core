@@ -127,7 +127,9 @@ typedef ::avmedia::MediaItem avmedia_MediaItem;
 bool AVMEDIA_DLLPUBLIC EmbedMedia(
         const ::css::uno::Reference< ::css::frame::XModel>& xModel,
         const OUString& rSourceURL,
-        OUString & o_rEmbeddedURL);
+        OUString & o_rEmbeddedURL,
+        ::css::uno::Reference<::css::io::XInputStream> const& xInputStream =
+            ::css::uno::Reference<::css::io::XInputStream>());
 
 OUString GetFilename(OUString const& rSourceURL);
 
