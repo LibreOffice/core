@@ -90,12 +90,11 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     }
 
     HDC     hDC = nullptr;
-    HBITMAP hBmp = nullptr;
+    ScopedHBITMAP hBmp;
 
     if( pData )
     {
         hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
-        hBmp = nullptr;
         if (hDC)
         {
             nDX = GetDeviceCaps( hDC, HORZRES );
@@ -113,37 +112,42 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
         SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
 
         void *pDummy;
-        hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(pGraphics->getHDC(), nDX, nDY, nBitCount, &pDummy);
+        hBmp.reset(WinSalVirtualDevice::ImplCreateVirDevBitmap(pGraphics->getHDC(),
+                                                               nDX, nDY,
+                                                               nBitCount, &pDummy));
 
         // #124826# continue even if hBmp could not be created
         // if we would return a failure in this case, the process
         // would terminate which is not required
     }
 
-    if (hDC)
-    {
-        WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount, (pData != nullptr && pData->hDC != nullptr ), nDX, nDY);
-        SalData*                pSalData = GetSalData();
-        WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), nullptr, pVDev);
-        pVirGraphics->SetLayout( SalLayoutFlags::NONE );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-        pVirGraphics->setHDC(hDC);
-        if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
-        {
-            pVirGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
-            RealizePalette( hDC );
-        }
-        pVirGraphics->InitGraphics();
-
-        pVDev->setGraphics(pVirGraphics);
-
-        return std::unique_ptr<SalVirtualDevice>(pVDev);
-    }
-    else
-    {
-        if ( hBmp )
-            DeleteBitmap( hBmp );
+    if (!hDC)
         return nullptr;
+
+    const bool bForeignDC = (pData != nullptr && pData->hDC != nullptr);
+    const SalData* pSalData = GetSalData();
+
+    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, hBmp.release(),
+                                                         nBitCount, bForeignDC,
+                                                         nDX, nDY);
+
+    WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
+                                                      pGraphics->isScreen(), nullptr, pVDev);
+
+    // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+    pVirGraphics->SetLayout( SalLayoutFlags::NONE );
+    pVirGraphics->setHDC(hDC);
+
+    if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
+    {
+        pVirGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+        RealizePalette( hDC );
     }
+
+    pVirGraphics->InitGraphics();
+    pVDev->setGraphics(pVirGraphics);
+
+    return std::unique_ptr<SalVirtualDevice>(pVDev);
 }
 
 WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, long nWidth, long nHeight)
@@ -184,8 +188,8 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )
         DeleteDC( mpGraphics->getHDC() );
-    if( mhBmp )
-        DeleteBitmap( mhBmp );
+
+    mhBmp.reset();
     mpGraphics.reset();
 }
 
@@ -209,35 +213,32 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???
-    else
+
+    const HDC hDC = getHDC();
+    void *pDummy;
+
+    mhBmp.reset(ImplCreateVirDevBitmap(hDC, nDX, nDY, mnBitCount, &pDummy));
+    if (!mhBmp)
     {
-        void *pDummy;
-        HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount, &pDummy);
-        if ( hNewBmp )
-        {
-            mnWidth = nDX;
-            mnHeight = nDY;
-
-            SelectBitmap( getHDC(), hNewBmp );
-            DeleteBitmap( mhBmp );
-            mhBmp = hNewBmp;
-
-            if (mpGraphics)
-            {
-                WinOpenGLSalGraphicsImpl *pImpl;
-                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
-                if (pImpl)
-                    pImpl->Init();
-            }
-            return true;
-        }
-        else
-        {
-            mnWidth = 0;
-            mnHeight = 0;
-            return false;
-        }
+        mnWidth = 0;
+        mnHeight = 0;
+        return false;
     }
+
+    mnWidth = nDX;
+    mnHeight = nDY;
+
+    SelectBitmap(hDC, mhBmp.get());
+
+    if (mpGraphics)
+    {
+        WinOpenGLSalGraphicsImpl *pImpl;
+        pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
+        if (pImpl)
+            pImpl->Init();
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
