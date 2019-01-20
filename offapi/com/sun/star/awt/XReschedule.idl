@@ -18,7 +18,7 @@
  */
 
 #ifndef __com_sun_star_awt_XReschedule_idl__
-#define __com_sun_star_awt_XReschedulet_idl__
+#define __com_sun_star_awt_XReschedule_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 
