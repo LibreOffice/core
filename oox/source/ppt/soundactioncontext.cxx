@@ -27,6 +27,8 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <avmedia/mediaitem.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -54,11 +56,15 @@ namespace oox { namespace ppt {
             if( mbHasStartSound )
             {
                 OUString url;
-                // TODO this is very wrong
                 if ( !msSndName.isEmpty() )
                 {
-                    // try the builtIn version
-                    url = msSndName;
+                    Reference<css::io::XInputStream>
+                        xInputStream = getFilter().openInputStream(msSndName);
+                    if (xInputStream.is())
+                    {
+                        ::avmedia::EmbedMedia(getFilter().getModel(), msSndName, url, xInputStream);
+                        xInputStream->closeInput();
+                    }
                 }
                 if ( !url.isEmpty() )
                 {
