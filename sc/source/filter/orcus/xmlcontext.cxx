@@ -19,20 +19,19 @@
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
-#include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>
 #include <orcus/xml_namespace.hpp>
 #include <orcus/orcus_xml.hpp>
-#include <orcus/global.hpp>
 #include <orcus/sax_parser_base.hpp>
 #include <orcus/stream.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <string>
 #include <sstream>
+
+namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
 
 #define BUFFER_SIZE 4096
 

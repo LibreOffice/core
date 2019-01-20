@@ -23,10 +23,8 @@
 #include <comphelper/string.hxx>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <svtools/htmlcfg.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
@@ -44,11 +42,9 @@
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <sfx2/docfile.hxx>
 
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/tencinfo.h>

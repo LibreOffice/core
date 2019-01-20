@@ -44,6 +44,11 @@ class SvxULSpaceItem;
 class SvxUnderlineItem;
 class SvxWeightItem;
 class SvxWordLineModeItem;
+class SvxShadowItem;
+class SvxHorJustifyItem;
+class SvxVerJustifyItem;
+class SvxBrushItem;
+class SvxBoxItem;
 
 //  EditEngine is not allowed to define its own ITEMID's
 #define INCLUDED_EDITENG_EEITEMID_HXX

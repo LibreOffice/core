@@ -21,10 +21,7 @@
 //              their variables via extern!
 
 #include <scitems.hxx>
-#include <scmem.h>
-#include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <attrib.hxx>
 #include "lotfilter.hxx"
 #include <tool.h>
 #include <editeng/svxenum.hxx>

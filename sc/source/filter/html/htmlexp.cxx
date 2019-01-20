@@ -20,10 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <rtl/tencinfo.h>
-
 #include <vcl/svapp.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
@@ -40,9 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
-#include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
@@ -51,7 +46,6 @@
 #include <osl/diagnose.h>
 
 #include <htmlexp.hxx>
-#include <filter.hxx>
 #include <global.hxx>
 #include <postit.hxx>
 #include <document.hxx>
@@ -68,7 +62,6 @@
 
 #include <editeng/flditem.hxx>
 #include <editeng/borderline.hxx>
-#include <unotools/syslocale.hxx>
 
 // Without strings.hrc: error C2679: binary '=' : no operator defined which takes a
 // right-hand operand of type 'const class String (__stdcall *)(class ScResId)'

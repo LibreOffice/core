@@ -21,7 +21,6 @@
 #include <ftools.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
-#include <rtl/strbuf.hxx>
 #include <tools/color.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/itempool.hxx>
@@ -31,7 +30,6 @@
 
 #include <math.h>
 #include <global.hxx>
-#include <document.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <compiler.hxx>

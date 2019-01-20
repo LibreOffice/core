@@ -15,11 +15,9 @@
 #include <rangenam.hxx>
 #include <tokenarray.hxx>
 #include <globalnames.hxx>
-#include <docoptio.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <compiler.hxx>
-#include <dbdata.hxx>
 #include <stlpool.hxx>
 #include <scitems.hxx>
 #include <patattr.hxx>
@@ -33,24 +31,18 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/charhiddenitem.hxx>
-#include <editeng/protitem.hxx>
-#include <editeng/prntitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/justifyitem.hxx>
 
-#include <formula/token.hxx>
-#include <tools/datetime.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <i18nlangtag/lang.h>
-#include <vcl/outdev.hxx>
 #include <tools/fontenum.hxx>
 #include <sal/log.hxx>
 

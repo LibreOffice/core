@@ -9,7 +9,6 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 
@@ -18,6 +17,8 @@
 #include <rtl/strbuf.hxx>
 
 #include <orcus/format_detection.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace {
 

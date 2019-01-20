@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <global.hxx>
-#include <document.hxx>
 #include <filter.hxx>
 #include <editutil.hxx>
 #include <rtfimp.hxx>

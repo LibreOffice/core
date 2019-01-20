@@ -18,28 +18,21 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
-#include <svx/algitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <svl/style.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
 
 #include <rtfexp.hxx>
-#include <filter.hxx>
 #include <cellvalue.hxx>
 #include <document.hxx>
 #include <patattr.hxx>
 #include <attrib.hxx>
 #include <cellform.hxx>
 #include <editutil.hxx>
-#include <stlpool.hxx>
 #include <ftools.hxx>
 
 void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,

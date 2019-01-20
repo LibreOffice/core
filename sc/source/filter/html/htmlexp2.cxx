@@ -23,11 +23,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdxcgv.hxx>
-#include <sot/exchange.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
-#include <vcl/transfer.hxx>
-#include <svtools/embedtransfer.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 
@@ -35,7 +32,6 @@
 #include <global.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
-#include <ftools.hxx>
 #include <rtl/strbuf.hxx>
 
 using namespace com::sun::star;
