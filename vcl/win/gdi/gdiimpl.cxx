@@ -209,19 +209,8 @@ WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
     mrParent(rParent),
     mbXORMode(false),
     mbPen(false),
-    mhPen(nullptr),
-    mbBrush(false),
-    mhBrush(nullptr)
+    mbBrush(false)
 {
-}
-
-WinSalGraphicsImpl::~WinSalGraphicsImpl()
-{
-    if ( mhPen )
-        DeletePen( mhPen );
-
-    if ( mhBrush )
-        DeleteBrush( mhBrush );
 }
 
 void WinSalGraphicsImpl::Init()
@@ -1334,13 +1323,10 @@ HPEN WinSalGraphicsImpl::MakePen(Color nColor)
 void WinSalGraphicsImpl::ResetPen(HPEN hNewPen)
 {
     HPEN hOldPen = SelectPen(mrParent.getHDC(), hNewPen);
-
-    if (mhPen)
-        DeletePen(mhPen);
-    else
+    if (!mhPen)
         mrParent.mhDefPen = hOldPen;
 
-    mhPen = hNewPen;
+    mhPen.reset(hNewPen);
 }
 
 void WinSalGraphicsImpl::SetFillColor()
@@ -1496,13 +1482,10 @@ HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
 void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
 {
     HBRUSH hOldBrush = SelectBrush(mrParent.getHDC(), hNewBrush);
-
-    if (mhBrush)
-        DeleteBrush(mhBrush);
-    else
+    if (!mhBrush)
         mrParent.mhDefBrush = hOldBrush;
 
-    mhBrush = hNewBrush;
+    mhBrush.reset(hNewBrush);
 }
 
 void WinSalGraphicsImpl::SetXORMode( bool bSet, bool )
@@ -1581,7 +1564,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
             aWinRect.top    = nY;
             aWinRect.right  = nX+nWidth;
             aWinRect.bottom = nY+nHeight;
-            ::FillRect( mrParent.getHDC(), &aWinRect, mhBrush );
+            ::FillRect( mrParent.getHDC(), &aWinRect, mhBrush.get() );
         }
     }
     else

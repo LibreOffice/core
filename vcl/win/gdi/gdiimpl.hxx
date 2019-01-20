@@ -22,6 +22,7 @@
 
 #include <salgdiimpl.hxx>
 #include <win/salgdi.h>
+#include <win/scoped_gdi.hxx>
 
 #include <vcl/gradient.hxx>
 
@@ -37,9 +38,9 @@ private:
     WinSalGraphics& mrParent;
     bool mbXORMode : 1; // _every_ output with RasterOp XOR
     bool mbPen : 1; // is Pen (FALSE == NULL_PEN)
-    HPEN mhPen; // Pen
+    ScopedHPEN mhPen; // Pen
     bool mbBrush : 1; // is Brush (FALSE == NULL_BRUSH)
-    HBRUSH mhBrush; // Brush
+    ScopedHBRUSH mhBrush; // Brush
     COLORREF mnPenColor; // PenColor
     COLORREF mnBrushColor; // BrushColor
 
@@ -61,7 +62,7 @@ public:
 
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
 
-    virtual ~WinSalGraphicsImpl() override;
+    virtual ~WinSalGraphicsImpl() override = default;
 
     virtual void Init() override;
 
