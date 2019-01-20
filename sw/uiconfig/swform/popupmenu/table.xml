@@ -18,6 +18,10 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:UpdateCurIndex"/>
+  <menu:menuitem menu:id=".uno:EditCurIndex"/>
+  <menu:menuitem menu:id=".uno:RemoveTableOf"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:NumberingStart"/>
   <menu:menuitem menu:id=".uno:ContinueNumbering"/>
   <menu:menuitem menu:id=".uno:IncrementLevel"/>
