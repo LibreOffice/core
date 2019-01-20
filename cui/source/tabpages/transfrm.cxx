@@ -104,7 +104,7 @@ bool lcl_twipsNeeded(const SdrView* pView)
     return false;
 }
 
-} // anonymouus ns
+} // anonymous ns
 
 
 /*************************************************************************
