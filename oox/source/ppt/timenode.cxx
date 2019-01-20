@@ -27,6 +27,7 @@
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -294,6 +295,7 @@ namespace oox { namespace ppt {
             Reference< XAnimateMotion > xAnimateMotion( xNode, UNO_QUERY );
             Reference< XAnimateTransform > xAnimateTransform( xNode, UNO_QUERY );
             Reference< XCommand > xCommand( xNode, UNO_QUERY );
+            Reference< XAudio > xAudio( xNode, UNO_QUERY );
             Reference< XIterateContainer > xIterateContainer( xNode, UNO_QUERY );
             sal_Int16 nInt16 = 0;
             bool bBool = false;
@@ -334,6 +336,8 @@ namespace oox { namespace ppt {
                                 xAnimate->setTarget(aValue);
                             if (xCommand.is())
                                 xCommand->setTarget(aValue);
+                            if (xAudio.is())
+                                xAudio->setSource(aValue);
                         }
                         break;
                     case NP_SUBITEM:
