@@ -46,6 +46,7 @@
 #include "commontimenodecontext.hxx"
 #include "timeanimvaluecontext.hxx"
 #include "animationtypes.hxx"
+#include "timetargetelementcontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -179,12 +180,14 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs) override
             {
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, mpNode );
+                case PPT_TOKEN( cTn ):
+                    return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
+                case PPT_TOKEN( tgtEl ):
+                    return new TimeTargetElementContext( *this, mpNode->getTarget() );
                 default:
                     break;
                 }

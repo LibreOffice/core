@@ -44,6 +44,8 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -191,6 +193,7 @@ public:
     void testTdf120028();
     void testTdf120028b();
     void testTdf94238();
+    void testTdf44223();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -275,6 +278,7 @@ public:
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testTdf94238);
+    CPPUNIT_TEST(testTdf44223);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2621,6 +2625,27 @@ void SdImportTest::testTdf94238()
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), aGradient.YOffset);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(39), aGradient.Border);
+}
+
+void SdImportTest::testTdf44223()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf44223.pptx"), PPTX);
+    uno::Reference<document::XStorageBasedDocument> xSBD(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSBD.is());
+
+    uno::Reference<embed::XStorage> xStorage = xSBD->getDocumentStorage();
+    CPPUNIT_ASSERT(xStorage.is());
+
+    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xNameAccess.is());
+
+    uno::Reference<embed::XStorage> xStorage_2(xNameAccess->getByName("Media"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStorage_2.is());
+    uno::Reference< container::XNameAccess > xNameAccess_2(xStorage_2, uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio1.wav"));
+    CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio2.wav"));
 
     xDocShRef->DoClose();
 }

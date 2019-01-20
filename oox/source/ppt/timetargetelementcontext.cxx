@@ -27,6 +27,9 @@
 #include <drawingml/embeddedwavaudiofile.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <avmedia/mediaitem.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -122,8 +125,16 @@ namespace oox { namespace ppt {
             return this;
         case PPT_TOKEN( sndTgt ):
         {
+            OUString srcFile = drawingml::getEmbeddedWAVAudioFile(getRelations(), rAttribs);
             mpTarget->mnType = XML_sndTgt;
-            mpTarget->msValue = drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs );
+            Reference<css::io::XInputStream>
+                xInputStream = getFilter().openInputStream(srcFile);
+
+            if (xInputStream.is())
+            {
+                ::avmedia::EmbedMedia(getFilter().getModel(), srcFile, mpTarget->msValue, xInputStream);
+                xInputStream->closeInput();
+            }
             break;
         }
         case PPT_TOKEN( spTgt ):

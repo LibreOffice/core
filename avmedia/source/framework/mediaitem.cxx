@@ -415,14 +415,10 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
 
 
 bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
-        OUString const& rSourceURL, OUString & o_rEmbeddedURL)
+        OUString const& rSourceURL, OUString & o_rEmbeddedURL, uno::Reference<io::XInputStream> const& xInputStream)
 {
     try
     {
-        ::ucbhelper::Content sourceContent(rSourceURL,
-                uno::Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext());
-
         uno::Reference<document::XStorageBasedDocument> const xSBD(xModel,
                 uno::UNO_QUERY_THROW);
         uno::Reference<embed::XStorage> const xStorage(
@@ -439,10 +435,22 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         uno::Reference<io::XOutputStream> const xOutStream(
             xStream->getOutputStream(), uno::UNO_SET_THROW);
 
-        if (!sourceContent.openStream(xOutStream)) // copy file to storage
+        if (xInputStream.is())
         {
-            SAL_INFO("avmedia", "openStream to storage failed");
-            return false;
+            // Throw Exception if failed.
+            ::comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
+        }
+        else
+        {
+            ::ucbhelper::Content sourceContent(rSourceURL,
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
+
+            if (!sourceContent.openStream(xOutStream)) // copy file to storage
+            {
+                SAL_INFO("avmedia", "openStream to storage failed");
+                return false;
+            }
         }
 
         uno::Reference<embed::XTransactedObject> const xSubTransaction(
@@ -466,7 +474,6 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
     }
     return false;
 }
-
 
 } // namespace avmedia
 
