@@ -73,6 +73,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/itemset.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 
@@ -995,20 +997,32 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
-    Paper ePaper =  mpPaperSizeBox->GetSelection();
-    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
+    const Paper ePaper = mpPaperSizeBox->GetSelection();
+    Size aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
-    if(mpPaperOrientation->GetSelectedEntryPos() == 0)
+    if (mpPaperOrientation->GetSelectedEntryPos() == 0)
         Swap(aSize);
 
     mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 0);
-    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
+    const SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     // Page/slide properties dialog (FuPage::ExecuteDialog and ::ApplyItemSet) misuses
     // SID_ATTR_PAGE_EXT1 to distinguish between Impress and Draw, as for whether to fit
     // objects to paper size. Until that is handled somehow better, we do the same here
-    SfxBoolItem aFitObjs(SID_ATTR_PAGE_EXT1, IsImpress());
+    const SfxBoolItem aFitObjs(SID_ATTR_PAGE_EXT1, IsImpress());
 
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get(), &aFitObjs});
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD,
+                                                { &aSizeItem, mpPageItem.get(), &aFitObjs });
+
+    // Notify LOK clients of the page size chagne.
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
