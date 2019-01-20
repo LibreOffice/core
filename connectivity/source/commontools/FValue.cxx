@@ -752,7 +752,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
     }
 
     bool bRet = false;
-    OSL_ENSURE(!m_bNull,"SHould not be null!");
+    OSL_ENSURE(!m_bNull,"Should not be null!");
     switch(m_eTypeKind)
     {
         case DataType::VARCHAR:
