@@ -451,7 +451,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     }
 
     // pNumItem must have been set from outside!
-    DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, good bye.CRASH. :-(" );
+    DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, goodbye. CRASH. :-(" );
 
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
 
@@ -1356,7 +1356,7 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
             {
                 if ( bAdded && (nFmtLbSelPos != SELPOS_NONE) )
                 {
-                    // everything alright
+                    // everything all right
                     if(bOneAreaFlag)                  //@@ ???
                         SetCategory(0);
                     else
