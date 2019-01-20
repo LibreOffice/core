@@ -1376,8 +1376,6 @@ SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
 
     SetColorList(pColorTable);
     SetBitmapList(pBitmapList);
-
-    m_xFillTab->set_size_request(m_aColorSize.Width(), m_aColorSize.Height());
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()
@@ -1506,6 +1504,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         }
         if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
             m_xBtnBitmap->show();
+        SetOptimalSize(GetDialogController());
     }
 
     if ( bCharBackColor )
