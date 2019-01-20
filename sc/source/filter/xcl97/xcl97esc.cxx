@@ -21,19 +21,15 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svx/svdpage.hxx>
-#include <editeng/outlobj.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/fmglob.hxx>
-#include <vcl/outdev.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/sdasitm.hxx>
@@ -44,15 +40,11 @@
 #include <sot/storage.hxx>
 #include <xeescher.hxx>
 
-#include <global.hxx>
-#include <document.hxx>
 #include <drwlayer.hxx>
 #include <xecontent.hxx>
 #include <editeng/flditem.hxx>
 #include <userdat.hxx>
 #include <xcl97rec.hxx>
-#include <xehelper.hxx>
-#include <xechart.hxx>
 #include <xcl97esc.hxx>
 #include <unotools/streamwrap.hxx>
 #include <oox/ole/olehelper.hxx>

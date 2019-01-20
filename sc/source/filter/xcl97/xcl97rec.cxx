@@ -17,45 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/unoapi.hxx>
 #include <editeng/writingmodeitem.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
-#include <svl/zformat.hxx>
-#include <formulacell.hxx>
 #include <drwlayer.hxx>
 
 #include <root.hxx>
 #include <xcl97rec.hxx>
 #include <xcl97esc.hxx>
-#include <editutil.hxx>
-#include <xecontent.hxx>
 #include <xeescher.hxx>
-#include <xestyle.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
 #include <xlcontent.hxx>
 
-#include <scitems.hxx>
-
 #include <unotools/fltrcfg.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
@@ -65,13 +51,8 @@
 #include <stdio.h>
 
 #include <document.hxx>
-#include <conditio.hxx>
 #include <rangelst.hxx>
-#include <stlpool.hxx>
-#include <viewopti.hxx>
-#include <scextopt.hxx>
 #include <docoptio.hxx>
-#include <patattr.hxx>
 #include <tabprotection.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>

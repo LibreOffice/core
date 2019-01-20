@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-
 #include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
-#include <attrib.hxx>
 #include <dif.hxx>
 #include <docpool.hxx>
 #include <document.hxx>
-#include <filter.hxx>
 #include <fprogressbar.hxx>
 #include <ftools.hxx>
 #include <patattr.hxx>

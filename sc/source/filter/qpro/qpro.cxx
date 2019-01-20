@@ -19,17 +19,12 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sfx2/docfile.hxx>
 
 #include <qproform.hxx>
 #include <qpro.hxx>
 #include <qprostyle.hxx>
 
-#include <global.hxx>
 #include <scerrors.hxx>
-#include <docpool.hxx>
-#include <patattr.hxx>
-#include <filter.hxx>
 #include <ftools.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>

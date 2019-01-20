@@ -22,13 +22,8 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
-#include <attrib.hxx>
 #include <document.hxx>
-#include <rangenam.hxx>
 #include <formulacell.hxx>
-#include <patattr.hxx>
-#include <docpool.hxx>
-#include <compiler.hxx>
 #include <global.hxx>
 
 #include <root.hxx>
@@ -36,7 +31,6 @@
 #include <lotform.hxx>
 #include <tool.h>
 #include <namebuff.hxx>
-#include <lotrange.hxx>
 #include <lotattr.hxx>
 #include <stringutil.hxx>
 

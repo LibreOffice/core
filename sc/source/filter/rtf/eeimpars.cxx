@@ -22,22 +22,15 @@
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
-#include <svtools/parhtml.hxx>
-#include <svtools/htmltokn.h>
 #include <svl/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/string.hxx>
 
@@ -45,7 +38,6 @@
 #include <global.hxx>
 #include <document.hxx>
 #include <editutil.hxx>
-#include <stlsheet.hxx>
 #include <docpool.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>

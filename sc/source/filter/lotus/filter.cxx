@@ -19,23 +19,17 @@
 
 //  Discover WKS, WK1 and WK3; s.a op.cpp
 
-#include <string.h>
 #include <map>
 
 #include <filter.hxx>
 #include <document.hxx>
-#include <compiler.hxx>
 #include <scerrors.hxx>
 
-#include <root.hxx>
-#include <lotrange.hxx>
 #include <optab.h>
 #include <op.h>
 #include <scmem.h>
 #include <decl.h>
-#include <tool.h>
 #include <fprogressbar.hxx>
-#include <patattr.hxx>
 #include "lotfilter.hxx"
 #include <tools/stream.hxx>
 

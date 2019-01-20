@@ -387,6 +387,9 @@ blacklist:
     sc/source/filter/inc/formulabase.hxx:
     # Needed for typedef
     - com/sun/star/table/CellAddress.hpp
+    sc/source/filter/inc/fprogressbar.hxx:
+    # Avoid collision with fprogressbar.cxx checking
+    - progress.hxx
     sc/source/filter/inc/ooxformulaparser.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
@@ -665,6 +668,9 @@ blacklist:
     sc/source/filter/xml/xmldrani.hxx:
     # Complex type needs complete type
     - com/sun/star/beans/PropertyValue.hpp
+    sc/source/filter/ftools/sharedformulagroups.cxx:
+    # Needed for implicit dtor
+    - tokenarray.hxx
     sc/source/filter/excel/excimp8.cxx:
     # base class has to be a complete type
     - com/sun/star/container/XIndexContainer.hpp
@@ -688,6 +694,15 @@ blacklist:
     sc/source/filter/excel/xistyle.cxx:
     # Needed for direct member access
     - xladdress.hxx
+    sc/source/filter/lotus/filter.cxx:
+    # Needed to avoid loplugin:unreffun error
+    - filter.hxx
+    sc/source/filter/lotus/memory.cxx
+    # Needed to avoid loplugin:unreffun error
+    - scmem.h
+    sc/source/filter/lotus/op.cxx:
+    # Needed to avoid loplugin:unreffun error
+    - op.h
     sc/source/filter/oox/ooxformulaparser.cxx:
     # Needed for direct member access
     - com/sun/star/lang/XComponent.hpp
@@ -697,6 +712,14 @@ blacklist:
     sc/source/filter/oox/worksheethelper.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
+    sc/source/filter/orcus/orcusfiltersimpl.cxx:
+    # Needed for implicit dtor
+    - tokenarray.hxx
+    # Needed for direct member access
+    - com/sun/star/task/XStatusIndicator.hpp
+    sc/source/filter/orcus/xmlcontext.cxx:
+    # Needed for implicit dtor
+    - tokenarray.hxx
     sc/source/filter/xml/XMLExportIterator.cxx:
     # Needed for direct member access
     - com/sun/star/table/XCellRange.hpp

@@ -23,15 +23,12 @@
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/svxrtf.hxx>
-#include <editeng/shaditem.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
 #include <osl/diagnose.h>
+#include <svl/itempool.hxx>
 
 #include <rtfparse.hxx>
-#include <global.hxx>
-#include <document.hxx>
-#include <docpool.hxx>
 
 #define SC_RTFTWIPTOL 10        // 10 Twips tolerance when determining columns
 

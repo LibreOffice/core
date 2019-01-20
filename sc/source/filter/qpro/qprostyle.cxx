@@ -18,10 +18,7 @@
  */
 
 #include <sal/config.h>
-#include <sfx2/docfile.hxx>
 
-#include <qproform.hxx>
-#include <qpro.hxx>
 #include <qprostyle.hxx>
 
 #include <scitems.hxx>
@@ -29,19 +26,14 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <map>
 
 #include <global.hxx>
-#include <scerrors.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
-#include <filter.hxx>
 #include <document.hxx>
-#include <formulacell.hxx>
 
 ScQProStyle::ScQProStyle()
 {

@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/math.hxx>
-
 #include <dif.hxx>
-#include <filter.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>

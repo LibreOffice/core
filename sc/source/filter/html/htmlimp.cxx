@@ -19,8 +19,6 @@
 
 #include <scitems.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/string.hxx>
-#include <editeng/eeitem.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/lrspitem.hxx>
@@ -39,7 +37,7 @@
 #include <editutil.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
-#include <compiler.hxx>
+#include <refdata.hxx>
 #include <rangenam.hxx>
 #include <attrib.hxx>
 #include <ftools.hxx>

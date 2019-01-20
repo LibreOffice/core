@@ -18,22 +18,17 @@
  */
 
 #include <scitems.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 
 #include <attrib.hxx>
-#include <rangenam.hxx>
-#include <compiler.hxx>
 #include <document.hxx>
 
 #include <tool.h>
-#include <decl.h>
 #include <root.hxx>
 #include <lotrange.hxx>
 #include <namebuff.hxx>
-#include <ftools.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
 #include "lotfilter.hxx"
