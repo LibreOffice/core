@@ -483,6 +483,10 @@ SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
     const sal_uInt16 nHtmlMode = ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
+    // tdf#92154 limit comboBOX_TEMPLATE length
+    const int nMaxWidth(m_xTemplateBox->get_approximate_digit_width() * 50);
+    m_xTemplateBox->set_size_request(nMaxWidth , -1);
+
     // In the template dialog the text is not influenceable
     m_xTextText->set_sensitive(!bFormat);
     m_xTextEdit->set_sensitive(!bFormat);
