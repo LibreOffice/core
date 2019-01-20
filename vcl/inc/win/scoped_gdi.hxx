@@ -12,6 +12,7 @@
 
 #include <win/svsys.h>
 #include <win/wincomp.hxx>
+#include <win/saldata.hxx>
 
 #include <memory>
 
@@ -52,6 +53,22 @@ private:
 using ScopedSelectedHPEN = ScopedSelectedGDI<ScopedHPEN, SelectPen>;
 using ScopedSelectedHFONT = ScopedSelectedGDI<ScopedHFONT, SelectFont>;
 using ScopedSelectedHBRUSH = ScopedSelectedGDI<ScopedHBRUSH, SelectBrush>;
+
+template <sal_uLong ID> class ScopedCachedHDC
+{
+public:
+    explicit ScopedCachedHDC(HBITMAP hBitmap)
+        : m_hDC(ImplGetCachedDC(ID, hBitmap))
+    {
+    }
+
+    ~ScopedCachedHDC() { ImplReleaseCachedDC(ID); }
+
+    HDC get() const { return m_hDC; }
+
+private:
+    HDC m_hDC;
+};
 
 #endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 

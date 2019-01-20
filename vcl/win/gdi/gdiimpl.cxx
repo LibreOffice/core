@@ -559,7 +559,8 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
         }
         else if( hDrawDDB && !bPrintDDB )
         {
-            HDC         hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
+            ScopedCachedHDC<CACHED_HDC_DRAW> hBmpDC(hDrawDDB);
+
             COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
             COLORREF    nOldTextColor = RGB(0,0,0);
             bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
@@ -592,7 +593,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 BitBlt( hDC,
                         static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
                         static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                        hBmpDC,
+                        hBmpDC.get(),
                         static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
                         nDrawMode );
             }
@@ -603,7 +604,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 StretchBlt( hDC,
                             static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
                             static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                            hBmpDC,
+                            hBmpDC.get(),
                             static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
                             static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                             nDrawMode );
@@ -616,8 +617,6 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 SetBkColor( hDC, nOldBkColor );
                 ::SetTextColor( hDC, nOldTextColor );
             }
-
-            ImplReleaseCachedDC( CACHED_HDC_DRAW );
         }
     }
 }
@@ -688,11 +687,11 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
         hMaskBitmap.reset(CreateCompatibleBitmap(hDC, nDstWidth, nDstHeight));
     }
 
-    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, hMemBitmap.get() );
-    HDC hMaskDC = ImplGetCachedDC( CACHED_HDC_2, hMaskBitmap.get() );
+    ScopedCachedHDC<CACHED_HDC_1> hMemDC(hMemBitmap.get());
+    ScopedCachedHDC<CACHED_HDC_2> hMaskDC(hMaskBitmap.get());
 
     aPosAry.mnDestX = aPosAry.mnDestY = 0;
-    BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
+    BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
 
     // WIN/WNT seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
@@ -701,35 +700,32 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
         WinSalBitmap aTmp;
 
         if( aTmp.Create( rTransparentBitmap, &mrParent ) )
-            ImplDrawBitmap( hMaskDC, aPosAry, aTmp, false, SRCCOPY );
+            ImplDrawBitmap( hMaskDC.get(), aPosAry, aTmp, false, SRCCOPY );
     }
     else
-        ImplDrawBitmap( hMaskDC, aPosAry, rTransparentBitmap, false, SRCCOPY );
+        ImplDrawBitmap( hMaskDC.get(), aPosAry, rTransparentBitmap, false, SRCCOPY );
 
     // now MemDC contains background, MaskDC the transparency mask
 
     // #105055# Respect XOR mode
     if( mbXORMode )
     {
-        ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, false, SRCERASE );
+        ImplDrawBitmap( hMaskDC.get(), aPosAry, rSalBitmap, false, SRCERASE );
         // now MaskDC contains the bitmap area with black background
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
+        BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hMaskDC.get(), 0, 0, SRCINVERT );
         // now MemDC contains background XORed bitmap area ontop
     }
     else
     {
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
+        BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hMaskDC.get(), 0, 0, SRCAND );
         // now MemDC contains background with masked-out bitmap area
-        ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, false, SRCERASE );
+        ImplDrawBitmap( hMaskDC.get(), aPosAry, rSalBitmap, false, SRCERASE );
         // now MaskDC contains the bitmap area with black background
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
+        BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hMaskDC.get(), 0, 0, SRCPAINT );
         // now MemDC contains background and bitmap merged together
     }
     // copy to output DC
-    BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC, 0, 0, SRCCOPY );
-
-    ImplReleaseCachedDC( CACHED_HDC_1 );
-    ImplReleaseCachedDC( CACHED_HDC_2 );
+    BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC.get(), 0, 0, SRCCOPY );
 }
 
 bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
@@ -738,8 +734,8 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     if( mbPen || !mbBrush || mbXORMode )
         return false; // can only perform solid fills without XOR.
 
-    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1 );
-    SetPixel( hMemDC, int(0), int(0), mnBrushColor );
+    ScopedCachedHDC<CACHED_HDC_1> hMemDC(nullptr);
+    SetPixel( hMemDC.get(), int(0), int(0), mnBrushColor );
 
     BLENDFUNCTION aFunc = {
         AC_SRC_OVER,
@@ -751,10 +747,8 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
     // that to dest hdc
     bool bRet = GdiAlphaBlend(mrParent.getHDC(), nX, nY, nWidth, nHeight,
-                              hMemDC, 0,0,1,1,
+                              hMemDC.get(), 0,0,1,1,
                               aFunc ) == TRUE;
-
-    ImplReleaseCachedDC( CACHED_HDC_1 );
 
     return bRet;
 }
@@ -800,11 +794,15 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( long nX, long nY, long
 
     HDC     hDC = mrParent.getHDC();
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
-    HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     bool    bRet;
 
-    bRet = BitBlt( hBmpDC, 0, 0, static_cast<int>(nDX), static_cast<int>(nDY), hDC, static_cast<int>(nX), static_cast<int>(nY), SRCCOPY ) ? TRUE : FALSE;
-    ImplReleaseCachedDC( CACHED_HDC_1 );
+    {
+        ScopedCachedHDC<CACHED_HDC_1> hBmpDC(hBmpBitmap);
+
+        bRet = BitBlt(hBmpDC.get(), 0, 0,
+                      static_cast<int>(nDX), static_cast<int>(nDY), hDC,
+                      static_cast<int>(nX), static_cast<int>(nY), SRCCOPY) ? TRUE : FALSE;
+    }
 
     if( bRet )
     {
