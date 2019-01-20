@@ -19,7 +19,6 @@
 
 #include <decl.h>
 #include <lotform.hxx>
-#include <compiler.hxx>
 #include "lotfilter.hxx"
 #include <lotrange.hxx>
 #include <namebuff.hxx>
@@ -27,7 +26,6 @@
 #include <ftools.hxx>
 #include <tool.h>
 
-#include <math.h>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <memory>

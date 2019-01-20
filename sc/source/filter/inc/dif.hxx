@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <types.hxx>
 

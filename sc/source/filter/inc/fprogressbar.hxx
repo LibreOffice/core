@@ -23,9 +23,9 @@
 #include <vector>
 #include <memory>
 #include <rtl/ustring.hxx>
+#include <progress.hxx>
 
 class SfxObjectShell;
-class ScProgress;
 class SvStream;
 
 const sal_Int32 SCF_INV_SEGMENT = -1;

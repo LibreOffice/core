@@ -26,12 +26,9 @@
 #include "lotfilter.hxx"
 #include <lotimpop.hxx>
 #include <lotattr.hxx>
-#include <testlotus.hxx>
 #include <fprogressbar.hxx>
 
 #include <sal/log.hxx>
-
-class ScFormulaCell;
 
 ErrCode ImportLotus::parse()
 {

@@ -11,25 +11,20 @@
 #include <orcusinterface.hxx>
 #include <tokenarray.hxx>
 
-#include <document.hxx>
-
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-#include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 #include <orcus/orcus_gnumeric.hpp>
 #include <orcus/orcus_xlsx.hpp>
 #include <orcus/orcus_xls_xml.hpp>
 #include <orcus/orcus_ods.hpp>
 #include <orcus/orcus_import_ods.hpp>
-#include <orcus/global.hpp>
 #include <orcus/stream.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 

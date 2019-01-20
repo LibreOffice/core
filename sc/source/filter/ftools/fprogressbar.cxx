@@ -18,7 +18,6 @@
  */
 
 #include <fprogressbar.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <progress.hxx>

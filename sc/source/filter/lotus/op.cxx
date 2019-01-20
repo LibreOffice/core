@@ -21,13 +21,10 @@
 #include <rtl/character.hxx>
 
 #include <string.h>
-#include <math.h>
-#include <stdlib.h>
 
 #include <scitems.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -35,14 +32,12 @@
 #include <unotools/configmgr.hxx>
 
 #include <formulacell.hxx>
-#include <rangenam.hxx>
 #include <document.hxx>
 #include <postit.hxx>
 
 #include <op.h>
 #include <optab.h>
 #include <tool.h>
-#include <decl.h>
 #include "lotfilter.hxx"
 #include <lotform.hxx>
 #include <lotrange.hxx>

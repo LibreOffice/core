@@ -26,7 +26,6 @@
 #include <xehelper.hxx>
 #include <xltools.hxx>
 #include <formulacell.hxx>
-#include <xcl97rec.hxx>
 #include <document.hxx>
 #include <editutil.hxx>
 #include <root.hxx>
@@ -34,7 +33,6 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <svl/sharedstring.hxx>
 
