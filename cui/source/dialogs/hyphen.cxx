@@ -85,7 +85,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
     // 1) we will need to discard all hyphenation positions at the end that
     // will not result in a line break where the text to the left still fits
     // on the line.
-    // 2) since as from OOo 3.2 '-' are part of a word an thus text like
+    // 2) since as from OOo 3.2 '-' are part of a word and thus text like
     // 'multi-line-editor' is regarded as single word we also need to discard those
     // hyphenation positions to the left of the rightmost '-' that is still left of
     // the rightmost valid hyphenation position according to 1)
