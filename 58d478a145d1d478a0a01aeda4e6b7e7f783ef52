@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_20555351",
+        "filename": "wizards/source/template/Samples.xba",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-01-21T18:41:52Z",
+      "side": 1,
+      "message": "I guess comment here should be adapted too.",
+      "revId": "58d478a145d1d478a0a01aeda4e6b7e7f783ef52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
