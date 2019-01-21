@@ -33,6 +33,12 @@ namespace sd {
 class FuConstructRectangle final
     : public FuConstruct
 {
+private:
+    //Extra attributes coming from parameters
+    sal_uInt16 mnFillTransparence;  // Default: 0
+    OUString msFillColor;           // Default: ""
+    sal_uInt16 mnLineStyle;         // Default: SAL_MAX_UINT16
+
 public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );

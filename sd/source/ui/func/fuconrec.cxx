@@ -26,6 +26,7 @@
 
 #include <app.hrc>
 #include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnedit.hxx>
@@ -42,6 +43,8 @@
 #include <sfx2/request.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/xtable.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xfillit.hxx>
 
 #include <svx/svdocapt.hxx>
 
@@ -73,7 +76,28 @@ FuConstructRectangle::FuConstructRectangle (
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    , mnFillTransparence(0)
+    , mnLineStyle(SAL_MAX_UINT16)
 {
+}
+
+namespace{
+
+/// Checks to see if the request has a parameter of IsSticky:bool=true
+/// It means that the selected command/button will stay selected after use
+bool isSticky(SfxRequest& rReq)
+{
+    const SfxItemSet *pArgs = rReq.GetArgs ();
+    if (pArgs)
+    {
+        const SfxBoolItem* pIsSticky = rReq.GetArg<SfxBoolItem>(FN_PARAM_4);
+        if (pIsSticky && pIsSticky->GetValue())
+            return true;
+    }
+
+    return false;
+}
+
 }
 
 rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
@@ -81,7 +105,7 @@ rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell* pViewSh, ::sd::W
     FuConstructRectangle* pFunc;
     rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructRectangle( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
-    pFunc->SetPermanent(bPermanent);
+    pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
 }
 
@@ -106,6 +130,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 const SfxUInt32Item* pAxisX = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_X);
                 const SfxUInt32Item* pAxisY = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_Y);
 
+                if (!pCenterX || !pCenterY || !pAxisX || !pAxisY)
+                    break;
+
                 ::tools::Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
@@ -122,10 +149,29 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 
             case SID_DRAW_RECT :
             {
-                const SfxUInt32Item* pMouseStartX = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_X);
-                const SfxUInt32Item* pMouseStartY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_Y);
-                const SfxUInt32Item* pMouseEndX = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_X);
-                const SfxUInt32Item* pMouseEndY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_Y);
+                const SfxUInt32Item* pMouseStartX       = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_X);
+                const SfxUInt32Item* pMouseStartY       = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_Y);
+                const SfxUInt32Item* pMouseEndX         = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_X);
+                const SfxUInt32Item* pMouseEndY         = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_Y);
+                const SfxUInt16Item* pFillTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+                const SfxStringItem* pFillColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+                const SfxUInt16Item* pLineStyle         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+
+                if (pFillTransparence && pFillTransparence->GetValue() > 0)
+                {
+                    mnFillTransparence = pFillTransparence->GetValue();
+                }
+                if (pFillColor && !pFillColor->GetValue().isEmpty())
+                {
+                    msFillColor = pFillColor->GetValue();
+                }
+                if (pLineStyle)
+                {
+                    mnLineStyle = pLineStyle->GetValue();
+                }
+
+                if (!pMouseStartX || !pMouseStartY || !pMouseEndX || !pMouseEndY)
+                    break;
 
                 ::tools::Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),
@@ -410,6 +456,24 @@ void FuConstructRectangle::Deactivate()
     FuConstruct::Deactivate();
 }
 
+namespace {
+/// Returns the color based on the color names listed in core/include/tools/color.hxx
+/// Feel free to extend with more color names from color.hxx
+Color strToColor(const OUString& sColor)
+{
+    Color aColor = COL_AUTO;
+
+    if (sColor == "COL_GRAY")
+        aColor = COL_GRAY;
+    else if (sColor == "COL_GRAY3")
+        aColor = COL_GRAY3;
+    else if (sColor == "COL_GRAY7")
+        aColor = COL_GRAY7;
+
+    return aColor;
+}
+}
+
 /**
  * set attribute for the object to be created
  */
@@ -494,6 +558,29 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
         pObj->SetLayer(rAdmin.GetLayerID(sUNO_LayerName_measurelines));
+    }
+    else if (nSlotId == SID_DRAW_RECT)
+    {
+        if (mnFillTransparence > 0 && mnFillTransparence <= 100)
+            rAttr.Put(XFillTransparenceItem(mnFillTransparence));
+        if (!msFillColor.isEmpty())
+            rAttr.Put(XFillColorItem(OUString(), strToColor(msFillColor)));
+
+        switch(mnLineStyle)
+        {
+        case 0:
+            rAttr.Put( XLineStyleItem(css::drawing::LineStyle_NONE ) );
+            break;
+        case 1:
+            rAttr.Put( XLineStyleItem(css::drawing::LineStyle_SOLID ) );
+            break;
+        case 2:
+            rAttr.Put( XLineStyleItem(css::drawing::LineStyle_DASH ) );
+            break;
+        default:
+            // Leave it to the defaults
+            break;
+        }
     }
 }
 

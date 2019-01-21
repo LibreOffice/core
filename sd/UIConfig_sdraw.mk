@@ -87,6 +87,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sdraw,\
 	sd/uiconfig/sdraw/toolbar/optionsbar \
 	sd/uiconfig/sdraw/toolbar/positionbar \
 	sd/uiconfig/sdraw/toolbar/rectanglesbar \
+	sd/uiconfig/sdraw/toolbar/redactionbar \
 	sd/uiconfig/sdraw/toolbar/standardbar \
 	sd/uiconfig/sdraw/toolbar/starshapes \
 	sd/uiconfig/sdraw/toolbar/symbolshapes \
