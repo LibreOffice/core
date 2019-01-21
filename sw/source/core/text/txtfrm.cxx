@@ -1788,17 +1788,15 @@ static void lcl_SetScriptInval(SwTextFrame& rFrame, TextFrameIndex const nPos)
         rFrame.GetPara()->GetScriptInfo().SetInvalidityA( nPos );
 }
 
-static void lcl_ModifyOfst(SwTextFrame* pFrame, TextFrameIndex const nPos, TextFrameIndex const nLen)
+// note: SwClientNotify will be called once for every frame => just fix own Ofst
+static void lcl_ModifyOfst(SwTextFrame & rFrame,
+        TextFrameIndex const nPos, TextFrameIndex const nLen,
+        TextFrameIndex (* op)(TextFrameIndex const&, TextFrameIndex const&))
 {
-    while( pFrame && pFrame->GetOfst() <= nPos )
-        pFrame = pFrame->GetFollow();
-    while( pFrame )
+    assert(nLen != TextFrameIndex(COMPLETE_STRING));
+    if (rFrame.IsFollow() && nPos < rFrame.GetOfst())
     {
-        if (nLen == TextFrameIndex(COMPLETE_STRING))
-            pFrame->ManipOfst(TextFrameIndex(pFrame->GetText().getLength()));
-        else
-            pFrame->ManipOfst( pFrame->GetOfst() + nLen );
-        pFrame = pFrame->GetFollow();
+        rFrame.ManipOfst( op(rFrame.GetOfst(), nLen) );
     }
 }
 
@@ -1859,11 +1857,8 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
             {
                 // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
                 lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
-                if (rTextFrame.HasFollow())
-                {
-                    TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
-                    lcl_ModifyOfst(&rTextFrame, nIndex, nDeleted); // FIXME why positive?
-                }
+                TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
+                lcl_ModifyOfst(rTextFrame, nIndex, nDeleted, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
             }
         }
     }
@@ -1994,8 +1989,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             {
                 lcl_SetScriptInval( *this, nPos );
                 bSetFieldsDirty = bRecalcFootnoteFlag = true;
-                if (HasFollow())
-                    lcl_ModifyOfst( this, nPos, nLen );
+                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
             }
         }
     }
@@ -2023,8 +2017,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             lcl_SetWrong( *this, rNode, nNPos, nNLen, false );
             lcl_SetScriptInval( *this, nPos );
             bSetFieldsDirty = true;
-            if (HasFollow())
-                lcl_ModifyOfst( this, nPos, nLen );
+            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
         }
     }
     else if (pMoveText)
@@ -2082,8 +2075,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             lcl_SetWrong( *this, rNode, nNPos, nNLen, true );
             lcl_SetScriptInval( *this, nPos );
             bSetFieldsDirty = true;
-            if( HasFollow() )
-                lcl_ModifyOfst( this, nPos, nLen );
+            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
         }
         break;
         case RES_DEL_CHR:
@@ -2104,8 +2096,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 InvalidateRange( SwCharRange(nPos, nLen), -1 );
                 lcl_SetScriptInval( *this, nPos );
                 bSetFieldsDirty = bRecalcFootnoteFlag = true;
-                if (HasFollow())
-                    lcl_ModifyOfst(this, nPos, TextFrameIndex(COMPLETE_STRING));
+                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
             }
         }
         break;
@@ -2135,8 +2126,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             {
                 lcl_SetScriptInval( *this, nPos );
                 bSetFieldsDirty = bRecalcFootnoteFlag = true;
-                if (HasFollow())
-                    lcl_ModifyOfst( this, nPos, nLen );
+                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
             }
         }
         break;
