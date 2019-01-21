@@ -395,14 +395,15 @@ void CGMImpressOutAct::BeginGroup()
     {
         maGroupLevel[mnGroupLevel] = maXShapes->getCount();
     }
-    mnGroupLevel++;
+    ++mnGroupLevel;
     mnGroupActCount = mpCGM->mnActCount;
 }
 
 void CGMImpressOutAct::EndGroup()
 {
-    if ( mnGroupLevel )     // preserve overflow
-        mnGroupLevel--;
+    if (!mnGroupLevel)
+        return;
+    --mnGroupLevel;
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
         sal_uInt32 nFirstIndex = maGroupLevel[mnGroupLevel];
