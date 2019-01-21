@@ -958,9 +958,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         m_pForceOpenGL->IsValueChangedFromSaved())
     {
         SolarMutexGuard aGuard;
-        svtools::executeRestartDialog(
-            comphelper::getProcessComponentContext(), nullptr,
-            svtools::RESTART_REASON_OPENGL);
+        if( svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), nullptr,
+                svtools::RESTART_REASON_OPENGL))
+            GetParentDialog()->EndDialog(RET_OK);
     }
 
     return bModified;
