@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_e0205bfa",
+        "filename": "sc/qa/extras/sccellobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-21T18:17:32Z",
+      "side": 1,
+      "message": "Please sort these includes alphabetically.",
+      "revId": "ea89a918651badb31093d85e4eccb8d46a908023",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_807d27e9",
+        "filename": "test/source/text/xsimpletext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-21T18:17:32Z",
+      "side": 1,
+      "message": "Please move the dtor into the headerfile as following:\n\nprotected:\n    ~XSimpleText() {}\n\nSee https://cgit.freedesktop.org/libreoffice/core/tree/include/test/table/xtablerows.hxx as an example.",
+      "revId": "ea89a918651badb31093d85e4eccb8d46a908023",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
