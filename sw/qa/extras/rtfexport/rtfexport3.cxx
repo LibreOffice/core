@@ -244,6 +244,15 @@ DECLARE_RTFEXPORT_TEST(testTdf122455, "tdf122455.rtf")
     CPPUNIT_ASSERT_EQUAL(16.0, getProperty<double>(getRun(getParagraph(1), 1), "CharHeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTabs, "tabs.rtf")
+{
+    // Test tab alignment in decimal mode.
+    auto aTabStops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabStops.getLength());
+    const style::TabStop& rTabStop = aTabStops[0];
+    CPPUNIT_ASSERT_EQUAL(style::TabAlign_DECIMAL, rTabStop.Alignment);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
