@@ -296,7 +296,7 @@ void SpellDialog::Init_Impl()
     LinguMgr::GetChangeAllList()->clear();
 }
 
-void SpellDialog::UpdateBoxes_Impl()
+void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
 {
     sal_Int32 i;
     m_pSuggestionLB->Clear();
@@ -323,7 +323,8 @@ void SpellDialog::UpdateBoxes_Impl()
     }
     else
         SetTitle_Impl( nAltLanguage );
-    m_pLanguageLB->SelectLanguage( nAltLanguage );
+    if( !bCallFromSelectHdl )
+        m_pLanguageLB->SelectLanguage( nAltLanguage );
     int nDicts = InitUserDicts();
 
     // enter alternatives
@@ -766,7 +767,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
 
          m_pSentenceED->AddUndoAction(o3tl::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
     }
-    SpellDialog::UpdateBoxes_Impl();
+    SpellDialog::UpdateBoxes_Impl(true);
 }
 
 
