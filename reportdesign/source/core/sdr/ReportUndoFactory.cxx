@@ -20,7 +20,6 @@
 #include <RptObject.hxx>
 #include <UndoActions.hxx>
 #include <strings.hrc>
-#include <o3tl/make_unique.hxx>
 
 namespace rptui
 {
@@ -35,9 +34,9 @@ static std::unique_ptr<SdrUndoAction> lcl_createUndo(SdrObject& rObject, Action 
     uno::Reference< report::XSection> xSection = pObj->getSection();
     uno::Reference< report::XGroup> xGroup = xSection->getGroup();
     if ( xGroup.is() )
-        return o3tl::make_unique<OUndoGroupSectionAction>(rObject.getSdrModelFromSdrObject(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,pCommentId);
+        return std::make_unique<OUndoGroupSectionAction>(rObject.getSdrModelFromSdrObject(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,pCommentId);
     else
-        return o3tl::make_unique<OUndoReportSectionAction>(rObject.getSdrModelFromSdrObject(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,pCommentId);
+        return std::make_unique<OUndoReportSectionAction>(rObject.getSdrModelFromSdrObject(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,pCommentId);
 }
 
 

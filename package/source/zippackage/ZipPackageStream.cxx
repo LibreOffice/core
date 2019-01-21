@@ -50,7 +50,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <rtl/instance.hxx>
 #include <rtl/random.h>
@@ -837,7 +836,7 @@ bool ZipPackageStream::saveChild(
                     // Start a new thread deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
-                    rZipOut.addDeflatingThread( pZipEntry, o3tl::make_unique<DeflateThread>(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
+                    rZipOut.addDeflatingThread( pZipEntry, std::make_unique<DeflateThread>(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
                 }
                 else
                 {

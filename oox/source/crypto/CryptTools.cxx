@@ -12,8 +12,6 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <o3tl/make_unique.hxx>
-
 #if USE_TLS_OPENSSL
 #include <openssl/evp.h>
 #include <openssl/sha.h>
@@ -316,7 +314,7 @@ struct CryptoImpl
 #endif
 
 Crypto::Crypto()
-    : mpImpl(o3tl::make_unique<CryptoImpl>())
+    : mpImpl(std::make_unique<CryptoImpl>())
 {
 }
 

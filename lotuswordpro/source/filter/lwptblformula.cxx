@@ -67,7 +67,6 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <memory>
 
 LwpFormulaArg::~LwpFormulaArg()
@@ -88,7 +87,7 @@ void LwpFormulaInfo::ReadConst()
 {
     double Constant = m_pObjStrm->QuickReadDouble();
 
-    m_aStack.push_back( o3tl::make_unique<LwpFormulaConst>(Constant) );
+    m_aStack.push_back( std::make_unique<LwpFormulaConst>(Constant) );
 }
 
 /**
@@ -107,7 +106,7 @@ void LwpFormulaInfo::ReadText()
     aText += OUString(aBuf.data(), nStrLen, osl_getThreadTextEncoding());
     aText += "\"";
 
-    m_aStack.push_back(o3tl::make_unique<LwpFormulaText>(aText));
+    m_aStack.push_back(std::make_unique<LwpFormulaText>(aText));
 }
 
 void LwpFormulaInfo::ReadCellID()
@@ -118,7 +117,7 @@ void LwpFormulaInfo::ReadCellID()
     RowSpecifier.QuickRead(m_pObjStrm.get());
     ColumnSpecifier.QuickRead(m_pObjStrm.get());
 
-    m_aStack.push_back( o3tl::make_unique<LwpFormulaCellAddr>(ColumnSpecifier.ColumnID(cColumn),
+    m_aStack.push_back( std::make_unique<LwpFormulaCellAddr>(ColumnSpecifier.ColumnID(cColumn),
                                                 RowSpecifier.RowID(m_nFormulaRow)) );
 }
 
@@ -132,7 +131,7 @@ void LwpFormulaInfo::ReadCellRange()
     std::unique_ptr<LwpFormulaCellAddr> pEndCellAddr(static_cast<LwpFormulaCellAddr*>(m_aStack.back().release()));
     m_aStack.pop_back();
 
-    m_aStack.push_back( o3tl::make_unique<LwpFormulaCellRangeAddr>(pStartCellAddr->GetCol(),
+    m_aStack.push_back( std::make_unique<LwpFormulaCellRangeAddr>(pStartCellAddr->GetCol(),
                                                     pStartCellAddr->GetRow(),
                                                     pEndCellAddr->GetCol(),
                                                     pEndCellAddr->GetRow()) );

@@ -52,7 +52,6 @@
 #include <vector>
 #include <set>
 #include <string.h>
-#include <o3tl/make_unique.hxx>
 
 using namespace utl;
 using namespace osl;
@@ -314,7 +313,7 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 #endif
 
-                    currDict.m_pDict = o3tl::make_unique<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
+                    currDict.m_pDict = std::make_unique<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
 #if defined(H_DEPRECATED)
                     currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dict_encoding().c_str());
 #else

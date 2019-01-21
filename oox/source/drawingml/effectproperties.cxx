@@ -15,7 +15,6 @@
 #include <oox/token/tokens.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -36,7 +35,7 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
         m_Effects.reserve(rSourceProps.m_Effects.size());
         for (auto const& it : rSourceProps.m_Effects)
         {
-            m_Effects.push_back(o3tl::make_unique<Effect>(*it));
+            m_Effects.push_back(std::make_unique<Effect>(*it));
         }
     }
 }

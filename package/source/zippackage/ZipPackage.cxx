@@ -80,7 +80,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace std;
 using namespace osl;
@@ -771,7 +770,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             OUString message;
             try
             {
-                m_pZipFile = o3tl::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, true, m_bForceRecovery);
+                m_pZipFile = std::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, true, m_bForceRecovery);
                 getZipFileContents();
             }
             catch ( IOException & e )
@@ -1151,7 +1150,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = o3tl::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, false);
+        m_pZipFile = std::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, false);
 }
 
 namespace

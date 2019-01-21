@@ -129,7 +129,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <osl/mutex.hxx>
 #include <PropertyForward.hxx>
@@ -3769,13 +3768,13 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
             const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
-            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
+            addUndoAction(std::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
-            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
+            addUndoAction(std::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
@@ -3816,14 +3815,14 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
             const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
-            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*m_aReportModel
+            addUndoAction(std::make_unique<OReportSectionUndo>(*m_aReportModel
                                                             ,SID_PAGEHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getPageHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
-            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*m_aReportModel
+            addUndoAction(std::make_unique<OReportSectionUndo>(*m_aReportModel
                                                             ,SID_PAGEFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getPageFooter)
                                                             ,m_xReportDefinition
@@ -3870,7 +3869,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
             rUndoEnv.AddElement( xGroup->getFunctions() );
         }
 
-        addUndoAction( o3tl::make_unique<OGroupUndo>(
+        addUndoAction( std::make_unique<OGroupUndo>(
             *m_aReportModel,
             _bAppend ? RID_STR_UNDO_APPEND_GROUP : RID_STR_UNDO_REMOVE_GROUP,
             _bAppend ? Inserted : Removed,
@@ -3904,7 +3903,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
         {
             const OXUndoEnvironment::OUndoEnvLock aLock(m_aReportModel->GetUndoEnv());
             if ( _bUndo )
-                addUndoAction(o3tl::make_unique<OGroupSectionUndo>(*m_aReportModel
+                addUndoAction(std::make_unique<OGroupSectionUndo>(*m_aReportModel
                                                                 ,_bHeader ? SID_GROUPHEADER_WITHOUT_UNDO : SID_GROUPFOOTER_WITHOUT_UNDO
                                                                 ,_bHeader ? ::std::mem_fn(&OGroupHelper::getHeader) : ::std::mem_fn(&OGroupHelper::getFooter)
                                                                 ,xGroup
