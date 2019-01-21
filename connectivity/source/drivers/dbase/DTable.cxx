@@ -1826,7 +1826,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         // reserve enough space for hypothetical max length
                     snprintf(s,
                         sizeof(s),
-                        "%04d%02d%02d",
+                        "%04" SAL_PRIdINT32 "%02" SAL_PRIuUINT32 "%02" SAL_PRIuUINT32,
                         static_cast<sal_Int32>(aDate.Year),
                         static_cast<sal_uInt32>(aDate.Month),
                         static_cast<sal_uInt32>(aDate.Day));
