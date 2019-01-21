@@ -623,11 +623,10 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
-    auto nCount = maVector.size();
-    while (nCount)
+    while (!maVector.empty())
     {
         auto const pRedline = maVector.back();
-        maVector.erase(--nCount);
+        maVector.erase(maVector.size() - 1);
         LOKRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
     }
