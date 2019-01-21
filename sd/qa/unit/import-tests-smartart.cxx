@@ -778,6 +778,15 @@ void SdImportTestSmartArt::testOrgChart()
     // assistant shape was below the employee shape.
     CPPUNIT_ASSERT_GREATER(aAssistantPos.Y, aEmployeePos.Y);
 
+    // Make sure the connector of the assistant is above the shape.
+    uno::Reference<drawing::XShape> xAssistantConnector(
+        getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAssistantConnector.is());
+    awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
+    // This failed, the vertical positions of the connector and the shape of
+    // the assistant were the same.
+    CPPUNIT_ASSERT_LESS(aAssistantPos.Y, aAssistantConnectorPos.Y);
+
     // Make sure the height of xManager and xManager2 is the same.
     uno::Reference<text::XText> xManager2(
         getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 0), uno::UNO_QUERY);
