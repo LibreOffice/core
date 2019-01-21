@@ -43,6 +43,7 @@
 class QFileDialog;
 class QGridLayout;
 class QWidget;
+class QComboBox;
 
 typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
                                         css::ui::dialogs::XFilePickerControlAccess,
@@ -71,6 +72,7 @@ protected:
 
     //mapping of SAL control ID's to created custom controls
     QHash<sal_Int16, QWidget*> _customWidgets;
+    QHash<sal_Int16, QWidget*> _customListboxes;
 
     //widget to contain extra custom controls
     QWidget* _extraControls;
@@ -157,6 +159,8 @@ public:
 private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
+    void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction, const css::uno::Any& rValue);
+    css::uno::Any handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction);
     OUString implGetDirectory();
 
     // emit XFilePickerListener controlStateChanged event
