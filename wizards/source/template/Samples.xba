@@ -109,9 +109,9 @@ End Sub
 
 
 Sub SaveCurrentStyles(oDocument as Object)
-&apos;This sub stores the current document in the user work directory
+&apos;This sub stores the current document in the directory to hold temporary files.
 	On Error Goto ErrorOcurred
-	aTempURL = GetPathSettings(&quot;Work&quot;, False)
+	aTempURL = GetPathSettings(&quot;Temp&quot;, False)
 	Dim aRightMost as String
 	aRightMost = Right(aTempURL, 1)
 	if aRightMost = &quot;/&quot; Then
