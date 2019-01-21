@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_45ff4167",
+        "filename": "sw/source/core/unocore/unomap1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-21T08:33:06Z",
+      "side": 1,
+      "message": "Could you please document these in offapi/ at least on master?",
+      "revId": "c57447b27d74e625e77f4b39d1637b4b3be3c39c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
