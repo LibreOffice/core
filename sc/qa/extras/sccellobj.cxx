@@ -10,11 +10,12 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/sheetcell.hxx>
-#include <test/table/xcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
+#include <test/table/xcell.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/text/xsimpletext.hxx>
 #include <test/util/xindent.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -25,6 +26,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
@@ -39,7 +41,8 @@ class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XEnumerationAccess,
                                          public apitest::XFormulaQuery,
                                          public apitest::XIndent,
-                                         public apitest::XSheetAnnotationAnchor
+                                         public apitest::XSheetAnnotationAnchor,
+                                         public apitest::XSimpleText,
 {
 public:
     ScCellObj();
@@ -80,6 +83,12 @@ public:
 
     // XSheetAnnotationAnchor
     CPPUNIT_TEST(testGetAnnotation);
+
+    // XSimpleText
+    CPPUNIT_TEST(testCreateTextCursor);
+    CPPUNIT_TEST(testCreateTextCursorByRange);
+    CPPUNIT_TEST(testInsertString);
+    CPPUNIT_TEST(testInsertControlCharacter);
 
     CPPUNIT_TEST_SUITE_END();
 
