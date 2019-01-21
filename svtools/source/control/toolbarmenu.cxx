@@ -23,8 +23,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <vcl/dockwin.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
@@ -692,19 +690,19 @@ void ToolbarMenu::LoseFocus()
 
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits )
 {
-    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, rStr, nItemBits ) );
+    appendEntry( std::make_unique<ToolbarMenuEntry>( *this, nEntryId, rStr, nItemBits ) );
 }
 
 
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage )
 {
-    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, rImage, rStr, MenuItemBits::NONE ) );
+    appendEntry( std::make_unique<ToolbarMenuEntry>( *this, nEntryId, rImage, rStr, MenuItemBits::NONE ) );
 }
 
 
 void ToolbarMenu::appendEntry( int nEntryId, Control* pControl )
 {
-    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, pControl, MenuItemBits::NONE ) );
+    appendEntry( std::make_unique<ToolbarMenuEntry>( *this, nEntryId, pControl, MenuItemBits::NONE ) );
 }
 
 

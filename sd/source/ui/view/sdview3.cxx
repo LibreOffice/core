@@ -795,7 +795,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 if( bUndo )
                                     AddUndo(
-                                        o3tl::make_unique<E3dAttributesUndoAction>(
+                                        std::make_unique<E3dAttributesUndoAction>(
                                             *static_cast< E3dObject* >(pPickObj),
                                             aNewSet,
                                             aOldSet));

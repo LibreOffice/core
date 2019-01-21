@@ -38,7 +38,6 @@
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <sfx2/objface.hxx>
-#include <o3tl/make_unique.hxx>
 #include <drawview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
@@ -489,7 +488,7 @@ void MasterPagesSelector::SetItem (
                         mpContainer->GetPageNameForToken(aToken),
                         nIndex);
                 }
-                SetUserData(nIndex, o3tl::make_unique<UserData>(nIndex,aToken));
+                SetUserData(nIndex, std::make_unique<UserData>(nIndex,aToken));
 
                 AddTokenToIndexEntry(nIndex,aToken);
             }

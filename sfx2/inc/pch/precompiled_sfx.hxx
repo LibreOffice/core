@@ -351,7 +351,6 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>

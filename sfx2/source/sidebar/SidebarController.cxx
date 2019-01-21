@@ -44,7 +44,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -118,7 +117,7 @@ SidebarController::SidebarController (
       mpResourceManager()
 {
     // Decks and panel collections for this sidebar
-    mpResourceManager = o3tl::make_unique<ResourceManager>();
+    mpResourceManager = std::make_unique<ResourceManager>();
 }
 
 rtl::Reference<SidebarController> SidebarController::create(

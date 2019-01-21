@@ -874,7 +874,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
     if ( rWindow.GetParent() != pWorkWin )
         rWindow.SetParent( pWorkWin );
 
-    auto pChild = o3tl::make_unique<SfxChild_Impl>(rWindow, rWindow.GetSizePixel(),
+    auto pChild = std::make_unique<SfxChild_Impl>(rWindow, rWindow.GetSizePixel(),
                                     eAlign, rWindow.IsVisible());
 
     aChildren.push_back(std::move(pChild));
@@ -889,7 +889,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl(std::shared_ptr<SfxModelessDial
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
 
-    auto pChild = o3tl::make_unique<SfxChild_Impl>(rController, eAlign);
+    auto pChild = std::make_unique<SfxChild_Impl>(rController, eAlign);
 
     aChildren.push_back(std::move(pChild));
     bSorted = false;

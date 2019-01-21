@@ -45,7 +45,6 @@
 #include <editeng/editobj.hxx>
 #include <editeng/CustomPropertyField.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -1175,7 +1174,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
-                        auto pNewSet = o3tl::make_unique<SfxItemSet>( GetDoc()->GetPool(), svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{} );
+                        auto pNewSet = std::make_unique<SfxItemSet>( GetDoc()->GetPool(), svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{} );
                         pNewSet->Put(pObj->GetMergedItemSet());
                         aAttrList.emplace_back(std::move(pNewSet), pObj->GetUserCall());
                     }
@@ -1339,7 +1338,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
                     m_ExternalEdits.push_back(
-                        o3tl::make_unique<SdrExternalToolEdit>(
+                        std::make_unique<SdrExternalToolEdit>(
                             mpDrawView.get(), pObj));
                     m_ExternalEdits.back()->Edit( &aGraphicObject );
                 }

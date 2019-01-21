@@ -36,7 +36,6 @@
 #include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
@@ -167,7 +166,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     // Undo-Action
                     mpDocSh->GetUndoManager()->AddUndoAction(
-                        o3tl::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+                        std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
 
                     pSheet->GetItemSet().Put(aTempSet);
                     pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -218,7 +217,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                             // Undo-Action
                             mpDocSh->GetUndoManager()->AddUndoAction(
-                                o3tl::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+                                std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
 
                             pSheet->GetItemSet().Put(aTempSet);
                             pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -294,7 +293,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         // Undo-Action
                         mpDocSh->GetUndoManager()->AddUndoAction(
-                            o3tl::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+                            std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
 
                         pSheet->GetItemSet().Put(aTempSet,false);
                         pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -337,7 +336,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                             // Undo-Action
                             mpDocSh->GetUndoManager()->AddUndoAction(
-                                o3tl::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+                                std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
 
                             pSheet->GetItemSet().Set(aTempSet,false);
                             pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));

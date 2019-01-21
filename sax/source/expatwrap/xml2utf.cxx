@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/io/NotConnectedException.hpp>
@@ -324,8 +323,8 @@ void XMLFile2UTFConverter::initializeDecoding()
         rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( m_sEncoding.getStr() );
         if( encoding != RTL_TEXTENCODING_UTF8 )
         {
-            m_pText2Unicode = o3tl::make_unique<Text2UnicodeConverter>( m_sEncoding );
-            m_pUnicode2Text = o3tl::make_unique<Unicode2TextConverter>( RTL_TEXTENCODING_UTF8 );
+            m_pText2Unicode = std::make_unique<Text2UnicodeConverter>( m_sEncoding );
+            m_pUnicode2Text = std::make_unique<Unicode2TextConverter>( RTL_TEXTENCODING_UTF8 );
         }
     }
 }

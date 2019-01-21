@@ -847,7 +847,7 @@ void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
             {
                 if ( bool(eCallMode & SfxCallMode::RECORD) )
                     rReq.AllowRecording( true );
-                xImp->xPoster->Post(o3tl::make_unique<SfxRequest>(rReq));
+                xImp->xPoster->Post(std::make_unique<SfxRequest>(rReq));
                 return;
             }
         }

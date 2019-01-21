@@ -28,7 +28,6 @@
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/syslocale.hxx>
@@ -204,7 +203,7 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
     // removed in Desktop::RemoveTemporaryDirectory() if soffice process gets closed before the
     // mailer finishes using them.
 
-    maAttachmentFiles.emplace_back(o3tl::make_unique<utl::TempFile>(&GetBaseTempDirURL()));
+    maAttachmentFiles.emplace_back(std::make_unique<utl::TempFile>(&GetBaseTempDirURL()));
     maAttachmentFiles.back()->EnableKillingFile();
     INetURLObject aFilePathObj(maAttachmentFiles.back()->GetURL());
     OUString sNewAttachmentURL = aFilePathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);

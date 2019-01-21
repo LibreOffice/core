@@ -795,7 +795,7 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
     if ( nPos >= pImpl->pCaches.size() ||
          pImpl->pCaches[nPos]->GetId() != nId )
     {
-        pImpl->pCaches.insert( pImpl->pCaches.begin() + nPos, o3tl::make_unique<SfxStateCache>(nId) );
+        pImpl->pCaches.insert( pImpl->pCaches.begin() + nPos, std::make_unique<SfxStateCache>(nId) );
         DBG_ASSERT( nPos == 0 ||
                     pImpl->pCaches[nPos]->GetId() >
                         pImpl->pCaches[nPos-1]->GetId(), "" );

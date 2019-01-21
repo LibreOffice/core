@@ -71,8 +71,6 @@
 #include <map>
 #include <memory>
 
-#include <o3tl/make_unique.hxx>
-
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -209,7 +207,7 @@ std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
         if (xHandler.is())
             return nullptr; // No need to add new layer: JavaContext already present
     }
-    return o3tl::make_unique< css::uno::ContextLayer >(new svt::JavaContext(xContext));
+    return std::make_unique< css::uno::ContextLayer >(new svt::JavaContext(xContext));
 }
 }
 #endif
