@@ -6453,3 +6453,88 @@ SfxVoidItem AutoSum SID_AUTO_SUM
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Intern;
 ]
+
+SfxVoidItem FormulaSum SID_FORMULA_SUM
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Intern;
+]
+
+SfxVoidItem FormulaAverage SID_FORMULA_AVERAGE
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Intern;
+]
+
+SfxVoidItem FormulaMin SID_FORMULA_MIN
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Intern;
+]
+
+SfxVoidItem FormulaMax SID_FORMULA_MAX
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Intern;
+]
+
+SfxVoidItem FormulaCount SID_FORMULA_COUNT
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Intern;
+]

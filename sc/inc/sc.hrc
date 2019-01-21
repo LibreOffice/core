@@ -200,6 +200,11 @@
 #define SID_ENTER_STRING        (SC_MESSAGE_START + 37)
 #define SID_ROWCOL_SELCOUNT     (SC_MESSAGE_START + 38)
 #define SID_AUTO_SUM            (SC_MESSAGE_START + 39)
+#define SID_FORMULA_SUM         (SC_MESSAGE_START + 40)
+#define SID_FORMULA_AVERAGE     (SC_MESSAGE_START + 41)
+#define SID_FORMULA_MAX         (SC_MESSAGE_START + 42)
+#define SID_FORMULA_MIN         (SC_MESSAGE_START + 43)
+#define SID_FORMULA_COUNT       (SC_MESSAGE_START + 44)
 
 // messages for opening dialogs:
 #define SID_OPENDLG_CONSOLIDATE             (SC_MESSAGE_START + 50)
@@ -240,9 +245,12 @@
 
 // functions
 
+
+
+
 #define SID_OPEN_CALC                   (SC_FUNCTION_START + 4)
 #define SID_CONVERT_FORMULA_TO_VALUE    (SC_FUNCTION_START + 5)
-#define FILE_MENU_END                   (SC_FUNCTION_START + 20)
+#define FILE_MENU_END                   (SC_FUNCTION_START + 20
 
 #define EDIT_MENU_START         (FILE_MENU_END)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
