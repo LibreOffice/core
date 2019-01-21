@@ -49,7 +49,6 @@ class Qt5Widget : public QWidget
 
     virtual void focusInEvent(QFocusEvent*) override;
     virtual void focusOutEvent(QFocusEvent*) override;
-    virtual void keyPressEvent(QKeyEvent*) override;
     virtual void keyReleaseEvent(QKeyEvent*) override;
     virtual void mouseMoveEvent(QMouseEvent*) override;
     virtual void mousePressEvent(QMouseEvent*) override;
