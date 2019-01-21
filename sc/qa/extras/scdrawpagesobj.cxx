@@ -8,8 +8,10 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -18,12 +20,16 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <cppu/unotype.hxx>
+
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScDrawPagesObj : public CalcUnoApiTest, public apitest::XIndexAccess
+class ScDrawPagesObj : public CalcUnoApiTest,
+                       public apitest::XElementAccess,
+                       public apitest::XIndexAccess
 {
 public:
     ScDrawPagesObj();
@@ -33,6 +39,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDrawPagesObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -46,6 +56,7 @@ private:
 
 ScDrawPagesObj::ScDrawPagesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<drawing::XDrawPage>::get())
     , XIndexAccess(3)
 {
 }
