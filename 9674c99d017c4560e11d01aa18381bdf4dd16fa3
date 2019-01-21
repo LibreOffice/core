@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_60210ba0",
+        "filename": "vcl/win/gdi/gdiimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-21T11:44:06Z",
+      "side": 1,
+      "message": "I have been told in IRC that we usually simply omit this for non-exported classes, to allow compiler auto-generate virtual dtor here. For exported virtual classes, we need to keep non-inline definition to have it \"as an anchor for emitting vtable etc.\":\n\n\u003e \"~C() override;\" in the class defn, and sth like \"C::~C() \u003d default;\" in the .cxx",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 53
+      },
+      "revId": "9674c99d017c4560e11d01aa18381bdf4dd16fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
