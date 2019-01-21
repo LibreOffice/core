@@ -403,18 +403,16 @@ bool Qt5Widget::event(QEvent* pEvent)
         // but enables keypress event.
         // If event is not accepted and shortcut is successfully activated,
         // KeyPress event is omitted.
-        // It looks like handleKeyEvent function still activates the shortcut on KeyPress event,
-        // so there's no harm in disabling shortcut activation via Qt mechanisms.
-        pEvent->accept();
+        //
+        // Instead of processing keyPressEvent, handle ShortcutOverride event,
+        // and if it's handled - disable the shortcut, it should have been activated.
+        // Don't process keyPressEvent generated after disabling shortcut since it was handled here.
+        // If event is not handled, don't accept it and let Qt activate related shortcut.
+        if (handleKeyEvent(static_cast<QKeyEvent*>(pEvent), true))
+            pEvent->accept();
     }
 
     return QWidget::event(pEvent);
-}
-
-void Qt5Widget::keyPressEvent(QKeyEvent* pEvent)
-{
-    if (handleKeyEvent(pEvent, true))
-        pEvent->accept();
 }
 
 void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
