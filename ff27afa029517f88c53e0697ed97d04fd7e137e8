@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_45b74188",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2019-01-21T10:40:19Z",
+      "side": 1,
+      "message": "That error occurs in that line: https://paste.debian.net/1061685/\n\nI debugged the test and fail comes after \"validate\" call from here. https://opengrok.libreoffice.org/xref/core/sc/qa/unit/helper/qahelper.cxx?r\u003d60a66bd5#722\n\nAll test works same way. What is the wrong about here?",
+      "range": {
+        "startLine": 924,
+        "startChar": 4,
+        "endLine": 924,
+        "endChar": 102
+      },
+      "revId": "ff27afa029517f88c53e0697ed97d04fd7e137e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
