@@ -2231,6 +2231,26 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormulaSum" oor:op="replace">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Sum</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormulaMin" oor:op="replace">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Min</value>
+        </prop>>
+      </node>
+      <node oor:name=".uno:FormulaMax" oor:op="replace">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Max</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormulaCount" oor:op="replace">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Count</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:InsertFieldMenu" oor:op="replace">
