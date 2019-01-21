@@ -277,36 +277,6 @@ void VclQt5Clipboard::setContents(
             }
         }
 
-        // Add image data if present
-        if (bHasImage)
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            //FIXME: other image formats?
-            aFlavor.MimeType = "image/png";
-            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
-
-            Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
-            {
-                Sequence<sal_Int8> aData;
-                aValue >>= aData;
-
-                QImage image;
-                image.loadFromData(reinterpret_cast<const uchar*>(aData.getConstArray()),
-                                   aData.getLength());
-
-                pMimeData->setImageData(image);
-            }
-        }
-
         // Add text data
         // TODO: consider checking if text of suitable type is present
         {
