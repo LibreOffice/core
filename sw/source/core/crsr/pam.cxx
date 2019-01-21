@@ -597,16 +597,6 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         {
             bRet = true;
         }
-        else
-        {
-            const SwSectionNode* pParentSectionNd = pNd->FindSectionNode();
-            if ( pParentSectionNd != nullptr
-                 && ( pParentSectionNd->GetSection().IsProtectFlag()
-                      || ( bFormView && !pParentSectionNd->GetSection().IsEditInReadonlyFlag()) ) )
-            {
-                bRet = true;
-            }
-        }
     }
 
     if ( !bRet
@@ -711,7 +701,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                 // touches fields, or fully encloses it), then don't disable editing
                 bRet = !( ( !pA || bAtStartA ) && ( !pB || bAtStartB ) );
             }
-            if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) )
+            if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) )
             {
                 // Form protection case
                 bRet = ( pA == nullptr ) || ( pB == nullptr ) || bAtStartA || bAtStartB;
