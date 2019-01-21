@@ -31,7 +31,6 @@ public class LOKitInputConnectionHandler implements InputConnectionHandler {
      */
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyEvent(event);
         return false;
     }
 
