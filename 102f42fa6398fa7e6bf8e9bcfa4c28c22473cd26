@@ -16,6 +16,24 @@
       "revId": "102f42fa6398fa7e6bf8e9bcfa4c28c22473cd26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_a0fee302",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2019-01-21T11:35:38Z",
+      "side": 1,
+      "message": "So i should move numFmt to under idx for corrected order?",
+      "parentUuid": "1f485f77_055f0942",
+      "revId": "102f42fa6398fa7e6bf8e9bcfa4c28c22473cd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
