@@ -18,7 +18,14 @@ interface XWordBasic
 
     void FileOpen( [in] string Name, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToMru, [in] any PasswordDoc, [in] any PasswordDot, [in] any Revert, [in] any WritePasswordDoc, [in] any WritePasswordDot );
     void FileSave();
-    void ToolsOptionsView( [in] any Whatever1, [in] any Whatever2, [in] any Whatever3, [in] any Whatever4, [in] any Whatever5, [in] any Whatever6, [in] any Whatever7, [in] any Whatever8, [in] any Whatever9, [in] any Whatever10, [in] any Whatever11, [in] any Whatever12, [in] any Whatever13, [in] any Whatever14, [in] any Whatever15, [in] any Whatever16, [in] any Whatever17, [in] any Whatever18, [in] any Whatever19, [in] any Whatever20 );
+    // There is no documentation for ToolsOptionsView, but all examples seem to pass it only named
+    // parameters, so the order of parameters in the definition doesn't matter, I hope. Define some
+    // (named) parameters found in sample code on the net. And ones found in customer code as
+    // necessary later.
+    //
+    // If it turns out that ToolsOptionsView is actually called with both named and positional parameters in customer code
+    // we might be in trouble.
+    void ToolsOptionsView( [in] any FieldCodes, [in] any ShowAll, [in] any Whatever3, [in] any Whatever4, [in] any Whatever5, [in] any Whatever6, [in] any Whatever7, [in] any Whatever8, [in] any Whatever9, [in] any Whatever10, [in] any Whatever11, [in] any Whatever12, [in] any Whatever13, [in] any Whatever14, [in] any Whatever15, [in] any Whatever16, [in] any Whatever17, [in] any Whatever18, [in] any Whatever19, [in] any Whatever20 );
     string WindowName();
     boolean ExistingBookmark( [in] string Name );
     void MailMergeOpenDataSource( [in] string Name,
