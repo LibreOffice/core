@@ -30,6 +30,7 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textrun.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <tools/gen.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -72,6 +73,10 @@ sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
 
     if (!pNode)
         return nType;
+
+    // This is cheaper than visiting the whole sub-tree.
+    if (pNode->getName().startsWith("hierChild"))
+        return oox::XML_bentConnector3;
 
     for (const auto& pChild : pNode->getChildren())
     {
@@ -170,6 +175,28 @@ void calculateHierChildOffsetScale(const oox::drawingml::ShapePtr& pShape,
                 rWidthScale += 1.0;
         }
     }
+}
+
+/// Sets the position and size of a connector inside a hierChild algorithm.
+void setHierChildConnPosSize(const oox::drawingml::ShapePtr& pShape)
+{
+    // Connect to the top center of the child.
+    awt::Point aShapePoint = pShape->getPosition();
+    awt::Size aShapeSize = pShape->getSize();
+    tools::Rectangle aRectangle(Point(aShapePoint.X, aShapePoint.Y),
+                                Size(aShapeSize.Width, aShapeSize.Height));
+    Point aTo = aRectangle.TopCenter();
+
+    // Connect from the bottom center of the parent.
+    Point aFrom = aTo;
+    aFrom.setY(aFrom.getY() - aRectangle.getHeight() * 0.3);
+
+    tools::Rectangle aRect(aFrom, aTo);
+    aRect.Justify();
+    aShapePoint = awt::Point(aRect.Left(), aRect.Top());
+    aShapeSize = awt::Size(aRect.getWidth(), aRect.getHeight());
+    pShape->setPosition(aShapePoint);
+    pShape->setSize(aShapeSize);
 }
 }
 
@@ -542,6 +569,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
+
+                if (nType == XML_bentConnector3)
+                {
+                    setHierChildConnPosSize(rShape);
+                    break;
+                }
             }
 
             // Parse constraints to adjust the size.
@@ -629,7 +662,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
 
             sal_Int32 nCount = rShape->getChildren().size();
-            double fSpace = 0.3;
 
             if (mnType == XML_hierChild)
             {
@@ -643,6 +675,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // A manager node's height should be independent from if it has
             // assistants and employees, compensate for that.
             bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
+
+            // Add spacing, so connectors have a chance to be visible.
+            double fSpace = (nCount > 1 || bTop) ? 0.3 : 0;
+
             double fHeightScale = 1.0;
             if (mnType == XML_hierRoot && nCount < 3 && bTop)
                 fHeightScale = fHeightScale * nCount / 3;
