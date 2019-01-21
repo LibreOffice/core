@@ -1191,15 +1191,19 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                         auto aParamInfos = xIdlMethod->getParameterInfos();
                         for (unsigned int i = 1; i < cNames; ++i)
                         {
+                            bool bFound = false;
                             for (int j = 0; j < aParamInfos.getLength(); ++j)
                             {
                                 if (aParamInfos[j].aName.equalsIgnoreAsciiCase(OUString(o3tl::toU(rgszNames[i]))))
                                 {
                                     rgdispid[i] = j;
+                                    bFound = true;
                                     SAL_INFO("extensions.olebridge", "  " << OUString(o3tl::toU(rgszNames[i])) << ": " << rgdispid[i]);
                                     break;
                                 }
                             }
+                            if (!bFound)
+                                SAL_INFO("extensions.olebridge", "  " << OUString(o3tl::toU(rgszNames[i])) << ": NOT FOUND");
                         }
                     }
                 }
