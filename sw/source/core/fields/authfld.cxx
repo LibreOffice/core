@@ -51,6 +51,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
+    : SimpleReferenceObject()
 {
     for(int i = 0; i < AUTH_FIELD_END; ++i)
         aAuthFields[i] = rCopy.aAuthFields[i];
