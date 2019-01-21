@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_055f0942",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-01-21T11:09:49Z",
+      "side": 1,
+      "message": "This will break the Excel compatibility. Please respect the element order for OOXML export changes. Especially for XLSX files the element order is important as Excel throws most of the content after an invalid element away. According to the OOXML spec the correct order is idx, (delete or [layout, tx, numFmt, spPr, txPr, dLblPos, showLegendKey, showVal, showCatName, showSerName, showPercent, showBubbleSize, separator]).",
+      "revId": "102f42fa6398fa7e6bf8e9bcfa4c28c22473cd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
