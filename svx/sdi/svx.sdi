@@ -6826,7 +6826,10 @@ SfxVoidItem RecSearch SID_FM_SEARCH
 
 
 SfxBoolItem Rect SID_DRAW_RECT
-(SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
+(SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X, SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,
+ SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X, SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y,
+ SfxUInt16Item FillTransparence FN_PARAM_1, SfxStringItem FillColor FN_PARAM_2,
+ SfxUInt16Item LineStyle FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
