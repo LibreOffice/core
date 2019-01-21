@@ -120,6 +120,7 @@ public:
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
     void testTdf119029();
+    void testTdf122031();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -202,6 +203,7 @@ public:
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testTdf119029);
+    CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1921,6 +1923,20 @@ void Chart2ExportTest::testTdf119029()
     assertXPath(pXmlDoc,
                 "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "rot",
                 "-5400000");
+}
+
+void Chart2ExportTest::testTdf122031()
+{
+    //Checks pie chart data label format.
+
+    load("/chart2/qa/extras/data/xlsx/", "tdf122031.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "formatCode", "0.000%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", "0.000%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:numFmt", "formatCode", "0.000%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:numFmt", "formatCode", "0.000%");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
