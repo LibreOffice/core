@@ -44,6 +44,7 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QWindow>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QWidget>
@@ -378,6 +379,12 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
         if (cb)
             cb->setChecked(bChecked);
     }
+    else if (_customListboxes.contains(controlId))
+    {
+        QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
+        if (cb)
+            handleSetListValue(cb, nControlAction, value);
+    }
     else
         SAL_WARN("vcl.kde5", "set value on unknown control " << controlId);
 }
@@ -404,6 +411,12 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
         QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
         if (cb)
             value = cb->isChecked();
+    }
+    else if (_customListboxes.contains(controlId))
+    {
+        QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
+        if (cb)
+            return handleGetListValue(cb, nControlAction);
     }
     else
         SAL_WARN("vcl.kde5", "get value on unknown control" << controlId);
@@ -561,7 +574,6 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case PUSHBUTTON_PLAY:
         case LISTBOX_VERSION:
         case LISTBOX_TEMPLATE:
-        case LISTBOX_IMAGE_TEMPLATE:
         case LISTBOX_IMAGE_ANCHOR:
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
@@ -569,7 +581,84 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_IMAGE_ANCHOR_LABEL:
         case LISTBOX_FILTER_SELECTOR:
             break;
+
+        case LISTBOX_IMAGE_TEMPLATE:
+            auto widget = new QComboBox(_extraControls);
+            _layout->addWidget(widget);
+            _customListboxes.insert(controlId, widget);
+            break;
     }
+}
+
+void KDE5FilePicker::handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
+                                        const css::uno::Any& rValue)
+{
+    switch (nAction)
+    {
+        case ControlActions::ADD_ITEM:
+        {
+            OUString sItem;
+            rValue >>= sItem;
+            pQComboBox->addItem(toQString(sItem));
+        }
+        break;
+        case ControlActions::ADD_ITEMS:
+        {
+            Sequence<OUString> aStringList;
+            rValue >>= aStringList;
+            sal_Int32 nItemCount = aStringList.getLength();
+            for (sal_Int32 i = 0; i < nItemCount; ++i)
+            {
+                pQComboBox->addItem(toQString(aStringList[i]));
+            }
+        }
+        break;
+        case ControlActions::SET_SELECT_ITEM:
+        {
+            sal_Int32 nPos = 0;
+            rValue >>= nPos;
+            pQComboBox->setCurrentIndex(nPos);
+        }
+        break;
+        default:
+            //FIXME: insert warning here
+            break;
+    }
+}
+
+uno::Any KDE5FilePicker::handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction)
+{
+    uno::Any aAny;
+    switch (nAction)
+    {
+        case ControlActions::GET_ITEMS:
+        {
+            uno::Sequence<OUString> aItemList;
+
+            for (int i = 0; i < pQComboBox->count(); ++i)
+            {
+                aItemList[i] = toOUString(pQComboBox->itemText(i));
+            }
+            aAny <<= aItemList;
+        }
+        break;
+        case ControlActions::GET_SELECTED_ITEM:
+        {
+            OUString sItem = toOUString(pQComboBox->currentText());
+            aAny <<= sItem;
+        }
+        break;
+        case ControlActions::GET_SELECTED_ITEM_INDEX:
+        {
+            int nCurrent = pQComboBox->currentIndex();
+            aAny <<= nCurrent;
+        }
+        break;
+        default:
+            //FIXME: insert warning here
+            break;
+    }
+    return aAny;
 }
 
 OUString KDE5FilePicker::implGetDirectory()
