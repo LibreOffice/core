@@ -61,7 +61,6 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>
@@ -797,7 +796,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 mpDrawView->UnmarkAllPoints();
 
                 if( bUndo )
-                    mpDrawView->AddUndo(o3tl::make_unique<SdrUndoGeoObj>(*pPathObj));
+                    mpDrawView->AddUndo(std::make_unique<SdrUndoGeoObj>(*pPathObj));
 
                 pPathObj->ToggleClosed();
 

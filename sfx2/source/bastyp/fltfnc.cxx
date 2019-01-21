@@ -83,7 +83,6 @@
 #include "fltlst.hxx"
 #include <sfx2/request.hxx>
 #include <arrdecl.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <vector>
 #include <memory>
@@ -273,7 +272,7 @@ namespace
                 return *aImpl;
 
         // first Matcher created for this factory
-        aImplArr.push_back(o3tl::make_unique<SfxFilterMatcher_Impl>(aName));
+        aImplArr.push_back(std::make_unique<SfxFilterMatcher_Impl>(aName));
         return *aImplArr.back().get();
     }
 }

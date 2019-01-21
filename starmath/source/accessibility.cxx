@@ -57,7 +57,6 @@
 #include "accessibility.hxx"
 #include <document.hxx>
 #include <view.hxx>
-#include <o3tl/make_unique.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>
 
@@ -1511,7 +1510,7 @@ void SmEditAccessible::Init()
         if (pEditEngine && pEditView)
         {
             assert(!pTextHelper);
-            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SmEditSource>( *this ) ));
+            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( std::make_unique<SmEditSource>( *this ) ));
             pTextHelper->SetEventSource( this );
         }
     }

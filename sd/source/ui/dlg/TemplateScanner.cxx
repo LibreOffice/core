@@ -22,7 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/doctempl.hxx>
@@ -194,7 +193,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                     ||  (sContentType == "Impress 2.0"))
                 {
                     OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(sTitle);
-                    mpTemplateEntries.push_back(o3tl::make_unique<TemplateEntry>(sLocalisedTitle, sTargetURL));
+                    mpTemplateEntries.push_back(std::make_unique<TemplateEntry>(sLocalisedTitle, sTargetURL));
                 }
             }
 

@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/viewsh.hxx>
@@ -215,7 +214,7 @@ std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
     std::unique_ptr<SfxItemSet> pRet;
     if(nId == SID_SM_EDITOPTIONS)
     {
-        pRet = o3tl::make_unique<SfxItemSet>(
+        pRet = std::make_unique<SfxItemSet>(
             GetPool(),
             svl::Items< //TP_SMPRINT
                 SID_PRINTTITLE, SID_PRINTZOOM,

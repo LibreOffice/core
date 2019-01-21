@@ -39,7 +39,6 @@
 #include <bitmaps.hlst>
 
 #include <officecfg/Office/Common.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -219,7 +218,7 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
 
 void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
 {
-    AppendItem( o3tl::make_unique<RecentDocsViewItem>(*this, rURL, rTitle, rThumbnail, nId, mnItemMaxSize) );
+    AppendItem( std::make_unique<RecentDocsViewItem>(*this, rURL, rTitle, rThumbnail, nId, mnItemMaxSize) );
 }
 
 void RecentDocsView::Reload()

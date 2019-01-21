@@ -35,7 +35,6 @@
 #include <unotools/syslocale.hxx>
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <string.h>
@@ -270,7 +269,7 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
 
 std::unique_ptr<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
 {
-    return o3tl::make_unique<SfxItemSet>(GetItemSet());
+    return std::make_unique<SfxItemSet>(GetItemSet());
 }
 
 /**
@@ -620,7 +619,7 @@ std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
  SfxStyleSearchBits mask
 )
 {
-    return o3tl::make_unique<SfxStyleSheetIterator>(this,eFam,mask);
+    return std::make_unique<SfxStyleSheetIterator>(this,eFam,mask);
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create

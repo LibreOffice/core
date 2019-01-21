@@ -83,7 +83,6 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 
@@ -959,7 +958,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
 
             // (#67720#)
             pManager->AddUndoAction(
-                o3tl::make_unique<ModifyPageUndoAction>(
+                std::make_unique<ModifyPageUndoAction>(
                     pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
                     aVisibleLayers.IsSet( nBackground ),
                     aVisibleLayers.IsSet( nBgObj )));
@@ -980,7 +979,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
-            pManager->AddUndoAction( o3tl::make_unique<RenameLayoutTemplateUndoAction>( pDocument, aOldLayoutName, rName ) );
+            pManager->AddUndoAction( std::make_unique<RenameLayoutTemplateUndoAction>( pDocument, aOldLayoutName, rName ) );
             pDocument->RenameLayoutTemplate( aOldLayoutName, rName );
         }
     }

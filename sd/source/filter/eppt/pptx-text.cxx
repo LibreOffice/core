@@ -56,7 +56,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace css;
 
@@ -1212,7 +1211,7 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     mnBiDi = rParagraphObj.mnBiDi;
 
     for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
-        mvPortions.push_back( o3tl::make_unique<PortionObj>( **it ) );
+        mvPortions.push_back( std::make_unique<PortionObj>( **it ) );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;

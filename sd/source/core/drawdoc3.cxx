@@ -38,7 +38,6 @@
 #include <vcl/weld.hxx>
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <drawdoc.hxx>
@@ -509,7 +508,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         {
             if( pUndoMgr )
             {
-                pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aCreatedStyles, true));
+                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aCreatedStyles, true));
             }
         }
     }
@@ -948,10 +947,10 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     // styles, so it cannot be used after this point
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewGraphicStyles);
     if (!aNewGraphicStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewGraphicStyles, true));
+        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewGraphicStyles, true));
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewCellStyles);
     if (!aNewCellStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewCellStyles, true));
+        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aNewCellStyles, true));
 
     if( bUndo )
         EndUndo();
@@ -1300,7 +1299,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                             aUndoRemove.emplace_back(a.get(), true);
 
                         if (pUndoMgr)
-                            pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoRemove, false));
+                            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoRemove, false));
                     }
 
                     for( const auto& a : aRemove )
@@ -1554,7 +1553,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                         if (bUndo)
                         {
-                            pUndoMgr->AddUndoAction(o3tl::make_unique<StyleSheetUndoAction>(this,
+                            pUndoMgr->AddUndoAction(std::make_unique<StyleSheetUndoAction>(this,
                                                                  pMySheet, &pHisSheet->GetItemSet()));
                         }
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
@@ -1625,7 +1624,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 // Add UndoAction for creating and inserting the stylesheets to
                 // the top of the UndoManager
-                pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>( this, aCreatedStyles, true));
+                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>( this, aCreatedStyles, true));
             }
         }
 
@@ -1711,7 +1710,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             if( bUndo )
             {
-                pUndoMgr->AddUndoAction(o3tl::make_unique<SdPresentationLayoutUndoAction>
+                pUndoMgr->AddUndoAction(std::make_unique<SdPresentationLayoutUndoAction>
                         (this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
@@ -1777,7 +1776,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             aUndoInsert.reserve(aCreatedStyles.size());
             for (const auto& a : aCreatedStyles)
                 aUndoInsert.emplace_back(a.get(), true);
-            pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoInsert, true));
+            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoInsert, true));
         }
 
         // Generate new master pages and register them with the document
@@ -1846,7 +1845,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             if( bUndo )
             {
-                pUndoMgr->AddUndoAction(o3tl::make_unique<SdPresentationLayoutUndoAction>
+                pUndoMgr->AddUndoAction(std::make_unique<SdPresentationLayoutUndoAction>
                             (this, aOldLayoutName, aName,
                              eOldAutoLayout, eNewAutoLayout, true,
                              rpPage));

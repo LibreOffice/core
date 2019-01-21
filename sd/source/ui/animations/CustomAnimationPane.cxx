@@ -47,7 +47,6 @@
 #include <createcustomanimationpanel.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/scrbar.hxx>
@@ -296,7 +295,7 @@ void CustomAnimationPane::addUndo()
     {
         SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
         if( pPage )
-            pManager->AddUndoAction( o3tl::make_unique<UndoAnimation>( mrBase.GetDocShell()->GetDoc(), pPage ) );
+            pManager->AddUndoAction( std::make_unique<UndoAnimation>( mrBase.GetDocShell()->GetDoc(), pPage ) );
     }
 }
 
@@ -2490,7 +2489,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
             {
                 SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
                 if( pPage )
-                    pManager->AddUndoAction( o3tl::make_unique<UndoAnimationPath>( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
+                    pManager->AddUndoAction( std::make_unique<UndoAnimationPath>( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
             }
 
             pEffect->updatePathFromSdrPathObj( *pPathObj );
