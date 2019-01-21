@@ -235,7 +235,7 @@ Any SAL_CALL IUnknownWrapper::invoke( const OUString& aFunctionName,
     }
     catch (const IllegalArgumentException &)
     {
-        throw;
+        ret = directInvoke( aFunctionName, aParams);
     }
     catch (const CannotConvertException &)
     {
