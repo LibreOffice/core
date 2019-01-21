@@ -804,7 +804,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
         SolarMutexGuard aGuard;
-        svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH);
+        if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH))
+            GetParentDialog()->EndDialog(RET_OK);
     }
 }
 
