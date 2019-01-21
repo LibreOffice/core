@@ -77,8 +77,8 @@ public:
 
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
     virtual void SAL_CALL FileSave() override;
-    virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& Whatever1,
-                                            const css::uno::Any& Whatever2,
+    virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& FieldCodes,
+                                            const css::uno::Any& ShowAll,
                                             const css::uno::Any& Whatever3,
                                             const css::uno::Any& Whatever4,
                                             const css::uno::Any& Whatever5,
@@ -541,8 +541,8 @@ SwWordBasic::FileSave()
 }
 
 void SAL_CALL
-SwWordBasic::ToolsOptionsView( const css::uno::Any& /*Whatever1*/,
-                               const css::uno::Any& /*Whatever2*/,
+SwWordBasic::ToolsOptionsView( const css::uno::Any& /*FieldCodes*/,
+                               const css::uno::Any& /*ShowAll*/,
                                const css::uno::Any& /*Whatever3*/,
                                const css::uno::Any& /*Whatever4*/,
                                const css::uno::Any& /*Whatever5*/,
