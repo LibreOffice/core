@@ -42,6 +42,8 @@
 #include <sfx2/request.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/xtable.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xfillit.hxx>
 
 #include <svx/svdocapt.hxx>
 
@@ -126,6 +128,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 const SfxUInt32Item* pMouseStartY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_Y);
                 const SfxUInt32Item* pMouseEndX = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_X);
                 const SfxUInt32Item* pMouseEndY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_Y);
+                const SfxUInt16Item* pTrans = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
 
                 ::tools::Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),
@@ -415,7 +418,13 @@ void FuConstructRectangle::Deactivate()
  */
 void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 {
-    if (nSlotId == SID_DRAW_RECT_ROUND        ||
+    /*if (nSlotId == SID_DRAW_RECT)
+    {
+        rAttr.Put(XFillTransparenceItem(50));
+        rAttr.Put(XFillColorItem(OUString(), COL_GRAY7));
+        rAttr.Put( XLineStyleItem(css::drawing::LineStyle_NONE) );
+    }
+    else */if (nSlotId == SID_DRAW_RECT_ROUND        ||
         nSlotId == SID_DRAW_RECT_ROUND_NOFILL ||
         nSlotId == SID_DRAW_SQUARE_ROUND      ||
         nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL)
