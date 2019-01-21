@@ -111,7 +111,6 @@ public:
     // XSinkCaller
     virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 
-protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAAPPLICATION_HXX
