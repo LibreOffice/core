@@ -1,6 +1,4 @@
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPages";"insertNewByIndex()"
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPages";"remove()"
-"ScDrawPagesObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScDrawPagesObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPageExpander#optional";"expand()"
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPageSummarizer#optional";"summarize()"
