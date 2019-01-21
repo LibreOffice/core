@@ -94,7 +94,6 @@ using namespace ::ucbhelper;
 #include <svtools/templatefoldercache.hxx>
 
 #include <unotools/ucbhelper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <memory>
 #include <vector>
 
@@ -1022,7 +1021,7 @@ bool SfxDocumentTemplates::InsertDir
 
     if ( xTemplates->addGroup( rText ) )
     {
-        return pImp->InsertRegion( o3tl::make_unique<RegionData_Impl>( pImp.get(), rText ), nRegion );
+        return pImp->InsertRegion( std::make_unique<RegionData_Impl>( pImp.get(), rText ), nRegion );
     }
 
     return false;
@@ -1353,7 +1352,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         if ( pPos )
             nPos = *pPos;
 
-        auto pEntry = o3tl::make_unique<DocTempl_EntryData_Impl>(
+        auto pEntry = std::make_unique<DocTempl_EntryData_Impl>(
             this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
@@ -1492,7 +1491,7 @@ void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
                                      Content& rContent )
 {
-    auto pRegion = o3tl::make_unique<RegionData_Impl>( this, rTitle );
+    auto pRegion = std::make_unique<RegionData_Impl>( this, rTitle );
     auto pRegionTmp = pRegion.get();
 
     if ( ! InsertRegion( std::move(pRegion), size_t(-1) ) )

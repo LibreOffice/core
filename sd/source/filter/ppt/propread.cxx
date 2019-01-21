@@ -23,7 +23,6 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize ) :
     mnId        ( nId ),
@@ -206,7 +205,7 @@ Section::Section( const Section& rSection )
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = rSection.aFMTID[ i ];
     for(const std::unique_ptr<PropEntry>& rEntry : rSection.maEntries)
-        maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry));
+        maEntries.push_back(std::make_unique<PropEntry>(*rEntry));
 }
 
 Section::Section( const sal_uInt8* pFMTID )
@@ -252,11 +251,11 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
         if ( (*iter)->mnId == nId )
             (*iter).reset(new PropEntry( nId, pBuf, nBufSize ));
         else
-            maEntries.insert( iter, o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ));
+            maEntries.insert( iter, std::make_unique<PropEntry>( nId, pBuf, nBufSize ));
     }
     else
     {
-        maEntries.push_back( o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ) );
+        maEntries.push_back( std::make_unique<PropEntry>( nId, pBuf, nBufSize ) );
     }
 }
 
@@ -520,7 +519,7 @@ Section& Section::operator=( const Section& rSection )
         memcpy( static_cast<void*>(aFMTID), static_cast<void const *>(rSection.aFMTID), 16 );
 
         for(const std::unique_ptr<PropEntry>& rEntry : rSection.maEntries)
-            maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry));
+            maEntries.push_back(std::make_unique<PropEntry>(*rEntry));
     }
     return *this;
 }
@@ -580,7 +579,7 @@ void PropRead::Read()
                 {
                     Section aSection(aSectCLSID.data());
                     aSection.Read(mpSvStream.get());
-                    maSections.push_back(o3tl::make_unique<Section>(aSection));
+                    maSections.push_back(std::make_unique<Section>(aSection));
                 }
                 mpSvStream->Seek( nCurrent );
             }
@@ -599,7 +598,7 @@ PropRead& PropRead::operator=( const PropRead& rPropRead )
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
         for(const std::unique_ptr<Section>& rSection : rPropRead.maSections)
-            maSections.push_back(o3tl::make_unique<Section>(*rSection));
+            maSections.push_back(std::make_unique<Section>(*rSection));
     }
     return *this;
 }

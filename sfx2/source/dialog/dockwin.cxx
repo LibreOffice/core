@@ -206,7 +206,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
 std::unique_ptr<SfxChildWindow> SfxDockingWrapper::CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
                                               SfxBindings *pBindings, SfxChildWinInfo* pInfo)
 {
-    return o3tl::make_unique<SfxDockingWrapper>(pParent, nId, pBindings, pInfo);
+    return std::make_unique<SfxDockingWrapper>(pParent, nId, pBindings, pInfo);
 }
 
 void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)
@@ -215,7 +215,7 @@ void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChil
     for (int i=0; i < NUM_OF_DOCKINGWINDOWS; i++ )
     {
         sal_uInt16 nID = sal_uInt16(SID_DOCKWIN_START+i);
-        auto pFact = o3tl::make_unique<SfxChildWinFactory>( SfxDockingWrapper::CreateImpl, nID, 0xffff );
+        auto pFact = std::make_unique<SfxChildWinFactory>( SfxDockingWrapper::CreateImpl, nID, 0xffff );
         pFact->aInfo.nFlags |= nFlags;
         pFact->aInfo.bVisible = bVis;
         SfxChildWindow::RegisterChildWindow(pMod, std::move(pFact));

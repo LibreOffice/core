@@ -30,7 +30,6 @@
 #include <sax/fastparser.hxx>
 #include <memory>
 #include <vector>
-#include <o3tl/make_unique.hxx>
 
 using namespace std;
 using namespace ::cppu;
@@ -85,7 +84,7 @@ void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::Attribu
 
 void NamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
 {
-    m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
+    m_aNamespaceDefines.push_back( std::make_unique<NamespaceDefine>(
                                     rNamespacePrefix, rNamespaceURI) );
 }
 

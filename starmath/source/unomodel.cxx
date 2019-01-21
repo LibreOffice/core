@@ -23,7 +23,6 @@
 #include <utility>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -625,7 +624,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
                     0
                 };
-                auto pItemSet = o3tl::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
+                auto pItemSet = std::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
                 SmModule *pp = SM_MOD();
                 pp->GetConfig()->ConfigToItemSet(*pItemSet);
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );

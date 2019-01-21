@@ -44,7 +44,6 @@
 #include <svx/svxids.hrc>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/svddrgmt.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include "CustomAnimationPane.hxx"
 #include <View.hxx>
@@ -941,23 +940,23 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                     bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
                     }
                     else if (bWdt0 || bHgt0)
                     {
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
                     }
                     else // !bWdt0 && !bHgt0
                     {
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
-                        rHandlerList.AddHdl(o3tl::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
+                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
                     }
 
                     while( nCount < rHandlerList.GetHdlCount() )

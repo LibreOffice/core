@@ -34,7 +34,6 @@
 #include <View.hxx>
 #include <Window.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 namespace sd {
 
@@ -130,7 +129,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
             if( bDifferent )
             {
-                pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aPolyPolygon, aName));
+                pLineEndList->Insert(std::make_unique<XLineEndEntry>(aPolyPolygon, aName));
             }
             else
             {

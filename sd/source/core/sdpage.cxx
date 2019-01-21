@@ -55,7 +55,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <o3tl/enumarray.hxx>
-#include <o3tl/make_unique.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <Outliner.hxx>
@@ -569,8 +568,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         if( bUndo )
         {
-            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectPresentationKind>( *pSdrObj ) );
-            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>(*pSdrObj) );
+            pUndoManager->AddUndoAction( std::make_unique<UndoObjectPresentationKind>( *pSdrObj ) );
+            pUndoManager->AddUndoAction( std::make_unique<UndoObjectUserCall>(*pSdrObj) );
         }
 
         InsertPresObj(pSdrObj, eObjKind);
@@ -733,7 +732,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
 
                         if (bUndo)
                             pUndoManager->AddUndoAction(
-                                o3tl::make_unique<UndoObjectUserCall>(_rObj));
+                                std::make_unique<UndoObjectUserCall>(_rObj));
 
                         // Object was resized by user and does not listen to its slide anymore
                         _rObj.SetUserCall(nullptr);
@@ -2217,7 +2216,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         {
             pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
             pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoAttrObject( *pObj, true, true ) );
-            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>( *pObj ) );
+            pUndoManager->AddUndoAction( std::make_unique<UndoObjectUserCall>( *pObj ) );
         }
 
             pObj->AdjustToMaxRect(rRect);
@@ -2280,7 +2279,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         if( !IsPresObj( pObj ) )
         {
             if( bUndo )
-                pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectPresentationKind>( *pObj ) );
+                pUndoManager->AddUndoAction( std::make_unique<UndoObjectPresentationKind>( *pObj ) );
 
             InsertPresObj( pObj, eObjKind );
         }

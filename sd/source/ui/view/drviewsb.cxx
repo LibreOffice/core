@@ -36,7 +36,6 @@
 #include <svx/dialogs.hrc>
 #include <unotools/useroptions.hxx>
 #include <tools/diagnose_ex.h>
-#include <o3tl/make_unique.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -85,7 +84,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 
         SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         pManager->AddUndoAction(
-            o3tl::make_unique<ModifyPageUndoAction>(
+            std::make_unique<ModifyPageUndoAction>(
                 GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
                 aVisibleLayers.IsSet( nBackground ),
                 aVisibleLayers.IsSet( nBgObj )));

@@ -41,7 +41,6 @@ one go*/
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <sfx2/frame.hxx>
@@ -1213,7 +1212,7 @@ void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLNumberContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_NUMBER));
+    GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_NUMBER));
 }
 
 
@@ -1290,7 +1289,7 @@ void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLTextContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_TEXT));
+    GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_TEXT));
 }
 
 
@@ -1331,7 +1330,7 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLStringContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_FIXED));
+    GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_FIXED));
 }
 
 
@@ -1828,7 +1827,7 @@ void SmXMLNoneContext_Impl::EndElement()
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
     GetSmImport().GetNodeStack().push_front(
-        o3tl::make_unique<SmTextNode>(aToken,FNT_VARIABLE));
+        std::make_unique<SmTextNode>(aToken,FNT_VARIABLE));
 }
 
 

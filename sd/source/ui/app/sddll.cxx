@@ -93,7 +93,6 @@
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sdabstdlg.hxx>
 #include <sdfilter.hxx>
 #include <sdmod.hxx>
@@ -252,7 +251,7 @@ void SdDLL::Init()
     if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsDraw())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
-    auto pUniqueModule = o3tl::make_unique<SdModule>(pImpressFact, pDrawFact);
+    auto pUniqueModule = std::make_unique<SdModule>(pImpressFact, pDrawFact);
     SdModule* pModule = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Draw, std::move(pUniqueModule));
 

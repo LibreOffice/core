@@ -51,7 +51,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
 #include <rtl/ustring.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>
@@ -388,7 +387,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
 
             if( mbMasterPage )
             {
-                mpDocSh->GetUndoManager()->AddUndoAction(o3tl::make_unique<StyleSheetUndoAction>(
+                mpDocSh->GetUndoManager()->AddUndoAction(std::make_unique<StyleSheetUndoAction>(
                     mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet)));
                 pStyleSheet->GetItemSet().Put( *pTempSet );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );

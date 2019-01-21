@@ -22,7 +22,6 @@
 #include <svx/svditer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <o3tl/make_unique.hxx>
 #include <Outliner.hxx>
 
 #include <drawdoc.hxx>
@@ -208,7 +207,7 @@ Iterator OutlinerContainer::CreateSelectionIterator (
                 break;
         }
 
-    return Iterator (o3tl::make_unique<SelectionIteratorImpl> (
+    return Iterator (std::make_unique<SelectionIteratorImpl> (
         rObjectList, nObjectIndex, pDocument, rpViewShell, bDirectionIsForward));
 }
 
@@ -272,7 +271,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
         ePageKind, eEditMode, bDirectionIsForward, aLocation);
 
     return Iterator (
-        o3tl::make_unique<DocumentIteratorImpl> (nPageIndex, ePageKind, eEditMode,
+        std::make_unique<DocumentIteratorImpl> (nPageIndex, ePageKind, eEditMode,
             pDocument, rpViewShell, bDirectionIsForward));
 }
 

@@ -20,7 +20,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/styfitem.hxx>
 #include <svl/inethist.hxx>
@@ -460,7 +459,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
-    auto pRet = o3tl::make_unique<SfxItemSet>(
+    auto pRet = std::make_unique<SfxItemSet>(
         rPool,
         svl::Items<
             SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,

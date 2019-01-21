@@ -30,7 +30,6 @@
 #include "uiobject.hxx"
 #include <strings.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -558,7 +557,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
         maMaxElementDimensions.setHeight( aSizePixel.Height() );
     }
 
-    maElementList.push_back(o3tl::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
+    maElementList.push_back(std::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
 }
 
 void SmElementsControl::setElementSetId(const char* pSetId)
@@ -575,7 +574,7 @@ void SmElementsControl::addElements(const std::pair<const char*, const char*> aE
         const char* pElement = aElementsArray[i].first;
         const char* pElementHelp = aElementsArray[i].second;
         if (!pElement) {
-            maElementList.push_back(o3tl::make_unique<SmElementSeparator>());
+            maElementList.push_back(std::make_unique<SmElementSeparator>());
         } else {
             OUString aElement(OUString::createFromAscii(pElement));
             if (aElement == RID_NEWLINE)
@@ -788,7 +787,7 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, voi
 
     if (pViewSh)
     {
-        std::unique_ptr<SfxStringItem> pInsertCommand = o3tl::make_unique<SfxStringItem>(SID_INSERTCOMMANDTEXT, rElement.getText());
+        std::unique_ptr<SfxStringItem> pInsertCommand = std::make_unique<SfxStringItem>(SID_INSERTCOMMANDTEXT, rElement.getText());
         pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
             { pInsertCommand.get() });

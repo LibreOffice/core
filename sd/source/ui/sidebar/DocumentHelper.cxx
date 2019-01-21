@@ -38,7 +38,6 @@
 #include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -273,7 +272,7 @@ void DocumentHelper::ProvideStyles (
        if (pUndoManager != nullptr)
        {
            pUndoManager->AddUndoAction (
-               o3tl::make_unique<SdMoveStyleSheetsUndoAction>(
+               std::make_unique<SdMoveStyleSheetsUndoAction>(
                    &rTargetDocument,
                    aCreatedStyles,
                    true));
@@ -404,7 +403,7 @@ void DocumentHelper::AssignMasterPageToPage (
         // not override the new master page) and assign the master page to
         // the regular slide.
         rDocument.GetDocSh()->GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<SdBackgroundObjUndoAction>(
+            std::make_unique<SdBackgroundObjUndoAction>(
                 rDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
                 true);
         pPage->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));

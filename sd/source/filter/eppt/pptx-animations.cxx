@@ -18,7 +18,6 @@
  */
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "epptooxml.hxx"
@@ -1191,7 +1190,7 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
                                                      UNO_QUERY);
                 if (xEnumeration.is() && xEnumeration->hasMoreElements())
                 {
-                    auto pNodeContext = o3tl::make_unique<NodeContext>(xNode, false, false);
+                    auto pNodeContext = std::make_unique<NodeContext>(xNode, false, false);
                     if (pNodeContext->isValid())
                     {
                         mpFS->startElementNS(XML_p, XML_timing, FSEND);
@@ -1296,7 +1295,7 @@ bool NodeContext::initChildNodes()
                 if (xChildNode.is())
                 {
                     auto pChildContext
-                        = o3tl::make_unique<NodeContext>(xChildNode, bIsMainSeq, bIsIterateChild);
+                        = std::make_unique<NodeContext>(xChildNode, bIsMainSeq, bIsIterateChild);
                     if (pChildContext->isValid())
                         bValid = true;
                     maChildNodes.push_back(std::move(pChildContext));

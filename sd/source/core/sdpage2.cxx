@@ -19,7 +19,6 @@
 
 #include <vector>
 #include <libxml/xmlwriter.h>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdundo.hxx>
@@ -448,7 +447,7 @@ SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 SfxItemSet* SdPage::getOrCreateItems()
 {
     if( mpItems == nullptr )
-        mpItems = o3tl::make_unique<SfxItemSet>( getSdrModelFromSdrPage().GetItemPool(), svl::Items<SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES>{} );
+        mpItems = std::make_unique<SfxItemSet>( getSdrModelFromSdrPage().GetItemPool(), svl::Items<SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES>{} );
 
     return mpItems.get();
 }

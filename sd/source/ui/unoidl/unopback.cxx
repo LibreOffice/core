@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
@@ -59,7 +58,7 @@ SdUnoPageBackground::SdUnoPageBackground(
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = o3tl::make_unique<SfxItemSet>( pDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
+        mpSet = std::make_unique<SfxItemSet>( pDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
         if( pSet )
             mpSet->Put(*pSet);
@@ -100,7 +99,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         StartListening( *pDoc );
         mpDoc = pDoc;
 
-        mpSet = o3tl::make_unique<SfxItemSet>( *rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
+        mpSet = std::make_unique<SfxItemSet>( *rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {

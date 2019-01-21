@@ -73,7 +73,6 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
@@ -1400,7 +1399,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
 
                         if (comphelper::isFileUrl(aDestURL) || !aDest.removeSegment())
                         {
-                            pFileLock = o3tl::make_unique<osl::File>(aDestURL);
+                            pFileLock = std::make_unique<osl::File>(aDestURL);
                             auto rc = pFileLock->open(osl_File_OpenFlag_Write);
                             if (rc == osl::FileBase::E_ACCES)
                                 bHandleSysLocked = true;

@@ -25,7 +25,6 @@
 #include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
@@ -1049,7 +1048,7 @@ std::unique_ptr<SmNode> SmParser::DoLine()
         ExpressionArray.emplace_back(std::unique_ptr<SmNode>(new SmExpressionNode(aTok)));
     }
 
-    auto xSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmLineNode>(m_aCurToken);
     xSNode->SetSubNodes(buildNodeArray(ExpressionArray));
     return xSNode;
 }
@@ -1285,7 +1284,7 @@ std::unique_ptr<SmNode> SmParser::DoOpSubSup()
         throw std::range_error("parser depth limit");
 
     // get operator symbol
-    auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
+    auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
     // skip operator token
     NextToken();
     // get sub- supscripts if any
@@ -1370,7 +1369,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 NextToken();
                 return pNode;
             }
-            auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
+            auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
             std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
             xSNode->SetSubNodes(std::move(pNode), std::move(xError));
             return std::unique_ptr<SmNode>(xSNode.release());
@@ -1385,20 +1384,20 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 
         case TTEXT :
             {
-                auto pNode = o3tl::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
         case TCHARACTER :
             {
-                auto pNode = o3tl::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
         case TIDENT :
         case TNUMBER :
         {
-            auto pTextNode = o3tl::make_unique<SmTextNode>(m_aCurToken,
+            auto pTextNode = std::make_unique<SmTextNode>(m_aCurToken,
                                              m_aCurToken.eType == TNUMBER ?
                                              FNT_NUMBER :
                                              FNT_VARIABLE);
@@ -1471,7 +1470,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TDOTSUP :
         case TDOTSVERT :
             {
-                auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
+                auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
@@ -1491,14 +1490,14 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TEMPTYSET :
         case TINFINITY :
             {
-                auto pNode = o3tl::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
 
         case TPLACE:
             {
-                auto pNode = o3tl::make_unique<SmPlaceNode>(m_aCurToken);
+                auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
@@ -1578,7 +1577,7 @@ std::unique_ptr<SmNode> SmParser::DoEscape()
         case TLDLINE :
         case TRDLINE :
             {
-                auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
+                auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
@@ -1595,7 +1594,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
 
     assert(TokenInGroup(TG::Oper));
 
-    auto xSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmOperNode>(m_aCurToken);
 
     // get operator
     auto xOperator = DoOper();
@@ -1765,7 +1764,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
 
     assert(TokenInGroup(TG::Attribute));
 
-    auto xSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmAttributNode>(m_aCurToken);
     std::unique_ptr<SmNode> xAttr;
     SmScaleMode  eScaleMode = SmScaleMode::None;
 
@@ -1812,7 +1811,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
         case TNBOLD :
         case TPHANTOM :
             {
-                auto pNode = o3tl::make_unique<SmFontNode>(m_aCurToken);
+                auto pNode = std::make_unique<SmFontNode>(m_aCurToken);
                 NextToken();
                 return pNode;
             }
@@ -2071,7 +2070,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto pBody = o3tl::make_unique<SmBracebodyNode>(m_aCurToken);
+    auto pBody = std::make_unique<SmBracebodyNode>(m_aCurToken);
 
     std::vector<std::unique_ptr<SmNode>> aNodes;
     // get body if any
@@ -2081,7 +2080,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.emplace_back(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+                aNodes.emplace_back(std::make_unique<SmMathSymbolNode>(m_aCurToken));
                 NextToken();
             }
             else if (m_aCurToken.eType != TRIGHT)
@@ -2098,7 +2097,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.emplace_back(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+                aNodes.emplace_back(std::make_unique<SmMathSymbolNode>(m_aCurToken));
                 NextToken();
             }
             else if (!TokenInGroup(TG::RBrace))
@@ -2147,7 +2146,7 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
         case TLOG :
         case TEXP :
             {
-                auto pNode = o3tl::make_unique<SmTextNode>(m_aCurToken, FNT_FUNCTION);
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_FUNCTION);
                 NextToken();
                 return pNode;
             }
@@ -2164,7 +2163,7 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto xSNode = o3tl::make_unique<SmTableNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmTableNode>(m_aCurToken);
 
     NextToken();
 
@@ -2299,7 +2298,7 @@ std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
     if (!aSymbolName.isEmpty())
         m_aUsedSymbols.insert( aSymbolName );
 
-    auto pNode = o3tl::make_unique<SmSpecialNode>(m_aCurToken);
+    auto pNode = std::make_unique<SmSpecialNode>(m_aCurToken);
     NextToken();
     return pNode;
 }
@@ -2310,7 +2309,7 @@ std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto pNode = o3tl::make_unique<SmGlyphSpecialNode>(m_aCurToken);
+    auto pNode = std::make_unique<SmGlyphSpecialNode>(m_aCurToken);
     NextToken();
     return pNode;
 }
@@ -2321,7 +2320,7 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
     std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
     xSNode->SetSubNodes(std::move(pErr), nullptr);
 

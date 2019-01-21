@@ -8,8 +8,6 @@
  */
 #include <caret.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 SmCaretPosGraph::SmCaretPosGraph() = default;
 
 SmCaretPosGraph::~SmCaretPosGraph() = default;
@@ -18,7 +16,7 @@ SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPos pos,
                                            SmCaretPosGraphEntry* left)
 {
     assert(pos.nIndex >= 0);
-    auto entry = o3tl::make_unique<SmCaretPosGraphEntry>(pos, left, nullptr);
+    auto entry = std::make_unique<SmCaretPosGraphEntry>(pos, left, nullptr);
     SmCaretPosGraphEntry* e = entry.get();
     //Set Left and Right to point to the entry itself if they are NULL
     entry->Left = entry->Left ? entry->Left : e;

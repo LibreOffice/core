@@ -28,7 +28,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -963,7 +962,7 @@ void SmEditWindow::Flush()
         SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
         {
-            std::unique_ptr<SfxStringItem> pTextToFlush = o3tl::make_unique<SfxStringItem>(SID_TEXT, GetText());
+            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
             pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
                     SID_TEXT, SfxCallMode::RECORD,
                     { pTextToFlush.get() });

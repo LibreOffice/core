@@ -35,7 +35,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <tools/debug.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <sdresid.hxx>
@@ -903,11 +902,11 @@ void CustomAnimationList::update()
             if( xShape.is() )
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
-                pLBoxEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+                pLBoxEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
                 OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER);
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
-                pLBoxEntry->AddItem(o3tl::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
+                pLBoxEntry->AddItem(std::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
                 Insert( pLBoxEntry );
                 SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );
                 if( pViewData )
@@ -1020,8 +1019,8 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         // create an entry for the effect
         SvTreeListEntry* pEntry = new CustomAnimationListEntry( pEffect );
 
-        pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-        pEntry->AddItem(o3tl::make_unique<CustomAnimationListEntryItem>(aDescription, pEffect, this));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+        pEntry->AddItem(std::make_unique<CustomAnimationListEntryItem>(aDescription, pEffect, this));
 
         if( pParentEntry )
         {

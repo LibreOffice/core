@@ -33,7 +33,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
@@ -774,7 +773,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                             }
                             else
                             {
-                                pItemSet = o3tl::make_unique<SfxItemSet>(pDoc->GetPool(),
+                                pItemSet = std::make_unique<SfxItemSet>(pDoc->GetPool(),
                                             svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );

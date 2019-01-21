@@ -37,7 +37,6 @@
 #include <starmath.hrc>
 
 #include <svx/xmlsecctrl.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace
 {
@@ -54,7 +53,7 @@ namespace
 
         SfxObjectFactory& rFactory = SmDocShell::Factory();
 
-        auto pUniqueModule = o3tl::make_unique<SmModule>(&rFactory);
+        auto pUniqueModule = std::make_unique<SmModule>(&rFactory);
         SmModule* pModule = pUniqueModule.get();
         SfxApplication::SetModule(SfxToolsModule::Math, std::move(pUniqueModule));
 

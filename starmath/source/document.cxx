@@ -22,7 +22,6 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/accessibletexthelper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -545,7 +544,7 @@ Printer* SmDocShell::GetPrt()
     }
     else if (!mpPrinter)
     {
-        auto pOptions = o3tl::make_unique<SfxItemSet>(
+        auto pOptions = std::make_unique<SfxItemSet>(
             GetPool(),
             svl::Items<
                 SID_PRINTTITLE, SID_PRINTZOOM,
@@ -900,7 +899,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             SfxUndoManager *pTmpUndoMgr = GetUndoManager();
             if (pTmpUndoMgr)
                 pTmpUndoMgr->AddUndoAction(
-                    o3tl::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                    std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
 
             SetFormat( aNewFormat );
             Repaint();
@@ -943,7 +942,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
-                        o3tl::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                        std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
                 Repaint();
@@ -966,7 +965,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
-                        o3tl::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                        std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
                 Repaint();
@@ -989,7 +988,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
-                        o3tl::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                        std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
                 Repaint();
@@ -1017,7 +1016,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
-                        o3tl::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                        std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
                 Repaint();

@@ -24,7 +24,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>
-#include <o3tl/make_unique.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -555,7 +554,7 @@ bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eR
 }
 
 SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy)
-    : m_pImpl(o3tl::make_unique<Impl>(xDocumentProperties, bUseLocalizedPolicy))
+    : m_pImpl(std::make_unique<Impl>(xDocumentProperties, bUseLocalizedPolicy))
 {
     if (!xDocumentProperties.is())
         return;

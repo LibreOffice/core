@@ -22,7 +22,6 @@
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <app.hrc>
 
@@ -140,7 +139,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
                 mpDocSh->GetUndoManager()->AddUndoAction(
-                    o3tl::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), pOutSet));
+                    std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), pOutSet));
 
                 pStyleSheet->GetItemSet().Put( *pOutSet );
                 static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );

@@ -31,7 +31,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <unotools/datetime.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <svx/svdundo.hxx>
@@ -352,7 +351,7 @@ void Annotation::createChangeUndo()
 {
     SdrModel* pModel = GetModel(); // TTTT should use reference
     if( pModel && pModel->IsUndoEnabled() )
-        pModel->AddUndo( o3tl::make_unique<UndoAnnotation>( *this ) );
+        pModel->AddUndo( std::make_unique<UndoAnnotation>( *this ) );
 
     if( pModel )
     {
@@ -380,7 +379,7 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const Referen
     Annotation* pAnnotation = dynamic_cast< Annotation* >( xAnnotation.get() );
     if( pAnnotation )
     {
-        return o3tl::make_unique< UndoInsertOrRemoveAnnotation >( *pAnnotation, bInsert );
+        return std::make_unique< UndoInsertOrRemoveAnnotation >( *pAnnotation, bInsert );
     }
     else
     {

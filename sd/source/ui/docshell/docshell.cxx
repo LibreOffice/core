@@ -49,7 +49,6 @@
 #include <comphelper/classids.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <sfx2/fcontnr.hxx>
 

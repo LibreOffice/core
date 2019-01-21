@@ -21,7 +21,6 @@
 #include <pdfparse.hxx>
 
 #include <comphelper/hash.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -533,7 +532,7 @@ void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValu
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
-        m_aSubElements.emplace_back(o3tl::make_unique<PDFName>(rName));
+        m_aSubElements.emplace_back(std::make_unique<PDFName>(rName));
         m_aSubElements.emplace_back( std::move(pValue) );
     }
     else

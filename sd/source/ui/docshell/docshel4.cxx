@@ -26,7 +26,6 @@
 #include <DrawDocShell.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <editeng/outlobj.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/waitobj.hxx>
@@ -103,7 +102,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
     if (bCreate && !mpPrinter)
     {
         // create ItemSet with special pool area
-        auto pSet = o3tl::make_unique<SfxItemSet>( GetPool(),
+        auto pSet = std::make_unique<SfxItemSet>( GetPool(),
                             svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );
@@ -607,30 +606,30 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
-            xFilter = o3tl::make_unique<SdHTMLFilter>(rMedium, *this);
+            xFilter = std::make_unique<SdHTMLFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
-            xFilter = o3tl::make_unique<SdPPTFilter>(rMedium, *this);
+            xFilter = std::make_unique<SdPPTFilter>(rMedium, *this);
             static_cast<SdPPTFilter*>(xFilter.get())->PreSaveBasic();
         }
         else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
-            xFilter = o3tl::make_unique<SdCGMFilter>(rMedium, *this);
+            xFilter = std::make_unique<SdCGMFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "draw8" ) >= 0 ||
                  aTypeName.indexOf( "impress8" ) >= 0 )
         {
-            xFilter = o3tl::make_unique<SdXMLFilter>(rMedium, *this);
+            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
-            xFilter = o3tl::make_unique<SdXMLFilter>(rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60);
+            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60);
         }
         else
         {
-            xFilter = o3tl::make_unique<SdGRFFilter>(rMedium, *this);
+            xFilter = std::make_unique<SdGRFFilter>(rMedium, *this);
         }
 
         if (xFilter)

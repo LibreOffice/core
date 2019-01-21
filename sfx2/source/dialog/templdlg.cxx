@@ -70,7 +70,6 @@
 
 #include <sfx2/StyleManager.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
-#include <o3tl/make_unique.hxx>
 
 #define STD_ENTRY_HEIGHT 17
 
@@ -587,7 +586,7 @@ static SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
     {
-        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pEntry->getName(), eStyleFamily), 1);
+        pTreeListEntry->ReplaceItem(std::make_unique<StyleLBoxString>(pEntry->getName(), eStyleFamily), 1);
     }
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
@@ -1206,7 +1205,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
                     SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
                     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
                     {
-                        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(aStrings[nPos], eFam), 1);
+                        pTreeListEntry->ReplaceItem(std::make_unique<StyleLBoxString>(aStrings[nPos], eFam), 1);
                     }
                     aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
                 }
@@ -2010,7 +2009,7 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
             SvTreeListEntry* pTreeListEntry = aFmtLb->GetEntry(nPos);
             OUString aEntryStr = aFmtLb->GetEntryText(pTreeListEntry);
             const SfxStyleFamily eFam = aPreviewCheckbox->IsChecked() ? GetFamilyItem_Impl()->GetFamily(): SfxStyleFamily::None;
-            pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(aEntryStr, eFam), 1);
+            pTreeListEntry->ReplaceItem(std::make_unique<StyleLBoxString>(aEntryStr, eFam), 1);
             aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
             aFmtLb->Recalc();
         }

@@ -40,7 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 // disable warnings again because someone along the line has enabled them
 // (we have  included boost headers, what did you expect?)
@@ -378,27 +377,27 @@ public:
 
     void pushName( iteratorT first, iteratorT last )
     {
-        insertNewValue( o3tl::make_unique<PDFName>(iteratorToString(first,last)), first );
+        insertNewValue( std::make_unique<PDFName>(iteratorToString(first,last)), first );
     }
 
     void pushDouble( iteratorT first, SAL_UNUSED_PARAMETER iteratorT /*last*/ )
     {
-        insertNewValue( o3tl::make_unique<PDFNumber>(m_fDouble), first );
+        insertNewValue( std::make_unique<PDFNumber>(m_fDouble), first );
     }
 
     void pushString( iteratorT first, iteratorT last )
     {
-        insertNewValue( o3tl::make_unique<PDFString>(iteratorToString(first,last)), first );
+        insertNewValue( std::make_unique<PDFString>(iteratorToString(first,last)), first );
     }
 
     void pushBool( iteratorT first, iteratorT last )
     {
-        insertNewValue( o3tl::make_unique<PDFBool>( last-first == 4 ), first );
+        insertNewValue( std::make_unique<PDFBool>( last-first == 4 ), first );
     }
 
     void pushNull( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
-        insertNewValue( o3tl::make_unique<PDFNull>(), first );
+        insertNewValue( std::make_unique<PDFNull>(), first );
     }
 
 
@@ -443,7 +442,7 @@ public:
         m_aUIntStack.pop_back();
         unsigned int nObject = m_aUIntStack.back();
         m_aUIntStack.pop_back();
-        insertNewValue( o3tl::make_unique<PDFObjectRef>(nObject,nGeneration), first );
+        insertNewValue( std::make_unique<PDFObjectRef>(nObject,nGeneration), first );
     }
 
     void beginDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )

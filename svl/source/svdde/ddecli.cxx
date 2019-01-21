@@ -22,7 +22,6 @@
 #include <algorithm>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/thread.h>
 #include <comphelper/solarmutex.hxx>
 
@@ -139,7 +138,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
 }
 
 DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic ):
-    pImp(o3tl::make_unique<DdeImp>())
+    pImp(std::make_unique<DdeImp>())
 {
     pImp->nStatus  = DMLERR_NO_ERROR;
     pImp->hConv    = nullptr;

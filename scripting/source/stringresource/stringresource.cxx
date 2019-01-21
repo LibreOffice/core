@@ -38,7 +38,6 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -338,7 +337,7 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
         if( m_pDefaultLocaleItem )
         {
             m_aChangedDefaultLocaleVector.push_back(
-                o3tl::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
+                std::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
         }
 
         m_pDefaultLocaleItem = pLocaleItem;
@@ -522,7 +521,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 if( m_pDefaultLocaleItem )
                 {
                     m_aChangedDefaultLocaleVector.push_back(
-                            o3tl::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
+                            std::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
                 }
                 m_pCurrentLocaleItem = nullptr;
                 m_pDefaultLocaleItem = nullptr;

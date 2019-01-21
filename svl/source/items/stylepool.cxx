@@ -20,7 +20,6 @@
 #include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/debug.hxx>
 #include <algorithm>
 #include <map>
@@ -411,7 +410,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
 std::unique_ptr<IStylePoolIteratorAccess> StylePoolImpl::createIterator( bool bSkipUnusedItemSets,
                                                          bool bSkipIgnorableItems )
 {
-    return o3tl::make_unique<Iterator>( maRoot, bSkipUnusedItemSets, bSkipIgnorableItems );
+    return std::make_unique<Iterator>( maRoot, bSkipUnusedItemSets, bSkipIgnorableItems );
 }
 // Ctor, Dtor and redirected methods of class StylePool, nearly inline ;-)
 
