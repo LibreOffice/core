@@ -536,7 +536,8 @@ SwWordBasic::FileOpen( const OUString& Name, const uno::Any& ConfirmConversions,
 void SAL_CALL
 SwWordBasic::FileSave()
 {
-    // FIXME save it
+    uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
+    dispatchRequests(xModel,".uno:Save");
 }
 
 void SAL_CALL
