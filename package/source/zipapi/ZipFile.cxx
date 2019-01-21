@@ -33,7 +33,6 @@
 #include <rtl/digest.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -648,7 +647,7 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
 
 std::unique_ptr<ZipEnumeration> ZipFile::entries()
 {
-    return o3tl::make_unique<ZipEnumeration>(aEntries);
+    return std::make_unique<ZipEnumeration>(aEntries);
 }
 
 uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,

@@ -44,7 +44,6 @@
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace rptui
 {
@@ -392,7 +391,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt)
             if ( xContainer.is() )
             {
                 m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction(
-                    o3tl::make_unique<OUndoContainerAction>( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
+                    std::make_unique<OUndoContainerAction>( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
                         xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }
@@ -458,7 +457,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
             uno::Reference< report::XFunctions> xFunctions(evt.Source,uno::UNO_QUERY);
             if ( xFunctions.is() )
             {
-                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( o3tl::make_unique<OUndoContainerAction>(
+                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( std::make_unique<OUndoContainerAction>(
                     m_pImpl->m_rModel, rptui::Removed, xFunctions.get(), xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }

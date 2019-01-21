@@ -37,8 +37,6 @@
 #include <EncryptedDataHeader.hxx>
 #include <rtl/instance.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -409,9 +407,9 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
 {
     if ( pEntry->IsFolder() )
-        maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
+        maContents[pEntry->getName()] = std::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
     else
-        maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
+        maContents[pEntry->getName()] = std::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
     if ( bSetParent )
         pEntry->setParent ( *this );
 }

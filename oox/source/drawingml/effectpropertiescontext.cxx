@@ -15,8 +15,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -75,7 +73,7 @@ void EffectPropertiesContext::saveUnsupportedAttribs( Effect& rEffect, const Att
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     sal_Int32 nPos = mrEffectProperties.m_Effects.size();
-    mrEffectProperties.m_Effects.push_back(o3tl::make_unique<Effect>());
+    mrEffectProperties.m_Effects.push_back(std::make_unique<Effect>());
     switch( nElement )
     {
         case A_TOKEN( outerShdw ):

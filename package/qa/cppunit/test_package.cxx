@@ -13,7 +13,6 @@
 #include <comphelper/threadpool.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <o3tl/make_unique.hxx>
 
 #include <iterator>
 
@@ -160,7 +159,7 @@ namespace
                 mxNA->getByName(aName) >>= xStrm;
 
                 CPPUNIT_ASSERT(xStrm.is());
-                aPool.pushTask(o3tl::make_unique<Worker>(pTag, xStrm, *itBuf));
+                aPool.pushTask(std::make_unique<Worker>(pTag, xStrm, *itBuf));
             }
 
             aPool.waitUntilDone(pTag);

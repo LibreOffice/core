@@ -42,7 +42,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
@@ -1022,7 +1021,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                         aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
-                    pAvailSpellSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                    pAvailSpellSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1085,7 +1084,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                         aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
-                    pAvailGrammarSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                    pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1145,7 +1144,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
                         aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
-                    pAvailHyphSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                    pAvailHyphSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1207,7 +1206,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                         aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
-                    pAvailThesSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                    pAvailThesSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }

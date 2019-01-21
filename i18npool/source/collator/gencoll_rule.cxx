@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 #include <stdio.h>
 #include <string.h>
@@ -27,7 +28,6 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <unicode/tblcoll.h>
 
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF,
     //        UCOL_DEFAULT_STRENGTH, &parseError, &status);
 
-    auto coll = o3tl::make_unique<icu::RuleBasedCollator>(reinterpret_cast<const UChar *>(Obuf.getStr()), status);
+    auto coll = std::make_unique<icu::RuleBasedCollator>(reinterpret_cast<const UChar *>(Obuf.getStr()), status);
 
     if (U_SUCCESS(status)) {
         std::vector<uint8_t> data;

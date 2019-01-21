@@ -21,8 +21,6 @@
 #include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -141,7 +139,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 //      ----------------------------------------------------;
 BreakIterator_zh::BreakIterator_zh()
 {
-    m_xDict = o3tl::make_unique<xdictionary>("zh");
+    m_xDict = std::make_unique<xdictionary>("zh");
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "CN"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
 }
@@ -151,7 +149,7 @@ BreakIterator_zh::BreakIterator_zh()
 //      ----------------------------------------------------;
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
-    m_xDict = o3tl::make_unique<xdictionary>("zh");
+    m_xDict = std::make_unique<xdictionary>("zh");
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "TW"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
 }
@@ -161,7 +159,7 @@ BreakIterator_zh_TW::BreakIterator_zh_TW()
 //      ----------------------------------------------------;
 BreakIterator_ja::BreakIterator_ja()
 {
-    m_xDict = o3tl::make_unique<xdictionary>("ja");
+    m_xDict = std::make_unique<xdictionary>("ja");
     m_xDict->setJapaneseWordBreak();
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ja", "JP"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";

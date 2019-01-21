@@ -25,7 +25,6 @@
 #include <hash.hxx>
 
 #include <rtl/character.hxx>
-#include <o3tl/make_unique.hxx>
 
 SvStringHashEntry * SvStringHashTable::Insert( const OString& rElement, sal_uInt32 * pInsertPos )
 {
@@ -35,7 +34,7 @@ SvStringHashEntry * SvStringHashTable::Insert( const OString& rElement, sal_uInt
         return maInt2EntryMap[*pInsertPos].get();
     }
     maString2IntMap[rElement] = mnNextId;
-    maInt2EntryMap[mnNextId] = o3tl::make_unique<SvStringHashEntry>(rElement);
+    maInt2EntryMap[mnNextId] = std::make_unique<SvStringHashEntry>(rElement);
     *pInsertPos = mnNextId;
     mnNextId++;
     return maInt2EntryMap[*pInsertPos].get();

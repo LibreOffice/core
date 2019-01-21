@@ -230,11 +230,11 @@ public:
         std::unique_ptr<SfxChildWindowContext> Class::CreateImpl( vcl::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
-            return o3tl::make_unique<Class>(pParent,0,pBindings,pInfo);\
+            return std::make_unique<Class>(pParent,0,pBindings,pInfo);\
         } \
         void    Class::RegisterChildWindowContext(sal_uInt16 nId, SfxModule* pMod)   \
         {   \
-            auto pFact = o3tl::make_unique<SfxChildWinContextFactory>( \
+            auto pFact = std::make_unique<SfxChildWinContextFactory>( \
                 Class::CreateImpl, nId );   \
             SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, std::move(pFact)); \
         }
@@ -260,11 +260,11 @@ public:
         std::unique_ptr<SfxChildWindow> Class::CreateImpl( vcl::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
-                    return o3tl::make_unique<Class>(pParent, nId, pBindings, pInfo);\
+                    return std::make_unique<Class>(pParent, nId, pBindings, pInfo);\
                 } \
         void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)   \
                 {   \
-                    auto pFact = o3tl::make_unique<SfxChildWinFactory>( \
+                    auto pFact = std::make_unique<SfxChildWinFactory>( \
                         Class::CreateImpl, MyID, Pos );   \
                     pFact->aInfo.nFlags |= nFlags;  \
                     pFact->aInfo.bVisible = bVis;         \
