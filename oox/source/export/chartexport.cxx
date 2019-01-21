@@ -3243,6 +3243,7 @@ void ChartExport::exportDataLabels(
             continue;
 
         pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
 
         if (GetProperty(xLabelPropSet, "NumberFormat") || GetProperty(xLabelPropSet, "PercentageNumberFormat"))
         {
@@ -3257,7 +3258,6 @@ void ChartExport::exportDataLabels(
         }
 
         // Individual label property that overwrites the baseline.
-        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
         exportTextProps( xPropSet );
         writeLabelProperties(pFS, this, xLabelPropSet, aParam);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
