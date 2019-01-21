@@ -352,9 +352,8 @@ uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
     return uno::Any(); // ???
 }
 
-void SAL_CALL SwVbaApplication::setCustomizationContext( const uno::Any& _customizationcontext )
+void SAL_CALL SwVbaApplication::setCustomizationContext(const uno::Any& /*_customizationcontext*/)
 {
-    (void) _customizationcontext;
     // ???
 }
 
