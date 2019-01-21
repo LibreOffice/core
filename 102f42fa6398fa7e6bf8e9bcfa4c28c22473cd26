@@ -34,6 +34,24 @@
       "revId": "102f42fa6398fa7e6bf8e9bcfa4c28c22473cd26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_a04ca376",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-01-21T11:46:32Z",
+      "side": 1,
+      "message": "You need to check which elements are written by the other calls in that block. In its current form the patch has introduced a serious regression and should be fixed as soon as possible.",
+      "parentUuid": "1f485f77_a0fee302",
+      "revId": "102f42fa6398fa7e6bf8e9bcfa4c28c22473cd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
