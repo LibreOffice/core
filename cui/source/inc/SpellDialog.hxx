@@ -196,7 +196,7 @@ private:
     void            AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu const *pMenu );
     void            StartSpellOptDlg_Impl();
     int             InitUserDicts();
-    void            UpdateBoxes_Impl();
+    void            UpdateBoxes_Impl(bool bCallFromSelectHdl = false);
     void            Init_Impl();
     void            SpellContinue_Impl(bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
