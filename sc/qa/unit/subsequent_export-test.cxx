@@ -212,6 +212,7 @@ public:
     void testPivotCacheAfterExportXLSX();
 
     void testXltxExport();
+    void testDataLabelFormatResaveXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -329,6 +330,7 @@ public:
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
 
     CPPUNIT_TEST(testXltxExport);
+    CPPUNIT_TEST(testDataLabelFormatResaveXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -912,6 +914,19 @@ void ScExportTest::testColumnWidthResaveXLSX()
     // This column width is default and it is depended on operating system.
 
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 6);
+}
+
+void ScExportTest::testDataLabelFormatResaveXLSX()
+{
+    ScDocShellRef xShell = loadDoc("percent_chart_3dec.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/charts/chart1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "formatCode", "0.000%");
+
 }
 
 #if HAVE_MORE_FONTS
