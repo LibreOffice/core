@@ -1,5 +1,3 @@
-"ScDrawPagesObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScDrawPagesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPages";"insertNewByIndex()"
 "ScDrawPagesObj";"com::sun::star::drawing::XDrawPages";"remove()"
 "ScDrawPagesObj";"com::sun::star::container::XElementAccess";"getElementType()"
