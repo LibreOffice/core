@@ -2148,9 +2148,8 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         std::size_t nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = mpDoc->GetLeftMargin();
         // do not subtract margin; it is included in TmpWidth
-        long nXWidth = mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<long>::max();
-        if ( nXWidth < nTmpWidth )
-            nXWidth = nTmpWidth;
+        long nXWidth = std::max(
+            mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<long>::max(), nTmpWidth);
 
         // search for Portion that does not fit anymore into line
         TETextPortion* pPortion = nullptr;
