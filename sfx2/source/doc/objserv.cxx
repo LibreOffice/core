@@ -109,6 +109,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <guisaveas.hxx>
 #include <saveastemplatedlg.hxx>
@@ -641,6 +642,34 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Remove the extra page at the beginning
             uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
             xDrawPages->remove( xPage );
+
+            // Show the Redaction toolbar
+            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            if (pViewFrame)
+            {
+                Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+                Reference<css::beans::XPropertySet> xPropSet( xFrame, UNO_QUERY );
+                Reference<css::frame::XLayoutManager> xLayoutManager;
+
+                if ( xPropSet.is() )
+                {
+                    try
+                    {
+                        Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
+                        aValue >>= xLayoutManager;
+                        xLayoutManager->createElement( "private:resource/toolbar/redactionbar" );
+                        xLayoutManager->showElement("private:resource/toolbar/redactionbar");
+                    }
+                    catch ( const css::uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch ( css::uno::Exception& )
+                    {
+                         SAL_WARN( "sfx.doc", "Exception while trying to show the Redaction Toolbar!");
+                    }
+                }
+            }
 
             return;
         }
