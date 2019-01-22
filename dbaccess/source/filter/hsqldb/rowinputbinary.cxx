@@ -99,7 +99,7 @@ OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
             byte = ~byte;
         // add 1 to byte array
         // FIXME e.g. 10000 valid ?
-        for (size_t i = aBytes.size() - 1; i != 0; ++i)
+        for (size_t i = aBytes.size() - 1; i != 0; --i)
         {
             aBytes[i] += 1;
             if (aBytes[i] != 0)
