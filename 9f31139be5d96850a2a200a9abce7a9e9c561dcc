@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5bb15ee1",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-22T10:54:45Z",
+      "side": 1,
+      "message": "That is the right direction; yet, why constant \"15\"? I would imagine some calculated value, something like \"nPos + 4\", or at least proper comments on what it depends",
+      "range": {
+        "startLine": 228,
+        "startChar": 28,
+        "endLine": 228,
+        "endChar": 30
+      },
+      "revId": "9f31139be5d96850a2a200a9abce7a9e9c561dcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
