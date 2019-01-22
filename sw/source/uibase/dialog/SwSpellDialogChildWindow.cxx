@@ -405,20 +405,21 @@ The code below would only be part of the solution.
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
-        if(aRet.empty())
+        bool bNoDictionaryAvailable = pWrtShell->GetDoc()->IsDictionaryMissing();
+        if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
         {
-            if(bCloseMessage)
-            {
-                LockFocusNotification( true );
-                OUString sInfo(SwResId(STR_SPELLING_COMPLETED));
-                // #i84610#
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow()->GetFrameWeld(),
-                                                                                           VclMessageType::Info, VclButtonsType::Ok, sInfo));
-                xBox->run();
-                LockFocusNotification( false );
-                // take care that the now valid selection is stored
-                LoseFocus();
-            }
+            LockFocusNotification( true );
+            OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
+            // #i84610#
+            std::unique_ptr<weld::MessageDialog> xBox(
+                Application::CreateMessageDialog( GetWindow()->GetFrameWeld(),
+                                                  VclMessageType::Info,
+                                                  VclButtonsType::Ok,
+                                                  sInfo ) );
+            xBox->run();
+            LockFocusNotification( false );
+            // take care that the now valid selection is stored
+            LoseFocus();
         }
     }
     return aRet;
