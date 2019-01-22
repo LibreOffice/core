@@ -37,19 +37,16 @@ import com.sun.star.uno.XInterface;
 * <code>com.sun.star.drawing.DrawPages</code>. <p>
 * Object implements the following interfaces :
 * <ul>
-*  <li> <code>com::sun::star::drawing::XDrawPageExpander</code></li>
 *  <li> <code>com::sun::star::container::XIndexAccess</code></li>
 *  <li> <code>com::sun::star::drawing::XDrawPageSummarizer</code></li>
 *  <li> <code>com::sun::star::container::XElementAccess</code></li>
 *  <li> <code>com::sun::star::drawing::XDrawPages</code></li>
 * </ul>
 * @see com.sun.star.drawing.DrawPages
-* @see com.sun.star.drawing.XDrawPageExpander
 * @see com.sun.star.container.XIndexAccess
 * @see com.sun.star.drawing.XDrawPageSummarizer
 * @see com.sun.star.container.XElementAccess
 * @see com.sun.star.drawing.XDrawPages
-* @see ifc.drawing._XDrawPageExpander
 * @see ifc.container._XIndexAccess
 * @see ifc.drawing._XDrawPageSummarizer
 * @see ifc.container._XElementAccess

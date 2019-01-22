@@ -4,5 +4,4 @@
 "SdDrawPagesAccess";"com::sun::star::drawing::XDrawPages";"remove()"
 "SdDrawPagesAccess";"com::sun::star::container::XElementAccess";"getElementType()"
 "SdDrawPagesAccess";"com::sun::star::container::XElementAccess";"hasElements()"
-"SdDrawPagesAccess";"com::sun::star::drawing::XDrawPageExpander#optional";"expand()"
 "SdDrawPagesAccess";"com::sun::star::drawing::XDrawPageSummarizer#optional";"summarize()"
