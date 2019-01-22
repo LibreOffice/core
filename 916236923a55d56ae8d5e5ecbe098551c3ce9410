@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b673c94d",
+        "filename": "test/source/text/xsimpletext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-22T21:40:44Z",
+      "side": 1,
+      "message": "You can remove !\u003d nullptr which makes it easier to read.",
+      "revId": "916236923a55d56ae8d5e5ecbe098551c3ce9410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_968e8d25",
+        "filename": "test/source/text/xsimpletext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-22T21:40:44Z",
+      "side": 1,
+      "message": "You can remove !\u003d nullptr which makes it easier to read.",
+      "revId": "916236923a55d56ae8d5e5ecbe098551c3ce9410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f679412f",
+        "filename": "test/source/text/xsimpletext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-22T21:40:44Z",
+      "side": 1,
+      "message": "It\u0027s better to separate these asserts into two CPPUNIT_ASSERT() (the order should be from generic to specific). Otherwise it makes it hard to find the problem when something fails.",
+      "revId": "916236923a55d56ae8d5e5ecbe098551c3ce9410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d676453f",
+        "filename": "test/source/text/xsimpletext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-01-22T21:40:44Z",
+      "side": 1,
+      "message": "It\u0027s better to separate these asserts into two CPPUNIT_ASSERT() (the order should be from generic to specific). Otherwise it makes it hard to find the problem when something fails.",
+      "revId": "916236923a55d56ae8d5e5ecbe098551c3ce9410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
