@@ -534,6 +534,8 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mpMenuBarContainerWidget( nullptr ),
     mpMenuAllowShrinkWidget( nullptr ),
     mpMenuBarWidget( nullptr ),
+    mpMenuBarContainerProvider( nullptr ),
+    mpMenuBarProvider( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
     mpParentSalMenu( nullptr ),
@@ -834,6 +836,7 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuAllowShrinkWidget, 0, 0, 1, 1);
 
     mpMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
+
     gtk_widget_insert_action_group(mpMenuBarWidget, "win", mpActionGroup);
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
     gtk_widget_set_hexpand(mpMenuAllowShrinkWidget, true);
@@ -848,6 +851,67 @@ void GtkSalMenu::CreateMenuBarWidget()
 #else
     (void)mpMenuAllowShrinkWidget;
     (void)mpMenuBarContainerWidget;
+#endif
+}
+
+void GtkSalMenu::ApplyPersona()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    assert(mbMenuBar);
+    // I'm dubious about the persona theming feature, but as it exists, lets try and support
+    // it, apply the image to the mpMenuBarContainerWidget
+    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+
+    GtkStyleContext *pMenuBarContainerContext = gtk_widget_get_style_context(GTK_WIDGET(mpMenuBarContainerWidget));
+    if (mpMenuBarContainerProvider)
+    {
+        gtk_style_context_remove_provider(pMenuBarContainerContext, GTK_STYLE_PROVIDER(mpMenuBarContainerProvider));
+        mpMenuBarContainerProvider = nullptr;
+    }
+    GtkStyleContext *pMenuBarContext = gtk_widget_get_style_context(GTK_WIDGET(mpMenuBarWidget));
+    if (mpMenuBarProvider)
+    {
+        gtk_style_context_remove_provider(pMenuBarContext, GTK_STYLE_PROVIDER(mpMenuBarProvider));
+        mpMenuBarProvider = nullptr;
+    }
+
+    if (!rPersonaBitmap.IsEmpty())
+    {
+        if (maPersonaBitmap != rPersonaBitmap)
+        {
+            vcl::PNGWriter aPNGWriter(rPersonaBitmap);
+            mxPersonaImage.reset(new utl::TempFile);
+            mxPersonaImage->EnableKillingFile(true);
+            SvStream* pStream = mxPersonaImage->GetStream(StreamMode::WRITE);
+            aPNGWriter.Write(*pStream);
+            mxPersonaImage->CloseStream();
+        }
+
+        mpMenuBarContainerProvider = gtk_css_provider_new();
+        OUString aBuffer = "* { background-image: url(\"" + mxPersonaImage->GetURL() + "\"); background-position: top right; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(pMenuBarContainerContext, GTK_STYLE_PROVIDER(mpMenuBarContainerProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+
+        // force the menubar to be transparent when persona is active otherwise for
+        // me the menubar becomes gray when its in the backdrop
+        mpMenuBarProvider = gtk_css_provider_new();
+        static const gchar data[] = "* { "
+          "background-image: none;"
+          "background-color: transparent;"
+          "}";
+        gtk_css_provider_load_from_data(mpMenuBarProvider, data, -1, nullptr);
+        gtk_style_context_add_provider(pMenuBarContext,
+                                       GTK_STYLE_PROVIDER(mpMenuBarProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+    maPersonaBitmap = rPersonaBitmap;
+#else
+    (void)maPersonaBitmap;
+    (void)mpMenuBarContainerProvider;
+    (void)mpMenuBarProvider;
 #endif
 }
 
@@ -1329,6 +1393,15 @@ void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const vcl::KeyCode&, co
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
+}
+
+int GtkSalMenu::GetMenuBarHeight() const
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return mpMenuBarWidget ? gtk_widget_get_allocated_height(mpMenuBarWidget) : 0;
+#else
+    return 0;
+#endif
 }
 
 /*
