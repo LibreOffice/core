@@ -113,7 +113,7 @@ class OResultSet final : public OBase_Mutex,
 
     /**
      * Check the following things:
-     * - cursor is out of range. Throws expception if true.
+     * - cursor is out of range. Throws exception if true.
      * - column index is out of range. Throws exception if true.
      * - result set is fetched. If no, then it fetches the result.
      */
