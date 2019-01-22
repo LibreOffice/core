@@ -15,6 +15,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <sal/types.h>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
