@@ -39,9 +39,43 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
 }
 
-bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType /*eType*/,
-                                                        ControlPart /*ePart*/)
+bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart /*ePart*/)
 {
+    switch (eType)
+    {
+        case ControlType::Generic:
+        case ControlType::Pushbutton:
+            return true;
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
+        case ControlType::Combobox:
+        case ControlType::Editbox:
+        case ControlType::EditboxNoBorder:
+        case ControlType::MultilineEditbox:
+        case ControlType::Listbox:
+        case ControlType::Spinbox:
+        case ControlType::SpinButtons:
+        case ControlType::TabItem:
+        case ControlType::TabPane:
+        case ControlType::TabHeader:
+        case ControlType::TabBody:
+        case ControlType::Scrollbar:
+        case ControlType::Slider:
+        case ControlType::Fixedline:
+        case ControlType::Toolbar:
+        case ControlType::Menubar:
+        case ControlType::MenuPopup:
+        case ControlType::Progress:
+        case ControlType::IntroProgress:
+        case ControlType::Tooltip:
+        case ControlType::WindowBackground:
+        case ControlType::Frame:
+        case ControlType::ListNode:
+        case ControlType::ListNet:
+        case ControlType::ListHeader:
+            return false;
+    }
+
     return false;
 }
 
@@ -52,14 +86,111 @@ bool FileDefinitionWidgetDraw::hitTestNativeControl(
     return false;
 }
 
-bool FileDefinitionWidgetDraw::drawNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,
-                                                 const tools::Rectangle& /*rControlRegion*/,
-                                                 ControlState /*eState*/,
+namespace
+{
+void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCommands,
+                       SalGraphics& rGraphics, long nX, long nY, long nWidth, long nHeight)
+{
+    for (std::shared_ptr<DrawCommand> const& pDrawCommand : rDrawCommands)
+    {
+        switch (pDrawCommand->maType)
+        {
+            case DrawCommandType::RECTANGLE:
+            {
+                auto const& rRectDrawCommand
+                    = static_cast<RectangleDrawCommand const&>(*pDrawCommand);
+                Point aRectPoint(nX, nY);
+                Size aRectSize(nWidth - 1, nHeight - 1);
+                tools::Polygon aPolygon(tools::Rectangle(aRectPoint, aRectSize),
+                                        rRectDrawCommand.mnRx, rRectDrawCommand.mnRy);
+
+                basegfx::B2DPolygon aB2DPolygon(aPolygon.getB2DPolygon());
+                rGraphics.SetLineColor(rRectDrawCommand.maStrokeColor);
+                rGraphics.SetFillColor(rRectDrawCommand.maFillColor);
+                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
+                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+            }
+            break;
+        }
+    }
+}
+
+} // end anonymous namespace
+
+bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
+                                                 const tools::Rectangle& rControlRegion,
+                                                 ControlState eState,
                                                  const ImplControlValue& /*rValue*/,
                                                  const OUString& /*aCaptions*/)
 {
-    (void)m_rGraphics; // avoid unused warning
-    return false;
+    bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
+    m_rGraphics.setAntiAliasB2DDraw(true);
+
+    long nWidth = rControlRegion.GetWidth();
+    long nHeight = rControlRegion.GetHeight();
+    long nX = rControlRegion.Left() + 1;
+    long nY = rControlRegion.Top() + 1;
+
+    bool bOK = false;
+
+    switch (eType)
+    {
+        case ControlType::Generic:
+        {
+        }
+        break;
+        case ControlType::Pushbutton:
+        {
+            std::shared_ptr<WidgetDefinition> pDefinition
+                = m_WidgetDefinitionReader.getPushButtonDefinition(ePart);
+            if (pDefinition)
+            {
+                std::shared_ptr<WidgetDefinitionState> pState
+                    = pDefinition->getStates(eState).back();
+                {
+                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                    bOK = true;
+                }
+            }
+        }
+        break;
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
+        case ControlType::Combobox:
+        case ControlType::Editbox:
+        case ControlType::EditboxNoBorder:
+        case ControlType::MultilineEditbox:
+        case ControlType::Listbox:
+        case ControlType::Spinbox:
+        case ControlType::SpinButtons:
+        case ControlType::TabItem:
+        case ControlType::TabPane:
+        case ControlType::TabBody:
+        case ControlType::Scrollbar:
+        case ControlType::Slider:
+        case ControlType::Fixedline:
+        case ControlType::Toolbar:
+        case ControlType::Menubar:
+            break;
+        case ControlType::MenuPopup:
+            break;
+        case ControlType::Progress:
+        case ControlType::IntroProgress:
+            break;
+        case ControlType::Tooltip:
+            break;
+        case ControlType::WindowBackground:
+        case ControlType::Frame:
+        case ControlType::ListNode:
+        case ControlType::ListNet:
+        case ControlType::ListHeader:
+        default:
+            break;
+    }
+
+    m_rGraphics.setAntiAliasB2DDraw(bOldAA);
+
+    return bOK;
 }
 
 bool FileDefinitionWidgetDraw::getNativeControlRegion(

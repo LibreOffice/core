@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <widgets>
     <style>
@@ -53,4 +53,17 @@
         <toolTextColor value="#000000"/>
         <fontColor value="#000000"/>
     </style>
+
+    <pushbutton>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+            </state>
+
+            <state enabled="true" focused="any" pressed="any" rollover="true" default="any" selected="any">
+                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+            </state>
+        </part>
+    </pushbutton>
+
 </widgets>

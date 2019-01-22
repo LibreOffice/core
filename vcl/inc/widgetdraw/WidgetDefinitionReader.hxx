@@ -15,13 +15,86 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/XmlWalker.hxx>
+#include <unordered_map>
+#include <vector>
+#include <vcl/salnativewidgets.hxx>
 
 namespace vcl
 {
+enum class DrawCommandType
+{
+    RECTANGLE
+};
+
+class VCL_DLLPUBLIC DrawCommand
+{
+public:
+    DrawCommand(DrawCommandType aType)
+        : maType(aType)
+        , mnStrokeWidth(-1)
+        , mnMargin(0)
+    {
+    }
+
+    DrawCommandType maType;
+
+    Color maStrokeColor;
+    Color maFillColor;
+    sal_Int32 mnStrokeWidth;
+    sal_Int32 mnMargin;
+};
+
+class VCL_DLLPUBLIC RectangleDrawCommand : public DrawCommand
+{
+public:
+    sal_Int32 mnRx;
+    sal_Int32 mnRy;
+
+    RectangleDrawCommand()
+        : DrawCommand(DrawCommandType::RECTANGLE)
+        , mnRx(0)
+        , mnRy(0)
+    {
+    }
+};
+
+class VCL_DLLPUBLIC WidgetDefinitionState
+{
+public:
+    OString msEnabled;
+    OString msFocused;
+    OString msPressed;
+    OString msRollover;
+    OString msDefault;
+    OString msSelected;
+
+    WidgetDefinitionState(OString const& sEnabled, OString const& sFocused, OString const& sPressed,
+                          OString const& sRollover, OString const& sDefault,
+                          OString const& sSelected);
+
+    std::vector<std::shared_ptr<DrawCommand>> mpDrawCommands;
+
+    void addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
+                          sal_Int32 nRx, sal_Int32 nRy, sal_Int32 nMargin);
+};
+
+class VCL_DLLPUBLIC WidgetDefinition
+{
+public:
+    std::vector<std::shared_ptr<WidgetDefinitionState>> getStates(ControlState eState);
+
+    std::vector<std::shared_ptr<WidgetDefinitionState>> maStates;
+};
+
 class VCL_DLLPUBLIC WidgetDefinitionReader
 {
 private:
     OUString m_rFilePath;
+
+    void readPushButton(tools::XmlWalker& rWalker);
+    static void readDrawingDefinition(tools::XmlWalker& rWalker,
+                                      std::shared_ptr<WidgetDefinitionState>& rStates);
 
 public:
     Color maFaceColor;
@@ -74,6 +147,10 @@ public:
     Color maVisitedLinkColor;
     Color maToolTextColor;
     Color maFontColor;
+
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maPushButtonDefinitions;
+
+    std::shared_ptr<WidgetDefinition> getPushButtonDefinition(ControlPart ePart);
 
     WidgetDefinitionReader(OUString const& rFilePath);
     bool read();
