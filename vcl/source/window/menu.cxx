@@ -2671,6 +2671,21 @@ bool MenuBar::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
     return pMenuWin && pMenuWin->HandleMenuButtonEvent(i_nButtonId);
 }
 
+int MenuBar::GetMenuBarHeight() const
+{
+    MenuBar* pMenuBar = const_cast<MenuBar*>(this);
+    const SalMenu *pNativeMenu = pMenuBar->ImplGetSalMenu();
+    int nMenubarHeight;
+    if (pNativeMenu)
+        nMenubarHeight = pNativeMenu->GetMenuBarHeight();
+    else
+    {
+        vcl::Window* pMenubarWin = GetWindow();
+        nMenubarHeight = pMenubarWin ? pMenubarWin->GetOutputHeightPixel() : 0;
+    }
+    return nMenubarHeight;
+}
+
 // bool PopupMenu::bAnyPopupInExecute = false;
 
 MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {

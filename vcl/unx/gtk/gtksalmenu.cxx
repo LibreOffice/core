@@ -820,6 +820,28 @@ void GtkSalMenu::CreateMenuBarWidget()
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
     mpMenuBarContainerWidget = gtk_grid_new();
 
+    // I'm dubious about the persona theming feature, but as it exists, lets try and support
+    // it, apply the image to the mpMenuBarContainerWidget
+    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+    if (!rPersonaBitmap.IsEmpty())
+    {
+        vcl::PNGWriter aPNGWriter(rPersonaBitmap);
+        mxPersonaImage.reset(new utl::TempFile);
+        mxPersonaImage->EnableKillingFile(true);
+        SvStream* pStream = mxPersonaImage->GetStream(StreamMode::WRITE);
+        aPNGWriter.Write(*pStream);
+        mxPersonaImage->CloseStream();
+
+        GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(mpMenuBarContainerWidget));
+
+        GtkCssProvider *pProvider = gtk_css_provider_new();
+        OUString aBuffer = "* { background-image: url(\"" + mxPersonaImage->GetURL() + "\"); background-position: top right; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(pProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(pContext, GTK_STYLE_PROVIDER(pProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarContainerWidget), true);
     gtk_grid_insert_row(pGrid, 0);
     gtk_grid_attach(pGrid, mpMenuBarContainerWidget, 0, 0, 1, 1);
@@ -834,6 +856,23 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuAllowShrinkWidget, 0, 0, 1, 1);
 
     mpMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
+
+    // force the menubar to be transparent when persona is active otherwise for
+    // me the menubar becomes gray when its in the backdrop
+    if (!rPersonaBitmap.IsEmpty())
+    {
+        GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(mpMenuBarWidget));
+        GtkCssProvider *pProvider = gtk_css_provider_new();
+        static const gchar data[] = "* { "
+          "background-image: none;"
+          "background-color: transparent;"
+          "}";
+        gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+        gtk_style_context_add_provider(pContext,
+                                       GTK_STYLE_PROVIDER(pProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
     gtk_widget_insert_action_group(mpMenuBarWidget, "win", mpActionGroup);
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
     gtk_widget_set_hexpand(mpMenuAllowShrinkWidget, true);
@@ -1329,6 +1368,15 @@ void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const vcl::KeyCode&, co
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
+}
+
+int GtkSalMenu::GetMenuBarHeight() const
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return mpMenuBarWidget ? gtk_widget_get_allocated_height(mpMenuBarWidget) : 0;
+#else
+    return 0;
+#endif
 }
 
 /*

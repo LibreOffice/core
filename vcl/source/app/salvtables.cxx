@@ -205,6 +205,11 @@ tools::Rectangle SalMenu::GetMenuBarButtonRectPixel( sal_uInt16, SalFrame* )
     return tools::Rectangle();
 }
 
+int SalMenu::GetMenuBarHeight() const
+{
+    return 0;
+}
+
 SalMenuItem::~SalMenuItem()
 {
 }

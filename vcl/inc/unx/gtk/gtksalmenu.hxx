@@ -20,6 +20,7 @@
 
 #include <salmenu.hxx>
 #include <unx/gtk/gtkframe.hxx>
+#include <unotools/tempfile.hxx>
 #include <vcl/idle.hxx>
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -55,6 +56,7 @@ private:
     bool                            mbReturnFocusToDocument;
     bool                            mbAddedGrab;
     GtkWidget*                      mpMenuBarContainerWidget;
+    std::unique_ptr<utl::TempFile>  mxPersonaImage;
     GtkWidget*                      mpMenuAllowShrinkWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
@@ -137,7 +139,9 @@ public:
     virtual void ShowCloseButton(bool bShow) override;
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;
+    virtual int GetMenuBarHeight() const override;
 };
+
 
 class GtkSalMenuItem : public SalMenuItem
 {
