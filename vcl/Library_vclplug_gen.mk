@@ -100,7 +100,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/gdi/salgdi \
     vcl/unx/generic/gdi/salvd \
     vcl/unx/generic/gdi/xrender_peer \
-    vcl/unx/generic/window/FWS \
     vcl/unx/generic/window/salframe \
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \

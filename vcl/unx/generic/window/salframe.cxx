@@ -41,7 +41,6 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
-#include "FWS.hxx"
 #include <X11/extensions/shape.h>
 
 #include <unx/salunx.h>
@@ -2218,12 +2217,6 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             return;
 
         pDisplay_->getWMAdaptor()->showFullScreen( this, bFullScreen );
-        if( IsOverrideRedirect()
-            && WMSupportsFWS( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ) ) )
-        {
-            AddFwsProtocols( GetXDisplay(), GetShellWindow() );
-            RegisterFwsWindow( GetXDisplay(), GetShellWindow() );
-        }
     }
 }
 
