@@ -77,26 +77,27 @@ public:
 
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
     virtual void SAL_CALL FileSave() override;
-    virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& FieldCodes,
+    virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& DraftFont,
+                                            const css::uno::Any& WrapToWindow,
+                                            const css::uno::Any& PicturePlaceHolders,
+                                            const css::uno::Any& FieldCodes,
+                                            const css::uno::Any& BookMarks,
+                                            const css::uno::Any& FieldShading,
+                                            const css::uno::Any& StatusBar,
+                                            const css::uno::Any& HScroll,
+                                            const css::uno::Any& VScroll,
+                                            const css::uno::Any& StyleAreaWidth,
+                                            const css::uno::Any& Tabs,
+                                            const css::uno::Any& Spaces,
+                                            const css::uno::Any& Paras,
+                                            const css::uno::Any& Hyphens,
+                                            const css::uno::Any& Hidden,
                                             const css::uno::Any& ShowAll,
-                                            const css::uno::Any& Whatever3,
-                                            const css::uno::Any& Whatever4,
-                                            const css::uno::Any& Whatever5,
-                                            const css::uno::Any& Whatever6,
-                                            const css::uno::Any& Whatever7,
-                                            const css::uno::Any& Whatever8,
-                                            const css::uno::Any& Whatever9,
-                                            const css::uno::Any& Whatever10,
-                                            const css::uno::Any& Whatever11,
-                                            const css::uno::Any& Whatever12,
-                                            const css::uno::Any& Whatever13,
-                                            const css::uno::Any& Whatever14,
-                                            const css::uno::Any& Whatever15,
-                                            const css::uno::Any& Whatever16,
-                                            const css::uno::Any& Whatever17,
-                                            const css::uno::Any& Whatever18,
-                                            const css::uno::Any& Whatever19,
-                                            const css::uno::Any& Whatever20 ) override;
+                                            const css::uno::Any& Drawings,
+                                            const css::uno::Any& Anchors,
+                                            const css::uno::Any& TextBoundaries,
+                                            const css::uno::Any& VRuler,
+                                            const css::uno::Any& Highlight ) override;
     virtual OUString SAL_CALL WindowName() override;
     virtual sal_Bool SAL_CALL ExistingBookmark( const OUString& Name ) override;
     virtual void SAL_CALL MailMergeOpenDataSource(const OUString& Name, const css::uno::Any& Format,
@@ -541,28 +542,51 @@ SwWordBasic::FileSave()
 }
 
 void SAL_CALL
-SwWordBasic::ToolsOptionsView( const css::uno::Any& /*FieldCodes*/,
-                               const css::uno::Any& /*ShowAll*/,
-                               const css::uno::Any& /*Whatever3*/,
-                               const css::uno::Any& /*Whatever4*/,
-                               const css::uno::Any& /*Whatever5*/,
-                               const css::uno::Any& /*Whatever6*/,
-                               const css::uno::Any& /*Whatever7*/,
-                               const css::uno::Any& /*Whatever8*/,
-                               const css::uno::Any& /*Whatever9*/,
-                               const css::uno::Any& /*Whatever10*/,
-                               const css::uno::Any& /*Whatever11*/,
-                               const css::uno::Any& /*Whatever12*/,
-                               const css::uno::Any& /*Whatever13*/,
-                               const css::uno::Any& /*Whatever14*/,
-                               const css::uno::Any& /*Whatever15*/,
-                               const css::uno::Any& /*Whatever16*/,
-                               const css::uno::Any& /*Whatever17*/,
-                               const css::uno::Any& /*Whatever18*/,
-                               const css::uno::Any& /*Whatever19*/,
-                               const css::uno::Any& /*Whatever20*/)
+SwWordBasic::ToolsOptionsView( const css::uno::Any& DraftFont,
+                               const css::uno::Any& WrapToWindow,
+                               const css::uno::Any& PicturePlaceHolders,
+                               const css::uno::Any& FieldCodes,
+                               const css::uno::Any& BookMarks,
+                               const css::uno::Any& FieldShading,
+                               const css::uno::Any& StatusBar,
+                               const css::uno::Any& HScroll,
+                               const css::uno::Any& VScroll,
+                               const css::uno::Any& StyleAreaWidth,
+                               const css::uno::Any& Tabs,
+                               const css::uno::Any& Spaces,
+                               const css::uno::Any& Paras,
+                               const css::uno::Any& Hyphens,
+                               const css::uno::Any& Hidden,
+                               const css::uno::Any& ShowAll,
+                               const css::uno::Any& Drawings,
+                               const css::uno::Any& Anchors,
+                               const css::uno::Any& TextBoundaries,
+                               const css::uno::Any& VRuler,
+                               const css::uno::Any& Highlight )
 {
-    // ???
+    SAL_INFO("sw.vba", "WordBasic.ToolsOptionsView("
+             << "DraftFont:=" << DraftFont
+             << ", WrapToWindow:=" << WrapToWindow
+             << ", PicturePlaceHolders:=" << PicturePlaceHolders
+             << ", FieldCodes:=" << FieldCodes
+             << ", BookMarks:=" << BookMarks
+             << ", FieldShading:=" << FieldShading
+             << ", StatusBar:=" << StatusBar
+             << ", HScroll:=" << HScroll
+             << ", VScroll:=" << VScroll
+             << ", StyleAreaWidth:=" << StyleAreaWidth
+             << ", Tabs:=" << Tabs
+             << ", Spaces:=" << Spaces
+             << ", Paras:=" << Paras
+             << ", Hyphens:=" << Hyphens
+             << ", Hidden:=" << Hidden
+             << ", ShowAll:=" << ShowAll
+             << ", Drawings:=" << Drawings
+             << ", Anchors:=" << Anchors
+             << ", TextBoundaries:=" << TextBoundaries
+             << ", VRuler:=" << VRuler
+              << ", Highlight:=" << Highlight
+             << ")");
 }
 
 OUString SAL_CALL
