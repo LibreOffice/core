@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <stack>
 
 #include <sal/main.h>
@@ -148,10 +148,9 @@ public:
     TestDocumentHandler(const char* locale, const char* outFile )
         : rootNode(nullptr)
         , nError(0)
+        , theLocale(locale)
         , of(outFile, locale)
     {
-        strncpy( theLocale, locale, sizeof(theLocale) );
-        theLocale[sizeof(theLocale)-1] = 0;
     }
 
     virtual ~TestDocumentHandler(  ) override
@@ -190,7 +189,7 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL startDocument() override
     {
-    printf( "parsing document %s started\n", theLocale);
+    printf( "parsing document %s started\n", theLocale.c_str());
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
     of.writeAsciiString("#include <stdio.h>\n\n");
     of.writeAsciiString("extern \"C\" {\n\n");
@@ -204,16 +203,16 @@ public: // ExtendedDocumentHandler
             int err = rootNode->getError();
             if (err)
             {
-                printf( "Error: in data for %s: %d\n", theLocale, err);
+                printf( "Error: in data for %s: %d\n", theLocale.c_str(), err);
                 nError += err;
             }
         }
         else
         {
             ++nError;
-            printf( "Error: no data for %s\n", theLocale);
+            printf( "Error: no data for %s\n", theLocale.c_str());
         }
-        printf( "parsing document %s finished\n", theLocale);
+        printf( "parsing document %s finished\n", theLocale.c_str());
 
         of.writeAsciiString("} // extern \"C\"\n\n");
         of.closeOutput();
@@ -294,7 +293,7 @@ public: // ExtendedDocumentHandler
 
 public:
     int nError;
-    sal_Char theLocale[50];
+    std::string theLocale;
     OFileWriter of;
 };
 
