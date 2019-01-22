@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+1: Adolfo Jayme Barrientos <fitojb@ubuntu.com>
+Code-Review+1: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Code-Review+2: Stephan Bergmann <sbergman@redhat.com>
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Tue, 22 Jan 2019 08:48:30 +0100
+Reviewed-on: https://gerrit.libreoffice.org/66634
+Project: core
+Branch: refs/heads/master
