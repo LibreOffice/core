@@ -140,10 +140,12 @@ void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
                     OString sRollover = rWalker.attribute("rollover");
                     OString sDefault = rWalker.attribute("default");
                     OString sSelected = rWalker.attribute("selected");
+                    OString sButtonValue = rWalker.attribute("button-value");
 
                     std::shared_ptr<WidgetDefinitionState> pState
                         = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
-                                                                  sRollover, sDefault, sSelected);
+                                                                  sRollover, sDefault, sSelected,
+                                                                  sButtonValue);
                     pPart->maStates.push_back(pState);
                     readDrawingDefinition(rWalker, pState);
                 }
@@ -177,10 +179,12 @@ void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
                     OString sRollover = rWalker.attribute("rollover");
                     OString sDefault = rWalker.attribute("default");
                     OString sSelected = rWalker.attribute("selected");
-
+                    OString sButtonValue = rWalker.attribute("button-value");
+                    sButtonValue = sButtonValue.isEmpty() ? "any" : sButtonValue;
                     std::shared_ptr<WidgetDefinitionState> pState
                         = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
-                                                                  sRollover, sDefault, sSelected);
+                                                                  sRollover, sDefault, sSelected,
+                                                                  sButtonValue);
                     pPart->maStates.push_back(pState);
                     readDrawingDefinition(rWalker, pState);
                 }
@@ -396,7 +400,8 @@ WidgetDefinitionReader::getRadioButtonDefinition(ControlPart ePart)
     return std::shared_ptr<WidgetDefinition>();
 }
 
-std::vector<std::shared_ptr<WidgetDefinitionState>> WidgetDefinition::getStates(ControlState eState)
+std::vector<std::shared_ptr<WidgetDefinitionState>>
+WidgetDefinition::getStates(ControlState eState, ImplControlValue const& rValue)
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
 
@@ -429,6 +434,13 @@ std::vector<std::shared_ptr<WidgetDefinitionState>> WidgetDefinition::getStates(
                  || (state->msSelected == "false" && !(eState & ControlState::SELECTED))))
             bAdd = false;
 
+        ButtonValue eButtonValue = rValue.getTristateVal();
+
+        if (state->msButtonValue != "any"
+            && !((state->msButtonValue == "true" && eButtonValue == ButtonValue::On)
+                 || (state->msButtonValue == "false" && eButtonValue != ButtonValue::On)))
+            bAdd = false;
+
         if (bAdd)
             aStatesToAdd.push_back(state);
     }
@@ -438,13 +450,15 @@ std::vector<std::shared_ptr<WidgetDefinitionState>> WidgetDefinition::getStates(
 
 WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString const& sFocused,
                                              OString const& sPressed, OString const& sRollover,
-                                             OString const& sDefault, OString const& sSelected)
+                                             OString const& sDefault, OString const& sSelected,
+                                             OString const& sButtonValue)
     : msEnabled(sEnabled)
     , msFocused(sFocused)
     , msPressed(sPressed)
     , msRollover(sRollover)
     , msDefault(sDefault)
     , msSelected(sSelected)
+    , msButtonValue(sButtonValue)
 {
 }
 

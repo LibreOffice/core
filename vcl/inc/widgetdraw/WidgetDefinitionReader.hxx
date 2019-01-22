@@ -78,10 +78,11 @@ public:
     OString msRollover;
     OString msDefault;
     OString msSelected;
+    OString msButtonValue;
 
     WidgetDefinitionState(OString const& sEnabled, OString const& sFocused, OString const& sPressed,
                           OString const& sRollover, OString const& sDefault,
-                          OString const& sSelected);
+                          OString const& sSelected, OString const& sButtonValue);
 
     std::vector<std::shared_ptr<DrawCommand>> mpDrawCommands;
 
@@ -94,7 +95,8 @@ public:
 class VCL_DLLPUBLIC WidgetDefinition
 {
 public:
-    std::vector<std::shared_ptr<WidgetDefinitionState>> getStates(ControlState eState);
+    std::vector<std::shared_ptr<WidgetDefinitionState>> getStates(ControlState eState,
+                                                                  ImplControlValue const& rValue);
 
     std::vector<std::shared_ptr<WidgetDefinitionState>> maStates;
 };
