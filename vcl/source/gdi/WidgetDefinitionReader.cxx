@@ -13,7 +13,6 @@
 #include <sal/config.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
-#include <tools/XmlWalker.hxx>
 #include <unordered_map>
 
 namespace vcl
@@ -61,6 +60,82 @@ bool readColor(OString const& rString, Color& rColor)
 WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rFilePath)
     : m_rFilePath(rFilePath)
 {
+}
+
+void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
+                                                   std::shared_ptr<WidgetDefinitionState>& rpState)
+{
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "rect")
+        {
+            Color aStrokeColor;
+            readColor(rWalker.attribute("stroke"), aStrokeColor);
+            Color aFillColor;
+            readColor(rWalker.attribute("fill"), aFillColor);
+            OString sStrokeWidth = rWalker.attribute("stroke-width");
+            sal_Int32 nStrokeWidth = -1;
+            if (!sStrokeWidth.isEmpty())
+                nStrokeWidth = sStrokeWidth.toInt32();
+
+            sal_Int32 nRx = -1;
+            OString sRx = rWalker.attribute("rx");
+            if (!sRx.isEmpty())
+                nRx = sRx.toInt32();
+
+            sal_Int32 nRy = -1;
+            OString sRy = rWalker.attribute("ry");
+            if (!sRy.isEmpty())
+                nRy = sRy.toInt32();
+
+            sal_Int32 nMargin = 0;
+            OString sMargin = rWalker.attribute("margin");
+            if (!sMargin.isEmpty())
+                nMargin = sMargin.toInt32();
+
+            rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, nRx, nRy, nMargin);
+        }
+        rWalker.next();
+    }
+    rWalker.parent();
+}
+
+void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
+{
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "part")
+        {
+            OString sPart = rWalker.attribute("value");
+            std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
+            maPushButtonDefinitions.emplace(sPart, pPart);
+            rWalker.children();
+            while (rWalker.isValid())
+            {
+                if (rWalker.name() == "state")
+                {
+                    OString sEnabled = rWalker.attribute("enabled");
+                    OString sFocused = rWalker.attribute("focused");
+                    OString sPressed = rWalker.attribute("pressed");
+                    OString sRollover = rWalker.attribute("rollover");
+                    OString sDefault = rWalker.attribute("default");
+                    OString sSelected = rWalker.attribute("selected");
+
+                    std::shared_ptr<WidgetDefinitionState> pState
+                        = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
+                                                                  sRollover, sDefault, sSelected);
+                    pPart->maStates.push_back(pState);
+                    readDrawingDefinition(rWalker, pState);
+                }
+                rWalker.next();
+            }
+            rWalker.parent();
+        }
+        rWalker.next();
+    }
+    rWalker.parent();
 }
 
 bool WidgetDefinitionReader::read()
@@ -147,11 +222,176 @@ bool WidgetDefinitionReader::read()
             }
             aWalker.parent();
         }
+        else if (aWalker.name() == "pushbutton")
+        {
+            readPushButton(aWalker);
+        }
         aWalker.next();
     }
     aWalker.parent();
 
     return true;
+}
+
+namespace
+{
+OString xmlControlPart(ControlPart ePart)
+{
+    switch (ePart)
+    {
+        case ControlPart::NONE:
+            return "NONE";
+        case ControlPart::Entire:
+            return "Entire";
+        case ControlPart::ListboxWindow:
+            return "ListboxWindow";
+        case ControlPart::Button:
+            return "NONE";
+        case ControlPart::ButtonUp:
+            return "NONE";
+        case ControlPart::ButtonDown:
+            return "NONE";
+        case ControlPart::ButtonLeft:
+            return "NONE";
+        case ControlPart::ButtonRight:
+            return "NONE";
+        case ControlPart::AllButtons:
+            return "NONE";
+        case ControlPart::SeparatorHorz:
+            return "NONE";
+        case ControlPart::SeparatorVert:
+            return "NONE";
+        case ControlPart::TrackHorzLeft:
+            return "NONE";
+        case ControlPart::TrackVertUpper:
+            return "NONE";
+        case ControlPart::TrackHorzRight:
+            return "NONE";
+        case ControlPart::TrackVertLower:
+            return "NONE";
+        case ControlPart::TrackHorzArea:
+            return "NONE";
+        case ControlPart::TrackVertArea:
+            return "NONE";
+        case ControlPart::Arrow:
+            return "NONE";
+        case ControlPart::ThumbHorz:
+            return "NONE";
+        case ControlPart::ThumbVert:
+            return "NONE";
+        case ControlPart::MenuItem:
+            return "NONE";
+        case ControlPart::MenuItemCheckMark:
+            return "NONE";
+        case ControlPart::MenuItemRadioMark:
+            return "NONE";
+        case ControlPart::Separator:
+            return "NONE";
+        case ControlPart::SubmenuArrow:
+            return "NONE";
+        case ControlPart::SubEdit:
+            return "NONE";
+        case ControlPart::DrawBackgroundHorz:
+            return "NONE";
+        case ControlPart::DrawBackgroundVert:
+            return "NONE";
+        case ControlPart::TabsDrawRtl:
+            return "NONE";
+        case ControlPart::HasBackgroundTexture:
+            return "NONE";
+        case ControlPart::HasThreeButtons:
+            return "NONE";
+        case ControlPart::BackgroundWindow:
+            return "NONE";
+        case ControlPart::BackgroundDialog:
+            return "NONE";
+        case ControlPart::Border:
+            return "NONE";
+        case ControlPart::Focus:
+            return "FOCUS";
+
+        default:
+            break;
+    }
+    return "NONE";
+}
+
+} // end anonymous namespace
+
+std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getPushButtonDefinition(ControlPart ePart)
+{
+    auto aIterator = maPushButtonDefinitions.find(xmlControlPart(ePart));
+
+    if (aIterator != maPushButtonDefinitions.end())
+        return aIterator->second;
+    return std::shared_ptr<WidgetDefinition>();
+}
+
+std::vector<std::shared_ptr<WidgetDefinitionState>> WidgetDefinition::getStates(ControlState eState)
+{
+    std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
+
+    for (auto& state : maStates)
+    {
+        bool bAdd = true;
+
+        if (state->msEnabled != "any"
+            && !((state->msEnabled == "true" && eState & ControlState::ENABLED)
+                 || (state->msEnabled == "false" && !(eState & ControlState::ENABLED))))
+            bAdd = false;
+        if (state->msFocused != "any"
+            && !((state->msFocused == "true" && eState & ControlState::FOCUSED)
+                 || (state->msFocused == "false" && !(eState & ControlState::FOCUSED))))
+            bAdd = false;
+        if (state->msPressed != "any"
+            && !((state->msPressed == "true" && eState & ControlState::PRESSED)
+                 || (state->msPressed == "false" && !(eState & ControlState::PRESSED))))
+            bAdd = false;
+        if (state->msRollover != "any"
+            && !((state->msRollover == "true" && eState & ControlState::ROLLOVER)
+                 || (state->msRollover == "false" && !(eState & ControlState::ROLLOVER))))
+            bAdd = false;
+        if (state->msDefault != "any"
+            && !((state->msDefault == "true" && eState & ControlState::DEFAULT)
+                 || (state->msDefault == "false" && !(eState & ControlState::DEFAULT))))
+            bAdd = false;
+        if (state->msSelected != "any"
+            && !((state->msSelected == "true" && eState & ControlState::SELECTED)
+                 || (state->msSelected == "false" && !(eState & ControlState::SELECTED))))
+            bAdd = false;
+
+        if (bAdd)
+            aStatesToAdd.push_back(state);
+    }
+
+    return aStatesToAdd;
+}
+
+WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString const& sFocused,
+                                             OString const& sPressed, OString const& sRollover,
+                                             OString const& sDefault, OString const& sSelected)
+    : msEnabled(sEnabled)
+    , msFocused(sFocused)
+    , msPressed(sPressed)
+    , msRollover(sRollover)
+    , msDefault(sDefault)
+    , msSelected(sSelected)
+{
+}
+
+void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth,
+                                             Color aFillColor, sal_Int32 nRx, sal_Int32 nRy,
+                                             sal_Int32 nMargin)
+{
+    std::shared_ptr<DrawCommand> pCommand(std::make_shared<RectangleDrawCommand>());
+    pCommand->maStrokeColor = aStrokeColor;
+    pCommand->maFillColor = aFillColor;
+    pCommand->mnStrokeWidth = nStrokeWidth;
+    pCommand->mnMargin = nMargin;
+    RectangleDrawCommand& rRectCommand = static_cast<RectangleDrawCommand&>(*pCommand);
+    rRectCommand.mnRx = nRx;
+    rRectCommand.mnRy = nRy;
+    mpDrawCommands.push_back(pCommand);
 }
 
 } // end vcl namespace
