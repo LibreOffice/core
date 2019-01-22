@@ -2496,6 +2496,10 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
     SvTreeListEntry* pEntry = pData->GetActEntry();
     SvLBoxButton* pBox = pData->GetActBox();
 
+    // tdf#122874 Select the row, calling SelectHdl, before handling
+    // the toggle
+    m_xTreeView->Select(pEntry, true);
+
     for (int i = 1, nCount = pEntry->ItemCount(); i < nCount; ++i)
     {
         SvLBoxItem& rItem = pEntry->GetItem(i);
