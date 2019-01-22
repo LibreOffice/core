@@ -17,9 +17,8 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
-
-namespace o3tl { template <typename T> struct default_delete; }
 
 namespace comphelper
 {

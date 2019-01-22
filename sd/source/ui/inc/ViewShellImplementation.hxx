@@ -23,9 +23,8 @@
 #include "ViewShell.hxx"
 #include "ViewShellManager.hxx"
 #include "ToolBarManager.hxx"
+#include <o3tl/deleter.hxx>
 #include <memory>
-
-namespace o3tl { template <typename T> struct default_delete; }
 
 class SvxIMapDlg;
 

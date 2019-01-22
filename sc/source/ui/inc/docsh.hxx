@@ -24,6 +24,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <scdllapi.h>
 #include <document.hxx>
@@ -63,7 +64,6 @@ namespace com { namespace sun { namespace star { namespace script { namespace vb
 
 namespace ooo { namespace vba { namespace excel { class XWorkbook; } } }
 
-namespace o3tl { template <typename T> struct default_delete; }
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable2; } } } }
 
 namespace sfx2 { class FileDialogHelper; }

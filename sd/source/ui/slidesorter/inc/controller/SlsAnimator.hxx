@@ -24,13 +24,13 @@
 #include <canvas/elapsedtime.hxx>
 #include <vcl/idle.hxx>
 #include <sal/types.h>
+#include <o3tl/deleter.hxx>
 
 #include <functional>
 #include <memory>
 #include <vector>
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
-namespace o3tl { template <typename T> struct default_delete; }
 
 namespace sd { namespace slidesorter { namespace controller {
 

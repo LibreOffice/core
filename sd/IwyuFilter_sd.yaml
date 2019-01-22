@@ -110,8 +110,6 @@ blacklist:
     sd/source/ui/framework/module/ToolBarModule.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
-    # Needed for template
-    - o3tl/deleter.hxx
     sd/source/ui/framework/module/SlideSorterModule.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
@@ -160,9 +158,6 @@ blacklist:
     sd/source/ui/inc/fupage.hxx:
     # base class has to be a complete type
     - vcl/weld.hxx
-    sd/source/ui/inc/OutlineView.hxx:
-    #std::unique_ptr deleter type has to be complete
-    - o3tl/deleter.hxx
     sd/source/ui/inc/slideshow.hxx:
     # typedef needs a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -174,9 +169,6 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XReplaceDescriptor.hpp
-    sd/source/ui/inc/ViewShellManager.hxx:
-    #std::unique_ptr deleter type has to be complete
-    - o3tl/deleter.hxx
     sd/source/ui/inc/ViewTabBar.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
@@ -232,9 +224,6 @@ blacklist:
     sd/source/ui/inc/tools/SlotStateListener.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
-    sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:
-    # Needed for template
-    - o3tl/deleter.hxx
     sd/source/ui/presenter/PresenterHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/XPresenterHelper.hpp
