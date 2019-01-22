@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f6e26101",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T19:08:06Z",
+      "side": 1,
+      "message": "Percent format needs to be obtained only down below before being used, not in all other cases. Actually it is not necessary at all to remember it in yet another variable.",
+      "revId": "e67f1b52037e47f93d42842d23f2deb733070a37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d6ef65e7",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T19:08:06Z",
+      "side": 1,
+      "message": "The result of pDocument-\u003eGetFormatTable()-\u003eGetType( nNumFmt) could be remembered here so it doesn\u0027t need to be obtained again in the \n\n else if (nVal \u003d\u003d 0.0 || nVal \u003d\u003d 1.0)\n\ncase.",
+      "range": {
+        "startLine": 956,
+        "startChar": 49,
+        "endLine": 956,
+        "endChar": 95
+      },
+      "revId": "e67f1b52037e47f93d42842d23f2deb733070a37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b6ece9f3",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T19:08:06Z",
+      "side": 1,
+      "message": "Rather than obtaining\n\n pDocument-\u003eGetFormatTable()-\u003eGetType(\n                                aCol[rCol].GetNumberFormat( pDocument-\u003eGetNonThreadedContext(), nSource))\n\ntwice, remember it and reuse.",
+      "revId": "e67f1b52037e47f93d42842d23f2deb733070a37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_96bb2de4",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T19:08:06Z",
+      "side": 1,
+      "message": "Ditto, de-duplicate the call.",
+      "revId": "e67f1b52037e47f93d42842d23f2deb733070a37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
