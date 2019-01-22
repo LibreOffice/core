@@ -1257,7 +1257,6 @@ DECLARE_RTFIMPORT_TEST(testClassificatonPaste, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 
-#if !defined(MACOSX) && !defined(WNT)
 DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 {
     // Get the second child of the group shape.
@@ -1267,22 +1266,9 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
     xShape->getPropertyValue("PolyPolygon") >>= aPolyPolySequence;
     uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
 
-    // tdf#106792 These values were wrong all the time due to a missing
-    // conversion in SvxShapePolyPolygon::getPropertyValueImpl. There was no
-    // ForceMetricTo100th_mm -> the old results were in twips due to the
-    // object residing in Writer. The UNO API by definition is in 100thmm,
-    // thus I will correct the values here.
-    // Indeed need to use the Linux values, I have no idea why these differ
-    // from Mac/Win ones, but the disable above hints to that (maybe a problem
-    // of its own). Factor between Twips and 100thmm is ca. 1.76 -> stable change
-
     // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4972), rPolygon[0].X); // was: 2819, win is 10927
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3463), rPolygon[0].Y); // was: 1963
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5617), rPolygon[1].X); // was: 3181, win is 11572
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2852), rPolygon[1].Y); // was: 1620
+    CPPUNIT_ASSERT(rPolygon[0].Y > rPolygon[1].Y);
 }
-#endif
 
 DECLARE_RTFIMPORT_TEST(testTdf91684, "tdf91684.rtf")
 {
