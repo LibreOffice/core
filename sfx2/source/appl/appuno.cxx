@@ -876,7 +876,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             }
         }
     }
-#ifdef DB_UTIL
+#ifdef DBG_UTIL
     if ( nFoundArgs == nCount )
     {
         // except for the "special" slots: assure that every argument was convertible
