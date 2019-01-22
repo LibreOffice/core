@@ -141,7 +141,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
 bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                                  const tools::Rectangle& rControlRegion,
                                                  ControlState eState,
-                                                 const ImplControlValue& /*rValue*/,
+                                                 const ImplControlValue& rValue,
                                                  const OUString& /*aCaptions*/)
 {
     bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
@@ -166,11 +166,15 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
                 = m_WidgetDefinitionReader.getPushButtonDefinition(ePart);
             if (pDefinition)
             {
-                std::shared_ptr<WidgetDefinitionState> pState
-                    = pDefinition->getStates(eState).back();
+                auto aStates = pDefinition->getStates(eState, rValue);
+                if (!aStates.empty())
                 {
-                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
-                    bOK = true;
+                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                    {
+                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
+                                          nHeight);
+                        bOK = true;
+                    }
                 }
             }
         }
@@ -182,7 +186,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
             if (pDefinition)
             {
                 std::shared_ptr<WidgetDefinitionState> pState
-                    = pDefinition->getStates(eState).back();
+                    = pDefinition->getStates(eState, rValue).back();
                 {
                     munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
                     bOK = true;
