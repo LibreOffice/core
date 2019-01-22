@@ -24,7 +24,8 @@ namespace vcl
 {
 enum class DrawCommandType
 {
-    RECTANGLE
+    RECTANGLE,
+    CIRCLE
 };
 
 class VCL_DLLPUBLIC DrawCommand
@@ -59,6 +60,15 @@ public:
     }
 };
 
+class VCL_DLLPUBLIC CircleDrawCommand : public DrawCommand
+{
+public:
+    CircleDrawCommand()
+        : DrawCommand(DrawCommandType::CIRCLE)
+    {
+    }
+};
+
 class VCL_DLLPUBLIC WidgetDefinitionState
 {
 public:
@@ -77,6 +87,8 @@ public:
 
     void addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
                           sal_Int32 nRx, sal_Int32 nRy, sal_Int32 nMargin);
+    void addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
+                       sal_Int32 nMargin);
 };
 
 class VCL_DLLPUBLIC WidgetDefinition
@@ -93,6 +105,7 @@ private:
     OUString m_rFilePath;
 
     void readPushButton(tools::XmlWalker& rWalker);
+    void readRadioButton(tools::XmlWalker& rWalker);
     static void readDrawingDefinition(tools::XmlWalker& rWalker,
                                       std::shared_ptr<WidgetDefinitionState>& rStates);
 
@@ -149,8 +162,10 @@ public:
     Color maFontColor;
 
     std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maPushButtonDefinitions;
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maRadioButtonDefinitions;
 
     std::shared_ptr<WidgetDefinition> getPushButtonDefinition(ControlPart ePart);
+    std::shared_ptr<WidgetDefinition> getRadioButtonDefinition(ControlPart ePart);
 
     WidgetDefinitionReader(OUString const& rFilePath);
     bool read();
