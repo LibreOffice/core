@@ -34,6 +34,24 @@
       "revId": "1f7c48a46d4b3871830741e90501a6ffb393ea51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_bb2a928d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2019-01-22T15:14:38Z",
+      "side": 1,
+      "message": "Yes. With w:tblpX\" I get \n--------------------------\nequality assertion failed\n- Expected: 1996\n- Actual  : \n- In \u003cfile:///tmp/lu124637wccfk.tmp\u003e, attribute \u0027w:tblpX\u0027 of \u0027/w:document/w:body/w:tbl/w:tblPr/w:tblpPr\u0027 incorrect value.\n---------------------------\n\nWith \"tblpX\" I get\n-------------------\nassertion failed\n- Expression: pXmlDoc\n-------------------\n\nSo I think the path is correct. I also dumped the SvStream, like you did in the call before the last one. The xPath is correct to me.",
+      "parentUuid": "1f485f77_3b7102e2",
+      "revId": "1f7c48a46d4b3871830741e90501a6ffb393ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
