@@ -241,6 +241,12 @@ void MysqlTestDriver::testDBPositionChange()
     xResultSet->first();
     CPPUNIT_ASSERT_EQUAL(1, xResultSet->getRow());
 
+    // Now previous should put the cursor to before-first position, but it
+    // should return with false.
+    successPrevious = xResultSet->previous();
+    CPPUNIT_ASSERT(!successPrevious);
+    CPPUNIT_ASSERT_EQUAL(0, xResultSet->getRow());
+
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
     CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
 }
