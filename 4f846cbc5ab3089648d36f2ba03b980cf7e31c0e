@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5baa7e85",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T10:24:23Z",
+      "side": 0,
+      "message": "This let\u0027s the build fail.",
+      "revId": "4f846cbc5ab3089648d36f2ba03b980cf7e31c0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

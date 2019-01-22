@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_db9d4e67",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-22T10:24:23Z",
+      "side": 1,
+      "message": "Please don\u0027t insert arbitrary empty lines.",
+      "revId": "114ed939b4eb87ab4178ed241516d3d9a675e587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
