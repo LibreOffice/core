@@ -70,6 +70,11 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
 {
 }
 
+SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW )
+    : SwMsgPoolItem( RES_UPDATE_ATTR ), m_nStart( nS ), m_nEnd( nE ), m_nWhichAttr( nW ), m_aWhichFmtAttrs( aW )
+{
+}
+
 SwRefMarkFieldUpdate::SwRefMarkFieldUpdate( OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
