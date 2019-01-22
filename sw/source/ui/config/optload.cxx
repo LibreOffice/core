@@ -658,7 +658,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     m_xLbCaptionOrder->set_active(
         SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
     m_xCheckLB->select(0);
-    UpdateEntry(0);
+    ShowEntryHdl(*m_xCheckLB);
 }
 
 void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
