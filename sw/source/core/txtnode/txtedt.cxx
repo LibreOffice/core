@@ -88,6 +88,22 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
+namespace
+{
+    void DetectAndMarkMissingDictionaries( SwDoc* pDoc,
+                                           const uno::Reference< XSpellChecker1 >& xSpell,
+                                           const LanguageType eActLang )
+    {
+        if( !pDoc )
+            return;
+
+        if( xSpell.is() && !xSpell->hasLanguage( eActLang.get() ) )
+            pDoc->SetMissingDictionaries( true );
+        else
+            pDoc->SetMissingDictionaries( false );
+    }
+}
+
 struct SwParaIdleData_Impl
 {
     SwWrongList* pWrong;                // for spell checking
@@ -1054,6 +1070,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
+            DetectAndMarkMissingDictionaries( GetTextNode()->GetDoc(), pArgs->xSpeller, eActLang );
 
             if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang )
             {
@@ -1360,6 +1377,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
+            DetectAndMarkMissingDictionaries( pDoc, xSpell, eActLang );
 
             bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
             if( bSpell && !rWord.isEmpty() )
