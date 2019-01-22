@@ -47,6 +47,7 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::Pushbutton:
             return true;
         case ControlType::Radiobutton:
+            return true;
         case ControlType::Checkbox:
         case ControlType::Combobox:
         case ControlType::Editbox:
@@ -111,6 +112,26 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                                           basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
             }
             break;
+            case DrawCommandType::CIRCLE:
+            {
+                auto const& rCircleDrawCommand
+                    = static_cast<CircleDrawCommand const&>(*pDrawCommand);
+                Point aRectPoint(nX + 1 + rCircleDrawCommand.mnMargin,
+                                 nY + 1 + rCircleDrawCommand.mnMargin);
+                Size aRectSize(nWidth - 1 - 2 * rCircleDrawCommand.mnMargin,
+                               nHeight - 1 - 2 * rCircleDrawCommand.mnMargin);
+
+                tools::Rectangle aRectangle(aRectPoint, aRectSize);
+                tools::Polygon aPolygon(aRectangle.Center(), aRectangle.GetWidth() >> 1,
+                                        aRectangle.GetHeight() >> 1);
+
+                basegfx::B2DPolygon aB2DPolygon(aPolygon.getB2DPolygon());
+                rGraphics.SetLineColor(rCircleDrawCommand.maStrokeColor);
+                rGraphics.SetFillColor(rCircleDrawCommand.maFillColor);
+                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
+                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+            }
+            break;
         }
     }
 }
@@ -155,6 +176,20 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Radiobutton:
+        {
+            std::shared_ptr<WidgetDefinition> pDefinition
+                = m_WidgetDefinitionReader.getRadioButtonDefinition(ePart);
+            if (pDefinition)
+            {
+                std::shared_ptr<WidgetDefinitionState> pState
+                    = pDefinition->getStates(eState).back();
+                {
+                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                    bOK = true;
+                }
+            }
+        }
+        break;
         case ControlType::Checkbox:
         case ControlType::Combobox:
         case ControlType::Editbox:
