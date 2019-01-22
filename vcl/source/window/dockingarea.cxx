@@ -131,14 +131,9 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         // we need to shift the bitmap vertically so that it spans over the
         // menubar conveniently
-        long nMenubarHeight = 0;
         SystemWindow* pSysWin = GetSystemWindow();
-        if (pSysWin && pSysWin->GetMenuBar())
-        {
-            vcl::Window* pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
-            if (pMenubarWin)
-                nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
-        }
+        MenuBar* pMenuBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
+        int nMenubarHeight = pMenuBar ? pMenuBar->GetMenuBarHeight() : 0;
         aWallpaper.SetRect(tools::Rectangle(Point(0, -nMenubarHeight),
                            Size(rRenderContext.GetOutputWidthPixel(),
                                 rRenderContext.GetOutputHeightPixel() + nMenubarHeight)));
