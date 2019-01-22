@@ -121,8 +121,8 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
 
 /*-************************************************************************************************************//**
     @descr  declare one configuration item
-            These struct hold information about one view item. But not all member are used for all entries!
-            User must decide which information are useful and which not. We are a container iztem only and doesn't
+            These struct hold information about one view item. But not all members are used for all entries!
+            User must decide which information are useful and which not. We are a container items only and don't
             know anything about the context.
             But; we support a feature:
                 decision between items with default values (should not really exist in configuration!)
@@ -232,7 +232,7 @@ class IMPL_TViewData
         //---------------------------------------------------------------------------------------------------------
         css::uno::Any getUserItem( const ::rtl::OUString& sName )
         {
-            // default value - if item not exist!
+            // default value - if item does not exist!
             css::uno::Any aValue;
 
             sal_Int32 nCount = m_lUserData.getLength();
@@ -279,7 +279,7 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
                     But not every superclass should use them! Because some view types don't
                     have it really.
 
-    @attention      We implement a write-througt-cache! We use it for reading - but write all changes directly to
+    @attention      We implement a write-through-cache! We use it for reading - but write all changes directly to
                     configuration. (changes are made on internal cache too!). So it's easier to distinguish
                     between added/changed/removed elements without any complex mask or bool flag informations.
                     Caches from configuration and our own one are synchronized every time - if we do so.
@@ -335,8 +335,8 @@ class SvtViewOptionsBase_Impl
     @short          ctor
     @descr          We use it to open right configuration file and let configuration objects fill her caches.
                     Then we read all existing entries from right list and cached it inside our object too.
-                    Normaly we should enable notifications for changes on these values too ... but these feature
-                    isn't full implemented in the moment.
+                    Normally we should enable notifications for changes on these values too ... but these feature
+                    are not fully implemented at the moment.
 
     @seealso        baseclass ::utl::ConfigItem
     @seealso        method Notify()
@@ -392,7 +392,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
-    // dont flush configuration changes here to m_xRoot.
+    // don't flush configuration changes here to m_xRoot.
     // That must be done inside every SetXXX() method already !
     // Here its to late - DisposedExceptions from used configuration access can occur otherwise.
 
@@ -439,7 +439,7 @@ sal_Bool SvtViewOptionsBase_Impl::Exists( const ::rtl::OUString& sName )
     @seealso        member m_aList
 
     @param          "sName", name of entry to delete it
-    @return         true , if item not exist(!) or could be deleted (should be the same!)
+    @return         true , if item does not exist(!) or could be deleted (should be the same!)
                     false, otherwise
 *//*-*************************************************************************************************************/
 sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
@@ -533,7 +533,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(sName, sal_False),
-            css::uno::UNO_QUERY); // no _THROW ! because we dont create missing items here. So we have to live with zero references .-)
+            css::uno::UNO_QUERY); // no _THROW ! because we don't create missing items here. So we have to live with zero references .-)
         css::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
@@ -807,7 +807,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
     // Global access, must be guarded (multithreading!)
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
 
-    // Search for right dat container for this view type and initialize right data container or set right ref count!
+    // Search for right data container for this view type and initialize right data container or set right ref count!
     switch( eType )
     {
         case E_DIALOG       :   {
@@ -867,7 +867,7 @@ SvtViewOptions::~SvtViewOptions()
     // Global access, must be guarded (multithreading!)
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
 
-    // Search for right dat container for this view type and deinitialize right data container or set right ref count!
+    // Search for right data container for this view type and deinitialize right data container or set right ref count!
     switch( m_eViewType )
     {
         case E_DIALOG       :   {
@@ -1234,7 +1234,7 @@ void SvtViewOptions::SetUserItem( const ::rtl::OUString& sName  ,
         // ... we must create a new one. Protect follow code with the global mutex -
         // It must be - we create a static variable!
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
+        // We must check our pointer again - because it can be that another instance of our class will be faster than these!
         if( pMutex == NULL )
         {
             // Create the new mutex and set it for return on static variable.
