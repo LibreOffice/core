@@ -210,7 +210,9 @@ WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
     mbXORMode(false),
     mbPen(false),
     mhPen(nullptr),
+    mbStockPen(false),
     mbBrush(false),
+    mbStockBrush(false),
     mhBrush(nullptr)
 {
 }
@@ -218,10 +220,16 @@ WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
 WinSalGraphicsImpl::~WinSalGraphicsImpl()
 {
     if ( mhPen )
-        DeletePen( mhPen );
+    {
+        if ( !mbStockPen )
+            DeletePen( mhPen );
+    }
 
     if ( mhBrush )
-        DeleteBrush( mhBrush );
+    {
+        if ( !mbStockBrush )
+            DeleteBrush( mhBrush );
+    }
 }
 
 void WinSalGraphicsImpl::Init()
@@ -1278,6 +1286,7 @@ void WinSalGraphicsImpl::SetLineColor()
 
     // set new data
     mbPen       = FALSE;
+    mbStockPen  = TRUE;
 }
 
 void WinSalGraphicsImpl::SetLineColor(Color nColor)
@@ -1285,8 +1294,12 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
     COLORREF nPenColor = PALETTERGB(nColor.GetRed(),
                                     nColor.GetGreen(),
                                     nColor.GetBlue());
+    bool bStockPen = false;
+
     HPEN hNewPen = SearchStockPen(nPenColor);
-    if (!hNewPen)
+    if (hNewPen)
+        bStockPen = true;
+    else
         hNewPen = MakePen(nColor);
 
     ResetPen(hNewPen);
@@ -1295,6 +1308,7 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
     mnPenColor  = nPenColor;
     maLineColor = nColor;
     mbPen       = TRUE;
+    mbStockPen  = bStockPen;
 }
 
 HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
@@ -1336,9 +1350,16 @@ void WinSalGraphicsImpl::ResetPen(HPEN hNewPen)
     HPEN hOldPen = SelectPen(mrParent.getHDC(), hNewPen);
 
     if (mhPen)
-        DeletePen(mhPen);
+    {
+        if (!mbStockPen)
+        {
+            DeletePen(mhPen);
+        }
+    }
     else
+    {
         mrParent.mhDefPen = hOldPen;
+    }
 
     mhPen = hNewPen;
 }
@@ -1349,6 +1370,7 @@ void WinSalGraphicsImpl::SetFillColor()
 
     // set new data
     mbBrush     = FALSE;
+    mbStockBrush = TRUE;
 }
 
 void WinSalGraphicsImpl::SetFillColor(Color nColor)
@@ -1356,8 +1378,12 @@ void WinSalGraphicsImpl::SetFillColor(Color nColor)
     COLORREF nBrushColor = PALETTERGB(nColor.GetRed(),
                                       nColor.GetGreen(),
                                       nColor.GetBlue());
+    bool bStockBrush = false;
+
     HBRUSH hNewBrush = SearchStockBrush(nBrushColor);
-    if (!hNewBrush)
+    if (hNewBrush)
+        bStockBrush = true;
+    else
         hNewBrush = MakeBrush(nColor);
 
     ResetBrush(hNewBrush);
@@ -1366,6 +1392,7 @@ void WinSalGraphicsImpl::SetFillColor(Color nColor)
     mnBrushColor = nBrushColor;
     maFillColor = nColor;
     mbBrush     = TRUE;
+    mbStockBrush = bStockBrush;
 }
 
 HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
@@ -1498,9 +1525,16 @@ void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
     HBRUSH hOldBrush = SelectBrush(mrParent.getHDC(), hNewBrush);
 
     if (mhBrush)
-        DeleteBrush(mhBrush);
+    {
+        if (!mbStockBrush)
+        {
+            DeleteBrush(mhBrush);
+        }
+    }
     else
+    {
         mrParent.mhDefBrush = hOldBrush;
+    }
 
     mhBrush = hNewBrush;
 }
