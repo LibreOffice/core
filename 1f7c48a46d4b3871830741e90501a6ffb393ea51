@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_3bbc6268",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2019-01-22T14:32:33Z",
+      "side": 1,
+      "message": "Hi, on my machine the unit test fails. It can\u0027t find the value \"w:tblpX\" and \"W:tblpY\". That am I doing wrong? Output is fine.",
+      "revId": "1f7c48a46d4b3871830741e90501a6ffb393ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
