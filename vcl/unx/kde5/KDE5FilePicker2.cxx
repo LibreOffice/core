@@ -46,6 +46,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
 #include <KFileWidget>
@@ -433,7 +434,7 @@ void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable
     if (_customWidgets.contains(controlId))
         _customWidgets.value(controlId)->setEnabled(enable);
     else
-        SAL_WARN("vcl.kde5", "enable on unknown control" << controlId);
+        SAL_WARN("vcl.kde5", "enable on unknown control " << controlId);
 }
 
 void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
@@ -451,7 +452,7 @@ void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& labe
             cb->setText(toQString(label));
     }
     else
-        SAL_WARN("vcl.kde5", "set label on unknown control" << controlId);
+        SAL_WARN("vcl.kde5", "set label on unknown control " << controlId);
 }
 
 OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
@@ -470,7 +471,7 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
             label = toOUString(cb->text());
     }
     else
-        SAL_WARN("vcl.kde5", "get label on unknown control" << controlId);
+        SAL_WARN("vcl.kde5", "get label on unknown control " << controlId);
 
     return label;
 }
@@ -542,6 +543,9 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             break;
     }
 
+    auto resString = toQString(VclResId(resId));
+    resString.replace('~', '&');
+
     switch (controlId)
     {
         case CHECKBOX_AUTOEXTENSION:
@@ -556,8 +560,6 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
             bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
-            auto resString = toQString(VclResId(resId));
-            resString.replace('~', '&');
 
             auto widget = new QCheckBox(resString, _extraControls);
             widget->setHidden(hidden);
@@ -570,9 +572,6 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             break;
         }
         case PUSHBUTTON_PLAY:
-        case LISTBOX_VERSION:
-        case LISTBOX_TEMPLATE:
-        case LISTBOX_IMAGE_ANCHOR:
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
@@ -580,11 +579,22 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_FILTER_SELECTOR:
             break;
 
+        case LISTBOX_IMAGE_ANCHOR:
         case LISTBOX_IMAGE_TEMPLATE:
+        case LISTBOX_TEMPLATE:
+        case LISTBOX_VERSION:
+        {
             auto widget = new QComboBox(_extraControls);
-            _layout->addWidget(widget);
+            QLabel* label = new QLabel(resString);
+            label->setBuddy(widget);
+
+            QHBoxLayout* hBox = new QHBoxLayout;
+            hBox->addWidget(label);
+            hBox->addWidget(widget);
+            _layout->addLayout(hBox, _layout->rowCount(), 0, Qt::AlignLeft);
             _customListboxes.insert(controlId, widget);
             break;
+        }
     }
 }
 
@@ -619,7 +629,7 @@ void KDE5FilePicker::handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction
         }
         break;
         default:
-            //FIXME: insert warning here
+            SAL_WARN("vcl.kde5", "unknown action on list control " << nAction);
             break;
     }
 }
@@ -653,7 +663,7 @@ uno::Any KDE5FilePicker::handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAc
         }
         break;
         default:
-            //FIXME: insert warning here
+            SAL_WARN("vcl.kde5", "unknown action on list control " << nAction);
             break;
     }
     return aAny;
