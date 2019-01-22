@@ -312,6 +312,9 @@ private:
     bool mbColumnSelection       : 1;    //< TRUE: this content has been created by a column selection (clipboard docs only)
     bool mbIsPrepareSelAll       : 1;
 
+    enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
+    MissingDictionary meDictionaryMissing;
+
     // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
@@ -1634,6 +1637,11 @@ public:
      * @returns true if new background checking jobs were started
      */
     bool StartGrammarChecking( bool bSkipStart = false );
+
+    /// Use to notify if the dictionary can be found for a single content portion (has to be called for all portions)
+    void SetMissingDictionaries( bool bIsMissing );
+    /// Returns true if no dictionary can be found for any content
+    bool IsDictionaryMissing() { return meDictionaryMissing == MissingDictionary::True; }
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

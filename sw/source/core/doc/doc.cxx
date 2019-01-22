@@ -1827,4 +1827,13 @@ SwDoc::GetVbaEventProcessor()
     return mxVbaEvents;
 }
 
+void SwDoc::SetMissingDictionaries( bool bIsMissing )
+{
+    if( bIsMissing && meDictionaryMissing == MissingDictionary::Undefined )
+        meDictionaryMissing = MissingDictionary::True;
+    else if( !bIsMissing )
+        meDictionaryMissing = MissingDictionary::False;
+};
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
