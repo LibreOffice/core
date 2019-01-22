@@ -96,6 +96,24 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
 
             rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, nRx, nRy, nMargin);
         }
+        else if (rWalker.name() == "circ")
+        {
+            Color aStrokeColor;
+            readColor(rWalker.attribute("stroke"), aStrokeColor);
+            Color aFillColor;
+            readColor(rWalker.attribute("fill"), aFillColor);
+            OString sStrokeWidth = rWalker.attribute("stroke-width");
+            sal_Int32 nStrokeWidth = -1;
+            if (!sStrokeWidth.isEmpty())
+                nStrokeWidth = sStrokeWidth.toInt32();
+
+            sal_Int32 nMargin = 0;
+            OString sMargin = rWalker.attribute("margin");
+            if (!sMargin.isEmpty())
+                nMargin = sMargin.toInt32();
+
+            rpState->addDrawCircle(aStrokeColor, nStrokeWidth, aFillColor, nMargin);
+        }
         rWalker.next();
     }
     rWalker.parent();
@@ -111,6 +129,43 @@ void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
             OString sPart = rWalker.attribute("value");
             std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
             maPushButtonDefinitions.emplace(sPart, pPart);
+            rWalker.children();
+            while (rWalker.isValid())
+            {
+                if (rWalker.name() == "state")
+                {
+                    OString sEnabled = rWalker.attribute("enabled");
+                    OString sFocused = rWalker.attribute("focused");
+                    OString sPressed = rWalker.attribute("pressed");
+                    OString sRollover = rWalker.attribute("rollover");
+                    OString sDefault = rWalker.attribute("default");
+                    OString sSelected = rWalker.attribute("selected");
+
+                    std::shared_ptr<WidgetDefinitionState> pState
+                        = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
+                                                                  sRollover, sDefault, sSelected);
+                    pPart->maStates.push_back(pState);
+                    readDrawingDefinition(rWalker, pState);
+                }
+                rWalker.next();
+            }
+            rWalker.parent();
+        }
+        rWalker.next();
+    }
+    rWalker.parent();
+}
+
+void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
+{
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "part")
+        {
+            OString sPart = rWalker.attribute("value");
+            std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
+            maRadioButtonDefinitions.emplace(sPart, pPart);
             rWalker.children();
             while (rWalker.isValid())
             {
@@ -226,6 +281,10 @@ bool WidgetDefinitionReader::read()
         {
             readPushButton(aWalker);
         }
+        else if (aWalker.name() == "radiobutton")
+        {
+            readRadioButton(aWalker);
+        }
         aWalker.next();
     }
     aWalker.parent();
@@ -327,6 +386,16 @@ std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getPushButtonDefinitio
     return std::shared_ptr<WidgetDefinition>();
 }
 
+std::shared_ptr<WidgetDefinition>
+WidgetDefinitionReader::getRadioButtonDefinition(ControlPart ePart)
+{
+    auto aIterator = maRadioButtonDefinitions.find(xmlControlPart(ePart));
+
+    if (aIterator != maRadioButtonDefinitions.end())
+        return aIterator->second;
+    return std::shared_ptr<WidgetDefinition>();
+}
+
 std::vector<std::shared_ptr<WidgetDefinitionState>> WidgetDefinition::getStates(ControlState eState)
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
@@ -392,6 +461,17 @@ void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStro
     rRectCommand.mnRx = nRx;
     rRectCommand.mnRy = nRy;
     mpDrawCommands.push_back(pCommand);
+}
+
+void WidgetDefinitionState::addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth,
+                                          Color aFillColor, sal_Int32 nMargin)
+{
+    std::unique_ptr<DrawCommand> pCommand(std::make_unique<CircleDrawCommand>());
+    pCommand->maStrokeColor = aStrokeColor;
+    pCommand->maFillColor = aFillColor;
+    pCommand->mnStrokeWidth = nStrokeWidth;
+    pCommand->mnMargin = nMargin;
+    mpDrawCommands.push_back(std::move(pCommand));
 }
 
 } // end vcl namespace
