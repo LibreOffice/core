@@ -21,7 +21,8 @@ $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
-	Package_opengl \
+    Package_opengl \
+    Package_theme_definitions \
     UIConfig_vcl \
 	$(if $(filter WNT,$(OS)), \
 		Package_opengl_blacklist ) \
