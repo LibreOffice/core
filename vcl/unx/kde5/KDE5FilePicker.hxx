@@ -159,8 +159,9 @@ public:
 private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
-    void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction, const css::uno::Any& rValue);
-    css::uno::Any handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction);
+    static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
+                                   const css::uno::Any& rValue);
+    static css::uno::Any handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction);
     OUString implGetDirectory();
 
     // emit XFilePickerListener controlStateChanged event
