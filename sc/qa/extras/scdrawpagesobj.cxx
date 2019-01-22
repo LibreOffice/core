@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/drawing/xdrawpages.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -28,6 +29,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 class ScDrawPagesObj : public CalcUnoApiTest,
+                       public apitest::XDrawPages,
                        public apitest::XElementAccess,
                        public apitest::XIndexAccess
 {
@@ -39,6 +41,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDrawPagesObj);
+
+    // XDrawPages
+    CPPUNIT_TEST(testInsertNewByIndex);
+    CPPUNIT_TEST(testRemove);
 
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
