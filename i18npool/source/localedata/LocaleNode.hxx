@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
+#include <string>
 #include <vector>
 #include <memory>
 
@@ -62,9 +63,9 @@ public:
     void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  closeOutput() const;
     /// Return the locale string, something like en_US or de_DE
-    const char * getLocale() const { return theLocale; }
+    const char * getLocale() const { return theLocale.c_str(); }
 private:
-    char theLocale[50];
+    std::string theLocale;
     FILE *m_f;
 };
 

@@ -18,18 +18,15 @@
  */
 
 #include <stdio.h>
-#include <string.h>
 #include "LocaleNode.hxx"
 
 // The document handler, which is needed for the saxparser
 // The Documenthandler for reading sax
 
-OFileWriter::OFileWriter(const char *pcFile, const char *locale ) {
+OFileWriter::OFileWriter(const char *pcFile, const char *locale ): theLocale(locale) {
 
     printf("file generated=%s\n", pcFile);
     m_f = fopen(pcFile, "w");
-    strncpy( theLocale, locale, sizeof(theLocale) );
-    theLocale[sizeof(theLocale)-1] = 0;
 }
 
 OFileWriter::~OFileWriter() {
@@ -55,7 +52,7 @@ void OFileWriter::writeStringCharacters(const OUString& str) const
 
 void OFileWriter::writeFunction(const char *func, const char *count, const char *array) const
 {
-    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count)\n{\n", func, theLocale);
+    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\tcount = %s;\n", count);
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
@@ -65,13 +62,13 @@ void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale) 
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern sal_Unicode **  SAL_CALL %s%s(sal_Int16& count);\n", func, locale);
-    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count)\n{\n", func, theLocale);
+    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(count);\n}\n", func, locale);
 }
 
 void OFileWriter::writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const
 {
-    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
+    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\tcount = %s;\n", count);
     fprintf(m_f, "\tfrom = %s;\n", from);
     fprintf(m_f, "\tto = %s;\n", to);
@@ -83,7 +80,7 @@ void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale, 
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to);\n", func, locale);
-    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
+    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\tto = %s;\n", to);
     fprintf(m_f, "\tconst sal_Unicode* tmp;\n");
     fprintf(m_f, "\treturn %s%s(count, from, tmp);\n}\n", func, locale);
@@ -91,7 +88,7 @@ void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale, 
 
 void OFileWriter::writeFunction2(const char *func, const char *style, const char* attr, const char *array) const
 {
-    fprintf(m_f, "const sal_Unicode ***  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nAttributes )\n{\n", func, theLocale);
+    fprintf(m_f, "const sal_Unicode ***  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nAttributes )\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\tnStyles     = %s;\n", style);
     fprintf(m_f, "\tnAttributes = %s;\n", attr);
     fprintf(m_f, "\treturn %s;\n}\n", array);
@@ -102,13 +99,13 @@ void OFileWriter::writeRefFunction2(const char *func, const OUString& useLocale)
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes);\n", func, locale);
-    fprintf(m_f, "const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes)\n{\n", func, theLocale);
+    fprintf(m_f, "const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(nStyles, nAttributes);\n}\n", func, locale);
 }
 
 void OFileWriter::writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const
 {
-    fprintf(m_f, "const sal_Unicode ****  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes )\n{\n", func, theLocale);
+    fprintf(m_f, "const sal_Unicode ****  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes )\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\tnStyles     = %s;\n", style);
     fprintf(m_f, "\tnLevels     = %s;\n", levels);
     fprintf(m_f, "\tnAttributes = %s;\n", attr);
@@ -120,7 +117,7 @@ void OFileWriter::writeRefFunction3(const char *func, const OUString& useLocale)
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);
-    fprintf(m_f, "const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale);
+    fprintf(m_f, "const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
 }
 
