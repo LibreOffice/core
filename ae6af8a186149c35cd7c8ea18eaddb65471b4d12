@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5b983e69",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2019-01-22T10:58:56Z",
+      "side": 1,
+      "message": "I would leave 1024 number of columns, merge this Pull Request and check if these changes are not causing regression",
+      "revId": "ae6af8a186149c35cd7c8ea18eaddb65471b4d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9b8eb625",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2019-01-22T10:58:56Z",
+      "side": 1,
+      "message": "I think we should declare initial number of column instead of hardcoding it (eg. INITIALCOLCOUNT variable).",
+      "revId": "ae6af8a186149c35cd7c8ea18eaddb65471b4d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
