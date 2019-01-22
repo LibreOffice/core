@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/outdev.hxx>
+#include <o3tl/deleter.hxx>
 
 namespace sc {
     struct SpellCheckContext;
@@ -36,7 +37,6 @@ namespace editeng {
     struct MisspellRanges;
 }
 namespace drawinglayer { namespace processor2d { class BaseProcessor2D; } }
-namespace o3tl { template <typename T> struct default_delete; }
 
 namespace vcl { class Font; }
 class EditEngine;

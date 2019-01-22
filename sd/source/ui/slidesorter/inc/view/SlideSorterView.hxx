@@ -24,6 +24,7 @@
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsILayerPainter.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <View.hxx>
 #include <tools/gen.hxx>
@@ -38,7 +39,6 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
-namespace o3tl { template <typename T> struct default_delete; }
 namespace sd { class Window; }
 namespace sd { namespace slidesorter { class SlideSorter; } }
 

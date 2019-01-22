@@ -25,6 +25,7 @@
 #include "viewdata.hxx"
 #include "cbutton.hxx"
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <o3tl/deleter.hxx>
 
 #include <memory>
 #include <vector>
@@ -38,7 +39,6 @@ namespace sc {
 }
 
 namespace sdr { namespace overlay { class OverlayManager; } }
-namespace o3tl { template <typename T> struct default_delete; }
 
 class FmFormView;
 struct ScTableInfo;

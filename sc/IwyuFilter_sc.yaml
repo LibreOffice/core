@@ -118,9 +118,6 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XDispatchProviderInterceptor.hpp
     - com/sun/star/view/XSelectionChangeListener.hpp
-    sc/inc/document.hxx:
-    # std::unique_ptr deleter type has to be complete
-    - o3tl/deleter.hxx
     sc/inc/docuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -479,9 +476,6 @@ blacklist:
     sc/source/ui/inc/ExponentialSmoothingDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
-    sc/source/ui/inc/impex.hxx:
-    # Needed for template
-    - o3tl/deleter.hxx
     sc/source/ui/inc/MatrixComparisonGenerator.hxx:
     # base class has to be a complete type
     - viewdata.hxx

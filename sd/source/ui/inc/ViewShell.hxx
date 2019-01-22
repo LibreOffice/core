@@ -24,14 +24,13 @@
 
 #include <sfx2/viewsh.hxx>
 #include <vcl/prntypes.hxx>
+#include <o3tl/deleter.hxx>
 #include <pres.hxx>
 #include "View.hxx"
 #include "fupoor.hxx"
 #include <sddllapi.h>
 
 #include <memory>
-
-namespace o3tl { template <typename T> struct default_delete; }
 
 class SdPage;
 class SvxRuler;

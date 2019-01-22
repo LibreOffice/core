@@ -22,10 +22,10 @@
 
 #include <memory>
 #include <sal/types.h>
+#include <o3tl/deleter.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
-namespace o3tl { template <typename T> struct default_delete; }
 
 namespace sd {
 

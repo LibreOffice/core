@@ -68,6 +68,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
     # Avoid proposing o3tl fw declaration
     o3tl = {
         "o3tl/typed_flags_set.hxx" : "namespace o3tl { template <typename T> struct typed_flags; }",
+        "o3tl/deleter.hxx" : "namespace o3tl { template <typename T> struct default_delete; }",
     }
     for k, v, in o3tl.items():
         if include == k and v in toAdd:

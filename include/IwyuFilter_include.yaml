@@ -255,9 +255,6 @@ blacklist:
     include/vcl/devicecoordinate.hxx:
     # Needed for #if configure switch
     - basegfx/point/b2ipoint.hxx
-    include/vcl/edit.hxx:
-    # Needed for template
-    - o3tl/deleter.hxx
     include/vcl/event.hxx:
     # Needed for enum type 
     - vcl/window.hxx

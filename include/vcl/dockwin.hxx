@@ -21,12 +21,11 @@
 #define INCLUDED_VCL_DOCKWIN_HXX
 
 #include <vcl/dllapi.h>
+#include <o3tl/deleter.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
 #include <memory>
 #include <vector>
-
-namespace o3tl { template <typename T> struct default_delete; }
 
 // data to be sent with docking events
 struct DockingData

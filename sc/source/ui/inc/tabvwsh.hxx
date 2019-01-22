@@ -24,6 +24,7 @@
 #include <svx/fmshell.hxx>
 #include <sfx2/viewsh.hxx>
 #include <editeng/svxenum.hxx>
+#include <o3tl/deleter.hxx>
 #include <scdllapi.h>
 #include "dbfunc.hxx"
 #include "target.hxx"
@@ -59,8 +60,6 @@ class ScNavigatorSettings;
 class ScRangeName;
 
 struct ScHeaderFieldData;
-
-namespace o3tl { template <typename T> struct default_delete; }
 
 namespace editeng { class SvxBorderLine; }
 

@@ -25,12 +25,6 @@ blacklist:
     sw/inc/swtypes.hxx:
     # Needed for macro #define
     - com/sun/star/i18n/CollatorOptions.hpp
-    sw/inc/doc.hxx:
-    - o3tl/deleter.hxx
-    sw/inc/docsh.hxx:
-    - o3tl/deleter.hxx
-    sw/inc/list.hxx:
-    - o3tl/deleter.hxx
     sw/inc/IDocumentLinksAdministration.hxx:
     - sal/types.h
     sw/inc/pagedesc.hxx:
@@ -56,7 +50,6 @@ blacklist:
     - com/sun/star/frame/XTerminateListener2.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XJobManager.hpp
-    - o3tl/deleter.hxx
     sw/inc/splargs.hxx:
     # inline dtor, complete type is needed
     - com/sun/star/linguistic2/XSpellAlternatives.hpp
@@ -234,8 +227,6 @@ blacklist:
     - com/sun/star/text/XTextColumns.hpp
     sw/inc/pagepreviewlayout.hxx:
     - vector
-    sw/inc/shellio.hxx:
-    - o3tl/deleter.hxx
     sw/inc/unostyle.hxx:
     # Base class needs complete type
     - com/sun/star/beans/XPropertySet.hpp
