@@ -818,7 +818,14 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #endif
 
    return errorcode;
+#if defined __GNUC__ && __GNUC__ == 7 && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+#endif
 }
+#if defined __GNUC__ && __GNUC__ == 7 && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
 {
