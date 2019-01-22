@@ -20,7 +20,6 @@
 -o sc.ScDatabaseRangeObj
 -o sc.ScDocumentConfiguration
 -o sc.ScDrawPageObj
--o sc.ScDrawPagesObj
 -o sc.ScFilterDescriptorBase
 # ported to cppunit -o sc.ScHeaderFieldObj
 -o sc.ScHeaderFieldsObj
