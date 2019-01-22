@@ -1875,6 +1875,15 @@ static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
+static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& rWhichFmtAttr )
+{
+    for( sal_uInt16 nWhich : rWhichFmtAttr )
+        if ( isA11yRelevantAttribute( nWhich ) )
+            return true;
+
+    return false;
+}
+
 // Note: for now this overrides SwClient::SwClientNotify; the intermediary
 // classes still override SwClient::Modify, which should continue to work
 // as their implementation of SwClientNotify is SwClient's which calls Modify.
@@ -2454,7 +2463,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     SwContentFrame::Modify( pOld, pNew );
             }
 
-            if (isA11yRelevantAttribute(nWhich))
+            const SwUpdateAttr* pNewUpdate = static_cast<const SwUpdateAttr*>(pNew);
+            if( isA11yRelevantAttribute( pNewUpdate->getWhichAttr() ) &&
+                hasA11yRelevantAttribute( pNewUpdate->getFmtAttrs() ) )
             {
                 SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
                 if ( pViewSh  )
