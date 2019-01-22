@@ -652,8 +652,15 @@ sal_Bool SAL_CALL OResultSet::previous()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if (m_nRowPosition <= 0)
+    if (m_nRowPosition == 0)
+    {
+        m_nRowPosition--;
         return false;
+    }
+    else if (m_nRowPosition < 0)
+    {
+        return false;
+    }
 
     m_nRowPosition--;
     return true;
