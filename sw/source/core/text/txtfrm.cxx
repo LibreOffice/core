@@ -1875,6 +1875,15 @@ static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
+static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& rWhichFmtAttr )
+{
+    for( sal_uInt16 nWhich : rWhichFmtAttr )
+        if ( isA11yRelevantAttribute( nWhich ) )
+            return true;
+
+    return false;
+}
+
 // Note: for now this overrides SwClient::SwClientNotify; the intermediary
 // classes still override SwClient::Modify, which should continue to work
 // as their implementation of SwClientNotify is SwClient's which calls Modify.
@@ -2132,8 +2141,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         break;
         case RES_UPDATE_ATTR:
         {
-            sal_Int32 const nNPos = static_cast<const SwUpdateAttr*>(pNew)->getStart();
-            sal_Int32 const nNLen = static_cast<const SwUpdateAttr*>(pNew)->getEnd() - nNPos;
+            const SwUpdateAttr* pNewUpdate = static_cast<const SwUpdateAttr*>(pNew);
+
+            sal_Int32 const nNPos = pNewUpdate->getStart();
+            sal_Int32 const nNLen = pNewUpdate->getEnd() - nNPos;
             nPos = MapModelToView(&rNode, nNPos);
             nLen = MapModelToView(&rNode, nNPos + nNLen) - nPos;
             if( IsIdxInside( nPos, nLen ) )
@@ -2147,13 +2158,23 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     nLen = TextFrameIndex(1);
 
                 InvalidateRange_( SwCharRange( nPos, nLen) );
-                const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr();
+                const sal_uInt16 nTmp = pNewUpdate->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
                     lcl_SetScriptInval( *this, nPos );
+                }
+            }
+
+            if( isA11yRelevantAttribute( pNewUpdate->getWhichAttr() ) &&
+                hasA11yRelevantAttribute( pNewUpdate->getFmtAttrs() ) )
+            {
+                SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
+                if ( pViewSh  )
+                {
+                    pViewSh->InvalidateAccessibleParaAttrs( *this );
                 }
             }
         }
