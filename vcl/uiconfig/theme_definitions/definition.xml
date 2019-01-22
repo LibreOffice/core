@@ -1,0 +1,56 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+
+<widgets>
+    <style>
+        <faceColor value="#F7F7F7"/>
+        <checkedColor value="#C0C0C0"/>
+        <lightColor value="#FFFFFF"/>
+        <lightBorderColor value="#F7F7F7"/>
+        <shadowColor value="#808080"/>
+        <darkShadowColor value="#000000"/>
+        <buttonTextColor value="#007AFF"/>
+        <buttonRolloverTextColor value="#FFFFFF"/>
+        <radioCheckTextColor value="#000000"/>
+        <groupTextColor value="#000000"/>
+        <labelTextColor value="#000000"/>
+        <windowColor value="#FFFFFF"/>
+        <windowTextColor value="#000000"/>
+        <dialogColor value="#FFFFFF"/>
+        <dialogTextColor value="#000000"/>
+        <workspaceColor value="#F7F7F7"/>
+        <monoColor value="#000000"/>
+        <fieldColor value="#FFFFFF"/>
+        <fieldTextColor value="#000000"/>
+        <fieldRolloverTextColor value="#000000"/>
+        <activeColor value="#007AFF"/>
+        <activeTextColor value="#FFFFFF"/>
+        <activeBorderColor value="#C0C0C0"/>
+        <deactiveColor value="#808080"/>
+        <deactiveTextColor value="#C0C0C0"/>
+        <deactiveBorderColor value="#C0C0C0"/>
+        <menuColor value="#FFFFFF"/>
+        <menuBarColor value="#FFFFFF"/>
+        <menuBarRolloverColor value="#007AFF"/>
+        <menuBorderColor value="#C0C0C0"/>
+        <menuTextColor value="#000000"/>
+        <menuBarTextColor value="#000000"/>
+        <menuBarRolloverTextColor value="#000000"/>
+        <menuBarHighlightTextColor value="#000000"/>
+        <menuHighlightColor value="#007AFF"/>
+        <menuHighlightTextColor value="#FFFFFF"/>
+        <highlightColor value="#007AFF"/>
+        <highlightTextColor value="#FFFFFF"/>
+        <activeTabColor value="#FFFFFF"/>
+        <inactiveTabColor value="#C0C0C0"/>
+        <tabTextColor value="#000000"/>
+        <tabRolloverTextColor value="#000000"/>
+        <tabHighlightTextColor value="#000000"/>
+        <disableColor value="#808080"/>
+        <helpColor value="#FFFFE0"/>
+        <helpTextColor value="#000000"/>
+        <linkColor value="#007AFF"/>
+        <visitedLinkColor value="#0464AA"/>
+        <toolTextColor value="#000000"/>
+        <fontColor value="#000000"/>
+    </style>
+</widgets>

@@ -19,10 +19,9 @@ namespace vcl
 {
 namespace
 {
-OUString lcl_getClassificationUserPath()
+OUString lcl_getThemeDefinitionPath()
 {
-    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                   "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/");
+    OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/theme_definitions/");
     rtl::Bootstrap::expandMacros(sPath);
     return sPath;
 }
@@ -31,7 +30,7 @@ OUString lcl_getClassificationUserPath()
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
-    , m_WidgetDefinitionReader(lcl_getClassificationUserPath() + "definition.xml")
+    , m_WidgetDefinitionReader(lcl_getThemeDefinitionPath() + "definition.xml")
 {
     m_WidgetDefinitionReader.read();
 

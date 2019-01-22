@@ -930,6 +930,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		chart2_opengl_shader \
 	) \
 	vcl_opengl_shader \
+	vcl_theme_definitions \
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_blacklist \
 	) \
