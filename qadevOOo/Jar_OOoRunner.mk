@@ -351,7 +351,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_XDrawPageDuplicator \
     qadevOOo/tests/java/ifc/drawing/_XDrawPages \
     qadevOOo/tests/java/ifc/drawing/_XDrawPagesSupplier \
-    qadevOOo/tests/java/ifc/drawing/_XDrawPageSummarizer \
     qadevOOo/tests/java/ifc/drawing/_XDrawPageSupplier \
     qadevOOo/tests/java/ifc/drawing/_XDrawView \
     qadevOOo/tests/java/ifc/drawing/_XGluePointsSupplier \
@@ -975,7 +974,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScDataPilotItemsObj \
     qadevOOo/tests/java/mod/_sc/ScDocumentConfiguration \
     qadevOOo/tests/java/mod/_sc/ScDrawPageObj \
-    qadevOOo/tests/java/mod/_sc/ScDrawPagesObj \
     qadevOOo/tests/java/mod/_sc/ScFilterDescriptorBase \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldsObj \
