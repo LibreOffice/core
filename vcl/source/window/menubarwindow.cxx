@@ -1078,6 +1078,9 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
 
     const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+    SalMenu *pNativeMenu = pMenu ? pMenu->ImplGetSalMenu() : nullptr;
+    if (pNativeMenu)
+        pNativeMenu->ApplyPersona();
     if (!rPersonaBitmap.IsEmpty())
     {
         Wallpaper aWallpaper(rPersonaBitmap);
