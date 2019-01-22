@@ -562,7 +562,7 @@ SwWordBasic::ToolsOptionsView( const css::uno::Any& DraftFont,
                                const css::uno::Any& Highlight )
 {
     SAL_INFO("sw.vba", "WordBasic.ToolsOptionsView("
-             << "DraftFont:=" << DraftFont
+                "DraftFont:=" << DraftFont
              << ", WrapToWindow:=" << WrapToWindow
              << ", PicturePlaceHolders:=" << PicturePlaceHolders
              << ", FieldCodes:=" << FieldCodes
