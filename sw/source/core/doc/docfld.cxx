@@ -74,24 +74,24 @@ SetGetExpField::SetGetExpField(
     const SwTextField* pField,
     const SwIndex* pIdx )
 {
-    eSetGetExpFieldType = TEXTFIELD;
-    CNTNT.pTextField = pField;
-    nNode = rNdIdx.GetIndex();
+    m_eSetGetExpFieldType = TEXTFIELD;
+    m_CNTNT.pTextField = pField;
+    m_nNode = rNdIdx.GetIndex();
     if( pIdx )
-        nContent = pIdx->GetIndex();
+        m_nContent = pIdx->GetIndex();
     else if( pField )
-        nContent = pField->GetStart();
+        m_nContent = pField->GetStart();
     else
-        nContent = 0;
+        m_nContent = 0;
 }
 
 SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
                             const SwTextINetFormat& rINet )
 {
-    eSetGetExpFieldType = TEXTINET;
-    CNTNT.pTextINet = &rINet;
-    nNode = rNdIdx.GetIndex();
-    nContent = rINet.GetStart();
+    m_eSetGetExpFieldType = TEXTINET;
+    m_CNTNT.pTextINet = &rINet;
+    m_nNode = rNdIdx.GetIndex();
+    m_nContent = rINet.GetStart();
 }
 
 // Extension for Sections:
@@ -100,69 +100,69 @@ SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
 SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
-    eSetGetExpFieldType = SECTIONNODE;
-    CNTNT.pSection = &rSectNd.GetSection();
+    m_eSetGetExpFieldType = SECTIONNODE;
+    m_CNTNT.pSection = &rSectNd.GetSection();
 
     if( pPos )
     {
-        nNode = pPos->nNode.GetIndex();
-        nContent = pPos->nContent.GetIndex();
+        m_nNode = pPos->nNode.GetIndex();
+        m_nContent = pPos->nContent.GetIndex();
     }
     else
     {
-        nNode = rSectNd.GetIndex();
-        nContent = 0;
+        m_nNode = rSectNd.GetIndex();
+        m_nContent = 0;
     }
 }
 
 SetGetExpField::SetGetExpField( const SwTableBox& rTBox )
 {
-    eSetGetExpFieldType = TABLEBOX;
-    CNTNT.pTBox = &rTBox;
+    m_eSetGetExpFieldType = TABLEBOX;
+    m_CNTNT.pTBox = &rTBox;
 
-    nNode = 0;
-    nContent = 0;
+    m_nNode = 0;
+    m_nContent = 0;
     if( rTBox.GetSttNd() )
     {
         SwNodeIndex aIdx( *rTBox.GetSttNd() );
         const SwContentNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
         if( pNd )
-            nNode = pNd->GetIndex();
+            m_nNode = pNd->GetIndex();
     }
 }
 
 SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
                                 const SwTextTOXMark& rTOX )
 {
-    eSetGetExpFieldType = TEXTTOXMARK;
-    CNTNT.pTextTOX = &rTOX;
-    nNode = rNdIdx.GetIndex();
-    nContent = rTOX.GetStart();
+    m_eSetGetExpFieldType = TEXTTOXMARK;
+    m_CNTNT.pTextTOX = &rTOX;
+    m_nNode = rNdIdx.GetIndex();
+    m_nContent = rTOX.GetStart();
 }
 
 SetGetExpField::SetGetExpField( const SwPosition& rPos )
 {
-    eSetGetExpFieldType = CRSRPOS;
-    CNTNT.pPos = &rPos;
-    nNode = rPos.nNode.GetIndex();
-    nContent = rPos.nContent.GetIndex();
+    m_eSetGetExpFieldType = CRSRPOS;
+    m_CNTNT.pPos = &rPos;
+    m_nNode = rPos.nNode.GetIndex();
+    m_nContent = rPos.nContent.GetIndex();
 }
 
 SetGetExpField::SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
                                 const SwPosition* pPos  )
 {
-    eSetGetExpFieldType = FLYFRAME;
-    CNTNT.pFlyFormat = &rFlyFormat;
+    m_eSetGetExpFieldType = FLYFRAME;
+    m_CNTNT.pFlyFormat = &rFlyFormat;
     if( pPos )
     {
-        nNode = pPos->nNode.GetIndex();
-        nContent = pPos->nContent.GetIndex();
+        m_nNode = pPos->nNode.GetIndex();
+        m_nContent = pPos->nContent.GetIndex();
     }
     else
     {
         const SwFormatContent& rContent = rFlyFormat.GetContent();
-        nNode = rContent.GetContentIdx()->GetIndex() + 1;
-        nContent = 0;
+        m_nNode = rContent.GetContentIdx()->GetIndex() + 1;
+        m_nContent = 0;
     }
 }
 
@@ -179,8 +179,8 @@ void SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
     }
     else
     {
-        rPos.nNode = nNode;
-        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), nContent );
+        rPos.nNode = m_nNode;
+        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), m_nContent );
     }
 }
 
@@ -195,25 +195,25 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         SwPosition aPos( aIdx );
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");
-        nNode = aPos.nNode.GetIndex();
-        nContent = aPos.nContent.GetIndex();
+        m_nNode = aPos.nNode.GetIndex();
+        m_nContent = aPos.nContent.GetIndex();
     }
 }
 
 bool SetGetExpField::operator==( const SetGetExpField& rField ) const
 {
-    return nNode == rField.nNode
-           && nContent == rField.nContent
-           && ( !CNTNT.pTextField
-                || !rField.CNTNT.pTextField
-                || CNTNT.pTextField == rField.CNTNT.pTextField );
+    return m_nNode == rField.m_nNode
+           && m_nContent == rField.m_nContent
+           && ( !m_CNTNT.pTextField
+                || !rField.m_CNTNT.pTextField
+                || m_CNTNT.pTextField == rField.m_CNTNT.pTextField );
 }
 
 bool SetGetExpField::operator<( const SetGetExpField& rField ) const
 {
-    if( nNode < rField.nNode || ( nNode == rField.nNode && nContent < rField.nContent ))
+    if( m_nNode < rField.m_nNode || ( m_nNode == rField.m_nNode && m_nContent < rField.m_nContent ))
         return true;
-    else if( nNode != rField.nNode || nContent != rField.nContent )
+    else if( m_nNode != rField.m_nNode || m_nContent != rField.m_nContent )
         return false;
 
     const SwNode *pFirst = GetNodeFromContent(),
@@ -244,7 +244,7 @@ bool SetGetExpField::operator<( const SetGetExpField& rField ) const
             if( pFirst->IsTextNode() && pNext->IsTextNode() &&
                 ( pFirst->FindFlyStartNode() || pNext->FindFlyStartNode() ))
             {
-                return ::IsFrameBehind( *pNext->GetTextNode(), nContent, *pFirst->GetTextNode(), nContent );
+                return ::IsFrameBehind( *pNext->GetTextNode(), m_nContent, *pFirst->GetTextNode(), m_nContent );
             }
             return pFirstStt->GetIndex() < pNextStt->GetIndex();
         }
@@ -261,40 +261,40 @@ bool SetGetExpField::operator<( const SetGetExpField& rField ) const
 const SwNode* SetGetExpField::GetNodeFromContent() const
 {
     const SwNode* pRet = nullptr;
-    if( CNTNT.pTextField )
-        switch( eSetGetExpFieldType )
+    if( m_CNTNT.pTextField )
+        switch( m_eSetGetExpFieldType )
         {
         case TEXTFIELD:
-            pRet = &CNTNT.pTextField->GetTextNode();
+            pRet = &m_CNTNT.pTextField->GetTextNode();
             break;
 
         case TEXTINET:
-            pRet = &CNTNT.pTextINet->GetTextNode();
+            pRet = &m_CNTNT.pTextINet->GetTextNode();
             break;
 
         case SECTIONNODE:
-            pRet = CNTNT.pSection->GetFormat()->GetSectionNode();
+            pRet = m_CNTNT.pSection->GetFormat()->GetSectionNode();
             break;
 
         case CRSRPOS:
-            pRet = &CNTNT.pPos->nNode.GetNode();
+            pRet = &m_CNTNT.pPos->nNode.GetNode();
             break;
 
         case TEXTTOXMARK:
-            pRet = &CNTNT.pTextTOX->GetTextNode();
+            pRet = &m_CNTNT.pTextTOX->GetTextNode();
             break;
 
         case TABLEBOX:
-            if( CNTNT.pTBox->GetSttNd() )
+            if( m_CNTNT.pTBox->GetSttNd() )
             {
-                SwNodeIndex aIdx( *CNTNT.pTBox->GetSttNd() );
+                SwNodeIndex aIdx( *m_CNTNT.pTBox->GetSttNd() );
                 pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
             }
             break;
 
         case FLYFRAME:
             {
-                SwNodeIndex aIdx( *CNTNT.pFlyFormat->GetContent().GetContentIdx() );
+                SwNodeIndex aIdx( *m_CNTNT.pFlyFormat->GetContent().GetContentIdx() );
                 pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
             }
             break;
@@ -305,20 +305,20 @@ const SwNode* SetGetExpField::GetNodeFromContent() const
 sal_Int32 SetGetExpField::GetCntPosFromContent() const
 {
     sal_Int32 nRet = 0;
-    if( CNTNT.pTextField )
-        switch( eSetGetExpFieldType )
+    if( m_CNTNT.pTextField )
+        switch( m_eSetGetExpFieldType )
         {
         case TEXTFIELD:
-            nRet = CNTNT.pTextField->GetStart();
+            nRet = m_CNTNT.pTextField->GetStart();
             break;
         case TEXTINET:
-            nRet = CNTNT.pTextINet->GetStart();
+            nRet = m_CNTNT.pTextINet->GetStart();
             break;
         case TEXTTOXMARK:
-            nRet = CNTNT.pTextTOX->GetStart();
+            nRet = m_CNTNT.pTextTOX->GetStart();
             break;
         case CRSRPOS:
-            nRet =  CNTNT.pPos->nContent.GetIndex();
+            nRet =  m_CNTNT.pPos->nContent.GetIndex();
             break;
         default:
             break;

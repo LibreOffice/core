@@ -44,8 +44,8 @@ enum class SwFieldIds : sal_uInt16;
 // Update expression fields
 class SetGetExpField
 {
-    sal_uLong nNode;
-    sal_Int32 nContent;
+    sal_uLong m_nNode;
+    sal_Int32 m_nContent;
     union {
         const SwTextField* pTextField;
         const SwSection* pSection;
@@ -54,12 +54,12 @@ class SetGetExpField
         const SwTableBox* pTBox;
         const SwTextINetFormat* pTextINet;
         const SwFlyFrameFormat* pFlyFormat;
-    } CNTNT;
+    } m_CNTNT;
     enum SetGetExpFieldType
         {
             TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,
             TEXTINET, FLYFRAME
-        } eSetGetExpFieldType;
+        } m_eSetGetExpFieldType;
 
 public:
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
@@ -82,17 +82,17 @@ public:
     bool operator<( const SetGetExpField& rField ) const;
 
     const SwTextField* GetTextField() const
-        { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : nullptr; }
+        { return TEXTFIELD == m_eSetGetExpFieldType ? m_CNTNT.pTextField : nullptr; }
     const SwSection* GetSection() const
-        { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : nullptr; }
+        { return SECTIONNODE == m_eSetGetExpFieldType ? m_CNTNT.pSection : nullptr; }
     const SwTextINetFormat* GetINetFormat() const
-        { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : nullptr; }
+        { return TEXTINET == m_eSetGetExpFieldType ? m_CNTNT.pTextINet : nullptr; }
     const SwFlyFrameFormat* GetFlyFormat() const
-        { return FLYFRAME == eSetGetExpFieldType ? CNTNT.pFlyFormat : nullptr; }
+        { return FLYFRAME == m_eSetGetExpFieldType ? m_CNTNT.pFlyFormat : nullptr; }
 
-    sal_uLong GetNode() const { return nNode; }
-    sal_Int32 GetContent() const { return nContent; }
-    const void* GetPointer() const { return CNTNT.pTextField; }
+    sal_uLong GetNode() const { return m_nNode; }
+    sal_Int32 GetContent() const { return m_nContent; }
+    const void* GetPointer() const { return m_CNTNT.pTextField; }
 
     void GetPosOfContent( SwPosition& rPos ) const;
 
