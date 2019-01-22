@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7b641aba",
+        "filename": "include/xmloff/EnumPropertyHdl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-22T08:27:33Z",
+      "side": 1,
+      "message": "To avoid much duplication, it\u0027s enough to write:\n\ntemplate\u003c typename \u003e struct SvXMLEnumMapEntry;\n\n(No need to fix it here, I mention this more for follow-up commits.)",
+      "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5b595efc",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-22T08:27:33Z",
+      "side": 1,
+      "message": "Did you try if IWYU can handle C++17 nested namespace definitions? See e01b9e772637bbb3b6d856bd0288fb9691bc234d for an example. (Again, no need to fix it here, but for future commits.)",
+      "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
