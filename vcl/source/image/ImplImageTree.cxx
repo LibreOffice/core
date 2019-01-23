@@ -340,7 +340,10 @@ bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, B
     return false;
 }
 
-static OUString createVariant(ImageRequestParameters& rParameters)
+namespace
+{
+
+OUString createVariant(ImageRequestParameters& rParameters)
 {
     bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
     sal_Int32 aScalePercentage = rParameters.scalePercentage();
@@ -353,7 +356,7 @@ static OUString createVariant(ImageRequestParameters& rParameters)
     return aVariant;
 }
 
-static bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rParameters)
+bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rParameters)
 {
     OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     if (!urlExists(sUrl))
@@ -365,7 +368,7 @@ static bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParamet
     return true;
 }
 
-static void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters const & rParameters)
+void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl(createIconCacheUrl(sVariant, rParameters));
     vcl::PNGWriter aWriter(rParameters.mrBitmap);
@@ -378,6 +381,8 @@ static void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters 
     catch (...)
     {}
 }
+
+} // end anonymous namespace
 
 bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
 {
