@@ -140,7 +140,7 @@ public:
     SdrLayer*          GetLayer(sal_uInt16 i)                                        { return maLayers[i].get(); }
     const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return maLayers[i].get(); }
 
-    sal_uInt16         GetLayerPos(SdrLayer* pLayer) const;
+    sal_uInt16         GetLayerPos(const SdrLayer* pLayer) const;
 
     SdrLayer*          GetLayer(const OUString& rName);
     const SdrLayer*    GetLayer(const OUString& rName) const;
