@@ -6,8 +6,9 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="templatedialog4|TemplateDialog4">Frame Style</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
