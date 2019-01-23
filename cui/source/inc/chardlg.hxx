@@ -219,7 +219,7 @@ private:
     Color               GetPreviewFontColor(const Color& rColor) const;
     void                EnableNoneFontColor();
 
-    void SelectHdl_Impl(weld::ComboBox*);
+    void SelectHdl_Impl(const weld::ComboBox*);
     DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);

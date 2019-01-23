@@ -430,7 +430,7 @@ IMPL_LINK(SvxTabulatorTabPage, NewHdl_Impl, weld::Button&, rBtn, void)
     NewHdl_Impl(&rBtn);
 }
 
-void SvxTabulatorTabPage::NewHdl_Impl(weld::Button* pBtn)
+void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
 {
     // Add a new one and select it
     // Get the value from the display
