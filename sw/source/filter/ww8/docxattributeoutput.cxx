@@ -399,8 +399,8 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
 
 void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
 {
-    // look ahead for floating tables that where put into a frame during import
-    // flaoting tables in shapes are not supported: exclude this case
+    // look ahead for floating tables that were put into a frame during import
+    // floating tables in shapes are not supported: exclude this case
     if (!pTextNodeInfo && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         checkAndWriteFloatingTables(*this);
@@ -4239,7 +4239,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
 void DocxAttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner )
 {
     // This is called when the nested table ends in a cell, and there's no
-    // paragraph benhind that; so we must check for the ends of cell, rows,
+    // paragraph behind that; so we must check for the ends of cell, rows,
     // tables
     // ['true' to write an empty paragraph, MS Word insists on that]
     FinishTableRowCell( pNodeInfoInner, true );

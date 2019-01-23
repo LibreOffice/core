@@ -874,7 +874,7 @@ void RtfAttributeOutput::TableVerticalCell(
 void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)
 {
     // This is called when the nested table ends in a cell, and there's no
-    // paragraph benhind that; so we must check for the ends of cell, rows,
+    // paragraph behind that; so we must check for the ends of cell, rows,
     // and tables
     FinishTableRowCell(pNodeInfoInner);
 }
