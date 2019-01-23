@@ -80,15 +80,6 @@ void XMLPropertyBackpatcher<A>::SetProperty(
     const Reference<XPropertySet> & xPropSet,
     const OUString& sName)
 {
-    Reference<XPropertySet> xNonConstPropSet(xPropSet);
-    SetProperty(xNonConstPropSet, sName);
-}
-
-template<class A>
-void XMLPropertyBackpatcher<A>::SetProperty(
-    Reference<XPropertySet> & xPropSet,
-    const OUString& sName)
-{
     if (aIDMap.count(sName))
     {
         // we know this ID -> set property
