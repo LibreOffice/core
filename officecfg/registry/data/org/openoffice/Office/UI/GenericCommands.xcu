@@ -5397,9 +5397,6 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Con~trol Properties...</value>
         </prop>
-        <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Con~trol...</value>
-        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
         </prop>
@@ -5407,9 +5404,6 @@
       <node oor:name=".uno:FormProperties" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">For~m Properties...</value>
-        </prop>
-        <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">For~m...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
