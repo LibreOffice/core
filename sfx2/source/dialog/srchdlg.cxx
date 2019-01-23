@@ -129,7 +129,7 @@ void SearchDialog::SetFocusOnEdit()
     m_xSearchEdit->grab_focus();
 }
 
-void SearchDialog::runAsync(std::shared_ptr<SearchDialog>& rController)
+void SearchDialog::runAsync(const std::shared_ptr<SearchDialog>& rController)
 {
     weld::DialogController::runAsync(rController, [=](sal_Int32 /*nResult*/){ rController->m_aCloseHdl.Call(nullptr); });
 }
