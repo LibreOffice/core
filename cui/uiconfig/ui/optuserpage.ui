@@ -145,7 +145,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="optuserpage|faxft">Fa_x/e-mail:</property>
+                    <property name="label" translatable="yes" context="optuserpage|faxft">Fa_x/email:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fax</property>
                   </object>

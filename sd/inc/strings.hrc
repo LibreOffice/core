@@ -208,7 +208,7 @@
 #define STR_HTMLEXP_CONTENTS                            NC_("STR_HTMLEXP_CONTENTS", "Table of contents")
 #define STR_HTMLEXP_CLICKSTART                          NC_("STR_HTMLEXP_CLICKSTART", "Click here to start")
 #define STR_HTMLEXP_AUTHOR                              NC_("STR_HTMLEXP_AUTHOR", "Author")
-#define STR_HTMLEXP_EMAIL                               NC_("STR_HTMLEXP_EMAIL", "E-mail")
+#define STR_HTMLEXP_EMAIL                               NC_("STR_HTMLEXP_EMAIL", "Email")
 #define STR_HTMLEXP_HOMEPAGE                            NC_("STR_HTMLEXP_HOMEPAGE", "Homepage")
 #define STR_HTMLEXP_INFO                                NC_("STR_HTMLEXP_INFO", "Further information")
 #define STR_HTMLEXP_DOWNLOAD                            NC_("STR_HTMLEXP_DOWNLOAD", "Download presentation")

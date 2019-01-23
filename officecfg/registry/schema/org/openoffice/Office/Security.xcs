@@ -51,7 +51,7 @@
     </group>
     <group oor:name="HiddenContent">
       <info>
-        <desc>Specifies whether to remove the hidden content when sending the document attached to an e-mail</desc>
+        <desc>Specifies whether to remove the hidden content when sending the document attached to an email</desc>
       </info>
       <prop oor:name="RemoveHiddenContent" oor:type="xs:boolean"
           oor:nillable="false">

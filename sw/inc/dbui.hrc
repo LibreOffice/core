@@ -54,7 +54,7 @@ const std::pair<const char*, int> SA_ADDRESS_HEADER[] =
     { NC_("SA_ADDRESS_HEADER", "Country") ,               MM_PART_COUNTRY         },
     { NC_("SA_ADDRESS_HEADER", "Telephone private") ,     MM_PART_PHONE_PRIVATE   },
     { NC_("SA_ADDRESS_HEADER", "Telephone business") ,    MM_PART_PHONE_BUSINESS  },
-    { NC_("SA_ADDRESS_HEADER", "E-mail Address") ,        MM_PART_E_MAIL          },
+    { NC_("SA_ADDRESS_HEADER", "Email Address") ,        MM_PART_E_MAIL          },
     { NC_("SA_ADDRESS_HEADER", "Gender"),                 MM_PART_GENDER          }
 };
 

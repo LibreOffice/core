@@ -4947,7 +4947,7 @@
       </node>
       <node oor:name=".uno:SendMailDocAsPDF" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as P~DF...</value>
+          <value xml:lang="en-US">Email as P~DF...</value>
         </prop>
       </node>
       <node oor:name=".uno:SendViaBluetooth" oor:op="replace">
@@ -5718,13 +5718,13 @@
       </node>
       <node oor:name=".uno:SendMail" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail</value>
+          <value xml:lang="en-US">Email</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~E-mail Document...</value>
+          <value xml:lang="en-US">~Email Document...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Attach to E-mail</value>
+          <value xml:lang="en-US">Attach to Email</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6684,12 +6684,12 @@
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~Microsoft Format...</value>
+          <value xml:lang="en-US">Email as ~Microsoft Format...</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
+          <value xml:lang="en-US">Email as ~OpenDocument Format...</value>
         </prop>
       </node>
       <node oor:name=".uno:TemplateManager" oor:op="replace">

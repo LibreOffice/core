@@ -500,7 +500,7 @@
       </node>
       <node oor:name=".uno:DBSendReportAsMail" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Report As E-Mail...</value>
+          <value xml:lang="en-US">Report As Email...</value>
         </prop>
       </node>
       <node oor:name=".uno:DBSendReportToWriter" oor:op="replace">

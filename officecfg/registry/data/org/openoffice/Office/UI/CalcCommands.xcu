@@ -2176,12 +2176,12 @@
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~Microsoft Excel...</value>
+          <value xml:lang="en-US">Email as ~Microsoft Excel...</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~OpenDocument Spreadsheet...</value>
+          <value xml:lang="en-US">Email as ~OpenDocument Spreadsheet...</value>
         </prop>
       </node>
       <node oor:name=".uno:ShareDocument" oor:op="replace">

@@ -744,7 +744,7 @@
       </node>
       <node oor:name=".uno:MailMergeEmailDocuments" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Send E-Mail Messages</value>
+          <value xml:lang="en-US">Send Email Messages</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2664,12 +2664,12 @@
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~Microsoft Word...</value>
+          <value xml:lang="en-US">Email as ~Microsoft Word...</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~OpenDocument Text...</value>
+          <value xml:lang="en-US">Email as ~OpenDocument Text...</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectionModeDefault" oor:op="replace">

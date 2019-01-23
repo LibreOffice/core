@@ -352,7 +352,7 @@
 #define ST_TYPE_PROCEEDINGS                     NC_("ST_TYPE_PROCEEDINGS", "Conference proceedings")
 #define ST_TYPE_TECHREPORT                      NC_("ST_TYPE_TECHREPORT", "Research report")
 #define ST_TYPE_UNPUBLISHED                     NC_("ST_TYPE_UNPUBLISHED", "Unpublished")
-#define ST_TYPE_EMAIL                           NC_("ST_TYPE_EMAIL", "E-mail")
+#define ST_TYPE_EMAIL                           NC_("ST_TYPE_EMAIL", "Email")
 #define ST_TYPE_WWW                             NC_("ST_TYPE_WWW", "WWW document")
 #define ST_TYPE_CUSTOM1                         NC_("ST_TYPE_CUSTOM1", "User-defined1")
 #define ST_TYPE_CUSTOM2                         NC_("ST_TYPE_CUSTOM2", "User-defined2")

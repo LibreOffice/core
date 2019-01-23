@@ -77,7 +77,7 @@
 #define RID_SVXSTR_HYPERDLG_HLINETTP                NC_("RID_SVXSTR_HYPERDLG_HLINETTP", "Internet")
 #define RID_SVXSTR_HYPERDLG_HLINETTP_HELP           NC_("RID_SVXSTR_HYPERDLG_HLINETTP_HELP", "This is where you create a hyperlink to a Web page or FTP server connection.")
 #define RID_SVXSTR_HYPERDLG_HLMAILTP                NC_("RID_SVXSTR_HYPERDLG_HLMAILTP", "Mail")
-#define RID_SVXSTR_HYPERDLG_HLMAILTP_HELP           NC_("RID_SVXSTR_HYPERDLG_HLMAILTP_HELP", "This is where you create a hyperlink to an e-mail address.")
+#define RID_SVXSTR_HYPERDLG_HLMAILTP_HELP           NC_("RID_SVXSTR_HYPERDLG_HLMAILTP_HELP", "This is where you create a hyperlink to an email address.")
 #define RID_SVXSTR_HYPERDLG_HLDOCTP                 NC_("RID_SVXSTR_HYPERDLG_HLDOCTP", "Document")
 #define RID_SVXSTR_HYPERDLG_HLDOCTP_HELP            NC_("RID_SVXSTR_HYPERDLG_HLDOCTP_HELP", "This is where you create a hyperlink to an existing document or a target within a document.")
 #define RID_SVXSTR_HYPERDLG_HLDOCNTP                NC_("RID_SVXSTR_HYPERDLG_HLDOCNTP", "New Document")

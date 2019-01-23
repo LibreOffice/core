@@ -235,7 +235,7 @@
 #define STR_PRINT_NEWSIZE                       NC_("STR_PRINT_NEWSIZE", "The page size has been modified.\nShould the new settings be saved\nin the active document?")
 #define STR_PRINT_NEWORISIZE                    NC_("STR_PRINT_NEWORISIZE", "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?")
 #define STR_CANT_CLOSE                          NC_("STR_CANT_CLOSE", "The document cannot be closed because a\n print job is being carried out.")
-#define STR_ERROR_SEND_MAIL                     NC_("STR_ERROR_SEND_MAIL", "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.")
+#define STR_ERROR_SEND_MAIL                     NC_("STR_ERROR_SEND_MAIL", "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your email program settings.")
 // Error codes look like "MAPI_E_FAILURE" or "1234"
 #define STR_ERROR_SEND_MAIL_CODE                NC_("STR_ERROR_SEND_MAIL_CODE", "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\n\nError code is $1")
 #define STR_ERROR_SEND_MAIL_HEADER              NC_("STR_ERROR_SEND_MAIL_HEADER", "Error sending mail")

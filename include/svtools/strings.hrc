@@ -263,7 +263,7 @@
 #define STR_FIELD_HOMETEL                       NC_("STR_FIELD_HOMETEL", "Tel: Home")
 #define STR_FIELD_WORKTEL                       NC_("STR_FIELD_WORKTEL", "Tel: Work")
 #define STR_FIELD_FAX                           NC_("STR_FIELD_FAX", "FAX")
-#define STR_FIELD_EMAIL                         NC_("STR_FIELD_EMAIL", "E-mail")
+#define STR_FIELD_EMAIL                         NC_("STR_FIELD_EMAIL", "Email")
 #define STR_FIELD_URL                           NC_("STR_FIELD_URL", "URL")
 #define STR_FIELD_NOTE                          NC_("STR_FIELD_NOTE", "Note")
 #define STR_FIELD_USER1                         NC_("STR_FIELD_USER1", "User 1")

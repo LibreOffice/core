@@ -58,7 +58,7 @@ const std::pair<const char*, sal_uInt16> SID_INET_DLG_RES[] =
 {
     { NC_("SID_INET_DLG_RES", "Internet"), 0 },
     { NC_("SID_INET_DLG_RES", "Proxy"),  RID_SVXPAGE_INET_PROXY },
-    { NC_("SID_INET_DLG_RES", "E-mail"),  RID_SVXPAGE_INET_MAIL }
+    { NC_("SID_INET_DLG_RES", "Email"),  RID_SVXPAGE_INET_MAIL }
 };
 
 const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
@@ -77,7 +77,7 @@ const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
     { NC_("SID_SW_EDITOPTIONS_RES", "Comparison"), RID_SW_TP_COMPARISON_OPT  },
     { NC_("SID_SW_EDITOPTIONS_RES", "Compatibility"), RID_SW_TP_OPTCOMPATIBILITY_PAGE     },
     { NC_("SID_SW_EDITOPTIONS_RES", "AutoCaption"), RID_SW_TP_OPTCAPTION_PAGE  },
-    { NC_("SID_SW_EDITOPTIONS_RES", "Mail Merge E-mail"), RID_SW_TP_MAILCONFIG }
+    { NC_("SID_SW_EDITOPTIONS_RES", "Mail Merge Email"), RID_SW_TP_MAILCONFIG }
 };
 
 const std::pair<const char*, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =

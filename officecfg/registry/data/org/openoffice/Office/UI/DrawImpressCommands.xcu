@@ -1657,12 +1657,12 @@
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~Microsoft PowerPoint Presentation...</value>
+          <value xml:lang="en-US">Email as ~Microsoft PowerPoint Presentation...</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E-mail as ~OpenDocument Presentation...</value>
+          <value xml:lang="en-US">Email as ~OpenDocument Presentation...</value>
         </prop>
       </node>
       <node oor:name=".uno:ZoomMode" oor:op="replace">
