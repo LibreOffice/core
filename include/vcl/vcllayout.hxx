@@ -101,8 +101,6 @@ public:
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 
-    virtual std::shared_ptr<vcl::TextLayoutCache>
-        CreateTextLayoutCache(OUString const&) const;
     virtual const SalLayoutGlyphs* GetGlyphs() const;
 
 protected:

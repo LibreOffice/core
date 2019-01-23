@@ -164,7 +164,7 @@ namespace {
 
 } // namespace
 
-std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString) const
+std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
 {
     return std::make_shared<vcl::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
@@ -409,9 +409,9 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
         {
             hb_buffer_clear_contents(pHbBuffer);
 
-            int nMinRunPos = aSubRun.mnMin;
-            int nEndRunPos = aSubRun.mnEnd;
-            int nRunLen = nEndRunPos - nMinRunPos;
+            const int nMinRunPos = aSubRun.mnMin;
+            const int nEndRunPos = aSubRun.mnEnd;
+            const int nRunLen = nEndRunPos - nMinRunPos;
 
             OString sLanguage = msLanguage;
             if (sLanguage.isEmpty())
@@ -636,7 +636,6 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
         else
             pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
     }
-
 
     bool bKashidaJustify = false;
     DeviceCoordinate nKashidaWidth = 0;
