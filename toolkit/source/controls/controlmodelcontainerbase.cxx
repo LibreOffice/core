@@ -466,19 +466,23 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
     UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
-    // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
-    // With container controls you could have constructed an existing hierarchy and are now
-    // add this to an existing container, in this case a name nested in the containment
-    // hierarchy of the added control could contain a name clash, if we have access to the
-    // list of global names then recursively check for previously existing names (we need
-    // to do this obviously before the 'this' objects container is updated)
-    Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
-    if ( xAllChildren.is() )
+
+    if (hasByName(GetPropertyName(BASEPROPERTY_USERFORMCONTAINEES)))
     {
-        // remove old control (and children) from global list of containers
-        updateUserFormChildren( xAllChildren, aName, Remove, uno::Reference< XControlModel >() );
-        // Add new control (and containers if they exist)
-        updateUserFormChildren( xAllChildren, aName, Insert, xNewModel );
+        // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
+        // With container controls you could have constructed an existing hierarchy and are now
+        // add this to an existing container, in this case a name nested in the containment
+        // hierarchy of the added control could contain a name clash, if we have access to the
+        // list of global names then recursively check for previously existing names (we need
+        // to do this obviously before the 'this' objects container is updated)
+        Reference< XNameContainer > xAllChildren(getPropertyValue(GetPropertyName(BASEPROPERTY_USERFORMCONTAINEES)), UNO_QUERY);
+        if (xAllChildren.is())
+        {
+            // remove old control (and children) from global list of containers
+            updateUserFormChildren(xAllChildren, aName, Remove, uno::Reference< XControlModel >());
+            // Add new control (and containers if they exist)
+            updateUserFormChildren(xAllChildren, aName, Insert, xNewModel);
+        }
     }
     // stop listening at the old model
     stopControlListening( aElementPos->first );
@@ -566,17 +570,19 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     if ( maModels.end() != aElementPos )
         lcl_throwElementExistException();
 
-    // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
-    // With container controls you could have constructed an existing hierarchy and are now
-    // add this to an existing container, in this case a name nested in the containment
-    // hierarchy of the added control could contain a name clash, if we have access to the
-    // list of global names then we need to recursively check for previously existing
-    // names (we need to do this obviously before the 'this' objects container is updated)
-    // remove old control (and children) from global list of containers
-    Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
-
-    if ( xAllChildren.is() )
-        updateUserFormChildren( xAllChildren, aName, Insert, xM );
+    if (hasByName(GetPropertyName(BASEPROPERTY_USERFORMCONTAINEES)))
+    {
+        // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
+        // With container controls you could have constructed an existing hierarchy and are now
+        // add this to an existing container, in this case a name nested in the containment
+        // hierarchy of the added control could contain a name clash, if we have access to the
+        // list of global names then we need to recursively check for previously existing
+        // names (we need to do this obviously before the 'this' objects container is updated)
+        // remove old control (and children) from global list of containers
+        Reference< XNameContainer > xAllChildren(getPropertyValue(GetPropertyName(BASEPROPERTY_USERFORMCONTAINEES)), UNO_QUERY);
+        if (xAllChildren.is())
+            updateUserFormChildren(xAllChildren, aName, Insert, xM);
+    }
     maModels.emplace_back( xM, aName );
     mbGroupsUpToDate = false;
     startControlListening( xM );
