@@ -369,8 +369,16 @@ VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pPar
 
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, void)
 {
+    SelectFillType(rButton);
+}
+
+void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSet* _pSet)
+{
+    if (_pSet)
+        m_rXFSet.Set(*_pSet);
+
     sal_Int32 nPos = maBox.GetButtonPos(&rButton);
-    if(nPos != -1 && nPos != maBox.GetCurrentButtonPos())
+    if (nPos != -1 && (_pSet || nPos != maBox.GetCurrentButtonPos()))
     {
         maBox.SelectButton(&rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
