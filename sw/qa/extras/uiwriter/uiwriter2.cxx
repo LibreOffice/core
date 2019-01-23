@@ -56,6 +56,7 @@ public:
     void testUnfloatButtonReadOnlyMode();
     void testUnfloating();
     void testTdf122893();
+    void testTdf122901();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testUnfloatButtonReadOnlyMode);
     CPPUNIT_TEST(testUnfloating);
     CPPUNIT_TEST(testTdf122893);
+    CPPUNIT_TEST(testTdf122901);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -736,6 +738,55 @@ void SwUiWriterTest2::testTdf122893()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(getParagraph(1), "ParaAdjust"));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int16(200), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Height);
+}
+
+void SwUiWriterTest2::testTdf122901()
+{
+    load(DATA_DIRECTORY, "tdf105413.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // all paragraphs with zero borders
+    for (int i = 1; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(i), "ParaTopMargin"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(i), "ParaBottomMargin"));
+    }
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Increase paragraph borders in the 3th paragraph, similar to the default icon of the UI
+    // "Increase Paragraph Spacing". Because of the tracked deleted region between them,
+    // this sets also the same formatting in the first paragraph automatically
+    // to keep the changed paragraph formatting at hiding tracked changes or saving the document
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/false);
+
+    lcl_dispatchCommand(mxComponent, ".uno:ParaspaceIncrease", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(101), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(101),
+                         getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+
+    // first paragraph is also center-aligned with double line spacing
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(101), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(101),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

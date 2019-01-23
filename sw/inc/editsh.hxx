@@ -229,7 +229,8 @@ public:
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
-    void SetAttrItem( const SfxPoolItem&, SetAttrMode nFlags = SetAttrMode::DEFAULT );
+    void SetAttrItem( const SfxPoolItem&, SetAttrMode nFlags = SetAttrMode::DEFAULT,
+                     const bool bParagraphSetting = false );
     void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT,
                      SwPaM* pCursor = nullptr, const bool bParagraphSetting = false );
 
