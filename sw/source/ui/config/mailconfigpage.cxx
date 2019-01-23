@@ -105,26 +105,24 @@ public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
 };
 
-SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "MailConfigPage" , "modules/swriter/ui/mailconfigpage.ui", &rSet),
-
-    m_pConfigItem( new SwMailMergeConfigItem )
+SwMailConfigPage::SwMailConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/mailconfigpage.ui", "MailConfigPage", &rSet)
+    , m_pConfigItem(new SwMailMergeConfigItem)
+    , m_xDisplayNameED(m_xBuilder->weld_entry("displayname"))
+    , m_xAddressED(m_xBuilder->weld_entry("address"))
+    , m_xReplyToCB(m_xBuilder->weld_check_button("replytocb"))
+    , m_xReplyToFT(m_xBuilder->weld_label("replyto_label"))
+    , m_xReplyToED(m_xBuilder->weld_entry("replyto"))
+    , m_xServerED(m_xBuilder->weld_entry("server"))
+    , m_xPortNF(m_xBuilder->weld_spin_button("port"))
+    , m_xSecureCB(m_xBuilder->weld_check_button("secure"))
+    , m_xServerAuthenticationPB(m_xBuilder->weld_button("serverauthentication"))
+    , m_xTestPB(m_xBuilder->weld_button("test"))
 {
-    get(m_pDisplayNameED,"displayname");
-    get(m_pAddressED,"address");
-    get(m_pReplyToCB,"replytocb");
-    get(m_pReplyToFT,"replyto_label");
-    get(m_pReplyToED,"replyto");
-    get(m_pServerED,"server");
-    get(m_pPortNF,"port");
-    get(m_pSecureCB,"secure");
-    get(m_pServerAuthenticationPB,"serverauthentication");
-    get(m_pTestPB,"test");
-
-    m_pReplyToCB->SetClickHdl(LINK(this, SwMailConfigPage, ReplyToHdl));
-    m_pServerAuthenticationPB->SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
-    m_pTestPB->SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
-    m_pSecureCB->SetClickHdl(LINK(this, SwMailConfigPage, SecureHdl));
+    m_xReplyToCB->connect_toggled(LINK(this, SwMailConfigPage, ReplyToHdl));
+    m_xServerAuthenticationPB->connect_clicked(LINK(this, SwMailConfigPage, AuthenticationHdl));
+    m_xTestPB->connect_clicked(LINK(this, SwMailConfigPage, TestHdl));
+    m_xSecureCB->connect_toggled(LINK(this, SwMailConfigPage, SecureHdl));
 }
 
 SwMailConfigPage::~SwMailConfigPage()
@@ -135,39 +133,29 @@ SwMailConfigPage::~SwMailConfigPage()
 void SwMailConfigPage::dispose()
 {
     m_pConfigItem.reset();
-    m_pDisplayNameED.clear();
-    m_pAddressED.clear();
-    m_pReplyToCB.clear();
-    m_pReplyToFT.clear();
-    m_pReplyToED.clear();
-    m_pServerED.clear();
-    m_pPortNF.clear();
-    m_pSecureCB.clear();
-    m_pServerAuthenticationPB.clear();
-    m_pTestPB.clear();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwMailConfigPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwMailConfigPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwMailConfigPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwMailConfigPage>::Create(pParent, *rAttrSet);
 }
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
-    if(m_pDisplayNameED->IsValueChangedFromSaved())
-        m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());
-    if(m_pAddressED->IsValueChangedFromSaved())
-        m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
-    if( m_pReplyToCB->IsValueChangedFromSaved() )
-        m_pConfigItem->SetMailReplyTo(m_pReplyToCB->IsChecked());
-    if(m_pReplyToED->IsValueChangedFromSaved())
-        m_pConfigItem->SetMailReplyTo(m_pReplyToED->GetText());
-    if(m_pServerED->IsValueChangedFromSaved())
-        m_pConfigItem->SetMailServer(m_pServerED->GetText());
+    if (m_xDisplayNameED->get_value_changed_from_saved())
+        m_pConfigItem->SetMailDisplayName(m_xDisplayNameED->get_text());
+    if (m_xAddressED->get_value_changed_from_saved())
+        m_pConfigItem->SetMailAddress(m_xAddressED->get_text());
+    if (m_xReplyToCB->get_state_changed_from_saved() )
+        m_pConfigItem->SetMailReplyTo(m_xReplyToCB->get_active());
+    if (m_xReplyToED->get_value_changed_from_saved())
+        m_pConfigItem->SetMailReplyTo(m_xReplyToED->get_text());
+    if (m_xServerED->get_value_changed_from_saved())
+        m_pConfigItem->SetMailServer(m_xServerED->get_text());
 
-    m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
-    m_pConfigItem->SetSecureConnection(m_pSecureCB->IsChecked());
+    m_pConfigItem->SetMailPort(m_xPortNF->get_value());
+    m_pConfigItem->SetSecureConnection(m_xSecureCB->get_active());
 
     m_pConfigItem->Commit();
     return true;
@@ -175,58 +163,58 @@ bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
 
 void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
 {
-    m_pDisplayNameED->SetText(m_pConfigItem->GetMailDisplayName());
-    m_pAddressED->SetText(m_pConfigItem->GetMailAddress());
+    m_xDisplayNameED->set_text(m_pConfigItem->GetMailDisplayName());
+    m_xAddressED->set_text(m_pConfigItem->GetMailAddress());
 
-    m_pReplyToED->SetText(m_pConfigItem->GetMailReplyTo()) ;
-    m_pReplyToCB->Check(m_pConfigItem->IsMailReplyTo());
-    m_pReplyToCB->GetClickHdl().Call(m_pReplyToCB.get());
+    m_xReplyToED->set_text(m_pConfigItem->GetMailReplyTo()) ;
+    m_xReplyToCB->set_active(m_pConfigItem->IsMailReplyTo());
+    ReplyToHdl(*m_xReplyToCB);
 
-    m_pServerED->SetText(m_pConfigItem->GetMailServer());
-    m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
+    m_xServerED->set_text(m_pConfigItem->GetMailServer());
+    m_xPortNF->set_value(m_pConfigItem->GetMailPort());
 
-    m_pSecureCB->Check(m_pConfigItem->IsSecureConnection());
+    m_xSecureCB->set_active(m_pConfigItem->IsSecureConnection());
 
-    m_pDisplayNameED->SaveValue();
-    m_pAddressED    ->SaveValue();
-    m_pReplyToCB    ->SaveValue();
-    m_pReplyToED    ->SaveValue();
-    m_pServerED     ->SaveValue();
-    m_pPortNF       ->SaveValue();
-    m_pSecureCB     ->SaveValue();
+    m_xDisplayNameED->save_value();
+    m_xAddressED->save_value();
+    m_xReplyToCB->save_state();
+    m_xReplyToED->save_value();
+    m_xServerED->save_value();
+    m_xPortNF->save_value();
+    m_xSecureCB->save_state();
 }
 
-IMPL_LINK(SwMailConfigPage, ReplyToHdl, Button*, pBox, void)
+IMPL_LINK(SwMailConfigPage, ReplyToHdl, weld::ToggleButton&, rBox, void)
 {
-    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
-    m_pReplyToFT->Enable(bEnable);
-    m_pReplyToED->Enable(bEnable);
+    bool bEnable = rBox.get_active();
+    m_xReplyToFT->set_sensitive(bEnable);
+    m_xReplyToED->set_sensitive(bEnable);
 }
 
-IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, Button*, void)
+IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, weld::Button&, void)
 {
-    m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
+    m_pConfigItem->SetMailAddress(m_xAddressED->get_text());
 
-    SwAuthenticationSettingsDialog aDlg(GetFrameWeld(), *m_pConfigItem);
+    SwAuthenticationSettingsDialog aDlg(GetDialogFrameWeld(), *m_pConfigItem);
     aDlg.run();
 }
 
-IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
+IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, weld::Button&, void)
 {
     SwTestAccountSettingsDialog aDlg(this);
     aDlg.run();
 }
 
-IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
+IMPL_LINK(SwMailConfigPage, SecureHdl, weld::ToggleButton&, rBox, void)
 {
-    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
+    bool bEnable = rBox.get_active();
     m_pConfigItem->SetSecureConnection(bEnable);
-    m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
-    m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
+    m_pConfigItem->SetMailPort(m_xPortNF->get_value());
+    m_xPortNF->set_value(m_pConfigItem->GetMailPort());
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
+    : SfxDialogController(pParent->GetDialogFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
     , m_bStop(false)
     , m_pParent(pParent)
     , m_xStopPB(m_xBuilder->weld_button("stop"))
@@ -341,9 +329,9 @@ void SwTestAccountSettingsDialog::Test()
         //check connection
         uno::Reference< uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
-                    m_pParent->m_pServerED->GetText(),
-                    sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_pPortNF->GetValue()),
-                    m_pParent->m_pSecureCB->IsChecked() ? OUString("Ssl") : OUString("Insecure"));
+                    m_pParent->m_xServerED->get_text(),
+                    m_pParent->m_xPortNF->get_value(),
+                    m_pParent->m_xSecureCB->get_active() ? OUString("Ssl") : OUString("Insecure"));
         xMailService->connect(xConnectionContext, xAuthenticator);
         bIsLoggedIn = xMailService->isConnected();
         if( xInMailService.is() )
@@ -373,11 +361,12 @@ void SwTestAccountSettingsDialog::Test()
     }
 }
 
-SwMailConfigDlg::SwMailConfigDlg(vcl::Window* pParent, SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
+    : SfxSingleTabDialogController(pParent, rSet)
 {
+    TabPageParent pPageParent(get_content_area(), this);
     // create TabPage
-    SetTabPage(SwMailConfigPage::Create(get_content_area(), &rSet));
+    SetTabPage(SwMailConfigPage::Create(pPageParent, &rSet));
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
