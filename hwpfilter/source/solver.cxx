@@ -44,7 +44,7 @@ std::unique_ptr<double[]> mgcLinearSystemD::NewVector (int N)
   return B;
 }
 
-bool mgcLinearSystemD::Solve (int n, std::unique_ptr<std::unique_ptr<double[]>[]>& a, double* b)
+bool mgcLinearSystemD::Solve (int n, std::unique_ptr<std::unique_ptr<double[]>[]> const & a, double* b)
 {
   std::unique_ptr<int[]> indxc( new int[n] );
   if ( !indxc )

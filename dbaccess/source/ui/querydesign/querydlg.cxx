@@ -43,7 +43,7 @@ using namespace ::com::sun::star::sdbc;
 
 DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
-                       OJoinTableView::OTableWindowMap* _pTableMap,
+                       const OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
                        bool _bAllowTableSelect)
     : ModalDialog( pParent, "JoinDialog", "dbaccess/ui/joindialog.ui" )

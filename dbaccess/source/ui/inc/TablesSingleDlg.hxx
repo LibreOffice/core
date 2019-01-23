@@ -48,7 +48,7 @@ class ODbDataSourceAdministrationHelper;
     public:
 
         OTableSubscriptionDialog(vcl::Window* pParent
-            ,SfxItemSet* _pItems
+            ,const SfxItemSet* _pItems
             ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName
         );
