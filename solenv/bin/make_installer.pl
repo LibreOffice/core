@@ -1117,8 +1117,14 @@ sub MakeNonWindowsBuild ($$$$$$$$$$$$$$$)
                     if ( $installer::globals::call_epm )
                     {
                         # ... now epm can be started, to create the installation sets
-
-                        $installer::logger::Info->print( "... starting unpatched epm ... \n" );
+                        if ( $installer::globals::is_special_epm )
+                        {
+                            $installer::logger::Info->print( "... starting patched epm ... \n" );
+                        }
+                        else
+                        {
+                            $installer::logger::Info->print( "... starting unpatched epm ... \n" );
+                        }
 
                         if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref); }
 
