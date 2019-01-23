@@ -1345,6 +1345,26 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
+static sal_uInt16 lcl_GetTableDestSlot(sal_Int32 nTblDest)
+{
+    switch (nTblDest)
+    {
+        default:
+        case TBL_DEST_CELL:
+        {
+            return SID_ATTR_BRUSH;
+        }
+        case TBL_DEST_ROW:
+        {
+            return SID_ATTR_BRUSH_ROW;
+        }
+        case TBL_DEST_TBL:
+        {
+            return SID_ATTR_BRUSH_TABLE;
+        }
+    }
+}
+
 SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
     : SvxAreaTabPage(pParent, rInAttrs),
     bHighlighting(false),
@@ -1405,24 +1425,29 @@ DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
+void SvxBkgTabPage::Reset( const SfxItemSet* )
+{
+    maSet.Set( *m_pResetSet.get() );
+    if ( m_xTblLBox && m_xTblLBox->get_visible() )
+    {
+        m_nActPos = -1;
+        const SfxPoolItem* pItem;
+        if ( SfxItemState::SET == m_pResetSet->GetItemState( SID_BACKGRND_DESTINATION, false, &pItem ) )
+        {
+            sal_uInt16 nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            m_xTblLBox->set_active( nDestValue );
+            TblDestinationHdl_Impl( *m_xTblLBox );
+        }
+        m_xTblLBox->save_value();
+    }
+    SvxAreaTabPage::Reset( &maSet );
+}
+
 bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
     if (m_xTblLBox && m_xTblLBox->get_visible())
-    {
-        switch (m_xTblLBox->get_active())
-        {
-            case TBL_DEST_CELL:
-                nSlot = SID_ATTR_BRUSH;
-            break;
-            case TBL_DEST_ROW:
-                nSlot = SID_ATTR_BRUSH_ROW;
-            break;
-            case TBL_DEST_TBL:
-                nSlot = SID_ATTR_BRUSH_TABLE;
-            break;
-        }
-    }
+        nSlot = lcl_GetTableDestSlot(m_xTblLBox->get_active());
     else if ( bHighlighting )
         nSlot = SID_ATTR_BRUSH_CHAR;
     else if( bCharBackColor )
@@ -1465,12 +1490,48 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
         case drawing::FillStyle_BITMAP:
         {
             SvxBrushItem aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
-            if ( GraphicType::NONE != aBrushItem.GetGraphicObject()->GetType() ) // no selection so use current
+            if ( GraphicType::NONE != aBrushItem.GetGraphicObject()->GetType() )
                 rCoreSet->Put( aBrushItem );
             break;
         }
         default:
             break;
+    }
+
+    if (m_xTblLBox && m_xTblLBox->get_visible())
+    {
+        if (nSlot != SID_ATTR_BRUSH)
+        {
+            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH);
+            if (SfxItemState::SET == maSet.GetItemState(nWhich))
+            {
+                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+                rCoreSet->Put(aBrushItem);
+            }
+        }
+        if (nSlot != SID_ATTR_BRUSH_ROW)
+        {
+            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_ROW);
+            if (SfxItemState::SET == maSet.GetItemState(nWhich))
+            {
+                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+                rCoreSet->Put(aBrushItem);
+            }
+        }
+        if (nSlot != SID_ATTR_BRUSH_TABLE)
+        {
+            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_TABLE);
+            if (SfxItemState::SET == maSet.GetItemState(nWhich))
+            {
+                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+                rCoreSet->Put(aBrushItem);
+            }
+        }
+
+        if (m_xTblLBox->get_value_changed_from_saved())
+        {
+            rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, m_xTblLBox->get_active()));
+        }
     }
 
     return true;
@@ -1493,7 +1554,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         {
             m_xBtnBitmap->show();
             m_xTblLBox = m_xBuilder->weld_combo_box("tablelb");
-            m_xTblLBox->set_active(0);
+            m_xTblLBox->connect_changed(LINK(this, SvxBkgTabPage, TblDestinationHdl_Impl));
             m_xTblLBox->show();
         }
         if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
@@ -1520,7 +1581,70 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
     }
 
+    m_pResetSet = maSet.Clone();
+
     SvxAreaTabPage::PageCreated(aSet);
+}
+
+IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
+{
+    if (m_nActPos > -1)
+    {
+        // fill local item set with XATTR_FILL settings gathered from tab page
+        // and convert to SvxBrushItem and store in table destination slot Which
+        SvxAreaTabPage::FillItemSet(&maSet);
+        maSet.Put(getSvxBrushItemFromSourceSet(maSet, maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(m_nActPos))));
+    }
+
+    sal_Int32 nSelPos = rBox.get_active();
+    if (m_nActPos != nSelPos)
+    {
+        m_nActPos = nSelPos;
+
+        // fill local item set with XATTR_FILL created from SvxBushItem for table destination slot Which
+        sal_uInt16 nWhich = maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(nSelPos));
+        if (SfxItemState::SET == maSet.GetItemState(nWhich))
+        {
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+        }
+        else
+        {
+            SelectFillType(*m_xBtnNone, &maSet);
+            return;
+        }
+
+        // show tab page
+        drawing::FillStyle eXFS = drawing::FillStyle_NONE;
+        if (maSet.GetItemState(XATTR_FILLSTYLE) != SfxItemState::DONTCARE)
+        {
+            XFillStyleItem aFillStyleItem(static_cast<const XFillStyleItem&>(maSet.Get(GetWhich( XATTR_FILLSTYLE))));
+            eXFS = aFillStyleItem.GetValue();
+        }
+        switch(eXFS)
+        {
+            default:
+            case drawing::FillStyle_NONE:
+            {
+                SelectFillType(*m_xBtnNone, &maSet);
+                break;
+            }
+            case drawing::FillStyle_SOLID:
+            {
+                SelectFillType(*m_xBtnColor, &maSet);
+                // color tab page Active and New preview controls are same after SelectFillType
+                // hack to restore color tab page Active preview
+                setSvxBrushItemAsFillAttributesToTargetSet(static_cast<const SvxBrushItem&>(m_pResetSet->Get(nWhich)), *m_pResetSet);
+                static_cast<SvxColorTabPage*>(GetFillTabPage())->SetCtlPreviewOld(*m_pResetSet);
+                break;
+            }
+            case drawing::FillStyle_BITMAP:
+            {
+                SelectFillType(*m_xBtnBitmap, &maSet);
+                break;
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -251,6 +251,9 @@ protected:
 
     void SetOptimalSize(weld::DialogController* pController);
 
+    void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
+    SfxTabPage* GetFillTabPage() { return m_pFillTabPage; }
+
 private:
     DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
 
@@ -759,6 +762,8 @@ public:
 
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+
+    void    SetCtlPreviewOld( SfxItemSet& rAttrs ) { m_aCtlPreviewOld.SetAttributes( rAttrs ); }
 
     virtual void FillUserData() override;
 };
