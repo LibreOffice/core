@@ -108,7 +108,7 @@ IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
     pTimer->Start();
 }
 
-void Manager::registerGraphic(std::shared_ptr<ImpGraphic>& pImpGraphic,
+void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
                               OUString const& /*rsContext*/)
 {
     // make some space first

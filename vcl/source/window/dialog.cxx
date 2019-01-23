@@ -199,7 +199,7 @@ vcl::Window * lastLogicalChildOfParent(const vcl::Window *pTopLevel)
     return const_cast<vcl::Window *>(pChild);
 }
 
-void Accelerator::GenerateAutoMnemonicsOnHierarchy(vcl::Window* pWindow)
+void Accelerator::GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow)
 {
     MnemonicGenerator   aMnemonicGenerator;
     vcl::Window*                 pGetChild;

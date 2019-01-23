@@ -537,7 +537,7 @@ ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
 class PspSalLayout : public GenericSalLayout
 {
 public:
-    PspSalLayout(psp::PrinterGfx&, FreetypeFont& rFont);
+    PspSalLayout(psp::PrinterGfx&, const FreetypeFont& rFont);
 
     void                InitFont() const final override;
 
@@ -551,7 +551,7 @@ private:
     bool                mbArtBold;
 };
 
-PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, FreetypeFont& rFont)
+PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, const FreetypeFont& rFont)
 :   GenericSalLayout(*rFont.GetFontInstance())
 ,   mrPrinterGfx(rGfx)
 {

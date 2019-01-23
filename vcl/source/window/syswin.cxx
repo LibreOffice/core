@@ -113,7 +113,7 @@ void SystemWindow::dispose()
     Window::dispose();
 }
 
-static void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
+static void ImplHandleControlAccelerator( const vcl::Window* pWindow, bool bShow )
 {
     Control *pControl = dynamic_cast<Control*>(pWindow->ImplGetWindow());
     if (pControl && pControl->GetText().indexOf('~') != -1)
@@ -125,7 +125,7 @@ static void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
 
 namespace
 {
-    void processChildren(vcl::Window *pParent, bool bShowAccel)
+    void processChildren(const vcl::Window *pParent, bool bShowAccel)
     {
         // go through its children
         vcl::Window* pChild = firstLogicalChildOfParent(pParent);
@@ -157,7 +157,7 @@ namespace
     }
 }
 
-bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow)
+bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, const vcl::Window *pWindow)
 {
     if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
     {
