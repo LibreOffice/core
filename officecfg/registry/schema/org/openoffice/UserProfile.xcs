@@ -171,7 +171,7 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies the user's e-mail address.</desc>
+          <desc>Specifies the user's email address.</desc>
         </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->

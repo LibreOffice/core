@@ -221,7 +221,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="testmailsettings|label8">%PRODUCTNAME is testing the e-mail account settings...</property>
+                <property name="label" translatable="yes" context="testmailsettings|label8">%PRODUCTNAME is testing the email account settings...</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

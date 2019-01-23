@@ -8,7 +8,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="mmsendmails|SendMailsDialog">Sending E-mail messages</property>
+    <property name="title" translatable="yes" context="mmsendmails|SendMailsDialog">Sending Email messages</property>
     <property name="type_hint">dock</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -145,7 +145,7 @@
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
-                                <property name="label" translatable="yes" context="mmsendmails|transferstatus">%1 of %2 e-mails sent</property>
+                                <property name="label" translatable="yes" context="mmsendmails|transferstatus">%1 of %2 emails sent</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -196,7 +196,7 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes" context="mmsendmails|errorstatus">E-mails not sent: %1</property>
+                            <property name="label" translatable="yes" context="mmsendmails|errorstatus">Emails not sent: %1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
