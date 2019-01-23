@@ -631,6 +631,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FN_INSERT_HARD_SPACE:
             lclInsertCharacter( pTableView, pTopView, CHAR_NBSP );
         break;
+        case FN_INSERT_NNBSP:
+            lclInsertCharacter( pTableView, pTopView, CHAR_NNBSP );
+        break;
         case SID_INSERT_RLM:
             lclInsertCharacter( pTableView, pTopView, CHAR_RLM );
         break;

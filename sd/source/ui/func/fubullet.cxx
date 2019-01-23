@@ -52,6 +52,7 @@ const sal_Unicode CHAR_RLM          =   u'\x200F';
 const sal_Unicode CHAR_LRM          =   u'\x200E';
 const sal_Unicode CHAR_ZWSP         =   u'\x200B';
 const sal_Unicode CHAR_ZWNBSP       =   u'\x2060';
+const sal_Unicode CHAR_NNBSP        =   u'\x202F'; //NARROW NO-BREAK SPACE
 
 
 FuBullet::FuBullet (
@@ -83,6 +84,7 @@ void FuBullet::DoExecute( SfxRequest& rReq )
             case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
             case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;
             case FN_INSERT_HARD_SPACE:  cMark = CHAR_HARDBLANK ; break;
+            case FN_INSERT_NNBSP:  cMark = CHAR_NNBSP ; break;
             case SID_INSERT_RLM : cMark = CHAR_RLM ; break;
             case SID_INSERT_LRM : cMark = CHAR_LRM ; break;
             case SID_INSERT_ZWSP : cMark = CHAR_ZWSP ; break;
@@ -117,35 +119,35 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     }
 
     // insert string
-    if(pOV && pOL)
-    {
-        // prevent flickering
-        pOV->HideCursor();
-        pOL->SetUpdateMode(false);
+    if(!(pOV && pOL))
+        return;
 
-        // remove old selected text
-        pOV->InsertText( "" );
+    // prevent flickering
+    pOV->HideCursor();
+    pOL->SetUpdateMode(false);
 
-        // prepare undo
-        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
-        rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
-                                    "", 0, mpViewShell->GetViewShellBase().GetViewShellId() );
+    // remove old selected text
+    pOV->InsertText( "" );
 
-        // insert given text
-        OUString aStr( cMark );
-        pOV->InsertText( aStr, true);
+    // prepare undo
+    SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+    rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
+                                "", 0, mpViewShell->GetViewShellBase().GetViewShellId() );
 
-        ESelection aSel = pOV->GetSelection();
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
-        pOV->SetSelection(aSel);
+    // insert given text
+    OUString aStr( cMark );
+    pOV->InsertText( aStr, true);
 
-        rUndoMgr.LeaveListAction();
+    ESelection aSel = pOV->GetSelection();
+    aSel.nStartPara = aSel.nEndPara;
+    aSel.nStartPos = aSel.nEndPos;
+    pOV->SetSelection(aSel);
 
-        // restart repainting
-        pOL->SetUpdateMode(true);
-        pOV->ShowCursor();
-    }
+    rUndoMgr.LeaveListAction();
+
+    // restart repainting
+    pOL->SetUpdateMode(true);
+    pOV->ShowCursor();
 }
 
 void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
@@ -200,128 +202,130 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         return;
     }
 
-    if (!aChars.isEmpty())
+    if (aChars.isEmpty())
+        return;
+
+    OutlinerView* pOV = nullptr;
+    ::Outliner*   pOL = nullptr;
+
+    // determine depending on ViewShell Outliner and OutlinerView
+    if(dynamic_cast< const DrawViewShell *>( mpViewShell ))
     {
-        OutlinerView* pOV = nullptr;
-        ::Outliner*   pOL = nullptr;
-
-        // determine depending on ViewShell Outliner and OutlinerView
-        if(dynamic_cast< const DrawViewShell *>( mpViewShell ))
-        {
-            pOV = mpView->GetTextEditOutlinerView();
-            if (pOV)
-            {
-                pOL = mpView->GetTextEditOutliner();
-            }
-        }
-        else if(dynamic_cast< const OutlineViewShell *>( mpViewShell ))
-        {
-            pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
-            pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                mpViewShell->GetActiveWindow());
-        }
-
-        // insert special character
+        pOV = mpView->GetTextEditOutlinerView();
         if (pOV)
         {
-            // prevent flicker
-            pOV->HideCursor();
-            pOL->SetUpdateMode(false);
-
-            /* remember old attributes:
-               To do that, remove selected area before (it has to go anyway).
-               With that, we get unique attributes (and since there is no
-               DeleteSelected() in OutlinerView, it is deleted by inserting an
-               empty string). */
-            pOV->InsertText( "" );
-
-            SfxItemSet aOldSet( mpDoc->GetPool(), svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO>{} );
-            aOldSet.Put( pOV->GetAttribs() );
-
-            SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
-            ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
-            rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
-                                     "", 0, nViewShellId );
-            pOV->InsertText(aChars, true);
-
-            // set attributes (set font)
-            SfxItemSet aSet(pOL->GetEmptyItemSet());
-            SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                   aFont.GetStyleName(), aFont.GetPitch(),
-                                   aFont.GetCharSet(),
-                                   EE_CHAR_FONTINFO);
-            aSet.Put(aFontItem);
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
-            aSet.Put(aFontItem);
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
-            aSet.Put(aFontItem);
-            pOV->SetAttribs(aSet);
-
-            ESelection aSel = pOV->GetSelection();
-            aSel.nStartPara = aSel.nEndPara;
-            aSel.nStartPos = aSel.nEndPos;
-            pOV->SetSelection(aSel);
-
-            // do not go ahead with setting attributes of special characters
-            pOV->GetOutliner()->QuickSetAttribs(aOldSet, aSel);
-
-            rUndoMgr.LeaveListAction();
-
-            // show it again
-            pOL->SetUpdateMode(true);
-            pOV->ShowCursor();
+            pOL = mpView->GetTextEditOutliner();
         }
     }
+    else if(dynamic_cast< const OutlineViewShell *>( mpViewShell ))
+    {
+        pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
+        pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+            mpViewShell->GetActiveWindow());
+    }
+
+    // insert special character
+    if (!pOV)
+        return;
+
+    // prevent flicker
+    pOV->HideCursor();
+    pOL->SetUpdateMode(false);
+
+    /* remember old attributes:
+       To do that, remove selected area before (it has to go anyway).
+       With that, we get unique attributes (and since there is no
+       DeleteSelected() in OutlinerView, it is deleted by inserting an
+       empty string). */
+    pOV->InsertText( "" );
+
+    SfxItemSet aOldSet( mpDoc->GetPool(), svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO>{} );
+    aOldSet.Put( pOV->GetAttribs() );
+
+    SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+    ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
+    rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
+                             "", 0, nViewShellId );
+    pOV->InsertText(aChars, true);
+
+    // set attributes (set font)
+    SfxItemSet aSet(pOL->GetEmptyItemSet());
+    SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
+                           aFont.GetStyleName(), aFont.GetPitch(),
+                           aFont.GetCharSet(),
+                           EE_CHAR_FONTINFO);
+    aSet.Put(aFontItem);
+    aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+    aSet.Put(aFontItem);
+    aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+    aSet.Put(aFontItem);
+    pOV->SetAttribs(aSet);
+
+    ESelection aSel = pOV->GetSelection();
+    aSel.nStartPara = aSel.nEndPara;
+    aSel.nStartPos = aSel.nEndPos;
+    pOV->SetSelection(aSel);
+
+    // do not go ahead with setting attributes of special characters
+    pOV->GetOutliner()->QuickSetAttribs(aOldSet, aSel);
+
+    rUndoMgr.LeaveListAction();
+
+    // show it again
+    pOL->SetUpdateMode(true);
+    pOV->ShowCursor();
 }
 
 void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, SfxViewFrame* pViewFrame )
 {
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
+    if( !(SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP_CONTROL ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_NNBSP ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_RLM ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_LRM ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWNBSP ) ||
-        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWSP ))
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWSP )))
+        return;
+
+    ::sd::View* pView = pViewShell ? pViewShell->GetView() : nullptr;
+    OutlinerView* pOLV = pView ? pView->GetTextEditOutlinerView() : nullptr;
+
+    const bool bTextEdit = pOLV;
+
+    SvtCTLOptions aCTLOptions;
+    const bool bCtlEnabled = aCTLOptions.IsCTLFontEnabled();
+
+    if(!bTextEdit )
     {
-        ::sd::View* pView = pViewShell ? pViewShell->GetView() : nullptr;
-        OutlinerView* pOLV = pView ? pView->GetTextEditOutlinerView() : nullptr;
+        rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
+        rSet.DisableItem(FN_INSERT_HARDHYPHEN);
+        rSet.DisableItem(FN_INSERT_HARD_SPACE);
+        rSet.DisableItem(FN_INSERT_NNBSP);
+        rSet.DisableItem(SID_INSERT_ZWNBSP);
+        rSet.DisableItem(SID_INSERT_ZWSP);
+    }
 
-        const bool bTextEdit = pOLV;
+    if( !bTextEdit && (dynamic_cast<OutlineViewShell const *>( pViewShell ) == nullptr) )
+    {
+        rSet.DisableItem(SID_CHARMAP);
+        rSet.DisableItem(SID_CHARMAP_CONTROL);
+    }
 
-        SvtCTLOptions aCTLOptions;
-        const bool bCtlEnabled = aCTLOptions.IsCTLFontEnabled();
+    if(!bTextEdit || !bCtlEnabled )
+    {
+        rSet.DisableItem(SID_INSERT_RLM);
+        rSet.DisableItem(SID_INSERT_LRM);
+    }
 
-        if(!bTextEdit )
-        {
-            rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
-            rSet.DisableItem(FN_INSERT_HARDHYPHEN);
-            rSet.DisableItem(FN_INSERT_HARD_SPACE);
-            rSet.DisableItem(SID_INSERT_ZWNBSP);
-            rSet.DisableItem(SID_INSERT_ZWSP);
-        }
+    if( pViewFrame )
+    {
+        SfxBindings& rBindings = pViewFrame->GetBindings();
 
-        if( !bTextEdit && (dynamic_cast<OutlineViewShell const *>( pViewShell ) == nullptr) )
-        {
-            rSet.DisableItem(SID_CHARMAP);
-            rSet.DisableItem(SID_CHARMAP_CONTROL);
-        }
-
-        if(!bTextEdit || !bCtlEnabled )
-        {
-            rSet.DisableItem(SID_INSERT_RLM);
-            rSet.DisableItem(SID_INSERT_LRM);
-        }
-
-        if( pViewFrame )
-        {
-            SfxBindings& rBindings = pViewFrame->GetBindings();
-
-            rBindings.SetVisibleState( SID_INSERT_RLM, bCtlEnabled );
-            rBindings.SetVisibleState( SID_INSERT_LRM, bCtlEnabled );
-        }
+        rBindings.SetVisibleState( SID_INSERT_RLM, bCtlEnabled );
+        rBindings.SetVisibleState( SID_INSERT_LRM, bCtlEnabled );
     }
 }
 } // end of namespace sd
