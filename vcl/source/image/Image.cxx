@@ -38,16 +38,14 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-Image::Image()
-{
-}
+using namespace css;
 
 Image::Image(const BitmapEx& rBitmapEx)
 {
     ImplInit(rBitmapEx);
 }
 
-Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
+Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     const Graphic aGraphic(rxGraphic);
     ImplInit(aGraphic.GetBitmapEx());
@@ -58,7 +56,7 @@ Image::Image(const OUString & rFileUrl)
     sal_Int32 nIndex = 0;
     if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
     {
-        mpImplData.reset(new ImplImage(rFileUrl.copy(nIndex)));
+        mpImplData = std::make_shared<ImplImage>(rFileUrl.copy(nIndex));
     }
     else
     {
@@ -71,14 +69,14 @@ Image::Image(const OUString & rFileUrl)
 }
 
 Image::Image(StockImage, const OUString & rFileUrl)
-    : mpImplData(new ImplImage(rFileUrl))
+    : mpImplData(std::make_shared<ImplImage>(rFileUrl))
 {
 }
 
 void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
-        mpImplData.reset(new ImplImage(rBitmapEx));
+        mpImplData = std::make_shared<ImplImage>(rBitmapEx);
 }
 
 Size Image::GetSizePixel() const
