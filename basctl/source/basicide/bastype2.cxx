@@ -1319,7 +1319,7 @@ bool SbTreeListBox::FindEntry(const OUString& rText, EntryType eType, weld::Tree
     return false;
 }
 
-bool SbTreeListBox::IsEntryProtected(weld::TreeIter* pEntry)
+bool SbTreeListBox::IsEntryProtected(const weld::TreeIter* pEntry)
 {
     bool bProtected = false;
     if (pEntry && m_xControl->get_iter_depth(*pEntry) == 1)
@@ -1355,7 +1355,7 @@ void SbTreeListBox::AddEntry(
     m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, &rImage, bChildrenOnDemand);
 }
 
-void SbTreeListBox::SetEntryBitmaps(weld::TreeIter& rIter, const OUString& rImage)
+void SbTreeListBox::SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage)
 {
     m_xControl->set_expander_image(rIter, rImage);
 }

@@ -338,7 +338,7 @@ SbMethod* MacroChooser::CreateMacro()
     return pMethod;
 }
 
-void MacroChooser::SaveSetCurEntry(weld::TreeView& rBox, weld::TreeIter& rEntry)
+void MacroChooser::SaveSetCurEntry(weld::TreeView& rBox, const weld::TreeIter& rEntry)
 {
     // the edit would be killed by the highlight otherwise:
 

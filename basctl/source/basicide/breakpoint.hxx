@@ -72,7 +72,7 @@ public:
     size_t size() const;
     BreakPoint& at(size_t i);
     const BreakPoint& at(size_t i) const;
-    void remove(BreakPoint* ptr);
+    void remove(const BreakPoint* ptr);
     void remove(size_t i);
 };
 
