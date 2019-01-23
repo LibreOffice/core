@@ -1352,6 +1352,8 @@
 
 #define STR_BUSINESS_CARDS                      NC_("labeldialog|cards", "Business Cards")
 
+#define STR_MAILCONFIG_DLG_TITLE                NC_("STR_MAILCONFIG_DLG_TITLE", "E-mail settings")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,7 @@
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <globals.hrc>
 #include <dbui.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
@@ -367,6 +368,7 @@ SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
     TabPageParent pPageParent(get_content_area(), this);
     // create TabPage
     SetTabPage(SwMailConfigPage::Create(pPageParent, &rSet));
+    m_xDialog->set_title(SwResId(STR_MAILCONFIG_DLG_TITLE));
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
