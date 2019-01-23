@@ -15,7 +15,7 @@
   <object class="GtkDialog" id="MMResultEmailDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="mmresultemaildialog|MMResultEmailDialog">E-Mail merged document</property>
+    <property name="title" translatable="yes" context="mmresultemaildialog|MMResultEmailDialog">Email merged document</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
@@ -273,7 +273,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="mmresultemaildialog|label2">E-Mail options</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|label2">Email options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -719,7 +719,7 @@
 #define STR_AUTH_TYPE_PROCEEDINGS               NC_("STR_AUTH_TYPE_PROCEEDINGS", "Conference proceedings")
 #define STR_AUTH_TYPE_TECHREPORT                NC_("STR_AUTH_TYPE_TECHREPORT", "Research report")
 #define STR_AUTH_TYPE_UNPUBLISHED               NC_("STR_AUTH_TYPE_UNPUBLISHED", "Unpublished")
-#define STR_AUTH_TYPE_EMAIL                     NC_("STR_AUTH_TYPE_EMAIL", "E-mail")
+#define STR_AUTH_TYPE_EMAIL                     NC_("STR_AUTH_TYPE_EMAIL", "Email")
 #define STR_AUTH_TYPE_WWW                       NC_("STR_AUTH_TYPE_WWW", "WWW document")
 #define STR_AUTH_TYPE_CUSTOM1                   NC_("STR_AUTH_TYPE_CUSTOM1", "User-defined1")
 #define STR_AUTH_TYPE_CUSTOM2                   NC_("STR_AUTH_TYPE_CUSTOM2", "User-defined2")
@@ -822,7 +822,7 @@
 #define STR_FILTER_CSV                          NC_("STR_FILTER_CSV", "Text Comma Separated (*.csv)")
 #define STR_FILTER_MDB                          NC_("STR_FILTER_MDB", "Microsoft Access (*.mdb;*.mde)")
 #define STR_FILTER_ACCDB                        NC_("STR_FILTER_ACCDB", "Microsoft Access 2007 (*.accdb,*.accde)")
-#define ST_CONFIGUREMAIL                        NC_("ST_CONFIGUREMAIL", "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\nDo you want to enter e-mail account information now?")
+#define ST_CONFIGUREMAIL                        NC_("ST_CONFIGUREMAIL", "In order to be able to send mail merge documents by email, %PRODUCTNAME requires information about the email account to be used.\n\nDo you want to enter email account information now?")
 #define ST_FILTERNAME                           NC_("ST_FILTERNAME", "%PRODUCTNAME Address List (.csv)")
 
 #define ST_STARTING                             NC_("ST_STARTING", "Select Starting Document")
@@ -929,7 +929,7 @@
 #define FLD_EU_TELPRIV                          NC_("FLD_EU_TELPRIV", "Tel. (Home)")
 #define FLD_EU_TELFIRMA                         NC_("FLD_EU_TELFIRMA", "Tel. (Work)")
 #define FLD_EU_FAX                              NC_("FLD_EU_FAX", "FAX")
-#define FLD_EU_EMAIL                            NC_("FLD_EU_EMAIL", "E-mail")
+#define FLD_EU_EMAIL                            NC_("FLD_EU_EMAIL", "Email")
 #define FLD_EU_STATE                            NC_("FLD_EU_STATE", "State")
 #define FLD_PAGEREF_OFF                         NC_("FLD_PAGEREF_OFF", "off")
 #define FLD_PAGEREF_ON                          NC_("FLD_PAGEREF_ON", "on")
@@ -1352,7 +1352,7 @@
 
 #define STR_BUSINESS_CARDS                      NC_("labeldialog|cards", "Business Cards")
 
-#define STR_MAILCONFIG_DLG_TITLE                NC_("STR_MAILCONFIG_DLG_TITLE", "E-mail settings")
+#define STR_MAILCONFIG_DLG_TITLE                NC_("STR_MAILCONFIG_DLG_TITLE", "Email settings")
 
 #endif
 
