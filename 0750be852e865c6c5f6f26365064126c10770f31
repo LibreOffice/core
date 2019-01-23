@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_915fb7e4",
+        "filename": "include/toolkit/controls/unocontrolmodel.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-23T12:30:59Z",
+      "side": 0,
+      "message": "Excuse my ignorance; I\u0027m curious why would the do{...}while (false) might be needed when this was written? why not use simple scope {...}?",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 8
+      },
+      "revId": "0750be852e865c6c5f6f26365064126c10770f31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
