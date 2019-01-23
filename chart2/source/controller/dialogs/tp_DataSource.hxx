@@ -97,7 +97,7 @@ private:
             <TRUE/> if the text from the field is a valid format to the internal
             data was valid
      */
-    bool updateModelFromControl(weld::Entry* pField = nullptr);
+    bool updateModelFromControl(const weld::Entry* pField = nullptr);
 
     /** @return </sal_True>, if the edit field contains a valid range entry. If no
         XCellRangesAccess can be obtained, </sal_False> is returned.
