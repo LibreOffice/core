@@ -212,13 +212,7 @@ ifeq ($(HAVE_GCC_FNO_INLINE),TRUE)
 FNO_INLINE=-fno-inline
 endif
 
-ifeq ($(HAVE_GCC_FNO_DEFAULT_INLINE),TRUE)
-FNO_DEFAULT_INLINE=-fno-default-inline
-endif
-
 gb_DEBUG_CFLAGS := $(FINLINE_LIMIT0) $(FNO_INLINE)
-gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
-
 
 gb_LinkTarget_INCLUDE :=\
     $(SOLARINC) \
