@@ -161,6 +161,11 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
+    FN_INSERT_NNBSP // status(final|play)
+    [
+        ExecMethod = FuTemporaryModify ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERT_RLM
     [
         ExecMethod = FuTemporary ;
