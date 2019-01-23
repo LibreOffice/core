@@ -18,6 +18,7 @@ interface XWordBasic
 
     void FileOpen( [in] string Name, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToMru, [in] any PasswordDoc, [in] any PasswordDot, [in] any Revert, [in] any WritePasswordDoc, [in] any WritePasswordDot );
     void FileSave();
+    void FileClose( [in] any Save );
     void ToolsOptionsView( [in] any DraftFont, [in] any WrapToWindow, [in] any PicturePlaceHolders, [in] any FieldCodes, [in] any BookMarks, [in] any FieldShading, [in] any StatusBar, [in] any HScroll, [in] any VScroll, [in] any StyleAreaWidth, [in] any Tabs, [in] any Spaces, [in] any Paras, [in] any Hyphens, [in] any Hidden, [in] any ShowAll, [in] any Drawings, [in] any Anchors, [in] any TextBoundaries, [in] any VRuler, [in] any Highlight );
     string WindowName();
     boolean ExistingBookmark( [in] string Name );
