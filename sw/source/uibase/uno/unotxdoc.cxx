@@ -3183,6 +3183,23 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  )
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
 
+void SwXTextDocument::addPasteEventListener(const uno::Reference<text::XPasteListener>& xListener)
+{
+    SolarMutexGuard aGuard;
+
+    if (IsValid() && xListener.is())
+        pDocShell->GetWrtShell()->GetPasteListeners().addInterface(xListener);
+}
+
+void SwXTextDocument::removePasteEventListener(
+    const uno::Reference<text::XPasteListener>& xListener)
+{
+    SolarMutexGuard aGuard;
+
+    if (IsValid() && xListener.is())
+        pDocShell->GetWrtShell()->GetPasteListeners().removeInterface(xListener);
+}
+
 void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nOutputWidth, int nOutputHeight,
                                  int nTilePosX, int nTilePosY,
