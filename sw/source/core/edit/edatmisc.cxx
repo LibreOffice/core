@@ -110,10 +110,11 @@ static void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNo
     }
 }
 
-void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
+void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, const bool bParagraphSetting )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
+    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     SwPaM* pCursor = GetCursor();
     if( pCursor->GetNext() != pCursor )     // Ring of Cursors
     {
@@ -125,6 +126,9 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
             if( rPaM.HasMark() && ( bIsTableMode ||
                 *rPaM.GetPoint() != *rPaM.GetMark() ))
             {
+                if (bParagraphSetting)
+                    lcl_disableShowChangesIfNeeded( GetDoc(), (*rPaM.Start()).nNode.GetNode(), eRedlMode);
+
                 GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags, GetLayout());
             }
         }
@@ -135,9 +139,14 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
     {
         if( !HasSelection() )
             UpdateAttr();
+
+        if (bParagraphSetting)
+            lcl_disableShowChangesIfNeeded( GetDoc(), (*pCursor->Start()).nNode.GetNode(), eRedlMode);
+
         GetDoc()->getIDocumentContentOperations().InsertPoolItem(*pCursor, rHint, nFlags, GetLayout());
     }
     EndAllAction();
+    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 }
 
 void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM* pPaM, const bool bParagraphSetting )
