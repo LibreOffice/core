@@ -165,7 +165,8 @@ class SfxStringItem;
 #define FN_INSERT_BREAK         (FN_INSERT + 3)
 #define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* optional hyphen */
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
-#define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* hyphen without break*/
+#define FN_INSERT_NNBSP         (FN_INSERT + 45)    /* U+202F NARROW NO-BREAK SPACE (NNBSP) */
+#define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)    /* hyphen without break*/
 
 //!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
 #define FN_FORMAT               (SID_SW_START +  400)
