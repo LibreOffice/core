@@ -128,6 +128,9 @@ public:
     // set the font
     virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;
 
+    // return true if a font is set
+    virtual bool                HasFont() const = 0;
+
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 

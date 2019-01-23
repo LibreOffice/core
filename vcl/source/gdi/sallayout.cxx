@@ -1574,12 +1574,6 @@ bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
     return bValid;
 }
 
-std::shared_ptr<vcl::TextLayoutCache> SalLayout::CreateTextLayoutCache(
-        OUString const&) const
-{
-    return nullptr; // by default, nothing to cache
-}
-
 const SalLayoutGlyphs* SalLayout::GetGlyphs() const
 {
     // No access to the glyphs by default.

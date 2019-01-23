@@ -329,6 +329,8 @@ public:
     virtual void            SetTextColor( Color nColor ) override;
     // set the font
     virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
+    // has a font set
+    virtual bool            HasFont() const override { return mpTextStyle[0].is(); }
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
