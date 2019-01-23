@@ -8,8 +8,10 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 
+#include <cppu/unotype.hxx>
 #include <rtl/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,7 +30,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScSheetLinksObj : public CalcUnoApiTest, public apitest::XEnumerationAccess
+class ScSheetLinksObj : public CalcUnoApiTest,
+                        public apitest::XElementAccess,
+                        public apitest::XEnumerationAccess
 {
 public:
     ScSheetLinksObj();
@@ -38,6 +42,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScSheetLinksObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -50,6 +58,7 @@ private:
 
 ScSheetLinksObj::ScSheetLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
 {
 }
 
