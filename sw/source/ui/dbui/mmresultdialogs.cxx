@@ -850,8 +850,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         {
             SwView* pConfigView = pTargetView ? pTargetView : pView;
             SfxAllItemSet aSet(pConfigView->GetPool());
-            SwMailConfigDlg aDlg(m_xDialog.get(), aSet);
-            nRet = aDlg.run();
+            ScopedVclPtrInstance<SwMailConfigDlg> pDlg(nullptr, aSet);
+            nRet = pDlg->Execute();
         }
 
         if(nRet != RET_OK && nRet != RET_YES)
