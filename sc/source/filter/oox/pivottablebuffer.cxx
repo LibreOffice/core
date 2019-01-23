@@ -413,8 +413,8 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
                 ::std::vector< OUString > aItems;
                 pCacheField->getCacheItemNames( aItems );
                 PivotCacheGroupItemVector aItemNames;
-                for( ::std::vector< OUString >::iterator aIt = aItems.begin(), aEnd = aItems.end(); aIt != aEnd; ++aIt )
-                    aItemNames.emplace_back( *aIt );
+                for( const auto& rItem : aItems )
+                    aItemNames.emplace_back( rItem );
                 // create all nested group fields (if any)
                 mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, aItemNames );
             }
@@ -450,10 +450,10 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
             // data field can have user defined groupname captions, apply them
             // if they do
             IdCaptionPairList captionList;
-            for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
+            for( const auto& rItem : maItems )
             {
-                if ( aIt->mnType == XML_data  && aIt->msCaption.getLength() )
-                    captionList.emplace_back( aIt->mnCacheItem, aIt->msCaption );
+                if ( rItem.mnType == XML_data  && rItem.msCaption.getLength() )
+                    captionList.emplace_back( rItem.mnCacheItem, rItem.msCaption );
             }
             if ( !captionList.empty() )
                 pCacheField->applyItemCaptions( captionList );
@@ -528,13 +528,16 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
             OSL_ENSURE( rPageField.mnItem == BIFF12_PTPAGEFIELD_MULTIITEMS, "PivotTableField::convertPageField - unexpected cache item index" );
             // try to find a single visible item
             bool bHasMultiItems = false;
-            for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); (aIt != aEnd) && !bHasMultiItems; ++aIt )
+            for( const auto& rItem : maItems )
             {
-                if( (aIt->mnType == XML_data) && !aIt->mbHidden )
+                if( (rItem.mnType == XML_data) && !rItem.mbHidden )
                 {
                     bHasMultiItems = nCacheItem >= 0;
-                    nCacheItem = bHasMultiItems ? -1 : aIt->mnCacheItem;
+                    nCacheItem = bHasMultiItems ? -1 : rItem.mnCacheItem;
                 }
+
+                if( bHasMultiItems )
+                    break;
             }
         }
         else
@@ -743,20 +746,20 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
 
                 try
                 {
-                    for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
+                    for( const auto& rItem : maItems )
                     {
-                        if (aIt->mnType != XML_data)
+                        if (rItem.mnType != XML_data)
                             continue;
 
-                        const PivotCacheItem* pSharedItem = pCacheField->getCacheItem(aIt->mnCacheItem);
+                        const PivotCacheItem* pSharedItem = pCacheField->getCacheItem(rItem.mnCacheItem);
                         if (!pSharedItem)
                             continue;
 
                         try
                         {
                             ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getFormattedName(*pDim, pDPObj, DateTime(getWorkbookSettings().getNullDate())));
-                            pMem->SetShowDetails(aIt->mbShowDetails);
-                            pMem->SetIsVisible(!aIt->mbHidden);
+                            pMem->SetShowDetails(rItem.mbShowDetails);
+                            pMem->SetIsVisible(!rItem.mbHidden);
                         }
                         catch( Exception& )
                         {
@@ -1230,40 +1233,44 @@ void PivotTable::finalizeImport()
                 finalizeFieldsImport();
 
                 // all row fields
-                for( IndexVector::iterator aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
-                    if( PivotTableField* pField = getTableField( *aIt ) )
+                for( const auto& rRowField : maRowFields )
+                    if( PivotTableField* pField = getTableField( rRowField ) )
                         pField->convertRowField();
 
                 // all column fields
-                for( IndexVector::iterator aIt = maColFields.begin(), aEnd = maColFields.end(); aIt != aEnd; ++aIt )
-                    if( PivotTableField* pField = getTableField( *aIt ) )
+                for( const auto& rColField : maColFields )
+                    if( PivotTableField* pField = getTableField( rColField ) )
                         pField->convertColField();
 
                 // all page fields
-                for( PageFieldVector::iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
-                    if( PivotTableField* pField = getTableField( aIt->mnField ) )
-                        pField->convertPageField( *aIt );
+                for( const auto& rPageField : maPageFields )
+                    if( PivotTableField* pField = getTableField( rPageField.mnField ) )
+                        pField->convertPageField( rPageField );
 
                 // all hidden fields
                 ::std::set< sal_Int32 > aVisFields;
                 aVisFields.insert( maRowFields.begin(), maRowFields.end() );
                 aVisFields.insert( maColFields.begin(), maColFields.end() );
-                for( PageFieldVector::iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
-                    aVisFields.insert( aIt->mnField );
-                for( PivotTableFieldVector::iterator aBeg = maFields.begin(), aIt = aBeg, aEnd = maFields.end(); aIt != aEnd; ++aIt )
-                    if( aVisFields.count( static_cast< sal_Int32 >( aIt - aBeg ) ) == 0 )
-                        (*aIt)->convertHiddenField();
+                for( const auto& rPageField : maPageFields )
+                    aVisFields.insert( rPageField.mnField );
+                sal_Int32 nIndex = 0;
+                for( auto& rxField : maFields )
+                {
+                    if( aVisFields.count( nIndex ) == 0 )
+                        rxField->convertHiddenField();
+                    ++nIndex;
+                }
 
                 // all data fields
-                for( DataFieldVector::iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
+                for( auto& rDataField : maDataFields )
                 {
-                    if( const PivotCacheField* pCacheField = getCacheField( aIt->mnField  ) )
+                    if( const PivotCacheField* pCacheField = getCacheField( rDataField.mnField  ) )
                     {
                         if ( pCacheField-> getGroupBaseField() != -1 )
-                            aIt->mnField = pCacheField-> getGroupBaseField();
+                            rDataField.mnField = pCacheField-> getGroupBaseField();
                     }
-                    if( PivotTableField* pField = getTableField( aIt->mnField ) )
-                        pField->convertDataField( *aIt );
+                    if( PivotTableField* pField = getTableField( rDataField.mnField ) )
+                        pField->convertDataField( rDataField );
                 }
 
                 // filters

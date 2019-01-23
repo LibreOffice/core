@@ -291,8 +291,8 @@ Connection& ConnectionsBuffer::createConnection()
 
 void ConnectionsBuffer::finalizeImport()
 {
-    for( ConnectionVector::iterator aIt = maConnections.begin(), aEnd = maConnections.end(); aIt != aEnd; ++aIt )
-        insertConnectionToMap( *aIt );
+    for( const auto& rxConnection : maConnections )
+        insertConnectionToMap( rxConnection );
 }
 
 ConnectionRef ConnectionsBuffer::getConnection( sal_Int32 nConnId ) const

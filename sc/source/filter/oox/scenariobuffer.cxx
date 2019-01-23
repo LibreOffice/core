@@ -106,9 +106,9 @@ void Scenario::finalizeImport()
 {
     AddressConverter& rAddrConv = getAddressConverter();
     ScRangeList aRanges;
-    for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
-        if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
-            aRanges.push_back( ScRange(aIt->maPos, aIt->maPos) );
+    for( const auto& rCell : maCells )
+        if( !rCell.mbDeleted && rAddrConv.checkCellAddress( rCell.maPos, true ) )
+            aRanges.push_back( ScRange(rCell.maPos, rCell.maPos) );
 
     if( !aRanges.empty() && !maModel.maName.isEmpty() ) try
     {
@@ -124,13 +124,13 @@ void Scenario::finalizeImport()
 
         // write scenario cell values
         Reference< XSpreadsheet > xSheet( getSheetFromDoc( aScenName ), UNO_SET_THROW );
-        for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
+        for( const auto& rCell : maCells )
         {
-            if( !aIt->mbDeleted ) try
+            if( !rCell.mbDeleted ) try
             {
                 // use XCell::setFormula to auto-detect values and strings
-                Reference< XCell > xCell( xSheet->getCellByPosition( aIt->maPos.Col(), aIt->maPos.Row() ), UNO_SET_THROW );
-                xCell->setFormula( aIt->maValue );
+                Reference< XCell > xCell( xSheet->getCellByPosition( rCell.maPos.Col(), rCell.maPos.Row() ), UNO_SET_THROW );
+                xCell->setFormula( rCell.maValue );
             }
             catch( Exception& )
             {

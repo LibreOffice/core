@@ -400,8 +400,8 @@ ExternalLinkInfo ExternalLink::getLinkInfo() const
             aDdeLinkInfo.Topic = maTargetUrl;
             ::std::vector< DDEItemInfo > aItemInfos;
             DDEItemInfo aItemInfo;
-            for( ExternalNameVector::const_iterator aIt = maExtNames.begin(), aEnd = maExtNames.end(); aIt != aEnd; ++aIt )
-                if( (*aIt)->getDdeItemInfo( aItemInfo ) )
+            for( const auto& rxExtName : maExtNames )
+                if( rxExtName->getDdeItemInfo( aItemInfo ) )
                     aItemInfos.push_back( aItemInfo );
             aDdeLinkInfo.Items = ContainerHelper::vectorToSequence( aItemInfos );
             aLinkInfo.Data <<= aDdeLinkInfo;
@@ -623,8 +623,8 @@ Sequence< ExternalLinkInfo > ExternalLinkBuffer::getLinkInfos() const
     ::std::vector< ExternalLinkInfo > aLinkInfos;
     // add entry for implicit index 0 (self reference to this document)
     aLinkInfos.push_back( mxSelfRef->getLinkInfo() );
-    for( ExternalLinkVec::const_iterator aIt = maExtLinks.begin(), aEnd = maExtLinks.end(); aIt != aEnd; ++aIt )
-        aLinkInfos.push_back( (*aIt)->getLinkInfo() );
+    for( const auto& rxExtLink : maExtLinks )
+        aLinkInfos.push_back( rxExtLink->getLinkInfo() );
     return ContainerHelper::vectorToSequence( aLinkInfos );
 }
 

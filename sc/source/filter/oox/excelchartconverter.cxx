@@ -97,8 +97,11 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
         Matrix< Any >::iterator aMIt = aMatrix.begin();
         // TODO: how to handle missing values in the map?
-        for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
-            *aMIt = aDIt->second;
+        for( const auto& rEntry : rDataSeq.maData )
+        {
+            *aMIt = rEntry.second;
+            ++aMIt;
+        }
         OUString aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
 
         if (!aRangeRep.isEmpty())

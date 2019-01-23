@@ -551,8 +551,8 @@ void ViewSettings::finalizeImport()
     // view settings for all sheets
     Reference< XNameContainer > xSheetsNC = NamedPropertyValues::create( getBaseFilter().getComponentContext() );
     if( !xSheetsNC.is() ) return;
-    for( SheetPropertiesMap::const_iterator aIt = maSheetProps.begin(), aEnd = maSheetProps.end(); aIt != aEnd; ++aIt )
-        ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( aIt->first ), aIt->second );
+    for( const auto& [rWorksheet, rObj] : maSheetProps )
+        ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( rWorksheet ), rObj );
 
     // use active sheet to set sheet properties that are document-global in Calc
     sal_Int16 nActiveSheet = getActiveCalcSheet();
