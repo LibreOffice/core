@@ -134,6 +134,10 @@ oslFileError oslTranslateFileError(int Errno)
             return osl_File_E_NOLCK;
 
         case ENOSYS:
+        case ENOTSUP:
+#if EOPNOTSUPP != ENOTSUP
+        case EOPNOTSUPP:
+#endif
            return osl_File_E_NOSYS;
 
 #if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))

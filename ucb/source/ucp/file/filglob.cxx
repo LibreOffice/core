@@ -344,7 +344,9 @@ namespace fileaccess {
                 case FileBase::E_NOLCK:  // No record locks available
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
-
+                case FileBase::E_NOSYS:
+                    ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                    break;
                 case FileBase::E_FAULT: // Bad address
                 case FileBase::E_LOOP:  // Too many symbolic links encountered
                 case FileBase::E_NOSPC: // No space left on device

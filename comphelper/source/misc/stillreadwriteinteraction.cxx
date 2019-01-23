@@ -96,6 +96,10 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
                 (exIO.Code == css::ucb::IOErrorCode_ACCESS_DENIED     )
                 || (exIO.Code == css::ucb::IOErrorCode_LOCKING_VIOLATION )
                 || (exIO.Code == css::ucb::IOErrorCode_NOT_EXISTING )
+                // At least on Linux, a request to open some fuse-mounted file O_RDWR may fail with
+                // EOPNOTSUPP (mapped to osl_File_E_NOSYS to IOErrorCode_NOT_SUPPORTED) when opening
+                // it O_RDONLY would succeed:
+                || (exIO.Code == css::ucb::IOErrorCode_NOT_SUPPORTED )
 #ifdef MACOSX
                 // this is a workaround for MAC, on this platform if the file is locked
                 // the returned error code looks to be wrong
