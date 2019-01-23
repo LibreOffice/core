@@ -2697,11 +2697,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Quotation">
+      <object class="GtkMenuItem" id="MenuStyles-Citation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|QuotationAction">Quotation</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
