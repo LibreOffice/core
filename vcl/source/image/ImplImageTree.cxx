@@ -594,15 +594,26 @@ void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
     }
 }
 
-OUString const & ImplImageTree::getRealImageName(OUString const & name)
+OUString const & ImplImageTree::getRealImageName(OUString const & rIconName)
 {
     IconLinkHash & rLinkHash = maIconSets[maCurrentStyle].maLinkHash;
 
-    IconLinkHash::iterator it(rLinkHash.find(name));
-    if (it == rLinkHash.end())
-        return name;
+    OUString sNameWithNoExtension = getNameNoExtension(rIconName);
 
-    return it->second;
+    IconLinkHash::iterator it;
+
+    // PNG is priority
+    it = rLinkHash.find(sNameWithNoExtension + ".png");
+    if (it != rLinkHash.end())
+        return it->second;
+
+    // also check SVG name
+    it = rLinkHash.find(sNameWithNoExtension + ".svg");
+    if (it != rLinkHash.end())
+        return it->second;
+
+    // neither was found so just return the original name
+    return rIconName;
 }
 
 bool ImplImageTree::checkPathAccess()
