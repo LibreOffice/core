@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_91621716",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-23T18:49:44Z",
+      "side": 1,
+      "message": "IsDictonaryMissing -\u003e IsDictionaryMissing",
+      "revId": "6daba221ebe55b48c1451680a59786518d2883ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b1a75350",
+        "filename": "sw/source/core/doc/doc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-23T18:49:44Z",
+      "side": 1,
+      "message": "SetMissingDictonaries -\u003e SetMissingDictionaries",
+      "revId": "6daba221ebe55b48c1451680a59786518d2883ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
