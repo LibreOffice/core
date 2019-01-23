@@ -57,7 +57,7 @@ using namespace ::com::sun::star::util;
 OResultSet::OResultSet(Connection* pConnection,
                        ::osl::Mutex& rMutex,
                        const uno::Reference< XInterface >& xStatement,
-                       isc_stmt_handle& aStatementHandle,
+                       const isc_stmt_handle& aStatementHandle,
                        XSQLDA* pSqlda )
     : OResultSet_BASE(rMutex)
     , OPropertyContainer(OResultSet_BASE::rBHelper)

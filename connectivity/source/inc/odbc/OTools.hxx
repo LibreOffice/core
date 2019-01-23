@@ -231,7 +231,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-        template <class T> void getValue(   OConnection* _pConnection,
+        template <class T> void getValue(   const OConnection* _pConnection,
                                             SQLHANDLE _aStatementHandle,
                                             sal_Int32 columnIndex,
                                             SQLSMALLINT _nType,
