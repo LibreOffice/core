@@ -83,7 +83,7 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
     return BitmapEx();
 }
 
-bool BitmapGaussianSeparableBlurFilter::convolutionPass(Bitmap& rBitmap, Bitmap& aNewBitmap,
+bool BitmapGaussianSeparableBlurFilter::convolutionPass(const Bitmap& rBitmap, Bitmap& aNewBitmap,
                                                         BitmapReadAccess const* pReadAcc,
                                                         int aNumberOfContributions,
                                                         const double* pWeights, int const* pPixels,

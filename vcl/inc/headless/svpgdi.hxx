@@ -242,7 +242,7 @@ public:
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
     void                    drawBitmap( const SalTwoRect& rPosAry,
-                                        BitmapBuffer* pBuffer,
+                                        const BitmapBuffer* pBuffer,
                                         cairo_operator_t eOp );
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,

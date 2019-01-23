@@ -34,7 +34,7 @@ class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
     friend class Application;
     friend class ::OutputDevice;
     friend class Printer;
-    friend cairo_surface_t* get_underlying_cairo_surface(VirtualDevice&);
+    friend cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice&);
 public:
     // reference device modes for different compatibility levels
     enum class RefDevMode { NONE = 0,

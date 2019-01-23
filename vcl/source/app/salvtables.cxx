@@ -591,13 +591,13 @@ namespace
         return Image(StockImage::Yes, rImage);
     }
 
-    Image createImage(VirtualDevice& rDevice)
+    Image createImage(const VirtualDevice& rDevice)
     {
         return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
     }
 
     void insert_to_menu(PopupMenu* pMenu, int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck)
+                        const OUString* pIconName, const VirtualDevice* pImageSurface, bool bCheck)
     {
         const auto nCount = pMenu->GetItemCount();
         const sal_uInt16 nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;

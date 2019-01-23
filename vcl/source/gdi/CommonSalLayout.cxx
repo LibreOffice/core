@@ -616,7 +616,7 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 //   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
 //     fill in the added space.
 
-void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
+void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
 {
     if (rArgs.mpDXArray == nullptr)
         return;

@@ -1184,7 +1184,7 @@ namespace
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
-    KeyEvent GtkToVcl(GdkEventKey& rEvent)
+    KeyEvent GtkToVcl(const GdkEventKey& rEvent)
     {
         sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(rEvent.keyval);
         if (nKeyCode == 0)
@@ -1553,7 +1553,7 @@ public:
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
 
-    gboolean signal_key(GdkEventKey* pEvent)
+    gboolean signal_key(const GdkEventKey* pEvent)
     {
         if (pEvent->type == GDK_KEY_PRESS && m_aKeyPressHdl.IsSet())
         {
@@ -1740,7 +1740,7 @@ namespace
         return load_icon_by_name(rIconName, sIconTheme, sUILang);
     }
 
-    GdkPixbuf* load_icon_from_surface(VirtualDevice& rDevice)
+    GdkPixbuf* load_icon_from_surface(const VirtualDevice& rDevice)
     {
         Size aSize(rDevice.GetOutputSizePixel());
         cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
@@ -1749,7 +1749,7 @@ namespace
         return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
     }
 
-    GtkWidget* image_new_from_virtual_device(VirtualDevice& rImageSurface)
+    GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
         GtkWidget* pImage = nullptr;
         if (gtk_check_version(3, 20, 0) == nullptr)
@@ -1839,7 +1839,7 @@ public:
     }
 
     void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                     const OUString* pIconName, VirtualDevice* pImageSurface,
+                     const OUString* pIconName, const VirtualDevice* pImageSurface,
                      bool bCheck)
     {
         GtkWidget* pImage = nullptr;
@@ -3983,7 +3983,7 @@ private:
         pThis->grab_broken(pEvent);
     }
 
-    void grab_broken(GdkEventGrabBroken *event)
+    void grab_broken(const GdkEventGrabBroken *event)
     {
         if (event->grab_window == nullptr)
         {
@@ -4037,7 +4037,7 @@ private:
         return pThis->key_press(pEvent);
     }
 
-    bool key_press(GdkEventKey* pEvent)
+    bool key_press(const GdkEventKey* pEvent)
     {
         if (pEvent->keyval == GDK_KEY_Escape)
         {
@@ -4756,7 +4756,7 @@ namespace
         return found;
     }
 
-    void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, VirtualDevice* pDevice)
+    void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, const VirtualDevice* pDevice)
     {
         if (!pIconName && !pDevice)
         {
@@ -4943,7 +4943,7 @@ private:
     }
 
     void insert_row(GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
-                    const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
+                    const OUString* pIconName, const VirtualDevice* pDevice, const OUString* pExpanderName)
     {
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, parent, pos,
                                           m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -6409,7 +6409,7 @@ private:
         SolarMutexGuard aGuard;
         return pThis->signal_motion(pEvent);
     }
-    bool signal_motion(GdkEventMotion* pEvent)
+    bool signal_motion(const GdkEventMotion* pEvent)
     {
         Point aPos(pEvent->x, pEvent->y);
         if (AllSettings::GetLayoutRTL())
@@ -6775,7 +6775,7 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
-    bool signal_key_press(GdkEventKey* pEvent)
+    bool signal_key_press(const GdkEventKey* pEvent)
     {
         KeyEvent aKEvt(GtkToVcl(*pEvent));
 

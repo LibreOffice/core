@@ -485,7 +485,7 @@ void ImplImageTree::createStyle()
 }
 
 /// Find an icon cache for the right scale factor
-ImplImageTree::IconCache &ImplImageTree::getIconCache(ImageRequestParameters& rParameters)
+ImplImageTree::IconCache &ImplImageTree::getIconCache(const ImageRequestParameters& rParameters)
 {
     IconSet &rSet = getCurrentIconSet();
     auto it = rSet.maScaledIconCaches.find(rParameters.mnScalePercentage);
