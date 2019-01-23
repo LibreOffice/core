@@ -112,6 +112,11 @@ interface ViewShellBaseView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_INSERT_NNBSP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_INSERT_RLM
     [
         ExecMethod = Execute ;

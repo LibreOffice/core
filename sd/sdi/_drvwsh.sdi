@@ -323,6 +323,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    FN_INSERT_NNBSP // status(final|play)
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERT_RLM
     [
         ExecMethod = FuTemporary ;
