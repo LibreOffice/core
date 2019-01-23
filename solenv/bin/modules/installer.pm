@@ -1155,7 +1155,14 @@ sub run {
                             {
                                 # ... now epm can be started, to create the installation sets
 
-                                installer::logger::print_message( "... starting unpatched epm ... \n" );
+                                if ( $installer::globals::is_special_epm )
+                                {
+                                       installer::logger::print_message( "... starting patched epm ... \n" );
+                                }
+                                else
+                                {
+                                       installer::logger::print_message( "... starting unpatched epm ... \n" );
+                                }
 
                                 if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref); }
 
