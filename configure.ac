@@ -6711,22 +6711,8 @@ dnl ===================================================================
 dnl  Clang++ tests
 dnl ===================================================================
 
-HAVE_GCC_FNO_DEFAULT_INLINE=
 HAVE_GCC_FNO_ENFORCE_EH_SPECS=
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CXX supports -fno-default-inline])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CFLAGS -Werror -fno-default-inline"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_DEFAULT_INLINE=TRUE ],[])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-    if test "$HAVE_GCC_FNO_DEFAULT_INLINE" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
     AC_MSG_CHECKING([whether $CXX supports -fno-enforce-eh-specs])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -6740,7 +6726,6 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 fi
-AC_SUBST(HAVE_GCC_FNO_DEFAULT_INLINE)
 AC_SUBST(HAVE_GCC_FNO_ENFORCE_EH_SPECS)
 
 dnl ===================================================================

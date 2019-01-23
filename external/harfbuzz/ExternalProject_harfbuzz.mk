@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(debug),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS)) \
+				$(if $(debug),$(gb_DEBUG_CFLAGS)) \
 				$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 				$(ICU_UCHAR_TYPE) \
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \

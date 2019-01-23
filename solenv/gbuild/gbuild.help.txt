@@ -132,7 +132,7 @@ INTERACTIVE VARIABLES:
        CXXFLAGS        Override compiler flags for C++ compilation.
                        Note: this overrides default optimization and debug
                        flags; to append flags without overriding, use:
-                       CXXFLAGS='$(call gb_LinkTarget__get_debugcxxflags,$(1)) -Wfoo'
+                       CXXFLAGS='$(call gb_LinkTarget__get_debugflags,$(1)) -Wfoo'
        ENVCFLAGSCXX    Append compiler flags for C++ compilation.
        OBJCFLAGS       Override compiler flags for Objective C compilation.
        OBJCXXFLAGS     Override compiler flags for Objective C++ compilation.
