@@ -3752,7 +3752,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     OFormComponents::write(_rxOutStream);
 
     // version
-    _rxOutStream->writeShort(0x0004);
+    _rxOutStream->writeShort(0x0005);
 
     // Name
     _rxOutStream << m_sName;
@@ -3830,18 +3830,15 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeShort(static_cast<sal_Int16>(m_eNavigation));
 
     OUString sFilter;
-    OUString sHaving;
-    OUString sOrder;
+    OUString sSort;
     if (m_xAggregateSet.is())
     {
         m_xAggregateSet->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
         // version 4
-        m_xAggregateSet->getPropertyValue(PROPERTY_HAVINGCLAUSE) >>= sHaving;
-        m_xAggregateSet->getPropertyValue(PROPERTY_SORT) >>= sOrder;
+        m_xAggregateSet->getPropertyValue(PROPERTY_SORT) >>= sSort;
     }
     _rxOutStream << sFilter;
-    _rxOutStream << sOrder;
-
+    _rxOutStream << sSort;
 
     // version 3
     sal_uInt16 nAnyMask = 0;
@@ -3859,6 +3856,12 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
         ::cppu::enum2int(nRealCycle, m_aCycle);
         _rxOutStream->writeShort(static_cast<sal_Int16>(nRealCycle));
     }
+
+    // version 5
+    OUString sHaving;
+    if (m_xAggregateSet.is())
+        m_xAggregateSet->getPropertyValue(PROPERTY_HAVINGCLAUSE) >>= sHaving;
+    _rxOutStream << sHaving;
 }
 
 
@@ -3935,16 +3938,14 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         m_eNavigation = static_cast<NavigationBarMode>(_rxInStream->readShort());
 
         _rxInStream >> sAggregateProp;
-        setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));
+        if (m_xAggregateSet.is())
+            m_xAggregateSet->setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));
         if(nVersion > 3)
         {
             _rxInStream >> sAggregateProp;
-            setPropertyValue(PROPERTY_HAVINGCLAUSE, makeAny(sAggregateProp));
+            if (m_xAggregateSet.is())
+                m_xAggregateSet->setPropertyValue(PROPERTY_SORT, makeAny(sAggregateProp));
         }
-
-        _rxInStream >> sAggregateProp;
-        if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_SORT, makeAny(sAggregateProp));
     }
 
     sal_uInt16 nAnyMask = 0;
@@ -3961,6 +3962,13 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     }
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_APPLYFILTER, makeAny((nAnyMask & DONTAPPLYFILTER) == 0));
+
+    if(nVersion > 4)
+    {
+        _rxInStream >> sAggregateProp;
+        if (m_xAggregateSet.is())
+            m_xAggregateSet->setPropertyValue(PROPERTY_HAVINGCLAUSE, makeAny(sAggregateProp));
+    }
 }
 
 
