@@ -107,7 +107,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXEdit );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXEdit>();
 }
 
 OUString UnoControlEditModel::getServiceName( )
@@ -676,7 +676,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
 UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXButton );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXButton>();
 
     osl_atomic_increment( &m_refCount );
     {
@@ -909,7 +909,7 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
     :GraphicControlModel( rxContext )
     ,mbAdjustingImageScaleMode( false )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXImageControl );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXImageControl>();
 }
 
 OUString UnoControlImageControlModel::getServiceName()
@@ -1079,7 +1079,7 @@ stardiv_Toolkit_UnoImageControlControl_get_implementation(
 UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXRadioButton );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXRadioButton>();
 }
 
 OUString UnoControlRadioButtonModel::getServiceName()
@@ -1321,7 +1321,7 @@ stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
 UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCheckBox );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXCheckBox>();
 }
 
 OUString UnoControlCheckBoxModel::getServiceName()
@@ -1535,7 +1535,7 @@ stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
 UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXFixedHyperlink>();
 }
 
 OUString UnoControlFixedHyperlinkModel::getServiceName()
@@ -1721,7 +1721,7 @@ stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
 UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXFixedText>();
 }
 
 OUString UnoControlFixedTextModel::getServiceName()
@@ -2100,7 +2100,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentConte
 {
     if ( i_mode == ConstructDefault )
     {
-        UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXListBox );
+        UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXListBox>();
     }
 }
 
@@ -2976,7 +2976,7 @@ stardiv_Toolkit_UnoListBoxControl_get_implementation(
 UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlListBoxModel( rxContext, ConstructWithoutProperties )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXComboBox>();
 }
 
 OUString UnoControlComboBoxModel::getImplementationName()
@@ -3478,7 +3478,7 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat )
 UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXDateField );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXDateField>();
 }
 
 OUString UnoControlDateFieldModel::getServiceName()
@@ -3748,7 +3748,7 @@ stardiv_Toolkit_UnoDateFieldControl_get_implementation(
 UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXTimeField );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXTimeField>();
 }
 
 OUString UnoControlTimeFieldModel::getServiceName()
@@ -3977,7 +3977,7 @@ stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
 UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXNumericField );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXNumericField>();
 }
 
 OUString UnoControlNumericFieldModel::getServiceName()
@@ -4197,7 +4197,7 @@ stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCurrencyField );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXCurrencyField>();
 }
 
 OUString UnoControlCurrencyFieldModel::getServiceName()
@@ -4421,7 +4421,7 @@ stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
 UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXPatternField );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXPatternField>();
 }
 
 OUString UnoControlPatternFieldModel::getServiceName()

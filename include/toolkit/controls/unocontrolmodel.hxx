@@ -98,6 +98,12 @@ protected:
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
             );
 
+    template<typename T> void UNO_CONTROL_MODEL_REGISTER_PROPERTIES() {
+        std::vector< sal_uInt16 > aIds;
+        T::ImplGetPropertyIds( aIds );
+        ImplRegisterProperties( aIds );
+    }
+
 protected:
 #ifdef _MSC_VER
     UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
@@ -172,13 +178,6 @@ public:
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
 };
-
-#define UNO_CONTROL_MODEL_REGISTER_PROPERTIES(a) \
-    do { \
-        std::vector< sal_uInt16 > aIds; \
-        a::ImplGetPropertyIds( aIds ); \
-        ImplRegisterProperties( aIds ); \
-    } while (false)
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 
