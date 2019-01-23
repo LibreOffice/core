@@ -22,6 +22,30 @@
       "revId": "0750be852e865c6c5f6f26365064126c10770f31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b1fe33ac",
+        "filename": "include/toolkit/controls/unocontrolmodel.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-23T12:45:11Z",
+      "side": 0,
+      "message": "so that the places using the macro actually needed a \";\" after it, as if it were a function call",
+      "parentUuid": "1f485f77_915fb7e4",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 8
+      },
+      "revId": "0750be852e865c6c5f6f26365064126c10770f31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
