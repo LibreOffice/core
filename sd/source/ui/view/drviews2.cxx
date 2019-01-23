@@ -1449,6 +1449,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case FN_INSERT_SOFT_HYPHEN:
         case FN_INSERT_HARDHYPHEN:
         case FN_INSERT_HARD_SPACE:
+        case FN_INSERT_HAIR_SPACE:
         case SID_INSERT_RLM :
         case SID_INSERT_LRM :
         case SID_INSERT_ZWNBSP :

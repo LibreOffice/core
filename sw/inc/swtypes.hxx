@@ -175,6 +175,7 @@ constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 #define CHAR_LRM            u'\x200E'
 #define CHAR_ZWSP           u'\x200B'
 #define CHAR_ZWNBSP         u'\x2060'
+#define CHAR_HAIRSPACE      u'\x200A'
 
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
