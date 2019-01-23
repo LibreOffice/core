@@ -794,7 +794,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 rSh.AutoUpdatePara( pColl, aULSpaceSet );
             }
             else
-                rSh.SetAttrItem( aULSpace );
+                rSh.SetAttrItem( aULSpace, SetAttrMode::DEFAULT, true );
         }
         break;
 

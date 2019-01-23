@@ -96,36 +96,6 @@ const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFormatHint ) const
     return GetDoc()->GetDefault( nFormatHint );
 }
 
-void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
-{
-    SET_CURR_SHELL( this );
-    StartAllAction();
-    SwPaM* pCursor = GetCursor();
-    if( pCursor->GetNext() != pCursor )     // Ring of Cursors
-    {
-        bool bIsTableMode = IsTableMode();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSATTR, nullptr);
-
-        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
-        {
-            if( rPaM.HasMark() && ( bIsTableMode ||
-                *rPaM.GetPoint() != *rPaM.GetMark() ))
-            {
-                GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags, GetLayout());
-            }
-        }
-
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSATTR, nullptr);
-    }
-    else
-    {
-        if( !HasSelection() )
-            UpdateAttr();
-        GetDoc()->getIDocumentContentOperations().InsertPoolItem(*pCursor, rHint, nFlags, GetLayout());
-    }
-    EndAllAction();
-}
-
 // tdf#122893 turn off ShowChanges mode to apply paragraph formatting permanently with redlining
 // ie. in all directly preceding deleted paragraphs at the actual cursor positions
 void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNode, RedlineFlags &eRedlMode )
@@ -138,6 +108,45 @@ void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNode, Red
         eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
     }
+}
+
+void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, const bool bParagraphSetting )
+{
+    SET_CURR_SHELL( this );
+    StartAllAction();
+    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
+    SwPaM* pCursor = GetCursor();
+    if( pCursor->GetNext() != pCursor )     // Ring of Cursors
+    {
+        bool bIsTableMode = IsTableMode();
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSATTR, nullptr);
+
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+        {
+            if( rPaM.HasMark() && ( bIsTableMode ||
+                *rPaM.GetPoint() != *rPaM.GetMark() ))
+            {
+                if (bParagraphSetting)
+                    lcl_disableShowChangesIfNeeded( GetDoc(), (*rPaM.Start()).nNode.GetNode(), eRedlMode);
+
+                GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags, GetLayout());
+            }
+        }
+
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSATTR, nullptr);
+    }
+    else
+    {
+        if( !HasSelection() )
+            UpdateAttr();
+
+        if (bParagraphSetting)
+            lcl_disableShowChangesIfNeeded( GetDoc(), (*pCursor->Start()).nNode.GetNode(), eRedlMode);
+
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem(*pCursor, rHint, nFlags, GetLayout());
+    }
+    EndAllAction();
+    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 }
 
 void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM* pPaM, const bool bParagraphSetting )
