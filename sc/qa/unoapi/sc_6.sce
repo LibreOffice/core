@@ -19,7 +19,6 @@
 -o sc.ScNamedRangesObj
 # -o sc.ScShapeObj
 # -o sc.ScSheetLinkObj
--o sc.ScSheetLinksObj
 -o sc.ScSpreadsheetSettings
 -o sc.ScSpreadsheetSettingsObj
 -o sc.ScStyleFamilyObj
