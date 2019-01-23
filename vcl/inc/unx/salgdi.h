@@ -116,6 +116,7 @@ public:
 
     virtual void                    SetTextColor( Color nColor ) override;
     virtual void                    SetFont(LogicalFontInstance*, int nFallbackLevel) override;
+    virtual bool                    HasFont() const override;
     virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual const FontCharMapRef    GetFontCharMap() const override;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;

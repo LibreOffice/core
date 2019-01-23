@@ -1348,13 +1348,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         OUString const& rString) const
 {
-    if (!mpGraphics) // can happen in e.g Insert Index/Table dialog
+    // can happen in e.g Insert Index/Table dialog
+    if (!mpGraphics || !mpGraphics->HasFont())
         return nullptr;
-
-    std::unique_ptr<GenericSalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
-    if (!pSalLayout)
-        return nullptr;
-    return pSalLayout->CreateTextLayoutCache(rString);
+    return GenericSalLayout::CreateTextLayoutCache(rString);
 }
 
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
