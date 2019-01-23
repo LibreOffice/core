@@ -160,6 +160,11 @@ class SvxBkgTabPage : public SvxAreaTabPage
     bool        bHighlighting       : 1;
     bool        bCharBackColor      : 1;
     SfxItemSet maSet;
+    std::unique_ptr<SfxItemSet> m_pResetSet;
+
+    sal_Int32 m_nActPos = -1;
+
+    DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
 public:
     using SvxAreaTabPage::ActivatePage;
     using SvxAreaTabPage::DeactivatePage;
@@ -173,6 +178,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PageCreated( const SfxAllItemSet& aSet ) override;
+    virtual void Reset( const SfxItemSet * ) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
