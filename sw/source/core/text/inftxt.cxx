@@ -1412,7 +1412,7 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
         // set digit mode to what will be used later to get same results
         SwDigitModeModifier const m(*m_pRef, LANGUAGE_NONE /*dummy*/);
         assert(m_pRef->GetDigitLanguage() != LANGUAGE_NONE);
-        SetCachedVclData(m_pRef->CreateTextLayoutCache(*m_pText));
+        SetCachedVclData(OutputDevice::CreateTextLayoutCache(*m_pText));
     }
 
     Init();

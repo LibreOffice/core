@@ -187,6 +187,7 @@ public:
 
 std::unique_ptr<GenericSalLayout> Qt5Graphics::GetTextLayout(int nFallbackLevel)
 {
+    assert(m_pTextStyle[nFallbackLevel]);
     if (!m_pTextStyle[nFallbackLevel])
         return nullptr;
     return o3tl::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);

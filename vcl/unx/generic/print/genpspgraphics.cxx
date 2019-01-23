@@ -735,6 +735,7 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
 
 std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLevel)
 {
+    assert(m_pFreetypeFont[nFallbackLevel]);
     if (!m_pFreetypeFont[nFallbackLevel])
         return nullptr;
     return o3tl::make_unique<PspSalLayout>(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
