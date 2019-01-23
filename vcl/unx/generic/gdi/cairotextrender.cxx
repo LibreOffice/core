@@ -444,6 +444,7 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
 
 std::unique_ptr<GenericSalLayout> CairoTextRender::GetTextLayout(int nFallbackLevel)
 {
+    assert(mpFreetypeFont[nFallbackLevel]);
     if (!mpFreetypeFont[nFallbackLevel])
         return nullptr;
     return o3tl::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]->GetFontInstance());

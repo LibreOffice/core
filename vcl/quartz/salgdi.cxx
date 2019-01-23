@@ -508,6 +508,7 @@ void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
 
 std::unique_ptr<GenericSalLayout> AquaSalGraphics::GetTextLayout(int nFallbackLevel)
 {
+    assert(mpTextStyle[nFallbackLevel]);
     if (!mpTextStyle[nFallbackLevel])
         return nullptr;
     return o3tl::make_unique<GenericSalLayout>(*mpTextStyle[nFallbackLevel]);

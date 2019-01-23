@@ -2070,7 +2070,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 if (aDX.size() < nLen)
                                     aDX.resize(nLen, 0);
 
-                                pFmtDevice->GetTextArray(aShort, &aDX[0]);
+                                pFmtDevice->GetTextArray(aShort, aDX.data());
 
                                 if ( !mpRefDevice->GetConnectMetaFile() ||
                                         mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
@@ -2081,7 +2081,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 }
 
                                 if (bPaint)
-                                    mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
+                                    mpDev->DrawTextArray(aDrawTextPos, aShort, aDX.data());
                             }
                             else
                             {
