@@ -52,6 +52,24 @@
       "revId": "1f7c48a46d4b3871830741e90501a6ffb393ea51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_36a35952",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-23T08:36:02Z",
+      "side": 1,
+      "message": "That\u0027s a step forward. :-) If you assert XPath, you also need to ignore the \"import\" case and only run the test in the \"import-export-import\" case, since only then we have an export result. Notice how that second assert fails only in the testTdf115094v3::Import case, not in testTdf115094v3::Import_Export_Import.",
+      "parentUuid": "1f485f77_bb2a928d",
+      "revId": "1f7c48a46d4b3871830741e90501a6ffb393ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
