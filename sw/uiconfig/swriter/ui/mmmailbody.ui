@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="MailBodyDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="mmmailbody|MailBodyDialog">E-Mail Message</property>
+    <property name="title" translatable="yes" context="mmmailbody|MailBodyDialog">Email Message</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -135,7 +135,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="greeting">
-                    <property name="label" translatable="yes" context="mmmailbody|greeting">This e-mail should contain a salutation</property>
+                    <property name="label" translatable="yes" context="mmmailbody|greeting">This email should contain a salutation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

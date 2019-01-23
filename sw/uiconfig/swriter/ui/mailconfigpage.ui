@@ -93,7 +93,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="mailconfigpage|address_label">_E-mail address:</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|address_label">_Email address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">address</property>
                   </object>
@@ -104,7 +104,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="replytocb">
-                    <property name="label" translatable="yes" context="mailconfigpage|replytocb">Send replies to _different e-mail address</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|replytocb">Send replies to _different email address</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

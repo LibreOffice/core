@@ -745,7 +745,7 @@
       </info>
       <prop oor:name="OutputToLetter" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determines whether the document output is a letter, not an e-mail.</desc>
+          <desc>Determines whether the document output is a letter, not an email.</desc>
           <label>Output as letter</label>
         </info>
         <value>true</value>
@@ -807,8 +807,8 @@
       </prop>
       <prop oor:name="IsEMailGreetingLine" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determines whether an e-mail should have a greeting line.</desc>
-          <label>E-mail greeting line</label>
+          <desc>Determines whether an email should have a greeting line.</desc>
+          <label>Email greeting line</label>
         </info>
         <value>true</value>
       </prop>
@@ -821,8 +821,8 @@
       </prop>
       <prop oor:name="IsEMailIndividualGreetingLine" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determines whether in an e-mail an individual greeting line is used instead of a neutral one.</desc>
-          <label>Use individual greeting line in e-Mail</label>
+          <desc>Determines whether in an email an individual greeting line is used instead of a neutral one.</desc>
+          <label>Use individual greeting line in email</label>
         </info>
         <value>true</value>
       </prop>
@@ -871,13 +871,13 @@
       <prop oor:name="MailDisplayName" oor:type="xs:string">
         <info>
           <desc>Contains the display name of the mail address.</desc>
-          <label>e-Mail Name</label>
+          <label>Email Name</label>
         </info>
       </prop>
       <prop oor:name="MailAddress" oor:type="xs:string">
         <info>
-          <desc>e-Mail address.</desc>
-          <label>e-Mail address</label>
+          <desc>Email address.</desc>
+          <label>Email address</label>
         </info>
       </prop>
       <prop oor:name="IsMailReplyTo" oor:type="xs:boolean">
@@ -972,8 +972,8 @@
       </prop>
       <prop oor:name="EMailSupported" oor:type="xs:boolean">
         <info>
-          <desc>Determines whether e-Mail is supported.</desc>
-          <label>E-Mail supported</label>
+          <desc>Determines whether email is supported.</desc>
+          <label>Email supported</label>
         </info>
       </prop>
       <set oor:name="AddressDataAssignments" oor:node-type="AddressDataAssignment">
@@ -5287,8 +5287,8 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
-            <desc>Specifies your e-mail address.</desc>
-            <label>E-mail</label>
+            <desc>Specifies your email address.</desc>
+            <label>Email</label>
           </info>
         </prop>
       </group>
@@ -5418,7 +5418,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
-            <desc>Specifies your e-mail address.</desc>
+            <desc>Specifies your email address.</desc>
             <label>Email</label>
           </info>
         </prop>
