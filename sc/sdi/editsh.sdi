@@ -93,6 +93,7 @@ interface TableText
     FN_INSERT_SOFT_HYPHEN       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FN_INSERT_HARDHYPHEN        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FN_INSERT_HARD_SPACE        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FN_INSERT_NNBSP             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_INSERT_RLM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_INSERT_LRM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_INSERT_ZWSP             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

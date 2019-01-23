@@ -10838,6 +10838,22 @@ SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertNarrowNobreakSpace FN_INSERT_NNBSP
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
 
 SfxVoidItem ManageLanguage SID_BASICIDE_MANAGE_LANG
 ()
