@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_minmax \
     tools/qa/cppunit/test_100mm2twips \
     tools/qa/cppunit/test_fround \
+    tools/qa/cppunit/test_xmlwalker \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))
@@ -35,6 +36,8 @@ $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))
 $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     sal \
     tl \
+    test \
+    unotest \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \
@@ -44,6 +47,10 @@ $(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \
 $(eval $(call gb_CppunitTest_set_include,tools_test,\
     $$(INCLUDE) \
     -I$(SRCDIR)/tools/inc \
+))
+
+$(eval $(call gb_Library_use_externals,tools_test,\
+	libxml2 \
 ))
 
 # vim: set noet sw=4 ts=4:
