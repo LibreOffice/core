@@ -303,10 +303,10 @@ const PivotCacheItem* PivotCacheItemList::getCacheItem( sal_Int32 nItemIdx ) con
 
 void PivotCacheItemList::applyItemCaptions( const IdCaptionPairList& vCaptions )
 {
-    for( IdCaptionPairList::const_iterator aIt = vCaptions.begin(), aEnd = vCaptions.end(); aIt != aEnd; ++aIt )
+    for( const auto& [rId, rCaption] : vCaptions )
     {
-        if ( static_cast<sal_uInt32>( aIt->first ) < maItems.size() )
-            maItems[ aIt->first ].setStringValue( aIt->second );
+        if ( static_cast<sal_uInt32>( rId ) < maItems.size() )
+            maItems[ rId ].setStringValue( rCaption );
     }
 }
 
@@ -314,8 +314,8 @@ void PivotCacheItemList::getCacheItemNames( ::std::vector< OUString >& orItemNam
 {
     orItemNames.clear();
     orItemNames.reserve( maItems.size() );
-    for( CacheItemVector::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-        orItemNames.push_back( aIt->getName() );
+    for( const auto& rItem : maItems )
+        orItemNames.push_back( rItem.getName() );
 }
 
 // private --------------------------------------------------------------------
@@ -657,26 +657,29 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
     // map the group item indexes from maGroupItems to all item indexes from maDiscreteItems
     std::vector< std::vector<sal_Int32> > aItemMap( maGroupItems.size() );
-    for( IndexVector::const_iterator aBeg = maDiscreteItems.begin(), aIt = aBeg, aEnd = maDiscreteItems.end(); aIt != aEnd; ++aIt )
+    sal_Int32 nIndex = -1;
+    for( const auto& rDiscreteItem : maDiscreteItems )
     {
-        if( std::vector<sal_Int32>* pItems = ContainerHelper::getVectorElementAccess( aItemMap, *aIt ) )
+        ++nIndex;
+        if( std::vector<sal_Int32>* pItems = ContainerHelper::getVectorElementAccess( aItemMap, rDiscreteItem ) )
         {
-            if ( const PivotCacheItem* pItem = rBaseCacheField.getCacheItems().getCacheItem( aIt - aBeg ) )
+            if ( const PivotCacheItem* pItem = rBaseCacheField.getCacheItems().getCacheItem( nIndex ) )
             {
                 // Skip unspecified or unused entries or errors
                 if ( pItem->isUnused() || ( pItem->getType() == XML_m ) ||  ( pItem->getType() == XML_e ) )
                     continue;
             }
-            pItems->push_back( static_cast< sal_Int32 >( aIt - aBeg ) );
+            pItems->push_back( nIndex );
         }
     }
 
     // process all groups
     Reference< XDataPilotField > xDPGroupField;
-    for( auto aBeg = aItemMap.begin(), aIt = aBeg, aEnd = aItemMap.end(); aIt != aEnd; ++aIt )
+    nIndex = 0;
+    for( const auto& rItems : aItemMap )
     {
-        SAL_WARN_IF( aIt->empty(), "sc", "PivotCacheField::createParentGroupField - item/group should not be empty" );
-        if( !aIt->empty() )
+        SAL_WARN_IF( rItems.empty(), "sc", "PivotCacheField::createParentGroupField - item/group should not be empty" );
+        if( !rItems.empty() )
         {
             /*  Insert the names of the items that are part of this group. Calc
                 expects the names of the members of the field whose members are
@@ -686,7 +689,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 names as they are already grouped is used here to resolve the
                 item names. */
             ::std::vector< OUString > aMembers;
-            for( auto i : *aIt )
+            for( auto i : rItems )
                 if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, i ) )
                     if( ::std::find( aMembers.begin(), aMembers.end(), pName->maGroupName ) == aMembers.end() )
                         aMembers.push_back( pName->maGroupName );
@@ -717,7 +720,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                     Therefore, a name from the passed list of original item
                     names is used to find the correct group. */
                 OUString aFirstItem;
-                if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, aIt->front() ) )
+                if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, rItems.front() ) )
                     aFirstItem = pName->maOrigName;
                 Reference< XNamed > xGroupName;
                 OUString aAutoName;
@@ -739,7 +742,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
                 // get the real group name from the list of group items
                 OUString aGroupName;
-                if( const PivotCacheItem* pGroupItem = maGroupItems.getCacheItem( static_cast< sal_Int32 >( aIt - aBeg ) ) )
+                if( const PivotCacheItem* pGroupItem = maGroupItems.getCacheItem( nIndex ) )
                     aGroupName = pGroupItem->getName();
                 SAL_WARN_IF( aGroupName.isEmpty(), "sc", "PivotCacheField::createParentGroupField - cannot find group name" );
                 if( aGroupName.isEmpty() )
@@ -754,7 +757,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                         aPropSet.setProperty( PROP_GroupInfo, aGroupInfo );
                     }
                     // replace original item names in passed vector with group name
-                    for( auto i : *aIt )
+                    for( auto i : rItems )
                         if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElementAccess( orItemNames, i ) )
                             pName->maGroupName = aGroupName;
                 }
@@ -764,6 +767,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown" );
             }
         }
+        ++nIndex;
     }
 
     Reference< XNamed > xFieldName( xDPGroupField, UNO_QUERY );
@@ -1051,8 +1055,13 @@ void PivotCache::writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) c
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row();
     mnCurrRow = -1;
     updateSourceDataRow( rSheetHelper, nRow );
-    for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
-        (*aIt)->writeSourceHeaderCell( rSheetHelper, nCol, nRow );
+    for( const auto& rxDatabaseField : maDatabaseFields )
+    {
+        if (nCol > nMaxCol)
+            break;
+        rxDatabaseField->writeSourceHeaderCell( rSheetHelper, nCol, nRow );
+        ++nCol;
+    }
 }
 
 void PivotCache::writeSourceDataCell( const WorksheetHelper& rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
@@ -1072,8 +1081,13 @@ void PivotCache::importPCRecord( SequenceInputStream& rStrm, const WorksheetHelp
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::importPCRecord - invalid row index" );
     SCCOL nCol = maSheetSrcModel.maRange.aStart.Col();
     SCCOL nMaxCol = getAddressConverter().getMaxApiAddress().Col();
-    for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); !rStrm.isEof() && (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
-        (*aIt)->importPCRecordItem( rStrm, rSheetHelper, nCol, nRow );
+    for( const auto& rxDatabaseField : maDatabaseFields )
+    {
+        if( rStrm.isEof() || (nCol > nMaxCol) )
+            break;
+        rxDatabaseField->importPCRecordItem( rStrm, rSheetHelper, nCol, nRow );
+        ++nCol;
+    }
 }
 
 // private --------------------------------------------------------------------

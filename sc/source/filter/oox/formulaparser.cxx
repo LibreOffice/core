@@ -679,17 +679,17 @@ Any& FormulaParserImpl::insertRawToken( sal_Int32 nOpCode, size_t nIndexFromEnd 
 
 size_t FormulaParserImpl::appendWhiteSpaceTokens( const WhiteSpaceVec* pSpaces )
 {
-    if( pSpaces && !pSpaces->empty() )
-        for( WhiteSpaceVec::const_iterator aIt = pSpaces->begin(), aEnd = pSpaces->end(); aIt != aEnd; ++aIt )
-            appendRawToken( OPCODE_SPACES ) <<= aIt->first;
+    if( pSpaces )
+        for( const auto& rSpace : *pSpaces )
+            appendRawToken( OPCODE_SPACES ) <<= rSpace.first;
     return pSpaces ? pSpaces->size() : 0;
 }
 
 size_t FormulaParserImpl::insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, size_t nIndexFromEnd )
 {
-    if( pSpaces && !pSpaces->empty() )
-        for( WhiteSpaceVec::const_iterator aIt = pSpaces->begin(), aEnd = pSpaces->end(); aIt != aEnd; ++aIt )
-            insertRawToken( OPCODE_SPACES, nIndexFromEnd ) <<= aIt->first;
+    if( pSpaces )
+        for( const auto& rSpace : *pSpaces )
+            insertRawToken( OPCODE_SPACES, nIndexFromEnd ) <<= rSpace.first;
     return pSpaces ? pSpaces->size() : 0;
 }
 

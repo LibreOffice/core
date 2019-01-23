@@ -326,20 +326,20 @@ static void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPai
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
     if ( pXf1 )
     {
-        for ( std::map< FormatKeyPair, ScRangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
+        auto it = std::find_if(rMap.begin(), rMap.end(),
+            [&nFormatId, &rStyles, &pXf1](const std::pair<FormatKeyPair, ScRangeList>& rEntry) {
+                if (rEntry.first.second != nFormatId)
+                    return false;
+                Xf* pXf2 = rStyles.getCellXf( rEntry.first.first ).get();
+                return *pXf1 == *pXf2;
+            });
+        if (it != rMap.end()) // already exists
         {
-            if ( it->first.second == nFormatId )
-            {
-                Xf* pXf2 = rStyles.getCellXf( it->first.first ).get();
-                if ( *pXf1 == *pXf2 ) // already exists
-                {
-                    // add ranges from the rangelist to the existing rangelist for the
-                    // matching style ( should we check if they overlap ? )
-                    for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
-                        it->second.push_back(rRangeList[i]);
-                    return;
-                }
-            }
+            // add ranges from the rangelist to the existing rangelist for the
+            // matching style ( should we check if they overlap ? )
+            for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
+                it->second.push_back(rRangeList[i]);
+            return;
         }
         rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;
     }
@@ -403,50 +403,48 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
 void SheetDataBuffer::finalizeImport()
 {
     // create all array formulas
-    for( ArrayFormulaVector::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
-        finalizeArrayFormula( aIt->first, aIt->second );
+    for( const auto& [rRange, rTokens] : maArrayFormulas )
+        finalizeArrayFormula( rRange, rTokens );
 
     // create all table operations
-    for( TableOperationVector::iterator aIt = maTableOperations.begin(), aEnd = maTableOperations.end(); aIt != aEnd; ++aIt )
-        finalizeTableOperation( aIt->first, aIt->second );
+    for( const auto& [rRange, rModel] : maTableOperations )
+        finalizeTableOperation( rRange, rModel );
 
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
     std::map< FormatKeyPair, ScRangeList > rangeStyleListMap;
-    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
+    for( const auto& [rFormatKeyPair, rRangeList] : maXfIdRangeLists )
     {
-        addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
+        addIfNotInMyMap( getStyles(), rangeStyleListMap, rFormatKeyPair.first, rFormatKeyPair.second, rRangeList );
     }
     // gather all ranges that have the same style and apply them in bulk
-    for (  std::map< FormatKeyPair, ScRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
+    for ( const auto& [rFormatKeyPair, rRanges] : rangeStyleListMap )
     {
-        const ScRangeList& rRanges( it->second );
         for (size_t i = 0, nSize = rRanges.size(); i < nSize; ++i)
-            addColXfStyle( it->first.first, it->first.second, rRanges[i]);
+            addColXfStyle( rFormatKeyPair.first, rFormatKeyPair.second, rRanges[i]);
     }
 
-    for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
+    for ( const auto& [rXfId, rRowRangeList] : maXfIdRowRangeList )
     {
-        if ( it->first == -1 ) // it's a dud skip it
+        if ( rXfId == -1 ) // it's a dud skip it
             continue;
         AddressConverter& rAddrConv = getAddressConverter();
         // get all row ranges for id
-        for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
+        for ( const auto& rRange : rRowRangeList )
         {
-            ScRange aRange( 0, rangeIter->mnFirst, getSheetIndex(),
-                            rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast, getSheetIndex() );
+            ScRange aRange( 0, rRange.mnFirst, getSheetIndex(),
+                            rAddrConv.getMaxApiAddress().Col(), rRange.mnLast, getSheetIndex() );
 
-            addColXfStyle( it->first, -1, aRange, true );
+            addColXfStyle( rXfId, -1, aRange, true );
         }
     }
 
     ScDocumentImport& rDoc = getDocImport();
     StylesBuffer& rStyles = getStyles();
-    for ( ColStyles::iterator col = maStylesPerColumn.begin(), col_end = maStylesPerColumn.end(); col != col_end; ++col )
+    for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
     {
-        RowStyles& rRowStyles = col->second;
-        SCCOL nScCol = static_cast< SCCOL >( col->first );
+        SCCOL nScCol = static_cast< SCCOL >( rCol );
 
         // tdf#91567 Get pattern from the first row without AutoFilter
         const ScPatternAttr* pDefPattern = nullptr;
@@ -468,12 +466,12 @@ void SheetDataBuffer::finalizeImport()
             pDefPattern = rDoc.getDoc().GetDefPattern();
 
         Xf::AttrList aAttrs(pDefPattern);
-        for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
+        for ( const auto& rRowStyle : rRowStyles )
         {
-             Xf* pXf = rStyles.getCellXf( rRows->mnNumFmt.first ).get();
+             Xf* pXf = rStyles.getCellXf( rRowStyle.mnNumFmt.first ).get();
 
              if ( pXf )
-                 pXf->applyPatternToAttrList( aAttrs,  rRows->mnStartRow,  rRows->mnEndRow,  rRows->mnNumFmt.second );
+                 pXf->applyPatternToAttrList( aAttrs,  rRowStyle.mnStartRow,  rRowStyle.mnEndRow,  rRowStyle.mnNumFmt.second );
         }
         if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nEndRow != MAXROW)
         {
@@ -495,10 +493,10 @@ void SheetDataBuffer::finalizeImport()
     }
 
     // merge all cached merged ranges and update right/bottom cell borders
-    for( MergedRangeVector::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
-        applyCellMerging( aIt->maRange );
-    for( MergedRangeVector::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
-        applyCellMerging( aIt->maRange );
+    for( const auto& rMergedRange : maMergedRanges )
+        applyCellMerging( rMergedRange.maRange );
+    for( const auto& rCenterFillRange : maCenterFillRanges )
+        applyCellMerging( rCenterFillRange.maRange );
 }
 
 // private --------------------------------------------------------------------

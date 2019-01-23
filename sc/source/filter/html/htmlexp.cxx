@@ -1209,9 +1209,8 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
             std::vector<sal_Int32> aPortions;
             rEngine.GetPortions( nPar, aPortions );
             sal_Int32 nStart = 0;
-            for ( std::vector<sal_Int32>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
+            for ( const sal_Int32 nEnd : aPortions )
             {
-                sal_Int32 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 bool bUrl = false;
                 // fields are single characters

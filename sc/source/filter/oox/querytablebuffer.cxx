@@ -89,12 +89,12 @@ OUString lclBuildWebQueryTables( const WebPrModel::TablesVector& rTables )
         return OUString( "HTML_tables" );
 
     OUStringBuffer aTables;
-    for( WebPrModel::TablesVector::const_iterator aIt = rTables.begin(), aEnd = rTables.end(); aIt != aEnd; ++aIt )
+    for( const auto& rTable : rTables )
     {
-        if( aIt->has< OUString >() )
-            lclAppendWebQueryTableName( aTables, aIt->get< OUString >() );
-        else if( aIt->has< sal_Int32 >() )
-            lclAppendWebQueryTableIndex( aTables, aIt->get< sal_Int32 >() );
+        if( rTable.has< OUString >() )
+            lclAppendWebQueryTableName( aTables, rTable.get< OUString >() );
+        else if( rTable.has< sal_Int32 >() )
+            lclAppendWebQueryTableIndex( aTables, rTable.get< sal_Int32 >() );
     }
     return aTables.makeStringAndClear();
 }

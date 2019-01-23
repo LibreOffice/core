@@ -1371,9 +1371,8 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
 bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap, const FunctionInfoVector& rFuncInfos )
 {
     bool bIsValid = true;
-    for( FunctionInfoVector::const_iterator aIt = rFuncInfos.begin(), aEnd = rFuncInfos.end(); aIt != aEnd; ++aIt )
+    for( const FunctionInfoRef& xFuncInfo : rFuncInfos )
     {
-        FunctionInfoRef xFuncInfo = *aIt;
         // set API opcode from ODF function name
         if (xFuncInfo->mbExternal)
             bIsValid &= initFuncOpCode( *xFuncInfo, rExtFuncTokenMap );

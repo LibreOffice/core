@@ -423,18 +423,18 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
 {
     ApiFilterSettings aSettings;
     OSL_ENSURE( maCriteria.size() <= 2, "CustomFilter::finalizeImport - too many filter criteria" );
-    for( FilterCriterionVector::iterator aIt = maCriteria.begin(), aEnd = maCriteria.end(); aIt != aEnd; ++aIt )
+    for( const auto& rCriterion : maCriteria )
     {
         // first extract the filter operator
         sal_Int32 nOperator = 0;
-        bool bValidOperator = lclGetApiOperatorFromToken( nOperator, aIt->mnOperator );
+        bool bValidOperator = lclGetApiOperatorFromToken( nOperator, rCriterion.mnOperator );
         if( bValidOperator )
         {
-            if( aIt->maValue.has< OUString >() )
+            if( rCriterion.maValue.has< OUString >() )
             {
                 // string argument
                 OUString aValue;
-                aIt->maValue >>= aValue;
+                rCriterion.maValue >>= aValue;
                 // check for 'empty', 'contains', 'begins with', or 'ends with' text filters
                 bool bEqual = nOperator == FilterOperator2::EQUAL;
                 bool bNotEqual = nOperator == FilterOperator2::NOT_EQUAL;
@@ -474,11 +474,11 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
                     aSettings.appendField( mbAnd, nOperator, aValue );
                 }
             }
-            else if( aIt->maValue.has< double >() )
+            else if( rCriterion.maValue.has< double >() )
             {
                 // floating-point argument
                 double fValue = 0.0;
-                aIt->maValue >>= fValue;
+                rCriterion.maValue >>= fValue;
                 aSettings.appendField( mbAnd, nOperator, fValue );
             }
         }
@@ -524,8 +524,8 @@ ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
         // filter settings object creates a sequence of filter fields
         aSettings = mxSettings->finalizeImport( nMaxCount );
         // add column index to all filter fields
-        for( ApiFilterSettings::FilterFieldVector::iterator aIt = aSettings.maFilterFields.begin(), aEnd = aSettings.maFilterFields.end(); aIt != aEnd; ++aIt )
-            aIt->Field = mnColId;
+        for( auto& rFilterField : aSettings.maFilterFields )
+            rFilterField.Field = mnColId;
     }
     return aSettings;
 }
@@ -588,10 +588,10 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
         bool bHasOrConnection = false;
 
         // process all filter column objects, exit when 'or' connection exists
-        for( FilterColumnVector::iterator aIt = maFilterColumns.begin(), aEnd = maFilterColumns.end(); !bHasOrConnection && (aIt != aEnd); ++aIt )
+        for( const auto& rxFilterColumn : maFilterColumns )
         {
             // the filter settings object creates a list of filter fields
-            ApiFilterSettings aSettings = (*aIt)->finalizeImport( nMaxCount );
+            ApiFilterSettings aSettings = rxFilterColumn->finalizeImport( nMaxCount );
             ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
 
             // new total number of filter fields
@@ -605,8 +605,8 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
 
             // check whether fields are connected by 'or' (see comments above).
             if( rColumnFields.size() >= 2 )
-                for( ApiFilterSettings::FilterFieldVector::iterator aSIt = rColumnFields.begin() + 1, aSEnd = rColumnFields.end(); !bHasOrConnection && (aSIt != aSEnd); ++aSIt )
-                    bHasOrConnection = aSIt->Connection == FilterConnection_OR;
+                bHasOrConnection = std::any_of(rColumnFields.begin() + 1, rColumnFields.end(),
+                    [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
 
             /*  Skip the column filter, if no filter fields have been created,
                 if the number of new filter fields would exceed the total limit
@@ -624,6 +624,9 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
                 // update the regular expressions mode
                 obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
             }
+
+            if( bHasOrConnection )
+                break;
         }
 
         // insert all filter fields to the filter descriptor

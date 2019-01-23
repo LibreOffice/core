@@ -165,8 +165,8 @@ Table& TableBuffer::createTable()
 void TableBuffer::finalizeImport()
 {
     // map all tables by identifier and display name
-    for( TableVector::iterator aIt = maTables.begin(), aEnd = maTables.end(); aIt != aEnd; ++aIt )
-        insertTableToMaps( *aIt );
+    for( const auto& rxTable : maTables )
+        insertTableToMaps( rxTable );
     // finalize all valid tables
     maIdTables.forEachMem( &Table::finalizeImport );
 }

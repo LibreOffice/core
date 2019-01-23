@@ -2077,11 +2077,11 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     }
 
     // copy reused number formats
-    for( ReuseMap::const_iterator aRIt = aReuseMap.begin(), aREnd = aReuseMap.end(); aRIt != aREnd; ++aRIt )
+    for( const auto& [rNumFmtId, rReuseId] : aReuseMap )
     {
-        maNumFmts[ aRIt->first ] = maNumFmts[ aRIt->second ];
-        if ( aRIt->first > mnHighestId )
-            mnHighestId = aRIt->first;
+        maNumFmts[ rNumFmtId ] = maNumFmts[ rReuseId ];
+        if ( rNumFmtId > mnHighestId )
+            mnHighestId = rNumFmtId;
     }
 }
 

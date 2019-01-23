@@ -65,8 +65,8 @@ void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     mvRanges.resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
-    for( ::std::vector< BinRange >::iterator aIt = mvRanges.begin(), aEnd = mvRanges.end(); aIt != aEnd; ++aIt )
-        aIt->read( rStrm );
+    for( auto& rRange : mvRanges )
+        rRange.read( rStrm );
 }
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
@@ -440,8 +440,8 @@ void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
         const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
 {
     ScRange aRange;
-    for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
-        if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
+    for( const auto& rBinRange : rBinRanges )
+        if( convertToCellRange( aRange, rBinRange, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
 }
 

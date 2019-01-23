@@ -85,10 +85,10 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         /* TODO: use svl::SharedString for names */
         ::std::vector< OUString > aNames( maTableColumnVector.size());
         size_t i = 0;
-        for (TableColumnVector::const_iterator aIt = maTableColumnVector.begin(), aEnd = maTableColumnVector.end();
-                aIt != aEnd; ++aIt, ++i)
+        for (const auto& rxTableColumn : maTableColumnVector)
         {
-            aNames[i] = (*aIt)->getName();
+            aNames[i] = rxTableColumn->getName();
+            ++i;
         }
         pDBData->SetTableColumnNames( aNames);
         return true;

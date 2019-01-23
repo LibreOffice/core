@@ -252,15 +252,13 @@ void RevisionHeadersFragment::finalizeImport()
     pCT->SetUseFixDateTime(true);
 
     const oox::core::Relations& rRels = getRelations();
-    RevDataType::const_iterator it = mpImpl->maRevData.begin(), itEnd = mpImpl->maRevData.end();
-    for (; it != itEnd; ++it)
+    for (const auto& [rRelId, rData] : mpImpl->maRevData)
     {
-        OUString aPath = rRels.getFragmentPathFromRelId(it->first);
+        OUString aPath = rRels.getFragmentPathFromRelId(rRelId);
         if (aPath.isEmpty())
             continue;
 
         // Parse each revision log fragment.
-        const RevisionMetadata& rData = it->second;
         pCT->SetUser(rData.maUserName);
         pCT->SetFixDateTimeLocal(rData.maDateTime);
         std::unique_ptr<oox::core::FastParser> xParser(oox::core::XmlFilterBase::createParser());

@@ -351,9 +351,8 @@ void DefinedNamesBuffer::finalizeImport()
 {
     // first insert all names without formula definition into the document, and insert them into the maps
     int index = 0;
-    for( DefNameVector::iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); aIt != aEnd; ++aIt )
+    for( DefinedNameRef& xDefName : maDefNames )
     {
-        DefinedNameRef xDefName = *aIt;
         xDefName->createNameObject( ++index );
         // map by sheet index and original model name
         maModelNameMap[ SheetNameKey( xDefName->getLocalCalcSheet(), xDefName->getUpcaseModelName() ) ] = xDefName;

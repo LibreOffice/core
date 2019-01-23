@@ -231,8 +231,8 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
     delete pLocalColOffset;
     if ( pTables )
     {
-        for( OuterMap::const_iterator it = pTables->begin(); it != pTables->end(); ++it)
-            delete it->second;
+        for( const auto& rEntry : *pTables)
+            delete rEntry.second;
         pTables.reset();
     }
 }
@@ -1831,16 +1831,15 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
     {
         ProcessFormatOptions( maTableItemSet, rInfo );
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
-        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rOption : rOptions)
         {
-            switch( itr->GetToken() )
+            switch( rOption.GetToken() )
             {
                 case HtmlOptionId::BORDER:
-                    mbBorderOn = itr->GetString().isEmpty() || (itr->GetNumber() != 0);
+                    mbBorderOn = rOption.GetString().isEmpty() || (rOption.GetNumber() != 0);
                 break;
                 case HtmlOptionId::ID:
-                    maTableName = itr->GetString();
+                    maTableName = rOption.GetString();
                 break;
                 default: break;
             }
@@ -2055,29 +2054,28 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
         ScHTMLSize aSpanSize( 1, 1 );
         boost::optional<OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
-        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rOption : rOptions)
         {
-            switch (itr->GetToken())
+            switch (rOption.GetToken())
             {
                 case HtmlOptionId::COLSPAN:
-                    aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
+                    aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( rOption.GetString().toInt32(), 1, 256 ) );
                 break;
                 case HtmlOptionId::ROWSPAN:
-                    aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
+                    aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( rOption.GetString().toInt32(), 1, 256 ) );
                 break;
                 case HtmlOptionId::SDVAL:
-                    pValStr = itr->GetString();
+                    pValStr = rOption.GetString();
                 break;
                 case HtmlOptionId::SDNUM:
-                    pNumStr = itr->GetString();
+                    pNumStr = rOption.GetString();
                 break;
                 case HtmlOptionId::CLASS:
                 {
                     // Pick up the number format associated with this class (if
                     // any).
-                    OUString aClass = itr->GetString();
+                    OUString aClass = rOption.GetString();
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
                     const OUString& rVal = rStyles.getPropertyValue("td", aClass, "mso-number-format");
                     if (!rVal.isEmpty())
@@ -2477,15 +2475,14 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
     }
 
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
-    HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rOption : rOptions)
     {
-        switch( itr->GetToken() )
+        switch( rOption.GetToken() )
         {
             case HtmlOptionId::ALIGN:
             {
                 SvxCellHorJustify eVal = SvxCellHorJustify::Standard;
-                const OUString& rOptVal = itr->GetString();
+                const OUString& rOptVal = rOption.GetString();
                 if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                     eVal = SvxCellHorJustify::Right;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ) )
@@ -2500,7 +2497,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
             case HtmlOptionId::VALIGN:
             {
                 SvxCellVerJustify eVal = SvxCellVerJustify::Standard;
-                const OUString& rOptVal = itr->GetString();
+                const OUString& rOptVal = rOption.GetString();
                 if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_top ) )
                     eVal = SvxCellVerJustify::Top;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
@@ -2515,7 +2512,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
             case HtmlOptionId::BGCOLOR:
             {
                 Color aColor;
-                itr->GetColor( aColor );
+                rOption.GetColor( aColor );
                 rItemSet.Put( SvxBrushItem( aColor, ATTR_BACKGROUND ) );
             }
             break;
@@ -2536,8 +2533,7 @@ void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW 
     // #i109987# only grow, don't shrink - use the largest needed size
     SCCOLROW nDiff = nSize - ((nIndex == 0) ? rSizes.front() : (rSizes[ nIndex ] - rSizes[ nIndex - 1 ]));
     if( nDiff > 0 )
-        for( ScSizeVec::iterator aIt = rSizes.begin() + nIndex, aEnd = rSizes.end(); aIt != aEnd; ++aIt )
-            *aIt += nDiff;
+        std::for_each(rSizes.begin() + nIndex, rSizes.end(), [&nDiff](SCCOLROW& rSize) { rSize += nDiff; });
 }
 
 void ScHTMLTable::CalcNeededDocSize(
@@ -2606,15 +2602,9 @@ void ScHTMLTable::RecalcDocSize()
     for( sal_uInt16 nPass = PASS_SINGLE; nPass <= PASS_SPANNED; ++nPass )
     {
         // iterate through every table cell
-        ScHTMLEntryMap::const_iterator aMapIterEnd = maEntryMap.end();
-        for( ScHTMLEntryMap::const_iterator aMapIter = maEntryMap.begin(); aMapIter != aMapIterEnd; ++aMapIter )
+        for( const auto& [rCellPos, rEntryVector] : maEntryMap )
         {
-            const ScHTMLPos& rCellPos = aMapIter->first;
             ScHTMLSize aCellSpan = GetSpan( rCellPos );
-
-            const ScHTMLEntryVector& rEntryVector = aMapIter->second;
-            ScHTMLEntryVector::const_iterator aVectorIter;
-            ScHTMLEntryVector::const_iterator aVectorIterEnd = rEntryVector.end();
 
             // process the dimension of the current cell in this pass?
             // (pass is single and span is 1) or (pass is not single and span is not 1)
@@ -2625,9 +2615,9 @@ void ScHTMLTable::RecalcDocSize()
                 ScHTMLSize aDocSize( 1, 0 );    // resulting size of the cell in document
 
                 // expand the cell size for each cell parse entry
-                for( aVectorIter = rEntryVector.begin(); aVectorIter != aVectorIterEnd; ++aVectorIter )
+                for( const auto& rpEntry : rEntryVector )
                 {
-                    ScHTMLTable* pTable = GetExistingTable( (*aVectorIter)->GetTableId() );
+                    ScHTMLTable* pTable = GetExistingTable( rpEntry->GetTableId() );
                     // find entry with maximum width
                     if( bProcessColWidth && pTable )
                         aDocSize.mnCols = std::max( aDocSize.mnCols, static_cast< SCCOL >( pTable->GetDocSize( tdCol ) ) );
@@ -2653,23 +2643,20 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
     // after the previous assignment it is allowed to call GetDocPos() methods
 
     // iterate through every table cell
-    ScHTMLEntryMap::iterator aMapIterEnd = maEntryMap.end();
-    for( ScHTMLEntryMap::iterator aMapIter = maEntryMap.begin(); aMapIter != aMapIterEnd; ++aMapIter )
+    for( auto& [rCellPos, rEntryVector] : maEntryMap )
     {
         // fixed doc position of the entire cell (first entry)
-        const ScHTMLPos aCellDocPos( GetDocPos( aMapIter->first ) );
+        const ScHTMLPos aCellDocPos( GetDocPos( rCellPos ) );
         // fixed doc size of the entire cell
-        const ScHTMLSize aCellDocSize( GetDocSize( aMapIter->first ) );
+        const ScHTMLSize aCellDocSize( GetDocSize( rCellPos ) );
 
         // running doc position for single entries
         ScHTMLPos aEntryDocPos( aCellDocPos );
 
-        ScHTMLEntryVector& rEntryVector = aMapIter->second;
         ScHTMLEntry* pEntry = nullptr;
-        ScHTMLEntryVector::iterator aVectorIterEnd = rEntryVector.end();
-        for( ScHTMLEntryVector::iterator aVectorIter = rEntryVector.begin(); aVectorIter != aVectorIterEnd; ++aVectorIter )
+        for( const auto& rpEntry : rEntryVector )
         {
-            pEntry = *aVectorIter;
+            pEntry = rpEntry;
             if( ScHTMLTable* pTable = GetExistingTable( pEntry->GetTableId() ) )
             {
                 pTable->RecalcDocPos( aEntryDocPos );   // recalc nested table
@@ -2903,14 +2890,13 @@ void ScHTMLQueryParser::InsertText( const HtmlImportInfo& rInfo )
 void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
 {
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
-    HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rOption : rOptions)
     {
-        switch( itr->GetToken() )
+        switch( rOption.GetToken() )
         {
             case HtmlOptionId::FACE :
             {
-                const OUString& rFace = itr->GetString();
+                const OUString& rFace = rOption.GetString();
                 OUString aFontName;
                 sal_Int32 nPos = 0;
                 while( nPos != -1 )
@@ -2927,14 +2913,14 @@ void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
             break;
             case HtmlOptionId::SIZE :
             {
-                sal_uInt32 nSize = getLimitedValue< sal_uInt32 >( itr->GetNumber(), 1, SC_HTML_FONTSIZES );
+                sal_uInt32 nSize = getLimitedValue< sal_uInt32 >( rOption.GetNumber(), 1, SC_HTML_FONTSIZES );
                 mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ nSize - 1 ], 100, ATTR_FONT_HEIGHT ) );
             }
             break;
             case HtmlOptionId::COLOR :
             {
                 Color aColor;
-                itr->GetColor( aColor );
+                rOption.GetColor( aColor );
                 mpCurrTable->PutItem( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
             }
             break;

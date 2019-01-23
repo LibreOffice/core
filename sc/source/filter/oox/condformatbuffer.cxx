@@ -1094,26 +1094,22 @@ ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, const ScDocume
 
 void CondFormatBuffer::finalizeImport()
 {
-    CondFormatVec::iterator it = maCondFormats.begin();
-    CondFormatVec::iterator it_end = maCondFormats.end();
-    for( ; it != it_end; ++it )
+    for( const auto& rxCondFormat : maCondFormats )
     {
-        if ( (*it).get() )
-            (*it).get()->finalizeImport();
+        if ( rxCondFormat.get() )
+            rxCondFormat.get()->finalizeImport();
     }
-    ExtCfDataBarRuleVec::iterator ext_it = maCfRules.begin();
-    ExtCfDataBarRuleVec::iterator ext_end = maCfRules.end();
-    for ( ; ext_it != ext_end; ++ext_it )
+    for ( const auto& rxCfRule : maCfRules )
     {
-        if ( (*ext_it).get() )
-            (*ext_it).get()->finalizeImport();
+        if ( rxCfRule.get() )
+            rxCfRule.get()->finalizeImport();
     }
 
-    for (auto itr = maExtCondFormats.begin(); itr != maExtCondFormats.end(); ++itr)
+    for (const auto& rxExtCondFormat : maExtCondFormats)
     {
         ScDocument* pDoc = &getScDocument();
 
-        const ScRangeList& rRange = (*itr)->getRange();
+        const ScRangeList& rRange = rxExtCondFormat->getRange();
         SCTAB nTab = rRange.front().aStart.Tab();
         ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
         if (!pFormat)
@@ -1125,10 +1121,10 @@ void CondFormatBuffer::finalizeImport()
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 
-        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = (*itr)->getEntries();
-        for (auto i = rEntries.begin(); i != rEntries.end(); ++i)
+        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = rxExtCondFormat->getEntries();
+        for (const auto& rxEntry : rEntries)
         {
-            pFormat->AddEntry((*i)->Clone(pDoc));
+            pFormat->AddEntry(rxEntry->Clone(pDoc));
         }
     }
 }
