@@ -88,6 +88,7 @@ public:
     void testForcePoint71();
     void testTdf106972();
     void testTdf106972Pdf17();
+    void testSofthyphenPos();
     void testTdf107013();
     void testTdf107018();
     void testTdf107089();
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testForcePoint71);
     CPPUNIT_TEST(testTdf106972);
     CPPUNIT_TEST(testTdf106972Pdf17);
+    CPPUNIT_TEST(testSofthyphenPos);
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
     CPPUNIT_TEST(testTdf107089);
@@ -597,6 +599,65 @@ void PdfExportTest::testTdf106972Pdf17()
     // Assert that we now attempt to preserve the original PDF data, even if
     // the original input was PDF >= 1.4.
     CPPUNIT_ASSERT(pXObject->Lookup("Resources"));
+}
+
+void PdfExportTest::testSofthyphenPos()
+{
+    // No need to run it on Windows, since it would use GDI printing, and not
+    // trigger PDF export which is the intent of the test.
+    // FIXME: Why does this fail on macOS?
+#if !defined MACOSX && !defined _WIN32
+    // Import the bugdoc and print to PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "softhyphen_pdf.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPrintable.is());
+    uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
+    {
+        {"FileName", uno::makeAny(maTempFile.GetURL())},
+        {"Wait", uno::makeAny(true)}
+    }));
+    xPrintable->print(aOptions);
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    if (aFile.bad())
+    {
+        // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
+        // running, there is no printer defined, etc.
+        return;
+    }
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+
+    // tdf#96892 incorrect fractional part of font size caused soft-hyphen to
+    // be positioned inside preceding text (incorrect = 11.1, correct = 11.05)
+
+    // there are 3 texts currently, for line 1, soft-hyphen, line 2
+    bool haveText(false);
+
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, FPDFPageObj_GetType(pPdfPageObject));
+        haveText = true;
+        double const size(FPDFTextObj_GetFontSize(pPdfPageObject));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.05, size, 1E-06);
+    }
+
+    CPPUNIT_ASSERT(haveText);
+#endif
 }
 
 void PdfExportTest::testTdf107013()
