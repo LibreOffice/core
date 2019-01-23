@@ -77,6 +77,7 @@ public:
 
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
     virtual void SAL_CALL FileSave() override;
+    virtual void SAL_CALL FileClose( const css::uno::Any& Save ) override;
     virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& DraftFont,
                                             const css::uno::Any& WrapToWindow,
                                             const css::uno::Any& PicturePlaceHolders,
@@ -539,6 +540,25 @@ SwWordBasic::FileSave()
 {
     uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
     dispatchRequests(xModel,".uno:Save");
+}
+
+void SAL_CALL
+SwWordBasic::FileClose( const css::uno::Any& Save )
+{
+    uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
+
+    sal_Bool bSave = false;
+    if (Save.hasValue() && (Save >>= bSave) && bSave)
+        FileSave();
+
+    // FIXME: Here I would much prefer to call VbaDocumentBase::Close() but not sure how to get at
+    // the VbaDocumentBase of the current document. (Probably it is easy and I haven't looked hard
+    // enough.)
+    //
+    // FIXME: Error handling. If there is no current document, return some kind of error? But for
+    // now, just ignore errors. This code is written to work for a very specific customer use case
+    // ayway, not for an arbitrary sequence of COM calls to the "VBA" API.
+    dispatchRequests(xModel,".uno:CloseDoc");
 }
 
 void SAL_CALL
