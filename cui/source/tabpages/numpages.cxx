@@ -2438,10 +2438,13 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     vcl::Font aFont(aStdFont);
                     Size aTmpSize(aStdFont.GetFontSize());
-                    aTmpSize.setWidth( aTmpSize.Width() * ( rFmt.GetBulletRelSize()) );
-                    aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
-                    aTmpSize.setHeight( aTmpSize.Height() * ( rFmt.GetBulletRelSize()) );
-                    aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
+                    if(pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE))
+                    {
+                        aTmpSize.setWidth( aTmpSize.Width() * ( rFmt.GetBulletRelSize()) );
+                        aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
+                        aTmpSize.setHeight( aTmpSize.Height() * ( rFmt.GetBulletRelSize()) );
+                        aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
+                    }
                     if(!aTmpSize.Height())
                         aTmpSize.setHeight( 1 );
                     aFont.SetFontSize(aTmpSize);
