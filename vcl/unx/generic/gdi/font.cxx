@@ -74,6 +74,11 @@ void X11SalGraphics::SetFont(LogicalFontInstance* pEntry, int nFallbackLevel)
     mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
 }
 
+bool X11SalGraphics::HasFont() const
+{
+    return mxTextRenderImpl->HasFont();
+}
+
 void
 X11SalGraphics::SetTextColor( Color nColor )
 {
