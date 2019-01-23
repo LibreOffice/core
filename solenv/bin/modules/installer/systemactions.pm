@@ -28,7 +28,7 @@ use installer::remover;
 use installer::windows::msiglobal;
 
 ######################################################
-# Creating a new direcotory
+# Creating a new directory
 ######################################################
 
 sub create_directory
@@ -39,7 +39,7 @@ sub create_directory
 }
 
 ######################################################
-# Creating a new direcotory with defined privileges
+# Creating a new directory with defined privileges
 ######################################################
 
 sub create_directory_with_privileges
@@ -175,7 +175,7 @@ sub create_directories
 {
     my ($newdirectory, $languagesref) =@_;
 
-    $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;  # removing ending slashes and backslashes
+    $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//; # removing ending slashes and backslashes
 
     my $path = "";
 
@@ -183,7 +183,7 @@ sub create_directories
     {
         if ( $installer::globals::temppathdefined ) { $path = $installer::globals::temppath; }
         else { $path = $installer::globals::unpackpath; }
-        $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
+        $path =~ s/\Q$installer::globals::separator\E\s*$//; # removing ending slashes and backslashes
         $path = $path . $installer::globals::separator;
     }
     else
@@ -201,7 +201,7 @@ sub create_directories
     $infoline = "create_directories: Using $path for $newdirectory !\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ($newdirectory eq "unzip" )  # special handling for common directory
+    if ($newdirectory eq "unzip" ) # special handling for common directory
     {
     }
     else
@@ -444,7 +444,7 @@ sub copy_directory
         {
             my $sourcefile = $sourcedir . $installer::globals::separator . $onefile;
             my $destfile = $destdir . $installer::globals::separator . $onefile;
-            if ( -f $sourcefile )   # only files, no directories
+            if ( -f $sourcefile ) # only files, no directories
             {
                 copy_one_file($sourcefile, $destfile);
             }
@@ -516,11 +516,11 @@ sub hardlink_complete_directory
         {
             my $source = $sourcedir . $installer::globals::separator . $onefile;
             my $dest = $destdir . $installer::globals::separator . $onefile;
-            if ( -f $source )   # only files, no directories
+            if ( -f $source ) # only files, no directories
             {
                 hardlink_one_file($source, $dest);
             }
-            if ( -d $source )   # recursive
+            if ( -d $source ) # recursive
             {
                 hardlink_complete_directory($source, $dest);
             }
@@ -560,13 +560,13 @@ sub softlink_complete_directory
         {
             my $source = $sourcedir . $installer::globals::separator . $onefile;
             my $dest = $destdir . $installer::globals::separator . $onefile;
-            if ( -f $source )   # only files, no directories
+            if ( -f $source ) # only files, no directories
             {
                 my $localsource = $source;
                 if ( $depth > 0 ) { for ( my $i = 1; $i <= $depth; $i++ ) { $localsource = "../" . $localsource; } }
                 softlink_one_file($localsource, $dest);
             }
-            if ( -d $source )   # recursive
+            if ( -d $source ) # recursive
             {
                 my $newdepth = $depth + 1;
                 softlink_complete_directory($source, $dest, $newdepth);
@@ -607,13 +607,13 @@ sub copy_complete_directory
         {
             my $source = $sourcedir . $installer::globals::separator . $onefile;
             my $dest = $destdir . $installer::globals::separator . $onefile;
-            if ( -f $source )   # only files, no directories
+            if ( -f $source ) # only files, no directories
             {
                 copy_one_file($source, $dest);
             }
-            if ( -d $source )   # recursive
+            if ( -d $source ) # recursive
             {
-                if ((!( $source =~ /packages\/SUNW/ )) && (!( $source =~ /packages\/OOO/ )))    # do not copy complete Solaris packages!
+                if ((!( $source =~ /packages\/SUNW/ )) && (!( $source =~ /packages\/OOO/ ))) # do not copy complete Solaris packages!
                 {
                     copy_complete_directory($source, $dest);
                 }
@@ -651,11 +651,11 @@ sub copy_directory_with_fileextension
     {
         if ((!($onefile eq ".")) && (!($onefile eq "..")))
         {
-            if ( $onefile =~ /\.$extension\s*$/ )   # only copying specified files
+            if ( $onefile =~ /\.$extension\s*$/ ) # only copying specified files
             {
                 my $sourcefile = $sourcedir . $installer::globals::separator . $onefile;
                 my $destfile = $destdir . $installer::globals::separator . $onefile;
-                if ( -f $sourcefile )   # only files, no directories
+                if ( -f $sourcefile ) # only files, no directories
                 {
                     copy_one_file($sourcefile, $destfile);
                 }
@@ -693,12 +693,12 @@ sub rename_files_with_fileextension
     {
         if ((!($onefile eq ".")) && (!($onefile eq "..")))
         {
-            if ( $onefile =~ /^\s*(\S.*?)\.$extension\s*$/ )    # only renaming specified files
+            if ( $onefile =~ /^\s*(\S.*?)\.$extension\s*$/ ) # only renaming specified files
             {
                 my $destfile = $1;
                 my $sourcefile = $dir . $installer::globals::separator . $onefile;
                 $destfile = $dir . $installer::globals::separator . $destfile;
-                if ( -f $sourcefile )   # only files, no directories
+                if ( -f $sourcefile ) # only files, no directories
                 {
                     rename_one_file($sourcefile, $destfile);
                 }
@@ -1087,10 +1087,10 @@ sub create_directory_structure
         $infoline = "Now trying to create parent directory $parentdir\n";
         push(@installer::globals::logfileinfo, $infoline);
 
-        create_directory_structure($parentdir);                                 # recursive
+        create_directory_structure($parentdir); # recursive
     }
 
-    create_directory($directory);   # now it has to succeed
+    create_directory($directory); # now it has to succeed
 }
 
 ######################################################
@@ -1128,12 +1128,12 @@ sub remove_complete_directory
             {
                 my $item = $directory . $installer::globals::separator . $oneitem;
 
-                if ( -f $item || -l $item )     # deleting files or links
+                if ( -f $item || -l $item ) # deleting files or links
                 {
                     unlink($item);
                 }
 
-                if ( -d $item )     # recursive
+                if ( -d $item ) # recursive
                 {
                     remove_complete_directory($item, 0);
                 }
@@ -1187,8 +1187,8 @@ sub create_pid_directory
     my ($directory) = @_;
 
     $directory =~ s/\Q$installer::globals::separator\E\s*$//;
-    my $pid = $$;           # process id
-    my $time = time();      # time
+    my $pid = $$; # process id
+    my $time = time(); # time
 
     $directory = $directory . "_" . $pid . $time;
 
@@ -1221,12 +1221,12 @@ sub read_complete_directory
             my $sep = "";
             if ( $pathstring ne "" ) { $sep = $installer::globals::separator; }
 
-            if ( ! -d $completefilename )   # only files, no directories
+            if ( ! -d $completefilename ) # only files, no directories
             {
                 my $content = $pathstring . $sep . $onefile;
                 push(@{$filecollector}, $content);
             }
-            else  # recursive for directories
+            else # recursive for directories
             {
                 my $newpathstring = $pathstring . $sep . $onefile;
                 read_complete_directory($completefilename, $newpathstring, $filecollector);
