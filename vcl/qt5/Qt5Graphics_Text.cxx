@@ -26,6 +26,8 @@
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
+#include <unx/glyphcache.hxx>
+#include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
@@ -96,19 +98,32 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
         return;
 
     QFontDatabase aFDB;
-
+    QStringList aFontFamilyList;
     if (bUseFontconfig)
-    {
-        const QStringList aFontFamilyList = aFDB.families();
-        ::std::vector<psp::fontID> aList;
-        psp::FastPrintFontInfo aInfo;
+        aFontFamilyList = aFDB.families();
+    GlyphCache& rGC = GlyphCache::GetInstance();
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    ::std::vector<psp::fontID> aList;
+    psp::FastPrintFontInfo aInfo;
 
-        psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        rMgr.getFontList(aList);
-        for (auto const& elem : aList)
+    rMgr.getFontList(aList);
+    for (auto const& elem : aList)
+    {
+        if (!rMgr.getFontFastInfo(elem, aInfo))
+            continue;
+
+        // normalize face number to the GlyphCache
+        int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
+
+        // inform GlyphCache about this font provided by the PsPrint subsystem
+        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
+        aDFA.IncreaseQualityBy(4096);
+        const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
+        rGC.AddFontFile(rFileName, nFaceNum, aInfo.m_nID, aDFA);
+
+        // register font files unknown to Qt
+        if (bUseFontconfig)
         {
-            if (!rMgr.getFontFastInfo(elem, aInfo))
-                continue;
             QString aFilename = toQString(
                 OStringToOUString(rMgr.getFontFileSysPath(aInfo.m_nID), RTL_TEXTENCODING_UTF8));
             QRawFont aRawFont(aFilename, 0.0);
@@ -117,9 +132,10 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
                 || !aFDB.styles(aFamilyName).contains(aRawFont.styleName()))
                 QFontDatabase::addApplicationFont(aFilename);
         }
-
-        SalGenericInstance::RegisterFontSubstitutors(pPFC);
     }
+
+    if (bUseFontconfig)
+        SalGenericInstance::RegisterFontSubstitutors(pPFC);
 
     for (auto& family : aFDB.families())
         for (auto& style : aFDB.styles(family))
