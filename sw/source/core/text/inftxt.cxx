@@ -1403,18 +1403,6 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_nLineNetHeight = 0;
     SetLineStart(TextFrameIndex(0));
 
-    SvtCTLOptions::TextNumerals const nTextNumerals(
-            SW_MOD()->GetCTLOptions().GetCTLTextNumerals());
-    // cannot cache for NUMERALS_CONTEXT because we need to know the string
-    // for the whole paragraph now
-    if (nTextNumerals != SvtCTLOptions::NUMERALS_CONTEXT)
-    {
-        // set digit mode to what will be used later to get same results
-        SwDigitModeModifier const m(*m_pRef, LANGUAGE_NONE /*dummy*/);
-        assert(m_pRef->GetDigitLanguage() != LANGUAGE_NONE);
-        SetCachedVclData(m_pRef->CreateTextLayoutCache(*m_pText));
-    }
-
     Init();
 }
 
