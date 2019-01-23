@@ -52,6 +52,7 @@ const sal_Unicode CHAR_RLM          =   u'\x200F';
 const sal_Unicode CHAR_LRM          =   u'\x200E';
 const sal_Unicode CHAR_ZWSP         =   u'\x200B';
 const sal_Unicode CHAR_ZWNBSP       =   u'\x2060';
+const sal_Unicode CHAR_NNBSP        =   u'\x202F'; //NARROW NO-BREAK SPACE
 
 
 FuBullet::FuBullet (
@@ -83,6 +84,7 @@ void FuBullet::DoExecute( SfxRequest& rReq )
             case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
             case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;
             case FN_INSERT_HARD_SPACE:  cMark = CHAR_HARDBLANK ; break;
+            case FN_INSERT_NNBSP:  cMark = CHAR_NNBSP ; break;
             case SID_INSERT_RLM : cMark = CHAR_RLM ; break;
             case SID_INSERT_LRM : cMark = CHAR_LRM ; break;
             case SID_INSERT_ZWSP : cMark = CHAR_ZWSP ; break;
@@ -281,6 +283,7 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, Sfx
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_NNBSP ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_RLM ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_LRM ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWNBSP ) ||
@@ -300,6 +303,7 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, Sfx
         rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
         rSet.DisableItem(FN_INSERT_HARDHYPHEN);
         rSet.DisableItem(FN_INSERT_HARD_SPACE);
+        rSet.DisableItem(FN_INSERT_NNBSP);
         rSet.DisableItem(SID_INSERT_ZWNBSP);
         rSet.DisableItem(SID_INSERT_ZWSP);
     }

@@ -6613,17 +6613,22 @@
       </node>
       <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Non-br~eaking Hyphen</value>
+          <value xml:lang="en-US">Insert non-br~eaking hyphen</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertSoftHyphen" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">S~oft Hyphen</value>
+          <value xml:lang="en-US">Insert s~oft Hyphen</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertNonBreakingSpace" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Non-breaking Space</value>
+          <value xml:lang="en-US">Insert ~non-breaking space</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertNarrowNobreakSpace" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert n~arrow no-break space (U+202F)</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertZWSP" oor:op="replace">
