@@ -1682,7 +1682,7 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
 
 namespace {
 
-void collectUIInformation(SdrObject* pObj)
+void collectUIInformation(const SdrObject* pObj)
 {
     EventDescription aDescription;
     aDescription.aAction = "SELECT";
