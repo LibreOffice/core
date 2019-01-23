@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 
 #include <cppu/unotype.hxx>
 #include <rtl/string.hxx>
@@ -34,7 +35,8 @@ namespace sc_apitest
 class ScSheetLinksObj : public CalcUnoApiTest,
                         public apitest::XElementAccess,
                         public apitest::XEnumerationAccess,
-                        public apitest::XIndexAccess
+                        public apitest::XIndexAccess,
+                        public apitest::XNameAccess
 {
 public:
     ScSheetLinksObj();
@@ -56,6 +58,11 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,6 +73,7 @@ ScSheetLinksObj::ScSheetLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(1)
+    , XNameAccess(m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/ScSheetLinksObj.ods"))
 {
 }
 

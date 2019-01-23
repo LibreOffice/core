@@ -84,7 +84,6 @@ job96=sc.ScFilterDescriptorBase
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
 job126=sc.ScSheetLinkObj
-job127=sc.ScSheetLinksObj
 job128=sc.ScSpreadsheetSettings
 job129=sc.ScSpreadsheetSettingsObj
 job131=sc.ScStyleFamilyObj
