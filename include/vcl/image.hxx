@@ -28,8 +28,9 @@
 #include <memory>
 
 struct ImplImage;
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace vcl
 {
@@ -43,7 +44,7 @@ namespace vcl
     };
 }
 
-#define IMAGELIST_IMAGE_NOTFOUND    (sal_uInt16(0xFFFF))
+#define IMAGELIST_IMAGE_NOTFOUND (sal_uInt16(0xFFFF))
 
 enum class StockImage { Yes };
 
@@ -52,19 +53,24 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
     friend class ::OutputDevice;
 
 public:
-                    Image();
-                    explicit Image( const BitmapEx& rBitmapEx );
-                    explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
-                    explicit Image( const OUString &rPNGFileUrl );
-                    explicit Image( StockImage, const OUString &rPNGFilePath );
+    Image();
+    explicit Image(BitmapEx const & rBitmapEx);
+    explicit Image(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    explicit Image(OUString const & rPNGFileUrl);
+    explicit Image(StockImage , OUString const & rPNGFilePath);
 
-    Size            GetSizePixel() const;
+    Size GetSizePixel() const;
+    BitmapEx GetBitmapEx() const;
 
-    BitmapEx        GetBitmapEx() const;
-
-    bool            operator!() const { return !mpImplData; }
-    bool            operator==( const Image& rImage ) const;
-    bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+    bool operator!() const
+    {
+        return !mpImplData;
+    }
+    bool operator==(const Image& rImage) const;
+    bool operator!=(const Image& rImage) const
+    {
+        return !(Image::operator==(rImage));
+    }
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 
@@ -72,7 +78,7 @@ private:
 
     std::shared_ptr<ImplImage> mpImplData;
 
-    SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
+    SAL_DLLPRIVATE void ImplInit(BitmapEx const & rBmpEx);
 };
 
 #endif // INCLUDED_VCL_IMAGE_HXX
