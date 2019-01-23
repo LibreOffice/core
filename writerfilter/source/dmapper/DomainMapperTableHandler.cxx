@@ -1176,8 +1176,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter())
                 m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth, nTableWidthType);
-            else if (!m_rDMapper_Impl.IsInFooter()) // FIXME: tdf#116989 floating objects anchored
-                                                    //to footer cannot have proper wrapping
+            else
             {
                 // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
                 uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
