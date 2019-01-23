@@ -41,7 +41,7 @@ namespace toolkit
     UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
-        UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
+        UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXScrollBar>();
     }
 
 
