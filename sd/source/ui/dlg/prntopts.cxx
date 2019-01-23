@@ -202,7 +202,7 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     ClickBookletHdl( nullptr );
 }
 
-VclPtr<SfxTabPage> SdPrintOptions::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdPrintOptions::Create(const TabPageParent& pWindow,
                                            const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SdPrintOptions>::Create( pWindow.pParent, *rOutAttrs );

@@ -47,7 +47,7 @@
 
 using namespace com::sun::star;
 
-SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxGradientTabPage::SvxGradientTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/gradientpage.ui", "GradientPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnGradientListState(nullptr)
@@ -241,7 +241,7 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
         m_xBtnModify->set_sensitive(false);
 }
 
-VclPtr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxGradientTabPage::Create(const TabPageParent& pWindow,
                                                const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxGradientTabPage>::Create(pWindow, *rOutAttrs);

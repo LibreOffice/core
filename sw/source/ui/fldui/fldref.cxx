@@ -1125,7 +1125,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldRefPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwFieldRefPage::Create(const TabPageParent& pParent,
                                          const SfxItemSet *const pAttrSet)
 {
     return VclPtr<SwFieldRefPage>::Create( pParent.pParent, pAttrSet );

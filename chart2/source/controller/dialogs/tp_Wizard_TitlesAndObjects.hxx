@@ -37,7 +37,7 @@ namespace chart
 class TitlesAndObjectsTabPage final : public svt::OWizardPage
 {
 public:
-    TitlesAndObjectsTabPage(TabPageParent pParent,
+    TitlesAndObjectsTabPage(const TabPageParent& pParent,
                             const css::uno::Reference< css::chart2::XChartDocument >& xChartModel,
                             const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~TitlesAndObjectsTabPage() override;

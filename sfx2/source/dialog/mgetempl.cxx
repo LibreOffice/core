@@ -46,7 +46,7 @@
  *
  *  initializes the list box with the templates
  */
-SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+SfxManageStyleSheetPage::SfxManageStyleSheetPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "sfx/ui/managestylepage.ui", "ManageStylePage", &rAttrSet)
     , pStyle(&static_cast<SfxStyleDialogController*>(pParent.pController)->GetStyleSheet())
     , pItem(nullptr)
@@ -522,7 +522,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
     }
 }
 
-VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create(const TabPageParent& pParent,
                                                     const SfxItemSet *rAttrSet )
 {
     return VclPtr<SfxManageStyleSheetPage>::Create(pParent, *rAttrSet);

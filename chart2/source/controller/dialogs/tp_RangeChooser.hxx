@@ -37,7 +37,7 @@ class RangeChooserTabPage final : public svt::OWizardPage, public RangeSelection
 {
 public:
 
-    RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+    RangeChooserTabPage(const TabPageParent& pParent, DialogModel & rDialogModel,
                         ChartTypeTemplateProvider* pTemplateProvider,
                         Dialog * pParentDialog, bool bHideDescription = false);
     virtual ~RangeChooserTabPage() override;

@@ -45,7 +45,7 @@ class SortByXValuesResourceGroup;
 class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
-    ChartTypeTabPage( TabPageParent pParent
+    ChartTypeTabPage(const TabPageParent& pParent
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;

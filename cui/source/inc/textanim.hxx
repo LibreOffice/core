@@ -77,10 +77,10 @@ private:
     sal_uInt16 GetSelectedDirection();
 
 public:
-    SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs);
+    SvxTextAnimationPage(const TabPageParent& pPage, const SfxItemSet& rInAttrs);
     virtual ~SvxTextAnimationPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

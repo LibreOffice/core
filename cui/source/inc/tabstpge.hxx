@@ -70,7 +70,7 @@ class SvxTabulatorTabPage : public SfxTabPage
 public:
     virtual ~SvxTabulatorTabPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -82,7 +82,7 @@ protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxTabulatorTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     // local variables, internal functions
     SvxTabStop      aCurrentTab;

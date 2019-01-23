@@ -43,7 +43,7 @@ const sal_uInt16 SwCondCollPage::m_aPageRg[] = {
     0
 };
 
-SwCondCollPage::SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwCondCollPage::SwCondCollPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)
     , m_rSh(::GetActiveView()->GetWrtShell())
     , m_pCmds(SwCondCollItem::GetCmds())
@@ -112,7 +112,7 @@ DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwCondCollPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwCondCollPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
 }

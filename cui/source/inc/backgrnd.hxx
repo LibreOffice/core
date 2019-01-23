@@ -46,7 +46,7 @@ class SvxBackgroundTabPage : public SvxTabPage
     friend class VclPtr<SvxBackgroundTabPage>;
     static const sal_uInt16 pPageRanges[];
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
     // returns the area of the which-values
     static const sal_uInt16* GetRanges() { return pPageRanges; }
 
@@ -65,7 +65,7 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    SvxBackgroundTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxBackgroundTabPage() override;
     virtual void dispose() override;
 
@@ -164,11 +164,11 @@ public:
     using SvxAreaTabPage::ActivatePage;
     using SvxAreaTabPage::DeactivatePage;
 
-    SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxBkgTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;

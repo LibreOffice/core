@@ -191,10 +191,10 @@ class SvxTransparenceTabPage : public SfxTabPage
     void InvalidatePreview (bool bEnable = true );
 
 public:
-    SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxTransparenceTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxTransparenceTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent, const SfxItemSet*);
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet*);
     static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
@@ -263,11 +263,11 @@ public:
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxAreaTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -325,11 +325,11 @@ private:
     DECL_LINK(SelectShadowHdl_Impl, ColorListBox&, void);
 
 public:
-    SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxShadowTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxShadowTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -404,13 +404,13 @@ private:
     sal_Int32 SearchGradientList(const OUString& rGradientName);
 
 public:
-    SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxGradientTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxGradientTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -476,13 +476,13 @@ private:
     sal_Int32 SearchHatchList(const OUString& rHatchName);
 
 public:
-    SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxHatchTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxHatchTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -560,13 +560,13 @@ private:
     sal_Int32 SearchBitmapList(const OUString& rBitmapName);
 
 public:
-    SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxBitmapTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBitmapTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -618,13 +618,13 @@ private:
     sal_Int32 SearchPatternList(const OUString& rPatternName);
 
 public:
-    SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxPatternTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxPatternTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -738,13 +738,13 @@ private:
     sal_Int32 FindInPalette( const Color& rColor );
 
 public:
-    SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxColorTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxColorTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

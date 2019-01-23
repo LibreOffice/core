@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star;
 
-SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent)
+SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, const TabPageParent& pParent)
     : svt::OWizardPage(pParent, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
     , m_pWizard(pWizard)
     , m_xLetterRB(m_xBuilder->weld_radio_button("letter"))

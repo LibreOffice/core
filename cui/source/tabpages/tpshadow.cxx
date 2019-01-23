@@ -45,7 +45,7 @@ const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
     0
 };
 
-SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxShadowTabPage::SvxShadowTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnColorListState(nullptr)
@@ -416,7 +416,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-VclPtr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxShadowTabPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rAttrs )
 {
     return VclPtr<SvxShadowTabPage>::Create( pParent, *rAttrs );

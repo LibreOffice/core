@@ -182,7 +182,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -213,13 +213,13 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
 
 public:
-    SwSectionFootnoteEndTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SwSectionFootnoteEndTabPage(const TabPageParent& pParent, const SfxItemSet &rAttrSet);
     virtual ~SwSectionFootnoteEndTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -232,13 +232,13 @@ class SwSectionIndentTabPage : public SfxTabPage
 
     DECL_LINK(IndentModifyHdl, weld::MetricSpinButton&, void);
 public:
-    SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SwSectionIndentTabPage(const TabPageParent& pParent, const SfxItemSet &rAttrSet);
     virtual ~SwSectionIndentTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell const & rSh);
 };

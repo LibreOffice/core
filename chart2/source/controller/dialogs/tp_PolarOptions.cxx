@@ -26,7 +26,7 @@
 namespace chart
 {
 
-PolarOptionsTabPage::PolarOptionsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+PolarOptionsTabPage::PolarOptionsTabPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
     , m_xCB_Clockwise(m_xBuilder->weld_check_button("CB_CLOCKWISE"))
     , m_xFL_StartingAngle(m_xBuilder->weld_frame("frameANGLE"))
@@ -49,7 +49,7 @@ void PolarOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> PolarOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> PolarOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<PolarOptionsTabPage>::Create(pParent, *rOutAttrs);
 }

@@ -328,7 +328,7 @@ void OfaMiscTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMiscTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaMiscTabPage>::Create( pParent.pParent, *rAttrSet );
 }
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, CheckBox&, void)
         m_pUseOpenGL->Check();
 }
 
-VclPtr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaViewTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaViewTabPage>::Create(pParent.pParent, *rAttrSet);
 }
@@ -1315,7 +1315,7 @@ void OfaLanguagesTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaLanguagesTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaLanguagesTabPage>::Create(pParent.pParent, *rAttrSet);
 }

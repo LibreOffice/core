@@ -84,7 +84,7 @@ class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup1() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -99,7 +99,7 @@ class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup2() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -114,7 +114,7 @@ class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup3() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -124,14 +124,14 @@ class ScTpSubTotalOptions final : public SfxTabPage
 {
 public:
     virtual ~ScTpSubTotalOptions() override;
-    static VclPtr<SfxTabPage>  Create      ( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 private:
     friend class VclPtr<ScTpSubTotalOptions>;
-    ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTpSubTotalOptions(const TabPageParent& pParent, const SfxItemSet& rArgSet);
 
     void Init                   ();
     void FillUserSortListBox    ();

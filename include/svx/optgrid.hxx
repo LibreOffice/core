@@ -90,10 +90,10 @@ class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxGridTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxGridTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

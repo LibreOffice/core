@@ -75,10 +75,10 @@ private:
 
 public:
 
-    SvxTextAttrPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    SvxTextAttrPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs);
     virtual ~SvxTextAttrPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

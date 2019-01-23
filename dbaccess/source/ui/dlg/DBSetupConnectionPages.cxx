@@ -59,13 +59,13 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OTextConnectionPageSetup>::Create(pParent, _rAttrSet);
     }
 
     // OTextConnectionPageSetup
-    OTextConnectionPageSetup::OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OTextConnectionPageSetup::OTextConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
                                   rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
         , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
@@ -570,13 +570,13 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    VclPtr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    VclPtr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OJDBCConnectionPageSetup>::Create(pParent, _rAttrSet);
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OConnectionTabPageSetup(pParent, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
                                 STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
         , m_xFTDriverClass(m_xBuilder->weld_label("jdbcLabel"))
@@ -689,7 +689,7 @@ using namespace ::com::sun::star;
     }
 
 
-    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
                                  rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
         , m_xPasswordrequired(m_xBuilder->weld_check_button("passwordrequired"))

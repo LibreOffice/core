@@ -150,10 +150,10 @@ friend class SwDropCapsPict;
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwDropCapsPage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
 

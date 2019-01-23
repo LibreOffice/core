@@ -47,7 +47,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
     virtual bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
 public:
-    SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, const TabPageParent& pParent);
     virtual ~SwMailMergeDocSelectPage() override;
     virtual void dispose() override;
 };

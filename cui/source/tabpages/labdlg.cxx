@@ -68,7 +68,7 @@ const sal_uInt16 SvxCaptionTabPage::pCaptionRanges[] =
     0
 };
 
-SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxCaptionTabPage::SvxCaptionTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)
     , nCaptionType(SdrCaptionType::Type1)
     , nGap(0)
@@ -340,7 +340,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetupType_Impl( nCaptionType );
 }
 
-VclPtr<SfxTabPage> SvxCaptionTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SvxCaptionTabPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SvxCaptionTabPage>::Create(pParent, *rOutAttrs);

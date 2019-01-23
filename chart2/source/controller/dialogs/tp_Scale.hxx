@@ -27,10 +27,10 @@ namespace chart
 class ScaleTabPage : public SfxTabPage
 {
 public:
-    ScaleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    ScaleTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~ScaleTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
     using TabPage::DeactivatePage;

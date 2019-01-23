@@ -109,7 +109,7 @@ void ScTpCalcOptions::Init()
     m_pBtnThread->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
-VclPtr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTpCalcOptions::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<ScTpCalcOptions>::Create( pParent.pParent, *rAttrSet );
 }

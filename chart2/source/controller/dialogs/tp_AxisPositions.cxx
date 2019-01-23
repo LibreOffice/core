@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-AxisPositionsTabPage::AxisPositionsTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
+AxisPositionsTabPage::AxisPositionsTabPage(const TabPageParent& pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow ,"modules/schart/ui/tp_AxisPositions.ui" ,"tp_AxisPositions" , &rInAttrs)
     , m_pNumFormatter(nullptr)
     , m_bCrossingAxisIsCategoryAxis(false)
@@ -61,7 +61,7 @@ AxisPositionsTabPage::~AxisPositionsTabPage()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> AxisPositionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> AxisPositionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<AxisPositionsTabPage>::Create(pParent, *rOutAttrs);
 }

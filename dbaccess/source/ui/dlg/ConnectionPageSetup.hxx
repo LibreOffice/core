@@ -47,11 +47,11 @@ namespace dbaui
 
     public:
         virtual ~OConnectionTabPageSetup() override;
-        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet);
+        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet);
+        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet);
+        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet);
+        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet);
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
@@ -59,7 +59,7 @@ namespace dbaui
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
-        OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
+        OConnectionTabPageSetup(const TabPageParent& pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual bool checkTestConnection() override;
             // nControlFlags is a combination of the CBTP_xxx-constants
     };

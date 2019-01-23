@@ -568,7 +568,7 @@ void SvxJavaOptionsPage::RequestRestart( svtools::RestartReason eReason )
 }
 
 
-VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxJavaOptionsPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxJavaOptionsPage>::Create( pParent.pParent, *rAttrSet );
 }

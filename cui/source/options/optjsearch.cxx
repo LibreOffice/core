@@ -25,7 +25,7 @@
 using namespace com::sun::star::i18n;
 
 
-SvxJSearchOptionsPage::SvxJSearchOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
+SvxJSearchOptionsPage::SvxJSearchOptionsPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/optjsearchpage.ui", "OptJSearchPage", &rSet)
     , m_xMatchCase(m_xBuilder->weld_check_button("matchcase"))
     , m_xMatchFullHalfWidth(m_xBuilder->weld_check_button("matchfullhalfwidth"))
@@ -56,7 +56,7 @@ SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxJSearchOptionsPage>::Create(pParent, *rSet);
 }

@@ -22,13 +22,13 @@
 namespace chart
 {
 
-DataLabelsTabPage::DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+DataLabelsTabPage::DataLabelsTabPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs)
         : SfxTabPage(pWindow , "modules/schart/ui/tp_DataLabel.ui", "tp_DataLabel", &rInAttrs)
         , m_aDataLabelResources(m_xBuilder.get(), pWindow.GetFrameWeld(), rInAttrs)
 {
 }
 
-VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> DataLabelsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<DataLabelsTabPage>::Create(pParent, *rOutAttrs);
 }

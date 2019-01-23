@@ -41,7 +41,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OSpreadSheetConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup() override;
 
     private:
@@ -59,8 +59,8 @@ namespace dbaui
         std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
-        OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        static VclPtr<OGenericAdministrationPage> CreateTextTabPage(const TabPageParent& pParent, const SfxItemSet& _rAttrSet );
+        OTextConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
         virtual void dispose() override;
         virtual ~OTextConnectionPageSetup() override;
     protected:
@@ -172,9 +172,9 @@ namespace dbaui
     class OJDBCConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
-        OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OJDBCConnectionPageSetup(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OJDBCConnectionPageSetup() override;
-        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet);
 
     private:
         virtual bool checkTestConnection() override;

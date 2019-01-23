@@ -61,10 +61,10 @@ class SwEndNoteOptionPage : public SfxTabPage
     DECL_LINK(NumCountHdl, weld::ComboBox&, void);
 
 public:
-    SwEndNoteOptionPage(TabPageParent pParent, bool bEndNote, const SfxItemSet &rSet);
+    SwEndNoteOptionPage(const TabPageParent& pParent, bool bEndNote, const SfxItemSet &rSet);
     virtual ~SwEndNoteOptionPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset( const SfxItemSet* ) override;
 
@@ -74,11 +74,11 @@ public:
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
     friend class VclPtr<SwFootNoteOptionPage>;
-    SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet );
+    SwFootNoteOptionPage(const TabPageParent& pParent, const SfxItemSet &rSet );
     virtual ~SwFootNoteOptionPage() override;
 
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
 };
 
 #endif

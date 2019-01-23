@@ -67,7 +67,7 @@ public:
     virtual ~SvxNumberFormatTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>      Create(const TabPageParent& pParent,
                                     const SfxItemSet* rAttrSet );
     // Returns area information.
     static const sal_uInt16* GetRanges() { return pRanges; }
@@ -79,7 +79,7 @@ public:
     void                    HideLanguage(bool bFlag=true);
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 private:
-    SvxNumberFormatTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+    SvxNumberFormatTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
 
     std::unique_ptr<SvxNumberInfoItem>    pNumItem;
     std::unique_ptr<SvxNumberFormatShell> pNumFmtShell;

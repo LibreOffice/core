@@ -59,7 +59,7 @@ public:
     virtual ~SwMailConfigPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                       const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

@@ -161,14 +161,14 @@ private:
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange();
 
-    SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxPageDescPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     // returns the range of the Which values
     static const sal_uInt16* GetRanges() { return pRanges; }
 

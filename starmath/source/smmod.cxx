@@ -235,7 +235,7 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-VclPtr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet )
 {
     VclPtr<SfxTabPage> pRet;
     if (nId == SID_SM_TP_PRINTOPTIONS)

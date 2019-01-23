@@ -220,7 +220,7 @@ void MarginControlsWrapper::SetControlDontKnow()
     mrBottomWrp.set_text(sEmpty);
 }
 
-SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+SvxBorderTabPage::SvxBorderTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "cui/ui/borderpage.ui", "BorderPage", &rCoreAttrs)
     , nMinValue(0)
     , nSWMode(SwBorderModes::NONE)
@@ -506,7 +506,7 @@ void SvxBorderTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBorderTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxBorderTabPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxBorderTabPage>::Create(pParent, *rAttrSet);

@@ -35,10 +35,10 @@ namespace chart
 class SchOptionTabPage : public SfxTabPage
 {
 public:
-    SchOptionTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SchOptionTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SchOptionTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 

@@ -103,7 +103,7 @@ void SfxMacroTabPage::EnableButtons()
         mpImpl->m_xAssignPB->set_sensitive(false);
 }
 
-SfxMacroTabPage::SfxMacroTabPage(TabPageParent pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
+SfxMacroTabPage::SfxMacroTabPage(const TabPageParent& pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
     : SfxTabPage(pParent, "cui/ui/eventassignpage.ui", "EventAssignPage", &rAttrSet)
 {
     mpImpl.reset(new SfxMacroTabPage_Impl);
@@ -374,13 +374,13 @@ void SfxMacroTabPage::FillEvents()
 
 namespace
 {
-    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
     {
         return VclPtr<SfxMacroTabPage>::Create( pParent, nullptr, rAttrSet );
     }
 }
 
-VclPtr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SfxMacroTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }

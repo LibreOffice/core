@@ -224,7 +224,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXSelectTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage() override;
     virtual void        dispose() override;
 
@@ -234,7 +234,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -402,7 +402,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXEntryTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage() override;
     virtual void dispose() override;
 
@@ -411,7 +411,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
@@ -447,7 +447,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXStylesTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -456,7 +456,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                        const SfxItemSet* rAttrSet);
 
 };

@@ -81,7 +81,7 @@ public:
     void SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
 };
 
-SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxPatternTabPage::SvxPatternTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/patterntabpage.ui", "PatternTabPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnPatternListState(nullptr)
@@ -252,7 +252,7 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
 }
 
 
-VclPtr<SfxTabPage> SvxPatternTabPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxPatternTabPage::Create(const TabPageParent& pWindow,
                                              const SfxItemSet* rSet )
 {
     return VclPtr<SvxPatternTabPage>::Create(pWindow, *rSet);

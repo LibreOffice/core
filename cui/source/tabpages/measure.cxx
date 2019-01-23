@@ -78,7 +78,7 @@ SvxMeasureDialog::SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rInA
 |*
 \************************************************************************/
 
-SvxMeasurePage::SvxMeasurePage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+SvxMeasurePage::SvxMeasurePage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs)
     : SvxTabPage(pWindow, "cui/ui/dimensionlinestabpage.ui", "DimensionLinesTabPage", rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
@@ -536,7 +536,7 @@ void SvxMeasurePage::Construct()
     m_aCtlPreview.Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxMeasurePage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SvxMeasurePage::Create(const TabPageParent& pParent,
                                           const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxMeasurePage>::Create(pParent, *rAttrs);

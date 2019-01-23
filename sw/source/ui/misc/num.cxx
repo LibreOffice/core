@@ -54,7 +54,7 @@ static bool bLastRelative = false;
 //dialog to this one, except with a different preview window impl.
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
-SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwNumPositionTabPage::SwNumPositionTabPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/outlinepositionpage.ui", "OutlinePositionPage", &rSet)
     , pSaveNum(nullptr)
     , pWrtSh(nullptr)
@@ -496,7 +496,7 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_xIndentAtMF->show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwNumPositionTabPage::Create(const TabPageParent& pParent,
                                                  const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwNumPositionTabPage>::Create(pParent, *rAttrSet);

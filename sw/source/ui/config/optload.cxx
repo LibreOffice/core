@@ -168,7 +168,7 @@ void SwLoadOptPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwLoadOptPage::Create(const TabPageParent& pParent,
                                           const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwLoadOptPage>::Create(pParent.pParent, *rAttrSet );
@@ -453,7 +453,7 @@ IMPL_LINK(SwCaptionOptPage, TextFilterHdl, OUString&, rTest, bool)
     return true;
 }
 
-SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwCaptionOptPage::SwCaptionOptPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/optcaptionpage.ui", "OptCaptionPage", &rSet)
     , m_sSWTable(SwResId(STR_CAPTION_TABLE))
     , m_sSWFrame(SwResId(STR_CAPTION_FRAME))
@@ -574,7 +574,7 @@ void SwCaptionOptPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCaptionOptPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SwCaptionOptPage::Create(const TabPageParent& pParent,
                                             const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwCaptionOptPage>::Create(pParent, *rAttrSet);

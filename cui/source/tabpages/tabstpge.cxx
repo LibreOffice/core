@@ -66,7 +66,7 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);
 }
 
-SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
+SvxTabulatorTabPage::SvxTabulatorTabPage(const TabPageParent& pParent, const SfxItemSet& rAttr)
     : SfxTabPage(pParent, "cui/ui/paratabspage.ui", "ParagraphTabsPage", &rAttr)
     , aCurrentTab(0)
     , aNewTabs(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP))
@@ -225,7 +225,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxTabulatorTabPage>::Create(pParent, *rSet);
 }

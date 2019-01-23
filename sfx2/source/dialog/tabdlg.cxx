@@ -181,7 +181,7 @@ SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString&
 {
 }
 
-SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
+SfxTabPage::SfxTabPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
     : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )

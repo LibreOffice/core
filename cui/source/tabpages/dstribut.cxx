@@ -49,7 +49,7 @@ SvxDistributeDialog::~SvxDistributeDialog()
 |*
 \************************************************************************/
 
-SvxDistributePage::SvxDistributePage(TabPageParent pWindow,
+SvxDistributePage::SvxDistributePage(const TabPageParent& pWindow,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
     : SfxTabPage(pWindow, "cui/ui/distributionpage.ui", "DistributionPage",

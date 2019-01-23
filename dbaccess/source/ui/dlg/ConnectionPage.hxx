@@ -57,7 +57,7 @@ namespace dbaui
 
     public:
         virtual ~OConnectionTabPage() override;
-        static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* _rAttrSet );
+        static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -67,7 +67,7 @@ namespace dbaui
             affect the type may be changed (compared to the previous URL).</p>
         */
     private:
-        OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OConnectionTabPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags is a combination of the CBTP_xxx-constants
 
         /** enables the test connection button, if allowed

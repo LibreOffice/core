@@ -36,11 +36,11 @@ class PolarOptionsTabPage : public SfxTabPage
 {
 
 public:
-    PolarOptionsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    PolarOptionsTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~PolarOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 

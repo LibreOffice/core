@@ -54,7 +54,7 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(TabPageParent pParent,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(const TabPageParent& pParent,
         const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rCoreAttrs,
         OCommonBehaviourTabPageFlags nControlFlags)
         : OGenericAdministrationPage(pParent, rUIXMLDescription, rId, rCoreAttrs)
@@ -165,7 +165,7 @@ namespace dbaui
     }
 
     // ODbaseDetailsPage
-    ODbaseDetailsPage::ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+    ODbaseDetailsPage::ODbaseDetailsPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/dbasepage.ui", "DbasePage",
                                     _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xShowDeleted(m_xBuilder->weld_check_button("showDelRowsCheckbutton"))
@@ -181,7 +181,7 @@ namespace dbaui
         disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateDbase(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateDbase(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<ODbaseDetailsPage>::Create(pParent, *_rAttrSet);
     }
@@ -235,20 +235,20 @@ namespace dbaui
     }
 
     // OAdoDetailsPage
-    OAdoDetailsPage::OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OAdoDetailsPage::OAdoDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
 
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateAdo(TabPageParent pParent, const SfxItemSet* rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateAdo(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
     {
         return VclPtr<OAdoDetailsPage>::Create(pParent, *rAttrSet);
     }
 
     // OOdbcDetailsPage
-    OOdbcDetailsPage::OOdbcDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OOdbcDetailsPage::OOdbcDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
                                     OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xUseCatalog(m_xBuilder->weld_check_button("useCatalogCheckbutton"))
@@ -261,7 +261,7 @@ namespace dbaui
         disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateODBC(const TabPageParent& pParent, const SfxItemSet* pAttrSet)
     {
         return VclPtr<OOdbcDetailsPage>::Create(pParent, *pAttrSet);
     }
@@ -286,7 +286,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OOdbcDetailsPage
-    OUserDriverDetailsPage::OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OUserDriverDetailsPage::OUserDriverDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xFTHostname(m_xBuilder->weld_label("hostnameft"))
@@ -303,7 +303,7 @@ namespace dbaui
         disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateUser(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateUser(const TabPageParent& pParent, const SfxItemSet* pAttrSet)
     {
         return VclPtr<OUserDriverDetailsPage>::Create(pParent, *pAttrSet);
     }
@@ -355,19 +355,19 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
-    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC(const TabPageParent& pParent, const SfxItemSet* pAttrSet)
     {
         return VclPtr<OMySQLODBCDetailsPage>::Create(pParent, *pAttrSet);
     }
 
     // OMySQLJDBCDetailsPage
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_nPortId(_nPortId)
@@ -499,7 +499,7 @@ namespace dbaui
     }
 
     // MySQLNativePage
-    MySQLNativePage::MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    MySQLNativePage::MySQLNativePage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
         , m_aMySQLSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified))
@@ -573,23 +573,23 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC(const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create(pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(const TabPageParent& pParent, const SfxItemSet* pAttrSet)
     {
         return VclPtr<MySQLNativePage>::Create(pParent, *pAttrSet);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create(pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
     }
 
     // OLDAPDetailsPage
-    OLDAPDetailsPage::OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OLDAPDetailsPage::OLDAPDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/ldappage.ui", "LDAP",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
@@ -611,7 +611,7 @@ namespace dbaui
         disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<OLDAPDetailsPage>::Create(pParent, *_rAttrSet);
     }
@@ -666,7 +666,7 @@ namespace dbaui
     }
 
     // OTextDetailsPage
-    OTextDetailsPage::OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    OTextDetailsPage::OTextDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
@@ -683,7 +683,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateText(const TabPageParent& pParent,  const SfxItemSet* pAttrSet)
     {
         return VclPtr<OTextDetailsPage>::Create(pParent, *pAttrSet);
     }
@@ -722,12 +722,12 @@ namespace dbaui
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<GeneratedValuesPage>::Create(pParent, *_rAttrSet);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );

@@ -89,7 +89,7 @@ public:
                         virtual ~SwFieldFuncPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

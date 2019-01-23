@@ -84,7 +84,7 @@ class SvxBorderTabPage : public SfxTabPage
 public:
     virtual ~SvxBorderTabPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
     static const sal_uInt16*      GetRanges() { return pRanges; }
 
@@ -100,7 +100,7 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+    SvxBorderTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
 
     std::vector<Image> m_aShadowImgVec;
     std::vector<Image> m_aBorderImgVec;

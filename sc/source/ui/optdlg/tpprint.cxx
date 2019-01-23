@@ -26,7 +26,7 @@
 #include <scmod.hxx>
 #include <sc.hrc>
 
-ScTpPrintOptions::ScTpPrintOptions( TabPageParent pPage,
+ScTpPrintOptions::ScTpPrintOptions(const TabPageParent& pPage,
                                     const SfxItemSet& rCoreAttrs )
     : SfxTabPage(pPage, "modules/scalc/ui/optdlg.ui", "optCalcPrintPage", &rCoreAttrs )
     , m_xSkipEmptyPagesCB(m_xBuilder->weld_check_button("suppressCB"))
@@ -39,7 +39,7 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-VclPtr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ScTpPrintOptions::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<ScTpPrintOptions>::Create(pParent, *rAttrSet);
 }

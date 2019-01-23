@@ -66,7 +66,7 @@ public:
 
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -107,10 +107,10 @@ class SwAddPrinterTabPage : public SfxTabPage
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
-    SwAddPrinterTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwAddPrinterTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwAddPrinterTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -175,7 +175,7 @@ class SwStdFontTabPage : public SfxTabPage
     virtual void dispose() override;
 
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -214,7 +214,7 @@ public:
     virtual ~SwTableOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -258,7 +258,7 @@ public:
     virtual ~SwShdwCursorOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -333,7 +333,7 @@ public:
     virtual ~SwRedlineOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -350,7 +350,7 @@ public:
     virtual ~SwTestTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -393,7 +393,7 @@ public:
     virtual ~SwCompareOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;

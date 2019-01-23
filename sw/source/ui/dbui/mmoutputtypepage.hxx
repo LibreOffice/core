@@ -36,7 +36,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
     DECL_LINK(TypeHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, const TabPageParent& pParent);
     virtual ~SwMailMergeOutputTypePage() override;
     virtual void dispose() override;
 };

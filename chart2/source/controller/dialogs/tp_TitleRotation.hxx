@@ -49,12 +49,12 @@ private:
     DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);
 
 public:
-    SchAlignmentTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
+    SchAlignmentTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
-    static VclPtr<SfxTabPage> CreateWithoutRotation(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> CreateWithoutRotation(const TabPageParent& pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 };

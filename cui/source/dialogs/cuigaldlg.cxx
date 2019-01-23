@@ -512,7 +512,7 @@ void GalleryThemeProperties::PageCreated(const OString& rId, SfxTabPage &rPage)
         static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
-TPGalleryThemeGeneral::TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet)
+TPGalleryThemeGeneral::TPGalleryThemeGeneral(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/gallerygeneralpage.ui", "GalleryGeneralPage", &rSet)
     , pData(nullptr)
     , m_xFiMSImage(m_xBuilder->weld_image("image"))
@@ -582,12 +582,12 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<TPGalleryThemeGeneral>::Create(pParent, *rSet);
 }
 
-TPGalleryThemeProperties::TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet)
+TPGalleryThemeProperties::TPGalleryThemeProperties(const TabPageParent& pWindow, const SfxItemSet& rSet)
     : SfxTabPage(pWindow, "cui/ui/galleryfilespage.ui", "GalleryFilesPage", &rSet)
     , pData(nullptr)
     , bEntriesFound(false)
@@ -655,7 +655,7 @@ void TPGalleryThemeProperties::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeProperties::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> TPGalleryThemeProperties::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<TPGalleryThemeProperties>::Create(pParent, *rSet);
 }

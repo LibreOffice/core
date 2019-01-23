@@ -113,7 +113,7 @@ void SfxCommonPrintOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SfxCommonPrintOptionsTabPage>::Create( pParent.pParent, *rAttrSet );
 }

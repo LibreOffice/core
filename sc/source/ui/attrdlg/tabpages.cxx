@@ -36,7 +36,7 @@ const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 
 // Zellschutz-Tabpage:
 
-ScTabPageProtection::ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+ScTabPageProtection::ScTabPageProtection(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "modules/scalc/ui/cellprotectionpage.ui", "CellProtectionPage", &rCoreAttrs)
     , m_xBtnHideCell(m_xBuilder->weld_check_button("checkHideAll"))
     , m_xBtnProtect(m_xBuilder->weld_check_button("checkProtected"))
@@ -60,7 +60,7 @@ ScTabPageProtection::~ScTabPageProtection()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTabPageProtection::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ScTabPageProtection::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<ScTabPageProtection>::Create(pParent, *rAttrSet);
 }

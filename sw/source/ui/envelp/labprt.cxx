@@ -27,7 +27,7 @@
 
 #include <cmdid.h>
 
-SwLabPrtPage::SwLabPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwLabPrtPage::SwLabPrtPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
     , pPrinter(nullptr)
     , m_xPageButton(m_xBuilder->weld_radio_button("entirepage"))
@@ -92,7 +92,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
     }
 }
 
-VclPtr<SfxTabPage> SwLabPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabPrtPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwLabPrtPage>::Create(pParent, *rSet );
 }

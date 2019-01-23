@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-void lcl_enableRangeChoosing(bool bEnable, TabPageParent pParent)
+void lcl_enableRangeChoosing(bool bEnable, const TabPageParent& pParent)
 {
     if (weld::Window* pWeldDialog = dynamic_cast<weld::Window*>(pParent.pPage))
     {
@@ -85,7 +85,7 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 namespace chart
 {
 
-ErrorBarResources::ErrorBarResources(weld::Builder* pParent, TabPageParent pParentDialog,
+ErrorBarResources::ErrorBarResources(weld::Builder* pParent, const TabPageParent& pParentDialog,
                                      const SfxItemSet& rInAttrs, bool bNoneAvailable,
                                      tErrorBarType eType /* = ERROR_BAR_Y */ )
     : m_eErrorKind( SvxChartKindError::NONE )

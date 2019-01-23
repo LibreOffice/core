@@ -67,7 +67,7 @@ namespace dbaui
         SetExchangeSupport();
     }
 
-    OGenericAdministrationPage::OGenericAdministrationPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
+    OGenericAdministrationPage::OGenericAdministrationPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
         : SfxTabPage(pParent, rUIXMLDescription, rId, &rAttrSet)
         , m_abEnableRoadmap(false)
         , m_pAdminDialog(nullptr)

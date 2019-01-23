@@ -136,12 +136,12 @@ static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-VclPtr<SfxTabPage> SvxPageDescPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxPageDescPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxPageDescPage>::Create(pParent, *rSet);
 }
 
-SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
+SvxPageDescPage::SvxPageDescPage(const TabPageParent& pParent, const SfxItemSet& rAttr)
     : SfxTabPage(pParent, "cui/ui/pageformatpage.ui", "PageFormatPage", &rAttr)
     , bLandscape(false)
     , eMode(SVX_PAGE_MODE_STANDARD)

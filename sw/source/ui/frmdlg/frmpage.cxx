@@ -604,7 +604,7 @@ namespace
     }
 }
 
-SwFramePage::SwFramePage(TabPageParent pParent, const SfxItemSet &rSet)
+SwFramePage::SwFramePage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/frmtypepage.ui", "FrameTypePage", &rSet)
     , m_bAtHorzPosModified(false)
     , m_bAtVertPosModified(false)
@@ -810,7 +810,7 @@ void SwFramePage::setOptimalRelWidth()
     m_xHoriRelationLB->clear();
 }
 
-VclPtr<SfxTabPage> SwFramePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFramePage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFramePage>::Create(pParent, *rSet);
 }
@@ -2280,7 +2280,7 @@ void SwFramePage::EnableVerticalPositioning( bool bEnable )
     m_xVertRelationLB->set_sensitive( bEnable );
 }
 
-SwGrfExtPage::SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwGrfExtPage::SwGrfExtPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/picturepage.ui", "PicturePage", &rSet)
     , m_bHtmlMode(false)
     , m_xMirror(m_xBuilder->weld_widget("flipframe"))
@@ -2321,7 +2321,7 @@ void SwGrfExtPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwGrfExtPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwGrfExtPage>::Create(pParent, *rSet);
 }
@@ -2656,7 +2656,7 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 }
 
 // set URL and ImageMap at frames
-SwFrameURLPage::SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwFrameURLPage::SwFrameURLPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/frmurlpage.ui", "FrameURLPage", &rSet)
     , m_xURLED(m_xBuilder->weld_entry("url"))
     , m_xSearchPB(m_xBuilder->weld_button("search"))
@@ -2746,7 +2746,7 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFrameURLPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFrameURLPage>::Create(pParent, *rSet);
 }
@@ -2770,7 +2770,7 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
     }
 }
 
-SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwFrameAddPage::SwFrameAddPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/frmaddpage.ui", "FrameAddPage", &rSet)
     , m_pWrtSh(nullptr)
     , m_bHtmlMode(false)
@@ -2818,7 +2818,7 @@ void SwFrameAddPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFrameAddPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFrameAddPage>::Create(pParent, *rSet);
 }

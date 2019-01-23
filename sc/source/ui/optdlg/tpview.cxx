@@ -127,7 +127,7 @@ void ScTpContentOptions::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScTpContentOptions::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> ScTpContentOptions::Create(const TabPageParent& pParent,
                                                const SfxItemSet*     rCoreSet )
 {
     return VclPtr<ScTpContentOptions>::Create(pParent.pParent, *rCoreSet);
@@ -415,7 +415,7 @@ void ScTpLayoutOptions::dispose()
 }
 
 
-VclPtr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> ScTpLayoutOptions::Create(const TabPageParent& pParent,
                                               const SfxItemSet*   rCoreSet )
 {
     VclPtrInstance<ScTpLayoutOptions> pNew( pParent.pParent, *rCoreSet );

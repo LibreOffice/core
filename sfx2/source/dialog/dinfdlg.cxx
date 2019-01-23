@@ -609,7 +609,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxDocumentDescPage::SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet& rItemSet)
+SfxDocumentDescPage::SfxDocumentDescPage(const TabPageParent& pParent, const SfxItemSet& rItemSet)
     : SfxTabPage(pParent, "sfx/ui/descriptioninfopage.ui", "DescriptionInfoPage", &rItemSet)
     , m_pInfoItem( nullptr)
     , m_xTitleEd(m_xBuilder->weld_entry("title"))
@@ -625,7 +625,7 @@ SfxDocumentDescPage::~SfxDocumentDescPage()
 {
 }
 
-VclPtr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
+VclPtr<SfxTabPage> SfxDocumentDescPage::Create(const TabPageParent& pParent, const SfxItemSet *rItemSet)
 {
      return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
 }
@@ -891,7 +891,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_pChangePassBtn->Disable();
 }
 
-VclPtr<SfxTabPage> SfxDocumentPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxDocumentPage::Create(const TabPageParent& pParent, const SfxItemSet* rItemSet )
 {
      return VclPtr<SfxDocumentPage>::Create( pParent.pParent, *rItemSet );
 }
@@ -2175,7 +2175,7 @@ DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create(const TabPageParent& pParent, const SfxItemSet* rItemSet )
 {
     return VclPtr<SfxCustomPropertiesPage>::Create( pParent.pParent, *rItemSet );
 }
@@ -2634,7 +2634,7 @@ DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create(const TabPageParent& pParent, const SfxItemSet* rItemSet )
 {
     return VclPtr<SfxCmisPropertiesPage>::Create( pParent.pParent, *rItemSet );
 }

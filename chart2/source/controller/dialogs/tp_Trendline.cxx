@@ -23,13 +23,13 @@
 namespace chart
 {
 
-TrendlineTabPage::TrendlineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+TrendlineTabPage::TrendlineTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "modules/schart/ui/tp_Trendline.ui", "TP_TRENDLINE", &rInAttrs)
     , m_aTrendlineResources(*m_xBuilder, rInAttrs)
 {
 }
 
-VclPtr<SfxTabPage> TrendlineTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> TrendlineTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<TrendlineTabPage>::Create(pParent, *rOutAttrs);
 }

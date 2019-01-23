@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 
-SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
+SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, const TabPageParent& pParent)
     : svt::OWizardPage(pParent, "modules/swriter/ui/mmselectpage.ui", "MMSelectPage")
     , m_pWizard(pWizard)
     , m_xCurrentDocRB(m_xBuilder->weld_radio_button("currentdoc"))

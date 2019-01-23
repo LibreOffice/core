@@ -34,7 +34,7 @@ class ScTpUserLists : public SfxTabPage
 {
     friend class VclPtr<ScTpUserLists>;
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                           const SfxItemSet*     rAttrSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) override;

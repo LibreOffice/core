@@ -75,10 +75,10 @@ private:
     void InsertEntry(const OUString& rTxt);
 
 public:
-    OfaAutocorrOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrOptionsPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~OfaAutocorrOptionsPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -130,12 +130,12 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     void CreateEntry(const OUString& rTxt, sal_uInt16 nCol);
 
-    OfaSwAutoFmtOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaSwAutoFmtOptionsPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~OfaSwAutoFmtOptionsPage() override;
     virtual void dispose() override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                             const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -205,11 +205,11 @@ private:
                             LanguageType eNewLanguage);
 
 public:
-    OfaAutocorrReplacePage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrReplacePage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~OfaAutocorrReplacePage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -264,11 +264,11 @@ private:
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
-    OfaAutocorrExceptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrExceptPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~OfaAutocorrExceptPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -323,11 +323,11 @@ private:
     static void CreateEntry(weld::TreeView& rLstBox, const OUString& rTxt,
                             sal_uInt16 nCol, sal_uInt16 nTextCol);
 
-    OfaQuoteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaQuoteTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 public:
     virtual ~OfaQuoteTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -361,10 +361,10 @@ private:
     DECL_LINK(CheckHdl, weld::ToggleButton&, void);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
 
-    OfaAutoCompleteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutoCompleteTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 public:
     virtual ~OfaAutoCompleteTabPage() override;
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -426,10 +426,10 @@ private:
 
 public:
     /// construction via Create()
-    OfaSmartTagOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaSmartTagOptionsTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~OfaSmartTagOptionsTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

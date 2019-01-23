@@ -27,10 +27,10 @@ namespace chart
 class AxisPositionsTabPage : public SfxTabPage
 {
 public:
-    AxisPositionsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    AxisPositionsTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~AxisPositionsTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
     using TabPage::DeactivatePage;

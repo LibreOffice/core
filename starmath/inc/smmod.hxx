@@ -98,7 +98,7 @@ public:
     //virtual methods for options dialog
     virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
-    virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet ) override;
+    virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet ) override;
 };
 
 #define SM_MOD() ( static_cast<SmModule*>(SfxApplication::GetModule(SfxToolsModule::Math)) )

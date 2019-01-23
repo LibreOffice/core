@@ -55,7 +55,7 @@ public:
     };
 
     ErrorBarResources(
-        weld::Builder* pParent, TabPageParent pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
+        weld::Builder* pParent, const TabPageParent& pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
     virtual ~ErrorBarResources();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );

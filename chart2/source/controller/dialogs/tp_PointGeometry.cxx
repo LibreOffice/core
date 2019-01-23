@@ -28,7 +28,7 @@
 namespace chart
 {
 
-SchLayoutTabPage::SchLayoutTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SchLayoutTabPage::SchLayoutTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
      : SfxTabPage(pParent, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType", &rInAttrs)
 {
     m_pGeometryResources.reset(new BarGeometryResources(m_xBuilder.get()));
@@ -45,7 +45,7 @@ void SchLayoutTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchLayoutTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchLayoutTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SchLayoutTabPage>::Create(pParent, *rOutAttrs);
 }

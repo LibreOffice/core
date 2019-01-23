@@ -51,7 +51,7 @@ class SfxMacroTabPage final : public SfxTabPage
 
 public:
     SfxMacroTabPage(
-        TabPageParent pParent,
+        const TabPageParent& pParent,
         const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet
     );
@@ -74,7 +74,7 @@ public:
     bool                        IsReadOnly() const override;
 
     // --------- inherit from the base -------------
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 };
 
 class SfxMacroAssignDlg : public SfxSingleTabDialogController

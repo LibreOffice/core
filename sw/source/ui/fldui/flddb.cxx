@@ -276,7 +276,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwFieldDBPage::Create(const TabPageParent& pParent,
                                         const SfxItemSet *const pAttrSet )
 {
     return VclPtr<SwFieldDBPage>::Create( pParent.pParent, pAttrSet );

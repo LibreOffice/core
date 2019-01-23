@@ -220,10 +220,10 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 public:
     DECL_LINK(ToggleExportPDFAHdl, weld::ToggleButton&, void);
 
-    ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabGeneralPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabGeneralPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
@@ -257,10 +257,10 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     void                        ToggleRbPgLyContinueFacingHdl();
 
 public:
-    ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabOpnFtrPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabOpnFtrPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -286,10 +286,10 @@ class ImpPDFTabViewerPage : public SfxTabPage
     DECL_LINK(ToggleRbBookmarksHdl, weld::ToggleButton&, void);
 
 public:
-    ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabViewerPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabViewerPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -334,10 +334,10 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     void                        enablePermissionControls();
 
 public:
-    ImpPDFTabSecurityPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabSecurityPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSecurityPage() override;
 
-    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -363,10 +363,10 @@ class ImpPDFTabLinksPage : public SfxTabPage
     DECL_LINK(ClickRbOpnLnksBrowserHdl, weld::ToggleButton&, void);
 
 public:
-    ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabLinksPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabLinksPage() override;
 
-    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -392,10 +392,10 @@ class ImpPDFTabSigningPage : public SfxTabPage
     DECL_LINK(ClickmaPbSignCertClear, weld::Button&, void);
 
 public:
-    ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ImpPDFTabSigningPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSigningPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );

@@ -168,7 +168,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 namespace chart
 {
 
-DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+DataSourceTabPage::DataSourceTabPage(const TabPageParent& pParent, DialogModel & rDialogModel,
                                      ChartTypeTemplateProvider* pTemplateProvider,
                                      Dialog * pParentDialog,
                                      bool bHideDescription /* = false */)

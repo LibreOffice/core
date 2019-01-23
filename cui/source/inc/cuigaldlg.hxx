@@ -213,9 +213,9 @@ private:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
 public:
-    TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet);
+    TPGalleryThemeGeneral(const TabPageParent& pParent, const SfxItemSet& rSet);
     void                SetXChgData( ExchangeData* pData );
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
 };
 
 class TPGalleryThemeProperties : public SfxTabPage
@@ -271,7 +271,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
 public:
-    TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet);
+    TPGalleryThemeProperties(const TabPageParent& pWindow, const SfxItemSet& rSet);
     virtual ~TPGalleryThemeProperties() override;
     virtual void        dispose() override;
 
@@ -280,7 +280,7 @@ public:
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX

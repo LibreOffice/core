@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::ToggleButton&, 
     m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 }
 
-SmPrintOptionsTabPage::SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet& rOptions)
+SmPrintOptionsTabPage::SmPrintOptionsTabPage(const TabPageParent& pPage, const SfxItemSet& rOptions)
     : SfxTabPage(pPage, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
     , m_xTitle(m_xBuilder->weld_check_button("title"))
     , m_xText(m_xBuilder->weld_check_button("text"))
@@ -222,7 +222,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
 }
 
-VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet& rSet)
+VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet& rSet)
 {
     return VclPtr<SmPrintOptionsTabPage>::Create(pParent, rSet).get();
 }

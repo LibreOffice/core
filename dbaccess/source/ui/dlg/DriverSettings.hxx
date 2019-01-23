@@ -36,48 +36,48 @@ namespace dbaui
 
         /** Creates the detail page for ado
         */
-        static  VclPtr<SfxTabPage> CreateDbase( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateDbase(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  VclPtr<SfxTabPage> CreateAdo( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateAdo(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ODBC
         */
-        static  VclPtr<SfxTabPage> CreateODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateODBC(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for user
         */
-        static  VclPtr<SfxTabPage> CreateUser( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateUser(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
         */
-        static  VclPtr<SfxTabPage> CreateMySQLODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLODBC(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
         */
-        static  VclPtr<SfxTabPage> CreateMySQLJDBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLJDBC(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLNATIVE
         */
-        static  VclPtr<SfxTabPage> CreateMySQLNATIVE( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLNATIVE(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
-        static VclPtr<SfxTabPage>  CreateOracleJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet );
+        static VclPtr<SfxTabPage>  CreateOracleJDBC(const TabPageParent& pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for LDAP
         */
-        static  VclPtr<SfxTabPage> CreateLDAP( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateLDAP(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /// Creates the detail page for Text
-        static  VclPtr<SfxTabPage> CreateText( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateText(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the GeneratedValues page
-        static  VclPtr<SfxTabPage> CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateGeneratedValuesPage(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static  VclPtr<SfxTabPage> CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateSpecialSettingsPage(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet );
     };
 }
 

@@ -57,9 +57,9 @@ class SmPrintOptionsTabPage : public SfxTabPage
     virtual void    Reset(const SfxItemSet* rSet) override;
 
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet &rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pWindow, const SfxItemSet &rSet);
 
-    SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet &rOptions);
+    SmPrintOptionsTabPage(const TabPageParent& pPage, const SfxItemSet &rOptions);
     virtual ~SmPrintOptionsTabPage() override;
 };
 

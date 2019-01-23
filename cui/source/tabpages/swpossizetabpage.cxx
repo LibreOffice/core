@@ -508,7 +508,7 @@ static LB lcl_GetLBRelationsForStrID(const FrmMap* _pMap,
     return nLBRelations;
 }
 
-SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/swpossizepage.ui", "SwPosSizePage", &rInAttrs)
     , m_pVMap(nullptr)
     , m_pHMap(nullptr)
@@ -705,7 +705,7 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     m_xHoriLB->clear();
 }
 
-VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxSwPosSizeTabPage>::Create(pParent, *rSet);
 }

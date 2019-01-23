@@ -77,11 +77,11 @@ private:
     DECL_LINK(SelectCaptTypeHdl_Impl, SvtValueSet*, void);
 
 public:
-    SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxCaptionTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxCaptionTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pCaptionRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

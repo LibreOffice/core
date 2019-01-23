@@ -48,7 +48,7 @@ class SAL_WARN_UNUSED SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
+    SvxTabPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
         : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
     {
     }

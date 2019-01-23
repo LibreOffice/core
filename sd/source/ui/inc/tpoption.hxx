@@ -33,10 +33,10 @@
 class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
-    SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SdTpOptionsSnap(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SdTpOptionsSnap() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 };
@@ -57,7 +57,7 @@ public:
             virtual ~SdTpOptionsContents() override;
     virtual void dispose() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 };
@@ -131,7 +131,7 @@ public:
             virtual ~SdTpOptionsMisc() override;
     virtual void dispose() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

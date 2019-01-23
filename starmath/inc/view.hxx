@@ -250,7 +250,7 @@ protected:
     void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const override;
-    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(const TabPageParent& pParent,
                                                       const SfxItemSet &rOptions) override;
     virtual void Deactivate(bool IsMDIActivate) override;
     virtual void Activate(bool IsMDIActivate) override;

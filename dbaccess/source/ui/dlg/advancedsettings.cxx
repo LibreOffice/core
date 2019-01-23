@@ -54,7 +54,7 @@ namespace dbaui
     };
 
     // SpecialSettingsPage
-    SpecialSettingsPage::SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta)
+    SpecialSettingsPage::SpecialSettingsPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta)
         : OGenericAdministrationPage(pParent, "dbaccess/ui/specialsettingspage.ui", "SpecialSettingsPage", _rCoreAttrs)
         , m_aBooleanSettings()
         , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
@@ -267,7 +267,7 @@ namespace dbaui
     }
 
     // GeneratedValuesPage
-    GeneratedValuesPage::GeneratedValuesPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+    GeneratedValuesPage::GeneratedValuesPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, "dbaccess/ui/generatedvaluespage.ui", "GeneratedValuesPage", _rCoreAttrs)
         , m_xAutoRetrievingEnabled(m_xBuilder->weld_check_button("autoretrieve"))
         , m_xGrid(m_xBuilder->weld_widget("grid"))

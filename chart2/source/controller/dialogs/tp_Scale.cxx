@@ -49,7 +49,7 @@ void lcl_setValue(weld::FormattedSpinButton& rFmtField, double fValue)
 
 }
 
-ScaleTabPage::ScaleTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
+ScaleTabPage::ScaleTabPage(const TabPageParent& pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "modules/schart/ui/tp_Scale.ui", "tp_Scale", &rInAttrs)
     , fMin(0.0)
     , fMax(0.0)
@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, weld::ComboBox&, void)
     SetNumFormat();
 }
 
-VclPtr<SfxTabPage> ScaleTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> ScaleTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<ScaleTabPage>::Create(pParent, *rOutAttrs);
 }

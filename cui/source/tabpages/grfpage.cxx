@@ -49,7 +49,7 @@ static int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
     description: crop graphic
  --------------------------------------------------------------------*/
 
-SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
+SvxGrfCropPage::SvxGrfCropPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "cui/ui/croppage.ui", "CropPage", &rSet)
     , nOldWidth(0)
     , nOldHeight(0)
@@ -112,7 +112,7 @@ void SvxGrfCropPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SvxGrfCropPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SvxGrfCropPage>::Create(pParent, *rSet);
 }

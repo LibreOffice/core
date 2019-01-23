@@ -40,7 +40,7 @@ namespace dbaui
         bool            m_bUserGrabFocus;
 
     public:
-        OConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
+        OConnectionHelper(const TabPageParent& pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper() override;
         virtual void dispose() override;
 

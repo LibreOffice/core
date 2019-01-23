@@ -377,7 +377,7 @@ void SwColumnPage::ResetColWidth()
 constexpr sal_uInt16 g_nMinWidth(MINLAY);
 
 // Now as TabPage
-SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwColumnPage::SwColumnPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/columnpage.ui", "ColumnPage", &rSet)
     , m_nFirstVis(0)
     , m_pModifiedField(nullptr)
@@ -599,7 +599,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-VclPtr<SfxTabPage> SwColumnPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwColumnPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwColumnPage>::Create(pParent, *rSet);
 }

@@ -19,7 +19,7 @@ class ScTpDefaultsOptions : public SfxTabPage
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  VclPtr<SfxTabPage> Create (TabPageParent pParent, const SfxItemSet* rCoreSet);
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rCoreSet);
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset(const SfxItemSet* rCoreSet) override;

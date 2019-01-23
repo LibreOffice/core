@@ -719,7 +719,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
     }
 }
 
-SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+SwTOXSelectTabPage::SwTOXSelectTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tocindexpage.ui", "TocIndexPage", &rAttrSet)
     , sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
@@ -1199,7 +1199,7 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage(SfxItemSet* _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXSelectTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXSelectTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
 }
@@ -1797,7 +1797,7 @@ namespace
     };
 }
 
-SwTOXEntryTabPage::SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+SwTOXEntryTabPage::SwTOXEntryTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tocentriespage.ui", "TocEntriesPage", &rAttrSet)
     , sDelimStr(SwResId(STR_DELIM))
     , sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
@@ -2141,7 +2141,7 @@ DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXEntryTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXEntryTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
@@ -3389,7 +3389,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     return nIndex;
 }
 
-SwTOXStylesTabPage::SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+SwTOXStylesTabPage::SwTOXStylesTabPage(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tocstylespage.ui", "TocStylesPage", &rAttrSet)
     , m_xLevelLB(m_xBuilder->weld_tree_view("levels"))
     , m_xAssignBT(m_xBuilder->weld_button("assign"))
@@ -3500,7 +3500,7 @@ DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXStylesTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SwTOXStylesTabPage::Create(const TabPageParent& pParent,
                                               const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);

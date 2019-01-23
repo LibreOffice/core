@@ -66,7 +66,7 @@ const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
     0
 };
 
-SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxBitmapTabPage::SvxBitmapTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
@@ -418,7 +418,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     ClickBitmapHdl_Impl();
 }
 
-VclPtr<SfxTabPage> SvxBitmapTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxBitmapTabPage::Create(const TabPageParent& pWindow, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxBitmapTabPage>::Create(pWindow, *rAttrs);
 }

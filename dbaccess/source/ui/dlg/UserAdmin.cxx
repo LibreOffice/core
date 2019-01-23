@@ -190,7 +190,7 @@ void OUserAdmin::FillUserNames()
 
 }
 
-VclPtr<SfxTabPage> OUserAdmin::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+VclPtr<SfxTabPage> OUserAdmin::Create(const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
 {
     return VclPtr<OUserAdmin>::Create( pParent.pParent, *_rAttrSet );
 }

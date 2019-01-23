@@ -49,7 +49,7 @@ class SvxStdParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pStdRanges[];
 
 private:
-    SvxStdParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxStdParagraphTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     long                    nWidth;
     long                    nMinFixDist;
@@ -106,7 +106,7 @@ public:
 
     DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
@@ -162,7 +162,7 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     void                    UpdateExample_Impl();
 
-    SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxParaAlignTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
 protected:
     virtual void            ActivatePage( const SfxItemSet& rSet ) override;
@@ -171,7 +171,7 @@ protected:
 public:
     virtual ~SvxParaAlignTabPage() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
@@ -205,7 +205,7 @@ class SvxExtParagraphTabPage: public SfxTabPage
 public:
     virtual ~SvxExtParagraphTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
 
@@ -219,7 +219,7 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxExtParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxExtParagraphTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     bool                bPageBreak;
     bool                bHtmlMode;
@@ -279,12 +279,12 @@ class SvxAsianTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xHangingPunctCB;
     std::unique_ptr<weld::CheckButton> m_xScriptSpaceCB;
 
-    SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxAsianTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
 public:
     virtual ~SvxAsianTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet);
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

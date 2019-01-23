@@ -199,7 +199,7 @@ void SwContentOptPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwContentOptPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwContentOptPage>::Create(pParent.pParent, *rAttrSet);
@@ -305,7 +305,7 @@ IMPL_LINK(SwContentOptPage, VertRulerHdl, Button*, pBox, void)
 }
 
 // TabPage Printer additional settings
-SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
+SwAddPrinterTabPage::SwAddPrinterTabPage(const TabPageParent& pParent,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "modules/swriter/ui/printoptionspage.ui", "PrintOptionsPage", &rCoreSet)
     , sNone(SwResId(SW_STR_NONE))
@@ -378,7 +378,7 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
     m_xPagesFrame->set_sensitive(!bPreview);
 }
 
-VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwAddPrinterTabPage::Create(const TabPageParent& pParent,
                                                 const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwAddPrinterTabPage>::Create(pParent, *rAttrSet);
@@ -599,7 +599,7 @@ void SwStdFontTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwStdFontTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwStdFontTabPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwStdFontTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -1082,7 +1082,7 @@ void SwTableOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwTableOptionsTabPage::Create(const TabPageParent& pParent,
                                                   const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwTableOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -1348,7 +1348,7 @@ void SwShdwCursorOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent.pParent, *rSet );
 }
@@ -1754,7 +1754,7 @@ void SwRedlineOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwRedlineOptionsTabPage>::Create( pParent.pParent, *rSet );
 }
@@ -2158,7 +2158,7 @@ void SwCompareOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwCompareOptionsTabPage>::Create( pParent.pParent, *rAttrSet );
 }
@@ -2308,7 +2308,7 @@ void SwTestTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwTestTabPage::Create(const TabPageParent& pParent,
                                           const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwTestTabPage>::Create(pParent.pParent, *rAttrSet);

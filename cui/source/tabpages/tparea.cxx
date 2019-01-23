@@ -82,7 +82,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxAreaTabPage::SvxAreaTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
@@ -324,14 +324,14 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-VclPtr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxAreaTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxAreaTabPage>::Create(pParent, *rAttrs);
 }
 
 namespace {
 
-VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)

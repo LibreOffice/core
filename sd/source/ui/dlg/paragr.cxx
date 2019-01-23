@@ -39,7 +39,7 @@ public:
     virtual ~SdParagraphNumTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -82,7 +82,7 @@ void SdParagraphNumTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SdParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet * rAttrSet)
+VclPtr<SfxTabPage> SdParagraphNumTabPage::Create(const TabPageParent& pParent, const SfxItemSet * rAttrSet)
 {
     return VclPtr<SdParagraphNumTabPage>::Create( pParent.pParent, *rAttrSet );
 }

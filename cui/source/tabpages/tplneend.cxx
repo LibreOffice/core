@@ -48,7 +48,7 @@
 
 #define XOUT_WIDTH    150
 
-SvxLineEndDefTabPage::SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxLineEndDefTabPage::SvxLineEndDefTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent , "cui/ui/lineendstabpage.ui", "LineEndPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , pPolyObj(nullptr)
@@ -244,7 +244,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
     }
 }
 
-VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxLineEndDefTabPage>::Create(pParent, *rSet );
 }

@@ -43,7 +43,7 @@ public:
     virtual ~OfaMSFilterTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -96,7 +96,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
 public:
     OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

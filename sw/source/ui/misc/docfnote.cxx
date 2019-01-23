@@ -63,7 +63,7 @@ IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
     SfxTabDialogController::OkHdl(rBtn);
 }
 
-SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
+SwEndNoteOptionPage::SwEndNoteOptionPage(const TabPageParent& pParent, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pParent,
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
@@ -210,7 +210,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*pSh->GetDoc())->GetName());
 }
 
-VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwEndNoteOptionPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet )
 {
     return VclPtr<SwEndNoteOptionPage>::Create(pParent, true, *rSet);
 }
@@ -370,7 +370,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     return true;
 }
 
-SwFootNoteOptionPage::SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwFootNoteOptionPage::SwFootNoteOptionPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SwEndNoteOptionPage(pParent, false, rSet)
 {
 }
@@ -379,7 +379,7 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(TabPageParent pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet )
 {
     return VclPtr<SwFootNoteOptionPage>::Create(pParent, *rSet);
 }

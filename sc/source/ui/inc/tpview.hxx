@@ -69,7 +69,7 @@ class ScTpContentOptions : public SfxTabPage
     virtual void dispose() override;
 
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
@@ -112,7 +112,7 @@ class ScTpLayoutOptions : public SfxTabPage
 public:
     virtual ~ScTpLayoutOptions() override;
     virtual void        dispose() override;
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;

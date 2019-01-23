@@ -67,11 +67,11 @@ private:
 
 public:
 
-    SvxMeasurePage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    SvxMeasurePage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs);
     virtual ~SvxMeasurePage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

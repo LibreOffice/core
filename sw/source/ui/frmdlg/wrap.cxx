@@ -63,7 +63,7 @@ SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtSh
     SetTabPage(xNewPage);
 }
 
-SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwWrapTabPage::SwWrapTabPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/wrappage.ui", "WrapPage", &rSet)
     , m_nAnchorId(RndStdIds::FLY_AT_PARA)
     , m_nHtmlMode(0)
@@ -111,7 +111,7 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwWrapTabPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwWrapTabPage>::Create(pParent, *rSet);
 }

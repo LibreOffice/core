@@ -30,7 +30,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(TabPageParent pParent,
+TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(const TabPageParent& pParent,
                                                  const uno::Reference< XChartDocument >& xChartModel,
                                                  const uno::Reference< uno::XComponentContext >& xContext )
     : OWizardPage(pParent, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")

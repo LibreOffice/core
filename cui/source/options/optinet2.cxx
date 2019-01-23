@@ -257,7 +257,7 @@ void SvxProxyTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxProxyTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxProxyTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxProxyTabPage>::Create(pParent.pParent, *rAttrSet);
 }
@@ -888,7 +888,7 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-VclPtr<SfxTabPage> SvxSecurityTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxSecurityTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxSecurityTabPage>::Create(pParent.pParent, *rAttrSet);
 }
@@ -1003,7 +1003,7 @@ void SvxEMailTabPage::dispose()
 
 /* -------------------------------------------------------------------------*/
 
-VclPtr<SfxTabPage>  SvxEMailTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage>  SvxEMailTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxEMailTabPage>::Create(pParent.pParent, *rAttrSet);
 }

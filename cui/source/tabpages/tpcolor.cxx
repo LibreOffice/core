@@ -54,7 +54,7 @@
 
 using namespace com::sun::star;
 
-SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxColorTabPage::SvxColorTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
     , mpTopDlg( GetParentDialog() )
     , rOutAttrs           ( rInAttrs )
@@ -285,7 +285,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     UpdateModified();
 }
 
-VclPtr<SfxTabPage> SvxColorTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SvxColorTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SvxColorTabPage>::Create(pParent, *rOutAttrs);
 }

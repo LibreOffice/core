@@ -195,7 +195,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
+SvxNumberFormatTabPage::SvxNumberFormatTabPage(const TabPageParent& pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
     , nInitFormat(ULONG_MAX)
@@ -322,7 +322,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create(const TabPageParent& pParent,
                                                    const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxNumberFormatTabPage>::Create(pParent, *rAttrSet);

@@ -59,7 +59,7 @@ public:
             virtual ~SdPrintOptions() override;
     virtual void dispose() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

@@ -30,7 +30,7 @@
 namespace chart
 {
 
-SchOptionTabPage::SchOptionTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
+SchOptionTabPage::SchOptionTabPage(const TabPageParent& pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "modules/schart/ui/tp_SeriesToAxis.ui", "TP_OPTIONS", &rInAttrs)
     , m_nAllSeriesAxisIndex(0)
     , m_bProvidesSecondaryYAxis(true)
@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::ToggleButton&, void)
         m_xCBAxisSideBySide->set_sensitive( m_xRbtAxis1->get_active());
 }
 
-VclPtr<SfxTabPage> SchOptionTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SchOptionTabPage::Create(const TabPageParent& pParent,
                                             const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SchOptionTabPage>::Create(pParent, *rOutAttrs);

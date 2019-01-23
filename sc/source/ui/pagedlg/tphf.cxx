@@ -43,7 +43,7 @@
 
 // class ScHFPage
 
-ScHFPage::ScHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
+ScHFPage::ScHFPage(const TabPageParent& pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SvxHFPage(pParent, rSet, nSetId)
     , aDataSet(*rSet.GetPool(), svl::Items<ATTR_PAGE, ATTR_PAGE, ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT>{})
     , nPageUsage(SvxPageUsage::All)
@@ -231,12 +231,12 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
 
 // class ScHeaderPage
 
-ScHeaderPage::ScHeaderPage(TabPageParent pParent, const SfxItemSet& rSet)
+ScHeaderPage::ScHeaderPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : ScHFPage(pParent, rSet, SID_ATTR_PAGE_HEADERSET)
 {
 }
 
-VclPtr<SfxTabPage> ScHeaderPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScHeaderPage::Create(const TabPageParent& pParent, const SfxItemSet* rCoreSet)
 {
     return VclPtr<ScHeaderPage>::Create(pParent, *rCoreSet);
 }
@@ -248,12 +248,12 @@ const sal_uInt16* ScHeaderPage::GetRanges()
 
 // class ScFooterPage
 
-ScFooterPage::ScFooterPage(TabPageParent pParent, const SfxItemSet& rSet)
+ScFooterPage::ScFooterPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_FOOTERSET )
 {
 }
 
-VclPtr<SfxTabPage> ScFooterPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScFooterPage::Create(const TabPageParent& pParent, const SfxItemSet* rCoreSet)
 {
     return VclPtr<ScFooterPage>::Create(pParent, *rCoreSet);
 }

@@ -23,12 +23,12 @@
 
 using namespace ::com::sun::star;
 
-VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)
+VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(const TabPageParent& pParent, const SfxItemSet* set)
 {
     return VclPtr<SfxDocumentFontsPage>::Create(pParent, *set);
 }
 
-SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set)
+SfxDocumentFontsPage::SfxDocumentFontsPage(const TabPageParent& parent, const SfxItemSet& set)
     : SfxTabPage(parent, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
     , embedFontsCheckbox(m_xBuilder->weld_check_button("embedFonts"))
     , embedUsedFontsCheckbox(m_xBuilder->weld_check_button("embedUsedFonts"))

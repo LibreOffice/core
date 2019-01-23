@@ -35,7 +35,7 @@ namespace svt
     {
     }
 
-    OWizardPage::OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
+    OWizardPage::OWizardPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID)
         : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
         , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
                                    : Application::CreateInterimBuilder(this, rUIXMLDescription))

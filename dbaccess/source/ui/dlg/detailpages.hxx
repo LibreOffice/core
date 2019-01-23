@@ -72,7 +72,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        OCommonBehaviourTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
+        OCommonBehaviourTabPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
     protected:
 
         virtual ~OCommonBehaviourTabPage() override;
@@ -97,7 +97,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        ODbaseDetailsPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~ODbaseDetailsPage() override;
     private:
         OUString            m_sDsn;
@@ -117,7 +117,7 @@ namespace dbaui
     class OAdoDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OAdoDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OOdbcDetailsPage
@@ -126,7 +126,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OOdbcDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OOdbcDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OOdbcDetailsPage() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -140,7 +140,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OUserDriverDetailsPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OUserDriverDetailsPage() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -158,14 +158,14 @@ namespace dbaui
     class OMySQLODBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OMySQLODBCDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
     };
 
     // OGeneralSpecialJDBCDetailsPage
     class OGeneralSpecialJDBCDetailsPage final : public OCommonBehaviourTabPage
     {
     public:
-        OGeneralSpecialJDBCDetailsPage(TabPageParent pParent,
+        OGeneralSpecialJDBCDetailsPage(const TabPageParent& pParent,
                                        const SfxItemSet& _rCoreAttrs,
                                        sal_uInt16 _nPortId,
                                        bool bShowSocket = true);
@@ -196,7 +196,7 @@ namespace dbaui
     class MySQLNativePage : public OCommonBehaviourTabPage
     {
     public:
-        MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        MySQLNativePage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
         virtual ~MySQLNativePage() override;
 
     private:
@@ -221,7 +221,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OLDAPDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OLDAPDetailsPage() override;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -243,7 +243,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OTextDetailsPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs);
 
         std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
 

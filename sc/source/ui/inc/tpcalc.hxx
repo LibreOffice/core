@@ -31,7 +31,7 @@ class ScTpCalcOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpCalcOptions>;
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;

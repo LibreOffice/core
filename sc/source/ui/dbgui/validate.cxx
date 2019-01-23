@@ -420,7 +420,7 @@ void ScTPValidationValue::Init()
     CheckHdl( nullptr );
 }
 
-VclPtr<SfxTabPage> ScTPValidationValue::Create( TabPageParent pParent, const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTPValidationValue::Create(const TabPageParent& pParent, const SfxItemSet* rArgSet )
 {
     return VclPtr<ScTPValidationValue>::Create( pParent.pParent, *rArgSet );
 }
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, Button*, void)
 
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet)
+ScTPValidationHelp::ScTPValidationHelp(const TabPageParent& pParent, const SfxItemSet& rArgSet)
     : SfxTabPage(pParent, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
     , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
     , m_xEdtTitle(m_xBuilder->weld_entry("title"))
@@ -704,7 +704,7 @@ ScTPValidationHelp::~ScTPValidationHelp()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTPValidationHelp::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> ScTPValidationHelp::Create(const TabPageParent& pParent,
                                               const SfxItemSet* rArgSet)
 {
     return VclPtr<ScTPValidationHelp>::Create(pParent, *rArgSet);
@@ -741,7 +741,7 @@ bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError(TabPageParent pParent,
+ScTPValidationError::ScTPValidationError(const TabPageParent& pParent,
                                          const SfxItemSet& rArgSet)
 
     :   SfxTabPage      ( pParent,
@@ -773,7 +773,7 @@ void ScTPValidationError::Init()
     SelectActionHdl(*m_xLbAction);
 }
 
-VclPtr<SfxTabPage> ScTPValidationError::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> ScTPValidationError::Create(const TabPageParent& pParent,
                                                const SfxItemSet* rArgSet)
 {
     return VclPtr<ScTPValidationError>::Create(pParent, *rArgSet);

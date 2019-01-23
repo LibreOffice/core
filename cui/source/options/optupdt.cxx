@@ -198,7 +198,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
 }
 
 VclPtr<SfxTabPage>
-SvxOnlineUpdateTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+SvxOnlineUpdateTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxOnlineUpdateTabPage>::Create( pParent.pParent, *rAttrSet );
 }

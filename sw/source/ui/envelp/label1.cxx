@@ -219,7 +219,7 @@ Printer *SwLabDlg::GetPrt()
         return nullptr;
 }
 
-SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwLabPage::SwLabPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/cardmediumpage.ui", "CardMediumPage", &rSet)
     , pDBManager(nullptr)
     , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
@@ -445,7 +445,7 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-VclPtr<SfxTabPage> SwLabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwLabPage>::Create(pParent, *rSet);
 }
@@ -545,7 +545,7 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
         m_xSheetButton->set_active(true);
 }
 
-SwPrivateDataPage::SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwPrivateDataPage::SwPrivateDataPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/privateuserpage.ui", "PrivateUserPage", &rSet)
     , m_xFirstNameED(m_xBuilder->weld_entry("firstname"))
     , m_xNameED(m_xBuilder->weld_entry("lastname"))
@@ -573,7 +573,7 @@ SwPrivateDataPage::~SwPrivateDataPage()
 {
 }
 
-VclPtr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwPrivateDataPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwPrivateDataPage>::Create(pParent, *rSet);
 }
@@ -642,7 +642,7 @@ void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
     m_xMailED->set_text(aItem.m_aPrivMail);
 }
 
-SwBusinessDataPage::SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwBusinessDataPage::SwBusinessDataPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/businessdatapage.ui", "BusinessDataPage", &rSet)
     , m_xCompanyED(m_xBuilder->weld_entry("company"))
     , m_xCompanyExtED(m_xBuilder->weld_entry("company2"))
@@ -666,7 +666,7 @@ SwBusinessDataPage::~SwBusinessDataPage()
 {
 }
 
-VclPtr<SfxTabPage> SwBusinessDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwBusinessDataPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwBusinessDataPage>::Create(pParent, *rSet);
 }

@@ -34,12 +34,12 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 
-VclPtr<SfxTabPage> SwDocStatPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwDocStatPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwDocStatPage>::Create(pParent, *rSet);
 }
 
-SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwDocStatPage::SwDocStatPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
     , m_xPageNo(m_xBuilder->weld_label("nopages"))
     , m_xTableNo(m_xBuilder->weld_label("notables"))

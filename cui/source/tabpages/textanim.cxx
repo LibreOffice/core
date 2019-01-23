@@ -82,7 +82,7 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 |*
 \************************************************************************/
 
-SvxTextAnimationPage::SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs)
+SvxTextAnimationPage::SvxTextAnimationPage(const TabPageParent& pPage, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, "cui/ui/textanimtabpage.ui", "TextAnimation", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , eAniKind(SdrTextAniKind::NONE)
@@ -377,7 +377,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxTextAnimationPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTextAnimationPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxTextAnimationPage>::Create(pParent, *rAttrs);
 }

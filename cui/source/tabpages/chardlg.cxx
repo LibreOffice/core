@@ -169,7 +169,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
     return m_aPreviewWin.GetCTLFont();
 }
 
-SvxCharBasePage::SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
     : SfxTabPage(pParent, rUIXMLDescription, rID, &rItemset)
     , m_bPreviewBackgroundToCharacter( false )
 {
@@ -224,7 +224,7 @@ struct SvxCharNamePage_Impl
 
 // class SvxCharNamePage -------------------------------------------------
 
-SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharNamePage::SvxCharNamePage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : SvxCharBasePage(pParent, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
     , m_xEastFrame(m_xBuilder->weld_widget("asian"))
@@ -1201,7 +1201,7 @@ DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharNamePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxCharNamePage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxCharNamePage>::Create(pParent, *rSet );
 }
@@ -1322,7 +1322,7 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharEffectsPage ----------------------------------------------
 
-SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharEffectsPage::SvxCharEffectsPage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : SvxCharBasePage(pParent, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
@@ -1683,7 +1683,7 @@ DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharEffectsPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxCharEffectsPage>::Create( pParent, *rSet );
 }
@@ -2446,7 +2446,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharPositionPage::SvxCharPositionPage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : SvxCharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
@@ -2671,7 +2671,7 @@ DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxCharPositionPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxCharPositionPage>::Create(pParent, *rSet);
 }
@@ -3053,7 +3053,7 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : SvxCharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
@@ -3184,7 +3184,7 @@ DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxCharTwoLinesPage>::Create(pParent, *rSet);
 }

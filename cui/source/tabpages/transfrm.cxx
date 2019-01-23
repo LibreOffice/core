@@ -192,7 +192,7 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 |*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
-SvxAngleTabPage::SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxAngleTabPage::SvxAngleTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/rotationtabpage.ui", "Rotation", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
@@ -336,7 +336,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     m_xMtrPosY->save_value();
 }
 
-VclPtr<SfxTabPage> SvxAngleTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxAngleTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxAngleTabPage>::Create(pParent, *rSet);
 }
@@ -430,7 +430,7 @@ void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eR
 |*      dialog for changing slant and corner radius
 |*
 \************************************************************************/
-SvxSlantTabPage::SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxSlantTabPage::SvxSlantTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
@@ -736,7 +736,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
 }
 
-VclPtr<SfxTabPage> SvxSlantTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SvxSlantTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SvxSlantTabPage>::Create(pParent, *rOutAttrs);
 }
@@ -780,7 +780,7 @@ DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 |*      Dialog for changing position and size of graphic objects
 |*
 \************************************************************************/
-SvxPositionSizeTabPage::SvxPositionSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxPositionSizeTabPage::SvxPositionSizeTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/possizetabpage.ui", "PositionAndSize", rInAttrs)
     , mrOutAttrs(rInAttrs)
     , mpView(nullptr)
@@ -1174,7 +1174,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     ChangeSizeProtectHdl(*m_xTsbSizeProtect);
 }
 
-VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SvxPositionSizeTabPage>::Create(pParent, *rOutAttrs);
 }

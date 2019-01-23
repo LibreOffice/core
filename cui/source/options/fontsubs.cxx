@@ -152,7 +152,7 @@ void SvxFontSubstTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxFontSubstTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxFontSubstTabPage::Create(const TabPageParent& pParent,
                                                 const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxFontSubstTabPage>::Create(pParent.pParent, *rAttrSet);

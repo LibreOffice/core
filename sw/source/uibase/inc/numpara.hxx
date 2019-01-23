@@ -61,10 +61,10 @@ class SwParagraphNumTabPage final : public SfxTabPage
                           SfxStyleFamily nFamily );
 
 public:
-    SwParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rSet );
+    SwParagraphNumTabPage(const TabPageParent& pParent, const SfxItemSet& rSet );
     virtual ~SwParagraphNumTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                       const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return aPageRg; }
 

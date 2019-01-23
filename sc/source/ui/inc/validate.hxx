@@ -82,7 +82,7 @@ public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
     virtual                     ~ScTPValidationValue() override;
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>          Create( TabPageParent pParent, const SfxItemSet* rArgSet );
+    static VclPtr<SfxTabPage>          Create(const TabPageParent& pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) override;
@@ -264,10 +264,10 @@ private:
     std::unique_ptr<weld::TextView> m_xEdInputHelp;
 
 public:
-    ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTPValidationHelp(const TabPageParent& pParent, const SfxItemSet& rArgSet);
     virtual ~ScTPValidationHelp() override;
 
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rArgSet);
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
@@ -289,10 +289,10 @@ private:
     DECL_LINK(ClickSearchHdl, weld::Button&, void);
 
 public:
-    ScTPValidationError(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTPValidationError(const TabPageParent& pParent, const SfxItemSet& rArgSet);
     virtual ~ScTPValidationError() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent, const SfxItemSet* rArgSet );
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };

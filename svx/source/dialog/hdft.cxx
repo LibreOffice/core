@@ -106,27 +106,27 @@ namespace svx {
     }
 }
 
-VclPtr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxHeaderPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
 }
 
-VclPtr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxFooterPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
 }
 
-SvxHeaderPage::SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rAttr)
+SvxHeaderPage::SvxHeaderPage(const TabPageParent& pParent, const SfxItemSet& rAttr)
     : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
 {
 }
 
-SvxFooterPage::SvxFooterPage(TabPageParent pParent, const SfxItemSet& rAttr)
+SvxFooterPage::SvxFooterPage(const TabPageParent& pParent, const SfxItemSet& rAttr)
     : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
 {
 }
 
-SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
+SvxHFPage::SvxHFPage(const TabPageParent& pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SfxTabPage(pParent, "svx/ui/headfootformatpage.ui", "HFFormatPage", &rSet)
     , nId(nSetId)
     , mbDisableQueryBox(false)

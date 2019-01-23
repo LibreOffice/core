@@ -25,13 +25,13 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ErrorBarsTabPage::ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+ErrorBarsTabPage::ErrorBarsTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "modules/schart/ui/tp_ErrorBars.ui", "tp_ErrorBars", &rInAttrs)
     , m_aErrorBarResources(m_xBuilder.get(), pParent, rInAttrs, /* bNoneAvailable = */ false)
 {
 }
 
-VclPtr<SfxTabPage> ErrorBarsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> ErrorBarsTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<ErrorBarsTabPage>::Create(pParent, *rOutAttrs);
 }

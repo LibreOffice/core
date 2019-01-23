@@ -96,11 +96,11 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 
 public:
-    SvxSingleNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxSingleNumPickTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxSingleNumPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -129,11 +129,11 @@ class SvxBulletPickTabPage final : public SfxTabPage
     DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 public:
-    SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxBulletPickTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -171,11 +171,11 @@ class SvxNumPickTabPage final : public SfxTabPage
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 
 public:
-    SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumPickTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxNumPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -214,11 +214,11 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
 
 public:
-    SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxBitmapPickTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxBitmapPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                       const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -318,11 +318,11 @@ class SvxNumOptionsTabPage : public SfxTabPage
     void EditModifyHdl_Impl(weld::Entry*);
 
 public:
-    SvxNumOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumOptionsTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxNumOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -405,7 +405,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK(IndentAtHdl_Impl, weld::MetricSpinButton&, void);
 
 public:
-    SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumPositionTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SvxNumPositionTabPage() override;
     virtual void dispose() override;
 
@@ -414,7 +414,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);

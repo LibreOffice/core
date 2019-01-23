@@ -93,7 +93,7 @@ public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
@@ -153,7 +153,7 @@ protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
@@ -180,7 +180,7 @@ public:
     virtual ~SvxEMailTabPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

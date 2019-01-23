@@ -384,7 +384,7 @@ short SwOutlineTabDialog::Ok()
     return RET_OK;
 }
 
-SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
+SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(const TabPageParent& pPage,
     const SfxItemSet& rSet)
     : SfxTabPage(pPage, "modules/swriter/ui/outlinenumberingpage.ui", "OutlineNumberingPage", &rSet)
     , aNoFormatName(SwResId(SW_STR_NONE))
@@ -802,7 +802,7 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
     ActivatePage(*rSet);
 }
 
-VclPtr<SfxTabPage> SwOutlineSettingsTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SwOutlineSettingsTabPage::Create(const TabPageParent& pParent,
                                                     const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwOutlineSettingsTabPage>::Create(pParent, *rAttrSet);

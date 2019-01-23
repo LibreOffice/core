@@ -68,7 +68,7 @@ using namespace com::sun::star;
 
 // Sort Criteria Tab page
 
-ScTabPageSortFields::ScTabPageSortFields(TabPageParent pParent, const SfxItemSet& rArgSet)
+ScTabPageSortFields::ScTabPageSortFields(const TabPageParent& pParent, const SfxItemSet& rArgSet)
     : SfxTabPage(pParent, "modules/scalc/ui/sortcriteriapage.ui", "SortCriteriaPage", &rArgSet)
     ,
 
@@ -129,7 +129,7 @@ void ScTabPageSortFields::Init()
     }
 }
 
-VclPtr<SfxTabPage> ScTabPageSortFields::Create(TabPageParent pParent, const SfxItemSet* pArgSet)
+VclPtr<SfxTabPage> ScTabPageSortFields::Create(const TabPageParent& pParent, const SfxItemSet* pArgSet)
 {
     return VclPtr<ScTabPageSortFields>::Create(pParent, *pArgSet);
 }
@@ -479,7 +479,7 @@ void ScTabPageSortFields::AddSortKey( sal_uInt16 nItem )
 
 // Sort option Tab Page:
 
-ScTabPageSortOptions::ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
+ScTabPageSortOptions::ScTabPageSortOptions(const TabPageParent& pParent, const SfxItemSet& rArgSet)
     : SfxTabPage(pParent, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
     , aStrRowLabel(ScResId(SCSTR_ROW_LABEL))
     , aStrColLabel(ScResId(SCSTR_COL_LABEL))
@@ -580,7 +580,7 @@ void ScTabPageSortOptions::Init()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> ScTabPageSortOptions::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
+VclPtr<SfxTabPage> ScTabPageSortOptions::Create(const TabPageParent& pParent, const SfxItemSet* rArgSet)
 {
     return VclPtr<ScTabPageSortOptions>::Create(pParent, *rArgSet);
 }

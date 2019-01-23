@@ -105,7 +105,7 @@ namespace svt
                 must be the OWizardMachine (which is derived from Window)
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
-        OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
+        OWizardPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID);
         virtual void dispose() override;
         virtual ~OWizardPage() override;
 

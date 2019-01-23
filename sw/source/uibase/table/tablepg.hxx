@@ -78,10 +78,10 @@ class SwFormatTablePage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rSet );
+    SwFormatTablePage(const TabPageParent& pParent, const SfxItemSet& rSet );
     virtual ~SwFormatTablePage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -127,10 +127,10 @@ class SwTableColumnPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwTableColumnPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwTableColumnPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -171,9 +171,9 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK(HeadLineCBClickHdl, weld::ToggleButton&, void);
 
 public:
-    SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwTextFlowPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwTextFlowPage() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 

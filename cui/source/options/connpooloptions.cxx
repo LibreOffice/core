@@ -332,7 +332,7 @@ namespace offapp
         SfxTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(const TabPageParent& _pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent.pParent, *_rAttrSet);
     }

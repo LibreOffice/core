@@ -212,7 +212,7 @@ void SvxSaveTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxSaveTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxSaveTabPage::Create(const TabPageParent& pParent,
                                            const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxSaveTabPage>::Create( pParent.pParent, *rAttrSet );

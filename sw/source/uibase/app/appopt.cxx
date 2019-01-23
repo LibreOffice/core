@@ -411,7 +411,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? SvViewOpt::DestText : SvViewOpt::DestWeb);
 }
 
-VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet )
 {
     VclPtr<SfxTabPage> pRet;
     SfxAllItemSet aSet(*(rSet.GetPool()));

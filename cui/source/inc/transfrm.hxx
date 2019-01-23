@@ -131,10 +131,10 @@ private:
     DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
 
 public:
-    SvxPositionSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxPositionSizeTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxPositionSizeTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -190,10 +190,10 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
 
 public:
-    SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxAngleTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAngleTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -241,10 +241,10 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_aControlY[2];
 
 public:
-    SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxSlantTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxSlantTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;

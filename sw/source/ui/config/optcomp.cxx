@@ -332,7 +332,7 @@ void SwCompatibilityOptPage::WriteOptions()
         m_aConfigItem.AppendItem(rItem);
 }
 
-VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCompatibilityOptPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwCompatibilityOptPage>::Create( pParent.pParent, *rAttrSet );
 }

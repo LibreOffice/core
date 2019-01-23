@@ -170,7 +170,7 @@ namespace
 
 // TabPage for application-specific print options
 
-VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(TabPageParent pParent,
+VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(const TabPageParent& pParent,
                                                   const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage(pParent, rSet, false);
@@ -303,7 +303,7 @@ void SwView::NotifyCursor(SfxViewShell* pViewShell) const
 
 // Create page printer/additions for SwView and SwPagePreview
 
-VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
+VclPtr<SfxTabPage> CreatePrintOptionsPage(const TabPageParent& pParent,
                                           const SfxItemSet &rOptions,
                                           bool bPreview)
 {

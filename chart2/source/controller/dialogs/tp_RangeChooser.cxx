@@ -67,7 +67,7 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Sequence;
 
-RangeChooserTabPage::RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+RangeChooserTabPage::RangeChooserTabPage(const TabPageParent& pParent, DialogModel & rDialogModel,
                                          ChartTypeTemplateProvider* pTemplateProvider,
                                          Dialog* pParentDialog, bool bHideDescription /* = false */)
     : OWizardPage(pParent, "modules/schart/ui/tp_RangeChooser.ui", "tp_RangeChooser")

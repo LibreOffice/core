@@ -180,7 +180,7 @@ short SwEnvDlg::Ok()
     return nRet;
 }
 
-SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwEnvPage::SwEnvPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/envaddresspage.ui", "EnvAddressPage", &rSet)
     , m_pDialog(nullptr)
     , m_pSh(nullptr)
@@ -298,7 +298,7 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-VclPtr<SfxTabPage> SwEnvPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwEnvPage>::Create(pParent, *rSet);
 }

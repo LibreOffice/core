@@ -70,7 +70,7 @@ const sal_uInt16 SvxLineTabPage::pLineRanges[] =
     0
 };
 
-SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxLineTabPage::SvxLineTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)
     , m_pSymbolList(nullptr)
     , m_bNewSize(false)
@@ -1176,7 +1176,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     ChangePreviewHdl_Impl( nullptr );
 }
 
-VclPtr<SfxTabPage> SvxLineTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SvxLineTabPage::Create(const TabPageParent& pParent,
                                           const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxLineTabPage>::Create(pParent, *rAttrs);

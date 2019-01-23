@@ -46,7 +46,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SdTpOptionsSnap::SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SdTpOptionsSnap::SdTpOptionsSnap(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxGridTabPage(pParent, rInAttrs)
 {
     m_xSnapFrames->show();
@@ -100,7 +100,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     ClickRotateHdl_Impl(*m_xCbxRotate);
 }
 
-VclPtr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsSnap::Create(const TabPageParent& pWindow,
                                             const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsSnap>::Create(pWindow, *rAttrs);
@@ -173,7 +173,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsContents::Create(const TabPageParent& pWindow,
                                                 const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsContents>::Create( pWindow.pParent, *rAttrs );
@@ -526,7 +526,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsMisc::Create(const TabPageParent& pWindow,
                                             const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsMisc>::Create( pWindow.pParent, *rAttrs );

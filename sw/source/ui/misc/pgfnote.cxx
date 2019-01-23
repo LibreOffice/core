@@ -104,7 +104,7 @@ IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void
     m_xLineTypeBox->SetColor(rColorBox.GetSelectEntryColor());
 }
 
-SwFootNotePage::SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet)
+SwFootNotePage::SwFootNotePage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
     , lMaxHeight(0)
     , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
@@ -140,7 +140,7 @@ void SwFootNotePage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwFootNotePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFootNotePage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFootNotePage>::Create(pParent, *rSet);
 }

@@ -198,7 +198,7 @@ void SwGreetingsHandler::Contains(bool bContainsGreeting)
     m_xNeutralCB->set_sensitive(bContainsGreeting);
 }
 
-SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
+SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, const TabPageParent& pParent)
     : svt::OWizardPage(pParent, "modules/swriter/ui/mmsalutationpage.ui", "MMSalutationPage")
     , SwGreetingsHandler(pWizard->GetConfigItem(), *m_xBuilder)
     , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))

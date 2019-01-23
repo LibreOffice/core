@@ -1695,7 +1695,7 @@ bool SwPagePreview::HasPrintOptionsPage() const
     return true;
 }
 
-VclPtr<SfxTabPage> SwPagePreview::CreatePrintOptionsPage(TabPageParent pParent,
+VclPtr<SfxTabPage> SwPagePreview::CreatePrintOptionsPage(const TabPageParent& pParent,
                                                          const SfxItemSet &rOptions)
 {
     return ::CreatePrintOptionsPage(pParent, rOptions, !m_bNormalPrint);

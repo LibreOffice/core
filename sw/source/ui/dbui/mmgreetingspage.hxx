@@ -104,7 +104,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage
     virtual void        ActivatePage() override;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 public:
-    SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, const TabPageParent& pParent);
     virtual ~SwMailMergeGreetingsPage() override;
     virtual void dispose() override;
 };

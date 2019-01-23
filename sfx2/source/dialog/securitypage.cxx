@@ -400,12 +400,12 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     m_xProtectPB->show(!bNewProtection);
 }
 
-VclPtr<SfxTabPage> SfxSecurityPage::Create(TabPageParent pParent, const SfxItemSet * rItemSet)
+VclPtr<SfxTabPage> SfxSecurityPage::Create(const TabPageParent& pParent, const SfxItemSet * rItemSet)
 {
     return VclPtr<SfxSecurityPage>::Create(pParent, *rItemSet);
 }
 
-SfxSecurityPage::SfxSecurityPage(TabPageParent pParent, const SfxItemSet& rItemSet)
+SfxSecurityPage::SfxSecurityPage(const TabPageParent& pParent, const SfxItemSet& rItemSet)
     : SfxTabPage(pParent, "sfx/ui/securityinfopage.ui", "SecurityInfoPage", &rItemSet)
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this ));

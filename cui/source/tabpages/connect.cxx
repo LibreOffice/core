@@ -68,7 +68,7 @@ SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet
 |*
 \************************************************************************/
 
-SvxConnectionPage::SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+SvxConnectionPage::SvxConnectionPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "cui/ui/connectortabpage.ui", "ConnectorTabPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
@@ -315,7 +315,7 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxConnectionPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SvxConnectionPage::Create(const TabPageParent& pParent,
                                              const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxConnectionPage>::Create(pParent, *rAttrs);

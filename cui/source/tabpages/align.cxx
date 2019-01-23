@@ -102,7 +102,7 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
 
 }//namespace
 
-AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+AlignmentTabPage::AlignmentTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "cui/ui/cellalignment.ui", "CellAlignPage", &rCoreAttrs)
     , m_aVsRefEdge(nullptr)
     // text alignment
@@ -168,7 +168,7 @@ void AlignmentTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> AlignmentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> AlignmentTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<AlignmentTabPage>::Create(pParent, *rAttrSet);
 }

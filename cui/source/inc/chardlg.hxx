@@ -43,7 +43,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+    SvxCharBasePage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -111,7 +111,7 @@ private:
     std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
     std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
 
-    SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxCharNamePage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     const FontList*     GetFontList() const;
@@ -155,7 +155,7 @@ public:
                         virtual ~SvxCharNamePage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -209,7 +209,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xPositionLB;
     std::unique_ptr<weld::Label> m_xA11yWarningFT;
 
-    SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxCharEffectsPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -234,7 +234,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -286,7 +286,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xKerningMF;
     std::unique_ptr<weld::CheckButton> m_xPairKerningBtn;
 
-                        SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rSet);
+                        SvxCharPositionPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -310,7 +310,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -335,7 +335,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xStartBracketLB;
     std::unique_ptr<weld::TreeView> m_xEndBracketLB;
 
-    SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxCharTwoLinesPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                UpdatePreview_Impl();
     void                Initialize();
@@ -354,7 +354,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;

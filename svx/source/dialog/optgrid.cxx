@@ -88,7 +88,7 @@ bool  SvxGridItem::GetPresentation
 }
 
 // TabPage Screen Settings
-SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+SvxGridTabPage::SvxGridTabPage(const TabPageParent& pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
     , bAttrModified(false)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
@@ -146,7 +146,7 @@ SvxGridTabPage::~SvxGridTabPage()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> SvxGridTabPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
+VclPtr<SfxTabPage> SvxGridTabPage::Create(const TabPageParent& pParent, const SfxItemSet& rAttrSet)
 {
     return VclPtr<SvxGridTabPage>::Create(pParent, rAttrSet);
 }

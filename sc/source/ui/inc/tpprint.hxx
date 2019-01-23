@@ -29,10 +29,10 @@ class ScTpPrintOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton>       m_xSelectedSheetsCB;
     std::unique_ptr<weld::CheckButton>       m_xForceBreaksCB;
 
-    ScTpPrintOptions(TabPageParent pPage, const SfxItemSet& rCoreSet);
+    ScTpPrintOptions(const TabPageParent& pPage, const SfxItemSet& rCoreSet);
 public:
     virtual ~ScTpPrintOptions() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) override;
     virtual void        Reset( const SfxItemSet* rCoreSet ) override;
     using SfxTabPage::DeactivatePage;

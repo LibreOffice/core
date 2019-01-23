@@ -53,7 +53,7 @@ const sal_uInt16 SvxTextAttrPage::pRanges[] =
 |* dialog (page) for copying objects
 |*
 \************************************************************************/
-SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs)
+SvxTextAttrPage::SvxTextAttrPage(const TabPageParent& pPage, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, "cui/ui/textattrtabpage.ui", "TextAttributesPage", rInAttrs)
     , rOutAttrs(rInAttrs)
     , m_eObjKind(OBJ_NONE)
@@ -479,7 +479,7 @@ void SvxTextAttrPage::Construct()
     m_xTsbWordWrapText->show( bWordWrapTextEnabled );
 }
 
-VclPtr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTextAttrPage::Create(const TabPageParent& pWindow, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxTextAttrPage>::Create(pWindow, *rAttrs);
 }

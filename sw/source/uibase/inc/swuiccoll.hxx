@@ -60,9 +60,9 @@ class SwCondCollPage : public SfxTabPage
     static const sal_uInt16 m_aPageRg[];
 
 public:
-    SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwCondCollPage(const TabPageParent& pParent, const SfxItemSet &rSet);
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return m_aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) override;

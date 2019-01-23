@@ -49,7 +49,7 @@
 using namespace com::sun::star;
 
 
-SvxLineDefTabPage::SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxLineDefTabPage::SvxLineDefTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/linestyletabpage.ui", "LineStylePage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aXLineAttr(rInAttrs.GetPool())
@@ -301,7 +301,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-VclPtr<SfxTabPage> SvxLineDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxLineDefTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxLineDefTabPage>::Create(pParent, *rOutAttrs);
 }

@@ -197,13 +197,13 @@ public:
 
     void ShowSymbolControls(bool bOn);
 
-    SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -293,13 +293,13 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineDefTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineDefTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -359,13 +359,13 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineEndDefTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineEndDefTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create(const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

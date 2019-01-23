@@ -30,9 +30,9 @@ namespace chart
 class DataLabelsTabPage : public SfxTabPage
 {
 public:
-    DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    DataLabelsTabPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs);
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pWindow, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 

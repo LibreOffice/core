@@ -72,7 +72,7 @@ void SvxCTLOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxCTLOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxCTLOptionsPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxCTLOptionsPage>::Create( pParent.pParent, *rAttrSet );
 }

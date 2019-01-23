@@ -57,11 +57,11 @@ class SwLabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwLabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwLabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     virtual ~SwLabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -103,10 +103,10 @@ class SwPrivateDataPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwPrivateDataPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -135,10 +135,10 @@ class SwBusinessDataPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwBusinessDataPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

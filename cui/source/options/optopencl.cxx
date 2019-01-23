@@ -71,7 +71,7 @@ void SvxOpenCLTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxOpenCLTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxOpenCLTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxOpenCLTabPage>::Create(pParent.pParent, *rAttrSet);
 }

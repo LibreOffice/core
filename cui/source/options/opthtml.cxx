@@ -88,7 +88,7 @@ void OfaHtmlTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaHtmlTabPage::Create(const TabPageParent& pParent,
                                            const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaHtmlTabPage>::Create(pParent.pParent, *rAttrSet);

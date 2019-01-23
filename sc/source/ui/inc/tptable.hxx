@@ -27,7 +27,7 @@ class ScTablePage : public SfxTabPage
     friend class VclPtr<ScTablePage>;
     static const sal_uInt16 pPageTableRanges[];
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                           const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
@@ -38,7 +38,7 @@ public:
 
     virtual         ~ScTablePage() override;
 private:
-    ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    ScTablePage(const TabPageParent& pParent, const SfxItemSet& rCoreSet);
     void            ShowImage();
 
 private:

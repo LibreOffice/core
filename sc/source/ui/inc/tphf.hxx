@@ -37,7 +37,7 @@ public:
     void            SetStyleDlg ( ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
-    ScHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId);
+    ScHFPage(const TabPageParent& pParent, const SfxItemSet& rSet, sal_uInt16 nSetId);
 
     virtual void    ActivatePage() override;
     virtual void    DeactivatePage() override;
@@ -60,22 +60,22 @@ class ScHeaderPage : public ScHFPage
 {
     friend class VclPtr<ScHeaderPage>;
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    ScHeaderPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ScHeaderPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 };
 
 class ScFooterPage : public ScHFPage
 {
     friend class VclPtr<ScFooterPage>;
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    ScFooterPage(TabPageParent pParent, const SfxItemSet& rSet);
+    ScFooterPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX

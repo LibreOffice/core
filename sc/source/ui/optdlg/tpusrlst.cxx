@@ -149,7 +149,7 @@ void ScTpUserLists::Init()
 
 }
 
-VclPtr<SfxTabPage> ScTpUserLists::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTpUserLists::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<ScTpUserLists>::Create( pParent.pParent, *rAttrSet );
 }

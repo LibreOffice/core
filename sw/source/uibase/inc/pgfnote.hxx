@@ -33,9 +33,9 @@ class SwFootNotePage: public SfxTabPage
 {
     friend class VclPtr<SwFootNotePage>;
     static const sal_uInt16 aPageRg[];
-    SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwFootNotePage(const TabPageParent& pParent, const SfxItemSet &rSet);
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;

@@ -39,7 +39,7 @@ class SvxDistributePage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xBtnVerBottom;
 
 public:
-    SvxDistributePage(TabPageParent pWindow, const SfxItemSet& rInAttrs,
+    SvxDistributePage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor,
         SvxDistributeVertical eVer);
     virtual ~SvxDistributePage() override;

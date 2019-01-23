@@ -181,10 +181,10 @@ class SwFramePage: public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwFramePage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwFramePage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SwFramePage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
@@ -239,9 +239,9 @@ class SwGrfExtPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwGrfExtPage(const TabPageParent& pParent, const SfxItemSet &rSet);
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -266,10 +266,10 @@ class SwFrameURLPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwFrameURLPage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SwFrameURLPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -316,11 +316,11 @@ class SwFrameAddPage : public SfxTabPage
     static const sal_uInt16 aAddPgRg[];
 
 public:
-    SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwFrameAddPage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SwFrameAddPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;

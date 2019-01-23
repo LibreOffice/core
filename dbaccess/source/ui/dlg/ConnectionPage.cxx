@@ -76,13 +76,13 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    VclPtr<SfxTabPage> OConnectionTabPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> OConnectionTabPage::Create(const TabPageParent& pParent, const SfxItemSet* _rAttrSet)
     {
         return VclPtr<OConnectionTabPage>::Create(pParent, *_rAttrSet);
     }
 
     // OConnectionTabPage
-    OConnectionTabPage::OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+    OConnectionTabPage::OConnectionTabPage(const TabPageParent& pParent, const SfxItemSet& _rCoreAttrs)
         : OConnectionHelper(pParent, "dbaccess/ui/connectionpage.ui", "ConnectionPage", _rCoreAttrs)
         , m_xFL2(m_xBuilder->weld_label("userlabel"))
         , m_xUserNameLabel(m_xBuilder->weld_label("userNameLabel"))

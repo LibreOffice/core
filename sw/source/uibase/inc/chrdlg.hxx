@@ -59,11 +59,11 @@ class SwCharURLPage : public SfxTabPage
     DECL_LINK(EventHdl, weld::Button&, void);
 
 public:
-    SwCharURLPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwCharURLPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     virtual ~SwCharURLPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent,
                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

@@ -51,7 +51,7 @@ class DataSourceTabPage final :
         public RangeSelectionListenerParent
 {
 public:
-    explicit DataSourceTabPage(TabPageParent pParent,
+    explicit DataSourceTabPage(const TabPageParent& pParent,
                                DialogModel & rDialogModel,
                                ChartTypeTemplateProvider* pTemplateProvider,
                                Dialog * pParentDialog,

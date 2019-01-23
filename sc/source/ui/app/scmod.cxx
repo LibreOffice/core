@@ -2004,7 +2004,7 @@ void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet )
 {
     VclPtr<SfxTabPage> pRet;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

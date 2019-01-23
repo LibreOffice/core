@@ -398,7 +398,7 @@ void SteppedPropertiesDialog::fillParameter( ChartTypeParameter& rParameter, boo
 class SplineResourceGroup : public ChangingResource
 {
 public:
-    explicit SplineResourceGroup(weld::Builder* pBuilder, TabPageParent pParent);
+    explicit SplineResourceGroup(weld::Builder* pBuilder, const TabPageParent& pParent);
 
     void showControls( bool bShow );
 
@@ -421,7 +421,7 @@ private:
     std::unique_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
 };
 
-SplineResourceGroup::SplineResourceGroup(weld::Builder* pBuilder, TabPageParent pParent)
+SplineResourceGroup::SplineResourceGroup(weld::Builder* pBuilder, const TabPageParent& pParent)
     : ChangingResource()
     , m_pParent(pParent)
     , m_xFT_LineType(pBuilder->weld_label("linetypeft"))
@@ -601,7 +601,7 @@ IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl, weld::TreeView&, void)
         m_pChangeListener->stateChanged(this);
 }
 
-ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference< XChartDocument >& xChartModel,
+ChartTypeTabPage::ChartTypeTabPage(const TabPageParent& pParent , const uno::Reference< XChartDocument >& xChartModel,
                                    bool bShowDescription)
     : OWizardPage(pParent, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType")
     , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(m_xBuilder.get()) )

@@ -86,7 +86,7 @@ class SvxGrfCropPage : public SfxTabPage
     // Example
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
 
-    SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SvxGrfCropPage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SvxGrfCropPage() override;
     virtual void dispose() override;
 
@@ -102,7 +102,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet );
 
     virtual bool FillItemSet( SfxItemSet *rSet ) override;
     virtual void Reset( const SfxItemSet *rSet ) override;

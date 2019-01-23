@@ -29,7 +29,7 @@
 namespace chart
 {
 
-SchAlignmentTabPage::SchAlignmentTabPage(TabPageParent pParent,
+SchAlignmentTabPage::SchAlignmentTabPage(const TabPageParent& pParent,
                                          const SfxItemSet& rInAttrs, bool bWithRotation)
     : SfxTabPage(pParent, "modules/schart/ui/titlerotationtabpage.ui", "TitleRotationTabPage", &rInAttrs)
     , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
@@ -79,13 +79,13 @@ void SchAlignmentTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SchAlignmentTabPage::Create(const TabPageParent& pParent,
                                                const SfxItemSet* rInAttrs)
 {
     return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs);
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(TabPageParent pParent,
+VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(const TabPageParent& pParent,
                                                               const SfxItemSet* rInAttrs)
 {
     return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs, false);

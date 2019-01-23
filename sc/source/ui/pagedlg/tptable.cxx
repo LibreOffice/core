@@ -94,7 +94,7 @@ bool WAS_DEFAULT(sal_uInt16 w, SfxItemSet const & s)
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
 
-ScTablePage::ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+ScTablePage::ScTablePage(const TabPageParent& pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "modules/scalc/ui/sheetprintpage.ui", "SheetPrintPage", &rCoreAttrs)
     , m_nOrigScalePageWidth(0)
     , m_nOrigScalePageHeight(0)
@@ -143,7 +143,7 @@ ScTablePage::~ScTablePage()
     disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTablePage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScTablePage::Create(const TabPageParent& pParent, const SfxItemSet* rCoreSet)
 {
     return VclPtr<ScTablePage>::Create(pParent, *rCoreSet);
 }

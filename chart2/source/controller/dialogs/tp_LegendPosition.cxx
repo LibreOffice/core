@@ -26,7 +26,7 @@
 namespace chart
 {
 
-SchLegendPosTabPage::SchLegendPosTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+SchLegendPosTabPage::SchLegendPosTabPage(const TabPageParent& pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "modules/schart/ui/tp_LegendPosition.ui", "tp_LegendPosition", &rInAttrs)
     , m_aLegendPositionResources(*m_xBuilder)
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR")))
@@ -45,7 +45,7 @@ void SchLegendPosTabPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SchLegendPosTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchLegendPosTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SchLegendPosTabPage>::Create(pParent, *rOutAttrs);
 }

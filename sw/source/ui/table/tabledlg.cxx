@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-SwFormatTablePage::SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rSet)
+SwFormatTablePage::SwFormatTablePage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/formattablepage.ui", "FormatTablePage", &rSet)
     , pTableData(nullptr)
     , nSaveWidth(0)
@@ -364,7 +364,7 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
     bModified = true;
 }
 
-VclPtr<SfxTabPage> SwFormatTablePage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwFormatTablePage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwFormatTablePage>::Create(pParent, *rAttrSet);
 }
@@ -697,7 +697,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 //Description: Page column configuration
-SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwTableColumnPage::SwTableColumnPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tablecolumnpage.ui", "TableColumnPage", &rSet)
     , pTableData(nullptr)
     , nTableWidth(0)
@@ -756,7 +756,7 @@ SwTableColumnPage::~SwTableColumnPage()
 {
 }
 
-VclPtr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTableColumnPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTableColumnPage>::Create(pParent, *rAttrSet);
 }
@@ -1206,7 +1206,7 @@ void  SwTableTabDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
 }
 
-SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwTextFlowPage::SwTextFlowPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tabletextflowpage.ui", "TableTextFlowPage", &rSet)
     , pShell(nullptr)
     , bPageBreak(true)
@@ -1262,7 +1262,7 @@ SwTextFlowPage::~SwTextFlowPage()
 {
 }
 
-VclPtr<SfxTabPage> SwTextFlowPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwTextFlowPage::Create(const TabPageParent& pParent,
                                            const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);

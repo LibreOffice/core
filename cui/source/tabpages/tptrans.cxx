@@ -200,7 +200,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
     }
 }
 
-SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxTransparenceTabPage::SvxTransparenceTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , nPageType(PageType::Area)
@@ -253,7 +253,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxI
     SetExchangeSupport();
 }
 
-VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxTransparenceTabPage>::Create(pParent, *rAttrs);
 }

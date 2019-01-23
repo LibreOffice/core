@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, Button*, void)
     aEBasicExectblCB->Enable( aEBasicCodeCB->IsChecked() );
 }
 
-VclPtr<SfxTabPage> OfaMSFilterTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaMSFilterTabPage::Create(const TabPageParent& pParent,
                                                const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaMSFilterTabPage>::Create( pParent.pParent, *rAttrSet );
@@ -187,7 +187,7 @@ void OfaMSFilterTabPage2::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaMSFilterTabPage2::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaMSFilterTabPage2::Create(const TabPageParent& pParent,
                                                 const SfxItemSet* rAttrSet )
 {
     return VclPtr<OfaMSFilterTabPage2>::Create( pParent.pParent, *rAttrSet );

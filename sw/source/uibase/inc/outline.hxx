@@ -102,7 +102,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwOutlineSettingsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwOutlineSettingsTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage() override;
 
     void SetWrtShell(SwWrtShell* pShell);
@@ -112,7 +112,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create(const TabPageParent& pParent,
                                        const SfxItemSet* rAttrSet);
     void SetNumRule(SwNumRule *pRule)
     {
