@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d17f6fa9",
+        "filename": "offapi/com/sun/star/text/XPasteListener.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-23T18:55:16Z",
+      "side": 1,
+      "message": "oy vey. can we at least document the things we are smuggling through this list of properties?",
+      "revId": "c3b0e625cb460c099b3fda34023f435892b14da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
