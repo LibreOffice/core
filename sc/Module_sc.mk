@@ -176,6 +176,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_scenariosobj \
 	CppunitTest_sc_shapeobj \
 	CppunitTest_sc_sheetlinkobj \
+	CppunitTest_sc_sheetlinksobj \
 	CppunitTest_sc_sortdescriptorbaseobj \
 	CppunitTest_sc_spreadsheetsettings \
 	CppunitTest_sc_spreadsheetsettingsobj \
