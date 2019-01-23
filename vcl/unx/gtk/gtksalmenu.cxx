@@ -848,6 +848,8 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_widget_show_all(mpMenuBarContainerWidget);
 
     ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
+
+    ApplyPersona();
 #else
     (void)mpMenuAllowShrinkWidget;
     (void)mpMenuBarContainerWidget;
