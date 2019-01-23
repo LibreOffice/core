@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
         the NumRules don't have names */
     css::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
 
-    SAL_DLLPRIVATE sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry )
+    SAL_DLLPRIVATE sal_uInt32 Find( const XMLTextListAutoStylePoolEntry_Impl* pEntry )
         const;
 public:
 

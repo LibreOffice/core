@@ -164,7 +164,7 @@ void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
     m_aNames.insert(rName);
 }
 
-sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
+sal_uInt32 XMLTextListAutoStylePool::Find( const XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {

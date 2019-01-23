@@ -88,14 +88,8 @@ public:
     /// Set property with the proper value for this name. If the value
     /// is not yet known, store the XPropertySet in the backpatch list.
     /// Use this whenever the value should be set, even if it is not yet known.
-    /// const version
     void SetProperty(
         const css::uno::Reference<css::beans::XPropertySet> & xPropSet,
-        const OUString& sName);
-
-    /// non-const version of SetProperty
-    void SetProperty(
-        css::uno::Reference<css::beans::XPropertySet> & xPropSet,
         const OUString& sName);
 };
 
