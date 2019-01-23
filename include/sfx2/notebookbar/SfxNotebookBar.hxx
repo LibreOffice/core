@@ -47,7 +47,7 @@ public:
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     /** Show menu bar only in current frame */
-    static void ShowMenubar(SfxViewFrame* pViewFrame, bool bShow);
+    static void ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow);
     static void ToggleMenubar();
 
 private:

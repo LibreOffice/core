@@ -49,7 +49,7 @@ private:
 
 public:
     SearchDialog(weld::Window* pWindow, const OUString& rConfigName);
-    static void runAsync(std::shared_ptr<SearchDialog>& rController);
+    static void runAsync(const std::shared_ptr<SearchDialog>& rController);
     virtual ~SearchDialog() override;
 
     void         SetFindHdl( const Link<SearchDialog&,void>& rLink ) { m_aFindHdl = rLink; }
