@@ -54,6 +54,8 @@
 
 #include <BitmapLightenFilter.hxx>
 
+using namespace css;
+
 bool ImageRequestParameters::convertToDarkTheme()
 {
     static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
@@ -128,25 +130,25 @@ OUString getNameNoExtension(OUString const & sName)
     return sName.copy(0, nDotPosition);
 }
 
-std::shared_ptr<SvMemoryStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
+std::shared_ptr<SvMemoryStream> wrapStream(uno::Reference<io::XInputStream> const & rInputStream)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
     // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
     // l. 593):
-    OSL_ASSERT(stream.is());
-    std::shared_ptr<SvMemoryStream> s(std::make_shared<SvMemoryStream>());
+    OSL_ASSERT(rInputStream.is());
+    std::shared_ptr<SvMemoryStream> aMemoryStream(std::make_shared<SvMemoryStream>());
     for (;;)
     {
-        sal_Int32 const size = 2048;
-        css::uno::Sequence< sal_Int8 > data(size);
-        sal_Int32 n = stream->readBytes(data, size);
-        s->WriteBytes(data.getConstArray(), n);
-        if (n < size)
+        const sal_Int32 nSize(2048);
+        uno::Sequence<sal_Int8> aData(nSize);
+        sal_Int32 nRead = rInputStream->readBytes(aData, nSize);
+        aMemoryStream->WriteBytes(aData.getConstArray(), nRead);
+        if (nRead < nSize)
             break;
     }
-    s->Seek(0);
-    return s;
+    aMemoryStream->Seek(0);
+    return aMemoryStream;
 }
 
 void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString const & rPath, ImageRequestParameters& rParameters)
@@ -236,7 +238,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
             if (checkPathAccess())
             {
                 IconSet& rIconSet = getCurrentIconSet();
-                const css::uno::Reference<css::container::XNameAccess>& rNameAccess = rIconSet.maNameAccess;
+                const uno::Reference<container::XNameAccess> & rNameAccess = rIconSet.maNameAccess;
 
                 LanguageTag aLanguageTag(rLang);
 
@@ -252,7 +254,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
                 }
             }
         }
-        catch (const css::uno::Exception & e)
+        catch (const uno::Exception & e)
         {
             SAL_INFO("vcl", e);
         }
@@ -275,7 +277,7 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
             if (checkPathAccess())
             {
                 IconSet& rIconSet = getCurrentIconSet();
-                const css::uno::Reference<css::container::XNameAccess>& rNameAccess = rIconSet.maNameAccess;
+                const uno::Reference<container::XNameAccess>& rNameAccess = rIconSet.maNameAccess;
 
                 LanguageTag aLanguageTag(rLang);
 
@@ -283,7 +285,7 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
                 {
                     if (rNameAccess->hasByName(rPath))
                     {
-                        css::uno::Reference<css::io::XInputStream> aStream;
+                        uno::Reference<io::XInputStream> aStream;
                         bool ok = rNameAccess->getByName(rPath) >>= aStream;
                         assert(ok);
                         (void)ok; // prevent unused warning in release build
@@ -292,7 +294,7 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
                 }
             }
         }
-        catch (const css::uno::Exception & e)
+        catch (const uno::Exception & e)
         {
             SAL_INFO("vcl", e);
         }
@@ -330,7 +332,7 @@ bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, B
             if (doLoadImage(aParameters))
                 return true;
         }
-        catch (css::uno::RuntimeException &)
+        catch (uno::RuntimeException &)
         {}
 
         aCurrentStyle = fallbackStyle(aCurrentStyle);
@@ -401,11 +403,11 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     {
         bFound = findImage(aPaths, rParameters);
     }
-    catch (css::uno::RuntimeException&)
+    catch (uno::RuntimeException&)
     {
         throw;
     }
-    catch (const css::uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         SAL_INFO("vcl", "ImplImageTree::doLoadImage exception: " << e);
     }
@@ -514,13 +516,13 @@ bool ImplImageTree::findImage(std::vector<OUString> const & rPaths, ImageRequest
     if (!checkPathAccess())
         return false;
 
-    css::uno::Reference<css::container::XNameAccess> const & rNameAccess = getCurrentIconSet().maNameAccess;
+    uno::Reference<container::XNameAccess> const & rNameAccess = getCurrentIconSet().maNameAccess;
 
     for (OUString const & rPath : rPaths)
     {
         if (rNameAccess->hasByName(rPath))
         {
-            css::uno::Reference<css::io::XInputStream> aStream;
+            uno::Reference<io::XInputStream> aStream;
             bool ok = rNameAccess->getByName(rPath) >>= aStream;
             assert(ok);
             (void)ok; // prevent unused warning in release build
@@ -540,16 +542,16 @@ void ImplImageTree::loadImageLinks()
     if (!checkPathAccess())
         return;
 
-    const css::uno::Reference<css::container::XNameAccess> &rNameAccess = getCurrentIconSet().maNameAccess;
+    const uno::Reference<container::XNameAccess> &rNameAccess = getCurrentIconSet().maNameAccess;
 
     if (rNameAccess->hasByName(aLinkFilename))
     {
-        css::uno::Reference< css::io::XInputStream > s;
-        bool ok = rNameAccess->getByName(aLinkFilename) >>= s;
+        uno::Reference<io::XInputStream> xStream;
+        bool ok = rNameAccess->getByName(aLinkFilename) >>= xStream;
         assert(ok);
         (void)ok; // prevent unused warning in release build
 
-        parseLinkFile( wrapStream(s) );
+        parseLinkFile(wrapStream(xStream));
         return;
     }
 }
@@ -562,12 +564,12 @@ void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
     while (xStream->ReadLine(aLine))
     {
         ++nLineNo;
-        if ( aLine.isEmpty() )
+        if (aLine.isEmpty())
             continue;
 
         sal_Int32 nIndex = 0;
-        aLink = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
-        aOriginal = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
+        aLink = OStringToOUString(aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
+        aOriginal = OStringToOUString(aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
 
         // skip comments, or incomplete entries
         if (aLink.isEmpty() || aLink[0] == '#' || aOriginal.isEmpty())
@@ -589,7 +591,7 @@ void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
 
 OUString const & ImplImageTree::getRealImageName(OUString const & name)
 {
-    IconLinkHash &rLinkHash = maIconSets[maCurrentStyle].maLinkHash;
+    IconLinkHash & rLinkHash = maIconSets[maCurrentStyle].maLinkHash;
 
     IconLinkHash::iterator it(rLinkHash.find(name));
     if (it == rLinkHash.end())
@@ -601,25 +603,27 @@ OUString const & ImplImageTree::getRealImageName(OUString const & name)
 bool ImplImageTree::checkPathAccess()
 {
     IconSet& rIconSet = getCurrentIconSet();
-    css::uno::Reference<css::container::XNameAccess> &rNameAccess = rIconSet.maNameAccess;
+    uno::Reference<container::XNameAccess> & rNameAccess = rIconSet.maNameAccess;
     if (rNameAccess.is())
         return true;
 
     try
     {
-        rNameAccess = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rIconSet.maURL);
+        rNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rIconSet.maURL);
     }
-    catch (const css::uno::RuntimeException &) {
+    catch (const uno::RuntimeException &)
+    {
         throw;
     }
-    catch (const css::uno::Exception & e) {
+    catch (const uno::Exception & e)
+    {
         SAL_INFO("vcl", "ImplImageTree::zip file location " << e << " for " << rIconSet.maURL);
         return false;
     }
     return rNameAccess.is();
 }
 
-css::uno::Reference<css::container::XNameAccess> const & ImplImageTree::getNameAccess()
+uno::Reference<container::XNameAccess> const & ImplImageTree::getNameAccess()
 {
     (void)checkPathAccess();
     return getCurrentIconSet().maNameAccess;
