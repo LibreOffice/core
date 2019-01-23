@@ -37,6 +37,7 @@ class EPUBExportTest : public test::BootstrapFixture,
                        public unotest::MacrosTest,
                        public XmlTestTools
 {
+protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
@@ -56,105 +57,6 @@ public:
     /// Looks up a key of a class in rCss.
     static OUString getCss(std::map<OUString, std::vector<OUString>>& rCss, const OUString& rClass,
                            const OUString& rKey);
-    void testOutlineLevel();
-    void testMimetype();
-    void testEPUB2();
-    void testEPUBFixedLayout();
-    void testEPUBFixedLayoutOption();
-    void testEPUBFixedLayoutImplicitBreak();
-    void testPageBreakSplit();
-    void testSpanAutostyle();
-    void testParaAutostyleCharProps();
-    void testMeta();
-    void testMetaXMP();
-    void testMetaAPI();
-    void testCoverImage();
-    void testParaNamedstyle();
-    void testCharNamedstyle();
-    void testNamedStyleInheritance();
-    void testNestedSpan();
-    void testLineBreak();
-    void testEscape();
-    void testParaCharProps();
-    void testSection();
-    void testList();
-    void testImage();
-    void testImageBorder();
-    void testImageNospan();
-    void testTable();
-    void testTableRowSpan();
-    void testTableCellBorder();
-    void testTableCellWidth();
-    void testTableRowHeight();
-    void testLink();
-    void testLinkInvalid();
-    void testLinkCharFormat();
-    void testLinkNamedCharFormat();
-    void testTableWidth();
-    void testTextBox();
-    void testFontEmbedding();
-    void testImageLink();
-    void testFootnote();
-    void testPopup();
-    void testPopupMedia();
-    void testPopupAPI();
-    void testPageSize();
-    void testSVG();
-    void testTdf115623SingleWritingMode();
-    void testTdf115623SplitByChapter();
-    void testTdf115623ManyPageSpans();
-    void testSimpleRuby();
-
-    CPPUNIT_TEST_SUITE(EPUBExportTest);
-    CPPUNIT_TEST(testOutlineLevel);
-    CPPUNIT_TEST(testMimetype);
-    CPPUNIT_TEST(testEPUB2);
-    CPPUNIT_TEST(testEPUBFixedLayout);
-    CPPUNIT_TEST(testEPUBFixedLayoutOption);
-    CPPUNIT_TEST(testEPUBFixedLayoutImplicitBreak);
-    CPPUNIT_TEST(testPageBreakSplit);
-    CPPUNIT_TEST(testSpanAutostyle);
-    CPPUNIT_TEST(testParaAutostyleCharProps);
-    CPPUNIT_TEST(testMeta);
-    CPPUNIT_TEST(testMetaXMP);
-    CPPUNIT_TEST(testMetaAPI);
-    CPPUNIT_TEST(testCoverImage);
-    CPPUNIT_TEST(testParaNamedstyle);
-    CPPUNIT_TEST(testCharNamedstyle);
-    CPPUNIT_TEST(testNamedStyleInheritance);
-    CPPUNIT_TEST(testNestedSpan);
-    CPPUNIT_TEST(testLineBreak);
-    CPPUNIT_TEST(testEscape);
-    CPPUNIT_TEST(testParaCharProps);
-    CPPUNIT_TEST(testSection);
-    CPPUNIT_TEST(testList);
-    CPPUNIT_TEST(testImage);
-    CPPUNIT_TEST(testImageBorder);
-    CPPUNIT_TEST(testImageNospan);
-    CPPUNIT_TEST(testTable);
-    CPPUNIT_TEST(testTableRowSpan);
-    CPPUNIT_TEST(testTableCellBorder);
-    CPPUNIT_TEST(testTableCellWidth);
-    CPPUNIT_TEST(testTableRowHeight);
-    CPPUNIT_TEST(testLink);
-    CPPUNIT_TEST(testLinkInvalid);
-    CPPUNIT_TEST(testLinkCharFormat);
-    CPPUNIT_TEST(testLinkNamedCharFormat);
-    CPPUNIT_TEST(testTableWidth);
-    CPPUNIT_TEST(testTextBox);
-    CPPUNIT_TEST(testFontEmbedding);
-    CPPUNIT_TEST(testImageLink);
-    CPPUNIT_TEST(testFootnote);
-    CPPUNIT_TEST(testPopup);
-    CPPUNIT_TEST(testPopupMedia);
-    CPPUNIT_TEST(testPopupAPI);
-    CPPUNIT_TEST(testPageSize);
-    CPPUNIT_TEST(testSVG);
-    CPPUNIT_TEST(testTdf115623SingleWritingMode);
-    CPPUNIT_TEST(testTdf115623SplitByChapter);
-    CPPUNIT_TEST(testTdf115623ManyPageSpans);
-    CPPUNIT_TEST(testSimpleRuby);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void EPUBExportTest::setUp()
@@ -264,7 +166,7 @@ OUString EPUBExportTest::getCss(std::map<OUString, std::vector<OUString>>& rCss,
     return aRet;
 }
 
-void EPUBExportTest::testOutlineLevel()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testOutlineLevel)
 {
     createDoc("outline-level.fodt", {});
 
@@ -275,7 +177,7 @@ void EPUBExportTest::testOutlineLevel()
     CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
 }
 
-void EPUBExportTest::testMimetype()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMimetype)
 {
     createDoc("hello.fodt", {});
 
@@ -311,7 +213,7 @@ void EPUBExportTest::testMimetype()
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.document.ExportFilter"));
 }
 
-void EPUBExportTest::testEPUB2()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUB2)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request EPUB2.
@@ -323,7 +225,7 @@ void EPUBExportTest::testEPUB2()
     assertXPath(mpXmlDoc, "/opf:package", "version", "2.0");
 }
 
-void EPUBExportTest::testEPUBFixedLayout()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayout)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request fixed layout.
@@ -337,7 +239,7 @@ void EPUBExportTest::testEPUBFixedLayout()
                        "pre-paginated");
 }
 
-void EPUBExportTest::testEPUBFixedLayoutOption()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutOption)
 {
     // Explicitly request fixed layout, this time via FilterOptions.
     maFilterOptions = "layout=fixed";
@@ -349,7 +251,7 @@ void EPUBExportTest::testEPUBFixedLayoutOption()
                        "pre-paginated");
 }
 
-void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutImplicitBreak)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request fixed layout.
@@ -370,7 +272,7 @@ void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
     assertXPathContent(mpXmlDoc, "//xhtml:li[2]/xhtml:a", "Second chapter");
 }
 
-void EPUBExportTest::testPageBreakSplit()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPageBreakSplit)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request split on page break (instead of on heading).
@@ -385,7 +287,7 @@ void EPUBExportTest::testPageBreakSplit()
     CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
 }
 
-void EPUBExportTest::testSpanAutostyle()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSpanAutostyle)
 {
     createDoc("span-autostyle.fodt", {});
 
@@ -397,7 +299,7 @@ void EPUBExportTest::testSpanAutostyle()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[3]", "class", "span2");
 }
 
-void EPUBExportTest::testParaAutostyleCharProps()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testParaAutostyleCharProps)
 {
     createDoc("para-autostyle-char-props.fodt", {});
 
@@ -407,7 +309,7 @@ void EPUBExportTest::testParaAutostyleCharProps()
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
 }
 
-void EPUBExportTest::testMeta()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMeta)
 {
     createDoc("meta.fodt", {});
 
@@ -427,7 +329,7 @@ void EPUBExportTest::testMeta()
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
 }
 
-void EPUBExportTest::testMetaXMP()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaXMP)
 {
     createDoc("meta-xmp.fodt", {});
     mpXmlDoc = parseExport("OEBPS/content.opf");
@@ -442,7 +344,7 @@ void EPUBExportTest::testMetaXMP()
                        "2016-11-20T17:16:07Z");
 }
 
-void EPUBExportTest::testMetaAPI()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaAPI)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "RVNGIdentifier", uno::makeAny(OUString("deadc0de-e394-4cd6-9b83-7172794612e5")) },
@@ -463,7 +365,7 @@ void EPUBExportTest::testMetaAPI()
                        "2015-11-20T17:16:07Z");
 }
 
-void EPUBExportTest::testCoverImage()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testCoverImage)
 {
     OUString aCoverURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "meta.cover-image.png";
     uno::Sequence<beans::PropertyValue> aFilterData(
@@ -480,7 +382,7 @@ void EPUBExportTest::testCoverImage()
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
 }
 
-void EPUBExportTest::testParaNamedstyle()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testParaNamedstyle)
 {
     createDoc("para-namedstyle.fodt", {});
 
@@ -495,7 +397,7 @@ void EPUBExportTest::testParaNamedstyle()
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
 }
 
-void EPUBExportTest::testCharNamedstyle()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testCharNamedstyle)
 {
     createDoc("char-namedstyle.fodt", {});
 
@@ -507,7 +409,7 @@ void EPUBExportTest::testCharNamedstyle()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class", "span1");
 }
 
-void EPUBExportTest::testNamedStyleInheritance()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testNamedStyleInheritance)
 {
     createDoc("named-style-inheritance.fodt", {});
 
@@ -523,7 +425,7 @@ void EPUBExportTest::testNamedStyleInheritance()
                          EPUBExportTest::getCss(aCssDoc, aBlue, "font-family"));
 }
 
-void EPUBExportTest::testNestedSpan()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testNestedSpan)
 {
     createDoc("nested-span.fodt", {});
 
@@ -541,7 +443,7 @@ void EPUBExportTest::testNestedSpan()
                          EPUBExportTest::getCss(aCssDoc, aRed, "font-family"));
 }
 
-void EPUBExportTest::testLineBreak()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLineBreak)
 {
     createDoc("line-break.fodt", {});
 
@@ -552,7 +454,7 @@ void EPUBExportTest::testLineBreak()
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span/xhtml:br", 1);
 }
 
-void EPUBExportTest::testEscape()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEscape)
 {
     createDoc("escape.fodt", {});
 
@@ -568,7 +470,7 @@ void EPUBExportTest::testEscape()
                            "\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0 "));
 }
 
-void EPUBExportTest::testParaCharProps()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testParaCharProps)
 {
     createDoc("para-char-props.fodt", {});
 
@@ -583,7 +485,7 @@ void EPUBExportTest::testParaCharProps()
     CPPUNIT_ASSERT_EQUAL(OUString("bold"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-weight"));
 }
 
-void EPUBExportTest::testSection()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSection)
 {
     createDoc("section.fodt", {});
 
@@ -592,7 +494,7 @@ void EPUBExportTest::testSection()
     assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "In section.");
 }
 
-void EPUBExportTest::testList()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testList)
 {
     createDoc("list.fodt", {});
 
@@ -603,7 +505,7 @@ void EPUBExportTest::testList()
     assertXPathContent(mpXmlDoc, "//xhtml:p[6]/xhtml:span", "F");
 }
 
-void EPUBExportTest::testImage()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImage)
 {
     createDoc("image.fodt", {});
 
@@ -611,7 +513,7 @@ void EPUBExportTest::testImage()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
 }
 
-void EPUBExportTest::testImageBorder()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageBorder)
 {
     createDoc("image-border.fodt", {});
 
@@ -624,7 +526,7 @@ void EPUBExportTest::testImageBorder()
                          EPUBExportTest::getCss(aCssDoc, aClass, "border"));
 }
 
-void EPUBExportTest::testImageNospan()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageNospan)
 {
     createDoc("image-nospan.fodt", {});
 
@@ -633,7 +535,7 @@ void EPUBExportTest::testImageNospan()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
 }
 
-void EPUBExportTest::testTable()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTable)
 {
     createDoc("table.fodt", {});
 
@@ -641,7 +543,7 @@ void EPUBExportTest::testTable()
     assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr/xhtml:td", 4);
 }
 
-void EPUBExportTest::testTableRowSpan()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableRowSpan)
 {
     createDoc("table-row-span.fodt", {});
 
@@ -650,7 +552,7 @@ void EPUBExportTest::testTableRowSpan()
     assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "rowspan", "2");
 }
 
-void EPUBExportTest::testTableCellBorder()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableCellBorder)
 {
     createDoc("table-cell-border.fodt", {});
 
@@ -664,7 +566,7 @@ void EPUBExportTest::testTableCellBorder()
                          EPUBExportTest::getCss(aCssDoc, aClass, "border-left"));
 }
 
-void EPUBExportTest::testTableCellWidth()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableCellWidth)
 {
     createDoc("table-cell-width.fodt", {});
 
@@ -683,7 +585,7 @@ void EPUBExportTest::testTableCellWidth()
                            EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
 }
 
-void EPUBExportTest::testTableRowHeight()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableRowHeight)
 {
     createDoc("table-row-height.fodt", {});
 
@@ -696,7 +598,7 @@ void EPUBExportTest::testTableRowHeight()
                            EPUBExportTest::getCss(aCssDoc, aClass1, "height").toDouble());
 }
 
-void EPUBExportTest::testLink()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLink)
 {
     createDoc("link.fodt", {});
 
@@ -705,7 +607,7 @@ void EPUBExportTest::testLink()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
 }
 
-void EPUBExportTest::testLinkInvalid()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLinkInvalid)
 {
     createDoc("link-invalid.odt", {});
 
@@ -714,7 +616,7 @@ void EPUBExportTest::testLinkInvalid()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", 0);
 }
 
-void EPUBExportTest::testLinkCharFormat()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLinkCharFormat)
 {
     createDoc("link-charformat.fodt", {});
 
@@ -724,7 +626,7 @@ void EPUBExportTest::testLinkCharFormat()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
 }
 
-void EPUBExportTest::testLinkNamedCharFormat()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLinkNamedCharFormat)
 {
     // Character properties from named character style on hyperlink was lost.
     createDoc("link-namedcharformat.fodt", {});
@@ -739,7 +641,7 @@ void EPUBExportTest::testLinkNamedCharFormat()
     CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aClass, "color"));
 }
 
-void EPUBExportTest::testTableWidth()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableWidth)
 {
     createDoc("table-width.fodt", {});
 
@@ -751,7 +653,7 @@ void EPUBExportTest::testTableWidth()
     CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::getCss(aCssDoc, aClass, "width"));
 }
 
-void EPUBExportTest::testTextBox()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTextBox)
 {
     createDoc("text-box.fodt", {});
 
@@ -771,7 +673,7 @@ void EPUBExportTest::testTextBox()
     CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aClass, "font-style"));
 }
 
-void EPUBExportTest::testFontEmbedding()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
 {
 #if !defined(MACOSX)
     createDoc("font-embedding.fodt", {});
@@ -797,7 +699,7 @@ void EPUBExportTest::testFontEmbedding()
 #endif
 }
 
-void EPUBExportTest::testImageLink()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageLink)
 {
     createDoc("image-link.fodt", {});
 
@@ -806,7 +708,7 @@ void EPUBExportTest::testImageLink()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:img", 1);
 }
 
-void EPUBExportTest::testFootnote()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFootnote)
 {
     createDoc("footnote.fodt", {});
 
@@ -816,7 +718,7 @@ void EPUBExportTest::testFootnote()
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside", "type", "footnote");
 }
 
-void EPUBExportTest::testPopup()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopup)
 {
     createDoc("popup.odt", {});
 
@@ -836,7 +738,7 @@ void EPUBExportTest::testPopup()
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]/xhtml:img", 1);
 }
 
-void EPUBExportTest::testPopupMedia()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupMedia)
 {
     // This is the same as testPopup(), but the links point to images in the
     // default media directory, not in the document directory.
@@ -848,7 +750,7 @@ void EPUBExportTest::testPopupMedia()
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a/xhtml:img", 1);
 }
 
-void EPUBExportTest::testPopupAPI()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupAPI)
 {
     // Make sure that the popup works with data from a media directory.
     OUString aMediaDir = m_directories.getURLFromSrc(DATA_DIRECTORY) + "popup";
@@ -867,7 +769,7 @@ void EPUBExportTest::testPopupAPI()
     CPPUNIT_ASSERT(aAnchor != aData);
 }
 
-void EPUBExportTest::testPageSize()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPageSize)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "EPUBLayoutMethod",
@@ -887,7 +789,7 @@ void EPUBExportTest::testPageSize()
     assertXPath(mpXmlDoc, "/svg:svg", "height", "279mm");
 }
 
-void EPUBExportTest::testSVG()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "EPUBLayoutMethod",
@@ -915,7 +817,7 @@ void EPUBExportTest::testSVG()
     assertXPathNSDef(mpXmlDoc, "/svg:svg", "xlink", "http://www.w3.org/1999/xlink");
 }
 
-void EPUBExportTest::testTdf115623SingleWritingMode()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SingleWritingMode)
 {
     // Simple page that has single writing mode should work.
     createDoc("tdf115623-single-writing-mode.odt", {});
@@ -926,7 +828,7 @@ void EPUBExportTest::testTdf115623SingleWritingMode()
                          EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
 }
 
-void EPUBExportTest::testTdf115623SplitByChapter()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SplitByChapter)
 {
     createDoc("tdf115623-split-by-chapter.odt", {});
     std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
@@ -947,7 +849,7 @@ void EPUBExportTest::testTdf115623SplitByChapter()
     }
 }
 
-void EPUBExportTest::testTdf115623ManyPageSpans()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623ManyPageSpans)
 {
     createDoc("tdf115623-many-pagespans.odt", {});
     std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
@@ -968,15 +870,13 @@ void EPUBExportTest::testTdf115623ManyPageSpans()
     }
 }
 
-void EPUBExportTest::testSimpleRuby()
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSimpleRuby)
 {
     createDoc("simple-ruby.odt", {});
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:span", "base text");
     assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:rt", "ruby text");
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
