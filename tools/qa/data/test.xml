@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root root-attr="Hello World">
+    <child number="1" attribute="123">
+        <grandchild attribute1="ABC" attribute2="CDE">Content</grandchild>
+    </child>
+    <child number="2">
+    </child>
+    <child number="3">
+    </child>
+</root>
