@@ -37,19 +37,52 @@ public:
 
 void WidgetDefinitionReaderTest::testRead()
 {
-    vcl::WidgetDefinitionReader aWidgetDefinitionReader(getFullUrl("definition1.xml"));
+    vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aWidgetDefinitionReader.maFaceColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"),
-                         aWidgetDefinitionReader.maCheckedColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aWidgetDefinitionReader.maLightColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aReader.maFaceColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aReader.maCheckedColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aReader.maLightColor.AsRGBHexString());
 
-    aWidgetDefinitionReader.read();
+    aReader.read();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("f7f7f7"), aWidgetDefinitionReader.maFaceColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("c0c0c0"),
-                         aWidgetDefinitionReader.maCheckedColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aWidgetDefinitionReader.maLightColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("123456"), aReader.maFaceColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("234567"), aReader.maCheckedColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("345678"), aReader.maLightColor.AsRGBHexString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aReader.maVisitedLinkColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aReader.maToolTextColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aReader.maFontColor.AsRGBHexString());
+
+    {
+        std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
+            = aReader.getPushButtonDefinition(ControlPart::Entire)
+                  ->getStates(ControlState::DEFAULT | ControlState::ENABLED
+                                  | ControlState::ROLLOVER,
+                              ImplControlValue());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aStates.size());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aStates[0]->mpDrawCommands.size());
+        CPPUNIT_ASSERT_EQUAL(vcl::DrawCommandType::RECTANGLE,
+                             aStates[0]->mpDrawCommands[0]->maType);
+        CPPUNIT_ASSERT_EQUAL(vcl::DrawCommandType::CIRCLE, aStates[0]->mpDrawCommands[1]->maType);
+    }
+
+    {
+        std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
+            = aReader.getRadioButtonDefinition(ControlPart::Entire)
+                  ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::On));
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aStates[0]->mpDrawCommands.size());
+    }
+
+    {
+        std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
+            = aReader.getRadioButtonDefinition(ControlPart::Entire)
+                  ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::Off));
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aStates[0]->mpDrawCommands.size());
+    }
 }
 
 } // namespace
