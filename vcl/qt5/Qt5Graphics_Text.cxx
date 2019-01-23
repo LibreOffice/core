@@ -26,6 +26,8 @@
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
+#include <unx/glyphcache.hxx>
+#include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
@@ -128,6 +130,27 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
             QList<int> sizes = aFDB.smoothSizes(family, style);
             pPFC->Add(Qt5FontFace::fromQFont(aFDB.font(family, style, *sizes.begin())));
         }
+
+    GlyphCache& rGC = GlyphCache::GetInstance();
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    ::std::vector<psp::fontID> aList;
+    psp::FastPrintFontInfo aInfo;
+    rMgr.getFontList(aList);
+    for (auto const& elem : aList)
+    {
+        if (!rMgr.getFontFastInfo(elem, aInfo))
+            continue;
+
+        // normalize face number to the GlyphCache
+        int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
+
+        // inform GlyphCache about this font provided by the PsPrint subsystem
+        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
+        aDFA.IncreaseQualityBy(4096);
+        const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
+        rGC.AddFontFile(rFileName, nFaceNum, aInfo.m_nID, aDFA);
+    }
 }
 
 void Qt5Graphics::ClearDevFontCache() {}
@@ -171,6 +194,7 @@ public:
 
 std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
 {
+    assert(m_pTextStyle[nFallbackLevel]);
     if (!m_pTextStyle[nFallbackLevel])
         return nullptr;
     return o3tl::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
