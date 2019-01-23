@@ -26,7 +26,6 @@
 #include <memory>
 #include <vclpluginapi.h>
 
-class GlyphCache;
 class QCursor;
 
 class VCLPLUG_QT5_PUBLIC Qt5Data : public GenericUnixSalData
