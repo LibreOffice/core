@@ -362,7 +362,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( ACFlags nFlag, bool bOn )
 }
 
 
-    // Two capital letters at the beginning of word?
+// Correct TWo INitial CApitals
 void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
@@ -447,7 +447,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
     }
 }
 
-
+// Format ordinal numbers suffixes (1st -> 1^st)
 bool SvxAutoCorrect::FnChgOrdinalNumber(
     SvxAutoCorrDoc& rDoc, const OUString& rTxt,
     sal_Int32 nSttPos, sal_Int32 nEndPos,
@@ -526,7 +526,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
     return bChg;
 }
 
-
+// Replace dashes
 bool SvxAutoCorrect::FnChgToEnEmDash(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
@@ -632,7 +632,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     return bRet;
 }
 
-
+// Add non-breaking space before specific punctuation marks in French text
 bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nEndPos,
@@ -718,7 +718,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
     return bRet;
 }
 
-
+// URL recognition
 bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
@@ -731,7 +731,7 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
     return bRet;
 }
 
-
+// Automatic *bold*, /italic/, -strikeout- and _underline_
 bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                         sal_Int32 nEndPos )
 {
@@ -819,7 +819,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
     return -1 != nFndPos;
 }
 
-
+// Capitalize first letter of every sentence
 void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                                     const OUString& rTxt, bool bNormalPos,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
@@ -882,6 +882,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if (0x1 == *pWordStt || 0x2 == *pWordStt)
         return; // already ok
 
+    // Only capitalize, if string before specified characters is long enough
     if( *pDelim && 2 >= pDelim - pWordStt &&
         lcl_IsInAsciiArr( ".-)>", *pDelim ) )
         return;
@@ -996,6 +997,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if (Flags::FullStop != nFlag)
         pExceptStt = nullptr;
 
+    // Only capitalize, if string is long enough
     if( 2 > ( pStr - pStart ) )
         return;
 
@@ -1097,6 +1099,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         rDoc.SaveCpltSttWord( ACFlags::CapitalStartSentence, nSttPos, sWord, cSave );
 }
 
+// Correct accidental use of cAPS LOCK key
 bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                         sal_Int32 nSttPos, sal_Int32 nEndPos,
                                         LanguageType eLang )
