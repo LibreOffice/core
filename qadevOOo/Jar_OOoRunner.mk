@@ -983,7 +983,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScNamedRangesObj \
     qadevOOo/tests/java/mod/_sc/ScShapeObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
-    qadevOOo/tests/java/mod/_sc/ScSheetLinksObj \
     qadevOOo/tests/java/mod/_sc/ScSpreadsheetSettings \
     qadevOOo/tests/java/mod/_sc/ScSpreadsheetSettingsObj \
     qadevOOo/tests/java/mod/_sc/ScStyleFamilyObj \
