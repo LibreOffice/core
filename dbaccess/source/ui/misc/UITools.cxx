@@ -741,7 +741,7 @@ SvxCellHorJustify mapTextJustify(sal_Int32 _nAlignment)
 void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
                             const Reference<XPropertySet>& xField,
                             SvNumberFormatter* _pFormatter,
-                            vcl::Window* _pParent)
+                            const vcl::Window* _pParent)
 {
     if (xAffectedCol.is() && xField.is())
     {
@@ -774,7 +774,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
     }
 }
 
-bool callColumnFormatDialog(vcl::Window* _pParent,
+bool callColumnFormatDialog(const vcl::Window* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
