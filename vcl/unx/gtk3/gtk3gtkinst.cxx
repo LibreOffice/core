@@ -1826,6 +1826,15 @@ public:
         g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), this);
     }
 
+    void remove_from_map(GtkMenuItem* pMenuItem)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
+        OString id(pStr, pStr ? strlen(pStr) : 0);
+        auto iter = m_aMap.find(id);
+        g_signal_handlers_disconnect_by_data(iter->second, this);
+        m_aMap.erase(iter);
+    }
+
     void disable_item_notify_events()
     {
         for (auto& a : m_aMap)
@@ -4200,6 +4209,7 @@ public:
 class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
 {
 protected:
+    std::vector<GtkMenuItem*> m_aExtraItems;
     OString m_sActivated;
     GtkInstanceMenuButton* m_pTopLevelMenuButton;
 
@@ -4358,11 +4368,21 @@ public:
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
+        m_aExtraItems.push_back(pMenuItem);
         add_to_map(pMenuItem);
         if (m_pTopLevelMenuButton)
             m_pTopLevelMenuButton->add_to_map(pMenuItem);
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
+    }
+
+    virtual ~GtkInstanceMenu() override
+    {
+        if (m_pTopLevelMenuButton)
+        {
+            for (auto a : m_aExtraItems)
+                m_pTopLevelMenuButton->remove_from_map(a);
+        }
     }
 };
 
