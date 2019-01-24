@@ -3770,6 +3770,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	XPagePrintable \
 	XParagraphAppend \
 	XParagraphCursor \
+	XPasteBroadcaster \
+	XPasteListener \
 	XRedline \
 	XReferenceMarksSupplier \
 	XRelativeTextContentInsert \

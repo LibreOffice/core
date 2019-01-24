@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
+#include <swdtflvr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -19,6 +20,31 @@ using namespace ::com::sun::star::text;
 namespace
 {
 char const DATA_DIRECTORY[] = "/sw/qa/extras/unowriter/data/";
+
+/// Listener implementation for testPasteListener.
+class PasteListener : public cppu::WeakImplHelper<text::XPasteListener>
+{
+    OUString m_aString;
+
+public:
+    void SAL_CALL notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent) override;
+
+    OUString& GetString();
+};
+
+void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent)
+{
+    comphelper::SequenceAsHashMap aMap(rEvent);
+    auto it = aMap.find("TextRange");
+    if (it != aMap.end())
+    {
+        auto xTextRange = it->second.get<uno::Reference<text::XTextRange>>();
+        if (xTextRange.is())
+            m_aString = xTextRange->getString();
+    }
+}
+
+OUString& PasteListener::GetString() { return m_aString; }
 }
 
 /// Test to assert UNO API call results of Writer.
@@ -28,11 +54,13 @@ public:
     void testDefaultCharStyle();
     void testSelectionInTableEnum();
     void testSelectionInTableEnumEnd();
+    void testPasteListener();
 
     CPPUNIT_TEST_SUITE(SwUnoWriter);
     CPPUNIT_TEST(testDefaultCharStyle);
     CPPUNIT_TEST(testSelectionInTableEnum);
     CPPUNIT_TEST(testSelectionInTableEnumEnd);
+    CPPUNIT_TEST(testPasteListener);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -135,6 +163,57 @@ void SwUnoWriter::testSelectionInTableEnumEnd()
     // the enumeration contained the paragraph after the table, but no part of
     // that paragraph was part of the selection.
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+}
+
+void SwUnoWriter::testPasteListener()
+{
+    loadURL("private:factory/swriter", nullptr);
+
+    // Insert initial string.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    xBodyText->insertString(xBodyText->getStart(), "ABCDEF", false);
+
+    // Add paste listener.
+    uno::Reference<text::XPasteBroadcaster> xBroadcaster(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XPasteListener> xListener(new PasteListener);
+    auto pListener = static_cast<PasteListener*>(xListener.get());
+    xBroadcaster->addPasteEventListener(xListener);
+
+    // Cut "DE" and then paste it.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+    TransferableDataHelper aHelper(pTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    // Without working listener registration in place, this test would have
+    // failed with 'Expected: DE; Actual:', i.e. the paste listener was not
+    // invoked.
+    CPPUNIT_ASSERT_EQUAL(OUString("DE"), pListener->GetString());
+
+    // Make sure that paste did not overwrite anything.
+    CPPUNIT_ASSERT_EQUAL(OUString("ABCDEF"), xBodyText->getString());
+
+    // Paste again, this time overwriting "BC".
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pListener->GetString().clear();
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    CPPUNIT_ASSERT_EQUAL(OUString("DE"), pListener->GetString());
+
+    // Make sure that paste overwrote "BC".
+    CPPUNIT_ASSERT_EQUAL(OUString("ADEDEF"), xBodyText->getString());
+
+    // Deregister paste listener, make sure it's not invoked.
+    xBroadcaster->removePasteEventListener(xListener);
+    pListener->GetString().clear();
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    CPPUNIT_ASSERT(pListener->GetString().isEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUnoWriter);
