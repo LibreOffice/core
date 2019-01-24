@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_38f90380",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-24T18:27:00Z",
+      "side": 1,
+      "message": "This is incorrect, since this string is translatable. Index-based removal is fine here, just make the number calculated correctly.",
+      "range": {
+        "startLine": 228,
+        "startChar": 21,
+        "endLine": 228,
+        "endChar": 50
+      },
+      "revId": "c11b2f74370adc9a156b690ebceddf55cc0d235d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
