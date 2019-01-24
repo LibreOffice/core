@@ -5325,13 +5325,14 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     DeleteAnchorStack();
     DeleteRefStacks();
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
+    // ofz#10994 remove any trailing fly paras before processing redlines
+    m_xWFlyPara.reset();
+    // ofz#12660 remove any trailing fly paras before deleting extra paras
+    m_xSFlyPara.reset();
     // remove extra paragraphs after attribute ctrl
     // stacks etc. are destroyed, and before fields
     // are updated
     m_aExtraneousParas.delete_all_from_doc();
-    // ofz#10994 remove any trailing fly paras before processing redlines
-    m_xWFlyPara.reset();
-    m_xSFlyPara.reset();
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     while (!m_aFrameRedlines.empty())
         m_aFrameRedlines.pop();
