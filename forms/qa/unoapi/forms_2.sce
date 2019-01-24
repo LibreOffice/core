@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
--o forms.ODateModel
+# Flaky since tdf#125170 -o forms.ODateModel
 -o forms.OEditControl
 -o forms.OEditModel
 #i109939 -o forms.OFileControlModel
