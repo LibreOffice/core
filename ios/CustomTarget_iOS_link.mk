@@ -42,7 +42,7 @@ $(IOSOBJ): $(IOSSRC) $(call gb_CustomTarget_get_target,ios/iOS_setup)
 	$(gb_CC) $(gb_COMPILERDEFS) $(gb_OSDEFS) $(gb_CFLAGS) \
 		-DDISABLE_DYNLOADING -DLIBO_INTERNAL_ONLY \
 		-fvisibility=hidden -Werror -O0 -fstrict-overflow \
-		$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS) -g) \
+		$(if $(ENABLE_DEBUG),-g) \
 		-c $(IOSSRC) -o $(IOSOBJ) \
 		-I$(SRCDIR)/include -I$(BUILDDIR)/config_host \
 

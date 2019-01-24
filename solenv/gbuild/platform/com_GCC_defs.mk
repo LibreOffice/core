@@ -204,16 +204,6 @@ ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
 endif
 
-ifeq ($(HAVE_GCC_FINLINE_LIMIT),TRUE)
-FINLINE_LIMIT0=-finline-limit=0
-endif
-
-ifeq ($(HAVE_GCC_FNO_INLINE),TRUE)
-FNO_INLINE=-fno-inline
-endif
-
-gb_DEBUG_CFLAGS := $(FINLINE_LIMIT0) $(FNO_INLINE)
-
 gb_LinkTarget_INCLUDE :=\
     $(SOLARINC) \
     -I$(BUILDDIR)/config_$(gb_Side) \
