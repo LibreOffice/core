@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/document/xembeddedobjectsupplier.hxx>
+#include <test/table/xtablechart.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -36,7 +37,8 @@ namespace sc_apitest
 {
 class ScChartObj : public CalcUnoApiTest,
                    public apitest::XEmbeddedObjectSupplier,
-                   public apitest::XNamed
+                   public apitest::XNamed,
+                   public apitest::XTableChart
 {
 public:
     ScChartObj();
@@ -53,6 +55,11 @@ public:
     // XNamed
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetNameThrowsException);
+
+    // XTableChart
+    CPPUNIT_TEST(testGetSetHasColumnHeaders);
+    CPPUNIT_TEST(testGetSetHasRowHeaders);
+    CPPUNIT_TEST(testGetSetRanges);
 
     CPPUNIT_TEST_SUITE_END();
 
