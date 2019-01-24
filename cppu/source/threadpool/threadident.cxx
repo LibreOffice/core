@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <list>
-
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
 

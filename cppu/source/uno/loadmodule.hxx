@@ -21,9 +21,9 @@
 #define INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
 
 #include <sal/config.h>
-#include <osl/module.hxx>
+#include <rtl/ustring.hxx>
 
-namespace rtl { class OUString; }
+namespace osl { class Module; }
 
 namespace cppu { namespace detail {
 

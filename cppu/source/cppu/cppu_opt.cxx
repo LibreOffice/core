@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 #include <rtl/ustrbuf.hxx>

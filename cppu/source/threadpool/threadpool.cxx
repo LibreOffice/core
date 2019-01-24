@@ -26,7 +26,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 

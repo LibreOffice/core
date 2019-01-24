@@ -21,10 +21,8 @@
 
 #include <algorithm>
 #include <cassert>
-#include <stdarg.h>
 
 #include <osl/mutex.hxx>
-#include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>

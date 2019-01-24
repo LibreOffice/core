@@ -17,18 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_java.h>
-
 #include "IdentityMapping.hxx"
 
-#include <algorithm>
 #include <cassert>
 #include <set>
 #include <unordered_map>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/module.h>
+#include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>

@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include "jobqueue.hxx"
 #include "threadpool.hxx"
 
 namespace cppu_threadpool {

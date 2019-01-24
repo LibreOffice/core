@@ -22,13 +22,9 @@
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
-#include <uno/dispatcher.h>
-#include <typelib/typedescription.hxx>
 #include <cppu/Enterable.hxx>
 #include <cppu/helper/purpenv/Environment.hxx>
 #include <cppu/helper/purpenv/Mapping.hxx>
-#include <cppu/EnvDcp.hxx>
-#include <uno/environment.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <sal/log.hxx>
 

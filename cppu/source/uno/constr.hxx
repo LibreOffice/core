@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_CONSTR_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_CONSTR_HXX
 
-#include <string.h>
 #include "prim.hxx"
+#include <osl/diagnose.h>
 
 namespace cppu
 {

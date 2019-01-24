@@ -22,12 +22,10 @@
 #include <cassert>
 #include <string.h>
 
-#include <rtl/alloc.h>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
-#include <uno/dispatcher.h>
 #include <uno/sequence2.h>
 
 #include "constr.hxx"

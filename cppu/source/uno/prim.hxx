@@ -28,9 +28,7 @@
 #include <uno/dispatcher.h>
 
 #include <osl/interlck.h>
-#include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
-#include <rtl/alloc.h>
+#include <stdint.h>
 
 namespace cppu
 {

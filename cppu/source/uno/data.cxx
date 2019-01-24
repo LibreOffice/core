@@ -18,9 +18,6 @@
  */
 
 
-#include <cstddef>
-
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <uno/data.h>
 
@@ -31,7 +28,6 @@
 #include "eq.hxx"
 
 using namespace ::cppu;
-using namespace ::osl;
 
 namespace cppu
 {

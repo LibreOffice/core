@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_ASSIGN_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_ASSIGN_HXX
 
-#include <string.h>
-
 #include "prim.hxx"
 #include "destr.hxx"
 #include "constr.hxx"

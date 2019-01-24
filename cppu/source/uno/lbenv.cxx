@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_java.h>
-
 #include <cppu/EnvDcp.hxx>
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/module.h>
+#include <osl/module.hxx>
 #include <osl/process.h>
 #include <rtl/process.h>
 #include <rtl/string.hxx>
@@ -37,7 +35,6 @@
 #include <uno/environment.h>
 #include <uno/lbnames.h>
 #include "prim.hxx"
-#include "destr.hxx"
 #include "loadmodule.hxx"
 
 #include <unordered_map>
@@ -59,7 +56,6 @@ bool td_equals( typelib_InterfaceTypeDescription const * pTD1,
                  pTD2->aBase.pTypeName->buffer ) == 0));
 }
 
-struct ObjectEntry;
 struct uno_DefaultEnvironment;
 
 
