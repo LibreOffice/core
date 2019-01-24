@@ -324,21 +324,14 @@ XclExpXmlPivotTableManager::XclExpXmlPivotTableManager( const XclExpRoot& rRoot 
 
 void XclExpXmlPivotTableManager::Initialize()
 {
-    ScDocument& rDoc = GetDoc();
+    const ScDocument& rDoc = GetDoc();
     if (!rDoc.HasPivotTable())
         // No pivot table to export.
         return;
 
-    ScDPCollection* pDPColl = rDoc.GetDPCollection();
+    const ScDPCollection* pDPColl = rDoc.GetDPCollection();
     if (!pDPColl)
         return;
-
-    // Update caches from DPObject
-    for (size_t i = 0; i < pDPColl->GetCount(); ++i)
-    {
-        ScDPObject& rDPObj = (*pDPColl)[i];
-        rDPObj.SyncAllDimensionMembers();
-    }
 
     // Go through the caches first.
 

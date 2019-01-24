@@ -176,7 +176,6 @@ public:
     void testHeaderImage();
 
     void testTdf88657();
-    void testTdf121612();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -259,7 +258,6 @@ public:
     CPPUNIT_TEST(testHeaderImage);
 
     CPPUNIT_TEST(testTdf88657);
-    CPPUNIT_TEST(testTdf121612);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3705,23 +3703,6 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
-}
-
-void ScExportTest::testTdf121612()
-{
-    ScDocShellRef xDocSh = loadDoc("tdf121612.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh.Is());
-    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-
-    // There should be a pivot table
-    CPPUNIT_ASSERT(rDoc.HasPivotTable());
-
-    // DP collection is not lost after export and has one entry
-    ScDPCollection* pDPColl = rDoc.GetDPCollection();
-    CPPUNIT_ASSERT(pDPColl);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
