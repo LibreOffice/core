@@ -1496,6 +1496,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             SvtSysLocaleOptions aSysLocaleOptions;
             aSysLocaleOptions.SetLocaleConfigString(aLanguage);
             aSysLocaleOptions.SetUILocaleConfigString(aLanguage);
+            // Set the LOK language tag, used for dialog tunneling.
+            comphelper::LibreOfficeKit::setLanguageTag(aSysLocaleOptions.GetLanguageTag());
         }
 
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
