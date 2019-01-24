@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/container/xnamecontainer \
 	test/source/container/xnamed \
 	test/source/container/xnamereplace \
+	test/source/document/xembeddedobjectsupplier \
 	test/source/document/xlinktargetsupplier \
 	test/source/drawing/captionshape \
 	test/source/drawing/xdrawpages \
