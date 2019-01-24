@@ -45,14 +45,15 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
     {
         case ControlType::Generic:
         case ControlType::Pushbutton:
-            return true;
         case ControlType::Radiobutton:
             return true;
         case ControlType::Checkbox:
         case ControlType::Combobox:
+            return false;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
+            return true;
         case ControlType::Listbox:
         case ControlType::Spinbox:
         case ControlType::SpinButtons:
@@ -196,9 +197,24 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Checkbox:
         case ControlType::Combobox:
+            break;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
+        {
+            std::shared_ptr<WidgetDefinition> pDefinition
+                = m_WidgetDefinitionReader.getEditboxDefinition(ePart);
+            if (pDefinition)
+            {
+                std::shared_ptr<WidgetDefinitionState> pState
+                    = pDefinition->getStates(eState, rValue).back();
+                {
+                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                    bOK = true;
+                }
+            }
+        }
+        break;
         case ControlType::Listbox:
         case ControlType::Spinbox:
         case ControlType::SpinButtons:
