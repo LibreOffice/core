@@ -50,11 +50,13 @@ public:
     void testViewBoxLeftTop();
     void testAccuracyCommandX();
     void testToggleCommandXY();
+    void testMultipleMoveTo();
 
     CPPUNIT_TEST_SUITE(CustomshapesTest);
     CPPUNIT_TEST(testViewBoxLeftTop);
     CPPUNIT_TEST(testAccuracyCommandX);
     CPPUNIT_TEST(testToggleCommandXY);
+    CPPUNIT_TEST(testMultipleMoveTo);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -159,6 +161,33 @@ void CustomshapesTest::testToggleCommandXY()
     double fHeight = static_cast<double>(aBoundRect.Height);
     // The tolerance is a guess, might be smaller.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("segment height out of tolerance", 5871.0, fHeight, 16.0);
+}
+
+void CustomshapesTest::testMultipleMoveTo()
+{
+    // tdf122964 Multiple moveTo has to be treated as lineTo in draw:enhanced-path
+    // Load a document with path "M 0 0 5 10 10 0 N"
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf122964_MultipleMoveTo.odg";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // Error was, that the second and further parameter pairs were treated as moveTo,
+    // and so the generated path was empty, resulting in zero width and height of the
+    // bounding box. It has to be treated same as "M 0 0 L 5 10 10 0 N".
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape", xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aBoundRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    bool bIsZero(aBoundRect.Height == 0 && aBoundRect.Width == 0);
+    CPPUNIT_ASSERT_MESSAGE("Path is empty", !bIsZero);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CustomshapesTest);
