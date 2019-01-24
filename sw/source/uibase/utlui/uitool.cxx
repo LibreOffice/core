@@ -661,19 +661,6 @@ void    SetDfltMetric( FieldUnit eMetric, bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset )
-{
-    CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
-    const sal_Int32 nCount = rToFill.GetEntryCount();
-    while (nOffset < nCount)
-    {
-        if( 0 < rCaseColl.compareString( rToFill.GetEntry(nOffset), rEntry ))
-            break;
-        ++nOffset;
-    }
-    return rToFill.InsertEntry(rEntry, nOffset);
-}
-
 void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBox& rToFill, int nOffset)
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();

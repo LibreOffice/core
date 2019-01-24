@@ -96,7 +96,6 @@ public:
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
     sal_uInt16          AppendField(const SwAuthEntry& rInsert);
-    SwAuthEntry*        GetFieldByPos(sal_uInt16 nPos);
 
     sal_uInt16          GetSequencePos(const SwAuthEntry* pAuthEntry, SwRootFrame const* pLayout);
 

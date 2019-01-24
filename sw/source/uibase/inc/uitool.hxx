@@ -89,7 +89,6 @@ void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 SW_DLLPUBLIC void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
-SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
 SW_DLLPUBLIC void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBox& rToFill, int nOffset);
 
 // Get table width and alignment

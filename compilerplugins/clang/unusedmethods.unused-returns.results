@@ -72,6 +72,8 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:776
     char * lok::Office::getVersionInfo()
 include/LibreOfficeKit/LibreOfficeKit.hxx:790
     _Bool lok::Office::runMacro(const char *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:798
+    _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
 include/oox/crypto/AgileEngine.hxx:122
@@ -176,8 +178,6 @@ include/test/sheet/xsheetannotation.hxx:36
     class com::sun::star::uno::Reference<class com::sun::star::sheet::XSheetAnnotation> apitest::XSheetAnnotation::getAnnotation(struct com::sun::star::table::CellAddress &)
 include/test/sheet/xspreadsheets2.hxx:40
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
-include/test/sheet/xstyleloader.hxx:27
-    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
 include/test/sheet/xusedareacursor.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
 include/tools/color.hxx:151
@@ -188,7 +188,7 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:172
+include/vcl/bitmap.hxx:171
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
@@ -204,13 +204,11 @@ include/vcl/menu.hxx:388
     _Bool Menu::HandleMenuActivateEvent(class Menu *) const
 include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
-include/vcl/texteng.hxx:280
+include/vcl/texteng.hxx:275
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:513
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:397
-    _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:1193
+include/vcl/weld.hxx:1219
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -276,17 +274,19 @@ sd/source/ui/inc/OutlineViewShell.hxx:115
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
+sw/inc/authfld.hxx:98
+    unsigned short SwAuthorityFieldType::AppendField(const class SwAuthEntry &)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1070
+sw/inc/doc.hxx:1077
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1231
+sw/inc/doc.hxx:1238
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1256
+sw/inc/doc.hxx:1263
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
-sw/inc/editsh.hxx:264
+sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
-sw/inc/editsh.hxx:636
+sw/inc/editsh.hxx:641
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
@@ -306,7 +306,7 @@ sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
-ucb/source/ucp/webdav-neon/NeonSession.hxx:239
+ucb/source/ucp/webdav-neon/NeonSession.hxx:240
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
 vcl/inc/font/FeatureCollector.hxx:48
     _Bool vcl::font::FeatureCollector::collect()

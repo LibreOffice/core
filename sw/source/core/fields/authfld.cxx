@@ -176,11 +176,6 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return m_DataArr.size()-1;
 }
 
-SwAuthEntry* SwAuthorityFieldType::GetFieldByPos(sal_uInt16 nPos)
-{
-    return m_DataArr[nPos].get();
-}
-
 sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
         SwRootFrame const*const pLayout)
 {

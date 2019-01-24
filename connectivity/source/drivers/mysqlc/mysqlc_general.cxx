@@ -225,11 +225,6 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
     return css::sdbc::DataType::VARCHAR;
 }
 
-OUString mysqlTypeToStr(MYSQL_FIELD const* field)
-{
-    return mysqlTypeToStr(field->type, field->flags);
-}
-
 OUString mysqlTypeToStr(unsigned type, unsigned flags)
 {
     bool isUnsigned = (flags & UNSIGNED_FLAG) != 0;
