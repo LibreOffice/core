@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
 			--without-java \
 			--without-turbojpeg \
 			$(if $(NASM),,--without-simd) \
-			CFLAGS='$(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(CFLAGS) $(gb_VISIBILITY_FLAGS)' \
+			CFLAGS='$(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(CFLAGS) $(gb_VISIBILITY_FLAGS)' \
 	)
 
 # vim: set noet sw=4 ts=4:

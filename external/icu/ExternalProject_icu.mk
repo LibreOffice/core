@@ -21,7 +21,7 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
-		&& CFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)" \
+		&& CFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" \
 			INSTALL=`cygpath -m /usr/bin/install` \
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
@@ -35,7 +35,6 @@ icu_CFLAGS:=" \
 	$(if $(filter iOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 	$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-	$(if $(debug),$(gb_DEBUG_CFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
@@ -44,7 +43,6 @@ icu_CFLAGS:=" \
 icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 	$(if $(filter iOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-	$(if $(debug),$(gb_DEBUG_CFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \

@@ -22,7 +22,7 @@ $(call gb_ExternalProject_get_state_target,lpsolve,build):
 else # $(OS)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
-		CC="$(CC) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS))" \
+		CC="$(CC) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS))" \
 		$(if $(filter MACOSX,$(OS)),EXTRA_LINKFLAGS='-install_name @__________________________________________________OOO/liblpsolve55.dylib') \
 		sh -e $(if $(filter MACOSX,$(OS)),ccc.osx, \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),ccc.static, \

@@ -259,8 +259,6 @@ gb_DEBUGINFO_FLAGS := \
 	-FS \
 	-Zi \
 
-gb_DEBUG_CFLAGS :=
-
 gb_COMPILEROPTFLAGS := -O2 -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 

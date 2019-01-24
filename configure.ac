@@ -3739,8 +3739,6 @@ fi
 # ===================================================================
 
 HAVE_GCC_GGDB2=
-HAVE_GCC_FINLINE_LIMIT=
-HAVE_GCC_FNO_INLINE=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -ggdb2])
     save_CFLAGS=$CFLAGS
@@ -3748,28 +3746,6 @@ if test "$GCC" = "yes"; then
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
     CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_GGDB2" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -finline-limit=0"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
-    CFLAGS=$save_CFLAGS
-    if test "$HAVE_GCC_FINLINE_LIMIT" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether $CC supports -fno-inline])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -fno-inline"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
-    CFLAGS=$save_CFLAGS
-    if test "$HAVE_GCC_FNO_INLINE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
@@ -3789,8 +3765,6 @@ if test "$GCC" = "yes"; then
     fi
 fi
 AC_SUBST(HAVE_GCC_GGDB2)
-AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
-AC_SUBST(HAVE_GCC_FNO_INLINE)
 
 dnl ===================================================================
 dnl  Test the gcc version

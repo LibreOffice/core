@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			CPPFLAGS=" $(SOLARINC)" \
-			CFLAGS='$(CFLAGS) $(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))' \
+			CFLAGS='$(CFLAGS) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))' \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
 			, \

@@ -71,7 +71,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(filter AIX,$(OS)), \
 			--disable-ipv6 --with-threads OPT="-g0 -fwrapv -O3 -Wall", \
 			$(if $(gb_Module_CURRENTMODULE_DEBUG_ENABLED), \
-				OPT="$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)")) \
+				OPT="$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS)")) \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
                                 --with-universal-archs=intel \
