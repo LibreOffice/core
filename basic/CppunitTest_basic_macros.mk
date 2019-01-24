@@ -61,8 +61,8 @@ $(eval $(call gb_CppunitTest_use_components,basic_macros,\
 	i18npool/util/i18npool \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
-	$(if $(DISABLE_ATL),,$(if $(filter $(OS),WNT), \
-		extensions/source/ole/oleautobridge)) \
+	$(if $(filter $(OS),WNT), \
+		extensions/source/ole/oleautobridge) \
 ))
 $(eval $(call gb_CppunitTest_use_configuration,basic_macros))
 

@@ -37,9 +37,7 @@ define sw_ooxmlexport_components
 	embeddedobj/util/embobj \
 	emfio/emfio \
 	$(if $(filter WNT,$(OS)), \
-		$(if $(DISABLE_ATL),, \
-			embeddedobj/source/msole/emboleobj.windows \
-		), \
+		embeddedobj/source/msole/emboleobj.windows, \
 		embeddedobj/source/msole/emboleobj \
 	) \
 	filter/source/config/cache/filterconfig1 \
