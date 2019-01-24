@@ -16,6 +16,24 @@
       "revId": "09d72d5949cb041da5aed1ec1580a90ba5d3872e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_ace12701",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4008,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-01-24T19:37:37Z",
+      "side": 1,
+      "message": "assert() internally calls abort(), so yes, no.",
+      "parentUuid": "5f4e5783_2c47774e",
+      "revId": "09d72d5949cb041da5aed1ec1580a90ba5d3872e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
