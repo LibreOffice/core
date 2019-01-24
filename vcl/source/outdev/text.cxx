@@ -1305,7 +1305,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             nPixelWidth, pDXPixelArray, flags, pLayoutCache);
 
     // get matching layout object for base font
-    std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
+    std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
 
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ) )
@@ -1350,16 +1350,11 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
 {
     if (!mpGraphics) // can happen in e.g Insert Index/Table dialog
         return nullptr;
-    OUString copyBecausePrepareModifiesIt(rString);
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs(copyBecausePrepareModifiesIt,
-            0, rString.getLength(), 0, nullptr);
 
-    std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
+    std::unique_ptr<GenericSalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
     if (!pSalLayout)
         return nullptr;
-    std::shared_ptr<vcl::TextLayoutCache> const ret(
-            pSalLayout->CreateTextLayoutCache(copyBecausePrepareModifiesIt));
-    return ret;
+    return pSalLayout->CreateTextLayoutCache(rString);
 }
 
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const

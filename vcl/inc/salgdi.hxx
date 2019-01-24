@@ -191,8 +191,8 @@ public:
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual std::unique_ptr<SalLayout>
-                                GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
+    virtual std::unique_ptr<GenericSalLayout>
+                                GetTextLayout(int nFallbackLevel) = 0;
     virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;
 
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;

@@ -1323,7 +1323,7 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     mpGraphics->SetFont( pLogicalFont, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
-    std::unique_ptr<SalLayout> pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
+    std::unique_ptr<GenericSalLayout> pFallback = mpGraphics->GetTextLayout(nFallbackLevel);
 
     if (!pFallback)
         return nullptr;
