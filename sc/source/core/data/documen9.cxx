@@ -62,7 +62,7 @@ void ScDocument::BeginDrawUndo()
         mpDrawLayer->BeginCalcUndo(false);
 }
 
-void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
+void ScDocument::TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
     if (mpDrawLayer && pSrcDoc->mpDrawLayer)
     {

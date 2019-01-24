@@ -46,7 +46,7 @@ private:
 
 public:
 
-    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument);
+    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
 
     virtual ~ScDataProviderDlg() override;
     virtual void dispose() override;

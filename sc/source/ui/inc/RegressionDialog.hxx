@@ -71,9 +71,9 @@ private:
                                        FormulaTemplate& rTemplate,
                                        size_t nRegressionIndex);
     // Generic table writer
-    static void WriteTable(std::function<CellValueGetter>& rCellGetter, size_t nRowsInTable,
+    static void WriteTable(const std::function<CellValueGetter>& rCellGetter, size_t nRowsInTable,
                     size_t nColsInTable, AddressWalkerWriter& rOutput,
-                    std::function<CellWriter>& rFunc);
+                    const std::function<CellWriter>& rFunc);
 
     DECL_LINK( CheckBoxHdl, CheckBox&, void );
     DECL_LINK( NumericFieldHdl, Edit&, void );

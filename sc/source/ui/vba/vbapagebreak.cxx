@@ -29,7 +29,7 @@ using namespace ::ooo::vba;
 template< typename... Ifc >
 ScVbaPageBreak< Ifc... >::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent,
                     const uno::Reference< uno::XComponentContext >& xContext,
-                    uno::Reference< beans::XPropertySet >& xProps,
+                    const uno::Reference< beans::XPropertySet >& xProps,
                     sheet::TablePageBreakData aTablePageBreakData):
             ScVbaPageBreak_BASE( xParent, xContext ),
             mxRowColPropertySet( xProps ),
@@ -113,7 +113,7 @@ template class ScVbaPageBreak< excel::XVPageBreak >;
 /* class ScVbaVPageBreak */
 ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                                   const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                                  css::uno::Reference< css::beans::XPropertySet >& xProps,
+                                  const css::uno::Reference< css::beans::XPropertySet >& xProps,
                                   css::sheet::TablePageBreakData aTablePageBreakData )
 :   ScVbaVPageBreak_BASE( xParent, xContext, xProps, aTablePageBreakData )
 {

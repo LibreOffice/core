@@ -3133,12 +3133,12 @@ bool ScMatrix::IsNumeric() const
     return pImpl->IsNumeric();
 }
 
-void ScMatrix::MatCopy(ScMatrix& mRes) const
+void ScMatrix::MatCopy(const ScMatrix& mRes) const
 {
     pImpl->MatCopy(*mRes.pImpl);
 }
 
-void ScMatrix::MatTrans(ScMatrix& mRes) const
+void ScMatrix::MatTrans(const ScMatrix& mRes) const
 {
     pImpl->MatTrans(*mRes.pImpl);
 }
@@ -3377,28 +3377,28 @@ public:
 
 }
 
-void ScMatrix::NotOp( ScMatrix& rMat)
+void ScMatrix::NotOp( const ScMatrix& rMat)
 {
     auto not_ = [](double a, double){return double(a == 0.0);};
     matop::MatOp<decltype(not_), double> aOp(not_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::NegOp( ScMatrix& rMat)
+void ScMatrix::NegOp( const ScMatrix& rMat)
 {
     auto neg_ = [](double a, double){return -a;};
     matop::MatOp<decltype(neg_), double> aOp(neg_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::AddOp( double fVal, ScMatrix& rMat)
+void ScMatrix::AddOp( double fVal, const ScMatrix& rMat)
 {
     auto add_ = [](double a, double b){return a + b;};
     matop::MatOp<decltype(add_)> aOp(add_, pImpl->GetErrorInterpreter(), fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::SubOp( bool bFlag, double fVal, ScMatrix& rMat)
+void ScMatrix::SubOp( bool bFlag, double fVal, const ScMatrix& rMat)
 {
     if (bFlag)
     {
@@ -3414,14 +3414,14 @@ void ScMatrix::SubOp( bool bFlag, double fVal, ScMatrix& rMat)
     }
 }
 
-void ScMatrix::MulOp( double fVal, ScMatrix& rMat)
+void ScMatrix::MulOp( double fVal, const ScMatrix& rMat)
 {
     auto mul_ = [](double a, double b){return a * b;};
     matop::MatOp<decltype(mul_)> aOp(mul_, pImpl->GetErrorInterpreter(), fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::DivOp( bool bFlag, double fVal, ScMatrix& rMat)
+void ScMatrix::DivOp( bool bFlag, double fVal, const ScMatrix& rMat)
 {
     if (bFlag)
     {
@@ -3437,7 +3437,7 @@ void ScMatrix::DivOp( bool bFlag, double fVal, ScMatrix& rMat)
     }
 }
 
-void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
+void ScMatrix::PowOp( bool bFlag, double fVal, const ScMatrix& rMat)
 {
     if (bFlag)
     {

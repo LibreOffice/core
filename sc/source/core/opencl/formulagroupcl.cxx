@@ -1035,7 +1035,7 @@ class DynamicKernelSlidingArgument : public Base
 public:
     DynamicKernelSlidingArgument(const ScCalcConfig& config, const std::string& s,
                                  const FormulaTreeNodeRef& ft,
-                                 std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
+                                 const std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
         : Base(config, s, ft, index)
         , mpCodeGen(CodeGen)
     {
@@ -1217,7 +1217,7 @@ class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:
     DynamicKernelMixedSlidingArgument( const ScCalcConfig& config, const std::string& s,
-        const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
+        const FormulaTreeNodeRef& ft, const std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index ) :
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
@@ -1321,7 +1321,7 @@ class ParallelReductionVectorRef : public Base
 public:
     ParallelReductionVectorRef(const ScCalcConfig& config, const std::string& s,
                                const FormulaTreeNodeRef& ft,
-                               std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
+                               const std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
         : Base(config, s, ft, index)
         , mpCodeGen(CodeGen)
         , mpClmem2(nullptr)
