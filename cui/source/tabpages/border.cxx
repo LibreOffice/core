@@ -159,6 +159,7 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
     }
     mrMfSize.set_value(mrMfSize.normalize(rItem.GetWidth()), FieldUnit::TWIP);
     mrLbColor.SelectEntry(rItem.GetColor());
+    mrMfSize.save_value();
 }
 
 void ShadowControlsWrapper::SetControlDontKnow()
