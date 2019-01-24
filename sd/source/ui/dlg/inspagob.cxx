@@ -82,7 +82,7 @@ void SdInsertPagesObjsDlg::Reset()
     }
     else
     {
-        Image aImgText(BMP_DOC_TEXT);
+        Image aImgText(StockImage::Yes, BMP_DOC_TEXT);
         m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 

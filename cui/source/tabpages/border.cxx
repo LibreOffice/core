@@ -294,7 +294,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnBorderImgIds); ++i)
-        m_aBorderImgVec.emplace_back(pnBorderImgIds[i]);
+        m_aBorderImgVec.emplace_back(StockImage::Yes, pnBorderImgIds[i]);
 
     static const OUStringLiteral pnShadowImgIds[SVX_BORDER_SHADOW_COUNT] =
     {
@@ -306,7 +306,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnShadowImgIds); ++i)
-        m_aShadowImgVec.emplace_back(pnShadowImgIds[i]);
+        m_aShadowImgVec.emplace_back(StockImage::Yes, pnShadowImgIds[i]);
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
     // this page needs ExchangeSupport
