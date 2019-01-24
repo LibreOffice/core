@@ -272,7 +272,7 @@ public:
                                        pDrawingArea->get_text_height() * 9);
     }
 
-    void calccols(vcl::RenderContext& rRenderContext);
+    void calccols(const vcl::RenderContext& rRenderContext);
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);

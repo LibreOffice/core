@@ -907,7 +907,7 @@ void CustomAnimationPane::UpdateLook()
     }
 }
 
-static void addValue( std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
+static void addValue( const std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
 {
     switch( pSet->getPropertyState( nHandle ) )
     {
