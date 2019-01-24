@@ -9,9 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <vcl/graphicfilter.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
+#include <view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -25,11 +27,13 @@ char const DATA_DIRECTORY[] = "/sw/qa/extras/unowriter/data/";
 class PasteListener : public cppu::WeakImplHelper<text::XPasteListener>
 {
     OUString m_aString;
+    uno::Reference<text::XTextContent> m_xTextGraphicObject;
 
 public:
     void SAL_CALL notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent) override;
 
     OUString& GetString();
+    uno::Reference<text::XTextContent>& GetTextGraphicObject();
 };
 
 void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent)
@@ -41,10 +45,24 @@ void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& 
         auto xTextRange = it->second.get<uno::Reference<text::XTextRange>>();
         if (xTextRange.is())
             m_aString = xTextRange->getString();
+        return;
+    }
+
+    it = aMap.find("TextGraphicObject");
+    if (it != aMap.end())
+    {
+        auto xTextGraphicObject = it->second.get<uno::Reference<text::XTextContent>>();
+        if (xTextGraphicObject.is())
+            m_xTextGraphicObject = xTextGraphicObject;
     }
 }
 
 OUString& PasteListener::GetString() { return m_aString; }
+
+uno::Reference<text::XTextContent>& PasteListener::GetTextGraphicObject()
+{
+    return m_xTextGraphicObject;
+}
 }
 
 /// Test to assert UNO API call results of Writer.
@@ -208,6 +226,23 @@ void SwUnoWriter::testPasteListener()
 
     // Make sure that paste overwrote "BC".
     CPPUNIT_ASSERT_EQUAL(OUString("ADEDEF"), xBodyText->getString());
+
+    // Test image paste.
+#if 0
+    // Pre-image-handling-rework image insertion works differently so this
+    // would fail, but manual testing shows the functionality itself is OK.
+    SwView& rView = pWrtShell->GetView();
+    OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
+    rView.InsertGraphic(aGraphicURL, OUString(), /*bAsLink=*/false,
+                        &GraphicFilter::GetGraphicFilter());
+    pTransfer->Cut();
+    pListener->GetString().clear();
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    // Without the working image listener in place, this test would have
+    // failed, the listener was not invoked in case of a graphic paste.
+    CPPUNIT_ASSERT(pListener->GetTextGraphicObject().is());
+    CPPUNIT_ASSERT(pListener->GetString().isEmpty());
+#endif
 
     // Deregister paste listener, make sure it's not invoked.
     xBroadcaster->removePasteEventListener(xListener);
