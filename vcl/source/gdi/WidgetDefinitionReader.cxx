@@ -174,6 +174,11 @@ void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
     readDefinition(rWalker, maRadioButtonDefinitions);
 }
 
+void WidgetDefinitionReader::readEditbox(tools::XmlWalker& rWalker)
+{
+    readDefinition(rWalker, maEditboxDefinitions);
+}
+
 bool WidgetDefinitionReader::read()
 {
     if (!lcl_fileExists(m_rFilePath))
@@ -265,6 +270,10 @@ bool WidgetDefinitionReader::read()
         else if (aWalker.name() == "radiobutton")
         {
             readRadioButton(aWalker);
+        }
+        else if (aWalker.name() == "editbox")
+        {
+            readEditbox(aWalker);
         }
         aWalker.next();
     }
@@ -373,6 +382,15 @@ WidgetDefinitionReader::getRadioButtonDefinition(ControlPart ePart)
     auto aIterator = maRadioButtonDefinitions.find(xmlControlPart(ePart));
 
     if (aIterator != maRadioButtonDefinitions.end())
+        return aIterator->second;
+    return std::shared_ptr<WidgetDefinition>();
+}
+
+std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getEditboxDefinition(ControlPart ePart)
+{
+    auto aIterator = maEditboxDefinitions.find(xmlControlPart(ePart));
+
+    if (aIterator != maEditboxDefinitions.end())
         return aIterator->second;
     return std::shared_ptr<WidgetDefinition>();
 }
