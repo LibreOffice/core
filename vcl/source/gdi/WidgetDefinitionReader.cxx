@@ -119,7 +119,9 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
     rWalker.parent();
 }
 
-void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
+void WidgetDefinitionReader::readDefinition(
+    tools::XmlWalker& rWalker,
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>>& rDefinition)
 {
     rWalker.children();
     while (rWalker.isValid())
@@ -128,73 +130,48 @@ void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
         {
             OString sPart = rWalker.attribute("value");
             std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
-            maPushButtonDefinitions.emplace(sPart, pPart);
-            rWalker.children();
-            while (rWalker.isValid())
-            {
-                if (rWalker.name() == "state")
-                {
-                    OString sEnabled = rWalker.attribute("enabled");
-                    OString sFocused = rWalker.attribute("focused");
-                    OString sPressed = rWalker.attribute("pressed");
-                    OString sRollover = rWalker.attribute("rollover");
-                    OString sDefault = rWalker.attribute("default");
-                    OString sSelected = rWalker.attribute("selected");
-                    OString sButtonValue = rWalker.attribute("button-value");
-
-                    std::shared_ptr<WidgetDefinitionState> pState
-                        = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
-                                                                  sRollover, sDefault, sSelected,
-                                                                  sButtonValue);
-                    pPart->maStates.push_back(pState);
-                    readDrawingDefinition(rWalker, pState);
-                }
-                rWalker.next();
-            }
-            rWalker.parent();
+            rDefinition.emplace(sPart, pPart);
+            readPart(rWalker, pPart);
         }
         rWalker.next();
     }
     rWalker.parent();
 }
 
-void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
+void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
+                                      std::shared_ptr<WidgetDefinition> rpPart)
 {
     rWalker.children();
     while (rWalker.isValid())
     {
-        if (rWalker.name() == "part")
+        if (rWalker.name() == "state")
         {
-            OString sPart = rWalker.attribute("value");
-            std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
-            maRadioButtonDefinitions.emplace(sPart, pPart);
-            rWalker.children();
-            while (rWalker.isValid())
-            {
-                if (rWalker.name() == "state")
-                {
-                    OString sEnabled = rWalker.attribute("enabled");
-                    OString sFocused = rWalker.attribute("focused");
-                    OString sPressed = rWalker.attribute("pressed");
-                    OString sRollover = rWalker.attribute("rollover");
-                    OString sDefault = rWalker.attribute("default");
-                    OString sSelected = rWalker.attribute("selected");
-                    OString sButtonValue = rWalker.attribute("button-value");
-                    sButtonValue = sButtonValue.isEmpty() ? "any" : sButtonValue;
-                    std::shared_ptr<WidgetDefinitionState> pState
-                        = std::make_shared<WidgetDefinitionState>(sEnabled, sFocused, sPressed,
-                                                                  sRollover, sDefault, sSelected,
-                                                                  sButtonValue);
-                    pPart->maStates.push_back(pState);
-                    readDrawingDefinition(rWalker, pState);
-                }
-                rWalker.next();
-            }
-            rWalker.parent();
+            OString sEnabled = rWalker.attribute("enabled");
+            OString sFocused = rWalker.attribute("focused");
+            OString sPressed = rWalker.attribute("pressed");
+            OString sRollover = rWalker.attribute("rollover");
+            OString sDefault = rWalker.attribute("default");
+            OString sSelected = rWalker.attribute("selected");
+            OString sButtonValue = rWalker.attribute("button-value");
+
+            std::shared_ptr<WidgetDefinitionState> pState = std::make_shared<WidgetDefinitionState>(
+                sEnabled, sFocused, sPressed, sRollover, sDefault, sSelected, sButtonValue);
+            rpPart->maStates.push_back(pState);
+            readDrawingDefinition(rWalker, pState);
         }
         rWalker.next();
     }
     rWalker.parent();
+}
+
+void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
+{
+    readDefinition(rWalker, maPushButtonDefinitions);
+}
+
+void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
+{
+    readDefinition(rWalker, maRadioButtonDefinitions);
 }
 
 bool WidgetDefinitionReader::read()
