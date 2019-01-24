@@ -330,7 +330,6 @@ public:
 
     const ScAutoFormatData* findByIndex(size_t nIndex) const;
     ScAutoFormatData* findByIndex(size_t nIndex);
-    iterator find(const ScAutoFormatData* pData);
     iterator find(const OUString& rName);
 
     iterator insert(std::unique_ptr<ScAutoFormatData> pNew);

@@ -105,8 +105,6 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept;
 
-OUString mysqlTypeToStr(MYSQL_FIELD const* pField);
-
 OUString mysqlTypeToStr(unsigned mysql_type, unsigned mysql_flags);
 
 sal_Int32 mysqlStrToOOOType(const OUString& sType);
