@@ -19,7 +19,7 @@
 
 namespace {
 
-Date getDate(double nDateTime, SvNumberFormatter* pFormatter)
+Date getDate(double nDateTime, const SvNumberFormatter* pFormatter)
 {
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays(static_cast<sal_Int32>(::rtl::math::approxFloor(nDateTime)));

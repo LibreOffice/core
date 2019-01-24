@@ -23,7 +23,7 @@ class ChildWindowWrapper : public SfxChildWindow
 {
 public:
     ChildWindowWrapper( vcl::Window* pParentP, sal_uInt16 nId,
-                  SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+                  SfxBindings* pBindings, const SfxChildWinInfo* pInfo ) :
         SfxChildWindow(pParentP, nId)
     {
         ScTabViewShell* pViewShell = getTabViewShell( pBindings );
@@ -71,7 +71,7 @@ public:
     }
 
 private:
-    static ScTabViewShell* getTabViewShell( SfxBindings *pBindings )
+    static ScTabViewShell* getTabViewShell( const SfxBindings *pBindings )
     {
         if( !pBindings )
             return nullptr;
