@@ -43,9 +43,13 @@ endif
 
 ifeq ($(OS),LINUX)
 ifneq ($(PKGFORMAT),)
+# Implementation com.sun.star.xml.security.SEInitializer_Gpg
+# does not provide a constructor or factory in case of MPLv2 subset
+ifneq ($(MPL_SUBSET),TRUE)
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CustomTarget_check_dynamic_objects \
 ))
+endif
 endif
 endif
 
