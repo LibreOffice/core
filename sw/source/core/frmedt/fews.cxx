@@ -55,6 +55,18 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/**
+ * This mutex is only used for the paste listeners, where the solar mutex can't
+ * be used.
+ */
+osl::Mutex& GetPasteMutex()
+{
+    static osl::Mutex aMutex;
+    return aMutex;
+}
+}
 
 void SwFEShell::EndAllActionAndCall()
 {
@@ -694,12 +706,14 @@ sal_uInt16 SwFEShell::GetCurOutColNum() const
 SwFEShell::SwFEShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions )
     , m_bCheckForOLEInCaption(false)
+    , m_aPasteListeners(GetPasteMutex())
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, vcl::Window *pWindow )
     : SwEditShell( rShell, pWindow )
     , m_bCheckForOLEInCaption(false)
+    , m_aPasteListeners(GetPasteMutex())
 {
 }
 

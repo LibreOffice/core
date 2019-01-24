@@ -30,6 +30,7 @@
 #include <sot/formats.hxx>
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <vector>
 #include <memory>
@@ -204,6 +205,7 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainTo;
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
+    comphelper::OInterfaceContainerHelper2 m_aPasteListeners;
 
     SAL_DLLPRIVATE SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
@@ -560,6 +562,8 @@ public:
 
     void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
+
+    comphelper::OInterfaceContainerHelper2& GetPasteListeners();
 
     bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
