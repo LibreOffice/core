@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_text_XPasteBroadcaster_idl__
+#define __com_sun_star_text_XPasteBroadcaster_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/text/XPasteListener.idl>
+
+module com { module sun { module star { module text {
+
+/** allows for adding/removing of paste event listeners.
+
+    @since LibreOffice 6.3
+*/
+interface XPasteBroadcaster : com::sun::star::uno::XInterface
+{
+    /** Adds an entry to the list of paste listeners.
+
+        @param xListener
+        The listener to be added.
+    */
+    void addPasteEventListener([in] com::sun::star::text::XPasteListener xListener);
+
+    /** Removes an entry to the list of paste listeners.
+
+        @param xListener
+        The listener to be removed.
+    */
+    void removePasteEventListener( [in] com::sun::star::text::XPasteListener xListener );
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+#ifndef __com_sun_star_text_XPasteListener_idl__
+#define __com_sun_star_text_XPasteListener_idl__
+
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module text {
+
+/**  used to notify listeners about paste events.
+
+    @since LibreOffice 6.3
+*/
+interface XPasteListener : com::sun::star::uno::XInterface
+{
+    /** Notifies the listener about paste events.
+
+        @param aEvent
+        The event containing details about the paste.
+
+        <p>The following keys may be used:
+        <ul>
+            <li>TextRange</li>
+        </ul></p>
+    */
+    void notifyPasteEvent([in] sequence< ::com::sun::star::beans::PropertyValue > aEvent);
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

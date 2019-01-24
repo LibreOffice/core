@@ -62,6 +62,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
+#include <com/sun/star/text/XPasteBroadcaster.hpp>
 
 #include "unobaseclass.hxx"
 #include "viewopt.hxx"
@@ -122,7 +123,8 @@ typedef cppu::WeakImplHelper
     css::xforms::XFormsSupplier,
     css::text::XFlatParagraphIteratorProvider,
     css::document::XDocumentLanguages,
-    css::util::XCloneable
+    css::util::XCloneable,
+    css::text::XPasteBroadcaster
 >
 SwXTextDocumentBaseClass;
 
@@ -378,6 +380,12 @@ public:
 
     // css::util::XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+
+    // css::text::XPasteBroadcaster
+    void SAL_CALL addPasteEventListener(
+        const ::css::uno::Reference<::css::text::XPasteListener>& xListener) override;
+    void SAL_CALL removePasteEventListener(
+        const ::css::uno::Reference<::css::text::XPasteListener>& xListener) override;
 
     /// @see vcl::ITiledRenderable::paintTile().
     virtual void paintTile( VirtualDevice &rDevice,

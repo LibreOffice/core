@@ -41,6 +41,7 @@ class SwWrtShell;
 class SvxClipboardFormatItem;
 class SwFrameShell;
 class SwView_Impl;
+class SwPasteContext;
 enum class SwPasteSdr;
 
 enum class TransferBufferType : sal_uInt16
@@ -133,7 +134,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
                         bool bIsXSelection );
-    bool PrivatePaste( SwWrtShell& rShell );
+    bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
 
@@ -181,7 +182,8 @@ public:
                           SotExchangeDest nDestination, bool bIsPasteFormat,
                           bool bIsDefault,
                           const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,
-                          bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA );
+                          bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
+                          SwPasteContext* pContext = nullptr );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
