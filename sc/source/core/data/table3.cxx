@@ -3134,9 +3134,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
                     aStr = aBuf.makeStringAndClear();
                 }
 
-                std::pair<StrSetType::iterator, bool> r = aStrSet.insert(aStr);
-                bool bIsUnique = r.second; // unique if inserted.
-                bResult = bIsUnique;
+                bResult = aStrSet.insert(aStr).second; // unique if inserted.
             }
         }
         else

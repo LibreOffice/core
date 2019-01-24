@@ -3069,7 +3069,6 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
     int nLevel = 1;
 
     std::vector<ComboBoxTextItem> aItems;
-    sal_Int32 nItemIndex = 0;
 
     while(true)
     {
@@ -3126,7 +3125,6 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                     sFinalValue = (*m_pStringReplace)(sFinalValue);
 
                 aItems.emplace_back(sFinalValue, sId);
-                ++nItemIndex;
             }
         }
 

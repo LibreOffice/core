@@ -354,8 +354,7 @@ void FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     swfdirpath = sPath + "/" + sPresentationName + ".sxi-swf-files";
 
-    oslFileError err;
-    err = osl_createDirectory( swfdirpath.pData );
+    osl_createDirectory( swfdirpath.pData );
 
     fullpath = swfdirpath + "/backgroundconfig.txt";
 
@@ -370,11 +369,10 @@ void FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
         osl_openFile( fullpath.pData, &aBackgroundConfig, osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
 
         sal_uInt64 bytesWritten;
-        err = osl_writeFile(aBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
+        osl_writeFile(aBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
 
     // TODO: check for errors
-    (void) err;
 
     FlashExporter aFlashExporter(
         mxContext,

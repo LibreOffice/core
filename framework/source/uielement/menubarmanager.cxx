@@ -1415,7 +1415,6 @@ void MenuBarManager::FillMenu(
         Sequence< PropertyValue > aProp;
         OUString aCommandURL;
         OUString aLabel;
-        OUString aHelpURL;
         OUString aModuleIdentifier( rModuleIdentifier );
         sal_uInt16 nType = 0;
         Reference< XIndexAccess > xIndexContainer;
@@ -1434,7 +1433,7 @@ void MenuBarManager::FillMenu(
                     if ( aPropName == "CommandURL" )
                         aProp[i].Value >>= aCommandURL;
                     else if ( aPropName == "HelpURL" )
-                        aProp[i].Value >>= aHelpURL;
+                        ;
                     else if ( aPropName == "ItemDescriptorContainer" )
                         aProp[i].Value >>= xIndexContainer;
                     else if ( aPropName == "Label" )

@@ -1462,14 +1462,11 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
                 // 2.2.3 adjust LVL of the new NumRule
 
-                sal_uInt16 aFlagsNewCharFormat = 0;
                 bool bNewCharFormatCreated = false;
                 for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                 {
                     AdjustLVL( nLevel, *rLFOInfo.pNumRule, aItemSet, aCharFormat,
                         bNewCharFormatCreated, sPrefix );
-                    if( bNewCharFormatCreated )
-                        aFlagsNewCharFormat += (1 << nLevel);
                 }
             }
         }

@@ -1840,16 +1840,13 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
         if ( xNodeAccess.is() )
         {
-            OUString sNodeId, sLabel, sPageURL, sGroupId;
+            OUString sNodeId, sLabel, sPageURL;
             bool bAllModules = false;
-            sal_Int32 nGroupIndex = 0;
 
             sNodeId = seqNames[i];
             xNodeAccess->getByName( "Label" ) >>= sLabel;
             xNodeAccess->getByName( "OptionsPage" ) >>= sPageURL;
             xNodeAccess->getByName( "AllModules" ) >>= bAllModules;
-            xNodeAccess->getByName( "GroupId" ) >>= sGroupId;
-            xNodeAccess->getByName( "GroupIndex" ) >>= nGroupIndex;
 
             if ( sLabel.isEmpty() )
                 sLabel = sGroupName;

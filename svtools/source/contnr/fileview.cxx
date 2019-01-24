@@ -1452,14 +1452,6 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     if ( maContent.empty() )
         return;
 
-    // count (estimate) the number of filter tokens
-    sal_Int32 nTokens=0;
-    const sal_Unicode* pStart = rFilter.getStr();
-    const sal_Unicode* pEnd = pStart + rFilter.getLength();
-    while ( pStart != pEnd )
-        if ( *pStart++ == ';' )
-            ++nTokens;
-
     // collect the filter tokens
     ::std::vector< WildCard > aFilters;
     FilterMatch::createWildCardFilterList(rFilter,aFilters);

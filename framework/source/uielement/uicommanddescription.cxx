@@ -182,8 +182,6 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 // XNameAccess
 Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
 {
-    static sal_Int32 nRequests  = 0;
-
     osl::MutexGuard g(m_aMutex);
     if ( !m_bConfigAccessInitialized )
     {
@@ -210,7 +208,6 @@ Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
     else
     {
         // SAFE
-        ++nRequests;
         return getInfoFromCommand( rCommandURL );
     }
 }

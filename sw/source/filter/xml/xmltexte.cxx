@@ -159,16 +159,8 @@ static void lcl_addFrameProperties(
     if ( !xSet.is() )
         return;
 
-    OUString aURL;
-    Any aAny = xSet->getPropertyValue("FrameURL");
-    aAny >>= aURL;
-
-    OUString aName;
-    aAny = xSet->getPropertyValue("FrameName");
-    aAny >>= aName;
-
     bool bIsAutoScroll = false, bIsScrollingMode = false;
-    aAny = xSet->getPropertyValue("FrameIsAutoScroll");
+    Any aAny = xSet->getPropertyValue("FrameIsAutoScroll");
     aAny >>= bIsAutoScroll;
     if ( !bIsAutoScroll )
     {

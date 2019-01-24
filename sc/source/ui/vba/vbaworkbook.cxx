@@ -368,8 +368,6 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
-    OUString sFilterName;
-    storeProps[0].Value >>= sFilterName;
     xStor->storeAsURL( sURL, storeProps );
 }
 

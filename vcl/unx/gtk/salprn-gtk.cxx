@@ -918,13 +918,10 @@ GtkPrintDialog::impl_readFromSettings()
     const OUString aCollate(pItem->getValue(aPrintDialogStr,
                 "Collate"));
 
-    bool bChanged(false);
-
     const gint nOldCopyCount(m_xWrapper->print_settings_get_n_copies(pSettings));
     const sal_Int32 nCopyCount(aCopyCount.toInt32());
     if (nCopyCount > 0 && nOldCopyCount != nCopyCount)
     {
-        bChanged = true;
         m_xWrapper->print_settings_set_n_copies(pSettings, sal::static_int_cast<gint>(nCopyCount));
     }
 
@@ -932,11 +929,8 @@ GtkPrintDialog::impl_readFromSettings()
     const bool bCollate(aCollate.equalsIgnoreAsciiCase("true"));
     if (bOldCollate != bCollate)
     {
-        bChanged = true;
         m_xWrapper->print_settings_set_collate(pSettings, bCollate);
     }
-    // TODO: what was this variable meant for?
-    (void) bChanged;
 
     m_xWrapper->print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);
     g_object_unref(G_OBJECT(pSettings));

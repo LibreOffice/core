@@ -158,7 +158,6 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
     {
         SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false);
-        sal_uInt16 nGlosEntry = 0;
         SwContentNode* pCNd = nullptr;
         bRet = true;
         do {
@@ -242,7 +241,6 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             }
 
             aStart = aStart.GetNode().EndOfSectionIndex() + 1;
-            ++nGlosEntry;
         } while( aStart < aDocEnd && aStart.GetNode().IsStartNode() );
     }
 

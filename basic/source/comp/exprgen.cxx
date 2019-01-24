@@ -209,7 +209,6 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
     {
         rGen.Gen( SbiOpcode::ARGC_ );
         // Type adjustment at DECLARE
-        sal_uInt16 nCount = 1;
 
         for( auto& pExpr: aData )
         {
@@ -249,7 +248,6 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
             {
                 rGen.Gen( SbiOpcode::ARGV_ );
             }
-            nCount++;
         }
     }
 }

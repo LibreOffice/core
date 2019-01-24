@@ -236,11 +236,9 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformControlToSdrCoordinates: no form property set!" );
     if ( !xPSetForm.is() )
         return false;
-    sal_Int32 nFormX = 0, nFormY = 0, nFormWidth, nFormHeight;
+    sal_Int32 nFormX = 0, nFormY = 0;
     xPSetForm->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nFormX;
     xPSetForm->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nFormY;
-    xPSetForm->getPropertyValue( DLGED_PROP_WIDTH ) >>= nFormWidth;
-    xPSetForm->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nFormHeight;
     Size aFormPos( nFormX, nFormY );
 
     // convert logic units to pixel

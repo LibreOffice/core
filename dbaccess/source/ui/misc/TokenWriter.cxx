@@ -815,7 +815,6 @@ void OHTMLImportExport::WriteTables()
 
         // 2. and now the data
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
-        sal_Int32 j=1;
         sal_Int32 kk=0;
         m_xResultSet->beforeFirst(); // set back before the first row
         while(m_xResultSet->next())
@@ -846,7 +845,6 @@ void OHTMLImportExport::WriteTables()
                 }
                 WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
             }
-            ++j;
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
     }
