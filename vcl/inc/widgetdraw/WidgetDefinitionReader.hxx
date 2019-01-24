@@ -106,6 +106,12 @@ class VCL_DLLPUBLIC WidgetDefinitionReader
 private:
     OUString m_rFilePath;
 
+    static void
+    readDefinition(tools::XmlWalker& rWalker,
+                   std::unordered_map<OString, std::shared_ptr<WidgetDefinition>>& rDefinition);
+
+    static void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinition> rpPart);
+
     void readPushButton(tools::XmlWalker& rWalker);
     void readRadioButton(tools::XmlWalker& rWalker);
     static void readDrawingDefinition(tools::XmlWalker& rWalker,
