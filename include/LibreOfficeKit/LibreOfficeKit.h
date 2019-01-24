@@ -348,6 +348,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::renderShapeSelection
     size_t (*renderShapeSelection)(LibreOfficeKitDocument* pThis, char** pOutput);
 
+    /// @see lok::Document::createViewWithOptions().
+    int (*createViewWithOptions) (LibreOfficeKitDocument* pThis, const char* pOptions);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
