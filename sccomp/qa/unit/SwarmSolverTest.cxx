@@ -102,7 +102,7 @@ void SwarmSolverTest::testUnconstrained()
     CPPUNIT_ASSERT(xSolver->getSuccess());
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
-    CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // It happens that the unconstrained test does not find a solution in the
     // timeframe or number of generations it has available as the search space is
     // too big and the values might not converge to solution. So for now just run
@@ -161,7 +161,7 @@ void SwarmSolverTest::testVariableBounded()
     CPPUNIT_ASSERT(xSolver->getSuccess());
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
-    CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
 }
 
@@ -219,7 +219,7 @@ void SwarmSolverTest::testVariableConstrained()
     CPPUNIT_ASSERT(xSolver->getSuccess());
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
-    CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.741657, aSolution[0], 1E-5);
 }
 
