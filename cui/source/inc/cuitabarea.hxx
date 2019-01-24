@@ -558,6 +558,7 @@ private:
     void ClickBitmapHdl_Impl();
     void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(const OUString& rBitmapName);
+    sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
 
 public:
     SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
