@@ -29,6 +29,7 @@ interface XPasteListener : com::sun::star::uno::XInterface
         <p>The following keys may be used:
         <ul>
             <li>TextRange</li>
+            <li>TextGraphicObject</li>
         </ul></p>
     */
     void notifyPasteEvent([in] sequence< ::com::sun::star::beans::PropertyValue > aEvent);

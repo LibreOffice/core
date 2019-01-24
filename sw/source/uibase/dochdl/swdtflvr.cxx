@@ -126,6 +126,7 @@
 #include <itabenum.hxx>
 #include <iodetect.hxx>
 #include <unotextrange.hxx>
+#include <unoframe.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
@@ -1125,35 +1126,60 @@ SwPasteContext::~SwPasteContext()
         if (m_rWrtShell.GetPasteListeners().getLength() == 0)
             return;
 
-        if (!m_pPaM)
+        beans::PropertyValue aPropertyValue;
+
+        switch (m_rWrtShell.GetView().GetShellMode())
+        {
+            case ShellMode::Graphic:
+            {
+                SwFrameFormat* pFormat = m_rWrtShell.GetFlyFrameFormat();
+                if (!pFormat)
+                    return;
+
+                aPropertyValue.Name = "TextGraphicObject";
+                aPropertyValue.Value
+                    <<= SwXTextGraphicObject::CreateXTextGraphicObject(*pFormat->GetDoc(), pFormat);
+                break;
+            }
+
+            default:
+            {
+                if (!m_pPaM)
+                    return;
+
+                SwPaM* pCursor = m_rWrtShell.GetCursor();
+                if (!pCursor)
+                    return;
+
+                if (!pCursor->GetPoint()->nNode.GetNode().IsTextNode())
+                    // Non-text was pasted.
+                    return;
+
+                // Update mark after paste.
+                *m_pPaM->GetMark() = *pCursor->GetPoint();
+
+                // Restore point.
+                ++m_pPaM->GetPoint()->nNode;
+                SwNode& rNode = m_pPaM->GetNode();
+                if (!rNode.IsTextNode())
+                    // Starting point is no longer text.
+                    return;
+
+                m_pPaM->GetPoint()->nContent.Assign(static_cast<SwContentNode*>(&rNode),
+                                                    m_nStartContent);
+
+                aPropertyValue.Name = "TextRange";
+                const uno::Reference<text::XTextRange> xTextRange = SwXTextRange::CreateXTextRange(
+                    *m_pPaM->GetDoc(), *m_pPaM->GetPoint(), m_pPaM->GetMark());
+                aPropertyValue.Value <<= xTextRange;
+                break;
+            }
+        }
+
+        if (aPropertyValue.Name.isEmpty())
             return;
-
-        SwPaM* pCursor = m_rWrtShell.GetCursor();
-        if (!pCursor)
-            return;
-
-        if (!pCursor->GetPoint()->nNode.GetNode().IsTextNode())
-            // Non-text was pasted.
-            return;
-
-        // Update mark after paste.
-        *m_pPaM->GetMark() = *pCursor->GetPoint();
-
-        // Restore point.
-        ++m_pPaM->GetPoint()->nNode;
-        SwNode& rNode = m_pPaM->GetNode();
-        if (!rNode.IsTextNode())
-            // Starting point is no longer text.
-            return;
-
-        m_pPaM->GetPoint()->nContent.Assign(static_cast<SwContentNode*>(&rNode), m_nStartContent);
 
         // Invoke the listeners.
-        beans::PropertyValue aPropertyValue;
-        aPropertyValue.Name = "TextRange";
-        const uno::Reference<text::XTextRange> xTextRange = SwXTextRange::CreateXTextRange(
-            *m_pPaM->GetDoc(), *m_pPaM->GetPoint(), m_pPaM->GetMark());
-        aPropertyValue.Value <<= xTextRange;
         uno::Sequence<beans::PropertyValue> aEvent{ aPropertyValue };
 
         comphelper::OInterfaceIteratorHelper2 it(m_rWrtShell.GetPasteListeners());
