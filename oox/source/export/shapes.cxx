@@ -675,9 +675,7 @@ static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHa
     sal_uInt16 nHandles = rHandles.getLength();
     for ( k = 0; k < nHandles ; k++ )
     {
-        const OUString sSwitched( "Switched"  );
         const OUString sPosition( "Position"  );
-        bool bSwitched = false;
         bool bPosition = false;
         EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShapeParameterPair aPolar;
@@ -688,10 +686,6 @@ static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHa
             {
                 if ( rPropVal.Value >>= aPosition )
                     bPosition = true;
-            }
-            else if ( rPropVal.Name == sSwitched )
-            {
-                rPropVal.Value >>= bSwitched ;
             }
         }
         if ( bPosition )

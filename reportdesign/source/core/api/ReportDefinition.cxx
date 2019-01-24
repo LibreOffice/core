@@ -2054,10 +2054,6 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         uno::Reference< style::XStyle> xStyle = new OStyle();
         xStyle->setName("Default");
-        uno::Reference<beans::XPropertySet> xProp(xStyle,uno::UNO_QUERY);
-        OUString sTray;
-        xProp->getPropertyValue("PrinterPaperTray")>>= sTray;
-
         return xStyle.get();
     }
     else if ( aServiceSpecifier == "com.sun.star.document.Settings" )

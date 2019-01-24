@@ -98,11 +98,8 @@ void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  )
     // information not needed
 }
 
-void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent )
+void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& )
 {
-    SolarMutexGuard aGuard;
-    OUString sSource;
-    rEvent.Accessor >>= sSource;
 }
 
 void SwDBTreeList_Impl::disposing( const EventObject&  )

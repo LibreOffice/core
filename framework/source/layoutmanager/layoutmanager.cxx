@@ -2662,11 +2662,6 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
     if( !m_xContainerWindow.is() )
         return;
 
-    awt::Rectangle aDockingArea( m_aDockingArea );
-    ::Size         aStatusBarSize( implts_getStatusBarSize() );
-
-    // Subtract status bar height
-    aDockingArea.Height -= aStatusBarSize.Height();
     aReadLock.clear();
 
     implts_setDockingAreaWindowSizes();

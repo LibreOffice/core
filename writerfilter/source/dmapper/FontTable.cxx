@@ -93,13 +93,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
                 m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             break;
         }
-        default:
-        {
-            //----> debug
-            int nVal = val.getInt();
-            ++nVal;
-            //<---- debug
-        }
+        default: ;
     }
 }
 

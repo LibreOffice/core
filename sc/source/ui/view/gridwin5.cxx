@@ -75,7 +75,6 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
         const ScChangeAction* pFound = nullptr;
         const ScChangeAction* pFoundContent = nullptr;
         const ScChangeAction* pFoundMove = nullptr;
-        long nModified = 0;
         const ScChangeAction* pAction = pTrack->GetFirst();
         while (pAction)
         {
@@ -109,7 +108,6 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                                 // added to avoid warnings
                             }
                         }
-                        ++nModified;
                     }
                 }
                 if ( eType == SC_CAT_MOVE )
@@ -120,7 +118,6 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                     if ( aRange.In( aCellPos ) )
                     {
                         pFound = pAction;
-                        ++nModified;
                     }
                 }
             }
