@@ -838,7 +838,7 @@ namespace sw {
 /// if first node is deleted & second survives, then the first node's frame
 /// will be deleted too; prevent this by moving the frame to the second node
 /// if necessary.
-void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode)
+void MoveDeletedPrevFrames(const SwTextNode & rDeletedPrev, SwTextNode & rNode)
 {
     std::vector<SwTextFrame*> frames;
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rDeletedPrev);

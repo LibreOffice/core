@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
-SwAccessibleHyperlink::SwAccessibleHyperlink(SwTextAttr & rTextAttr,
+SwAccessibleHyperlink::SwAccessibleHyperlink(const SwTextAttr & rTextAttr,
         SwAccessibleParagraph & rAccPara,
         sal_Int32 const nStt, sal_Int32 const nEnd)
     : m_pHyperlink(const_cast<SwFormatINetFormat*>(&rTextAttr.GetINetFormat()))

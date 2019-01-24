@@ -303,7 +303,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 
 namespace
 {
-    bool allowAccessLink(SwDoc& rDoc)
+    bool allowAccessLink(const SwDoc& rDoc)
     {
         OUString sReferer;
         SfxObjectShell * sh = rDoc.GetPersist();
