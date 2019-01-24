@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_78e65beb",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-24T17:47:38Z",
+      "side": 0,
+      "message": "removing this effectively disables the cache, as it\u0027s the only initialisation.\n\ncreating the cache should only depend on the Unicode string, not on any font, or what am i missing?",
+      "revId": "fddd956c0cf3b2c22a152bbb30554def1336b466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
