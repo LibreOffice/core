@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/document/xembeddedobjectsupplier.hxx>
 #include <test/table/xtablechart.hxx>
@@ -39,6 +40,7 @@ namespace sc_apitest
 class ScChartObj : public CalcUnoApiTest,
                    public apitest::XEmbeddedObjectSupplier,
                    public apitest::XNamed,
+                   public apitest::XPropertySet,
                    public apitest::XServiceInfo,
                    public apitest::XTableChart
 {
@@ -57,6 +59,9 @@ public:
     // XNamed
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetNameThrowsException);
+
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
