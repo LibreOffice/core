@@ -49,8 +49,12 @@ $(eval $(call gb_Module_add_check_targets,postprocess,\
 endif
 endif
 
+# Implementation com.sun.star.xml.security.SEInitializer_Gpg
+# does not provide a constructor or factory in case of MPLv2 subset
+ifneq ($(MPL_SUBSET),TRUE)
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CppunitTest_services \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
