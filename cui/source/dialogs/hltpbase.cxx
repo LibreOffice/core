@@ -176,7 +176,9 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         get(mpEdIndication, "indication");
         get(mpEdText, "name");
         get(mpBtScript, "script");
-        mpBtScript->SetModeImage(Image(RID_SVXBMP_SCRIPT));
+        BitmapEx aBitmap(RID_SVXBMP_SCRIPT);
+        aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+        mpBtScript->SetModeImage(Image(aBitmap));
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
         mpBtScript->EnableTextDisplay (false);
