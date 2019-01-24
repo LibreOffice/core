@@ -66,6 +66,7 @@ enum DocxColBreakStatus
 {
     COLBRK_NONE,
     COLBRK_POSTPONE,
+    COLBRK_WRITEANDPOSTPONE,
     COLBRK_WRITE
 };
 
