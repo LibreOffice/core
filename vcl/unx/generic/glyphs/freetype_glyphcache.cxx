@@ -69,9 +69,6 @@
 
 static FT_Library aLibFT = nullptr;
 
-// enable linking with old FT versions
-static int nFTVERSION = 0;
-
 typedef std::unordered_map<const char*, std::shared_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
@@ -84,7 +81,6 @@ namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFi
 // if (AH<AA) => do not autohint when antialiasing
 // if (EB<AH) => do not autohint for monochrome
 static int nDefaultPrioEmbedded    = 2;
-static int nDefaultPrioAutoHint    = 1;
 static int nDefaultPrioAntiAlias   = 1;
 
 FreetypeFontFile::FreetypeFontFile( const OString& rNativeFileName )
@@ -265,7 +261,6 @@ void GlyphCache::InitFreetype()
 
     FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
     FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
-    nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
@@ -275,9 +270,6 @@ void GlyphCache::InitFreetype()
     pEnv = ::getenv( "SAL_ANTIALIASED_TEXT_PRIORITY" );
     if( pEnv )
         nDefaultPrioAntiAlias = pEnv[0] - '0';
-    pEnv = ::getenv( "SAL_AUTOHINTING_PRIORITY" );
-    if( pEnv )
-        nDefaultPrioAutoHint  = pEnv[0] - '0';
 
     (void)vclFontFileList::get();
 }

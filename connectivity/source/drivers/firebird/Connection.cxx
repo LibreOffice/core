@@ -135,7 +135,6 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
         // the database may be stored as an
         // fdb file in older versions
         bool bIsFdbStored = false;
-        OUString aStorageURL;
         if (url == "sdbc:embedded:firebird")
         {
             m_bIsEmbedded = true;
@@ -148,10 +147,6 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                 if ( pIter->Name == "Storage" )
                 {
                     m_xEmbeddedStorage.set(pIter->Value,UNO_QUERY);
-                }
-                else if ( pIter->Name == "URL" )
-                {
-                    pIter->Value >>= aStorageURL;
                 }
                 else if ( pIter->Name == "Document" )
                 {

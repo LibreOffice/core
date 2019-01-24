@@ -4630,12 +4630,9 @@ void SbUnoStructRefObject::initMemberCache()
 {
     if ( mbMemberCacheInit )
         return;
-    sal_Int32 nAll = 0;
     typelib_TypeDescription * pTD = nullptr;
     maMemberInfo.getType().getDescription(&pTD);
     typelib_CompoundTypeDescription * pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD);
-    for ( ; pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
-        nAll += pCompTypeDescr->nMembers;
     for ( pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD); pCompTypeDescr;
         pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
     {

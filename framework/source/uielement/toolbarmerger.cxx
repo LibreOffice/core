@@ -435,7 +435,6 @@ void ToolBarMerger::MergeItems(
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
 
-    sal_uInt16 nIndex( 0 );
     for ( sal_Int32 i = 0; i < nSize; i++ )
     {
         const AddonToolbarItem& rItem = rAddonToolbarItems[i];
@@ -469,7 +468,6 @@ void ToolBarMerger::MergeItems(
                 ToolBarMerger::CreateToolbarItem( pToolbar, nInsPos, rItemId, rItem );
             }
 
-            ++nIndex;
             ++rItemId;
         }
     }

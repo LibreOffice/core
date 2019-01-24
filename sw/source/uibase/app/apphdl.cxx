@@ -262,12 +262,9 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
                 aDescriptor[svx::DataAccessDescriptorProperty::Command]      >>= aDBData.sCommand;
                 aDescriptor[svx::DataAccessDescriptorProperty::CommandType]  >>= aDBData.nCommandType;
 
-                uno::Sequence< uno::Any >                   aSelection;
                 uno::Reference< sdbc::XConnection>          xConnection;
                 uno::Reference< sdbc::XDataSource>          xSource;
                 uno::Reference< sdbcx::XColumnsSupplier>    xColumnsSupplier;
-                if (aDescriptor.has(svx::DataAccessDescriptorProperty::Selection))
-                    aDescriptor[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
                 if (aDescriptor.has(svx::DataAccessDescriptorProperty::Connection))
                     aDescriptor[svx::DataAccessDescriptorProperty::Connection] >>= xConnection;
                 uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);

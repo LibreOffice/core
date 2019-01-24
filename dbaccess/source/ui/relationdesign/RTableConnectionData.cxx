@@ -311,8 +311,6 @@ xKey.clear();
         OSL_ENSURE(xKey.is(),"Key is not valid!");
         if ( xKey.is() )
         {
-            sal_Int32 nType = 0;
-            xKey->getPropertyValue(PROPERTY_TYPE) >>= nType;
             OUString sReferencedTable;
             xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
             if ( sReferencedTable == getReferencedTable()->GetTableName() )

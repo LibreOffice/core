@@ -1842,9 +1842,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                     // 3. Methods
 
-                    // Counter for found listeners
-                    sal_Int32 nListenerCount = 0;
-
                     // Get and remember all methods
                     Sequence< Reference<XIdlMethod> > methods = rxIfaceClass->getMethods();
                     const Reference<XIdlMethod>* pSourceMethods = methods.getConstArray();
@@ -2134,7 +2131,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                                 pMethodTypes[i] = ADD_LISTENER_METHOD;
                                 pMethodTypes[k] = REMOVE_LISTENER_METHOD;
-                                nListenerCount++;
                             }
                         }
                     }

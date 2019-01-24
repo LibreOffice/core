@@ -170,7 +170,6 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& /*msUserData*/)
 {
     OUString paramName;
-    OUString targetURL;
     Reference<XOutputStream> outputStream;
 
     // Read output stream and target URL from the parameters given in sourceData.
@@ -180,8 +179,6 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
             paramName = sourceData[paramIdx].Name;
             if ( paramName == "OutputStream" )
                 sourceData[paramIdx].Value >>= outputStream;
-            else if ( paramName == "URL" )
-                sourceData[paramIdx].Value >>= targetURL;
         }
 
     if (!getDelegate().is())

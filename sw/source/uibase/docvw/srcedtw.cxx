@@ -78,7 +78,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
     const sal_uInt16 nStrLen = rSource.getLength();
     sal_uInt16 nInsert = 0;         // number of inserted portions
     sal_uInt16 nActPos = 0;         // position, where '<' was found
-    sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
     sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
     sal_uInt16 nPortEnd  =  0;
     TextPortion aText;
@@ -119,7 +118,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                 // "</" ignore slash
                 nPortStart = nActPos;
                 nActPos++;
-                nOffset++;
             }
             if(svtools::HTMLUNKNOWN == eFoundType)
             {

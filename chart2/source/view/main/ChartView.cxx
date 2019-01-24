@@ -952,7 +952,6 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
 {
     drawing::Direction3D aPreferredAspectRatio(1.0,1.0,1.0);
 
-    sal_Int32 nPlotterCount=0;
     //get a list of all preferred aspect ratios and combine them
     //first with special demands wins (less or equal zero <-> arbitrary)
     double fx, fy, fz;
@@ -985,7 +984,6 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
 
         if( fx>0 && fy>0 && fz>0 )
             break;
-        ++nPlotterCount;
     }
     aPreferredAspectRatio = drawing::Direction3D(fx, fy, fz);
     return aPreferredAspectRatio;

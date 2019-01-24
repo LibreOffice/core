@@ -121,8 +121,6 @@ bool ORowSetImportExport::Read()
     {
         Reference<XPropertySet> xProp(m_xResultSet,UNO_QUERY);
         sal_Int32 nRowCount = 0;
-        sal_Int32 nCurrentRow = 0;
-        sal_Int32 nRowFilterIndex = 0;
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
             bool bFinal = false;
@@ -141,8 +139,6 @@ bool ORowSetImportExport::Read()
         while(m_xResultSet.is() && m_xResultSet->next() && bContinue && nRowCount )
         {
             --nRowCount;
-            ++nCurrentRow;
-            ++nRowFilterIndex;
             bContinue = insertNewRow();
         }
     }

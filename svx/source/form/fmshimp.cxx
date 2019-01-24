@@ -3243,10 +3243,8 @@ void FmXFormShell::CreateExternalView_Lock()
             Reference< XPropertySet> xCurrentModelSet;
             OUString sColumnType,aGroupName,sControlSource;
             Sequence< Property> aProps;
-            Reference< XPropertySet> xCurrentBoundField;
             while ((xCurrentModelSet = Reference< XPropertySet>(aModelIterator.Next(), UNO_QUERY)).is())
             {
-                xCurrentModelSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xCurrentBoundField;
                 OSL_ENSURE(xCurrentModelSet.is(),"xCurrentModelSet is null!");
                 // create a description of the column to be created
                 // first : determine it's type

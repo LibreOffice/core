@@ -346,8 +346,6 @@ void NetChart::createShapes()
     //better performance for big data
     std::map< VDataSeries*, FormerPoint > aSeriesFormerPointMap;
     m_bPointsWereSkipped = false;
-    sal_Int32 nSkippedPoints = 0;
-    sal_Int32 nCreatedPoints = 0;
 
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
@@ -487,7 +485,6 @@ void NetChart::createShapes()
                                aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
                                                             , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
                     {
-                        ++nSkippedPoints;
                         m_bPointsWereSkipped = true;
                         continue;
                     }
@@ -535,8 +532,6 @@ void NetChart::createShapes()
                             uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
 
                     {
-                        nCreatedPoints++;
-
                         //create data point
                         drawing::Direction3D aSymbolSize(0,0,0);
                         if (bCreateSymbol) // implies pSymbolProperties

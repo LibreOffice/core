@@ -1915,12 +1915,6 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
         case BASEPROPERTY_BORDERCOLOR:
             ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetMonoColor, &StyleSettings::GetMonoColor);
             break;
-        case BASEPROPERTY_DEFAULTCONTROL:
-        {
-            OUString aName;
-            Value >>= aName;
-            break;
-        }
     }
 }
 

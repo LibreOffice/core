@@ -50,8 +50,6 @@ static constexpr auto DRAWTEXT_FLAGS_ICON =
 #define EVENTID_SHOW_CURSOR             (reinterpret_cast<void*>(1))
 #define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(2))
 
-static bool bEndScrollInvalidate = true;
-
 SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SvtIconChoiceCtrl* pCurView,
     WinBits nWinStyle
@@ -192,14 +190,12 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void
 {
     // arrow up: delta=-1; arrow down: delta=+1
     Scroll( 0, pScrollBar->GetDelta() );
-    bEndScrollInvalidate = true;
 }
 
 IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
 {
     // arrow left: delta=-1; arrow right: delta=+1
     Scroll( pScrollBar->GetDelta(), 0 );
-    bEndScrollInvalidate = true;
 }
 
 void SvxIconChoiceCtrl_Impl::FontModified()
@@ -532,8 +528,6 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
 
 void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    bEndScrollInvalidate = false;
-
 #if defined(OV_DRAWGRID)
     Color aOldColor (rRenderContext.GetLineColor());
     Color aCOL_BLACK);

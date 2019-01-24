@@ -299,7 +299,6 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
             if ( xIndex->getByIndex( i ) >>= aPropSequence )
             {
                 OUString aCommandURL;
-                OUString aLabel;
                 sal_uInt16 nType = ItemType::DEFAULT;
                 bool bVisible = true;
 
@@ -307,8 +306,6 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
                 {
                     if ( aProp.Name == "CommandURL" )
                         aProp.Value >>= aCommandURL;
-                    else if ( aProp.Name == "Label" )
-                        aProp.Value >>= aLabel;
                     else if ( aProp.Name == "Type" )
                         aProp.Value >>= nType;
                     else if ( aProp.Name == "IsVisible" )

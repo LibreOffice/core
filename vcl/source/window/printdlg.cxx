@@ -1384,9 +1384,6 @@ void PrintDialog::setupOptionalUI()
         Sequence< OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         OUString aGroupingHint;
-        OUString aDependsOnName;
-        sal_Int32 nDependsOnValue = 0;
-        bool bUseDependencyRow = false;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -1420,8 +1417,6 @@ void PrintDialog::setupOptionalUI()
             }
             else if ( rEntry.Name == "Enabled" )
             {
-                bool bValue = true;
-                rEntry.Value >>= bValue;
             }
             else if ( rEntry.Name == "GroupingHint" )
             {
@@ -1429,15 +1424,12 @@ void PrintDialog::setupOptionalUI()
             }
             else if ( rEntry.Name == "DependsOnName" )
             {
-                rEntry.Value >>= aDependsOnName;
             }
             else if ( rEntry.Name == "DependsOnEntry" )
             {
-                rEntry.Value >>= nDependsOnValue;
             }
             else if ( rEntry.Name == "AttachToDependency" )
             {
-                rEntry.Value >>= bUseDependencyRow;
             }
             else if ( rEntry.Name == "MinValue" )
             {

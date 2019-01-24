@@ -283,7 +283,7 @@ namespace XSLT
         // is most important here since we need to supply it to
         // the sax parser that drives the supplied document handler
         sal_Int32 nLength = aSourceData.getLength();
-        OUString aName, aFileName, aURL;
+        OUString aName, aURL;
         css::uno::Reference<XInputStream> xInputStream;
         css::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
@@ -292,8 +292,6 @@ namespace XSLT
                 Any value = aSourceData[i].Value;
                 if ( aName == "InputStream" )
                     value >>= xInputStream;
-                else if ( aName == "FileName" )
-                    value >>= aFileName;
                 else if ( aName == "URL" )
                     value >>= aURL;
                 else if ( aName == "InteractionHandler" )
@@ -430,18 +428,15 @@ namespace XSLT
         // since that is where our xml-writer will push the data
         // from its data-source interface
         OUString aName, sURL;
-        bool bIndent = false;
         OUString aDoctypePublic;
         // css::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
-                if ( aName == "Indent" )
-                    aSourceData[i].Value >>= bIndent;
                 if ( aName == "DocType_Public" )
                     aSourceData[i].Value >>= aDoctypePublic;
-                if ( aName == "OutputStream" )
+                else if ( aName == "OutputStream" )
                     aSourceData[i].Value >>= m_rOutputStream;
                 else if ( aName == "URL" )
                     aSourceData[i].Value >>= sURL;
