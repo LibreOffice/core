@@ -596,9 +596,9 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     sal_uInt16 nSel = m_aVsRefEdge.GetSelectedItemId();
 
-    Image aBottomLock(RID_SVXBMP_BOTTOMLOCK);
-    Image aTopLock(RID_SVXBMP_TOPLOCK);
-    Image aCellLock(RID_SVXBMP_CELLLOCK);
+    Image aBottomLock(StockImage::Yes, RID_SVXBMP_BOTTOMLOCK);
+    Image aTopLock(StockImage::Yes, RID_SVXBMP_TOPLOCK);
+    Image aCellLock(StockImage::Yes, RID_SVXBMP_CELLLOCK);
 
     m_aVsRefEdge.Clear();
     m_aVsRefEdge.SetStyle(m_aVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER);

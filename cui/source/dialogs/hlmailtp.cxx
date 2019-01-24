@@ -42,7 +42,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     get(m_pCbbReceiver, "receiver");
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
     get(m_pBtAdrBook, "adressbook");
-    m_pBtAdrBook->SetModeImage(Image(RID_SVXBMP_ADRESSBOOK));
+    m_pBtAdrBook->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_ADRESSBOOK));
     get(m_pFtSubject, "subject_label");
     get(m_pEdSubject, "subject");
 
