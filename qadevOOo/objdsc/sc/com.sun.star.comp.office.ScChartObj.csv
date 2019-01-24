@@ -5,5 +5,3 @@
 "ScChartObj";"com::sun::star::table::XTableChart";"getRanges()"
 "ScChartObj";"com::sun::star::table::XTableChart";"setRanges()"
 "ScChartObj";"com::sun::star::document::XEmbeddedObjectSupplier";"getEmbeddedObject()"
-"ScChartObj";"com::sun::star::container::XNamed";"getName()"
-"ScChartObj";"com::sun::star::container::XNamed";"setName()"
