@@ -77,7 +77,7 @@ public:
     {
         return mShows.empty() ? nullptr : mShows[mnCurPos].get();
     }
-    void erase(SdCustomShow* p)
+    void erase(const SdCustomShow* p)
     {
         auto it = std::find_if(mShows.begin(), mShows.end(),
                 [&] (std::unique_ptr<SdCustomShow> const &i) { return i.get() == p; });

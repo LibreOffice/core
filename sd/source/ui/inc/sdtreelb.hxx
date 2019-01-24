@@ -189,7 +189,7 @@ public:
     virtual void            KeyInput( const KeyEvent& rKEvt ) override;
     void MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    void                    SetViewFrame( SfxViewFrame* pViewFrame );
+    void                    SetViewFrame( const SfxViewFrame* pViewFrame );
 
     void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
