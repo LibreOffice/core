@@ -401,7 +401,7 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
     bool bUsedInDoc :1;// Flag, if this NumRule is used in the Doc,
                                                      //   or is supposed to be deleted on Reader-End
 
-    WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST)
+    WW8LSTInfo(SwNumRule* pNumRule_, const WW8LST& aLST)
         : pNumRule(pNumRule_), nIdLst(aLST.nIdLst),
         bSimpleList(aLST.bSimpleList), bUsedInDoc(false)
     {

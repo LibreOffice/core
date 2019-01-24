@@ -1037,7 +1037,7 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
 
 static bool IsShown(sal_uLong const nIndex,
     const SwFormatAnchor & rAnch,
-    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
 {
     assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
@@ -1081,7 +1081,7 @@ static bool IsShown(sal_uLong const nIndex,
 }
 
 void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
-    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
 {
     std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
@@ -1107,7 +1107,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
 
 void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
-    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
 {
 #if OSL_DEBUG_LEVEL > 0

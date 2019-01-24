@@ -188,9 +188,9 @@ struct CR_SetLineHeight
     {}
 };
 
-static bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static bool lcl_SetSelLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
                          SwTwips nDist, bool bCheck );
-static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
                                 SwTwips nDist, bool bCheck );
 
 typedef bool (*FN_lcl_SetLineHeight)(SwTableLine*, CR_SetLineHeight&, SwTwips, bool );
@@ -2912,7 +2912,7 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
     }
 }
 
-static bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static bool lcl_SetSelLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
                              SwTwips nDist, bool bCheck )
 {
     bool bRet = true;
@@ -2934,7 +2934,7 @@ static bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
     return bRet;
 }
 
-static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
                                 SwTwips nDist, bool bCheck )
 {
     bool bRet = true;

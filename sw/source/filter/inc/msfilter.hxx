@@ -326,7 +326,7 @@ namespace sw
             const SwPosition &mrPos;
         public:
             explicit SetEndIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
-                void operator()(std::unique_ptr<SwFltStackEntry> & pEntry) const
+                void operator()(const std::unique_ptr<SwFltStackEntry> & pEntry) const
             {
                 if (pEntry->bOpen)
                     pEntry->SetEndPos(mrPos);

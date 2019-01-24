@@ -3010,7 +3010,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
     AdjustPositions();
 }
 
-void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall)
+void SwTokenWindow::RemoveControl(const SwTOXButton* pDel, bool bInternalCall)
 {
     if (bInternalCall && TOX_AUTHORITIES == m_pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());

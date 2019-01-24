@@ -169,7 +169,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-void SwWrtShell::StartInsertRegionDialog(SwSectionData& rSectionData)
+void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
 {
     SfxItemSet aSet(
         GetView().GetPool(),

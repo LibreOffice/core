@@ -41,9 +41,9 @@ class SwAccessibleHyperlink
     sal_Int32 const m_nStartIndex;
     sal_Int32 const m_nEndIndex;
 
-    SwAccessibleHyperlink(SwTextAttr &,
+    SwAccessibleHyperlink(const SwTextAttr &,
                           SwAccessibleParagraph &,
-                              sal_Int32 nStt, sal_Int32 nEnd    );
+                          sal_Int32 nStt, sal_Int32 nEnd    );
     virtual ~SwAccessibleHyperlink() override;
 
     const SwFormatINetFormat* GetTextAttr() const;
