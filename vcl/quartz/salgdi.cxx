@@ -506,7 +506,7 @@ void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
     mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont);
 }
 
-std::unique_ptr<SalLayout> AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> AquaSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     if (!mpTextStyle[nFallbackLevel])
         return nullptr;

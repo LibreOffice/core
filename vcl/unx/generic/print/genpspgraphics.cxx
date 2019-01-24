@@ -733,7 +733,7 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
         m_pFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-std::unique_ptr<SalLayout> GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLevel)
 {
     if (!m_pFreetypeFont[nFallbackLevel])
         return nullptr;
