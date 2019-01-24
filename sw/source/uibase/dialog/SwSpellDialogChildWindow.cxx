@@ -176,6 +176,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(pWrtShell)
     {
+        bool bNoDictionaryAvailable = pWrtShell->GetDoc()->IsDictionaryMissing();
+
         if (!bRecheck)
         {
             // first set continuation point for spell/grammar check to the
@@ -380,7 +382,7 @@ The code below would only be part of the solution.
             OSL_ENSURE(m_pSpellState->m_bDrawingsSpelled &&
                         m_pSpellState->m_bOtherSpelled && m_pSpellState->m_bBodySpelled,
                         "not all parts of the document are already spelled");
-            if(m_pSpellState->m_xStartRange.is())
+            if( m_pSpellState->m_xStartRange.is() && !bNoDictionaryAvailable )
             {
                 LockFocusNotification( true );
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetController()->getDialog(),
@@ -406,8 +408,7 @@ The code below would only be part of the solution.
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
-        bool bNoDictionaryAvailable = pWrtShell->GetDoc()->IsDictionaryMissing();
-        if( aRet.empty() && bCloseMessage )
+        if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
         {
             LockFocusNotification( true );
             OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
