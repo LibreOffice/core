@@ -9228,8 +9228,6 @@ oox/source/shape/ShapeFilterBase.cxx
 oox/source/shape/ShapeFilterBase.hxx
 oox/source/shape/WpgContext.cxx
 oox/source/shape/WpgContext.hxx
-oox/source/shape/WpsContext.cxx
-oox/source/shape/WpsContext.hxx
 oox/source/token/namespacemap.cxx
 oox/source/token/propertynames.cxx
 oox/source/token/relationship.cxx
