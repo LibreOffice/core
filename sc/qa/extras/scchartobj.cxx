@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
+#include <test/document/xembeddedobjectsupplier.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -33,7 +34,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScChartObj : public CalcUnoApiTest, public apitest::XNamed
+class ScChartObj : public CalcUnoApiTest,
+                   public apitest::XEmbeddedObjectSupplier,
+                   public apitest::XNamed
 {
 public:
     ScChartObj();
@@ -43,6 +46,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScChartObj);
+
+    // XEmbeddedObjectSupplier
+    CPPUNIT_TEST(testGetEmbeddedObject);
 
     // XNamed
     CPPUNIT_TEST(testGetName);
