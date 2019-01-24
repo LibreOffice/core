@@ -1162,7 +1162,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
                     sImageName = "sd/cmd/transition-none.png";
 
                 mpVS_TRANSITION_ICONS->InsertItem(
-                    nPresetOffset + 1, Image( sImageName ), sLabel,
+                    nPresetOffset + 1, Image(StockImage::Yes, sImageName), sLabel,
                     VALUESET_APPEND, /* show legend */ true );
 
                 m_aNumVariants[ pPreset->getSetId() ] = 1;

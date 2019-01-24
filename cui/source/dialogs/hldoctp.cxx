@@ -42,11 +42,11 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtFileopen, "fileopen");
-    m_pBtFileopen->SetModeImage(Image(RID_SVXBMP_FILEOPEN));
+    m_pBtFileopen->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_FILEOPEN));
     get(m_pEdTarget, "target");
     get(m_pFtFullURL, "url");
     get(m_pBtBrowse, "browse");
-    m_pBtBrowse->SetModeImage(Image(RID_SVXBMP_TARGET));
+    m_pBtBrowse->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_TARGET));
 
     // Disable display of bitmap names.
     m_pBtBrowse->EnableTextDisplay (false);
