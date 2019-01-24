@@ -32,7 +32,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		$(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(JAVADOC) -J-Xmx120m -use -splitindex \
+		$(JAVADOC) -source $(JAVA_SOURCE_VER) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
 		-header "$(PRODUCTNAME) $(PRODUCTVERSION) SDK Java API Reference"\
 		-tag attention:a:"Attention:" \
