@@ -792,16 +792,33 @@ static void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,   
         }
         else if ( nParameterCount >= nParametersNeeded )
         {
-            // check if the last command is identical,
-            // if so, we just need to increment the count
-            if ( !vSegments.empty() && ( vSegments[ vSegments.size() - 1 ].Command == nLatestSegmentCommand ) )
-                vSegments[ vSegments.size() -1 ].Count++;
-            else
+            // Special rule for moveto in ODF 1.2 section 19.145
+            // "If a moveto is followed by multiple pairs of coordinates, they are treated as lineto."
+            if ( nLatestSegmentCommand == css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO )
             {
                 css::drawing::EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = nLatestSegmentCommand;
+                aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                 aSegment.Count = 1;
                 vSegments.push_back( aSegment );
+                nIndex--;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                nParametersNeeded = 1;
+            }
+            else
+            {
+                // General rule in ODF 1.2. section 19.145
+                // "If a command is repeated multiple times, all repeated command characters
+                // except the first one may be omitted." Thus check if the last command is identical,
+                // if so, we just need to increment the count
+                if ( !vSegments.empty() && ( vSegments[ vSegments.size() - 1 ].Command == nLatestSegmentCommand ) )
+                    vSegments[ vSegments.size() -1 ].Count++;
+                else
+                {
+                    css::drawing::EnhancedCustomShapeSegment aSegment;
+                    aSegment.Command = nLatestSegmentCommand;
+                    aSegment.Count = 1;
+                    vSegments.push_back( aSegment );
+                }
             }
             nParameterCount = 0;
         }
