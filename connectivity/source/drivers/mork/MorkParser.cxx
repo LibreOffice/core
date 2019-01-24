@@ -100,13 +100,10 @@ bool MorkParser::parse()
     // Run over mork chars and parse each term
     char cur = nextChar();
 
-    int i = 0;
-
     while ( Result && cur )
     {
         if ( !isWhiteSpace( cur ) )
         {
-            i++;
             // Figure out what a term
             switch ( cur )
             {

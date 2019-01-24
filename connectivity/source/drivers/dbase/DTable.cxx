@@ -2332,11 +2332,10 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 {
     OUString sTempName = createTempFile();
 
-    ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
-    Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
+    rtl::Reference<ODbaseTable> xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
+    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
-        Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
+        Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_xColumns->getCount();++i)
@@ -2361,7 +2360,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     }
 
     // construct the new table
-    if(!pNewTable->CreateImpl())
+    if(!xNewTable->CreateImpl())
     {
         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_ADDABLE,
@@ -2370,16 +2369,16 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         ::dbtools::throwGenericSQLException( sError, *this );
     }
 
-    pNewTable->construct();
+    xNewTable->construct();
     // copy the data
-    copyData(pNewTable,pNewTable->m_xColumns->getCount());
+    copyData(xNewTable.get(),xNewTable->m_xColumns->getCount());
     // drop the old table
     if(DropImpl())
     {
-        pNewTable->renameImpl(m_Name);
+        xNewTable->renameImpl(m_Name);
         // release the temp file
     }
-    xHold.clear();
+    xNewTable.clear();
 
     FileClose();
     construct();
@@ -2391,11 +2390,10 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 {
     OUString sTempName = createTempFile();
 
-    ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
-    Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
+    rtl::Reference<ODbaseTable> xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
+    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
-        Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
+        Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_xColumns->getCount();++i)
@@ -2419,24 +2417,23 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     }
 
     // construct the new table
-    if(!pNewTable->CreateImpl())
+    if(!xNewTable->CreateImpl())
     {
-        xHold.clear();
         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_DROP,
                 "$position$", OUString::number(_nPos)
              ) );
         ::dbtools::throwGenericSQLException( sError, *this );
     }
-    pNewTable->construct();
+    xNewTable->construct();
     // copy the data
-    copyData(pNewTable,_nPos);
+    copyData(xNewTable.get(),_nPos);
     // drop the old table
     if(DropImpl())
-        pNewTable->renameImpl(m_Name);
+        xNewTable->renameImpl(m_Name);
         // release the temp file
 
-    xHold.clear();
+    xNewTable.clear();
 
     FileClose();
     construct();

@@ -1241,7 +1241,6 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
         const ScChangeAction* pFound = nullptr;
         const ScChangeAction* pFoundContent = nullptr;
         const ScChangeAction* pFoundMove = nullptr;
-        long nModified = 0;
         const ScChangeAction* pAction = pTrack->GetFirst();
         while (pAction)
         {
@@ -1271,7 +1270,6 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                             default:
                                 break;
                         }
-                        ++nModified;
                     }
                 }
                 if ( eType == SC_CAT_MOVE )
@@ -1282,7 +1280,6 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                     if ( aRange.In( aCellPos ) )
                     {
                         pFound = pAction;
-                        ++nModified;
                     }
                 }
             }

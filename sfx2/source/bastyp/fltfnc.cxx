@@ -909,7 +909,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
     SfxFilterFlags       nFlags          = SfxFilterFlags::NONE;
     SotClipboardFormatId nClipboardId    = SotClipboardFormatId::NONE;
-    sal_Int32       nDocumentIconId = 0 ;
     sal_Int32       nFormatVersion  = 0 ;
     OUString sMimeType           ;
     OUString sType               ;
@@ -988,10 +987,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                     if ( lTypeProperties[nTypeProperty].Name == "ClipboardFormat" )
                     {
                         lTypeProperties[nTypeProperty].Value >>= sHumanName;
-                    }
-                    else if ( lTypeProperties[nTypeProperty].Name == "DocumentIconID" )
-                    {
-                        lTypeProperties[nTypeProperty].Value >>= nDocumentIconId;
                     }
                     else if ( lTypeProperties[nTypeProperty].Name == "MediaType" )
                     {

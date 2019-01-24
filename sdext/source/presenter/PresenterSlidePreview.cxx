@@ -203,21 +203,6 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
     mxCurrentSlide = rxPage;
     mxPreview = nullptr;
 
-    Reference<beans::XPropertySet> xPropertySet (mxCurrentSlide, UNO_QUERY);
-    if (xPropertySet.is())
-    {
-        awt::Size aSlideSize;
-        try
-        {
-            xPropertySet->getPropertyValue("Width") >>= aSlideSize.Width;
-            xPropertySet->getPropertyValue("Height") >>= aSlideSize.Height;
-        }
-        catch (beans::UnknownPropertyException&)
-        {
-            OSL_ASSERT(false);
-        }
-    }
-
     // The preview is not transparent, therefore only this window, not its
     // parent, has to be invalidated.
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);

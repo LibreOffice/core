@@ -2509,15 +2509,13 @@ TaskManager::getv(
     {
         // Assume failure
         aIsRegular = false;
-        osl::FileBase::RC result = osl::FileBase::E_INVAL;
         osl::DirectoryItem aTargetItem;
         osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
         if ( aTargetItem.is() )
         {
             osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
 
-            if ( osl::FileBase::E_None ==
-                 ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
+            if ( osl::FileBase::E_None == aTargetItem.getFileStatus( aTargetStatus ) )
                 aIsRegular =
                     aTargetStatus.getFileType() == osl::FileStatus::Regular;
         }

@@ -218,8 +218,6 @@ namespace dlgprov
 
             Reference< XControlModel > xControlModel = xControl->getModel();
             Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
-            OUString sName;
-            xProps->getPropertyValue("Name") >>= sName;
             if ( xEventCont.is() )
             {
                 Sequence< OUString > aNames = xEventCont->getElementNames();

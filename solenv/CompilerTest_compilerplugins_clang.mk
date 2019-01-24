@@ -73,6 +73,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unusedvariablemore \
     compilerplugins/clang/test/useuniqueptr \
     compilerplugins/clang/test/vclwidgets \
+    compilerplugins/clang/test/writeonlyvars \
 ))
 
 $(eval $(call gb_CompilerTest_use_externals,compilerplugins_clang, \

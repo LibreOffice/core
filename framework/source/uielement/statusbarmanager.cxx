@@ -413,7 +413,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     {
         uno::Sequence< beans::PropertyValue >   aProp;
         OUString                                aCommandURL;
-        OUString                                aHelpURL;
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
         sal_Int16                               nWidth( 0 );
@@ -428,10 +427,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                     if ( aProp[i].Name == "CommandURL" )
                     {
                         aProp[i].Value >>= aCommandURL;
-                    }
-                    else if ( aProp[i].Name == "HelpURL" )
-                    {
-                        aProp[i].Value >>= aHelpURL;
                     }
                     else if ( aProp[i].Name == "Style" )
                     {

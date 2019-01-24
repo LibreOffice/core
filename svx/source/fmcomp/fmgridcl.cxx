@@ -226,7 +226,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
 
     // extract the descriptor
-    OUString sDatasource, sCommand, sFieldName,sDatabaseLocation,sConnnectionResource;
+    OUString sDatasource, sCommand, sFieldName,sDatabaseLocation;
     sal_Int32       nCommandType = CommandType::COMMAND;
     Reference< XPreparedStatement >     xStatement;
     Reference< XResultSet >             xResultSet;
@@ -236,7 +236,6 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     ODataAccessDescriptor aColumn = OColumnTransferable::extractColumnDescriptor(aDroppedData);
     if (aColumn.has(DataAccessDescriptorProperty::DataSource))  aColumn[DataAccessDescriptorProperty::DataSource]   >>= sDatasource;
     if (aColumn.has(DataAccessDescriptorProperty::DatabaseLocation))    aColumn[DataAccessDescriptorProperty::DatabaseLocation] >>= sDatabaseLocation;
-    if (aColumn.has(DataAccessDescriptorProperty::ConnectionResource))  aColumn[DataAccessDescriptorProperty::ConnectionResource] >>= sConnnectionResource;
     if (aColumn.has(DataAccessDescriptorProperty::Command))     aColumn[DataAccessDescriptorProperty::Command]      >>= sCommand;
     if (aColumn.has(DataAccessDescriptorProperty::CommandType)) aColumn[DataAccessDescriptorProperty::CommandType]  >>= nCommandType;
     if (aColumn.has(DataAccessDescriptorProperty::ColumnName))  aColumn[DataAccessDescriptorProperty::ColumnName]   >>= sFieldName;
@@ -675,20 +674,17 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
     if (pMenu && xCols.is() && nColId)
     {
-        Reference< css::beans::XPropertySet > xSet( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
-        sal_Int16 nClassId;
-        xSet->getPropertyValue(FM_PROP_CLASSID) >>= nClassId;
+        Reference< css::beans::XPropertySet > xPropSet( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
 
-        Reference< css::io::XPersistObject >  xServiceQuestion(xSet, UNO_QUERY);
+        Reference< css::io::XPersistObject >  xServiceQuestion(xPropSet, UNO_QUERY);
         sal_Int32 nColType = xServiceQuestion.is() ? getColumnTypeByModelName(xServiceQuestion->getServiceName()) : 0;
         if (nColType == TYPE_TEXTFIELD)
         {   // edit fields and formatted fields have the same service name, thus getColumnTypeByModelName returns TYPE_TEXTFIELD
             // in both cases. And as columns don't have an css::lang::XServiceInfo interface, we have to distinguish both
             // types via the existence of special properties
-            Reference< css::beans::XPropertySet >  xProps(xSet, UNO_QUERY);
-            if (xProps.is())
+            if (xPropSet.is())
             {
-                Reference< css::beans::XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
+                Reference< css::beans::XPropertySetInfo >  xPropsInfo = xPropSet->getPropertySetInfo();
                 if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(FM_PROP_FORMATSSUPPLIER))
                     nColType = TYPE_FORMATTEDFIELD;
             }

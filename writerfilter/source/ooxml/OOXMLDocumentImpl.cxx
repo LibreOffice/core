@@ -554,7 +554,6 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
         bool bFound = false;
-        sal_Int32 counter = 0;
         uno::Sequence<uno::Sequence< beans::StringPair>> aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomList;
         std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
@@ -586,7 +585,6 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 {
                     aCustomXmlDomList.push_back(customXmlTemp);
                     aCustomXmlDomPropsList.push_back(mxCustomXmlProsDom);
-                    counter++;
                     resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
                 }
 
@@ -628,7 +626,6 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector< uno::Sequence<uno::Any> > aGlossaryDomList;
-        sal_Int32 counter = 0;
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
               OOXMLStream::Pointer_t gStream;
@@ -704,7 +701,6 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       glossaryTuple[3] <<= gTarget;
                       glossaryTuple[4] <<= contentType;
                       aGlossaryDomList.push_back(glossaryTuple);
-                      counter++;
                   }
               }
         }
