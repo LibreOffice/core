@@ -375,6 +375,9 @@ struct _LibreOfficeKitDocumentClass
                                   int nY,
                                   int nOffset);
 
+    /// @see lok::Document::createViewWithOptions().
+    int (*createViewWithOptions) (LibreOfficeKitDocument* pThis, const char* pOptions);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

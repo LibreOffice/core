@@ -440,13 +440,17 @@ public:
     }
 
     /**
-     * Create a new view for an existing document.
+     * Create a new view for an existing document with
+     * options similar to documentLoadWithOptions.
      * By default a loaded document has 1 view.
      * @return the ID of the new view.
      */
-    int createView()
+    int createView(const char* pOptions = nullptr)
     {
-        return mpDoc->pClass->createView(mpDoc);
+        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, createViewWithOptions))
+            return mpDoc->pClass->createViewWithOptions(mpDoc, pOptions);
+        else
+            return mpDoc->pClass->createView(mpDoc);
     }
 
     /**
