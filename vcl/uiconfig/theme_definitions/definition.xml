@@ -78,4 +78,12 @@
         </part>
     </radiobutton>
 
+    <editbox>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+            </state>
+        </part>
+    </editbox>
+
 </widgets>

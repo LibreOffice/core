@@ -174,6 +174,11 @@ void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
     readDefinition(rWalker, maRadioButtonDefinitions);
 }
 
+void WidgetDefinitionReader::readEditbox(tools::XmlWalker& rWalker)
+{
+    readDefinition(rWalker, maEditboxDefinitions);
+}
+
 bool WidgetDefinitionReader::read()
 {
     if (!lcl_fileExists(m_rFilePath))
@@ -265,6 +270,10 @@ bool WidgetDefinitionReader::read()
         else if (aWalker.name() == "radiobutton")
         {
             readRadioButton(aWalker);
+        }
+        else if (aWalker.name() == "editbox")
+        {
+            readEditbox(aWalker);
         }
         aWalker.next();
     }
@@ -377,6 +386,15 @@ WidgetDefinitionReader::getRadioButtonDefinition(ControlPart ePart)
     return std::shared_ptr<WidgetDefinition>();
 }
 
+std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getEditboxDefinition(ControlPart ePart)
+{
+    auto aIterator = maEditboxDefinitions.find(xmlControlPart(ePart));
+
+    if (aIterator != maEditboxDefinitions.end())
+        return aIterator->second;
+    return std::shared_ptr<WidgetDefinition>();
+}
+
 std::vector<std::shared_ptr<WidgetDefinitionState>>
 WidgetDefinition::getStates(ControlState eState, ImplControlValue const& rValue)
 {
@@ -457,7 +475,7 @@ void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStro
 void WidgetDefinitionState::addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth,
                                           Color aFillColor, sal_Int32 nMargin)
 {
-    std::unique_ptr<DrawCommand> pCommand(std::make_unique<CircleDrawCommand>());
+    std::shared_ptr<DrawCommand> pCommand(std::make_shared<CircleDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;

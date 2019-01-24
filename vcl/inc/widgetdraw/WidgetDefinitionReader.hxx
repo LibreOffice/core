@@ -114,6 +114,8 @@ private:
 
     void readPushButton(tools::XmlWalker& rWalker);
     void readRadioButton(tools::XmlWalker& rWalker);
+    void readEditbox(tools::XmlWalker& rWalker);
+
     static void readDrawingDefinition(tools::XmlWalker& rWalker,
                                       std::shared_ptr<WidgetDefinitionState>& rStates);
 
@@ -171,9 +173,11 @@ public:
 
     std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maPushButtonDefinitions;
     std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maRadioButtonDefinitions;
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maEditboxDefinitions;
 
     std::shared_ptr<WidgetDefinition> getPushButtonDefinition(ControlPart ePart);
     std::shared_ptr<WidgetDefinition> getRadioButtonDefinition(ControlPart ePart);
+    std::shared_ptr<WidgetDefinition> getEditboxDefinition(ControlPart ePart);
 
     WidgetDefinitionReader(OUString const& rFilePath);
     bool read();
