@@ -684,6 +684,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis,
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
 static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
 static int doc_createView(LibreOfficeKitDocument* pThis);
+static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis, const char* pOptions);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
@@ -791,6 +792,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderShapeSelection = doc_renderShapeSelection;
         m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
+
+        m_pDocumentClass->createViewWithOptions = doc_createViewWithOptions;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1487,7 +1490,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // 'Language=...' is an option that LOK consumes by itself, and does
         // not pass it as a parameter to the filter
         OUString aOptions = getUString(pOptions);
-        OUString aLanguage = extractParameter(aOptions, "Language");
+        const OUString aLanguage = extractParameter(aOptions, "Language");
 
         if (!aLanguage.isEmpty())
         {
@@ -3512,12 +3515,27 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
     pDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
-static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
+static int doc_createViewWithOptions(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
+                                     const char* pOptions)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    OUString aOptions = getUString(pOptions);
+    const OUString aLanguage = extractParameter(aOptions, "Language");
+
+    if (!aLanguage.isEmpty())
+    {
+        // Set the LOK language tag, used for dialog tunneling.
+        comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
+    }
+
     return SfxLokHelper::createView();
+}
+
+static int doc_createView(LibreOfficeKitDocument* pThis)
+{
+    return doc_createViewWithOptions(pThis, nullptr); // No options.
 }
 
 static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
