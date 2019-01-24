@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_15705272",
+        "filename": "vcl/inc/win/scoped_gdi.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-24T07:13:59Z",
+      "side": 1,
+      "message": "I\u0027d replace the const member with template integral parameter:\n\n   template \u003c sal_uLong ID \u003e\n   class ScopedCachedHDC\n   {\n      ...\n        : m_hDC(ImplGetCachedDC(ID, hBitmap))\n      ...\n        ImplReleaseCachedDC(ID);\n   }",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 25
+      },
+      "revId": "9aa5a4ceee1ea4526ff007b201398dbcc06d75ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
