@@ -1059,34 +1059,52 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
     bool bModified = false;
 
+    bool bAdj = false;
     SvxAdjust eAdjust = SvxAdjust::Left;
 
-    if ( m_xLeft->get_active() )
+    if (m_xLeft->get_active())
+    {
         eAdjust = SvxAdjust::Left;
-    else if ( m_xRight->get_active() )
+        bAdj = m_xLeft->get_saved_state() == TRISTATE_FALSE;
+    }
+    else if (m_xRight->get_active())
+    {
         eAdjust = SvxAdjust::Right;
-    else if ( m_xCenter->get_active() )
+        bAdj = m_xRight->get_saved_state() == TRISTATE_FALSE;
+    }
+    else if (m_xCenter->get_active())
+    {
         eAdjust = SvxAdjust::Center;
-    else if ( m_xJustify->get_active() )
+        bAdj = m_xCenter->get_saved_state() == TRISTATE_FALSE;
+    }
+    else if (m_xJustify->get_active())
+    {
         eAdjust = SvxAdjust::Block;
+        bAdj = m_xJustify->get_saved_state() == TRISTATE_FALSE ||
+            m_xExpandCB->get_state_changed_from_saved() ||
+            m_xLastLineLB->get_value_changed_from_saved();
+    }
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
 
-    SvxAdjust eOneWord = m_xExpandCB->get_active() ? SvxAdjust::Block : SvxAdjust::Left;
+    if (bAdj)
+    {
+        SvxAdjust eOneWord = m_xExpandCB->get_active() ? SvxAdjust::Block : SvxAdjust::Left;
 
-    int nLBPos = m_xLastLineLB->get_active();
-    SvxAdjust eLastBlock = SvxAdjust::Left;
-    if ( 1 == nLBPos )
-        eLastBlock = SvxAdjust::Center;
-    else if ( 2 == nLBPos )
-        eLastBlock = SvxAdjust::Block;
+        int nLBPos = m_xLastLineLB->get_active();
+        SvxAdjust eLastBlock = SvxAdjust::Left;
+        if ( 1 == nLBPos )
+            eLastBlock = SvxAdjust::Center;
+        else if ( 2 == nLBPos )
+            eLastBlock = SvxAdjust::Block;
 
-    SvxAdjustItem aAdj( static_cast<const SvxAdjustItem&>(GetItemSet().Get( _nWhich )) );
-    aAdj.SetAdjust( eAdjust );
-    aAdj.SetOneWord( eOneWord );
-    aAdj.SetLastBlock( eLastBlock );
-    rOutSet->Put( aAdj );
-    bModified = true;
+        SvxAdjustItem aAdj( static_cast<const SvxAdjustItem&>(GetItemSet().Get( _nWhich )) );
+        aAdj.SetAdjust( eAdjust );
+        aAdj.SetOneWord( eOneWord );
+        aAdj.SetLastBlock( eLastBlock );
+        rOutSet->Put( aAdj );
+        bModified = true;
+    }
 
     if (m_xSnapToGridCB->get_state_changed_from_saved())
     {
