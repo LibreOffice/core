@@ -286,7 +286,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     return true;
 }
 
-std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> WinSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     if (!mpWinFontEntry[nFallbackLevel])
         return nullptr;

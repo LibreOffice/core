@@ -169,7 +169,7 @@ public:
     void SetOrientation(int nOrientation) { mnOrientation = nOrientation; }
 };
 
-std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> Qt5Graphics::GetTextLayout(int nFallbackLevel)
 {
     if (!m_pTextStyle[nFallbackLevel])
         return nullptr;

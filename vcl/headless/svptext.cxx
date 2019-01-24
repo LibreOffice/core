@@ -92,11 +92,11 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-std::unique_ptr<SalLayout> SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     if (utl::ConfigManager::IsFuzzing())
         return nullptr;
-    return m_aTextRenderImpl.GetTextLayout(rArgs, nFallbackLevel);
+    return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);
 }
 
 void SvpSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)

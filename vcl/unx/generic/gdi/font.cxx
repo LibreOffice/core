@@ -105,9 +105,9 @@ X11SalGraphics::GetFontMetric( ImplFontMetricDataRef &rxFontMetric, int nFallbac
     mxTextRenderImpl->GetFontMetric(rxFontMetric, nFallbackLevel);
 }
 
-std::unique_ptr<SalLayout> X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+std::unique_ptr<GenericSalLayout> X11SalGraphics::GetTextLayout(int nFallbackLevel)
 {
-    return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
+    return mxTextRenderImpl->GetTextLayout(nFallbackLevel);
 }
 
 #if ENABLE_CAIRO_CANVAS
