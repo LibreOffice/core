@@ -1232,14 +1232,17 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_pSerializer->endElementNS(XML_w, XML_smartTag);
     }
 
-    if ( m_nColBreakStatus == COLBRK_WRITE )
+    if ( m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_br,
                 FSNS( XML_w, XML_type ), "column", FSEND );
         m_pSerializer->endElementNS( XML_w, XML_r );
 
-        m_nColBreakStatus = COLBRK_NONE;
+        if ( m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE )
+            m_nColBreakStatus = COLBRK_POSTPONE;
+        else
+            m_nColBreakStatus = COLBRK_NONE;
     }
 
     if ( m_bPostponedPageBreak && !m_bWritingHeaderFooter )
@@ -6038,7 +6041,10 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
     {
         case msword::ColumnBreak:
             // The column break should be output in the next paragraph...
-            m_nColBreakStatus = COLBRK_POSTPONE;
+            if ( m_nColBreakStatus == COLBRK_WRITE )
+                m_nColBreakStatus = COLBRK_WRITEANDPOSTPONE;
+            else
+                m_nColBreakStatus = COLBRK_POSTPONE;
             break;
         case msword::PageBreak:
             if ( pSectionInfo )
