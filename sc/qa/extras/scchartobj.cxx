@@ -11,6 +11,7 @@
 #include <test/container/xnamed.hxx>
 #include <test/document/xembeddedobjectsupplier.hxx>
 #include <test/table/xtablechart.hxx>
+#include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -38,6 +39,7 @@ namespace sc_apitest
 class ScChartObj : public CalcUnoApiTest,
                    public apitest::XEmbeddedObjectSupplier,
                    public apitest::XNamed,
+                   public apitest::XServiceInfo,
                    public apitest::XTableChart
 {
 public:
@@ -56,6 +58,11 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetNameThrowsException);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XTableChart
     CPPUNIT_TEST(testGetSetHasColumnHeaders);
     CPPUNIT_TEST(testGetSetHasRowHeaders);
@@ -70,6 +77,7 @@ private:
 ScChartObj::ScChartObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("ScChartObj")
+    , XServiceInfo("ScChartObj", "com.sun.star.table.TableChart")
 {
 }
 
