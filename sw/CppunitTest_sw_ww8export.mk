@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export, \
     comphelper \
     cppu \
     cppuhelper \
-    $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
+    emboleobj \
     sal \
     test \
     unotest \

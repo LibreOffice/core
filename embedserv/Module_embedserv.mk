@@ -13,14 +13,9 @@ $(eval $(call gb_Module_Module,embedserv))
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,embedserv,\
-	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,Library_inprocserv) \
-))
-
-ifeq ($(DISABLE_ATL),)
-$(eval $(call gb_Module_add_targets,embedserv,\
 	Library_emser \
+	Library_inprocserv \
 ))
-endif
 
 endif
 
