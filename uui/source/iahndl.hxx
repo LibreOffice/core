@@ -237,8 +237,8 @@ private:
 
     void
     handleAuthFallbackRequest(
-            OUString & instructions,
-            OUString & url,
+            const OUString & instructions,
+            const OUString & url,
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
 };
 
