@@ -26,7 +26,6 @@
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/dispatcher.h>
-#include <typelib/typedescription.h>
 
 using namespace com::sun::star;
 

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/byteseq.h>
-#include <rtl/uuid.h>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 

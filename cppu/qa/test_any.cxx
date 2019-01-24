@@ -22,9 +22,7 @@
 #include <stdlib.h>
 #include <type_traits>
 
-#include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -46,13 +44,9 @@
 #include <Struct2b.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <osl/interlck.h>
-#include <rtl/string.h>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 namespace {

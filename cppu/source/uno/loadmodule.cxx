@@ -21,7 +21,7 @@
 #include <sal/config.h>
 
 #include <osl/module.h>
-#include <rtl/string.h>
+#include <osl/module.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 

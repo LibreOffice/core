@@ -20,11 +20,12 @@
 #define INCLUDED_CPPU_SOURCE_UNO_DESTR_HXX
 
 #include <sal/config.h>
+#include <osl/diagnose.h>
 
 #include <cassert>
+#include <cstdlib>
 
 #include "prim.hxx"
-
 
 namespace cppu
 {

@@ -25,16 +25,13 @@
 #include <vector>
 #include <memory>
 
-#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <new>
 #include <sal/log.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.h>

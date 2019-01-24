@@ -363,7 +363,6 @@
 #include <rtl/ustring.hxx>
 
 #include <cstddef>
-#include <iostream>
 
 namespace test { namespace codemaker { namespace cppumaker {
 

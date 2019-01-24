@@ -19,10 +19,13 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_EQ_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_EQ_HXX
 
-#include <math.h>
+#include <cmath>
+#include <string.h>
+
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
 
 #include "prim.hxx"
-#include "destr.hxx"
 
 
 namespace cppu
