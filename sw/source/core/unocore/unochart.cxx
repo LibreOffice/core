@@ -734,8 +734,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
                 // get length of data sequence
                 sal_Int32 nL = 0;
-                sal_Char c;
-                while (ii< iiEnd && 'x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
+                while (ii< iiEnd && 'x' == (bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
                 {
                     ++nL;   ++ii;
                 }
@@ -745,7 +744,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 // to be found because that is not supported
                 while (ii < iiEnd)
                 {
-                    if ('x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
+                    if ('x' == (bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
                         throw lang::IllegalArgumentException();
                     ++ii;
                 }

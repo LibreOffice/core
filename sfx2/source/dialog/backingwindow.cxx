@@ -205,18 +205,6 @@ void BackingWindow::initControls()
 
     // collect the URLs of the entries in the File/New menu
     SvtModuleOptions    aModuleOptions;
-    std::set< OUString > aFileNewAppsAvailable;
-    SvtDynamicMenuOptions aOpt;
-    Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
-    const OUString sURLKey( "URL"  );
-
-    for ( auto const & newMenuProp : aNewMenu )
-    {
-        comphelper::SequenceAsHashMap aEntryItems( newMenuProp );
-        OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, OUString() ) );
-        if ( !sURL.isEmpty() )
-            aFileNewAppsAvailable.insert( sURL );
-    }
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
         mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_WRITER;

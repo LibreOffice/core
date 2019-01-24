@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
         multimap<string, size_t> entries;
         multimap<string,size_t>::iterator ret(entries.begin());
 
-        int line(1);
         cin.getline(inputBuffer, MAXLINE);
         const string encoding(inputBuffer);
         size_t currentOffset(encoding.size()+1);
@@ -70,7 +69,6 @@ int main(int argc, char *argv[])
                 {
                         cin.getline(inputBuffer, MAXLINE);
                         currentOffset += strlen(inputBuffer)+1;
-                        ++line;
                 }
         }
 

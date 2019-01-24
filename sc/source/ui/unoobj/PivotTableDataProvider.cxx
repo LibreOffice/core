@@ -197,13 +197,8 @@ uno::Reference<chart2::data::XDataSource> SAL_CALL
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    bool bLabel = true;
-    bool bCategories = false;
     bool bOrientCol = true;
     OUString aRangeRepresentation;
-    OUString sPivotTable;
-    uno::Sequence<sal_Int32> aSequenceMapping;
-    bool bTimeBased = false;
 
     for (beans::PropertyValue const & rProperty : aArguments)
     {
@@ -218,18 +213,8 @@ uno::Reference<chart2::data::XDataSource> SAL_CALL
             }
             bOrientCol = (eSource == chart::ChartDataRowSource_COLUMNS);
         }
-        else if (rProperty.Name == "FirstCellAsLabel")
-            rProperty.Value >>= bLabel;
-        else if (rProperty.Name == "HasCategories")
-            rProperty.Value >>= bCategories;
         else if (rProperty.Name == "CellRangeRepresentation")
             rProperty.Value >>= aRangeRepresentation;
-        else if (rProperty.Name == "SequenceMapping")
-            rProperty.Value >>= aSequenceMapping;
-        else if (rProperty.Name == "TimeBased")
-            rProperty.Value >>= bTimeBased;
-        else if (rProperty.Name == "ConnectedPivotTable")
-            rProperty.Value >>= sPivotTable;
     }
 
     uno::Reference<chart2::data::XDataSource> xResult;

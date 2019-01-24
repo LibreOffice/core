@@ -2292,7 +2292,6 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         else
         {
             sal_Int32 nLineObjectCount(0);
-            sal_Int32 nAreaObjectCount(0);
 
             // correct some values and collect content data
             for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
@@ -2305,7 +2304,6 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                 }
                 else
                 {
-                    nAreaObjectCount++;
                     AdaptObjColor(
                         *pObj,
                         rCandidate.second,

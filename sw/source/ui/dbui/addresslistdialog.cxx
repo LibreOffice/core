@@ -103,17 +103,11 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
             xSourceProperties->getPropertyValue("Info") >>= aInfo;
             if(aFilters.getLength() == 1 && aInfo.getLength() )
             {
-                OUString sFieldDelim;
-                OUString sStringDelim;
                 OUString sExtension;
                 OUString sCharSet;
                 for(sal_Int32 nInfo = 0; nInfo < aInfo.getLength(); ++nInfo)
                 {
-                    if(aInfo[nInfo].Name == "FieldDelimiter")
-                        aInfo[nInfo].Value >>= sFieldDelim;
-                    else if(aInfo[nInfo].Name == "StringDelimiter")
-                        aInfo[nInfo].Value >>= sStringDelim;
-                    else if(aInfo[nInfo].Name == "Extension")
+                    if(aInfo[nInfo].Name == "Extension")
                         aInfo[nInfo].Value >>= sExtension;
                     else if(aInfo[nInfo].Name == "CharSet")
                         aInfo[nInfo].Value >>= sCharSet;

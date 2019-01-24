@@ -118,7 +118,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
     OUString idxDir;
     bool bExtension = false;
-    int iDir = 0;
     vector< vector<HitItem> > aIndexFolderResultVectorVector;
 
     bool bTemporary;
@@ -239,8 +238,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         {
             SAL_WARN("xmlhelp", e);
         }
-
-        ++iDir;
 
         if( bTemporary )
             aIndexFolderIt.deleteTempIndexFolder( idxDir );

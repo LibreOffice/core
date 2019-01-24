@@ -159,7 +159,6 @@ static ErrCode ReadThroughComponent(
 
         try
         {
-            bool bEncrypted = false;
             // open stream (and set parser input)
             OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
@@ -179,10 +178,6 @@ static ErrCode ReadThroughComponent(
 
             // get input stream
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-
-            uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            uno::Any aAny = xProps->getPropertyValue("Encrypted");
-            aAny >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
         {

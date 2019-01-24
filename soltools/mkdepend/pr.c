@@ -109,7 +109,6 @@ size_t pr(struct inclist *ip, char *file, char *base)
 {
     size_t ret;
     static char *lastfile;
-    static int  current_len;
     int    len, i;
     char    buf[ BUFSIZ ];
 
@@ -119,7 +118,7 @@ size_t pr(struct inclist *ip, char *file, char *base)
         lastfile = file;
         sprintf(buf, "\n%s%s%s: \\\n %s", objprefix, base, objsuffix,
             ip->i_file);
-        len = current_len = (int)strlen(buf);
+        len = (int)strlen(buf);
     }
     else {
         buf[0] = ' ';
@@ -127,7 +126,6 @@ size_t pr(struct inclist *ip, char *file, char *base)
         buf[2] = '\n';
         buf[3] = ' ';
         strcpy(buf+4, ip->i_file);
-        current_len += len;
     }
     ret = fwrite(buf, len, 1, stdout);
 

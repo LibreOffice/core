@@ -632,9 +632,6 @@ void PresenterToolBar::ProcessEntry (
     if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, "Type") >>= sType))
         return;
 
-    OUString sName;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "Name") >>= sName;
-
     // Read mode specific values.
     SharedElementMode pNormalMode (new ElementMode());
     SharedElementMode pMouseOverMode (new ElementMode());

@@ -127,8 +127,6 @@ char    *includedirs[ MAXDIRS + 1 ];
 char    *objprefix = "";
 char    *objsuffix = OBJSUFFIX;
 static char    *startat = "# DO NOT DELETE";
-static int width = 78;
-static boolean append = FALSE;
 boolean printed = FALSE;
 boolean verbose = FALSE;
 boolean show_where_not = FALSE;
@@ -274,16 +272,13 @@ int main(int argc, char    **argv)
         /* do not use if endmarker processing */
         case 'a':
             if (endmarker) break;
-            append = TRUE;
             break;
         case 'w':
             if (endmarker) break;
             if (argv[0][2] == '\0') {
                 argv++;
                 argc--;
-                width = atoi(argv[0]);
-            } else
-                width = atoi(argv[0]+2);
+            }
             break;
         case 'n':
             // Use "-n" switch to generate dependencies with windows-native slash style

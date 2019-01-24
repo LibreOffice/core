@@ -460,15 +460,6 @@ PresenterTextParagraph::PresenterTextParagraph (
     if (rxTextRange.is())
     {
         Reference<beans::XPropertySet> xProperties (rxTextRange, UNO_QUERY);
-        lang::Locale aLocale;
-        try
-        {
-            xProperties->getPropertyValue("CharLocale") >>= aLocale;
-        }
-        catch(beans::UnknownPropertyException&)
-        {
-            // Ignore the exception.  Use the default value.
-        }
         try
         {
             xProperties->getPropertyValue("WritingMode") >>= mnWritingMode;

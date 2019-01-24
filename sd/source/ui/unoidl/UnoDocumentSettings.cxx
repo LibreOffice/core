@@ -364,8 +364,6 @@ uno::Sequence<beans::PropertyValue>
                 else
                 {
                     // Such specific path construction is grim.
-                    OUString aValue;
-                    aRet[i].Value >>= aValue;
 
                     OUStringBuffer aName( getNameOfType( t ) );
                     OUString aResult;

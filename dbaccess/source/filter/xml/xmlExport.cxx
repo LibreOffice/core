@@ -398,8 +398,6 @@ void ODBExport::exportDataSource()
                 // special handlings
                 if ( pProperties->Name == PROPERTY_BOOLEANCOMPARISONMODE )
                 {
-                    sal_Int32 nValue = 0;
-                    aValue >>= nValue;
                     if ( sValue == "0" )
                         sValue = "equal-integer";
                     else if ( sValue == "1" )
