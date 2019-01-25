@@ -349,35 +349,29 @@ bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTim
 bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
 {
     const sal_Int32 nDateTokens {comphelper::string::getTokenCount(aDateStr, '-')};
-    bool bSuccess = true;
+
+    if (nDateTokens<1 || nDateTokens>3)
+        return false;
 
     sal_Int32 nYear    = 1899;
     sal_Int32 nMonth   = 12;
     sal_Int32 nDay     = 30;
 
-    if ( nDateTokens > 3 || aDateStr.isEmpty() )
-        bSuccess = false;
-    else
-    {
-        sal_Int32 n = 0;
-        if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
-            bSuccess = false;
-        if ( nDateTokens >= 2 )
-            if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
-                bSuccess = false;
-        if ( nDateTokens >= 3 )
-            if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
-                bSuccess = false;
-    }
+    sal_Int32 nIdx {0};
+    if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', nIdx ), 0, 9999 ) )
+        return false;
+    if ( nDateTokens >= 2 )
+        if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', nIdx ), 0, 12 ) )
+            return false;
+    if ( nDateTokens >= 3 )
+        if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', nIdx ), 0, 31 ) )
+            return false;
 
-    if (bSuccess)
-    {
-        rDate.Year = static_cast<sal_uInt16>(nYear);
-        rDate.Month = static_cast<sal_uInt16>(nMonth);
-        rDate.Day = static_cast<sal_uInt16>(nDay);
-    }
+    rDate.Year = static_cast<sal_uInt16>(nYear);
+    rDate.Month = static_cast<sal_uInt16>(nMonth);
+    rDate.Day = static_cast<sal_uInt16>(nDay);
 
-    return bSuccess;
+    return true;
 }
 
 /** convert ISO8601 Time String to util::Time */
