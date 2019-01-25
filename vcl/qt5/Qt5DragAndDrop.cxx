@@ -14,6 +14,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
+#include <QtCore/QMimeData>
+#include <QtCore/QUrl>
+
 #include <Qt5DragAndDrop.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Widget.hxx>
@@ -21,6 +24,65 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+
+Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
+    : m_pMimeData(pMimeData)
+{
+}
+
+css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+{
+    uno::Any aAny;
+    assert(m_pMimeData);
+
+    // FIXME: not sure if we should support more mimetypes here
+    // (how to carry out external DnD with anything else than [file] URL?)
+    if (m_pMimeData->hasUrls())
+    {
+        QList<QUrl> urlList = m_pMimeData->urls();
+
+        if (urlList.size() > 0)
+        {
+            //FIXME: multiple URLs, here we take only 1st one
+            QString url = urlList.at(0).path();
+            std::string aStr = url.toStdString();
+            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
+            aAny <<= aSeq;
+        }
+    }
+    return aAny;
+}
+
+std::vector<css::datatransfer::DataFlavor> Qt5DnDTransferable::getTransferDataFlavorsAsVector()
+{
+    std::vector<css::datatransfer::DataFlavor> aVector;
+    css::datatransfer::DataFlavor aFlavor;
+
+    if (m_pMimeData)
+    {
+        for (QString& rMimeType : m_pMimeData->formats())
+        {
+            // filter out non-MIME types such as TARGETS, MULTIPLE, TIMESTAMP
+            if (rMimeType.indexOf('/') == -1)
+                continue;
+
+            if (rMimeType.startsWith("text/plain"))
+            {
+                aFlavor.MimeType = "text/plain;charset=utf-16";
+                aFlavor.DataType = cppu::UnoType<OUString>::get();
+                aVector.push_back(aFlavor);
+            }
+            else
+            {
+                aFlavor.MimeType = toOUString(rMimeType);
+                aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+                aVector.push_back(aFlavor);
+            }
+        }
+    }
+
+    return aVector;
+}
 
 Qt5DragSource::~Qt5DragSource()
 {

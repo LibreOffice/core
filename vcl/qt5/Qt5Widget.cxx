@@ -204,14 +204,15 @@ void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 {
     if (event->mimeData()->hasFormat(m_InternalMimeType))
         event->accept();
-    // else FIXME: external drag source
+    else
+        event->acceptProposedAction();
 }
 
 void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
     QPoint point = event->pos();
 
-    m_pFrame->draggingStarted(point.x(), point.y());
+    m_pFrame->draggingStarted(point.x(), point.y(), event->mimeData());
     QWidget::dragMoveEvent(event);
 }
 
@@ -219,7 +220,7 @@ void Qt5Widget::dropEvent(QDropEvent* event)
 {
     QPoint point = event->pos();
 
-    m_pFrame->dropping(point.x(), point.y());
+    m_pFrame->dropping(point.x(), point.y(), event->mimeData());
     QWidget::dropEvent(event);
 }
 
