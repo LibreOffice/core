@@ -114,6 +114,9 @@ public:
     bool IsCreateObj() const { return pAktCreate!=nullptr; }
     SdrObject* GetCreateObj() const { return pAktCreate; }
 
+    /// Setup layer (eg. foreground / background) of the given object.
+    static void SetupObjLayer(const SdrPageView* pPageView, const OUString& aActiveLayer, SdrObject* pObj);
+
     // BegCreateCaptionObj() creates a SdrCaptionObj (legend item).
     // rObjSiz is the initial size of the legend text frame.
     // Only the length of the tip is dragged
