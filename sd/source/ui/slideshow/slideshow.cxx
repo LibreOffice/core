@@ -1111,6 +1111,7 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     VclPtr<WorkWindow> pWorkWindow = VclPtr<FullScreenWorkWindow>::Create(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
+    pWorkWindow->SetText(mpCurrentViewShellBase->GetDocShell()->GetTitle(SFX_TITLE_FILENAME));
     pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PresentationFlags::HideAllApps : PresentationFlags::NONE, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
