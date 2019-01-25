@@ -12,6 +12,7 @@
 #include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/tablevalidation.hxx>
 #include <test/sheet/xsheetcondition.hxx>
+#include <test/sheet/xmultiformulatokens.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -33,6 +34,7 @@ namespace sc_apitest
 {
 class ScTableValidationObj : public CalcUnoApiTest,
                              public apitest::TableValidation,
+                             public apitest::XMultiFormulaTokens,
                              public apitest::XPropertySet,
                              public apitest::XServiceInfo,
                              public apitest::XSheetCondition
@@ -48,6 +50,10 @@ public:
 
     // TableValidation
     CPPUNIT_TEST(testTableValidationProperties);
+
+    // XMultiFormulaTokens
+    CPPUNIT_TEST(testGetCount);
+    CPPUNIT_TEST(testGetSetTokens);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
