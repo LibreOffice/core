@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <thread>
 #include <boost/property_tree/json_parser.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -108,6 +109,7 @@ public:
     void testCalcSheetNames( Office* pOffice );
     void testPaintPartTile( Office* pOffice );
     void testDocumentLoadLanguage(Office* pOffice);
+    void testMultiKeyInput(Office *pOffice);
 #if 0
     void testOverlay( Office* pOffice );
 #endif
@@ -132,6 +134,7 @@ void TiledRenderingTest::runAllTests()
 
     testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
+    testMultiKeyInput(pOffice.get());
     testImpressSlideNames( pOffice.get() );
     testCalcSheetNames( pOffice.get() );
     testPaintPartTile( pOffice.get() );
@@ -393,6 +396,59 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
     }
 }
 #endif
+
+void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
+{
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
+
+    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+
+    // Create two views.
+    int nViewA = pDocument->getView();
+    pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jill\"}}");
+
+    pDocument->createView();
+    int nViewB = pDocument->getView();
+    pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jack\"}}");
+
+    // Enable change tracking
+    pDocument->postUnoCommand(".uno:TrackChanges");
+
+    // First a key-stroke from a
+    pDocument->setView(nViewA);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 97, 0); // a
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 512);   // 'a
+
+    // A space on 'a' - force commit
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, 0); // ' '
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1284);   // '' '
+
+    // Another 'a'
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 97, 0); // a
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 512);   // 'a
+
+    // FIXME: Wait for writer input handler to commit that.
+    // without this we fall foul of edtwin's KeyInputFlushTimer
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    // Quickly a new key-stroke from b
+    pDocument->setView(nViewB);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 98, 0); // b
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 514);   // 'b
+
+    // A space on 'b' - force commit
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, 0); // ' '
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1284);   // '' '
+
+    // Wait for writer input handler to commit that.
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    // get track changes ?
+    char *values = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
+    std::cerr << "Values: '" << values << "'\n";
+    CPPUNIT_ASSERT(0);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiledRenderingTest);
 
