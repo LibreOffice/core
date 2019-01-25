@@ -2082,6 +2082,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:Rect?FillTransparence:short=50&amp;FillColor:string=COL_GRAY7&amp;LineStyle:short=0&amp;IsSticky:bool=true" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rectangle</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Rectangle Redaction</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Rect_Rounded" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rectangle, Rounded</value>
@@ -4730,6 +4741,17 @@
       <node oor:name=".uno:Freeline_Unfilled" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Freeform Line</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Freeline_Unfilled?Transparence:short=50&amp;Color:string=COL_GRAY7&amp;Width:short=500&amp;IsSticky:bool=true" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Freeform</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Freeform Redaction</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
