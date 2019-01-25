@@ -10,36 +10,46 @@
 #ifndef INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
 #define INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <test/testdllapi.hxx>
 
+#include <set>
 #include <vector>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XPropertySet
 {
 public:
-    virtual ~XPropertySet();
+    XPropertySet() {}
 
+    XPropertySet(const std::set<OUString> rIgnoreValue)
+        : m_IgnoreValue(rIgnoreValue)
+    {
+    }
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetPropertySetInfo();
     void testSetPropertyValue();
     void testGetPropertyValue();
+    void testPropertyChangeListner();
+    void testVetoableChangeListner();
 
 protected:
+    ~XPropertySet(){};
     bool isPropertyValueChangeable(const OUString& rName);
 
     virtual bool isPropertyIgnored(const OUString& rName);
 
 private:
     void fillPropsToTest(const css::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);
-    static bool getSinglePropertyValue(
-        const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const OUString& rName);
+    static bool
+    getSinglePropertyValue(const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+                           const OUString& rName);
 
     struct OOO_DLLPUBLIC_TEST PropsToTest
     {
@@ -54,9 +64,10 @@ private:
     };
 
     PropsToTest maPropsToTest;
+    std::set<OUString> m_IgnoreValue;
 };
 
-}
+} // namespace apitest
 
 #endif
 

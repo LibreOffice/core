@@ -8,22 +8,121 @@
  */
 
 #include <test/beans/xpropertyset.hxx>
-#include <cppunit/extensions/HelperMacros.h>
 
-#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Type.h>
+
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
+
 #include <set>
+
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
+namespace apitest
+{
+XPropertySet::PropsToTest::PropsToTest()
+    : initialized(false)
+{
+}
 
-XPropertySet::~XPropertySet() {}
+class MockedPropertyChangeListener : public ::cppu::WeakImplHelper<beans::XPropertyChangeListener>
+{
+public:
+    MockedPropertyChangeListener()
+        : m_bListenerCalled(false)
+    {
+    }
 
-XPropertySet::PropsToTest::PropsToTest() : initialized(false) {}
+    bool m_bListenerCalled;
+
+    virtual void SAL_CALL propertyChange(const beans::PropertyChangeEvent& /* xEvent */) override
+    {
+        m_bListenerCalled = true;
+    }
+
+    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+};
+
+class MockedVetoableChangeListener : public ::cppu::WeakImplHelper<beans::XVetoableChangeListener>
+{
+public:
+    MockedVetoableChangeListener()
+        : m_bListenerCalled(false)
+    {
+    }
+
+    bool m_bListenerCalled;
+
+    virtual void SAL_CALL vetoableChange(const beans::PropertyChangeEvent& /* xEvent */) override
+    {
+        m_bListenerCalled = true;
+    }
+
+    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+};
+
+void XPropertySet::testPropertyChangeListner()
+{
+    uno::Reference<beans::XPropertySet> xPropSet(init(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
+    fillPropsToTest(xPropInfo);
+
+    for (const auto& aName : maPropsToTest.bound)
+    {
+        rtl::Reference<MockedPropertyChangeListener> xListener = new MockedPropertyChangeListener();
+        xPropSet->addPropertyChangeListener(
+            aName, uno::Reference<beans::XPropertyChangeListener>(xListener.get()));
+        if (!isPropertyValueChangeable(aName))
+            continue;
+
+        CPPUNIT_ASSERT(xListener->m_bListenerCalled);
+
+        xListener->m_bListenerCalled = false;
+        xPropSet->removePropertyChangeListener(
+            aName, uno::Reference<beans::XPropertyChangeListener>(xListener.get()));
+        isPropertyValueChangeable(aName);
+        CPPUNIT_ASSERT(!xListener->m_bListenerCalled);
+    }
+}
+
+void XPropertySet::testVetoableChangeListner()
+{
+    uno::Reference<beans::XPropertySet> xPropSet(init(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
+    fillPropsToTest(xPropInfo);
+
+    for (const auto& aName : maPropsToTest.bound)
+    {
+        rtl::Reference<MockedVetoableChangeListener> xListener = new MockedVetoableChangeListener();
+        xPropSet->addVetoableChangeListener(
+            aName, uno::Reference<beans::XVetoableChangeListener>(xListener.get()));
+        if (!isPropertyValueChangeable(aName))
+            continue;
+
+        CPPUNIT_ASSERT(xListener->m_bListenerCalled);
+
+        xListener->m_bListenerCalled = false;
+        xPropSet->removeVetoableChangeListener(
+            aName, uno::Reference<beans::XVetoableChangeListener>(xListener.get()));
+        isPropertyValueChangeable(aName);
+        CPPUNIT_ASSERT(!xListener->m_bListenerCalled);
+    }
+}
 
 void XPropertySet::testGetPropertySetInfo()
 {
@@ -147,7 +246,8 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
 
             std::cout << type.getTypeName() << std::endl;
             std::cout << rName << std::endl;
-            CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: unknown type in Any tested.", false);
+            CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: unknown type in Any tested.",
+                                   false);
         }
 
         uno::Any anyTest = xPropSet->getPropertyValue(rName);
@@ -155,7 +255,9 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     }
     catch (const uno::Exception&)
     {
-        CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: exception thrown while retrieving the property value.", false);
+        CPPUNIT_ASSERT_MESSAGE(
+            "XPropertySet::isChangeable: exception thrown while retrieving the property value.",
+            false);
     }
 
     return false;
@@ -191,7 +293,7 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
         if ((aProp.Attributes & beans::PropertyAttribute::MAYBEVOID) != 0)
             continue;
 
-        bool bBound       = (aProp.Attributes & beans::PropertyAttribute::BOUND) != 0;
+        bool bBound = (aProp.Attributes & beans::PropertyAttribute::BOUND) != 0;
         bool bConstrained = (aProp.Attributes & beans::PropertyAttribute::CONSTRAINED) != 0;
         bool bCanChange = isPropertyValueChangeable(aProp.Name);
 
@@ -208,8 +310,8 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
     maPropsToTest.initialized = true;
 }
 
-bool XPropertySet::getSinglePropertyValue(
-    const uno::Reference<beans::XPropertySet>& xPropSet, const OUString& rName)
+bool XPropertySet::getSinglePropertyValue(const uno::Reference<beans::XPropertySet>& xPropSet,
+                                          const OUString& rName)
 {
     try
     {
@@ -222,11 +324,11 @@ bool XPropertySet::getSinglePropertyValue(
     return false;
 }
 
-bool XPropertySet::isPropertyIgnored(const OUString& /*rName*/)
+bool XPropertySet::isPropertyIgnored(const OUString& rName)
 {
-    return false;
+    return m_IgnoreValue.count(rName) > 0;
 }
 
-}
+} // namespace apitest
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

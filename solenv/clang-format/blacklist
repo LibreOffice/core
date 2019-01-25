@@ -7569,7 +7569,6 @@ include/svx/zoomslideritem.hxx
 include/systools/win32/comtools.hxx
 include/systools/win32/qswin32.h
 include/systools/win32/uwinapi.h
-include/test/beans/xpropertyset.hxx
 include/test/bootstrapfixture.hxx
 include/test/calc_unoapi_test.hxx
 include/test/callgrind.hxx
@@ -16559,7 +16558,6 @@ sw/source/uibase/wrtsh/wrtsh2.cxx
 sw/source/uibase/wrtsh/wrtsh3.cxx
 sw/source/uibase/wrtsh/wrtsh4.cxx
 sw/source/uibase/wrtsh/wrtundo.cxx
-test/source/beans/xpropertyset.cxx
 test/source/bootstrapfixture.cxx
 test/source/calc_unoapi_test.cxx
 test/source/callgrind.cxx
