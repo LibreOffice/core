@@ -466,6 +466,7 @@ void DesktopLOKTest::testSearchCalc()
     // Result is on the first sheet.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -492,6 +493,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
     // But we do get the selection afterwards.
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -843,6 +845,7 @@ void DesktopLOKTest::testCommandResult()
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), aTree.get_child("commandName").get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(true, aTree.get_child("success").get_value<bool>());
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -886,6 +889,7 @@ void DesktopLOKTest::testWriterComments()
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -910,6 +914,7 @@ void DesktopLOKTest::testTrackChanges()
     // This was 1, only the active view was notified.
     CPPUNIT_ASSERT_EQUAL(2, m_nTrackChanges);
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -944,6 +949,7 @@ void DesktopLOKTest::testSheetOperations()
         CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
     }
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1057,6 +1063,7 @@ void DesktopLOKTest::testSheetSelections()
         free(pCopiedContent);
     }
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1239,6 +1246,7 @@ void DesktopLOKTest::testContextMenuCalc()
         CPPUNIT_ASSERT_EQUAL(aCheckedToCell.get().data(), std::string("false"));
     }
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1296,6 +1304,7 @@ void DesktopLOKTest::testContextMenuWriter()
         CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1424,6 +1433,7 @@ void DesktopLOKTest::testContextMenuImpress()
         CPPUNIT_ASSERT_EQUAL(aCheckedHelpFront.get().data(), std::string("true"));
     }
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1895,6 +1905,7 @@ void DesktopLOKTest::testPaintPartTile()
 
     mxComponent.clear();
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -1937,6 +1948,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     Scheduler::ProcessEventsToIdle();
     mxComponent.clear();
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -2215,6 +2227,7 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -2597,6 +2610,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 275"), m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL(OString("1898, 1418, 0, 275"), m_aTextSelectionEnd);
 
+    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
