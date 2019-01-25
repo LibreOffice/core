@@ -21,7 +21,7 @@ import xml.dom.minidom as minidom
 import traceback
 import subprocess
 from sys import platform
-
+import collections
 
 class GbuildLinkTarget:
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
@@ -78,6 +78,14 @@ class GbuildExe(GbuildLinkTarget):
 
 
 class GbuildParser:
+    """Main data model object.
+
+    Attributes:
+        target_by_path     : dict[path:string, set(target)]
+                               where target is one of the GbuildLinkTarget subclasses
+        target_by_location : dict[path:string, set(target)]
+                               where target is one of the GbuildLinkTarget subclasses
+    """
     def __init__(self, makecmd):
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
@@ -324,6 +332,179 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
         self.create_include_paths()
         self.create_macros()
         self.create_settings_file() 
+
+class CodeliteIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        self.create_workspace_file()
+        for module in self.gbuildparser.modulenamelist:
+            self.create_project_file(module)
+        #self.create_project_file('vcl')
+
+    def create_workspace_file(self):
+        root_node = ET.Element('CodeLite_Workspace', Name='libo2', Database='./libo2.tags', Version='10.0.0')
+        for module in self.gbuildparser.modulenamelist:
+            ET.SubElement(root_node, 'Project', Name=module, Path='%s/%s.project' % (module, module), Active='No')
+        build_matrix_node = ET.SubElement(root_node, 'BuildMatrix')
+        workspace_config_node = ET.SubElement(build_matrix_node, 'WorkspaceConfiguration', Name='Debug', Selected='yes')
+        ET.SubElement(workspace_config_node, 'Environment')
+        for module in self.gbuildparser.modulenamelist:
+            ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Debug')
+        workspace_config_node = ET.SubElement(build_matrix_node, 'WorkspaceConfiguration', Name='Release', Selected='yes')
+        ET.SubElement(workspace_config_node, 'Environment')
+        for module in self.gbuildparser.modulenamelist:
+            ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Release')
+
+        self.write_pretty_xml(root_node, os.path.join(self.gbuildparser.builddir, 'libo2.workspace'))
+
+    def create_project_file(self, module_name):
+        root_node = ET.Element('CodeLite_Project', Name=module_name, InternalType='')
+        ET.SubElement(root_node, 'Plugins')
+
+        # add CXX files
+        virtual_dirs = collections.defaultdict(set)
+        for target_path in self.gbuildparser.target_by_path.keys():
+            if target_path.startswith(module_name+'/'):
+                for target in self.gbuildparser.target_by_path[target_path]:
+                    for file in target.cxxobjects:
+                        relative_file = '/'.join(file.split('/')[1:])
+                        path = '/'.join(file.split('/')[1:-1])
+                        virtual_dirs[path].add(relative_file + '.cxx')
+        # add HXX files
+        all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
+        for lib in all_libs:
+            if lib.name == module_name:
+                for hdir in lib.include:
+                    # only want the module-internal ones
+                    if hdir.startswith(module_name+'/'):
+                        for hf in os.listdir(hdir):
+                            if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
+                                path = '/'.join(hf.split('/')[1:-1])
+                                virtual_dirs[path].add(hf)
+        # add HXX files from the root/include/** folders
+        module_include = os.path.join(self.gbuildparser.builddir, 'include', module_name)
+        if os.path.exists(module_include):
+            for hf in os.listdir(module_include):
+                if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
+                    path = '../include/' + ('/'.join(hf.split('/')[1:-1]))
+                    virtual_dirs['include/' + module_name].add('../include/' + module_name + '/' + hf)
+
+        for vd_name in sorted(virtual_dirs.keys()):
+            vd_files = sorted(virtual_dirs[vd_name])
+            parent_node = root_node
+            for subname in vd_name.split('/'):
+                parent_node = ET.SubElement(parent_node, 'VirtualDirectory', Name=subname)
+            for file in vd_files:
+                ET.SubElement(parent_node, 'File', Name=file)
+
+        ET.SubElement(root_node, 'Description')
+        ET.SubElement(root_node, 'Dependencies')
+        ET.SubElement(root_node, 'Dependencies', Name='Debug')
+        ET.SubElement(root_node, 'Dependencies', Name='Release')
+
+        settingstemplate = """\
+  <Settings Type="Dynamic Library">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="" Assembler="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="clang( based on LLVM 3.5.0 )" DebuggerType="GNU gdb debugger" Type="Dynamic Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g" C_Options="-g" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand/>
+        <CleanCommand>make %s.clean</CleanCommand>
+        <BuildCommand>make %s.build</BuildCommand>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory>$(WorkspacePath)</WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="clang( based on LLVM 3.5.0 )" DebuggerType="GNU gdb debugger" Type="Dynamic Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="" C_Options="" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-O2" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand/>
+        <CleanCommand>make %s.clean</CleanCommand>
+        <BuildCommand>make %s.build</BuildCommand>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory>$(WorkspacePath)</WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+"""
+        root_node.append(ET.fromstring(settingstemplate % (module_name, module_name, module_name, module_name)))
+
+        self.write_pretty_xml(root_node, os.path.join(self.gbuildparser.builddir, module_name, '%s.project' % module_name))
+
+    def write_pretty_xml(self, node, file_path):
+        xml_str = ET.tostring(node, encoding='unicode')
+        pretty_str = minidom.parseString(xml_str).toprettyxml(encoding='utf-8')
+        with open(file_path, 'w') as f:
+            f.write(pretty_str.decode())
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -1648,6 +1829,7 @@ if __name__ == '__main__':
 
     paths = {}
     generators = {
+        'codelite': CodeliteIntegrationGenerator,
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
