@@ -1998,12 +1998,14 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             Graphic aGraphic;
+            OUString sGrfName;
             size_t i = 0;
             for (auto & grfName : aGrfNames)
             {
-                INetURLObject aObj(grfName);
+                sGrfName = grfName;
+                INetURLObject aObj(sGrfName);
                 if(aObj.GetProtocol() == INetProtocol::File)
-                    grfName = aObj.PathToFileName();
+                    sGrfName = aObj.PathToFileName();
 
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
@@ -2020,13 +2022,13 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
                     }
                     Image aImage(aBitmap);
 
-                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, grfName, aImage );
+                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, sGrfName, aImage );
                 }
                 else
                 {
                     Image aImage;
                     pPopup->InsertItem(
-                        MN_GALLERY_ENTRY + i, grfName, aImage );
+                        MN_GALLERY_ENTRY + i, sGrfName, aImage );
                 }
                 ++i;
             }
