@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_fbd92522",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2438,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-01-25T11:21:03Z",
+      "side": 1,
+      "message": "Would be good to update the doxygen comment with @bSkipRunning \u003d)",
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_dbd669f2",
+        "filename": "sc/qa/unit/parallelism.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-01-25T11:21:03Z",
+      "side": 1,
+      "message": "Perhaps a comment of the form: // We expect A-\u003eZ to be re-calculated to 2 - and the others to stay as \u00271\u0027 - or whatever ;-) to give some comfort to the person trying to fix the failing code in future.\n\nBut great to have unit tests for this ! I assume (from a quick scan) that these test the recursive propagation of span calculation ? \u003d)",
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9b0a3188",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2971,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-01-25T11:21:03Z",
+      "side": 1,
+      "message": "Nice to optimize that \u003d)",
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_3bf9fd7f",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-01-25T11:21:03Z",
+      "side": 1,
+      "message": "Is the first part of this std::min - right ? the offset looks to be inside the formula-group / span - which has a maximum length of nRowsToRead items so adding something to that looks unexpected.",
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
