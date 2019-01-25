@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/sheet/globalsheetsettings.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -23,7 +24,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScSpreadsheetSettings : public CalcUnoApiTest, public apitest::GlobalSheetSettings
+class ScSpreadsheetSettings : public CalcUnoApiTest,
+                              public apitest::GlobalSheetSettings,
+                              public apitest::XPropertySet
 {
 public:
     ScSpreadsheetSettings();
@@ -37,6 +40,13 @@ public:
     // GlobalSheetSettings
     CPPUNIT_TEST(testGlobalSheetSettingsProperties);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -45,6 +55,7 @@ private:
 
 ScSpreadsheetSettings::ScSpreadsheetSettings()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XPropertySet({ "LinkUpdateMode", "UsePrinterMetrics", "UserLists" })
 {
 }
 
@@ -70,7 +81,7 @@ void ScSpreadsheetSettings::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSpreadsheetSettings);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
