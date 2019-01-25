@@ -883,7 +883,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     slen = strlen( "/usr/local/bin" ) + 1;
     if ( opath != NULL )
         slen += strlen( ":" ) + strlen( opath );
-    npath = calloc( slen );
+    npath = malloc( slen );
+    *npath = '\0';
     if ( opath != NULL ) {
         strcat( npath, opath );
         strcat( npath, ":" );
