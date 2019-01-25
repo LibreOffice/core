@@ -232,17 +232,11 @@ SAL_IMPLEMENT_MAIN()
         }
         if ( readOption( &sOption, "p", &nPos, arg) ) {
             OString sTmp(OUStringToOString(sOption, RTL_TEXTENCODING_UTF8));
-            sal_Int32 nIndex= sTmp.indexOf(':');
-            OString sPrt = sTmp.copy(0, nIndex+1);
-            OString sCmds = sTmp.copy(nIndex+1);
-
-            nIndex = 0;
+            sal_Int32 nIndex{ sTmp.indexOf(':')+1 };
+            const OString sPrt = sTmp.copy(0, nIndex);
             std::vector< OString > vCmds;
-            do {
-                OString sCmd = sCmds.getToken( 0, ',', nIndex );
-                vCmds.push_back(sCmd);
-            } while ( nIndex >= 0 );
-
+            while (nIndex>=0)
+                vCmds.push_back(sTmp.getToken( 0, ',', nIndex ));
             options.protocolCmdMap.emplace(sPrt, vCmds);
             continue;
         }
