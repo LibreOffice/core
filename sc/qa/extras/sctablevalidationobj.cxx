@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/sheet/tablevalidation.hxx>
 #include <test/sheet/xsheetcondition.hxx>
 
@@ -18,10 +19,10 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -31,6 +32,7 @@ namespace sc_apitest
 {
 class ScTableValidationObj : public CalcUnoApiTest,
                              public apitest::TableValidation,
+                             public apitest::XPropertySet,
                              public apitest::XSheetCondition
 {
 public:
@@ -44,6 +46,13 @@ public:
 
     // TableValidation
     CPPUNIT_TEST(testTableValidationProperties);
+
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListner);
+    CPPUNIT_TEST(testVetoableChangeListner);
 
     // XSheetCondition
     CPPUNIT_TEST(testGetSetFormula1);
@@ -59,6 +68,7 @@ private:
 
 ScTableValidationObj::ScTableValidationObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XPropertySet({ "Type", "ErrorAlertStyle" })
 {
 }
 
@@ -95,7 +105,7 @@ void ScTableValidationObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableValidationObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

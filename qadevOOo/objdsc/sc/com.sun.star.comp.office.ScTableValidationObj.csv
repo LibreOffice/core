@@ -1,7 +1,0 @@
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
-"ScTableValidationObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"

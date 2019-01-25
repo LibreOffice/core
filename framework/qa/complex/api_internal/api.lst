@@ -91,7 +91,6 @@ job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj
 job135=sc.ScTableColumnsObj
 job138=sc.ScTableRowObj
-job139=sc.ScTableValidationObj
 job140=sc.XMLContentExporter
 job141=sc.XMLContentImporter
 job142=sc.XMLImporter
