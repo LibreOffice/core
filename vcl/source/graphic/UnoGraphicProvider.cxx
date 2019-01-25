@@ -151,11 +151,10 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
-    sal_Int32                               nIndex = 0;
 
-    if( rResourceURL.getToken( 0, '/', nIndex ) == "private:graphicrepository" )
+    OUString sPathName;
+    if( rResourceURL.startsWith("private:graphicrepository/", &sPathName) )
     {
-        OUString sPathName( rResourceURL.copy( nIndex ) );
         BitmapEx aBitmap;
         if ( vcl::ImageRepository::loadImage( sPathName, aBitmap ) )
         {
@@ -169,11 +168,10 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
-    sal_Int32                               nIndex = 0;
 
-    if( rResourceURL.getToken( 0, '/', nIndex ) == "private:standardimage" )
+    OUString sImageName;
+    if( rResourceURL.startsWith("private:standardimage/", &sImageName) )
     {
-        OUString sImageName( rResourceURL.copy( nIndex ) );
         if ( sImageName == "info" )
         {
             xRet = Graphic(GetStandardInfoBoxImage().GetBitmapEx()).GetXGraphic();
