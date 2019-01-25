@@ -305,6 +305,8 @@ private:
 
 public:
     virtual int run() = 0;
+    // Run async without a controller
+    virtual bool runAsync(const std::function<void(sal_Int32)>& func) = 0;
     virtual void response(int response) = 0;
     virtual void add_button(const OUString& rText, int response, const OString& rHelpId = OString())
         = 0;
