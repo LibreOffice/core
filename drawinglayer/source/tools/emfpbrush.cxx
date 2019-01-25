@@ -105,7 +105,7 @@ namespace emfplushelper
             case BrushTypePathGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\tpath gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\tpath gradient, wrapMode: " << wrapMode << " additional flags: 0x" << std::hex << additionalFlags << std::dec);
                 sal_uInt32 color;
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
@@ -241,7 +241,7 @@ namespace emfplushelper
             case BrushTypeLinearGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\tlinear gradient, wrapMode: " << wrapMode << " additional flags: 0x" << std::hex << additionalFlags << std::dec);
                 s.ReadFloat(areaX).ReadFloat(areaY).ReadFloat(areaWidth).ReadFloat(areaHeight);
                 SAL_INFO("drawinglayer", "EMF+\tarea: " << areaX << "," << areaY << " - " << areaWidth << "x" << areaHeight);
                 sal_uInt32 color;
@@ -256,14 +256,14 @@ namespace emfplushelper
                 s.ReadUInt32(color);
                 s.ReadUInt32(color);
 
-                if (additionalFlags & 0x02)
+                if (additionalFlags & 0x02) // BrushDataTransform
                 {
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
                     SAL_INFO("drawinglayer", "EMF+\tuse brush transformation: " << brush_transformation);
                 }
 
-                if (additionalFlags & 0x08)
+                if (additionalFlags & 0x08) // BrushDataBlendFactorsH
                 {
                     s.ReadInt32(blendPoints);
                     SAL_INFO("drawinglayer", "EMF+\tuse blend, points: " << blendPoints);
@@ -285,7 +285,7 @@ namespace emfplushelper
                     }
                 }
 
-                if (additionalFlags & 0x04)
+                if (additionalFlags & 0x04) // BrushDataPresetColors
                 {
                     s.ReadInt32(colorblendPoints);
                     SAL_INFO("drawinglayer", "EMF+\tuse color blend, points: " << colorblendPoints);
