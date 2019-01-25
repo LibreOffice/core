@@ -791,7 +791,19 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
             RedlinData *pData = static_cast<RedlinData *>(pEntry->GetUserData());
 
-            if( !pData->bDisabled )
+            bool bIsNotFormatted = true;
+
+            // don't accept format-only changes secretly for Reject all
+            if ( !bSelect && !bAccept )
+            {
+                SwRedlineTable::size_type nPosition = GetRedlinePos( *pEntry );
+                const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
+
+                if( nsRedlineType_t::REDLINE_FORMAT == rRedln.GetType() )
+                    bIsNotFormatted = false;
+            }
+
+            if( !pData->bDisabled && bIsNotFormatted )
                 aRedlines.push_back( pEntry );
         }
 
