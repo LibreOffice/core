@@ -107,10 +107,17 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                                         rRectDrawCommand.mnRx, rRectDrawCommand.mnRy);
 
                 basegfx::B2DPolygon aB2DPolygon(aPolygon.getB2DPolygon());
-                rGraphics.SetLineColor(rRectDrawCommand.maStrokeColor);
+                rGraphics.SetLineColor();
                 rGraphics.SetFillColor(rRectDrawCommand.maFillColor);
                 rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
                                           basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                rGraphics.SetLineColor(rRectDrawCommand.maStrokeColor);
+                rGraphics.SetFillColor();
+                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                                       basegfx::B2DVector(rRectDrawCommand.mnStrokeWidth,
+                                                          rRectDrawCommand.mnStrokeWidth),
+                                       basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
+                                       0.0f, false, nullptr);
             }
             break;
             case DrawCommandType::CIRCLE:
