@@ -570,7 +570,7 @@ bool Impl_calcClipRange( double&        t1,
         // determine clip positions on c2. Can use original c1 (which
         // is necessary anyway, to get the t's on the original curve),
         // since the distance calculations work directly in the
-        // Bernstein polynom parameter domain.
+        // Bernstein polynomial parameter domain.
         if( Impl_calcSafeParams_clip( t1, t2, bounds_c2,
                                       calcLineDistance( bounds_c2.a,
                                                         bounds_c2.b,
