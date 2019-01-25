@@ -883,7 +883,15 @@ public:
     virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override
     {
         VclAbstractDialog::AsyncContext aCtx;
-        aCtx.mxOwnerDialog = aOwner;
+        aCtx.mxOwnerDialogController = aOwner;
+        aCtx.maEndDialogFn = rEndDialogFn;
+        return m_xDialog->StartExecuteAsync(aCtx);
+    }
+
+    virtual bool runAsync(const std::function<void(sal_Int32)> &rEndDialogFn) override
+    {
+        VclAbstractDialog::AsyncContext aCtx;
+        aCtx.mxOwnerSelf.reset(this);
         aCtx.maEndDialogFn = rEndDialogFn;
         return m_xDialog->StartExecuteAsync(aCtx);
     }

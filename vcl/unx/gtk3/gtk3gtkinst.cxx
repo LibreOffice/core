@@ -2367,6 +2367,8 @@ private:
     GtkDialog* m_pDialog;
     DialogRunner m_aDialogRun;
     std::shared_ptr<weld::DialogController> m_xDialogController;
+    // Used to keep ourself alive during a runAsync(when doing runAsync without a DialogController)
+    std::shared_ptr<GtkInstanceDialog> m_xRunAsyncSelf;
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
@@ -2414,6 +2416,7 @@ private:
         m_aFunc(GtkToVcl(ret));
         m_aFunc = nullptr;
         m_xDialogController.reset();
+        m_xRunAsyncSelf.reset();
     }
 
 public:
@@ -2431,6 +2434,20 @@ public:
         assert(!m_nResponseSignalId);
 
         m_xDialogController = rDialogController;
+        m_aFunc = func;
+
+        show();
+
+        m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+
+        return true;
+    }
+
+    virtual bool runAsync(const std::function<void(sal_Int32)>& func) override
+    {
+        assert(!m_nResponseSignalId);
+
+        m_xRunAsyncSelf.reset(this);
         m_aFunc = func;
 
         show();
