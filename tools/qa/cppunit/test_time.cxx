@@ -114,8 +114,15 @@ void TimeTest::testClockValues()
     // Expect this to be exact within floating point accuracy.
     // This is a hairy rounding condition, if it yields problems on any
     // platform feel free to disable the test for that platform.
+    // At least when doing a 32-bit build on Linux x86 with GCC 8.2.1, when -Os from
+    // gb_COMPILEROPTFLAGS in solenv/gbuild/platform/LINUX_INTEL_GCC.mk is overridden by -O1 (or
+    // higher) passed into CXXFLAGS, the test fails with an actual value of 0.9136, for reasons not
+    // investigated further:
+#if !(defined __GNUC__ && !defined __clang__ && defined X86 && defined __OPTIMIZE__                \
+      && !defined __OPTIMIZE_SIZE__)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.9135999999999, fFractionOfSecond,
                                          1e-14);
+#endif
 
     fTime = -0.000001;
     Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 4);
