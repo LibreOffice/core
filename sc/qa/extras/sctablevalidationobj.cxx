@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/tablevalidation.hxx>
 #include <test/sheet/xsheetcondition.hxx>
 
@@ -33,6 +34,7 @@ namespace sc_apitest
 class ScTableValidationObj : public CalcUnoApiTest,
                              public apitest::TableValidation,
                              public apitest::XPropertySet,
+                             public apitest::XServiceInfo,
                              public apitest::XSheetCondition
 {
 public:
@@ -54,6 +56,11 @@ public:
     CPPUNIT_TEST(testPropertyChangeListner);
     CPPUNIT_TEST(testVetoableChangeListner);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XSheetCondition
     CPPUNIT_TEST(testGetSetFormula1);
     CPPUNIT_TEST(testGetSetFormula2);
@@ -69,6 +76,7 @@ private:
 ScTableValidationObj::ScTableValidationObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XPropertySet({ "Type", "ErrorAlertStyle" })
+    , XServiceInfo("ScTableValidationObj", "com.sun.star.sheet.TableValidation")
 {
 }
 
