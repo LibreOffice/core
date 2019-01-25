@@ -786,6 +786,7 @@ namespace emfplushelper
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 
             {
+                // BrushDataPath
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {
                     SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
@@ -828,7 +829,8 @@ namespace emfplushelper
                         aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i] );
                         aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i] );
                         aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i] );
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        //brush->solidColor.GetTransparency() * (1. - brush->blendFactors[i]) + brush->secondColorr.GetTransparency() * brush->blendFactors[i];
+                        aVector.emplace_back(aBlendPoint, aColor, 1.);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -850,7 +852,7 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        aVector.emplace_back(aBlendPoint, aColor, (255 - brush->colorblendColors[i].GetTransparency()) / 255.0);
                     }
                 }
                 else // ok, no extra points: just start and end
@@ -891,7 +893,9 @@ namespace emfplushelper
                             aStartPoint,
                             aEndPoint,
                             false,                  // do not use UnitCoordinates
-                            drawinglayer::primitive2d::SpreadMethod::Pad));
+                            drawinglayer::primitive2d::SpreadMethod::Repeat
+                            //drawinglayer::primitive2d::SpreadMethod::Pad
+                                    ));
                 }
                 else // BrushTypePathGradient
                 {
