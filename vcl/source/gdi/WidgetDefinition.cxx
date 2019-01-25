@@ -16,114 +16,12 @@
 
 namespace vcl
 {
-namespace
+std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getDefinition(ControlType eType,
+                                                                      ControlPart ePart)
 {
-OString xmlControlPart(ControlPart ePart)
-{
-    switch (ePart)
-    {
-        case ControlPart::NONE:
-            return "NONE";
-        case ControlPart::Entire:
-            return "Entire";
-        case ControlPart::ListboxWindow:
-            return "ListboxWindow";
-        case ControlPart::Button:
-            return "NONE";
-        case ControlPart::ButtonUp:
-            return "NONE";
-        case ControlPart::ButtonDown:
-            return "NONE";
-        case ControlPart::ButtonLeft:
-            return "NONE";
-        case ControlPart::ButtonRight:
-            return "NONE";
-        case ControlPart::AllButtons:
-            return "NONE";
-        case ControlPart::SeparatorHorz:
-            return "NONE";
-        case ControlPart::SeparatorVert:
-            return "NONE";
-        case ControlPart::TrackHorzLeft:
-            return "NONE";
-        case ControlPart::TrackVertUpper:
-            return "NONE";
-        case ControlPart::TrackHorzRight:
-            return "NONE";
-        case ControlPart::TrackVertLower:
-            return "NONE";
-        case ControlPart::TrackHorzArea:
-            return "NONE";
-        case ControlPart::TrackVertArea:
-            return "NONE";
-        case ControlPart::Arrow:
-            return "NONE";
-        case ControlPart::ThumbHorz:
-            return "NONE";
-        case ControlPart::ThumbVert:
-            return "NONE";
-        case ControlPart::MenuItem:
-            return "NONE";
-        case ControlPart::MenuItemCheckMark:
-            return "NONE";
-        case ControlPart::MenuItemRadioMark:
-            return "NONE";
-        case ControlPart::Separator:
-            return "NONE";
-        case ControlPart::SubmenuArrow:
-            return "NONE";
-        case ControlPart::SubEdit:
-            return "NONE";
-        case ControlPart::DrawBackgroundHorz:
-            return "NONE";
-        case ControlPart::DrawBackgroundVert:
-            return "NONE";
-        case ControlPart::TabsDrawRtl:
-            return "NONE";
-        case ControlPart::HasBackgroundTexture:
-            return "NONE";
-        case ControlPart::HasThreeButtons:
-            return "NONE";
-        case ControlPart::BackgroundWindow:
-            return "NONE";
-        case ControlPart::BackgroundDialog:
-            return "NONE";
-        case ControlPart::Border:
-            return "NONE";
-        case ControlPart::Focus:
-            return "FOCUS";
+    auto aIterator = maDefinitions.find(ControlTypeAndPart(eType, ePart));
 
-        default:
-            break;
-    }
-    return "NONE";
-}
-
-} // end anonymous namespace
-
-std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getPushButtonDefinition(ControlPart ePart)
-{
-    auto aIterator = maPushButtonDefinitions.find(xmlControlPart(ePart));
-
-    if (aIterator != maPushButtonDefinitions.end())
-        return aIterator->second;
-    return std::shared_ptr<WidgetDefinitionPart>();
-}
-
-std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getRadioButtonDefinition(ControlPart ePart)
-{
-    auto aIterator = maRadioButtonDefinitions.find(xmlControlPart(ePart));
-
-    if (aIterator != maRadioButtonDefinitions.end())
-        return aIterator->second;
-    return std::shared_ptr<WidgetDefinitionPart>();
-}
-
-std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getEditboxDefinition(ControlPart ePart)
-{
-    auto aIterator = maEditboxDefinitions.find(xmlControlPart(ePart));
-
-    if (aIterator != maEditboxDefinitions.end())
+    if (aIterator != maDefinitions.end())
         return aIterator->second;
     return std::shared_ptr<WidgetDefinitionPart>();
 }
