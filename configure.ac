@@ -8879,16 +8879,16 @@ int fb_api_is_30(void) { return 0; }
     else
         dnl Embedded Firebird has version 3.0
         AC_DEFINE(HAVE_FIREBIRD_30, 1)
-        dnl We need libatomic-ops for any non X86/X64 system
+        dnl We need libatomic_ops for any non X86/X64 system
         if test "${CPUNAME}" != INTEL -a "${CPUNAME}" != X86_64; then
             dnl ===================================================================
-            dnl Check for system libatomic-ops
+            dnl Check for system libatomic_ops
             dnl ===================================================================
             libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
             if test "$with_system_libatomic_ops" = "yes"; then
                 SYSTEM_LIBATOMIC_OPS=TRUE
                 AC_CHECK_HEADERS(atomic_ops.h, [],
-                [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
+                [AC_MSG_ERROR(atomic_ops.h not found. install libatomic_ops)], [])
             else
                 SYSTEM_LIBATOMIC_OPS=
                 LIBATOMIC_OPS_CFLAGS="-I${WORKDIR}/UnpackedTarball/libatomic_ops/include"
