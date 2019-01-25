@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_dbe0a999",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-25T13:35:29Z",
+      "side": 1,
+      "message": "i think this check is unnecessary because the mpGraphics was just needed previously to get the SalLayout from it.",
+      "revId": "bd49bb73749bcab384f230c549b76e92c7d58984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
