@@ -171,6 +171,10 @@ void XPropertySet::testGetPropertyValue()
 
 bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
 {
+    bool bIgnore = isPropertyIgnored(rName);
+    if (bIgnore)
+        return false;
+
     uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
     try
     {
@@ -193,7 +197,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         {
             // 16-bit integer
             sal_Int16 nOld = any.get<sal_Int16>();
-            sal_Int16 nNew = nOld + 2;
+            sal_Int16 nNew = nOld + 1;
             xPropSet->setPropertyValue(rName, makeAny(nNew));
         }
         else if (type == cppu::UnoType<sal_Int32>::get())
@@ -240,14 +244,10 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         }
         else
         {
-            bool bIgnore = isPropertyIgnored(rName);
-            if (bIgnore)
-                return false;
-
             std::cout << type.getTypeName() << std::endl;
             std::cout << rName << std::endl;
-            CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: unknown type in Any tested.",
-                                   false);
+            CPPUNIT_ASSERT_MESSAGE(
+                "XPropertySet::isPropertyValueChangeable: unknown type in Any tested.", false);
         }
 
         uno::Any anyTest = xPropSet->getPropertyValue(rName);
@@ -255,9 +255,9 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     }
     catch (const uno::Exception&)
     {
-        CPPUNIT_ASSERT_MESSAGE(
-            "XPropertySet::isChangeable: exception thrown while retrieving the property value.",
-            false);
+        CPPUNIT_ASSERT_MESSAGE("XPropertySet::isPropertyValueChangeable: exception thrown while "
+                               "retrieving the property value.",
+                               false);
     }
 
     return false;
