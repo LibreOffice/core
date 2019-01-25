@@ -55,6 +55,102 @@ bool readColor(OString const& rString, Color& rColor)
     return true;
 }
 
+ControlPart xmlStringToControlPart(OString const& sPart)
+{
+    if (sPart.equalsIgnoreAsciiCase("NONE"))
+        return ControlPart::NONE;
+    else if (sPart.equalsIgnoreAsciiCase("Entire"))
+        return ControlPart::Entire;
+    else if (sPart.equalsIgnoreAsciiCase("ListboxWindow"))
+        return ControlPart::ListboxWindow;
+    else if (sPart.equalsIgnoreAsciiCase("Button"))
+        return ControlPart::Button;
+    else if (sPart.equalsIgnoreAsciiCase("ButtonUp"))
+        return ControlPart::ButtonUp;
+    else if (sPart.equalsIgnoreAsciiCase("ButtonDown"))
+        return ControlPart::ButtonDown;
+    else if (sPart.equalsIgnoreAsciiCase("ButtonLeft"))
+        return ControlPart::ButtonLeft;
+    else if (sPart.equalsIgnoreAsciiCase("ButtonRight"))
+        return ControlPart::ButtonRight;
+    else if (sPart.equalsIgnoreAsciiCase("AllButtons"))
+        return ControlPart::AllButtons;
+    else if (sPart.equalsIgnoreAsciiCase("SeparatorHorz"))
+        return ControlPart::SeparatorHorz;
+    else if (sPart.equalsIgnoreAsciiCase("SeparatorVert"))
+        return ControlPart::SeparatorVert;
+    else if (sPart.equalsIgnoreAsciiCase("TrackHorzLeft"))
+        return ControlPart::TrackHorzLeft;
+    else if (sPart.equalsIgnoreAsciiCase("TrackVertUpper"))
+        return ControlPart::TrackVertUpper;
+    else if (sPart.equalsIgnoreAsciiCase("TrackHorzRight"))
+        return ControlPart::TrackHorzRight;
+    else if (sPart.equalsIgnoreAsciiCase("TrackVertLower"))
+        return ControlPart::TrackVertLower;
+    else if (sPart.equalsIgnoreAsciiCase("TrackHorzArea"))
+        return ControlPart::TrackHorzArea;
+    else if (sPart.equalsIgnoreAsciiCase("TrackVertArea"))
+        return ControlPart::TrackVertArea;
+    else if (sPart.equalsIgnoreAsciiCase("Arrow"))
+        return ControlPart::Arrow;
+    else if (sPart.equalsIgnoreAsciiCase("ThumbHorz"))
+        return ControlPart::ThumbHorz;
+    else if (sPart.equalsIgnoreAsciiCase("ThumbVert"))
+        return ControlPart::ThumbVert;
+    else if (sPart.equalsIgnoreAsciiCase("MenuItem"))
+        return ControlPart::MenuItem;
+    else if (sPart.equalsIgnoreAsciiCase("MenuItemCheckMark"))
+        return ControlPart::MenuItemCheckMark;
+    else if (sPart.equalsIgnoreAsciiCase("MenuItemRadioMark"))
+        return ControlPart::MenuItemRadioMark;
+    else if (sPart.equalsIgnoreAsciiCase("Separator"))
+        return ControlPart::Separator;
+    else if (sPart.equalsIgnoreAsciiCase("SubmenuArrow"))
+        return ControlPart::SubmenuArrow;
+    else if (sPart.equalsIgnoreAsciiCase("SubEdit"))
+        return ControlPart::SubEdit;
+    else if (sPart.equalsIgnoreAsciiCase("DrawBackgroundHorz"))
+        return ControlPart::DrawBackgroundHorz;
+    else if (sPart.equalsIgnoreAsciiCase("DrawBackgroundVert"))
+        return ControlPart::DrawBackgroundVert;
+    else if (sPart.equalsIgnoreAsciiCase("TabsDrawRtl"))
+        return ControlPart::TabsDrawRtl;
+    else if (sPart.equalsIgnoreAsciiCase("HasBackgroundTexture"))
+        return ControlPart::HasBackgroundTexture;
+    else if (sPart.equalsIgnoreAsciiCase("HasThreeButtons"))
+        return ControlPart::HasThreeButtons;
+    else if (sPart.equalsIgnoreAsciiCase("BackgroundWindow"))
+        return ControlPart::BackgroundWindow;
+    else if (sPart.equalsIgnoreAsciiCase("BackgroundDialog"))
+        return ControlPart::BackgroundDialog;
+    else if (sPart.equalsIgnoreAsciiCase("Border"))
+        return ControlPart::Border;
+    else if (sPart.equalsIgnoreAsciiCase("Focus"))
+        return ControlPart::Focus;
+    return ControlPart::NONE;
+}
+
+bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
+{
+    bool bReturn = false;
+    if (rString == "pushbutton")
+    {
+        reType = ControlType::Pushbutton;
+        bReturn = true;
+    }
+    else if (rString == "radiobutton")
+    {
+        reType = ControlType::Radiobutton;
+        bReturn = true;
+    }
+    else if (rString == "editbox")
+    {
+        reType = ControlType::Editbox;
+        bReturn = true;
+    }
+    return bReturn;
+}
+
 } // end anonymous namespace
 
 WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rFilePath)
@@ -144,9 +240,8 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
     rWalker.parent();
 }
 
-void WidgetDefinitionReader::readDefinition(
-    tools::XmlWalker& rWalker,
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>>& rPart)
+void WidgetDefinitionReader::readDefinition(tools::XmlWalker& rWalker,
+                                            WidgetDefinition& rWidgetDefinition, ControlType eType)
 {
     rWalker.children();
     while (rWalker.isValid())
@@ -154,8 +249,9 @@ void WidgetDefinitionReader::readDefinition(
         if (rWalker.name() == "part")
         {
             OString sPart = rWalker.attribute("value");
+            ControlPart ePart = xmlStringToControlPart(sPart);
             std::shared_ptr<WidgetDefinitionPart> pPart = std::make_shared<WidgetDefinitionPart>();
-            rPart.emplace(sPart, pPart);
+            rWidgetDefinition.maDefinitions.emplace(ControlTypeAndPart(eType, ePart), pPart);
             readPart(rWalker, pPart);
         }
         rWalker.next();
@@ -259,6 +355,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
     aWalker.children();
     while (aWalker.isValid())
     {
+        ControlType eType;
         if (aWalker.name() == "style")
         {
             aWalker.children();
@@ -273,17 +370,9 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
             }
             aWalker.parent();
         }
-        else if (aWalker.name() == "pushbutton")
+        else if (getControlTypeForXmlString(aWalker.name(), eType))
         {
-            readDefinition(aWalker, rWidgetDefinition.maPushButtonDefinitions);
-        }
-        else if (aWalker.name() == "radiobutton")
-        {
-            readDefinition(aWalker, rWidgetDefinition.maRadioButtonDefinitions);
-        }
-        else if (aWalker.name() == "editbox")
-        {
-            readDefinition(aWalker, rWidgetDefinition.maEditboxDefinitions);
+            readDefinition(aWalker, rWidgetDefinition, eType);
         }
         aWalker.next();
     }
