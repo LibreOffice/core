@@ -57,6 +57,8 @@
 #include <sdpage.hxx>
 #include <cusshow.hxx>
 #include <optsitem.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;
@@ -1111,6 +1113,10 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     VclPtr<WorkWindow> pWorkWindow = VclPtr<FullScreenWorkWindow>::Create(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
+    OUString Title(SdResId(STR_FULLSCREEN_SLIDESHOW));
+    Title = Title.replaceFirst("%s",
+                               mpCurrentViewShellBase->GetDocShell()->GetTitle(SFX_TITLE_DETECT));
+    pWorkWindow->SetText(Title);
     pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PresentationFlags::HideAllApps : PresentationFlags::NONE, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
