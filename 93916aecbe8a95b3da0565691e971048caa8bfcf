@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_3e120b5a",
+        "filename": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T15:56:50Z",
+      "side": 1,
+      "message": "I think we have a clang plugin that enforces that you use CPPUNIT_ASSERT_EQUAL(expected, actual) instead of CPPUNIT_ASSERT(actual \u003d\u003d expected).",
+      "revId": "93916aecbe8a95b3da0565691e971048caa8bfcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
