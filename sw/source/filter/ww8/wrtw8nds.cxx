@@ -2759,6 +2759,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
                 else
                     pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
+
+                const SvxAdjustItem* pAdjust = rNode.GetSwAttrSet().GetItem(RES_PARATR_ADJUST);
+                if ( pAdjust && (pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right ) )
+                    pTmpSet->Put( *pAdjust, RES_PARATR_ADJUST );
             }
             // move code for handling of numbered,
             // but not counted paragraphs to this place. Otherwise, the paragraph
