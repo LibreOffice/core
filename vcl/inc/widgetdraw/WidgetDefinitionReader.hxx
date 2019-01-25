@@ -109,7 +109,7 @@ public:
                      float fY2);
 };
 
-class VCL_DLLPUBLIC WidgetDefinition
+class VCL_DLLPUBLIC WidgetDefinitionPart
 {
 public:
     std::vector<std::shared_ptr<WidgetDefinitionState>> getStates(ControlState eState,
@@ -118,24 +118,8 @@ public:
     std::vector<std::shared_ptr<WidgetDefinitionState>> maStates;
 };
 
-class VCL_DLLPUBLIC WidgetDefinitionReader
+class VCL_DLLPUBLIC WidgetDefinition
 {
-private:
-    OUString m_rFilePath;
-
-    static void
-    readDefinition(tools::XmlWalker& rWalker,
-                   std::unordered_map<OString, std::shared_ptr<WidgetDefinition>>& rDefinition);
-
-    static void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinition> rpPart);
-
-    void readPushButton(tools::XmlWalker& rWalker);
-    void readRadioButton(tools::XmlWalker& rWalker);
-    void readEditbox(tools::XmlWalker& rWalker);
-
-    static void readDrawingDefinition(tools::XmlWalker& rWalker,
-                                      std::shared_ptr<WidgetDefinitionState>& rStates);
-
 public:
     Color maFaceColor;
     Color maCheckedColor;
@@ -188,16 +172,32 @@ public:
     Color maToolTextColor;
     Color maFontColor;
 
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maPushButtonDefinitions;
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maRadioButtonDefinitions;
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>> maEditboxDefinitions;
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maPushButtonDefinitions;
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maRadioButtonDefinitions;
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maEditboxDefinitions;
 
-    std::shared_ptr<WidgetDefinition> getPushButtonDefinition(ControlPart ePart);
-    std::shared_ptr<WidgetDefinition> getRadioButtonDefinition(ControlPart ePart);
-    std::shared_ptr<WidgetDefinition> getEditboxDefinition(ControlPart ePart);
+    std::shared_ptr<WidgetDefinitionPart> getPushButtonDefinition(ControlPart ePart);
+    std::shared_ptr<WidgetDefinitionPart> getRadioButtonDefinition(ControlPart ePart);
+    std::shared_ptr<WidgetDefinitionPart> getEditboxDefinition(ControlPart ePart);
+};
 
+class VCL_DLLPUBLIC WidgetDefinitionReader
+{
+private:
+    OUString m_rFilePath;
+
+    static void
+    readDefinition(tools::XmlWalker& rWalker,
+                   std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>>& rDefinition);
+
+    static void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinitionPart> rpPart);
+
+    static void readDrawingDefinition(tools::XmlWalker& rWalker,
+                                      std::shared_ptr<WidgetDefinitionState>& rStates);
+
+public:
     WidgetDefinitionReader(OUString const& rFilePath);
-    bool read();
+    bool read(WidgetDefinition& rWidgetDefinition);
 };
 
 } // end vcl namespace
