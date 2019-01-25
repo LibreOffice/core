@@ -3472,7 +3472,8 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
 
 
 SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
-
+(SfxUInt16Item Transparence FN_PARAM_1, SfxStringItem Color FN_PARAM_2,
+ SfxUInt16Item Width FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
