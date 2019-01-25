@@ -149,6 +149,43 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok);
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok);
 
+#if defined LIBO_INTERNAL_ONLY
+/// @cond INTERNAL
+
+/** Matches against a substring appearing in first string.
+
+  The result is true if and only if the second string appears as a substring
+  of first string, at the given position, and is either at the end of the
+  first string or is followed by the specified separator character.
+  This function can't be used for language specific comparison.
+  If the second string contains one or more occurrences of the separator,
+  then they are also considered as normal characters during matching.
+
+  @param    rString the input OUString in which the token is to be checked
+  @param    nToken  the number of the token to match. If negative, then
+                    false is returned.
+  @param    cSep    the character which separate the tokens
+  @param    rIndex  the index in rString from which to start conunting tokens
+                    and then perform the match.
+                    If a match is found, then this param is set to the position
+                    of the next token or to -1, if it is the last token. If no
+                    match is found, then rIndex is not modified. This allows to
+                    check for various possible substrings that may start at the
+                    given position.
+  @param    rMatch  the input OUStringLiteral to be matched.
+  @return   false if either nToken is negative or rIndex is outside of rString
+            range, else the result of the match.
+*/
+COMPHELPER_DLLPUBLIC bool matchToken(
+    const OUString &rString,
+    sal_Int32 nToken,
+    sal_Unicode cSep,
+    sal_Int32 &rIndex,
+    const OUStringLiteral &rMatch);
+
+/// @endcond
+#endif
+
 /** Reverse an OUString
 
   @param    rIn     the input OUString
