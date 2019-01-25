@@ -1519,9 +1519,10 @@ void ScFormulaCell::Interpret()
 
     ScFormulaCell* pTopCell = mxGroup ? mxGroup->mpTopCell : this;
 
-    if (pTopCell->mbSeenInPath && rRecursionHelper.GetDepComputeLevel() && !bRunning)
+    if (pTopCell->mbSeenInPath && rRecursionHelper.GetDepComputeLevel())
     {
         // This call arose from a dependency calculation and we just found a cycle.
+        aResult.SetResultError( FormulaError::CircularReference );
         // This will mark all elements in the cycle as parts-of-cycle.
         ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pTopCell);
         return;
