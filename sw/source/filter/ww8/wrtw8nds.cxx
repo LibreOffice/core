@@ -2749,14 +2749,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
             if (
                 (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
-                rTextColl.GetFrameDir().GetValue() == SvxFrameDirection::Environment &&
-                aAttrIter.IsParaRTL()
+                rTextColl.GetFrameDir().GetValue() == SvxFrameDirection::Environment
                )
             {
                 if ( !pTmpSet )
                     pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
 
-                pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
+                if ( bParaRTL )
+                    pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
+                else
+                    pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
             }
             // move code for handling of numbered,
             // but not counted paragraphs to this place. Otherwise, the paragraph
