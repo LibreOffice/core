@@ -821,8 +821,9 @@ bool WMAdaptor::getNetWmName()
                                         )
                                     {
                                         OUString aMetaVersion( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_UTF8 );
-                                        nVersionMajor = aMetaVersion.getToken(0, '.').toInt32();
-                                        nVersionMinor = aMetaVersion.getToken(1, '.').toInt32();
+                                        sal_Int32 nIdx {0};
+                                        nVersionMajor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
+                                        nVersionMinor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
                                     }
                                     if( pProperty )
                                     {
