@@ -331,11 +331,7 @@ static void printSetPropertyMixinBody(
         do
         {
             OString s(fieldtype.getToken(0, '<', nPos));
-            OStringBuffer buffer(16);
-            buffer.append("((");
-            buffer.append(s.copy(s.lastIndexOf('/')+1));
-            buffer.append(')');
-            OString t = buffer.makeStringAndClear();
+            OString t{ "((" + s.copy(s.lastIndexOf('/')+1) + ")" };
 
             if ( t == "((Optional)" ) {
                 optional=true;
