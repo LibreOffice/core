@@ -30,9 +30,9 @@ OUString lcl_getThemeDefinitionPath()
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
-    , m_WidgetDefinitionReader(lcl_getThemeDefinitionPath() + "definition.xml")
 {
-    m_WidgetDefinitionReader.read();
+    WidgetDefinitionReader aReader(lcl_getThemeDefinitionPath() + "definition.xml");
+    aReader.read(m_aWidgetDefinition);
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbNoFocusRects = true;
@@ -196,11 +196,11 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Pushbutton:
         {
-            std::shared_ptr<WidgetDefinition> pDefinition
-                = m_WidgetDefinitionReader.getPushButtonDefinition(ePart);
-            if (pDefinition)
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getPushButtonDefinition(ePart);
+            if (pPart)
             {
-                auto aStates = pDefinition->getStates(eState, rValue);
+                auto aStates = pPart->getStates(eState, rValue);
                 if (!aStates.empty())
                 {
                     std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
@@ -215,12 +215,12 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Radiobutton:
         {
-            std::shared_ptr<WidgetDefinition> pDefinition
-                = m_WidgetDefinitionReader.getRadioButtonDefinition(ePart);
-            if (pDefinition)
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getRadioButtonDefinition(ePart);
+            if (pPart)
             {
                 std::shared_ptr<WidgetDefinitionState> pState
-                    = pDefinition->getStates(eState, rValue).back();
+                    = pPart->getStates(eState, rValue).back();
                 {
                     munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
                     bOK = true;
@@ -235,12 +235,12 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
         {
-            std::shared_ptr<WidgetDefinition> pDefinition
-                = m_WidgetDefinitionReader.getEditboxDefinition(ePart);
-            if (pDefinition)
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getEditboxDefinition(ePart);
+            if (pPart)
             {
                 std::shared_ptr<WidgetDefinitionState> pState
-                    = pDefinition->getStates(eState, rValue).back();
+                    = pPart->getStates(eState, rValue).back();
                 {
                     munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
                     bOK = true;
@@ -294,56 +294,56 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
 {
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
-    aStyleSet.SetFaceColor(m_WidgetDefinitionReader.maFaceColor);
-    aStyleSet.SetCheckedColor(m_WidgetDefinitionReader.maCheckedColor);
-    aStyleSet.SetLightColor(m_WidgetDefinitionReader.maLightColor);
-    aStyleSet.SetLightBorderColor(m_WidgetDefinitionReader.maLightBorderColor);
-    aStyleSet.SetShadowColor(m_WidgetDefinitionReader.maShadowColor);
-    aStyleSet.SetDarkShadowColor(m_WidgetDefinitionReader.maDarkShadowColor);
-    aStyleSet.SetButtonTextColor(m_WidgetDefinitionReader.maButtonTextColor);
-    aStyleSet.SetButtonRolloverTextColor(m_WidgetDefinitionReader.maButtonRolloverTextColor);
-    aStyleSet.SetRadioCheckTextColor(m_WidgetDefinitionReader.maRadioCheckTextColor);
-    aStyleSet.SetGroupTextColor(m_WidgetDefinitionReader.maGroupTextColor);
-    aStyleSet.SetLabelTextColor(m_WidgetDefinitionReader.maLabelTextColor);
-    aStyleSet.SetWindowColor(m_WidgetDefinitionReader.maWindowColor);
-    aStyleSet.SetWindowTextColor(m_WidgetDefinitionReader.maWindowTextColor);
-    aStyleSet.SetDialogColor(m_WidgetDefinitionReader.maDialogColor);
-    aStyleSet.SetDialogTextColor(m_WidgetDefinitionReader.maDialogTextColor);
-    aStyleSet.SetWorkspaceColor(m_WidgetDefinitionReader.maWorkspaceColor);
-    aStyleSet.SetMonoColor(m_WidgetDefinitionReader.maMonoColor);
-    aStyleSet.SetFieldColor(m_WidgetDefinitionReader.maFieldColor);
-    aStyleSet.SetFieldTextColor(m_WidgetDefinitionReader.maFieldTextColor);
-    aStyleSet.SetFieldRolloverTextColor(m_WidgetDefinitionReader.maFieldRolloverTextColor);
-    aStyleSet.SetActiveColor(m_WidgetDefinitionReader.maActiveColor);
-    aStyleSet.SetActiveTextColor(m_WidgetDefinitionReader.maActiveTextColor);
-    aStyleSet.SetActiveBorderColor(m_WidgetDefinitionReader.maActiveBorderColor);
-    aStyleSet.SetDeactiveColor(m_WidgetDefinitionReader.maDeactiveColor);
-    aStyleSet.SetDeactiveTextColor(m_WidgetDefinitionReader.maDeactiveTextColor);
-    aStyleSet.SetDeactiveBorderColor(m_WidgetDefinitionReader.maDeactiveBorderColor);
-    aStyleSet.SetMenuColor(m_WidgetDefinitionReader.maMenuColor);
-    aStyleSet.SetMenuBarColor(m_WidgetDefinitionReader.maMenuBarColor);
-    aStyleSet.SetMenuBarRolloverColor(m_WidgetDefinitionReader.maMenuBarRolloverColor);
-    aStyleSet.SetMenuBorderColor(m_WidgetDefinitionReader.maMenuBorderColor);
-    aStyleSet.SetMenuTextColor(m_WidgetDefinitionReader.maMenuTextColor);
-    aStyleSet.SetMenuBarTextColor(m_WidgetDefinitionReader.maMenuBarTextColor);
-    aStyleSet.SetMenuBarRolloverTextColor(m_WidgetDefinitionReader.maMenuBarRolloverTextColor);
-    aStyleSet.SetMenuBarHighlightTextColor(m_WidgetDefinitionReader.maMenuBarHighlightTextColor);
-    aStyleSet.SetMenuHighlightColor(m_WidgetDefinitionReader.maMenuHighlightColor);
-    aStyleSet.SetMenuHighlightTextColor(m_WidgetDefinitionReader.maMenuHighlightTextColor);
-    aStyleSet.SetHighlightColor(m_WidgetDefinitionReader.maHighlightColor);
-    aStyleSet.SetHighlightTextColor(m_WidgetDefinitionReader.maHighlightTextColor);
-    aStyleSet.SetActiveTabColor(m_WidgetDefinitionReader.maActiveTabColor);
-    aStyleSet.SetInactiveTabColor(m_WidgetDefinitionReader.maInactiveTabColor);
-    aStyleSet.SetTabTextColor(m_WidgetDefinitionReader.maTabTextColor);
-    aStyleSet.SetTabRolloverTextColor(m_WidgetDefinitionReader.maTabRolloverTextColor);
-    aStyleSet.SetTabHighlightTextColor(m_WidgetDefinitionReader.maTabHighlightTextColor);
-    aStyleSet.SetDisableColor(m_WidgetDefinitionReader.maDisableColor);
-    aStyleSet.SetHelpColor(m_WidgetDefinitionReader.maHelpColor);
-    aStyleSet.SetHelpTextColor(m_WidgetDefinitionReader.maHelpTextColor);
-    aStyleSet.SetLinkColor(m_WidgetDefinitionReader.maLinkColor);
-    aStyleSet.SetVisitedLinkColor(m_WidgetDefinitionReader.maVisitedLinkColor);
-    aStyleSet.SetToolTextColor(m_WidgetDefinitionReader.maToolTextColor);
-    aStyleSet.SetFontColor(m_WidgetDefinitionReader.maFontColor);
+    aStyleSet.SetFaceColor(m_aWidgetDefinition.maFaceColor);
+    aStyleSet.SetCheckedColor(m_aWidgetDefinition.maCheckedColor);
+    aStyleSet.SetLightColor(m_aWidgetDefinition.maLightColor);
+    aStyleSet.SetLightBorderColor(m_aWidgetDefinition.maLightBorderColor);
+    aStyleSet.SetShadowColor(m_aWidgetDefinition.maShadowColor);
+    aStyleSet.SetDarkShadowColor(m_aWidgetDefinition.maDarkShadowColor);
+    aStyleSet.SetButtonTextColor(m_aWidgetDefinition.maButtonTextColor);
+    aStyleSet.SetButtonRolloverTextColor(m_aWidgetDefinition.maButtonRolloverTextColor);
+    aStyleSet.SetRadioCheckTextColor(m_aWidgetDefinition.maRadioCheckTextColor);
+    aStyleSet.SetGroupTextColor(m_aWidgetDefinition.maGroupTextColor);
+    aStyleSet.SetLabelTextColor(m_aWidgetDefinition.maLabelTextColor);
+    aStyleSet.SetWindowColor(m_aWidgetDefinition.maWindowColor);
+    aStyleSet.SetWindowTextColor(m_aWidgetDefinition.maWindowTextColor);
+    aStyleSet.SetDialogColor(m_aWidgetDefinition.maDialogColor);
+    aStyleSet.SetDialogTextColor(m_aWidgetDefinition.maDialogTextColor);
+    aStyleSet.SetWorkspaceColor(m_aWidgetDefinition.maWorkspaceColor);
+    aStyleSet.SetMonoColor(m_aWidgetDefinition.maMonoColor);
+    aStyleSet.SetFieldColor(m_aWidgetDefinition.maFieldColor);
+    aStyleSet.SetFieldTextColor(m_aWidgetDefinition.maFieldTextColor);
+    aStyleSet.SetFieldRolloverTextColor(m_aWidgetDefinition.maFieldRolloverTextColor);
+    aStyleSet.SetActiveColor(m_aWidgetDefinition.maActiveColor);
+    aStyleSet.SetActiveTextColor(m_aWidgetDefinition.maActiveTextColor);
+    aStyleSet.SetActiveBorderColor(m_aWidgetDefinition.maActiveBorderColor);
+    aStyleSet.SetDeactiveColor(m_aWidgetDefinition.maDeactiveColor);
+    aStyleSet.SetDeactiveTextColor(m_aWidgetDefinition.maDeactiveTextColor);
+    aStyleSet.SetDeactiveBorderColor(m_aWidgetDefinition.maDeactiveBorderColor);
+    aStyleSet.SetMenuColor(m_aWidgetDefinition.maMenuColor);
+    aStyleSet.SetMenuBarColor(m_aWidgetDefinition.maMenuBarColor);
+    aStyleSet.SetMenuBarRolloverColor(m_aWidgetDefinition.maMenuBarRolloverColor);
+    aStyleSet.SetMenuBorderColor(m_aWidgetDefinition.maMenuBorderColor);
+    aStyleSet.SetMenuTextColor(m_aWidgetDefinition.maMenuTextColor);
+    aStyleSet.SetMenuBarTextColor(m_aWidgetDefinition.maMenuBarTextColor);
+    aStyleSet.SetMenuBarRolloverTextColor(m_aWidgetDefinition.maMenuBarRolloverTextColor);
+    aStyleSet.SetMenuBarHighlightTextColor(m_aWidgetDefinition.maMenuBarHighlightTextColor);
+    aStyleSet.SetMenuHighlightColor(m_aWidgetDefinition.maMenuHighlightColor);
+    aStyleSet.SetMenuHighlightTextColor(m_aWidgetDefinition.maMenuHighlightTextColor);
+    aStyleSet.SetHighlightColor(m_aWidgetDefinition.maHighlightColor);
+    aStyleSet.SetHighlightTextColor(m_aWidgetDefinition.maHighlightTextColor);
+    aStyleSet.SetActiveTabColor(m_aWidgetDefinition.maActiveTabColor);
+    aStyleSet.SetInactiveTabColor(m_aWidgetDefinition.maInactiveTabColor);
+    aStyleSet.SetTabTextColor(m_aWidgetDefinition.maTabTextColor);
+    aStyleSet.SetTabRolloverTextColor(m_aWidgetDefinition.maTabRolloverTextColor);
+    aStyleSet.SetTabHighlightTextColor(m_aWidgetDefinition.maTabHighlightTextColor);
+    aStyleSet.SetDisableColor(m_aWidgetDefinition.maDisableColor);
+    aStyleSet.SetHelpColor(m_aWidgetDefinition.maHelpColor);
+    aStyleSet.SetHelpTextColor(m_aWidgetDefinition.maHelpTextColor);
+    aStyleSet.SetLinkColor(m_aWidgetDefinition.maLinkColor);
+    aStyleSet.SetVisitedLinkColor(m_aWidgetDefinition.maVisitedLinkColor);
+    aStyleSet.SetToolTextColor(m_aWidgetDefinition.maToolTextColor);
+    aStyleSet.SetFontColor(m_aWidgetDefinition.maFontColor);
 
     rSettings.SetStyleSettings(aStyleSet);
 

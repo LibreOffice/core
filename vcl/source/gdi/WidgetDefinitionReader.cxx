@@ -146,7 +146,7 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
 
 void WidgetDefinitionReader::readDefinition(
     tools::XmlWalker& rWalker,
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinition>>& rDefinition)
+    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>>& rPart)
 {
     rWalker.children();
     while (rWalker.isValid())
@@ -154,8 +154,8 @@ void WidgetDefinitionReader::readDefinition(
         if (rWalker.name() == "part")
         {
             OString sPart = rWalker.attribute("value");
-            std::shared_ptr<WidgetDefinition> pPart = std::make_shared<WidgetDefinition>();
-            rDefinition.emplace(sPart, pPart);
+            std::shared_ptr<WidgetDefinitionPart> pPart = std::make_shared<WidgetDefinitionPart>();
+            rPart.emplace(sPart, pPart);
             readPart(rWalker, pPart);
         }
         rWalker.next();
@@ -164,7 +164,7 @@ void WidgetDefinitionReader::readDefinition(
 }
 
 void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
-                                      std::shared_ptr<WidgetDefinition> rpPart)
+                                      std::shared_ptr<WidgetDefinitionPart> rpPart)
 {
     rWalker.children();
     while (rWalker.isValid())
@@ -189,22 +189,7 @@ void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
     rWalker.parent();
 }
 
-void WidgetDefinitionReader::readPushButton(tools::XmlWalker& rWalker)
-{
-    readDefinition(rWalker, maPushButtonDefinitions);
-}
-
-void WidgetDefinitionReader::readRadioButton(tools::XmlWalker& rWalker)
-{
-    readDefinition(rWalker, maRadioButtonDefinitions);
-}
-
-void WidgetDefinitionReader::readEditbox(tools::XmlWalker& rWalker)
-{
-    readDefinition(rWalker, maEditboxDefinitions);
-}
-
-bool WidgetDefinitionReader::read()
+bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 {
     if (!lcl_fileExists(m_rFilePath))
         return false;
@@ -212,56 +197,56 @@ bool WidgetDefinitionReader::read()
     SvFileStream aFileStream(m_rFilePath, StreamMode::READ);
 
     std::unordered_map<OString, Color*> aStyleColorMap = {
-        { "faceColor", &maFaceColor },
-        { "checkedColor", &maCheckedColor },
-        { "lightColor", &maLightColor },
-        { "lightBorderColor", &maLightBorderColor },
-        { "shadowColor", &maShadowColor },
-        { "darkShadowColor", &maDarkShadowColor },
-        { "buttonTextColor", &maButtonTextColor },
-        { "buttonRolloverTextColor", &maButtonRolloverTextColor },
-        { "radioCheckTextColor", &maRadioCheckTextColor },
-        { "groupTextColor", &maGroupTextColor },
-        { "labelTextColor", &maLabelTextColor },
-        { "windowColor", &maWindowColor },
-        { "windowTextColor", &maWindowTextColor },
-        { "dialogColor", &maDialogColor },
-        { "dialogTextColor", &maDialogTextColor },
-        { "workspaceColor", &maWorkspaceColor },
-        { "monoColor", &maMonoColor },
-        { "fieldColor", &maFieldColor },
-        { "fieldTextColor", &maFieldTextColor },
-        { "fieldRolloverTextColor", &maFieldRolloverTextColor },
-        { "activeColor", &maActiveColor },
-        { "activeTextColor", &maActiveTextColor },
-        { "activeBorderColor", &maActiveBorderColor },
-        { "deactiveColor", &maDeactiveColor },
-        { "deactiveTextColor", &maDeactiveTextColor },
-        { "deactiveBorderColor", &maDeactiveBorderColor },
-        { "menuColor", &maMenuColor },
-        { "menuBarColor", &maMenuBarColor },
-        { "menuBarRolloverColor", &maMenuBarRolloverColor },
-        { "menuBorderColor", &maMenuBorderColor },
-        { "menuTextColor", &maMenuTextColor },
-        { "menuBarTextColor", &maMenuBarTextColor },
-        { "menuBarRolloverTextColor", &maMenuBarRolloverTextColor },
-        { "menuBarHighlightTextColor", &maMenuBarHighlightTextColor },
-        { "menuHighlightColor", &maMenuHighlightColor },
-        { "menuHighlightTextColor", &maMenuHighlightTextColor },
-        { "highlightColor", &maHighlightColor },
-        { "highlightTextColor", &maHighlightTextColor },
-        { "activeTabColor", &maActiveTabColor },
-        { "inactiveTabColor", &maInactiveTabColor },
-        { "tabTextColor", &maTabTextColor },
-        { "tabRolloverTextColor", &maTabRolloverTextColor },
-        { "tabHighlightTextColor", &maTabHighlightTextColor },
-        { "disableColor", &maDisableColor },
-        { "helpColor", &maHelpColor },
-        { "helpTextColor", &maHelpTextColor },
-        { "linkColor", &maLinkColor },
-        { "visitedLinkColor", &maVisitedLinkColor },
-        { "toolTextColor", &maToolTextColor },
-        { "fontColor", &maFontColor },
+        { "faceColor", &rWidgetDefinition.maFaceColor },
+        { "checkedColor", &rWidgetDefinition.maCheckedColor },
+        { "lightColor", &rWidgetDefinition.maLightColor },
+        { "lightBorderColor", &rWidgetDefinition.maLightBorderColor },
+        { "shadowColor", &rWidgetDefinition.maShadowColor },
+        { "darkShadowColor", &rWidgetDefinition.maDarkShadowColor },
+        { "buttonTextColor", &rWidgetDefinition.maButtonTextColor },
+        { "buttonRolloverTextColor", &rWidgetDefinition.maButtonRolloverTextColor },
+        { "radioCheckTextColor", &rWidgetDefinition.maRadioCheckTextColor },
+        { "groupTextColor", &rWidgetDefinition.maGroupTextColor },
+        { "labelTextColor", &rWidgetDefinition.maLabelTextColor },
+        { "windowColor", &rWidgetDefinition.maWindowColor },
+        { "windowTextColor", &rWidgetDefinition.maWindowTextColor },
+        { "dialogColor", &rWidgetDefinition.maDialogColor },
+        { "dialogTextColor", &rWidgetDefinition.maDialogTextColor },
+        { "workspaceColor", &rWidgetDefinition.maWorkspaceColor },
+        { "monoColor", &rWidgetDefinition.maMonoColor },
+        { "fieldColor", &rWidgetDefinition.maFieldColor },
+        { "fieldTextColor", &rWidgetDefinition.maFieldTextColor },
+        { "fieldRolloverTextColor", &rWidgetDefinition.maFieldRolloverTextColor },
+        { "activeColor", &rWidgetDefinition.maActiveColor },
+        { "activeTextColor", &rWidgetDefinition.maActiveTextColor },
+        { "activeBorderColor", &rWidgetDefinition.maActiveBorderColor },
+        { "deactiveColor", &rWidgetDefinition.maDeactiveColor },
+        { "deactiveTextColor", &rWidgetDefinition.maDeactiveTextColor },
+        { "deactiveBorderColor", &rWidgetDefinition.maDeactiveBorderColor },
+        { "menuColor", &rWidgetDefinition.maMenuColor },
+        { "menuBarColor", &rWidgetDefinition.maMenuBarColor },
+        { "menuBarRolloverColor", &rWidgetDefinition.maMenuBarRolloverColor },
+        { "menuBorderColor", &rWidgetDefinition.maMenuBorderColor },
+        { "menuTextColor", &rWidgetDefinition.maMenuTextColor },
+        { "menuBarTextColor", &rWidgetDefinition.maMenuBarTextColor },
+        { "menuBarRolloverTextColor", &rWidgetDefinition.maMenuBarRolloverTextColor },
+        { "menuBarHighlightTextColor", &rWidgetDefinition.maMenuBarHighlightTextColor },
+        { "menuHighlightColor", &rWidgetDefinition.maMenuHighlightColor },
+        { "menuHighlightTextColor", &rWidgetDefinition.maMenuHighlightTextColor },
+        { "highlightColor", &rWidgetDefinition.maHighlightColor },
+        { "highlightTextColor", &rWidgetDefinition.maHighlightTextColor },
+        { "activeTabColor", &rWidgetDefinition.maActiveTabColor },
+        { "inactiveTabColor", &rWidgetDefinition.maInactiveTabColor },
+        { "tabTextColor", &rWidgetDefinition.maTabTextColor },
+        { "tabRolloverTextColor", &rWidgetDefinition.maTabRolloverTextColor },
+        { "tabHighlightTextColor", &rWidgetDefinition.maTabHighlightTextColor },
+        { "disableColor", &rWidgetDefinition.maDisableColor },
+        { "helpColor", &rWidgetDefinition.maHelpColor },
+        { "helpTextColor", &rWidgetDefinition.maHelpTextColor },
+        { "linkColor", &rWidgetDefinition.maLinkColor },
+        { "visitedLinkColor", &rWidgetDefinition.maVisitedLinkColor },
+        { "toolTextColor", &rWidgetDefinition.maToolTextColor },
+        { "fontColor", &rWidgetDefinition.maFontColor },
     };
 
     tools::XmlWalker aWalker;
@@ -290,15 +275,15 @@ bool WidgetDefinitionReader::read()
         }
         else if (aWalker.name() == "pushbutton")
         {
-            readPushButton(aWalker);
+            readDefinition(aWalker, rWidgetDefinition.maPushButtonDefinitions);
         }
         else if (aWalker.name() == "radiobutton")
         {
-            readRadioButton(aWalker);
+            readDefinition(aWalker, rWidgetDefinition.maRadioButtonDefinitions);
         }
         else if (aWalker.name() == "editbox")
         {
-            readEditbox(aWalker);
+            readDefinition(aWalker, rWidgetDefinition.maEditboxDefinitions);
         }
         aWalker.next();
     }
@@ -392,36 +377,35 @@ OString xmlControlPart(ControlPart ePart)
 
 } // end anonymous namespace
 
-std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getPushButtonDefinition(ControlPart ePart)
+std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getPushButtonDefinition(ControlPart ePart)
 {
     auto aIterator = maPushButtonDefinitions.find(xmlControlPart(ePart));
 
     if (aIterator != maPushButtonDefinitions.end())
         return aIterator->second;
-    return std::shared_ptr<WidgetDefinition>();
+    return std::shared_ptr<WidgetDefinitionPart>();
 }
 
-std::shared_ptr<WidgetDefinition>
-WidgetDefinitionReader::getRadioButtonDefinition(ControlPart ePart)
+std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getRadioButtonDefinition(ControlPart ePart)
 {
     auto aIterator = maRadioButtonDefinitions.find(xmlControlPart(ePart));
 
     if (aIterator != maRadioButtonDefinitions.end())
         return aIterator->second;
-    return std::shared_ptr<WidgetDefinition>();
+    return std::shared_ptr<WidgetDefinitionPart>();
 }
 
-std::shared_ptr<WidgetDefinition> WidgetDefinitionReader::getEditboxDefinition(ControlPart ePart)
+std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getEditboxDefinition(ControlPart ePart)
 {
     auto aIterator = maEditboxDefinitions.find(xmlControlPart(ePart));
 
     if (aIterator != maEditboxDefinitions.end())
         return aIterator->second;
-    return std::shared_ptr<WidgetDefinition>();
+    return std::shared_ptr<WidgetDefinitionPart>();
 }
 
 std::vector<std::shared_ptr<WidgetDefinitionState>>
-WidgetDefinition::getStates(ControlState eState, ImplControlValue const& rValue)
+WidgetDefinitionPart::getStates(ControlState eState, ImplControlValue const& rValue)
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
 
