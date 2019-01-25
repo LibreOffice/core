@@ -25,7 +25,8 @@ namespace vcl
 enum class DrawCommandType
 {
     RECTANGLE,
-    CIRCLE
+    CIRCLE,
+    LINE
 };
 
 class VCL_DLLPUBLIC DrawCommand
@@ -69,6 +70,20 @@ public:
     }
 };
 
+class VCL_DLLPUBLIC LineDrawCommand : public DrawCommand
+{
+public:
+    float mfX1;
+    float mfY1;
+    float mfX2;
+    float mfY2;
+
+    LineDrawCommand()
+        : DrawCommand(DrawCommandType::LINE)
+    {
+    }
+};
+
 class VCL_DLLPUBLIC WidgetDefinitionState
 {
 public:
@@ -90,6 +105,8 @@ public:
                           sal_Int32 nRx, sal_Int32 nRy, sal_Int32 nMargin);
     void addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
                        sal_Int32 nMargin);
+    void addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1, float fY1, float fX2,
+                     float fY2);
 };
 
 class VCL_DLLPUBLIC WidgetDefinition

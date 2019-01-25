@@ -133,6 +133,32 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                                           basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
             }
             break;
+            case DrawCommandType::LINE:
+            {
+                auto const& rLineDrawCommand = static_cast<LineDrawCommand const&>(*pDrawCommand);
+                Point aRectPoint(nX + 1 + rLineDrawCommand.mnMargin,
+                                 nY + 1 + rLineDrawCommand.mnMargin);
+
+                Size aRectSize(nWidth - 1 - 2 * rLineDrawCommand.mnMargin,
+                               nHeight - 1 - 2 * rLineDrawCommand.mnMargin);
+
+                rGraphics.SetFillColor();
+                rGraphics.SetLineColor(rLineDrawCommand.maStrokeColor);
+
+                basegfx::B2DPolygon aB2DPolygon{
+                    { aRectPoint.X() + (aRectSize.Width() * rLineDrawCommand.mfX1),
+                      aRectPoint.Y() + (aRectSize.Height() * rLineDrawCommand.mfY1) },
+                    { aRectPoint.X() + (aRectSize.Width() * rLineDrawCommand.mfX2),
+                      aRectPoint.Y() + (aRectSize.Height() * rLineDrawCommand.mfY2) },
+                };
+
+                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                                       basegfx::B2DVector(rLineDrawCommand.mnStrokeWidth,
+                                                          rLineDrawCommand.mnStrokeWidth),
+                                       basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
+                                       0.0f, false, nullptr);
+            }
+            break;
         }
     }
 }
