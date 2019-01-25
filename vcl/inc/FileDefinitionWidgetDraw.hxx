@@ -22,7 +22,7 @@ class FileDefinitionWidgetDraw : public vcl::WidgetDrawInterface
 {
 private:
     SalGraphics& m_rGraphics;
-    WidgetDefinitionReader m_WidgetDefinitionReader;
+    WidgetDefinition m_aWidgetDefinition;
 
 public:
     FileDefinitionWidgetDraw(SalGraphics& rGraphics);
