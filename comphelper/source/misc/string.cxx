@@ -144,6 +144,45 @@ sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok)
     return tmpl_getTokenCount<OUString, sal_Unicode>(rIn, cTok);
 }
 
+#if defined LIBO_INTERNAL_ONLY
+/// @cond INTERNAL
+
+bool matchToken(
+    const OUString &rString,
+    sal_Int32 nToken,
+    sal_Unicode cSep,
+    sal_Int32 &rIndex,
+    const OUStringLiteral &rMatch)
+{
+    if (rIndex<0 || rIndex>rString.getLength()-rMatch.getLength() || nToken<0)
+        return false;
+
+    sal_Int32 nIdx {rIndex}; // do not modify rIndex until token match is confirmed
+
+    while (nToken>0 && nIdx<rString.getLength())
+        if (rString[nIdx++]==cSep)
+            --nToken;
+
+    if (nToken)
+        return false;
+
+    if (!rString.match(rMatch, nIdx))
+        return false;
+
+    nIdx += rMatch.getLength();
+
+    if (nIdx<rString.getLength() && rString[nIdx]!=cSep)
+        return false;
+
+    // Token match confirmed, update index
+    rIndex = nIdx<rString.getLength() ? nIdx+1 : -1;
+
+    return true;
+}
+
+/// @endcond
+#endif
+
 sal_uInt32 decimalStringToNumber(
     OUString const & str )
 {

@@ -46,6 +46,7 @@ public:
     void testReverseString();
     void testSplit();
     void testRemoveAny();
+    void testMatchToken();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testReverseString);
     CPPUNIT_TEST(testSplit);
     CPPUNIT_TEST(testRemoveAny);
+    CPPUNIT_TEST(testMatchToken);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -404,6 +406,47 @@ void TestString::testRemoveAny()
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
     sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };
     CPPUNIT_ASSERT_EQUAL(OUString(), removeAny(in, test7));
+}
+
+void TestString::testMatchToken()
+{
+    using namespace ::comphelper::string;
+    OUString in("abc,d,ef,,ghij,k");
+    sal_Int32 nIdx {0};
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, "abc"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, "d"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), nIdx);
+    CPPUNIT_ASSERT_EQUAL(OUString("ef"), in.getToken(0, ',', nIdx));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, ""));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, "ghij"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), nIdx);
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 0, ',', nIdx, "z"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, "k"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), nIdx);
+    nIdx = -6;
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 0, ',', nIdx, "abc"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-6), nIdx);
+    nIdx = 40;
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 0, ',', nIdx, "abc"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(40), nIdx);
+    nIdx = 0;
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 0, ',', nIdx, "efg"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nIdx);
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 0, ',', nIdx, "abd,d,ef,,ghij,kl"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nIdx);
+    CPPUNIT_ASSERT_EQUAL(false, matchToken(in, 1, ',', nIdx, "D"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 1, ',', nIdx, "d"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), nIdx);
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 0, ',', nIdx, "ef,,ghij"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), nIdx);
+    nIdx = 0;
+    CPPUNIT_ASSERT_EQUAL(true, matchToken(in, 2, ',', nIdx, "ef,"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nIdx);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
