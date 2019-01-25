@@ -584,6 +584,7 @@ namespace emfplushelper
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 
             {
+                // BrushDataPath
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {
                     SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
@@ -591,20 +592,25 @@ namespace emfplushelper
                 ::basegfx::B2DHomMatrix aTextureTransformation;
 
                 if (brush->hasTransformation) {
-                   aTextureTransformation *= brush->brush_transformation;
+
+                    SAL_INFO("drawinglayer",
+                             "EMF+\t brush->brush_transformation matrix: " << brush->brush_transformation);
+                    // adjust aTextureTransformation for our world space:
+                    // -> revert the mapping -> apply the transformation -> map back
+                    aTextureTransformation = brush->brush_transformation;
+                    basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
+                    aInvertedMapTrasform.invert();
+                    aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
+
+                    SAL_INFO("drawinglayer",
+                             "EMF+\t brush->brush_transformation matrix after modifications: " << aTextureTransformation);
                 }
 
-                // adjust aTextureTransformation for our world space:
-                // -> revert the mapping -> apply the transformation -> map back
-                basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
-                aInvertedMapTrasform.invert();
-                aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
-
                 // select the stored colors
-                basegfx::BColor aStartColor =  brush->solidColor.getBColor();
-                basegfx::BColor aEndColor =  brush->secondColor.getBColor();
-                drawinglayer::primitive2d::SvgGradientEntryVector aVector;
+                basegfx::BColor aStartColor = brush->solidColor.getBColor();
+                basegfx::BColor aEndColor = brush->secondColor.getBColor();
 
+                drawinglayer::primitive2d::SvgGradientEntryVector aVector;
                 if (brush->blendPositions)
                 {
                     SAL_INFO("drawinglayer", "EMF+\t\tuse blend");
@@ -616,17 +622,18 @@ namespace emfplushelper
                         basegfx::BColor aColor;
                         if (brush->type == BrushTypeLinearGradient)
                         {
-                            aBlendPoint = brush->blendPositions [i];
+                            aBlendPoint = brush->blendPositions[i];
                         }
                         else
                         {
                             // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
-                            aBlendPoint = 2. * ( 1. - brush->blendPositions [i] );
+                            aBlendPoint = 2. * ( 1. - brush->blendPositions[i] );
                         }
-                        aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i] );
-                        aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i] );
-                        aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i] );
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i]);
+                        aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i]);
+                        aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i]);
+                        //brush->solidColor.GetTransparency() * (1. - brush->blendFactors[i]) + brush->secondColorr.GetTransparency() * brush->blendFactors[i];
+                        aVector.emplace_back(aBlendPoint, aColor, 1.);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -648,20 +655,20 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        aVector.emplace_back(aBlendPoint, aColor, (255 - brush->colorblendColors[i].GetTransparency()) / 255.0);
                     }
                 }
                 else // ok, no extra points: just start and end
                 {
                     if (brush->type == BrushTypeLinearGradient)
                     {
-                        aVector.emplace_back(0.0, aStartColor, 1. );
-                        aVector.emplace_back(1.0, aEndColor, 1. );
+                        aVector.emplace_back(0.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(1.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
                     }
                     else // again, here reverse
                     {
-                        aVector.emplace_back(0.0, aEndColor, 1. );
-                        aVector.emplace_back(1.0, aStartColor, 1. );
+                        aVector.emplace_back(0.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(1.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
                     }
                 }
 
@@ -675,7 +682,7 @@ namespace emfplushelper
 
                 if (brush->type == BrushTypeLinearGradient)
                 {
-                    basegfx::B2DPoint aStartPoint = Map(brush->areaX,brush->areaY);
+                    basegfx::B2DPoint aStartPoint = Map(brush->areaX, brush->areaY);
                     aStartPoint = aPolygonTransformation * aStartPoint;
                     basegfx::B2DPoint aEndPoint = Map(brush->areaX + brush->areaWidth, brush->areaY + brush->areaHeight);
                     aEndPoint = aPolygonTransformation * aEndPoint;
@@ -689,7 +696,9 @@ namespace emfplushelper
                             aStartPoint,
                             aEndPoint,
                             false,                  // do not use UnitCoordinates
-                            drawinglayer::primitive2d::SpreadMethod::Pad));
+                            drawinglayer::primitive2d::SpreadMethod::Repeat
+                            //drawinglayer::primitive2d::SpreadMethod::Pad
+                                    ));
                 }
                 else // BrushTypePathGradient
                 {
