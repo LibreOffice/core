@@ -20,39 +20,31 @@
  *************************************************************/
 
 
- // include ---------------------------------------------------------------
+
+// include ---------------------------------------------------------------
 #define __RSC
 #include "svx/svxerr.hxx"
 #include <svx/dialogs.hrc>
 #include <editeng/editerr.hxx>
 
- // pragma ----------------------------------------------------------------
 
- // Error-Context ---------------------------------------------------------
+// Error-Context ---------------------------------------------------------
 Resource RID_SVXERRCTX
 {
     String ERRCTX_SVX_LINGU_THESAURUS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
         Text [ en-US ] = "$(ERR) executing the thesaurus." ;
     };
     String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
         Text [ en-US ] = "$(ERR) executing the spellcheck." ;
     };
     String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
         Text [ en-US ] = "$(ERR) executing the hyphenation." ;
     };
     String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
         Text [ en-US ] = "$(ERR) creating a dictionary." ;
     };
     String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
@@ -64,41 +56,32 @@ Resource RID_SVXERRCTX
         Text [ en-US ] = "$(ERR) loading the graphics." ;
     };
 };
- // Error-Code ------------------------------------------------------------
+
+// Error-Code ------------------------------------------------------------
 Resource RID_SVXERRCODE
 {
     String ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
-        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
         Text [ en-US ] = "No thesaurus available for the current language.\nPlease check your installation and install the desired language." ;
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\nor activate it under 'Tools - Options - Language Settings - Writing Aids'.";
+        Text [ en-US ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\nor activate it under 'Tools - Options - Language Settings - Writing Aids'." ;
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
-        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
         Text [ en-US ] = "Spellcheck is not available." ;
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
-        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
         Text [ en-US ] = "Hyphenation not available." ;
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
         Text [ en-US ] = "The custom dictionary $(ARG1) cannot be read." ;
     };
     String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
         Text [ en-US ] = "The custom dictionary $(ARG1) cannot be created." ;
     };
     String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK
@@ -107,64 +90,61 @@ Resource RID_SVXERRCODE
     };
     String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "An unlinked graphic could not be loaded.";
+        Text [ en-US ] = "An unlinked graphic could not be loaded." ;
     };
     String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "A language has not been fixed for the selected term.";
+        Text [ en-US ] = "A language has not been fixed for the selected term." ;
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The form layer wasn't loaded as the required IO-services (stardiv.uno.io.*) could not be instantiated.";
+        Text [ en-US ] = "The form layer wasn't loaded as the required IO-services (stardiv.uno.io.*) could not be instantiated." ;
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The form layer wasn't written as the required IO services (stardiv.uno.io.*) could not be instantiated.";
+        Text [ en-US ] = "The form layer wasn't written as the required IO services (stardiv.uno.io.*) could not be instantiated." ;
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "An error occurred while reading the form controls. The form layer has not been loaded.";
+        Text [ en-US ] = "An error occurred while reading the form controls. The form layer has not been loaded." ;
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "An error occurred while writing the form controls. The form layer has not been saved.";
+        Text [ en-US ] = "An error occurred while writing the form controls. The form layer has not been saved." ;
     };
     String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "An error occurred while reading one of the bullets. Not all of the bullets were loaded.";
+        Text [ en-US ] = "An error occurred while reading one of the bullets. Not all of the bullets were loaded." ;
     };
-
     String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
     {
-//      TEXT = "Der Basic-Code wurde verändert und kann somit nicht mehr als Original gespeichert werden." ;
-//      TEXT [ English ] = "The Basic-Code is modified and so it can not be saved as original." ;
-        Text [ en-US ] = "All changes to the Basic Code are lost.The original VBA Macro Code is saved instead.";
+        Text [ en-US ] = "All changes to the Basic Code are lost. The original VBA Macro Code is saved instead." ;
     };
 
     String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The original VBA Basic Code contained in the document will not be saved.";
+        Text [ en-US ] = "The original VBA Basic Code contained in the document will not be saved." ;
     };
 
     String ERRCODE_SVX_WRONGPASS & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The password is incorrect. The document cannot be opened.";
+        Text [ en-US ] = "The password is incorrect. The document cannot be opened." ;
     };
 
     String ERRCODE_SVX_READ_FILTER_CRYPT & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The encryption method used in this document is not supported. Only Microsoft Office 97/2000 compatible password encryption is supported.";
+        Text [ en-US ] = "The encryption method used in this document is not supported. Only Microsoft Office 97/2000 compatible password encryption is supported." ;
     };
 
     String ERRCODE_SVX_READ_FILTER_PPOINT & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The loading of password-encrypted Microsoft PowerPoint presentations is not supported.";
+        Text [ en-US ] = "The loading of password-encrypted Microsoft PowerPoint presentations is not supported." ;
     };
 
     String ERRCODE_SVX_EXPORT_FILTER_CRYPT & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "Password protection is not supported when documents are saved in a Microsoft Office format.\nDo you want to save the document without password protection?";
+        Text [ en-US ] = "Password protection is not supported when documents are saved in a Microsoft Office format.\nDo you want to save the document without password protection?" ;
     };
 };
- // ********************************************************************** EOF
 
+// ********************************************************************** EOF
