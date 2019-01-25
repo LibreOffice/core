@@ -47,6 +47,11 @@ public:
     void    SetEditMode(sal_uInt16 nMode);
     sal_uInt16  GetEditMode() { return nEditMode; }
 
+    /**
+     * set attribute for the object to be created
+     */
+    void SetAttributes(SfxItemSet& rAttr);
+
     virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
 private:
@@ -59,6 +64,11 @@ private:
 
     sal_uInt16    nEditMode;
     css::uno::Any maTargets;   // used for creating a path for custom animations
+
+    //Extra attributes coming from parameters
+    sal_uInt16  mnTransparence;  // Default: 0
+    OUString    msColor;         // Default: ""
+    sal_uInt16  mnWidth;         // Default: 0
 };
 
 } // end of namespace sd
