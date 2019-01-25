@@ -22,7 +22,6 @@
 #include <cassert>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
