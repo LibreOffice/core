@@ -10,23 +10,33 @@
 #ifndef INCLUDED_TEST_SHEET_XNAMEDRANGES_HXX
 #define INCLUDED_TEST_SHEET_XNAMEDRANGES_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XNamedRanges
 {
 public:
     // remove default entry
-    XNamedRanges();
+    XNamedRanges()
+        : maNameToRemove("initial1")
+    {
+    }
+
     // removes given entry
-    XNamedRanges(const OUString& rNameToRemove);
+    XNamedRanges(const OUString& rNameToRemove)
+        : maNameToRemove(rNameToRemove)
+    {
+    }
 
-    virtual ~XNamedRanges();
-
-    virtual css::uno::Reference< css::uno::XInterface > init(sal_Int32 nSheets = 0) = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) = 0;
 
     // XNamedRanges
     void testAddNewByName();
@@ -35,13 +45,14 @@ public:
     void testOutputList();
 
 protected:
-    css::uno::Reference< css::sheet::XSpreadsheet > xSheet;
+    ~XNamedRanges(){};
+    css::uno::Reference<css::sheet::XSpreadsheet> xSheet;
 
 private:
     OUString const maNameToRemove;
 };
 
-}
+} // namespace apitest
 
 #endif // INCLUDED_TEST_SHEET_XNAMEDRANGES_HXX
 

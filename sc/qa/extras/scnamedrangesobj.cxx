@@ -8,18 +8,24 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScNamedRangesObj : public CalcUnoApiTest, public apitest::XNamedRanges
+namespace sc_apitest
+{
+class ScNamedRangesObj : public CalcUnoApiTest,
+                         public apitest::XEnumerationAccess,
+                         public apitest::XNamedRanges
 {
 public:
     ScNamedRangesObj();
@@ -27,9 +33,13 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet = 0) override;
+    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XNamedRanges
     CPPUNIT_TEST(testAddNewByName);
@@ -40,24 +50,37 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScNamedRangesObj::ScNamedRangesObj()
-     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
+uno::Reference<uno::XInterface> ScNamedRangesObj::init()
 {
-    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
-
-    uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue("NamedRanges"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XNamedRanges> xNamedRanges(xPropSet->getPropertyValue("NamedRanges"),
+                                                     UNO_QUERY_THROW);
 
     //set value from xnamedranges.hxx
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
+    xSheet.set(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+
+    return xNamedRanges;
+}
+
+uno::Reference<uno::XInterface> ScNamedRangesObj::getXNamedRanges(sal_Int32 nSheet)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XNamedRanges> xNamedRanges(xPropSet->getPropertyValue("NamedRanges"),
+                                                     UNO_QUERY_THROW);
+
+    //set value from xnamedranges.hxx
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
     xSheet.set(xIndexAccess->getByIndex(nSheet), UNO_QUERY_THROW);
 
     return xNamedRanges;
@@ -80,7 +103,7 @@ void ScNamedRangesObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangesObj);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
