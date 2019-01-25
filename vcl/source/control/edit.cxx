@@ -2932,8 +2932,7 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     for( sal_Int32 i = 0; i < nEle; i++ )
     {
         sal_Int32 nIndex = 0;
-        const OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
-        if ( aMimetype == "text/plain" )
+        if (comphelper::string::matchToken(rFlavors[i].MimeType, 0, ';', nIndex, "text/plain"))
         {
             mpDDInfo->bIsStringSupported = true;
             break;
