@@ -36,8 +36,8 @@ public:
     void testGetPropertySetInfo();
     void testSetPropertyValue();
     void testGetPropertyValue();
-    void testPropertyChangeListner();
-    void testVetoableChangeListner();
+    void testPropertyChangeListener();
+    void testVetoableChangeListener();
 
 protected:
     ~XPropertySet(){};
