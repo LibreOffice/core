@@ -33,12 +33,12 @@
 
 namespace
 {
-    void lclErrorDialog(weld::Window* pParent, const OUString& rString)
+    void lclErrorDialog(weld::Window* pParent, const OUString& rString, const std::function<void(sal_Int32)>& func)
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+        std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   rString));
-        xBox->run();
+        xBox->runAsync(func);
     }
 }
 
@@ -166,23 +166,31 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     switch ( eError )
     {
         case SOLVERR_NOFORMULA:
-            lclErrorDialog(GetFrameWeld() , errMsgNoFormula);
-            m_pEdFormulaCell->GrabFocus();
+            lclErrorDialog(GetFrameWeld(), errMsgNoFormula,
+                [this](sal_Int32 /*nResult*/) {
+                    m_pEdFormulaCell->GrabFocus();
+                });
             break;
 
         case SOLVERR_INVALID_FORMULA:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidForm);
-            m_pEdFormulaCell->GrabFocus();
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidForm,
+                [this](sal_Int32 /*nResult*/) {
+                    m_pEdFormulaCell->GrabFocus();
+                });
             break;
 
         case SOLVERR_INVALID_VARIABLE:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidVar);
-            m_pEdVariableCell->GrabFocus();
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidVar,
+                [this](sal_Int32 /*nResult*/) {
+                    m_pEdVariableCell->GrabFocus();
+                });
             break;
 
         case SOLVERR_INVALID_TARGETVALUE:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidVal);
-            m_pEdTargetVal->GrabFocus();
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidVal,
+                [this](sal_Int32 /*nResult*/) {
+                    m_pEdTargetVal->GrabFocus();
+                });
             break;
     }
 }

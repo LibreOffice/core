@@ -37,6 +37,7 @@ class Dialog;
 class BitmapEx;
 namespace weld
 {
+    class Dialog;
     class DialogController;
     class Window;
 }
@@ -54,8 +55,12 @@ public:
     virtual short       Execute() = 0;
 
     struct AsyncContext {
+        // for the case where the owner is the dialog itself, and the dialog is an unwelded VclPtr based dialog
         VclPtr<VclReferenceBase> mxOwner;
-        std::shared_ptr<weld::DialogController> mxOwnerDialog;
+        // for the case where the dialog is welded, and owned by a DialogController
+        std::shared_ptr<weld::DialogController> mxOwnerDialogController;
+        // for the case where the dialog is welded, and is running async without a DialogController
+        std::shared_ptr<weld::Dialog> mxOwnerSelf;
         std::function<void(sal_Int32)> maEndDialogFn;
         bool isSet() { return !!maEndDialogFn; }
     };
