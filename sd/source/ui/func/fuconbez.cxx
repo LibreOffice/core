@@ -31,6 +31,9 @@
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xlnwtit.hxx>
 
 #include <app.hrc>
 #include <ViewShell.hxx>
@@ -50,7 +53,10 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-
+/*//Extra attributes coming from parameters
+    sal_uInt16  mnTransparence;  // Default: 0
+    OUString    msColor;         // Default: ""
+    sal_uInt16  mnWidth;         // Default: 0*/
 FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -58,8 +64,29 @@ FuConstructBezierPolygon::FuConstructBezierPolygon (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
-      nEditMode(SID_BEZIER_MOVE)
+      nEditMode(SID_BEZIER_MOVE),
+      mnTransparence(0),
+      mnWidth(0)
 {
+}
+
+namespace{
+
+/// Checks to see if the request has a parameter of IsSticky:bool=true
+/// It means that the selected command/button will stay selected after use
+bool isSticky(SfxRequest& rReq)
+{
+    const SfxItemSet *pArgs = rReq.GetArgs ();
+    if (pArgs)
+    {
+        const SfxBoolItem* pIsSticky = rReq.GetArg<SfxBoolItem>(FN_PARAM_4);
+        if (pIsSticky && pIsSticky->GetValue())
+            return true;
+    }
+
+    return false;
+}
+
 }
 
 rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
@@ -67,7 +94,7 @@ rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::s
     FuConstructBezierPolygon* pFunc;
     rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructBezierPolygon( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
-    pFunc->SetPermanent(bPermanent);
+    pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
 }
 
@@ -76,11 +103,32 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     FuConstruct::DoExecute( rReq );
 
     const SfxItemSet* pArgs = rReq.GetArgs();
+
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = nullptr;
         if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
             maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
+
+        if (nSlotId == SID_DRAW_FREELINE_NOFILL)
+        {
+            const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+            const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+            const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+
+            if (pTransparence && pTransparence->GetValue() > 0)
+            {
+                mnTransparence = pTransparence->GetValue();
+            }
+            if (pColor && !pColor->GetValue().isEmpty())
+            {
+                msColor = pColor->GetValue();
+            }
+            if (pWidth && pWidth->GetValue() > 0)
+            {
+                mnWidth = pWidth->GetValue();
+            }
+        }
     }
 }
 
@@ -126,6 +174,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
+            SetAttributes(aAttr);
             pObj->SetMergedItemSet(aAttr);
         }
     }
@@ -283,6 +332,37 @@ void FuConstructBezierPolygon::SelectionHasChanged()
     mpViewShell->GetViewShellBase().GetToolBarManager()->SelectionHasChanged(
         *mpViewShell,
         *mpView);
+}
+
+namespace {
+/// Returns the color based on the color names listed in core/include/tools/color.hxx
+/// Feel free to extend with more color names from color.hxx
+Color strToColor(const OUString& sColor)
+{
+    Color aColor = COL_AUTO;
+
+    if (sColor == "COL_GRAY")
+        aColor = COL_GRAY;
+    else if (sColor == "COL_GRAY3")
+        aColor = COL_GRAY3;
+    else if (sColor == "COL_GRAY7")
+        aColor = COL_GRAY7;
+
+    return aColor;
+}
+}
+
+void FuConstructBezierPolygon::SetAttributes(SfxItemSet& rAttr)
+{
+    if (nSlotId == SID_DRAW_FREELINE_NOFILL)
+    {
+        if (mnTransparence > 0 && mnTransparence <= 100)
+            rAttr.Put(XLineTransparenceItem(mnTransparence));
+        if (!msColor.isEmpty())
+            rAttr.Put(XLineColorItem(OUString(), strToColor(msColor)));
+        if (mnWidth > 0)
+            rAttr.Put(XLineWidthItem(mnWidth));
+    }
 }
 
 /**
