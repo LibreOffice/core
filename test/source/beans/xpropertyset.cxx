@@ -76,7 +76,7 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 
-void XPropertySet::testPropertyChangeListner()
+void XPropertySet::testPropertyChangeListener()
 {
     uno::Reference<beans::XPropertySet> xPropSet(init(), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
@@ -100,7 +100,7 @@ void XPropertySet::testPropertyChangeListner()
     }
 }
 
-void XPropertySet::testVetoableChangeListner()
+void XPropertySet::testVetoableChangeListener()
 {
     uno::Reference<beans::XPropertySet> xPropSet(init(), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
