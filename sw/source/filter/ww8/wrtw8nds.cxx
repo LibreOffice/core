@@ -195,10 +195,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
 {
 
     SwPosition aPos(rTextNd);
-    if (SvxFrameDirection::Horizontal_RL_TB == rWr.m_pDoc->GetTextDirection(aPos))
-        mbParaIsRTL = true;
-    else
-        mbParaIsRTL = false;
+    mbParaIsRTL = SvxFrameDirection::Horizontal_RL_TB == rWr.m_pDoc->GetTextDirection(aPos);
 
     maCharRunIter = maCharRuns.begin();
     IterToCurrent();
@@ -1548,7 +1545,7 @@ SvxFrameDirection MSWordExportBase::GetDefaultFrameDirection( ) const
         {
             nDir = TrueFrameDirection( *static_cast< const SwFrameFormat * >(m_pOutFormatNode) );
         }
-        else if ( dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) !=  nullptr )    //pagagraph
+        else if ( dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) !=  nullptr )    //paragraph
         {
             const SwContentNode *pNd = static_cast<const SwContentNode *>(m_pOutFormatNode);
             SwPosition aPos( *pNd );
@@ -2665,7 +2662,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
-            bool bParaRTL = aAttrIter.IsParaRTL();
+            const bool bParaRTL = aAttrIter.IsParaRTL();
 
             int nNumberLevel = -1;
             if (rNode.IsNumbered())
