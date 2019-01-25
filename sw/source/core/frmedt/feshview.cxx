@@ -3142,6 +3142,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
             }
         }
         SdrPageView* pPageView = pDrawView->GetSdrPageView();
+        SdrCreateView::SetupObjLayer(pPageView, pDrawView->GetActiveLayer(), pObj);
         pDrawView->InsertObjectAtView(pObj, *pPageView);
     }
     ImpEndCreate();
