@@ -37,6 +37,35 @@ using namespace ::boost;
 using namespace ::lok;
 using namespace ::std;
 
+namespace {
+
+void processEventsToIdle()
+{
+    typedef void (ProcessEventsToIdleFn)(void);
+    static ProcessEventsToIdleFn *processFn = nullptr;
+    if (!processFn)
+    {
+        void *me = dlopen(nullptr, RTLD_NOW);
+        processFn = reinterpret_cast<ProcessEventsToIdleFn *>(dlsym(me, "unit_lok_process_events_to_idle"));
+    }
+
+    CPPUNIT_ASSERT(processFn);
+
+    (*processFn)();
+}
+
+void insertString(Document& rDocument, const std::string& s)
+{
+    for (const char c : s)
+    {
+        rDocument.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rDocument.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        processEventsToIdle();
+    }
+}
+
+}
+
 OUString getFileURLFromSystemPath(OUString const & path)
 {
     OUString url;
@@ -56,6 +85,9 @@ public:
     const string m_sSrcRoot;
     const string m_sInstDir;
     const string m_sLOPath;
+
+    std::unique_ptr<Document> loadDocument( Office *pOffice, const string &pName,
+                                            const char *pFilterOptions = nullptr );
 
     TiledRenderingTest()
         : m_sSrcRoot( getenv( "SRC_ROOT" ) )
@@ -130,20 +162,26 @@ int getDocumentType( Office* pOffice, const string& rPath )
     return pDocument->getDocumentType();
 }
 
+std::unique_ptr<Document> TiledRenderingTest::loadDocument( Office *pOffice, const string &pName,
+                                                            const char *pFilterOptions )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/" + pName;
+    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock." + pName + "#";
+
+    remove( sLockFile.c_str() );
+
+    return std::unique_ptr<Document>(pOffice->documentLoad( sDocPath.c_str(), pFilterOptions ));
+}
+
 void TiledRenderingTest::testDocumentTypes( Office* pOffice )
 {
-    const string sTextDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
-    const string sTextLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
-    // FIXME: same comment as below wrt lockfile removal.
-    remove( sTextLockFile.c_str() );
-
-    std::unique_ptr<Document> pDocument(pOffice->documentLoad( sTextDocPath.c_str()));
     CPPUNIT_ASSERT(pDocument.get());
     CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
     // This crashed.
     pDocument->postUnoCommand(".uno:Bold");
-    Scheduler::ProcessEventsToIdle();
+    processEventsToIdle();
 
     const string sPresentationDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_presentation.odp";
     const string sPresentationLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_presentation.odp#";
@@ -158,16 +196,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
 
 void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
 {
-    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/impress_slidenames.odp";
-    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.impress_slidenames.odp#";
-
-    // FIXME: this is a temporary hack: LOK will fail when trying to open a
-    // locked file, and since we're reusing the file for a different unit
-    // test it's entirely possible that an unwanted lock file will remain.
-    // Hence forcefully remove it here.
-    remove( sLockFile.c_str() );
-
-    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -179,13 +208,7 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
 
 void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
 {
-    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/calc_sheetnames.ods";
-    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.calc_sheetnames.ods#";
-
-    // FIXME: LOK will fail when trying to open a locked file
-    remove( sLockFile.c_str() );
-
-    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -195,13 +218,8 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
 
 void TiledRenderingTest::testPaintPartTile(Office* pOffice)
 {
-    const string sTextDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
-    const string sTextLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
-    // FIXME: same comment as below wrt lockfile removal.
-    remove(sTextLockFile.c_str());
-
-    std::unique_ptr<Document> pDocument(pOffice->documentLoad( sTextDocPath.c_str()));
     CPPUNIT_ASSERT(pDocument.get());
     CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
 
@@ -223,45 +241,9 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
 }
 
-namespace {
-
-void processEventsToIdle()
-{
-    typedef void (ProcessEventsToIdleFn)(void);
-    static ProcessEventsToIdleFn *processFn = nullptr;
-    if (!processFn)
-    {
-        void *me = dlopen(nullptr, RTLD_NOW);
-        processFn = reinterpret_cast<ProcessEventsToIdleFn *>(dlsym(me, "unit_lok_process_events_to_idle"));
-    }
-
-    CPPUNIT_ASSERT(processFn);
-
-    (*processFn)();
-}
-
-void insertString(Document& rDocument, const std::string& s)
-{
-    for (const char c : s)
-    {
-        rDocument.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rDocument.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
-        processEventsToIdle();
-    }
-}
-
-}
-
 void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
 {
-    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/empty.ods";
-    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.empty.ods#";
-
-    // FIXME: LOK will fail when trying to open a locked file
-    remove(sLockFile.c_str());
-
-    // first try with the en-US locale
-    std::unique_ptr<Document> pDocument(pOffice->documentLoad(sDocPath.c_str(), "Language=en-US"));
+    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt", "Language=en-US"));
 
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
