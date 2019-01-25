@@ -2113,8 +2113,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
     bool bFlyInTable = m_pParentFrame && IsInTable();
 
+    SwTextFormatColl& rTextColl = lcl_getFormatCollection( *this, &rNode );
     if ( !bFlyInTable )
-        m_nStyleBeforeFly = GetId( lcl_getFormatCollection( *this, &rNode ) );
+        m_nStyleBeforeFly = GetId( rTextColl );
 
     // nStyleBeforeFly may change when we recurse into another node, so we
     // have to remember it in nStyle
@@ -2742,11 +2743,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             If a given para is using the SvxFrameDirection::Environment direction we
             cannot export that, if it's ltr then that's ok as that is word's
             default. Otherwise we must add a RTL attribute to our export list
+            Only necessary if the ParaStyle doesn't define the direction.
             */
             const SvxFrameDirectionItem* pItem =
                 rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
             if (
                 (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
+                rTextColl.GetFrameDir().GetValue() == SvxFrameDirection::Environment &&
                 aAttrIter.IsParaRTL()
                )
             {
