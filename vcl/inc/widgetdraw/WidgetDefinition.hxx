@@ -17,6 +17,9 @@
 #include <tools/color.hxx>
 #include <unordered_map>
 #include <vector>
+#include <cstddef>
+#include <functional>
+#include <boost/functional/hash.hpp>
 #include <vcl/salnativewidgets.hxx>
 
 namespace vcl
@@ -83,6 +86,42 @@ public:
     }
 };
 
+struct VCL_DLLPUBLIC ControlTypeAndPart
+{
+    ControlType const meType;
+    ControlPart const mePart;
+
+    ControlTypeAndPart(ControlType eType, ControlPart ePart)
+        : meType(eType)
+        , mePart(ePart)
+    {
+    }
+
+    bool operator==(ControlTypeAndPart const& aOther) const
+    {
+        return meType == aOther.meType && mePart == aOther.mePart;
+    }
+};
+
+} // end vcl namespace
+
+namespace std
+{
+template <> struct VCL_DLLPUBLIC hash<vcl::ControlTypeAndPart>
+{
+    std::size_t operator()(vcl::ControlTypeAndPart const& rControlTypeAndPart) const noexcept
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, rControlTypeAndPart.meType);
+        boost::hash_combine(seed, rControlTypeAndPart.mePart);
+        return seed;
+    }
+};
+
+} // end std namespace
+
+namespace vcl
+{
 class VCL_DLLPUBLIC WidgetDefinitionState
 {
 public:
@@ -171,13 +210,8 @@ public:
     Color maToolTextColor;
     Color maFontColor;
 
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maPushButtonDefinitions;
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maRadioButtonDefinitions;
-    std::unordered_map<OString, std::shared_ptr<WidgetDefinitionPart>> maEditboxDefinitions;
-
-    std::shared_ptr<WidgetDefinitionPart> getPushButtonDefinition(ControlPart ePart);
-    std::shared_ptr<WidgetDefinitionPart> getRadioButtonDefinition(ControlPart ePart);
-    std::shared_ptr<WidgetDefinitionPart> getEditboxDefinition(ControlPart ePart);
+    std::unordered_map<ControlTypeAndPart, std::shared_ptr<WidgetDefinitionPart>> maDefinitions;
+    std::shared_ptr<WidgetDefinitionPart> getDefinition(ControlType eType, ControlPart ePart);
 };
 
 } // end vcl namespace
