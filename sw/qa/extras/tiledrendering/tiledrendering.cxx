@@ -470,9 +470,13 @@ void SwTiledRenderingTest::testInsertShape()
     comphelper::dispatchCommand(".uno:BasicShapes.circle", uno::Sequence<beans::PropertyValue>());
 
     // check that the shape was inserted in the visible area, not outside
-    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    IDocumentDrawModelAccess &rDrawModelAccess = pWrtShell->GetDoc()->getIDocumentDrawModelAccess();
+    SdrPage* pPage = rDrawModelAccess.GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(2736, 868, 7264, 3132), pObject->GetSnapRect());
+
+    // check that it is in the foreground layer
+    CPPUNIT_ASSERT_EQUAL(rDrawModelAccess.GetHeavenId().get(), pObject->GetLayer().get());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
