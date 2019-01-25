@@ -54,9 +54,10 @@ void WidgetDefinitionReaderTest::testRead()
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.maToolTextColor.AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.maFontColor.AsRGBHexString());
 
+    // Pushbutton
     {
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
-            = aDefinition.getPushButtonDefinition(ControlPart::Entire)
+            = aDefinition.getDefinition(ControlType::Pushbutton, ControlPart::Entire)
                   ->getStates(ControlState::DEFAULT | ControlState::ENABLED
                                   | ControlState::ROLLOVER,
                               ImplControlValue());
@@ -69,9 +70,10 @@ void WidgetDefinitionReaderTest::testRead()
         CPPUNIT_ASSERT_EQUAL(vcl::DrawCommandType::CIRCLE, aStates[0]->mpDrawCommands[1]->maType);
     }
 
+    // Radiobutton
     {
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
-            = aDefinition.getRadioButtonDefinition(ControlPart::Entire)
+            = aDefinition.getDefinition(ControlType::Radiobutton, ControlPart::Entire)
                   ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::On));
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
         CPPUNIT_ASSERT_EQUAL(size_t(2), aStates[0]->mpDrawCommands.size());
@@ -79,7 +81,7 @@ void WidgetDefinitionReaderTest::testRead()
 
     {
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
-            = aDefinition.getRadioButtonDefinition(ControlPart::Entire)
+            = aDefinition.getDefinition(ControlType::Radiobutton, ControlPart::Entire)
                   ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::Off));
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates[0]->mpDrawCommands.size());

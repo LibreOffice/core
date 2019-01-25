@@ -197,7 +197,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::Pushbutton:
         {
             std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getPushButtonDefinition(ePart);
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
             if (pPart)
             {
                 auto aStates = pPart->getStates(eState, rValue);
@@ -216,7 +216,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::Radiobutton:
         {
             std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getRadioButtonDefinition(ePart);
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
             if (pPart)
             {
                 std::shared_ptr<WidgetDefinitionState> pState
@@ -236,7 +236,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::MultilineEditbox:
         {
             std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getEditboxDefinition(ePart);
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
             if (pPart)
             {
                 std::shared_ptr<WidgetDefinitionState> pState
