@@ -75,6 +75,7 @@ AsyncRequests::~AsyncRequests()
     aLock.clear();
     // <- SYNCHRONIZED
 
+    SolarMutexReleaser aReleaser;
     join();
 }
 
