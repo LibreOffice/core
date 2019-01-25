@@ -7599,7 +7599,6 @@ include/test/sheet/xdatapilottable.hxx
 include/test/sheet/xdatapilottable2.hxx
 include/test/sheet/xgoalseek.hxx
 include/test/sheet/xnamedrange.hxx
-include/test/sheet/xnamedranges.hxx
 include/test/sheet/xprintareas.hxx
 include/test/sheet/xsheetannotation.hxx
 include/test/sheet/xsheetannotations.hxx
@@ -10146,7 +10145,6 @@ sc/qa/extras/sceditfieldobj-header.cxx
 sc/qa/extras/scfilterdescriptorbaseobj.cxx
 sc/qa/extras/scmodelobj.cxx
 sc/qa/extras/scnamedrangeobj.cxx
-sc/qa/extras/scnamedrangesobj.cxx
 sc/qa/extras/scoutlineobj.cxx
 sc/qa/extras/scsubtotaldescriptorbaseobj.cxx
 sc/qa/extras/scsubtotalfieldobj.cxx
@@ -16588,7 +16586,6 @@ test/source/sheet/xdatapilottable.cxx
 test/source/sheet/xdatapilottable2.cxx
 test/source/sheet/xgoalseek.cxx
 test/source/sheet/xnamedrange.cxx
-test/source/sheet/xnamedranges.cxx
 test/source/sheet/xprintareas.cxx
 test/source/sheet/xsheetannotation.cxx
 test/source/sheet/xsheetannotations.cxx
