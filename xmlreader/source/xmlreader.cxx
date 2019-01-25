@@ -21,11 +21,9 @@
 
 #include <cassert>
 #include <climits>
-#include <cstddef>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <osl/file.h>
 #include <rtl/character.hxx>
 #include <rtl/string.h>
