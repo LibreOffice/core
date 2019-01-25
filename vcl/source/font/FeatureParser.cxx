@@ -17,27 +17,30 @@ namespace font
 {
 OUString trimFontNameFeatures(OUString const& rFontName)
 {
-    OUString sResultName(rFontName);
+    const sal_Int32 nPrefixIdx{ rFontName.indexOf(vcl::font::FeaturePrefix) };
 
-    if (sResultName.indexOf(vcl::font::FeaturePrefix) < 0)
-        return sResultName;
+    if (nPrefixIdx < 0)
+        return rFontName;
 
-    return sResultName.getToken(0, vcl::font::FeaturePrefix);
+    return rFontName.copy(0, nPrefixIdx);
 }
 
 FeatureParser::FeatureParser(OUString const& rFontName)
 {
-    if (rFontName.indexOf(vcl::font::FeaturePrefix) < 0)
+    sal_Int32 nPrefixIdx{ rFontName.indexOf(vcl::font::FeaturePrefix) };
+
+    if (nPrefixIdx < 0)
         return;
 
-    OUString sName = rFontName.getToken(1, vcl::font::FeaturePrefix);
+    OUString sName = rFontName.getToken(0, vcl::font::FeaturePrefix, ++nPrefixIdx);
     sal_Int32 nIndex = 0;
     do
     {
         OUString sToken = sName.getToken(0, vcl::font::FeatureSeparator, nIndex);
 
-        OUString sID = sToken.getToken(0, '=');
-        OUString sValue = sToken.getToken(1, '=');
+        sal_Int32 nInnerIdx{ 0 };
+        OUString sID = sToken.getToken(0, '=', nInnerIdx);
+        OUString sValue = sToken.getToken(0, '=', nInnerIdx);
 
         if (sID.getLength() == 4 && sValue != "0")
         {
