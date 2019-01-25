@@ -308,13 +308,14 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest )
 {
+    rDest.mxBitmap.Expand( 0, rSource.mnY );
+    rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
+        tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), &rSource.mxBitmap );
+
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
     {   // Insert on Bottom
         if ( mpCGM->mnVDCYmul == -1 )
             rDest.mnOrigin = rSource.mnOrigin;          // new origin
-        rDest.mxBitmap.Expand( 0, rSource.mnY );
-        rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
-            tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), &rSource.mxBitmap );
         FloatPoint aFloatPoint;
         aFloatPoint.X = rSource.mnQ.X - rSource.mnR.X;
         aFloatPoint.Y = rSource.mnQ.Y - rSource.mnR.Y;
@@ -327,9 +328,6 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
     {   // Insert on Top
         if ( mpCGM->mnVDCYmul == 1 )
             rDest.mnOrigin = rSource.mnOrigin;          // new origin
-        rDest.mxBitmap.Expand( 0, rSource.mnY );
-        rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
-            tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), &rSource.mxBitmap );
         rDest.mnP = rSource.mnP;
         rDest.mnR = rSource.mnR;
     }
