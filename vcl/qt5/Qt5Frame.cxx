@@ -1059,7 +1059,7 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
     m_pDropTarget = nullptr;
 }
 
-void Qt5Frame::draggingStarted(const int x, const int y)
+void Qt5Frame::draggingStarted(const int x, const int y, const QMimeData* pQMimeData)
 {
     assert(m_pDropTarget);
 
@@ -1072,7 +1072,10 @@ void Qt5Frame::draggingStarted(const int x, const int y)
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
+    if (pQMimeData)
+        xTransferable = new Qt5DnDTransferable(pQMimeData);
+    else
+        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
 
     if (!m_bInDrag && xTransferable.is())
     {
@@ -1087,7 +1090,7 @@ void Qt5Frame::draggingStarted(const int x, const int y)
         m_pDropTarget->fire_dragOver(aEvent);
 }
 
-void Qt5Frame::dropping(const int x, const int y)
+void Qt5Frame::dropping(const int x, const int y, const QMimeData* pQMimeData)
 {
     assert(m_pDropTarget);
 
@@ -1101,7 +1104,10 @@ void Qt5Frame::dropping(const int x, const int y)
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
+    if (pQMimeData)
+        xTransferable = new Qt5DnDTransferable(pQMimeData);
+    else
+        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
     aEvent.Transferable = xTransferable;
 
     m_pDropTarget->fire_drop(aEvent);
