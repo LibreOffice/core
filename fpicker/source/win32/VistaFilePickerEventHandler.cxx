@@ -289,6 +289,7 @@ public:
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
+    // See special handling in ~AsyncRequests for this static
     static AsyncRequests aNotify(RequestHandlerRef(new AsyncPickerEvents()));
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
