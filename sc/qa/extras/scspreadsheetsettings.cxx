@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/globalsheetsettings.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -26,7 +27,8 @@ namespace sc_apitest
 {
 class ScSpreadsheetSettings : public CalcUnoApiTest,
                               public apitest::GlobalSheetSettings,
-                              public apitest::XPropertySet
+                              public apitest::XPropertySet,
+                              public apitest::XServiceInfo
 {
 public:
     ScSpreadsheetSettings();
@@ -47,6 +49,11 @@ public:
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -56,6 +63,8 @@ private:
 ScSpreadsheetSettings::ScSpreadsheetSettings()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XPropertySet({ "LinkUpdateMode", "UsePrinterMetrics", "UserLists" })
+    , XServiceInfo("stardiv.StarCalc.ScSpreadsheetSettings",
+                   "com.sun.star.sheet.GlobalSheetSettings")
 {
 }
 
