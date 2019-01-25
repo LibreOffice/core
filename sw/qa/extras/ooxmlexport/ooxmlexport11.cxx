@@ -14,6 +14,7 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -651,6 +652,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCe
     sal_Int32 nRowLeft = parseDump("/root/page/body/tab[4]/row[1]/infos/bounds", "left").toInt32();
     sal_Int32 nTextLeft  = parseDump("/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds", "left").toInt32();
     CPPUNIT_ASSERT( nRowLeft < nTextLeft );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf98620_environmentBiDi, "tdf98620_environmentBiDi.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), "ParaAdjust" ));
+
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(2), "ParaAdjust" ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")
