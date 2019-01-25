@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_1b476120",
+        "filename": "sd/source/ui/func/fuconrec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T08:11:41Z",
+      "side": 1,
+      "message": "A one-liner doxygen documentation for this free function in the form of \"/// Foo bar baz.\" would be nice here.",
+      "revId": "c493dfcf38a5317fc56a86875a20eed4d01f8779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_fb5365e1",
+        "filename": "sd/source/ui/func/fuconrec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T08:11:41Z",
+      "side": 1,
+      "message": "These kind of whitespace changes are not too helpful; if you add a next long variable at the bottom, you\u0027ll have to update everything again, polluting git blame history.",
+      "revId": "c493dfcf38a5317fc56a86875a20eed4d01f8779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_db50a9d7",
+        "filename": "sd/source/ui/func/fuconrec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T08:11:41Z",
+      "side": 1,
+      "message": "Double new lines.",
+      "revId": "c493dfcf38a5317fc56a86875a20eed4d01f8779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_bb5f2de4",
+        "filename": "sd/source/ui/func/fuconrec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T08:11:41Z",
+      "side": 1,
+      "message": "Make up your mind if you want whitespace inside () or not. :-) And again, missing one-liner doxygen comment for free function. (Sure, it converts a string to color, but perhaps mention the input is assumed to follow what format.)",
+      "revId": "c493dfcf38a5317fc56a86875a20eed4d01f8779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5b5ef9e6",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-25T08:11:41Z",
+      "side": 1,
+      "message": "What is the reason you re-throw a runtime exception, but not others? If you don\u0027t want any custom logic for exception handling, then the easiest is to use DBG_UNHANDLED_EXCEPTION(), i.e. catch everything and log a warning. Silent catch makes later debugging hard.",
+      "revId": "c493dfcf38a5317fc56a86875a20eed4d01f8779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
