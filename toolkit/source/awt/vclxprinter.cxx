@@ -206,9 +206,8 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    sal_Int32 nIndex = 0;
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
-        rFormDescription.getToken( 3, ';', nIndex ).toInt32());
+        rFormDescription.getToken( 3, ';' ).toInt32());
     GetPrinter()->SetPaperBin( nPaperBin );
 }
 
