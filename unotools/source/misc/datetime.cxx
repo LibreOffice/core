@@ -27,6 +27,7 @@
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <comphelper/string.hxx>
 #include <sstream>
 
 namespace
@@ -347,20 +348,13 @@ bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTim
 //          year, week date, ordinal date
 bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
 {
+    const sal_Int32 nDateTokens {comphelper::string::getTokenCount(aDateStr, '-')};
     bool bSuccess = true;
 
     sal_Int32 nYear    = 1899;
     sal_Int32 nMonth   = 12;
     sal_Int32 nDay     = 30;
 
-    const sal_Unicode* pStr = aDateStr.getStr();
-    sal_Int32 nDateTokens = 1;
-    while ( *pStr )
-    {
-        if ( *pStr == '-' )
-            nDateTokens++;
-        pStr++;
-    }
     if ( nDateTokens > 3 || aDateStr.isEmpty() )
         bSuccess = false;
     else
