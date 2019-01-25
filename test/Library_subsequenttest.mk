@@ -113,6 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xheaderfootercontent \
 	test/source/sheet/xlabelrange \
 	test/source/sheet/xlabelranges \
+	test/source/sheet/xmultiformulatokens \
 	test/source/sheet/xmultipleoperation \
 	test/source/sheet/xnamedrange \
 	test/source/sheet/xnamedranges \
