@@ -569,6 +569,30 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
     }
 }
 
+void SdrCreateView::SetupObjLayer(const SdrPageView* pPageView, const OUString& aActiveLayer, SdrObject* pObj)
+{
+    const SdrLayerAdmin& rAd = pPageView->GetPage()->GetLayerAdmin();
+    SdrLayerID nLayer(0);
+
+    // #i72535#
+    if(dynamic_cast<const FmFormObj*>( pObj) !=  nullptr)
+    {
+        // for FormControls, force to form layer
+        nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
+    }
+    else
+    {
+        nLayer = rAd.GetLayerID(aActiveLayer);
+    }
+
+    if(SDRLAYER_NOTFOUND == nLayer)
+    {
+        nLayer = SdrLayerID(0);
+    }
+
+    pObj->SetLayer(nLayer);
+}
+
 bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 {
     bool bRet=false;
@@ -599,26 +623,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 SdrObject* pObj=pCurrentCreate;
                 pCurrentCreate=nullptr;
 
-                const SdrLayerAdmin& rAd = pCreatePV->GetPage()->GetLayerAdmin();
-                SdrLayerID nLayer(0);
-
-                // #i72535#
-                if(dynamic_cast<const FmFormObj*>( pObj) !=  nullptr)
-                {
-                    // for FormControls, force to form layer
-                    nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
-                }
-                else
-                {
-                    nLayer = rAd.GetLayerID(maActualLayer);
-                }
-
-                if(SDRLAYER_NOTFOUND == nLayer)
-                {
-                    nLayer = SdrLayerID(0);
-                }
-
-                pObj->SetLayer(nLayer);
+                SetupObjLayer(pCreatePV, maActualLayer, pObj);
 
                 // recognize creation of a new 3D object inside a 3D scene
                 bool bSceneIntoScene(false);
