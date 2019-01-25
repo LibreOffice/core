@@ -103,6 +103,9 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextLineColor(const GDIMetaFile& rMetaFile);
     void testTextLineColor();
 
+    void checkGradient(const GDIMetaFile& rMetaFile);
+    void testGradient();
+
 public:
     SvmTest()
         : BootstrapFixture(true, false)
@@ -134,6 +137,7 @@ public:
     CPPUNIT_TEST(testTextColor);
     CPPUNIT_TEST(testTextFillColor);
     CPPUNIT_TEST(testTextLineColor);
+    CPPUNIT_TEST(testGradient);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1022,6 +1026,44 @@ void SvmTest::testTextLineColor()
     pVirtualDev->SetTextLineColor(Color(0x345678));
 
     checkTextLineColor(writeAndRead(aGDIMetaFile, "textlinecolor.svm"));
+}
+
+void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]", {
+        {"style", "Linear"},
+        {"startcolor", "#ffffff"},
+        {"endcolor", "#000000"},
+        {"angle", "0"},
+        {"border", "0"},
+        {"offsetx", "50"},
+        {"offsety", "50"},
+        {"startintensity", "100"},
+        {"endintensity", "100"},
+        {"steps", "0"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]/rectangle", {
+        {"left", "1"},
+        {"top", "2"},
+        {"right", "4"},
+        {"bottom", "6"},
+    });
+}
+
+void SvmTest::testGradient()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+
+    tools::Rectangle aRectangle(Point(1, 2), Size(4,5));
+
+    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    pVirtualDev->DrawGradient(aRectangle, aGradient);
+
+    checkGradient(writeAndRead(aGDIMetaFile, "gradient.svm"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvmTest);
