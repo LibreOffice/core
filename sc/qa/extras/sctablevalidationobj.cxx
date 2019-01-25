@@ -53,8 +53,8 @@ public:
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testSetPropertyValue);
     CPPUNIT_TEST(testGetPropertyValue);
-    CPPUNIT_TEST(testPropertyChangeListner);
-    CPPUNIT_TEST(testVetoableChangeListner);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
