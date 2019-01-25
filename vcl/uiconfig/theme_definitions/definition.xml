@@ -81,7 +81,8 @@
     <editbox>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
-                <rect stroke="#C7C7C7" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+                <!-- <rect stroke="#C7C7C7" fill="#FFFFFF" stroke-width="2" rx="5" ry="5" margin="0"/> -->
+                <line stroke="#C7C7C7" stroke-width="2" x1="0.0" y1="0.9" x2="1.0" y2="0.9"/>
             </state>
         </part>
     </editbox>
