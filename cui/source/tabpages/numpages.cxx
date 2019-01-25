@@ -1910,14 +1910,16 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             Graphic aGraphic;
+            OUString sGrfName;
             ScopedVclPtrInstance< VirtualDevice > pVD;
             size_t i = 0;
             for (auto & grfName : aGrfNames)
             {
+                sGrfName = grfName;
                 OUString sItemId = "gallery" + OUString::number(i);
-                INetURLObject aObj(grfName);
+                INetURLObject aObj(sGrfName);
                 if(aObj.GetProtocol() == INetProtocol::File)
-                    grfName = aObj.PathToFileName();
+                    sGrfName = aObj.PathToFileName();
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
                     BitmapEx aBitmap(aGraphic.GetBitmapEx());
@@ -1933,11 +1935,11 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
                     }
                     pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
                     pVD->DrawBitmapEx(Point(), aBitmap);
-                    m_xGalleryMenu->append(sItemId, grfName, *pVD);
+                    m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
                 }
                 else
                 {
-                    m_xGalleryMenu->append(sItemId, grfName);
+                    m_xGalleryMenu->append(sItemId, sGrfName);
                 }
                 ++i;
             }
