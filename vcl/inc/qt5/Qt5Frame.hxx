@@ -37,6 +37,7 @@ class QWidget;
 class Qt5MainWindow;
 class Qt5DragSource;
 class Qt5DropTarget;
+class QMimeData;
 class QPaintDevice;
 class QScreen;
 class QImage;
@@ -136,8 +137,8 @@ public:
     virtual void deregisterDragSource(Qt5DragSource const* pDragSource);
     virtual void registerDropTarget(Qt5DropTarget* pDropTarget);
     virtual void deregisterDropTarget(Qt5DropTarget const* pDropTarget);
-    void draggingStarted(const int x, const int y);
-    void dropping(const int x, const int y);
+    void draggingStarted(const int x, const int y, const QMimeData* pQMimeData);
+    void dropping(const int x, const int y, const QMimeData* pQMimeData);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;
