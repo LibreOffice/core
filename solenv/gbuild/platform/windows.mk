@@ -28,7 +28,12 @@ COM := MSC
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
+ifeq ($(CPUNAME),INTEL)
 gb_AS := ml
+else ifeq ($(CPUNAME),X86_64)
+gb_AS := ml64
+endif
+
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link

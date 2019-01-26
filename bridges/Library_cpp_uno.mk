@@ -608,6 +608,27 @@ $(eval $(call gb_Library_add_defs,$(COMNAME)_uno,\
 ))
 endif
 
+#########################################################
+else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),WNT-X86_64-mscx)
+#########################################################
+
+$(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
+	bridges/source/cpp_uno/msvc_win64_x86-64/abi \
+	bridges/source/cpp_uno/msvc_win64_x86-64/cpp2uno \
+	bridges/source/cpp_uno/msvc_win64_x86-64/dllinit \
+	bridges/source/cpp_uno/msvc_win64_x86-64/except \
+	bridges/source/cpp_uno/msvc_win64_x86-64/uno2cpp \
+))
+
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+	bridges/source/cpp_uno/msvc_win64_x86-64/except \
+, $(gb_COMPILERNOOPTFLAGS) \
+))
+
+$(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
+	bridges/source/cpp_uno/msvc_win64_x86-64/call \
+))
+
 #####################################
 else
 #####################################
