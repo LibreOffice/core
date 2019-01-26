@@ -13,6 +13,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/document/xactionlockable.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
@@ -32,6 +33,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 class ScNamedRangesObj : public CalcUnoApiTest,
+                         public apitest::XActionLockable,
                          public apitest::XElementAccess,
                          public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
@@ -50,6 +52,10 @@ public:
     virtual uno::Reference<uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
+
+    // XActionLockable
+    CPPUNIT_TEST(testAddRemoveActionLock);
+    CPPUNIT_TEST(testSetResetActionLock);
 
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
