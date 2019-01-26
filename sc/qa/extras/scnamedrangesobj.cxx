@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -34,7 +35,8 @@ class ScNamedRangesObj : public CalcUnoApiTest,
                          public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
-                         public apitest::XNamedRanges
+                         public apitest::XNamedRanges,
+                         public apitest::XServiceInfo
 {
 public:
     ScNamedRangesObj();
@@ -69,6 +71,11 @@ public:
     //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
     CPPUNIT_TEST(testOutputList);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -80,6 +87,7 @@ ScNamedRangesObj::ScNamedRangesObj()
     , XElementAccess(cppu::UnoType<sheet::XNamedRange>::get())
     , XIndexAccess(4)
     , XNameAccess("initial1")
+    , XServiceInfo("ScNamedRangesObj", "com.sun.star.sheet.NamedRanges")
 {
 }
 
