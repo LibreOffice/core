@@ -97,6 +97,25 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
 }
 
+std::ostream& operator << (std::ostream& ost, const awt::Rectangle& r)
+{
+    ost << "Rectangle: X:" << r.X
+        << " Y:" << r.Y
+        << " W:" << r.Width
+        << " H:" << r.Height;
+    return ost;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
+{
+    // Make sure the rotation is exported correctly, and not distorting size
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Object's RotateAngle is wrong", 4700.0,
+                                         getProperty<double>(xShape, "RotateAngle"), 10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Object's FrameRect is wrong", awt::Rectangle(0, 0, 24188, 24070),
+                                 getProperty<awt::Rectangle>(xShape, "FrameRect"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
