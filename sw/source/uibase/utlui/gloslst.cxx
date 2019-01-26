@@ -375,9 +375,10 @@ void SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *
     for(size_t i = 0; i < nCount; ++i)
     {
         AutoTextGroup* pGroup = aGroupArr[i].get();
+        sal_Int32 nIdx{ 0 };
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
-            OUString sBlock = pGroup->sLongNames.getToken(j, STRING_DELIM);
+            OUString sBlock = pGroup->sLongNames.getToken(0, STRING_DELIM, nIdx);
             if( nBeginLen + 1 < sBlock.getLength() &&
                 rSCmp.isEqual( sBlock.copy(0, nBeginLen), rBegin ))
             {
