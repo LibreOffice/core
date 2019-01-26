@@ -258,7 +258,7 @@ void ScNameDefDlg::AddPushed()
                     assert( pNewEntry);     // undo of no insertion smells fishy
                     if (pNewEntry)
                         mpDocShell->GetUndoManager()->AddUndoAction(
-                                o3tl::make_unique<ScUndoAddRangeData>( mpDocShell, pNewEntry, nTab) );
+                                std::make_unique<ScUndoAddRangeData>( mpDocShell, pNewEntry, nTab) );
 
                     // set table stream invalid, otherwise RangeName won't be saved if no other
                     // call invalidates the stream

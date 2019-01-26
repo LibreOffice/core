@@ -51,7 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <editutil.hxx>
-#include <o3tl/make_unique.hxx>
+
 using ::utl::AccessibleRelationSetHelper;
 using ::utl::AccessibleStateSetHelper;
 using ::accessibility::AccessibleStaticTextBase;
@@ -1542,7 +1542,7 @@ tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 {
     ScCsvGrid& rGrid = implGetGrid();
 
-    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
+    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
     return pEditSource;
 }
 

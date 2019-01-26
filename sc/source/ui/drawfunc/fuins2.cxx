@@ -44,7 +44,6 @@
 #include <svx/charthelper.hxx>
 #include <scmod.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
@@ -565,7 +564,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 if (bUndo)
                 {
                     pScDocSh->GetUndoManager()->AddUndoAction(
-                        o3tl::make_unique<ScUndoInsertTab>( pScDocSh, nNewTab,
+                        std::make_unique<ScUndoInsertTab>( pScDocSh, nNewTab,
                                              true/*bAppend*/, aTabName ) );
                 }
 
@@ -728,7 +727,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     {
         // add undo action the same way as in SdrEditView::InsertObjectAtView
         // (using UndoActionHdl etc.)
-        pView->AddUndo(o3tl::make_unique<SdrUndoNewObj>(*pObj));
+        pView->AddUndo(std::make_unique<SdrUndoNewObj>(*pObj));
     }
 
     // BM/IHA --

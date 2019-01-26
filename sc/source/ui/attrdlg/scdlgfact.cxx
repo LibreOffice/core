@@ -76,7 +76,6 @@
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxdlg.hxx>
 #include <conditio.hxx>
-#include <o3tl/make_unique.hxx>
 
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
@@ -753,12 +752,12 @@ VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormat
 VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(weld::Window* pParent,
                                                                 bool bCol, bool bRow)
 {
-    return VclPtr<AbstractScColRowLabelDlg_Impl>::Create(o3tl::make_unique<ScColRowLabelDlg>(pParent, bCol, bRow));
+    return VclPtr<AbstractScColRowLabelDlg_Impl>::Create(std::make_unique<ScColRowLabelDlg>(pParent, bCol, bRow));
 }
 
 VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText)
 {
-    return VclPtr<AbstractScSortWarningDlg_Impl>::Create(o3tl::make_unique<ScSortWarningDlg>(pParent, rExtendText, rCurrentText));
+    return VclPtr<AbstractScSortWarningDlg_Impl>::Create(std::make_unique<ScSortWarningDlg>(pParent, rExtendText, rCurrentText));
 }
 
 VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
@@ -769,25 +768,25 @@ VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCon
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(o3tl::make_unique<ScDataPilotDatabaseDlg>(pParent));
+    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(std::make_unique<ScDataPilotDatabaseDlg>(pParent));
 }
 
 VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
     weld::Window* pParent, bool bEnableExternal)
 {
-    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(o3tl::make_unique<ScDataPilotSourceTypeDlg>(pParent, bEnableExternal));
+    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(std::make_unique<ScDataPilotSourceTypeDlg>(pParent, bEnableExternal));
 }
 
 VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg(weld::Window* pParent,
                                                                         const std::vector<OUString>& rServices)
 {
-    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(o3tl::make_unique<ScDataPilotServiceDlg>(pParent, rServices));
+    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(std::make_unique<ScDataPilotServiceDlg>(pParent, rServices));
 }
 
 VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(weld::Window* pParent,
     bool bDisallowCellMove)
 {
-    return VclPtr<AbstractScDeleteCellDlg_Impl>::Create(o3tl::make_unique<ScDeleteCellDlg>(pParent, bDisallowCellMove));
+    return VclPtr<AbstractScDeleteCellDlg_Impl>::Create(std::make_unique<ScDeleteCellDlg>(pParent, bDisallowCellMove));
 }
 
 VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(vcl::Window* pParent,
@@ -799,7 +798,7 @@ VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(
 
 VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(o3tl::make_unique<ScDeleteContentsDlg>(pParent));
+    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(std::make_unique<ScDeleteContentsDlg>(pParent));
 }
 
 VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg(weld::Window*       pParent,
@@ -812,41 +811,41 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
                                                             double          fMax,
                                                             sal_uInt16      nPossDir)
 {
-    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(o3tl::make_unique<ScFillSeriesDlg>(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir));
+    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(std::make_unique<ScFillSeriesDlg>(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir));
 }
 
 VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
 {
-    return VclPtr<AbstractScGroupDlg_Impl>::Create(o3tl::make_unique<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
+    return VclPtr<AbstractScGroupDlg_Impl>::Create(std::make_unique<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
 }
 
 VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,
                                                                 bool bDisallowCellMove)
 {
-    return VclPtr<AbstractScInsertCellDlg_Impl>::Create(o3tl::make_unique<ScInsertCellDlg>(pParent, bDisallowCellMove));
+    return VclPtr<AbstractScInsertCellDlg_Impl>::Create(std::make_unique<ScInsertCellDlg>(pParent, bDisallowCellMove));
 }
 
 VclPtr<AbstractScInsertContentsDlg> ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg(weld::Window* pParent,
                                                                                             const OUString* pStrTitle)
 {
-    return VclPtr<AbstractScInsertContentsDlg_Impl>::Create(o3tl::make_unique<ScInsertContentsDlg>(pParent, pStrTitle));
+    return VclPtr<AbstractScInsertContentsDlg_Impl>::Create(std::make_unique<ScInsertContentsDlg>(pParent, pStrTitle));
 }
 
 VclPtr<AbstractScInsertTableDlg> ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData,
     SCTAB nTabCount, bool bFromFile)
 {
-    return VclPtr<AbstractScInsertTableDlg_Impl>::Create(o3tl::make_unique<ScInsertTableDlg>(pParent, rViewData,nTabCount, bFromFile));
+    return VclPtr<AbstractScInsertTableDlg_Impl>::Create(std::make_unique<ScInsertTableDlg>(pParent, rViewData,nTabCount, bFromFile));
 }
 
 VclPtr<AbstractScSelEntryDlg> ScAbstractDialogFactory_Impl::CreateScSelEntryDlg(weld::Window* pParent,
                                                                                 const std::vector<OUString> &rEntryList)
 {
-    return VclPtr<AbstractScSelEntryDlg_Impl>::Create(o3tl::make_unique<ScSelEntryDlg>(pParent, rEntryList));
+    return VclPtr<AbstractScSelEntryDlg_Impl>::Create(std::make_unique<ScSelEntryDlg>(pParent, rEntryList));
 }
 
 VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScLinkedAreaDlg_Impl>::Create(o3tl::make_unique<ScLinkedAreaDlg>(pParent));
+    return VclPtr<AbstractScLinkedAreaDlg_Impl>::Create(std::make_unique<ScLinkedAreaDlg>(pParent));
 }
 
 VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg(weld::Window* pParent,
@@ -858,19 +857,19 @@ VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInp
                                                                 long            nMaximum ,
                                                                 long            nMinimum )
 {
-    return VclPtr<AbstractScMetricInputDlg_Impl>::Create(o3tl::make_unique<ScMetricInputDlg>(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
+    return VclPtr<AbstractScMetricInputDlg_Impl>::Create(std::make_unique<ScMetricInputDlg>(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
         nDecimals, nMaximum , nMinimum));
 }
 
 VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(weld::Window* pParent,
     const OUString& rDefault)
 {
-    return VclPtr<AbstractScMoveTableDlg_Impl>::Create(o3tl::make_unique<ScMoveTableDlg>(pParent, rDefault));
+    return VclPtr<AbstractScMoveTableDlg_Impl>::Create(std::make_unique<ScMoveTableDlg>(pParent, rDefault));
 }
 
 VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
 {
-    return VclPtr<AbstractScNameCreateDlg_Impl>::Create(o3tl::make_unique<ScNameCreateDlg>(pParent, nFlags));
+    return VclPtr<AbstractScNameCreateDlg_Impl>::Create(std::make_unique<ScNameCreateDlg>(pParent, nFlags));
 }
 
 VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell )
@@ -940,7 +939,7 @@ VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInp
         const OUString& rTitle, const OUString& rEditTitle, const OUString& rDefault, const OString& rHelpId,
         const OString& rEditHelpId)
 {
-    return VclPtr<AbstractScStringInputDlg_Impl>::Create(o3tl::make_unique<ScStringInputDlg>(pParent, rTitle, rEditTitle,
+    return VclPtr<AbstractScStringInputDlg_Impl>::Create(std::make_unique<ScStringInputDlg>(pParent, rTitle, rEditTitle,
                 rDefault, rHelpId, rEditHelpId));
 }
 
@@ -950,7 +949,7 @@ VclPtr<AbstractScTabBgColorDlg> ScAbstractDialogFactory_Impl::CreateScTabBgColor
                                                             const OUString& rTabBgColorNoColorText,
                                                             const Color& rDefaultColor)
 {
-    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(o3tl::make_unique<ScTabBgColorDlg>(pParent, rTitle, rTabBgColorNoColorText, rDefaultColor));
+    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(std::make_unique<ScTabBgColorDlg>(pParent, rTitle, rTabBgColorNoColorText, rDefaultColor));
 }
 
 VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg (
@@ -966,7 +965,7 @@ VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportO
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScAttrDlg>(pParent, pCellAttrs));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScAttrDlg>(pParent, pCellAttrs));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
@@ -1020,7 +1019,7 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg(weld
                                                                             SfxStyleSheetBase& rStyleBase,
                                                                             bool bPage)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScStyleDlg>(pParent, rStyleBase, bPage));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScStyleDlg>(pParent, rStyleBase, bPage));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
@@ -1032,18 +1031,18 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(v
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScCharDlg(
     weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScCharDlg>(pParent, pAttr, pDocShell));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScCharDlg>(pParent, pAttr, pDocShell));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     weld::Window* pParent, const SfxItemSet* pAttr)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScParagraphDlg>(pParent, pAttr));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScParagraphDlg>(pParent, pAttr));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScSortDlg>(pParent, pArgSet));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScSortDlg>(pParent, pArgSet));
 }
 
 //------------------ Factories for TabPages--------------------

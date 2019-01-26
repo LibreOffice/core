@@ -59,8 +59,6 @@
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <algorithm>
 #include <memory>
 
@@ -2632,7 +2630,7 @@ copyFirstFormulaBlock(
             if (!pNumArray)
             {
                 rCxt.m_NumArrays.push_back(
-                    o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+                    std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
                 pNumArray = rCxt.m_NumArrays.back().get();
             }
 
@@ -2643,7 +2641,7 @@ copyFirstFormulaBlock(
             if (!pStrArray)
             {
                 rCxt.m_StrArrays.push_back(
-                    o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
+                    std::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
                 pStrArray = rCxt.m_StrArrays.back().get();
             }
 
@@ -2732,7 +2730,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             sc::numeric_block::const_iterator it = sc::numeric_block::begin(*itBlk->data);
             sc::numeric_block::const_iterator itEnd = sc::numeric_block::end(*itBlk->data);
             rCxt.m_NumArrays.push_back(
-                o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(it, itEnd));
+                std::make_unique<sc::FormulaGroupContext::NumArrayType>(it, itEnd));
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             rArray.resize(nRow2+1, fNan); // allocate to the requested length.
 
@@ -2761,7 +2759,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         case sc::element_type_edittext:
         {
             rCxt.m_StrArrays.push_back(
-                o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nRow2+1, nullptr));
+                std::make_unique<sc::FormulaGroupContext::StrArrayType>(nRow2+1, nullptr));
             sc::FormulaGroupContext::StrArrayType& rArray = *rCxt.m_StrArrays.back();
             pColArray = rCxt.setCachedColArray(nTab, nCol, nullptr, &rArray);
             if (!pColArray)
@@ -2848,7 +2846,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         {
             // Fill the whole length with NaN's.
             rCxt.m_NumArrays.push_back(
-                o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1, fNan));
+                std::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1, fNan));
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, nullptr);
             if (!pColArray)

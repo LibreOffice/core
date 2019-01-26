@@ -24,7 +24,6 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/zforlist.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -74,7 +73,7 @@ ScQueryParamBase::ScQueryParamBase() :
     mbRangeLookup(false)
 {
     for (size_t i = 0; i < MAXQUERY; ++i)
-        m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
+        m_Entries.push_back(std::make_unique<ScQueryEntry>());
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
@@ -83,7 +82,7 @@ ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
 {
     for (auto const& it : r.m_Entries)
     {
-        m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
+        m_Entries.push_back(std::make_unique<ScQueryEntry>(*it));
     }
 }
 
@@ -102,7 +101,7 @@ ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
         m_Entries.clear();
         for (auto const& it : r.m_Entries)
         {
-            m_Entries.push_back(o3tl::make_unique<ScQueryEntry>(*it));
+            m_Entries.push_back(std::make_unique<ScQueryEntry>(*it));
         }
     }
     return *this;
@@ -143,7 +142,7 @@ ScQueryEntry& ScQueryParamBase::AppendEntry()
         return **itr;
 
     // Add a new entry to the end.
-    m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
+    m_Entries.push_back(std::make_unique<ScQueryEntry>());
     return *m_Entries.back();
 }
 
@@ -194,7 +193,7 @@ bool ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
         if (m_Entries.size() < MAXQUERY)
             // Make sure that we have at least MAXQUERY number of entries at
             // all times.
-            m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
+            m_Entries.push_back(std::make_unique<ScQueryEntry>());
         bRet = true;
     }
 
@@ -221,7 +220,7 @@ void ScQueryParamBase::Resize(size_t nNew)
     {
         size_t n = nNew - m_Entries.size();
         for (size_t i = 0; i < n; ++i)
-            m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
+            m_Entries.push_back(std::make_unique<ScQueryEntry>());
     }
 }
 

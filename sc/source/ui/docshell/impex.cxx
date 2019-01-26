@@ -58,7 +58,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/svlibrary.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -265,7 +264,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
         ScMarkData aDestMark;
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoPaste>(pDocSh, aRange, aDestMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
+            std::make_unique<ScUndoPaste>(pDocSh, aRange, aDestMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
     }
     pUndoDoc.reset();
     if( pDocSh )

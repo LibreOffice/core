@@ -40,8 +40,6 @@
 #include <vcl/weld.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <limits>
 
 #define QUERY_ENTRY_COUNT 4
@@ -490,7 +488,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
                 // first without the first line
                 std::pair<EntryListsMap::iterator, bool> r =
-                    m_EntryLists.insert(std::make_pair(nColumn, o3tl::make_unique<EntryList>()));
+                    m_EntryLists.insert(std::make_pair(nColumn, std::make_unique<EntryList>()));
                 if (!r.second)
                     // insertion failed.
                     return;

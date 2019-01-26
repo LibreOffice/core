@@ -35,7 +35,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <globstr.hrc>

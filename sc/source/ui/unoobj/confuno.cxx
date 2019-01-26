@@ -39,7 +39,6 @@
 #include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <formula/grammar.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -243,7 +242,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                auto pSet = o3tl::make_unique<SfxItemSet>( *rDoc.GetPool(),
+                auto pSet = std::make_unique<SfxItemSet>( *rDoc.GetPool(),
                         svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                         SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,

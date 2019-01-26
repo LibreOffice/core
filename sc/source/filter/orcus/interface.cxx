@@ -38,7 +38,6 @@
 #include <editeng/justifyitem.hxx>
 
 #include <svl/sharedstringpool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -288,7 +287,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
         // The calc document initializes with one sheet already present.
         assert(maDoc.getSheetCount() == 1);
         maDoc.setSheetName(0, aTabName);
-        maSheets.push_back(o3tl::make_unique<ScOrcusSheet>(maDoc, 0, *this));
+        maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, 0, *this));
         return maSheets.back().get();
     }
 
@@ -296,7 +295,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
         return nullptr;
 
     SCTAB nTab = maDoc.getSheetCount() - 1;
-    maSheets.push_back(o3tl::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -328,7 +327,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
         return it->get();
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(o3tl::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -344,7 +343,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(orcus::spread
         return it->get();
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(o3tl::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -378,7 +377,7 @@ void ScOrcusFactory::finalize()
         if (!pArray)
             return std::unique_ptr<ScFormulaCell>();
 
-        return o3tl::make_unique<ScFormulaCell>(&maDoc.getDoc(), rToken.maPos, *pArray);
+        return std::make_unique<ScFormulaCell>(&maDoc.getDoc(), rToken.maPos, *pArray);
     };
 
     int nCellCount = 0;

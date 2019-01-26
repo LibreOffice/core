@@ -63,7 +63,6 @@
 
 #include <oox/core/fastparser.hxx>
 #include <comphelper/threadpool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -322,7 +321,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
          pProgress->setCustomRowProgress(
                      aProgressUpdater.wrapProgress(
                              pProgress->getRowProgress() ) );
-         rSharedPool.pushTask( o3tl::make_unique<WorkerThread>( pTag, rWorkbookHandler, rxFragment,
+         rSharedPool.pushTask( std::make_unique<WorkerThread>( pTag, rWorkbookHandler, rxFragment,
                                            /* ref */ nSheetsLeft ) );
          nSheetsLeft++;
      }

@@ -34,7 +34,6 @@
 #include <editeng/unofored.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -448,7 +447,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                 break;
             }
 
-            pHeaderField->InitDoc(xTextRange, o3tl::make_unique<ScHeaderFooterEditSource>(aTextData), aSelection);
+            pHeaderField->InitDoc(xTextRange, std::make_unique<ScHeaderFooterEditSource>(aTextData), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)

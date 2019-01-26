@@ -24,7 +24,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <arealink.hxx>
 
@@ -142,7 +141,7 @@ void ScAreaLink::Closed()
     bool bUndo (rDoc.IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
-        m_pDocSh->GetUndoManager()->AddUndoAction( o3tl::make_unique<ScUndoRemoveAreaLink>( m_pDocSh,
+        m_pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoRemoveAreaLink>( m_pDocSh,
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
@@ -419,7 +418,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
             m_pDocSh->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoUpdateAreaLink>( m_pDocSh,
+                std::make_unique<ScUndoUpdateAreaLink>( m_pDocSh,
                                             aFileName, aFilterName, aOptions,
                                             aSourceArea, aOldRange, GetRefreshDelay(),
                                             aNewUrl, rNewFilter, aNewOpt,

@@ -92,7 +92,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/lang.h>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -318,7 +317,7 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
 void ScXMLTableRowCellContext::PushParagraphField(std::unique_ptr<SvxFieldData> pData, const OUString& rStyleName)
 {
     mbHasFormatRuns = true;
-    maFields.push_back(o3tl::make_unique<Field>(std::move(pData)));
+    maFields.push_back(std::make_unique<Field>(std::move(pData)));
     Field& rField = *maFields.back().get();
 
     sal_Int32 nPos = maParagraph.getLength();
@@ -363,7 +362,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     const ScXMLEditAttributeMap& rEditAttrMap = GetScImport().GetEditAttributeMap();
 
     mbHasFormatRuns = true;
-    maFormats.push_back(o3tl::make_unique<ParaFormat>(*mpEditEngine));
+    maFormats.push_back(std::make_unique<ParaFormat>(*mpEditEngine));
     ParaFormat& rFmt = *maFormats.back().get();
     rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
     rFmt.maSelection.nStartPos = nBegin;
@@ -572,18 +571,18 @@ OUString ScXMLTableRowCellContext::GetFirstParagraph() const
 
 void ScXMLTableRowCellContext::PushParagraphFieldDate(const OUString& rStyleName)
 {
-    PushParagraphField(o3tl::make_unique<SvxDateField>(), rStyleName);
+    PushParagraphField(std::make_unique<SvxDateField>(), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldSheetName(const OUString& rStyleName)
 {
     SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
-    PushParagraphField(o3tl::make_unique<SvxTableField>(nTab), rStyleName);
+    PushParagraphField(std::make_unique<SvxTableField>(nTab), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldDocTitle(const OUString& rStyleName)
 {
-    PushParagraphField(o3tl::make_unique<SvxFileField>(), rStyleName);
+    PushParagraphField(std::make_unique<SvxFileField>(), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldURL(

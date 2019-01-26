@@ -47,7 +47,6 @@
 #include <userdat.hxx>
 #include <detfunc.hxx>
 #include <editutil.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -332,7 +331,7 @@ void ScCaptionCreator::UpdateCaptionPos()
     {
         // create drawing undo action
         if( pDrawLayer && pDrawLayer->IsRecording() )
-            pDrawLayer->AddCalcUndo( o3tl::make_unique<SdrUndoGeoObj>( *m_pCaption ) );
+            pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *m_pCaption ) );
         // calculate new caption rectangle (#i98141# handle LTR<->RTL switch correctly)
         tools::Rectangle aCaptRect = m_pCaption->GetLogicRect();
         long nDiffX = (rOldTailPos.X() >= 0) ? (aCaptRect.Left() - rOldTailPos.X()) : (rOldTailPos.X() - aCaptRect.Right());
@@ -352,7 +351,7 @@ void ScCaptionCreator::UpdateCaptionPos()
     {
         // create drawing undo action
         if( pDrawLayer && pDrawLayer->IsRecording() )
-            pDrawLayer->AddCalcUndo( o3tl::make_unique<ScUndoObjData>( m_pCaption.get(), pCaptData->maStart, pCaptData->maEnd, maPos, pCaptData->maEnd ) );
+            pDrawLayer->AddCalcUndo( std::make_unique<ScUndoObjData>( m_pCaption.get(), pCaptData->maStart, pCaptData->maEnd, maPos, pCaptData->maEnd ) );
         // set new position
         pCaptData->maStart = maPos;
     }
@@ -466,7 +465,7 @@ void removeFromDrawPageAndFree( const std::shared_ptr< SdrCaptionObj >& pCaption
         // create drawing undo action (before removing the object to have valid draw page in undo action)
         bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
         if (bRecording)
-            pDrawLayer->AddCalcUndo( o3tl::make_unique<ScUndoDelSdrCaptionObj>( pCaption ));
+            pDrawLayer->AddCalcUndo( std::make_unique<ScUndoDelSdrCaptionObj>( pCaption ));
         // remove the object from the drawing page, delete if undo is disabled
         pDrawPage->RemoveObject( pCaption->GetOrdNum() );
     }
@@ -765,7 +764,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const std::shared_ptr< SdrC
         {
             // copy edit text object (object must be inserted into page already)
             if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                maNoteData.m_pCaption->SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>( *pOPO ) );
+                maNoteData.m_pCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
             // copy formatting items (after text has been copied to apply font formatting)
             maNoteData.m_pCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
             // move textbox position relative to new cell, copy textbox size
@@ -785,7 +784,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const std::shared_ptr< SdrC
         // create undo action
         if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
             if( pDrawLayer->IsRecording() )
-                pDrawLayer->AddCalcUndo( o3tl::make_unique<ScUndoNewSdrCaptionObj>( maNoteData.m_pCaption ) );
+                pDrawLayer->AddCalcUndo( std::make_unique<ScUndoNewSdrCaptionObj>( maNoteData.m_pCaption ) );
     }
 }
 
@@ -843,7 +842,7 @@ std::shared_ptr< SdrCaptionObj > ScNoteUtil::CreateTempCaption(
     if( pNoteCaption && rUserText.isEmpty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
-            pCaption->SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>( *pOPO ) );
+            pCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
         // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         tools::Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );

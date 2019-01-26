@@ -937,7 +937,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        o3tl::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, aOldData, aNewData ) );
+                        std::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, aOldData, aNewData ) );
 
         if ( bStyleToMarked )
         {

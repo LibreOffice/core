@@ -35,8 +35,6 @@
 #include <grouparealistener.hxx>
 #endif
 
-#include <o3tl/make_unique.hxx>
-
 // Number of slots per dimension
 // must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
 #define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
@@ -1096,7 +1094,7 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     if (it == m_BulkGroupAreas.end() || m_BulkGroupAreas.key_comp()(pArea, it->first))
     {
         // Insert a new one.
-        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, o3tl::make_unique<sc::ColumnSpanSet>(false)));
+        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, std::make_unique<sc::ColumnSpanSet>(false)));
     }
 
     sc::ColumnSpanSet *const pSet = it->second.get();

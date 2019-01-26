@@ -26,7 +26,6 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/configmgr.hxx>
 
 namespace {
@@ -290,7 +289,7 @@ void ScDocumentImport::setFormulaCell(
         return;
 
     std::unique_ptr<ScFormulaCell> pFC =
-        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
+        std::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
 
@@ -319,7 +318,7 @@ void ScDocumentImport::setFormulaCell(
         return;
 
     std::unique_ptr<ScFormulaCell> pFC =
-        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
+        std::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
 
@@ -343,7 +342,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, std::unique_ptr<ScT
         return;
 
     std::unique_ptr<ScFormulaCell> pFC =
-        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, std::move(pArray));
+        std::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, std::move(pArray));
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
 

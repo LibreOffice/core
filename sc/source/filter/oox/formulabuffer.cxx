@@ -21,7 +21,6 @@
 #include <oox/token/tokens.hxx>
 #include <oox/helper/progressbar.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -80,7 +79,7 @@ public:
         {
             // Create an entry for this column.
             std::pair<ColCacheType::iterator,bool> r =
-                maCache.emplace(rPos.Col(), o3tl::make_unique<Item>());
+                maCache.emplace(rPos.Col(), std::make_unique<Item>());
             if (!r.second)
                 // Insertion failed.
                 return;
@@ -355,7 +354,7 @@ void FormulaBuffer::finalizeImport()
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
 
     ScDocumentImport& rDoc = getDocImport();
-    rDoc.getDoc().SetAutoNameCache(o3tl::make_unique<ScAutoNameCache>(&rDoc.getDoc()));
+    rDoc.getDoc().SetAutoNameCache(std::make_unique<ScAutoNameCache>(&rDoc.getDoc()));
     ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
 
     SCTAB nTabCount = rDoc.getDoc().GetTableCount();

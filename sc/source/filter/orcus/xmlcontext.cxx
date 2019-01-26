@@ -16,7 +16,6 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
 #include <ucbhelper/content.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <orcus/xml_structure_tree.hpp>
@@ -42,7 +41,7 @@ namespace {
 ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
     SvTreeListEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
-    rStore.push_back(o3tl::make_unique<ScOrcusXMLTreeParam::EntryData>(eType));
+    rStore.push_back(std::make_unique<ScOrcusXMLTreeParam::EntryData>(eType));
     rEntry.SetUserData(rStore.back().get());
     return *rStore.back();
 }

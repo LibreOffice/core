@@ -54,7 +54,6 @@
 #include <document.hxx>
 #include <rangelst.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <orcus/css_parser.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -81,7 +80,7 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             {
                 // new element
                 std::pair<ElemsType::iterator, bool> r =
-                    m_ElemProps.insert(std::make_pair(aElem, o3tl::make_unique<NamePropsType>()));
+                    m_ElemProps.insert(std::make_pair(aElem, std::make_unique<NamePropsType>()));
                 if (!r.second)
                     // insertion failed.
                     return;
@@ -165,7 +164,7 @@ void ScHTMLStyles::insertProp(
     {
         // new element
         std::pair<NamePropsType::iterator, bool> r =
-            rStore.insert(std::make_pair(aName, o3tl::make_unique<PropsType>()));
+            rStore.insert(std::make_pair(aName, std::make_unique<PropsType>()));
         if (!r.second)
             // insertion failed.
             return;
@@ -1019,7 +1018,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
     {   // Table in Table
         sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
         Colonize(mxActEntry.get());
-        aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
+        aTableStack.push( std::make_unique<ScHTMLTableStackEntry>(
             mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
@@ -1075,7 +1074,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             CloseEntry( pInfo );
             NextRow( pInfo );
         }
-        aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
+        aTableStack.push( std::make_unique<ScHTMLTableStackEntry>(
             mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
@@ -1270,7 +1269,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
 {
-    mxActEntry->maImageList.push_back(o3tl::make_unique<ScHTMLImage>());
+    mxActEntry->maImageList.push_back(std::make_unique<ScHTMLImage>());
     ScHTMLImage* pImage = mxActEntry->maImageList.back().get();
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (const auto & rOption : rOptions)
@@ -2277,7 +2276,7 @@ bool ScHTMLTable::IsSpaceCharInfo( const HtmlImportInfo& rInfo )
 
 ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
 {
-    return o3tl::make_unique<ScHTMLEntry>( GetCurrItemSet() );
+    return std::make_unique<ScHTMLEntry>( GetCurrItemSet() );
 }
 
 void ScHTMLTable::CreateNewEntry( const HtmlImportInfo& rInfo )

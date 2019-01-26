@@ -10,7 +10,6 @@
 #include <memory>
 #include <cellvalues.hxx>
 #include <column.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <cassert>
 
@@ -266,10 +265,10 @@ struct TableValues::Impl
 
         for (size_t nTab = 0; nTab < nTabs; ++nTab)
         {
-            m_Tables.push_back(o3tl::make_unique<TableType>());
+            m_Tables.push_back(std::make_unique<TableType>());
             std::unique_ptr<TableType>& rTab2 = m_Tables.back();
             for (size_t nCol = 0; nCol < nCols; ++nCol)
-                rTab2->push_back(o3tl::make_unique<CellValues>());
+                rTab2->push_back(std::make_unique<CellValues>());
         }
     }
 

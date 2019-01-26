@@ -13,7 +13,6 @@
 #include <unotools/charclass.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -111,7 +110,7 @@ void ScDPResultTree::add(
         if (itDim == rDims.end())
         {
             // New dimension.  Insert it.
-            auto r = rDims.emplace(aUpperName, o3tl::make_unique<DimensionNode>());
+            auto r = rDims.emplace(aUpperName, std::make_unique<DimensionNode>());
             assert(r.second);
             itDim = r.first;
         }

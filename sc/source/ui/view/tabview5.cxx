@@ -28,7 +28,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>

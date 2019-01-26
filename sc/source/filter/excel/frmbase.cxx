@@ -19,7 +19,6 @@
 
 #include <formel.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 ScRangeListTabs::ScRangeListTabs()
@@ -56,7 +55,7 @@ void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            m_TabRanges.insert(std::make_pair(nTab, o3tl::make_unique<RangeListType>()));
+            m_TabRanges.insert(std::make_pair(nTab, std::make_unique<RangeListType>()));
 
         if (!r.second)
             // Insertion failed.
@@ -114,7 +113,7 @@ void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            m_TabRanges.insert(std::make_pair(nTab, o3tl::make_unique<RangeListType>()));
+            m_TabRanges.insert(std::make_pair(nTab, std::make_unique<RangeListType>()));
 
         if (!r.second)
             // Insertion failed.

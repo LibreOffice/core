@@ -22,8 +22,6 @@
 #include "xmlimprt.hxx"
 #include <xmloff/xmlnmspe.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -93,7 +91,7 @@ void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
     //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
 
-    auto pLabelRange = o3tl::make_unique<ScMyLabelRange>(
+    auto pLabelRange = std::make_unique<ScMyLabelRange>(
                 ScMyLabelRange{sLabelRangeStr, sDataRangeStr, bColumnOrientation});
 
     GetScImport().AddLabelRange(std::move(pLabelRange));

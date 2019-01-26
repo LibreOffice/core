@@ -36,7 +36,6 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 #include <sfx2/lokhelper.hxx>
 
@@ -140,7 +139,7 @@ void ScViewFunc::CutToClip()
 
         if ( bRecord )                          // Draw-Undo now available
             pDocSh->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoCut>( pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
+                std::make_unique<ScUndoCut>( pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
 
         aModificator.SetDocumentModified();
         pDocSh->UpdateOle(&GetViewData());
@@ -1416,7 +1415,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             //  Merge the paste undo action into the insert action.
             //  Use ScUndoWrapper so the ScUndoPaste pointer can be stored in the insert action.
 
-            pUndoMgr->AddUndoAction( o3tl::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
+            pUndoMgr->AddUndoAction( std::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
         }
         else
             pUndoMgr->AddUndoAction( std::move(pUndo) );
@@ -1609,7 +1608,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             aMarkedRange, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
 
         if (bInsertCells)
-            pUndoMgr->AddUndoAction(o3tl::make_unique<ScUndoWrapper>(std::move(pUndo)), true);
+            pUndoMgr->AddUndoAction(std::make_unique<ScUndoWrapper>(std::move(pUndo)), true);
         else
             pUndoMgr->AddUndoAction(std::move(pUndo));
 
@@ -1772,7 +1771,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
 
         pUndoMgr->AddUndoAction(
-            o3tl::make_unique<ScUndoPaste>(
+            std::make_unique<ScUndoPaste>(
                 pDocSh, aRanges, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
         pUndoMgr->LeaveListAction();
     }
@@ -1993,7 +1992,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                                    nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                                    std::move(pUndoDoc), std::move(pRedoDoc),
                                                    std::move(pUndoData) ) );
-        pUndoMgr->AddUndoAction( o3tl::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
+        pUndoMgr->AddUndoAction( std::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
 
         PaintPartFlags nPaint = PaintPartFlags::Grid;
         if (bColInfo)

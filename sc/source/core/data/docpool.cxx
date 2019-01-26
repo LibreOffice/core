@@ -25,7 +25,6 @@
 
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -201,7 +200,7 @@ ScDocumentPool::ScDocumentPool()
     SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
-    auto pSet = o3tl::make_unique<SfxItemSet>( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
+    auto pSet = std::make_unique<SfxItemSet>( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
     SfxItemSet      aSetItemItemSet( *this,
                                      svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
                                      ATTR_BORDER,     ATTR_SHADOW,

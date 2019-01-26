@@ -23,8 +23,6 @@
 #include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 enum ScPreviewLocationType
 {
     SC_PLOC_CELLRANGE,
@@ -176,7 +174,7 @@ void ScPreviewLocationData::AddCellRange( const tools::Rectangle& rRect, const S
                                             const MapMode& rDrawMap )
 {
     tools::Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow) );
 
     OSL_ENSURE( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
 
@@ -210,7 +208,7 @@ void ScPreviewLocationData::AddColHeaders( const tools::Rectangle& rRect, SCCOL 
     ScRange aRange( nStartCol, 0, nTab, nEndCol, 0, nTab );
     tools::Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, false) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, false) );
 }
 
 void ScPreviewLocationData::AddRowHeaders( const tools::Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, bool bRepRow )
@@ -219,7 +217,7 @@ void ScPreviewLocationData::AddRowHeaders( const tools::Rectangle& rRect, SCROW 
     ScRange aRange( 0, nStartRow, nTab, 0, nEndRow, nTab );
     tools::Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(SC_PLOC_ROWHEADER, aPixelRect, aRange, false, bRepRow) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(SC_PLOC_ROWHEADER, aPixelRect, aRange, false, bRepRow) );
 }
 
 void ScPreviewLocationData::AddHeaderFooter( const tools::Rectangle& rRect, bool bHeader, bool bLeft )
@@ -231,7 +229,7 @@ void ScPreviewLocationData::AddHeaderFooter( const tools::Rectangle& rRect, bool
                 ( bLeft ? SC_PLOC_LEFTHEADER : SC_PLOC_RIGHTHEADER ) :
                 ( bLeft ? SC_PLOC_LEFTFOOTER : SC_PLOC_RIGHTFOOTER );
 
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(eType, aPixelRect, aRange, false, false) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(eType, aPixelRect, aRange, false, false) );
 }
 
 void ScPreviewLocationData::AddNoteMark( const tools::Rectangle& rRect, const ScAddress& rPos )
@@ -239,7 +237,7 @@ void ScPreviewLocationData::AddNoteMark( const tools::Rectangle& rRect, const Sc
     ScRange aRange( rPos );
     tools::Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(SC_PLOC_NOTEMARK, aPixelRect, aRange, false, false) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(SC_PLOC_NOTEMARK, aPixelRect, aRange, false, false) );
 }
 
 void ScPreviewLocationData::AddNoteText( const tools::Rectangle& rRect, const ScAddress& rPos )
@@ -247,7 +245,7 @@ void ScPreviewLocationData::AddNoteText( const tools::Rectangle& rRect, const Sc
     ScRange aRange( rPos );
     tools::Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
-    m_Entries.push_front( o3tl::make_unique<ScPreviewLocationEntry>(SC_PLOC_NOTETEXT, aPixelRect, aRange, false, false) );
+    m_Entries.push_front( std::make_unique<ScPreviewLocationEntry>(SC_PLOC_NOTETEXT, aPixelRect, aRange, false, false) );
 }
 
 void ScPreviewLocationData::GetDrawRange( sal_uInt16 nPos, tools::Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const

@@ -36,7 +36,6 @@
 
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/charclass.hxx>
 
 #include <map>
@@ -85,7 +84,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
         mpDoc->GetRangeNameMap(aRangeMap);
         for (const auto& [aTemp, pRangeName] : aRangeMap)
         {
-            m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*pRangeName)));
+            m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pRangeName)));
         }
     }
     else

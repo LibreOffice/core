@@ -41,7 +41,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <o3tl/make_unique.hxx>
+
 #ifdef indices
 #undef indices
 #endif
@@ -384,8 +384,8 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
     if (!mpTextHelper)
     {
         mpTextHelper = new ::accessibility::AccessibleTextHelper(
-            o3tl::make_unique<ScAccessibilityEditSource>(
-                o3tl::make_unique<ScAccessiblePreviewHeaderCellTextData>(
+            std::make_unique<ScAccessibilityEditSource>(
+                std::make_unique<ScAccessiblePreviewHeaderCellTextData>(
                     mpViewShell, getAccessibleName(), maCellPos,
                     mbColumnHeader, mbRowHeader)));
         mpTextHelper->SetEventSource(this);

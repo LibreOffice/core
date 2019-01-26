@@ -25,7 +25,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>

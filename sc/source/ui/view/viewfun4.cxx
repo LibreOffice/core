@@ -43,7 +43,6 @@
 #include <svl/sharedstringpool.hxx>
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <comphelper/storagehelper.hxx>
 
@@ -146,7 +145,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 ScMarkData aDestMark;
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    o3tl::make_unique<ScUndoPaste>( pDocSh, aMarkRange, aDestMark,
+                    std::make_unique<ScUndoPaste>( pDocSh, aMarkRange, aDestMark,
                                      std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
             }
         }
@@ -297,7 +296,7 @@ void ScViewFunc::DoRefConversion()
         pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pRedoDoc, &rMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoRefConversion>( pDocSh,
+            std::make_unique<ScUndoRefConversion>( pDocSh,
                                     aMarkRange, rMark, std::move(pUndoDoc), std::move(pRedoDoc), bMulti) );
     }
 
@@ -426,7 +425,7 @@ void ScViewFunc::DoThesaurus()
         if (bRecord)
         {
             GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoThesaurus>(
+                std::make_unique<ScUndoThesaurus>(
                     GetViewData().GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
         }
     }
@@ -551,7 +550,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
             SCCOL nNewCol = rViewData.GetCurX();
             SCROW nNewRow = rViewData.GetCurY();
             rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoConversion>(
+                std::make_unique<ScUndoConversion>(
                         pDocSh, rMark,
                         nCol, nRow, nTab, std::move(pUndoDoc),
                         nNewCol, nNewRow, nTab, std::move(pRedoDoc), rConvParam ) );

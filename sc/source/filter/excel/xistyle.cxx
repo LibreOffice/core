@@ -65,7 +65,6 @@
 
 #include <root.hxx>
 #include <colrowst.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <vector>
 
@@ -1717,7 +1716,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.push_back( o3tl::make_unique<XclImpXFRange>( 0, MAXROW, rXFIndex ) );
+    maIndexList.push_back( std::make_unique<XclImpXFRange>( 0, MAXROW, rXFIndex ) );
 }
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )

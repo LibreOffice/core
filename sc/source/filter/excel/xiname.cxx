@@ -25,7 +25,6 @@
 #include <excimp8.hxx>
 #include <scextopt.hxx>
 #include <document.hxx>
-#include <o3tl/make_unique.hxx>
 
 // *** Implementation ***
 
@@ -285,7 +284,7 @@ void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
     sal_uLong nCount = maNameList.size();
     if( nCount < 0xFFFF )
-        maNameList.push_back( o3tl::make_unique<XclImpName>( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
+        maNameList.push_back( std::make_unique<XclImpName>( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
 const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB nScTab ) const

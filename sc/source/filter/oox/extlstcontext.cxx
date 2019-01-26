@@ -22,7 +22,6 @@
 #include <workbookfragment.hxx>
 
 #include <rangeutl.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 using ::oox::core::ContextHandlerRef;
@@ -117,7 +116,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         {
             ScDocument* pDoc = &getScDocument();
             mpCurrentRule.reset(new IconSetRule(*this));
-            maEntries.push_back(o3tl::make_unique<ScIconSetFormat>(pDoc));
+            maEntries.push_back(std::make_unique<ScIconSetFormat>(pDoc));
             return new IconSetContext(*this, mpCurrentRule.get());
         }
         else
@@ -169,7 +168,7 @@ void ExtConditionalFormattingContext::onEndElement()
             }
 
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();
-            rExtFormats.push_back(o3tl::make_unique<ExtCfCondFormat>(aRange, maEntries));
+            rExtFormats.push_back(std::make_unique<ExtCfCondFormat>(aRange, maEntries));
         }
         break;
         default:

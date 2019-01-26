@@ -49,7 +49,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <o3tl/make_unique.hxx>
+
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using namespace ::com::sun::star;
@@ -349,9 +349,9 @@ void ScAccessibleEditObject::CreateTextHelper()
         }
 
         std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
-            o3tl::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData));
+            std::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData));
 
-        mpTextHelper = o3tl::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
+        mpTextHelper = std::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
         mpTextHelper->SetEventSource(this);
 
         const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();

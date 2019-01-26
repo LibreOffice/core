@@ -72,7 +72,6 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <utility>
 #include <vector>
@@ -3705,7 +3704,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
             if (!bFound)
             {
                 // none found, re-insert deleted object (see ScUndoDataPilot::Undo)
-                r.InsertNewTable(o3tl::make_unique<ScDPObject>(rSrcObj));
+                r.InsertNewTable(std::make_unique<ScDPObject>(rSrcObj));
             }
         }
         OSL_ENSURE( maTables.size() == r.maTables.size(), "WriteRefsTo: couldn't restore all entries" );

@@ -29,7 +29,6 @@
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/sequence.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <TablePivotChart.hxx>
 #include <TablePivotCharts.hxx>
@@ -165,7 +164,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
                 xObject->setVisualAreaSize(nAspect, aAwtSize);
 
             pPage->InsertObject(pObject);
-            pModel->AddUndo(o3tl::make_unique<SdrUndoInsertObj>(*pObject));
+            pModel->AddUndo(std::make_unique<SdrUndoInsertObj>(*pObject));
     }
 }
 
@@ -178,7 +177,7 @@ void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
         ScDocument& rDoc = m_pDocShell->GetDocument();
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
         SdrPage* pPage = pModel->GetPage(sal_uInt16(m_nTab));
-        pModel->AddUndo(o3tl::make_unique<SdrUndoDelObj>(*pObject));
+        pModel->AddUndo(std::make_unique<SdrUndoDelObj>(*pObject));
         pPage->RemoveObject(pObject->GetOrdNum());
     }
 }

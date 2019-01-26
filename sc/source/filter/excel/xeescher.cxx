@@ -35,7 +35,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/embedhlp.hxx>
@@ -1190,7 +1189,7 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( o3tl::make_unique<XclObjComment>( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
+                        mnObjId = rRoot.GetObjectManager().AddObj( std::make_unique<XclObjComment>( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
 
                     SfxItemSet aItemSet = pCaption->GetMergedItemSet();
                     meTVA       = pCaption->GetTextVerticalAdjust();

@@ -29,7 +29,6 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
@@ -740,7 +739,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
 
     for (auto const& it : r.m_DimList)
     {
-        m_DimList.push_back(o3tl::make_unique<ScDPSaveDimension>(*it));
+        m_DimList.push_back(std::make_unique<ScDPSaveDimension>(*it));
     }
 }
 

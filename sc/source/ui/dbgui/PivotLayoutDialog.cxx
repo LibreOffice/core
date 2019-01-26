@@ -13,7 +13,6 @@
 #include <PivotLayoutDialog.hxx>
 #include <reffact.hxx>
 #include <vcl/treelistentry.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <rangeutl.hxx>
 #include <uiitems.hxx>
@@ -506,7 +505,7 @@ void ScPivotLayoutDialog::ApplyChanges()
 
     sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhich(SID_PIVOT_TABLE);
     ScPivotItem aPivotItem(nWhichPivot, &aSaveData, &aDestinationRange, bToNewSheet);
-    mpViewData->GetViewShell()->SetDialogDPObject(o3tl::make_unique<ScDPObject>(maPivotTableObject));
+    mpViewData->GetViewShell()->SetDialogDPObject(std::make_unique<ScDPObject>(maPivotTableObject));
 
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();

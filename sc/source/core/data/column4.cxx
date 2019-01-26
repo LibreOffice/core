@@ -30,7 +30,6 @@
 #include <compiler.hxx>
 
 #include <svl/sharedstringpool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <vector>
@@ -1640,7 +1639,7 @@ std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SC
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
         return std::unique_ptr<sc::ColumnIterator>();
 
-    return o3tl::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
+    return std::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
 }
 
 void ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 )

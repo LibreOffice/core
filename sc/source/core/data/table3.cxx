@@ -73,7 +73,6 @@
 #include <unordered_set>
 #include <vector>
 #include <mdds/flat_segment_tree.hpp>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -687,7 +686,7 @@ void fillSortedColumnArray(
         // In the sorted column container, element positions and row
         // positions must match, else formula cells may mis-behave during
         // grouping.
-        aSortedCols.push_back(o3tl::make_unique<SortedColumn>(nRow1));
+        aSortedCols.push_back(std::make_unique<SortedColumn>(nRow1));
     }
 
     for (size_t i = 0; i < pRows->size(); ++i)

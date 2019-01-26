@@ -33,7 +33,6 @@
 #include <unoreflist.hxx>
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>
-#include <o3tl/make_unique.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pPrintRanges(pDoc->CreatePrintRangeSaver())
@@ -159,7 +158,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
 
     // bUndoRefFirst is bSetChartRangeLists
     if ( pChartListenerCollection )
-        pDoc->SetChartListenerCollection( o3tl::make_unique<ScChartListenerCollection>(
+        pDoc->SetChartListenerCollection( std::make_unique<ScChartListenerCollection>(
             *pChartListenerCollection ), bUndoRefFirst );
 
     if (pDBCollection || pRangeName)

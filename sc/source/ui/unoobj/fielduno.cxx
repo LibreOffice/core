@@ -31,7 +31,6 @@
 
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <editeng/eeitem.hxx>
 
@@ -333,7 +332,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
 
     sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(mxContent, o3tl::make_unique<ScCellEditSource>(pDocShell, aCellPos), eType, aSelection));
+        new ScEditFieldObj(mxContent, std::make_unique<ScCellEditSource>(pDocShell, aCellPos), eType, aSelection));
     return xRet;
 }
 
@@ -486,7 +485,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(xTextRange, o3tl::make_unique<ScHeaderFooterEditSource>(mrData), eRealType, aSelection));
+        new ScEditFieldObj(xTextRange, std::make_unique<ScHeaderFooterEditSource>(mrData), eRealType, aSelection));
     return xRet;
 }
 

@@ -13,8 +13,6 @@
 #include <column.hxx>
 #include <table.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <sstream>
 
 namespace sc {
@@ -110,7 +108,7 @@ struct TableColumnBlockPositionSet::Impl
 };
 
 TableColumnBlockPositionSet::TableColumnBlockPositionSet( ScDocument& rDoc, SCTAB nTab ) :
-    mpImpl(o3tl::make_unique<Impl>())
+    mpImpl(std::make_unique<Impl>())
 {
     mpImpl->mpTab = rDoc.FetchTable(nTab);
 

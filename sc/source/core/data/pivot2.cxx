@@ -18,7 +18,6 @@
  */
 
 #include <pivot.hxx>
-#include <o3tl/make_unique.hxx>
 
 #if DEBUG_PIVOT_TABLE
 using std::cout;
@@ -126,7 +125,7 @@ void ScPivotParam::SetLabelData(const ScDPLabelDataVector& rVector)
     ScDPLabelDataVector::const_iterator it;
     for (it = rVector.begin(); it != rVector.end(); ++it)
     {
-        aNewArray.push_back(o3tl::make_unique<ScDPLabelData>(**it));
+        aNewArray.push_back(std::make_unique<ScDPLabelData>(**it));
     }
     maLabelArray.swap(aNewArray);
 }
