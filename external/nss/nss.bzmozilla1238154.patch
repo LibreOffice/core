@@ -1,0 +1,138 @@
+Seulement dans nss: dist
+diff -ur nss.org/nspr/configure nss/nspr/configure
+--- nss.org/nspr/configure	2019-01-26 12:23:06.589389910 +0100
++++ nss/nspr/configure	2019-01-26 12:26:56.566222293 +0100
+@@ -7127,7 +7127,7 @@
+ 
+         # Determine compiler version
+ 
+-        _MSVC_VER_FILTER='s|.* \([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
++        _MSVC_VER_FILTER='s|.*[^!-~]\([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
+ 
+         CC_VERSION=`${CC} -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         if test -z "$CC_VERSION"; then
+diff -ur nss.org/nspr/configure.in nss/nspr/configure.in
+--- nss.org/nspr/configure.in	2019-01-26 12:23:06.589389910 +0100
++++ nss/nspr/configure.in	2019-01-26 12:27:22.070314893 +0100
+@@ -1930,7 +1930,7 @@
+ 
+         # Determine compiler version
+         changequote(,)
+-        _MSVC_VER_FILTER='s|.* \([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
++        _MSVC_VER_FILTER='s|.*[^!-~]\([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
+         changequote([,])
+         CC_VERSION=`${CC} -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         if test -z "$CC_VERSION"; then
+diff -ur nss.org/nspr/configure.in.orig nss/nspr/configure.in.orig
+--- nss.org/nspr/configure.in.orig	2019-01-26 12:23:06.589389910 +0100
++++ nss/nspr/configure.in.orig	2019-01-26 12:26:46.038184083 +0100
+@@ -1930,7 +1930,7 @@
+ 
+         # Determine compiler version
+         changequote(,)
+-        _MSVC_VER_FILTER='s|.* \([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
++        _MSVC_VER_FILTER='s|.*[^!-~]\([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
+         changequote([,])
+         CC_VERSION=`${CC} -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         if test -z "$CC_VERSION"; then
+diff -ur nss.org/nspr/configure.orig nss/nspr/configure.orig
+--- nss.org/nspr/configure.orig	2019-01-26 12:23:06.589389910 +0100
++++ nss/nspr/configure.orig	2019-01-26 12:27:06.290257591 +0100
+@@ -7127,7 +7127,7 @@
+ 
+         # Determine compiler version
+ 
+-        _MSVC_VER_FILTER='s|.* \([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
++        _MSVC_VER_FILTER='s|.*[^!-~]\([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
+ 
+         CC_VERSION=`${CC} -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         if test -z "$CC_VERSION"; then
+Seulement dans nss/nspr: out
+Seulement dans nss/nss: build.log
+Seulement dans nss/nss/cmd/addbuiltin: out
+Seulement dans nss/nss/cmd/atob: out
+Seulement dans nss/nss/cmd/bltest: out
+Seulement dans nss/nss/cmd/btoa: out
+Seulement dans nss/nss/cmd/certutil: out
+Seulement dans nss/nss/cmd/chktest: out
+Seulement dans nss/nss/cmd/crlutil: out
+Seulement dans nss/nss/cmd/crmftest: out
+Seulement dans nss/nss/cmd/dbtest: out
+Seulement dans nss/nss/cmd/derdump: out
+Seulement dans nss/nss/cmd/digest: out
+Seulement dans nss/nss/cmd/ecperf: out
+Seulement dans nss/nss/cmd/fbectest: out
+Seulement dans nss/nss/cmd/fipstest: out
+Seulement dans nss/nss/cmd/httpserv: out
+Seulement dans nss/nss/cmd/lib: out
+Seulement dans nss/nss/cmd/listsuites: out
+Seulement dans nss/nss/cmd/lowhashtest: out
+Seulement dans nss/nss/cmd/makepqg: out
+Seulement dans nss/nss/cmd/modutil: out
+Seulement dans nss/nss/cmd/multinit: out
+Seulement dans nss/nss/cmd/ocspclnt: out
+Seulement dans nss/nss/cmd/ocspresp: out
+Seulement dans nss/nss/cmd/oidcalc: out
+Seulement dans nss/nss/cmd/p7content: out
+Seulement dans nss/nss/cmd/p7env: out
+Seulement dans nss/nss/cmd/p7sign: out
+Seulement dans nss/nss/cmd/p7verify: out
+Seulement dans nss/nss/cmd/pk11ectest: out
+Seulement dans nss/nss/cmd/pk11gcmtest: out
+Seulement dans nss/nss/cmd/pk11mode: out
+Seulement dans nss/nss/cmd/pk12util: out
+Seulement dans nss/nss/cmd/pk1sign: out
+Seulement dans nss/nss/cmd/pkix-errcodes: out
+Seulement dans nss/nss/cmd/pp: out
+Seulement dans nss/nss/cmd/pwdecrypt: out
+Seulement dans nss/nss/cmd/rsaperf: out
+Seulement dans nss/nss/cmd/rsapoptst: out
+Seulement dans nss/nss/cmd/sdrtest: out
+Seulement dans nss/nss/cmd/selfserv: out
+Seulement dans nss/nss/cmd/shlibsign/mangle: out
+Seulement dans nss/nss/cmd/shlibsign: out
+Seulement dans nss/nss/cmd/signtool: out
+Seulement dans nss/nss/cmd/signver: out
+Seulement dans nss/nss/cmd/smimetools: out
+Seulement dans nss/nss/cmd/ssltap: out
+Seulement dans nss/nss/cmd/strsclnt: out
+Seulement dans nss/nss/cmd/symkeyutil: out
+Seulement dans nss/nss/cmd/tests: out
+Seulement dans nss/nss/cmd/tstclnt: out
+Seulement dans nss/nss/cmd/vfychain: out
+Seulement dans nss/nss/cmd/vfyserv: out
+Seulement dans nss/nss/coreconf/nsinstall: out
+Seulement dans nss/nss/lib/base: out
+Seulement dans nss/nss/lib/certdb: out
+Seulement dans nss/nss/lib/certhigh: out
+Seulement dans nss/nss/lib/ckfw/builtins: out
+Seulement dans nss/nss/lib/ckfw: out
+Seulement dans nss/nss/lib/crmf: out
+Seulement dans nss/nss/lib/cryptohi: out
+Seulement dans nss/nss/lib/dbm/src: out
+Seulement dans nss/nss/lib/dev: out
+Seulement dans nss/nss/lib/freebl: out
+Seulement dans nss/nss/lib/jar: out
+Seulement dans nss/nss/lib/libpkix/pkix/certsel: out
+Seulement dans nss/nss/lib/libpkix/pkix/checker: out
+Seulement dans nss/nss/lib/libpkix/pkix/crlsel: out
+Seulement dans nss/nss/lib/libpkix/pkix/params: out
+Seulement dans nss/nss/lib/libpkix/pkix/results: out
+Seulement dans nss/nss/lib/libpkix/pkix/store: out
+Seulement dans nss/nss/lib/libpkix/pkix/top: out
+Seulement dans nss/nss/lib/libpkix/pkix/util: out
+Seulement dans nss/nss/lib/libpkix/pkix_pl_nss/module: out
+Seulement dans nss/nss/lib/libpkix/pkix_pl_nss/pki: out
+Seulement dans nss/nss/lib/libpkix/pkix_pl_nss/system: out
+Seulement dans nss/nss/lib/nss: out
+Seulement dans nss/nss/lib/pk11wrap: out
+Seulement dans nss/nss/lib/pkcs12: out
+Seulement dans nss/nss/lib/pkcs7: out
+Seulement dans nss/nss/lib/pki: out
+Seulement dans nss/nss/lib/smime: out
+Seulement dans nss/nss/lib/softoken/legacydb: out
+Seulement dans nss/nss/lib/softoken: out
+Seulement dans nss/nss/lib/sqlite: out
+Seulement dans nss/nss/lib/ssl: out
+Seulement dans nss/nss/lib/sysinit: out
+Seulement dans nss/nss/lib/util: out
