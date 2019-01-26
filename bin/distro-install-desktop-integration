@@ -103,7 +103,7 @@ sed -i \
     -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
     -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
     *
-# call in subshell to do not malfrom PRODUCTVERSION, ...
+# call in subshell to do not malform PRODUCTVERSION, ...
 (
     export OFFICE_PREFIX=$LIBDIR
     export PREFIX=$INSTALLDIRNAME
