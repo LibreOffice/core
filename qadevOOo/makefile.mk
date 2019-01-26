@@ -37,7 +37,7 @@ TST:
 
 .IF "$(SOLAR_JAVA)"=="TRUE"	
 .IF "$(ANT_HOME)"!="NO_ANT_HOME"
-ANT_FLAGS+=-Dbuild.source=1.5
+ANT_FLAGS+=-Dbuild.source=1.6
 .IF "$(L10N_framework)"==""
 ALLTAR: ANTBUILD
 .ENDIF
