@@ -39,7 +39,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/make_unique.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -276,8 +276,8 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
     if (!mpTextHelper)
     {
         mpTextHelper.reset( new ::accessibility::AccessibleTextHelper(
-            o3tl::make_unique<ScAccessibilityEditSource>(
-                o3tl::make_unique<ScAccessibleHeaderTextData>(
+            std::make_unique<ScAccessibilityEditSource>(
+                std::make_unique<ScAccessibleHeaderTextData>(
                     mpViewShell, mpEditObj.get(), meAdjust))) );
         mpTextHelper->SetEventSource(this);
     }

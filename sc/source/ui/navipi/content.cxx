@@ -61,7 +61,7 @@
 #include <drawview.hxx>
 #include <clipparam.hxx>
 #include <markdata.hxx>
-#include <o3tl/make_unique.hxx>
+
 using namespace com::sun::star;
 
 //  order of the categories in navigator -------------------------------------
@@ -1707,7 +1707,7 @@ void ScContentTree::InitEntry(SvTreeListEntry* pEntry,
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    pEntry->ReplaceItem(o3tl::make_unique<SvLBoxString>(rCol.GetText()), nColToHilite);
+    pEntry->ReplaceItem(std::make_unique<SvLBoxString>(rCol.GetText()), nColToHilite);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

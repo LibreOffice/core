@@ -50,7 +50,7 @@
 #include <vcl/svapp.hxx>
 
 #include <AccessibleSpreadsheet.hxx>
-#include <o3tl/make_unique.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -382,7 +382,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     {
         return ::std::unique_ptr< SvxEditSource >();
     }
-    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessibleCellTextData>(pViewShell, aCell, eSplitPos, this)));
+    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::make_unique<ScAccessibleCellTextData>(pViewShell, aCell, eSplitPos, this)));
 
     return pEditSource;
 }

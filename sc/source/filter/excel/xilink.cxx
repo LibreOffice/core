@@ -29,7 +29,6 @@
 #include <externalrefmgr.hxx>
 #include <scmatrix.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <vector>
@@ -638,7 +637,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     if( maXclUrl.equalsIgnoreAsciiCase( "\010EUROTOOL.XLA" ) )
     {
         meType = XclSupbookType::Eurotool;
-        maSupbTabList.push_back( o3tl::make_unique<XclImpSupbookTab>( maXclUrl ) );
+        maSupbTabList.push_back( std::make_unique<XclImpSupbookTab>( maXclUrl ) );
     }
     else if( nSBTabCnt )
     {
@@ -657,14 +656,14 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
             OUString aTabName( rStrm.ReadUniString() );
-            maSupbTabList.push_back( o3tl::make_unique<XclImpSupbookTab>( aTabName ) );
+            maSupbTabList.push_back( std::make_unique<XclImpSupbookTab>( aTabName ) );
         }
     }
     else
     {
         meType = XclSupbookType::Special;
         // create dummy list entry
-        maSupbTabList.push_back( o3tl::make_unique<XclImpSupbookTab>( maXclUrl ) );
+        maSupbTabList.push_back( std::make_unique<XclImpSupbookTab>( maXclUrl ) );
     }
 }
 
@@ -691,7 +690,7 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 
 void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv )
 {
-    maExtNameList.push_back( o3tl::make_unique<XclImpExtName>( *this, rStrm, meType, pFormulaConv ) );
+    maExtNameList.push_back( std::make_unique<XclImpExtName>( *this, rStrm, meType, pFormulaConv ) );
 }
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
@@ -782,7 +781,7 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 
 void XclImpLinkManagerImpl::ReadSupbook( XclImpStream& rStrm )
 {
-    maSupbookList.push_back( o3tl::make_unique<XclImpSupbook>( rStrm ) );
+    maSupbookList.push_back( std::make_unique<XclImpSupbook>( rStrm ) );
 }
 
 void XclImpLinkManagerImpl::ReadXct( XclImpStream& rStrm )

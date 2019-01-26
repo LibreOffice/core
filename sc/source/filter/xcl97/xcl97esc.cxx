@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svx/svdpage.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -216,7 +215,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     SvGlobalName aObjClsId( xObj->getClassID() );
                     if ( SotExchange::IsChart( aObjClsId ) )
                     {   // yes, it's a chart diagram
-                        mrObjMgr.AddObj( o3tl::make_unique<XclExpChartObj>( mrObjMgr, rxShape, pChildAnchor ) );
+                        mrObjMgr.AddObj( std::make_unique<XclExpChartObj>( mrObjMgr, rxShape, pChildAnchor ) );
                         pCurrXclObj = nullptr;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object

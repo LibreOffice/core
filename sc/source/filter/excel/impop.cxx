@@ -62,7 +62,6 @@
 
 #include <excform.hxx>
 #include <documentimport.hxx>
-#include <o3tl/make_unique.hxx>
 
 #if defined(_WIN32)
 #include <math.h>
@@ -1293,7 +1292,7 @@ void ImportExcel::PostDocLoad()
     GetExtDocOptions().SetChanged( true );
 
     // root data owns the extended document options -> create a new object
-    GetDoc().SetExtDocOptions( o3tl::make_unique<ScExtDocOptions>( GetExtDocOptions() ) );
+    GetDoc().SetExtDocOptions( std::make_unique<ScExtDocOptions>( GetExtDocOptions() ) );
 
     const SCTAB     nLast = pD->GetTableCount();
     const ScRange*      p;

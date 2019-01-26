@@ -24,7 +24,6 @@
 #include <unotools/charclass.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 #include <token.hxx>
 #include <tokenarray.hxx>
@@ -657,7 +656,7 @@ ScRangeName::ScRangeName(const ScRangeName& r)
 {
     for (auto const& it : r.m_Data)
     {
-        m_Data.insert(std::make_pair(it.first, o3tl::make_unique<ScRangeData>(*it.second)));
+        m_Data.insert(std::make_pair(it.first, std::make_unique<ScRangeData>(*it.second)));
     }
     // std::map was cloned, so each collection needs its own index to data.
     maIndexToData.resize( r.maIndexToData.size(), nullptr);

@@ -27,7 +27,6 @@
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <drawview.hxx>
 #include <global.hxx>
@@ -518,7 +517,7 @@ void ScDrawView::SetMarkedOriginalSize()
         {
             tools::Rectangle aDrawRect = pObj->GetLogicRect();
 
-            pUndoGroup->AddAction( o3tl::make_unique<SdrUndoGeoObj>( *pObj ) );
+            pUndoGroup->AddAction( std::make_unique<SdrUndoGeoObj>( *pObj ) );
             pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
                                                  Fraction( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
             ++nDone;
@@ -579,7 +578,7 @@ void ScDrawView::FitToCellSize()
         aCellRect.setHeight(static_cast<double>(aGraphicRect.GetHeight()) * fScaleMin);
     }
 
-    pUndoGroup->AddAction( o3tl::make_unique<SdrUndoGeoObj>( *pObj ) );
+    pUndoGroup->AddAction( std::make_unique<SdrUndoGeoObj>( *pObj ) );
 
     pObj->SetSnapRect(aCellRect);
 

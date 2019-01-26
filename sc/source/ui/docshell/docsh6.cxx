@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <svx/pageitem.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -213,14 +212,14 @@ static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
         if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SfxItemState::SET)
         {
             const SfxItemSet& rSrcSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-            auto pDestSet = o3tl::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
+            auto pDestSet = std::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
             pDestSet->Put(rSrcSet);
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET,std::move(pDestSet)));
         }
         if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SfxItemState::SET)
         {
             const SfxItemSet& rSrcSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-            auto pDestSet = o3tl::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
+            auto pDestSet = std::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
             pDestSet->Put(rSrcSet);
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_FOOTERSET,std::move(pDestSet)));
         }

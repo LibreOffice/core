@@ -34,7 +34,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/app.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
@@ -1050,7 +1049,7 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
     if (nTable > nSize)
         for (sal_Int32 i = nSize; i < nTable; ++i)
         {
-            aTables.push_back(o3tl::make_unique<StylesType>(0, nFields+1, -1));
+            aTables.push_back(std::make_unique<StylesType>(0, nFields+1, -1));
         }
 }
 

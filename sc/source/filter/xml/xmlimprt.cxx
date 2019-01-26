@@ -96,7 +96,7 @@
 
 #include <memory>
 #include <utility>
-#include <o3tl/make_unique.hxx>
+
 #define SC_LOCALE           "Locale"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
 #define SC_REPEAT_ROW "repeat-row"
@@ -914,7 +914,7 @@ void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
     {
         // No chain exists for this sheet.  Create one.
         ::std::pair<SheetNamedExpMap::iterator, bool> r =
-            m_SheetNamedExpressions.insert(std::make_pair(nTab, o3tl::make_unique<ScMyNamedExpressions>()));
+            m_SheetNamedExpressions.insert(std::make_pair(nTab, std::make_unique<ScMyNamedExpressions>()));
         if (!r.second)
             // insertion failed.
             return;

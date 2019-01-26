@@ -24,7 +24,6 @@
 #include <tools/datetime.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sax/tools/converter.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
@@ -163,29 +162,29 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_INSERT_TABS:
         {
-            pCurrentAction = o3tl::make_unique<ScMyInsAction>(nActionType);
+            pCurrentAction = std::make_unique<ScMyInsAction>(nActionType);
         }
         break;
         case SC_CAT_DELETE_COLS:
         case SC_CAT_DELETE_ROWS:
         case SC_CAT_DELETE_TABS:
         {
-            pCurrentAction = o3tl::make_unique<ScMyDelAction>(nActionType);
+            pCurrentAction = std::make_unique<ScMyDelAction>(nActionType);
         }
         break;
         case SC_CAT_MOVE:
         {
-            pCurrentAction = o3tl::make_unique<ScMyMoveAction>();
+            pCurrentAction = std::make_unique<ScMyMoveAction>();
         }
         break;
         case SC_CAT_CONTENT:
         {
-            pCurrentAction = o3tl::make_unique<ScMyContentAction>();
+            pCurrentAction = std::make_unique<ScMyContentAction>();
         }
         break;
         case SC_CAT_REJECT:
         {
-            pCurrentAction = o3tl::make_unique<ScMyRejAction>();
+            pCurrentAction = std::make_unique<ScMyRejAction>();
         }
         break;
         default:
@@ -415,7 +414,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateInsertAct
 
     OUString sComment (pAction->aInfo.sComment);
 
-    return o3tl::make_unique<ScChangeActionIns>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return std::make_unique<ScChangeActionIns>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType);
 }
 
@@ -427,7 +426,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateDeleteAct
 
     OUString sComment (pAction->aInfo.sComment);
 
-    return o3tl::make_unique<ScChangeActionDel>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return std::make_unique<ScChangeActionDel>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType, pAction->nD, pTrack);
 }
 
@@ -442,7 +441,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateMoveActio
 
         OUString sComment (pAction->aInfo.sComment);
 
-        return o3tl::make_unique<ScChangeActionMove>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+        return std::make_unique<ScChangeActionMove>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
             pAction->pMoveRanges->aTargetRange, aUser, aDateTime, sComment, pAction->pMoveRanges->aSourceRange , pTrack);
     }
     return nullptr;
@@ -456,7 +455,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateRejection
 
     OUString sComment (pAction->aInfo.sComment);
 
-    return o3tl::make_unique<ScChangeActionReject>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return std::make_unique<ScChangeActionReject>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment);
 }
 
@@ -476,7 +475,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
 
     OUString sComment (pAction->aInfo.sComment);
 
-    return o3tl::make_unique<ScChangeActionContent>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return std::make_unique<ScChangeActionContent>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, sInputString);
 }
 

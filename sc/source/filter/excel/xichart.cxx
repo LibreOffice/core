@@ -76,7 +76,6 @@
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/numeric.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
@@ -1889,7 +1888,7 @@ void XclImpChSeries::AddChildSeries( const XclImpChSeries& rSeries )
     maTrendLines.insert( maTrendLines.end(), rSeries.maTrendLines.begin(), rSeries.maTrendLines.end() );
     for (auto const& it : rSeries.m_ErrorBars)
     {
-        m_ErrorBars.insert(std::make_pair(it.first, o3tl::make_unique<XclImpChSerErrorBar>(*it.second)));
+        m_ErrorBars.insert(std::make_pair(it.first, std::make_unique<XclImpChSerErrorBar>(*it.second)));
     }
 }
 

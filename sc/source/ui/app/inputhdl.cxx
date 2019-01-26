@@ -59,7 +59,6 @@
 #include <formula/funcvarargs.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <inputwin.hxx>
 #include <tabvwsh.hxx>
@@ -696,10 +695,10 @@ void ScInputHandler::ImplCreateEditEngine()
         if ( pActiveViewSh )
         {
             ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-            mpEditEngine = o3tl::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
+            mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
         }
         else
-            mpEditEngine = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+            mpEditEngine = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
 
         mpEditEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
@@ -2765,7 +2764,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             if ( pCommonAttrs )
             {
                 ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
-                pCellAttrs = o3tl::make_unique<ScPatternAttr>(pDoc->GetPool());
+                pCellAttrs = std::make_unique<ScPatternAttr>(pDoc->GetPool());
                 pCellAttrs->GetFromEditItemSet( pCommonAttrs.get() );
             }
         }

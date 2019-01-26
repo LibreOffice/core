@@ -21,7 +21,6 @@
 #include <utility>
 #include <scitems.hxx>
 #include <editeng/adjustitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -81,7 +80,7 @@ ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, std::make_unique<SfxItemSet>( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {

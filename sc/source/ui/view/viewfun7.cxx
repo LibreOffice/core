@@ -34,7 +34,6 @@
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <viewfunc.hxx>
@@ -169,7 +168,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                         pNewObj->NbcMove(Size(nDiffX,nDiffY));
                     if (pDestPage)
                         pDestPage->InsertObject( pNewObj );
-                    pScDrawView->AddUndo(o3tl::make_unique<SdrUndoInsertObj>( *pNewObj ));
+                    pScDrawView->AddUndo(std::make_unique<SdrUndoInsertObj>( *pNewObj ));
 
                     if (ScDrawLayer::IsCellAnchored(*pNewObj))
                         ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, *GetViewData().GetDocument(), nTab,

@@ -44,7 +44,7 @@ public:
                 vcl::Window *pParent, sal_uInt16 nId,
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo )
     {
-        return o3tl::make_unique<ChildWindowWrapper>(pParent, nId, pBindings, pInfo);
+        return std::make_unique<ChildWindowWrapper>(pParent, nId, pBindings, pInfo);
     }
 
     static void RegisterChildWindow (
@@ -52,7 +52,7 @@ public:
                     SfxModule* pModule  = nullptr,
                     SfxChildWindowFlags nFlags = SfxChildWindowFlags::NONE)
     {
-        auto pFactory = o3tl::make_unique<SfxChildWinFactory>(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
+        auto pFactory = std::make_unique<SfxChildWinFactory>(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
         pFactory->aInfo.nFlags |= nFlags;
         pFactory->aInfo.bVisible = bVisible;
         SfxChildWindow::RegisterChildWindow(pModule, std::move(pFactory));

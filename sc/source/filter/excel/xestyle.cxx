@@ -50,7 +50,6 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -3066,7 +3065,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             pNumFormat.reset(new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, xFormatter.get(), mpKeywordTable.get() )));
                         }
 
-                        maDxf.push_back(o3tl::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
+                        maDxf.push_back(std::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
                                 std::move(pFont), std::move(pNumFormat), std::move(pCellProt), std::move(pColor) ));
                         ++nIndex;
                     }

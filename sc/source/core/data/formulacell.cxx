@@ -54,7 +54,6 @@
 #include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/intitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <formulagroup.hxx>
 #include <listenercontext.hxx>
 #include <types.hxx>
@@ -575,7 +574,7 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
     {
         // Insert a new one.
         it = mpImpl->m_AreaListeners.insert(
-            it, std::make_pair(aKey, o3tl::make_unique<sc::FormulaGroupAreaListener>(
+            it, std::make_pair(aKey, std::make_unique<sc::FormulaGroupAreaListener>(
                 rRange, *(*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed)));
     }
 
@@ -4712,7 +4711,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 ScDocument::SetupFromNonThreadedContext(*context, i);
-                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");

@@ -28,7 +28,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -273,15 +272,15 @@ void ScSolverOptionsDialog::FillListBox()
             else
                 xButton->SetStateUnchecked();
             pEntry->AddItem(std::move(xButton));
-            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aVisName));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+            pEntry->AddItem(std::make_unique<SvLBoxString>(aVisName));
         }
         else
         {
             // value entry
             pEntry = new SvTreeListEntry;
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>("")); // empty column
-            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+            pEntry->AddItem(std::make_unique<SvLBoxString>("")); // empty column
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
             std::unique_ptr<ScSolverOptionsString> pItem(
                 new ScSolverOptionsString(aVisName));
             if ( eClass == uno::TypeClass_DOUBLE )

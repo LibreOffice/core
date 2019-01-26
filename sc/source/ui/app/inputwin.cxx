@@ -44,7 +44,6 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>
@@ -1181,10 +1180,10 @@ void ScTextWnd::InitEditEngine()
     {
         pDocSh = mpViewShell->GetViewData().GetDocShell();
         ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
-        pNew = o3tl::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        pNew = std::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
     mpEditEngine = std::move(pNew);
 
@@ -1223,7 +1222,7 @@ void ScTextWnd::InitEditEngine()
     else
         mpEditEngine->SetText(aString); // At least the right text then
 
-    mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
+    mpEditView = std::make_unique<EditView>(mpEditEngine.get(), this);
     mpEditView->SetInsertMode(bIsInsertMode);
 
     // Text from Clipboard is taken over as ASCII in a single row
@@ -1711,10 +1710,10 @@ void ScTextWnd::MakeDialogEditView()
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-        pNew = o3tl::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        pNew = std::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
     mpEditEngine = std::move(pNew);
 
@@ -1730,7 +1729,7 @@ void ScTextWnd::MakeDialogEditView()
     mpEditEngine->SetDefaults( pSet );
     mpEditEngine->SetUpdateMode( true );
 
-    mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
+    mpEditView = std::make_unique<EditView>(mpEditEngine.get(), this);
     mpEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();

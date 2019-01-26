@@ -18,7 +18,7 @@
 
 #include <memory>
 #include <utility>
-#include <o3tl/make_unique.hxx>
+
 using ::std::unique_ptr;
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
@@ -29,12 +29,12 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
 {
     for (const auto& [rName, pRangeName] : rOldNames)
     {
-        m_OldNames.insert(std::make_pair(rName, o3tl::make_unique<ScRangeName>(*pRangeName)));
+        m_OldNames.insert(std::make_pair(rName, std::make_unique<ScRangeName>(*pRangeName)));
     }
 
     for (auto const& it : rNewNames)
     {
-        m_NewNames.insert(std::make_pair(it.first, o3tl::make_unique<ScRangeName>(*it.second)));
+        m_NewNames.insert(std::make_pair(it.first, std::make_unique<ScRangeName>(*it.second)));
     }
 }
 

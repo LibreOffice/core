@@ -105,7 +105,6 @@
 
 #include <dwfunctr.hxx>
 #include <acredlin.hxx>
-#include <o3tl/make_unique.hxx>
 #include <filter.hxx>
 #include <scabstdlg.hxx>
 
@@ -124,7 +123,7 @@ void ScDLL::Init()
     if ( SfxApplication::GetModule(SfxToolsModule::Calc) )    // Module already active
         return;
 
-    auto pUniqueModule = o3tl::make_unique<ScModule>(&ScDocShell::Factory());
+    auto pUniqueModule = std::make_unique<ScModule>(&ScDocShell::Factory());
     ScModule* pMod = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Calc, std::move(pUniqueModule));
 

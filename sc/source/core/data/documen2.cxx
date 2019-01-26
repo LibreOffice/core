@@ -33,7 +33,6 @@
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <table.hxx>
@@ -1128,7 +1127,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
     if (findIt == rpCacheMap->aCacheMap.end())
     {
         auto insertIt = rpCacheMap->aCacheMap.emplace_hint(findIt,
-                    rRange, o3tl::make_unique<ScLookupCache>(this, rRange, *rpCacheMap) );
+                    rRange, std::make_unique<ScLookupCache>(this, rRange, *rpCacheMap) );
         pCache = insertIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.

@@ -43,7 +43,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
-#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -1088,7 +1087,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
     if (bUndo)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoBorder>( pDocShell, rRanges, std::move(pUndoDoc), rOuter, rInner ) );
+                std::make_unique<ScUndoBorder>( pDocShell, rRanges, std::move(pUndoDoc), rOuter, rInner ) );
     }
 
     for (size_t i = 0; i < nCount; ++i )
@@ -1225,7 +1224,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         ScMarkData aDestMark;
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoPaste>(
+            std::make_unique<ScUndoPaste>(
                 &rDocShell, ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab),
                 aDestMark, std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
@@ -1326,7 +1325,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         ScMarkData aDestMark;
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoPaste>( &rDocShell,
+            std::make_unique<ScUndoPaste>( &rDocShell,
                 ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), aDestMark,
                 std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
@@ -4052,7 +4051,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                         nReplaced = pUndoDoc->GetCellCount();
 
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            o3tl::make_unique<ScUndoReplace>( pDocShell, *pUndoMark, nCol, nRow, nTab,
+                            std::make_unique<ScUndoReplace>( pDocShell, *pUndoMark, nCol, nRow, nTab,
                                                         aUndoStr, std::move(pUndoDoc), pSearchItem ) );
 
                         pDocShell->PostPaintGridAll();
@@ -6207,7 +6206,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             aSelection.nEndPos = aSelection.nStartPos + 1;
             uno::Reference<text::XTextRange> xParent(this);
             pCellField->InitDoc(
-                xParent, o3tl::make_unique<ScCellEditSource>(pDocSh, aCellPos), aSelection);
+                xParent, std::make_unique<ScCellEditSource>(pDocSh, aCellPos), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
@@ -6978,7 +6977,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             pDocSh->GetUndoManager()->AddUndoAction(
-                                    o3tl::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
+                                    std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
         }
 
         rDoc.RemoveManualBreaks(nTab);
@@ -7145,7 +7144,7 @@ void ScTableSheetObj::PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOl
         if(bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoPrintRange>(
+                std::make_unique<ScUndoPrintRange>(
                     pDocSh,
                     nTab,
                     std::move(pOldRanges),

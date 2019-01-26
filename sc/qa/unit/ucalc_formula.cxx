@@ -35,7 +35,6 @@
 #include <svl/itemset.hxx>
 
 #include <formula/vectortoken.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/docfile.hxx>
@@ -3955,7 +3954,7 @@ void Test::testFormulaRefUpdateValidity()
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
     ScPatternAttr aNewAttrs(
-        o3tl::make_unique<SfxItemSet>(*m_pDoc->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{}));
+        std::make_unique<SfxItemSet>(*m_pDoc->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{}));
     aNewAttrs.GetItemSet().Put(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);

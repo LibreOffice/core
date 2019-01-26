@@ -25,8 +25,6 @@
 #include <viewdata.hxx>
 #include <scui_def.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
 {
@@ -39,7 +37,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
     rDoc.GetRangeNameMap(aCopyMap);
     for (const auto& [aTemp, pName] : aCopyMap)
     {
-        m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*pName)));
+        m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pName)));
     }
 
     ScViewData* pViewData = ScDocShell::GetViewData();

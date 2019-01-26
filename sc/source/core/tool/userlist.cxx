@@ -25,7 +25,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 
@@ -237,9 +236,9 @@ ScUserList::ScUserList()
             OUString aDayLong = aDayLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aDayShort ) )
-                maData.push_back( o3tl::make_unique<ScUserListData>( aDayShort ));
+                maData.push_back( std::make_unique<ScUserListData>( aDayShort ));
             if ( !HasEntry( aDayLong ) )
-                maData.push_back( o3tl::make_unique<ScUserListData>( aDayLong ));
+                maData.push_back( std::make_unique<ScUserListData>( aDayLong ));
         }
 
         xCal = xCalendars[j].Months;
@@ -262,9 +261,9 @@ ScUserList::ScUserList()
             OUString aMonthLong = aMonthLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aMonthShort ) )
-                maData.push_back( o3tl::make_unique<ScUserListData>( aMonthShort ));
+                maData.push_back( std::make_unique<ScUserListData>( aMonthShort ));
             if ( !HasEntry( aMonthLong ) )
-                maData.push_back( o3tl::make_unique<ScUserListData>( aMonthLong ));
+                maData.push_back( std::make_unique<ScUserListData>( aMonthLong ));
         }
     }
 }
@@ -272,7 +271,7 @@ ScUserList::ScUserList()
 ScUserList::ScUserList(const ScUserList& rOther)
 {
     for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back(o3tl::make_unique<ScUserListData>(*rData));
+        maData.push_back(std::make_unique<ScUserListData>(*rData));
 }
 
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
@@ -310,7 +309,7 @@ ScUserList& ScUserList::operator=( const ScUserList& rOther )
 {
     maData.clear();
     for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back(o3tl::make_unique<ScUserListData>(*rData));
+        maData.push_back(std::make_unique<ScUserListData>(*rData));
     return *this;
 }
 

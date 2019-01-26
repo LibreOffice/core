@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
@@ -304,7 +303,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
             bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
             Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
-            rHdl.AddHdl(o3tl::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));
+            rHdl.AddHdl(std::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));
         }
     }
 }

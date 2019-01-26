@@ -103,7 +103,6 @@
 #include <globalnames.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <miscuno.hxx>
-#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <optutil.hxx>
 #include <patattr.hxx>

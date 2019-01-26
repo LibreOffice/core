@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <o3tl/make_unique.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
@@ -113,7 +112,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
     if ( !mpPrinter && bCreateIfNotExist )
     {
         auto pSet =
-            o3tl::make_unique<SfxItemSet>( *mxPoolHelper->GetDocPool(),
+            std::make_unique<SfxItemSet>( *mxPoolHelper->GetDocPool(),
                             svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,

@@ -53,8 +53,6 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
-#include <o3tl/make_unique.hxx>
-
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -2465,7 +2463,7 @@ void XclExpChTypeGroup::ConvertSeries(
                 if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
                 {
                     sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
-                    m_ChartLines.insert(std::make_pair(nKey, o3tl::make_unique<XclExpChLineFormat>(GetChRoot())));
+                    m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
                 }
             }
             else
@@ -2560,7 +2558,7 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         XclExpChLineFormatRef xLineFmt( new XclExpChLineFormat( GetChRoot() ) );
         xLineFmt->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         sal_uInt16 nKey = EXC_CHCHARTLINE_HILO;
-        m_ChartLines.insert(std::make_pair(nKey, o3tl::make_unique<XclExpChLineFormat>(GetChRoot())));
+        m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
     }
     // dropbars
     if( bHasOpen && bHasClose )

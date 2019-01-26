@@ -41,7 +41,6 @@
 
 #include <vector>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 // Similar as in output.cxx
 
@@ -662,7 +661,7 @@ void ScDocument::FillInfo(
                 {
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, pRowInfo[nArrRow].nRowNo, nTab ) )
                     {
-                        aAltPatterns.push_back( o3tl::make_unique<ScPatternAttr>( *pInfo->pPatternAttr ) );
+                        aAltPatterns.push_back( std::make_unique<ScPatternAttr>( *pInfo->pPatternAttr ) );
                         pModifiedPatt = aAltPatterns.back().get();
                         pModifiedPatt->SetStyleSheet( pPreviewStyle );
                     }

@@ -55,8 +55,6 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>

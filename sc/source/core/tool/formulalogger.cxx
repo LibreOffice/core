@@ -14,7 +14,6 @@
 #include <interpre.hxx>
 
 #include <osl/file.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -39,7 +38,7 @@ std::unique_ptr<osl::File> initFile()
     aURL.SetSmartURL(aPath);
     aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-    return o3tl::make_unique<osl::File>(aPath);
+    return std::make_unique<osl::File>(aPath);
 }
 
 ScRefFlags getRefFlags( const ScAddress& rCellPos, const ScAddress& rRefPos )
@@ -125,7 +124,7 @@ struct FormulaLogger::GroupScope::Impl
 FormulaLogger::GroupScope::GroupScope(
     FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc,
     const ScFormulaCell& rCell, bool bOutputEnabled ) :
-    mpImpl(o3tl::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell, bOutputEnabled)) {}
+    mpImpl(std::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell, bOutputEnabled)) {}
 
 FormulaLogger::GroupScope::GroupScope( GroupScope&& r ) : mpImpl(std::move(r.mpImpl)) {}
 

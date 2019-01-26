@@ -33,7 +33,6 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <preview.hxx>
 #include <prevwsh.hxx>
@@ -1113,7 +1112,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            o3tl::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
+                            std::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 
@@ -1215,7 +1214,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            o3tl::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
+                            std::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 

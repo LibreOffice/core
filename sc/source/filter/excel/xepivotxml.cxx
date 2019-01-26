@@ -26,8 +26,6 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 
-#include <o3tl/make_unique.hxx>
-
 #include <vector>
 
 using namespace oox;
@@ -477,7 +475,7 @@ void XclExpXmlPivotTableManager::Initialize()
         {
             // Insert a new instance for this sheet index.
             std::pair<TablesType::iterator, bool> r =
-                m_Tables.insert(std::make_pair(nTab, o3tl::make_unique<XclExpXmlPivotTables>(GetRoot(), maCaches)));
+                m_Tables.insert(std::make_pair(nTab, std::make_unique<XclExpXmlPivotTables>(GetRoot(), maCaches)));
             it = r.first;
         }
 

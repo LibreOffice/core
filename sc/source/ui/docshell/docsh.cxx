@@ -143,7 +143,6 @@
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <refupdatecontext.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <vector>
@@ -2351,7 +2350,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ScExtDocOptions* pExtDocOpt = m_aDocument.GetExtDocOptions();
             if( !pExtDocOpt )
             {
-                m_aDocument.SetExtDocOptions( o3tl::make_unique<ScExtDocOptions>() );
+                m_aDocument.SetExtDocOptions( std::make_unique<ScExtDocOptions>() );
                 pExtDocOpt = m_aDocument.GetExtDocOptions();
             }
             pViewShell->GetViewData().WriteExtOptions( *pExtDocOpt );
@@ -2736,7 +2735,7 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
 
 std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
 {
-    return o3tl::make_unique<ScDocFuncDirect>( *this );
+    return std::make_unique<ScDocFuncDirect>( *this );
 }
 
 ScDocument* ScDocShell::GetClipDoc()

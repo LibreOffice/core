@@ -24,7 +24,6 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -585,7 +584,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             std::unique_ptr<ScDBData> pRedoDBData(new ScDBData(*pDBData));
 
             rDocShell.GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoImportData>( &rDocShell, nTab,
+                std::make_unique<ScUndoImportData>( &rDocShell, nTab,
                                         rParam, nUndoEndCol, nUndoEndRow,
                                         nFormulaCols,
                                         std::move(pUndoDoc), std::move(pRedoDoc),

@@ -24,7 +24,6 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <memory>
 
 #include <callform.hxx>
@@ -379,7 +378,7 @@ LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r)
 {
     for (auto const& it : r.m_Data)
     {
-        m_Data.insert(std::make_pair(it.first, o3tl::make_unique<LegacyFuncData>(*it.second)));
+        m_Data.insert(std::make_pair(it.first, std::make_unique<LegacyFuncData>(*it.second)));
     }
 }
 

@@ -391,7 +391,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if (bUndo)
                             {
                                 GetUndoManager()->AddUndoAction(
-                                    o3tl::make_unique<ScUndoChartData>( this, aChartName, aRangeListRef,
+                                    std::make_unique<ScUndoChartData>( this, aChartName, aRangeListRef,
                                                             bColHeaders, bRowHeaders, bAddRange ) );
                             }
                             m_aDocument.UpdateChartArea( aChartName, aRangeListRef,
@@ -403,7 +403,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if (bUndo)
                             {
                                 GetUndoManager()->AddUndoAction(
-                                    o3tl::make_unique<ScUndoChartData>( this, aChartName, aNewRange,
+                                    std::make_unique<ScUndoChartData>( this, aChartName, aNewRange,
                                                             bColHeaders, bRowHeaders, bAddRange ) );
                             }
                             m_aDocument.UpdateChartArea( aChartName, aNewRange,
@@ -1521,7 +1521,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
         {
             sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
             sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
-            GetUndoManager()->AddUndoAction( o3tl::make_unique<ScUndoPrintZoom>(
+            GetUndoManager()->AddUndoAction( std::make_unique<ScUndoPrintZoom>(
                             this, nTab, nOldScale, nOldPages, nScale, nPages ) );
         }
 
@@ -1727,7 +1727,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 if (bUndo)
                                 {
                                     GetUndoManager()->AddUndoAction(
-                                            o3tl::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
+                                            std::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
                                                         aOldData, aNewData ) );
                                 }
 

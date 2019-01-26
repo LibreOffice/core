@@ -33,7 +33,6 @@
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <docoptio.hxx>
@@ -81,7 +80,7 @@ void ScDocument::TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTA
                 pNewPage->InsertObject( pNewObject );
 
                 if (mpDrawLayer->IsRecording())
-                    mpDrawLayer->AddCalcUndo( o3tl::make_unique<SdrUndoInsertObj>( *pNewObject ) );
+                    mpDrawLayer->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );
 
                 pOldObject = aIter.Next();
             }

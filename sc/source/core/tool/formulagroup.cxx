@@ -27,7 +27,6 @@
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
-#include <o3tl/make_unique.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 
@@ -118,7 +117,7 @@ void FormulaGroupContext::ensureStrArray( ColArray& rColArray, size_t nArrayLen 
         return;
 
     m_StrArrays.push_back(
-        o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
+        std::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
     rColArray.mpStrArray = m_StrArrays.back().get();
 }
 
@@ -131,7 +130,7 @@ void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen 
     rtl::math::setNan(&fNan);
 
     m_NumArrays.push_back(
-        o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+        std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
     rColArray.mpNumArray = m_NumArrays.back().get();
 }
 

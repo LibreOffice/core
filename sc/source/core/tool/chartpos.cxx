@@ -21,7 +21,6 @@
 #include <document.hxx>
 #include <rechead.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 
@@ -377,7 +376,7 @@ void ScChartPositioner::CreatePositionMap()
                 {
                     if ( pCol->find( nInsRow ) == pCol->end() )
                     {
-                        pCol->emplace( nInsRow, o3tl::make_unique<ScAddress>( nCol, nRow, nTab ) );
+                        pCol->emplace( nInsRow, std::make_unique<ScAddress>( nCol, nRow, nTab ) );
                     }
                 }
             }

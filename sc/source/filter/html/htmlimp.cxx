@@ -26,7 +26,6 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 
 #include <htmlimp.hxx>
@@ -57,7 +56,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUStrin
 
 std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
 {
-    return o3tl::make_unique<ScHTMLImport>( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
+    return std::make_unique<ScHTMLImport>( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
 }
 
 ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -164,7 +163,7 @@ void ScGraphicShell::ExecuteExternalEdit( SAL_UNUSED_PARAMETER SfxRequest& )
         if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
         {
             GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
-            m_ExternalEdits.push_back( o3tl::make_unique<SdrExternalToolEdit>(
+            m_ExternalEdits.push_back( std::make_unique<SdrExternalToolEdit>(
                         pView, pObj));
             m_ExternalEdits.back()->Edit( &aGraphicObject );
         }

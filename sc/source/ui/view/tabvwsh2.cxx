@@ -25,7 +25,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <tabvwsh.hxx>
 #include <drawsh.hxx>

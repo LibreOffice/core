@@ -53,7 +53,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
@@ -1635,7 +1634,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     }
                     if ( mpDoc->GetPreviewFont() || mpDoc->GetPreviewCellStyle() )
                     {
-                        aAltPatterns.push_back(o3tl::make_unique<ScPatternAttr>(*pPattern));
+                        aAltPatterns.push_back(std::make_unique<ScPatternAttr>(*pPattern));
                         ScPatternAttr* pAltPattern = aAltPatterns.back().get();
                         if (  ScStyleSheet* pPreviewStyle = mpDoc->GetPreviewCellStyle( nCellX, nCellY, nTab ) )
                         {
@@ -1658,7 +1657,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             pPattern->GetItem(ATTR_LINEBREAK, pCondSet).GetValue())
                     {
                         // Disable line break when the cell content is numeric.
-                        aAltPatterns.push_back(o3tl::make_unique<ScPatternAttr>(*pPattern));
+                        aAltPatterns.push_back(std::make_unique<ScPatternAttr>(*pPattern));
                         ScPatternAttr* pAltPattern = aAltPatterns.back().get();
                         SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
                         pAltPattern->GetItemSet().Put(aLineBreak);

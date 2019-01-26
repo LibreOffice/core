@@ -31,7 +31,6 @@
 
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
@@ -112,7 +111,7 @@ void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
         if (bRecord)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoMakeOutline>( &rDocShell,
+                std::make_unique<ScUndoMakeOutline>( &rDocShell,
                                         nStartCol,nStartRow,nTab,nEndCol,nEndRow,nTab,
                                         std::move(pUndoTab), bColumns, true ) );
         }
@@ -173,7 +172,7 @@ void ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
             if (bRecord)
             {
                 rDocShell.GetUndoManager()->AddUndoAction(
-                    o3tl::make_unique<ScUndoMakeOutline>( &rDocShell,
+                    std::make_unique<ScUndoMakeOutline>( &rDocShell,
                                             nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
                                             std::move(pUndoTab), bColumns, false ) );
             }
@@ -229,7 +228,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
 
             rDocShell.GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoRemoveAllOutlines>( &rDocShell,
+                std::make_unique<ScUndoRemoveAllOutlines>( &rDocShell,
                                                 nStartCol, nStartRow, nTab,
                                                 nEndCol, nEndRow, nTab,
                                                 std::move(pUndoDoc), std::move(pUndoTab) ) );
@@ -301,7 +300,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoAutoOutline>( &rDocShell,
+            std::make_unique<ScUndoAutoOutline>( &rDocShell,
                                     nStartCol, nStartRow, nTab,
                                     nEndCol, nEndRow, nTab,
                                     std::move(pUndoDoc), std::move(pUndoTab) ) );
@@ -349,7 +348,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoOutlineLevel>( &rDocShell,
+            std::make_unique<ScUndoOutlineLevel>( &rDocShell,
                                     nStart, nEnd, nTab,             //! calculate start and end
                                     std::move(pUndoDoc), std::move(pUndoTab),
                                     bColumns, nLevel ) );
@@ -462,7 +461,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             rDoc.CopyToDocument(0, nStartRow, nTab, MAXCOL, nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             rDocShell.GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoOutlineBlock>( &rDocShell,
+                std::make_unique<ScUndoOutlineBlock>( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
                                         std::move(pUndoDoc), std::move(pUndoTab), true ) );
         }
@@ -590,7 +589,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
             rDoc.CopyToDocument(0, nEffStartRow, nTab, MAXCOL, nEffEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             rDocShell.GetUndoManager()->AddUndoAction(
-                o3tl::make_unique<ScUndoOutlineBlock>( &rDocShell,
+                std::make_unique<ScUndoOutlineBlock>( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
                                         std::move(pUndoDoc), std::move(pUndoTab), false ) );
         }
@@ -667,7 +666,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoDoOutline>( &rDocShell,
+            std::make_unique<ScUndoDoOutline>( &rDocShell,
                                     nStart, nEnd, nTab, std::move(pUndoDoc),  //! calc start and end
                                     bColumns, nLevel, nEntry, true ) );
     }
@@ -759,7 +758,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
-            o3tl::make_unique<ScUndoDoOutline>( &rDocShell,
+            std::make_unique<ScUndoDoOutline>( &rDocShell,
                                     nStart, nEnd, nTab, std::move(pUndoDoc),
                                     bColumns, nLevel, nEntry, false ) );
     }

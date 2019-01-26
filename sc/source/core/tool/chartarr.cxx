@@ -31,7 +31,6 @@
 #include <formulacell.hxx>
 #include <docoptio.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <formula/errorcodes.hxx>
 
 #include <memory>

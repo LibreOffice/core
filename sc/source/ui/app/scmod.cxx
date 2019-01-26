@@ -22,7 +22,6 @@
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <o3tl/make_unique.hxx>
 #include <scitems.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/eeitem.hxx>
@@ -1884,7 +1883,7 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
     std::unique_ptr<SfxItemSet> pRet;
     if(SID_SC_EDITOPTIONS == nId)
     {
-        pRet = o3tl::make_unique<SfxItemSet>(
+        pRet = std::make_unique<SfxItemSet>(
             GetPool(),
             svl::Items<
                 // TP_USERLISTS:

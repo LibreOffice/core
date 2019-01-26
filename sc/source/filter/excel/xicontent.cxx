@@ -57,7 +57,6 @@
 
 #include <memory>
 #include <utility>
-#include <o3tl/make_unique.hxx>
 #include <oox/helper/helper.hxx>
 #include <sal/log.hxx>
 
@@ -897,7 +896,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         XclTokenArrayHelper::ConvertStringToList(*xTokArr1, rDoc.GetSharedStringPool(), '\n');
 
     maDVItems.push_back(
-        o3tl::make_unique<DVItem>(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
+        std::make_unique<DVItem>(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
     DVItem& rItem = *maDVItems.back().get();
 
     rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );

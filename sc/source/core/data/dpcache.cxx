@@ -37,7 +37,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #if DUMP_PIVOT_TABLE
@@ -550,7 +549,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     std::vector<InitColumnData> aColData(mnColumnCount);
     maFields.reserve(mnColumnCount);
     for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
-        maFields.push_back(o3tl::make_unique<Field>());
+        maFields.push_back(std::make_unique<Field>());
 
     maLabelNames.reserve(mnColumnCount+1);
 
@@ -629,7 +628,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         maFields.clear();
         maFields.reserve(mnColumnCount);
         for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
-            maFields.push_back(o3tl::make_unique<Field>());
+            maFields.push_back(std::make_unique<Field>());
 
         // Get column titles and types.
         maLabelNames.clear();
@@ -1297,7 +1296,7 @@ SvNumberFormatter* ScDPCache::GetNumberFormatter() const
 
 long ScDPCache::AppendGroupField()
 {
-    maGroupFields.push_back(o3tl::make_unique<GroupItems>());
+    maGroupFields.push_back(std::make_unique<GroupItems>());
     return static_cast<long>(maFields.size() + maGroupFields.size() - 1);
 }
 
