@@ -12,7 +12,6 @@
 
 #include <map>
 #include <vector>
-#include <cstring>
 
 #include <osl/file.h>
 #include <osl/file.hxx>
@@ -22,8 +21,6 @@
 #include <rtl/ustring.hxx>
 #include <unoidl/unoidl.hxx>
 
-#include "sourceprovider-parser-requires.hxx"
-#include <sourceprovider-parser.hxx>
 #include "sourceprovider-scanner.hxx"
 #include "sourcetreeprovider.hxx"
 

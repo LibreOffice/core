@@ -17,6 +17,7 @@
 #include <sal/config.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include <algorithm>
 #include <cassert>
