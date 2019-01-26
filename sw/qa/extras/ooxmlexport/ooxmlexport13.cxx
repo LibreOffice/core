@@ -97,6 +97,16 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
+{
+    // Make sure the rotation is exported correctly, and size not distorted
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
+    auto frameRect = getProperty<awt::Rectangle>(xShape, "FrameRect");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24070), frameRect.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24188), frameRect.Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
