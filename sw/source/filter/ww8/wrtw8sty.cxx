@@ -43,6 +43,7 @@
 #include <ndtxt.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>
+#include <frmatr.hxx>
 #include <section.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtftn.hxx>
@@ -597,6 +598,10 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
         {
             assert( pFormat->GetPoolFormatId() == RES_POOLCOLL_STANDARD );
             aName = "Normal";
+
+            // force bidi property to be SET, so that it exports an appropriate locale value
+            if ( SfxItemState::SET != pFormat->GetItemState(RES_FRAMEDIR, false) )
+                pFormat->SetFormatAttr(pFormat->GetFrameDir());
         }
         else if (aName.equalsIgnoreAsciiCase("Normal"))
         {
