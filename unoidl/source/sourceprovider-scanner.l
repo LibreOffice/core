@@ -35,6 +35,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/textenc.h"
 #include "sal/types.h"
+#include <unoidl/unoidl.hxx>
 
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"
