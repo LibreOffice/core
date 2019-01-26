@@ -4761,7 +4761,27 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         CharGrabBag(*pGrabBag);
     }
 
-    m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, rSize);
+    rtl::Reference<sax_fastparser::FastAttributeList> xFrameAttributes(
+        FastSerializerHelper::createAttrList());
+    Size aSize = rSize;
+    if (pGrfNode)
+    {
+        const SwAttrSet& rSet = pGrfNode->GetSwAttrSet();
+        MirrorGraph eMirror = rSet.Get(RES_GRFATR_MIRRORGRF).GetValue();
+        if (eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both)
+            // Mirror on the vertical axis is a horizontal flip.
+            xFrameAttributes->add(XML_flipH, "1");
+        // RES_GRFATR_ROTATION is sal_uInt16; use sal_uInt32 for multiplication later
+        if (sal_uInt32 nRot = rSet.Get(RES_GRFATR_ROTATION).GetValue())
+        {
+            // RES_GRFATR_ROTATION is in 10ths of degree; convert to 100ths for macro
+            sal_uInt32 mOOXMLRot = OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRot*10);
+            xFrameAttributes->add(XML_rot, OString::number(mOOXMLRot));
+            aSize = pGrfNode->GetTwipSize();
+        }
+    }
+
+    m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
 
     // picture description (used for pic:cNvPr later too)
     ::sax_fastparser::FastAttributeList* docPrattrList = FastSerializerHelper::createAttrList();
@@ -4868,25 +4888,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             XML_bwMode, "auto",
             FSEND );
 
-    rtl::Reference<sax_fastparser::FastAttributeList> xFrameAttributes(
-        FastSerializerHelper::createAttrList());
-
-    if (pGrfNode)
-    {
-        MirrorGraph eMirror = pGrfNode->GetSwAttrSet().Get(RES_GRFATR_MIRRORGRF).GetValue();
-        if (eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both)
-            // Mirror on the vertical axis is a horizontal flip.
-            xFrameAttributes->add(XML_flipH, "1");
-    }
-
     m_pSerializer->startElementNS(
         XML_a, XML_xfrm, uno::Reference<xml::sax::XFastAttributeList>(xFrameAttributes.get()));
 
     m_pSerializer->singleElementNS( XML_a, XML_off,
             XML_x, "0", XML_y, "0",
             FSEND );
-    OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
-    OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
+    OString aWidth( OString::number( TwipsToEMU( aSize.Width() ) ) );
+    OString aHeight( OString::number( TwipsToEMU( aSize.Height() ) ) );
     m_pSerializer->singleElementNS( XML_a, XML_ext,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
