@@ -4766,30 +4766,8 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     SvxFrameDirection nDir = rDirection.GetValue();
 
     if ( nDir == SvxFrameDirection::Environment )
-    {
-        if ( m_rWW8Export.m_bOutPageDescs )
-            nDir = m_rWW8Export.GetCurrentPageDirection();
-        else if ( m_rWW8Export.m_pOutFormatNode )
-        {
-            if ( m_rWW8Export.m_bOutFlyFrameAttrs )  //frame
-            {
-                nDir = m_rWW8Export.TrueFrameDirection(
-                    *static_cast<const SwFrameFormat*>(m_rWW8Export.m_pOutFormatNode) );
-            }
-            else if ( dynamic_cast< const SwContentNode *>( m_rWW8Export.m_pOutFormatNode ) !=  nullptr )   //pagagraph
-            {
-                const SwContentNode* pNd =
-                    static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode);
-                SwPosition aPos( *pNd );
-                nDir = m_rWW8Export.m_pDoc->GetTextDirection( aPos );
-            }
-            else if ( dynamic_cast< const SwTextFormatColl *>( m_rWW8Export.m_pOutFormatNode ) !=  nullptr )
-                nDir = SvxFrameDirection::Horizontal_LR_TB;    //what else can we do :-(
-        }
+        nDir = GetExport( ).GetDefaultFrameDirection( );
 
-        if ( nDir == SvxFrameDirection::Environment )
-            nDir = SvxFrameDirection::Horizontal_LR_TB;    //Set something
-    }
 
     switch ( nDir )
     {
