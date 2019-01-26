@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 -o sc.ScModelObj
--o sc.ScNamedRangesObj
 # -o sc.ScShapeObj
 # -o sc.ScSheetLinkObj
 -o sc.ScSpreadsheetSettingsObj
