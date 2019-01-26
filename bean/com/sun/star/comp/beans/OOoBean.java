@@ -128,7 +128,7 @@ public class OOoBean
         { /* impossible here */ }
     }
 
-    /** Sets the timeout for methods which launch OOo in milli seconds.
+    /** Sets the timeout for methods which launch OOo in milliseconds.
 
         This method does not need a connection to an OOo instance.
      */
@@ -137,7 +137,7 @@ public class OOoBean
         nOOoStartTimeOut = nMilliSecs;
     }
 
-    /** Sets the timeout for normal OOO methods calls in milli seconds.
+    /** Sets the timeout for normal OOO methods calls in milliseconds.
 
         This method does not need a connection to an OOo instance.
      */
