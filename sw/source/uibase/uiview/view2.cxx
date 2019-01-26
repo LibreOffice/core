@@ -2381,9 +2381,10 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         if(!aDBNameList.empty())
         {
             OUString sDBName(aDBNameList[0]);
-            aData.sDataSource = sDBName.getToken(0, DB_DELIM);
-            aData.sCommand = sDBName.getToken(1, DB_DELIM);
-            aData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
+            sal_Int32 nIdx {0};
+            aData.sDataSource = sDBName.getToken(0, DB_DELIM, nIdx);
+            aData.sCommand = sDBName.getToken(0, DB_DELIM, nIdx);
+            aData.nCommandType = sDBName.getToken(0, DB_DELIM, nIdx).toInt32();
         }
         rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
         AttrChangedNotify( &rSh );
