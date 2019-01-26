@@ -16,6 +16,24 @@
       "revId": "a753b19c510aee6601372b39a9e9cf30e30a29a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_a99a47c2",
+        "filename": "unodevtools/source/skeletonmaker/javatypemaker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2019-01-26T15:03:17Z",
+      "side": 1,
+      "message": "Fixed in new patch version, thanks",
+      "parentUuid": "1f485f77_1e850fae",
+      "revId": "a753b19c510aee6601372b39a9e9cf30e30a29a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
