@@ -3490,7 +3490,11 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
 {
     if (!m_rExport.m_bOutPageDescs)
     {
-        if (rDirection.GetValue() == SvxFrameDirection::Horizontal_RL_TB)
+        SvxFrameDirection nDir = rDirection.GetValue();
+        if (nDir == SvxFrameDirection::Environment)
+            nDir = GetExport().GetDefaultFrameDirection();
+
+        if (nDir == SvxFrameDirection::Horizontal_RL_TB)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
         else
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);
