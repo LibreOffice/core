@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -32,6 +33,7 @@ class ScNamedRangesObj : public CalcUnoApiTest,
                          public apitest::XElementAccess,
                          public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
+                         public apitest::XNameAccess,
                          public apitest::XNamedRanges
 {
 public:
@@ -57,6 +59,11 @@ public:
     CPPUNIT_TEST(testGetCount);
 
     // XNamedRanges
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
+    // XNamedRanges
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
     //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
@@ -72,6 +79,7 @@ ScNamedRangesObj::ScNamedRangesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XNamedRange>::get())
     , XIndexAccess(4)
+    , XNameAccess("initial1")
 {
 }
 
