@@ -485,7 +485,7 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
 
         //---------------------------------------------------------------------
-        /** special terminate listener shuting down the SfxApplication.
+        /** special terminate listener shutting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
           * only ... it does not really shutdown the whole application.
           *

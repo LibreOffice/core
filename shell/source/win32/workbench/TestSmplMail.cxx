@@ -170,7 +170,7 @@ int SAL_CALL main(int , char*, char* )
     // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_ENSURE(sal_False, "Error shutting down");
     }
 
     // Dispose and clear factory
