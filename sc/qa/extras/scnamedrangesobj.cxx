@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -36,6 +37,7 @@ class ScNamedRangesObj : public CalcUnoApiTest,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
                          public apitest::XNamedRanges,
+                         public apitest::XPropertySet,
                          public apitest::XServiceInfo
 {
 public:
@@ -70,6 +72,13 @@ public:
     CPPUNIT_TEST(testAddNewFromTitles);
     //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
     CPPUNIT_TEST(testOutputList);
+
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
