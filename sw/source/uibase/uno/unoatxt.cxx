@@ -129,8 +129,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
     for ( size_t i = 0; i < nCount; ++i )
     {
         // The names will be passed without a path extension.
-        OUString sGroupName(pGlossaries->GetGroupName(i));
-        pArr[i] = sGroupName.getToken(0, GLOS_DELIM);
+        pArr[i] = pGlossaries->GetGroupName(i).getToken(0, GLOS_DELIM);
     }
     return aGroupNames;
 }
