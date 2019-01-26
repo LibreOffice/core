@@ -8,16 +8,20 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+
+#include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -25,6 +29,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 class ScNamedRangesObj : public CalcUnoApiTest,
+                         public apitest::XElementAccess,
                          public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
                          public apitest::XNamedRanges
@@ -39,6 +44,10 @@ public:
     virtual uno::Reference<uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -61,6 +70,7 @@ private:
 
 ScNamedRangesObj::ScNamedRangesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<sheet::XNamedRange>::get())
     , XIndexAccess(4)
 {
 }
