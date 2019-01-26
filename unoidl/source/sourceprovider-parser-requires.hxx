@@ -14,10 +14,8 @@
 
 #include <vector>
 
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <unoidl/unoidl.hxx>
 
 #define YYLTYPE int
 

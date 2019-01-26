@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <map>
@@ -19,7 +18,6 @@
 #include <vector>
 
 #include <config_version.h>
-#include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/process.h>

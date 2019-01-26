@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <map>
@@ -18,7 +17,6 @@
 #include <utility>
 #include <vector>
 
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/process.h>
