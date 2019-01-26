@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_1e850fae",
+        "filename": "unodevtools/source/skeletonmaker/javatypemaker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-26T06:43:42Z",
+      "side": 1,
+      "message": "Ostring -\u003e OString",
+      "revId": "a753b19c510aee6601372b39a9e9cf30e30a29a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
