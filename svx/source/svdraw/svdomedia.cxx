@@ -44,25 +44,13 @@
 using namespace ::com::sun::star;
 
 
-// Note: the temp file is read only, until it is deleted!
-// It may be shared between multiple documents in case of copy/paste,
-// hence the shared_ptr.
-struct MediaTempFile
-{
-    OUString const m_TempFileURL;
-    MediaTempFile(OUString const& rURL)
-        : m_TempFileURL(rURL)
-    {}
-    ~MediaTempFile()
-    {
-        ::osl::File::remove(m_TempFileURL);
-    }
-};
-
 struct SdrMediaObj::Impl
 {
     ::avmedia::MediaItem                  m_MediaProperties;
-    std::shared_ptr< MediaTempFile >  m_pTempFile;
+    // Note: the temp file is read only, until it is deleted!
+    // It may be shared between multiple documents in case of copy/paste,
+    // hence the shared_ptr.
+    std::shared_ptr< ::avmedia::MediaTempFile >  m_pTempFile;
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
     OUString m_LastFailedPkgURL;
 };
@@ -270,47 +258,6 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
     return tempFile.openStream();
 }
 
-static bool lcl_CopyToTempFile(
-        uno::Reference<io::XInputStream> const& xInStream,
-        OUString & o_rTempFileURL,
-        const OUString& rDesiredExtension)
-{
-    OUString tempFileURL;
-    ::osl::FileBase::RC const err =
-        ::osl::FileBase::createTempFile(nullptr, nullptr, & tempFileURL);
-    if (::osl::FileBase::E_None != err)
-    {
-        SAL_INFO("svx", "cannot create temp file");
-        return false;
-    }
-
-    if (!rDesiredExtension.isEmpty())
-    {
-        OUString newTempFileURL = tempFileURL + rDesiredExtension;
-        if (osl::File::move(tempFileURL, newTempFileURL) != osl::FileBase::E_None)
-        {
-            SAL_WARN("svx", "Could not rename file '" << tempFileURL << "' to '" << newTempFileURL << "'");
-            return false;
-        }
-        tempFileURL = newTempFileURL;
-    }
-
-    try
-    {
-        ::ucbhelper::Content tempContent(tempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext());
-        tempContent.writeStream(xInStream, true); // copy stream to file
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_WARN("svx", "exception: '" << e << "'");
-        return false;
-    }
-    o_rTempFileURL = tempFileURL;
-    return true;
-}
-
 void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream)
 {
     if (m_xImpl->m_pTempFile || m_xImpl->m_LastFailedPkgURL.isEmpty())
@@ -321,14 +268,14 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
 
     OUString tempFileURL;
     const bool bSuccess(
-        lcl_CopyToTempFile(
+        ::avmedia::CreateMediaTempFile(
             xStream,
             tempFileURL,
             ""));
 
     if (bSuccess)
     {
-        m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
+        m_xImpl->m_pTempFile.reset(new ::avmedia::MediaTempFile(tempFileURL));
 #if HAVE_FEATURE_AVMEDIA
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
@@ -372,7 +319,7 @@ static bool lcl_HandlePackageURL(
     OUString sDesiredExtension;
     if (nLastDot > nLastSlash && nLastDot+1 < rURL.getLength())
         sDesiredExtension = rURL.copy(nLastDot);
-    return lcl_CopyToTempFile(xInStream, o_rTempFileURL, sDesiredExtension);
+    return ::avmedia::CreateMediaTempFile(xInStream, o_rTempFileURL, sDesiredExtension);
 }
 #endif
 
@@ -407,7 +354,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 if (bSuccess)
                 {
                     m_xImpl->m_pTempFile.reset(
-                            new MediaTempFile(tempFileURL));
+                            new ::avmedia::MediaTempFile(tempFileURL));
 #if HAVE_FEATURE_AVMEDIA
                     m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
 #endif

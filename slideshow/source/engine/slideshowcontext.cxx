@@ -44,6 +44,7 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
                                     ActivitiesQueue&                  rActivitiesQueue,
                                     UserEventQueue&                   rUserEventQueue,
                                     CursorManager&                    rCursorManager,
+                                    MediaFileManager&                    rMediaFileManager,
                                     const UnoViewContainer&           rViewContainer,
                                     const uno::Reference<
                                           uno::XComponentContext>&    rComponentContext ) :
@@ -54,6 +55,7 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
         mrActivitiesQueue( rActivitiesQueue ),
         mrUserEventQueue( rUserEventQueue ),
         mrCursorManager( rCursorManager ),
+        mrMediaFileManager( rMediaFileManager ),
         mrViewContainer( rViewContainer ),
         mxComponentContext( rComponentContext )
     {}
