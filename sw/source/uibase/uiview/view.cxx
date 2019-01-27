@@ -1241,8 +1241,9 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             //apply information from print preview - if available
             if( !m_sNewCursorPos.isEmpty() )
             {
-                long nXTmp = m_sNewCursorPos.getToken( 0, ';' ).toInt32(),
-                     nYTmp = m_sNewCursorPos.getToken( 1, ';' ).toInt32();
+                sal_Int32 nIdx{ 0 };
+                const long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+                const long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
                 Point aCursorPos2( nXTmp, nYTmp );
                 bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
 
