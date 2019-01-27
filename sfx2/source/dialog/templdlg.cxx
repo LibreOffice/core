@@ -2144,6 +2144,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
     m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(StockImage::Yes, RID_SFXBMP_NEW_BY_EXAMPLE), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION));
+    //renamed to SID_STYLE_NEW_BY_EXAMPLE in SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
     m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(StockImage::Yes, RID_SFXBMP_UPDATE_BY_EXAMPLE), SfxResId(STR_STYLE_UPDATE_STYLE));
@@ -2195,6 +2196,8 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     m_aActionTbR->HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
     m_aActionTbR->SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
             ToolBoxItemBits::DROPDOWNONLY|m_aActionTbR->GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
+    //rename menu in case of Writer
+    m_aActionTbR->SetItemText(SID_STYLE_NEW_BY_EXAMPLE, SfxResId(STR_STYLE_NEW_STYLE_ACTION));
 }
 
 void SfxTemplateDialog_Impl::ClearFamilyList()
@@ -2385,6 +2388,8 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
         sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleUpdateByExample", sTextDoc);
         pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
         pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
+
+        pMenu->InsertSeparator();
 
         sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:LoadStyles", sTextDoc);
         pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
