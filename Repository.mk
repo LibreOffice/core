@@ -23,6 +23,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	bestreversemap \
 	canvasdemo \
 	cfgex \
+    checkbalance \
 	concat-deps \
 	cpp \
 	cppunittester \

@@ -30,6 +30,7 @@ certain functionality.
 @li @c sal.osl.pipe
 @li @c sal.rtl - SAL RTL library
 @li @c sal.textenc - the textencoding SAL library
+@li @c sal.checkbalance - the check balance example
 
 @section basctl
 
