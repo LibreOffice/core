@@ -88,8 +88,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
             nCaseReadonly |= PATH_READONLY;
         else if( SWUnoHelper::UCB_IsCaseSensitiveFileName( aTempFile.GetURL()))
             nCaseReadonly |= PATH_CASE_SENSITIVE;
-        OUString sId(OUString::number(nCaseReadonly));
-        m_xPathLB->append(sId, sPath);
+        m_xPathLB->append(OUString::number(nCaseReadonly), sPath);
     }
     m_xPathLB->set_active(0);
     m_xPathLB->set_sensitive(true);
@@ -111,7 +110,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
         else
             pData->sGroupTitle = sTitle;
         pData->sPath = m_xPathLB->get_text(sGroup.getToken(1, GLOS_DELIM).toInt32());
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+        const OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
         m_xGroupTLB->append(sId, pData->sGroupTitle);
         int nEntry = m_xGroupTLB->find_id(sId);
         m_xGroupTLB->set_text(nEntry, pData->sPath, 1);
@@ -143,7 +142,7 @@ void SwGlossaryGroupDlg::Apply()
     if (m_xNewPB->get_sensitive())
         NewHdl(*m_xNewPB);
 
-    OUString aActGroup = SwGlossaryDlg::GetCurrGroup();
+    const OUString aActGroup = SwGlossaryDlg::GetCurrGroup();
 
     for (const auto& removedStr : m_RemovedArr)
     {
@@ -158,9 +157,8 @@ void SwGlossaryGroupDlg::Apply()
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
-        OUString sTitle( removedStr.getToken(0, '\t', nIdx) );
         const OUString sMsg(SwResId(STR_QUERY_DELETE_GROUP1)
-                            + sTitle
+                            + removedStr.getToken(0, '\t', nIdx)
                             + SwResId(STR_QUERY_DELETE_GROUP2));
 
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_pParent,
@@ -202,8 +200,8 @@ IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, weld::TreeView&, void )
     if (nFirstEntry != -1)
     {
         GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nFirstEntry).toInt64());
-        OUString sEntry(pUserData->sGroupName);
-        OUString sName(m_xNameED->get_text());
+        const OUString sEntry(pUserData->sGroupName);
+        const OUString sName(m_xNameED->get_text());
         bool bExists = false;
         int nPos = m_xGroupTLB->find_text(sName);
         if (nPos != -1)
@@ -345,7 +343,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyListBoxHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, weld::Entry&, void)
 {
-    OUString sEntry(m_xNameED->get_text());
+    const OUString sEntry(m_xNameED->get_text());
     bool bEnableNew = true;
     bool bEnableDel = false;
     sal_uInt32 nCaseReadonly = m_xPathLB->get_active_id().toUInt32();
@@ -362,7 +360,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, weld::Entry&, void)
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
             for (int i = 0, nEntryCount = m_xGroupTLB->n_children(); i < nEntryCount; ++i)
             {
-                OUString sTemp = m_xGroupTLB->get_text(i, 0);
+                const OUString sTemp = m_xGroupTLB->get_text(i, 0);
                 nCaseReadonly = m_xPathLB->get_id(m_xPathLB->find_text(m_xGroupTLB->get_text(i,1))).toUInt32();
                 bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
