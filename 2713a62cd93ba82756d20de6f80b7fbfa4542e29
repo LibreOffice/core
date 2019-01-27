@@ -51,6 +51,24 @@
       "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_69456f70",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-27T21:20:25Z",
+      "side": 1,
+      "message": "https://groups.google.com/forum/#!topic/include-what-you-use/-jg0QwmxdK8\n\nI think IWYU ATM can\u0027t generate such proposals, let\u0027s see if there is upstream interest in supporting that.",
+      "parentUuid": "1f485f77_49bab3de",
+      "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
