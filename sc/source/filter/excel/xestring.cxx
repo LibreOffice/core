@@ -43,13 +43,11 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
     int nResult = 0;
 
     // 1st: compare all elements of the vectors
-    typedef typename ::std::vector< Type >::const_iterator CIT;
-    CIT aEndL = rLeft.end(), aEndR = rRight.end();
-    for( CIT aItL = rLeft.begin(), aItR = rRight.begin(); !nResult && (aItL != aEndL) && (aItR != aEndR); ++aItL, ++aItR )
+    auto [aItL, aItR] = std::mismatch(rLeft.begin(), rLeft.end(), rRight.begin(), rRight.end());
+    if ((aItL != rLeft.end()) && (aItR != rRight.end()))
         nResult = static_cast< int >( *aItL ) - static_cast< int >( *aItR );
-
-    // 2nd: no differences found so far -> compare the vector sizes. Shorter vector is less
-    if( !nResult )
+    else
+        // 2nd: compare the vector sizes. Shorter vector is less
         nResult = static_cast< int >( rLeft.size() ) - static_cast< int >( rRight.size() );
 
     return nResult;
@@ -81,9 +79,8 @@ template< typename Type, typename ValueHasher >
 sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& rHasher )
 {
     sal_uInt32 nHash = rVec.size();
-    typedef typename ::std::vector< Type >::const_iterator CIT;
-    for( CIT aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
-        nHash = (nHash * 31) + rHasher( *aIt );
+    for( const auto& rItem : rVec )
+        nHash = (nHash * 31) + rHasher( rItem );
     return static_cast< sal_uInt16 >( nHash ^ (nHash >> 16) );
 }
 
@@ -315,22 +312,21 @@ void XclExpString::WriteFormats( XclExpStream& rStrm, bool bWriteSize ) const
 {
     if( IsRich() )
     {
-        XclFormatRunVec::const_iterator aIt = maFormats.begin(), aEnd = maFormats.end();
         if( mbIsBiff8 )
         {
             if( bWriteSize )
                 rStrm << GetFormatsCount();
             rStrm.SetSliceSize( 4 );
-            for( ; aIt != aEnd; ++aIt )
-                rStrm << aIt->mnChar << aIt->mnFontIdx;
+            for( const auto& rFormat : maFormats )
+                rStrm << rFormat.mnChar << rFormat.mnFontIdx;
         }
         else
         {
             if( bWriteSize )
                 rStrm << static_cast< sal_uInt8 >( GetFormatsCount() );
             rStrm.SetSliceSize( 2 );
-            for( ; aIt != aEnd; ++aIt )
-                rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnFontIdx );
+            for( const auto& rFormat : maFormats )
+                rStrm << static_cast< sal_uInt8 >( rFormat.mnChar ) << static_cast< sal_uInt8 >( rFormat.mnFontIdx );
         }
         rStrm.SetSliceSize( 0 );
     }
@@ -373,9 +369,8 @@ void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
     {
         if( mbIsBiff8 )
         {
-            for( ScfUInt16Vec::const_iterator aIt = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIt != aEnd; ++aIt )
+            for( const sal_uInt16 nChar : maUniBuffer )
             {
-                sal_uInt16 nChar = *aIt;
                 *pnMem = static_cast< sal_uInt8 >( nChar );
                 ++pnMem;
                 if( mbIsUnicode )
@@ -433,15 +428,14 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
     else
     {
         XclExpFontBuffer& rFonts = rStrm.GetRoot().GetFontBuffer();
-        XclFormatRunVec::const_iterator aIt = maFormats.begin(), aEnd = maFormats.end();
 
         sal_uInt16  nStart = 0;
         const XclExpFont* pFont = nullptr;
-        for ( ; aIt != aEnd; ++aIt )
+        for ( const auto& rFormat : maFormats )
         {
             nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),
-                    nStart, aIt->mnChar-nStart, pFont );
-            pFont = rFonts.GetFont( aIt->mnFontIdx );
+                    nStart, rFormat.mnChar-nStart, pFont );
+            pFont = rFonts.GetFont( rFormat.mnFontIdx );
         }
         lcl_WriteRun( rStrm, GetUnicodeBuffer(),
                 nStart, GetUnicodeBuffer().size() - nStart, pFont );

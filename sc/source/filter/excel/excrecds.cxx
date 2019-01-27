@@ -476,24 +476,23 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         if (!rProts.empty())
         {
             rWorksheet->startElement( XML_protectedRanges, FSEND);
-            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), end( rProts.end());
-                    it != end; ++it)
+            for (const auto& rProt : rProts)
             {
-                SAL_WARN_IF( (*it).maSecurityDescriptorXML.isEmpty() && !(*it).maSecurityDescriptor.empty(),
+                SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
                         "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
                 rWorksheet->singleElement( XML_protectedRange,
-                        XML_name, (*it).maTitle.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maTitle).getStr(),
-                        XML_securityDescriptor, (*it).maSecurityDescriptorXML.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maSecurityDescriptorXML).getStr(),
+                        XML_name, rProt.maTitle.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maTitle).getStr(),
+                        XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maSecurityDescriptorXML).getStr(),
                         /* XXX 'password' is not part of OOXML, but Excel2013
                          * writes it if loaded from BIFF, in which case
                          * 'algorithmName', 'hashValue', 'saltValue' and
                          * 'spinCount' are absent; so do we if it was present. */
-                        XML_password, (*it).mnPasswordVerifier ? OString::number( (*it).mnPasswordVerifier, 16).getStr() : nullptr,
-                        XML_algorithmName, (*it).maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maAlgorithmName).getStr(),
-                        XML_hashValue, (*it).maPasswordHash.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maHashValue).getStr(),
-                        XML_saltValue, (*it).maPasswordHash.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maSaltValue).getStr(),
-                        XML_spinCount, (*it).maPasswordHash.mnSpinCount ? OString::number( (*it).maPasswordHash.mnSpinCount).getStr() : nullptr,
-                        XML_sqref, (*it).maRangeList.is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : nullptr,
+                        XML_password, rProt.mnPasswordVerifier ? OString::number( rProt.mnPasswordVerifier, 16).getStr() : nullptr,
+                        XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maAlgorithmName).getStr(),
+                        XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maHashValue).getStr(),
+                        XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maSaltValue).getStr(),
+                        XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
+                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( *rProt.maRangeList).getStr() : nullptr,
                         FSEND);
             }
             rWorksheet->endElement( XML_protectedRanges);
@@ -779,9 +778,8 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
 {
     meType = MultiValue;
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-    ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
-    for (; itr != itrEnd; ++itr)
-        maMultiValues.push_back(itr->maString.getString());
+    for (const auto& rItem : rItems)
+        maMultiValues.push_back(rItem.maString.getString());
 }
 
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
@@ -833,10 +831,9 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
         case MultiValue:
         {
             rWorksheet->startElement(XML_filters, FSEND);
-            std::vector<OUString>::const_iterator itr = maMultiValues.begin(), itrEnd = maMultiValues.end();
-            for (; itr != itrEnd; ++itr)
+            for (const auto& rMultiValue : maMultiValues)
             {
-                OString aStr = OUStringToOString(*itr, RTL_TEXTENCODING_UTF8);
+                OString aStr = OUStringToOString(rMultiValue, RTL_TEXTENCODING_UTF8);
                 const char* pz = aStr.getStr();
                 rWorksheet->singleElement(XML_filter, XML_val, pz, FSEND);
             }

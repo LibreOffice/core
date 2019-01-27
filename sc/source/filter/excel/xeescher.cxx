@@ -983,9 +983,9 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
                 if( nEntryCount )
                 {
                     ScfUInt8Vec aSelEx( nEntryCount, 0 );
-                    for( ScfInt16Vec::const_iterator aIt = maMultiSel.begin(), aEnd = maMultiSel.end(); aIt != aEnd; ++aIt )
-                        if( *aIt < nEntryCount )
-                            aSelEx[ *aIt ] = 1;
+                    for( const auto& rItem : maMultiSel )
+                        if( rItem < nEntryCount )
+                            aSelEx[ rItem ] = 1;
                     rStrm.Write( &aSelEx[ 0 ], aSelEx.size() );
                 }
             }
@@ -1446,10 +1446,10 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
         aAuthors.insert( XclXmlUtils::ToOUString( mrNotes.GetRecord( i )->GetAuthor() ) );
     }
 
-    for( Authors::const_iterator b = aAuthors.begin(), e = aAuthors.end(); b != e; ++b )
+    for( const auto& rAuthor : aAuthors )
     {
         rComments->startElement( XML_author, FSEND );
-        rComments->writeEscaped( *b );
+        rComments->writeEscaped( rAuthor );
         rComments->endElement( XML_author );
     }
 

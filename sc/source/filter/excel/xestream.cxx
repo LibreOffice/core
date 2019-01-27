@@ -304,8 +304,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
     nFlags &= EXC_STRF_16BIT;   // repeat only 16bit flag
     sal_uInt16 nCharLen = nFlags ? 2 : 1;
 
-    ScfUInt16Vec::const_iterator aEnd = rBuffer.end();
-    for( ScfUInt16Vec::const_iterator aIter = rBuffer.begin(); aIter != aEnd; ++aIter )
+    for( const auto& rItem : rBuffer )
     {
         if( mbInRec && (mnCurrSize + nCharLen > mnCurrMaxSize) )
         {
@@ -313,9 +312,9 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
             operator<<( nFlags );
         }
         if( nCharLen == 2 )
-            operator<<( *aIter );
+            operator<<( rItem );
         else
-            operator<<( static_cast< sal_uInt8 >( *aIter ) );
+            operator<<( static_cast< sal_uInt8 >( rItem ) );
     }
 }
 
@@ -775,10 +774,9 @@ static ScRange lcl_ToRange( const XclRange& rRange )
 OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 {
     ScRangeList aRanges;
-    for( XclRangeVector::const_iterator i = rRanges.begin(), end = rRanges.end();
-            i != end; ++i )
+    for( const auto& rRange : rRanges )
     {
-        aRanges.push_back( lcl_ToRange( *i ) );
+        aRanges.push_back( lcl_ToRange( rRange ) );
     }
     return ToOString( aRanges );
 }

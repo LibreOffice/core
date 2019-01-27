@@ -422,12 +422,12 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     //export cell notes
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
-    for (std::vector<sc::NoteEntry>::const_iterator it = aNotes.begin(), itEnd = aNotes.end(); it != itEnd; ++it)
+    for (const auto& rNote : aNotes)
     {
-        if (it->maPos.Tab() != mnScTab)
+        if (rNote.maPos.Tab() != mnScTab)
             continue;
 
-        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), it->maPos, it->mpNote, OUString()));
+        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, OUString()));
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
@@ -510,10 +510,9 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
         if (pTabProtect)
         {
             const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
-            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), itEnd( rProts.end());
-                    it != itEnd; ++it)
+            for (const auto& rProt : rProts)
             {
-                Add( new XclExpSheetEnhancedProtection( GetRoot(), *it));
+                Add( new XclExpSheetEnhancedProtection( GetRoot(), rProt));
             }
         }
 
@@ -564,12 +563,12 @@ void ExcTable::FillAsTableXml()
     //export cell notes
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
-    for (std::vector<sc::NoteEntry>::const_iterator it = aNotes.begin(), itEnd = aNotes.end(); it != itEnd; ++it)
+    for (const auto& rNote : aNotes)
     {
-        if (it->maPos.Tab() != mnScTab)
+        if (rNote.maPos.Tab() != mnScTab)
             continue;
 
-        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), it->maPos, it->mpNote, OUString()));
+        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, OUString()));
     }
 
     // WSBOOL needs data from page settings, create it here, add it later

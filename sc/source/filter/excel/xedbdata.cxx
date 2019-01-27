@@ -113,9 +113,9 @@ void XclExpTablesManager::Initialize()
         return;
 
     sal_Int32 nTableId = 0;
-    for (ScDBCollection::NamedDBs::iterator itDB(rDBs.begin()); itDB != rDBs.end(); ++itDB)
+    for (const auto& rxDB : rDBs)
     {
-        ScDBData* pDBData = itDB->get();
+        ScDBData* pDBData = rxDB.get();
         pDBData->RefreshTableColumnNames( &rDoc);   // currently not in sync, so refresh
         ScRange aRange( ScAddress::UNINITIALIZED);
         pDBData->GetArea( aRange);

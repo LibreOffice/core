@@ -93,17 +93,14 @@ void XclImpOutlineBuffer::MakeScOutline()
 
     ::std::vector<SCSIZE> aOutlineStack;
     aOutlineStack.reserve(mnMaxLevel);
-    OutlineLevels::const_iterator itr = maLevels.begin(), itrEnd = maLevels.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& [nPos, nLevel] : maLevels)
     {
-        SCSIZE nPos = itr->first;
         if (nPos >= mnEndPos)
         {
             // Don't go beyond the max allowed position.
             OSL_ENSURE(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
             break;
         }
-        sal_uInt8 nLevel = itr->second;
         sal_uInt8 nCurLevel = static_cast<sal_uInt8>(aOutlineStack.size());
         if (nLevel > nCurLevel)
         {
@@ -196,9 +193,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
         n--;
     }
 
-    std::vector<ExcScenarioCell>::iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
-        iter->SetValue(rIn.ReadUniString());
+    for (auto& rEntry : aEntries)
+        rEntry.SetValue(rIn.ReadUniString());
 }
 
 void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
@@ -217,12 +213,11 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
                               /* | ScScenarioFlags::ShowFrame*/
     r.SetScenarioData( nNewTab, aComment, COL_LIGHTGRAY, nFlags);
 
-    std::vector<ExcScenarioCell>::const_iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+    for (const auto& rEntry : aEntries)
     {
-        sal_uInt16 nCol = iter->nCol;
-        sal_uInt16 nRow = iter->nRow;
-        OUString aVal = iter->GetValue();
+        sal_uInt16 nCol = rEntry.nCol;
+        sal_uInt16 nRow = rEntry.nRow;
+        OUString aVal = rEntry.GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, ScMF::Scenario );
 

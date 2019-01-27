@@ -447,9 +447,9 @@ XclExpStringRef lclCreateFormattedString(
         rEE.GetPortions( nPara, aPosList );
 
         // process all portions in the paragraph
-        for( std::vector<sal_Int32>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
+        for( const auto& rPos : aPosList )
         {
-            aSel.nEndPos =  *it;
+            aSel.nEndPos = rPos;
             OUString aXclPortionText = aParaText.copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
             aItemSet.ClearItem();
@@ -716,9 +716,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
         std::vector<sal_Int32> aPosList;
         mrEE.GetPortions( nPara, aPosList );
 
-        for( std::vector<sal_Int32>::const_iterator it( aPosList.begin() ); it != aPosList.end(); ++it )
+        for( const auto& rPos : aPosList )
         {
-            aSel.nEndPos = *it;
+            aSel.nEndPos = rPos;
             if( aSel.nStartPos < aSel.nEndPos )
             {
 

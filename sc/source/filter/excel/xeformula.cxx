@@ -738,8 +738,8 @@ void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
     // do conversion for nested operands, if token is an operator or function
     if( rConvInfo.mnTokPos < mxData->maOpListVec.size() )
         if( const XclExpOperandList* pOperands = mxData->maOpListVec[ rConvInfo.mnTokPos ].get() )
-            for( XclExpOperandList::const_iterator aIt = pOperands->begin(), aEnd = pOperands->end(); aIt != aEnd; ++aIt )
-                RecalcTokenClass( *aIt, eConv, eClassConv, nTokClass == EXC_TOKCLASS_REF );
+            for( const auto& rOperand : *pOperands )
+                RecalcTokenClass( rOperand, eConv, eClassConv, nTokClass == EXC_TOKCLASS_REF );
 }
 
 void XclExpFmlaCompImpl::FinalizeFormula()
@@ -2480,18 +2480,18 @@ void XclExpFmlaCompImpl::InsertZeros( sal_uInt16 nInsertPos, sal_uInt16 nInsertS
     mxData->maTokVec.insert( mxData->maTokVec.begin() + nInsertPos, nInsertSize, 0 );
 
     // update positions of operands waiting for an operator
-    for( ScfUInt16Vec::iterator aIt = mxData->maOpPosStack.begin(), aEnd = mxData->maOpPosStack.end(); aIt != aEnd; ++aIt )
-        if( nInsertPos <= *aIt )
-            *aIt = *aIt + nInsertSize;
+    for( auto& rOpPos : mxData->maOpPosStack )
+        if( nInsertPos <= rOpPos )
+            rOpPos += nInsertSize;
 
     // update operand lists of all operator tokens
     if( nInsertPos < mxData->maOpListVec.size() )
         mxData->maOpListVec.insert( mxData->maOpListVec.begin() + nInsertPos, nInsertSize, XclExpOperandListRef() );
-    for( XclExpOperandListVector::iterator aIt = mxData->maOpListVec.begin(), aEnd = mxData->maOpListVec.end(); aIt != aEnd; ++aIt )
-        if( aIt->get() )
-            for( XclExpOperandList::iterator aIt2 = (*aIt)->begin(), aEnd2 = (*aIt)->end(); aIt2 != aEnd2; ++aIt2 )
-                if( nInsertPos <= aIt2->mnTokPos )
-                    aIt2->mnTokPos = aIt2->mnTokPos + nInsertSize;
+    for( auto& rxOpList : mxData->maOpListVec )
+        if( rxOpList.get() )
+            for( auto& rOp : *rxOpList )
+                if( nInsertPos <= rOp.mnTokPos )
+                    rOp.mnTokPos += nInsertSize;
 }
 
 void XclExpFmlaCompImpl::Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset )

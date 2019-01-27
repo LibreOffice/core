@@ -175,9 +175,9 @@ void XclExpPageBreaks::WriteBody( XclExpStream& rStrm )
     bool bWriteRange = (rStrm.GetRoot().GetBiff() == EXC_BIFF8);
 
     rStrm << static_cast< sal_uInt16 >( mrPageBreaks.size() );
-    for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
+    for( const auto& rPageBreak : mrPageBreaks )
     {
-        rStrm << *aIt;
+        rStrm << rPageBreak;
         if( bWriteRange )
             rStrm << sal_uInt16( 0 ) << mnMaxPos;
     }
@@ -195,10 +195,10 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
             XML_count,              sNumPageBreaks.getStr(),
             XML_manualBreakCount,   sNumPageBreaks.getStr(),
             FSEND );
-    for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
+    for( const auto& rPageBreak : mrPageBreaks )
     {
         pWorksheet->singleElement( XML_brk,
-                XML_id,     OString::number(  *aIt ).getStr(),
+                XML_id,     OString::number(  rPageBreak ).getStr(),
                 XML_man,    "true",
                 XML_max,    OString::number(  mnMaxPos ).getStr(),
                 XML_min,    "0",
@@ -314,9 +314,8 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     rDoc.GetAllRowBreaks(aRowBreaks, nScTab, false, true);
 
     SCROW const nMaxRow = numeric_limits<sal_uInt16>::max();
-    for (set<SCROW>::const_iterator itr = aRowBreaks.begin(), itrEnd = aRowBreaks.end(); itr != itrEnd; ++itr)
+    for (const SCROW nRow : aRowBreaks)
     {
-        SCROW nRow = *itr;
         if (nRow > nMaxRow)
             break;
 
@@ -333,8 +332,8 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     set<SCCOL> aColBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
-    for (set<SCCOL>::const_iterator itr = aColBreaks.begin(), itrEnd = aColBreaks.end(); itr != itrEnd; ++itr)
-        maData.maVerPageBreaks.push_back(*itr);
+    for (const auto& rColBreak : aColBreaks)
+        maData.maVerPageBreaks.push_back(rColBreak);
 }
 
 class XclExpXmlStartHeaderFooterElementRecord : public XclExpXmlElementRecord

@@ -1250,8 +1250,7 @@ ErrCode ImportExcel8::Read()
     {
         // In some strange circumstances a the codename might be missing
         // # Create any missing Sheet CodeNames
-        std::vector < SCTAB >::iterator it_end = nTabsWithNoCodeName.end();
-        for ( std::vector < SCTAB >::iterator it = nTabsWithNoCodeName.begin(); it != it_end; ++it )
+        for ( const auto& rTab : nTabsWithNoCodeName )
         {
             SCTAB nTab = 1;
             while ( true )
@@ -1260,19 +1259,11 @@ ErrCode ImportExcel8::Read()
                 aBuf.append("Sheet");
                 aBuf.append(static_cast<sal_Int32>(nTab++));
                 OUString sTmpName = aBuf.makeStringAndClear();
-                std::vector<OUString>::iterator codeName_It = aCodeNames.begin();
-                std::vector<OUString>::iterator codeName_It_end = aCodeNames.end();
-                // search for codename
-                for ( ; codeName_It != codeName_It_end; ++codeName_It )
-                {
-                    if ( *codeName_It == sTmpName )
-                        break;
-                }
 
-                if ( codeName_It == codeName_It_end ) // generated codename not found
+                if ( std::find(aCodeNames.begin(), aCodeNames.end(), sTmpName) == aCodeNames.end() ) // generated codename not found
                 {
                     // Set new codename
-                    GetDoc().SetCodeName( *it, sTmpName );
+                    GetDoc().SetCodeName( rTab, sTmpName );
                     // Record newly used codename
                     aCodeNames.push_back(sTmpName);
                     break;

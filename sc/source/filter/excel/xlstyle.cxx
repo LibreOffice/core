@@ -1525,8 +1525,8 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     }
 
     // copy reused number formats
-    for( XclReuseMap::const_iterator aRIt = aReuseMap.begin(), aREnd = aReuseMap.end(); aRIt != aREnd; ++aRIt )
-        maFmtMap[ aRIt->first ] = maFmtMap[ aRIt->second ];
+    for( const auto& [rXclNumFmt, rXclReuseFmt] : aReuseMap )
+        maFmtMap[ rXclNumFmt ] = maFmtMap[ rXclReuseFmt ];
 }
 
 // Cell formatting data (XF) ==================================================

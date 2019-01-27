@@ -1162,14 +1162,14 @@ void XclExpCrn::WriteBody( XclExpStream& rStrm )
     rStrm   << static_cast< sal_uInt8 >( mnScCol + maValues.size() - 1 )
             << static_cast< sal_uInt8 >( mnScCol )
             << static_cast< sal_uInt16 >( mnScRow );
-    for( CachedValues::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt )
+    for( const auto& rValue : maValues )
     {
-        if( aIt->has< bool >() )
-            WriteBool( rStrm, aIt->get< bool >() );
-        else if( aIt->has< double >() )
-            WriteDouble( rStrm, aIt->get< double >() );
-        else if( aIt->has< OUString >() )
-            WriteString( rStrm, aIt->get< OUString >() );
+        if( rValue.has< bool >() )
+            WriteBool( rStrm, rValue.get< bool >() );
+        else if( rValue.has< double >() )
+            WriteDouble( rStrm, rValue.get< double >() );
+        else if( rValue.has< OUString >() )
+            WriteString( rStrm, rValue.get< OUString >() );
         else
             WriteEmpty( rStrm );
     }
@@ -1220,11 +1220,11 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
             FSEND);
 
     ScAddress aAdr( mnScCol, mnScRow, 0);   // Tab number doesn't matter
-    for( CachedValues::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt, aAdr.IncCol() )
+    for( const auto& rValue : maValues )
     {
-        if( aIt->has< double >() )
+        if( rValue.has< double >() )
         {
-            double fVal = aIt->get< double >();
+            double fVal = rValue.get< double >();
             if (rtl::math::isFinite( fVal))
             {
                 // t='n' is omitted
@@ -1244,23 +1244,23 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
                 pFS->write( "#VALUE!" );    // OOXTODO: support other error values
             }
         }
-        else if( aIt->has< OUString >() )
+        else if( rValue.has< OUString >() )
         {
             pFS->startElement( XML_cell,
                     XML_r,      XclXmlUtils::ToOString( aAdr),
                     XML_t,      "str",
                     FSEND);
             pFS->startElement( XML_v, FSEND );
-            pFS->write( aIt->get< OUString >() );
+            pFS->write( rValue.get< OUString >() );
         }
-        else if( aIt->has< bool >() )
+        else if( rValue.has< bool >() )
         {
             pFS->startElement( XML_cell,
                     XML_r,      XclXmlUtils::ToOString( aAdr),
                     XML_t,      "b",
                     FSEND);
             pFS->startElement( XML_v, FSEND );
-            pFS->write( aIt->get< bool >() ? "1" : "0" );
+            pFS->write( rValue.get< bool >() ? "1" : "0" );
         }
         // OOXTODO: error type cell t='e'
         else
@@ -1269,6 +1269,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
         }
         pFS->endElement( XML_v );
         pFS->endElement( XML_cell);
+        aAdr.IncCol();
     }
 
     pFS->endElement( XML_row);
@@ -1541,8 +1542,12 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl ) :
     mnFileId = nFileId + 1;
     ScfStringVec aTabNames;
     pRefMgr->getAllCachedTableNames( nFileId, aTabNames );
-    for( ScfStringVec::const_iterator aBeg = aTabNames.begin(), aIt = aBeg, aEnd = aTabNames.end(); aIt != aEnd; ++aIt )
-        InsertTabName( *aIt, pRefMgr->getCacheTable( nFileId, aIt - aBeg ) );
+    size_t nTabIndex = 0;
+    for( const auto& rTabName : aTabNames )
+    {
+        InsertTabName( rTabName, pRefMgr->getCacheTable( nFileId, nTabIndex ) );
+        ++nTabIndex;
+    }
 }
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rApplic, const OUString& rTopic ) :
@@ -2481,8 +2486,8 @@ void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
         rStrm.StartRecord( EXC_ID_EXTERNSHEET, 2 + 6 * nCount );
         rStrm << nCount;
         rStrm.SetSliceSize( 6 );
-        for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
-            aIt->Save( rStrm );
+        for( const auto& rXti : maXtiVec )
+            rXti.Save( rStrm );
         rStrm.EndRecord();
     }
 }
@@ -2504,17 +2509,17 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
 #if 0
     if( !maXtiVec.empty() )
     {
-        for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
-            aIt->SaveXml( rStrm );
+        for( const auto& rXti : maXtiVec )
+            rXti.SaveXml( rStrm );
     }
 #endif
 }
 
 sal_uInt16 XclExpLinkManagerImpl8::InsertXti( const XclExpXti& rXti )
 {
-    for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
-        if( *aIt == rXti )
-            return ulimit_cast< sal_uInt16 >( aIt - maXtiVec.begin() );
+    auto aIt = std::find(maXtiVec.begin(), maXtiVec.end(), rXti);
+    if (aIt != maXtiVec.end())
+        return ulimit_cast< sal_uInt16 >( std::distance(maXtiVec.begin(), aIt) );
     maXtiVec.push_back( rXti );
     return ulimit_cast< sal_uInt16 >( maXtiVec.size() - 1 );
 }

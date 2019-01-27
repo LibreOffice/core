@@ -110,6 +110,7 @@
 #include <namebuff.hxx>
 #include <sfx2/docfile.hxx>
 #include <memory>
+#include <numeric>
 #include <utility>
 
 using namespace com::sun::star;
@@ -954,10 +955,8 @@ void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef const & xDrawObj )
 
 std::size_t XclImpDrawObjVector::GetProgressSize() const
 {
-    std::size_t nProgressSize = 0;
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = mObjs.begin(), aEnd = mObjs.end(); aIt != aEnd; ++aIt )
-        nProgressSize += (*aIt)->GetProgressSize();
-    return nProgressSize;
+    return std::accumulate(mObjs.begin(), mObjs.end(), std::size_t(0),
+        [](const std::size_t& rSum, const XclImpDrawObjRef& rxObj) { return rSum + rxObj->GetProgressSize(); });
 }
 
 XclImpPhObj::XclImpPhObj( const XclImpRoot& rRoot ) :
@@ -1018,8 +1017,8 @@ SdrObjectUniquePtr XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv,
             *GetDoc().GetDrawLayer()));
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     SdrObjList& rObjList = *xSdrObj->GetSubList();  // SdrObjGroup always returns existing sublist
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
-        rDffConv.ProcessObject( rObjList, **aIt );
+    for( const auto& rxChild : maChildren )
+        rDffConv.ProcessObject( rObjList, *rxChild );
     rDffConv.Progress();
     return xSdrObj;
 }
@@ -1371,8 +1370,8 @@ SdrObjectUniquePtr XclImpPolygonObj::DoCreateSdrObj( XclImpDffConverter& rDffCon
     {
         // create the polygon
         ::basegfx::B2DPolygon aB2DPolygon;
-        for( PointVector::const_iterator aIt = maCoords.begin(), aEnd = maCoords.end(); aIt != aEnd; ++aIt )
-            aB2DPolygon.append( lclGetPolyPoint( rAnchorRect, *aIt ) );
+        for( const auto& rCoord : maCoords )
+            aB2DPolygon.append( lclGetPolyPoint( rAnchorRect, rCoord ) );
         // close polygon if specified
         if( ::get_flag( mnPolyFlags, EXC_OBJ_POLY_CLOSED ) && (maCoords.front() != maCoords.back()) )
             aB2DPolygon.append( lclGetPolyPoint( rAnchorRect, maCoords.front() ) );
@@ -2737,9 +2736,13 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
         // multi selection: API expects sequence of list entry indexes
         if( bMultiSel )
         {
-            for( ScfUInt8Vec::const_iterator aBeg = maSelection.begin(), aIt = aBeg, aEnd = maSelection.end(); aIt != aEnd; ++aIt )
-                if( *aIt != 0 )
-                    aSelVec.push_back( static_cast< sal_Int16 >( aIt - aBeg ) );
+            sal_Int16 nIndex = 0;
+            for( const auto& rItem : maSelection )
+            {
+                if( rItem != 0 )
+                    aSelVec.push_back( nIndex );
+                ++nIndex;
+            }
         }
         // single selection: mnSelEntry is one-based, API expects zero-based
         else if( mnSelEntry > 0 )
@@ -3352,8 +3355,8 @@ void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawOb
 void XclImpDffConverter::ProcessDrawing( const XclImpDrawObjVector& rDrawObjs )
 {
     SdrPage& rSdrPage = GetConvData().mrSdrPage;
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = rDrawObjs.begin(), aEnd = rDrawObjs.end(); aIt != aEnd; ++aIt )
-        ProcessObject( rSdrPage, **aIt );
+    for( const auto& rxDrawObj : rDrawObjs )
+        ProcessObject( rSdrPage, *rxDrawObj );
 }
 
 void XclImpDffConverter::ProcessDrawing( SvStream& rDffStrm )
@@ -4000,10 +4003,8 @@ void XclImpDrawing::SetSkipObj( sal_uInt16 nObjId )
 
 std::size_t XclImpDrawing::GetProgressSize() const
 {
-    std::size_t nProgressSize = maRawObjs.GetProgressSize();
-    for( XclImpObjMap::const_iterator aIt = maObjMap.begin(), aEnd = maObjMap.end(); aIt != aEnd; ++aIt )
-        nProgressSize += aIt->second->GetProgressSize();
-    return nProgressSize;
+    return std::accumulate(maObjMap.begin(), maObjMap.end(), maRawObjs.GetProgressSize(),
+        [](const std::size_t& rSum, const XclImpObjMap::value_type& rEntry) { return rSum + rEntry.second->GetProgressSize(); });
 }
 
 void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& rSdrModel, SdrPage& rSdrPage )
@@ -4015,8 +4016,8 @@ void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& 
     // register this drawing manager at the passed (global) DFF manager
     rDffConv.InitializeDrawing( *this, rSdrModel, rSdrPage );
     // process list of objects to be skipped
-    for( ScfUInt16Vec::const_iterator aIt = maSkipObjs.begin(), aEnd = maSkipObjs.end(); aIt != aEnd; ++aIt )
-        if( XclImpDrawObjBase* pDrawObj = FindDrawObj( *aIt ).get() )
+    for( const auto& rSkipObj : maSkipObjs )
+        if( XclImpDrawObjBase* pDrawObj = FindDrawObj( rSkipObj ).get() )
             pDrawObj->SetProcessSdrObj( false );
     // process drawing objects without DFF data
     rDffConv.ProcessDrawing( maRawObjs );
@@ -4298,17 +4299,16 @@ void XclImpObjectManager::ConvertObjects()
         return;
 
     // get total progress bar size for all sheet drawing managers
-    std::size_t nProgressSize = 0;
-    for( XclImpSheetDrawingMap::iterator aIt = maSheetDrawings.begin(), aEnd = maSheetDrawings.end(); aIt != aEnd; ++aIt )
-        nProgressSize += aIt->second->GetProgressSize();
+    std::size_t nProgressSize = std::accumulate(maSheetDrawings.begin(), maSheetDrawings.end(), std::size_t(0),
+        [](const std::size_t& rSum, const XclImpSheetDrawingMap::value_type& rEntry) { return rSum + rEntry.second->GetProgressSize(); });
     // nothing to do if progress bar is zero (no objects present)
     if( nProgressSize == 0 )
         return;
 
     XclImpDffConverter aDffConv( GetRoot(), maDggStrm );
     aDffConv.StartProgressBar( nProgressSize );
-    for( XclImpSheetDrawingMap::iterator aIt = maSheetDrawings.begin(), aEnd = maSheetDrawings.end(); aIt != aEnd; ++aIt )
-        aIt->second->ConvertObjects( aDffConv );
+    for( auto& rEntry : maSheetDrawings )
+        rEntry.second->ConvertObjects( aDffConv );
 
     // #i112436# don't call ScChartListenerCollection::SetDirty here,
     // instead use InterpretDirtyCells in ScDocument::CalcAfterLoad.
