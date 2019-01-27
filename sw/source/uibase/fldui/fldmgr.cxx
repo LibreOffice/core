@@ -1182,10 +1182,11 @@ bool SwFieldMgr::InsertField(
             }
             else
             {
-                aDBData.sDataSource = rData.m_sPar1.getToken(0, DB_DELIM);
-                aDBData.sCommand = rData.m_sPar1.getToken(1, DB_DELIM);
-                aDBData.nCommandType = rData.m_sPar1.getToken(2, DB_DELIM).toInt32();
-                sPar1 = rData.m_sPar1.getToken(3, DB_DELIM);
+                sal_Int32 nIdx{ 0 };
+                aDBData.sDataSource = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
+                aDBData.sCommand = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
+                aDBData.nCommandType = rData.m_sPar1.getToken(0, DB_DELIM, nIdx).toInt32();
+                sPar1 = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
             }
 
             if(!aDBData.sDataSource.isEmpty() && pCurShell->GetDBData() != aDBData)
@@ -1469,8 +1470,8 @@ bool SwFieldMgr::InsertField(
             const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rData.m_sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
-            for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
-                pArray[nToken] = rData.m_sPar2.getToken(nToken, DB_DELIM);
+            for(sal_Int32 nToken = 0, nIdx = 0; nToken < nTokenCount; nToken++)
+                pArray[nToken] = rData.m_sPar2.getToken(0, DB_DELIM, nIdx);
             static_cast<SwDropDownField*>(pField.get())->SetItems(aEntries);
             static_cast<SwDropDownField*>(pField.get())->SetName(rData.m_sPar1);
         }
@@ -1641,8 +1642,8 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
-            for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
-                pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
+            for(sal_Int32 nToken = 0, nIdx = 0; nToken < nTokenCount; nToken++)
+                pArray[nToken] = sPar2.getToken(0, DB_DELIM, nIdx);
             static_cast<SwDropDownField*>(pTmpField.get())->SetItems(aEntries);
             static_cast<SwDropDownField*>(pTmpField.get())->SetName(rPar1);
             bSetPar1 = bSetPar2 = false;
@@ -1654,9 +1655,9 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpField.get());
             SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
             rtl::Reference<SwAuthEntry> xTempEntry(new SwAuthEntry);
-            for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
+            for( sal_Int32 i = 0, nIdx = 0; i < AUTH_FIELD_END; ++i )
                 xTempEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
-                                rPar1.getToken( i, TOX_STYLE_DELIMITER ));
+                                rPar1.getToken( 0, TOX_STYLE_DELIMITER, nIdx ));
             if( pAuthorityType->ChangeEntryContent( xTempEntry.get() ) )
             {
                 pType->UpdateFields();
