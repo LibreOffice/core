@@ -3295,6 +3295,7 @@ namespace sw
     RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
     CreatePortionHint::~CreatePortionHint() {}
     FindSdrObjectHint::~FindSdrObjectHint() {}
+    FindXShapeHint::~FindXShapeHint() {}
     CollectTextObjectsHint::~CollectTextObjectsHint() {}
     GetZOrderHint::~GetZOrderHint() {}
     GetObjectConnectedHint::~GetObjectConnectedHint() {}

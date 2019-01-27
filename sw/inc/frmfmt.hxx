@@ -21,6 +21,8 @@
 
 #include <memory>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
 #include "format.hxx"
@@ -49,6 +51,14 @@ namespace sw
         SdrObject*& m_rpObject;
         FindSdrObjectHint(SdrObject*& rpObject) : m_rpObject(rpObject) {};
         virtual ~FindSdrObjectHint() override;
+    };
+    // This is cheating too, btw.
+    struct SW_DLLPUBLIC FindXShapeHint final : SfxHint
+    {
+        const SdrObject& m_rObject;
+        css::uno::Reference<css::uno::XInterface>& m_rxShape;
+        FindXShapeHint(const SdrObject& rObject, css::uno::Reference<css::uno::XInterface>& rxShape) : m_rObject(rObject), m_rxShape(rxShape) {};
+        virtual ~FindXShapeHint() override;
     };
 }
 class SwFrameFormats;
@@ -146,6 +156,12 @@ public:
           SdrObject *FindRealSdrObject();
     const SdrObject *FindRealSdrObject() const
         { return const_cast<SwFrameFormat*>(this)->FindRealSdrObject(); }
+    css::uno::Reference<css::uno::XInterface> FindXShape(const SdrObject& rObject)
+    {
+        auto xShape = css::uno::Reference<css::uno::XInterface>();
+        CallSwClientNotify(sw::FindXShapeHint(rObject, xShape));
+        return xShape;
+    }
 
     bool IsLowerOf( const SwFrameFormat& rFormat ) const;
 
