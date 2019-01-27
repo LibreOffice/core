@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <mediamisc.hxx>
+#include <osl/file.hxx>
 
 using namespace ::com::sun::star;
 
@@ -473,6 +474,50 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
                 "Exception while trying to embed media");
     }
     return false;
+}
+
+bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
+        OUString& o_rTempFileURL, const OUString& rDesiredExtension)
+{
+    OUString tempFileURL;
+    ::osl::FileBase::RC const err =
+        ::osl::FileBase::createTempFile(nullptr, nullptr, & tempFileURL);
+    if (::osl::FileBase::E_None != err)
+    {
+        SAL_WARN("avmedia", "cannot create temp file");
+        return false;
+    }
+
+    if (!rDesiredExtension.isEmpty())
+    {
+        OUString newTempFileURL = tempFileURL + rDesiredExtension;
+        if (osl::File::move(tempFileURL, newTempFileURL) != osl::FileBase::E_None)
+        {
+            SAL_WARN("avmedia", "Could not rename file '" << tempFileURL << "' to '" << newTempFileURL << "'");
+            return false;
+        }
+        tempFileURL = newTempFileURL;
+    }
+
+    try
+    {
+        ::ucbhelper::Content tempContent(tempFileURL,
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
+        tempContent.writeStream(xInStream, true); // copy stream to file
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("avmedia", "exception: '" << e << "'");
+        return false;
+    }
+    o_rTempFileURL = tempFileURL;
+    return true;
+}
+
+MediaTempFile::~MediaTempFile()
+{
+    ::osl::File::remove(m_TempFileURL);
 }
 
 } // namespace avmedia

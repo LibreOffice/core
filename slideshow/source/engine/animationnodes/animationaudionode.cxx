@@ -152,7 +152,8 @@ void AnimationAudioNode::createPlayer() const
     {
         mpPlayer = SoundPlayer::create( getContext().mrEventMultiplexer,
                                         maSoundURL,
-                                        getContext().mxComponentContext );
+                                        getContext().mxComponentContext,
+                                        getContext().mrMediaFileManager);
     }
     catch( lang::NoSupportException& )
     {
