@@ -33,6 +33,24 @@
       "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_49bab3de",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-01-27T08:20:30Z",
+      "side": 1,
+      "message": "Now I did, it can recognize them as valid, although it still lists them in this longer form in the full include list.\n\nUsing such needs a bit more manual work (or a newer IWYU than mine) than pasting the proposals, but I can do that.",
+      "parentUuid": "1f485f77_5b595efc",
+      "revId": "2713a62cd93ba82756d20de6f80b7fbfa4542e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
