@@ -219,6 +219,7 @@
 #define STR_STYLE_FILTER_HIERARCHICAL           NC_("STR_STYLE_FILTER_HIERARCHICAL", "Hierarchical")
 #define STR_STYLE_FILL_FORMAT_MODE              NC_("STR_STYLE_FILL_FORMAT_MODE", "Fill Format Mode")
 #define STR_STYLE_NEW_STYLE_FROM_SELECTION      NC_("STR_STYLE_NEW_STYLE_FROM_SELECTION", "New Style from Selection")
+#define STR_STYLE_NEW_STYLE_ACTION              NC_("STR_STYLE_NEW_STYLE_ACTION", "Styles actions")
 #define STR_STYLE_UPDATE_STYLE                  NC_("STR_STYLE_UPDATE_STYLE", "Update Style")
 
 #define STR_MACRO_LOSS                          NC_("STR_MACRO_LOSS", "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.")
