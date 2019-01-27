@@ -67,5 +67,13 @@
         <property name="use_underline">True</property>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="Custom">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="scalemenu|Custom">Custom ...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
   </object>
 </interface>
