@@ -143,6 +143,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/remotedialog \
 	sd/uiconfig/simpress/ui/rotatemenu \
 	sd/uiconfig/simpress/ui/scalemenu \
+	sd/uiconfig/simpress/ui/customscalemenu \
 	sd/uiconfig/simpress/ui/sdviewpage \
 	sd/uiconfig/simpress/ui/sidebarslidebackground \
 	sd/uiconfig/simpress/ui/slidecontextmenu \

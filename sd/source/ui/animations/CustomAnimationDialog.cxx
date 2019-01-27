@@ -66,6 +66,9 @@
 #include <strings.hrc>
 #include <helpids.h>
 
+#include <sdabstdlg.hxx>
+#include <CustomScaleDialog.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -1166,7 +1169,9 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
+    VclPtr<MetricField>       mpMetric2;
     Link<LinkParamNone*,void> maModifyHdl;
+    VclPtr<vcl::Window>       mpParentWindow;
     int                       mnDirection;
 };
 
@@ -1174,11 +1179,17 @@ ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent,
     : PropertySubControl( nControlType )
     , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/scalemenu.ui", "")
     , maModifyHdl( rModifyHdl )
+    , mpParentWindow(pParent)
 {
-    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP| WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FieldUnit::PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
+
+    mpMetric2.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER));
+    mpMetric2->SetUnit( FieldUnit::PERCENT );
+    mpMetric2->SetMin( 0 );
+    mpMetric2->SetMax( 10000 );
 
     mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
@@ -1209,6 +1220,7 @@ void ScalePropertyBox::updateMenu()
     mpMenu->CheckItem("hori", mnDirection == 1);
     mpMenu->CheckItem("vert", mnDirection == 2);
     mpMenu->CheckItem("both", mnDirection == 3);
+    mpMenu->CheckItem("Custom", mnDirection == 4);
 }
 
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl, Edit&, void)
@@ -1224,73 +1236,115 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
     int nDirection = mnDirection;
 
     OString sIdent(pPb->GetCurItemIdent());
-    if (sIdent == "hori")
-        nDirection = 1;
-    else if (sIdent == "veri")
-        nDirection = 2;
-    else if (sIdent == "both")
-        nDirection = 3;
-    else
-        nValue = sIdent.toInt32();
+    if(sIdent == "Custom" ) {
+        // Passing values of currently set horizontal and veritical factor values and also scale direction
+        ScopedVclPtrInstance<SdCustomScaleDialog> pDlg(mpParentWindow, mpMetric->GetValue(), mpMetric2->GetValue(), mnDirection == 3);
+        OSL_ENSURE(pDlg, "Dialog Creation failed!");
+        sal_uInt16 nResult = RET_CANCEL;
 
-    bool bModified = false;
+        if(pDlg) {
+            nResult = pDlg->Execute();
+            bool bModified = false;
+            if( nResult == RET_OK ) {
+                bModified = true;
+                if( pDlg->IsScaledUniformly() ) {
+                    mnDirection = 3;
+                    if(pDlg->getHorizontalScale() != 0) {
+                        mpMetric->SetValue( pDlg->getHorizontalScale() );
+                        mpMetric2->SetValue( pDlg->getHorizontalScale() );
+                    } else if(pDlg->getVerticalScale() != 0) {
+                        mpMetric->SetValue( pDlg->getVerticalScale() );
+                        mpMetric2->SetValue( pDlg->getVerticalScale() );
+                    }
+                }
+                else {
+                    mpMetric2->SetValue( mnDirection == 2 ? mpMetric->GetValue() : pDlg->getVerticalScale() );
+                    mpMetric->SetValue( pDlg->getHorizontalScale() );
+                    mnDirection = 4;
+                }
+            }
 
-    if( nDirection != mnDirection )
-    {
-        mnDirection = nDirection;
-        bModified = true;
-    }
+            if( bModified )
+            {
+                mpMetric->Modify();
+                mpMetric2->Modify();
+                updateMenu();
+            }
+        }
+    } else {
+        if (sIdent == "hori")
+            nDirection = 1;
+        else if (sIdent == "veri")
+            nDirection = 2;
+        else if (sIdent == "both")
+            nDirection = 3;
+        else
+            nValue = sIdent.toInt32();
 
-    if( nValue != mpMetric->GetValue() )
-    {
-        mpMetric->SetValue( nValue );
-        bModified = true;
-    }
+        bool bModified = false;
 
-    if( bModified )
-    {
-        mpMetric->Modify();
-        updateMenu();
+        if( nDirection != mnDirection )
+        {
+            mnDirection = nDirection;
+            bModified = true;
+        }
+
+        if( nValue != mpMetric->GetValue() )
+        {
+            mpMetric->SetValue( nValue );
+            bModified = true;
+        }
+
+        if( bModified )
+        {
+            mpMetric->Modify();
+            updateMenu();
+        }
     }
 }
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( !mpMetric.get() )
-        return;
+    if( mpMetric.get() || mpMetric2.get() )
+    {
+        ValuePair aValues;
+        rValue >>= aValues;
 
-    ValuePair aValues;
-    rValue >>= aValues;
+        double fValue1 = 0.0;
+        double fValue2 = 0.0;
 
-    double fValue1 = 0.0;
-    double fValue2 = 0.0;
+        aValues.First >>= fValue1;
+        aValues.Second >>= fValue2;
 
-    aValues.First >>= fValue1;
-    aValues.Second >>= fValue2;
+        if( fValue2 == 0.0 )
+            mnDirection = 1;
+        else if( fValue1 == 0.0 )
+            mnDirection = 2;
+        else if( fValue1 == fValue2 )
+            mnDirection = 3;
+        else
+            mnDirection = 4;
 
-    if( fValue2 == 0.0 )
-        mnDirection = 1;
-    else if( fValue1 == 0.0 )
-        mnDirection = 2;
-    else
-        mnDirection = 3;
+        // Shrink animation is represented by negative value
+        // Shrink factor is calculated as (1 + $fValue)
+        // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
+        // 0.25 = -0.75 + 1
+        if ( fValue1 < 0.0 )
+            fValue1 += 1;
+        if ( fValue2 < 0.0 )
+            fValue2 += 1;
 
-    // Shrink animation is represented by negative value
-    // Shrink factor is calculated as (1 + $fValue)
-    // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
-    // 0.25 = -0.75 + 1
-    if ( fValue1 < 0.0 )
-        fValue1 += 1;
-    if ( fValue2 < 0.0 )
-        fValue2 += 1;
-
-    long nValue;
-    if( fValue1 )
-        nValue = static_cast<long>(fValue1 * 100.0);
-    else
-        nValue = static_cast<long>(fValue2 * 100.0);
-    mpMetric->SetValue( nValue );
-    updateMenu();
+        long nValue;
+        if( fValue1 )
+            nValue = static_cast<long>(fValue1 * 100.0);
+        else
+            nValue = static_cast<long>(fValue2 * 100.0);
+        mpMetric->SetValue( nValue );
+        if( mnDirection == 2 ) {
+            mpMetric2->SetValue( nValue );
+        }
+        updateMenu();
+    }
 }
 
 Any ScalePropertyBox::getValue()
@@ -1310,6 +1364,10 @@ Any ScalePropertyBox::getValue()
         fValue2 = 0.0;
     else if( mnDirection == 2 )
         fValue1 = 0.0;
+    else if( mnDirection == 4) {
+        fValue1 = static_cast<double>(mpMetric->GetValue()) / 100.0;
+        fValue2 = static_cast<double>(mpMetric2->GetValue()) / 100.0;
+    }
 
     ValuePair aValues;
     aValues.First <<= fValue1;
