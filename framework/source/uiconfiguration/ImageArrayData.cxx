@@ -71,6 +71,18 @@ void ImageAryData::Load(const OUString &rPrefix)
 
     bool bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
 
+    /* If the uno command has parameters, passed in from a toolbar,
+     * recover from failure by removing the parameters from the file name
+     */
+    if (!bSuccess && aFileName.indexOf("%3f") > 0)
+    {
+        sal_Int32 nStart = aFileName.indexOf("%3f");
+        sal_Int32 nEnd = aFileName.lastIndexOf(".");
+
+        aFileName = aFileName.replaceAt(nStart, nEnd - nStart, "");
+        bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
+    }
+
     SAL_WARN_IF(!bSuccess, "fwk.uiconfiguration", "Failed to load image '" << aFileName
               << "' from icon theme '" << aIconTheme << "'");
 }
