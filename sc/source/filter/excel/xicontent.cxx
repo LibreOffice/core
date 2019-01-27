@@ -725,8 +725,8 @@ void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
 
 void XclImpCondFormatManager::Apply()
 {
-    for( XclImpCondFmtList::iterator itFmt = maCondFmtList.begin(); itFmt != maCondFmtList.end(); ++itFmt )
-        (*itFmt)->Apply();
+    for( auto& rxFmt : maCondFmtList )
+        rxFmt->Apply();
     maCondFmtList.clear();
 }
 
@@ -927,10 +927,9 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 void XclImpValidationManager::Apply()
 {
     ScDocument& rDoc = GetRoot().GetDoc();
-    DVItemList::iterator itr = maDVItems.begin(), itrEnd = maDVItems.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rxDVItem : maDVItems)
     {
-        DVItem& rItem = **itr;
+        DVItem& rItem = *rxDVItem;
         // set the handle ID
         sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );
@@ -1088,8 +1087,8 @@ void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 void XclImpWebQueryBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
-    for( XclImpWebQueryList::iterator itQuery = maWQList.begin(); itQuery != maWQList.end(); ++itQuery )
-        itQuery->Apply( rDoc, EXC_WEBQRY_FILTER );
+    for( auto& rQuery : maWQList )
+        rQuery.Apply( rDoc, EXC_WEBQRY_FILTER );
 }
 
 // Decryption =================================================================
@@ -1383,10 +1382,9 @@ void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab
 
 void XclImpSheetProtectBuffer::Apply() const
 {
-    for (ProtectedSheetMap::const_iterator itr = maProtectedSheets.begin(), itrEnd = maProtectedSheets.end();
-         itr != itrEnd; ++itr)
+    for (const auto& [rTab, rSheet] : maProtectedSheets)
     {
-        if (!itr->second.mbProtected)
+        if (!rSheet.mbProtected)
             // This sheet is (for whatever reason) not protected.
             continue;
 
@@ -1394,7 +1392,7 @@ void XclImpSheetProtectBuffer::Apply() const
         pProtect->setProtected(true);
 
         // 16-bit hash password
-        const sal_uInt16 nHash = itr->second.mnPasswordHash;
+        const sal_uInt16 nHash = rSheet.mnPasswordHash;
         if (nHash)
         {
             Sequence<sal_Int8> aPass(2);
@@ -1404,7 +1402,7 @@ void XclImpSheetProtectBuffer::Apply() const
         }
 
         // sheet protection options
-        const sal_uInt16 nOptions = itr->second.mnOptions;
+        const sal_uInt16 nOptions = rSheet.mnOptions;
         pProtect->setOption( ScTableProtection::OBJECTS,               (nOptions & 0x0001) );
         pProtect->setOption( ScTableProtection::SCENARIOS,             (nOptions & 0x0002) );
         pProtect->setOption( ScTableProtection::FORMAT_CELLS,          (nOptions & 0x0004) );
@@ -1422,10 +1420,10 @@ void XclImpSheetProtectBuffer::Apply() const
         pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, (nOptions & 0x4000) );
 
         // Enhanced protection containing editable ranges and permissions.
-        pProtect->setEnhancedProtection( itr->second.maEnhancedProtections);
+        pProtect->setEnhancedProtection( rSheet.maEnhancedProtections);
 
         // all done.  now commit.
-        GetDoc().SetTabProtection(itr->first, pProtect.get());
+        GetDoc().SetTabProtection(rTab, pProtect.get());
     }
 }
 

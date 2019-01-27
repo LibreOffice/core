@@ -20,6 +20,7 @@
 #include <xetable.hxx>
 
 #include <map>
+#include <numeric>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scitems.hxx>
 #include <svl/intitem.hxx>
@@ -1114,8 +1115,8 @@ bool XclExpMultiCellBase::IsEmpty() const
 
 void XclExpMultiCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 {
-    for( XclExpMultiXFIdDeq::iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
-        aIt->ConvertXFIndex( rRoot );
+    for( auto& rXFId : maXFIds )
+        rXFId.ConvertXFIndex( rRoot );
 }
 
 void XclExpMultiCellBase::Save( XclExpStream& rStrm )
@@ -1226,10 +1227,8 @@ void XclExpMultiCellBase::SaveXml( XclExpXmlStream& rStrm )
 
 sal_uInt16 XclExpMultiCellBase::GetCellCount() const
 {
-    sal_uInt16 nCount = 0;
-    for( XclExpMultiXFIdDeq::const_iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
-        nCount = nCount + aIt->mnCount;
-    return nCount;
+    return std::accumulate(maXFIds.begin(), maXFIds.end(), sal_uInt16(0),
+        [](const sal_uInt16& rSum, const XclExpMultiXFId& rXFId) { return rSum + rXFId.mnCount; });
 }
 
 void XclExpMultiCellBase::AppendXFId( const XclExpMultiXFId& rXFId )
@@ -1262,10 +1261,10 @@ void XclExpMultiCellBase::GetXFIndexes( ScfUInt16Vec& rXFIndexes ) const
 {
     OSL_ENSURE( GetLastXclCol() < rXFIndexes.size(), "XclExpMultiCellBase::GetXFIndexes - vector too small" );
     ScfUInt16Vec::iterator aDestIt = rXFIndexes.begin() + GetXclCol();
-    for( XclExpMultiXFIdDeq::const_iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
+    for( const auto& rXFId : maXFIds )
     {
-        ::std::fill( aDestIt, aDestIt + aIt->mnCount, aIt->mnXFIndex );
-        aDestIt += aIt->mnCount;
+        ::std::fill( aDestIt, aDestIt + rXFId.mnCount, rXFId.mnXFIndex );
+        aDestIt += rXFId.mnCount;
     }
 }
 
@@ -1277,13 +1276,13 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 
     // build new XF index vector, containing passed XF indexes
     maXFIds.clear();
-    XclExpMultiXFId aXFId( 0 );
-    for( ScfUInt16Vec::const_iterator aIt = rXFIndexes.begin() + GetXclCol(), aEnd = rXFIndexes.begin() + nLastXclCol + 1; aIt != aEnd; ++aIt )
-    {
-        // AppendXFId() tests XclExpXFIndex::mnXFId, set it too
-        aXFId.mnXFId = aXFId.mnXFIndex = *aIt;
-        AppendXFId( aXFId );
-    }
+    std::for_each(rXFIndexes.begin() + GetXclCol(), rXFIndexes.begin() + nLastXclCol + 1,
+        [this](const sal_uInt16& rXFIndex) {
+            XclExpMultiXFId aXFId( 0 );
+            // AppendXFId() tests XclExpXFIndex::mnXFId, set it too
+            aXFId.mnXFId = aXFId.mnXFIndex = rXFIndex;
+            AppendXFId( aXFId );
+        });
 
     // remove leading and trailing unused XF indexes
     if( !maXFIds.empty() && (maXFIds.front().mnXFIndex == EXC_XF_NOTFOUND) )
@@ -1926,24 +1925,21 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
 
     // *** Find default row format *** ----------------------------------------
 
-    ScfUInt16Vec::iterator aCellBeg = aXFIndexes.begin(), aCellEnd = aXFIndexes.end(), aCellIt;
-    ScfUInt16Vec::const_iterator aColBeg = rColXFIndexes.begin(), aColIt;
-
     // find most used XF index in the row
     typedef ::std::map< sal_uInt16, size_t > XclExpXFIndexMap;
     XclExpXFIndexMap aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     size_t nMaxXFCount = 0;
     const size_t nHalfIndexes = aXFIndexes.size() / 2;
-    for( aCellIt = aCellBeg; aCellIt != aCellEnd; ++aCellIt )
+    for( const auto& rXFIndex : aXFIndexes )
     {
-        if( *aCellIt != EXC_XF_NOTFOUND )
+        if( rXFIndex != EXC_XF_NOTFOUND )
         {
-            size_t& rnCount = aIndexMap[ *aCellIt ];
+            size_t& rnCount = aIndexMap[ rXFIndex ];
             ++rnCount;
             if( rnCount > nMaxXFCount )
             {
-                nRowXFIndex = *aCellIt;
+                nRowXFIndex = rXFIndex;
                 nMaxXFCount = rnCount;
                 if (nMaxXFCount > nHalfIndexes)
                 {
@@ -1964,9 +1960,10 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
         // count needed XF indexes for blank cells with and without row default XF index
         size_t nXFCountWithRowDefXF = 0;
         size_t nXFCountWithoutRowDefXF = 0;
-        for( aCellIt = aCellBeg, aColIt = aColBeg; aCellIt != aCellEnd; ++aCellIt, ++aColIt )
+        ScfUInt16Vec::const_iterator aColIt = rColXFIndexes.begin();
+        for( const auto& rXFIndex : aXFIndexes )
         {
-            sal_uInt16 nXFIndex = *aCellIt;
+            sal_uInt16 nXFIndex = rXFIndex;
             if( nXFIndex != EXC_XF_NOTFOUND )
             {
                 if( nXFIndex != nRowXFIndex )
@@ -1974,6 +1971,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
                 if( nXFIndex != *aColIt )
                     ++nXFCountWithoutRowDefXF;  // without row default XF index
             }
+            ++aColIt;
         }
 
         // use column XF indexes if this would cause less or equal number of BLANK records
@@ -1986,9 +1984,13 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     {
         // use column default XF indexes
         // #i194#: remove cell XF indexes equal to column default XF indexes
-        for( aCellIt = aCellBeg, aColIt = aColBeg; aCellIt != aCellEnd; ++aCellIt, ++aColIt )
-            if( *aCellIt == *aColIt )
-                *aCellIt = EXC_XF_NOTFOUND;
+        ScfUInt16Vec::const_iterator aColIt = rColXFIndexes.begin();
+        for( auto& rXFIndex : aXFIndexes )
+        {
+            if( rXFIndex == *aColIt )
+                rXFIndex = EXC_XF_NOTFOUND;
+            ++aColIt;
+        }
     }
     else
     {
@@ -1996,9 +1998,9 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
         mnXFIndex = nRowXFIndex;
         ::set_flag( mnFlags, EXC_ROW_USEDEFXF );
         // #98133#, #i194#, #i27407#: remove cell XF indexes equal to row default XF index
-        for( aCellIt = aCellBeg; aCellIt != aCellEnd; ++aCellIt )
-            if( *aCellIt == nRowXFIndex )
-                *aCellIt = EXC_XF_NOTFOUND;
+        for( auto& rXFIndex : aXFIndexes )
+            if( rXFIndex == nRowXFIndex )
+                rXFIndex = EXC_XF_NOTFOUND;
     }
 
     // remove unused parts of BLANK/MULBLANK cell records
@@ -2179,9 +2181,8 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 #endif
     if (nThreads == 1)
     {
-        RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
-        for (itr = itrBeg; itr != itrEnd; ++itr)
-            itr->second->Finalize( rColXFIndexes, true );
+        for (auto& rEntry : maRowMap)
+            rEntry.second->Finalize( rColXFIndexes, true );
     }
     else
     {
@@ -2191,10 +2192,12 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         for ( size_t i = 0; i < nThreads; i++ )
             aTasks[ i ].reset( new RowFinalizeTask( pTag, rColXFIndexes, i == 0 ) );
 
-        RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
         size_t nIdx = 0;
-        for ( itr = itrBeg; itr != itrEnd; ++itr, ++nIdx )
-            aTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
+        for ( const auto& rEntry : maRowMap )
+        {
+            aTasks[ nIdx % nThreads ]->push_back( rEntry.second.get() );
+            ++nIdx;
+        }
 
         for ( size_t i = 1; i < nThreads; i++ )
             rPool.pushTask( std::move(aTasks[ i ]) );
@@ -2217,10 +2220,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpRow* pPrev = nullptr;
     typedef std::vector< XclExpRow* > XclRepeatedRows;
     XclRepeatedRows aRepeated;
-    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
-    for (itr = itrBeg; itr != itrEnd; ++itr)
+    for (const auto& rEntry : maRowMap)
     {
-        const RowRef& rRow = itr->second;
+        const RowRef& rRow = rEntry.second;
         if ( rRow->IsDefaultable() )
         {
             XclExpDefaultRowData aDefData( *rRow );
@@ -2259,13 +2261,13 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     rDefRowData = aMaxDefData;
 
     // now disable repeating extra (empty) rows that are equal to the default row
-    for ( XclRepeatedRows::iterator it = aRepeated.begin(), it_end = aRepeated.end(); it != it_end; ++it)
+    for (auto& rpRow : aRepeated)
     {
-        if ( (*it)->GetXclRowRpt() > 1
-             && (*it)->GetHeight() == rDefRowData.mnHeight
-             && (*it)->IsHidden() == rDefRowData.IsHidden() )
+        if ( rpRow->GetXclRowRpt() > 1
+             && rpRow->GetHeight() == rDefRowData.mnHeight
+             && rpRow->IsHidden() == rDefRowData.IsHidden() )
         {
-            (*it)->SetXclRowRpt( 1 );
+            rpRow->SetXclRowRpt( 1 );
         }
     }
 
@@ -2276,9 +2278,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     sal_uInt32 nFirstUsedXclRow = SAL_MAX_UINT32;
     sal_uInt32 nFirstFreeXclRow = 0;
 
-    for (itr = itrBeg; itr != itrEnd; ++itr)
+    for (const auto& rEntry : maRowMap)
     {
-        const RowRef& rRow = itr->second;
+        const RowRef& rRow = rEntry.second;
         // disable unused rows
         rRow->DisableIfDefault( aMaxDefData );
 
@@ -2314,24 +2316,21 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
 
     // save in blocks of 32 rows, each block contains first all ROWs, then all cells
     size_t nSize = maRowMap.size();
-    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
+    RowMap::iterator itr = maRowMap.begin(), itrEnd = maRowMap.end();
     RowMap::iterator itrBlkStart = maRowMap.begin(), itrBlkEnd = maRowMap.begin();
-    sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : itrBeg->second->GetXclRow();
+    sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : itr->second->GetXclRow();
 
-    for (itr = itrBeg; itr != itrEnd; ++itr)
+    for (; itr != itrEnd; ++itr)
     {
         // find end of row block
-        while( (itrBlkEnd != itrEnd) && (itrBlkEnd->second->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE) )
-            ++itrBlkEnd;
+        itrBlkEnd = std::find_if_not(itrBlkEnd, itrEnd,
+            [&nStartXclRow](const RowMap::value_type& rRow) { return rRow.second->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE; });
 
         // write the ROW records
-        RowMap::iterator itRow;
-        for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
-            itRow->second->Save( rStrm );
+        std::for_each(itrBlkStart, itrBlkEnd, [&rStrm](const RowMap::value_type& rRow) { rRow.second->Save( rStrm ); });
 
         // write the cell records
-        for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
-             itRow->second->WriteCellList( rStrm );
+        std::for_each(itrBlkStart, itrBlkEnd, [&rStrm](const RowMap::value_type& rRow) { rRow.second->WriteCellList( rStrm ); });
 
         itrBlkStart = (itrBlkEnd == itrEnd) ? itrBlkEnd : itrBlkEnd++;
         nStartXclRow += EXC_ROW_ROWBLOCKSIZE;
@@ -2340,13 +2339,7 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
 
 void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
-    sal_Int32 nNonEmpty = 0;
-    RowMap::iterator itr = maRowMap.begin(), itrEnd = maRowMap.end();
-    for (; itr != itrEnd; ++itr)
-        if (itr->second->IsEnabled())
-            ++nNonEmpty;
-
-    if (nNonEmpty == 0)
+    if (std::none_of(maRowMap.begin(), maRowMap.end(), [](const RowMap::value_type& rRow) { return rRow.second->IsEnabled(); }))
     {
         rStrm.GetCurrentStream()->singleElement( XML_sheetData, FSEND );
         return;
@@ -2354,8 +2347,8 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetData, FSEND );
-    for (itr = maRowMap.begin(); itr != itrEnd; ++itr)
-        itr->second->SaveXml(rStrm);
+    for (const auto& rEntry : maRowMap)
+        rEntry.second->SaveXml(rStrm);
     rWorksheet->endElement( XML_sheetData );
 }
 

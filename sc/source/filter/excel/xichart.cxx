@@ -2910,8 +2910,7 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > const & xChar
         ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
         OSL_ENSURE( maSeries.size() >= 3, "XclImpChTypeGroup::CreateChartType - missing stock series" );
         int nRoleIdx = (maSeries.size() == 3) ? 1 : 0;
-        for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end();
-                (nRoleIdx < 4) && (aIt != aEnd); ++nRoleIdx, ++aIt )
+        for( const auto& rxSeries : maSeries )
         {
             // create a data sequence with a specific role
             OUString aRole;
@@ -2922,9 +2921,12 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > const & xChar
                 case 2: aRole = EXC_CHPROP_ROLE_LOWVALUES;      break;
                 case 3: aRole = EXC_CHPROP_ROLE_CLOSEVALUES;    break;
             }
-            Reference< XLabeledDataSequence > xDataSeq = (*aIt)->CreateValueSequence( aRole );
+            Reference< XLabeledDataSequence > xDataSeq = rxSeries->CreateValueSequence( aRole );
             if( xDataSeq.is() )
                 aLabeledSeqVec.push_back( xDataSeq );
+            ++nRoleIdx;
+            if (nRoleIdx >= 4)
+                break;
         }
 
         // attach labeled data sequences to series and insert series into chart type
@@ -3610,8 +3612,12 @@ XclImpChTypeGroupRef XclImpChAxesSet::GetFirstTypeGroup() const
 XclImpChLegendRef XclImpChAxesSet::GetLegend() const
 {
     XclImpChLegendRef xLegend;
-    for( XclImpChTypeGroupMap::const_iterator aIt = maTypeGroups.begin(), aEnd = maTypeGroups.end(); !xLegend && (aIt != aEnd); ++aIt )
-        xLegend = aIt->second->GetLegend();
+    for( const auto& rEntry : maTypeGroups )
+    {
+        xLegend = rEntry.second->GetLegend();
+        if (xLegend)
+            break;
+    }
     return xLegend;
 }
 
@@ -3747,11 +3753,11 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
     if( xChartTypeCont.is() )
     {
         sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
-        for( XclImpChTypeGroupMap::const_iterator aIt = maTypeGroups.begin(), aEnd = maTypeGroups.end(); aIt != aEnd; ++aIt )
+        for( const auto& rEntry : maTypeGroups )
         {
             try
             {
-                Reference< XChartType > xChartType = aIt->second->CreateChartType( xDiagram, nApiAxesSetIdx );
+                Reference< XChartType > xChartType = rEntry.second->CreateChartType( xDiagram, nApiAxesSetIdx );
                 if( xChartType.is() )
                     xChartTypeCont->addChartType( xChartType );
             }
@@ -4039,8 +4045,8 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
     {
         ::std::unique_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
-        for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
-            (*aIt)->FillAllSourceLinks( *xRefTokens );
+        for( const auto& rxSeries : maSeries )
+            rxSeries->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )
         {
             ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, std::move(xRefTokens) ) );
@@ -4119,9 +4125,8 @@ void XclImpChChart::Finalize()
 
 void XclImpChChart::FinalizeSeries()
 {
-    for( XclImpChSeriesVec::iterator aSIt = maSeries.begin(), aSEnd = maSeries.end(); aSIt != aSEnd; ++aSIt )
+    for( const XclImpChSeriesRef& xSeries : maSeries )
     {
-        XclImpChSeriesRef xSeries = *aSIt;
         if( xSeries->HasParentSeries() )
         {
             /*  Process child series (trend lines and error bars). Data of
@@ -4148,18 +4153,18 @@ void XclImpChChart::FinalizeDataFormats()
         itself has collected all CHDATAFORMAT groups to be able to store data
         format groups for series that have not been imported at that time. This
         loop finally assigns these groups to the related series. */
-    for( XclImpChDataFormatMap::const_iterator aMIt = maDataFmts.begin(), aMEnd = maDataFmts.end(); aMIt != aMEnd; ++aMIt )
+    for( const auto& [rPos, rDataFmt] : maDataFmts )
     {
-        sal_uInt16 nSeriesIdx = aMIt->first.mnSeriesIdx;
+        sal_uInt16 nSeriesIdx = rPos.mnSeriesIdx;
         if( nSeriesIdx < maSeries.size() )
-            maSeries[ nSeriesIdx ]->SetDataFormat( aMIt->second );
+            maSeries[ nSeriesIdx ]->SetDataFormat( rDataFmt );
     }
 
     /*  #i51639# (part 2): Finalize data formats of all series. This adds for
         example missing CHDATAFORMAT groups for entire series that are needed
         for automatic colors of lines and areas. */
-    for( XclImpChSeriesVec::iterator aVIt = maSeries.begin(), aVEnd = maSeries.end(); aVIt != aVEnd; ++aVIt )
-        (*aVIt)->FinalizeDataFormats();
+    for( auto& rxSeries : maSeries )
+        rxSeries->FinalizeDataFormats();
 }
 
 void XclImpChChart::FinalizeTitle()

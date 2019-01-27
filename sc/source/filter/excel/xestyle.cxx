@@ -388,8 +388,8 @@ void XclExpPaletteImpl::Finalize()
     }
 
     // remap color ID data map (maColorIdDataVec) from list indexes to palette indexes
-    for( XclColorIdDataVec::iterator aIt = maColorIdDataVec.begin(), aEnd = maColorIdDataVec.end(); aIt != aEnd; ++aIt )
-        aIt->mnIndex = aRemapVec[ aIt->mnIndex ].mnPalIndex;
+    for( auto& rColorIdData : maColorIdDataVec )
+        rColorIdData.mnIndex = aRemapVec[ rColorIdData.mnIndex ].mnPalIndex;
 }
 
 sal_uInt16 XclExpPaletteImpl::GetColorIndex( sal_uInt32 nColorId ) const
@@ -472,8 +472,8 @@ bool XclExpPaletteImpl::IsDefaultPalette() const
 void XclExpPaletteImpl::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast< sal_uInt16 >( maPalette.size() );
-    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
-        rStrm << aIt->maColor;
+    for( const auto& rColor : maPalette )
+        rStrm << rColor.maColor;
 }
 
 void XclExpPaletteImpl::SaveXml( XclExpXmlStream& rStrm )
@@ -484,9 +484,9 @@ void XclExpPaletteImpl::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_colors, FSEND );
     rStyleSheet->startElement( XML_indexedColors, FSEND );
-    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
+    for( const auto& rColor : maPalette )
         rStyleSheet->singleElement( XML_rgbColor,
-                XML_rgb,    XclXmlUtils::ToOString( aIt->maColor ).getStr(),
+                XML_rgb,    XclXmlUtils::ToOString( rColor.maColor ).getStr(),
                 FSEND );
     rStyleSheet->endElement( XML_indexedColors );
     rStyleSheet->endElement( XML_colors );
@@ -613,8 +613,8 @@ void XclExpPaletteImpl::RawReducePalette( sal_uInt32 nPass )
     }
 
     // update color ID data map (maps color IDs to color list indexes), replace old by new list indexes
-    for( XclColorIdDataVec::iterator aIt = maColorIdDataVec.begin(), aEnd = maColorIdDataVec.end(); aIt != aEnd; ++aIt )
-        aIt->mnIndex = aListIndexMap[ aIt->mnIndex ];
+    for( auto& rColorIdData : maColorIdDataVec )
+        rColorIdData.mnIndex = aListIndexMap[ rColorIdData.mnIndex ];
 }
 
 void XclExpPaletteImpl::ReduceLeastUsedColor()
@@ -638,12 +638,12 @@ void XclExpPaletteImpl::ReduceLeastUsedColor()
         if( nKeep > nRemove ) --nKeep;
 
         // recalculate color ID data map (maps color IDs to color list indexes)
-        for( XclColorIdDataVec::iterator aIt = maColorIdDataVec.begin(), aEnd = maColorIdDataVec.end(); aIt != aEnd; ++aIt )
+        for( auto& rColorIdData : maColorIdDataVec )
         {
-            if( aIt->mnIndex > nRemove )
-                --aIt->mnIndex;
-            else if( aIt->mnIndex == nRemove )
-                aIt->mnIndex = nKeep;
+            if( rColorIdData.mnIndex > nRemove )
+                --rColorIdData.mnIndex;
+            else if( rColorIdData.mnIndex == nRemove )
+                rColorIdData.mnIndex = nKeep;
         }
     }
 }
@@ -703,18 +703,19 @@ sal_Int32 XclExpPaletteImpl::GetNearestPaletteColor(
     rnIndex = 0;
     sal_Int32 nDist = SAL_MAX_INT32;
 
-    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end();
-            aIt != aEnd; ++aIt )
+    sal_uInt32 nPaletteIndex = 0;
+    for( const auto& rPaletteColor : maPalette )
     {
-        if( !aIt->mbUsed )
+        if( !rPaletteColor.mbUsed )
         {
-            sal_Int32 nCurrDist = lclGetColorDistance( rColor, aIt->maColor );
+            sal_Int32 nCurrDist = lclGetColorDistance( rColor, rPaletteColor.maColor );
             if( nCurrDist < nDist )
             {
-                rnIndex = aIt - maPalette.begin();
+                rnIndex = nPaletteIndex;
                 nDist = nCurrDist;
             }
         }
+        ++nPaletteIndex;
     }
     return nDist;
 }
@@ -726,22 +727,23 @@ sal_Int32 XclExpPaletteImpl::GetNearPaletteColors(
     sal_Int32 nDist1 = SAL_MAX_INT32;
     sal_Int32 nDist2 = SAL_MAX_INT32;
 
-    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end();
-            aIt != aEnd; ++aIt )
+    sal_uInt32 nPaletteIndex = 0;
+    for( const auto& rPaletteColor : maPalette )
     {
-        sal_Int32 nCurrDist = lclGetColorDistance( rColor, aIt->maColor );
+        sal_Int32 nCurrDist = lclGetColorDistance( rColor, rPaletteColor.maColor );
         if( nCurrDist < nDist1 )
         {
             rnSecond = rnFirst;
             nDist2 = nDist1;
-            rnFirst = aIt - maPalette.begin();
+            rnFirst = nPaletteIndex;
             nDist1 = nCurrDist;
         }
         else if( nCurrDist < nDist2 )
         {
-            rnSecond = aIt - maPalette.begin();
+            rnSecond = nPaletteIndex;
             nDist2 = nCurrDist;
         }
+        ++nPaletteIndex;
     }
     return nDist1;
 }
@@ -1390,8 +1392,8 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
 
 void XclExpNumFmtBuffer::Save( XclExpStream& rStrm )
 {
-    for( XclExpNumFmtVec::const_iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
-        WriteFormatRecord( rStrm, *aIt );
+    for( const auto& rEntry : maFormatMap )
+        WriteFormatRecord( rStrm, rEntry );
 }
 
 void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
@@ -1403,9 +1405,9 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->startElement( XML_numFmts,
             XML_count,  OString::number(  maFormatMap.size() ).getStr(),
             FSEND );
-    for( XclExpNumFmtVec::iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
+    for( auto& rEntry : maFormatMap )
     {
-        aIt->SaveXml( rStrm );
+        rEntry.SaveXml( rStrm );
     }
     rStyleSheet->endElement( XML_numFmts );
 }
@@ -2508,8 +2510,8 @@ void XclExpXFBuffer::Finalize()
     // *** map all built-in XF records (cell and style) *** -------------------
 
     // do not change XF order -> std::map<> iterates elements in ascending order
-    for( XclExpBuiltInMap::const_iterator aIt = maBuiltInMap.begin(); aIt != aBuiltInEnd; ++aIt )
-        AppendXFIndex( aIt->first );
+    for( const auto& rEntry : maBuiltInMap )
+        AppendXFIndex( rEntry.first );
 
     // *** insert all user-defined style XF records, without reduce *** -------
 
@@ -2641,20 +2643,18 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->startElement( XML_fills,
             XML_count,  OString::number(  maFills.size() ).getStr(),
             FSEND );
-    for( XclExpFillList::iterator aIt = maFills.begin(), aEnd = maFills.end();
-            aIt != aEnd; ++aIt )
+    for( auto& rFill : maFills )
     {
-        aIt->SaveXml( rStrm );
+        rFill.SaveXml( rStrm );
     }
     rStyleSheet->endElement( XML_fills );
 
     rStyleSheet->startElement( XML_borders,
             XML_count,  OString::number(  maBorders.size() ).getStr(),
             FSEND );
-    for( XclExpBorderList::iterator aIt = maBorders.begin(), aEnd = maBorders.end();
-            aIt != aEnd; ++aIt )
+    for( auto& rBorder : maBorders )
     {
-        aIt->SaveXml( rStrm );
+        rBorder.SaveXml( rStrm );
     }
     rStyleSheet->endElement( XML_borders );
 
@@ -2740,9 +2740,12 @@ sal_uInt32 XclExpXFBuffer::FindXF( const SfxStyleSheetBase& rStyleSheet ) const
 
 sal_uInt32 XclExpXFBuffer::FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel ) const
 {
-    for( XclExpBuiltInMap::const_iterator aIt = maBuiltInMap.begin(), aEnd = maBuiltInMap.end(); aIt != aEnd; ++aIt )
-        if( (aIt->second.mnStyleId == nStyleId) && (aIt->second.mnLevel == nLevel) )
-            return aIt->first;
+    auto aIt = std::find_if(maBuiltInMap.begin(), maBuiltInMap.end(),
+        [&nStyleId, nLevel](const XclExpBuiltInMap::value_type& rEntry) {
+            return (rEntry.second.mnStyleId == nStyleId) && (rEntry.second.mnLevel == nLevel);
+        });
+    if (aIt != maBuiltInMap.end())
+        return aIt->first;
     return EXC_XFID_NOTFOUND;
 }
 
@@ -2997,13 +3000,12 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
         ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList(nTab);
         if (pList)
         {
-            for (ScConditionalFormatList::const_iterator itr = pList->begin();
-                    itr != pList->end(); ++itr)
+            for (const auto& rxItem : *pList)
             {
-                size_t nEntryCount = (*itr)->size();
+                size_t nEntryCount = rxItem->size();
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
-                    const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(nFormatEntry);
+                    const ScFormatEntry* pFormatEntry = rxItem->GetEntry(nFormatEntry);
                     if (!pFormatEntry || (pFormatEntry->GetType() != ScFormatEntry::Type::Condition &&
                                 pFormatEntry->GetType() != ScFormatEntry::Type::Date))
                         continue;
@@ -3094,9 +3096,9 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
             XML_count, OString::number(maDxf.size()).getStr(),
             FSEND );
 
-    for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )
+    for ( auto& rxDxf : maDxf )
     {
-        (*itr)->SaveXml( rStrm );
+        rxDxf->SaveXml( rStrm );
     }
 
     rStyleSheet->endElement( XML_dxfs );

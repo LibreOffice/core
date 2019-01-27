@@ -519,9 +519,9 @@ void XclPTFieldInfo::GetSubtotals( XclPTSubtotalVec& rSubtotals ) const
 void XclPTFieldInfo::SetSubtotals( const XclPTSubtotalVec& rSubtotals )
 {
     mnSubtotals = EXC_SXVD_SUBT_NONE;
-    for( XclPTSubtotalVec::const_iterator aIt = rSubtotals.begin(), aEnd = rSubtotals.end(); aIt != aEnd; ++aIt )
+    for( const auto& rSubtotal : rSubtotals )
     {
-        switch( *aIt )
+        switch( rSubtotal )
         {
             case ScGeneralFunction::AUTO:      mnSubtotals |= EXC_SXVD_SUBT_DEFAULT;   break;
             case ScGeneralFunction::SUM:       mnSubtotals |= EXC_SXVD_SUBT_SUM;       break;

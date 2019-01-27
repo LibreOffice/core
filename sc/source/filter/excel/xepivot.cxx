@@ -601,8 +601,8 @@ void XclExpPCField::WriteSxgroupinfo( XclExpStream& rStrm )
     if( IsStdGroupField() && !maGroupOrder.empty() )
     {
         rStrm.StartRecord( EXC_ID_SXGROUPINFO, 2 * maGroupOrder.size() );
-        for( ScfUInt16Vec::const_iterator aIt = maGroupOrder.begin(), aEnd = maGroupOrder.end(); aIt != aEnd; ++aIt )
-            rStrm << *aIt;
+        for( const auto& rItem : maGroupOrder )
+            rStrm << rItem;
         rStrm.EndRecord();
     }
 }
@@ -1057,9 +1057,9 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 
     // item properties
     const ScDPSaveDimension::MemberList &rMembers = rSaveDim.GetMembers();
-    for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; ++i)
-        if( XclExpPTItem* pItem = GetItemAcc( (*i)->GetName() ) )
-            pItem->SetPropertiesFromMember( **i );
+    for (const auto& pMember : rMembers)
+        if( XclExpPTItem* pItem = GetItemAcc( pMember->GetName() ) )
+            pItem->SetPropertiesFromMember( *pMember );
 }
 
 void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
@@ -1244,10 +1244,13 @@ const XclExpPTField* XclExpPivotTable::GetField( const OUString& rName ) const
 
 sal_uInt16 XclExpPivotTable::GetDataFieldIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const
 {
-    for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
-        if( const XclExpPTField* pField = GetField( aIt->first ) )
-            if( pField->GetFieldName() == rName )
-                return static_cast< sal_uInt16 >( aIt - maDataFields.begin() );
+    auto aIt = std::find_if(maDataFields.begin(), maDataFields.end(),
+        [this, &rName](const XclPTDataFieldPos& rDataField) {
+            const XclExpPTField* pField = GetField( rDataField.first );
+            return pField && pField->GetFieldName() == rName;
+        });
+    if (aIt != maDataFields.end())
+        return static_cast< sal_uInt16 >( std::distance(maDataFields.begin(), aIt) );
     return nDefaultIdx;
 }
 
@@ -1391,7 +1394,7 @@ void XclExpPivotTable::Finalize()
     {
         ScfUInt16Vec::const_iterator aIt = ::std::find( pFieldVec->begin(), pFieldVec->end(), EXC_SXIVD_DATA );
         if( aIt != pFieldVec->end() )
-            maPTInfo.mnDataPos = static_cast< sal_uInt16 >( aIt - pFieldVec->begin() );
+            maPTInfo.mnDataPos = static_cast< sal_uInt16 >( std::distance(pFieldVec->begin(), aIt) );
     }
 
     // single data field is always row oriented
@@ -1450,8 +1453,8 @@ void XclExpPivotTable::WriteSxivd( XclExpStream& rStrm, const ScfUInt16Vec& rFie
     if( !rFields.empty() )
     {
         rStrm.StartRecord( EXC_ID_SXIVD, rFields.size() * 2 );
-        for( ScfUInt16Vec::const_iterator aIt = rFields.begin(), aEnd = rFields.end(); aIt != aEnd; ++aIt )
-            rStrm << *aIt;
+        for( const auto& rField : rFields )
+            rStrm << rField;
         rStrm.EndRecord();
     }
 }
@@ -1462,9 +1465,9 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
     {
         rStrm.StartRecord( EXC_ID_SXPI, maPageFields.size() * 6 );
         rStrm.SetSliceSize( 6 );
-        for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
+        for( const auto& rPageField : maPageFields )
         {
-            XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
+            XclExpPTFieldRef xField = maFieldList.GetRecord( rPageField );
             if( xField )
                 xField->WriteSxpiEntry( rStrm );
         }
@@ -1474,11 +1477,11 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
 
 void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
 {
-    for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
+    for( const auto& [rFieldIdx, rDataInfoIdx] : maDataFields )
     {
-        XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
+        XclExpPTFieldRef xField = maFieldList.GetRecord( rFieldIdx );
         if( xField )
-            xField->WriteSxdi( rStrm, aIt->second );
+            xField->WriteSxdi( rStrm, rDataInfoIdx );
     }
 }
 

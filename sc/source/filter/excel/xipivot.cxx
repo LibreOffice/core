@@ -414,8 +414,8 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
             ScDPSaveGroupItemVec aGroupItems;
             aGroupItems.reserve( maItems.size() );
             // initialize with own item names
-            for( XclImpPCItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-                aGroupItems.emplace_back( (*aIt)->ConvertToText() );
+            for( const auto& rxItem : maItems )
+                aGroupItems.emplace_back( rxItem->ConvertToText() );
 
             // *** iterate over all base items, set their names at corresponding own items ***
             for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )
@@ -427,9 +427,9 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
 
             // *** create the ScDPSaveGroupDimension object, fill with grouping info ***
             ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
-            for( ScDPSaveGroupItemVec::const_iterator aIt = aGroupItems.begin(), aEnd = aGroupItems.end(); aIt != aEnd; ++aIt )
-                if( !aIt->IsEmpty() )
-                    aGroupDim.AddGroupItem( *aIt );
+            for( const auto& rGroupItem : aGroupItems )
+                if( !rGroupItem.IsEmpty() )
+                    aGroupDim.AddGroupItem( rGroupItem );
             rSaveData.GetDimensionData()->AddGroupDimension( aGroupDim );
         }
     }
@@ -768,10 +768,10 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                 // read index list and insert all items into generated source data
                 if( bGenerateSource && (nItemScRow <= MAXROW) && (++nItemScRow <= MAXROW) )
                 {
-                    for( XclImpPCFieldVec::const_iterator aIt = aOrigFields.begin(), aEnd = aOrigFields.end(); aIt != aEnd; ++aIt )
+                    for( const auto& rxOrigField : aOrigFields )
                     {
-                        sal_uInt16 nItemIdx = (*aIt)->Has16BitIndexes() ? aPCStrm.ReaduInt16() : aPCStrm.ReaduInt8();
-                        (*aIt)->WriteOrigItemToSource( nItemScRow, nScTab, nItemIdx );
+                        sal_uInt16 nItemIdx = rxOrigField->Has16BitIndexes() ? aPCStrm.ReaduInt16() : aPCStrm.ReaduInt8();
+                        rxOrigField->WriteOrigItemToSource( nItemScRow, nScTab, nItemIdx );
                     }
                 }
                 xCurrField.reset();
@@ -1183,8 +1183,8 @@ void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject*
         return;
 
     pSaveDim->SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
-    for( XclImpPTItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ConvertItem( *pSaveDim, pObj, rRoot );
+    for( const auto& rxItem : maItems )
+        rxItem->ConvertItem( *pSaveDim, pObj, rRoot );
 
     if(bPageField && maPageInfo.mnSelItem != EXC_SXPI_ALLITEMS)
     {
@@ -1422,21 +1422,19 @@ void XclImpPivotTable::Convert()
 
     // *** fields ***
 
-    ScfUInt16Vec::const_iterator aIt, aEnd;
-
     // row fields
-    for( aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rRowField : maRowFields )
+        if( const XclImpPTField* pField = GetField( rRowField ) )
             pField->ConvertRowColField( aSaveData );
 
     // column fields
-    for( aIt = maColFields.begin(), aEnd = maColFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rColField : maColFields )
+        if( const XclImpPTField* pField = GetField( rColField ) )
             pField->ConvertRowColField( aSaveData );
 
     // page fields
-    for( aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rPageField : maPageFields )
+        if( const XclImpPTField* pField = GetField( rPageField ) )
             pField->ConvertPageField( aSaveData );
 
     // We need to import hidden fields because hidden fields may contain
@@ -1450,8 +1448,8 @@ void XclImpPivotTable::Convert()
                 pField->ConvertHiddenField( aSaveData );
 
     // data fields
-    for( aIt = maFiltDataFields.begin(), aEnd = maFiltDataFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rFiltDataField : maFiltDataFields )
+        if( const XclImpPTField* pField = GetField( rFiltDataField ) )
             pField->ConvertDataField( aSaveData );
 
     // *** insert into Calc document ***
@@ -1529,27 +1527,24 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     vector<ScAddress> aFieldBtns;
 
     aGeometry.getPageFieldPositions(aFieldBtns);
-    vector<ScAddress>::const_iterator itr = aFieldBtns.begin(), itrEnd = aFieldBtns.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rFieldBtn : aFieldBtns)
     {
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), ScMF::Button);
+        rDoc.ApplyFlagsTab(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab(), ScMF::Button);
 
         ScMF nMFlag = ScMF::ButtonPopup;
-        OUString aName = rDoc.GetString(itr->Col(), itr->Row(), itr->Tab());
+        OUString aName = rDoc.GetString(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab());
         if (rSaveData.HasInvisibleMember(aName))
             nMFlag |= ScMF::HiddenMember;
 
-        rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), nMFlag);
+        rDoc.ApplyFlagsTab(rFieldBtn.Col()+1, rFieldBtn.Row(), rFieldBtn.Col()+1, rFieldBtn.Row(), rFieldBtn.Tab(), nMFlag);
     }
 
     aGeometry.getColumnFieldPositions(aFieldBtns);
     rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aFieldDims);
     if (aFieldBtns.size() == aFieldDims.size())
     {
-        itr    = aFieldBtns.begin();
-        itrEnd = aFieldBtns.end();
         vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
-        for (; itr != itrEnd; ++itr, ++itDim)
+        for (const auto& rFieldBtn : aFieldBtns)
         {
             ScMF nMFlag = ScMF::Button;
             const ScDPSaveDimension* pDim = *itDim;
@@ -1557,7 +1552,8 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
                 nMFlag |= ScMF::HiddenMember;
             if (!pDim->IsDataLayout())
                 nMFlag |= ScMF::ButtonPopup;
-            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+            rDoc.ApplyFlagsTab(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab(), nMFlag);
+            ++itDim;
         }
     }
 
@@ -1565,10 +1561,8 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aFieldDims);
     if ((aFieldBtns.size() == aFieldDims.size()) || (maPTAddlInfo.mbCompactMode && aFieldBtns.size() == 1))
     {
-        itr    = aFieldBtns.begin();
-        itrEnd = aFieldBtns.end();
         vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rFieldBtn : aFieldBtns)
         {
             ScMF nMFlag = ScMF::Button;
             const ScDPSaveDimension* pDim = itDim != aFieldDims.end() ? *itDim++ : nullptr;
@@ -1576,7 +1570,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
                 nMFlag |= ScMF::HiddenMember;
             if (!pDim || !pDim->IsDataLayout())
                 nMFlag |= ScMF::ButtonPopup;
-            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+            rDoc.ApplyFlagsTab(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab(), nMFlag);
         }
     }
 }
@@ -1588,18 +1582,18 @@ void XclImpPivotTable::ApplyFieldInfo()
     ScDPSaveData& rSaveData = *mpDPObj->GetSaveData();
 
     // row fields
-    for( auto aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rRowField : maRowFields )
+        if( const XclImpPTField* pField = GetField( rRowField ) )
             pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
 
     // column fields
-    for( auto aIt = maColFields.begin(), aEnd = maColFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rColField : maColFields )
+        if( const XclImpPTField* pField = GetField( rColField ) )
             pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
 
     // page fields
-    for( auto aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
-        if( const XclImpPTField* pField = GetField( *aIt ) )
+    for( const auto& rPageField : maPageFields )
+        if( const XclImpPTField* pField = GetField( rPageField ) )
             pField->ConvertFieldInfo( rSaveData, mpDPObj, *this, true );
 
     // hidden fields
@@ -1718,20 +1712,20 @@ void XclImpPivotTableManager::ReadSxAddl( XclImpStream& rStrm )
 
 void XclImpPivotTableManager::ReadPivotCaches( const XclImpStream& rStrm )
 {
-    for( XclImpPivotCacheVec::iterator aIt = maPCaches.begin(), aEnd = maPCaches.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ReadPivotCacheStream( rStrm );
+    for( auto& rxPCache : maPCaches )
+        rxPCache->ReadPivotCacheStream( rStrm );
 }
 
 void XclImpPivotTableManager::ConvertPivotTables()
 {
-    for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
-        (*aIt)->Convert();
+    for( auto& rxPTable : maPTables )
+        rxPTable->Convert();
 }
 
 void XclImpPivotTableManager::MaybeRefreshPivotTables()
 {
-    for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
-        (*aIt)->MaybeRefresh();
+    for( auto& rxPTable : maPTables )
+        rxPTable->MaybeRefresh();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

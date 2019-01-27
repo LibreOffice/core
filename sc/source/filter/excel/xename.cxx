@@ -711,36 +711,32 @@ void XclExpNameManagerImpl::CreateUserNames()
 {
     std::vector<ScRangeData*> vEmulateAsLocalRange;
     const ScRangeName& rNamedRanges = GetNamedRanges();
-    ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rEntry : rNamedRanges)
     {
         // skip definitions of shared formulas
-        if (!FindNamedExp(SCTAB_GLOBAL, itr->second->GetName()))
+        if (!FindNamedExp(SCTAB_GLOBAL, rEntry.second->GetName()))
         {
-            const ScTokenArray* pCode = itr->second->GetCode();
+            const ScTokenArray* pCode = rEntry.second->GetCode();
             if ( pCode
-                && (itr->second->HasType( ScRangeData::Type::AbsPos ) || itr->second->HasType( ScRangeData::Type::AbsArea ))
+                && (rEntry.second->HasType( ScRangeData::Type::AbsPos ) || rEntry.second->HasType( ScRangeData::Type::AbsArea ))
                 && lcl_EnsureAbs3DToken( SCTAB_GLOBAL, pCode->FirstToken(), /*bFix=*/false ) )
             {
-                vEmulateAsLocalRange.emplace_back(itr->second.get());
+                vEmulateAsLocalRange.emplace_back(rEntry.second.get());
             }
             else
-                CreateName(SCTAB_GLOBAL, *itr->second);
+                CreateName(SCTAB_GLOBAL, *rEntry.second);
         }
     }
     //look at sheets containing local range names
     ScRangeName::TabNameCopyMap rLocalNames;
     GetDoc().GetAllTabRangeNames(rLocalNames);
-    ScRangeName::TabNameCopyMap::iterator tabIt = rLocalNames.begin(), tabItEnd = rLocalNames.end();
-    for (; tabIt != tabItEnd; ++tabIt)
+    for (const auto& [rTab, pRangeName] : rLocalNames)
     {
-        itr = tabIt->second->begin();
-        itrEnd = tabIt->second->end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rEntry : *pRangeName)
         {
             // skip definitions of shared formulas
-            if (!FindNamedExp(tabIt->first, itr->second->GetName()))
-                CreateName(tabIt->first, *itr->second);
+            if (!FindNamedExp(rTab, rEntry.second->GetName()))
+                CreateName(rTab, *rEntry.second);
         }
     }
 

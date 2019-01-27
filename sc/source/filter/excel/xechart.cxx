@@ -264,10 +264,10 @@ void XclExpChRootData::InitializeFutureRecBlock( XclExpStream& rStrm )
             rStrm.EndRecord();
         }
         // write all unwritten CHFRBLOCKBEGIN records
-        for( XclChFrBlockVector::const_iterator aIt = maUnwrittenFrBlocks.begin(), aEnd = maUnwrittenFrBlocks.end(); aIt != aEnd; ++aIt )
+        for( const auto& rUnwrittenFrBlock : maUnwrittenFrBlocks )
         {
-            OSL_ENSURE( aIt->mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
-            lclWriteChFrBlockRecord( rStrm, *aIt, true );
+            OSL_ENSURE( rUnwrittenFrBlock.mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
+            lclWriteChFrBlockRecord( rStrm, rUnwrittenFrBlock, true );
         }
         // move all record infos to vector of written blocks
         maWrittenFrBlocks.insert( maWrittenFrBlocks.end(), maUnwrittenFrBlocks.begin(), maUnwrittenFrBlocks.end() );
@@ -2481,13 +2481,13 @@ void XclExpChTypeGroup::ConvertSeries(
             ::set_flag( maData.mnFlags, EXC_CHTYPEGROUP_VARIEDCOLORS, aSeriesProp.GetBoolProperty( EXC_CHPROP_VARYCOLORSBY ) );
 
             // process all series
-            for( XDataSeriesVec::const_iterator aIt = aSeriesVec.begin(), aEnd = aSeriesVec.end(); aIt != aEnd; ++aIt )
+            for( const auto& rxSeries : aSeriesVec )
             {
                 // create Excel series object, stock charts need special processing
                 if( maTypeInfo.meTypeId == EXC_CHTYPEID_STOCK )
-                    CreateAllStockSeries( xChartType, *aIt );
+                    CreateAllStockSeries( xChartType, rxSeries );
                 else
-                    CreateDataSeries( xDiagram, *aIt );
+                    CreateDataSeries( xDiagram, rxSeries );
             }
         }
     }

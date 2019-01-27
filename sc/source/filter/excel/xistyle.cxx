@@ -691,10 +691,8 @@ void XclImpNumFmtBuffer::CreateScFormats()
     OSL_ENSURE( maIndexMap.empty(), "XclImpNumFmtBuffer::CreateScFormats - already created" );
 
     SvNumberFormatter& rFormatter = GetFormatter();
-    for( XclNumFmtMap::const_iterator aIt = GetFormatMap().begin(), aEnd = GetFormatMap().end(); aIt != aEnd; ++aIt )
+    for( const auto& [rXclNumFmt, rNumFmt] : GetFormatMap() )
     {
-        const XclNumFmt& rNumFmt = aIt->second;
-
         // insert/convert the Excel number format
         sal_Int32 nCheckPos;
         SvNumFormatType nType = SvNumFormatType::DEFINED;
@@ -709,7 +707,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
             nKey = rFormatter.GetFormatIndex( rNumFmt.meOffset, rNumFmt.meLanguage );
 
         // insert the resulting format key into the Excel->Calc index map
-        maIndexMap[ aIt->first ] = nKey;
+        maIndexMap[ rXclNumFmt ] = nKey;
     }
 }
 
@@ -1626,35 +1624,34 @@ void XclImpXFBuffer::CreateUserStyles()
 
     /*  Calculate names of built-in styles. Store styles with reserved names
         in the aConflictNameStyles list. */
-    for( XclImpStyleList::iterator itStyle = maBuiltinStyles.begin(); itStyle != maBuiltinStyles.end(); ++itStyle )
+    for( const auto& rxStyle : maBuiltinStyles )
     {
-        OUString aStyleName = XclTools::GetBuiltInStyleName( (*itStyle)->GetBuiltinId(), (*itStyle)->GetName(), (*itStyle)->GetLevel() );
+        OUString aStyleName = XclTools::GetBuiltInStyleName( rxStyle->GetBuiltinId(), rxStyle->GetName(), rxStyle->GetLevel() );
         OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
         if( aCellStyles.count( aStyleName ) > 0 )
-            aConflictNameStyles.push_back( itStyle->get() );
+            aConflictNameStyles.push_back( rxStyle.get() );
         else
-            aCellStyles[ aStyleName ] = itStyle->get();
+            aCellStyles[ aStyleName ] = rxStyle.get();
     }
 
     /*  Calculate names of user defined styles. Store styles with reserved
         names in the aConflictNameStyles list. */
-    for( XclImpStyleList::iterator itStyle = maUserStyles.begin(); itStyle != maUserStyles.end(); ++itStyle )
+    for( const auto& rxStyle : maUserStyles )
     {
         // #i1624# #i1768# ignore unnamed user styles
-        if( !(*itStyle)->GetName().isEmpty() )
+        if( !rxStyle->GetName().isEmpty() )
         {
-            if( aCellStyles.count( (*itStyle)->GetName() ) > 0 )
-                aConflictNameStyles.push_back( itStyle->get() );
+            if( aCellStyles.count( rxStyle->GetName() ) > 0 )
+                aConflictNameStyles.push_back( rxStyle.get() );
             else
-                aCellStyles[ (*itStyle)->GetName() ] = itStyle->get();
+                aCellStyles[ rxStyle->GetName() ] = rxStyle.get();
         }
     }
 
     // find unused names for all styles with conflicting names
-    for( XclImpStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
+    for( XclImpStyle* pStyle : aConflictNameStyles )
     {
-        XclImpStyle* pStyle = *aIt;
         OUString aUnusedName;
         sal_Int32 nIndex = 0;
         do
@@ -1666,9 +1663,9 @@ void XclImpXFBuffer::CreateUserStyles()
     }
 
     // set final names and create user-defined and modified built-in cell styles
-    for( CellStyleNameMap::iterator aIt = aCellStyles.begin(), aEnd = aCellStyles.end(); aIt != aEnd; ++aIt )
-        if( aIt->second )
-            aIt->second->CreateUserStyle( aIt->first );
+    for( auto& [rStyleName, rpStyle] : aCellStyles )
+        if( rpStyle )
+            rpStyle->CreateUserStyle( rStyleName );
 }
 
 ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
@@ -1982,20 +1979,19 @@ void XclImpXFRangeBuffer::Finalize()
 
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
-    for( XclImpXFRangeColumnVec::const_iterator aVBeg = maColumns.begin(), aVEnd = maColumns.end(), aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
+    SCCOL nScCol = 0;
+    for( const auto& rxColumn : maColumns )
     {
         // apply all cell styles of an existing column
-        if( aVIt->get() )
+        if( rxColumn.get() )
         {
-            XclImpXFRangeColumn& rColumn = **aVIt;
-            SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
+            XclImpXFRangeColumn& rColumn = *rxColumn;
             std::vector<ScAttrEntry> aAttrs;
             aAttrs.reserve(rColumn.end() - rColumn.begin());
 
-            for (XclImpXFRangeColumn::IndexList::iterator itr = rColumn.begin(), itrEnd = rColumn.end();
-                 itr != itrEnd; ++itr)
+            for (const auto& rxStyle : rColumn)
             {
-                XclImpXFRange& rStyle = **itr;
+                XclImpXFRange& rStyle = *rxStyle;
                 const XclImpXFIndex& rXFIndex = rStyle.maXFIndex;
                 XclImpXF* pXF = rXFBuffer.GetXF( rXFIndex.GetXFIndex() );
                 if (!pXF)
@@ -2022,11 +2018,12 @@ void XclImpXFRangeBuffer::Finalize()
             aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
             rDoc.setAttrEntries(nScTab, nScCol, std::move(aAttrParam));
         }
+        ++nScCol;
     }
 
     // insert hyperlink cells
-    for( XclImpHyperlinkVector::const_iterator aLIt = maHyperlinks.begin(), aLEnd = maHyperlinks.end(); aLIt != aLEnd; ++aLIt )
-        XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
+    for( const auto& [rXclRange, rUrl] : maHyperlinks )
+        XclImpHyperlink::InsertUrl( GetRoot(), rXclRange, rUrl );
 
     // apply cell merging
     for ( size_t i = 0, nRange = maMergeList.size(); i < nRange; ++i )

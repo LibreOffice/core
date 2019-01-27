@@ -209,9 +209,9 @@ XclExpExtIconSet::XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetForma
 
     if (mbCustom)
     {
-        for (auto itr = rData.maCustomVector.begin(); itr != rData.maCustomVector.end(); ++itr)
+        for (const auto& rItem : rData.maCustomVector)
         {
-            maCustom.AppendNewRecord(new XclExpExtIcon(*this, *itr));
+            maCustom.AppendNewRecord(new XclExpExtIcon(*this, rItem));
         }
     }
 }
@@ -288,9 +288,9 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
     maRange(rRange)
 {
     ScAddress aAddr = maRange.front().aStart;
-    for (auto itr = rData.begin(), itrEnd = rData.end(); itr != itrEnd; ++itr)
+    for (const auto& rItem : rData)
     {
-        const ScFormatEntry* pEntry = itr->pEntry;
+        const ScFormatEntry* pEntry = rItem.pEntry;
         switch (pEntry->GetType())
         {
             case ScFormatEntry::Type::Iconset:
@@ -315,12 +315,12 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
 
                 if (bNeedsExt)
                 {
-                    maCfRules.AppendNewRecord(new XclExpExtCfRule(*this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
+                    maCfRules.AppendNewRecord(new XclExpExtCfRule(*this, *pEntry, aAddr, rItem.aGUID, rItem.nPriority));
                 }
             }
             break;
             case ScFormatEntry::Type::Databar:
-                maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
+                maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, rItem.aGUID, rItem.nPriority));
             break;
             default:
             break;

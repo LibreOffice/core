@@ -115,8 +115,8 @@ void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCou
         rStrm << nXclCount;
     }
     rStrm.SetSliceSize( bCol16Bit ? 8 : 6 );
-    for( XclRangeVector::const_iterator aIt = mRanges.begin() + nBegin, aEnd = mRanges.begin() + nEnd; aIt != aEnd; ++aIt )
-        aIt->Write( rStrm, bCol16Bit );
+    std::for_each(mRanges.begin() + nBegin, mRanges.begin() + nEnd,
+        [&rStrm, &bCol16Bit](const XclRange& rRange) { rRange.Write(rStrm, bCol16Bit); });
 }
 
 XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAddress& rMaxPos ) :

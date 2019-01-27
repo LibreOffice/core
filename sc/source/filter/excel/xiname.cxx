@@ -291,15 +291,18 @@ const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB n
 {
     const XclImpName* pGlobalName = nullptr;   // a found global name
     const XclImpName* pLocalName = nullptr;    // a found local name
-    for( XclImpNameList::const_iterator itName = maNameList.begin(); itName != maNameList.end() && !pLocalName; ++itName )
+    for( const auto& rxName : maNameList )
     {
-        if( (*itName)->GetXclName() == rXclName )
+        if( rxName->GetXclName() == rXclName )
         {
-            if( (*itName)->GetScTab() == nScTab )
-                pLocalName = itName->get();
-            else if( (*itName)->IsGlobal() )
-                pGlobalName = itName->get();
+            if( rxName->GetScTab() == nScTab )
+                pLocalName = rxName.get();
+            else if( rxName->IsGlobal() )
+                pGlobalName = rxName.get();
         }
+
+        if (pLocalName)
+            break;
     }
     return pLocalName ? pLocalName : pGlobalName;
 }
@@ -312,9 +315,8 @@ const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 
 void XclImpNameManager::ConvertAllTokens()
 {
-    XclImpNameList::iterator it = maNameList.begin(), itEnd = maNameList.end();
-    for (; it != itEnd; ++it)
-        (*it)->ConvertTokens();
+    for (auto& rxName : maNameList)
+        rxName->ConvertTokens();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

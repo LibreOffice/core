@@ -223,9 +223,9 @@ void XclImpTabInfo::AppendXclTabName( const OUString& rXclTabName, SCTAB nScTab 
 
 void XclImpTabInfo::InsertScTab( SCTAB nScTab )
 {
-    for( XclTabNameMap::iterator aIt = maTabNames.begin(), aEnd = maTabNames.end(); aIt != aEnd; ++aIt )
-        if( aIt->second >= nScTab )
-            ++aIt->second;
+    for( auto& rEntry : maTabNames )
+        if( rEntry.second >= nScTab )
+            ++rEntry.second;
 }
 
 SCTAB XclImpTabInfo::GetScTabFromXclName( const OUString& rXclTabName ) const
@@ -255,9 +255,8 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId ) const
 {
     sal_uInt16 nReturn = 0;
-    for( ScfUInt16Vec::const_iterator aIt = maTabIdVec.begin(), aEnd = maTabIdVec.end(); aIt != aEnd; ++aIt )
+    for( sal_uInt16 nValue : maTabIdVec )
     {
-        sal_uInt16 nValue = *aIt;
         if( nValue == nCreatedId )
             return nReturn;
         if( nValue <= nMaxTabId )
@@ -569,9 +568,9 @@ void XclImpSupbookTab::LoadCachedValues( const ScExternalRefCache::TableTypeRef&
     if (maCrnList.empty())
         return;
 
-    for (XclImpCrnList::iterator itCrnRef = maCrnList.begin(); itCrnRef != maCrnList.end(); ++itCrnRef)
+    for (const auto& rxCrn : maCrnList)
     {
-        const XclImpCrn* const pCrn = itCrnRef->get();
+        const XclImpCrn* const pCrn = rxCrn.get();
         const XclAddress& rAddr = pCrn->GetAddress();
         switch (pCrn->GetType())
         {
@@ -739,11 +738,11 @@ void XclImpSupbook::LoadCachedValues()
     ScExternalRefManager* pRefMgr = GetRoot().GetDoc().GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aAbsUrl);
 
-    for (XclImpSupbookTabList::iterator itTab = maSupbTabList.begin(); itTab != maSupbTabList.end(); ++itTab)
+    for (auto& rxTab : maSupbTabList)
     {
-        const OUString& rTabName = (*itTab)->GetTabName();
+        const OUString& rTabName = rxTab->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
-        (*itTab)->LoadCachedValues( pCacheTable, GetSharedStringPool());
+        rxTab->LoadCachedValues( pCacheTable, GetSharedStringPool());
         pCacheTable->setWholeTableCached();
     }
 }
@@ -772,8 +771,12 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
         insert the entries of the second record before the entries of the first
         record. */
     XclImpXtiVector aNewEntries( nXtiCount );
-    for( XclImpXtiVector::iterator aIt = aNewEntries.begin(), aEnd = aNewEntries.end(); rStrm.IsValid() && (aIt != aEnd); ++aIt )
-        rStrm >> *aIt;
+    for( auto& rNewEntry : aNewEntries )
+    {
+        if (!rStrm.IsValid())
+            break;
+        rStrm >> rNewEntry;
+    }
     maXtiList.insert( maXtiList.begin(), aNewEntries.begin(), aNewEntries.end() );
 
     LoadCachedValues();
@@ -874,8 +877,8 @@ void XclImpLinkManagerImpl::LoadCachedValues()
 {
     // Read all CRN records which can be accessed via XclImpSupbook, and store
     // the cached values to the external reference manager.
-    for (XclImpSupbookList::iterator itSupbook = maSupbookList.begin(); itSupbook != maSupbookList.end(); ++itSupbook)
-        (*itSupbook)->LoadCachedValues();
+    for (auto& rxSupbook : maSupbookList)
+        rxSupbook->LoadCachedValues();
 }
 
 XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :

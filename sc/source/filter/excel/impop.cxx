@@ -1244,8 +1244,8 @@ void ImportExcel::PostDocLoad()
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
     // outlines for all sheets, sets hidden rows and columns (#i11776# after filtered ranges)
-    for (XclImpOutlineListBuffer::iterator itBuffer = pOutlineListBuffer->begin(); itBuffer != pOutlineListBuffer->end(); ++itBuffer)
-        (*itBuffer)->Convert();
+    for (auto& rxBuffer : *pOutlineListBuffer)
+        rxBuffer->Convert();
 
     // document view settings (before visible OLE area)
     GetDocViewSettings().Finalize();

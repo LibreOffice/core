@@ -217,13 +217,10 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     if (!maRowHeights.is_tree_valid())
         return;
 
-    ColRowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
     SCROW nPrevRow = -1;
     ExcColRowFlags nPrevFlags = ExcColRowFlags::NONE;
-    for (; itrFlags != itrFlagsEnd; ++itrFlags)
+    for (const auto& [nRow, nFlags] : maRowFlags)
     {
-        SCROW nRow = itrFlags->first;
-        ExcColRowFlags nFlags = itrFlags->second;
         if (nPrevRow >= 0)
         {
             sal_uInt16 nHeight = 0;
@@ -308,11 +305,8 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     SCROW nPrevRow = -1;
     bool bPrevHidden = false;
-    RowHiddenType::const_iterator itr = maHiddenRows.begin(), itrEnd = maHiddenRows.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& [nRow, bHidden] : maHiddenRows)
     {
-        SCROW nRow = itr->first;
-        bool bHidden = itr->second;
         if (nPrevRow >= 0)
         {
             if (bPrevHidden)

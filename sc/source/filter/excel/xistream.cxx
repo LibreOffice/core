@@ -146,9 +146,12 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
 
             // since the export uses Std97 encryption always we have to request it here
             ::std::vector< sal_uInt16 > aPassVect( 16 );
-            ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
-            for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
-                *aIt = static_cast< sal_uInt16 >( rPassword[nInd] );
+            sal_Int32 nInd = 0;
+            std::for_each(aPassVect.begin(), aPassVect.begin() + nLen,
+                [&rPassword, &nInd](sal_uInt16& rPass) {
+                    rPass = static_cast< sal_uInt16 >( rPassword[nInd] );
+                    ++nInd;
+                });
 
             uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
             OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the sequence!" );
@@ -251,10 +254,11 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
         // copy string to sal_uInt16 array
         ::std::vector< sal_uInt16 > aPassVect( 16 );
         const sal_Unicode* pcChar = rPassword.getStr();
-        const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
-        for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
-            *aIt = static_cast< sal_uInt16 >( *pcChar );
+        std::for_each(aPassVect.begin(), aPassVect.begin() + nLen,
+            [&pcChar](sal_uInt16& rPass) {
+                rPass = static_cast< sal_uInt16 >( *pcChar );
+                ++pcChar;
+            });
 
         // init codec
         mpCodec->InitKey(aPassVect.data(), maSalt.data());

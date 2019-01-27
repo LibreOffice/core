@@ -211,18 +211,17 @@ XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane )
 
     // find the cursor position in the selection list (or add it)
     XclRangeList& rXclSel = maSelData.maXclSelection;
-    bool bFound = false;
-    for( XclRangeVector::const_iterator aIt = rXclSel.begin(), aEnd = rXclSel.end(); !bFound && (aIt != aEnd); ++aIt )
+    auto aIt = std::find_if(rXclSel.begin(), rXclSel.end(),
+        [this](const XclRange& rRange) { return rRange.Contains(maSelData.maXclCursor); });
+    if (aIt != rXclSel.end())
     {
-        bFound = aIt->Contains( maSelData.maXclCursor );
-        if( bFound )
-            maSelData.mnCursorIdx = static_cast< sal_uInt16 >( aIt - rXclSel.begin() );
+        maSelData.mnCursorIdx = static_cast< sal_uInt16 >( std::distance(rXclSel.begin(), aIt) );
     }
-    /*  Cursor cell not found in list? (e.g. inactive pane, or removed in
-        ConvertRangeList(), because Calc cursor on invalid pos)
-        -> insert the valid Excel cursor. */
-    if( !bFound )
+    else
     {
+        /*  Cursor cell not found in list? (e.g. inactive pane, or removed in
+            ConvertRangeList(), because Calc cursor on invalid pos)
+            -> insert the valid Excel cursor. */
         maSelData.mnCursorIdx = static_cast< sal_uInt16 >( rXclSel.size() );
         rXclSel.push_back( XclRange( maSelData.maXclCursor ) );
     }

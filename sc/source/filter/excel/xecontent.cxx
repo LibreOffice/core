@@ -1421,14 +1421,13 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
 {
     const ScRange & rRange = rFormat.GetRange().front();
     ScAddress aAddr = rRange.aStart;
-    for(ScColorScaleEntries::const_iterator itr = rFormat.begin();
-            itr != rFormat.end(); ++itr)
+    for(const auto& rxColorScaleEntry : rFormat)
     {
         // exact position is not important, we allow only absolute refs
 
-        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr[0], aAddr ) );
+        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *rxColorScaleEntry, aAddr ) );
         maCfvoList.AppendRecord( xCfvo );
-        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), itr[0]->GetColor() ) );
+        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), rxColorScaleEntry->GetColor() ) );
         maColList.AppendRecord( xClo );
     }
 }
@@ -1553,10 +1552,9 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, const X
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )
     {
         sal_Int32 nIndex = 0;
-        for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
-                        itr != pCondFmtList->end(); ++itr)
+        for( const auto& rxCondFmt : *pCondFmtList)
         {
-            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **itr, xExtLst, nIndex ));
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *rxCondFmt, xExtLst, nIndex ));
             if( xCondfmtRec->IsValidForXml() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }

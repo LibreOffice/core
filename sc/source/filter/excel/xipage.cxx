@@ -368,18 +368,16 @@ void XclImpPageSettings::Finalize()
 
     // *** page breaks ***
 
-    ScfUInt16Vec::const_iterator aIt, aEnd;
-
-    for( aIt = maData.maHorPageBreaks.begin(), aEnd = maData.maHorPageBreaks.end(); aIt != aEnd; ++aIt )
+    for( const auto& rHorPageBreak : maData.maHorPageBreaks )
     {
-        SCROW nScRow = static_cast< SCROW >( *aIt );
+        SCROW nScRow = static_cast< SCROW >( rHorPageBreak );
         if( nScRow <= MAXROW )
             rDoc.SetRowBreak(nScRow, nScTab, false, true);
     }
 
-    for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); aIt != aEnd; ++aIt )
+    for( const auto& rVerPageBreak : maData.maVerPageBreaks )
     {
-        SCCOL nScCol = static_cast< SCCOL >( *aIt );
+        SCCOL nScCol = static_cast< SCCOL >( rVerPageBreak );
         if( nScCol <= MAXCOL )
             rDoc.SetColBreak(nScCol, nScTab, false, true);
     }
