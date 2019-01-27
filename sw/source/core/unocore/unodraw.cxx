@@ -284,37 +284,20 @@ void    SwFmDrawPage::RemovePageView()
     pPageView = nullptr;
 }
 
-uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj )
+uno::Reference<uno::XInterface> SwFmDrawPage::GetInterface(SdrObject* pObj)
 {
-    uno::Reference< XInterface >  xShape;
-    if( pObj )
-    {
-        SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-
-        SwIterator<SwXShape,SwFormat> aIter(*pFormat);
-        SwXShape* pxShape = aIter.First();
-        if (pxShape)
-        {
-            //tdf#113615 when mapping from SdrObject to XShape via
-            //SwFrameFormat check all the SdrObjects belonging to this
-            //SwFrameFormat to find the right one. In the case of Grouped
-            //objects there can be both the group and the elements of the group
-            //registered here so the first one isn't necessarily the right one
-            while (SwXShape* pNext = aIter.Next())
-            {
-                SvxShape* pSvxShape = pNext->GetSvxShape();
-                if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
-                {
-                    pxShape = pNext;
-                    break;
-                }
-            }
-            xShape =  *static_cast<cppu::OWeakObject*>(pxShape);
-        }
-        else
-            xShape = pObj->getUnoShape();
-    }
-    return xShape;
+    const auto pFormat(::FindFrameFormat(pObj));
+    if(!pObj)
+        return uno::Reference<uno::XInterface>();
+    // tdf#113615 when mapping from SdrObject to XShape via
+    // SwFrameFormat check all the SdrObjects belonging to this
+    // SwFrameFormat to find the right one. In the case of Grouped
+    // objects there can be both the group and the elements of the group
+    // registered here so the first one isn't necessarily the right one
+    const auto xShape(pFormat->FindXShape(*pObj));
+    if(xShape)
+        return xShape;
+    return pObj->getUnoShape();
 }
 
 uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
@@ -582,7 +565,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                                     static_cast< cppu::OWeakObject * > ( this ) );
 
     // we're already registered in the model / SwXDrawPage::add() already called
-    if(pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
+    if(pShape->GetFrameFormat() || !pShape->m_bDescriptor )
         return;
 
     // we're inserted elsewhere already
@@ -716,9 +699,10 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         pTemp = pPam.get();
     UnoActionContext aAction(pDoc);
     pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
-    SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+    pShape->EndListeningAll();
+    auto pFormat = ::FindFrameFormat( pObj );
     if(pFormat)
-        pFormat->Add(pShape);
+        pShape->StartListening(pFormat->GetNotifier());
     pShape->m_bDescriptor = false;
 
     pPam.reset();
@@ -879,13 +863,12 @@ namespace
     }
 }
 
-SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape,
-                   SwDoc const*const pDoc)
-    :
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
-    m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
-    pImpl(new SwShapeDescriptor_Impl(pDoc)),
-    m_bDescriptor(true)
+SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape, SwDoc const*const pDoc)
+    : m_pFrameFormat(nullptr)
+    , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
+    , m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE))
+    , pImpl(new SwShapeDescriptor_Impl(pDoc))
+    , m_bDescriptor(true)
 {
     if(!xShape.is())  // default Ctor
         return;
@@ -918,9 +901,9 @@ SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape,
     SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
     if(pObj)
     {
-        SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-        if(pFormat)
-            pFormat->Add(this);
+        m_pFrameFormat = ::FindFrameFormat( pObj );
+        if(m_pFrameFormat)
+            StartListening(m_pFrameFormat->GetNotifier());
 
         lcl_addShapePropertyEventFactories( *pObj, *this );
         pImpl->bInitializedPropertyNotifier = true;
@@ -947,9 +930,10 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         {
             if ( pSwShape->m_bDescriptor )
             {
-                SwFrameFormat* pFormat = ::FindFrameFormat( pCurrent );
-                if ( pFormat )
-                    pFormat->Add( pSwShape );
+                pSwShape->EndListeningAll();
+                auto pFrameFormat = ::FindFrameFormat( pCurrent );
+                if ( pFrameFormat )
+                    pSwShape->StartListening(pFrameFormat->GetNotifier());
                 pSwShape->m_bDescriptor = false;
             }
 
@@ -967,7 +951,7 @@ SwXShape::~SwXShape()
     SolarMutexGuard aGuard;
     if (xShapeAgg.is())
     {
-        uno::Reference< uno::XInterface >  xRef;
+        uno::Reference<uno::XInterface> xRef;
         xShapeAgg->setDelegator(xRef);
     }
     pImpl.reset();
@@ -1992,9 +1976,16 @@ void SwXShape::removeVetoableChangeListener(
     OSL_FAIL("not implemented");
 }
 
-void SwXShape::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXShape::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
+    else if(auto pFindHint = dynamic_cast<const sw::FindXShapeHint*>(&rHint))
+    {
+        auto pSvxShape(GetSvxShape());
+        if(!pFindHint->m_rxShape.is() || (pSvxShape && pSvxShape->GetSdrObject() == &pFindHint->m_rObject))
+            pFindHint->m_rxShape = *this;
+    }
 }
 
 void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
@@ -2720,8 +2711,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
 {
     SolarMutexGuard aGuard;
     SvxShape* pSvxShape = GetSvxShape();
-    SwFrameFormat* pFormat = GetFrameFormat();
-    if(!(pSvxShape && pFormat))
+    if(!(pSvxShape && GetFrameFormat()))
         throw uno::RuntimeException();
 
     uno::Reference<XShapes> xShapes;
@@ -2751,7 +2741,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
             SdrObject* pObj = pAddShape->GetSdrObject();
             if(pObj)
             {
-                SwDoc* pDoc = pFormat->GetDoc();
+                SwDoc* pDoc = GetFrameFormat()->GetDoc();
                 // set layer of new drawing
                 // object to corresponding invisible layer.
                 if( SdrInventor::FmForm != pObj->GetObjInventor())
@@ -2768,9 +2758,10 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
         }
         pSwShape->m_bDescriptor = false;
         //add the group member to the format of the group
-        SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
-        if(pShapeFormat)
-            pFormat->Add(pSwShape);
+        EndListeningAll();
+        auto pFrameFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
+        if(pFrameFormat)
+            StartListening(pFrameFormat->GetNotifier());
     }
 
 }
