@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#include <avmedia/mediaitem.hxx>
 
 #include <memory>
 
@@ -39,6 +40,8 @@ namespace slideshow
 {
     namespace internal
     {
+        class MediaFileManager;
+
         /** Little class that plays a sound from a URL.
             TODO:
             Must be explicitly disposed (as long as enable_shared_ptr_from_this
@@ -64,7 +67,8 @@ namespace slideshow
             static ::std::shared_ptr<SoundPlayer> create(
                 EventMultiplexer & rEventMultiplexer,
                 const OUString& rSoundURL,
-                const css::uno::Reference< css::uno::XComponentContext>& rComponentContext );
+                const css::uno::Reference< css::uno::XComponentContext>& rComponentContext,
+                MediaFileManager& rMediaFileManager);
 
             virtual ~SoundPlayer() override;
 
@@ -92,12 +96,15 @@ namespace slideshow
             SoundPlayer(
                 EventMultiplexer & rEventMultiplexer,
                 const OUString& rSoundURL,
-                const css::uno::Reference< css::uno::XComponentContext>& rComponentContext );
+                const css::uno::Reference< css::uno::XComponentContext>& rComponentContext,
+                MediaFileManager & rMediaFileManager);
 
             EventMultiplexer & mrEventMultiplexer;
             // TODO(Q3): obsolete when boost::enable_shared_ptr_from_this
             //           is available
             ::std::shared_ptr<SoundPlayer> mThis;
+            // Temp file for pakcage url.
+            ::std::shared_ptr<::avmedia::MediaTempFile> mpMediaTempFile;
             css::uno::Reference< css::media::XPlayer > mxPlayer;
         };
 
