@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_89678b26",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2019-01-27T20:25:07Z",
+      "side": 1,
+      "message": "This one is also used in the Calc navigator, where it isn\u0027t a split button. What we need is to change that tooltip conditionally, only when in Writer. The SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu method might be a good place for that.",
+      "revId": "07673f835d98ce31fce32e0fc2e738da85335b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_696c4f08",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2019-01-27T20:25:07Z",
+      "side": 1,
+      "message": "Why remove the ellipsis (given that this command shows a dialog)?",
+      "revId": "07673f835d98ce31fce32e0fc2e738da85335b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
