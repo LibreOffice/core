@@ -2992,7 +2992,7 @@
       </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~New Style...</value>
+          <value xml:lang="en-US">~New Style from Selection</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">New</value>
@@ -3019,7 +3019,7 @@
       </node>
       <node oor:name=".uno:StyleUpdateByExample" oor:op="replace">
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Update Style</value>
+          <value xml:lang="en-US">~Update Selected Style</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Update</value>
