@@ -859,6 +859,8 @@ void GtkSalMenu::CreateMenuBarWidget()
 void GtkSalMenu::ApplyPersona()
 {
 #if GTK_CHECK_VERSION(3,0,0)
+    if (!mpMenuBarContainerWidget)
+        return;
     assert(mbMenuBar);
     // I'm dubious about the persona theming feature, but as it exists, lets try and support
     // it, apply the image to the mpMenuBarContainerWidget
