@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_89cb0b1d",
+        "filename": "external/nss/UnpackedTarball_nss.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-27T16:42:40Z",
+      "side": 1,
+      "message": "there is no reason to restrict application of this patch to WNT, is there?  (while it is only necessary for WNT, it can be beneficial to keep the patched state consistent, if only to make subsequent patches apply cleanly across all configurations)",
+      "revId": "34c002c54ab90c07e550202b2aec88fea5a73dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_a9c6c715",
+        "filename": "external/nss/nss.bzmozilla1238154.patch",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-27T16:42:40Z",
+      "side": 1,
+      "message": "as configure is apparently not regenerated from configure.in in the configuration/build steps called from ExternalProject_nss.mk, there is little benefit in modifying configure.in in addition to configure (and most existing patches in external/nss/ don\u0027t change it, except for aix.patch; I would suggest leaving it alone here, too)",
+      "revId": "34c002c54ab90c07e550202b2aec88fea5a73dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_c94b43ae",
+        "filename": "external/nss/nss.bzmozilla1238154.patch",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-27T16:42:40Z",
+      "side": 1,
+      "message": "the *.orig files are artefacts of previous patches having been applied; there is no reason to modify those files",
+      "revId": "34c002c54ab90c07e550202b2aec88fea5a73dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
