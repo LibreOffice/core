@@ -41,6 +41,7 @@ namespace slideshow
         class ScreenUpdater;
         class UnoViewContainer;
         class CursorManager;
+        class MediaFileManager;
         class SubsettableShapeManager;
 
         /** Common arguments for slideshow objects.
@@ -72,6 +73,9 @@ namespace slideshow
                 Activities queue, where repeating activities are
                 to be scheduled.
 
+                @param rMediaFileManager
+                To handle media file with package urls.
+
                 @param rUserEventQueue
                 User event queue
 
@@ -88,6 +92,7 @@ namespace slideshow
                               ActivitiesQueue&                                  rActivitiesQueue,
                               UserEventQueue&                                   rUserEventQueue,
                               CursorManager&                                    rCursorManager,
+                              MediaFileManager&                                 rMediaFileManager,
                               const UnoViewContainer&                           rViewContainer,
                               const css::uno::Reference< css::uno::XComponentContext>&    rComponentContext );
             void dispose();
@@ -99,6 +104,7 @@ namespace slideshow
             ActivitiesQueue&                                mrActivitiesQueue;
             UserEventQueue&                                 mrUserEventQueue;
             CursorManager&                                  mrCursorManager;
+            MediaFileManager&                               mrMediaFileManager;
             const UnoViewContainer&                         mrViewContainer;
             css::uno::Reference< css::uno::XComponentContext>   mxComponentContext;
         };
