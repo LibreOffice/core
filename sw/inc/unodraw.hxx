@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNODRAW_HXX
 #define INCLUDED_SW_INC_UNODRAW_HXX
 
+#include <svl/listener.hxx>
 #include <svx/fmdpage.hxx>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
@@ -119,13 +120,13 @@ cppu::WeakAggImplHelper6
     css::drawing::XShape
 >
 SwXShapeBaseClass;
-class SwXShape : public SwXShapeBaseClass,
-    public SwClient
+class SwXShape : public SwXShapeBaseClass, public SvtListener
 {
     friend class SwXGroupShape;
     friend class SwXDrawPage;
     friend class SwFmDrawPage;
 
+    SwFrameFormat* m_pFrameFormat;
     css::uno::Reference< css::uno::XAggregation > xShapeAgg;
     // reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
@@ -189,8 +190,6 @@ class SwXShape : public SwXShapeBaseClass,
 
 protected:
     virtual ~SwXShape() override;
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
@@ -238,8 +237,10 @@ public:
     virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
     virtual OUString SAL_CALL getShapeType(  ) override;
 
+    virtual void Notify(const SfxHint&) override;
+
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl.get();}
-    SwFrameFormat*               GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwFrameFormat*               GetFrameFormat() const { return m_pFrameFormat; }
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() {return xShapeAgg;}
 
     // helper
