@@ -131,10 +131,25 @@ bool AVMEDIA_DLLPUBLIC EmbedMedia(
         ::css::uno::Reference<::css::io::XInputStream> const& xInputStream =
             ::css::uno::Reference<::css::io::XInputStream>());
 
+bool AVMEDIA_DLLPUBLIC CreateMediaTempFile(
+        ::css::uno::Reference<::css::io::XInputStream> const& xInStream,
+        OUString& o_rTempFileURL,
+        const OUString& rDesiredExtension);
+
 OUString GetFilename(OUString const& rSourceURL);
 
 ::css::uno::Reference< ::css::io::XStream> CreateStream(
     const ::css::uno::Reference< ::css::embed::XStorage>& xStorage, const OUString& rFilename);
+
+struct AVMEDIA_DLLPUBLIC MediaTempFile
+{
+    OUString const m_TempFileURL;
+    MediaTempFile(OUString const& rURL)
+        : m_TempFileURL(rURL)
+    {}
+    ~MediaTempFile();
+};
+
 }
 
 #endif

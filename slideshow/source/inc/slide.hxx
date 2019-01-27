@@ -153,6 +153,7 @@ namespace slideshow
 
         class EventQueue;
         class CursorManager;
+        class MediaFileManager;
         class EventMultiplexer;
         class ActivitiesQueue;
         class UserEventQueue;
@@ -195,6 +196,7 @@ namespace slideshow
                                     ActivitiesQueue&                                    rActivitiesQueue,
                                     UserEventQueue&                                     rUserEventQueue,
                                     CursorManager&                                      rCursorManager,
+                                    MediaFileManager&                                      rMediaFileManager,
                                     const UnoViewContainer&                             rViewContainer,
                                     const css::uno::Reference< css::uno::XComponentContext >&      xContext,
                                     const ShapeEventListenerMap&                        rShapeListenerMap,
