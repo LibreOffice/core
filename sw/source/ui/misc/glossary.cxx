@@ -262,6 +262,22 @@ void SwGlossaryDlg::dispose()
     SvxStandardDialog::dispose();
 }
 
+namespace
+{
+
+OUString getCurrentGlossary()
+{
+    const OUString sTemp{ ::GetCurrGlosGroup() };
+
+    // the zeroth path is not being recorded!
+    if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
+        return sTemp.getToken(0, GLOS_DELIM);
+
+    return sTemp;
+}
+
+}
+
 // select new group
 IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
 {
@@ -299,11 +315,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
-        OUString sTemp(::GetCurrGlosGroup());
-        // the zeroth path is not being recorded!
-        if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
-            sTemp = sTemp.getToken(0, GLOS_DELIM);
-        aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
+        aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, getCurrentGlossary()));
         aReq.Done();
     }
     Invalidate(InvalidateFlags::Update);
@@ -319,11 +331,7 @@ void SwGlossaryDlg::Apply()
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
-        OUString sTemp(::GetCurrGlosGroup());
-        // the zeroth path is not being recorded!
-        if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
-            sTemp = sTemp.getToken(0, GLOS_DELIM);
-        aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
+        aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, getCurrentGlossary()));
         aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
         aReq.Done();
     }
@@ -474,11 +482,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
             if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
             {
                 SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                OUString sTemp(::GetCurrGlosGroup());
-                // the zeroth path is not being recorded!
-                if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
-                    sTemp = sTemp.getToken(0, GLOS_DELIM);
-                aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
+                aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, getCurrentGlossary()));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
                 aReq.Done();
