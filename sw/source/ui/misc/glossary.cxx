@@ -690,15 +690,16 @@ void SwGlossaryDlg::Init()
         OUString sGroupName(pGlossaryHdl->GetGroupName(nId, &sTitle));
         if(sGroupName.isEmpty())
             continue;
+        const OUString sName{ sGroupName.getToken( 0, GLOS_DELIM ) };
         if(sTitle.isEmpty())
-            sTitle = sGroupName.getToken( 0, GLOS_DELIM );
+            sTitle = sName;
         if(sTitle == sMyAutoTextEnglish)
             sTitle = sMyAutoTextTranslated;
         SvTreeListEntry* pEntry = m_pCategoryBox->InsertEntry( sTitle );
         const sal_Int32 nPath = sGroupName.getToken( 1, GLOS_DELIM ).toInt32();
 
         GroupUserData* pData = new GroupUserData;
-        pData->sGroupName = sGroupName.getToken(0, GLOS_DELIM);
+        pData->sGroupName = sName;
         pData->nPathIdx = static_cast< sal_uInt16 >(nPath);
         pData->bReadonly = pGlossaryHdl->IsReadOnly(&sGroupName);
 
