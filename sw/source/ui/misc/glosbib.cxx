@@ -147,7 +147,8 @@ void SwGlossaryGroupDlg::Apply()
 
     for (const auto& removedStr : m_RemovedArr)
     {
-        const OUString sDelGroup = removedStr.getToken(0, '\t');
+        sal_Int32 nIdx{ 0 };
+        const OUString sDelGroup = removedStr.getToken(0, '\t', nIdx);
         if( sDelGroup == aActGroup )
         {
             //when the current group is deleted, the current group has to be relocated
@@ -157,7 +158,7 @@ void SwGlossaryGroupDlg::Apply()
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
-        OUString sTitle( removedStr.getToken(1, '\t') );
+        OUString sTitle( removedStr.getToken(0, '\t', nIdx) );
         const OUString sMsg(SwResId(STR_QUERY_DELETE_GROUP1)
                             + sTitle
                             + SwResId(STR_QUERY_DELETE_GROUP2));
@@ -172,9 +173,10 @@ void SwGlossaryGroupDlg::Apply()
     //don't rename before there was one
     for (auto it(m_RenamedArr.cbegin()); it != m_RenamedArr.cend(); ++it)
     {
-        OUString const sOld(it->getToken(0, RENAME_TOKEN_DELIM));
-        OUString sNew(it->getToken(1, RENAME_TOKEN_DELIM));
-        OUString const sTitle(it->getToken(2, RENAME_TOKEN_DELIM));
+        sal_Int32 nIdx{ 0 };
+        OUString const sOld(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
+        OUString sNew(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
+        OUString const sTitle(it->getToken(0, RENAME_TOKEN_DELIM, nIdx));
         pGlosHdl->RenameGroup(sOld, sNew, sTitle);
         if (it == m_RenamedArr.begin())
         {
