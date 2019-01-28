@@ -355,6 +355,13 @@ DECLARE_RTFIMPORT_TEST(testTdf112211_2, "tdf112211-2.rtf")
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf122430, "tdf122430.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 18, Actual  : 12', i.e. the font was smaller than expected.
+    CPPUNIT_ASSERT_EQUAL(18.0f, getProperty<float>(getRun(getParagraph(1), 2), "CharHeight"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo49892, "fdo49892.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
