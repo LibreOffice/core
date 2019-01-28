@@ -34,7 +34,6 @@
 
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
-namespace sd { class CustomAnimationPresets; }
 
 namespace weld { class ComboBox; }
 
@@ -130,8 +129,6 @@ private:
 private:
     ViewShellBase& mrBase;
 
-    const CustomAnimationPresets* mpCustomAnimationPresets;
-
     // UI Elements
     VclPtr<FixedText>   mpFTAnimation;
     VclPtr<CustomAnimationList> mpCustomAnimationList;
@@ -173,16 +170,11 @@ private:
     css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
     css::uno::Reference< css::drawing::XDrawView > mxView;
 
-    /** The mpCustomAnimationPresets is initialized either on demand or
+    /** The CustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this
         class.  This timer is responsible for the later.
     */
     Timer maLateInitTimer;
-
-    /** This method initializes the mpCustomAnimationPresets on demand and
-        returns a reference to the list.
-    */
-    const CustomAnimationPresets& getPresets();
 
     MotionPathTagVector maMotionPathTags;
 

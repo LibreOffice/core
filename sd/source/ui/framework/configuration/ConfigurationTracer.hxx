@@ -23,6 +23,7 @@
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace sd { namespace framework {

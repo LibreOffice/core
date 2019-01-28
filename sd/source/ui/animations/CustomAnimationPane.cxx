@@ -124,7 +124,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
-    mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -532,7 +531,7 @@ void CustomAnimationPane::updateControls()
     {
         CustomAnimationEffectPtr pEffect = maListSelection.front();
 
-        OUString aUIName( getPresets().getUINameForPresetId( pEffect->getPresetId() ) );
+        OUString aUIName( CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId( pEffect->getPresetId() ) );
 
         OUString aTemp( maStrModify );
 
@@ -542,7 +541,7 @@ void CustomAnimationPane::updateControls()
             mpFTEffect->SetText( aTemp );
         }
 
-        CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
+        CustomAnimationPresetPtr pDescriptor = CustomAnimationPresets::getCustomAnimationPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
         {
             PropertySubControl* pSubControl = nullptr;
@@ -2387,13 +2386,6 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     xRoot->appendChild( xAnimationNode );
 
     SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
-}
-
-const CustomAnimationPresets& CustomAnimationPane::getPresets()
-{
-    if (mpCustomAnimationPresets == nullptr)
-        mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
-    return *mpCustomAnimationPresets;
 }
 
 // ICustomAnimationListController
