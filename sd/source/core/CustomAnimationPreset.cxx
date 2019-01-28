@@ -35,6 +35,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/lok.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
 
 #include <tools/debug.hxx>
@@ -521,22 +524,27 @@ void CustomAnimationPresets::changePresetSubType( const CustomAnimationEffectPtr
     }
 }
 
-CustomAnimationPresets* CustomAnimationPresets::mpCustomAnimationPresets = nullptr;
+std::map<OUString, CustomAnimationPresets*>  CustomAnimationPresets::mpCustomAnimationPresetsMap;
 
 const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets()
 {
-    if( !mpCustomAnimationPresets )
-    {
-        SolarMutexGuard aGuard;
+    // Support localization per-view. Currently not useful for Desktop
+    // but very much critical for LOK. The cache now is per-language.
+    const OUString aLang = comphelper::LibreOfficeKit::isActive()
+                               ? comphelper::LibreOfficeKit::getLanguageTag().getLanguage()
+                               : SvtSysLocaleOptions().GetLanguageTag().getLanguage();
 
-        if( !mpCustomAnimationPresets )
-        {
-            mpCustomAnimationPresets = new sd::CustomAnimationPresets();
-            mpCustomAnimationPresets->importResources();
-        }
-    }
+    SolarMutexGuard aGuard;
+    const auto it = mpCustomAnimationPresetsMap.find(aLang);
+    if (it != mpCustomAnimationPresetsMap.end())
+        return *it->second;
 
-    return *mpCustomAnimationPresets;
+    // Note: we are invoked recursively(!), so we must set the instance pointer
+    // in the cache map before we importResources, lest we get in infinite loop.
+    sd::CustomAnimationPresets* pCustomAnimationPresets = new sd::CustomAnimationPresets();
+    mpCustomAnimationPresetsMap[aLang] = pCustomAnimationPresets;
+    pCustomAnimationPresets->importResources();
+    return *pCustomAnimationPresets;
 }
 
 Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 nPresetClass ) const

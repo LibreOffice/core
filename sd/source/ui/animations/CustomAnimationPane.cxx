@@ -124,7 +124,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
-    mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -532,7 +531,7 @@ void CustomAnimationPane::updateControls()
     {
         CustomAnimationEffectPtr pEffect = maListSelection.front();
 
-        OUString aUIName( getPresets().getUINameForPresetId( pEffect->getPresetId() ) );
+        OUString aUIName( CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId( pEffect->getPresetId() ) );
 
         OUString aTemp( maStrModify );
 
@@ -542,7 +541,7 @@ void CustomAnimationPane::updateControls()
             mpFTEffect->SetText( aTemp );
         }
 
-        CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
+        CustomAnimationPresetPtr pDescriptor = CustomAnimationPresets::getCustomAnimationPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
         {
             PropertySubControl* pSubControl = nullptr;
@@ -994,7 +993,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
             rValue >>= aPresetSubType;
             if( aPresetSubType != pEffect->getPresetSubType() )
             {
-                getPresets().changePresetSubType( pEffect, aPresetSubType );
+                CustomAnimationPresets::getCustomAnimationPresets().changePresetSubType( pEffect, aPresetSubType );
                 bEffectChanged = true;
             }
         }
@@ -1091,7 +1090,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
     sal_Int32 nMaxParaDepth = 0;
 
     // get options from selected effects
-    const CustomAnimationPresets& rPresets (getPresets());
+    const CustomAnimationPresets& rPresets (CustomAnimationPresets::getCustomAnimationPresets());
     for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
         EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
@@ -2157,7 +2156,7 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 {
     PresetCategoryList rCategoryList;
     sal_uInt16 nPosition = mpLBCategory->GetSelectedEntryPos();
-    const CustomAnimationPresets& rPresets (getPresets());
+    const CustomAnimationPresets& rPresets (CustomAnimationPresets::getCustomAnimationPresets());
     switch(nPosition)
     {
         case 0:rCategoryList = rPresets.getEntrancePresets();break;
@@ -2244,7 +2243,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback, Timer *, void)
 {
     // Call getPresets() to initiate the (expensive) construction of the
     // presets list.
-    getPresets();
+    CustomAnimationPresets::getCustomAnimationPresets();
 
     // update selection and control states
     onSelectionChanged();
@@ -2387,13 +2386,6 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     xRoot->appendChild( xAnimationNode );
 
     SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
-}
-
-const CustomAnimationPresets& CustomAnimationPane::getPresets()
-{
-    if (mpCustomAnimationPresets == nullptr)
-        mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
-    return *mpCustomAnimationPresets;
 }
 
 // ICustomAnimationListController
