@@ -608,6 +608,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     if(aMiscOptions.IsExperimentalMode() && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
+        Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
         OUString sMigrEnvVal;
         osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
             &sMigrEnvVal.pData);
@@ -615,14 +616,18 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             bNeedMigration = true;
         else
         {
-            MigrationWarnDialog aWarnDlg(GetFrameWeld(m_pImpl->getModel_noCreate()));
-            bNeedMigration = aWarnDlg.run() == RET_OK;
+            Reference<XPropertySet> const xPropSet(xRootStorage, UNO_QUERY_THROW);
+            sal_Int32 nOpenMode(0);
+            if ((xPropSet->getPropertyValue("OpenMode") >>= nOpenMode)
+                && (nOpenMode & css::embed::ElementModes::WRITE))
+            {
+                MigrationWarnDialog aWarnDlg(GetFrameWeld(m_pImpl->getModel_noCreate()));
+                bNeedMigration = aWarnDlg.run() == RET_OK;
+            }
         }
         if (bNeedMigration)
         {
             // back up content xml file if migration was successful
-            Reference<XStorage> xRootStorage = m_pImpl->getOrCreateRootStorage();
-
             constexpr char BACKUP_XML_NAME[] = "content_before_migration.xml";
             try
             {
