@@ -1201,14 +1201,6 @@ class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
     GtkWidget* m_pWidget;
-private:
-    bool m_bTakeOwnership;
-    bool m_bFrozen;
-    gulong m_nFocusInSignalId;
-    gulong m_nFocusOutSignalId;
-    gulong m_nKeyPressSignalId;
-    gulong m_nKeyReleaseSignalId;
-    gulong m_nSizeAllocateSignalId;
 
     static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
@@ -1233,6 +1225,15 @@ private:
     {
         m_aFocusOutHdl.Call(*this);
     }
+
+private:
+    bool m_bTakeOwnership;
+    bool m_bFrozen;
+    gulong m_nFocusInSignalId;
+    gulong m_nFocusOutSignalId;
+    gulong m_nKeyPressSignalId;
+    gulong m_nKeyReleaseSignalId;
+    gulong m_nSizeAllocateSignalId;
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -6586,11 +6587,14 @@ private:
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pTextRenderer;
     GtkMenu* m_pMenu;
+    GtkWidget* m_pToggleButton;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<int> m_aSeparatorRows;
     gboolean m_bPopupActive;
     bool m_bAutoComplete;
+    gulong m_nToggleFocusInSignalId;
+    gulong m_nToggleFocusOutSignalId;
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
     gulong m_nKeyPressEventSignalId;
@@ -6941,15 +6945,29 @@ private:
         g_signal_connect(m_pMenu, "key-press-event", G_CALLBACK(signalKeyPress), this);
     }
 
+    static void find_toggle_button(GtkWidget *pWidget, gpointer user_data)
+    {
+        if (g_strcmp0(gtk_widget_get_name(pWidget), "GtkToggleButton") == 0)
+        {
+            GtkWidget **ppToggleButton = static_cast<GtkWidget**>(user_data);
+            *ppToggleButton = pWidget;
+        }
+        else if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_forall(GTK_CONTAINER(pWidget), find_toggle_button, user_data);
+    }
+
 public:
     GtkInstanceComboBox(GtkComboBox* pComboBox, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBox), bTakeOwnership)
         , m_pComboBox(pComboBox)
         , m_pTreeModel(gtk_combo_box_get_model(m_pComboBox))
         , m_pMenu(nullptr)
+        , m_pToggleButton(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
+        , m_nToggleFocusInSignalId(0)
+        , m_nToggleFocusOutSignalId(0)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
         , m_nAutoCompleteIdleId(0)
@@ -6990,6 +7008,9 @@ public:
             m_nEntryFocusOutSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
+
+        find_toggle_button(GTK_WIDGET(m_pComboBox), &m_pToggleButton);
+
         install_menu_typeahead();
     }
 
@@ -7262,6 +7283,10 @@ public:
         }
         else
             g_signal_handler_block(m_pComboBox, m_nKeyPressEventSignalId);
+        if (m_nToggleFocusInSignalId)
+            g_signal_handler_block(m_pToggleButton, m_nToggleFocusInSignalId);
+        if (m_nToggleFocusOutSignalId)
+            g_signal_handler_block(m_pToggleButton, m_nToggleFocusOutSignalId);
         g_signal_handler_block(m_pComboBox, m_nChangedSignalId);
         g_signal_handler_block(m_pComboBox, m_nPopupShownSignalId);
         GtkInstanceContainer::disable_notify_events();
@@ -7272,6 +7297,10 @@ public:
         GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pComboBox, m_nPopupShownSignalId);
         g_signal_handler_unblock(m_pComboBox, m_nChangedSignalId);
+        if (m_nToggleFocusInSignalId)
+            g_signal_handler_unblock(m_pToggleButton, m_nToggleFocusInSignalId);
+        if (m_nToggleFocusOutSignalId)
+            g_signal_handler_unblock(m_pToggleButton, m_nToggleFocusOutSignalId);
         if (GtkEntry* pEntry = get_entry())
         {
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
@@ -7317,6 +7346,18 @@ public:
         return m_bPopupActive;
     }
 
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
+    {
+        m_nToggleFocusInSignalId = g_signal_connect(m_pToggleButton, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        weld::Widget::connect_focus_in(rLink);
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
+    {
+        m_nToggleFocusOutSignalId = g_signal_connect(m_pToggleButton, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+        weld::Widget::connect_focus_out(rLink);
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         if (m_nAutoCompleteIdleId)
@@ -7329,6 +7370,10 @@ public:
         }
         else
             g_signal_handler_disconnect(m_pComboBox, m_nKeyPressEventSignalId);
+        if (m_nToggleFocusInSignalId)
+            g_signal_handler_disconnect(m_pToggleButton, m_nToggleFocusInSignalId);
+        if (m_nToggleFocusOutSignalId)
+            g_signal_handler_disconnect(m_pToggleButton, m_nToggleFocusOutSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nPopupShownSignalId);
     }
