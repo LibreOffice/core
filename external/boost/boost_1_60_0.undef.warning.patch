@@ -1,15 +1,9 @@
 --- a/b/boost/boost/config/workaround.hpp
 +++ a/b/boost/boost/config/workaround.hpp
-@@ -237,6 +237,19 @@
+@@ -237,6 +237,13 @@
  #else
  #define BOOST_INTEL_WORKAROUND_GUARD 0
  #endif
-+
-+#ifndef BOOST_GCC_VERSION
-+#define BOOST_GCC_VERSION_WORKAROUND_GUARD 1
-+#else
-+#define BOOST_GCC_VERSION_WORKAROUND_GUARD 0
-+#endif
 +
 +#ifndef __clang_major__
 +#define __clang_major___WORKAROUND_GUARD 1
