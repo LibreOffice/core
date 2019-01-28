@@ -67,6 +67,47 @@
       "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_64459670",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-01-28T14:08:30Z",
+      "side": 1,
+      "message": "Note that nFGStartOffset/nFGEndOffset is the \"relative\" index (w.r.t to the current formula-group) of the first/last cell that needs to be read from the current formula-group. \n\nnRowsToRead is the just the number of rows pending read from the current cell (inclusive) but the current cell need not be at the beginning of the formula-group so we need the relative index (w.r.t current FG) of current cell. This is already calculated in nFGStartOffset. Also all of nRowsToRead cells from nFGStartOffset need not be inside this formula-group (It is possible to have another FG starting just after the current FG\u0027s last cell), so we need to upper-bound the end-offset by \"FG.length - 1\".",
+      "parentUuid": "1f485f77_3bf9fd7f",
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_643a36e8",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-01-28T14:08:30Z",
+      "side": 1,
+      "message": "This is one place where dirty cells in the visible area is collected to find the smallest bounding range. Only this range is then passed to EnsureFormulaCellResults() below which recalcs only the dirty subspans of this range and the dependencies of these dirty subspans recursively.",
+      "range": {
+        "startLine": 1830,
+        "startChar": 12,
+        "endLine": 1833,
+        "endChar": 48
+      },
+      "revId": "80710b4a73989306f467454fa11da2b09909b4dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
