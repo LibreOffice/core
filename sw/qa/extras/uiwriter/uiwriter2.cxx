@@ -22,6 +22,7 @@
 #include <wrtsh.hxx>
 #include <redline.hxx>
 #include <UndoManager.hxx>
+#include <fmtornt.hxx>
 
 namespace
 {
@@ -43,6 +44,7 @@ public:
     void testTdf105413();
     void testTdf101873();
     void testTableWidth();
+    void testTdf122942();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -56,6 +58,7 @@ public:
     CPPUNIT_TEST(testTdf105413);
     CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST(testTableWidth);
+    CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -495,6 +498,37 @@ void SwUiWriterTest2::testTableWidth()
                                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
                          getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
+void SwUiWriterTest2::testTdf122942()
+{
+    load(DATA_DIRECTORY, "tdf122942.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    // Do the moral equivalent of mouse button down, move and up.
+    // Start creating a custom shape that overlaps with the rounded rectangle
+    // already present in the document.
+    Point aStartPos(8000, 3000);
+    pWrtShell->BeginCreate(static_cast<sal_uInt16>(OBJ_CUSTOMSHAPE), aStartPos);
+
+    // Set its size.
+    Point aMovePos(10000, 5000);
+    pWrtShell->MoveCreate(aMovePos);
+
+    // Finish creation.
+    pWrtShell->EndCreate(SdrCreateCmd::ForceEnd);
+
+    // Make sure that the shape is inserted.
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
+
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 0; Actual  : 1030', i.e. the shape was below the
+    // paragraph mark, not above it.
+    const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
+    CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
