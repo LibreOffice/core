@@ -101,7 +101,7 @@ class tdf117276(UITestCase):
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
         xTreeList = xCheckListMenu.getChild("check_list_box")
 
-        x8000Entry = xTreeList.getChild("0")
+        x8000Entry = xTreeList.getChild("1") # check "8000"
         x8000Entry.executeAction("CLICK", tuple())
 
         xOkBtn = xFloatWindow.getChild("ok")
