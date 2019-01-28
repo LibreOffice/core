@@ -2415,8 +2415,10 @@ private:
         hide();
         m_aFunc(GtkToVcl(ret));
         m_aFunc = nullptr;
+        // move the self pointer, otherwise it might be de-allocated by time we try to reset it
+        std::shared_ptr<GtkInstanceDialog> me = std::move(m_xRunAsyncSelf);
         m_xDialogController.reset();
-        m_xRunAsyncSelf.reset();
+        me.reset();
     }
 
 public:
