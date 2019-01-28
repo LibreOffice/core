@@ -467,7 +467,7 @@
                 <child>
                   <object class="GtkEntry" id="entry_name">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
