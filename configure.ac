@@ -11,7 +11,7 @@ dnl in order to create a configure script.
 
 AC_INIT([LibreOffice],[6.3.0.0.alpha0+],[],[],[http://documentfoundation.org/])
 
-AC_PREREQ([2.59])
+AC_PREREQ([2.68])
 
 if test -n "$BUILD_TYPE"; then
     AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
