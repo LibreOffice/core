@@ -947,22 +947,22 @@ void Invocation_Impl::fillInfoForMethod
     rInfo.aType = aReturnType;
     Sequence<ParamInfo> aParamInfos = xMethod->getParameterInfos();
     sal_Int32 nParamCount = aParamInfos.getLength();
-    if( nParamCount > 0 )
+    if( nParamCount <= 0 )
+        return;
+
+    const ParamInfo* pInfo = aParamInfos.getConstArray();
+
+    rInfo.aParamTypes.realloc( nParamCount );
+    Type* pParamTypes = rInfo.aParamTypes.getArray();
+    rInfo.aParamModes.realloc( nParamCount );
+    ParamMode* pParamModes = rInfo.aParamModes.getArray();
+
+    for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
     {
-        const ParamInfo* pInfo = aParamInfos.getConstArray();
-
-        rInfo.aParamTypes.realloc( nParamCount );
-        Type* pParamTypes = rInfo.aParamTypes.getArray();
-        rInfo.aParamModes.realloc( nParamCount );
-        ParamMode* pParamModes = rInfo.aParamModes.getArray();
-
-        for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
-        {
-            Reference< XIdlClass > xParamClass = pInfo[i].aType;
-            Type aParamType( xParamClass->getTypeClass(), xParamClass->getName() );
-            pParamTypes[ i ] = aParamType;
-            pParamModes[ i ] = pInfo[i].aMode;
-        }
+        Reference< XIdlClass > xParamClass = pInfo[i].aType;
+        Type aParamType( xParamClass->getTypeClass(), xParamClass->getName() );
+        pParamTypes[ i ] = aParamType;
+        pParamModes[ i ] = pInfo[i].aMode;
     }
 }
 

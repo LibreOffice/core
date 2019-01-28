@@ -1134,121 +1134,121 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
         }
     }
-    if (xVirtualMachine.is())
+    if (!xVirtualMachine.is())
+        return;
+
+    try
     {
-        try
+        jvmaccess::VirtualMachine::AttachGuard aAttachGuard(
+            xVirtualMachine);
+        JNIEnv * pJNIEnv = aAttachGuard.getEnvironment();
+
+        // call java.lang.System.setProperty
+        // String setProperty( String key, String value)
+        jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
+        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java/lang/System", nullptr);
+        jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.setProperty", nullptr);
+
+        jstring jsPropName= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName.getStr()), aPropertyName.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
+
+        // remove the property if it does not have a value ( user left the dialog field empty)
+        // or if the port is set to 0
+        aPropertyValue= aPropertyValue.trim();
+        if( aPropertyValue.isEmpty() ||
+           ( ( aPropertyName == "ftp.proxyPort" || aPropertyName == "http.proxyPort" /*|| aPropertyName == "socksProxyPort"*/ ) && aPropertyValue == "0" )
+          )
         {
-            jvmaccess::VirtualMachine::AttachGuard aAttachGuard(
-                xVirtualMachine);
-            JNIEnv * pJNIEnv = aAttachGuard.getEnvironment();
+            // call java.lang.System.getProperties
+            jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.getProperties", nullptr);
+            jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.getProperties", nullptr);
+            // call java.util.Properties.remove
+            jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java/util/Properties", nullptr);
+            jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.util.Properties.remove", nullptr);
+            pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
 
-            // call java.lang.System.setProperty
-            // String setProperty( String key, String value)
-            jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java/lang/System", nullptr);
-            jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.setProperty", nullptr);
-
-            jstring jsPropName= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName.getStr()), aPropertyName.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-
-            // remove the property if it does not have a value ( user left the dialog field empty)
-            // or if the port is set to 0
-            aPropertyValue= aPropertyValue.trim();
-            if( aPropertyValue.isEmpty() ||
-               ( ( aPropertyName == "ftp.proxyPort" || aPropertyName == "http.proxyPort" /*|| aPropertyName == "socksProxyPort"*/ ) && aPropertyValue == "0" )
-              )
+            // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+            // has a value for two java properties
+            if (!aPropertyName2.isEmpty())
             {
-                // call java.lang.System.getProperties
-                jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.getProperties", nullptr);
-                jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.getProperties", nullptr);
-                // call java.util.Properties.remove
-                jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java/util/Properties", nullptr);
-                jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.util.Properties.remove", nullptr);
-                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
-
-                // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
-                // has a value for two java properties
-                if (!aPropertyName2.isEmpty())
-                {
-                    jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                    pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName2);
-                }
-            }
-            else
-            {
-                // Change the Value of the property
-                jstring jsPropValue= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyValue.getStr()), aPropertyValue.getLength());
+                jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
                 if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-
-                // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
-                // has a value for two java properties
-                if (!aPropertyName2.isEmpty())
-                {
-                    jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                    jsPropValue= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyValue.getStr()), aPropertyValue.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                    pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName2, jsPropValue);
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-                }
+                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName2);
             }
+        }
+        else
+        {
+            // Change the Value of the property
+            jstring jsPropValue= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyValue.getStr()), aPropertyValue.getLength());
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
+            pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
 
-            // If the settings for Security and NetAccess changed then we have to notify the SandboxSecurity
-            // SecurityManager
-            // call System.getSecurityManager()
-            if (bSecurityChanged)
+            // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+            // has a value for two java properties
+            if (!aPropertyName2.isEmpty())
             {
-                jmethodID jmGetSecur= pJNIEnv->GetStaticMethodID( jcSystem,"getSecurityManager","()Ljava/lang/SecurityManager;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.getSecurityManager", nullptr);
-                jobject joSecur= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetSecur);
-                if (joSecur != nullptr)
-                {
-                    // Make sure the SecurityManager is our SandboxSecurity
-                    // FindClass("com.sun.star.lib.sandbox.SandboxSecurityManager" only worked at the first time
-                    // this code was executed. Maybe it is a security feature. However, all attempts to debug the
-                    // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
+                jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
+                jsPropValue= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyValue.getStr()), aPropertyValue.getLength());
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
+                pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName2, jsPropValue);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
+            }
+        }
+
+        // If the settings for Security and NetAccess changed then we have to notify the SandboxSecurity
+        // SecurityManager
+        // call System.getSecurityManager()
+        if (bSecurityChanged)
+        {
+            jmethodID jmGetSecur= pJNIEnv->GetStaticMethodID( jcSystem,"getSecurityManager","()Ljava/lang/SecurityManager;");
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetStaticMethodID java.lang.System.getSecurityManager", nullptr);
+            jobject joSecur= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetSecur);
+            if (joSecur != nullptr)
+            {
+                // Make sure the SecurityManager is our SandboxSecurity
+                // FindClass("com.sun.star.lib.sandbox.SandboxSecurityManager" only worked at the first time
+                // this code was executed. Maybe it is a security feature. However, all attempts to debug the
+                // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
 //                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
 //                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity");
 //                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
-                    // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
-                    jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
-                    jclass jcClass= pJNIEnv->FindClass("java/lang/Class");
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java.lang.Class", nullptr);
-                    jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.lang.Class.getName", nullptr);
-                    jstring jsClass= static_cast<jstring>(pJNIEnv->CallObjectMethod( jcSec, jmName));
-                    const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, nullptr);
-                    OUString sName(reinterpret_cast<sal_Unicode const *>(jcharName));
-                    bool bIsSandbox;
-                    bIsSandbox = sName == "com.sun.star.lib.sandbox.SandboxSecurity";
-                    pJNIEnv->ReleaseStringChars( jsClass, jcharName);
+                // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
+                jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
+                jclass jcClass= pJNIEnv->FindClass("java/lang/Class");
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java.lang.Class", nullptr);
+                jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.lang.Class.getName", nullptr);
+                jstring jsClass= static_cast<jstring>(pJNIEnv->CallObjectMethod( jcSec, jmName));
+                const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, nullptr);
+                OUString sName(reinterpret_cast<sal_Unicode const *>(jcharName));
+                bool bIsSandbox;
+                bIsSandbox = sName == "com.sun.star.lib.sandbox.SandboxSecurity";
+                pJNIEnv->ReleaseStringChars( jsClass, jcharName);
 
-                    if (bIsSandbox)
-                    {
-                        // call SandboxSecurity.reset
-                        jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset", nullptr);
-                        pJNIEnv->CallVoidMethod( joSecur, jmReset);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset", nullptr);
-                    }
+                if (bIsSandbox)
+                {
+                    // call SandboxSecurity.reset
+                    jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset", nullptr);
+                    pJNIEnv->CallVoidMethod( joSecur, jmReset);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset", nullptr);
                 }
             }
         }
-        catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw css::lang::WrappedTargetRuntimeException(
-                "jvmaccess::VirtualMachine::AttachGuard::CreationException",
-                static_cast< cppu::OWeakObject * >(this), anyEx );
-        }
+    }
+    catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+            "jvmaccess::VirtualMachine::AttachGuard::CreationException",
+            static_cast< cppu::OWeakObject * >(this), anyEx );
     }
 }
 

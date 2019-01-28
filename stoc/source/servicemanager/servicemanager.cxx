@@ -316,20 +316,20 @@ public:
 void OServiceManager_Listener::disposing(const EventObject & rEvt )
 {
     Reference<XSet > x( xSMgr );
-    if( x.is() )
+    if( !x.is() )
+        return;
+
+    try
     {
-        try
-        {
-            x->remove( Any( &rEvt.Source, cppu::UnoType<XInterface>::get()) );
-        }
-        catch( const IllegalArgumentException & )
-        {
-            OSL_FAIL( "IllegalArgumentException caught" );
-        }
-        catch( const NoSuchElementException & )
-        {
-            OSL_FAIL( "NoSuchElementException caught" );
-        }
+        x->remove( Any( &rEvt.Source, cppu::UnoType<XInterface>::get()) );
+    }
+    catch( const IllegalArgumentException & )
+    {
+        OSL_FAIL( "IllegalArgumentException caught" );
+    }
+    catch( const NoSuchElementException & )
+    {
+        OSL_FAIL( "NoSuchElementException caught" );
     }
 }
 
@@ -1161,24 +1161,24 @@ void OServiceManager::remove( const Any & Element )
 
     //remove from the service map
     Reference<XServiceInfo > xSF( Reference<XServiceInfo >::query( xEle ) );
-    if( xSF.is() )
-    {
-        Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
-        const OUString * pArray = aServiceNames.getConstArray();
-        for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
-        {
-            pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
-                m_ServiceMap.equal_range( pArray[i] );
+    if( !xSF.is() )
+        return;
 
-            while( p.first != p.second )
+    Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
+    const OUString * pArray = aServiceNames.getConstArray();
+    for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
+    {
+        pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
+            m_ServiceMap.equal_range( pArray[i] );
+
+        while( p.first != p.second )
+        {
+            if( xEle == (*p.first).second )
             {
-                if( xEle == (*p.first).second )
-                {
-                    m_ServiceMap.erase( p.first );
-                    break;
-                }
-                ++p.first;
+                m_ServiceMap.erase( p.first );
+                break;
             }
+            ++p.first;
         }
     }
 }
