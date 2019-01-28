@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_e453c6e1",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-28T08:52:26Z",
+      "side": 1,
+      "message": "For follow-up patches: if the type is already spelled out in the very same line (in this case: SfxStringItem) then it\u0027s OK to replace std::unique_ptr\u003cFoo\u003e with just auto.",
+      "revId": "4c785dbd8892331a6d28fd3590c241e96b68f0ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
