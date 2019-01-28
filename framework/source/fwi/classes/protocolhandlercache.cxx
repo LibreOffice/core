@@ -73,10 +73,10 @@ PatternHash::const_iterator findPatternKey(PatternHash const * hash, const OUStr
                 That means it use two static member list to hold all necessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
-std::unique_ptr<HandlerHash> HandlerCache::m_pHandler;
-std::unique_ptr<PatternHash> HandlerCache::m_pPattern;
+std::unique_ptr<HandlerHash> HandlerCache::s_pHandler;
+std::unique_ptr<PatternHash> HandlerCache::s_pPattern;
 sal_Int32    HandlerCache::m_nRefCount = 0;
-std::unique_ptr<HandlerCFGAccess> HandlerCache::m_pConfig;
+HandlerCFGAccess* HandlerCache::s_pConfig = nullptr;
 
 /**
     @short      ctor of the cache of all registered protocol handler
@@ -91,11 +91,11 @@ HandlerCache::HandlerCache()
 
     if (m_nRefCount==0)
     {
-        m_pHandler.reset(new HandlerHash);
-        m_pPattern.reset(new PatternHash);
-        m_pConfig.reset(new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER));
-        m_pConfig->read(*m_pHandler, *m_pPattern);
-        m_pConfig->setCache(this);
+        s_pHandler.reset(new HandlerHash);
+        s_pPattern.reset(new PatternHash);
+        s_pConfig = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
+        s_pConfig->read(*s_pHandler, *s_pPattern);
+        s_pConfig->setCache(this);
     }
 
     ++m_nRefCount;
@@ -112,11 +112,12 @@ HandlerCache::~HandlerCache()
 
     if( m_nRefCount==1)
     {
-        m_pConfig->setCache(nullptr);
+        s_pConfig->setCache(nullptr);
 
-        m_pConfig.reset();
-        m_pHandler.reset();
-        m_pPattern.reset();
+        delete s_pConfig;
+        s_pConfig = nullptr;
+        s_pHandler.reset();
+        s_pPattern.reset();
     }
 
     --m_nRefCount;
@@ -133,10 +134,10 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
 
     SolarMutexGuard aGuard;
 
-    PatternHash::const_iterator pItem = findPatternKey(m_pPattern.get(), sURL);
-    if (pItem!=m_pPattern->end())
+    PatternHash::const_iterator pItem = findPatternKey(s_pPattern.get(), sURL);
+    if (pItem != s_pPattern->end())
     {
-        *pReturn = (*m_pHandler)[pItem->second];
+        *pReturn = (*s_pHandler)[pItem->second];
         bFound = true;
     }
 
@@ -158,8 +159,8 @@ void HandlerCache::takeOver(std::unique_ptr<HandlerHash> pHandler, std::unique_p
 {
     SolarMutexGuard aGuard;
 
-    m_pHandler = std::move(pHandler);
-    m_pPattern = std::move(pPattern);
+    s_pHandler = std::move(pHandler);
+    s_pPattern = std::move(pPattern);
 }
 
 /**

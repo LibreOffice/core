@@ -93,11 +93,11 @@ class FWI_DLLPUBLIC HandlerCache final
     private:
 
         /// list of all registered handler registered by her uno implementation names
-        static std::unique_ptr<HandlerHash> m_pHandler;
+        static std::unique_ptr<HandlerHash> s_pHandler;
         /// maps URL pattern to handler names
-        static std::unique_ptr<PatternHash> m_pPattern;
+        static std::unique_ptr<PatternHash> s_pPattern;
         /// informs about config updates
-        static std::unique_ptr<HandlerCFGAccess> m_pConfig;
+        static HandlerCFGAccess* s_pConfig;
         /// ref count to construct/destruct internal member lists on demand by using singleton mechanism
         static sal_Int32 m_nRefCount;
 
