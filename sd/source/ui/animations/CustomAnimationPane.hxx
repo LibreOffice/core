@@ -134,8 +134,6 @@ private:
 private:
     ViewShellBase& mrBase;
 
-    const CustomAnimationPresets* mpCustomAnimationPresets;
-
     VclPtr<PushButton> mpPBAddEffect;
     VclPtr<PushButton> mpPBRemoveEffect;
     VclPtr<FixedText>  mpFTEffect;
@@ -178,16 +176,20 @@ private:
     css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
     css::uno::Reference< css::drawing::XDrawView > mxView;
 
-    /** The mpCustomAnimationPresets is initialized either on demand or
+    /** The CustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this
         class.  This timer is responsible for the later.
     */
     Timer maLateInitTimer;
 
-    /** This method initializes the mpCustomAnimationPresets on demand and
-        returns a reference to the list.
+    /** This method gets presets instance, which is localized
+     * for the current user's locale.
     */
-    const CustomAnimationPresets& getPresets();
+    const CustomAnimationPresets& getPresets() const
+    {
+        // CustomAnimationPresets already caches, no need for another one here.
+        return CustomAnimationPresets::getCustomAnimationPresets();
+    }
 
     MotionPathTagVector maMotionPathTags;
 
