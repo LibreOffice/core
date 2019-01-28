@@ -466,7 +466,7 @@ sub usage()
           "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
           "                      commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
           "                      is detected automatically\n" .
-          "     --commits        generete log with all commits (default)\n" .
+          "     --commits        generate log with all commits (default)\n" .
           "     --bugs           generate log with bugzilla entries\n" .
           "     --bugs-changelog generate log with bugzilla entries, use changelog style\n" .
           "     --bugs-wiki      generate log with bugzilla entries, use wiki markup\n" .
