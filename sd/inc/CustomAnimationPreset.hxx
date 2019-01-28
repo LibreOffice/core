@@ -127,7 +127,8 @@ private:
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
 
-    SAL_DLLPRIVATE static CustomAnimationPresets*  mpCustomAnimationPresets;
+    //! Maps per-language the animation presets.
+    SAL_DLLPRIVATE static std::map<OUString, CustomAnimationPresets*>  mpCustomAnimationPresetsMap;
 };
 
 

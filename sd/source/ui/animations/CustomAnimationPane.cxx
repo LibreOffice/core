@@ -128,7 +128,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
-    mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
     mnMotionPathPos( 3 ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -145,7 +144,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           bool )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanelhorizontal.ui", rxFrame ),
     mrBase( rBase ),
-    mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
     mnMotionPathPos( 3 ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -2430,13 +2428,6 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     xRoot->appendChild( xAnimationNode );
 
     SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
-}
-
-const CustomAnimationPresets& CustomAnimationPane::getPresets()
-{
-    if (mpCustomAnimationPresets == nullptr)
-        mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
-    return *mpCustomAnimationPresets;
 }
 
 // ICustomAnimationListController
