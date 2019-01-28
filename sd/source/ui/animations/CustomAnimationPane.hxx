@@ -34,7 +34,6 @@
 
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
-namespace sd { class CustomAnimationPresets; }
 
 namespace weld { class ComboBox; }
 
@@ -109,7 +108,7 @@ private:
     void changeSelection( STLPropertySet const * pResultSet, STLPropertySet const * pOldSet );
 
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
-    bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
+    static bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
     void UpdateLook();
     sal_uInt32 fillAnimationLB( bool bHasText );
     PathKind getCreatePathKind() const;
@@ -129,8 +128,6 @@ private:
 
 private:
     ViewShellBase& mrBase;
-
-    const CustomAnimationPresets* mpCustomAnimationPresets;
 
     // UI Elements
     VclPtr<FixedText>   mpFTAnimation;
@@ -173,16 +170,11 @@ private:
     css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
     css::uno::Reference< css::drawing::XDrawView > mxView;
 
-    /** The mpCustomAnimationPresets is initialized either on demand or
+    /** The CustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this
         class.  This timer is responsible for the later.
     */
     Timer maLateInitTimer;
-
-    /** This method initializes the mpCustomAnimationPresets on demand and
-        returns a reference to the list.
-    */
-    const CustomAnimationPresets& getPresets();
 
     MotionPathTagVector maMotionPathTags;
 
