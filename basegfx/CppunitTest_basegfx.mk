@@ -22,7 +22,18 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
-    basegfx/test/basegfx2d \
+    basegfx/test/B2DRangeTest \
+    basegfx/test/B2DPolyRangeTest \
+    basegfx/test/B2DHomMatrixTest \
+    basegfx/test/B2DPointTest \
+    basegfx/test/B2DPolygonTest \
+    basegfx/test/B2DPolygonToolsTest \
+    basegfx/test/B2DPolyPolygonTest \
+    basegfx/test/B1DRangeTest \
+    basegfx/test/B2XRangeTest \
+    basegfx/test/B2IBoxTest \
+    basegfx/test/B2DTupleTest \
+    basegfx/test/BColorTest \
     basegfx/test/SvgPathImportExport \
     basegfx/test/basegfx3d \
     basegfx/test/boxclipper \
