@@ -1961,17 +1961,22 @@ bool SwFEShell::ImpEndCreate()
             nXOffset = pAnch->getFrameArea().Left()+pAnch->getFrameArea().Width()-rBound.Right();
         else
             nXOffset = rBound.Left() - pAnch->getFrameArea().Left();
-        if( pAnch->IsTextFrame() && static_cast<const SwTextFrame*>(pAnch)->IsFollow() )
+        if (pAnch->IsTextFrame())
         {
             const SwTextFrame* pTmp = static_cast<const SwTextFrame*>(pAnch);
-            do {
-                pTmp = pTmp->FindMaster();
-                OSL_ENSURE( pTmp, "Where's my Master?" );
-                // OD 2004-03-30 #i26791# - correction: add frame area height
-                // of master frames.
-                nYOffset += pTmp->IsVertical() ?
-                            pTmp->getFrameArea().Width() : pTmp->getFrameArea().Height();
-            } while ( pTmp->IsFollow() );
+            if (pTmp->IsFollow())
+            {
+                do {
+                    pTmp = pTmp->FindMaster();
+                    OSL_ENSURE(pTmp, "Where's my Master?");
+                    // OD 2004-03-30 #i26791# - correction: add frame area height
+                    // of master frames.
+                    nYOffset += pTmp->IsVertical() ?
+                                pTmp->getFrameArea().Width() : pTmp->getFrameArea().Height();
+                } while (pTmp->IsFollow());
+            }
+
+            nYOffset -= pTmp->GetBaseVertOffsetForFly(false);
         }
     }
 
