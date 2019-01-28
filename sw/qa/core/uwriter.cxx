@@ -1354,19 +1354,19 @@ void SwDocTest::testTableAutoFormats()
     aTableAF.m_aShadow = aShadow;
     //Set bInclFont
     bool aIFont = false;
-    aTableAF.bInclFont = aIFont;
+    aTableAF.m_bInclFont = aIFont;
     //Set bInclJustify
     bool aIJustify = false;
-    aTableAF.bInclJustify = aIJustify;
+    aTableAF.m_bInclJustify = aIJustify;
     //Set bInclFrame
     bool aIFrame = false;
-    aTableAF.bInclFrame = aIFrame;
+    aTableAF.m_bInclFrame = aIFrame;
     //Set bInclBackground
     bool aIBackground = false;
-    aTableAF.bInclBackground = aIBackground;
+    aTableAF.m_bInclBackground = aIBackground;
     //Set bInclValueFormat
     bool aIVFormat = false;
-    aTableAF.bInclValueFormat = aIVFormat;
+    aTableAF.m_bInclValueFormat = aIVFormat;
 
     //set the box format to AutoFormat
     aTableAF.SetBoxFormat( aBoxAF, sal_uInt8(0) );
@@ -1492,15 +1492,15 @@ void SwDocTest::testTableAutoFormats()
     //Get m_aShadow
     CPPUNIT_ASSERT( bool( pLoadAF->m_aShadow == aShadow ) );
     //Get bInclFont
-    CPPUNIT_ASSERT( bool( pLoadAF->bInclFont == aIFont ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bInclFont == aIFont ) );
     //Get bInclJustify
-    CPPUNIT_ASSERT( bool( pLoadAF->bInclJustify == aIJustify ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bInclJustify == aIJustify ) );
     //Get bInclFrame
-    CPPUNIT_ASSERT( bool( pLoadAF->bInclFrame == aIFrame ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bInclFrame == aIFrame ) );
     //Get bInclBackground
-    CPPUNIT_ASSERT( bool( pLoadAF->bInclBackground == aIBackground ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bInclBackground == aIBackground ) );
     //Get bInclValueFormat
-    CPPUNIT_ASSERT( bool( pLoadAF->bInclValueFormat == aIVFormat ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bInclValueFormat == aIVFormat ) );
 }
 
 static OUString

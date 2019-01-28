@@ -247,19 +247,19 @@ class SW_DLLPUBLIC SwTableAutoFormat
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
     OUString m_aName;
-    sal_uInt16 nStrResId;
+    sal_uInt16 m_nStrResId;
 
     // Common flags of Calc and Writer.
-    bool bInclFont : 1;
-    bool bInclJustify : 1;
-    bool bInclFrame : 1;
-    bool bInclBackground : 1;
-    bool bInclValueFormat : 1;
+    bool m_bInclFont : 1;
+    bool m_bInclJustify : 1;
+    bool m_bInclFrame : 1;
+    bool m_bInclBackground : 1;
+    bool m_bInclValueFormat : 1;
 
     // Calc specific flags.
-    bool bInclWidthHeight : 1;
+    bool m_bInclWidthHeight : 1;
 
-    SwBoxAutoFormat* aBoxAutoFormat[ 16 ];
+    SwBoxAutoFormat* m_aBoxAutoFormat[ 16 ];
 
     // Writer-specific options
     SvxFormatBreakItem m_aBreak;
@@ -285,7 +285,7 @@ public:
     SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
     static const SwBoxAutoFormat& GetDefaultBoxFormat();
 
-    void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
+    void SetName( const OUString& rNew ) { m_aName = rNew; m_nStrResId = USHRT_MAX; }
     const OUString& GetName() const { return m_aName; }
 
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
@@ -296,23 +296,23 @@ public:
     void RestoreTableProperties(SwTable &table) const;
     void StoreTableProperties(const SwTable &table);
 
-    bool IsFont() const         { return bInclFont; }
-    bool IsJustify() const      { return bInclJustify; }
-    bool IsFrame() const        { return bInclFrame; }
-    bool IsBackground() const   { return bInclBackground; }
-    bool IsValueFormat() const  { return bInclValueFormat; }
+    bool IsFont() const         { return m_bInclFont; }
+    bool IsJustify() const      { return m_bInclJustify; }
+    bool IsFrame() const        { return m_bInclFrame; }
+    bool IsBackground() const   { return m_bInclBackground; }
+    bool IsValueFormat() const  { return m_bInclValueFormat; }
 
     /// Check if style is hidden.
     bool IsHidden() const       { return m_bHidden; }
     /// Check if style is defined by user.
     bool IsUserDefined() const  { return m_bUserDefined; }
 
-    void SetFont( const bool bNew )         { bInclFont = bNew; }
-    void SetJustify( const  bool bNew )     { bInclJustify = bNew; }
-    void SetFrame( const bool bNew )        { bInclFrame = bNew; }
-    void SetBackground( const bool bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
+    void SetFont( const bool bNew )         { m_bInclFont = bNew; }
+    void SetJustify( const  bool bNew )     { m_bInclJustify = bNew; }
+    void SetFrame( const bool bNew )        { m_bInclFrame = bNew; }
+    void SetBackground( const bool bNew )   { m_bInclBackground = bNew; }
+    void SetValueFormat( const bool bNew )  { m_bInclValueFormat = bNew; }
+    void SetWidthHeight( const bool bNew )  { m_bInclWidthHeight = bNew; }
 
     /// Set if style is hidden.
     void SetHidden(bool bHidden)            { m_bHidden = bHidden; }

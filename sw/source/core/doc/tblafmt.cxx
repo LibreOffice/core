@@ -598,7 +598,7 @@ void SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion )
 
 SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
     : m_aName( rName )
-    , nStrResId( USHRT_MAX )
+    , m_nStrResId( USHRT_MAX )
     , m_aBreak( SvxBreak::NONE, RES_BREAK )
     , m_aKeepWithNextPara( false, RES_KEEP )
     , m_aRepeatHeading( 0 )
@@ -609,14 +609,14 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
     , m_bHidden( false )
     , m_bUserDefined( true )
 {
-    bInclFont = true;
-    bInclJustify = true;
-    bInclFrame = true;
-    bInclBackground = true;
-    bInclValueFormat = true;
-    bInclWidthHeight = true;
+    m_bInclFont = true;
+    m_bInclJustify = true;
+    m_bInclFrame = true;
+    m_bInclBackground = true;
+    m_bInclValueFormat = true;
+    m_bInclWidthHeight = true;
 
-    memset( aBoxAutoFormat, 0, sizeof( aBoxAutoFormat ) );
+    memset( m_aBoxAutoFormat, 0, sizeof( m_aBoxAutoFormat ) );
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
@@ -624,7 +624,7 @@ SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
     , m_aKeepWithNextPara( false, RES_KEEP )
     , m_aShadow( RES_SHADOW )
 {
-    for(SwBoxAutoFormat* & rp : aBoxAutoFormat)
+    for(SwBoxAutoFormat* & rp : m_aBoxAutoFormat)
         rp = nullptr;
     *this = rNew;
 }
@@ -636,24 +636,24 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
 
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
-        if( aBoxAutoFormat[ n ] )
-            delete aBoxAutoFormat[ n ];
+        if( m_aBoxAutoFormat[ n ] )
+            delete m_aBoxAutoFormat[ n ];
 
-        SwBoxAutoFormat* pFormat = rNew.aBoxAutoFormat[ n ];
+        SwBoxAutoFormat* pFormat = rNew.m_aBoxAutoFormat[ n ];
         if( pFormat )      // if is set -> copy
-            aBoxAutoFormat[ n ] = new SwBoxAutoFormat( *pFormat );
+            m_aBoxAutoFormat[ n ] = new SwBoxAutoFormat( *pFormat );
         else            // else default
-            aBoxAutoFormat[ n ] = nullptr;
+            m_aBoxAutoFormat[ n ] = nullptr;
     }
 
     m_aName = rNew.m_aName;
-    nStrResId = rNew.nStrResId;
-    bInclFont = rNew.bInclFont;
-    bInclJustify = rNew.bInclJustify;
-    bInclFrame = rNew.bInclFrame;
-    bInclBackground = rNew.bInclBackground;
-    bInclValueFormat = rNew.bInclValueFormat;
-    bInclWidthHeight = rNew.bInclWidthHeight;
+    m_nStrResId = rNew.m_nStrResId;
+    m_bInclFont = rNew.m_bInclFont;
+    m_bInclJustify = rNew.m_bInclJustify;
+    m_bInclFrame = rNew.m_bInclFrame;
+    m_bInclBackground = rNew.m_bInclBackground;
+    m_bInclValueFormat = rNew.m_bInclValueFormat;
+    m_bInclWidthHeight = rNew.m_bInclWidthHeight;
 
     m_aBreak = rNew.m_aBreak;
     m_aPageDesc = rNew.m_aPageDesc;
@@ -671,7 +671,7 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
 
 SwTableAutoFormat::~SwTableAutoFormat()
 {
-    SwBoxAutoFormat** ppFormat = aBoxAutoFormat;
+    SwBoxAutoFormat** ppFormat = m_aBoxAutoFormat;
     for( sal_uInt8 n = 0; n < 16; ++n, ++ppFormat )
         if( *ppFormat )
             delete *ppFormat;
@@ -681,18 +681,18 @@ void SwTableAutoFormat::SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPo
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
+    SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ nPos ];
     if( pFormat )      // if is set -> copy
-        *aBoxAutoFormat[ nPos ] = rNew;
+        *m_aBoxAutoFormat[ nPos ] = rNew;
     else            // else set anew
-        aBoxAutoFormat[ nPos ] = new SwBoxAutoFormat( rNew );
+        m_aBoxAutoFormat[ nPos ] = new SwBoxAutoFormat( rNew );
 }
 
 const SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
+    SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ nPos ];
     if( pFormat )      // if is set -> copy
         return *pFormat;
     else            // else return the default
@@ -708,7 +708,7 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
 {
     SAL_WARN_IF(!(nPos < 16), "sw.core", "GetBoxFormat wrong area");
 
-    SwBoxAutoFormat** pFormat = &aBoxAutoFormat[ nPos ];
+    SwBoxAutoFormat** pFormat = &m_aBoxAutoFormat[ nPos ];
     if( !*pFormat )
     {
         // If default doesn't exist yet:
@@ -734,11 +734,11 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
+    SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ nPos ];
     if( !pFormat )     // if is set -> copy
     {
         pFormat = new SwBoxAutoFormat;
-        aBoxAutoFormat[ nPos ] = pFormat;
+        m_aBoxAutoFormat[ nPos ] = pFormat;
     }
 
     if( SwTableAutoFormatUpdateFlags::Char & eFlags )
@@ -980,23 +980,23 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         m_aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
-            rStream.ReadUInt16( nStrResId );
+            rStream.ReadUInt16( m_nStrResId );
             // start from 3d because default is added via constructor
-            sal_uInt16 nId = RES_POOLTABLESTYLE_3D + nStrResId;
+            sal_uInt16 nId = RES_POOLTABLESTYLE_3D + m_nStrResId;
             if( RES_POOLTABLESTYLE_3D <= nId &&
                 nId < RES_POOLTABSTYLE_END )
             {
                 m_aName = SwStyleNameMapper::GetUIName(nId, m_aName);
             }
             else
-                nStrResId = USHRT_MAX;
+                m_nStrResId = USHRT_MAX;
         }
-        rStream.ReadCharAsBool( b ); bInclFont = b;
-        rStream.ReadCharAsBool( b ); bInclJustify = b;
-        rStream.ReadCharAsBool( b ); bInclFrame = b;
-        rStream.ReadCharAsBool( b ); bInclBackground = b;
-        rStream.ReadCharAsBool( b ); bInclValueFormat = b;
-        rStream.ReadCharAsBool( b ); bInclWidthHeight = b;
+        rStream.ReadCharAsBool( b ); m_bInclFont = b;
+        rStream.ReadCharAsBool( b ); m_bInclJustify = b;
+        rStream.ReadCharAsBool( b ); m_bInclFrame = b;
+        rStream.ReadCharAsBool( b ); m_bInclBackground = b;
+        rStream.ReadCharAsBool( b ); m_bInclValueFormat = b;
+        rStream.ReadCharAsBool( b ); m_bInclWidthHeight = b;
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
@@ -1018,7 +1018,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
             SwBoxAutoFormat* pFormat = new SwBoxAutoFormat;
             bRet = pFormat->Load( rStream, rVersions, nVal );
             if( bRet )
-                aBoxAutoFormat[ i ] = pFormat;
+                m_aBoxAutoFormat[ i ] = pFormat;
             else
             {
                 delete pFormat;
@@ -1036,13 +1036,13 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
-    rStream.WriteUInt16( nStrResId );
-    rStream.WriteBool( bInclFont );
-    rStream.WriteBool( bInclJustify );
-    rStream.WriteBool( bInclFrame );
-    rStream.WriteBool( bInclBackground );
-    rStream.WriteBool( bInclValueFormat );
-    rStream.WriteBool( bInclWidthHeight );
+    rStream.WriteUInt16( m_nStrResId );
+    rStream.WriteBool( m_bInclFont );
+    rStream.WriteBool( m_bInclJustify );
+    rStream.WriteBool( m_bInclFrame );
+    rStream.WriteBool( m_bInclBackground );
+    rStream.WriteBool( m_bInclValueFormat );
+    rStream.WriteBool( m_bInclWidthHeight );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
@@ -1058,7 +1058,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
     for( int i = 0; bRet && i < 16; ++i )
     {
-        SwBoxAutoFormat* pFormat = aBoxAutoFormat[ i ];
+        SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ i ];
         if( !pFormat )     // if not set -> write default
         {
             // If it doesn't exist yet:
@@ -1075,7 +1075,7 @@ OUString SwTableAutoFormat::GetTableTemplateCellSubName(const SwBoxAutoFormat& r
 {
     sal_Int32 nIndex = 0;
     for (; nIndex < 16; ++nIndex)
-        if (aBoxAutoFormat[nIndex] == &rBoxFormat) break;
+        if (m_aBoxAutoFormat[nIndex] == &rBoxFormat) break;
 
     // box format doesn't belong to this table format
     if (16 <= nIndex)
