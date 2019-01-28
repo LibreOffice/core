@@ -33,6 +33,24 @@
       "revId": "07673f835d98ce31fce32e0fc2e738da85335b12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_c4732a4d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-01-28T10:15:28Z",
+      "side": 1,
+      "message": "It\u0027s my proposal in c9. We should use ellipsis more sparingly, otherwise the actual information \"there is more\" is lost. This text here is a corner case of required input, something like \"Exit\" \u003d\u003e \"Do you really want?\" (bad example).\n\nhttps://ux.stackexchange.com/questions/30420/what-are-the-rules-of-using-ellipsis-on-buttons",
+      "parentUuid": "1f485f77_696c4f08",
+      "revId": "07673f835d98ce31fce32e0fc2e738da85335b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
