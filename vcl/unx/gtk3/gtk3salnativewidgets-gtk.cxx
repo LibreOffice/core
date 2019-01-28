@@ -387,47 +387,37 @@ static GtkWidget* gTreeViewWidget;
 
 namespace
 {
-    void parent_styles_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
+    void style_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
     {
-        while ((context = gtk_style_context_get_parent(context)))
+        do
         {
             gtk_style_context_set_state(context, flags);
         }
+        while ((context = gtk_style_context_get_parent(context)));
     }
 
-    void parent_styles_context_save(GtkStyleContext* context)
+    class StyleContextSave
     {
-        while ((context = gtk_style_context_get_parent(context)))
+    private:
+        std::vector<std::pair<GtkStyleContext*, GtkStateFlags>> m_aStates;
+    public:
+        void save(GtkStyleContext* context)
         {
-            gtk_style_context_save(context);
+            do
+            {
+                m_aStates.emplace_back(context, gtk_style_context_get_state(context));
+            }
+            while ((context = gtk_style_context_get_parent(context)));
         }
-    }
-
-    void parent_styles_context_restore(GtkStyleContext* context)
-    {
-        while ((context = gtk_style_context_get_parent(context)))
+        void restore()
         {
-            gtk_style_context_restore(context);
+            for (auto a = m_aStates.rbegin(); a != m_aStates.rend(); ++a)
+            {
+                gtk_style_context_set_state(a->first, a->second);
+            }
+            m_aStates.clear();
         }
-    }
-
-    void style_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
-    {
-        gtk_style_context_set_state(context, flags);
-        parent_styles_context_set_state(context, flags);
-    }
-
-    void style_context_save(GtkStyleContext* context)
-    {
-        gtk_style_context_save(context);
-        parent_styles_context_save(context);
-    }
-
-    void style_context_restore(GtkStyleContext* context)
-    {
-        gtk_style_context_restore(context);
-        parent_styles_context_restore(context);
-    }
+    };
 
     tools::Rectangle render_common(GtkStyleContext *pContext, cairo_t *cr, const tools::Rectangle &rIn, GtkStateFlags flags)
     {
@@ -2519,7 +2509,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     long nWidth = rControlRegion.GetWidth();
     long nHeight = rControlRegion.GetHeight();
 
-    style_context_save(context);
+    StyleContextSave aContextState;
+    aContextState.save(context);
     style_context_set_state(context, flags);
 
     if (styleClass)
@@ -2654,7 +2645,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
         gtk_style_context_remove_class(context, styleClass);
     }
-    style_context_restore(context);
+    aContextState.restore();
 
     cairo_destroy(cr); // unref
 
@@ -2959,7 +2950,8 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     }
 
     GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
-    style_context_save(pStyle);
+    StyleContextSave aContextState;
+    aContextState.save(pStyle);
     GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
     GdkRGBA color;
@@ -2999,12 +2991,12 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aTextColor = getColor( text_color );
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
-    style_context_restore(pStyle);
+    aContextState.restore();
 
     // button mouse over colors
     {
         GdkRGBA normal_button_rollover_text_color, pressed_button_rollover_text_color;
-        style_context_save(mpButtonStyle);
+        aContextState.save(mpButtonStyle);
         style_context_set_state(mpButtonStyle, GTK_STATE_FLAG_PRELIGHT);
         gtk_style_context_get_color(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &normal_button_rollover_text_color);
         aTextColor = getColor(normal_button_rollover_text_color);
@@ -3014,7 +3006,7 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aTextColor = getColor(pressed_button_rollover_text_color);
         style_context_set_state(mpButtonStyle, GTK_STATE_FLAG_NORMAL);
         aStyleSet.SetButtonPressedRolloverTextColor( aTextColor );
-        style_context_restore(mpButtonStyle);
+        aContextState.restore();
     }
 
     // tooltip colors
@@ -3099,10 +3091,7 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetSkipDisabledInMenus( true );
     aStyleSet.SetPreferredContextMenuShortcuts( false );
 
-    style_context_save(mpMenuStyle);
-    style_context_save(mpMenuBarStyle);
-    style_context_save(mpMenuBarItemStyle);
-    style_context_save(mpMenuItemLabelStyle);
+    aContextState.save(mpMenuItemLabelStyle);
 
     // menu colors
     style_context_set_state(mpMenuStyle, GTK_STATE_FLAG_NORMAL);
@@ -3143,62 +3132,59 @@ void GtkSalGraphics::updateSettings(AllSettings& rSettings)
     ::Color aHighlightTextColor = getColor( color );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
-    style_context_restore(mpMenuItemLabelStyle);
-    style_context_restore(mpMenuBarItemStyle);
-    style_context_restore(mpMenuBarStyle);
-    style_context_restore(mpMenuStyle);
+    aContextState.restore();
 
     // hyperlink colors
-    style_context_save(mpLinkButtonStyle);
+    aContextState.save(mpLinkButtonStyle);
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_LINK);
     gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
     aStyleSet.SetLinkColor(getColor(text_color));
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_VISITED);
     gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
-    style_context_restore(mpLinkButtonStyle);
+    aContextState.restore();
 
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabLabelStyle;
-        style_context_save(pCStyle);
+        aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabTextColor(aTextColor);
         aStyleSet.SetTabFont(getFont(mpNotebookHeaderTabsTabLabelStyle, rSettings.GetUILanguageTag().getLocale()));
-        style_context_restore(pCStyle);
+        aContextState.restore();
     }
 
     {
         GtkStyleContext *pCStyle = mpToolButtonStyle;
-        style_context_save(pCStyle);
+        aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetToolTextColor(aTextColor);
         aStyleSet.SetToolFont(getFont(mpToolButtonStyle, rSettings.GetUILanguageTag().getLocale()));
-        style_context_restore(pCStyle);
+        aContextState.restore();
     }
 
     // mouse over text colors
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabHoverLabelStyle;
-        style_context_save(pCStyle);
+        aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_PRELIGHT);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabRolloverTextColor(aTextColor);
-        style_context_restore(pCStyle);
+        aContextState.restore();
     }
 
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabActiveLabelStyle;
-        style_context_save(pCStyle);
+        aContextState.save(pCStyle);
         style_context_set_state(pCStyle, ACTIVE_TAB());
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabHighlightTextColor(aTextColor);
-        style_context_restore(pCStyle);
+        aContextState.restore();
     }
 
     // get cursor blink time
