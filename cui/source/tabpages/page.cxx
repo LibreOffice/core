@@ -314,7 +314,7 @@ void SvxPageDescPage::Init_Impl()
     // adjust the handler
     m_xLayoutBox->connect_changed(LINK(this, SvxPageDescPage, LayoutHdl_Impl));
 
-    m_xPaperTrayBox->connect_changed(LINK(this, SvxPageDescPage, PaperBinHdl_Impl));
+    m_xPaperTrayBox->connect_focus_in(LINK(this, SvxPageDescPage, PaperBinHdl_Impl));
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
     m_xPaperHeightEdit->connect_value_changed(LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
@@ -808,7 +808,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBoxText&, void)
     UpdateExample_Impl( true );
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
 {
     if (m_xPaperTrayBox->get_count() > 1)
         // already filled
