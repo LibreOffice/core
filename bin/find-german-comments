@@ -126,9 +126,9 @@ class Parser:
         return sock
 
     def get_lang(self, s):
-        """ the output is 'german' or 'english' or 'german or english'. when
+        """ the output is 'german' or 'english' or 'german or english'. When
         unsure, just don't warn, there are strings where you just can't
-        teremine the results reliably, like '#110680#' """
+        determine the results reliably, like '#110680#' """
 
         self.text_cat.stdin.write(bytes(s, 'utf-8'))
         self.text_cat.stdin.write(bytes("\n", 'utf-8'))
