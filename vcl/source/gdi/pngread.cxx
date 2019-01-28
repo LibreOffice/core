@@ -900,6 +900,10 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
 
 void PNGReaderImpl::ImplReadIDAT()
 {
+    //when fuzzing with a max len set, max decompress to 250 times that limit
+    static size_t nMaxAllowedDecompression = [](const char* pEnv) { size_t nRet = pEnv ? std::atoi(pEnv) : 0; return nRet * 250; }(std::getenv("FUZZ_MAX_INPUT_LEN"));
+    size_t nTotalDataRead = 0;
+
     if( mnChunkLen > 0 )
     {
         mbIDATStarted = true;
@@ -918,6 +922,12 @@ void PNGReaderImpl::ImplReadIDAT()
             sal_Int32 nToRead = mnScansize - (mpScanCurrent - mpInflateInBuf.get());
             sal_Int32 nRead = mpZCodec.ReadAsynchron( aIStrm, mpScanCurrent, nToRead );
             if ( nRead < 0 )
+            {
+                mbStatus = false;
+                break;
+            }
+            nTotalDataRead += nRead;
+            if (nMaxAllowedDecompression && nTotalDataRead > nMaxAllowedDecompression)
             {
                 mbStatus = false;
                 break;
