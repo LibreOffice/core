@@ -564,9 +564,9 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     //@todo -> more flexible handle creation
     //2 scenarios possible:
     //1. add an additional invisible shape as a child to the selected object
-    //this child needs to be named somehow and handles need to be generated therefrom ...
+    //this child needs to be named somehow and handles need to be generated there from...
     //or 2. offer a central service per view where renderer and so can register for handle creation for a special shape
-    //.. or 3. feature from drawinglayer to create handles for each shape ... (bad performance ... ?) ?
+    //.. or 3. feature from drawinglayer to create handles for each shape... (bad performance... ?) ?
 
     //scenario 1 is now used:
     //if a child with name MarkHandles exists
