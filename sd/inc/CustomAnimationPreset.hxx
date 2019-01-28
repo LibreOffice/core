@@ -88,6 +88,9 @@ public:
     SAL_DLLPRIVATE CustomAnimationPresets();
     SAL_DLLPRIVATE ~CustomAnimationPresets();
 
+    /** This method gets presets instance, which is localized
+     * for the current user's locale.
+    */
     static const CustomAnimationPresets& getCustomAnimationPresets();
 
     SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
@@ -125,7 +128,8 @@ private:
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
 
-    SAL_DLLPRIVATE static CustomAnimationPresets*  mpCustomAnimationPresets;
+    //! Maps per-language the animation presets.
+    SAL_DLLPRIVATE static std::map<OUString, CustomAnimationPresets*>  mpCustomAnimationPresetsMap;
 };
 
 
