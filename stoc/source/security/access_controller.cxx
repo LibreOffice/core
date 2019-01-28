@@ -386,19 +386,19 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     }
 
     // switch on caching for DYNAMIC_ONLY and ON (shareable multi-user process)
-    if (ON == m_mode || DYNAMIC_ONLY == m_mode)
+    if (!(ON == m_mode || DYNAMIC_ONLY == m_mode))
+        return;
+
+    sal_Int32 cacheSize = 0; // multi-user cache size
+    if (! (m_xComponentContext->getValueByName(
+        "/services/" SERVICE_NAME "/user-cache-size" ) >>= cacheSize))
     {
-        sal_Int32 cacheSize = 0; // multi-user cache size
-        if (! (m_xComponentContext->getValueByName(
-            "/services/" SERVICE_NAME "/user-cache-size" ) >>= cacheSize))
-        {
-            cacheSize = 128; // reasonable default?
-        }
-#ifdef __CACHE_DIAGNOSE
-        cacheSize = 2;
-#endif
-        m_user2permissions.setSize( cacheSize );
+        cacheSize = 128; // reasonable default?
     }
+#ifdef __CACHE_DIAGNOSE
+    cacheSize = 2;
+#endif
+    m_user2permissions.setSize( cacheSize );
 }
 
 void AccessController::disposing()
@@ -495,53 +495,53 @@ void AccessController::checkAndClearPostPoned()
     std::unique_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( nullptr ); // takeover ownership
     OSL_ASSERT(rec);
-    if (rec)
+    if (!rec)
+        return;
+
+    t_rec_vec const& vec = *rec;
+    switch (m_mode)
     {
-        t_rec_vec const& vec = *rec;
-        switch (m_mode)
+    case SINGLE_USER:
+    {
+        OSL_ASSERT( m_singleUser_init );
+        for (const auto & p : vec)
         {
-        case SINGLE_USER:
+            OSL_ASSERT( m_singleUserId == p.first );
+            m_singleUserPermissions.checkPermission( p.second );
+        }
+        break;
+    }
+    case SINGLE_DEFAULT_USER:
+    {
+        OSL_ASSERT( m_defaultPerm_init );
+        for (const auto & p : vec)
         {
-            OSL_ASSERT( m_singleUser_init );
-            for (const auto & p : vec)
+            OSL_ASSERT( p.first.isEmpty() ); // default-user
+            m_defaultPermissions.checkPermission( p.second );
+        }
+        break;
+    }
+    case ON:
+    {
+        for (const auto & p : vec)
+        {
+            PermissionCollection const * pPermissions;
+            // lookup policy for user
             {
-                OSL_ASSERT( m_singleUserId == p.first );
-                m_singleUserPermissions.checkPermission( p.second );
+                MutexGuard guard( m_mutex );
+                pPermissions = m_user2permissions.lookup( p.first );
             }
-            break;
-        }
-        case SINGLE_DEFAULT_USER:
-        {
-            OSL_ASSERT( m_defaultPerm_init );
-            for (const auto & p : vec)
+            OSL_ASSERT( pPermissions );
+            if (pPermissions)
             {
-                OSL_ASSERT( p.first.isEmpty() ); // default-user
-                m_defaultPermissions.checkPermission( p.second );
+                pPermissions->checkPermission( p.second );
             }
-            break;
         }
-        case ON:
-        {
-            for (const auto & p : vec)
-            {
-                PermissionCollection const * pPermissions;
-                // lookup policy for user
-                {
-                    MutexGuard guard( m_mutex );
-                    pPermissions = m_user2permissions.lookup( p.first );
-                }
-                OSL_ASSERT( pPermissions );
-                if (pPermissions)
-                {
-                    pPermissions->checkPermission( p.second );
-                }
-            }
-            break;
-        }
-        default:
-            OSL_FAIL( "### this should never be called in this ac mode!" );
-            break;
-        }
+        break;
+    }
+    default:
+        OSL_FAIL( "### this should never be called in this ac mode!" );
+        break;
     }
 }
 

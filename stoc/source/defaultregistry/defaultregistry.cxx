@@ -188,19 +188,19 @@ NestedKeyImpl::NestedKeyImpl( const OUString& rKeyName,
 void NestedKeyImpl::computeChanges()
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
-    if ( m_state != m_xRegistry->m_state )
+    if ( m_state == m_xRegistry->m_state )
+        return;
+
+    Reference<XRegistryKey> rootKey(m_xRegistry->m_localReg->getRootKey());
+
+    Reference<XRegistryKey> tmpKey = rootKey->openKey(m_name);
+
+    if ( tmpKey.is() )
     {
-        Reference<XRegistryKey> rootKey(m_xRegistry->m_localReg->getRootKey());
-
-        Reference<XRegistryKey> tmpKey = rootKey->openKey(m_name);
-
-        if ( tmpKey.is() )
-        {
-            m_localKey = rootKey->openKey(m_name);
-        }
-
-        m_state = m_xRegistry->m_state;
+        m_localKey = rootKey->openKey(m_name);
     }
+
+    m_state = m_xRegistry->m_state;
 }
 
 

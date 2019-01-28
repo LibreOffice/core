@@ -295,23 +295,24 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
 void IdlAttributeFieldImpl::checkException(
     uno_Any * exception, Reference< XInterface > const & context) const
 {
-    if (exception != nullptr) {
-        Any e;
-        uno_any_destruct(&e, reinterpret_cast< uno_ReleaseFunc >(cpp_release));
-        uno_type_any_constructAndConvert(
-            &e, exception->pData, exception->pType,
-            getReflection()->getUno2Cpp().get());
-        uno_any_destruct(exception, nullptr);
-        if (!e.isExtractableTo(
-                cppu::UnoType<RuntimeException>::get()))
-        {
-            throw WrappedTargetRuntimeException(
-                "non-RuntimeException occurred when accessing an"
-                " interface type attribute",
-                context, e);
-        }
-        cppu::throwException(e);
+    if (exception == nullptr)
+        return;
+
+    Any e;
+    uno_any_destruct(&e, reinterpret_cast< uno_ReleaseFunc >(cpp_release));
+    uno_type_any_constructAndConvert(
+        &e, exception->pData, exception->pType,
+        getReflection()->getUno2Cpp().get());
+    uno_any_destruct(exception, nullptr);
+    if (!e.isExtractableTo(
+            cppu::UnoType<RuntimeException>::get()))
+    {
+        throw WrappedTargetRuntimeException(
+            "non-RuntimeException occurred when accessing an"
+            " interface type attribute",
+            context, e);
     }
+    cppu::throwException(e);
 }
 
 

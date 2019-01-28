@@ -192,19 +192,19 @@ static void binuno_proxy_free(
 static void binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
-    if (osl_atomic_increment( &that->m_nRefCount ) == 1)
-    {
-        // rebirth of zombie
-        uno_ExtEnvironment * uno_env =
-            that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != nullptr );
-        (*uno_env->registerProxyInterface)(
-            uno_env, reinterpret_cast< void ** >( &pUnoI ), binuno_proxy_free,
-            that->m_oid.pData,
-            reinterpret_cast< typelib_InterfaceTypeDescription * >(
-                that->m_typeDescr.get() ) );
-        OSL_ASSERT( that == static_cast< binuno_Proxy * >( pUnoI ) );
-    }
+    if (osl_atomic_increment( &that->m_nRefCount ) != 1)
+        return;
+
+    // rebirth of zombie
+    uno_ExtEnvironment * uno_env =
+        that->m_root->m_factory->m_uno_env.get()->pExtEnv;
+    OSL_ASSERT( uno_env != nullptr );
+    (*uno_env->registerProxyInterface)(
+        uno_env, reinterpret_cast< void ** >( &pUnoI ), binuno_proxy_free,
+        that->m_oid.pData,
+        reinterpret_cast< typelib_InterfaceTypeDescription * >(
+            that->m_typeDescr.get() ) );
+    OSL_ASSERT( that == static_cast< binuno_Proxy * >( pUnoI ) );
 }
 
 

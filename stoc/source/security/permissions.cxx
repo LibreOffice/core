@@ -140,28 +140,28 @@ SocketPermission::SocketPermission(
 
     // separate host from portrange
     sal_Int32 colon = m_host.indexOf( ':' );
-    if (colon >= 0) // port [range] given
+    if (colon < 0) // port [range] not given
+        return;
+
+    sal_Int32 minus = m_host.indexOf( '-', colon +1 );
+    if (minus < 0)
     {
-        sal_Int32 minus = m_host.indexOf( '-', colon +1 );
-        if (minus < 0)
-        {
-            m_lowerPort = m_upperPort = m_host.copy( colon +1 ).toInt32();
-        }
-        else if (minus == (colon +1)) // -N
-        {
-            m_upperPort = m_host.copy( minus +1 ).toInt32();
-        }
-        else if (minus == (m_host.getLength() -1)) // N-
-        {
-            m_lowerPort = m_host.copy( colon +1, m_host.getLength() -1 -colon -1 ).toInt32();
-        }
-        else // A-B
-        {
-            m_lowerPort = m_host.copy( colon +1, minus - colon -1 ).toInt32();
-            m_upperPort = m_host.copy( minus +1 ).toInt32();
-        }
-        m_host = m_host.copy( 0, colon );
+        m_lowerPort = m_upperPort = m_host.copy( colon +1 ).toInt32();
     }
+    else if (minus == (colon +1)) // -N
+    {
+        m_upperPort = m_host.copy( minus +1 ).toInt32();
+    }
+    else if (minus == (m_host.getLength() -1)) // N-
+    {
+        m_lowerPort = m_host.copy( colon +1, m_host.getLength() -1 -colon -1 ).toInt32();
+    }
+    else // A-B
+    {
+        m_lowerPort = m_host.copy( colon +1, minus - colon -1 ).toInt32();
+        m_upperPort = m_host.copy( minus +1 ).toInt32();
+    }
+    m_host = m_host.copy( 0, colon );
 }
 
 inline bool SocketPermission::resolveHost() const
@@ -301,40 +301,40 @@ FilePermission::FilePermission(
     , m_url( perm.URL )
     , m_allFiles( perm.URL == "<<ALL FILES>>" )
 {
-    if (! m_allFiles)
+    if ( m_allFiles)
+        return;
+
+    if ( m_url == "*" )
     {
-        if ( m_url == "*" )
-        {
-            OUStringBuffer buf( 64 );
-            buf.append( getWorkingDir() );
-            buf.append( "/*" );
-            m_url = buf.makeStringAndClear();
-        }
-        else if ( m_url == "-" )
-        {
-            OUStringBuffer buf( 64 );
-            buf.append( getWorkingDir() );
-            buf.append( "/-" );
-            m_url = buf.makeStringAndClear();
-        }
-        else if (!m_url.startsWith("file:///"))
-        {
-            // relative path
-            OUString out;
-            oslFileError rc = ::osl_getAbsoluteFileURL(
-                getWorkingDir().pData, perm.URL.pData, &out.pData );
-            m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
-        }
-#ifdef _WIN32
-        // correct win drive letters
-        if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
-        {
-            static OUString s_colon = ":";
-            // common case in API is a ':' (sal), so convert '|' to ':'
-            m_url = m_url.replaceAt( 9, 1, s_colon );
-        }
-#endif
+        OUStringBuffer buf( 64 );
+        buf.append( getWorkingDir() );
+        buf.append( "/*" );
+        m_url = buf.makeStringAndClear();
     }
+    else if ( m_url == "-" )
+    {
+        OUStringBuffer buf( 64 );
+        buf.append( getWorkingDir() );
+        buf.append( "/-" );
+        m_url = buf.makeStringAndClear();
+    }
+    else if (!m_url.startsWith("file:///"))
+    {
+        // relative path
+        OUString out;
+        oslFileError rc = ::osl_getAbsoluteFileURL(
+            getWorkingDir().pData, perm.URL.pData, &out.pData );
+        m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
+    }
+#ifdef _WIN32
+    // correct win drive letters
+    if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
+    {
+        static OUString s_colon = ":";
+        // common case in API is a ':' (sal), so convert '|' to ':'
+        m_url = m_url.replaceAt( 9, 1, s_colon );
+    }
+#endif
 }
 
 bool FilePermission::implies( Permission const & perm ) const

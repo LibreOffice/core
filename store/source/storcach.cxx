@@ -220,42 +220,42 @@ void PageCache::rescale_Impl (std::size_t new_size)
     std::size_t new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = static_cast<Entry**>(std::malloc(new_bytes));
 
-    if (new_table != nullptr)
+    if (new_table == nullptr)
+        return;
+
+    Entry ** old_table = m_hash_table;
+    std::size_t old_size  = m_hash_size;
+
+    SAL_INFO(
+        "store",
+        "ave chain length: " << (m_hash_entries >> m_hash_shift)
+            << ", total entries: " << m_hash_entries << " [old_size: "
+            << old_size << " new_size: " << new_size << "]");
+
+    memset (new_table, 0, new_bytes);
+
+    m_hash_table = new_table;
+    m_hash_size  = new_size;
+    m_hash_shift = highbit(m_hash_size) - 1;
+
+    std::size_t i;
+    for (i = 0; i < old_size; i++)
     {
-        Entry ** old_table = m_hash_table;
-        std::size_t old_size  = m_hash_size;
-
-        SAL_INFO(
-            "store",
-            "ave chain length: " << (m_hash_entries >> m_hash_shift)
-                << ", total entries: " << m_hash_entries << " [old_size: "
-                << old_size << " new_size: " << new_size << "]");
-
-        memset (new_table, 0, new_bytes);
-
-        m_hash_table = new_table;
-        m_hash_size  = new_size;
-        m_hash_shift = highbit(m_hash_size) - 1;
-
-        std::size_t i;
-        for (i = 0; i < old_size; i++)
+        Entry * curr = old_table[i];
+        while (curr != nullptr)
         {
-            Entry * curr = old_table[i];
-            while (curr != nullptr)
-            {
-                Entry * next = curr->m_pNext;
-                int index = hash_index_Impl(curr->m_nOffset);
-                curr->m_pNext = m_hash_table[index];
-                m_hash_table[index] = curr;
-                curr = next;
-            }
-            old_table[i] = nullptr;
+            Entry * next = curr->m_pNext;
+            int index = hash_index_Impl(curr->m_nOffset);
+            curr->m_pNext = m_hash_table[index];
+            m_hash_table[index] = curr;
+            curr = next;
         }
-        if (old_table != m_hash_table_0)
-        {
+        old_table[i] = nullptr;
+    }
+    if (old_table != m_hash_table_0)
+    {
 
-            std::free (old_table);
-        }
+        std::free (old_table);
     }
 }
 
