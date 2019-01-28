@@ -103,23 +103,23 @@ namespace svgio
             // decompose children
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
-            if(!aNewTarget.empty())
-            {
-                if(getTransform())
-                {
-                    // create embedding group element with transformation
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            *getTransform(),
-                            aNewTarget));
+            if(aNewTarget.empty())
+                return;
 
-                    rTarget.push_back(xRef);
-                }
-                else
-                {
-                    // append to current target
-                    rTarget.append(aNewTarget);
-                }
+            if(getTransform())
+            {
+                // create embedding group element with transformation
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        *getTransform(),
+                        aNewTarget));
+
+                rTarget.push_back(xRef);
+            }
+            else
+            {
+                // append to current target
+                rTarget.append(aNewTarget);
             }
         }
 
@@ -127,132 +127,132 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DContainer& rContent,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(!rContent.empty() && Display_none != getDisplay())
+            if(!(!rContent.empty() && Display_none != getDisplay()))
+                return;
+
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            drawinglayer::primitive2d::Primitive2DContainer aClipTarget;
+            basegfx::B2DPolyPolygon aClipPolyPolygon;
+
+            // get clipPath definition as primitives
+            decomposeSvgNode(aClipTarget, true);
+
+            if(!aClipTarget.empty())
             {
-                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::primitive2d::Primitive2DContainer aClipTarget;
-                basegfx::B2DPolyPolygon aClipPolyPolygon;
+                // extract filled polygons as base for a mask PolyPolygon
+                drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
 
-                // get clipPath definition as primitives
-                decomposeSvgNode(aClipTarget, true);
+                aExtractor.process(aClipTarget);
 
-                if(!aClipTarget.empty())
+                const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+                const sal_uInt32 nSize(rResult.size());
+
+                if(nSize > 1)
                 {
-                    // extract filled polygons as base for a mask PolyPolygon
-                    drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
+                    // merge to single clipPolyPolygon
+                    aClipPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
+                }
+                else
+                {
+                    aClipPolyPolygon = rResult[0];
+                }
+            }
 
-                    aExtractor.process(aClipTarget);
+            if(aClipPolyPolygon.count())
+            {
+                if(objectBoundingBox == getClipPathUnits())
+                {
+                    // clip is object-relative, transform using content transformation
+                    const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));
 
-                    const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
-                    const sal_uInt32 nSize(rResult.size());
-
-                    if(nSize > 1)
+                    aClipPolyPolygon.transform(
+                        basegfx::utils::createScaleTranslateB2DHomMatrix(
+                            aContentRange.getRange(),
+                            aContentRange.getMinimum()));
+                }
+                else // userSpaceOnUse
+                {
+                    // #i124852#
+                    if(pTransform)
                     {
-                        // merge to single clipPolyPolygon
-                        aClipPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
-                    }
-                    else
-                    {
-                        aClipPolyPolygon = rResult[0];
+                        aClipPolyPolygon.transform(*pTransform);
                     }
                 }
 
-                if(aClipPolyPolygon.count())
+                // #i124313# try to avoid creating an embedding to a MaskPrimitive2D if
+                // possible; MaskPrimitive2D processing is potentially expensive
+                bool bCreateEmbedding(true);
+                bool bAddContent(true);
+
+                if(basegfx::utils::isRectangle(aClipPolyPolygon))
                 {
-                    if(objectBoundingBox == getClipPathUnits())
-                    {
-                        // clip is object-relative, transform using content transformation
-                        const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));
+                    // ClipRegion is a rectangle, thus it is not expensive to tell
+                    // if the content is completely inside or outside of it; get ranges
+                    const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
+                    const basegfx::B2DRange aContentRange(
+                        rContent.getB2DRange(
+                            aViewInformation2D));
 
-                        aClipPolyPolygon.transform(
-                            basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                aContentRange.getRange(),
-                                aContentRange.getMinimum()));
+                    if(aClipRange.isInside(aContentRange))
+                    {
+                        // completely contained, no need to clip at all, so no need for embedding
+                        bCreateEmbedding = false;
                     }
-                    else // userSpaceOnUse
+                    else if(aClipRange.overlaps(aContentRange))
                     {
-                        // #i124852#
-                        if(pTransform)
-                        {
-                            aClipPolyPolygon.transform(*pTransform);
-                        }
-                    }
+                        // overlap; embedding needed. ClipRegion can be minimized by using
+                        // the intersection of the ClipRange and the ContentRange. Minimizing
+                        // the ClipRegion potentially enhances further processing since
+                        // usually clip operations are expensive.
+                        basegfx::B2DRange aCommonRange(aContentRange);
 
-                    // #i124313# try to avoid creating an embedding to a MaskPrimitive2D if
-                    // possible; MaskPrimitive2D processing is potentially expensive
-                    bool bCreateEmbedding(true);
-                    bool bAddContent(true);
-
-                    if(basegfx::utils::isRectangle(aClipPolyPolygon))
-                    {
-                        // ClipRegion is a rectangle, thus it is not expensive to tell
-                        // if the content is completely inside or outside of it; get ranges
-                        const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
-                        const basegfx::B2DRange aContentRange(
-                            rContent.getB2DRange(
-                                aViewInformation2D));
-
-                        if(aClipRange.isInside(aContentRange))
-                        {
-                            // completely contained, no need to clip at all, so no need for embedding
-                            bCreateEmbedding = false;
-                        }
-                        else if(aClipRange.overlaps(aContentRange))
-                        {
-                            // overlap; embedding needed. ClipRegion can be minimized by using
-                            // the intersection of the ClipRange and the ContentRange. Minimizing
-                            // the ClipRegion potentially enhances further processing since
-                            // usually clip operations are expensive.
-                            basegfx::B2DRange aCommonRange(aContentRange);
-
-                            aCommonRange.intersect(aClipRange);
-                            aClipPolyPolygon = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonRange));
-                        }
-                        else
-                        {
-                            // not inside and no overlap -> completely outside
-                            // no need for embedding, no need for content at all
-                            bCreateEmbedding = false;
-                            bAddContent = false;
-                        }
+                        aCommonRange.intersect(aClipRange);
+                        aClipPolyPolygon = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonRange));
                     }
                     else
                     {
-                        // ClipRegion is not a simple rectangle, it would be possible but expensive to
-                        // tell if the content needs clipping or not. It is also dependent of
-                        // the content's decomposition. To do this, a processor would be needed that
-                        // is capable if processing the given sequence of primitives and decide
-                        // if all is inside or all is outside. Such a ClipProcessor could be written,
-                        // but for now just create the embedding
-                    }
-
-                    if(bCreateEmbedding)
-                    {
-                        // redefine target. Use MaskPrimitive2D with created clip
-                        // geometry. Using the automatically set mbIsClipPathContent at
-                        // SvgStyleAttributes the clip definition is without fill, stroke,
-                        // and strokeWidth and forced to black
-                        const drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
-                            new drawinglayer::primitive2d::MaskPrimitive2D(
-                                aClipPolyPolygon,
-                                rContent));
-
-                        rContent = drawinglayer::primitive2d::Primitive2DContainer { xEmbedTransparence };
-                    }
-                    else
-                    {
-                        if(!bAddContent)
-                        {
-                            rContent.clear();
-                        }
+                        // not inside and no overlap -> completely outside
+                        // no need for embedding, no need for content at all
+                        bCreateEmbedding = false;
+                        bAddContent = false;
                     }
                 }
                 else
                 {
-                    // An empty clipping path will completely clip away the element that had
-                    // the clip-path property applied. (Svg spec)
-                    rContent.clear();
+                    // ClipRegion is not a simple rectangle, it would be possible but expensive to
+                    // tell if the content needs clipping or not. It is also dependent of
+                    // the content's decomposition. To do this, a processor would be needed that
+                    // is capable if processing the given sequence of primitives and decide
+                    // if all is inside or all is outside. Such a ClipProcessor could be written,
+                    // but for now just create the embedding
                 }
+
+                if(bCreateEmbedding)
+                {
+                    // redefine target. Use MaskPrimitive2D with created clip
+                    // geometry. Using the automatically set mbIsClipPathContent at
+                    // SvgStyleAttributes the clip definition is without fill, stroke,
+                    // and strokeWidth and forced to black
+                    const drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            aClipPolyPolygon,
+                            rContent));
+
+                    rContent = drawinglayer::primitive2d::Primitive2DContainer { xEmbedTransparence };
+                }
+                else
+                {
+                    if(!bAddContent)
+                    {
+                        rContent.clear();
+                    }
+                }
+            }
+            else
+            {
+                // An empty clipping path will completely clip away the element that had
+                // the clip-path property applied. (Svg spec)
+                rContent.clear();
             }
         }
 

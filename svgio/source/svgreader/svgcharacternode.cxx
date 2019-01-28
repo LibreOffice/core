@@ -503,36 +503,36 @@ namespace svgio
                     rSvgTextPosition,
                     rSvgStyleAttributes));
 
-            if(xRef.is() && (Visibility_visible == rSvgStyleAttributes.getVisibility()))
+            if(!(xRef.is() && (Visibility_visible == rSvgStyleAttributes.getVisibility())))
+                return;
+
+            if(!rSvgTextPosition.isRotated())
             {
-                if(!rSvgTextPosition.isRotated())
+                rTarget.push_back(xRef);
+            }
+            else
+            {
+                // need to apply rotations to each character as given
+                const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate =
+                    dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(xRef.get());
+
+                if(pCandidate)
                 {
-                    rTarget.push_back(xRef);
+                    const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
+                    const drawinglayer::primitive2d::Primitive2DContainer& aResult(
+                        alocalTextBreakupHelper.getResult());
+
+                    if(!aResult.empty())
+                    {
+                        rTarget.append(aResult);
+                    }
+
+                    // also consume for the implied single space
+                    rSvgTextPosition.consumeRotation();
                 }
                 else
                 {
-                    // need to apply rotations to each character as given
-                    const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate =
-                        dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(xRef.get());
-
-                    if(pCandidate)
-                    {
-                        const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
-                        const drawinglayer::primitive2d::Primitive2DContainer& aResult(
-                            alocalTextBreakupHelper.getResult());
-
-                        if(!aResult.empty())
-                        {
-                            rTarget.append(aResult);
-                        }
-
-                        // also consume for the implied single space
-                        rSvgTextPosition.consumeRotation();
-                    }
-                    else
-                    {
-                        OSL_ENSURE(false, "Used primitive is not a text primitive (!)");
-                    }
+                    OSL_ENSURE(false, "Used primitive is not a text primitive (!)");
                 }
             }
         }

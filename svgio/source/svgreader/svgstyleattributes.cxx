@@ -262,75 +262,75 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             drawinglayer::primitive2d::Primitive2DContainer const & rSource) const
         {
-            if(!rSource.empty())
+            if(rSource.empty())
+                return;
+
+            // at this point the primitives in rSource are of type TextSimplePortionPrimitive2D
+            // or TextDecoratedPortionPrimitive2D and have the Fill Color (pAttributes->getFill())
+            // set. When another fill is used and also evtl. stroke is set it gets necessary to
+            // dismantle to geometry and add needed primitives
+            const basegfx::BColor* pFill = getFill();
+            const SvgGradientNode* pFillGradient = getSvgGradientNodeFill();
+            const SvgPatternNode* pFillPattern = getSvgPatternNodeFill();
+            const basegfx::BColor* pStroke = getStroke();
+            const SvgGradientNode* pStrokeGradient = getSvgGradientNodeStroke();
+            const SvgPatternNode* pStrokePattern = getSvgPatternNodeStroke();
+            basegfx::B2DPolyPolygon aMergedArea;
+
+            if(pFillGradient || pFillPattern || pStroke || pStrokeGradient || pStrokePattern)
             {
-                // at this point the primitives in rSource are of type TextSimplePortionPrimitive2D
-                // or TextDecoratedPortionPrimitive2D and have the Fill Color (pAttributes->getFill())
-                // set. When another fill is used and also evtl. stroke is set it gets necessary to
-                // dismantle to geometry and add needed primitives
-                const basegfx::BColor* pFill = getFill();
-                const SvgGradientNode* pFillGradient = getSvgGradientNodeFill();
-                const SvgPatternNode* pFillPattern = getSvgPatternNodeFill();
-                const basegfx::BColor* pStroke = getStroke();
-                const SvgGradientNode* pStrokeGradient = getSvgGradientNodeStroke();
-                const SvgPatternNode* pStrokePattern = getSvgPatternNodeStroke();
-                basegfx::B2DPolyPolygon aMergedArea;
+                // text geometry is needed, create
+                // use neutral ViewInformation and create LineGeometryExtractor2D
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
-                if(pFillGradient || pFillPattern || pStroke || pStrokeGradient || pStrokePattern)
+                // process
+                aExtractor.process(rSource);
+
+                // get results
+                const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
+                const sal_uInt32 nResultCount(rResult.size());
+                basegfx::B2DPolyPolygonVector aTextFillVector;
+                aTextFillVector.reserve(nResultCount);
+
+                for(sal_uInt32 a(0); a < nResultCount; a++)
                 {
-                    // text geometry is needed, create
-                    // use neutral ViewInformation and create LineGeometryExtractor2D
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                    drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
+                    const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
 
-                    // process
-                    aExtractor.process(rSource);
-
-                    // get results
-                    const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
-                    const sal_uInt32 nResultCount(rResult.size());
-                    basegfx::B2DPolyPolygonVector aTextFillVector;
-                    aTextFillVector.reserve(nResultCount);
-
-                    for(sal_uInt32 a(0); a < nResultCount; a++)
+                    if(rCandidate.getIsFilled())
                     {
-                        const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
-
-                        if(rCandidate.getIsFilled())
-                        {
-                            aTextFillVector.push_back(rCandidate.getB2DPolyPolygon());
-                        }
-                    }
-
-                    if(!aTextFillVector.empty())
-                    {
-                        aMergedArea = basegfx::utils::mergeToSinglePolyPolygon(aTextFillVector);
+                        aTextFillVector.push_back(rCandidate.getB2DPolyPolygon());
                     }
                 }
 
-                const bool bStrokeUsed(pStroke || pStrokeGradient || pStrokePattern);
+                if(!aTextFillVector.empty())
+                {
+                    aMergedArea = basegfx::utils::mergeToSinglePolyPolygon(aTextFillVector);
+                }
+            }
 
-                // add fill. Use geometry even for simple color fill when stroke
-                // is used, else text rendering and the geometry-based stroke will
-                // normally not really match optically due to diverse system text
-                // renderers
-                if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
-                {
-                    // create text fill content based on geometry
-                    add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange());
-                }
-                else if(pFill)
-                {
-                    // add the already prepared primitives for single color fill
-                    rTarget.append(rSource);
-                }
+            const bool bStrokeUsed(pStroke || pStrokeGradient || pStrokePattern);
 
-                // add stroke
-                if(aMergedArea.count() && bStrokeUsed)
-                {
-                    // create text stroke content
-                    add_stroke(aMergedArea, rTarget, aMergedArea.getB2DRange());
-                }
+            // add fill. Use geometry even for simple color fill when stroke
+            // is used, else text rendering and the geometry-based stroke will
+            // normally not really match optically due to diverse system text
+            // renderers
+            if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
+            {
+                // create text fill content based on geometry
+                add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange());
+            }
+            else if(pFill)
+            {
+                // add the already prepared primitives for single color fill
+                rTarget.append(rSource);
+            }
+
+            // add stroke
+            if(aMergedArea.count() && bStrokeUsed)
+            {
+                // create text stroke content
+                add_stroke(aMergedArea, rTarget, aMergedArea.getB2DRange());
             }
         }
 
@@ -346,127 +346,127 @@ namespace svgio
             // get the color stops
             rFillGradient.collectGradientEntries(aSvgGradientEntryVector);
 
-            if(!aSvgGradientEntryVector.empty())
-            {
-                basegfx::B2DHomMatrix aGeoToUnit;
-                basegfx::B2DHomMatrix aGradientTransform;
+            if(aSvgGradientEntryVector.empty())
+                return;
 
-                if(rFillGradient.getGradientTransform())
-                {
-                    aGradientTransform = *rFillGradient.getGradientTransform();
-                }
+            basegfx::B2DHomMatrix aGeoToUnit;
+            basegfx::B2DHomMatrix aGradientTransform;
+
+            if(rFillGradient.getGradientTransform())
+            {
+                aGradientTransform = *rFillGradient.getGradientTransform();
+            }
+
+            if(userSpaceOnUse == rFillGradient.getGradientUnits())
+            {
+                aGeoToUnit.translate(-rGeoRange.getMinX(), -rGeoRange.getMinY());
+                aGeoToUnit.scale(1.0 / rGeoRange.getWidth(), 1.0 / rGeoRange.getHeight());
+            }
+
+            if(SVGTokenLinearGradient == rFillGradient.getType())
+            {
+                basegfx::B2DPoint aStart(0.0, 0.0);
+                basegfx::B2DPoint aEnd(1.0, 0.0);
 
                 if(userSpaceOnUse == rFillGradient.getGradientUnits())
                 {
-                    aGeoToUnit.translate(-rGeoRange.getMinX(), -rGeoRange.getMinY());
-                    aGeoToUnit.scale(1.0 / rGeoRange.getWidth(), 1.0 / rGeoRange.getHeight());
-                }
-
-                if(SVGTokenLinearGradient == rFillGradient.getType())
-                {
-                    basegfx::B2DPoint aStart(0.0, 0.0);
-                    basegfx::B2DPoint aEnd(1.0, 0.0);
-
-                    if(userSpaceOnUse == rFillGradient.getGradientUnits())
-                    {
-                        // all possible units
-                        aStart.setX(rFillGradient.getX1().solve(mrOwner, xcoordinate));
-                        aStart.setY(rFillGradient.getY1().solve(mrOwner, ycoordinate));
-                        aEnd.setX(rFillGradient.getX2().solve(mrOwner, xcoordinate));
-                        aEnd.setY(rFillGradient.getY2().solve(mrOwner, ycoordinate));
-                    }
-                    else
-                    {
-                        // fractions or percent relative to object bounds
-                        const SvgNumber X1(rFillGradient.getX1());
-                        const SvgNumber Y1(rFillGradient.getY1());
-                        const SvgNumber X2(rFillGradient.getX2());
-                        const SvgNumber Y2(rFillGradient.getY2());
-
-                        aStart.setX(Unit_percent == X1.getUnit() ? X1.getNumber() * 0.01 : X1.getNumber());
-                        aStart.setY(Unit_percent == Y1.getUnit() ? Y1.getNumber() * 0.01 : Y1.getNumber());
-                        aEnd.setX(Unit_percent == X2.getUnit() ? X2.getNumber() * 0.01 : X2.getNumber());
-                        aEnd.setY(Unit_percent == Y2.getUnit() ? Y2.getNumber() * 0.01 : Y2.getNumber());
-                    }
-
-                    if(!aGeoToUnit.isIdentity())
-                    {
-                        aStart *= aGeoToUnit;
-                        aEnd *= aGeoToUnit;
-                    }
-
-                    rTarget.push_back(
-                        new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
-                            aGradientTransform,
-                            rPath,
-                            aSvgGradientEntryVector,
-                            aStart,
-                            aEnd,
-                            userSpaceOnUse != rFillGradient.getGradientUnits(),
-                            rFillGradient.getSpreadMethod()));
+                    // all possible units
+                    aStart.setX(rFillGradient.getX1().solve(mrOwner, xcoordinate));
+                    aStart.setY(rFillGradient.getY1().solve(mrOwner, ycoordinate));
+                    aEnd.setX(rFillGradient.getX2().solve(mrOwner, xcoordinate));
+                    aEnd.setY(rFillGradient.getY2().solve(mrOwner, ycoordinate));
                 }
                 else
                 {
-                    basegfx::B2DPoint aStart(0.5, 0.5);
-                    basegfx::B2DPoint aFocal;
-                    double fRadius(0.5);
-                    const SvgNumber* pFx = rFillGradient.getFx();
-                    const SvgNumber* pFy = rFillGradient.getFy();
-                    const bool bFocal(pFx || pFy);
+                    // fractions or percent relative to object bounds
+                    const SvgNumber X1(rFillGradient.getX1());
+                    const SvgNumber Y1(rFillGradient.getY1());
+                    const SvgNumber X2(rFillGradient.getX2());
+                    const SvgNumber Y2(rFillGradient.getY2());
 
-                    if(userSpaceOnUse == rFillGradient.getGradientUnits())
-                    {
-                        // all possible units
-                        aStart.setX(rFillGradient.getCx().solve(mrOwner, xcoordinate));
-                        aStart.setY(rFillGradient.getCy().solve(mrOwner, ycoordinate));
-                        fRadius = rFillGradient.getR().solve(mrOwner);
-
-                        if(bFocal)
-                        {
-                            aFocal.setX(pFx ? pFx->solve(mrOwner, xcoordinate) : aStart.getX());
-                            aFocal.setY(pFy ? pFy->solve(mrOwner, ycoordinate) : aStart.getY());
-                        }
-                    }
-                    else
-                    {
-                        // fractions or percent relative to object bounds
-                        const SvgNumber Cx(rFillGradient.getCx());
-                        const SvgNumber Cy(rFillGradient.getCy());
-                        const SvgNumber R(rFillGradient.getR());
-
-                        aStart.setX(Unit_percent == Cx.getUnit() ? Cx.getNumber() * 0.01 : Cx.getNumber());
-                        aStart.setY(Unit_percent == Cy.getUnit() ? Cy.getNumber() * 0.01 : Cy.getNumber());
-                        fRadius = (Unit_percent == R.getUnit()) ? R.getNumber() * 0.01 : R.getNumber();
-
-                        if(bFocal)
-                        {
-                            aFocal.setX(pFx ? (Unit_percent == pFx->getUnit() ? pFx->getNumber() * 0.01 : pFx->getNumber()) : aStart.getX());
-                            aFocal.setY(pFy ? (Unit_percent == pFy->getUnit() ? pFy->getNumber() * 0.01 : pFy->getNumber()) : aStart.getY());
-                        }
-                    }
-
-                    if(!aGeoToUnit.isIdentity())
-                    {
-                        aStart *= aGeoToUnit;
-                        fRadius = (aGeoToUnit * basegfx::B2DVector(fRadius, 0.0)).getLength();
-
-                        if(bFocal)
-                        {
-                            aFocal *= aGeoToUnit;
-                        }
-                    }
-
-                    rTarget.push_back(
-                        new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
-                            aGradientTransform,
-                            rPath,
-                            aSvgGradientEntryVector,
-                            aStart,
-                            fRadius,
-                            userSpaceOnUse != rFillGradient.getGradientUnits(),
-                            rFillGradient.getSpreadMethod(),
-                            bFocal ? &aFocal : nullptr));
+                    aStart.setX(Unit_percent == X1.getUnit() ? X1.getNumber() * 0.01 : X1.getNumber());
+                    aStart.setY(Unit_percent == Y1.getUnit() ? Y1.getNumber() * 0.01 : Y1.getNumber());
+                    aEnd.setX(Unit_percent == X2.getUnit() ? X2.getNumber() * 0.01 : X2.getNumber());
+                    aEnd.setY(Unit_percent == Y2.getUnit() ? Y2.getNumber() * 0.01 : Y2.getNumber());
                 }
+
+                if(!aGeoToUnit.isIdentity())
+                {
+                    aStart *= aGeoToUnit;
+                    aEnd *= aGeoToUnit;
+                }
+
+                rTarget.push_back(
+                    new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                        aGradientTransform,
+                        rPath,
+                        aSvgGradientEntryVector,
+                        aStart,
+                        aEnd,
+                        userSpaceOnUse != rFillGradient.getGradientUnits(),
+                        rFillGradient.getSpreadMethod()));
+            }
+            else
+            {
+                basegfx::B2DPoint aStart(0.5, 0.5);
+                basegfx::B2DPoint aFocal;
+                double fRadius(0.5);
+                const SvgNumber* pFx = rFillGradient.getFx();
+                const SvgNumber* pFy = rFillGradient.getFy();
+                const bool bFocal(pFx || pFy);
+
+                if(userSpaceOnUse == rFillGradient.getGradientUnits())
+                {
+                    // all possible units
+                    aStart.setX(rFillGradient.getCx().solve(mrOwner, xcoordinate));
+                    aStart.setY(rFillGradient.getCy().solve(mrOwner, ycoordinate));
+                    fRadius = rFillGradient.getR().solve(mrOwner);
+
+                    if(bFocal)
+                    {
+                        aFocal.setX(pFx ? pFx->solve(mrOwner, xcoordinate) : aStart.getX());
+                        aFocal.setY(pFy ? pFy->solve(mrOwner, ycoordinate) : aStart.getY());
+                    }
+                }
+                else
+                {
+                    // fractions or percent relative to object bounds
+                    const SvgNumber Cx(rFillGradient.getCx());
+                    const SvgNumber Cy(rFillGradient.getCy());
+                    const SvgNumber R(rFillGradient.getR());
+
+                    aStart.setX(Unit_percent == Cx.getUnit() ? Cx.getNumber() * 0.01 : Cx.getNumber());
+                    aStart.setY(Unit_percent == Cy.getUnit() ? Cy.getNumber() * 0.01 : Cy.getNumber());
+                    fRadius = (Unit_percent == R.getUnit()) ? R.getNumber() * 0.01 : R.getNumber();
+
+                    if(bFocal)
+                    {
+                        aFocal.setX(pFx ? (Unit_percent == pFx->getUnit() ? pFx->getNumber() * 0.01 : pFx->getNumber()) : aStart.getX());
+                        aFocal.setY(pFy ? (Unit_percent == pFy->getUnit() ? pFy->getNumber() * 0.01 : pFy->getNumber()) : aStart.getY());
+                    }
+                }
+
+                if(!aGeoToUnit.isIdentity())
+                {
+                    aStart *= aGeoToUnit;
+                    fRadius = (aGeoToUnit * basegfx::B2DVector(fRadius, 0.0)).getLength();
+
+                    if(bFocal)
+                    {
+                        aFocal *= aGeoToUnit;
+                    }
+                }
+
+                rTarget.push_back(
+                    new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                        aGradientTransform,
+                        rPath,
+                        aSvgGradientEntryVector,
+                        aStart,
+                        fRadius,
+                        userSpaceOnUse != rFillGradient.getGradientUnits(),
+                        rFillGradient.getSpreadMethod(),
+                        bFocal ? &aFocal : nullptr));
             }
         }
 
@@ -513,85 +513,85 @@ namespace svgio
             // fill polyPolygon with given pattern
             const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives = rFillPattern.getPatternPrimitives();
 
-            if(!rPrimitives.empty())
+            if(rPrimitives.empty())
+                return;
+
+            double fTargetWidth(rGeoRange.getWidth());
+            double fTargetHeight(rGeoRange.getHeight());
+
+            if(!(fTargetWidth > 0.0 && fTargetHeight > 0.0))
+                return;
+
+            // get relative values from pattern
+            double fX(0.0);
+            double fY(0.0);
+            double fW(0.0);
+            double fH(0.0);
+
+            rFillPattern.getValuesRelative(fX, fY, fW, fH, rGeoRange, mrOwner);
+
+            if(!(fW > 0.0 && fH > 0.0))
+                return;
+
+            // build the reference range relative to the rGeoRange
+            const basegfx::B2DRange aReferenceRange(fX, fY, fX + fW, fY + fH);
+
+            // find out how the content is mapped to the reference range
+            basegfx::B2DHomMatrix aMapPrimitivesToUnitRange;
+            const basegfx::B2DRange* pViewBox = rFillPattern.getViewBox();
+
+            if(pViewBox)
             {
-                double fTargetWidth(rGeoRange.getWidth());
-                double fTargetHeight(rGeoRange.getHeight());
+                // use viewBox/preserveAspectRatio
+                const SvgAspectRatio& rRatio = rFillPattern.getSvgAspectRatio();
+                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
 
-                if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
+                if(rRatio.isSet())
                 {
-                    // get relative values from pattern
-                    double fX(0.0);
-                    double fY(0.0);
-                    double fW(0.0);
-                    double fH(0.0);
-
-                    rFillPattern.getValuesRelative(fX, fY, fW, fH, rGeoRange, mrOwner);
-
-                    if(fW > 0.0 && fH > 0.0)
-                    {
-                        // build the reference range relative to the rGeoRange
-                        const basegfx::B2DRange aReferenceRange(fX, fY, fX + fW, fY + fH);
-
-                        // find out how the content is mapped to the reference range
-                        basegfx::B2DHomMatrix aMapPrimitivesToUnitRange;
-                        const basegfx::B2DRange* pViewBox = rFillPattern.getViewBox();
-
-                        if(pViewBox)
-                        {
-                            // use viewBox/preserveAspectRatio
-                            const SvgAspectRatio& rRatio = rFillPattern.getSvgAspectRatio();
-                            const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-
-                            if(rRatio.isSet())
-                            {
-                                // let mapping be created from SvgAspectRatio
-                                aMapPrimitivesToUnitRange = rRatio.createMapping(aUnitRange, *pViewBox);
-                            }
-                            else
-                            {
-                                // choose default mapping
-                                aMapPrimitivesToUnitRange = SvgAspectRatio::createLinearMapping(aUnitRange, *pViewBox);
-                            }
-                        }
-                        else
-                        {
-                            // use patternContentUnits
-                            const SvgUnits aPatternContentUnits(rFillPattern.getPatternContentUnits() ? *rFillPattern.getPatternContentUnits() : userSpaceOnUse);
-
-                            if(userSpaceOnUse == aPatternContentUnits)
-                            {
-                                // create relative mapping to unit coordinates
-                                aMapPrimitivesToUnitRange.scale(1.0 / (fW * fTargetWidth), 1.0 / (fH * fTargetHeight));
-                            }
-                            else
-                            {
-                                aMapPrimitivesToUnitRange.scale(1.0 / fW, 1.0 / fH);
-                            }
-                        }
-
-                        // apply aMapPrimitivesToUnitRange to content when used
-                        drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rPrimitives);
-
-                        if(!aMapPrimitivesToUnitRange.isIdentity())
-                        {
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    aMapPrimitivesToUnitRange,
-                                    aPrimitives));
-
-                            aPrimitives = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                        }
-
-                        // embed in PatternFillPrimitive2D
-                        rTarget.push_back(
-                            new drawinglayer::primitive2d::PatternFillPrimitive2D(
-                                rPath,
-                                aPrimitives,
-                                aReferenceRange));
-                    }
+                    // let mapping be created from SvgAspectRatio
+                    aMapPrimitivesToUnitRange = rRatio.createMapping(aUnitRange, *pViewBox);
+                }
+                else
+                {
+                    // choose default mapping
+                    aMapPrimitivesToUnitRange = SvgAspectRatio::createLinearMapping(aUnitRange, *pViewBox);
                 }
             }
+            else
+            {
+                // use patternContentUnits
+                const SvgUnits aPatternContentUnits(rFillPattern.getPatternContentUnits() ? *rFillPattern.getPatternContentUnits() : userSpaceOnUse);
+
+                if(userSpaceOnUse == aPatternContentUnits)
+                {
+                    // create relative mapping to unit coordinates
+                    aMapPrimitivesToUnitRange.scale(1.0 / (fW * fTargetWidth), 1.0 / (fH * fTargetHeight));
+                }
+                else
+                {
+                    aMapPrimitivesToUnitRange.scale(1.0 / fW, 1.0 / fH);
+                }
+            }
+
+            // apply aMapPrimitivesToUnitRange to content when used
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rPrimitives);
+
+            if(!aMapPrimitivesToUnitRange.isIdentity())
+            {
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aMapPrimitivesToUnitRange,
+                        aPrimitives));
+
+                aPrimitives = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+            }
+
+            // embed in PatternFillPrimitive2D
+            rTarget.push_back(
+                new drawinglayer::primitive2d::PatternFillPrimitive2D(
+                    rPath,
+                    aPrimitives,
+                    aReferenceRange));
         }
 
         void SvgStyleAttributes::add_fill(
@@ -603,50 +603,50 @@ namespace svgio
             const SvgGradientNode* pFillGradient = getSvgGradientNodeFill();
             const SvgPatternNode* pFillPattern = getSvgPatternNodeFill();
 
-            if(pFill || pFillGradient || pFillPattern)
+            if(!(pFill || pFillGradient || pFillPattern))
+                return;
+
+            const double fFillOpacity(getFillOpacity().solve(mrOwner));
+
+            if(!basegfx::fTools::more(fFillOpacity, 0.0))
+                return;
+
+            drawinglayer::primitive2d::Primitive2DContainer aNewFill;
+
+            if(pFillGradient)
             {
-                const double fFillOpacity(getFillOpacity().solve(mrOwner));
+                // create fill content with SVG gradient primitive
+                add_fillGradient(rPath, aNewFill, *pFillGradient, rGeoRange);
+            }
+            else if(pFillPattern)
+            {
+                // create fill content with SVG pattern primitive
+                add_fillPatternTransform(rPath, aNewFill, *pFillPattern, rGeoRange);
+            }
+            else // if(pFill)
+            {
+                // create fill content
+                aNewFill.resize(1);
+                aNewFill[0] = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    rPath,
+                    *pFill);
+            }
 
-                if(basegfx::fTools::more(fFillOpacity, 0.0))
-                {
-                    drawinglayer::primitive2d::Primitive2DContainer aNewFill;
+            if(aNewFill.empty())
+                return;
 
-                    if(pFillGradient)
-                    {
-                        // create fill content with SVG gradient primitive
-                        add_fillGradient(rPath, aNewFill, *pFillGradient, rGeoRange);
-                    }
-                    else if(pFillPattern)
-                    {
-                        // create fill content with SVG pattern primitive
-                        add_fillPatternTransform(rPath, aNewFill, *pFillPattern, rGeoRange);
-                    }
-                    else // if(pFill)
-                    {
-                        // create fill content
-                        aNewFill.resize(1);
-                        aNewFill[0] = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            rPath,
-                            *pFill);
-                    }
-
-                    if(!aNewFill.empty())
-                    {
-                        if(basegfx::fTools::less(fFillOpacity, 1.0))
-                        {
-                            // embed in UnifiedTransparencePrimitive2D
-                            rTarget.push_back(
-                                new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                    aNewFill,
-                                    1.0 - fFillOpacity));
-                        }
-                        else
-                        {
-                            // append
-                            rTarget.append(aNewFill);
-                        }
-                    }
-                }
+            if(basegfx::fTools::less(fFillOpacity, 1.0))
+            {
+                // embed in UnifiedTransparencePrimitive2D
+                rTarget.push_back(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        aNewFill,
+                        1.0 - fFillOpacity));
+            }
+            else
+            {
+                // append
+                rTarget.append(aNewFill);
             }
         }
 
@@ -659,150 +659,150 @@ namespace svgio
             const SvgGradientNode* pStrokeGradient = getSvgGradientNodeStroke();
             const SvgPatternNode* pStrokePattern = getSvgPatternNodeStroke();
 
-            if(pStroke || pStrokeGradient || pStrokePattern)
+            if(!(pStroke || pStrokeGradient || pStrokePattern))
+                return;
+
+            drawinglayer::primitive2d::Primitive2DContainer aNewStroke;
+            const double fStrokeOpacity(getStrokeOpacity().solve(mrOwner));
+
+            if(!basegfx::fTools::more(fStrokeOpacity, 0.0))
+                return;
+
+            // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
+            const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
+
+            if(!basegfx::fTools::more(fStrokeWidth, 0.0))
+                return;
+
+            drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
+
+            // if we have a line with two identical points it is not really a line,
+            // but used by SVG sometimes to paint a single dot.In that case, create
+            // the geometry for a single dot
+            if(1 == rPath.count())
             {
-                drawinglayer::primitive2d::Primitive2DContainer aNewStroke;
-                const double fStrokeOpacity(getStrokeOpacity().solve(mrOwner));
+                const basegfx::B2DPolygon& aSingle(rPath.getB2DPolygon(0));
 
-                if(basegfx::fTools::more(fStrokeOpacity, 0.0))
+                if(2 == aSingle.count() && aSingle.getB2DPoint(0).equal(aSingle.getB2DPoint(1)))
                 {
-                    // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
-                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
+                    aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(
+                            basegfx::utils::createPolygonFromCircle(
+                                aSingle.getB2DPoint(0),
+                                fStrokeWidth * (1.44 * 0.5))),
+                        pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0));
+                }
+            }
 
-                    if(basegfx::fTools::more(fStrokeWidth, 0.0))
+            if(!aNewLinePrimitive.is())
+            {
+                // get LineJoin, LineCap and stroke array
+                const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
+                const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
+                ::std::vector< double > aDashArray;
+
+                if(!getStrokeDasharray().empty())
+                {
+                    aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
+                }
+
+                // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
+                // The default needs to be set explicitly, because svg default <> Draw default
+                double fMiterMinimumAngle;
+                if (getStrokeMiterLimit().isSet())
+                {
+                    fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
+                }
+                else
+                {
+                    fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
+                }
+
+                // todo: Handle getStrokeDashOffset()
+
+                // prepare line attribute
+                const drawinglayer::attribute::LineAttribute aLineAttribute(
+                    pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
+                    fStrokeWidth,
+                    aB2DLineJoin,
+                    aLineCap,
+                    fMiterMinimumAngle);
+
+                if(aDashArray.empty())
+                {
+                    aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        rPath,
+                        aLineAttribute);
+                }
+                else
+                {
+                    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashArray);
+
+                    aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        rPath,
+                        aLineAttribute,
+                        aStrokeAttribute);
+                }
+            }
+
+            if(pStrokeGradient || pStrokePattern)
+            {
+                // put primitive into Primitive2DReference and Primitive2DSequence
+                const drawinglayer::primitive2d::Primitive2DContainer aSeq { aNewLinePrimitive };
+
+                // use neutral ViewInformation and create LineGeometryExtractor2D
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+
+                // process
+                aExtractor.process(aSeq);
+
+                // check for fill rsults
+                const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
+
+                if(!rLineFillVector.empty())
+                {
+                    const basegfx::B2DPolyPolygon aMergedArea(
+                        basegfx::utils::mergeToSinglePolyPolygon(
+                            rLineFillVector));
+
+                    if(aMergedArea.count())
                     {
-                        drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
-
-                        // if we have a line with two identical points it is not really a line,
-                        // but used by SVG sometimes to paint a single dot.In that case, create
-                        // the geometry for a single dot
-                        if(1 == rPath.count())
+                        if(pStrokeGradient)
                         {
-                            const basegfx::B2DPolygon& aSingle(rPath.getB2DPolygon(0));
-
-                            if(2 == aSingle.count() && aSingle.getB2DPoint(0).equal(aSingle.getB2DPoint(1)))
-                            {
-                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                    basegfx::B2DPolyPolygon(
-                                        basegfx::utils::createPolygonFromCircle(
-                                            aSingle.getB2DPoint(0),
-                                            fStrokeWidth * (1.44 * 0.5))),
-                                    pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0));
-                            }
+                            // create fill content with SVG gradient primitive. Use original GeoRange,
+                            // e.g. from circle without LineWidth
+                            add_fillGradient(aMergedArea, aNewStroke, *pStrokeGradient, rGeoRange);
                         }
-
-                        if(!aNewLinePrimitive.is())
+                        else // if(pStrokePattern)
                         {
-                            // get LineJoin, LineCap and stroke array
-                            const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
-                            const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
-                            ::std::vector< double > aDashArray;
-
-                            if(!getStrokeDasharray().empty())
-                            {
-                                aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
-                            }
-
-                            // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
-                            // The default needs to be set explicitly, because svg default <> Draw default
-                            double fMiterMinimumAngle;
-                            if (getStrokeMiterLimit().isSet())
-                            {
-                                fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
-                            }
-                            else
-                            {
-                                fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
-                            }
-
-                            // todo: Handle getStrokeDashOffset()
-
-                            // prepare line attribute
-                            const drawinglayer::attribute::LineAttribute aLineAttribute(
-                                pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
-                                fStrokeWidth,
-                                aB2DLineJoin,
-                                aLineCap,
-                                fMiterMinimumAngle);
-
-                            if(aDashArray.empty())
-                            {
-                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                    rPath,
-                                    aLineAttribute);
-                            }
-                            else
-                            {
-                                const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashArray);
-
-                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                    rPath,
-                                    aLineAttribute,
-                                    aStrokeAttribute);
-                            }
-                        }
-
-                        if(pStrokeGradient || pStrokePattern)
-                        {
-                            // put primitive into Primitive2DReference and Primitive2DSequence
-                            const drawinglayer::primitive2d::Primitive2DContainer aSeq { aNewLinePrimitive };
-
-                            // use neutral ViewInformation and create LineGeometryExtractor2D
-                            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                            drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
-
-                            // process
-                            aExtractor.process(aSeq);
-
-                            // check for fill rsults
-                            const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
-
-                            if(!rLineFillVector.empty())
-                            {
-                                const basegfx::B2DPolyPolygon aMergedArea(
-                                    basegfx::utils::mergeToSinglePolyPolygon(
-                                        rLineFillVector));
-
-                                if(aMergedArea.count())
-                                {
-                                    if(pStrokeGradient)
-                                    {
-                                        // create fill content with SVG gradient primitive. Use original GeoRange,
-                                        // e.g. from circle without LineWidth
-                                        add_fillGradient(aMergedArea, aNewStroke, *pStrokeGradient, rGeoRange);
-                                    }
-                                    else // if(pStrokePattern)
-                                    {
-                                        // create fill content with SVG pattern primitive. Use GeoRange
-                                        // from the expanded data, e.g. circle with extended geo by half linewidth
-                                        add_fillPatternTransform(aMergedArea, aNewStroke, *pStrokePattern, aMergedArea.getB2DRange());
-                                    }
-                                }
-                            }
-                        }
-                        else // if(pStroke)
-                        {
-                            aNewStroke.push_back(aNewLinePrimitive);
-                        }
-
-                        if(!aNewStroke.empty())
-                        {
-                            if(basegfx::fTools::less(fStrokeOpacity, 1.0))
-                            {
-                                // embed in UnifiedTransparencePrimitive2D
-                                rTarget.push_back(
-                                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                        aNewStroke,
-                                        1.0 - fStrokeOpacity));
-                            }
-                            else
-                            {
-                                // append
-                                rTarget.append(aNewStroke);
-                            }
+                            // create fill content with SVG pattern primitive. Use GeoRange
+                            // from the expanded data, e.g. circle with extended geo by half linewidth
+                            add_fillPatternTransform(aMergedArea, aNewStroke, *pStrokePattern, aMergedArea.getB2DRange());
                         }
                     }
                 }
+            }
+            else // if(pStroke)
+            {
+                aNewStroke.push_back(aNewLinePrimitive);
+            }
+
+            if(aNewStroke.empty())
+                return;
+
+            if(basegfx::fTools::less(fStrokeOpacity, 1.0))
+            {
+                // embed in UnifiedTransparencePrimitive2D
+                rTarget.push_back(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        aNewStroke,
+                        1.0 - fStrokeOpacity));
+            }
+            else
+            {
+                // append
+                rTarget.append(aNewStroke);
             }
         }
 
@@ -906,174 +906,174 @@ namespace svgio
             const SvgMarkerNode* pMid = accessMarkerMidXLink();
             const SvgMarkerNode* pEnd = accessMarkerEndXLink();
 
-            if(pStart || pMid || pEnd)
+            if(!(pStart || pMid || pEnd))
+                return;
+
+            const sal_uInt32 nSubPathCount(rPath.count());
+
+            if(!nSubPathCount)
+                return;
+
+            // remember prepared marker; pStart, pMid and pEnd may all be equal when
+            // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
+            // see 'case SVGTokenMarker' in this file; thus in this case only one common
+            // marker in primitive form will be prepared
+            const SvgMarkerNode* pPrepared = nullptr;
+
+            // values for the prepared marker, results of prepare_singleMarker
+            drawinglayer::primitive2d::Primitive2DContainer aPreparedMarkerPrimitives;
+            basegfx::B2DHomMatrix aPreparedMarkerTransform;
+            basegfx::B2DRange aPreparedMarkerClipRange;
+
+            for (sal_uInt32 a(0); a < nSubPathCount; a++)
             {
-                const sal_uInt32 nSubPathCount(rPath.count());
+                // iterate over sub-paths
+                const basegfx::B2DPolygon& aSubPolygonPath(rPath.getB2DPolygon(a));
+                const sal_uInt32 nSubPolygonPointCount(aSubPolygonPath.count());
+                const bool bSubPolygonPathIsClosed(aSubPolygonPath.isClosed());
 
-                if(nSubPathCount)
+                if(nSubPolygonPointCount)
                 {
-                    // remember prepared marker; pStart, pMid and pEnd may all be equal when
-                    // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
-                    // see 'case SVGTokenMarker' in this file; thus in this case only one common
-                    // marker in primitive form will be prepared
-                    const SvgMarkerNode* pPrepared = nullptr;
+                    // for each sub-path, create one marker per point (when closed, two markers
+                    // need to pe created for the 1st point)
+                    const sal_uInt32 nTargetMarkerCount(bSubPolygonPathIsClosed ? nSubPolygonPointCount + 1 : nSubPolygonPointCount);
 
-                    // values for the prepared marker, results of prepare_singleMarker
-                    drawinglayer::primitive2d::Primitive2DContainer aPreparedMarkerPrimitives;
-                    basegfx::B2DHomMatrix aPreparedMarkerTransform;
-                    basegfx::B2DRange aPreparedMarkerClipRange;
-
-                    for (sal_uInt32 a(0); a < nSubPathCount; a++)
+                    for (sal_uInt32 b(0); b < nTargetMarkerCount; b++)
                     {
-                        // iterate over sub-paths
-                        const basegfx::B2DPolygon& aSubPolygonPath(rPath.getB2DPolygon(a));
-                        const sal_uInt32 nSubPolygonPointCount(aSubPolygonPath.count());
-                        const bool bSubPolygonPathIsClosed(aSubPolygonPath.isClosed());
+                        const bool bIsFirstMarker(!a && !b);
+                        const bool bIsLastMarker(nSubPathCount - 1 == a && nTargetMarkerCount - 1 == b);
+                        const SvgMarkerNode* pNeeded = nullptr;
 
-                        if(nSubPolygonPointCount)
+                        if(bIsFirstMarker)
                         {
-                            // for each sub-path, create one marker per point (when closed, two markers
-                            // need to pe created for the 1st point)
-                            const sal_uInt32 nTargetMarkerCount(bSubPolygonPathIsClosed ? nSubPolygonPointCount + 1 : nSubPolygonPointCount);
+                            // 1st point in 1st sub-polygon, use pStart
+                            pNeeded = pStart;
+                        }
+                        else if(bIsLastMarker)
+                        {
+                            // last point in last sub-polygon, use pEnd
+                            pNeeded = pEnd;
+                        }
+                        else
+                        {
+                            // anything in-between, use pMid
+                            pNeeded = pMid;
+                        }
 
-                            for (sal_uInt32 b(0); b < nTargetMarkerCount; b++)
+                        if(pHelpPointIndices && !pHelpPointIndices->empty())
+                        {
+                            const basegfx::utils::PointIndexSet::const_iterator aFound(
+                                pHelpPointIndices->find(basegfx::utils::PointIndex(a, b)));
+
+                            if(aFound != pHelpPointIndices->end())
                             {
-                                const bool bIsFirstMarker(!a && !b);
-                                const bool bIsLastMarker(nSubPathCount - 1 == a && nTargetMarkerCount - 1 == b);
-                                const SvgMarkerNode* pNeeded = nullptr;
-
-                                if(bIsFirstMarker)
-                                {
-                                    // 1st point in 1st sub-polygon, use pStart
-                                    pNeeded = pStart;
-                                }
-                                else if(bIsLastMarker)
-                                {
-                                    // last point in last sub-polygon, use pEnd
-                                    pNeeded = pEnd;
-                                }
-                                else
-                                {
-                                    // anything in-between, use pMid
-                                    pNeeded = pMid;
-                                }
-
-                                if(pHelpPointIndices && !pHelpPointIndices->empty())
-                                {
-                                    const basegfx::utils::PointIndexSet::const_iterator aFound(
-                                        pHelpPointIndices->find(basegfx::utils::PointIndex(a, b)));
-
-                                    if(aFound != pHelpPointIndices->end())
-                                    {
-                                        // this point is a pure helper point; do not create a marker for it
-                                        continue;
-                                    }
-                                }
-
-                                if(!pNeeded)
-                                {
-                                    // no marker needs to be created for this point
-                                    continue;
-                                }
-
-                                if(pPrepared != pNeeded)
-                                {
-                                    // if needed marker is not yet prepared, do it now
-                                    if(prepare_singleMarker(aPreparedMarkerPrimitives, aPreparedMarkerTransform, aPreparedMarkerClipRange, *pNeeded))
-                                    {
-                                        pPrepared = pNeeded;
-                                    }
-                                    else
-                                    {
-                                        // error: could not prepare given marker
-                                        OSL_ENSURE(false, "OOps, could not prepare given marker as primitives (!)");
-                                        pPrepared = nullptr;
-                                        continue;
-                                    }
-                                }
-
-                                // prepare complete transform
-                                basegfx::B2DHomMatrix aCombinedTransform(aPreparedMarkerTransform);
-
-                                // get rotation
-                                if(pPrepared->getOrientAuto())
-                                {
-                                    const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
-
-                                    // get entering and leaving tangents; this will search backward/forward
-                                    // in the polygon to find tangents unequal to zero, skipping empty edges
-                                    // see basegfx descriptions)
-                                    // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
-                                    // and entering tangent for end marker. To achieve this (if wanted) it is possible
-                                    // to make the fetch of aEntering/aLeaving dependent on bIsFirstMarker/bIsLastMarker.
-                                    // This is not done here, see comment 14 in task #1232379#
-                                    // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute
-                                    basegfx::B2DVector aEntering(
-                                        basegfx::utils::getTangentEnteringPoint(
-                                            aSubPolygonPath,
-                                            nPointIndex));
-                                    basegfx::B2DVector aLeaving(
-                                        basegfx::utils::getTangentLeavingPoint(
-                                            aSubPolygonPath,
-                                            nPointIndex));
-                                    const bool bEntering(!aEntering.equalZero());
-                                    const bool bLeaving(!aLeaving.equalZero());
-
-                                    if(bEntering || bLeaving)
-                                    {
-                                        basegfx::B2DVector aSum(0.0, 0.0);
-
-                                        if(bEntering)
-                                        {
-                                            aSum += aEntering.normalize();
-                                        }
-
-                                        if(bLeaving)
-                                        {
-                                            aSum += aLeaving.normalize();
-                                        }
-
-                                        if(!aSum.equalZero())
-                                        {
-                                            const double fAngle(atan2(aSum.getY(), aSum.getX()));
-
-                                            // apply rotation
-                                            aCombinedTransform.rotate(fAngle);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    // apply rotation
-                                    aCombinedTransform.rotate(pPrepared->getAngle());
-                                }
-
-                                // get and apply target position
-                                const basegfx::B2DPoint aPoint(aSubPolygonPath.getB2DPoint(b % nSubPolygonPointCount));
-
-                                aCombinedTransform.translate(aPoint.getX(), aPoint.getY());
-
-                                // prepare marker
-                                drawinglayer::primitive2d::Primitive2DReference xMarker(
-                                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                                        aCombinedTransform,
-                                        aPreparedMarkerPrimitives));
-
-                                if(!aPreparedMarkerClipRange.isEmpty())
-                                {
-                                    // marker needs to be clipped, it's bigger as the mapping
-                                    basegfx::B2DPolyPolygon aClipPolygon(basegfx::utils::createPolygonFromRect(aPreparedMarkerClipRange));
-
-                                    aClipPolygon.transform(aCombinedTransform);
-                                    xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
-                                        aClipPolygon,
-                                        drawinglayer::primitive2d::Primitive2DContainer { xMarker });
-                                }
-
-                                // add marker
-                                rTarget.push_back(xMarker);
+                                // this point is a pure helper point; do not create a marker for it
+                                continue;
                             }
                         }
+
+                        if(!pNeeded)
+                        {
+                            // no marker needs to be created for this point
+                            continue;
+                        }
+
+                        if(pPrepared != pNeeded)
+                        {
+                            // if needed marker is not yet prepared, do it now
+                            if(prepare_singleMarker(aPreparedMarkerPrimitives, aPreparedMarkerTransform, aPreparedMarkerClipRange, *pNeeded))
+                            {
+                                pPrepared = pNeeded;
+                            }
+                            else
+                            {
+                                // error: could not prepare given marker
+                                OSL_ENSURE(false, "OOps, could not prepare given marker as primitives (!)");
+                                pPrepared = nullptr;
+                                continue;
+                            }
+                        }
+
+                        // prepare complete transform
+                        basegfx::B2DHomMatrix aCombinedTransform(aPreparedMarkerTransform);
+
+                        // get rotation
+                        if(pPrepared->getOrientAuto())
+                        {
+                            const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
+
+                            // get entering and leaving tangents; this will search backward/forward
+                            // in the polygon to find tangents unequal to zero, skipping empty edges
+                            // see basegfx descriptions)
+                            // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
+                            // and entering tangent for end marker. To achieve this (if wanted) it is possible
+                            // to make the fetch of aEntering/aLeaving dependent on bIsFirstMarker/bIsLastMarker.
+                            // This is not done here, see comment 14 in task #1232379#
+                            // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute
+                            basegfx::B2DVector aEntering(
+                                basegfx::utils::getTangentEnteringPoint(
+                                    aSubPolygonPath,
+                                    nPointIndex));
+                            basegfx::B2DVector aLeaving(
+                                basegfx::utils::getTangentLeavingPoint(
+                                    aSubPolygonPath,
+                                    nPointIndex));
+                            const bool bEntering(!aEntering.equalZero());
+                            const bool bLeaving(!aLeaving.equalZero());
+
+                            if(bEntering || bLeaving)
+                            {
+                                basegfx::B2DVector aSum(0.0, 0.0);
+
+                                if(bEntering)
+                                {
+                                    aSum += aEntering.normalize();
+                                }
+
+                                if(bLeaving)
+                                {
+                                    aSum += aLeaving.normalize();
+                                }
+
+                                if(!aSum.equalZero())
+                                {
+                                    const double fAngle(atan2(aSum.getY(), aSum.getX()));
+
+                                    // apply rotation
+                                    aCombinedTransform.rotate(fAngle);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // apply rotation
+                            aCombinedTransform.rotate(pPrepared->getAngle());
+                        }
+
+                        // get and apply target position
+                        const basegfx::B2DPoint aPoint(aSubPolygonPath.getB2DPoint(b % nSubPolygonPointCount));
+
+                        aCombinedTransform.translate(aPoint.getX(), aPoint.getY());
+
+                        // prepare marker
+                        drawinglayer::primitive2d::Primitive2DReference xMarker(
+                            new drawinglayer::primitive2d::TransformPrimitive2D(
+                                aCombinedTransform,
+                                aPreparedMarkerPrimitives));
+
+                        if(!aPreparedMarkerClipRange.isEmpty())
+                        {
+                            // marker needs to be clipped, it's bigger as the mapping
+                            basegfx::B2DPolyPolygon aClipPolygon(basegfx::utils::createPolygonFromRect(aPreparedMarkerClipRange));
+
+                            aClipPolygon.transform(aCombinedTransform);
+                            xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
+                                aClipPolygon,
+                                drawinglayer::primitive2d::Primitive2DContainer { xMarker });
+                        }
+
+                        // add marker
+                        rTarget.push_back(xMarker);
                     }
                 }
             }
@@ -1153,98 +1153,98 @@ namespace svgio
             const drawinglayer::primitive2d::Primitive2DContainer& rSource,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(!rSource.empty())
+            if(rSource.empty())
+                return;
+
+            const double fOpacity(getOpacity().solve(mrOwner));
+
+            if(basegfx::fTools::equalZero(fOpacity))
             {
-                const double fOpacity(getOpacity().solve(mrOwner));
+                return;
+            }
 
-                if(basegfx::fTools::equalZero(fOpacity))
-                {
-                    return;
-                }
+            drawinglayer::primitive2d::Primitive2DContainer aSource(rSource);
 
-                drawinglayer::primitive2d::Primitive2DContainer aSource(rSource);
+            if(basegfx::fTools::less(fOpacity, 1.0))
+            {
+                // embed in UnifiedTransparencePrimitive2D
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        aSource,
+                        1.0 - fOpacity));
 
-                if(basegfx::fTools::less(fOpacity, 1.0))
-                {
-                    // embed in UnifiedTransparencePrimitive2D
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            aSource,
-                            1.0 - fOpacity));
+                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+            }
 
-                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                }
+            if(pTransform)
+            {
+                // create embedding group element with transformation. This applies the given
+                // transformation to the graphical content, but *not* to mask and/or clip (as needed)
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        *pTransform,
+                        aSource));
 
-                if(pTransform)
-                {
-                    // create embedding group element with transformation. This applies the given
-                    // transformation to the graphical content, but *not* to mask and/or clip (as needed)
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            *pTransform,
-                            aSource));
+                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+            }
 
-                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                }
+            const SvgClipPathNode* pClip = accessClipPathXLink();
+            while(pClip)
+            {
+                // #i124852# transform may be needed when userSpaceOnUse
+                pClip->apply(aSource, pTransform);
+                pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
+            }
 
-                const SvgClipPathNode* pClip = accessClipPathXLink();
-                while(pClip)
+            if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
+            {
+                const SvgMaskNode* pMask = accessMaskXLink();
+                if(pMask)
                 {
                     // #i124852# transform may be needed when userSpaceOnUse
-                    pClip->apply(aSource, pTransform);
-                    pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
+                    pMask->apply(aSource, pTransform);
                 }
+            }
 
-                if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
+            // This is part of the SVG import of self-written SVGs from
+            // Draw/Impress containing multiple Slides/Pages. To be able
+            // to later 'break' these to multiple Pages if wanted, embed
+            // each Page-Content in a identifiable Primitive Grouping
+            // Object.
+            // This is the case when the current Node is a GroupNode, has
+            // class="Page" set, has a parent that also is a GroupNode
+            // at which class="Slide" is set.
+            // Multiple Slides/Pages are possible for Draw and Impress.
+            if(SVGTokenG == mrOwner.getType() && mrOwner.getClass())
+            {
+                const OUString aOwnerClass(*mrOwner.getClass());
+
+                if("Page" == aOwnerClass)
                 {
-                    const SvgMaskNode* pMask = accessMaskXLink();
-                    if(pMask)
+                    const SvgNode* pParent(mrOwner.getParent());
+
+                    if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
                     {
-                        // #i124852# transform may be needed when userSpaceOnUse
-                        pMask->apply(aSource, pTransform);
-                    }
-                }
+                        const OUString aParentClass(*pParent->getClass());
 
-                // This is part of the SVG import of self-written SVGs from
-                // Draw/Impress containing multiple Slides/Pages. To be able
-                // to later 'break' these to multiple Pages if wanted, embed
-                // each Page-Content in a identifiable Primitive Grouping
-                // Object.
-                // This is the case when the current Node is a GroupNode, has
-                // class="Page" set, has a parent that also is a GroupNode
-                // at which class="Slide" is set.
-                // Multiple Slides/Pages are possible for Draw and Impress.
-                if(SVGTokenG == mrOwner.getType() && mrOwner.getClass())
-                {
-                    const OUString aOwnerClass(*mrOwner.getClass());
-
-                    if("Page" == aOwnerClass)
-                    {
-                        const SvgNode* pParent(mrOwner.getParent());
-
-                        if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                        if("Slide" == aParentClass)
                         {
-                            const OUString aParentClass(*pParent->getClass());
+                            // embed to grouping primitive to identify the
+                            // Slide/Page information
+                            const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                new drawinglayer::primitive2d::PageHierarchyPrimitive2D(
+                                    aSource));
 
-                            if("Slide" == aParentClass)
-                            {
-                                // embed to grouping primitive to identify the
-                                // Slide/Page information
-                                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                    new drawinglayer::primitive2d::PageHierarchyPrimitive2D(
-                                        aSource));
-
-                                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                            }
+                            aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                         }
                     }
                 }
+            }
 
-                if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
-                {
-                    // append to current target
-                    rTarget.append(aSource);
-                }
+            if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
+            {
+                // append to current target
+                rTarget.append(aSource);
             }
         }
 

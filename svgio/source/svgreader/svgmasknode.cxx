@@ -170,147 +170,147 @@ namespace svgio
             // decompose children
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
-            if(!aNewTarget.empty())
+            if(aNewTarget.empty())
+                return;
+
+            if(getTransform())
             {
-                if(getTransform())
-                {
-                    // create embedding group element with transformation
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            *getTransform(),
-                            aNewTarget));
+                // create embedding group element with transformation
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        *getTransform(),
+                        aNewTarget));
 
-                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                }
-
-                // append to current target
-                rTarget.append(aNewTarget);
+                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
+
+            // append to current target
+            rTarget.append(aNewTarget);
         }
 
         void SvgMaskNode::apply(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(!rTarget.empty() && Display_none != getDisplay())
+            if(!(!rTarget.empty() && Display_none != getDisplay()))
+                return;
+
+            drawinglayer::primitive2d::Primitive2DContainer aMaskTarget;
+
+            // get mask definition as primitives
+            decomposeSvgNode(aMaskTarget, true);
+
+            if(!aMaskTarget.empty())
             {
-                drawinglayer::primitive2d::Primitive2DContainer aMaskTarget;
+                // get range of content to be masked
+                const basegfx::B2DRange aContentRange(
+                        rTarget.getB2DRange(
+                            drawinglayer::geometry::ViewInformation2D()));
+                const double fContentWidth(aContentRange.getWidth());
+                const double fContentHeight(aContentRange.getHeight());
 
-                // get mask definition as primitives
-                decomposeSvgNode(aMaskTarget, true);
-
-                if(!aMaskTarget.empty())
+                if(fContentWidth > 0.0 && fContentHeight > 0.0)
                 {
-                    // get range of content to be masked
-                    const basegfx::B2DRange aContentRange(
-                            rTarget.getB2DRange(
-                                drawinglayer::geometry::ViewInformation2D()));
-                    const double fContentWidth(aContentRange.getWidth());
-                    const double fContentHeight(aContentRange.getHeight());
+                    // create OffscreenBufferRange
+                    basegfx::B2DRange aOffscreenBufferRange;
 
-                    if(fContentWidth > 0.0 && fContentHeight > 0.0)
+                    if(objectBoundingBox == maMaskUnits)
                     {
-                        // create OffscreenBufferRange
-                        basegfx::B2DRange aOffscreenBufferRange;
+                        // fractions or percentages of the bounding box of the element to which the mask is applied
+                        const double fX(Unit_percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
+                        const double fY(Unit_percent == getY().getUnit() ? getY().getNumber() * 0.01 : getY().getNumber());
+                        const double fW(Unit_percent == getWidth().getUnit() ? getWidth().getNumber() * 0.01 : getWidth().getNumber());
+                        const double fH(Unit_percent == getHeight().getUnit() ? getHeight().getNumber() * 0.01 : getHeight().getNumber());
 
-                        if(objectBoundingBox == maMaskUnits)
+                        aOffscreenBufferRange = basegfx::B2DRange(
+                            aContentRange.getMinX() + (fX * fContentWidth),
+                            aContentRange.getMinY() + (fY * fContentHeight),
+                            aContentRange.getMinX() + ((fX + fW) * fContentWidth),
+                            aContentRange.getMinY() + ((fY + fH) * fContentHeight));
+                    }
+                    else
+                    {
+                        const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
+                        const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
+
+                        aOffscreenBufferRange = basegfx::B2DRange(
+                            fX,
+                            fY,
+                            fX + (getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : 0.0),
+                            fY + (getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : 0.0));
+                    }
+
+                    if(objectBoundingBox == maMaskContentUnits)
+                    {
+                        // mask is object-relative, embed in content transformation
+                        const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                            new drawinglayer::primitive2d::TransformPrimitive2D(
+                                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                    aContentRange.getRange(),
+                                    aContentRange.getMinimum()),
+                                aMaskTarget));
+
+                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
+                    }
+                    else // userSpaceOnUse
+                    {
+                        // #i124852#
+                        if(pTransform)
                         {
-                            // fractions or percentages of the bounding box of the element to which the mask is applied
-                            const double fX(Unit_percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
-                            const double fY(Unit_percent == getY().getUnit() ? getY().getNumber() * 0.01 : getY().getNumber());
-                            const double fW(Unit_percent == getWidth().getUnit() ? getWidth().getNumber() * 0.01 : getWidth().getNumber());
-                            const double fH(Unit_percent == getHeight().getUnit() ? getHeight().getNumber() * 0.01 : getHeight().getNumber());
-
-                            aOffscreenBufferRange = basegfx::B2DRange(
-                                aContentRange.getMinX() + (fX * fContentWidth),
-                                aContentRange.getMinY() + (fY * fContentHeight),
-                                aContentRange.getMinX() + ((fX + fW) * fContentWidth),
-                                aContentRange.getMinY() + ((fY + fH) * fContentHeight));
-                        }
-                        else
-                        {
-                            const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
-                            const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
-
-                            aOffscreenBufferRange = basegfx::B2DRange(
-                                fX,
-                                fY,
-                                fX + (getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : 0.0),
-                                fY + (getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : 0.0));
-                        }
-
-                        if(objectBoundingBox == maMaskContentUnits)
-                        {
-                            // mask is object-relative, embed in content transformation
                             const drawinglayer::primitive2d::Primitive2DReference xTransform(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                        aContentRange.getRange(),
-                                        aContentRange.getMinimum()),
+                                    *pTransform,
                                     aMaskTarget));
 
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                         }
-                        else // userSpaceOnUse
-                        {
-                            // #i124852#
-                            if(pTransform)
-                            {
-                                const drawinglayer::primitive2d::Primitive2DReference xTransform(
-                                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                                        *pTransform,
-                                        aMaskTarget));
-
-                                aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
-                            }
-                        }
-
-                        // embed content to a ModifiedColorPrimitive2D since the definitions
-                        // how content is used as alpha is special for Svg
-                        {
-                            const drawinglayer::primitive2d::Primitive2DReference xInverseMask(
-                                new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                                    aMaskTarget,
-                                    basegfx::BColorModifierSharedPtr(
-                                        new basegfx::BColorModifier_luminance_to_alpha())));
-
-                            aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
-                        }
-
-                        // prepare new content
-                        drawinglayer::primitive2d::Primitive2DReference xNewContent(
-                            new drawinglayer::primitive2d::TransparencePrimitive2D(
-                                rTarget,
-                                aMaskTarget));
-
-                        // output up to now is defined by aContentRange and mask is oriented
-                        // relative to it. It is possible that aOffscreenBufferRange defines
-                        // a smaller area. In that case, embed to a mask primitive
-                        if(!aOffscreenBufferRange.isInside(aContentRange))
-                        {
-                            xNewContent = new drawinglayer::primitive2d::MaskPrimitive2D(
-                                basegfx::B2DPolyPolygon(
-                                    basegfx::utils::createPolygonFromRect(
-                                        aOffscreenBufferRange)),
-                                drawinglayer::primitive2d::Primitive2DContainer { xNewContent });
-                        }
-
-                        // redefine target. Use TransparencePrimitive2D with created mask
-                        // geometry
-                        rTarget = drawinglayer::primitive2d::Primitive2DContainer { xNewContent };
                     }
-                    else
+
+                    // embed content to a ModifiedColorPrimitive2D since the definitions
+                    // how content is used as alpha is special for Svg
                     {
-                        // content is geometrically empty
-                        rTarget.clear();
+                        const drawinglayer::primitive2d::Primitive2DReference xInverseMask(
+                            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                                aMaskTarget,
+                                basegfx::BColorModifierSharedPtr(
+                                    new basegfx::BColorModifier_luminance_to_alpha())));
+
+                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
                     }
+
+                    // prepare new content
+                    drawinglayer::primitive2d::Primitive2DReference xNewContent(
+                        new drawinglayer::primitive2d::TransparencePrimitive2D(
+                            rTarget,
+                            aMaskTarget));
+
+                    // output up to now is defined by aContentRange and mask is oriented
+                    // relative to it. It is possible that aOffscreenBufferRange defines
+                    // a smaller area. In that case, embed to a mask primitive
+                    if(!aOffscreenBufferRange.isInside(aContentRange))
+                    {
+                        xNewContent = new drawinglayer::primitive2d::MaskPrimitive2D(
+                            basegfx::B2DPolyPolygon(
+                                basegfx::utils::createPolygonFromRect(
+                                    aOffscreenBufferRange)),
+                            drawinglayer::primitive2d::Primitive2DContainer { xNewContent });
+                    }
+
+                    // redefine target. Use TransparencePrimitive2D with created mask
+                    // geometry
+                    rTarget = drawinglayer::primitive2d::Primitive2DContainer { xNewContent };
                 }
                 else
                 {
-                    // An empty clipping path will completely clip away the element that had
-                    // the clip-path property applied. (Svg spec)
+                    // content is geometrically empty
                     rTarget.clear();
                 }
+            }
+            else
+            {
+                // An empty clipping path will completely clip away the element that had
+                // the clip-path property applied. (Svg spec)
+                rTarget.clear();
             }
         }
 

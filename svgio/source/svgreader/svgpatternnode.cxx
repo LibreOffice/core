@@ -198,62 +198,62 @@ namespace svgio
             double fTargetWidth(rGeoRange.getWidth());
             double fTargetHeight(rGeoRange.getHeight());
 
-            if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
+            if(!(fTargetWidth > 0.0 && fTargetHeight > 0.0))
+                return;
+
+            const SvgUnits aPatternUnits(getPatternUnits() ? *getPatternUnits() : objectBoundingBox);
+
+            if(objectBoundingBox == aPatternUnits)
             {
-                const SvgUnits aPatternUnits(getPatternUnits() ? *getPatternUnits() : objectBoundingBox);
+                rfW = (getWidth().isSet()) ? getWidth().getNumber() : 0.0;
+                rfH = (getHeight().isSet()) ? getHeight().getNumber() : 0.0;
 
-                if(objectBoundingBox == aPatternUnits)
+                if(Unit_percent == getWidth().getUnit())
                 {
-                    rfW = (getWidth().isSet()) ? getWidth().getNumber() : 0.0;
-                    rfH = (getHeight().isSet()) ? getHeight().getNumber() : 0.0;
-
-                    if(Unit_percent == getWidth().getUnit())
-                    {
-                        rfW *= 0.01;
-                    }
-
-                    if(Unit_percent == getHeight().getUnit())
-                    {
-                        rfH *= 0.01;
-                    }
-                }
-                else
-                {
-                    rfW = (getWidth().isSet()) ? getWidth().solve(rUser, xcoordinate) : 0.0;
-                    rfH = (getHeight().isSet()) ? getHeight().solve(rUser, ycoordinate) : 0.0;
-
-                    // make relative to rGeoRange
-                    rfW /= fTargetWidth;
-                    rfH /= fTargetHeight;
+                    rfW *= 0.01;
                 }
 
-                if(rfW > 0.0 && rfH > 0.0)
+                if(Unit_percent == getHeight().getUnit())
                 {
-                    if(objectBoundingBox == aPatternUnits)
-                    {
-                        rfX = (getX().isSet()) ? getX().getNumber() : 0.0;
-                        rfY = (getY().isSet()) ? getY().getNumber() : 0.0;
-
-                        if(Unit_percent == getX().getUnit())
-                        {
-                            rfX *= 0.01;
-                        }
-
-                        if(Unit_percent == getY().getUnit())
-                        {
-                            rfY *= 0.01;
-                        }
-                    }
-                    else
-                    {
-                        rfX = (getX().isSet()) ? getX().solve(rUser, xcoordinate) : 0.0;
-                        rfY = (getY().isSet()) ? getY().solve(rUser, ycoordinate) : 0.0;
-
-                        // make relative to rGeoRange
-                        rfX = (rfX - rGeoRange.getMinX()) / fTargetWidth;
-                        rfY = (rfY - rGeoRange.getMinY()) / fTargetHeight;
-                    }
+                    rfH *= 0.01;
                 }
+            }
+            else
+            {
+                rfW = (getWidth().isSet()) ? getWidth().solve(rUser, xcoordinate) : 0.0;
+                rfH = (getHeight().isSet()) ? getHeight().solve(rUser, ycoordinate) : 0.0;
+
+                // make relative to rGeoRange
+                rfW /= fTargetWidth;
+                rfH /= fTargetHeight;
+            }
+
+            if(!(rfW > 0.0 && rfH > 0.0))
+                return;
+
+            if(objectBoundingBox == aPatternUnits)
+            {
+                rfX = (getX().isSet()) ? getX().getNumber() : 0.0;
+                rfY = (getY().isSet()) ? getY().getNumber() : 0.0;
+
+                if(Unit_percent == getX().getUnit())
+                {
+                    rfX *= 0.01;
+                }
+
+                if(Unit_percent == getY().getUnit())
+                {
+                    rfY *= 0.01;
+                }
+            }
+            else
+            {
+                rfX = (getX().isSet()) ? getX().solve(rUser, xcoordinate) : 0.0;
+                rfY = (getY().isSet()) ? getY().solve(rUser, ycoordinate) : 0.0;
+
+                // make relative to rGeoRange
+                rfX = (rfX - rGeoRange.getMinX()) / fTargetWidth;
+                rfY = (rfY - rGeoRange.getMinY()) / fTargetHeight;
             }
         }
 

@@ -142,50 +142,50 @@ namespace svgio
             // try to access link to content
             const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-            if (pXLink && Display_none != pXLink->getDisplay() && !mbDecomposingSvgNode)
+            if (!(pXLink && Display_none != pXLink->getDisplay() && !mbDecomposingSvgNode))
+                return;
+
+            // decompose children
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+
+            // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
+            // SVG docs want the getWidth() and getHeight() from this node
+            // to be valid for the subtree.
+            mbDecomposingSvgNode = true;
+            const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
+            pXLink->decomposeSvgNode(aNewTarget, true);
+            const_cast< SvgNode* >(pXLink)->setAlternativeParent();
+            mbDecomposingSvgNode = false;
+
+            if(aNewTarget.empty())
+                return;
+
+            basegfx::B2DHomMatrix aTransform;
+
+            if(getX().isSet() || getY().isSet())
             {
-                // decompose children
-                drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+                aTransform.translate(
+                    getX().solve(*this, xcoordinate),
+                    getY().solve(*this, ycoordinate));
+            }
 
-                // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
-                // SVG docs want the getWidth() and getHeight() from this node
-                // to be valid for the subtree.
-                mbDecomposingSvgNode = true;
-                const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
-                pXLink->decomposeSvgNode(aNewTarget, true);
-                const_cast< SvgNode* >(pXLink)->setAlternativeParent();
-                mbDecomposingSvgNode = false;
+            if(getTransform())
+            {
+                aTransform = *getTransform() * aTransform;
+            }
 
-                if(!aNewTarget.empty())
-                {
-                    basegfx::B2DHomMatrix aTransform;
+            if(!aTransform.isIdentity())
+            {
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aTransform,
+                        aNewTarget));
 
-                    if(getX().isSet() || getY().isSet())
-                    {
-                        aTransform.translate(
-                            getX().solve(*this, xcoordinate),
-                            getY().solve(*this, ycoordinate));
-                    }
-
-                    if(getTransform())
-                    {
-                        aTransform = *getTransform() * aTransform;
-                    }
-
-                    if(!aTransform.isIdentity())
-                    {
-                        const drawinglayer::primitive2d::Primitive2DReference xRef(
-                            new drawinglayer::primitive2d::TransformPrimitive2D(
-                                aTransform,
-                                aNewTarget));
-
-                        rTarget.push_back(xRef);
-                    }
-                    else
-                    {
-                        rTarget.append(aNewTarget);
-                    }
-                }
+                rTarget.push_back(xRef);
+            }
+            else
+            {
+                rTarget.append(aNewTarget);
             }
         }
 

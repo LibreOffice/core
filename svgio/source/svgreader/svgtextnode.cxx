@@ -89,21 +89,21 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             drawinglayer::primitive2d::Primitive2DContainer const & rSource)
         {
-            if(!rSource.empty())
-            {
-                const SvgStyleAttributes* pAttributes = rCandidate.getSvgStyleAttributes();
+            if(rSource.empty())
+                return;
 
-                if(pAttributes)
-                {
-                    // add text with taking all Fill/Stroke attributes into account
-                    pAttributes->add_text(rTarget, rSource);
-                }
-                else
-                {
-                    // should not happen, every subnode from SvgTextNode will at least
-                    // return the attributes from SvgTextNode. Nonetheless, add text
-                    rTarget.append(rSource);
-                }
+            const SvgStyleAttributes* pAttributes = rCandidate.getSvgStyleAttributes();
+
+            if(pAttributes)
+            {
+                // add text with taking all Fill/Stroke attributes into account
+                pAttributes->add_text(rTarget, rSource);
+            }
+            else
+            {
+                // should not happen, every subnode from SvgTextNode will at least
+                // return the attributes from SvgTextNode. Nonetheless, add text
+                rTarget.append(rSource);
             }
         }
 
@@ -225,37 +225,37 @@ namespace svgio
             // SVGTokenTref and SVGTokenTextPath. These increase a given current text position
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle && !getChildren().empty())
+            if(!(pStyle && !getChildren().empty()))
+                return;
+
+            const double fOpacity(pStyle->getOpacity().getNumber());
+
+            if(fOpacity <= 0.0)
+                return;
+
+            SvgTextPosition aSvgTextPosition(nullptr, *this, maSvgTextPositions);
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+            const auto& rChildren = getChildren();
+            const sal_uInt32 nCount(rChildren.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                const double fOpacity(pStyle->getOpacity().getNumber());
+                const SvgNode& rCandidate = *rChildren[a];
 
-                if(fOpacity > 0.0)
-                {
-                    SvgTextPosition aSvgTextPosition(nullptr, *this, maSvgTextPositions);
-                    drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-                    const auto& rChildren = getChildren();
-                    const sal_uInt32 nCount(rChildren.size());
+                DecomposeChild(rCandidate, aNewTarget, aSvgTextPosition);
+            }
 
-                    for(sal_uInt32 a(0); a < nCount; a++)
-                    {
-                        const SvgNode& rCandidate = *rChildren[a];
+            if(!aNewTarget.empty())
+            {
+                drawinglayer::primitive2d::Primitive2DContainer aNewTarget2;
 
-                        DecomposeChild(rCandidate, aNewTarget, aSvgTextPosition);
-                    }
+                addTextPrimitives(*this, aNewTarget2, aNewTarget);
+                aNewTarget = aNewTarget2;
+            }
 
-                    if(!aNewTarget.empty())
-                    {
-                        drawinglayer::primitive2d::Primitive2DContainer aNewTarget2;
-
-                        addTextPrimitives(*this, aNewTarget2, aNewTarget);
-                        aNewTarget = aNewTarget2;
-                    }
-
-                    if(!aNewTarget.empty())
-                    {
-                        pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
-                    }
-                }
+            if(!aNewTarget.empty())
+            {
+                pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
             }
         }
 

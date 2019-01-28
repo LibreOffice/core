@@ -50,58 +50,58 @@ namespace svgio
         // #i125258#
         void SvgSvgNode::initializeStyleAttributes()
         {
-            if(!mbStyleAttributesInitialized)
+            if(mbStyleAttributesInitialized)
+                return;
+
+            // #i125258# determine if initial values need to be initialized with hard values
+            // for the case that this is the outmost SVG statement and it has no parent
+            // stale (CssStyle for svg may be defined)
+            bool bSetInitialValues(true);
+
+            if(getParent())
             {
-                // #i125258# determine if initial values need to be initialized with hard values
-                // for the case that this is the outmost SVG statement and it has no parent
-                // stale (CssStyle for svg may be defined)
-                bool bSetInitialValues(true);
-
-                if(getParent())
-                {
-                    // #i125258# no initial values when it's a SVG element embedded in SVG
-                    bSetInitialValues = false;
-                }
-
-                if(bSetInitialValues)
-                {
-                    const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
-
-                    if(pStyles && pStyles->getParentStyle())
-                    {
-                        // SVG has a parent style (probably CssStyle), check if fill is set there anywhere
-                        // already. If yes, do not set the default fill (black)
-                        bool bFillSet(false);
-                        const SvgStyleAttributes* pParentStyle = pStyles->getParentStyle();
-
-                        while(pParentStyle && !bFillSet)
-                        {
-                            bFillSet = pParentStyle->isFillSet();
-                            pParentStyle = pParentStyle->getParentStyle();
-                        }
-
-                        if(bFillSet)
-                        {
-                            // #125258# no initial values when SVG has a parent style at which a fill
-                            // is already set
-                            bSetInitialValues = false;
-                        }
-                    }
-                }
-
-                if(bSetInitialValues)
-                {
-                    // #i125258# only set if not yet initialized (SvgSvgNode::parseAttribute is already done,
-                    // just setting may revert an already set valid value)
-                    if(!maSvgStyleAttributes.isFillSet())
-                    {
-                        // #i125258# initial fill is black (see SVG1.1 spec)
-                        maSvgStyleAttributes.setFill(SvgPaint(basegfx::BColor(0.0, 0.0, 0.0), true, true));
-                    }
-                }
-
-                mbStyleAttributesInitialized = true;
+                // #i125258# no initial values when it's a SVG element embedded in SVG
+                bSetInitialValues = false;
             }
+
+            if(bSetInitialValues)
+            {
+                const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
+
+                if(pStyles && pStyles->getParentStyle())
+                {
+                    // SVG has a parent style (probably CssStyle), check if fill is set there anywhere
+                    // already. If yes, do not set the default fill (black)
+                    bool bFillSet(false);
+                    const SvgStyleAttributes* pParentStyle = pStyles->getParentStyle();
+
+                    while(pParentStyle && !bFillSet)
+                    {
+                        bFillSet = pParentStyle->isFillSet();
+                        pParentStyle = pParentStyle->getParentStyle();
+                    }
+
+                    if(bFillSet)
+                    {
+                        // #125258# no initial values when SVG has a parent style at which a fill
+                        // is already set
+                        bSetInitialValues = false;
+                    }
+                }
+            }
+
+            if(bSetInitialValues)
+            {
+                // #i125258# only set if not yet initialized (SvgSvgNode::parseAttribute is already done,
+                // just setting may revert an already set valid value)
+                if(!maSvgStyleAttributes.isFillSet())
+                {
+                    // #i125258# initial fill is black (see SVG1.1 spec)
+                    maSvgStyleAttributes.setFill(SvgPaint(basegfx::BColor(0.0, 0.0, 0.0), true, true));
+                }
+            }
+
+            mbStyleAttributesInitialized = true;
         }
 
         SvgSvgNode::~SvgSvgNode()
@@ -709,22 +709,22 @@ namespace svgio
                 }
             }
 
-            if(aSequence.empty() && !getParent() && getViewBox())
-            {
-                // tdf#118232 No geometry, Outermost SVG element and we have a ViewBox.
-                // Create a HiddenGeometry Primitive containing an expanded
-                // hairline geometry to have the size contained
-                const drawinglayer::primitive2d::Primitive2DReference xLine(
-                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                        basegfx::utils::createPolygonFromRect(
-                            *getViewBox()),
-                        basegfx::BColor(0.0, 0.0, 0.0)));
-                const drawinglayer::primitive2d::Primitive2DReference xHidden(
-                    new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                        drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+            if(!(aSequence.empty() && !getParent() && getViewBox()))
+                return;
 
-                rTarget.push_back(xHidden);
-            }
+            // tdf#118232 No geometry, Outermost SVG element and we have a ViewBox.
+            // Create a HiddenGeometry Primitive containing an expanded
+            // hairline geometry to have the size contained
+            const drawinglayer::primitive2d::Primitive2DReference xLine(
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    basegfx::utils::createPolygonFromRect(
+                        *getViewBox()),
+                    basegfx::BColor(0.0, 0.0, 0.0)));
+            const drawinglayer::primitive2d::Primitive2DReference xHidden(
+                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                    drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+
+            rTarget.push_back(xHidden);
         }
 
         const basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const
