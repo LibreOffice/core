@@ -181,9 +181,6 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     Reference< XConnection > xCon = pCon;
     pCon->construct(url, info);
 
-    if (url == "sdbc:embedded:firebird")
-        pCon->setAutoCommit(true);
-
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
