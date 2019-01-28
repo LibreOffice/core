@@ -58,6 +58,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
@@ -2308,8 +2309,8 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             awt::Point aAttrPosInHoriL2R(
                     ConvertPositionToHoriL2R( xGroupShape->getPosition(),
                                                xGroupShape->getSize() ) );
-            aNewPos.X -= aAttrPosInHoriL2R.X;
-            aNewPos.Y -= aAttrPosInHoriL2R.Y;
+            aNewPos.X = o3tl::saturating_sub(aNewPos.X, aAttrPosInHoriL2R.X);
+            aNewPos.Y = o3tl::saturating_sub(aNewPos.Y, aAttrPosInHoriL2R.Y);
         }
         // convert relative position in horizontal left-to-right layout into
         // absolute position in horizontal left-to-right layout
@@ -2323,8 +2324,8 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             SvxShape* pSvxGroupShape = reinterpret_cast< SvxShape * >(
                     sal::static_int_cast< sal_IntPtr >( xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
             const awt::Point aGroupPos = pSvxGroupShape->getPosition();
-            aNewPos.X += aGroupPos.X;
-            aNewPos.Y += aGroupPos.Y;
+            aNewPos.X = o3tl::saturating_add(aNewPos.X, aGroupPos.X);
+            aNewPos.Y = o3tl::saturating_add(aNewPos.Y, aGroupPos.Y);
         }
         // set position
         mxShape->setPosition( aNewPos );
