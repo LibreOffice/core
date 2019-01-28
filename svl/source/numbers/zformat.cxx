@@ -3058,14 +3058,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     else
     {
-        double fTime = fNumber * 86400.0;
-        const double fOrigTime = fTime;
-        const double fFullSeconds = std::trunc(fTime);
-        fTime = rtl::math::round( fTime, int(nCntPost));
-        // Do not round up into the next magnitude, truncate instead.
-        if (fTime >= fFullSeconds + 1.0 || (fTime == 0.0 && fOrigTime != 0.0))
-            fTime = rtl::math::pow10Exp( std::trunc( rtl::math::pow10Exp( fOrigTime, nCntPost)), -nCntPost);
-
+        const double fTime = rtl::math::round( fNumber * 86400.0, int(nCntPost));
         if (bSign && fTime == 0.0)
         {
             bSign = false; // Not -00:00:00
