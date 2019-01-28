@@ -245,7 +245,10 @@ bool FmFormShell::PrepareClose(bool bUI)
 
                     if ( bModified && bUI )
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/savemodifieddialog.ui"));
+                        SfxViewShell* pShell = GetViewShell();
+                        vcl::Window* pShellWnd = pShell ? pShell->GetWindow() : nullptr;
+                        weld::Widget* pFrameWeld = pShellWnd ? pShellWnd->GetFrameWeld() : nullptr;
+                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pFrameWeld, "svx/ui/savemodifieddialog.ui"));
                         std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog("SaveModifiedDialog"));
                         switch (xQry->run())
                         {
