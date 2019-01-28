@@ -673,7 +673,12 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( eState >= SfxItemState::DEFAULT )
     {
         pFontItem = static_cast<const SvxFontItem*>(&( rSet.Get( nWhich ) ));
-        pNameBox->set_active_text( pFontItem->GetFamilyName() );
+        const OUString &rName = pFontItem->GetFamilyName();
+        int nIndex = pNameBox->find_text(rName);
+        pNameBox->set_active(nIndex);
+        // tdf#122992 if it didn't exist in the list, set the entry text to it anyway
+        if (nIndex == -1)
+            pNameBox->set_entry_text(rName);
     }
     else
     {
