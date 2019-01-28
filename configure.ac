@@ -6550,39 +6550,6 @@ return !(i != 0 && j != 0);
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING([that $CXX supports C++14 constexpr])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    // A somewhat over-complicated way of checking for
-    // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66460> "ICE using __func__
-    // in constexpr function":
-    #include <cassert>
-    template<typename T> inline constexpr T f(T x) { return x; }
-    template<typename T> inline constexpr T g(T x) {
-        assert(f(static_cast<int>(x)));
-        return x;
-    }
-    enum E { e };
-    auto v = g(E::e);
-
-    struct S {
-        int n_;
-        constexpr bool f() {
-            int n = n_;
-            int i = 0;
-            while (n > 0) { --n; ++i; }
-            assert(i >= 0);
-            return i == 0;
-        }
-    };
-    constexpr auto v2 = S{10}.f();
-    ]])], AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required C++14 constexpr support]))
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-
 dnl _Pragma support (may require C++11)
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CXX supports _Pragma operator])
@@ -6616,66 +6583,6 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING([[that $CXX supports [[fallthrough]]]])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-dnl Unknown attributes must be ignored by compilers, but they do emit warnings about them:
-if test "$COM" = MSC; then
-    CXXFLAGS="$CXXFLAGS /we5030"
-else
-    CXXFLAGS="$CXXFLAGS -Werror"
-fi
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-        // There appears to be no feature-test macro for __has_cpp_attribute in C++2a, approximate
-        // by checking for __cplusplus:
-        #if __cplusplus > 201703L
-        #if !__has_cpp_attribute(fallthrough)
-        #error
-        #endif
-        #else
-        void f(int & x) {
-            switch (x) {
-            case 0:
-                ++x;
-                [[fallthrough]];
-            default:
-                ++x;
-            }
-        }
-        #endif
-    ]])],
-    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required [[fallthrough]] support]))
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
-
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING([[that $CXX supports [[nodiscard]]]])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-dnl Unknown attributes must be ignored by compilers, but they do emit warnings about them:
-if test "$COM" = MSC; then
-    CXXFLAGS="$CXXFLAGS /we5030"
-else
-    CXXFLAGS="$CXXFLAGS -Werror"
-fi
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-        // There appears to be no feature-test macro for __has_cpp_attribute in C++2a, approximate
-        // by checking for __cplusplus:
-        #if __cplusplus > 201703L
-        #if !__has_cpp_attribute(nodiscard)
-        #error
-        #endif
-        #else
-        [[nodiscard]] int f();
-        #endif
-    ]])],
-    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required [[nodiscard]] support]))
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
-
 AC_MSG_CHECKING([whether $CXX supports guaranteed copy elision])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
@@ -6698,24 +6605,6 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
         AC_DEFINE([HAVE_CPP_GUARANTEED_COPY_ELISION],[1])
         AC_MSG_RESULT([yes])
     ], [AC_MSG_RESULT([no])])
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
-
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING([that $CXX has a fix for CWG1579])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <memory>
-        struct S1 {};
-        struct S2: S1 {};
-        std::unique_ptr<S1> f() {
-            std::unique_ptr<S2> s2(new S2);
-            return s2;
-        }
-    ])],
-    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks a required fix for CWG1579]))
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
@@ -12522,48 +12411,6 @@ if test "$build_os" = "cygwin"; then
 
     AC_SUBST(ILIB)
 fi
-
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING([that $CXX supports inline variables])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-if test "$build_os" = cygwin; then
-    save_LIB=$LIB
-    export LIB=$ILIB
-fi
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-        #if !defined __cpp_inline_variables
-        // This tests for one specific aspect of inline variables that is actually used by
-        // ORegistry::ROOT (registry/source/regimpl.cxx):
-        struct S { constexpr S() {} };
-        struct T { static constexpr S s{}; };
-        S const * f() { return &T::s; }
-        #endif
-    ]])],
-    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required inline variable support]))
-CXXFLAGS=$save_CXXFLAGS
-if test "$build_os" = cygwin; then
-    LIB=$save_LIB
-fi
-AC_LANG_POP([C++])
-
-dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
-AC_MSG_CHECKING(
-    [that C++11 use of const_iterator in standard containers is not broken])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    #include <list>
-    ]],[[
-        std::list<int> l;
-        l.erase(l.cbegin());
-    ]])],
-    AC_MSG_RESULT([yes]),
-    AC_MSG_ERROR([C++11 use of const_iterator in standard containers must not broken]))
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
 
 # ===================================================================
 # Creating bigger shared library to link against
