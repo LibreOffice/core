@@ -1333,7 +1333,7 @@ def main():
         try:
             tree = ET.parse(filename)
         except ET.ParseError:
-            err(filename, None, None, "parse", "malformatted xml file")
+            err(filename, None, None, "parse", "malformed xml file")
             continue
         except IOError:
             err(filename, None, None, None, "unable to read file")
