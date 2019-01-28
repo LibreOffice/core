@@ -63,7 +63,9 @@ static const expect_t expect[]
 
 void Tdf119625Test::testTime()
 {
-    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForFileName("tdf119625.odb");
+    // the migration requires the file to be writable
+    utl::TempFile const temp(createTempCopy("tdf119625.odb"));
+    uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
 
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
     // at this point migration is already done
