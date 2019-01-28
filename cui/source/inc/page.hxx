@@ -132,7 +132,7 @@ private:
 
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(PaperBinHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(PaperBinHdl_Impl, weld::Widget&, void);
     DECL_LINK(SwapOrientation_Impl, weld::Button&, void);
     void SwapFirstValues_Impl( bool bSet );
     DECL_LINK(BorderModify_Impl, weld::MetricSpinButton&, void);
