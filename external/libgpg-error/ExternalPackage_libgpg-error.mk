@@ -13,7 +13,15 @@ $(eval $(call gb_ExternalPackage_use_external_project,libgpg-error,libgpg-error)
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
-$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.21.0))
+ifeq ($(OS),LINUX)
+
+$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error-lo.so.0,src/.libs/libgpg-error-lo.so.0.22.0))
+
+else ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.0.dylib,src/.libs/libgpg-error.0.dylib))
+
+endif
 
 endif # $(DISABLE_DYNLOADING)
 

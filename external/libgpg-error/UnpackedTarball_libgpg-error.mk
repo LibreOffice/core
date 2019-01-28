@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
     external/libgpg-error/fix-autoconf-macros.patch \
     external/libgpg-error/disable-rpath-option.patch \
 	external/libgpg-error/libgpg-error_gawk5.patch \
+	$(if $(filter LINUX,$(OS)),external/libgpg-error/libgpgerror-bundled-soname.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:
