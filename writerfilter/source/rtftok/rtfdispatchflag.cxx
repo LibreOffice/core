@@ -773,6 +773,14 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTF_SUPER:
         {
+            // Make sure character properties are not lost if the document
+            // starts with a footnote.
+            if (!isStyleSheetImport())
+            {
+                checkFirstRun();
+                checkNeedPap();
+            }
+
             if (!m_aStates.top().pCurrentBuffer)
                 m_aStates.top().pCurrentBuffer = &m_aSuperBuffer;
 
