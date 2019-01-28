@@ -1509,24 +1509,8 @@ namespace basegfx
             const double fZero(0.0);
             const double fOne(1.0);
 
-            // crop to useful values
-            if(fTools::less(fRadiusX, fZero))
-            {
-                fRadiusX = fZero;
-            }
-            else if(fTools::more(fRadiusX, fOne))
-            {
-                fRadiusX = fOne;
-            }
-
-            if(fTools::less(fRadiusY, fZero))
-            {
-                fRadiusY = fZero;
-            }
-            else if(fTools::more(fRadiusY, fOne))
-            {
-                fRadiusY = fOne;
-            }
+            fRadiusX = std::clamp(fRadiusX, 0.0, 1.0);
+            fRadiusY = std::clamp(fRadiusY, 0.0, 1.0);
 
             if(rtl::math::approxEqual(fZero, fRadiusX) || rtl::math::approxEqual(fZero, fRadiusY))
             {
