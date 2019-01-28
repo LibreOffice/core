@@ -71,6 +71,8 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/lok.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1380,6 +1382,13 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             locale.isEmpty(), "configmgr",
             ("access best-matching localized property value via \"*<locale>\""
              " with empty <locale>; falling back to defaults"));
+
+        // Since the locale given to us is the one used at initialization,
+        // here we override it with the actual current-user's language to
+        // support per-view localization in LOK.
+        if (comphelper::LibreOfficeKit::isActive())
+            locale = comphelper::LibreOfficeKit::getLanguageTag().getLanguage();
+
         if (!locale.isEmpty()) {
             // Find best match using an adaptation of RFC 4647 lookup matching
             // rules, removing "-" or "_" delimited segments from the end:
