@@ -87,7 +87,7 @@ Connection::Connection()
     , m_sFirebirdURL()
     , m_bIsEmbedded(false)
     , m_bIsFile(false)
-    , m_bIsAutoCommit(false)
+    , m_bIsAutoCommit(true)
     , m_bIsReadOnly(false)
     , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
 #if SAL_TYPES_SIZEOFPOINTER == 8
