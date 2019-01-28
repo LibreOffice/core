@@ -129,29 +129,29 @@ namespace svgio
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle && getRx().isSet() && getRy().isSet())
+            if(!(pStyle && getRx().isSet() && getRy().isSet()))
+                return;
+
+            const double fRx(getRx().solve(*this, xcoordinate));
+            const double fRy(getRy().solve(*this, ycoordinate));
+
+            if(!(fRx > 0.0 && fRy > 0.0))
+                return;
+
+            const basegfx::B2DPolygon aPath(
+                basegfx::utils::createPolygonFromEllipse(
+                    basegfx::B2DPoint(
+                        getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
+                        getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
+                    fRx, fRy));
+
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+
+            pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
+
+            if(!aNewTarget.empty())
             {
-                const double fRx(getRx().solve(*this, xcoordinate));
-                const double fRy(getRy().solve(*this, ycoordinate));
-
-                if(fRx > 0.0 && fRy > 0.0)
-                {
-                    const basegfx::B2DPolygon aPath(
-                        basegfx::utils::createPolygonFromEllipse(
-                            basegfx::B2DPoint(
-                                getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
-                                getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
-                            fRx, fRy));
-
-                    drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-
-                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
-
-                    if(!aNewTarget.empty())
-                    {
-                        pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
-                    }
-                }
+                pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
             }
         }
     } // end of namespace svgreader

@@ -115,28 +115,28 @@ namespace svgio
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle && getR().isSet())
+            if(!(pStyle && getR().isSet()))
+                return;
+
+            const double fR(getR().solve(*this));
+
+            if(fR <= 0.0)
+                return;
+
+            const basegfx::B2DPolygon aPath(
+                basegfx::utils::createPolygonFromCircle(
+                    basegfx::B2DPoint(
+                        getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
+                        getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
+                    fR));
+
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+
+            pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
+
+            if(!aNewTarget.empty())
             {
-                const double fR(getR().solve(*this));
-
-                if(fR > 0.0)
-                {
-                    const basegfx::B2DPolygon aPath(
-                        basegfx::utils::createPolygonFromCircle(
-                            basegfx::B2DPoint(
-                                getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
-                                getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
-                            fR));
-
-                    drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-
-                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
-
-                    if(!aNewTarget.empty())
-                    {
-                        pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
-                    }
-                }
+                pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
             }
         }
     } // end of namespace svgreader

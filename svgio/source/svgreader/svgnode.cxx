@@ -47,19 +47,72 @@ namespace svgio
         {
             const SvgDocument& rDocument = getDocument();
 
-            if(rDocument.hasGlobalCssStyleAttributes())
+            if(!rDocument.hasGlobalCssStyleAttributes())
+                return;
+
+            const SvgNode* pParent = rCurrent.getParent();
+
+            // check for ID (highest priority)
+            if(rCurrent.getId())
             {
-                const SvgNode* pParent = rCurrent.getParent();
+                const OUString& rId = *rCurrent.getId();
 
-                // check for ID (highest priority)
-                if(rCurrent.getId())
+                if(rId.getLength())
                 {
-                    const OUString& rId = *rCurrent.getId();
+                    const OUString aNewConcatenated(
+                        "#" + rId + aConcatenated);
 
-                    if(rId.getLength())
+                    if(pParent)
+                    {
+                        // check for combined selectors at parent firstso that higher specificity will be in front
+                        fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                    }
+
+                    const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
+
+                    if(pNew)
+                    {
+                        // add CssStyle if found
+                        maCssStyleVector.push_back(pNew);
+                    }
+                }
+            }
+
+            // check for 'class' references (a list of entries is allowed)
+            if(rCurrent.getClass())
+            {
+                const OUString& rClassList = *rCurrent.getClass();
+                const sal_Int32 nLen(rClassList.getLength());
+
+                if(nLen)
+                {
+                    std::vector< OUString > aParts;
+                    sal_Int32 nPos(0);
+                    OUStringBuffer aToken;
+
+                    while(nPos < nLen)
+                    {
+                        const sal_Int32 nInitPos(nPos);
+                        copyToLimiter(rClassList, u' ', nPos, aToken, nLen);
+                        skip_char(rClassList, u' ', nPos, nLen);
+                        const OUString aPart(aToken.makeStringAndClear().trim());
+
+                        if(aPart.getLength())
+                        {
+                            aParts.push_back(aPart);
+                        }
+
+                        if(nInitPos == nPos)
+                        {
+                            OSL_ENSURE(false, "Could not interpret on current position (!)");
+                            nPos++;
+                        }
+                    }
+
+                    for(size_t a(0); a < aParts.size(); a++)
                     {
                         const OUString aNewConcatenated(
-                            "#" + rId + aConcatenated);
+                            "." + aParts[a] + aConcatenated);
 
                         if(pParent)
                         {
@@ -76,89 +129,36 @@ namespace svgio
                         }
                     }
                 }
+            }
 
-                // check for 'class' references (a list of entries is allowed)
-                if(rCurrent.getClass())
-                {
-                    const OUString& rClassList = *rCurrent.getClass();
-                    const sal_Int32 nLen(rClassList.getLength());
+            // check for class-dependent references to CssStyles
+            if(rClassStr.isEmpty())
+                return;
 
-                    if(nLen)
-                    {
-                        std::vector< OUString > aParts;
-                        sal_Int32 nPos(0);
-                        OUStringBuffer aToken;
+            OUString aNewConcatenated(aConcatenated);
 
-                        while(nPos < nLen)
-                        {
-                            const sal_Int32 nInitPos(nPos);
-                            copyToLimiter(rClassList, u' ', nPos, aToken, nLen);
-                            skip_char(rClassList, u' ', nPos, nLen);
-                            const OUString aPart(aToken.makeStringAndClear().trim());
+            if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(rClassStr))
+            {
+                // no new CssStyle Selector and already starts with rClassStr, do not concatenate;
+                // we pass an 'empty' node (in the sense of CssStyle Selector)
+            }
+            else
+            {
+                aNewConcatenated = rClassStr + aConcatenated;
+            }
 
-                            if(aPart.getLength())
-                            {
-                                aParts.push_back(aPart);
-                            }
+            if(pParent)
+            {
+                // check for combined selectors at parent firstso that higher specificity will be in front
+                fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+            }
 
-                            if(nInitPos == nPos)
-                            {
-                                OSL_ENSURE(false, "Could not interpret on current position (!)");
-                                nPos++;
-                            }
-                        }
+            const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
 
-                        for(size_t a(0); a < aParts.size(); a++)
-                        {
-                            const OUString aNewConcatenated(
-                                "." + aParts[a] + aConcatenated);
-
-                            if(pParent)
-                            {
-                                // check for combined selectors at parent firstso that higher specificity will be in front
-                                fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
-                            }
-
-                            const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
-
-                            if(pNew)
-                            {
-                                // add CssStyle if found
-                                maCssStyleVector.push_back(pNew);
-                            }
-                        }
-                    }
-                }
-
-                // check for class-dependent references to CssStyles
-                if(!rClassStr.isEmpty())
-                {
-                    OUString aNewConcatenated(aConcatenated);
-
-                    if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(rClassStr))
-                    {
-                        // no new CssStyle Selector and already starts with rClassStr, do not concatenate;
-                        // we pass an 'empty' node (in the sense of CssStyle Selector)
-                    }
-                    else
-                    {
-                        aNewConcatenated = rClassStr + aConcatenated;
-                    }
-
-                    if(pParent)
-                    {
-                        // check for combined selectors at parent firstso that higher specificity will be in front
-                        fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
-                    }
-
-                    const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
-
-                    if(pNew)
-                    {
-                        // add CssStyle if found
-                        maCssStyleVector.push_back(pNew);
-                    }
-                }
+            if(pNew)
+            {
+                // add CssStyle if found
+                maCssStyleVector.push_back(pNew);
             }
         }
 
@@ -500,84 +500,84 @@ namespace svgio
 
             const auto& rChildren = getChildren();
 
-            if(!rChildren.empty())
+            if(rChildren.empty())
+                return;
+
+            mbDecomposing = true;
+
+            const sal_uInt32 nCount(rChildren.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                mbDecomposing = true;
+                SvgNode* pCandidate = rChildren[a].get();
 
-                const sal_uInt32 nCount(rChildren.size());
-
-                for(sal_uInt32 a(0); a < nCount; a++)
+                if(pCandidate && Display_none != pCandidate->getDisplay())
                 {
-                    SvgNode* pCandidate = rChildren[a].get();
-
-                    if(pCandidate && Display_none != pCandidate->getDisplay())
+                    const auto& rGrandChildren = pCandidate->getChildren();
+                    const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
+                    // decompose:
+                    // - visible terminal nodes
+                    // - all non-terminal nodes (might contain visible nodes down the hierarchy)
+                    if( !rGrandChildren.empty() || ( pChildStyles && (Visibility_visible == pChildStyles->getVisibility())) )
                     {
-                        const auto& rGrandChildren = pCandidate->getChildren();
-                        const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
-                        // decompose:
-                        // - visible terminal nodes
-                        // - all non-terminal nodes (might contain visible nodes down the hierarchy)
-                        if( !rGrandChildren.empty() || ( pChildStyles && (Visibility_visible == pChildStyles->getVisibility())) )
+                        drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+                        pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
+
+                        if(!aNewTarget.empty())
                         {
-                            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-                            pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
-
-                            if(!aNewTarget.empty())
-                            {
-                                rTarget.append(aNewTarget);
-                            }
-                        }
-                    }
-                    else if(!pCandidate)
-                    {
-                        OSL_ENSURE(false, "Null-Pointer in child node list (!)");
-                    }
-                }
-
-                if(!rTarget.empty())
-                {
-                    const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
-                    if(pStyles)
-                    {
-                        // check if we have Title or Desc
-                        const OUString& rTitle = pStyles->getTitle();
-                        const OUString& rDesc = pStyles->getDesc();
-
-                        if(!rTitle.isEmpty() || !rDesc.isEmpty())
-                        {
-                            // default object name is empty
-                            OUString aObjectName;
-
-                            // use path as object name when outmost element
-                            if(SVGTokenSvg == getType())
-                            {
-                                aObjectName = getDocument().getAbsolutePath();
-
-                                if(!aObjectName.isEmpty())
-                                {
-                                    INetURLObject aURL(aObjectName);
-
-                                    aObjectName = aURL.getName(
-                                        INetURLObject::LAST_SEGMENT,
-                                        true,
-                                        INetURLObject::DecodeMechanism::WithCharset);
-                                }
-                            }
-
-                            // pack in ObjectInfoPrimitive2D group
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                                    rTarget,
-                                    aObjectName,
-                                    rTitle,
-                                    rDesc));
-
-                            rTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                            rTarget.append(aNewTarget);
                         }
                     }
                 }
-                mbDecomposing = false;
+                else if(!pCandidate)
+                {
+                    OSL_ENSURE(false, "Null-Pointer in child node list (!)");
+                }
             }
+
+            if(!rTarget.empty())
+            {
+                const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
+                if(pStyles)
+                {
+                    // check if we have Title or Desc
+                    const OUString& rTitle = pStyles->getTitle();
+                    const OUString& rDesc = pStyles->getDesc();
+
+                    if(!rTitle.isEmpty() || !rDesc.isEmpty())
+                    {
+                        // default object name is empty
+                        OUString aObjectName;
+
+                        // use path as object name when outmost element
+                        if(SVGTokenSvg == getType())
+                        {
+                            aObjectName = getDocument().getAbsolutePath();
+
+                            if(!aObjectName.isEmpty())
+                            {
+                                INetURLObject aURL(aObjectName);
+
+                                aObjectName = aURL.getName(
+                                    INetURLObject::LAST_SEGMENT,
+                                    true,
+                                    INetURLObject::DecodeMechanism::WithCharset);
+                            }
+                        }
+
+                        // pack in ObjectInfoPrimitive2D group
+                        const drawinglayer::primitive2d::Primitive2DReference xRef(
+                            new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
+                                rTarget,
+                                aObjectName,
+                                rTitle,
+                                rDesc));
+
+                        rTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                    }
+                }
+            }
+            mbDecomposing = false;
         }
 
         const basegfx::B2DRange SvgNode::getCurrentViewPort() const

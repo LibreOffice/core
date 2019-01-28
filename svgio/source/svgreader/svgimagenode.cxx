@@ -193,168 +193,168 @@ namespace svgio
             // get size range and create path
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle && getWidth().isSet() && getHeight().isSet())
+            if(!(pStyle && getWidth().isSet() && getHeight().isSet()))
+                return;
+
+            const double fWidth(getWidth().solve(*this, xcoordinate));
+            const double fHeight(getHeight().solve(*this, ycoordinate));
+
+            if(!(fWidth > 0.0 && fHeight > 0.0))
+                return;
+
+            BitmapEx aBitmapEx;
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+
+            // prepare Target and ViewBox for evtl. AspectRatio mappings
+            const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
+            const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
+            const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
+            basegfx::B2DRange aViewBox(aTarget);
+
+            if(!maMimeType.isEmpty() && !maData.isEmpty())
             {
-                const double fWidth(getWidth().solve(*this, xcoordinate));
-                const double fHeight(getHeight().solve(*this, ycoordinate));
+                // use embedded base64 encoded data
+                css::uno::Sequence< sal_Int8 > aPass;
+                ::comphelper::Base64::decode(aPass, maData);
 
-                if(fWidth > 0.0 && fHeight > 0.0)
+                if(aPass.hasElements())
                 {
-                    BitmapEx aBitmapEx;
-                    drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+                    SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), StreamMode::READ);
+                    Graphic aGraphic;
 
-                    // prepare Target and ViewBox for evtl. AspectRatio mappings
-                    const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
-                    const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
-                    const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
-                    basegfx::B2DRange aViewBox(aTarget);
-
-                    if(!maMimeType.isEmpty() && !maData.isEmpty())
+                    if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
+                        aGraphic,
+                        OUString(),
+                        aStream))
                     {
-                        // use embedded base64 encoded data
-                        css::uno::Sequence< sal_Int8 > aPass;
-                        ::comphelper::Base64::decode(aPass, maData);
-
-                        if(aPass.hasElements())
-                        {
-                            SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), StreamMode::READ);
-                            Graphic aGraphic;
-
-                            if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
-                                aGraphic,
-                                OUString(),
-                                aStream))
-                            {
-                                extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
-                            }
-                        }
+                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
                     }
-                    else if(!maUrl.isEmpty())
+                }
+            }
+            else if(!maUrl.isEmpty())
+            {
+                const OUString& rPath = getDocument().getAbsolutePath();
+                OUString aAbsUrl;
+                try {
+                    aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
+                } catch (rtl::MalformedUriException & e) {
+                    SAL_WARN(
+                        "svg",
+                        "caught rtl::MalformedUriException \""
+                            << e.getMessage() << "\"");
+                }
+
+                if (!aAbsUrl.isEmpty() && rPath != aAbsUrl)
+                {
+                    SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
+                    Graphic aGraphic;
+
+                    if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
+                           aGraphic,
+                           aAbsUrl,
+                           aStream))
                     {
-                        const OUString& rPath = getDocument().getAbsolutePath();
-                        OUString aAbsUrl;
-                        try {
-                            aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
-                        } catch (rtl::MalformedUriException & e) {
-                            SAL_WARN(
-                                "svg",
-                                "caught rtl::MalformedUriException \""
-                                    << e.getMessage() << "\"");
-                        }
-
-                        if (!aAbsUrl.isEmpty() && rPath != aAbsUrl)
-                        {
-                            SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
-                            Graphic aGraphic;
-
-                            if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
-                                   aGraphic,
-                                   aAbsUrl,
-                                   aStream))
-                            {
-                                extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
-                            }
-                        }
+                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
                     }
-                    else if(!maXLink.isEmpty())
-                    {
-                        const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
+                }
+            }
+            else if(!maXLink.isEmpty())
+            {
+                const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-                        if(pXLink && Display_none != pXLink->getDisplay())
-                        {
-                            pXLink->decomposeSvgNode(aNewTarget, true);
-
-                            if(!aNewTarget.empty())
-                            {
-                                aViewBox = aNewTarget.getB2DRange(drawinglayer::geometry::ViewInformation2D());
-                            }
-                        }
-                    }
-
-                    if(!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()  && 0 != aBitmapEx.GetSizePixel().Height())
-                    {
-                        // calculate centered unit size
-                        const double fAspectRatio = static_cast<double>(aBitmapEx.GetSizePixel().Width()) / static_cast<double>(aBitmapEx.GetSizePixel().Height());
-
-                        if(basegfx::fTools::equal(fAspectRatio, 0.0))
-                        {
-                            // use unit range
-                            aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
-                        }
-                        else if(basegfx::fTools::more(fAspectRatio, 0.0))
-                        {
-                            // width bigger height
-                            const double fHalfHeight((1.0 / fAspectRatio) * 0.5);
-                            aViewBox = basegfx::B2DRange(
-                                0.0,
-                                0.5 - fHalfHeight,
-                                1.0,
-                                0.5 + fHalfHeight);
-                        }
-                        else
-                        {
-                            // height bigger width
-                            const double fHalfWidth(fAspectRatio * 0.5);
-                            aViewBox = basegfx::B2DRange(
-                                0.5 - fHalfWidth,
-                                0.0,
-                                0.5 + fHalfWidth,
-                                1.0);
-                        }
-
-                        // create content from created bitmap, use calculated unit range size
-                        // as transformation to map the picture data correctly
-                        aNewTarget.resize(1);
-                        aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
-                            aBitmapEx,
-                            basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                aViewBox.getRange(),
-                                aViewBox.getMinimum()));
-                    }
+                if(pXLink && Display_none != pXLink->getDisplay())
+                {
+                    pXLink->decomposeSvgNode(aNewTarget, true);
 
                     if(!aNewTarget.empty())
                     {
-                        if(aTarget.equal(aViewBox))
-                        {
-                            // just add to rTarget
-                            rTarget.append(aNewTarget);
-                        }
-                        else
-                        {
-                            // create mapping
-                            const SvgAspectRatio& rRatio = maSvgAspectRatio;
-
-                            // even when ratio is not set, use the defaults
-                            // let mapping be created from SvgAspectRatio
-                            const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
-
-                            if(!aEmbeddingTransform.isIdentity())
-                            {
-                                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                                        aEmbeddingTransform,
-                                        aNewTarget));
-
-                                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                            }
-
-                            if(!rRatio.isMeetOrSlice())
-                            {
-                                // need to embed in MaskPrimitive2D to ensure clipping
-                                const drawinglayer::primitive2d::Primitive2DReference xMask(
-                                    new drawinglayer::primitive2d::MaskPrimitive2D(
-                                        basegfx::B2DPolyPolygon(
-                                            basegfx::utils::createPolygonFromRect(aTarget)),
-                                        aNewTarget));
-
-                                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
-                            }
-
-                            // embed and add to rTarget, take local extra-transform into account
-                            pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
-                        }
+                        aViewBox = aNewTarget.getB2DRange(drawinglayer::geometry::ViewInformation2D());
                     }
                 }
+            }
+
+            if(!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()  && 0 != aBitmapEx.GetSizePixel().Height())
+            {
+                // calculate centered unit size
+                const double fAspectRatio = static_cast<double>(aBitmapEx.GetSizePixel().Width()) / static_cast<double>(aBitmapEx.GetSizePixel().Height());
+
+                if(basegfx::fTools::equal(fAspectRatio, 0.0))
+                {
+                    // use unit range
+                    aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+                }
+                else if(basegfx::fTools::more(fAspectRatio, 0.0))
+                {
+                    // width bigger height
+                    const double fHalfHeight((1.0 / fAspectRatio) * 0.5);
+                    aViewBox = basegfx::B2DRange(
+                        0.0,
+                        0.5 - fHalfHeight,
+                        1.0,
+                        0.5 + fHalfHeight);
+                }
+                else
+                {
+                    // height bigger width
+                    const double fHalfWidth(fAspectRatio * 0.5);
+                    aViewBox = basegfx::B2DRange(
+                        0.5 - fHalfWidth,
+                        0.0,
+                        0.5 + fHalfWidth,
+                        1.0);
+                }
+
+                // create content from created bitmap, use calculated unit range size
+                // as transformation to map the picture data correctly
+                aNewTarget.resize(1);
+                aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+                    aBitmapEx,
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aViewBox.getRange(),
+                        aViewBox.getMinimum()));
+            }
+
+            if(aNewTarget.empty())
+                return;
+
+            if(aTarget.equal(aViewBox))
+            {
+                // just add to rTarget
+                rTarget.append(aNewTarget);
+            }
+            else
+            {
+                // create mapping
+                const SvgAspectRatio& rRatio = maSvgAspectRatio;
+
+                // even when ratio is not set, use the defaults
+                // let mapping be created from SvgAspectRatio
+                const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
+
+                if(!aEmbeddingTransform.isIdentity())
+                {
+                    const drawinglayer::primitive2d::Primitive2DReference xRef(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aEmbeddingTransform,
+                            aNewTarget));
+
+                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                }
+
+                if(!rRatio.isMeetOrSlice())
+                {
+                    // need to embed in MaskPrimitive2D to ensure clipping
+                    const drawinglayer::primitive2d::Primitive2DReference xMask(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            basegfx::B2DPolyPolygon(
+                                basegfx::utils::createPolygonFromRect(aTarget)),
+                            aNewTarget));
+
+                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
+                }
+
+                // embed and add to rTarget, take local extra-transform into account
+                pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
             }
         }
 

@@ -81,21 +81,21 @@ namespace svgio
             // #i125258# for SVGTokenA decompose children
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle)
+            if(!pStyle)
+                return;
+
+            const double fOpacity(pStyle->getOpacity().getNumber());
+
+            if(fOpacity > 0.0 && Display_none != getDisplay())
             {
-                const double fOpacity(pStyle->getOpacity().getNumber());
+                drawinglayer::primitive2d::Primitive2DContainer aContent;
 
-                if(fOpacity > 0.0 && Display_none != getDisplay())
+                // decompose children
+                SvgNode::decomposeSvgNode(aContent, bReferenced);
+
+                if(!aContent.empty())
                 {
-                    drawinglayer::primitive2d::Primitive2DContainer aContent;
-
-                    // decompose children
-                    SvgNode::decomposeSvgNode(aContent, bReferenced);
-
-                    if(!aContent.empty())
-                    {
-                        pStyle->add_postProcess(rTarget, aContent, getTransform());
-                    }
+                    pStyle->add_postProcess(rTarget, aContent, getTransform());
                 }
             }
         }
