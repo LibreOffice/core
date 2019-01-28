@@ -135,7 +135,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_drawpagesobj \
 	CppunitTest_sc_editfieldobj_cell \
 	CppunitTest_sc_editfieldobj_header \
-	CppunitTest_sc_filterdescriptorbaseobj \
+	CppunitTest_sc_filterdescriptorbase \
 	CppunitTest_sc_functiondescriptionobj \
 	CppunitTest_sc_functionlistobj \
 	CppunitTest_sc_headerfieldsobj \

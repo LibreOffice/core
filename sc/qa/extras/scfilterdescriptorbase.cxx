@@ -21,21 +21,21 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScFilterDescriptorBaseObj : public CalcUnoApiTest,
-                                  public apitest::SheetFilterDescriptor,
-                                  public apitest::XSheetFilterDescriptor
+namespace sc_apitest
+{
+class ScFilterDescriptorBase : public CalcUnoApiTest,
+                               public apitest::SheetFilterDescriptor,
+                               public apitest::XSheetFilterDescriptor
 {
 public:
-    ScFilterDescriptorBaseObj();
+    ScFilterDescriptorBase();
 
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
 
-    CPPUNIT_TEST_SUITE(ScFilterDescriptorBaseObj);
+    CPPUNIT_TEST_SUITE(ScFilterDescriptorBase);
 
     // SheetFilterDescriptor
     CPPUNIT_TEST(testSheetFilterDescriptorProperties);
@@ -46,46 +46,46 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScFilterDescriptorBaseObj::ScFilterDescriptorBaseObj():
-    CalcUnoApiTest("/sc/qa/extras/testdocuments")
+ScFilterDescriptorBase::ScFilterDescriptorBase()
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScFilterDescriptorBaseObj::init()
+uno::Reference<uno::XInterface> ScFilterDescriptorBase::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(5, 5)->setValue(15);
     xSheet->getCellByPosition(1, 4)->setValue(10);
     xSheet->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Reference< sheet::XSheetFilterable > xSF(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetFilterable> xSF(xSheet, uno::UNO_QUERY_THROW);
 
     return xSF->createFilterDescriptor(true);
 }
 
-void ScFilterDescriptorBaseObj::setUp()
+void ScFilterDescriptorBase::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScFilterDescriptorBaseObj::tearDown()
+void ScFilterDescriptorBase::tearDown()
 {
     closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScFilterDescriptorBaseObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScFilterDescriptorBase);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
