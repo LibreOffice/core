@@ -562,7 +562,7 @@
             "buildsystem": "simple",
             "build-commands": [
                 "./autogen.sh --prefix=/run/build/libreoffice/inst --with-distro=LibreOfficeFlatpak",
-                "make $(if test \"$(uname -i)\" = i386; then printf build-nocheck; fi)",
+                "make $(if test \"$FLATPAK_ARCH\" = i386; then printf build-nocheck; fi)",
                 "make distro-pack-install",
                 "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh'",
                 "desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter /app/share/applications/org.libreoffice.LibreOffice.desktop",
