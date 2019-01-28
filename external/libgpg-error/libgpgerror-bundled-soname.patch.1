@@ -1,0 +1,22 @@
+--- libgpg-error/src/Makefile.in.orig	2019-01-28 14:11:10.518425440 +0100
++++ libgpg-error/src/Makefile.in	2019-01-28 14:11:16.901414229 +0100
+@@ -540,7 +540,7 @@
+ @HAVE_LD_VERSION_SCRIPT_TRUE@libgpg_error_vers_opt = -Wl,--version-script=$(srcdir)/gpg-error.vers
+ libgpg_error_la_LDFLAGS = \
+   $(no_undefined) $(export_symbols) $(libgpg_error_vers_opt) \
+-  $(extra_ltoptions) -version-info \
++  $(extra_ltoptions) -release lo -version-info \
+   @LIBGPG_ERROR_LT_CURRENT@:@LIBGPG_ERROR_LT_REVISION@:@LIBGPG_ERROR_LT_AGE@
+ 
+ libgpg_error_la_SOURCES = gettext.h $(arch_sources) \
+--- libgpg-error/src/gpg-error.vers.orig	2019-01-28 14:08:11.413740011 +0100
++++ libgpg-error/src/gpg-error.vers	2019-01-28 14:08:34.172700037 +0100
+@@ -20,7 +20,7 @@
+ #       visibility.h and gpg-error.def.in as well.
+ 
+ 
+-GPG_ERROR_1.0 {
++GPG_ERROR_LIBREOFFICE {
+   global:
+     gpg_strerror;
+     gpg_strerror_r;

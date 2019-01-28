@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-disable-dllinit.patch.1) \
 	external/libgpg-error/w32-build-fixes-4.patch \
 	external/libgpg-error/clang-cl.patch \
+	$(if $(filter LINUX,$(OS)),external/libgpg-error/libgpgerror-bundled-soname.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:
