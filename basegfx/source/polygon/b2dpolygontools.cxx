@@ -39,9 +39,6 @@
 // #i37443#
 #define ANGLE_BOUND_START_VALUE     (2.25)
 #define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
-#ifdef DBG_UTIL
-static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
-#endif
 #define STEPSPERQUARTER     (3)
 
 namespace basegfx
@@ -270,11 +267,7 @@ namespace basegfx
                     // #i37443# prepare convenient AngleBound if none was given
                     if(fAngleBound == 0.0)
                     {
-#ifdef DBG_UTIL
-                        fAngleBound = fAngleBoundStartValue;
-#else
                         fAngleBound = ANGLE_BOUND_START_VALUE;
-#endif
                     }
                     else if(fTools::less(fAngleBound, ANGLE_BOUND_MINIMUM_VALUE))
                     {
