@@ -259,10 +259,6 @@ namespace
 #endif
             {
                 //big stupid copy here
-                static bool bWarnedOnce = false;
-                SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
-                bWarnedOnce = true;
-
                 const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
                 const SalTwoRect aTwoRect = { 0, 0, pSrc->mnWidth, pSrc->mnHeight,
                                               0, 0, pSrc->mnWidth, pSrc->mnHeight };
