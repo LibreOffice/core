@@ -2630,6 +2630,7 @@ Label_MaskStateMachine:
     }
     if ( bi18n )
     {
+        const sal_Int32 nOldSrcPos = nSrcPos;
         nSrcPos = nSrcPos + nSpaces;
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
@@ -2649,11 +2650,15 @@ Label_MaskStateMachine:
                 SetError( nErr );      // parsed chars as string
             }
             if ( aRes.EndPos <= nSrcPos )
-            {   // ?!?
+            {
+                // Could not parse anything meaningful.
+                assert(!aRes.TokenType);
                 nErr = FormulaError::IllegalChar;
                 SetError( nErr );
-                nSrcPos = aFormula.getLength();
-                aSymbol.truncate();
+                // Caller has to act on an empty symbol for
+                // nSrcPos < aFormula.getLength()
+                nSrcPos = nOldSrcPos;
+                aSymbol.setLength(0);
             }
             else
             {
@@ -4117,7 +4122,22 @@ bool ScCompiler::NextNewToken( bool bInArray )
     sal_Int32 nSpaces = NextSymbol(bInArray);
 
     if (!cSymbol[0])
+    {
+        if (nSrcPos < aFormula.getLength())
+        {
+            // Nothing could be parsed, remainder as bad string.
+            // NextSymbol() must had set an error for this.
+            assert( pArr->GetCodeError() != FormulaError::NONE);
+            const OUString aBad( aFormula.copy( nSrcPos));
+            svl::SharedString aSS = pDoc->GetSharedStringPool().intern( aBad);
+            maRawToken.SetString( aSS.getData(), aSS.getDataIgnoreCase());
+            maRawToken.NewOpCode( ocBad);
+            nSrcPos = aFormula.getLength();
+            // Add bad string as last token.
+            return true;
+        }
         return false;
+    }
 
     if( nSpaces )
     {
