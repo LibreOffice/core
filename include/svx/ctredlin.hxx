@@ -329,6 +329,9 @@ public:
     void            EnableAcceptAll(bool bFlag);
     void            EnableReject(bool bFlag);
     void            EnableRejectAll(bool bFlag);
+    static void     EnableClearFormatButton(VclPtr<PushButton>, bool bFlag);
+    void            EnableClearFormat(bool bFlag);
+    void            EnableClearFormatAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();

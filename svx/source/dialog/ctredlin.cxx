@@ -32,6 +32,8 @@
 
 #include <editeng/unolingu.hxx>
 #include <svx/ctredlin.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 
 #define WRITER_DATE     2
 #define CALC_DATE       3
@@ -371,6 +373,11 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     pTopLevel->get(m_pRejectAll, "rejectall");
     pTopLevel->get(m_pUndo, "undo");
 
+    // set wider window for the optional extending button labels
+    // eg. "Reject/Clear formatting" instead of "Reject"
+    EnableClearFormat(true);
+    EnableClearFormatAll(true);
+
     SvSimpleTableContainer* pTable = get<SvSimpleTableContainer>("changes");
     Size aControlSize(80, 65);
     aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
@@ -481,6 +488,39 @@ void SvxTPView::EnableRejectAll(bool bFlag)
 {
     bEnableRejectAll = bFlag;
     m_pRejectAll->Enable(bFlag);
+}
+
+void SvxTPView::EnableClearFormatButton(VclPtr<PushButton> pButton, bool bFlag)
+{
+    OUString sText = pButton->GetText();
+    OUString sClearFormat = SvxResId(RID_SVXSTR_CLEARFORM);
+    sal_Int32 nPos = sText.indexOf(sClearFormat);
+
+    // add or remove "Clear formatting" to get "Reject" or "Reject/Clear formatting"
+    if (bFlag)
+    {
+        if (nPos == -1)
+        {
+            pButton->SetText(sText + "/" + sClearFormat);
+        }
+    }
+    else
+    {
+        if (nPos > 0)
+        {
+            pButton->SetText(sText.copy(0, nPos - 1));
+        }
+    }
+}
+
+void SvxTPView::EnableClearFormat(bool bFlag)
+{
+    EnableClearFormatButton( m_pReject, bFlag );
+}
+
+void SvxTPView::EnableClearFormatAll(bool bFlag)
+{
+    EnableClearFormatButton( m_pRejectAll, bFlag );
 }
 
 void SvxTPView::ShowUndo()

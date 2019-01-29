@@ -59,6 +59,7 @@ public:
     void testTdf122893();
     void testTdf122901();
     void testTdf122942();
+    void testTdf52391();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf122893);
     CPPUNIT_TEST(testTdf122901);
     CPPUNIT_TEST(testTdf122942);
+    CPPUNIT_TEST(testTdf52391);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -821,6 +823,22 @@ void SwUiWriterTest2::testTdf122942()
     // paragraph mark, not above it.
     const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
     CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
+}
+
+void SwUiWriterTest2::testTdf52391()
+{
+    load(DATA_DIRECTORY, "tdf52391.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
+    // this was "Portion1", because the tracked background color of Portion1 was
+    // accepted for "Reject All". Now rejection clears formatting of the text
+    // in format-only changes, concatenating the text portions in the first paragraph.
+    CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
