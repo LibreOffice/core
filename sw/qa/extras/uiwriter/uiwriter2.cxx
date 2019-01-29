@@ -648,49 +648,70 @@ void SwUiWriterTest2::testUnfloatButtonReadOnlyMode()
 
 void SwUiWriterTest2::testUnfloating()
 {
-    // Test what happens when pushing the unfloat button
-    load(FLOATING_TABLE_DATA_DIRECTORY, "unfloatable_floating_table.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
+    // Test unfloating with tables imported from different file formats
+    const std::vector<OUString> aTestFiles = {
+        "unfloatable_floating_table.odt",
+        "unfloatable_floating_table.docx",
+        "unfloatable_floating_table.doc",
+    };
 
-    SwFlyFrame* pFlyFrame;
-
-    // Before unfloating we have only one page with a fly frame
+    for (const OUString& aTestFile : aTestFiles)
     {
-        CPPUNIT_ASSERT_EQUAL(SwFrameType::Page, pWrtShell->GetLayout()->GetLower()->GetType());
-        CPPUNIT_ASSERT(!pWrtShell->GetLayout()->GetLower()->GetNext());
-        CPPUNIT_ASSERT_EQUAL(SwFrameType::Txt,
-                             pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetType());
-        const SwSortedObjs* pAnchored
-            = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
-        CPPUNIT_ASSERT(pAnchored);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnchored->size());
-        SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
-        pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
-        CPPUNIT_ASSERT(pFlyFrame);
+        OString sTestFileName = OUStringToOString(aTestFile, RTL_TEXTENCODING_UTF8);
+        OString sFailureMessage = OString("Failure in the test file: ") + sTestFileName;
+
+        // Test what happens when pushing the unfloat button
+        load(FLOATING_TABLE_DATA_DIRECTORY, "unfloatable_floating_table.docx");
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pTextDoc);
+        SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
+
+        SwFlyFrame* pFlyFrame;
+
+        // Before unfloating we have only one page with a fly frame
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), SwFrameType::Page,
+                                         pWrtShell->GetLayout()->GetLower()->GetType());
+            CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(),
+                                   !pWrtShell->GetLayout()->GetLower()->GetNext());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                sFailureMessage.getStr(), SwFrameType::Txt,
+                pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetType());
+            const SwSortedObjs* pAnchored
+                = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
+            CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pAnchored);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), static_cast<size_t>(1),
+                                         pAnchored->size());
+            SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
+            pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+            CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame);
+        }
+
+        // Select the floating table
+        SdrObject* pObj = pFlyFrame->GetFormat()->FindRealSdrObject();
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pObj);
+        pWrtShell->SelectObj(Point(), 0, pObj);
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame->IsShowUnfloatButton(pWrtShell));
+
+        // Push the unfloat button
+        pFlyFrame->ActiveUnfloatButton(pWrtShell);
+        Scheduler::ProcessEventsToIdle();
+
+        // After unfloating we have two pages with one table frame on each page
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(),
+                               pWrtShell->GetLayout()->GetLower()->GetNext());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), SwFrameType::Page,
+                                     pWrtShell->GetLayout()->GetLower()->GetNext()->GetType());
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(),
+                               !pWrtShell->GetLayout()->GetLower()->GetNext()->GetNext());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            sFailureMessage.getStr(), SwFrameType::Tab,
+            pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            sFailureMessage.getStr(), SwFrameType::Tab,
+            pWrtShell->GetLayout()->GetLower()->GetNext()->GetLower()->GetLower()->GetType());
     }
-
-    // Select the floating table
-    SdrObject* pObj = pFlyFrame->GetFormat()->FindRealSdrObject();
-    CPPUNIT_ASSERT(pObj);
-    pWrtShell->SelectObj(Point(), 0, pObj);
-    CPPUNIT_ASSERT(pFlyFrame->IsShowUnfloatButton(pWrtShell));
-
-    // Push the unfloat button
-    pFlyFrame->ActiveUnfloatButton(pWrtShell);
-
-    // After unfloating we have two pages with one table frame on each page
-    CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetNext());
-    CPPUNIT_ASSERT_EQUAL(SwFrameType::Page,
-                         pWrtShell->GetLayout()->GetLower()->GetNext()->GetType());
-    CPPUNIT_ASSERT(!pWrtShell->GetLayout()->GetLower()->GetNext()->GetNext());
-    CPPUNIT_ASSERT_EQUAL(SwFrameType::Tab,
-                         pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetType());
-    CPPUNIT_ASSERT_EQUAL(
-        SwFrameType::Tab,
-        pWrtShell->GetLayout()->GetLower()->GetNext()->GetLower()->GetLower()->GetType());
 }
 
 void SwUiWriterTest2::testTdf122893()
