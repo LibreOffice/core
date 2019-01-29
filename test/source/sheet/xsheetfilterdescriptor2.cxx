@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/sheet/xsheetfilterdescriptor.hxx>
+#include <test/sheet/xsheetfilterdescriptor2.hxx>
 
-#include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
+#include <com/sun/star/sheet/TableFilterField2.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -22,19 +22,19 @@ using namespace css::uno;
 
 namespace apitest
 {
-void XSheetFilterDescriptor::testGetSetFilterFields()
+void XSheetFilterDescriptor2::testGetSetFilterFields2()
 {
-    uno::Reference<sheet::XSheetFilterDescriptor> xSFD(init(), uno::UNO_QUERY_THROW);
-    uno::Sequence<sheet::TableFilterField> aDefaultTFF = xSFD->getFilterFields();
+    uno::Reference<sheet::XSheetFilterDescriptor2> xSFD(init(), uno::UNO_QUERY_THROW);
+    uno::Sequence<sheet::TableFilterField2> aDefaultTFF = xSFD->getFilterFields2();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get TableFilterField", sal_Int32(0),
                                  aDefaultTFF.getLength());
 
-    uno::Sequence<sheet::TableFilterField> aTFF;
+    uno::Sequence<sheet::TableFilterField2> aTFF;
     aTFF.realloc(1);
 
-    xSFD->setFilterFields(aTFF);
-    uno::Sequence<sheet::TableFilterField> aNewTFF = xSFD->getFilterFields();
+    xSFD->setFilterFields2(aTFF);
+    uno::Sequence<sheet::TableFilterField2> aNewTFF = xSFD->getFilterFields2();
     CPPUNIT_ASSERT_MESSAGE("Unable to set TableFilterField", aNewTFF != aDefaultTFF);
 }
 
