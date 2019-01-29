@@ -410,9 +410,10 @@ The code below would only be part of the solution.
         {
             LockFocusNotification( true );
             OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
+            vcl::Window* pThisWindow = GetWindow();
             // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog( GetWindow()->GetFrameWeld(),
+                Application::CreateMessageDialog( pThisWindow->GetFrameWeld(),
                                                   VclMessageType::Info,
                                                   VclButtonsType::Ok,
                                                   sInfo ) );
@@ -420,6 +421,8 @@ The code below would only be part of the solution.
             LockFocusNotification( false );
             // take care that the now valid selection is stored
             LoseFocus();
+            if( pThisWindow )
+                pThisWindow->GrabFocus();
         }
     }
     return aRet;
