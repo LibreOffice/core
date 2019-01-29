@@ -484,10 +484,14 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     {
         // tdf#112443 if position is completely off-page
         // return the proposed position and do not adjust it...
-        // tdf#120839 .. unless anchored to char (anchor can jump on other page)
-        bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+        const bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
 
-        if ( bDisablePositioning && !IsAnchoredToChar() && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Bottom() )
+        // tdf#123002 disable the positioning in header and footer only
+        // we should limit this since anchors of body frames may appear on other pages
+        const bool bIsFooterOrHeader = GetAnchorFrame().GetUpper()
+                                     && (GetAnchorFrame().GetUpper()->IsFooterFrame() || GetAnchorFrame().GetUpper()->IsHeaderFrame() );
+
+        if ( bDisablePositioning && bIsFooterOrHeader && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Bottom() )
         {
             return nProposedRelPosY;
         }
