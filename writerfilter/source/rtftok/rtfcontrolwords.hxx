@@ -1990,13 +1990,32 @@ enum RTFControlTypes
 };
 
 /// Represents an RTF Control Word
-struct RTFSymbol
+class RTFSymbol
 {
-    const char* sKeyword;
-    int nControlType;
-    RTFKeyword nIndex;
+    const char* m_sKeyword;
+    int m_nControlType;
+    RTFKeyword m_nIndex;
 
-    int nDefValue; //For most of the ControlWords, default is 0.
+    int m_nDefValue; ///< Most of the control words default to 0.
+
+public:
+    RTFSymbol() = default;
+    RTFSymbol(const char* sKeyword, int nControlType = 0, RTFKeyword nIndex = RTF_invalid,
+              int nDefValue = 0)
+        : m_sKeyword(sKeyword)
+        , m_nControlType(nControlType)
+        , m_nIndex(nIndex)
+        , m_nDefValue(nDefValue)
+    {
+    }
+
+    const char* GetKeyword() const { return m_sKeyword; }
+
+    int GetControlType() const { return m_nControlType; }
+
+    RTFKeyword GetIndex() const { return m_nIndex; }
+
+    int GetDefValue() const { return m_nDefValue; }
 
     bool operator<(const RTFSymbol& rOther) const;
 };

@@ -209,8 +209,8 @@ const char* keywordToString(RTFKeyword nKeyword)
 {
     for (int i = 0; i < nRTFControlWords; i++)
     {
-        if (nKeyword == aRTFControlWords[i].nIndex)
-            return aRTFControlWords[i].sKeyword;
+        if (nKeyword == aRTFControlWords[i].GetIndex())
+            return aRTFControlWords[i].GetKeyword();
     }
     return nullptr;
 }

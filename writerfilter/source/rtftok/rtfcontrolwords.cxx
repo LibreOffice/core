@@ -1845,7 +1845,7 @@ int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
 
 bool RTFSymbol::operator<(const RTFSymbol& rOther) const
 {
-    return std::strcmp(sKeyword, rOther.sKeyword) < 0;
+    return std::strcmp(m_sKeyword, rOther.m_sKeyword) < 0;
 }
 
 RTFMathSymbol const aRTFMathControlWords[] = {
