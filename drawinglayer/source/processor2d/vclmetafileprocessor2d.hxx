@@ -174,6 +174,8 @@ namespace drawinglayer
             // like '/L', '/LI', 'LBody' instead of simple '/P' (Paragraph).
             // The value -1 means 'no OutlineLevel' and values >= 0 express the level.
             sal_Int16                           mnCurrentOutlineLevel;
+            bool mbInListItem;
+            bool mbBulletPresent;
 
         protected:
             /*  the local processor for BasePrimitive2D-Implementation based primitives,
