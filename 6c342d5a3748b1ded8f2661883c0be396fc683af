@@ -16,6 +16,24 @@
       "revId": "6c342d5a3748b1ded8f2661883c0be396fc683af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_2a976593",
+        "filename": "vcl/source/app/salplug.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-01-29T09:53:01Z",
+      "side": 1,
+      "message": "\"gtk3_kde5\" is basically just \"gtk3\" + another (kde5) file picker that runs in a separate process, so AFAICT there\u0027s no difference for gtk3_kde5 as compared to gtk3 in this place. Should I explicitly mention this here?",
+      "parentUuid": "1f485f77_ea494d60",
+      "revId": "6c342d5a3748b1ded8f2661883c0be396fc683af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
