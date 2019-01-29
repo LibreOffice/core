@@ -117,80 +117,6 @@ static bool is_gnome_desktop( Display* pDisplay )
     return ret;
 }
 
-static bool bWasXError = false;
-
-static bool WasXError()
-{
-    bool bRet = bWasXError;
-    bWasXError = false;
-    return bRet;
-}
-
-extern "C"
-{
-    static int autodect_error_handler( Display*, XErrorEvent* )
-    {
-        bWasXError = true;
-        return 0;
-    }
-
-    typedef int(* XErrorHandler)(Display*,XErrorEvent*);
-}
-
-static int KDEVersion( Display* pDisplay )
-{
-    int nRet = 0;
-
-    Atom nFullSession = XInternAtom( pDisplay, "KDE_FULL_SESSION", True );
-    Atom nKDEVersion  = XInternAtom( pDisplay, "KDE_SESSION_VERSION", True );
-
-    if( nFullSession )
-    {
-        if( !nKDEVersion )
-            return 3;
-
-        Atom                aRealType   = None;
-        int                 nFormat     = 8;
-        unsigned long       nItems      = 0;
-        unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = nullptr;
-        XGetWindowProperty( pDisplay,
-                            DefaultRootWindow( pDisplay ),
-                            nKDEVersion,
-                            0, 1,
-                            False,
-                            AnyPropertyType,
-                            &aRealType,
-                            &nFormat,
-                            &nItems,
-                            &nBytesLeft,
-                            &pProperty );
-        if( !WasXError() && nItems != 0 && pProperty )
-        {
-            nRet = *reinterpret_cast< sal_Int32* >( pProperty );
-        }
-        if( pProperty )
-        {
-            XFree( pProperty );
-            pProperty = nullptr;
-        }
-    }
-    return nRet;
-}
-
-static bool is_kde4_desktop( Display* pDisplay )
-{
-    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
-    static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
-    if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "4") == 0 )
-        return true;
-
-    if ( KDEVersion( pDisplay ) == 4 )
-        return true;
-
-    return false;
-}
-
 static bool is_kde5_desktop()
 {
     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
@@ -216,8 +142,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_LXQT;
         if ( aOver.equalsIgnoreAsciiCase( "kde5" ) )
             return DESKTOP_KDE5;
-        if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
-            return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
             return DESKTOP_GNOME;
         if ( aOver.equalsIgnoreAsciiCase( "gnome-wayland" ) )
@@ -326,17 +250,10 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         if( pDisplay == nullptr )
             return DESKTOP_NONE;
 
-        XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
-
-        if ( is_kde4_desktop( pDisplay ) )
-            ret = DESKTOP_KDE4;
-        else if ( is_gnome_desktop( pDisplay ) )
+        if ( is_gnome_desktop( pDisplay ) )
             ret = DESKTOP_GNOME;
         else
             ret = DESKTOP_UNKNOWN;
-
-        // set the default handler again
-        XSetErrorHandler( pOldHdl );
 
         XCloseDisplay( pDisplay );
     }
