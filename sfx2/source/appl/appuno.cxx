@@ -106,6 +106,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxInt16Item_Impl), "Version", SID_VERSION },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "SaveACopy", SID_SAVEACOPYITEM },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "NoFileSync", SID_NO_FILE_SYNC },
+    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "IsRedactMode", SID_IS_REDACT_MODE },
 };
 
 static sal_uInt16 nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);

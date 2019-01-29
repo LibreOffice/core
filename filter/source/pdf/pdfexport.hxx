@@ -65,6 +65,8 @@ private:
     sal_Int32           mnProgressValue;
     bool                mbRemoveTransparencies;
 
+    bool                mbIsRedactMode;
+
     OUString            msWatermark;
     OUString            msTiledWatermark;
 
