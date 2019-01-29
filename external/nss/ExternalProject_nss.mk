@@ -25,6 +25,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		XCFLAGS="-arch:SSE $(SOLARINC)" \
 		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
+			NSS_DISABLE_GTESTS=1 \
 	,nss)
 
 else # OS!=WNT
