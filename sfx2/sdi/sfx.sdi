@@ -4764,7 +4764,8 @@ SfxVoidItem ExportToPDF SID_EXPORTDOCASPDF
 ]
 
 SfxVoidItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
-(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME,
+ SfxBoolItem IsRedactMode SID_IS_REDACT_MODE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
