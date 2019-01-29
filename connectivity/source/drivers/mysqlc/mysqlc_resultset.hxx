@@ -75,7 +75,7 @@ class OResultSet final : public OBase_Mutex,
 
     sal_Int32 getDataLength(sal_Int32 column)
     {
-        return m_aRows[m_nRowCount][column - 1].getLength();
+        return m_aRows[m_nRowPosition][column - 1].getLength();
     }
     bool checkNull(sal_Int32 column);
 

@@ -236,7 +236,7 @@ uno::Reference<XInputStream> SAL_CALL OResultSet::getBinaryStream(sal_Int32 colu
 
     OString sVal = m_aRows[m_nRowPosition][column - 1];
     return new SequenceInputStream{ uno::Sequence<sal_Int8>(
-        reinterpret_cast<sal_Int8 const*>(sVal.getStr()), getDataLength(column - 1)) };
+        reinterpret_cast<sal_Int8 const*>(sVal.getStr()), getDataLength(column)) };
 }
 
 uno::Reference<XInputStream> SAL_CALL OResultSet::getCharacterStream(sal_Int32 column)
@@ -284,7 +284,7 @@ uno::Sequence<sal_Int8> SAL_CALL OResultSet::getBytes(sal_Int32 column)
         return uno::Sequence<sal_Int8>();
 
     return uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(sVal.getStr()),
-                                   getDataLength(column - 1));
+                                   getDataLength(column));
 }
 
 Date SAL_CALL OResultSet::getDate(sal_Int32 column)
@@ -476,7 +476,7 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
         return t;
 
     OString sVal = m_aRows[m_nRowPosition][column - 1];
-    OString timeString{ sVal.getStr(), getDataLength(column - 1) };
+    OString timeString{ sVal.getStr(), getDataLength(column) };
     OString token;
     sal_Int32 nIndex, i = 0;
 
@@ -515,10 +515,13 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
 
     // YY-MM-DD HH:MM:SS
     std::vector<OString> dateAndTime
-        = lcl_split(OString{ sVal.getStr(), getDataLength(column - 1) }, ' ');
+        = lcl_split(OString{ sVal.getStr(), getDataLength(column) }, ' ');
 
     auto dateParts = lcl_split(dateAndTime.at(0), '-');
     auto timeParts = lcl_split(dateAndTime.at(1), ':');
+
+    if (dateParts.size() < 2 || timeParts.size() < 2)
+        throw SQLException("Timestamp has a wrong format", *this, OUString(), 1, Any());
 
     DateTime dt;
 
