@@ -42,7 +42,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
 }
 
-bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart /*ePart*/)
+bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
 {
     switch (eType)
     {
@@ -52,7 +52,9 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::Checkbox:
             return true;
         case ControlType::Combobox:
-            return false;
+            if (ePart == ControlPart::HasBackgroundTexture)
+                return false;
+            return true;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
@@ -248,7 +250,21 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Combobox:
-            break;
+        {
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
+            if (pPart)
+            {
+                auto aStates = pPart->getStates(eState, rValue);
+                if (!aStates.empty())
+                {
+                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                    bOK = true;
+                }
+            }
+        }
+        break;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
@@ -308,6 +324,9 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
     {
         case ControlType::Checkbox:
             rNativeContentRegion = tools::Rectangle(Point(), Size(48, 32));
+            return true;
+        case ControlType::Radiobutton:
+            rNativeContentRegion = tools::Rectangle(Point(), Size(32, 32));
             return true;
         default:
             break;

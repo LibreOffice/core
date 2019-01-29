@@ -90,6 +90,26 @@
         </part>
     </checkbox>
 
+    <combobox>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+               <rect stroke="#4CD964" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" />
+            </state>
+        </part>
+        <part value="ButtonUp">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.6" x2="0.5" y2="0.4"/>
+                <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.4" x2="0.8" y2="0.6"/>
+            </state>
+        </part>
+        <part value="ButtonDown">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.4" x2="0.5" y2="0.6"/>
+                <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.6" x2="0.8" y2="0.4"/>
+            </state>
+        </part>
+    </combobox>
+
     <editbox>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
