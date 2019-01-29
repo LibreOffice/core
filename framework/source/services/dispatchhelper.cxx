@@ -26,6 +26,8 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
 #include <comphelper/profilezone.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <vcl/threadex.hxx>
 
 namespace framework{
 
@@ -45,6 +47,19 @@ DEFINE_INIT_SERVICE( DispatchHelper, {} )
 DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   m_xContext    (xContext)
 {
+}
+
+/**
+ * Proxy around DispatchHelper::executeDispatch(), as
+ * vcl::solarthread::syncExecute() does not seem to accept lambdas.
+ */
+static css::uno::Any
+executeDispatchStatic(DispatchHelper* pThis,
+                      const css::uno::Reference<css::frame::XDispatch>& xDispatch,
+                      const css::util::URL& aURL, bool SyncronFlag,
+                      const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
+{
+    return pThis->executeDispatch(xDispatch, aURL, SyncronFlag, lArguments);
 }
 
 /** dtor.
@@ -103,7 +118,14 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // search dispatcher
     css::uno::Reference< css::frame::XDispatch >          xDispatch       = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
 
-    return executeDispatch(xDispatch, aURL, true, lArguments);
+    utl::MediaDescriptor aDescriptor(lArguments);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+
+    if (bOnMainThread)
+        return vcl::solarthread::syncExecute(
+            std::bind(&executeDispatchStatic, this, xDispatch, aURL, true, lArguments));
+    else
+        return executeDispatch(xDispatch, aURL, true, lArguments);
 }
 
 
