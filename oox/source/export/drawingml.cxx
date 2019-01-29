@@ -123,19 +123,6 @@ using ::sax_fastparser::FastSerializerHelper;
 namespace oox {
 namespace drawingml {
 
-#define GETA(propName) \
-    GetProperty( rXPropSet, #propName )
-
-#define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
-
-#define GET(variable, propName) \
-    if ( GETA(propName) ) \
-        mAny >>= variable;
-
-#define CGETAD(propName) \
-    (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, #propName ))
-
 static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
@@ -386,7 +373,7 @@ bool DrawingML::EqualGradients( awt::Gradient aGradient1, awt::Gradient aGradien
 void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
 {
     awt::Gradient aGradient;
-    if( GETA( FillGradient ) )
+    if (GetProperty(rXPropSet, "FillGradient"))
     {
         aGradient = *o3tl::doAccess<awt::Gradient>(mAny);
 
@@ -596,7 +583,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
 
-    GET( aLineStyle, LineStyle );
+    if (GetProperty(rXPropSet, "LineStyle"))
+        mAny >>= aLineStyle;
 
     sal_uInt32 nLineWidth = 0;
     ::Color nColor;
@@ -652,7 +640,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
     }
 
-    GET( nLineWidth, LineWidth );
+    if (GetProperty(rXPropSet, "LineWidth"))
+        mAny >>= nLineWidth;
 
     switch (aLineStyle)
     {
@@ -666,7 +655,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 //this query is good for shapes, but in the case of charts it returns 0 values
                 if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 0) {
                     OUString aLineDashName;
-                    GET(aLineDashName, LineDashName);
+                    if (GetProperty(rXPropSet, "LineDashName"))
+                        mAny >>= aLineDashName;
                     if (!aLineDashName.isEmpty() && xModel) {
                         css::uno::Any aAny = getLineDash(xModel, aLineDashName);
                         aAny >>= aLineDash;
@@ -677,7 +667,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             {
                 //export the linestyle of chart wall (plot area) and chart page
                 OUString aLineDashName;
-                GET(aLineDashName, LineDashName);
+                if (GetProperty(rXPropSet, "LineDashName"))
+                    mAny >>= aLineDashName;
                 if (!aLineDashName.isEmpty() && xModel) {
                     css::uno::Any aAny = getLineDash(xModel, aLineDashName);
                     aAny >>= aLineDash;
@@ -695,12 +686,12 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             [[fallthrough]];
         case drawing::LineStyle_SOLID:
         default:
-            if ( GETA( LineColor ) )
+            if (GetProperty(rXPropSet, "LineColor"))
             {
                 nColor = ::Color(mAny.get<sal_uInt32>() & 0xffffff);
                 bColorSet = true;
             }
-            if ( GETA( LineTransparence ) )
+            if (GetProperty(rXPropSet, "LineTransparence"))
             {
                 nColorAlpha = MAX_PERCENT - (mAny.get<sal_Int16>() * PER_PERCENT);
             }
@@ -873,7 +864,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
     }
 
-    if( !bNoFill && nLineWidth > 1 && GETA( LineJoint ) )
+    if (!bNoFill && nLineWidth > 1 && GetProperty(rXPropSet, "LineJoint"))
     {
         LineJoint eLineJoint = mAny.get<LineJoint>();
 
@@ -1527,7 +1518,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     {
         nSize = rnCharHeight;
     }
-    else if( GETA( CharHeight ) )
+    else if (GetProperty(rXPropSet, "CharHeight"))
     {
         nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
         if ( nElement == XML_rPr )
@@ -1537,7 +1528,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-     if( GETA( CharKerning ) )
+     if (GetProperty(rXPropSet, "CharKerning"))
         nCharKerning = static_cast<sal_Int32>(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
@@ -1547,13 +1538,15 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     **/
     nCharKerning = ((nCharKerning * 720)-360) / 254;
 
-    if ( ( bComplex && GETA( CharWeightComplex ) ) || GETA( CharWeight ) )
+    if ((bComplex && GetProperty(rXPropSet, "CharWeightComplex"))
+        || GetProperty(rXPropSet, "CharWeight"))
     {
         if ( *o3tl::doAccess<float>(mAny) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
     }
 
-    if ( ( bComplex && GETA( CharPostureComplex ) ) || GETA( CharPosture ) )
+    if ((bComplex && GetProperty(rXPropSet, "CharPostureComplex"))
+        || GetProperty(rXPropSet, "CharPosture"))
         switch ( *o3tl::doAccess<awt::FontSlant>(mAny) )
         {
             case awt::FontSlant_OBLIQUE :
@@ -1564,7 +1557,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 break;
         }
 
-    if ( CGETAD( CharUnderline ) )
+    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharUnderline", eState)
+         && eState == beans::PropertyState_DIRECT_VALUE)
+        || GetProperty(rXPropSet, "CharUnderline"))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -1619,7 +1614,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if ( CGETAD( CharStrikeout ) )
+    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharStrikeout", eState)
+         && eState == beans::PropertyState_DIRECT_VALUE)
+        || GetProperty(rXPropSet, "CharStrikeout"))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -1645,7 +1642,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if( GETA( CharLocale ) )
+    if (GetProperty(rXPropSet, "CharLocale"))
     {
         css::lang::Locale aLocale;
         mAny >>= aLocale;
@@ -1654,10 +1651,13 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             usLanguage = aLanguageTag.getBcp47MS();
     }
 
-    if( GETAD( CharEscapement ) )
+    if (GetPropertyAndState(rXPropSet, rXPropState, "CharEscapement", eState)
+        && eState == beans::PropertyState_DIRECT_VALUE)
         mAny >>= nCharEscapement;
 
-    if( nCharEscapement && GETAD( CharEscapementHeight ) )
+    if (nCharEscapement
+        && (GetPropertyAndState(rXPropSet, rXPropState, "CharEscapementHeight", eState)
+            && eState == beans::PropertyState_DIRECT_VALUE))
     {
         sal_uInt32 nCharEscapementHeight = 0;
         mAny >>= nCharEscapementHeight;
@@ -1666,7 +1666,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         nSize = (nSize / 0.58);
     }
 
-    if( GETA( CharCaseMap ) )
+    if (GetProperty(rXPropSet, "CharCaseMap"))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -1693,7 +1693,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                           FSEND );
 
     // mso doesn't like text color to be placed after typeface
-    if( CGETAD( CharColor ) )
+    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharColor", eState)
+         && eState == beans::PropertyState_DIRECT_VALUE)
+        || GetProperty(rXPropSet, "CharColor"))
     {
         ::Color color( *o3tl::doAccess<sal_uInt32>(mAny) );
         SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
@@ -1708,7 +1710,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if( ( underline != nullptr ) && CGETAD( CharUnderlineColor ) )
+    if (underline
+        && ((bCheckDirect
+             && GetPropertyAndState(rXPropSet, rXPropState, "CharUnderlineColor", eState)
+             && eState == beans::PropertyState_DIRECT_VALUE)
+            || GetProperty(rXPropSet, "CharUnderlineColor")))
     {
         ::Color color = ::Color(*o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
@@ -1724,7 +1730,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if( GETA( CharFontName ) )
+    if (GetProperty(rXPropSet, "CharFontName"))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -1740,7 +1746,12 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                FSEND );
     }
 
-    if( ( bComplex && GETAD( CharFontNameComplex ) ) || ( !bComplex && GETAD( CharFontNameAsian ) ) )
+    if ((bComplex
+         && (GetPropertyAndState(rXPropSet, rXPropState, "CharFontNameComplex", eState)
+             && eState == beans::PropertyState_DIRECT_VALUE))
+        || (!bComplex
+            && (GetPropertyAndState(rXPropSet, rXPropState, "CharFontNameAsian", eState)
+                && eState == beans::PropertyState_DIRECT_VALUE)))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -1759,13 +1770,14 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     if( bIsField )
     {
         Reference< XTextField > rXTextField;
-        GET( rXTextField, TextField );
+        if (GetProperty(rXPropSet, "TextField"))
+            mAny >>= rXTextField;
         if( rXTextField.is() )
             rXPropSet.set( rXTextField, UNO_QUERY );
     }
 
     // field properties starts here
-    if( GETA( URL ) )
+    if (GetProperty(rXPropSet, "URL"))
     {
         OUString sURL;
 
@@ -1789,7 +1801,7 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     OUString aFieldType, aFieldValue;
 
-    if( GETA( TextPortionType ) )
+    if (GetProperty(rXPropSet, "TextPortionType"))
     {
         aFieldType = *o3tl::doAccess<OUString>(mAny);
         SAL_INFO("oox.shape", "field type: " << aFieldType);
@@ -1798,7 +1810,8 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
     if( aFieldType == "TextField" )
     {
         Reference< XTextField > rXTextField;
-        GET( rXTextField, TextField );
+        if (GetProperty(rXPropSet, "TextField"))
+            mAny >>= rXTextField;
         if( rXTextField.is() )
         {
             rXPropSet.set( rXTextField, UNO_QUERY );
@@ -1821,7 +1834,8 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 else if( aFieldKind == "URL" )
                 {
                     bIsURLField = true;
-                    GET( aFieldValue, Representation)
+                    if (GetProperty(rXPropSet, "Representation"))
+                        mAny >>= aFieldValue;
 
                 }
                 else if(aFieldKind == "Date")
@@ -1893,10 +1907,12 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     sal_Int16 nLevel = -1;
-    GET( nLevel, NumberingLevel );
+    if (GetProperty(rXPropSet, "NumberingLevel"))
+        mAny >>= nLevel;
 
     bool bNumberingIsNumber = true;
-    GET( bNumberingIsNumber, NumberingIsNumber );
+    if (GetProperty(rXPropSet, "NumberingIsNumber"))
+        mAny >>= bNumberingIsNumber;
 
     bool bIsURLField = false;
     OUString sFieldValue = GetFieldValue( rRun, bIsURLField );
@@ -2004,7 +2020,7 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
 
 void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
 {
-    if( nLevel < 0 || !GETA( NumberingRules ) )
+    if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
         return;
 
     Reference< XIndexAccess > rXIndexAccess;
@@ -2198,7 +2214,7 @@ bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
 
 sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName)
 {
-    if( nLevel < 0 || !GETA( NumberingRules ) )
+    if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
         return 0;
 
     Reference< XIndexAccess > rXIndexAccess;
@@ -2277,19 +2293,22 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
         return;
 
     sal_Int16 nLevel = -1;
-    GET( nLevel, NumberingLevel );
+    if (GetProperty(rXPropSet, "NumberingLevel"))
+        mAny >>= nLevel;
 
     sal_Int16 nTmp = sal_Int16(style::ParagraphAdjust_LEFT);
-    GET( nTmp, ParaAdjust );
+    if (GetProperty(rXPropSet, "ParaAdjust"))
+        mAny >>= nTmp;
     style::ParagraphAdjust nAlignment = static_cast<style::ParagraphAdjust>(nTmp);
 
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
-    if( GETAD( ParaLineSpacing ) )
+    if (GetPropertyAndState(rXPropSet, rXPropState, "ParaLineSpacing", eState)
+        && eState == beans::PropertyState_DIRECT_VALUE)
         bHasLinespacing = ( mAny >>= aLineSpacing );
 
     bool bRtl = false;
-    if( GETA( WritingMode ) )
+    if (GetProperty(rXPropSet, "WritingMode"))
     {
         sal_Int16 nWritingMode;
         if( ( mAny >>= nWritingMode ) && nWritingMode == text::WritingMode2::RL_TB )
@@ -2301,14 +2320,18 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     sal_Int32 nParaLeftMargin = 0;
     sal_Int32 nParaFirstLineIndent = 0;
 
-    GET( nParaLeftMargin, ParaLeftMargin );
-    GET( nParaFirstLineIndent,ParaFirstLineIndent);
+    if (GetProperty(rXPropSet, "ParaLeftMargin"))
+        mAny >>= nParaLeftMargin;
+    if (GetProperty(rXPropSet, "ParaFirstLineIndent"))
+        mAny >>= nParaFirstLineIndent;
 
     sal_Int32 nParaTopMargin = 0;
     sal_Int32 nParaBottomMargin = 0;
 
-    GET( nParaTopMargin, ParaTopMargin );
-    GET( nParaBottomMargin, ParaBottomMargin );
+    if (GetProperty(rXPropSet, "ParaTopMargin"))
+        mAny >>= nParaTopMargin;
+    if (GetProperty(rXPropSet, "ParaBottomMargin"))
+        mAny >>= nParaBottomMargin;
 
     sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,"LeftMargin");
     sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,"FirstLineOffset");
@@ -2428,20 +2451,25 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
     // top inset looks a bit different compared to ppt export
     // check if something related doesn't work as expected
-    GET( nLeft, TextLeftDistance );
-    GET( nRight, TextRightDistance );
-    GET( nTop, TextUpperDistance );
-    GET( nBottom, TextLowerDistance );
+    if (GetProperty(rXPropSet, "TextLeftDistance"))
+        mAny >>= nLeft;
+    if (GetProperty(rXPropSet, "TextRightDistance"))
+        mAny >>= nRight;
+    if (GetProperty(rXPropSet, "TextUpperDistance"))
+        mAny >>= nTop;
+    if (GetProperty(rXPropSet, "TextLowerDistance"))
+        mAny >>= nBottom;
 
     TextVerticalAdjust eVerticalAlignment( TextVerticalAdjust_TOP );
     const char* sVerticalAlignment = nullptr;
-    GET( eVerticalAlignment, TextVerticalAdjust );
+    if (GetProperty(rXPropSet, "TextVerticalAdjust"))
+        mAny >>= eVerticalAlignment;
     if( eVerticalAlignment != TextVerticalAdjust_TOP )
         sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
     const char* sWritingMode = nullptr;
     bool bVertical = false;
-    if( GETA( TextWritingMode ) )
+    if (GetProperty(rXPropSet, "TextWritingMode"))
     {
         WritingMode eMode;
 
@@ -2452,7 +2480,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
     }
 
-    if ( GETA( CustomShapeGeometry ) )
+    if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
         Sequence< PropertyValue > aProps;
         if ( mAny >>= aProps )
@@ -2479,7 +2507,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
-    GET( eHorizontalAlignment, TextHorizontalAdjust );
+    if (GetProperty(rXPropSet, "TextHorizontalAdjust"))
+        mAny >>= eHorizontalAlignment;
     if( eHorizontalAlignment == TextHorizontalAdjust_CENTER )
         bHorizontalCenter = true;
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
@@ -2488,7 +2517,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     bool bHasWrap = false;
     bool bWrap = false;
     // Only custom shapes obey the TextWordWrap option, normal text always wraps.
-    if( dynamic_cast<SvxCustomShape*>(rXIface.get()) && GETA( TextWordWrap ) )
+    if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, "TextWordWrap"))
     {
         mAny >>= bWrap;
         bHasWrap = true;
@@ -2525,13 +2554,14 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
         {
             bool bTextAutoGrowHeight = false;
-            GET(bTextAutoGrowHeight, TextAutoGrowHeight);
+            if (GetProperty(rXPropSet, "TextAutoGrowHeight"))
+                mAny >>= bTextAutoGrowHeight;
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
         }
         if (GetDocumentType() == DOCUMENT_PPTX)
         {
             TextFitToSizeType eFit = TextFitToSizeType_NONE;
-            if (GETA(TextFitToSize))
+            if (GetProperty(rXPropSet, "TextFitToSize"))
                 mAny >>= eFit;
 
             if (eFit == TextFitToSizeType_AUTOFIT)
@@ -2555,7 +2585,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             else
             {
                 bool bTextAutoGrowHeight = false;
-                GET(bTextAutoGrowHeight, TextAutoGrowHeight);
+                if (GetProperty(rXPropSet, "TextAutoGrowHeight"))
+                    mAny >>= bTextAutoGrowHeight;
                 mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
             }
         }
