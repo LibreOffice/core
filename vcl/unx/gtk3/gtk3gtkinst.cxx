@@ -617,6 +617,12 @@ void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
 {
+    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats;
+    if (xTrans.is())
+    {
+        aFormats = xTrans->getTransferDataFlavors();
+    }
+
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
@@ -635,7 +641,6 @@ void VclGtkClipboard::setContents(
     assert(m_aGtkTargets.empty());
     if (m_aContents.is())
     {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
         std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
         if (!aGtkTargets.empty())
         {
