@@ -797,8 +797,8 @@ void Font::finalizeImport()
                     xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
                     xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
                     xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
-                    xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FAF: CJK Unified Ideographs
-                    xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FAF: CJK unified ideographs
+                    xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
+                    xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
                     xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
                     xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
                     xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
