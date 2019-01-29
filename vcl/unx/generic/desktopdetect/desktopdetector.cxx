@@ -191,14 +191,11 @@ static bool is_kde4_desktop( Display* pDisplay )
     return false;
 }
 
-static bool is_kde5_desktop( Display* pDisplay )
+static bool is_kde5_desktop()
 {
     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
     static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
     if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "5") == 0)
-        return true;
-
-    if ( KDEVersion( pDisplay ) == 5 )
         return true;
 
     return false;
@@ -280,6 +277,9 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         ret = DESKTOP_LXQT;
     else
     {
+        if ( is_kde5_desktop() )
+            return DESKTOP_KDE5;
+
         // tdf#121275 if we still can't tell, and WAYLAND_DISPLAY
         // is set, default to gtk3
         const char* pWaylandStr = getenv("WAYLAND_DISPLAY");
@@ -328,9 +328,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
         XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
 
-        if ( is_kde5_desktop( pDisplay ) )
-            ret = DESKTOP_KDE5;
-        else if ( is_kde4_desktop( pDisplay ) )
+        if ( is_kde4_desktop( pDisplay ) )
             ret = DESKTOP_KDE4;
         else if ( is_gnome_desktop( pDisplay ) )
             ret = DESKTOP_GNOME;
