@@ -1937,6 +1937,8 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
     OUString aChartType( xChartType->getChartType());
     sal_Int32 eChartType = lcl_getChartType( aChartType );
 
+    sal_Int32 nSavedOffset = 0; //tdf#108067
+
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<rSeriesSeq.getLength(); ++nSeriesIdx )
     {
         // export series
@@ -2030,10 +2032,26 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                         case chart::TYPEID_PIE:
                         case chart::TYPEID_DOUGHNUT:
                         {
+                            //ooxml export for explosion distance of dataseries in exploded doughnut charts
                             if( xOldPropSet.is() && GetProperty( xOldPropSet, "SegmentOffset") )
                             {
                                 sal_Int32 nOffset = 0;
                                 mAny >>= nOffset;
+
+                                //tdf#108067: explosion distance exported for the first dataseries instead of last
+                                if ( rSeriesSeq.getLength() > 1)
+                                {
+                                    if ( nOffset && nSeriesIdx == 0 )
+                                    {
+                                        nSavedOffset = nOffset;
+                                        nOffset = 0;
+                                    }
+                                    else if ( nSavedOffset && nSeriesIdx == rSeriesSeq.getLength()-1 )
+                                    {
+                                        nOffset = nSavedOffset;
+                                    }
+                                }
+
                                 pFS->singleElement( FSNS( XML_c, XML_explosion ),
                                     XML_val, I32S( nOffset ),
                                     FSEND );
@@ -3324,6 +3342,7 @@ void ChartExport::exportDataPoints(
                     case chart::TYPEID_PIE:
                     case chart::TYPEID_DOUGHNUT:
                     {
+                        //ooxml export for explosion distance of datapoints in exploded doughnut charts
                         if( xPropSet.is() && GetProperty( xPropSet, "SegmentOffset") )
                         {
                             sal_Int32 nOffset = 0;

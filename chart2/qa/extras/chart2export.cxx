@@ -125,6 +125,7 @@ public:
     void testTdf108022();
     void testTdf121744();
     void testTdf122031();
+    void testExplodedDoughnutChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST(testTdf122031);
+    CPPUNIT_TEST(testExplodedDoughnutChart);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1991,6 +1993,19 @@ void Chart2ExportTest::testTdf122031()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:numFmt", "formatCode", "0.000%");
+}
+
+void Chart2ExportTest::testExplodedDoughnutChart()
+{
+    load("/chart2/qa/extras/data/odt/", "exploded-doughnut-chart.odt");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+
+    if (!pXmlDoc)
+        return;
+
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser[3]/c:explosion", "val", "50");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
