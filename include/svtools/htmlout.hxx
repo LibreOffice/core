@@ -26,12 +26,10 @@
 #include <rtl/string.hxx>
 #include <svl/macitem.hxx>
 
-#include <svtools/HtmlWriter.hxx>
-
 class Color;
 class ImageMap;
+class HtmlWriter;
 class SvStream;
-class SvxMacroTableDtor;
 class SvNumberFormatter;
 
 struct HTMLOutEvent

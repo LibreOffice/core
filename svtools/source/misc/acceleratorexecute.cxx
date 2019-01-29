@@ -34,6 +34,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <vcl/evntpost.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

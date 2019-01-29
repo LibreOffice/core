@@ -23,8 +23,9 @@
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#include <svtools/javacontext.hxx>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+
+namespace com :: sun :: star :: task { class XInteractionRequest; }
 
 #define JAVA_INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
 

@@ -10,6 +10,7 @@
 
 #include <FontFeaturesDialog.hxx>
 #include <vcl/font/FeatureParser.hxx>
+#include <vcl/virdev.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/dialmgr.hxx>
 #include <unordered_set>

@@ -14,9 +14,11 @@
 #include <vcl/toolbox.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/status/Template.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 namespace {
 

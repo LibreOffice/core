@@ -21,6 +21,7 @@
 #include <svl/lngmisc.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <unotools/lingucfg.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>

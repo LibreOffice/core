@@ -22,10 +22,11 @@
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <memory>
+
+namespace com :: sun :: star :: uno { class XInterface; }
 
 class SvxMacroTableDtor;
 class SvxMacroItem;

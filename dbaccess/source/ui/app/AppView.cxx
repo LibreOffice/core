@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/toolbox.hxx>
+#include <vcl/event.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

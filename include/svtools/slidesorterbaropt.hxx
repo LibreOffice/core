@@ -21,11 +21,10 @@
 #define INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
 
 #include <svtools/svtdllapi.h>
-#include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
 
 /** forward declaration to our private date container implementation
 

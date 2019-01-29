@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #define INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
-#include <memory>
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/wintypes.hxx>
 #include <vcl/window.hxx>
+
+namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
 class ExtMultiLineEdit;
 

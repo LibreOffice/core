@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
+#include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <UITools.hxx>
 

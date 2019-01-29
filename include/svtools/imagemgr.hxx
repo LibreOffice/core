@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_IMAGEMGR_HXX
 
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <svtools/svtdllapi.h>
 
 enum class SvImageId {

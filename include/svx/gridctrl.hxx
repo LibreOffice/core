@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 

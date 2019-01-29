@@ -22,10 +22,10 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

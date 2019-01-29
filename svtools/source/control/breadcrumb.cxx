@@ -8,6 +8,8 @@
  */
 
 #include <svtools/breadcrumb.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/fixedhyper.hxx>
 
 class CustomLink : public FixedHyperlink
 {

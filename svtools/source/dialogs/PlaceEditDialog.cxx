@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_oauth2.h>
+
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
 
@@ -14,6 +16,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
+#include <svtools/place.hxx>
 
 using namespace com::sun::star::uno;
 

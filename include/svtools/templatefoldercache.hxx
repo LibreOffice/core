@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 
 #include <svtools/svtdllapi.h>
-#include <sal/types.h>
 #include <o3tl/deleter.hxx>
 #include <memory>
 

@@ -7,11 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/processfactory.hxx>
 #include <svtools/foldertree.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/urlobj.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/treelistentry.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
 #include <bitmaps.hlst>
+
+using namespace ::com::sun::star::task;
 
 FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )

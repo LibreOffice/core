@@ -26,6 +26,7 @@
 #include <toolkit/helper/convert.hxx>
 
 #include <com/sun/star/ui/ItemStyle.hpp>
+#include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/ImageDrawMode.hpp>
 #include <com/sun/star/awt/XGraphics2.hpp>

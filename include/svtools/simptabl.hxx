@@ -23,7 +23,6 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/headbar.hxx>
 #include <vcl/svtabbx.hxx>
-#include <unotools/intlwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <vcl/commandevent.hxx>
 

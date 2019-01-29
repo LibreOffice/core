@@ -18,6 +18,7 @@
  */
 
 #include <svtools/svparser.hxx>
+#include <svtools/htmltokn.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <rtl/textcvt.h>

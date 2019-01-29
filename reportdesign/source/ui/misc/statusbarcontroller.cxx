@@ -31,6 +31,7 @@
 #include <vcl/status.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace rptui
 {

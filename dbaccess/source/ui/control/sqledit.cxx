@@ -35,6 +35,7 @@
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace dbaui;
 

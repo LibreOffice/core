@@ -19,6 +19,7 @@
 
 #include <viewlayoutctrl.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>

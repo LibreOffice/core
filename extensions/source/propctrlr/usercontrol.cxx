@@ -23,6 +23,7 @@
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/event.hxx>
 #include <tools/debug.hxx>
 #include <svl/zformat.hxx>
 #include <connectivity/dbconversion.hxx>

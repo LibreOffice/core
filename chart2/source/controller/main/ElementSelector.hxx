@@ -21,6 +21,7 @@
 
 #include <ObjectIdentifier.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/toolboxcontroller.hxx>
 

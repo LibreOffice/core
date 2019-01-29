@@ -34,6 +34,7 @@
 #include <svx/dialogs.hrc>
 #include <strings.hrc>
 #include <vcl/builderfactory.hxx>
+#include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 
 #define CM_1_TO_TWIP        567

@@ -18,6 +18,7 @@
  */
 
 #include <svtools/simptabl.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>

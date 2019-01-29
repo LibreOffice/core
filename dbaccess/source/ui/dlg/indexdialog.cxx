@@ -30,6 +30,7 @@
 #include <indexcollection.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <UITools.hxx>

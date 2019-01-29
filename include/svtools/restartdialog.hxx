@@ -12,8 +12,9 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <svtools/svtdllapi.h>
+
+namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
 namespace weld { class Window; }
 namespace com { namespace sun { namespace star { namespace uno {

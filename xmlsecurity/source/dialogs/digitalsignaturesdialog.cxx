@@ -56,6 +56,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/configitem.hxx>
 
 using namespace comphelper;

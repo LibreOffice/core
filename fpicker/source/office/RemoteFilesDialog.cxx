@@ -7,11 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_oauth2.h>
+
 #include "RemoteFilesDialog.hxx"
 #include <fpsofficeResMgr.hxx>
 #include <strings.hrc>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <ucbhelper/commandenvironment.hxx>
+#include <vcl/treelistentry.hxx>
 #include <bitmaps.hlst>
 
 class FileViewContainer : public vcl::Window

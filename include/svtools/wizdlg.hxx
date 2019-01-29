@@ -22,12 +22,11 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/idle.hxx>
 
 class TabPage;
-class Button;
-class PushButton;
 struct ImplWizPageData;
 struct ImplWizButtonData;
 

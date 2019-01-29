@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_UNO_UNOCONTROLTABLEMODEL_HXX
 
 #include <svtools/table/tablemodel.hxx>
+#include <svtools/table/tablesort.hxx>
 #include <table/tablecontrol.hxx>
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>

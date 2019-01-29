@@ -24,15 +24,11 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>
-#include <tools/contnr.hxx>
 #include <vcl/image.hxx>
-#include <vcl/seleng.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class Point;
 class SvxIconChoiceCtrl_Impl;
-class Image;
 
 enum class SvxIconViewFlags
 {

@@ -22,9 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/customweld.hxx>
 #include <memory>
@@ -36,12 +34,12 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
+class UserDrawEvent;
+class VirtualDevice;
 
 struct ValueSetItem;
 struct SvtValueSetItem;
 
-class ValueSetAcc;
-class ValueItemAcc;
 enum class DrawFrameStyle;
 
 /*************************************************************************

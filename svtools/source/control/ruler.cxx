@@ -24,8 +24,11 @@
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vcllayout.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 
+#include <svtools/accessibleruler.hxx>
 #include <svtools/ruler.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>

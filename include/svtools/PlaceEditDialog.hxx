@@ -10,17 +10,14 @@
 #ifndef INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 #define INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 
-#include <svtools/ServerDetailsControls.hxx>
-
+#include <svtools/svtdllapi.h>
 #include <vcl/weld.hxx>
-
-#include <svtools/inettbc.hxx>
-#include <svtools/place.hxx>
-
-#include <config_oauth2.h>
 
 #include <memory>
 #include <vector>
+
+class Place;
+class DetailsContainer;
 
 class SVT_DLLPUBLIC PlaceEditDialog : public weld::GenericDialogController
 {

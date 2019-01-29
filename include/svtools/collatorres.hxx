@@ -24,8 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-class CollatorResourceData;
-
 class SVT_DLLPUBLIC CollatorResource
 {
 private:

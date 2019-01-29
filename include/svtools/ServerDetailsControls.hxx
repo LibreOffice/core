@@ -9,14 +9,23 @@
 #ifndef INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
 #define INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
 
-#include <map>
+#include <vector>
 
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/task/PasswordContainer.hpp>
-#include <com/sun/star/task/XPasswordContainer2.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
+#include <tools/link.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+
+namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
+namespace com :: sun :: star :: awt { class XWindow; }
+
+namespace weld {
+    class Button;
+    class ComboBox;
+    class Entry;
+    class SpinButton;
+    class ToggleButton;
+}
 
 class PlaceEditDialog;
 

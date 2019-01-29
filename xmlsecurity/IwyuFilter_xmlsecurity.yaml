@@ -1,4 +1,5 @@
 ---
+assumeFilename: xmlsecurity/source/xmlsec/xmlsec_init.cxx
 blacklist:
     xmlsecurity/qa/unit/pdfsigning/pdfsigning.cxx:
     # complete type is needed
