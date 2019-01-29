@@ -270,8 +270,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword << "' with param? "
                                                << (bParam ? 1 : 0) << " param val: '"
                                                << (bParam ? nParam : 0) << "'");
-    RTFSymbol aSymbol;
-    aSymbol.sKeyword = rKeyword.getStr();
+    RTFSymbol aSymbol(rKeyword.getStr());
     auto low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
     int i = low - s_aRTFControlWords.begin();
     if (low == s_aRTFControlWords.end() || aSymbol < *low)
@@ -283,35 +282,35 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     }
 
     RTFError ret;
-    switch (s_aRTFControlWords[i].nControlType)
+    switch (s_aRTFControlWords[i].GetControlType())
     {
         case CONTROL_FLAG:
             // flags ignore any parameter by definition
-            ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_DESTINATION:
             // same for destinations
-            ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_SYMBOL:
             // and symbols
-            ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_TOGGLE:
-            ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].nIndex, bParam, nParam);
+            ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].GetIndex(), bParam, nParam);
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_VALUE:
             if (!bParam)
-                nParam = s_aRTFControlWords[i].nDefValue;
-            ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);
+                nParam = s_aRTFControlWords[i].GetDefValue();
+            ret = m_rImport.dispatchValue(s_aRTFControlWords[i].GetIndex(), nParam);
             if (ret != RTFError::OK)
                 return ret;
             break;
