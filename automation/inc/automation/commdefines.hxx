@@ -24,7 +24,7 @@
 /*************************************************************************
  *
  *    ATTENTION
- *    This file is intended to work inside and outside the StarOffice environment.
+ *    This file is intended to work inside and outside the OpenOffice environment.
  *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
@@ -86,11 +86,11 @@
 #endif // OSL_LITENDIAN
 
 /**
-    Es gibt zwei arten von Datenpaketen
-    die erste enthält in den ersten 4 Byte die Längenangabe und in den Darauffolgenden die Daten
+    Es gibt zwei Arten von Datenpaketen
+    Die erste enthält in den ersten 4 Byte die Längenangabe und in den darauffolgenden die Daten.
     Die Längenangabe bezieht sich nur auf die Daten ohne die Längenangabe selbst.
 
-    Die Zweite Art von Datenpaketen enthält Header mit weitere Informationen
+    Die zweite Art von Datenpaketen enthält Header mit weiteren Informationen
     wie unten beschrieben.
 
     Umgeschaltet wird mit dem Boolean bUseMultiChannel im Konstruktor des Managers.
@@ -136,7 +136,7 @@ typedef comm_USHORT CommunicationOption;
 #define CH_SUPPORT_OPTIONS          ((HandshakeType)0x0103)
 #define OPT_USE_SHUTDOWN_PROTOCOL   ((CommunicationOption)0x0001)
 
-/// these are for making sure all Data is read prior to shutting sown the link
+/// these are for making sure all Data is read prior to shutting down the link
 #define CH_REQUEST_ShutdownLink     ((HandshakeType)0x0104) /// Request to Shutdown this link
 #define CH_ShutdownLink             ((HandshakeType)0x0105) /// Shutdown this link
 
