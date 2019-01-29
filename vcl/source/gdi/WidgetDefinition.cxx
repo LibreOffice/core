@@ -89,28 +89,36 @@ WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString co
 }
 
 void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth,
-                                             Color aFillColor, sal_Int32 nRx, sal_Int32 nRy,
-                                             sal_Int32 nMargin)
+                                             Color aFillColor, float fX1, float fY1, float fX2,
+                                             float fY2, sal_Int32 nRx, sal_Int32 nRy)
 {
     std::shared_ptr<DrawCommand> pCommand(std::make_shared<RectangleDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
-    pCommand->mnMargin = nMargin;
     RectangleDrawCommand& rRectCommand = static_cast<RectangleDrawCommand&>(*pCommand);
     rRectCommand.mnRx = nRx;
     rRectCommand.mnRy = nRy;
+    rRectCommand.mfX1 = fX1;
+    rRectCommand.mfY1 = fY1;
+    rRectCommand.mfX2 = fX2;
+    rRectCommand.mfY2 = fY2;
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
 void WidgetDefinitionState::addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth,
-                                          Color aFillColor, sal_Int32 nMargin)
+                                          Color aFillColor, float fX1, float fY1, float fX2,
+                                          float fY2)
 {
     std::shared_ptr<DrawCommand> pCommand(std::make_shared<CircleDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
-    pCommand->mnMargin = nMargin;
+    CircleDrawCommand& rCircleCommand = static_cast<CircleDrawCommand&>(*pCommand);
+    rCircleCommand.mfX1 = fX1;
+    rCircleCommand.mfY1 = fY1;
+    rCircleCommand.mfX2 = fX2;
+    rCircleCommand.mfY2 = fY2;
     mpDrawCommands.push_back(std::move(pCommand));
 }
 

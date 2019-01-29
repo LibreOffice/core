@@ -37,7 +37,6 @@ public:
     DrawCommand(DrawCommandType aType)
         : maType(aType)
         , mnStrokeWidth(-1)
-        , mnMargin(0)
     {
     }
 
@@ -46,7 +45,6 @@ public:
     Color maStrokeColor;
     Color maFillColor;
     sal_Int32 mnStrokeWidth;
-    sal_Int32 mnMargin;
 };
 
 class VCL_DLLPUBLIC RectangleDrawCommand : public DrawCommand
@@ -55,10 +53,19 @@ public:
     sal_Int32 mnRx;
     sal_Int32 mnRy;
 
+    float mfX1;
+    float mfY1;
+    float mfX2;
+    float mfY2;
+
     RectangleDrawCommand()
         : DrawCommand(DrawCommandType::RECTANGLE)
         , mnRx(0)
         , mnRy(0)
+        , mfX1(0.0f)
+        , mfY1(0.0f)
+        , mfX2(1.0f)
+        , mfY2(1.0f)
     {
     }
 };
@@ -66,8 +73,17 @@ public:
 class VCL_DLLPUBLIC CircleDrawCommand : public DrawCommand
 {
 public:
+    float mfX1;
+    float mfY1;
+    float mfX2;
+    float mfY2;
+
     CircleDrawCommand()
         : DrawCommand(DrawCommandType::CIRCLE)
+        , mfX1(0.0f)
+        , mfY1(0.0f)
+        , mfX2(1.0f)
+        , mfY2(1.0f)
     {
     }
 };
@@ -139,10 +155,11 @@ public:
 
     std::vector<std::shared_ptr<DrawCommand>> mpDrawCommands;
 
-    void addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
-                          sal_Int32 nRx, sal_Int32 nRy, sal_Int32 nMargin);
-    void addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor,
-                       sal_Int32 nMargin);
+    void addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor, float fX1,
+                          float fY1, float fX2, float fY2, sal_Int32 nRx, sal_Int32 nRy);
+    void addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor, float fX1,
+                       float fY1, float fX2, float fY2);
+
     void addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1, float fY1, float fX2,
                      float fY2);
 };

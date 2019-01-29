@@ -124,10 +124,8 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             {
                 auto const& rCircleDrawCommand
                     = static_cast<CircleDrawCommand const&>(*pDrawCommand);
-                Point aRectPoint(nX + 1 + rCircleDrawCommand.mnMargin,
-                                 nY + 1 + rCircleDrawCommand.mnMargin);
-                Size aRectSize(nWidth - 1 - 2 * rCircleDrawCommand.mnMargin,
-                               nHeight - 1 - 2 * rCircleDrawCommand.mnMargin);
+                Point aRectPoint(nX + 1, nY + 1);
+                Size aRectSize(nWidth - 1, nHeight - 1);
 
                 tools::Rectangle aRectangle(aRectPoint, aRectSize);
                 tools::Polygon aPolygon(aRectangle.Center(), aRectangle.GetWidth() >> 1,
@@ -143,11 +141,9 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             case DrawCommandType::LINE:
             {
                 auto const& rLineDrawCommand = static_cast<LineDrawCommand const&>(*pDrawCommand);
-                Point aRectPoint(nX + 1 + rLineDrawCommand.mnMargin,
-                                 nY + 1 + rLineDrawCommand.mnMargin);
+                Point aRectPoint(nX + 1, nY + 1);
 
-                Size aRectSize(nWidth - 1 - 2 * rLineDrawCommand.mnMargin,
-                               nHeight - 1 - 2 * rLineDrawCommand.mnMargin);
+                Size aRectSize(nWidth - 1, nHeight - 1);
 
                 rGraphics.SetFillColor();
                 rGraphics.SetLineColor(rLineDrawCommand.maStrokeColor);
