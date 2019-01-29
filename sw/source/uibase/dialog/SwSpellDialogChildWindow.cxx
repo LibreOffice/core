@@ -421,6 +421,8 @@ The code below would only be part of the solution.
             LockFocusNotification( false );
             // take care that the now valid selection is stored
             LoseFocus();
+            if( pTemp )
+                pTemp->GrabFocus();
         }
     }
     return aRet;
