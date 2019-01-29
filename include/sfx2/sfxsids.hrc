@@ -256,8 +256,9 @@ class SfxDocumentInfoItem;
 // Used to export a temporary file for preview in Mail Merge Wizard, where saving the data source is
 // not required for preview, but interferes with not-yet-saved embedded data source for main document.
 #define SID_NO_EMBEDDED_DS                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 1731)
+#define SID_IS_REDACT_MODE                  (SID_SFX_START + 1733)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1733)
+//      SID_SFX_free_START                  (SID_SFX_START + 1734)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
