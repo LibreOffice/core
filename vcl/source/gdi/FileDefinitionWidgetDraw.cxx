@@ -15,6 +15,9 @@
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
 
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 namespace vcl
 {
 namespace
@@ -101,12 +104,15 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             {
                 auto const& rRectDrawCommand
                     = static_cast<RectangleDrawCommand const&>(*pDrawCommand);
-                Point aRectPoint(nX, nY);
-                Size aRectSize(nWidth - 1, nHeight - 1);
-                tools::Polygon aPolygon(tools::Rectangle(aRectPoint, aRectSize),
-                                        rRectDrawCommand.mnRx, rRectDrawCommand.mnRy);
 
-                basegfx::B2DPolygon aB2DPolygon(aPolygon.getB2DPolygon());
+                basegfx::B2DRectangle rRect(
+                    nX + (nWidth * rRectDrawCommand.mfX1), nY + (nHeight * rRectDrawCommand.mfY1),
+                    nX + (nWidth * rRectDrawCommand.mfX2), nY + (nHeight * rRectDrawCommand.mfY2));
+
+                basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
+                    rRect, rRectDrawCommand.mnRx / rRect.getWidth() * 2.0,
+                    rRectDrawCommand.mnRy / rRect.getHeight() * 2.0);
+
                 rGraphics.SetLineColor();
                 rGraphics.SetFillColor(rRectDrawCommand.maFillColor);
                 rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
@@ -124,14 +130,15 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             {
                 auto const& rCircleDrawCommand
                     = static_cast<CircleDrawCommand const&>(*pDrawCommand);
-                Point aRectPoint(nX + 1, nY + 1);
-                Size aRectSize(nWidth - 1, nHeight - 1);
 
-                tools::Rectangle aRectangle(aRectPoint, aRectSize);
-                tools::Polygon aPolygon(aRectangle.Center(), aRectangle.GetWidth() >> 1,
-                                        aRectangle.GetHeight() >> 1);
+                basegfx::B2DRectangle rRect(nX + (nWidth * rCircleDrawCommand.mfX1),
+                                            nY + (nHeight * rCircleDrawCommand.mfY1),
+                                            nX + (nWidth * rCircleDrawCommand.mfX2),
+                                            nY + (nHeight * rCircleDrawCommand.mfY2));
 
-                basegfx::B2DPolygon aB2DPolygon(aPolygon.getB2DPolygon());
+                basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromEllipse(
+                    rRect.getCenter(), rRect.getWidth() / 2.0, rRect.getHeight() / 2.0);
+
                 rGraphics.SetLineColor(rCircleDrawCommand.maStrokeColor);
                 rGraphics.SetFillColor(rCircleDrawCommand.maFillColor);
                 rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
@@ -177,10 +184,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
     bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
     m_rGraphics.setAntiAliasB2DDraw(true);
 
-    long nWidth = rControlRegion.GetWidth();
-    long nHeight = rControlRegion.GetHeight();
-    long nX = rControlRegion.Left() + 1;
-    long nY = rControlRegion.Top() + 1;
+    long nWidth = rControlRegion.GetWidth() - 1;
+    long nHeight = rControlRegion.GetHeight() - 1;
+    long nX = rControlRegion.Left();
+    long nY = rControlRegion.Top();
 
     bool bOK = false;
 
