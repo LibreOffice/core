@@ -2341,6 +2341,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
     if ( xExporter.is() )
     {
+        bool bIsRedactMode = true;
         try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
@@ -2406,6 +2407,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aArgs.realloc( ++nEnd );
             aArgs[nEnd-1].Name = "FilterName";
             aArgs[nEnd-1].Value <<= aFilterName;
+        }
+
+        if (bIsRedactMode)
+        {
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = "IsRedactMode";
+            aArgs[nEnd-1].Value <<= bIsRedactMode;
         }
 
         return xFilter->filter( aArgs );
