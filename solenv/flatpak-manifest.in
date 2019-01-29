@@ -556,7 +556,7 @@
                     "url": "https://dev-www.libreoffice.org/src/libatomic_ops-7.6.8.tar.gz",
                     "sha256": "1d6a279edf81767e74d2ad2c9fce09459bc65f12c6525a40b0cb3e53c089f665",
                     "type": "file",
-                    "dest-filename": "libatomic_ops-7.6.8.tar.gz"
+                    "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/extern/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf",
