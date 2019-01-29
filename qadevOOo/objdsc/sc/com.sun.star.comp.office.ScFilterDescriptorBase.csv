@@ -1,7 +1,0 @@
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
-"ScFilterDescriptorBase";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"

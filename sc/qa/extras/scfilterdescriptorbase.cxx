@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/sheet/sheetfilterdescriptor.hxx>
 #include <test/sheet/xsheetfilterdescriptor.hxx>
 
@@ -25,6 +26,7 @@ namespace sc_apitest
 {
 class ScFilterDescriptorBase : public CalcUnoApiTest,
                                public apitest::SheetFilterDescriptor,
+                               public apitest::XPropertySet,
                                public apitest::XSheetFilterDescriptor
 {
 public:
@@ -40,6 +42,13 @@ public:
     // SheetFilterDescriptor
     CPPUNIT_TEST(testSheetFilterDescriptorProperties);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     // XSheetFilterDescriptor
     CPPUNIT_TEST(testGetSetFilterFields);
 
@@ -51,6 +60,7 @@ private:
 
 ScFilterDescriptorBase::ScFilterDescriptorBase()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XPropertySet({ "Orientation", "OutputPosition" })
 {
 }
 
