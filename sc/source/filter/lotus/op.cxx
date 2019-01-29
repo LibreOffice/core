@@ -201,13 +201,13 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
     {
-        LotusRange*      pRange;
+        std::unique_ptr<LotusRange> pRange;
 
         if( nColSt == nColEnd && nRowSt == nRowEnd )
-            pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
+            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
         else
-            pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
-                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
+            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
+                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
         sal_Char cBuf[sizeof(cBuffer)+1];
         if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
@@ -222,7 +222,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->maRangeNames.Append( pRange );
+        rContext.pLotusRoot->maRangeNames.Append( std::move(pRange) );
     }
 }
 
@@ -240,13 +240,13 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
     {
-        LotusRange*      pRange;
+        std::unique_ptr<LotusRange> pRange;
 
         if( nType )
-            pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
+            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
         else
-            pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
-                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
+            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
+                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
         sal_Char cBuf[sizeof(cBuffer)+1];
         if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
@@ -260,7 +260,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         OUString  aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->maRangeNames.Append( pRange );
+        rContext.pLotusRoot->maRangeNames.Append( std::move(pRange) );
     }
 }
 
