@@ -117,6 +117,8 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( false ),
 
+    mbIsRedactMode              ( false ),
+
     mbHideViewerToolbar         ( false ),
     mbHideViewerMenubar         ( false ),
     mbHideViewerWindowControls  ( false ),
@@ -229,6 +231,24 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     if( aMtf.GetActionSize() &&
                              ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
                     {
+                        // We convert the whole metafile into a bitmap to get rid of the
+                        // text covered by redaction shapes
+                        if (mbIsRedactMode)
+                        {
+                            try
+                            {
+                                Graphic aGraph(aMtf);
+                                BitmapEx bmp = aGraph.GetBitmapEx();
+                                Graphic bgraph(bmp);
+                                aMtf = bgraph.GetGDIMetaFile();
+                            }
+                            catch(const Exception& e)
+                            {
+                                SAL_WARN("filter.pdf", "Something went wrong while converting metafile to bitmap. Exception: "
+                                         << e.Message);
+                            }
+                        }
+
                         ImplExportPage(rPDFWriter, rPDFExtOutDevData, aMtf);
                         bRet = true;
                     }
@@ -559,6 +579,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbExportPlaceholders;
                 else if ( rFilterData[ nData ].Name == "UseReferenceXObject" )
                     rFilterData[ nData ].Value >>= mbUseReferenceXObject;
+                // Redaction & bitmap related stuff
+                else if ( rFilterData[ nData ].Name == "IsRedactMode" )
+                    rFilterData[ nData ].Value >>= mbIsRedactMode;
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
