@@ -46,11 +46,12 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     Sequence< PropertyValue >   aFilterData;
     sal_Int32                   nLength = rDescriptor.getLength();
     const PropertyValue*        pValue = rDescriptor.getConstArray();
+    bool                        bIsRedactMode = false;
     bool                    bRet = false;
     Reference< task::XStatusIndicator > xStatusIndicator;
     Reference< task::XInteractionHandler > xIH;
 
-    for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
+    for (sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
         if ( pValue[ i ].Name == "OutputStream" )
             pValue[ i ].Value >>= xOStm;
@@ -60,6 +61,12 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= xStatusIndicator;
         else if ( pValue[i].Name == "InteractionHandler" )
             pValue[i].Value >>= xIH;
+    }
+
+    for (sal_Int32 i = 0 ; i < nLength; ++i)
+    {
+        if ( pValue[i].Name == "IsRedactMode")
+            pValue[i].Value >>= bIsRedactMode;
     }
 
     /* we don't get FilterData if we are exporting directly
@@ -109,7 +116,34 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  "ExportBookmarks", true );
         aCfgItem.ReadBool(  "ExportHiddenSlides", false );
         aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
+
+        aCfgItem.ReadBool( "IsRedactMode", false);
+
         aFilterData = aCfgItem.GetFilterData();
+    }
+
+
+    if (bIsRedactMode)
+    {
+        bool bFound = false;
+
+        for (int i = 0; i < aFilterData.getLength(); ++i)
+        {
+            if (aFilterData[i].Name == "IsRedactMode")
+            {
+                aFilterData[i].Value <<= bIsRedactMode;
+                bFound = true;
+                break;
+            }
+        }
+
+        if (!bFound)
+        {
+            sal_Int32 nNewSize = aFilterData.getLength() + 1;
+            aFilterData.realloc( nNewSize );
+            aFilterData[nNewSize - 1].Name = "IsRedactMode";
+            aFilterData[nNewSize - 1].Value <<= bIsRedactMode;
+        }
     }
 
     if( mxSrcDoc.is() && xOStm.is() )
