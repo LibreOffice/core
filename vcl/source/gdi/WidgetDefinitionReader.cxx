@@ -185,12 +185,20 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
             if (!sRy.isEmpty())
                 nRy = sRy.toInt32();
 
-            sal_Int32 nMargin = 0;
-            OString sMargin = rWalker.attribute("margin");
-            if (!sMargin.isEmpty())
-                nMargin = sMargin.toInt32();
+            OString sX1 = rWalker.attribute("x1");
+            float fX1 = sX1.isEmpty() ? 0.0 : sX1.toFloat();
 
-            rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, nRx, nRy, nMargin);
+            OString sY1 = rWalker.attribute("y1");
+            float fY1 = sY1.isEmpty() ? 0.0 : sY1.toFloat();
+
+            OString sX2 = rWalker.attribute("x2");
+            float fX2 = sX2.isEmpty() ? 1.0 : sX2.toFloat();
+
+            OString sY2 = rWalker.attribute("y2");
+            float fY2 = sY2.isEmpty() ? 1.0 : sY2.toFloat();
+
+            rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, fX1, fY1, fX2, fY2,
+                                      nRx, nRy);
         }
         else if (rWalker.name() == "circ")
         {
@@ -203,12 +211,19 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
             if (!sStrokeWidth.isEmpty())
                 nStrokeWidth = sStrokeWidth.toInt32();
 
-            sal_Int32 nMargin = 0;
-            OString sMargin = rWalker.attribute("margin");
-            if (!sMargin.isEmpty())
-                nMargin = sMargin.toInt32();
+            OString sX1 = rWalker.attribute("x1");
+            float fX1 = sX1.isEmpty() ? 0.0 : sX1.toFloat();
 
-            rpState->addDrawCircle(aStrokeColor, nStrokeWidth, aFillColor, nMargin);
+            OString sY1 = rWalker.attribute("y1");
+            float fY1 = sY1.isEmpty() ? 0.0 : sY1.toFloat();
+
+            OString sX2 = rWalker.attribute("x2");
+            float fX2 = sX2.isEmpty() ? 1.0 : sX2.toFloat();
+
+            OString sY2 = rWalker.attribute("y2");
+            float fY2 = sY2.isEmpty() ? 1.0 : sY2.toFloat();
+
+            rpState->addDrawCircle(aStrokeColor, nStrokeWidth, aFillColor, fX1, fY1, fX2, fY2);
         }
         else if (rWalker.name() == "line")
         {
