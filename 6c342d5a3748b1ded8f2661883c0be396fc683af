@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_ea494d60",
+        "filename": "vcl/source/app/salplug.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-29T09:15:02Z",
+      "side": 1,
+      "message": "you didn\u0027t remove the \u003d\u003d \"gtk3_kde5\" conditional, so possibly the comment should stay and be updated?",
+      "revId": "6c342d5a3748b1ded8f2661883c0be396fc683af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
