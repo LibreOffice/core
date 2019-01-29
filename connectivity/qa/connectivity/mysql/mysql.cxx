@@ -20,6 +20,8 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
+
+#include <com/sun/star/util/DateTime.hpp>
 #include <svtools/miscopt.hxx>
 #include <osl/process.h>
 
@@ -49,6 +51,7 @@ public:
     void testDBPositionChange();
     void testMultipleResultsets();
     void testDBMetaData();
+    void testTimestampField();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -56,6 +59,7 @@ public:
     CPPUNIT_TEST(testIntegerInsertAndQuery);
     CPPUNIT_TEST(testMultipleResultsets);
     CPPUNIT_TEST(testDBMetaData);
+    CPPUNIT_TEST(testTimestampField);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -320,6 +324,38 @@ void MysqlTestDriver::testDBMetaData()
     CPPUNIT_ASSERT_THROW_MESSAGE("exception expected when indexing out of range",
                                  xMetaData->getColumnName(3), sdbc::SQLException);
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
+}
+
+void MysqlTestDriver::testTimestampField()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    if (!xConnection.is())
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+
+    xStatement->executeUpdate(
+        "CREATE TABLE myTestTable (id INTEGER PRIMARY KEY, mytimestamp timestamp)");
+    xStatement->executeUpdate("INSERT INTO myTestTable VALUES (1, '2008-02-16 20:15:03')");
+
+    // now let's query
+    Reference<XResultSet> xResultSet
+        = xStatement->executeQuery("SELECT mytimestamp from myTestTable");
+
+    xResultSet->next(); // use it
+    Reference<XRow> xRow(xResultSet, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xRow.is());
+    util::DateTime dt = xRow->getTimestamp(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<short>(2008), dt.Year);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(2), dt.Month);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(16), dt.Day);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(20), dt.Hours);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(15), dt.Minutes);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(3), dt.Seconds);
+
+    xStatement->executeUpdate("DROP TABLE myTestTable");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MysqlTestDriver);
