@@ -524,7 +524,7 @@ void CustomAnimationPresets::changePresetSubType( const CustomAnimationEffectPtr
     }
 }
 
-std::map<OUString, CustomAnimationPresets*>  CustomAnimationPresets::mpCustomAnimationPresetsMap;
+std::map<OUString, CustomAnimationPresets>  CustomAnimationPresets::mPresetsMap;
 
 const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets()
 {
@@ -535,16 +535,13 @@ const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets(
                                : SvtSysLocaleOptions().GetLanguageTag().getLanguage();
 
     SolarMutexGuard aGuard;
-    const auto it = mpCustomAnimationPresetsMap.find(aLang);
-    if (it != mpCustomAnimationPresetsMap.end())
-        return *it->second;
+    const auto it = mPresetsMap.find(aLang);
+    if (it != mPresetsMap.end())
+        return it->second;
 
-    // Note: we are invoked recursively(!), so we must set the instance pointer
-    // in the cache map before we importResources, lest we get in infinite loop.
-    sd::CustomAnimationPresets* pCustomAnimationPresets = new sd::CustomAnimationPresets();
-    mpCustomAnimationPresetsMap[aLang] = pCustomAnimationPresets;
-    pCustomAnimationPresets->importResources();
-    return *pCustomAnimationPresets;
+    CustomAnimationPresets& rPresets = mPresetsMap[aLang];
+    rPresets.importResources();
+    return rPresets;
 }
 
 Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 nPresetClass ) const
