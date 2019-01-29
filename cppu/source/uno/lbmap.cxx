@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef DISABLE_DYNLOADING
+#include <config_java.h>
+#endif
+
 #include "IdentityMapping.hxx"
 
 #include <cassert>
