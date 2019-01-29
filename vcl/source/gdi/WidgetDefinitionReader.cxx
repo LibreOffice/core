@@ -153,6 +153,11 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
         reType = ControlType::Checkbox;
         bReturn = true;
     }
+    else if (rString == "combobox")
+    {
+        reType = ControlType::Combobox;
+        bReturn = true;
+    }
 
     return bReturn;
 }
