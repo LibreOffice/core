@@ -148,6 +148,12 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
         reType = ControlType::Editbox;
         bReturn = true;
     }
+    else if (rString == "checkbox")
+    {
+        reType = ControlType::Checkbox;
+        bReturn = true;
+    }
+
     return bReturn;
 }
 
