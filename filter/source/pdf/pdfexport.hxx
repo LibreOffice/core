@@ -65,6 +65,8 @@ private:
     sal_Int32           mnProgressValue;
     bool                mbRemoveTransparencies;
 
+    bool                mbIsRedactMode;
+
     OUString            msWatermark;
 
     // these variable are here only to have a location in filter/pdf to set the default
