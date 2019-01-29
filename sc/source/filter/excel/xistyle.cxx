@@ -478,8 +478,8 @@ void XclImpFont::GuessScriptType()
                 xFontCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
                 xFontCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
                 xFontCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                xFontCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
-                xFontCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
+                xFontCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
+                xFontCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
                 xFontCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
                 xFontCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
                 xFontCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
