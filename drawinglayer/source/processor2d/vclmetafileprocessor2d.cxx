@@ -563,7 +563,9 @@ namespace drawinglayer
             mnSvtGraphicStrokeCount(0),
             mfCurrentUnifiedTransparence(0.0),
             mpPDFExtOutDevData(dynamic_cast< vcl::PDFExtOutDevData* >(rOutDev.GetExtOutDevData())),
-            mnCurrentOutlineLevel(-1)
+            mnCurrentOutlineLevel(-1),
+            mbInListItem(false),
+            mbBulletPresent(false)
         {
             OSL_ENSURE(rOutDev.GetConnectMetaFile(), "VclMetafileProcessor2D: Used on OutDev which has no MetaFile Target (!)");
             // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation
@@ -1232,9 +1234,19 @@ namespace drawinglayer
             // "XTEXT_EOC" is used, use here, too.
             const OString aCommentString("XTEXT_EOC");
 
+            // this is a part of list item, start LILabel ( = bullet)
+            if(mbInListItem)
+                mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::LILabel);
+
             // process recursively and add MetaFile comment
             process(rBulletPrimitive);
             mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
+
+            if(mbInListItem)
+            {
+                mpPDFExtOutDevData->EndStructureElement(); // end LILabel
+                mbBulletPresent = true;
+            }
         }
 
         void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive)
@@ -1301,7 +1313,7 @@ namespace drawinglayer
             {
                 // Dump as ListItem
                 mpPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::ListItem );
-                mpPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::LIBody );
+                mbInListItem = true;
             }
             else
             {
@@ -1315,7 +1327,8 @@ namespace drawinglayer
 
             if(bDumpAsListItem)
             {
-                mpPDFExtOutDevData->EndStructureElement();
+                mpPDFExtOutDevData->EndStructureElement(); // end ListItem
+                mbInListItem = false;
             }
 
             mpPDFExtOutDevData->EndStructureElement();
@@ -1338,8 +1351,19 @@ namespace drawinglayer
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
+            // this is a 2nd portion of list item
+            // bullet has been already processed, start LIBody
+            if (mbInListItem && mbBulletPresent)
+                mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::LIBody);
+
             // directdraw of text simple portion; use default processing
             RenderTextSimpleOrDecoratedPortionPrimitive2D(rTextCandidate);
+
+            if (mbInListItem && mbBulletPresent)
+            {
+                mpPDFExtOutDevData->EndStructureElement(); // end LIBody
+                mbBulletPresent = false;
+            }
 
             // restore DrawMode
             mpOutputDevice->SetDrawMode(nOriginalDrawMode);
