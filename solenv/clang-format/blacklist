@@ -7604,7 +7604,6 @@ include/test/sheet/xsheetannotation.hxx
 include/test/sheet/xsheetannotations.hxx
 include/test/sheet/xsheetannotationshapesupplier.hxx
 include/test/sheet/xsheetfilterable.hxx
-include/test/sheet/xsheetfilterdescriptor.hxx
 include/test/sheet/xsheetlinkable.hxx
 include/test/sheet/xsheetoperation.hxx
 include/test/sheet/xsheetoutline.hxx
@@ -16587,7 +16586,6 @@ test/source/sheet/xsheetannotation.cxx
 test/source/sheet/xsheetannotations.cxx
 test/source/sheet/xsheetannotationshapesupplier.cxx
 test/source/sheet/xsheetfilterable.cxx
-test/source/sheet/xsheetfilterdescriptor.cxx
 test/source/sheet/xsheetlinkable.cxx
 test/source/sheet/xsheetoperation.cxx
 test/source/sheet/xsheetoutline.cxx

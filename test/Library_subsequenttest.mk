@@ -140,6 +140,8 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetfilterable \
 	test/source/sheet/xsheetfilterableex \
 	test/source/sheet/xsheetfilterdescriptor \
+	test/source/sheet/xsheetfilterdescriptor2 \
+	test/source/sheet/xsheetfilterdescriptor3 \
 	test/source/sheet/xsheetlinkable \
 	test/source/sheet/xsheetoperation \
 	test/source/sheet/xsheetoutline \

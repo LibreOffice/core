@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR_HXX
-#define INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR_HXX
+#ifndef INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR2_HXX
+#define INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR2_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -17,19 +17,19 @@
 
 namespace apitest
 {
-class OOO_DLLPUBLIC_TEST XSheetFilterDescriptor
+class OOO_DLLPUBLIC_TEST XSheetFilterDescriptor2
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
-    void testGetSetFilterFields();
+    void testGetSetFilterFields2();
 
 protected:
-    ~XSheetFilterDescriptor() {}
+    ~XSheetFilterDescriptor2() {}
 };
 
 } // namespace apitest
 
-#endif // INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR_HXX
+#endif // INCLUDED_TEST_SHEET_XSHEETFILTERDESCRIPTOR2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
