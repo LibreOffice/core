@@ -2361,6 +2361,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         bool bHasStream = false;
         bool bHasBaseURL = false;
         bool bHasFilterName = false;
+        bool bIsRedactMode = false;
         sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
 
@@ -2378,6 +2379,10 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             else if( pOldValue[i].Name == "FilterName" )
                 bHasFilterName = true;
         }
+
+        // FIXME: Handle this inside TransformItems()
+        if (pItems->GetItemState(SID_IS_REDACT_MODE) == SfxItemState::SET)
+            bIsRedactMode = true;
 
         if ( !bHasOutputStream )
         {
@@ -2406,6 +2411,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aArgs.realloc( ++nEnd );
             aArgs[nEnd-1].Name = "FilterName";
             aArgs[nEnd-1].Value <<= aFilterName;
+        }
+
+        if (bIsRedactMode)
+        {
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = "IsRedactMode";
+            aArgs[nEnd-1].Value <<= bIsRedactMode;
         }
 
         return xFilter->filter( aArgs );
