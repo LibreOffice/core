@@ -263,7 +263,7 @@ SalInstance *CreateSalInstance()
 #ifdef MACOSX
         "osx"
 #else
-        "gtk3", "gtk", "kde5", "kde4", "gen"
+        "gtk3", "gtk", "kde5", "gen"
 #endif
 #endif
      };
