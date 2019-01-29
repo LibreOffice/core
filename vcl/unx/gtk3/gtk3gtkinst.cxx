@@ -7050,7 +7050,7 @@ public:
         else
         {
             g_object_set(G_OBJECT(m_pTextRenderer), "ellipsize", PANGO_ELLIPSIZE_NONE, nullptr);
-            gtk_cell_renderer_set_fixed_size(cell, size.width, size.height);
+            gtk_cell_renderer_set_fixed_size(cell, -1, size.height);
         }
         g_list_free(cells);
 
