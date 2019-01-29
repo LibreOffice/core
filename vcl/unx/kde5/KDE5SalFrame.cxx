@@ -85,7 +85,9 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
 
     // set width
     int nStretch = rQFont.stretch();
-    if (nStretch <= QFont::UltraCondensed)
+    if (nStretch == 0) // QFont::AnyStretch since Qt 5.8
+        aInfo.m_eWidth = WIDTH_DONTKNOW;
+    else if (nStretch <= QFont::UltraCondensed)
         aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
     else if (nStretch <= QFont::ExtraCondensed)
         aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;
