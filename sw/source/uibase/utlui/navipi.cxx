@@ -648,7 +648,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     tools::Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
-    Size aOptimalSize(m_xEdit->get_preferred_size());
+    Size aOptimalSize(m_xEdit->CalcMinimumSizeForText(m_xEdit->CreateFieldText(9999)));
     aItemWinSize.setWidth( std::max(aItemWinSize.Width(), aOptimalSize.Width()) );
     m_xEdit->SetSizePixel(aItemWinSize);
     m_aContentToolBox->InsertSeparator(4);
