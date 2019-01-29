@@ -77,6 +77,19 @@
         </part>
     </radiobutton>
 
+    <checkbox>
+        <part value="Entire">
+           <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+                <rect stroke="#4CD964" fill="#FFFFFF" stroke-width="1" rx="16" ry="16" />
+                <circ stroke="#4CD964" fill="#FFFFFF" stroke-width="1" x1="0.0" y1="0.0" x2="0.66" y2="1.0"/>
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+                <rect stroke="#4CD964" fill="#4CD964" stroke-width="1" rx="16" ry="16" />
+                <circ stroke="#4CD964" fill="#FFFFFF" stroke-width="1" x1="0.33" y1="0.0" x2="1.0" y2="1.0"/>
+            </state>
+        </part>
+    </checkbox>
+
     <editbox>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
