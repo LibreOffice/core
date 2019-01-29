@@ -27,11 +27,15 @@
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/lok.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
 
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
@@ -227,34 +231,24 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     return bRet;
 }
 
-namespace
-{
-    class ImportedTransitionPresetList
-    {
-    private:
-        sd::TransitionPresetList m_aTransitionPresetList;
-    public:
-        ImportedTransitionPresetList()
-        {
-            sd::TransitionPreset::importTransitionPresetList(
-                m_aTransitionPresetList);
-        }
-        const sd::TransitionPresetList& getList() const
-        {
-            return m_aTransitionPresetList;
-        }
-    };
-
-    class theTransitionPresetList :
-        public rtl::Static<ImportedTransitionPresetList,
-                           theTransitionPresetList>
-    {
-    };
-}
+std::map<OUString, TransitionPresetList> sd::TransitionPreset::mPresetsMap;
 
 const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
-    return theTransitionPresetList::get().getList();
+    // Support localization per-view. Currently not useful for Desktop
+    // but very much critical for LOK. The cache now is per-language.
+    const OUString aLang = comphelper::LibreOfficeKit::isActive()
+                               ? comphelper::LibreOfficeKit::getLanguageTag().getLanguage()
+                               : SvtSysLocaleOptions().GetLanguageTag().getLanguage();
+
+    SolarMutexGuard aGuard;
+    const auto it = mPresetsMap.find(aLang);
+    if (it != mPresetsMap.end())
+        return it->second;
+
+    TransitionPresetList& rList = mPresetsMap[aLang];
+    sd::TransitionPreset::importTransitionPresetList(rList);
+    return rList;
 }
 
 }
