@@ -57,11 +57,10 @@
     <pushbutton>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="7" ry="7" />
             </state>
-
             <state enabled="true" focused="any" pressed="any" rollover="true" default="any" selected="any" button-value="any">
-                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="7" ry="7" />
             </state>
         </part>
     </pushbutton>
@@ -69,11 +68,11 @@
     <radiobutton>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
-                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" margin="0"/>
+                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" />
             </state>
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
-                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" margin="0"/>
-                <circ stroke="#007AFF" fill="#007AFF" stroke-width="1" margin="3"/>
+                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" />
+                <circ stroke="#007AFF" fill="#007AFF" stroke-width="1" x1="0.1" y1="0.1" x2="0.9" y2="0.9"/>
             </state>
         </part>
     </radiobutton>
