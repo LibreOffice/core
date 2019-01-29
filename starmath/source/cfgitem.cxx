@@ -385,70 +385,70 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
-    if (nProps  &&  aValues.getLength() == nProps)
+    if (!(nProps  &&  aValues.getLength() == nProps))
+        return;
+
+    const Any * pValue = aValues.getConstArray();
+    vcl::Font   aFont;
+    sal_UCS4    cChar = '\0';
+    OUString    aSet;
+    bool        bPredefined = false;
+
+    OUString    aTmpStr;
+    sal_Int32       nTmp32 = 0;
+    bool        bTmp = false;
+
+    bool bOK = true;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp32))
+        cChar = static_cast< sal_UCS4 >( nTmp32 );
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
+        aSet = aTmpStr;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= bTmp))
+        bPredefined = bTmp;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
     {
-        const Any * pValue = aValues.getConstArray();
-        vcl::Font   aFont;
-        sal_UCS4    cChar = '\0';
-        OUString    aSet;
-        bool        bPredefined = false;
+        const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
+        OSL_ENSURE( pFntFmt, "unknown FontFormat" );
+        if (pFntFmt)
+            aFont = pFntFmt->GetFont();
+    }
+    else
+        bOK = false;
+    ++pValue;
 
-        OUString    aTmpStr;
-        sal_Int32       nTmp32 = 0;
-        bool        bTmp = false;
-
-        bool bOK = true;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp32))
-            cChar = static_cast< sal_UCS4 >( nTmp32 );
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
-            aSet = aTmpStr;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= bTmp))
-            bPredefined = bTmp;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
+    if (bOK)
+    {
+        OUString aUiName( rSymbolName );
+        OUString aUiSetName( aSet );
+        if (bPredefined)
         {
-            const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
-            OSL_ENSURE( pFntFmt, "unknown FontFormat" );
-            if (pFntFmt)
-                aFont = pFntFmt->GetFont();
+            OUString aTmp;
+            aTmp = SmLocalizedSymbolData::GetUiSymbolName( rSymbolName );
+            OSL_ENSURE( !aTmp.isEmpty(), "localized symbol-name not found" );
+            if (!aTmp.isEmpty())
+                aUiName = aTmp;
+            aTmp = SmLocalizedSymbolData::GetUiSymbolSetName( aSet );
+            OSL_ENSURE( !aTmp.isEmpty(), "localized symbolset-name not found" );
+            if (!aTmp.isEmpty())
+                aUiSetName = aTmp;
         }
-        else
-            bOK = false;
-        ++pValue;
 
-        if (bOK)
-        {
-            OUString aUiName( rSymbolName );
-            OUString aUiSetName( aSet );
-            if (bPredefined)
-            {
-                OUString aTmp;
-                aTmp = SmLocalizedSymbolData::GetUiSymbolName( rSymbolName );
-                OSL_ENSURE( !aTmp.isEmpty(), "localized symbol-name not found" );
-                if (!aTmp.isEmpty())
-                    aUiName = aTmp;
-                aTmp = SmLocalizedSymbolData::GetUiSymbolSetName( aSet );
-                OSL_ENSURE( !aTmp.isEmpty(), "localized symbolset-name not found" );
-                if (!aTmp.isEmpty())
-                    aUiSetName = aTmp;
-            }
-
-            rSymbol = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
-            if (aUiName != rSymbolName)
-                rSymbol.SetExportName( rSymbolName );
-        }
-        else
-        {
-            SAL_WARN("starmath", "symbol read error");
-        }
+        rSymbol = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
+        if (aUiName != rSymbolName)
+            rSymbol.SetExportName( rSymbolName );
+    }
+    else
+    {
+        SAL_WARN("starmath", "symbol read error");
     }
 }
 
@@ -602,47 +602,47 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
-    if (nProps  &&  aValues.getLength() == nProps)
-    {
-        const Any * pValue = aValues.getConstArray();
+    if (!(nProps  &&  aValues.getLength() == nProps))
+        return;
 
-        OUString    aTmpStr;
-        sal_Int16       nTmp16 = 0;
+    const Any * pValue = aValues.getConstArray();
 
-        bool bOK = true;
-        if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
-            rFontFormat.aName = aTmpStr;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nFamily = nTmp16;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nPitch = nTmp16;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nWeight = nTmp16;
-        else
-            bOK = false;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nItalic = nTmp16;
-        else
-            bOK = false;
-        ++pValue;
+    OUString    aTmpStr;
+    sal_Int16       nTmp16 = 0;
 
-        OSL_ENSURE( bOK, "read FontFormat failed" );
-    }
+    bool bOK = true;
+    if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
+        rFontFormat.aName = aTmpStr;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+        rFontFormat.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+        rFontFormat.nFamily = nTmp16;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+        rFontFormat.nPitch = nTmp16;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+        rFontFormat.nWeight = nTmp16;
+    else
+        bOK = false;
+    ++pValue;
+    if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+        rFontFormat.nItalic = nTmp16;
+    else
+        bOK = false;
+    ++pValue;
+
+    OSL_ENSURE( bOK, "read FontFormat failed" );
 }
 
 
@@ -874,81 +874,81 @@ void SmMathConfig::LoadFormat()
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( GetProperties( aNames ) );
-    if (nProps  &&  aValues.getLength() == nProps)
+    if (!(nProps  &&  aValues.getLength() == nProps))
+        return;
+
+    const Any *pValues = aValues.getConstArray();
+    const Any *pVal = pValues;
+
+    OUString    aTmpStr;
+    sal_Int16       nTmp16 = 0;
+    bool        bTmp = false;
+
+    // StandardFormat/Textmode
+    if (pVal->hasValue()  &&  (*pVal >>= bTmp))
+        pFormat->SetTextmode( bTmp );
+    ++pVal;
+    // StandardFormat/GreekCharStyle
+    if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
+        pFormat->SetGreekCharStyle( nTmp16 );
+    ++pVal;
+    // StandardFormat/ScaleNormalBracket
+    if (pVal->hasValue()  &&  (*pVal >>= bTmp))
+        pFormat->SetScaleNormalBrackets( bTmp );
+    ++pVal;
+    // StandardFormat/HorizontalAlignment
+    if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
+        pFormat->SetHorAlign( static_cast<SmHorAlign>(nTmp16) );
+    ++pVal;
+    // StandardFormat/BaseSize
+    if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
+        pFormat->SetBaseSize( Size(0, SmPtsTo100th_mm( nTmp16 )) );
+    ++pVal;
+
+    sal_uInt16 i;
+    for (i = SIZ_BEGIN;  i <= SIZ_END;  ++i)
     {
-        const Any *pValues = aValues.getConstArray();
-        const Any *pVal = pValues;
-
-        OUString    aTmpStr;
-        sal_Int16       nTmp16 = 0;
-        bool        bTmp = false;
-
-        // StandardFormat/Textmode
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pFormat->SetTextmode( bTmp );
-        ++pVal;
-        // StandardFormat/GreekCharStyle
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pFormat->SetGreekCharStyle( nTmp16 );
+            pFormat->SetRelSize( i, nTmp16 );
         ++pVal;
-        // StandardFormat/ScaleNormalBracket
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pFormat->SetScaleNormalBrackets( bTmp );
-        ++pVal;
-        // StandardFormat/HorizontalAlignment
-        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pFormat->SetHorAlign( static_cast<SmHorAlign>(nTmp16) );
-        ++pVal;
-        // StandardFormat/BaseSize
-        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pFormat->SetBaseSize( Size(0, SmPtsTo100th_mm( nTmp16 )) );
-        ++pVal;
-
-        sal_uInt16 i;
-        for (i = SIZ_BEGIN;  i <= SIZ_END;  ++i)
-        {
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                pFormat->SetRelSize( i, nTmp16 );
-            ++pVal;
-        }
-
-        for (i = DIS_BEGIN;  i <= DIS_END;  ++i)
-        {
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                pFormat->SetDistance( i, nTmp16 );
-            ++pVal;
-        }
-
-        LanguageType nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        for (i = FNT_BEGIN;  i < FNT_END;  ++i)
-        {
-            vcl::Font aFnt;
-            bool bUseDefaultFont = true;
-            if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
-            {
-                bUseDefaultFont = aTmpStr.isEmpty();
-                if (bUseDefaultFont)
-                {
-                    aFnt = pFormat->GetFont( i );
-                    aFnt.SetFamilyName( lcl_GetDefaultFontName( nLang, i ) );
-                }
-                else
-                {
-                    const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
-                    OSL_ENSURE( pFntFmt, "unknown FontFormat" );
-                    if (pFntFmt)
-                        aFnt = pFntFmt->GetFont();
-                }
-            }
-            ++pVal;
-
-            aFnt.SetFontSize( pFormat->GetBaseSize() );
-            pFormat->SetFont( i, aFnt, bUseDefaultFont );
-        }
-
-        OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );
-        SetFormatModified( false );
     }
+
+    for (i = DIS_BEGIN;  i <= DIS_END;  ++i)
+    {
+        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
+            pFormat->SetDistance( i, nTmp16 );
+        ++pVal;
+    }
+
+    LanguageType nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
+    for (i = FNT_BEGIN;  i < FNT_END;  ++i)
+    {
+        vcl::Font aFnt;
+        bool bUseDefaultFont = true;
+        if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
+        {
+            bUseDefaultFont = aTmpStr.isEmpty();
+            if (bUseDefaultFont)
+            {
+                aFnt = pFormat->GetFont( i );
+                aFnt.SetFamilyName( lcl_GetDefaultFontName( nLang, i ) );
+            }
+            else
+            {
+                const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
+                OSL_ENSURE( pFntFmt, "unknown FontFormat" );
+                if (pFntFmt)
+                    aFnt = pFntFmt->GetFont();
+            }
+        }
+        ++pVal;
+
+        aFnt.SetFontSize( pFormat->GetBaseSize() );
+        pFormat->SetFont( i, aFnt, bUseDefaultFont );
+    }
+
+    OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );
+    SetFormatModified( false );
 }
 
 
@@ -1016,19 +1016,19 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
 {
     if (!pFormat)
         LoadFormat();
-    if (rFormat != *pFormat)
-    {
-        *pFormat = rFormat;
-        SetFormatModified( true );
-        SaveFormat();
+    if (rFormat == *pFormat)
+        return;
 
-        if (bSaveFontFormatList)
-        {
-            // needed for SmFontTypeDialog's DefaultButtonClickHdl
-            if (pFontFormatList)
-                pFontFormatList->SetModified( true );
-            SaveFontFormatList();
-        }
+    *pFormat = rFormat;
+    SetFormatModified( true );
+    SaveFormat();
+
+    if (bSaveFontFormatList)
+    {
+        // needed for SmFontTypeDialog's DefaultButtonClickHdl
+        if (pFontFormatList)
+            pFontFormatList->SetModified( true );
+        SaveFontFormatList();
     }
 }
 

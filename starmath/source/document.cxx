@@ -130,53 +130,53 @@ const OUString SmDocShell::GetComment() const
 
 void SmDocShell::SetText(const OUString& rBuffer)
 {
-    if (rBuffer != maText)
+    if (rBuffer == maText)
+        return;
+
+    bool bIsEnabled = IsEnableSetModified();
+    if( bIsEnabled )
+        EnableSetModified( false );
+
+    maText = rBuffer;
+    SetFormulaArranged( false );
+
+    Parse();
+
+    SmViewShell *pViewSh = SmGetActiveView();
+    if( pViewSh )
     {
-        bool bIsEnabled = IsEnableSetModified();
-        if( bIsEnabled )
-            EnableSetModified( false );
-
-        maText = rBuffer;
-        SetFormulaArranged( false );
-
-        Parse();
-
-        SmViewShell *pViewSh = SmGetActiveView();
-        if( pViewSh )
+        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
+        if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
         {
-            pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
-            if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
-            {
-                // have SwOleClient::FormatChanged() to align the modified formula properly
-                // even if the visible area does not change (e.g. when formula text changes from
-                // "{a over b + c} over d" to "d over {a over b + c}"
-                SfxGetpApp()->NotifyEvent(SfxEventHint( SfxEventHintId::VisAreaChanged, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
+            // have SwOleClient::FormatChanged() to align the modified formula properly
+            // even if the visible area does not change (e.g. when formula text changes from
+            // "{a over b + c} over d" to "d over {a over b + c}"
+            SfxGetpApp()->NotifyEvent(SfxEventHint( SfxEventHintId::VisAreaChanged, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
 
-                Repaint();
-            }
-            else
-                pViewSh->GetGraphicWindow().Invalidate();
+            Repaint();
         }
-
-        if ( bIsEnabled )
-            EnableSetModified( bIsEnabled );
-        SetModified();
-
-        // launch accessible event if necessary
-        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : nullptr;
-        if (pAcc)
-        {
-            Any aOldValue, aNewValue;
-            if ( comphelper::OCommonAccessibleText::implInitTextChangedEvent( maText, rBuffer, aOldValue, aNewValue ) )
-            {
-                pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
-                        aOldValue, aNewValue );
-            }
-        }
-
-        if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
-            OnDocumentPrinterChanged(nullptr);
+        else
+            pViewSh->GetGraphicWindow().Invalidate();
     }
+
+    if ( bIsEnabled )
+        EnableSetModified( bIsEnabled );
+    SetModified();
+
+    // launch accessible event if necessary
+    SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : nullptr;
+    if (pAcc)
+    {
+        Any aOldValue, aNewValue;
+        if ( comphelper::OCommonAccessibleText::implInitTextChangedEvent( maText, rBuffer, aOldValue, aNewValue ) )
+        {
+            pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
+                    aOldValue, aNewValue );
+        }
+    }
+
+    if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
+        OnDocumentPrinterChanged(nullptr);
 }
 
 void SmDocShell::SetFormat(SmFormat const & rFormat)
@@ -495,30 +495,31 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             }
         }
     }
-    if ( (pRefDev = rDocShell.GetRefDev()) && pPrinter.get() != pRefDev.get() )
-    {
-        pRefDev->Push( PushFlags::MAPMODE );
-        if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
-        {
-            // if it is an embedded object (without its own printer)
-            // we change the MapMode temporarily.
-            //!If it is a document with its own printer the MapMode should
-            //!be set correct (once) elsewhere(!), in order to avoid numerous
-            //!superfluous pushing and popping of the MapMode when using
-            //!this class.
+    pRefDev = rDocShell.GetRefDev();
+    if ( !pRefDev || pPrinter.get() == pRefDev.get() )
+        return;
 
-            const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
-            if ( MapUnit::Map100thMM != eOld )
-            {
-                MapMode aMap( pRefDev->GetMapMode() );
-                aMap.SetMapUnit( MapUnit::Map100thMM );
-                Point aTmp( aMap.GetOrigin() );
-                aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
-                aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
-                aMap.SetOrigin( aTmp );
-                pRefDev->SetMapMode( aMap );
-            }
-        }
+    pRefDev->Push( PushFlags::MAPMODE );
+    if ( SfxObjectCreateMode::EMBEDDED != rDocShell.GetCreateMode() )
+        return;
+
+    // if it is an embedded object (without its own printer)
+    // we change the MapMode temporarily.
+    //!If it is a document with its own printer the MapMode should
+    //!be set correct (once) elsewhere(!), in order to avoid numerous
+    //!superfluous pushing and popping of the MapMode when using
+    //!this class.
+
+    const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
+    if ( MapUnit::Map100thMM != eOld )
+    {
+        MapMode aMap( pRefDev->GetMapMode() );
+        aMap.SetMapUnit( MapUnit::Map100thMM );
+        Point aTmp( aMap.GetOrigin() );
+        aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
+        aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
+        aMap.SetOrigin( aTmp );
+        pRefDev->SetMapMode( aMap );
     }
 }
 
@@ -773,22 +774,22 @@ void SmDocShell::ReplaceBadChars()
 {
     bool bReplace = false;
 
-    if (mpEditEngine)
+    if (!mpEditEngine)
+        return;
+
+    OUStringBuffer aBuf( mpEditEngine->GetText() );
+
+    for (sal_Int32 i = 0;  i < aBuf.getLength();  ++i)
     {
-        OUStringBuffer aBuf( mpEditEngine->GetText() );
-
-        for (sal_Int32 i = 0;  i < aBuf.getLength();  ++i)
+        if (aBuf[i] < ' ' && aBuf[i] != '\r' && aBuf[i] != '\n' && aBuf[i] != '\t')
         {
-            if (aBuf[i] < ' ' && aBuf[i] != '\r' && aBuf[i] != '\n' && aBuf[i] != '\t')
-            {
-                aBuf[i] = ' ';
-                bReplace = true;
-            }
+            aBuf[i] = ' ';
+            bReplace = true;
         }
-
-        if (bReplace)
-            maText = aBuf.makeStringAndClear();
     }
+
+    if (bReplace)
+        maText = aBuf.makeStringAndClear();
 }
 
 

@@ -378,22 +378,22 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         }
     }
 
-    if (!pContext)
-    {
-        sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
+    if (pContext)
+        return;
 
-        if (nTotalControlHeight > GetOutputSizePixel().Height())
-        {
-            mxScroll->SetRangeMax(nTotalControlHeight);
-            mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
-            mxScroll->SetVisibleSize(nControlHeight);
-            mxScroll->Show();
-        }
-        else
-        {
-            mxScroll->SetThumbPos(0);
-            mxScroll->Hide();
-        }
+    sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
+
+    if (nTotalControlHeight > GetOutputSizePixel().Height())
+    {
+        mxScroll->SetRangeMax(nTotalControlHeight);
+        mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
+        mxScroll->SetVisibleSize(nControlHeight);
+        mxScroll->Show();
+    }
+    else
+    {
+        mxScroll->SetThumbPos(0);
+        mxScroll->Hide();
     }
 }
 

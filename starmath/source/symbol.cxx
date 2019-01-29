@@ -249,27 +249,27 @@ void SmSymbolManager::Load()
 
 void SmSymbolManager::Save()
 {
-    if (m_bModified)
+    if (!m_bModified)
+        return;
+
+    SmMathConfig &rCfg = *SM_MOD()->GetConfig();
+
+    // prepare to skip symbols from iGreek on saving
+    OUString aSymbolSetName('i');
+    aSymbolSetName += SmLocalizedSymbolData::GetUiSymbolSetName("Greek");
+
+    SymbolPtrVec_t aTmp( GetSymbols() );
+    std::vector< SmSym > aSymbols;
+    for (const SmSym* i : aTmp)
     {
-        SmMathConfig &rCfg = *SM_MOD()->GetConfig();
-
-        // prepare to skip symbols from iGreek on saving
-        OUString aSymbolSetName('i');
-        aSymbolSetName += SmLocalizedSymbolData::GetUiSymbolSetName("Greek");
-
-        SymbolPtrVec_t aTmp( GetSymbols() );
-        std::vector< SmSym > aSymbols;
-        for (const SmSym* i : aTmp)
-        {
-            // skip symbols from iGreek set since those symbols always get added
-            // by computational means in SmSymbolManager::Load
-            if (i->GetSymbolSetName() != aSymbolSetName)
-                aSymbols.push_back( *i );
-        }
-        rCfg.SetSymbols( aSymbols );
-
-        m_bModified = false;
+        // skip symbols from iGreek set since those symbols always get added
+        // by computational means in SmSymbolManager::Load
+        if (i->GetSymbolSetName() != aSymbolSetName)
+            aSymbols.push_back( *i );
     }
+    rCfg.SetSymbols( aSymbols );
+
+    m_bModified = false;
 }
 
 

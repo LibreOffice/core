@@ -479,26 +479,26 @@ void SmXMLExport::ExportContent_()
 
     ExportNodes(pTree, 0);
 
-    if (!aText.isEmpty())
-    {
-        // Convert symbol names
-        if (pDocShell)
-        {
-            SmParser &rParser = pDocShell->GetParser();
-            bool bVal = rParser.IsExportSymbolNames();
-            rParser.SetExportSymbolNames( true );
-            auto pTmpTree = rParser.Parse( aText );
-            aText = rParser.GetText();
-            pTmpTree.reset();
-            rParser.SetExportSymbolNames( bVal );
-        }
+    if (aText.isEmpty())
+        return;
 
-        AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING,
-            OUString("StarMath 5.0"));
-        SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
-            XML_ANNOTATION, true, false);
-        GetDocHandler()->characters( aText );
+    // Convert symbol names
+    if (pDocShell)
+    {
+        SmParser &rParser = pDocShell->GetParser();
+        bool bVal = rParser.IsExportSymbolNames();
+        rParser.SetExportSymbolNames( true );
+        auto pTmpTree = rParser.Parse( aText );
+        aText = rParser.GetText();
+        pTmpTree.reset();
+        rParser.SetExportSymbolNames( bVal );
     }
+
+    AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING,
+        OUString("StarMath 5.0"));
+    SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
+        XML_ANNOTATION, true, false);
+    GetDocHandler()->characters( aText );
 }
 
 void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
@@ -541,37 +541,38 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
 void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
 {
     Reference < XPropertySet > xProps ( GetModel(), UNO_QUERY );
-    if ( xProps.is() )
-    {
-        Reference< XPropertySetInfo > xPropertySetInfo = xProps->getPropertySetInfo();
-        if (xPropertySetInfo.is())
-        {
-            Sequence< Property > aProps = xPropertySetInfo->getProperties();
-            if (const sal_Int32 nCount = aProps.getLength())
-            {
-                rProps.realloc(nCount);
-                SmMathConfig* pConfig = SM_MOD()->GetConfig();
-                const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
+    if ( !xProps.is() )
+        return;
 
-                std::transform(aProps.begin(), aProps.end(), rProps.begin(),
-                               [bUsedSymbolsOnly, &xProps](Property& prop) {
-                                   PropertyValue aRet;
-                                   if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
-                                       && prop.Name != "DialogLibraries"
-                                       && prop.Name != "RuntimeUID")
-                                   {
-                                       aRet.Name = prop.Name;
-                                       OUString aActualName(prop.Name);
-                                       // handle 'save used symbols only'
-                                       if (bUsedSymbolsOnly && prop.Name == "Symbols")
-                                           aActualName = "UserDefinedSymbolsInUse";
-                                       aRet.Value = xProps->getPropertyValue(aActualName);
-                                   }
-                                   return aRet;
-                               });
-            }
-        }
-    }
+    Reference< XPropertySetInfo > xPropertySetInfo = xProps->getPropertySetInfo();
+    if (!xPropertySetInfo.is())
+        return;
+
+    Sequence< Property > aProps = xPropertySetInfo->getProperties();
+    const sal_Int32 nCount = aProps.getLength();
+    if (!nCount)
+        return;
+
+    rProps.realloc(nCount);
+    SmMathConfig* pConfig = SM_MOD()->GetConfig();
+    const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
+
+    std::transform(aProps.begin(), aProps.end(), rProps.begin(),
+                   [bUsedSymbolsOnly, &xProps](Property& prop) {
+                       PropertyValue aRet;
+                       if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
+                           && prop.Name != "DialogLibraries"
+                           && prop.Name != "RuntimeUID")
+                       {
+                           aRet.Name = prop.Name;
+                           OUString aActualName(prop.Name);
+                           // handle 'save used symbols only'
+                           if (bUsedSymbolsOnly && prop.Name == "Symbols")
+                               aActualName = "UserDefinedSymbolsInUse";
+                           aRet.Value = xProps->getPropertyValue(aActualName);
+                       }
+                       return aRet;
+                   });
 }
 
 void SmXMLExport::ExportLine(const SmNode *pNode, int nLevel)
