@@ -27,7 +27,13 @@ public:
     void testGetTopic();
 
 protected:
+    explicit XDDELink(OUString const& rURL)
+        : m_URL(rURL)
+    {
+    }
     ~XDDELink() {}
+
+    OUString const m_URL;
 };
 } // namespace apitest
 

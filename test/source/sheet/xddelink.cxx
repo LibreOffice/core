@@ -37,8 +37,7 @@ void XDDELink::testGetTopic()
 {
     uno::Reference<sheet::XDDELink> xLink(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Unable to execute getTopic()",
-                           xLink->getTopic().endsWith("ScDDELinksObj.ods"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getTopic()", m_URL, xLink->getTopic());
 }
 } // namespace apitest
 
