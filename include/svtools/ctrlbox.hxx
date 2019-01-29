@@ -22,18 +22,17 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <vcl/customweld.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <memory>
 
+namespace weld { class CustomWeld; }
+
+class VirtualDevice;
 class BorderWidthImpl;
 class FontList;
 class ImpLineListData;

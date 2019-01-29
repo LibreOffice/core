@@ -20,6 +20,7 @@
 #include "GraphicExportFilter.hxx"
 
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>

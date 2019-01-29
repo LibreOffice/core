@@ -21,21 +21,17 @@
 #define INCLUDED_SVTOOLS_TOOLBARMENU_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/framestatuslistener.hxx>
-
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <memory>
-#include <vector>
 
 #include <rtl/ref.hxx>
-
-#include <vcl/ctrl.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/dockwin.hxx>
 
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
+namespace svt { class FrameStatusListener; }
+
+class Control;
 class ValueSet;
 
 namespace svtools {

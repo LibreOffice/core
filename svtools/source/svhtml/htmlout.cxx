@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <svl/zforlist.hxx>
 
+#include <svtools/HtmlWriter.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <vcl/imap.hxx>

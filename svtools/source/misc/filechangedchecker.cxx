@@ -9,8 +9,10 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
 
 #include <svtools/filechangedchecker.hxx>
+#include <vcl/timer.hxx>
 
 FileChangedChecker::FileChangedChecker(const OUString& rFilename,
         const ::std::function<void ()>& rCallback)

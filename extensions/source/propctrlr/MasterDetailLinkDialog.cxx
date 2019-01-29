@@ -18,6 +18,8 @@
  */
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include "MasterDetailLinkDialog.hxx"
 #include "formlinkdialog.hxx"
 #include "pcrservices.hxx"

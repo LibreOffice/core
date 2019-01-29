@@ -43,6 +43,7 @@
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 
 #include <vector>
 

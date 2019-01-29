@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_EXTENSIONLISTBOX_HXX
 
 #include <vcl/ctrl.hxx>
-#include <rtl/ustring.hxx>
 
 
 namespace svt

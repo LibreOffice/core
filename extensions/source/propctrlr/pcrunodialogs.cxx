@@ -20,6 +20,8 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "pcrservices.hxx"
 #include "pcrunodialogs.hxx"

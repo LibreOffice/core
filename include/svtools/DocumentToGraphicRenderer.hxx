@@ -23,14 +23,14 @@
 
 #include <vector>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XRenderable.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
-
 #include <vcl/graph.hxx>
 
 #include <svtools/svtdllapi.h>
+
+namespace com :: sun :: star :: awt { class XToolkit; }
+namespace com :: sun :: star :: frame { class XModel; }
+namespace com :: sun :: star :: lang { class XComponent; }
+namespace com :: sun :: star :: view { class XRenderable; }
 
 namespace com { namespace sun { namespace star {
     namespace drawing {

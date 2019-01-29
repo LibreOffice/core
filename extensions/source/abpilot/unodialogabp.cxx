@@ -22,6 +22,9 @@
 #include "abspilot.hxx"
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 #define PROPERTY_ID_DATASOURCENAME  3
 

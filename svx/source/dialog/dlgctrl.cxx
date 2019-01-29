@@ -20,6 +20,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>

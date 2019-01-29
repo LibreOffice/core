@@ -21,13 +21,11 @@
 #define INCLUDED_SVTOOLS_ASYNCLINK_HXX
 
 #include <svtools/svtdllapi.h>
-#include <tools/solar.h>
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 
-class Idle;
 class Timer;
 struct ImplSVEvent;
 

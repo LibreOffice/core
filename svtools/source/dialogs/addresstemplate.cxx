@@ -25,6 +25,10 @@
 #include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/configitem.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
@@ -32,6 +36,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -49,6 +54,7 @@
 #include <tools/urlobj.hxx>
 #include <algorithm>
 #include <map>
+#include <set>
 #include <array>
 #include <strings.hxx>
 

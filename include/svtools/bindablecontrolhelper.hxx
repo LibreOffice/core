@@ -22,7 +22,10 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com :: sun :: star :: frame { class XModel; }
+namespace com :: sun :: star :: uno { class XInterface; }
 
 namespace svt
 {

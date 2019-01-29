@@ -24,15 +24,10 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/propshlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -40,6 +35,9 @@
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
+
+namespace com :: sun :: star :: awt { class XWindow; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
 
 class VclWindowEvent;
 

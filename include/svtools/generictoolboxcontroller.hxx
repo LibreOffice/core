@@ -27,7 +27,6 @@
 namespace svt
 {
 
-struct ExecuteInfo;
 class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
 {
     public:

@@ -21,9 +21,12 @@
 #define INCLUDED_SVTOOLS_SCRIPTEDTEXT_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <rtl/ustring.hxx>
 #include <memory>
 
+
+namespace com :: sun :: star :: i18n { class XBreakIterator; }
+namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
 class OutputDevice;
 namespace vcl { class Font; }

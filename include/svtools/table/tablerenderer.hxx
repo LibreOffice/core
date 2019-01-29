@@ -22,10 +22,15 @@
 
 #include <svtools/table/tabletypes.hxx>
 
-#include <vcl/outdev.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
+namespace com :: sun :: star :: uno { class Any; }
+namespace tools { class Rectangle; }
+namespace vcl { class Window; }
+
+class OutputDevice;
 class StyleSettings;
 
 

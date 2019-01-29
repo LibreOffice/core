@@ -22,10 +22,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <unotools/calendarwrapper.hxx>
-#include <com/sun/star/i18n/Weekdays.hpp>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/field.hxx>
 #include <memory>
 #include <set>

@@ -20,8 +20,6 @@
 #define INCLUDED_SVTOOLS_INSDLG_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <tools/globname.hxx>
 #include <sot/formats.hxx>
 

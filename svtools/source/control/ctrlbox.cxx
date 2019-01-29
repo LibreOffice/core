@@ -23,9 +23,12 @@
 #include <tools/stream.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/image.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

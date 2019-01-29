@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include "DBTypeWizDlgSetup.hxx"
 #include <dbwizsetup.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/processfactory.hxx>

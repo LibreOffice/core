@@ -28,6 +28,7 @@
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <osl/diagnose.h>
 
 #include <officecfg/Office/Common.hxx>

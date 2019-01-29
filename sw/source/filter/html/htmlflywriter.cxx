@@ -33,6 +33,7 @@
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <svtools/HtmlWriter.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/boxitem.hxx>

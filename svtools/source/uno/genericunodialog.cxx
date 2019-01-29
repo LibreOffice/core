@@ -21,6 +21,8 @@
 #include <svtools/genericunodialog.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>

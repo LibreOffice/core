@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/menu.hxx>
 #include <tools/mapunit.hxx>

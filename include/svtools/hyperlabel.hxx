@@ -20,7 +20,6 @@
 #define INCLUDED_SVTOOLS_HYPERLABEL_HXX
 
 #include <memory>
-#include <vcl/event.hxx>
 
 
 #include <vcl/fixed.hxx>

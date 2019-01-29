@@ -21,15 +21,12 @@
 #define INCLUDED_SVTOOLS_TOOLBOXCONTROLLER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -39,6 +36,12 @@
 #include <tools/link.hxx>
 
 #include <unordered_map>
+
+namespace com :: sun :: star :: frame { class XDispatch; }
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: frame { class XLayoutManager; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com :: sun :: star :: util { class XURLTransformer; }
 
 class ToolBox;
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 
 #include <vcl/svapp.hxx>
 

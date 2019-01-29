@@ -23,18 +23,16 @@
 #include <svtools/svtdllapi.h>
 
 #include <memory>
-#include <vector>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <vcl/keycod.hxx>
-#include <vcl/evntpost.hxx>
-#include <osl/mutex.h>
+
+namespace com :: sun :: star :: frame { class XDispatchProvider; }
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: frame { class XModel; }
+namespace com :: sun :: star :: ui { class XAcceleratorConfiguration; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com :: sun :: star :: util { class XURLTransformer; }
 
 
 namespace svt

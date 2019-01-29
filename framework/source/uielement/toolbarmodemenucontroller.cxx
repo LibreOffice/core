@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 
 #include <vcl/menu.hxx>

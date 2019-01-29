@@ -28,6 +28,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace dbaui;
 using namespace dbtools;

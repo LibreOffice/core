@@ -43,6 +43,7 @@
 #include <osl/diagnose.h>
 #include <vcl/treelistentry.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::svt;
 using namespace ::dbaui;

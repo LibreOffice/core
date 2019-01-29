@@ -20,6 +20,7 @@
 #include <memory>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svx/SmartTagItem.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
 

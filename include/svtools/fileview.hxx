@@ -22,17 +22,14 @@
 #include <memory>
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <vcl/ctrl.hxx>
-#include <vcl/image.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
+namespace com :: sun :: star :: ucb { class XContent; }
+
 // class SvtFileView -----------------------------------------------------
 
-class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvTreeListEntry;
 class HeaderBar;

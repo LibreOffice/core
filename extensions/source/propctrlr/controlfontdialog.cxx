@@ -18,6 +18,7 @@
  */
 
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "controlfontdialog.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include "fontdialog.hxx"

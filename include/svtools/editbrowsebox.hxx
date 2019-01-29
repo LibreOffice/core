@@ -31,10 +31,8 @@
 
 #include <vcl/button.hxx>
 #include <svtools/brwbox.hxx>
-#include <vcl/timer.hxx>
 #include <svtools/brwhead.hxx>
 #include <svtools/svmedit.hxx>
-#include <vcl/svapp.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 
@@ -74,7 +72,6 @@ namespace o3tl
 
 
 class Edit;
-class SpinField;
 class FormattedField;
 
 

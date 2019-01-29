@@ -24,10 +24,12 @@
 #include <svtools/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class Bitmap;
+namespace weld {
+    class Builder;
+    class Container;
+}
 
 enum class WizardButtonFlags
 {
@@ -93,8 +95,6 @@ namespace svt
 
 
     //= OWizardPage
-
-    class OWizardMachine;
 
     class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {

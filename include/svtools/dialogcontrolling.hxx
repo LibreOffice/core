@@ -27,7 +27,6 @@
 #include <vcl/vclevent.hxx>
 
 #include <memory>
-#include <vector>
 
 namespace svt
 {

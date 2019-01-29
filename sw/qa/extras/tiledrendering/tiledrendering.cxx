@@ -21,6 +21,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/srchitem.hxx>

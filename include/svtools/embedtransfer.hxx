@@ -21,9 +21,10 @@
 #define INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/transfer.hxx>
 #include <memory>
+
+namespace com :: sun :: star :: embed { class XEmbeddedObject; }
 
 class Graphic;
 class SVT_DLLPUBLIC SvEmbedTransferHelper : public TransferableHelper
