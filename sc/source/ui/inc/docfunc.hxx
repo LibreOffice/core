@@ -216,7 +216,7 @@ public:
      * @param nOldIndex If 0 don't delete an old format
      * @param pFormat if NULL only delete an old format
      */
-    void ReplaceConditionalFormat( sal_uLong nOldIndex, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges );
+    void ReplaceConditionalFormat( sal_uLong nOldIndex, std::unique_ptr<ScConditionalFormat> pFormat, SCTAB nTab, const ScRangeList& rRanges );
 
     /**
      * Sets or replaces the conditional format list of a table

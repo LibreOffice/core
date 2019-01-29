@@ -64,7 +64,7 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void Resize() override;
 
-    ScConditionalFormat* GetConditionalFormat() const;
+    std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
     void Freeze() { mbFrozen = true; }
     void Thaw() { mbFrozen = false; }
     void RecalcAll();
@@ -120,7 +120,7 @@ public:
     virtual ~ScCondFormatDlg() override;
     virtual void dispose() override;
 
-    SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
+    SC_DLLPUBLIC std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
 
     virtual void SetReference(const ScRange&, ScDocument*) override;
     virtual bool IsRefInputMode() const override;

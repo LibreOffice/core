@@ -594,7 +594,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             continue;
 
         ScRangeList aIntersectedRange = rCondFormatRange.GetIntersectedRange(aOldRange);
-        ScConditionalFormat* pNewFormat = (*itr)->Clone(pDocument);
+        std::unique_ptr<ScConditionalFormat> pNewFormat = (*itr)->Clone(pDocument);
 
         pNewFormat->SetRange(aIntersectedRange);
         sc::RefUpdateContext aRefCxt(*pDocument);
@@ -605,9 +605,8 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
-        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(pDocument, mpCondFormatList->GetFormat((*itr)->GetKey()), pNewFormat, nTab))
+        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(pDocument, mpCondFormatList->GetFormat((*itr)->GetKey()), pNewFormat.get(), nTab))
         {
-            delete pNewFormat;
             continue;
         }
         sal_uLong nMax = 0;
@@ -617,7 +616,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         {
             // Check if there is the same format in the destination
             // If there is, then simply expand its range
-            if (CheckAndDeduplicateCondFormat(pDocument, (*itrCond).get(), pNewFormat, nTab))
+            if (CheckAndDeduplicateCondFormat(pDocument, (*itrCond).get(), pNewFormat.get(), nTab))
             {
                 bDuplicate = true;
                 break;
@@ -629,20 +628,20 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         // Do not add duplicate entries
         if (bDuplicate)
         {
-            delete pNewFormat;
             continue;
         }
 
         pNewFormat->SetKey(nMax + 1);
-        mpCondFormatList->InsertNew(pNewFormat);
+        auto pNewFormatTmp = pNewFormat.get();
+        mpCondFormatList->InsertNew(std::move(pNewFormat));
 
         if(!bSameDoc)
         {
-            for(size_t i = 0, n = pNewFormat->size();
+            for(size_t i = 0, n = pNewFormatTmp->size();
                     i < n; ++i)
             {
                 OUString aStyleName;
-                const ScFormatEntry* pEntry = pNewFormat->GetEntry(i);
+                const ScFormatEntry* pEntry = pNewFormatTmp->GetEntry(i);
                 if(pEntry->GetType() == ScFormatEntry::Type::Condition)
                     aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
                 else if(pEntry->GetType() == ScFormatEntry::Type::Date)
@@ -659,7 +658,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             }
         }
 
-        pDocument->AddCondFormatData( pNewFormat->GetRange(), nTab, pNewFormat->GetKey() );
+        pDocument->AddCondFormatData( pNewFormatTmp->GetRange(), nTab, pNewFormatTmp->GetKey() );
     }
 }
 

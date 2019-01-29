@@ -1043,7 +1043,7 @@ void CondFormat::finalizeImport()
     mpFormat->SetRange(maModel.maRanges);
     maRules.forEachMem( &CondFormatRule::finalizeImport );
     SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
-    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
+    sal_Int32 nIndex = getScDocument().AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpFormat), nTab);
 
     rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
 }
@@ -1115,9 +1115,10 @@ void CondFormatBuffer::finalizeImport()
         if (!pFormat)
         {
             // create new conditional format and insert it
-            pFormat = new ScConditionalFormat(0, pDoc);
-            pFormat->SetRange(rRange);
-            sal_uLong nKey = pDoc->AddCondFormat(pFormat, nTab);
+            auto pNewFormat = std::make_unique<ScConditionalFormat>(0, pDoc);
+            pFormat = pNewFormat.get();
+            pNewFormat->SetRange(rRange);
+            sal_uLong nKey = pDoc->AddCondFormat(std::move(pNewFormat), nTab);
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 
