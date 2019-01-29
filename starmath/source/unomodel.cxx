@@ -991,78 +991,78 @@ void SAL_CALL SmModel::render(
             rxOptions[i].Value >>= xRenderDevice;
     }
 
-    if (xRenderDevice.is())
+    if (!xRenderDevice.is())
+        return;
+
+    VCLXDevice*   pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+    VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
+                                         : VclPtr< OutputDevice >();
+    if (!pOut)
+        throw RuntimeException();
+
+    pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
+
+    uno::Reference< frame::XModel > xModel;
+    rSelection >>= xModel;
+    if (xModel != pDocSh->GetModel())
+        return;
+
+    //!! when called via API we may not have an active view
+    //!! thus we go and look for a view that can be used.
+    SfxViewShell* pViewSh = SfxViewShell::GetFirst( false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
+    while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
+        pViewSh = SfxViewShell::GetNext( *pViewSh, false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
+    SmViewShell *pView = dynamic_cast< SmViewShell *>( pViewSh );
+    SAL_WARN_IF( !pView, "starmath", "SmModel::render : no SmViewShell found" );
+
+    if (!pView)
+        return;
+
+    SmPrinterAccess aPrinterAccess( *pDocSh );
+    Printer *pPrinter = aPrinterAccess.GetPrinter();
+
+    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+    Size    aOutputSize   ( pPrinter->GetOutputSize() );
+    Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+
+    // no real printer ??
+    if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
     {
-        VCLXDevice*   pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
-                                             : VclPtr< OutputDevice >();
-        if (!pOut)
-            throw RuntimeException();
-
-        pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
-
-        uno::Reference< frame::XModel > xModel;
-        rSelection >>= xModel;
-        if (xModel == pDocSh->GetModel())
-        {
-            //!! when called via API we may not have an active view
-            //!! thus we go and look for a view that can be used.
-            SfxViewShell* pViewSh = SfxViewShell::GetFirst( false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
-            while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
-                pViewSh = SfxViewShell::GetNext( *pViewSh, false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
-            SmViewShell *pView = dynamic_cast< SmViewShell *>( pViewSh );
-            SAL_WARN_IF( !pView, "starmath", "SmModel::render : no SmViewShell found" );
-
-            if (pView)
-            {
-                SmPrinterAccess aPrinterAccess( *pDocSh );
-                Printer *pPrinter = aPrinterAccess.GetPrinter();
-
-                Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
-                Size    aOutputSize   ( pPrinter->GetOutputSize() );
-                Point   aPrtPageOffset( pPrinter->GetPageOffset() );
-
-                // no real printer ??
-                if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
-                {
-                    aPrtPaperSize = lcl_GuessPaperSize();
-                    // factors from Windows DIN A4
-                    aOutputSize    = Size( static_cast<long>(aPrtPaperSize.Width()  * 0.941),
-                                           static_cast<long>(aPrtPaperSize.Height() * 0.961));
-                    aPrtPageOffset = Point( static_cast<long>(aPrtPaperSize.Width()  * 0.0250),
-                                            static_cast<long>(aPrtPaperSize.Height() * 0.0214));
-                }
-                tools::Rectangle OutputRect( Point(), aOutputSize );
+        aPrtPaperSize = lcl_GuessPaperSize();
+        // factors from Windows DIN A4
+        aOutputSize    = Size( static_cast<long>(aPrtPaperSize.Width()  * 0.941),
+                               static_cast<long>(aPrtPaperSize.Height() * 0.961));
+        aPrtPageOffset = Point( static_cast<long>(aPrtPaperSize.Width()  * 0.0250),
+                                static_cast<long>(aPrtPaperSize.Height() * 0.0214));
+    }
+    tools::Rectangle OutputRect( Point(), aOutputSize );
 
 
-                // set minimum top and bottom border
-                if (aPrtPageOffset.Y() < 2000)
-                    OutputRect.AdjustTop(2000 - aPrtPageOffset.Y() );
-                if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
-                    OutputRect.AdjustBottom( -(2000 - (aPrtPaperSize.Height() -
-                                                (aPrtPageOffset.Y() + OutputRect.Bottom()))) );
+    // set minimum top and bottom border
+    if (aPrtPageOffset.Y() < 2000)
+        OutputRect.AdjustTop(2000 - aPrtPageOffset.Y() );
+    if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
+        OutputRect.AdjustBottom( -(2000 - (aPrtPaperSize.Height() -
+                                    (aPrtPageOffset.Y() + OutputRect.Bottom()))) );
 
-                // set minimum left and right border
-                if (aPrtPageOffset.X() < 2500)
-                    OutputRect.AdjustLeft(2500 - aPrtPageOffset.X() );
-                if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
-                    OutputRect.AdjustRight( -(1500 - (aPrtPaperSize.Width() -
-                                                (aPrtPageOffset.X() + OutputRect.Right()))) );
+    // set minimum left and right border
+    if (aPrtPageOffset.X() < 2500)
+        OutputRect.AdjustLeft(2500 - aPrtPageOffset.X() );
+    if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
+        OutputRect.AdjustRight( -(1500 - (aPrtPaperSize.Width() -
+                                    (aPrtPageOffset.X() + OutputRect.Right()))) );
 
-                if (!m_pPrintUIOptions)
-                    m_pPrintUIOptions.reset(new SmPrintUIOptions);
-                m_pPrintUIOptions->processProperties( rxOptions );
+    if (!m_pPrintUIOptions)
+        m_pPrintUIOptions.reset(new SmPrintUIOptions);
+    m_pPrintUIOptions->processProperties( rxOptions );
 
-                pView->Impl_Print( *pOut, *m_pPrintUIOptions, OutputRect );
+    pView->Impl_Print( *pOut, *m_pPrintUIOptions, OutputRect );
 
-                // release SmPrintUIOptions when everything is done.
-                // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
-                if (m_pPrintUIOptions->getBoolValue( "IsLastPage" ))
-                {
-                    m_pPrintUIOptions.reset();
-                }
-            }
-        }
+    // release SmPrintUIOptions when everything is done.
+    // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
+    if (m_pPrintUIOptions->getBoolValue( "IsLastPage" ))
+    {
+        m_pPrintUIOptions.reset();
     }
 }
 

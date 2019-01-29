@@ -597,25 +597,25 @@ SmCategoryDesc::~SmCategoryDesc()
 
 IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
 {
-    if (m_xCategories[nActiveCategory])
-    {
-        sal_uInt16  i;
+    if (!m_xCategories[nActiveCategory])
+        return;
 
-        if (&rControl == &m_xMetricField1->get_widget())
-            i = 0;
-        else if (&rControl == &m_xMetricField2->get_widget())
-            i = 1;
-        else if (&rControl == &m_xMetricField3->get_widget())
-            i = 2;
-        else if (&rControl == &m_xMetricField4->get_widget())
-            i = 3;
-        else
-            return;
-        if (m_pCurrentImage)
-            m_pCurrentImage->hide();
-        m_pCurrentImage = m_xCategories[nActiveCategory]->GetGraphic(i);
-        m_pCurrentImage->show();
-    }
+    sal_uInt16  i;
+
+    if (&rControl == &m_xMetricField1->get_widget())
+        i = 0;
+    else if (&rControl == &m_xMetricField2->get_widget())
+        i = 1;
+    else if (&rControl == &m_xMetricField3->get_widget())
+        i = 2;
+    else if (&rControl == &m_xMetricField4->get_widget())
+        i = 3;
+    else
+        return;
+    if (m_pCurrentImage)
+        m_pCurrentImage->hide();
+    m_pCurrentImage = m_xCategories[nActiveCategory]->GetGraphic(i);
+    m_pCurrentImage->show();
 }
 
 IMPL_LINK(SmDistanceDialog, MenuSelectHdl, const OString&, rId, void)

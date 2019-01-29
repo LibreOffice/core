@@ -1853,21 +1853,21 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
         pTree->Accept( this );
 
     //Draw selection if there's any
-    if( mbHasSelectionArea ){
-        maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
+    if( !mbHasSelectionArea )        return;
 
-        //Save device state
-        mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-        //Change colors
-        mrDev.SetLineColor( );
-        mrDev.SetFillColor( COL_LIGHTGRAY );
+    maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
 
-        //Draw rectangle
-        mrDev.DrawRect( maSelectionArea );
+    //Save device state
+    mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    //Change colors
+    mrDev.SetLineColor( );
+    mrDev.SetFillColor( COL_LIGHTGRAY );
 
-        //Restore device state
-        mrDev.Pop( );
-    }
+    //Draw rectangle
+    mrDev.DrawRect( maSelectionArea );
+
+    //Restore device state
+    mrDev.Pop( );
 }
 
 void SmSelectionDrawingVisitor::ExtendSelectionArea(const tools::Rectangle& rArea)
@@ -1900,21 +1900,22 @@ void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
 
 void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 {
-    if( pNode->IsSelected( ) ){
-        mrDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
+    if( !pNode->IsSelected())
+        return;
 
-        mrDev.SetFont( pNode->GetFont( ) );
-        Point Position = pNode->GetTopLeft( );
-        long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
-        long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
-        long top    = Position.getY( );
-        long bottom = top + pNode->GetHeight( );
-        tools::Rectangle rect( left, top, right, bottom );
+    mrDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
 
-        ExtendSelectionArea( rect );
+    mrDev.SetFont( pNode->GetFont( ) );
+    Point Position = pNode->GetTopLeft( );
+    long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
+    long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
+    long top    = Position.getY( );
+    long bottom = top + pNode->GetHeight( );
+    tools::Rectangle rect( left, top, right, bottom );
 
-        mrDev.Pop( );
-    }
+    ExtendSelectionArea( rect );
+
+    mrDev.Pop( );
 }
 
 // SmNodeToTextVisitor

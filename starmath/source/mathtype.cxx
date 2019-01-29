@@ -1744,26 +1744,26 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
 void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
     int &rCurCol,int &rCurRow)
 {
-    if (nMatrixRows!=0)
+    if (nMatrixRows==0)
+        return;
+
+    if (rCurCol == nMatrixCols-1)
     {
-        if (rCurCol == nMatrixCols-1)
+        if (rCurRow != nMatrixRows-1)
+            rRet.append(" {} ##\n");
+        if (nMatrixRows!=-1)
         {
-            if (rCurRow != nMatrixRows-1)
-                rRet.append(" {} ##\n");
-            if (nMatrixRows!=-1)
-            {
-                rCurCol=0;
-                rCurRow++;
-            }
+            rCurCol=0;
+            rCurRow++;
         }
+    }
+    else
+    {
+        rRet.append(" {} # ");
+        if (nMatrixRows!=-1)
+            rCurCol++;
         else
-        {
-            rRet.append(" {} # ");
-            if (nMatrixRows!=-1)
-                rCurCol++;
-            else
-                rRet.append("\n");
-        }
+            rRet.append("\n");
     }
 }
 
