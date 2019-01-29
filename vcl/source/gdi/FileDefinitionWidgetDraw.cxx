@@ -49,8 +49,8 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::Generic:
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
-            return true;
         case ControlType::Checkbox:
+            return true;
         case ControlType::Combobox:
             return false;
         case ControlType::Editbox:
@@ -232,6 +232,21 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Checkbox:
+        {
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
+            if (pPart)
+            {
+                auto aStates = pPart->getStates(eState, rValue);
+                if (!aStates.empty())
+                {
+                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                    bOK = true;
+                }
+            }
+        }
+        break;
         case ControlType::Combobox:
             break;
         case ControlType::Editbox:
@@ -285,11 +300,19 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
 }
 
 bool FileDefinitionWidgetDraw::getNativeControlRegion(
-    ControlType /*eType*/, ControlPart /*ePart*/,
-    const tools::Rectangle& /*rBoundingControlRegion*/, ControlState /*eState*/,
-    const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
-    tools::Rectangle& /*rNativeBoundingRegion*/, tools::Rectangle& /*rNativeContentRegion*/)
+    ControlType eType, ControlPart /*ePart*/, const tools::Rectangle& /*rBoundingControlRegion*/,
+    ControlState /*eState*/, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
+    tools::Rectangle& /*rNativeBoundingRegion*/, tools::Rectangle& rNativeContentRegion)
 {
+    switch (eType)
+    {
+        case ControlType::Checkbox:
+            rNativeContentRegion = tools::Rectangle(Point(), Size(48, 32));
+            return true;
+        default:
+            break;
+    }
+
     return false;
 }
 
