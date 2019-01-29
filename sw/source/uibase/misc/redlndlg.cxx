@@ -316,10 +316,12 @@ void SwRedlineAcceptDlg::InitAuthors()
     }
 
     m_pTPView->EnableAccept( bEnable && bSel );
-    m_pTPView->EnableReject( bEnable && bIsNotFormated && bSel );
+    m_pTPView->EnableReject( bEnable && bSel );
+    m_pTPView->EnableClearFormat( bEnable && !bIsNotFormated && bSel );
     m_pTPView->EnableAcceptAll( bEnable );
-    m_pTPView->EnableRejectAll( bEnable &&
-                                !m_bOnlyFormatedRedlines );
+    m_pTPView->EnableRejectAll( bEnable );
+    m_pTPView->EnableClearFormatAll( bEnable &&
+                                m_bOnlyFormatedRedlines );
 }
 
 OUString SwRedlineAcceptDlg::GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack)
@@ -793,8 +795,11 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
             bool bIsNotFormatted = true;
 
-            // don't accept format-only changes secretly for Reject all
-            if ( !bSelect && !bAccept )
+            // first remove only changes with insertion/deletion, if they exist
+            // (format-only changes haven't had real rejection yet, only an
+            // approximation: clear direct formatting, so try to warn
+            // with the extended button label "Reject All/Clear formatting")
+            if ( !bSelect && !bAccept && !m_bOnlyFormatedRedlines )
             {
                 SwRedlineTable::size_type nPosition = GetRedlinePos( *pEntry );
                 const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
@@ -1002,8 +1007,10 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     }
     bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
-    m_pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
-    m_pTPView->EnableRejectAll( bEnable && !m_bOnlyFormatedRedlines );
+    m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );
+    m_pTPView->EnableClearFormat( bEnable && bSel && !bIsNotFormated /*&& !bReadonlySel*/ );
+    m_pTPView->EnableRejectAll( bEnable );
+    m_pTPView->EnableClearFormatAll( bEnable && m_bOnlyFormatedRedlines );
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
