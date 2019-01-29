@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_INC_TABLE_GRIDTABLERENDERER_HXX
 
 #include <svtools/table/tablemodel.hxx>
+#include <vcl/image.hxx>
 
 #include <memory>
 

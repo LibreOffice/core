@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>

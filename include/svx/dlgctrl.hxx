@@ -26,6 +26,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/typed_flags_set.hxx>

@@ -25,6 +25,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 

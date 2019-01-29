@@ -30,6 +30,7 @@
 #include <properties.h>
 #include <helper/mischelper.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/theStatusbarControllerFactory.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>

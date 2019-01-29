@@ -30,6 +30,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
+#include <vcl/virdev.hxx>
 #include <charatr.hxx>
 #include <charfmt.hxx>
 #include <docstyle.hxx>

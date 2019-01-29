@@ -25,6 +25,7 @@
 #include <helpids.h>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 
 namespace dbaui
 {

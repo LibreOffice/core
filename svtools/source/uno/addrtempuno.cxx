@@ -22,6 +22,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/ref.hxx>

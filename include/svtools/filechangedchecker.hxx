@@ -12,11 +12,13 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <osl/file.hxx>
-#include <vcl/timer.hxx>
+#include <osl/time.h>
+#include <rtl/ustring.hxx>
 #include <vcl/idle.hxx>
 
 #include <functional>
+
+class Timer;
 
 /** Periodically checks if a file has been modified
 

@@ -23,18 +23,15 @@
 #include <memory>
 #include <svtools/svtdllapi.h>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/util/AliasProgrammaticPair.hpp>
-#include <com/sun/star/sdb/XDatabaseContext.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <unotools/configitem.hxx>
+
+namespace com :: sun :: star :: container { class XNameAccess; }
+namespace com :: sun :: star :: sdbc { class XDataSource; }
+namespace com :: sun :: star :: sdb { class XDatabaseContext; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com :: sun :: star :: util { struct AliasProgrammaticPair; }
 
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE

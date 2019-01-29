@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>

@@ -35,6 +35,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 
+#include <svtools/colorcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <o3tl/enumarray.hxx>
 

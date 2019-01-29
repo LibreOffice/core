@@ -28,6 +28,8 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>

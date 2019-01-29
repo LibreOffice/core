@@ -19,6 +19,7 @@
 
 #include <limits.h>
 #include <vcl/builder.hxx>
+#include <vcl/field.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>

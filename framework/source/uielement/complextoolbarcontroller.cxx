@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>

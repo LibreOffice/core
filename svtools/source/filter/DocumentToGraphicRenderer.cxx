@@ -28,13 +28,16 @@
 #include <tools/fract.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

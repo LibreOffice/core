@@ -21,17 +21,16 @@
 #define INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <unordered_map>
+
+namespace com :: sun :: star :: frame { class XDispatch; }
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
 
 namespace svt
 {

@@ -22,9 +22,9 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+
+namespace osl { class Mutex; }
 
 class SvtPrintOptions_Impl;
 class PrinterOptions;

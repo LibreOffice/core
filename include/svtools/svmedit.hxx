@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_SVMEDIT_HXX
 #define INCLUDED_SVTOOLS_SVMEDIT_HXX
 
-#include <vcl/svapp.hxx>
 #include <vcl/vclmedit.hxx>
 
 #include <svtools/svtdllapi.h>
-#include <svtools/colorcfg.hxx>
 
 
 class SVT_DLLPUBLIC MultiLineEdit : public VclMultiLineEdit

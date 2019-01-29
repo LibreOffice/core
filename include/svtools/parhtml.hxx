@@ -20,11 +20,13 @@
 #ifndef INCLUDED_SVTOOLS_PARHTML_HXX
 #define INCLUDED_SVTOOLS_PARHTML_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
+#include <svtools/htmltokn.h>
 
 #include <vector>
+
+namespace com :: sun :: star :: uno { template <class interface_type> class Reference; }
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -33,8 +35,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class Color;
-class SvNumberFormatter;
-class SvKeyValueIterator;
 enum class HtmlOptionId;
 
 #define HTMLFONTSZ1_DFLT 7

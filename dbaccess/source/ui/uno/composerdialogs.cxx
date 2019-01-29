@@ -21,6 +21,8 @@
 #include <uiservices.hxx>
 
 #include <dbu_reghelper.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <stringconstants.hxx>
 #include <queryfilter.hxx>

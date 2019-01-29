@@ -25,7 +25,6 @@
 #include <sal/types.h>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/solar.h>
 
 #include <vector>
 #include <memory>

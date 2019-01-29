@@ -24,18 +24,19 @@
 #include <svtools/table/tabletypes.hxx>
 #include <svtools/table/tablerenderer.hxx>
 #include <svtools/table/tableinputhandler.hxx>
-#include <svtools/table/tablesort.hxx>
 
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
-#include <rtl/ref.hxx>
 #include <sal/types.h>
 
 #include <boost/optional.hpp>
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
+
+namespace svt { namespace table { class ITableDataSort; } }
+
+class Color;
 
 enum class ColumnAttributeGroup
 {

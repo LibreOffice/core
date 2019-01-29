@@ -45,6 +45,7 @@
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/button.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

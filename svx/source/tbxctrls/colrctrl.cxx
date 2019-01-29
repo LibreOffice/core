@@ -39,6 +39,7 @@
 #include <svx/dialmgr.hxx>
 #include <helpids.h>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 using namespace com::sun::star;
 

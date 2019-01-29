@@ -22,7 +22,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <cassert>
 #include <stdexcept>
 
 namespace rtl {

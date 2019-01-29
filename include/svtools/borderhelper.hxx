@@ -25,7 +25,9 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <vcl/outdev.hxx>
+
+class OutputDevice;
+class Point;
 
 enum class SvxBorderLineStyle : sal_Int16;
 

@@ -21,6 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 
 #include <svtools/toolboxcontroller.hxx>
+#include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>

@@ -25,6 +25,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/urlobj.hxx>

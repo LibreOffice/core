@@ -21,17 +21,20 @@
 #define INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
-#include <com/sun/star/ui/XStatusbarItem.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
 #include <unordered_map>
+
+namespace com :: sun :: star :: awt { class XWindow; }
+namespace com :: sun :: star :: beans { struct PropertyValue; }
+namespace com :: sun :: star :: frame { class XDispatch; }
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: ui { class XStatusbarItem; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com :: sun :: star :: util { class XURLTransformer; }
 
 namespace svt
 {

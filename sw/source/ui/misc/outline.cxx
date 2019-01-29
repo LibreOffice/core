@@ -21,7 +21,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-
+#include <vcl/virdev.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>
 #include <unotools/configmgr.hxx>

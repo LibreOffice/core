@@ -481,3 +481,64 @@ blacklist:
     include/xmloff/xmltabe.hxx:
     # Needed for css shortcut
     - sal/types.h
+    include/svtools/accessibleruler.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/svtools/asynclink.hxx:
+    # unique_ptr needs complete type
+    - osl/mutex.hxx
+    - vcl/idle.hxx
+    include/svtools/cliplistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/datatransfer/clipboard/XClipboardListener.hpp
+    include/svtools/dialogclosedlistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/dialogs/XDialogClosedListener.hpp
+    include/svtools/framestatuslistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XFrameActionListener.hpp
+    - com/sun/star/frame/XStatusListener.hpp
+    include/svtools/genericunodialog.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/ui/dialogs/XExecutableDialog.hpp
+    include/svtools/openfiledroptargetlistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
+    include/svtools/popupmenucontrollerbase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatch.hpp
+    - com/sun/star/frame/XDispatchProvider.hpp
+    - com/sun/star/frame/XPopupMenuController.hpp
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/svtools/popupwindowcontroller.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - svtools/toolboxcontroller.hxx
+    include/svtools/sfxecode.hxx:
+    # Needed for macro defines
+    - class ErrCode
+    include/svtools/statusbarcontroller.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx
+    include/svtools/toolboxcontroller.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/frame/XToolbarController.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    # Complete type is needed for DispatchInfo struct
+    - com/sun/star/beans/PropertyValue.hpp
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx
+    include/svtools/unoevent.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameReplace.hpp
+    - com/sun/star/lang/XServiceInfo.hpp

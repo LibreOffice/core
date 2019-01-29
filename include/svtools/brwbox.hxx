@@ -38,7 +38,6 @@
 
 class BrowserColumn;
 class BrowserDataWin;
-class MultiSelection;
 class BrowserHeader;
 
 namespace svt {

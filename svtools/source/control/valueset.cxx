@@ -20,11 +20,13 @@
 #include <tools/debug.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/virdev.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

@@ -24,9 +24,6 @@
 
 class MouseEvent;
 class KeyEvent;
-class HelpEvent;
-class CommandEvent;
-class NotifyEvent;
 
 
 namespace svt { namespace table

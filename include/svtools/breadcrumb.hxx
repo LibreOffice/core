@@ -12,12 +12,11 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <tools/urlobj.hxx>
-
-#include <vcl/fixedhyper.hxx>
 #include <vcl/layout.hxx>
 
 #include <vector>
+
+class FixedHyperlink;
 
 #define SPACING 6
 

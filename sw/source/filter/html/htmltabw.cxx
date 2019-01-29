@@ -22,6 +22,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
+#include <svtools/HtmlWriter.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_SVPARSER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/htmltokn.h>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
