@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_4a04e17b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-29T12:46:17Z",
+      "side": 1,
+      "message": "It is probably valuable to mention that this check was added in commit 23f698ecee033612ac3a9f5cfd7674b08bb3ccd1 and that you checked: both i#13832 and i#24135 remains fixed after your change.",
+      "revId": "aa1a08ba0ab83c01c134531c233ed0c692eb4953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
