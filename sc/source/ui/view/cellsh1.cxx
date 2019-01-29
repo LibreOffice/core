@@ -1988,7 +1988,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxInt16Item* pParam = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
                 if (pParam && nSlot == SID_OPENDLG_ICONSET)
                 {
-                    ScConditionalFormat* pFormat = new ScConditionalFormat(0, pDoc);
+                    auto pFormat = std::make_unique<ScConditionalFormat>(0, pDoc);
                     pFormat->SetRange(aRangeList);
 
                     ScIconSetType eIconSetType = limit_cast<ScIconSetType>(pParam->GetValue(), IconSet_3Arrows, IconSet_5Boxes);
@@ -2009,7 +2009,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pFormat->AddEntry(pEntry);
 
                     // use the new conditional formatting
-                    GetViewData()->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, pFormat, aPos.Tab(), aRangeList);
+                    GetViewData()->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, std::move(pFormat), aPos.Tab(), aRangeList);
 
                     break;
                 }

@@ -692,13 +692,13 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
 
 // conditional formats and validation ranges
 
-sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
+sal_uLong ScDocument::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, SCTAB nTab )
 {
     if(!pNew)
         return 0;
 
     if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->AddCondFormat( pNew );
+        return maTabs[nTab]->AddCondFormat( std::move(pNew) );
 
     return 0;
 }

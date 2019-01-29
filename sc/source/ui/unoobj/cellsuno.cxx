@@ -2388,10 +2388,10 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 // Then we can apply new conditional format if there is one
                                 if (pFormat->getCount())
                                 {
-                                    ScConditionalFormat* pNew = new ScConditionalFormat( 0, &rDoc );    // Index will be set on inserting
+                                    auto pNew = std::make_unique<ScConditionalFormat>( 0, &rDoc );    // Index will be set on inserting
                                     pFormat->FillFormat( *pNew, &rDoc, eGrammar );
                                     pNew->SetRange( aRanges );
-                                    pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
+                                    pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, std::move(pNew), nTab, aRanges );
                                 }
 
                                 // and repaint

@@ -1702,20 +1702,20 @@ ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocume
 {
 }
 
-ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
+std::unique_ptr<ScConditionalFormat> ScConditionalFormat::Clone(ScDocument* pNewDoc) const
 {
     // Real copy of the formula (for Ref Undo/between documents)
     if (!pNewDoc)
         pNewDoc = pDoc;
 
-    ScConditionalFormat* pNew = new ScConditionalFormat(nKey, pNewDoc);
+    std::unique_ptr<ScConditionalFormat> pNew(new ScConditionalFormat(nKey, pNewDoc));
     pNew->SetRange( maRanges );     // prerequisite for listeners
 
     for (auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
     {
         ScFormatEntry* pNewEntry = (*itr)->Clone(pNewDoc);
         pNew->maEntries.push_back( std::unique_ptr<ScFormatEntry>(pNewEntry) );
-        pNewEntry->SetParent(pNew);
+        pNewEntry->SetParent(pNew.get());
     }
 
     return pNew;
@@ -2045,9 +2045,9 @@ ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScCondi
         InsertNew( (*itr)->Clone(pDoc) );
 }
 
-void ScConditionalFormatList::InsertNew( ScConditionalFormat* pNew )
+void ScConditionalFormatList::InsertNew( std::unique_ptr<ScConditionalFormat> pNew )
 {
-    m_ConditionalFormats.insert(std::unique_ptr<ScConditionalFormat>(pNew));
+    m_ConditionalFormats.insert(std::move(pNew));
 }
 
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )

@@ -178,12 +178,12 @@ void ScCondFormatList::queue_resize(StateChangedType eReason)
     RecalcAll();
 }
 
-ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
+std::unique_ptr<ScConditionalFormat> ScCondFormatList::GetConditionalFormat() const
 {
     if(maEntries.empty())
         return nullptr;
 
-    ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
+    std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mpDoc));
     pFormat->SetRange(maRanges);
 
     for(auto & rEntry: maEntries)
@@ -676,7 +676,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
     }
 }
 
-ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
+std::unique_ptr<ScConditionalFormat> ScCondFormatDlg::GetConditionalFormat() const
 {
     OUString aRangeStr = mpEdRange->GetText();
     if(aRangeStr.isEmpty())
@@ -686,15 +686,12 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
     mpCondFormList->SetRange(aRange);
-    ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
+    std::unique_ptr<ScConditionalFormat> pFormat = mpCondFormList->GetConditionalFormat();
 
     if((nFlags & ScRefFlags::VALID) && !aRange.empty() && pFormat)
         pFormat->SetRange(aRange);
     else
-    {
-        delete pFormat;
-        pFormat = nullptr;
-    }
+        pFormat.reset();
 
     return pFormat;
 }
@@ -715,13 +712,16 @@ bool ScCondFormatDlg::Close()
 //
 void ScCondFormatDlg::OkPressed()
 {
-    ScConditionalFormat* pFormat = GetConditionalFormat();
+    std::unique_ptr<ScConditionalFormat> pFormat = GetConditionalFormat();
 
     if (!mpDlgItem->IsManaged())
     {
         if(pFormat)
+        {
+            auto& rRangeList = pFormat->GetRange();
             mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
-                    pFormat, maPos.Tab(), pFormat->GetRange());
+                    std::move(pFormat), maPos.Tab(), rRangeList);
+        }
         else
             mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
                     nullptr, maPos.Tab(), ScRangeList());
@@ -739,7 +739,7 @@ void ScCondFormatDlg::OkPressed()
         if (pFormat)
         {
             pFormat->SetKey(nKey);
-            pList->InsertNew(pFormat);
+            pList->InsertNew(std::move(pFormat));
         }
         mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
 
