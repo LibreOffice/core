@@ -94,8 +94,6 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * not access the 'gnome_accessibility_module_shutdown' anymore.
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
-                 * #i109007# KDE3 seems to have the same problem.
-                 * And same applies for KDE4.
                  */
                 if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "gtk3_kde5" || rModuleBase == "win" )
                 {
@@ -186,8 +184,7 @@ SalInstance* autodetect_plugin()
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if( desktop == DESKTOP_KDE4 ||
-              desktop == DESKTOP_KDE5 ||
+    else if( desktop == DESKTOP_KDE5 ||
               desktop == DESKTOP_LXQT )
         pList = pKDEFallbackList;
 
@@ -320,8 +317,7 @@ const OUString& SalGetDesktopEnvironment()
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "KDE4", "KDE5",
-        "LXQT" };
+        "XFCE", "MATE", "KDE5", "LXQT" };
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {
