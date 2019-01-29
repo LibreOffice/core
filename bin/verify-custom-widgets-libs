@@ -15,15 +15,16 @@
 # its easy to put the wrong lib name in if developing
 # under Linux
 
-FOO=`grep -h -r lo- */uiconfig | sed -e "s/<object class=\"//g" | sed -e "s/\".*$//"| sed 's/^[ \t]*//;s/[ \t]*$//'|sort|uniq`
+ret=0
+FOO=`git grep -h -r lo- */uiconfig | sed -e "s/<object class=\"//g" | sed -e "s/\".*$//"| sed 's/^[ \t]*//;s/[ \t]*$//'|sort|uniq`
 for foo in $FOO; do
     lib=$(echo $foo | cut -f1 -d-)
     symbol=$(echo $foo | cut -f2 -d-)
-    echo testing if lib$lib.so contains make$symbol
     nm -D instdir/program/lib$lib.so | grep make$symbol > /dev/null
     if [ $? != 0 ]; then
-        echo "MISSING. Windows will crash"
-    else
-        echo "OK";
+        echo "$foo exists in a .ui file, but make$symbol is missing from lib$lib.so, Windows will fail to find the symbol and crash"
+	echo "  typically make$symbol is in a different library and $foo should have the prefix of that library instead"
+        ret=1
     fi
 done
+exit $ret
