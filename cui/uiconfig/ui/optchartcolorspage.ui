@@ -146,7 +146,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorValueSet" id="table:border">
+                  <object class="svxcorelo-SvxColorValueSet" id="table:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
