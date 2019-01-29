@@ -37,85 +37,84 @@
 
 static bool is_gnome_desktop( Display* pDisplay )
 {
-    bool ret = false;
 
     // warning: these checks are coincidental, GNOME does not
     // explicitly advertise itself
-    if ( nullptr != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
-        ret = true;
+    if ( getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+        return true;
 
-    if( ! ret )
+    bool ret = false;
+
+    Atom nAtom1 = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
+    Atom nAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
+    if( nAtom1 || nAtom2 )
     {
-        Atom nAtom1 = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
-        Atom nAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
-        if( nAtom1 || nAtom2 )
+        int nProperties = 0;
+        Atom* pProperties = XListProperties( pDisplay, DefaultRootWindow( pDisplay ), &nProperties );
+        if( pProperties && nProperties )
         {
-            int nProperties = 0;
-            Atom* pProperties = XListProperties( pDisplay, DefaultRootWindow( pDisplay ), &nProperties );
-            if( pProperties && nProperties )
-            {
-                for( int i = 0; i < nProperties; i++ )
-                    if( pProperties[ i ] == nAtom1 ||
-                        pProperties[ i ] == nAtom2 )
+            for( int i = 0; i < nProperties; i++ )
+                if( pProperties[ i ] == nAtom1 ||
+                    pProperties[ i ] == nAtom2 )
                 {
                     ret = true;
+                    break;
                 }
-                XFree( pProperties );
-            }
+            XFree( pProperties );
         }
     }
+    if (ret)
+        return true;
 
-    if( ! ret )
+    Atom nUTFAtom       = XInternAtom( pDisplay, "UTF8_STRING", True );
+    Atom nNetWMNameAtom = XInternAtom( pDisplay, "_NET_WM_NAME", True );
+    if( nUTFAtom && nNetWMNameAtom )
     {
-        Atom nUTFAtom       = XInternAtom( pDisplay, "UTF8_STRING", True );
-        Atom nNetWMNameAtom = XInternAtom( pDisplay, "_NET_WM_NAME", True );
-        if( nUTFAtom && nNetWMNameAtom )
+        // another, more expensive check: search for a gnome-panel
+        ::Window aRoot, aParent, *pChildren = nullptr;
+        unsigned int nChildren = 0;
+        XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
+                    &aRoot, &aParent, &pChildren, &nChildren );
+        if( pChildren && nChildren )
         {
-            // another, more expensive check: search for a gnome-panel
-            ::Window aRoot, aParent, *pChildren = nullptr;
-            unsigned int nChildren = 0;
-            XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
-                        &aRoot, &aParent, &pChildren, &nChildren );
-            if( pChildren && nChildren )
+            for( unsigned int i = 0; i < nChildren && ! ret; i++ )
             {
-                for( unsigned int i = 0; i < nChildren && ! ret; i++ )
+                Atom nType = None;
+                int nFormat = 0;
+                unsigned long nItems = 0, nBytes = 0;
+                unsigned char* pProp = nullptr;
+                XGetWindowProperty( pDisplay,
+                                    pChildren[i],
+                                    nNetWMNameAtom,
+                                    0, 8,
+                                    False,
+                                    nUTFAtom,
+                                    &nType,
+                                    &nFormat,
+                                    &nItems,
+                                    &nBytes,
+                                    &pProp );
+                if( pProp && nType == nUTFAtom )
                 {
-                    Atom nType = None;
-                    int nFormat = 0;
-                    unsigned long nItems = 0, nBytes = 0;
-                    unsigned char* pProp = nullptr;
-                    XGetWindowProperty( pDisplay,
-                                        pChildren[i],
-                                        nNetWMNameAtom,
-                                        0, 8,
-                                        False,
-                                        nUTFAtom,
-                                        &nType,
-                                        &nFormat,
-                                        &nItems,
-                                        &nBytes,
-                                        &pProp );
-                    if( pProp && nType == nUTFAtom )
+                    OString aWMName( reinterpret_cast<char*>(pProp) );
+                    if (
+                        (aWMName.equalsIgnoreAsciiCase("gnome-shell")) ||
+                        (aWMName.equalsIgnoreAsciiCase("gnome-panel"))
+                       )
                     {
-                        OString aWMName( reinterpret_cast<char*>(pProp) );
-                        if (
-                            (aWMName.equalsIgnoreAsciiCase("gnome-shell")) ||
-                            (aWMName.equalsIgnoreAsciiCase("gnome-panel"))
-                           )
-                        {
-                            ret = true;
-                        }
+                        ret = true;
                     }
-                    if( pProp )
-                        XFree( pProp );
                 }
-                XFree( pChildren );
+                if( pProp )
+                    XFree( pProp );
             }
+            XFree( pChildren );
         }
     }
 
     return ret;
 }
+
 
 static bool is_kde5_desktop()
 {
@@ -162,15 +161,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     if (plugin == "svp")
         return DESKTOP_NONE;
 
-    DesktopType ret;
-
-    const char *pSession;
-    OString aDesktopSession;
-    if ( ( pSession = getenv( "DESKTOP_SESSION" ) ) )
-        aDesktopSession = OString( pSession, strlen( pSession ) );
-
-    const char *pDesktop;
-    if ( ( pDesktop = getenv( "XDG_CURRENT_DESKTOP" ) ) )
+    const char *pDesktop = getenv( "XDG_CURRENT_DESKTOP" );
+    if ( pDesktop )
     {
         OString aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
 
@@ -188,75 +180,80 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         }
     }
 
+    const char *pSession = getenv( "DESKTOP_SESSION" );
+    OString aDesktopSession;
+    if ( pSession )
+        aDesktopSession = OString( pSession, strlen( pSession ) );
+
     // fast environment variable checks
     if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
-        ret = DESKTOP_GNOME;
+        return DESKTOP_GNOME;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome-wayland" ) )
-        ret = DESKTOP_GNOME;
+        return DESKTOP_GNOME;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "mate" ) )
-        ret = DESKTOP_MATE;
+        return DESKTOP_MATE;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "xfce" ) )
-        ret = DESKTOP_XFCE;
+        return DESKTOP_XFCE;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "lxqt" ) )
-        ret = DESKTOP_LXQT;
-    else
+        return DESKTOP_LXQT;
+
+
+    if ( is_kde5_desktop() )
+        return DESKTOP_KDE5;
+
+    // tdf#121275 if we still can't tell, and WAYLAND_DISPLAY
+    // is set, default to gtk3
+    const char* pWaylandStr = getenv("WAYLAND_DISPLAY");
+    if (pWaylandStr && *pWaylandStr)
+        return DESKTOP_GNOME;
+
+    // these guys can be slower, with X property fetches,
+    // round-trips etc. and so are done later.
+
+    // get display to connect to
+    const char* pDisplayStr = getenv( "DISPLAY" );
+
+    int nParams = rtl_getAppCommandArgCount();
+    OUString aParam;
+    OString aBParm;
+    for( int i = 0; i < nParams; i++ )
     {
-        if ( is_kde5_desktop() )
-            return DESKTOP_KDE5;
-
-        // tdf#121275 if we still can't tell, and WAYLAND_DISPLAY
-        // is set, default to gtk3
-        const char* pWaylandStr = getenv("WAYLAND_DISPLAY");
-        if (pWaylandStr && *pWaylandStr)
-            return DESKTOP_GNOME;
-
-        // these guys can be slower, with X property fetches,
-        // round-trips etc. and so are done later.
-
-        // get display to connect to
-        const char* pDisplayStr = getenv( "DISPLAY" );
-
-        int nParams = rtl_getAppCommandArgCount();
-        OUString aParam;
-        OString aBParm;
-        for( int i = 0; i < nParams; i++ )
+        rtl_getAppCommandArg( i, &aParam.pData );
+        if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
         {
-            rtl_getAppCommandArg( i, &aParam.pData );
-            if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
-            {
-                rtl_getAppCommandArg( i+1, &aParam.pData );
-                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
-                pDisplayStr = aBParm.getStr();
-                break;
-            }
+            rtl_getAppCommandArg( i+1, &aParam.pData );
+            aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+            pDisplayStr = aBParm.getStr();
+            break;
         }
-
-        // no server at all
-        if( ! pDisplayStr || !*pDisplayStr )
-            return DESKTOP_NONE;
-
-
-        /* #i92121# workaround deadlocks in the X11 implementation
-        */
-        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
-        /* #i90094#
-           from now on we know that an X connection will be
-           established, so protect X against itself
-        */
-        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
-            XInitThreads();
-
-        Display* pDisplay = XOpenDisplay( pDisplayStr );
-        if( pDisplay == nullptr )
-            return DESKTOP_NONE;
-
-        if ( is_gnome_desktop( pDisplay ) )
-            ret = DESKTOP_GNOME;
-        else
-            ret = DESKTOP_UNKNOWN;
-
-        XCloseDisplay( pDisplay );
     }
+
+    // no server at all
+    if( ! pDisplayStr || !*pDisplayStr )
+        return DESKTOP_NONE;
+
+
+    /* #i92121# workaround deadlocks in the X11 implementation
+    */
+    static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+    /* #i90094#
+       from now on we know that an X connection will be
+       established, so protect X against itself
+    */
+    if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+        XInitThreads();
+
+    Display* pDisplay = XOpenDisplay( pDisplayStr );
+    if( pDisplay == nullptr )
+        return DESKTOP_NONE;
+
+    DesktopType ret;
+    if ( is_gnome_desktop( pDisplay ) )
+        ret = DESKTOP_GNOME;
+    else
+        ret = DESKTOP_UNKNOWN;
+
+    XCloseDisplay( pDisplay );
 
     return ret;
 }
