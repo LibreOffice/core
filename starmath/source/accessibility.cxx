@@ -391,19 +391,19 @@ void SAL_CALL SmGraphicAccessible::addAccessibleEventListener(
 void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener >& xListener )
 {
-    if (xListener.is() && nClientId)
+    if (!(xListener.is() && nClientId))
+        return;
+
+    SolarMutexGuard aGuard;
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
+    if ( !nListenerCount )
     {
-        SolarMutexGuard aGuard;
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( nClientId );
-            nClientId = 0;
-        }
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( nClientId );
+        nClientId = 0;
     }
 }
 

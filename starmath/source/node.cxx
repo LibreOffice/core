@@ -2630,32 +2630,32 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     Flags() |= FontChangeMask::Face;
 
-    if (mbIsFromGreekSymbolSet)
-    {
-        OSL_ENSURE( GetText().getLength() == 1, "a symbol should only consist of 1 char!" );
-        bool bItalic = false;
-        sal_Int16 nStyle = rFormat.GetGreekCharStyle();
-        OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
-        if (nStyle == 1)
-            bItalic = true;
-        else if (nStyle == 2)
-        {
-            const OUString& rTmp(GetText());
-            if (!rTmp.isEmpty())
-            {
-                static const sal_Unicode cUppercaseAlpha = 0x0391;
-                static const sal_Unicode cUppercaseOmega = 0x03A9;
-                sal_Unicode cChar = rTmp[0];
-                // uppercase letters should be straight and lowercase letters italic
-                bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
-            }
-        }
+    if (!mbIsFromGreekSymbolSet)
+        return;
 
-        if (bItalic)
-            Attributes() |= FontAttribute::Italic;
-        else
-            Attributes() &= ~FontAttribute::Italic;
+    OSL_ENSURE( GetText().getLength() == 1, "a symbol should only consist of 1 char!" );
+    bool bItalic = false;
+    sal_Int16 nStyle = rFormat.GetGreekCharStyle();
+    OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
+    if (nStyle == 1)
+        bItalic = true;
+    else if (nStyle == 2)
+    {
+        const OUString& rTmp(GetText());
+        if (!rTmp.isEmpty())
+        {
+            static const sal_Unicode cUppercaseAlpha = 0x0391;
+            static const sal_Unicode cUppercaseOmega = 0x03A9;
+            sal_Unicode cChar = rTmp[0];
+            // uppercase letters should be straight and lowercase letters italic
+            bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
+        }
     }
+
+    if (bItalic)
+        Attributes() |= FontAttribute::Italic;
+    else
+        Attributes() &= ~FontAttribute::Italic;
 };
 
 
