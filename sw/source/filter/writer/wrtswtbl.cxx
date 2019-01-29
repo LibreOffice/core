@@ -663,7 +663,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                 else if ( nAttrRowSpan < 1 )
                     nRowSpan = 0;
 
-                sal_uInt16 nColSpan = nCol - nOldCol + 1;
+                SAL_WARN_IF(nCol < nOldCol, "sw.filter", "unexpected " << nCol << " < " << nOldCol);
+                sal_uInt16 nColSpan = nCol >= nOldCol ? nCol - nOldCol + 1 : 1;
                 pRow->AddCell( pBox, nOldRow, nOldCol,
                                nRowSpan, nColSpan, nHeight,
                                pBrushItem );
