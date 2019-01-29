@@ -386,43 +386,42 @@ LotusRangeList::LotusRangeList()
 
 LotusRangeList::~LotusRangeList ()
 {
-    for (const auto& rpRange : maRanges)
-        delete rpRange;
 }
 
 LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 {
-    std::vector<LotusRange*>::iterator pIter = std::find_if(maRanges.begin(), maRanges.end(),
-        [&rRef](const LotusRange* pRange) { return rRef == *pRange; });
+    auto pIter = std::find_if(maRanges.begin(), maRanges.end(),
+        [&rRef](const std::unique_ptr<LotusRange>& pRange) { return rRef == *pRange; });
     if (pIter != maRanges.end())
         return (*pIter)->nId;
 
     return ID_FAIL;
 }
 
-void LotusRangeList::Append( LotusRange* pLR )
+void LotusRangeList::Append( std::unique_ptr<LotusRange> pLR )
 {
-    SAL_WARN_IF( !pLR, "sc.filter", "*LotusRangeList::Append(): no pointer!" );
-    maRanges.push_back(pLR);
+    assert( pLR );
+    auto pLRTmp = pLR.get();
+    maRanges.push_back(std::move(pLR));
 
     ScTokenArray    aTokArray;
 
     ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
-    pSingRef->SetAbsCol(pLR->nColStart);
-    pSingRef->SetAbsRow(pLR->nRowStart);
+    pSingRef->SetAbsCol(pLRTmp->nColStart);
+    pSingRef->SetAbsRow(pLRTmp->nRowStart);
 
-    if( pLR->IsSingle() )
+    if( pLRTmp->IsSingle() )
         aTokArray.AddSingleReference( *pSingRef );
     else
     {
         pSingRef = &aComplRef.Ref2;
-        pSingRef->SetAbsCol(pLR->nColEnd);
-        pSingRef->SetAbsRow(pLR->nRowEnd);
+        pSingRef->SetAbsCol(pLRTmp->nColEnd);
+        pSingRef->SetAbsRow(pLRTmp->nRowEnd);
         aTokArray.AddDoubleReference( aComplRef );
     }
 
-    pLR->SetId( nIdCnt );
+    pLRTmp->SetId( nIdCnt );
 
     nIdCnt++;
 }
