@@ -2566,14 +2566,14 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             }
         }
 
-        ScDPSaveGroupDimension* pNewGroupDim = nullptr;
+        std::unique_ptr<ScDPSaveGroupDimension> pNewGroupDim;
         if ( !pGroupDimension )
         {
             // create a new group dimension
             sNewDim = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, nullptr );
-            pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, sNewDim );
+            pNewGroupDim.reset(new ScDPSaveGroupDimension( aBaseDimName, sNewDim ));
 
-            pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
+            pGroupDimension = pNewGroupDim.get();     // make changes to the new dim if none existed
 
             if ( pBaseGroupDim )
             {
@@ -2624,10 +2624,10 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if ( pNewGroupDim )
         {
             pDimData->AddGroupDimension( *pNewGroupDim );
-            delete pNewGroupDim;        // AddGroupDimension copies the object
+            pNewGroupDim.reset();        // AddGroupDimension copies the object
             // don't access pGroupDimension after here
         }
-        pGroupDimension = pNewGroupDim = nullptr;
+        pGroupDimension = nullptr;
 
         // set orientation
         ScDPSaveDimension* pSaveDimension = aSaveData.GetDimensionByName( aGroupDimName );
