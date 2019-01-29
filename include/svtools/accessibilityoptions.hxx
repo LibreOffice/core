@@ -20,7 +20,6 @@
 #define INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 
 #include <svtools/svtdllapi.h>
-#include <unotools/configitem.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 

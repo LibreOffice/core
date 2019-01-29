@@ -29,6 +29,7 @@
 #include <svx/strings.hrc>
 #include <basegfx/utils/zoomtools.hxx>
 #include <bitmaps.hlst>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <set>
 

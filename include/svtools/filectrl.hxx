@@ -22,8 +22,9 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/button.hxx>
+
+class Edit;
 
 // Flags for internal use of FileControl
 enum class FileControlMode_Internal

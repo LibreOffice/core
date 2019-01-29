@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_EHDL_HXX
 #define INCLUDED_SVTOOLS_EHDL_HXX
 
-#include <memory>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <vcl/errinf.hxx>

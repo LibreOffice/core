@@ -24,8 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-class IndexEntryResourceData;
-
 class SVT_DLLPUBLIC IndexEntryResource
 {
 private:

@@ -24,6 +24,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/hint.hxx>
@@ -37,6 +38,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svdtrans.hxx>
 

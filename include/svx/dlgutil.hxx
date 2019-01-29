@@ -22,6 +22,7 @@
 
 #include <svtools/unitconv.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/outdev.hxx>
 
 class SfxItemSet;
 

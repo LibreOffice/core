@@ -19,6 +19,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <tools/solar.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/rtfkeywd.hxx>

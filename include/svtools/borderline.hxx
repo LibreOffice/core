@@ -22,7 +22,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <memory>
 
 /**
     Class computing border widths shared between Line style listbox and the

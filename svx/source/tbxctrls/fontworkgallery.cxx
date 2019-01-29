@@ -22,6 +22,7 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 
 #include <svl/itempool.hxx>
 

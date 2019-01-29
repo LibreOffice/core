@@ -20,6 +20,7 @@
 #include "AppSwapWindow.hxx"
 #include <helpids.h>
 #include "AppView.hxx"
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>

@@ -22,11 +22,11 @@
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
-#include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
+
+namespace com :: sun :: star :: io { class XInputStream; }
 
 namespace comphelper
 {
@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star { namespace embed {
     class XEmbeddedObject;
 }}}}
 
-namespace tools { class Rectangle; }
 class OutputDevice;
 
 namespace svt {

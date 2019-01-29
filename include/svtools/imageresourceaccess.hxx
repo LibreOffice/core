@@ -22,8 +22,10 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com :: sun :: star :: io { class XInputStream; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
 
 class SvStream;
 

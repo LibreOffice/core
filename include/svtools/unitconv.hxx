@@ -19,10 +19,13 @@
 #ifndef INCLUDED_SVTOOLS_UNITCONV_HXX
 #define INCLUDED_SVTOOLS_UNITCONV_HXX
 
-#include <vcl/field.hxx>
-#include <vcl/weld.hxx>
 #include <svtools/svtdllapi.h>
-#include <svl/poolitem.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/fldunit.hxx>
+
+namespace weld { class MetricSpinButton; }
+
+class MetricField;
 
 // macro -----------------------------------------------------------------
 

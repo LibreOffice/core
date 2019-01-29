@@ -93,6 +93,7 @@
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

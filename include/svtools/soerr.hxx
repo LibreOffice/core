@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVTOOLS_SOERR_HXX
 #define INCLUDED_SVTOOLS_SOERR_HXX
 
-#include <vcl/errcode.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdllapi.h>
 

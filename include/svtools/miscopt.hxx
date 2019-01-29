@@ -21,11 +21,13 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <tools/link.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
+template <typename Arg, typename Ret> class Link;
+class LinkParamNone;
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

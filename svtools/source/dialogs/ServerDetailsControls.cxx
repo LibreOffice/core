@@ -9,6 +9,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

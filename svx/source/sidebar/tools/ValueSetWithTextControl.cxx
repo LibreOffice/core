@@ -24,6 +24,7 @@
 #include <svtools/valueset.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {

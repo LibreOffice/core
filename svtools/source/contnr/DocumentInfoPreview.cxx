@@ -35,6 +35,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>

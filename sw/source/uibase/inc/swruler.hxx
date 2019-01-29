@@ -11,6 +11,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWRULER_HXX
 
 #include <svx/ruler.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/virdev.hxx>
 
 class SwViewShell;
 class View;

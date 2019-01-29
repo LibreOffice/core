@@ -21,13 +21,10 @@
 #define INCLUDED_SVTOOLS_RTFOUT_HXX
 
 #include <svtools/svtdllapi.h>
-#include <tools/solar.h>
 
+#include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
 
-namespace rtl {
-  class OUString;
-};
 class SvStream;
 
 namespace RTFOutFuncs {

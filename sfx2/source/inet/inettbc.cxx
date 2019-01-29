@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>

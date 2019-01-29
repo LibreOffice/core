@@ -23,26 +23,23 @@
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <toolkit/awt/vclxmenu.hxx>
+#include <tools/link.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
+
+namespace com :: sun :: star :: frame { class XFrame; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com :: sun :: star :: util { class XURLTransformer; }
 
 namespace svt
 {
-    struct PopupMenuControllerBaseDispatchInfo;
 
     typedef cppu::WeakComponentImplHelper<
                         css::lang::XServiceInfo            ,

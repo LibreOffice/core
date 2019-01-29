@@ -21,7 +21,6 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <list>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>

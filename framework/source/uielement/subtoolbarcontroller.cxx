@@ -29,6 +29,7 @@
 #include <vcl/commandinfoprovider.hxx>
 
 #include <com/sun/star/awt/XDockableWindow.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

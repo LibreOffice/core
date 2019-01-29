@@ -23,12 +23,13 @@
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <sot/exchange.hxx>
+
+namespace com :: sun :: star :: frame { class XFrame; }
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

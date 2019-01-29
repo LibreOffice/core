@@ -23,31 +23,16 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/vclptr.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt {
-    struct Point;
-    struct Rectangle;
-    struct Size;
-    class XFocusListener;
-} } } }
-
 namespace tools { class Rectangle; }
 class Ruler;
-namespace vcl { class Window; }
 
 
 typedef ::cppu::WeakAggComponentImplHelper5<

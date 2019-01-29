@@ -22,10 +22,10 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 
+
+namespace com :: sun :: star :: task { class XInteractionHandler; }
 
 namespace svt
 {

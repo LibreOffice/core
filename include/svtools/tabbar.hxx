@@ -23,9 +23,10 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
-#include <vcl/settings.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+class StyleSettings;
 
 /*
 
@@ -300,11 +301,7 @@ enum TabBarAllowRenamingReturnCode {
 };
 
 class MouseEvent;
-class TrackingEvent;
 class DataChangedEvent;
-class ImplTabButton;
-class ImplTabSizer;
-class TabBarEdit;
 
 struct ImplTabBarItem;
 struct TabBar_Impl;

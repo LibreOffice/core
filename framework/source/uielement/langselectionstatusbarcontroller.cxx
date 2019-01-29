@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/ui/XStatusbarItem.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
