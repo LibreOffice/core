@@ -42,7 +42,7 @@ struct MySqlFieldInfo
     OUString columnName;
     sal_Int32 length = 0;
     sal_Int32 type = 0;
-    unsigned mysql_type = 0;
+    enum_field_types mysql_type = {};
     unsigned charsetNumber = 0;
     unsigned flags = 0;
     OUString schemaName;
