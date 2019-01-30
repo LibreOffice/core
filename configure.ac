@@ -803,13 +803,6 @@ haiku*)
     ;;
 esac
 
-if test "$_os" != "WINNT"; then
-AC_C_BIGENDIAN([ENDIANNESS=big], [ENDIANNESS=little])
-else
-ENDIANNESS=little
-fi
-AC_SUBST(ENDIANNESS)
-
 if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
     if test -z "$with_android_ndk"; then
@@ -925,7 +918,7 @@ my_original_CXXFLAGS=$CXXFLAGS
 my_original_CPPFLAGS=$CPPFLAGS
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
-dnl Needs to precede the AC_SEARCH_LIBS call below, which apparently calls
+dnl Needs to precede the AC_C_BIGENDIAN and AC_SEARCH_LIBS calls below, which apparently call
 dnl AC_PROG_CC internally.
 if test "$_os" != "WINNT"; then
     # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
@@ -933,6 +926,13 @@ if test "$_os" != "WINNT"; then
     AC_PROG_CC
     CFLAGS=$save_CFLAGS
 fi
+
+if test "$_os" != "WINNT"; then
+AC_C_BIGENDIAN([ENDIANNESS=big], [ENDIANNESS=little])
+else
+ENDIANNESS=little
+fi
+AC_SUBST(ENDIANNESS)
 
 if test $_os != "WINNT"; then
     save_LIBS="$LIBS"
