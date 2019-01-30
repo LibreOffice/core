@@ -397,7 +397,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     if ( pInst && pVisibleDlgParent )
         nMutexCount = pInst->ReleaseYieldMutexAll();
 
-    BYTE* pOutDevMode = (reinterpret_cast<BYTE*>(pOutBuffer) + pOutBuffer->mnDriverOffset);
+    BYTE* pOutDevMode = reinterpret_cast<BYTE*>(pOutBuffer) + pOutBuffer->mnDriverOffset;
     nRet = DocumentPropertiesW( hWnd, hPrn,
                                 pPrinterNameW,
                                 reinterpret_cast<LPDEVMODEW>(pOutDevMode), reinterpret_cast<LPDEVMODEW>(const_cast<BYTE *>(pInBuffer)), nMode );
