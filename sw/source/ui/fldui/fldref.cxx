@@ -268,11 +268,12 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     sal_uInt16 nFormatBoxPosition = USHRT_MAX;
     if( !IsRefresh() )
     {
+        sal_Int32 nIdx{ 0 };
         OUString sUserData = GetUserData();
-        if(!IsRefresh() && sUserData.getToken(0, ';').
+        if(!IsRefresh() && sUserData.getToken(0, ';', nIdx).
                                 equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(1, ';');
+            OUString sVal = sUserData.getToken(0, ';', nIdx);
             const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
@@ -284,7 +285,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
                         break;
                     }
                 }
-                sVal = sUserData.getToken(2, ';');
+                sVal = sUserData.getToken(0, ';', nIdx);
                 if(!sVal.isEmpty())
                 {
                     nFormatBoxPosition = static_cast< sal_uInt16 >(sVal.toInt32());
