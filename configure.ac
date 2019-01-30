@@ -11,7 +11,12 @@ dnl in order to create a configure script.
 
 AC_INIT([LibreOffice],[6.3.0.0.alpha0+],[],[],[http://documentfoundation.org/])
 
-AC_PREREQ([2.68])
+dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
+dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
+dnl so check for the version of autoconf that is actually used to create the configure script
+AC_PREREQ([2.59])
+m4_if(m4_version_compare(m4_defn([AC_AUTOCONF_VERSION]), [2.68]), -1,
+    [AC_MSG_ERROR([at least autoconf version 2.68 is needed (you can use AUTOCONF environment variable to point to a suitable one)])])
 
 if test -n "$BUILD_TYPE"; then
     AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
