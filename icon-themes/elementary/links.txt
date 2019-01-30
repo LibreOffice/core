@@ -1225,12 +1225,15 @@ cmd/sc_loadstyles.png cmd/sc_open.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Macro
+cmd/32/macrodialog.png cmd/32/scriptorganizer.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
 
+cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 
+cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 
@@ -1343,11 +1346,6 @@ cmd/lc_selectmode.png cmd/lc_selectobject.png
 
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_selectmode.png cmd/sc_selectobject.png
-
-# Navigator
-cmd/32/navigationbar.png cmd/32/navigator.png
-cmd/lc_navigationbar.png cmd/lc_navigator.png
-cmd/sc_navigationbar.png cmd/sc_navigator.png
 
 # Database
 cmd/32/dbdtableedit.png cmd/32/dbtableedit.png
@@ -1672,23 +1670,26 @@ res/sx03256.png cmd/sc_insertplugin.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
 res/sx10596.png cmd/sc_checkbox.png
+res/sx10597.png cmd/sc_label.png
+res/sx10598.png cmd/sc_groupbox.png
 res/sx10599.png cmd/sc_text.png
-res/sx10600.png cmd/lc_listbox.png
+res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
 res/sx10603.png cmd/sc_gridvisible.png
-
+res/sx10604.png cmd/sc_imagebutton.png
 res/sx10605.png cmd/sc_open.png
+res/sx10607.png cmd/sc_navigationbar.png
 res/sx10704.png cmd/sc_datefield.png
 res/sx10705.png cmd/sc_timefield.png
 res/sx10706.png cmd/sc_text.png
 res/sx10707.png cmd/sc_formattedfield.png
+res/sx10708.png cmd/sc_patternfield.png
 res/sx10710.png cmd/sc_imagecontrol.png
 res/sx10715.png cmd/sc_datafilterstandardfilter.png
 res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
-
 res/sx10768.png cmd/sc_scrollbar.png
-res/sx10769.png cmd/sc_scrollbar.png
+res/sx10769.png cmd/sc_spinbutton.png
 res/sx18002.png res/minus.png
 res/sx18003.png res/plus.png
 
