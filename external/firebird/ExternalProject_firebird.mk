@@ -35,7 +35,7 @@ MAKE_PRE=LC_ALL=C
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/libEngine12.dylib \
-			$(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.0)
+			$(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.4)
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
@@ -55,7 +55,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 			) \
-			$(if $(filter GCC-INTEL,$(COM)-$(CPUNAME)),-Di386=1) \
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_USE_DEBUG_RUNTIME)) \
@@ -97,9 +96,17 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 							'<' 101200)), \
 					ac_cv_func_clock_gettime=no)) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
-			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) $(INVOKE_FPA) SHELL='$(SHELL)' LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' $(MAKE_POST); \
+				$(MAKE_PRE) $(MAKE) \
+					$(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
+					$(if $(ENABLE_DEBUG),Debug) $(INVOKE_FPA) SHELL='$(SHELL)' \
+					LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
+				$(MAKE_POST); \
 			else \
-			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' $(MAKE_POST); \
+				$(MAKE_PRE) $(MAKE) \
+					$(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
+					$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' \
+					LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
+				$(MAKE_POST); \
 			fi \
 	)
 # vim: set noet sw=4 ts=4:

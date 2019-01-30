@@ -169,10 +169,10 @@
                     "dest-filename": "external/tarballs/cppunit-1.14.0.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/Firebird-3.0.0.32483-0.tar.bz2",
-                    "sha256": "6994be3555e23226630c587444be19d309b25b0fcf1f87df3b4e3f88943e5860",
+                    "url": "https://dev-www.libreoffice.org/src/Firebird-3.0.4.33054-0.tar.bz2",
+                    "sha256": "b208931d309029d05dbcd8f6c1b4fd9d21be1d60cee2ff29c08b5002db83756b",
                     "type": "file",
-                    "dest-filename": "external/tarballs/Firebird-3.0.0.32483-0.tar.bz2"
+                    "dest-filename": "external/tarballs/Firebird-3.0.4.33054-0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/bae83fa5dc7f081768daace6e199adc3-glm-0.9.4.6-libreoffice.zip",
@@ -568,7 +568,7 @@
             "buildsystem": "simple",
             "build-commands": [
                 "./autogen.sh --prefix=/run/build/libreoffice/inst --with-distro=LibreOfficeFlatpak",
-                "make $(if test \"$FLATPAK_ARCH\" = i386; then printf build-nocheck; fi)",
+                "make $(if test \"$(uname -i)\" = i386; then printf build-nocheck; fi)",
                 "make distro-pack-install",
                 "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh'",
                 "desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter /app/share/applications/org.libreoffice.LibreOffice.desktop",

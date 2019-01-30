@@ -1,0 +1,23 @@
+diff -ur firebird.org/builds/posix/prefix.darwin_i386 firebird/builds/posix/prefix.darwin_i386
+--- firebird.org/builds/posix/prefix.darwin_i386	2019-02-02 19:02:04.791073432 +0100
++++ firebird/builds/posix/prefix.darwin_i386	2019-02-02 19:03:54.027159757 +0100
+@@ -44,3 +44,7 @@
+ SO_LINK_LIBS+=-liconv
+ 
+ include $(ROOT)/gen/darwin.defaults
++
++# This file must be compiled with SSE4.2 support
++%/CRC32C.o: COMMON_FLAGS += -msse4
++
+diff -ur firebird.org/builds/posix/prefix.darwin_x86_64 firebird/builds/posix/prefix.darwin_x86_64
+--- firebird.org/builds/posix/prefix.darwin_x86_64	2019-02-02 19:02:04.795073436 +0100
++++ firebird/builds/posix/prefix.darwin_x86_64	2019-02-02 19:04:29.407187769 +0100
+@@ -51,3 +51,7 @@
+ SO_LINK_LIBS+=-liconv
+ 
+ include $(ROOT)/gen/darwin.defaults
++
++# This file must be compiled with SSE4.2 support
++%/CRC32C.o: COMMON_FLAGS += -msse4
++
+Seulement dans firebird: config.log
