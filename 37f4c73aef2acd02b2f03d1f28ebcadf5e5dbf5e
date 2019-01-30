@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_41916752",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 2
+      },
+      "lineNbr": 7607,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-30T14:45:18Z",
+      "side": 0,
+      "message": "better not remove from the blacklist, to avoid pointless reformatting in the commit",
+      "revId": "37f4c73aef2acd02b2f03d1f28ebcadf5e5dbf5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
