@@ -11,17 +11,22 @@
 #include <HeaderFooterWin.hxx>
 
 #include <edtwin.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
 #include <strings.hrc>
+#include <fmtpdsc.hxx>
 #include <vcl/metric.hxx>
 #include <viewopt.hxx>
 #include <frame.hxx>
 #include <flyfrm.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
+#include <pagefrm.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -104,12 +109,40 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 
     SwDoc& rDoc = *pTextFrame->GetTextNodeFirst()->GetDoc();
 
+    // When we move the table before the first text node, we need to clear RES_PAGEDESC attribute
+    // of the text node otherwise LO will create a page break after the table
+    if (pTextFrame->GetTextNodeFirst())
+    {
+        const SwPageDesc* pPageDesc
+            = pTextFrame->GetAttrSet()->GetPageDesc().GetPageDesc(); // First text node of the page has this
+        if (pPageDesc)
+        {
+            // First set the existing page desc for the table node
+            SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
+                            svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
+            aSet.Put(SwFormatPageDesc(pPageDesc));
+            SwPaM aPaMTable(*pTableNode);
+            rDoc.getIDocumentContentOperations().InsertItemSet(
+                aPaMTable, aSet, SetAttrMode::DEFAULT);
+
+            // Then remove pagedesc from the attributes of the text node
+            aSet.Put(SwFormatPageDesc(nullptr));
+            SwPaM aPaMTextNode(*pTextFrame->GetTextNodeFirst());
+            rDoc.getIDocumentContentOperations().InsertItemSet(
+                aPaMTextNode, aSet, SetAttrMode::DEFAULT);
+        }
+    }
+
     // Move the table outside of the text frame
     SwNodeRange aRange(*pTableNode, 0, *pTableNode->EndOfSectionNode(), 1);
     rDoc.getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos, SwMoveFlags::DEFAULT);
 
     // Remove the floating table's frame
-    SwFrame::DestroyFrame(pFlyFrame);
+    SwFlyFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
+    if (pFrameFormat)
+    {
+        rDoc.getIDocumentLayoutAccess().DelLayoutFormat(pFrameFormat);
+    }
 
     rDoc.getIDocumentState().SetModified();
 
