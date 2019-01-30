@@ -1497,6 +1497,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     // prepare working copy and target to append
 
                     pWorkDoc->RemoveInvisibleContent();
+                    // remove of invisible content has influence on page count and so on fields for page count,
+                    // therefore layout has to be updated before fields are converted to text
+                    pWorkShell->CalcLayout();
                     pWorkShell->ConvertFieldsToText();
                     pWorkShell->SetNumberingRestart();
                     if( bSynchronizedDoc )
@@ -1512,8 +1515,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         ++targetDocPageCount; // Docs always start on odd pages (so offset must be even).
                     SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc( *pWorkDoc,
                         nStartingPageNo, !bWorkDocInitialized, targetDocPageCount, nDocNo);
-                    // ensure layout is up to date in order to get correct page count
-                    pWorkShell->CalcLayout();
                     targetDocPageCount += pWorkShell->GetPageCnt();
 
                     if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
