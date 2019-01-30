@@ -140,8 +140,7 @@ void SwFieldRefPage::dispose()
 
 IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl_Impl, Edit&, void)
 {
-    OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
-    UpdateSubType(sFilter);
+    UpdateSubType(comphelper::string::strip(m_pFilterED->GetText(), ' '));
 }
 
 // #i83479#
@@ -269,12 +268,11 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     if( !IsRefresh() )
     {
         sal_Int32 nIdx{ 0 };
-        OUString sUserData = GetUserData();
+        const OUString sUserData = GetUserData();
         if(!IsRefresh() && sUserData.getToken(0, ';', nIdx).
                                 equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(0, ';', nIdx);
-            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
+            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sUserData.getToken(0, ';', nIdx).toInt32());
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
@@ -393,8 +391,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
     sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     // fill selection-ListBox
-    OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
-    UpdateSubType(sFilter);
+    UpdateSubType(comphelper::string::strip(m_pFilterED->GetText(), ' '));
 
     bool bName = false;
     nFieldDlgFormatSel = 0;
