@@ -12,15 +12,12 @@
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace com::sun::star;
 
 namespace sc_apitest
 {
@@ -75,7 +72,7 @@ ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
 
 uno::Reference<uno::XInterface> ScSpreadsheetSettingsObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     return xDoc;
 }
 
