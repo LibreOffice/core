@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/scrbar.hxx>
+#include <vcl/status.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/multisel.hxx>
@@ -195,6 +196,7 @@ private:
     VclPtr<BrowserDataWin> pDataWin;       // window to display data rows
     VclPtr<ScrollBar>      pVScroll;       // vertical scrollbar
     VclPtr<ScrollBar>      aHScroll;       // horizontal scrollbar
+    VclPtr<StatusBar>      aStatusBar;     // statusbar, just to measure its height
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
@@ -289,7 +291,9 @@ private:
     DECL_DLLPRIVATE_LINK(    ScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK(    StartDragHdl, HeaderBar*, void );
 
-    SVT_DLLPRIVATE long            GetFrozenWidth() const;
+    SVT_DLLPRIVATE long GetFrozenWidth() const;
+
+    SVT_DLLPRIVATE long GetBarHeight() const;
 
     bool            GoToRow(long nRow, bool bRowColMove, bool bDoNotModifySelection = false );
 
