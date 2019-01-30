@@ -1131,14 +1131,19 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
 void Edit::ImplAlign()
 {
+    if (mnAlign == EDIT_ALIGN_LEFT && !mnXOffset)
+    {
+        // short circuit common case and avoid slow GetTextWidth() calc
+        return;
+    }
+
     long nTextWidth = GetTextWidth( ImplGetText() );
     long nOutWidth = GetOutputSizePixel().Width();
 
     if ( mnAlign == EDIT_ALIGN_LEFT )
     {
-        if( mnXOffset && ( nTextWidth < nOutWidth ) )
+        if (nTextWidth < nOutWidth)
             mnXOffset = 0;
-
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
@@ -1161,8 +1166,8 @@ void Edit::ImplAlign()
     }
     else if( mnAlign == EDIT_ALIGN_CENTER )
     {
-            // would be nicer with check while scrolling but then it's not centred in scrolled state
-            mnXOffset = (nOutWidth - nTextWidth) / 2;
+        // would be nicer with check while scrolling but then it's not centred in scrolled state
+        mnXOffset = (nOutWidth - nTextWidth) / 2;
     }
 }
 
