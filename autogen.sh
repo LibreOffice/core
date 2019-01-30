@@ -39,6 +39,7 @@ sub clean()
 }
 
 my $aclocal;
+my $autoconf;
 
 # check we have various vital tools
 sub sanity_checks($)
@@ -48,7 +49,7 @@ sub sanity_checks($)
     my %required =
       (
        'pkg-config' => "pkg-config is required to be installed",
-       'autoconf'   => "autoconf is required",
+       $autoconf    => "autoconf is required",
        $aclocal     => "$aclocal is required",
       );
 
@@ -135,6 +136,9 @@ die "\$src_path must not contain spaces, but it is '$src_path'." if ($src_path =
 
 # Alloc $ACLOCAL to specify which aclocal to use
 $aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
+# Alloc $AUTOCONF to specify which autoconf to use
+# (e.g. autoconf268 from a backports repo)
+$autoconf = $ENV{AUTOCONF} ? $ENV{AUTOCONF} : 'autoconf';
 
 my $system = `uname -s`;
 chomp $system;
@@ -191,7 +195,7 @@ if ($src_path ne $build_path)
 }
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
-system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
+system ("$autoconf -I ${src_path}") && die "Failed to run autoconf";
 die "Failed to generate the configure script" if (! -f "configure");
 
 # Handle help arguments first, so we don't clobber autogen.lastrun
