@@ -83,7 +83,6 @@ job91=sc.ScDataPilotFieldsObj
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
 job126=sc.ScSheetLinkObj
-job129=sc.ScSpreadsheetSettingsObj
 job131=sc.ScStyleFamilyObj
 job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj
