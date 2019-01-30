@@ -120,7 +120,7 @@ namespace
         Component resource_;
     };
 
-    inline bool is_UNC_path(const sal_Unicode* path)
+    bool is_UNC_path(const sal_Unicode* path)
     { return (0 == wcsncmp(UNC_PREFIX, o3tl::toW(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
 
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
@@ -179,7 +179,7 @@ namespace
         return has_parent;
     }
 
-    inline bool has_path_parent(const OUString& path)
+    bool has_path_parent(const OUString& path)
     { return has_path_parent(path.getStr()); }
 
 }
@@ -1143,10 +1143,10 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     return false;
 }
 
-static inline bool is_floppy_A_present()
+static bool is_floppy_A_present()
 { return (GetLogicalDrives() & 1); }
 
-static inline bool is_floppy_B_present()
+static bool is_floppy_B_present()
 { return (GetLogicalDrives() & 2); }
 
 static bool is_floppy_volume_mount_point(const OUString& path)
@@ -1235,7 +1235,7 @@ static UINT get_volume_mount_point_drive_type(const OUString& path)
     return DRIVE_NO_ROOT_DIR;
 }
 
-static inline bool is_drivetype_request(sal_uInt32 field_mask)
+static bool is_drivetype_request(sal_uInt32 field_mask)
 {
     return (field_mask & osl_VolumeInfo_Mask_Attributes);
 }
@@ -1286,7 +1286,7 @@ static oslFileError osl_get_drive_type(
     return osl_File_E_None;
 }
 
-static inline bool is_volume_space_info_request(sal_uInt32 field_mask)
+static bool is_volume_space_info_request(sal_uInt32 field_mask)
 {
     return (field_mask &
             (osl_VolumeInfo_Mask_TotalSpace |
@@ -1312,7 +1312,7 @@ static void get_volume_space_information(
     }
 }
 
-static inline bool is_filesystem_attributes_request(sal_uInt32 field_mask)
+static bool is_filesystem_attributes_request(sal_uInt32 field_mask)
 {
     return (field_mask &
             (osl_VolumeInfo_Mask_MaxNameLength |

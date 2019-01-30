@@ -40,7 +40,7 @@ inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
     va_end(args);
 }
 #else
-static inline void OutputDebugStringFormatW( PCWSTR, ... )
+static void OutputDebugStringFormatW( PCWSTR, ... )
 {
 }
 #endif

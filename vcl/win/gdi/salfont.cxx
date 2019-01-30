@@ -64,13 +64,13 @@ using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
 
-static inline FIXED FixedFromDouble( double d )
+static FIXED FixedFromDouble( double d )
 {
     const long l = static_cast<long>( d * 65536. );
     return *reinterpret_cast<FIXED const *>(&l);
 }
 
-static inline int IntTimes256FromFixed(FIXED f)
+static int IntTimes256FromFixed(FIXED f)
 {
     int nFixedTimes256 = (f.value << 8) + ((f.fract+0x80) >> 8);
     return nFixedTimes256;
@@ -490,7 +490,7 @@ static int ImplWeightToWin( FontWeight eWeight )
     return 0;
 }
 
-static inline FontPitch ImplLogPitchToSal( BYTE nPitch )
+static FontPitch ImplLogPitchToSal( BYTE nPitch )
 {
     if ( nPitch & FIXED_PITCH )
         return PITCH_FIXED;
@@ -498,7 +498,7 @@ static inline FontPitch ImplLogPitchToSal( BYTE nPitch )
         return PITCH_VARIABLE;
 }
 
-static inline FontPitch ImplMetricPitchToSal( BYTE nPitch )
+static FontPitch ImplMetricPitchToSal( BYTE nPitch )
 {
     // Grrrr! See NT help
     if ( !(nPitch & TMPF_FIXED_PITCH) )
@@ -507,7 +507,7 @@ static inline FontPitch ImplMetricPitchToSal( BYTE nPitch )
         return PITCH_VARIABLE;
 }
 
-static inline BYTE ImplPitchToWin( FontPitch ePitch )
+static BYTE ImplPitchToWin( FontPitch ePitch )
 {
     if ( ePitch == PITCH_FIXED )
         return FIXED_PITCH;
@@ -661,7 +661,7 @@ rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSe
     return new WinFontInstance(*this, rFSD);
 }
 
-static inline DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
+static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 void WinFontFace::UpdateFromHDC( HDC hDC ) const
 {

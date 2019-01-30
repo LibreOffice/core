@@ -49,7 +49,6 @@ namespace
     const Type CPPUTYPE_SEQINT8  = cppu::UnoType<Sequence< sal_Int8 >>::get();
     const Type CPPUTYPE_OUSTRING = cppu::UnoType<OUString>::get();
 
-    inline
     bool isValidFlavor( const DataFlavor& aFlavor )
     {
         return ( aFlavor.MimeType.getLength( ) &&
@@ -89,7 +88,6 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
     memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
 }
 
-inline
 OUString byteStreamToOUString( CDOTransferable::ByteSequence_t& aByteStream )
 {
     sal_Int32 nWChars;
@@ -105,7 +103,6 @@ OUString byteStreamToOUString( CDOTransferable::ByteSequence_t& aByteStream )
     return OUString( reinterpret_cast< sal_Unicode* >( aByteStream.getArray( ) ), nWChars );
 }
 
-inline
 Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& aRequestedDataType )
 {
     Any aAny;

@@ -76,7 +76,7 @@ namespace /* private */
     @returns
     the email address prefixed with the specified prefix.
 */
-static inline std::wstring prefixEmailAddress(
+static std::wstring prefixEmailAddress(
     const std::wstring& aEmailAddress,
     const std::wstring& aPrefix = L"SMTP:")
 {

@@ -87,7 +87,7 @@ namespace /* private */
         size_t sum_;
     };
 
-    inline size_t calc_sum_of_string_lengths(const std::vector<OUString>& string_cont)
+    size_t calc_sum_of_string_lengths(const std::vector<OUString>& string_cont)
     {
         return std::for_each(
             string_cont.begin(), string_cont.end(), sum_of_string_lengths());

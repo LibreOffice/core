@@ -38,7 +38,7 @@
 #include <shlguid.h>
 #include <shlobj.h>
 
-static inline bool is_current_process_window(HWND hwnd)
+static bool is_current_process_window(HWND hwnd)
 {
     DWORD pid;
     GetWindowThreadProcessId(hwnd, &pid);
