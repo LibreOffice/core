@@ -103,6 +103,9 @@ public:
     /** Translates between color transformation token names and the corresponding token */
     static sal_Int32    getColorTransformationToken( const OUString& sName );
 
+    /// Compares this color with rOther.
+    bool equals(const Color& rOther, const GraphicHelper& rGraphicHelper, ::Color nPhClr) const;
+
 private:
     /** Internal helper for getColor(). */
     void                setResolvedRgb( ::Color nRgb ) const;
