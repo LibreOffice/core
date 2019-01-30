@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9ee69ae8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-30T09:05:15Z",
+      "side": 1,
+      "message": "Usually \"bugfixing by code removal\" doesn\u0027t work, this seems to be an exception. But then it\u0027s a good idea to prove that you did your homework of researching bad side-effects. I would spell out something like this in the commit message:\n\n\"and both i#13832 and i#24135 remains fixed after the change\"\n\nProvided that you indeed tested those scenarios manually. :-)",
+      "revId": "7b92e87b1d64e3cdf627eda14074a39681d17ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_3ecd665d",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-30T09:05:15Z",
+      "side": 1,
+      "message": "Could you enable this test, just remove the fixme and adapt it to test the new behavior?",
+      "revId": "7b92e87b1d64e3cdf627eda14074a39681d17ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_fed6aef1",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-30T09:05:15Z",
+      "side": 1,
+      "message": "No need to have this commented out, just remove it now, that it\u0027s no longer necessary.",
+      "revId": "7b92e87b1d64e3cdf627eda14074a39681d17ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
