@@ -943,7 +943,6 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             break;
         }
         case BITFIELDS:
-            break;
         case ZCOMPRESS:
         case COMPRESS_NONE:
         {
