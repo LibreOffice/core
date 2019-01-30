@@ -211,18 +211,8 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  CREATE_DB	= $(RBIN)/create_db$(EXEC_EXT)
 --- builds/posix/Makefile.in	2016-07-07 15:56:06.459221300 +0200
 +++ builds/posix/Makefile.in	2016-07-13 12:44:57.134217200 +0200
-@@ -33,7 +33,8 @@
- #		Alex Peshkoff - created single makefile based on Mark's files
- # 
- 
--ROOT=$(shell cd ..; pwd)
-+#ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
-
- include     make.defaults
- ifeq ($(CROSS_OUT), Y)
-@@ -163,7 +164,7 @@
- .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest
+@@ -171,7 +171,7 @@
+ .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest preliminaryCheck
  
  master_process:
 -	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
@@ -230,94 +220,6 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  	$(MAKE) updateBuildNum
  	$(MAKE) export_lists
  	$(MAKE) extern
-@@ -186,10 +187,10 @@
- 	(cd $(BIN); $(LN) $(notdir $(GPRE)) $(notdir $(GPRE_CURRENT)))
- ifeq ($(IsDeveloper), Y)
- # In developer mode we must regenerate various files in include/gen
--	$(MAKE) codes
-+#	$(MAKE) codes
- endif
--	$(MAKE) plugins
--	$(MAKE) examples
-+#	$(MAKE) plugins
-+	$(MAKE) include_generic
- 	$(MAKE) rest
- 
- 
-@@ -198,7 +199,7 @@
- 	$(MAKE) CROSS_OUT=Y cross2
- 
- cross1:
--	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
-+	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
- 	$(MAKE) updateBuildNum
- 	$(MAKE) export_lists
- 	$(MAKE) extern
-@@ -223,7 +224,7 @@
- 	$(MAKE) -f Makefile.examples -C $(GEN_ROOT)/examples/
- 
- cross2:
--	ln -sf $(SRC_ROOT)/include/cross/$(CROSS_CONFIG) $(SRC_ROOT)/include/gen/autoconfig.h
-+	cp -f $(SRC_ROOT)/include/cross/$(CROSS_CONFIG) $(SRC_ROOT)/include/gen/autoconfig.h
- 	$(MAKE) prerequisites
- 	$(MAKE) tommath
- 	$(MAKE) yvalve
-@@ -275,7 +275,8 @@
- 
- # remote redirector is statically linked in main FB library
- $(LIBFIREBIRD_FULLNAME):	$(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
--	$(LINK_FIREBIRD) -o $@ $^ $(LINK_FIREBIRD_LIBS)
-+	@echo 'compile: $(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)'
-+	$(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)
- 
- 
- #___________________________________________________________________________
-@@ -284,7 +286,8 @@
- engine: $(ENGINE_SONAME)
- 
- $(ENGINE_SONAME):	$(Engine_Objects) $(SVC_Objects) $(COMMON_LIB)
--	$(LINK_ENGINE) -o $@ $^ $(LINK_ENGINE_LIBS)
-+	@echo 'compile engine: $(LINK_ENGINE) $(CPPFLAGS) -o $@ $^ $(LINK_ENGINE_LIBS)'
-+	$(LINK_ENGINE) $(CPPFLAGS) -o $@ $^ $(YValve_Objects) $(Remote_Client_Objects) $(LINK_ENGINE_LIBS)
- 
- 
- #___________________________________________________________________________
-@@ -294,7 +297,7 @@
- fbintl: $(LIBFBINTL_SO)
- 
- $(LIBFBINTL_SO):	$(INTL_Objects) $(COMMON_LIB)
--	$(LINK_INTL) -o $@ $^ $(LINK_INTL_LIBS)
-+	$(LINK_INTL) $(CPPFLAGS) -o $@ $^ $(YValve_Objects) $(Remote_Client_Objects) $(LINK_INTL_LIBS)
- 
- 
- #___________________________________________________________________________
-@@ -393,7 +396,7 @@
- 
- .PHONY:	firebird_server fb_lock_print fbguard fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup
- 
--utilities: firebird_server fb_lock_print fbguard fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup udfsupport
-+utilities: gbak gfix isql
- 
- firebird_server:	$(FB_DAEMON)
- 
-@@ -540,7 +543,7 @@
- GBAK_FILES := $(FDB_FILES:.fdb=.gbak) $(FIREBIRD)/msg.gbak
- GBAK_FILES := $(subst Native,$(TARGET),$(GBAK_FILES))
- 
--rest:	qli message_file
-+rest:	message_file
- 
- cross_rest:	qli gbak_files
- 	$(MAKE) $(BUILD_FILE)
-@@ -593,7 +595,7 @@
- IBASE_ExtraFiles = include/types_pub.h include/consts_pub.h dsql/sqlda_pub.h common/dsc_pub.h jrd/ibase.h jrd/inf_pub.h jrd/blr.h include/gen/iberror.h
- SRC_IBASE_ExtraFiles = $(addprefix $(SRC_ROOT)/, $(IBASE_ExtraFiles))
- MAKE_HEADER_Src = $(addprefix $(SRC_ROOT)/, misc/makeHeader.cpp)
--MAKE_HEADER_Bin = ./makeHeader
-+MAKE_HEADER_Bin = ./makeHeader.exe
- 
- $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
- 	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
 diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
 --- builds/posix/Makefile.in.examples	2016-07-07 13:56:13.048235166 +0200
 +++ builds/posix/Makefile.in.examples	2016-07-07 14:37:36.904301682 +0200
@@ -346,7 +248,7 @@ diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
 diff -ur builds/posix/make.rules builds/posix/make.rules
 --- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
 +++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
-@@ -88,22 +88,20 @@
+@@ -92,26 +92,23 @@
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.c
  	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
@@ -358,6 +260,10 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.cpp
  	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ $(OBJ)/%.o: $(ROOT)/%.cpp
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
 -	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
  
  .SUFFIXES: .epp .e
@@ -517,7 +423,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
 --- extern/cloop/src/tests/test1/CTest.c	2016-07-07 15:56:27.611791300 +0200
 +++ extern/cloop/src/tests/test1/CTest.c	2016-07-13 17:04:22.805090300 +0200
 @@ -23,6 +23,7 @@
- #include <malloc.h>
+ #include <stdlib.h>
  #include <stdio.h>
  
 +#define WIN32
