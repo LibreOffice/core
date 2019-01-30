@@ -185,6 +185,7 @@ cmd/32/linespacing.png cmd/32/spacepara15.png
 cmd/32/linestyle.png cmd/32/borderdialog.png
 cmd/32/linetoolbox.png cmd/32/freeline.png
 cmd/32/loadstyles.png cmd/32/open.png
+cmd/32/macrodialog.png cmd/32/scriptorganizer.png
 cmd/32/macroorganizer.png cmd/32/formproperties.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/mailmergefirstentry.png cmd/32/firstrecord.png
@@ -292,7 +293,6 @@ cmd/32/starshapes.png cmd/32/starshapes.star5.png
 cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
-cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
 cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
@@ -518,6 +518,7 @@ cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/lc_linestyle.png cmd/lc_borderdialog.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 cmd/lc_macroorganizer.png cmd/lc_formproperties.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
@@ -620,7 +621,6 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
-cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
@@ -811,6 +811,7 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/sc_linestyle.png cmd/sc_borderdialog.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_loadstyles.png cmd/sc_open.png
+cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macroorganizer.png cmd/sc_formproperties.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
@@ -913,7 +914,6 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
-cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
 cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
@@ -942,8 +942,8 @@ cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 desktop/res/extension_16.png cmd/sc_addons.png
 desktop/res/extension_32.png cmd/32/addons.png
-extensions/res/scanner/minus.png res/minus.png
-extensions/res/scanner/plus.png res/plus.png
+extensions/source/scanner/minus.png res/minus.png
+extensions/source/scanner/plus.png res/plus.png
 formula/res/fx.png cmd/sc_insertformula.png
 framework/res/addtemplate_32.png cmd/32/newdoc.png
 framework/res/arrow.png cmd/sc_nextrecord.png
