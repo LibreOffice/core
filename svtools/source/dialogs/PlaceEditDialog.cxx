@@ -223,10 +223,18 @@ void PlaceEditDialog::InitDetails( )
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSshDetails);
 
+    // Remove Windows Share entry from dialog on Windows OS, where it's non-functional
+#if defined(_WIN32)
+    // Set variable nPos's value from Other CMIS to Windows Share
+    // nPos is the position of Windows Share entry which is the fourth item that is pre-defined in svtools\source\dialogs\PlaceEditDialog.cxx,
+    // after other CMIS types were inserted
+    m_xLBServerType->remove(nPos + 3);
+#else
     // Create Windows Share control
     std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSmbDetails);
+#endif
 
     // Set default to first value
     m_xLBServerType->set_active(0);
