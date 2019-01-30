@@ -1934,7 +1934,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
         m_sNewMenuEntryId = OUString::number(reinterpret_cast<sal_uInt64>(pNewEntryData));
         m_xMenuListBox->append(m_sNewMenuEntryId,
-                               SvxConfigPageHelper::stripHotKey(pNewEntryData->GetName()), "");
+                               SvxConfigPageHelper::stripHotKey(pNewEntryData->GetName()));
         m_xMenuListBox->select(m_xMenuListBox->n_children() - 1);
 
         if (mpEntries)
