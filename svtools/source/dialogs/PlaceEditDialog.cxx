@@ -223,10 +223,16 @@ void PlaceEditDialog::InitDetails( )
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSshDetails);
 
+    // Remove non-functional Windows Share entry from listbox in Windows OS
+#if defined(_WIN32)
+    // Set variable nPos's value from Other CMIS to Windows Share
+    m_xLBServerType->remove(nPos + 3);
+#else
     // Create Windows Share control
     std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSmbDetails);
+#endif
 
     // Set default to first value
     m_xLBServerType->set_active(0);
