@@ -1,0 +1,157 @@
+diff -ur firebird.org/src/common/classes/alloc.cpp firebird/src/common/classes/alloc.cpp
+--- src/common/classes/alloc.cpp	2019-01-30 20:49:15.624518663 +0100
++++ src/common/classes/alloc.cpp	2019-01-30 20:55:02.974627262 +0100
+@@ -1556,7 +1556,7 @@
+ 
+ 	~FreeObjects();
+ 
+-	FreeObjPtr allocateBlock(MemPool* pool, size_t from, size_t& size) throw (OOM_EXCEPTION)
++	FreeObjPtr allocateBlock(MemPool* pool, size_t from, size_t& size)
+ 	{
+ 		size_t full_size = size + (from ? 0 : ListBuilder::MEM_OVERHEAD);
+ 		if (full_size > Limits::TOP_LIMIT)
+@@ -1623,7 +1623,7 @@
+ 	ListBuilder listBuilder;
+ 	Extent* currentExtent;
+ 
+-	MemBlock* newBlock(MemPool* pool, unsigned slot) throw (OOM_EXCEPTION);
++	MemBlock* newBlock(MemPool* pool, unsigned slot);
+ };
+ 
+ 
+@@ -1844,7 +1844,7 @@
+ 
+ 
+ template <class ListBuilder, class Limits>
+-MemBlock* FreeObjects<ListBuilder, Limits>::newBlock(MemPool* pool, unsigned slot) throw (OOM_EXCEPTION)
++MemBlock* FreeObjects<ListBuilder, Limits>::newBlock(MemPool* pool, unsigned slot)
+ {
+ 	size_t size = Limits::getSize(slot);
+ 
+@@ -2080,7 +2080,7 @@
+ }
+ 
+ template <class Extent>
+-void MemPool::newExtent(size_t& size, Extent** linkedList) throw(OOM_EXCEPTION)
++void MemPool::newExtent(size_t& size, Extent** linkedList)
+ {
+ 	// No large enough block found. We need to extend the pool
+ 	void* memory = NULL;
+@@ -2145,7 +2145,7 @@
+ 	pool->setStatsGroup(newStats);
+ }
+ 
+-MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect) throw (OOM_EXCEPTION)
++MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect)
+ {
+ 	MutexEnsureUnlock guard(mutex, "MemPool::alloc");
+ 	guard.enter();
+@@ -2206,7 +2206,7 @@
+ #ifdef DEBUG_GDS_ALLOC
+ 	, const char* fileName, int line
+ #endif
+-) throw (OOM_EXCEPTION)
++)
+ {
+ 	size_t length = from ? size : ROUNDUP(size + VALGRIND_REDZONE, roundingSize) + GUARD_BYTES;
+ 	MemBlock* memory = alloc(from, length, true);
+@@ -2236,7 +2236,7 @@
+ }
+ 
+ 
+-void* MemPool::allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemPool::allocate(size_t size ALLOC_PARAMS)
+ {
+ 	MemBlock* memory = allocate2(0, size ALLOC_PASS_ARGS);
+ 
+@@ -2363,12 +2363,12 @@
+ 	releaseRaw(pool_destroying, hunk, hunk->length, false);
+ }
+ 
+-void MemPool::memoryIsExhausted(void) throw (OOM_EXCEPTION)
++void MemPool::memoryIsExhausted(void)
+ {
+ 	Firebird::BadAlloc::raise();
+ }
+ 
+-void* MemPool::allocRaw(size_t size) throw (OOM_EXCEPTION)
++void* MemPool::allocRaw(size_t size)
+ {
+ #if !(defined USE_VALGRIND || defined USE_ASAN)
+ 	if (size == DEFAULT_ALLOCATION)
+@@ -2448,7 +2448,7 @@
+ }
+ 
+ 
+-void* MemPool::getExtent(size_t from, size_t& to) throw(OOM_EXCEPTION)		// pass desired minimum size, return actual extent size
++void* MemPool::getExtent(size_t from, size_t& to) // pass desired minimum size, return actual extent size
+ {
+ 	MemBlock* extent = allocate2(from, to ALLOC_ARGS);
+ 	return &extent->body;
+@@ -2567,7 +2567,7 @@
+ 	deallocate(block);
+ }
+ 
+-void* MemoryPool::calloc(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemoryPool::calloc(size_t size ALLOC_PARAMS)
+ {
+ 	void* block = allocate(size ALLOC_PASS_ARGS);
+ 	memset(block, 0, size);
+@@ -2708,7 +2708,7 @@
+ 	MemPool::globalFree(block);
+ }
+ 
+-void* MemoryPool::allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemoryPool::allocate(size_t size ALLOC_PARAMS)
+ {
+ 	return pool->allocate(size ALLOC_PASS_ARGS);
+ }
+diff -ur firebird.org/src/common/classes/fb_string.h firebird/src/common/classes/fb_string.h
+--- src/common/classes/fb_string.h	2019-01-30 20:49:15.632518722 +0100
++++ src/common/classes/fb_string.h	2019-01-30 20:50:55.925208217 +0100
+@@ -674,7 +674,7 @@
+ 		}
+ 		StringType& assign(const void* s, size_type n)
+ 		{
+-			auto const p = baseAssign(n);
++			pointer p = baseAssign(n);
+ 			if (n != 0) memcpy(p, s, n);
+ 			return *this;
+ 		}
+diff -ur firebird.org/src/dsql/StmtNodes.cpp firebird/src/dsql/StmtNodes.cpp
+--- src/dsql/StmtNodes.cpp	2019-01-30 20:49:15.548518110 +0100
++++ src/dsql/StmtNodes.cpp	2019-01-30 21:02:33.648589618 +0100
+@@ -6644,7 +6644,7 @@
+ 
+ void StoreNode::genBlr(DsqlCompilerScratch* dsqlScratch)
+ {
+-	const dsql_msg* message = dsqlGenDmlHeader(dsqlScratch, dsqlRse == nullptr ? nullptr : dsqlRse->as<RseNode>());
++	const dsql_msg* message = dsqlGenDmlHeader(dsqlScratch, dsqlRse == NULL ? NULL : dsqlRse->as<RseNode>());
+ 
+ 	dsqlScratch->appendUChar(statement2 ? blr_store2 : blr_store);
+ 	GEN_expr(dsqlScratch, dsqlRelation);
+diff -ur firebird.org/src/jrd/Optimizer.cpp firebird/src/jrd/Optimizer.cpp
+--- src/jrd/Optimizer.cpp	2019-01-30 20:49:15.568518256 +0100
++++ src/jrd/Optimizer.cpp	2019-01-30 20:58:22.739570042 +0100
+@@ -368,7 +368,7 @@
+ 
+ 	// Allocate needed indexScratches
+ 
+-	index_desc* idx = csb_tail->csb_idx == nullptr ? nullptr : csb_tail->csb_idx->items;
++	index_desc* idx = csb_tail->csb_idx == NULL ? NULL : csb_tail->csb_idx->items;
+ 	for (int i = 0; i < csb_tail->csb_indices; ++i, ++idx)
+ 		indexScratches.add(IndexScratch(p, tdbb, idx, csb_tail));
+ }
+diff -ur firebird.org/src/jrd/SimilarToMatcher.h firebird/src/jrd/SimilarToMatcher.h
+--- src/jrd/SimilarToMatcher.h	2019-01-30 20:49:15.584518372 +0100
++++ src/jrd/SimilarToMatcher.h	2019-01-30 21:00:31.016109587 +0100
+@@ -338,7 +338,7 @@
+ 		private:
+ 			static const unsigned INCREASE_FACTOR = 50;
+ 			unsigned size;
+-			AutoPtr<UCHAR, ArrayDelete<UCHAR>> data;
++			AutoPtr <UCHAR, ArrayDelete > data;
+ 			T* end;
+ 		};
+ #endif	// RECURSIVE_SIMILAR
+Seulement dans firebird: temp
