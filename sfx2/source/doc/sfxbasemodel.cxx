@@ -119,6 +119,7 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include "printhelper.hxx"
 #include <sfx2/sfxresid.hxx>
+#include <vcl/threadex.hxx>
 
 
 //  namespaces
@@ -1461,6 +1462,14 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly()
     return !m_pData->m_pObjectShell.is() || m_pData->m_pObjectShell->IsReadOnly();
 }
 
+/**
+ * Proxy around SfxObjectShell::Save_Impl(), as vcl::solarthread::syncExecute()
+ * does not seem to accept lambdas.
+ */
+static bool SaveImplStatic(SfxObjectShell* pThis, const SfxItemSet* pParams)
+{
+    return pThis->Save_Impl(pParams);
+}
 
 //  XStorable2
 
@@ -1474,6 +1483,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         SfxSaveGuard aSaveGuard(this, m_pData);
 
         bool bCheckIn = false;
+        bool bOnMainThread = false;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
             // check that only acceptable parameters are provided here
@@ -1483,7 +1493,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
               && aSeqArgs[nInd].Name != "VersionMajor"
               && aSeqArgs[nInd].Name != "FailOnWarning"
               && aSeqArgs[nInd].Name != "CheckIn"
-              && aSeqArgs[nInd].Name != "NoFileSync" )
+              && aSeqArgs[nInd].Name != "NoFileSync"
+              && aSeqArgs[nInd].Name != "OnMainThread" )
             {
                 OUString aMessage( "Unexpected MediaDescriptor parameter: "  );
                 aMessage += aSeqArgs[nInd].Name;
@@ -1492,6 +1503,10 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             else if ( aSeqArgs[nInd].Name == "CheckIn" )
             {
                 aSeqArgs[nInd].Value >>= bCheckIn;
+            }
+            else if (aSeqArgs[nInd].Name == "OnMainThread")
+            {
+                aSeqArgs[nInd].Value >>= bOnMainThread;
             }
         }
 
@@ -1544,7 +1559,11 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         {
             // Tell the SfxMedium if we are in checkin instead of normal save
             m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
-            bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
+            if (bOnMainThread)
+                bRet = vcl::solarthread::syncExecute(
+                    std::bind(&SaveImplStatic, m_pData->m_pObjectShell.get(), pParams));
+            else
+                bRet = m_pData->m_pObjectShell->Save_Impl(pParams);
             m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
         }
 
