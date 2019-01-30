@@ -48,7 +48,7 @@ CFormatEtcContainer::CFormatEtcContainer( )
 
 void CFormatEtcContainer::addFormatEtc( const CFormatEtc& fetc )
 {
-    m_FormatMap.push_back( CFormatEtc( fetc ) );
+    m_FormatMap.push_back( fetc );
 }
 
 void CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
