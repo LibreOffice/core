@@ -58,10 +58,10 @@ using namespace osl;
 #endif
 
 /**
- * The double member determin the alignment.
- * Under Os2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
- * The aligment of a strukture is min( 8, sizeof( max basic type ) ), the greatest basic type
- * determine the aligment.
+ * The double member determine the alignment.
+ * Under OS/2 and Windows the Alignment is min( 8, sizeof( type ) ).
+ * The alignment of a structure is min( 8, sizeof( max basic type ) ), the greatest basic type
+ * determines the alignment.
  */
 struct AlignSize_Impl
 {
@@ -75,7 +75,7 @@ struct AlignSize_Impl
 #pragma pack()
 #endif
 
-// the value of the maximal alignment
+// The value of the maximal alignment
 static sal_Int32 nMaxAlignment = (sal_Int32)( (sal_Size)(&((AlignSize_Impl *) 16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
@@ -86,9 +86,7 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
     return nRequestedAlignment;
 }
 
-/**
- * Calculate the new size of the struktur.
- */
+// Calculate the new size of the structure
 static inline sal_Int32 newAlignedSize(
     sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
     SAL_THROW( () )
@@ -110,7 +108,7 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 
     sal_Int32 nSize;
     // The reference is the description
-    // if the description is empty, than it must be filled with
+    // if the description is empty, then it must be filled with
     // the new description
     switch( eTypeClass )
     {
@@ -178,7 +176,7 @@ struct hashStr_Impl
 
 
 //-----------------------------------------------------------------------------
-// Heavy hack, the const sal_Unicode * is hold by the typedescription reference
+// Heavy hack, the const sal_Unicode * is held by the type description reference
 typedef hash_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
                   hashStr_Impl, equalStr_Impl > WeakMap_Impl;
 
@@ -192,7 +190,7 @@ static sal_Int32 nCacheSize = 256;
 //-----------------------------------------------------------------------------
 /**
  * All members must set initial to 0 and no constructor is needed. So it
- * doesn't care, when this class is static initialized.<BR>
+ * doesn't care, when this class is static initialized.
  */
 struct TypeDescriptor_Init_Impl
 {
@@ -279,7 +277,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
     {
         sal_Int32 nSize = pWeakMap->size();
         typelib_TypeDescriptionReference ** ppTDR = new typelib_TypeDescriptionReference *[ nSize ];
-        // save al weak references
+        // save all weak references
         WeakMap_Impl::const_iterator aIt = pWeakMap->begin();
         sal_Int32 i = 0;
         while( aIt != pWeakMap->end() )
@@ -468,10 +466,10 @@ namespace {
 // description are necessary, but not the additional
 // pMapMemberIndexToFunctionIndex, nMapFunctionIndexToMemberIndex, and
 // pMapFunctionIndexToMemberIndex (which are computed by
-// typelib_typedescription_initTables).  Furthermore, in those situations, it
+// typelib_typedescription_initTables). Furthermore, in those situations, it
 // might be illegal to compute those tables, as the creation of the interface
 // member type descriptions would recursively require a complete interface type
-// description.  The parameter initTables controls whether or not to call
+// description. The parameter initTables controls whether or not to call
 // typelib_typedescription_initTables in those situations.
 bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
     if (! (*ppTypeDescr)->bComplete)
@@ -508,7 +506,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             }
 
             OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
-            // typedescription found
+            // type description found
             // set to on demand
             pTD->bOnDemand = sal_True;
 
@@ -522,7 +520,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                 pTD->bComplete = sal_True;
             }
 
-            // The type description is hold by the reference until
+            // The type description is held by the reference until
             // on demand is activated.
             ::typelib_typedescription_register( &pTD ); // replaces incomplete one
             OSL_ASSERT( pTD == *ppTypeDescr ); // has to merge into existing one
@@ -1668,7 +1666,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 {
                     if (osl_incrementInterlockedCount( &pTDR->pType->nRefCount ) > 1)
                     {
-                        // The refence is incremented. The object cannot be destroyed.
+                        // The reference is incremented. The object cannot be destroyed.
                         // Release the guard at the earliest point.
                         aGuard.clear();
                         ::typelib_typedescription_release( *ppNewDescription );
@@ -1730,7 +1728,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 }
                 else if( !pTDR->pType->bOnDemand && (*ppNewDescription)->bOnDemand )
                 {
-                    // switch from !OnDemand to OnDemand, so the description must be relesed
+                    // switch from !OnDemand to OnDemand, so the description must be released
                     typelib_typedescription_release( pTDR->pType );
                 }
 
@@ -1761,8 +1759,8 @@ extern "C" void SAL_CALL typelib_typedescription_register(
         OSL_ASSERT( (void *)*ppNewDescription == (void *)pTDR );
     }
 
-    // By default this reference is not really weak. The reference hold the description
-    // and the description hold the reference.
+    // By default this reference is not really weak. The reference holds the description
+    // and the description holds the reference.
     if( !(*ppNewDescription)->bOnDemand )
     {
         // nor OnDemand so the description must be acquired if registered
@@ -2216,7 +2214,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
 
         if( *ppRet )
         {
-            // typedescription found
+            // type description found
             if (typelib_TypeClass_TYPEDEF == (*ppRet)->eTypeClass)
             {
                 typelib_TypeDescription * pTD = 0;
@@ -2229,7 +2227,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
             {
                 // set to on demand
                 (*ppRet)->bOnDemand = sal_True;
-                // The type description is hold by the reference until
+                // The type description is held by the reference until
                 // on demand is activated.
                 typelib_typedescription_register( ppRet );
 
@@ -2277,7 +2275,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
         rInit.callChain( &pRet, pTypeName );
         if( pRet )
         {
-            // typedescription found
+            // type description found
             if (typelib_TypeClass_TYPEDEF == pRet->eTypeClass)
             {
                 typelib_typedescriptionreference_acquire(
@@ -2291,11 +2289,11 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
             {
                 // set to on demand
                 pRet->bOnDemand = sal_True;
-                // The type description is hold by the reference until
+                // The type description is held by the reference until
                 // on demand is activated.
                 typelib_typedescription_register( &pRet );
 
-                // insert into the chache
+                // insert into the cache
                 MutexGuard aGuard( rInit.getMutex() );
                 if( !rInit.pCache )
                     rInit.pCache = new TypeDescriptionList_Impl;
@@ -2355,7 +2353,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
 
     if( !rInit.pWeakMap )
         rInit.pWeakMap = new WeakMap_Impl;
-    // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
+    // Heavy hack, the const sal_Unicode * is held by the type description reference
     // not registered
     rInit.pWeakMap->operator[]( (*ppTDR)->pTypeName->buffer ) = *ppTDR;
 }
@@ -2431,7 +2429,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
         sal_Int32 n = ::osl_incrementInterlockedCount( &pRef->pType->nRefCount );
         if( n > 1 )
         {
-            // The refence is incremented. The object cannot be destroyed.
+            // The reference is incremented. The object cannot be destroyed.
             // Release the guard at the earliest point.
             *ppRet = pRef->pType;
             return;
@@ -2439,8 +2437,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
         else
         {
             ::osl_decrementInterlockedCount( &pRef->pType->nRefCount );
-            // detruction of this type in progress (another thread!)
-            // no acces through this weak reference
+            // destruction of this type in progress (another thread!)
+            // no access through this weak reference
             pRef->pType = 0;
         }
     }
@@ -2473,14 +2471,14 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
             sal_Int32 n = ::osl_incrementInterlockedCount( &(*aIt).second->nRefCount );
             if( n > 1 )
             {
-                // The refence is incremented. The object cannot be destroyed.
+                // The reference is incremented. The object cannot be destroyed.
                 // Release the guard at the earliest point.
                 *ppRet = (*aIt).second;
             }
             else
             {
-                // detruction of this type in progress (another thread!)
-                // no acces through this weak reference
+                // destruction of this type in progress (another thread!)
+                // no access through this weak reference
                 ::osl_decrementInterlockedCount( &(*aIt).second->nRefCount );
             }
         }
