@@ -66,7 +66,7 @@ cmd/32/insertframeinteract.png cmd/32/insertframe.png
 cmd/32/insertframeinteractnocolumns.png cmd/32/insertframe.png
 cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
-cmd/32/insertnumericfield.png cmd/32/numberformatstandard.png
+cmd/32/insertnumericfield.png cmd/32/numericfield.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectchartfromfile.png cmd/32/open.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
@@ -88,7 +88,6 @@ cmd/32/inserttimefieldvar.png cmd/32/timefield.png
 cmd/32/inserttoolbox.png cmd/32/drawchart.png
 cmd/32/insobjctrl.png cmd/32/newdoc.png
 cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
-cmd/32/numericfield.png cmd/32/numberformatstandard.png
 cmd/32/repaginate.png cmd/32/insertpagenumberfield.png
 cmd/32/showchanges.png cmd/32/addwatch.png
 cmd/32/tracechangemode.png cmd/32/trackchanges.png
@@ -123,7 +122,7 @@ cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
-cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
+cmd/lc_insertnumericfield.png cmd/lc_numericfield.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectchartfromfile.png cmd/lc_open.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
@@ -146,7 +145,6 @@ cmd/lc_inserttimefieldvar.png cmd/lc_timefield.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
-cmd/lc_numericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_repaginate.png cmd/lc_insertpagenumberfield.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
@@ -181,7 +179,7 @@ cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
-cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
+cmd/sc_insertnumericfield.png cmd/sc_numericfield.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectchartfromfile.png cmd/sc_open.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
@@ -204,7 +202,6 @@ cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
-cmd/sc_numericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
@@ -1225,12 +1222,15 @@ cmd/sc_loadstyles.png cmd/sc_open.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Macro
+cmd/32/macrodialog.png cmd/32/scriptorganizer.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
 
+cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 
+cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 
@@ -1343,11 +1343,6 @@ cmd/lc_selectmode.png cmd/lc_selectobject.png
 
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_selectmode.png cmd/sc_selectobject.png
-
-# Navigator
-cmd/32/navigationbar.png cmd/32/navigator.png
-cmd/lc_navigationbar.png cmd/lc_navigator.png
-cmd/sc_navigationbar.png cmd/sc_navigator.png
 
 # Database
 cmd/32/dbdtableedit.png cmd/32/dbtableedit.png
@@ -1672,23 +1667,26 @@ res/sx03256.png cmd/sc_insertplugin.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
 res/sx10596.png cmd/sc_checkbox.png
+res/sx10597.png cmd/sc_label.png
+res/sx10598.png cmd/sc_groupbox.png
 res/sx10599.png cmd/sc_text.png
-res/sx10600.png cmd/lc_listbox.png
+res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
 res/sx10603.png cmd/sc_gridvisible.png
-
+res/sx10604.png cmd/sc_imagebutton.png
 res/sx10605.png cmd/sc_open.png
+res/sx10607.png cmd/sc_navigationbar.png
 res/sx10704.png cmd/sc_datefield.png
 res/sx10705.png cmd/sc_timefield.png
-res/sx10706.png cmd/sc_text.png
-res/sx10707.png cmd/sc_formattedfield.png
+res/sx10706.png cmd/sc_numericfield.png
+res/sx10707.png cmd/sc_currencyfield.png
+res/sx10708.png cmd/sc_patternfield.png
 res/sx10710.png cmd/sc_imagecontrol.png
 res/sx10715.png cmd/sc_datafilterstandardfilter.png
 res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
-
 res/sx10768.png cmd/sc_scrollbar.png
-res/sx10769.png cmd/sc_scrollbar.png
+res/sx10769.png cmd/sc_spinbutton.png
 res/sx18002.png res/minus.png
 res/sx18003.png res/plus.png
 

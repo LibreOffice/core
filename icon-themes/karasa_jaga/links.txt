@@ -185,6 +185,7 @@ cmd/32/linespacing.png cmd/32/spacepara15.png
 cmd/32/linestyle.png cmd/32/borderdialog.png
 cmd/32/linetoolbox.png cmd/32/freeline.png
 cmd/32/loadstyles.png cmd/32/open.png
+cmd/32/macrodialog.png cmd/32/scriptorganizer.png
 cmd/32/macroorganizer.png cmd/32/formproperties.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/mailmergefirstentry.png cmd/32/firstrecord.png
@@ -518,6 +519,7 @@ cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/lc_linestyle.png cmd/lc_borderdialog.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 cmd/lc_macroorganizer.png cmd/lc_formproperties.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
@@ -811,6 +813,7 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/sc_linestyle.png cmd/sc_borderdialog.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_loadstyles.png cmd/sc_open.png
+cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macroorganizer.png cmd/sc_formproperties.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
