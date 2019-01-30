@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include <detdata.hxx>
 #include <refupdat.hxx>
@@ -33,22 +34,19 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
-    for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); /*noop*/ )
-    {
-        // look for operations on the deleted sheet
-        if ((*it)->GetPos().Tab() == nTab)
-            it = aDetOpDataVector.erase( it);
-        else
-            ++it;
-    }
+    aDetOpDataVector.erase(std::remove_if(aDetOpDataVector.begin(), aDetOpDataVector.end(),
+        [&nTab](const std::unique_ptr<ScDetOpData>& rxDetOpData) {
+            return rxDetOpData->GetPos().Tab() == nTab; // look for operations on the deleted sheet
+        }),
+        aDetOpDataVector.end());
 }
 
 void ScDetOpList::UpdateReference( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
-    for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); ++it )
+    for (auto& rxDetOpData : aDetOpDataVector )
     {
-        ScAddress aPos = (*it)->GetPos();
+        ScAddress aPos = rxDetOpData->GetPos();
         SCCOL nCol1 = aPos.Col();
         SCROW nRow1 = aPos.Row();
         SCTAB nTab1 = aPos.Tab();
@@ -62,7 +60,7 @@ void ScDetOpList::UpdateReference( const ScDocument* pDoc, UpdateRefMode eUpdate
                 rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
-            (*it)->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
+            rxDetOpData->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
     }
 }
 

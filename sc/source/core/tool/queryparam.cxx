@@ -168,15 +168,11 @@ std::vector<ScQueryEntry*> ScQueryParamBase::FindAllEntriesByField(SCCOLROW nFie
 {
     std::vector<ScQueryEntry*> aEntries;
 
-    EntriesType::iterator itr = std::find_if(
-        m_Entries.begin(), m_Entries.end(), FindByField(nField));
+    auto fFind = FindByField(nField);
 
-    while (itr != m_Entries.end())
-    {
-        aEntries.push_back((*itr).get());
-        itr = std::find_if(
-            itr + 1, m_Entries.end(), FindByField(nField));
-    }
+    for (const auto& rxEntry : m_Entries)
+        if (fFind(rxEntry))
+            aEntries.push_back(rxEntry.get());
 
     return aEntries;
 }

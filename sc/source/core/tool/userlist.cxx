@@ -277,18 +277,17 @@ ScUserList::ScUserList(const ScUserList& rOther)
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 {
     const ScUserListData* pFirstCaseInsensitive = nullptr;
-    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
     sal_uInt16 nIndex;
     bool bMatchCase = false;
 
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rxItem : maData)
     {
-        if ((*itr)->GetSubIndex(rSubStr, nIndex, bMatchCase))
+        if (rxItem->GetSubIndex(rSubStr, nIndex, bMatchCase))
         {
             if (bMatchCase)
-                return itr->get();
+                return rxItem.get();
             if (!pFirstCaseInsensitive)
-                pFirstCaseInsensitive = itr->get();
+                pFirstCaseInsensitive = rxItem.get();
         }
     }
 
@@ -315,18 +314,10 @@ ScUserList& ScUserList::operator=( const ScUserList& rOther )
 
 bool ScUserList::operator==( const ScUserList& r ) const
 {
-    if (size() != r.size())
-        return false;
-
-    DataType::const_iterator itr1 = maData.begin(), itr2 = r.maData.begin(), itrEnd = maData.end();
-    for (; itr1 != itrEnd; ++itr1, ++itr2)
-    {
-        const ScUserListData& v1 = **itr1;
-        const ScUserListData& v2 = **itr2;
-        if (v1.GetString() != v2.GetString() || v1.GetSubCount() != v2.GetSubCount())
-            return false;
-    }
-    return true;
+    return std::equal(maData.begin(), maData.end(), r.maData.begin(), r.maData.end(),
+        [](const std::unique_ptr<ScUserListData>& lhs, const std::unique_ptr<ScUserListData>& rhs) {
+            return (lhs->GetString() == rhs->GetString()) && (lhs->GetSubCount() == rhs->GetSubCount());
+        });
 }
 
 bool ScUserList::operator!=( const ScUserList& r ) const

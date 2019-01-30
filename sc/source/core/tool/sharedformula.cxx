@@ -343,16 +343,15 @@ void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<S
 
     // Add next cell positions to the list (to ensure that each position becomes a single cell).
     std::vector<SCROW> aRows2;
-    std::vector<SCROW>::const_iterator it = rRows.begin(), itEnd = rRows.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rRow : rRows)
     {
-        if (*it > MAXROW)
+        if (rRow > MAXROW)
             break;
 
-        aRows2.push_back(*it);
+        aRows2.push_back(rRow);
 
-        if (*it < MAXROW)
-            aRows2.push_back(*it+1);
+        if (rRow < MAXROW)
+            aRows2.push_back(rRow+1);
     }
 
     // Remove duplicates again (the vector should still be sorted).

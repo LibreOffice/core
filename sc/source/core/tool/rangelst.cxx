@@ -1163,13 +1163,11 @@ void ScRangePairList::Remove(size_t nPos)
 
 void ScRangePairList::Remove( const ScRangePair & rAdr)
 {
-    for ( auto itr = maPairs.begin(); itr != maPairs.end(); ++itr )
+    auto itr = std::find_if(maPairs.begin(), maPairs.end(), [&rAdr](const ScRangePair& rPair) { return &rAdr == &rPair; });
+    if (itr != maPairs.end())
     {
-        if (&rAdr == &*itr)
-        {
-            maPairs.erase( itr );
-            return;
-        }
+        maPairs.erase( itr );
+        return;
     }
     assert(false);
 }
@@ -1231,17 +1229,12 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
 // Delete entries that have the labels (first range) on nTab
 void ScRangePairList::DeleteOnTab( SCTAB nTab )
 {
-    for (auto it = maPairs.begin(); it != maPairs.end(); )
-    {
-        const ScRangePair & rR = *it;
-        const ScRange & rRange = rR.GetRange(0);
-        if ( rRange.aStart.Tab() == nTab && rRange.aEnd.Tab() == nTab )
-        {
-            it = maPairs.erase(it);
-        }
-        else
-            ++it;
-    }
+    maPairs.erase(std::remove_if(maPairs.begin(), maPairs.end(),
+        [&nTab](const ScRangePair& rR) {
+            const ScRange & rRange = rR.GetRange(0);
+            return (rRange.aStart.Tab() == nTab) && (rRange.aEnd.Tab() == nTab);
+        }),
+        maPairs.end());
 }
 
 ScRangePair* ScRangePairList::Find( const ScAddress& rAdr )

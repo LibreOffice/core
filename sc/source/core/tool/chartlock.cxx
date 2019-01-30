@@ -82,13 +82,11 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
 ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
     maChartModels( lcl_getAllLivingCharts( pDoc ) )
 {
-    std::vector< WeakReference< frame::XModel > >::const_iterator aIter = maChartModels.begin();
-    const std::vector< WeakReference< frame::XModel > >::const_iterator aEnd = maChartModels.end();
-    for( ; aIter != aEnd; ++aIter )
+    for( const auto& rxChartModel : maChartModels )
     {
         try
         {
-            Reference< frame::XModel > xModel( *aIter );
+            Reference< frame::XModel > xModel( rxChartModel );
             if( xModel.is())
                 xModel->lockControllers();
         }
@@ -101,13 +99,11 @@ ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
 
 ScChartLockGuard::~ScChartLockGuard()
 {
-    std::vector< WeakReference< frame::XModel > >::const_iterator aIter = maChartModels.begin();
-    const std::vector< WeakReference< frame::XModel > >::const_iterator aEnd = maChartModels.end();
-    for( ; aIter != aEnd; ++aIter )
+    for( const auto& rxChartModel : maChartModels )
     {
         try
         {
-            Reference< frame::XModel > xModel( *aIter );
+            Reference< frame::XModel > xModel( rxChartModel );
             if( xModel.is())
                 xModel->unlockControllers();
         }
