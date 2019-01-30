@@ -11,7 +11,7 @@
 #pragma once
 
 #include <cppuhelper/compbase.hxx>
-#include <Qt5Clipboard.hxx>
+#include "Qt5Clipboard.hxx"
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
