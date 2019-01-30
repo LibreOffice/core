@@ -804,8 +804,9 @@ bool SwCursorShell::MoveFieldType(
 
         if( bDelField )
         {
-            delete static_cast<SwFormatField*>(&pTextField->GetAttr());
+            auto const pFormat(static_cast<SwFormatField*>(&pTextField->GetAttr()));
             delete pTextField;
+            delete pFormat;
         }
 
         if( it != aSrtLst.end() && isSrch ) // found
