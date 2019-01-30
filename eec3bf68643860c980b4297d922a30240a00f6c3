@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_c17d57e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-30T16:39:40Z",
+      "side": 1,
+      "message": "see the mail thread starting at \u003chttps://sourceware.org/ml/libc-help/2019-01/msg00058.html\u003e \"math_errhandling getting undef\u0027ed for -std\u003dgnu11?\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "eec3bf68643860c980b4297d922a30240a00f6c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
