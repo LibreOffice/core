@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_debbf2e2",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-01-30T05:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f485f77_057dc91b",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 21
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_e5798d2f",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_bed71624",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-01-30T05:24:48Z",
+      "side": 1,
+      "message": "No, we can create hBmp in ImplCreareVirDevBitmap even if hDC was not\ninitialized properly.\n\n    HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)\n    {\n        HBITMAP hBitmap;\n\n         if ( nBitCount \u003d\u003d 1 )\n         {\n             hBitmap \u003d CreateBitmap( static_cast\u003cint\u003e(nDX), static_cast\u003cint\u003e(nDY), 1, 1, nullptr );\n             SAL_WARN_IF( !hBitmap, \"vcl\", \"CreateBitmap failed: \" \u003c\u003c WindowsErrorString( GetLastError() ) );\n             ppData \u003d nullptr;\n         }\n         ...\n    }\n\nNot sure if it is a valid case, but we definitely should not change this\nbehaviour in the current patch.",
+      "parentUuid": "1f485f77_e5798d2f",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 84
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c576913f",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2019-01-21T00:56:11Z",
       "side": 1,
       "message": "useless parentheses",
+      "range": {
+        "startLine": 127,
+        "startChar": 28,
+        "endLine": 127,
+        "endChar": 29
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9edc5a47",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-01-30T05:24:48Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "1f485f77_c576913f",
       "range": {
         "startLine": 127,
         "startChar": 28,
