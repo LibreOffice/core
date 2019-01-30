@@ -1129,5 +1129,76 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
     CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[9]/body/txt[2]", ""));
 }
 
+
+DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecounttest.ods", "Sheet1")
+{
+    executeMailMerge(true);
+
+    for (int doc = 0; doc < 4; ++doc)
+    {
+        loadMailMergeDocument(doc);
+
+        // get document properties
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(), uno::UNO_QUERY_THROW);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect0(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSect1(xSections->getByIndex(1), uno::UNO_QUERY_THROW);
+
+        OUString sFieldPageCount;
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+        if (xFields.is())
+        {
+            while (xFields->hasMoreElements())
+            {
+                uno::Any aField = xFields->nextElement();
+                uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+                if (xServiceInfo->supportsService("com.sun.star.text.textfield.PageCount"))
+                {
+                    uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
+                    sFieldPageCount = xField->getAnchor()->getString();
+                }
+            }
+        }
+
+        switch (doc)
+        {
+        case 0:
+            // both sections visible, page num is 2
+            CPPUNIT_ASSERT_EQUAL(2, getPages());
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect1, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(OUString("2"), sFieldPageCount);
+            break;
+        case 1:
+            // second section hidden, page num is 1
+            CPPUNIT_ASSERT_EQUAL(1, getPages());
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect1, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(OUString("1"), sFieldPageCount);
+            break;
+        case 2:
+            // first section hidden, page num is 1
+            CPPUNIT_ASSERT_EQUAL(1, getPages());
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect0, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect1, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(OUString("1"), sFieldPageCount);
+            break;
+        case 3:
+            // both sections hidden, page num is 1
+            CPPUNIT_ASSERT_EQUAL(1, getPages());
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect0, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect1, "IsCurrentlyVisible"));
+            CPPUNIT_ASSERT_EQUAL(OUString("1"), sFieldPageCount);
+            break;
+        }
+    }
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
