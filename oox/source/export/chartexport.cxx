@@ -26,6 +26,7 @@
 #include <drawingml/chart/typegroupconverter.hxx>
 
 #include <cstdio>
+#include <iterator>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
