@@ -16,6 +16,24 @@
       "revId": "34fcd7ad5b3f8be0bec3bc7dc1fb496abe2bbf74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5e6ca235",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-01-30T09:59:40Z",
+      "side": 1,
+      "message": "I added the assert() to assure aRes.TokenType is not set when reaching here (it really should not, but..). Later we can remove setting the error then.",
+      "parentUuid": "1f485f77_7eaf5e94",
+      "revId": "34fcd7ad5b3f8be0bec3bc7dc1fb496abe2bbf74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
