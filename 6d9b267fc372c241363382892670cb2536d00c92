@@ -45,6 +45,30 @@
       "revId": "6d9b267fc372c241363382892670cb2536d00c92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b43bb79a",
+        "filename": "sd/source/ui/slideshow/slideshow.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-01-30T21:25:56Z",
+      "side": 1,
+      "message": "Bug met Bug :P .",
+      "parentUuid": "1f485f77_612463c7",
+      "range": {
+        "startLine": 1118,
+        "startChar": 51,
+        "endLine": 1118,
+        "endChar": 53
+      },
+      "revId": "6d9b267fc372c241363382892670cb2536d00c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
