@@ -410,9 +410,7 @@ void GalleryBrowser1::Resize()
 void GalleryBrowser1::GetFocus()
 {
     Control::GetFocus();
-    if( maNewTheme->IsEnabled() )
-        maNewTheme->GrabFocus();
-    else
+    if( mpThemes )
         mpThemes->GrabFocus();
 }
 

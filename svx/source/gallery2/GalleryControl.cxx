@@ -185,35 +185,25 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt )
     {
         if( !rKEvt.GetKeyCode().IsShift() )
         {
-            if( mpBrowser1->maNewTheme->HasFocus() )
-                mpBrowser1->mpThemes->GrabFocus();
-            else if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
+                mpBrowser2->GetViewWindow()->GrabFocus();
+            else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser2->maViewBox->GrabFocus();
             else if( mpBrowser2->maViewBox->HasFocus() )
-                mpBrowser2->GetViewWindow()->GrabFocus();
+                mpBrowser1->maNewTheme->GrabFocus();
             else
-            {
-                if( mpBrowser1->maNewTheme->IsEnabled() )
-                    mpBrowser1->maNewTheme->GrabFocus();
-                else
-                    mpBrowser1->mpThemes->GrabFocus();
-            }
+                mpBrowser1->mpThemes->GrabFocus();
         }
         else
         {
-            if( mpBrowser2->GetViewWindow()->HasFocus() )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
+                mpBrowser1->maNewTheme->GrabFocus();
+            else if( mpBrowser1->maNewTheme->HasFocus() )
                 mpBrowser2->maViewBox->GrabFocus();
             else if( mpBrowser2->maViewBox->HasFocus() )
-                mpBrowser1->mpThemes->GrabFocus();
-            else if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
-            {
-                if( mpBrowser1->maNewTheme->IsEnabled() )
-                    mpBrowser1->maNewTheme->GrabFocus();
-                else
-                    mpBrowser2->GetViewWindow()->GrabFocus();
-            }
-            else
                 mpBrowser2->GetViewWindow()->GrabFocus();
+            else
+                mpBrowser1->mpThemes->GrabFocus();
         }
     }
 
