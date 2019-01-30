@@ -861,35 +861,28 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 
 void FillControl::Resize()
 {
-    // Relative width of the two list boxes is 2/5 : 3/5
     Size aSize(GetOutputSizePixel());
-    long nW = aSize.Width() / 5;
     long nH = aSize.Height();
 
-    long nPrefHeight = mpLbFillType->get_preferred_size().Height();
+    Size aTypeSize(mpLbFillType->get_preferred_size());
+    long nPrefHeight = aTypeSize.Height();
     long nOffset = (nH - nPrefHeight)/2;
-    mpLbFillType->SetPosSizePixel(Point(0, nOffset), Size(nW * 2, nPrefHeight));
+    mpLbFillType->SetPosSizePixel(Point(0, nOffset), Size(aTypeSize.Width(), nPrefHeight));
     nPrefHeight = mpToolBoxColor->get_preferred_size().Height();
     nOffset = (nH - nPrefHeight)/2;
-    mpToolBoxColor->SetPosSizePixel(Point(nW * 2, nOffset),Size(nW * 3, nPrefHeight));
+    mpToolBoxColor->SetPosSizePixel(Point(aTypeSize.Width(), nOffset),Size(aSize.Width() - aTypeSize.Width(), nPrefHeight));
     nPrefHeight = mpLbFillType->get_preferred_size().Height();
     nOffset = (nH - nPrefHeight)/2;
-    mpLbFillAttr->SetPosSizePixel(Point(nW * 2, nOffset),Size(nW * 3, nPrefHeight));
+    mpLbFillAttr->SetPosSizePixel(Point(aTypeSize.Width(), nOffset),Size(aSize.Width() - aTypeSize.Width(), nPrefHeight));
 }
 
 void FillControl::SetOptimalSize()
 {
-    const Size aLogicalAttrSize(50,0);
-    Size aSize(LogicToPixel(aLogicalAttrSize, MapMode(MapUnit::MapAppFont)));
-
-    Point aAttrPnt = mpLbFillAttr->GetPosPixel();
-
-    aSize.setHeight( std::max(aSize.Height(), mpLbFillType->get_preferred_size().Height()) );
-    aSize.setHeight( std::max(aSize.Height(), mpToolBoxColor->get_preferred_size().Height()) );
-    aSize.setHeight( std::max(aSize.Height(), mpLbFillAttr->get_preferred_size().Height()) );
-
-    aSize.setWidth( aAttrPnt.X() + aSize.Width() );
-
+    Size aSize(mpLbFillType->get_preferred_size());
+    Size aFirstSize(mpToolBoxColor->get_preferred_size());
+    Size aSecondSize(mpLbFillAttr->get_preferred_size());
+    aSize.setHeight(std::max({aSize.Height(), aFirstSize.Height(), aSecondSize.Height()}));
+    aSize.setWidth(aSize.Width() + LogicToPixel(Size(55, 0), MapMode(MapUnit::MapAppFont)).Width());
     SetSizePixel(aSize);
 }
 
