@@ -111,6 +111,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL) )
+    ,aStatusBar( VclPtr<StatusBar>::Create(this) )
 {
     ConstructImpl( nMode );
 }
@@ -137,6 +138,7 @@ void BrowseBox::dispose()
     pDataWin.disposeAndClear();
     pVScroll.disposeAndClear();
     aHScroll.disposeAndClear();
+    aStatusBar.disposeAndClear();
 
     // free columns-space
     mvCols.clear();
@@ -2076,11 +2078,11 @@ bool BrowseBox::ReserveControlArea(sal_uInt16 nWidth)
 
 tools::Rectangle BrowseBox::GetControlArea() const
 {
-
+    auto nHeight = aHScroll->GetSizePixel().Height();
     return tools::Rectangle(
-        Point( 0, GetOutputSizePixel().Height() - aHScroll->GetSizePixel().Height() ),
+        Point( 0, GetOutputSizePixel().Height() - nHeight ),
         Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
-             aHScroll->GetSizePixel().Height() ) );
+             nHeight ) );
 }
 
 void BrowseBox::SetMode( BrowserMode nMode )

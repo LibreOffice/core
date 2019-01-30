@@ -475,9 +475,7 @@ void BrowseBox::Resize()
     pDataWin->bResizeOnPaint = false;
 
     // calc the size of the scrollbars
-    // (we can't ask the scrollbars for their widths cause if we're zoomed they still have to be
-    // resized - which is done in UpdateScrollbars)
-    sal_uLong nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nSBSize = GetBarHeight();
     if (IsZoom())
         nSBSize = static_cast<sal_uLong>(nSBSize * static_cast<double>(GetZoom()));
 
@@ -1028,6 +1026,17 @@ void BrowseBox::PaintData( vcl::Window const & rWin, vcl::RenderContext& rRender
     ImplPaintData(rRenderContext, rRect, false);
 }
 
+long BrowseBox::GetBarHeight() const
+{
+    // tdf#115941 because some platforms have things like overlay scrollbars, take a max
+    // of a statusbar height and a scrollbar height as the control area height
+
+    // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
+    // resized - which is done in UpdateScrollbars)
+
+    return std::max(aStatusBar->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
+}
+
 void BrowseBox::UpdateScrollbars()
 {
 
@@ -1043,7 +1052,7 @@ void BrowseBox::UpdateScrollbars()
     pDataWin->bInUpdateScrollbars = true;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
-    sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nCornerSize = GetBarHeight();
     if (IsZoom())
         nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
@@ -1940,7 +1949,7 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     long nY = aRowBar.Top() - aRect.Top();
     Size aSize(aRect.GetSize());
 
-    return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - aHScroll->GetSizePixel().Height()) );
+    return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - GetBarHeight()) );
 }
 
 tools::Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
