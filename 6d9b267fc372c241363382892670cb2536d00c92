@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f485f77_212e6ba5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-30T18:46:26Z",
+      "side": 1,
+      "message": "Let\u0027s also make commit message more useful:\n\ntdf#98143: provide a title for fullscreen slide show\n\n-\u003e This version does not repeat the bug title, but provides a short description what this patch does.\n\nFor this specific patch, frankly speaking, nothing more than the commit message title is needed. Your following lines just repeat what is obvious in the code itself. In more involved cases, it\u0027s good to explain what is not visible/obvious in code, or in bug, e.g. your findings or assumptions (if they aren\u0027t in inline comments)...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "6d9b267fc372c241363382892670cb2536d00c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_612463c7",
         "filename": "sd/source/ui/slideshow/slideshow.cxx",
         "patchSetId": 7
