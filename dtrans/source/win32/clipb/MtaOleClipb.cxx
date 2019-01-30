@@ -61,7 +61,6 @@ namespace /* private */
 
     const sal_uInt32 MAX_WAITTIME                   = 10000;  // msec
     const sal_uInt32 MAX_WAIT_SHUTDOWN              = 10000; // msec
-    const sal_uInt32 MAX_CLIPEVENT_PROCESSING_TIME  = 5000;  // msec
 
     const bool MANUAL_RESET                     = true;
     const bool INIT_NONSIGNALED                 = false;
