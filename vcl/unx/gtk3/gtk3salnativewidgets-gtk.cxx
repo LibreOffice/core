@@ -1168,14 +1168,17 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
 
 #define FALLBACK_ARROW_SIZE gint(11 * 0.85)
 
-tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
+tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(ControlType nType,
                                                    ControlPart nPart,
                                                    tools::Rectangle aAreaRect )
 {
     tools::Rectangle    aButtonRect;
 
     GtkBorder padding;
-    gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
+    if (nType == ControlType::Listbox)
+        gtk_style_context_get_padding(mpListboxButtonStyle, gtk_style_context_get_state(mpListboxButtonStyle), &padding);
+    else
+        gtk_style_context_get_padding(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
     gint nArrowWidth = FALLBACK_ARROW_SIZE;
     if (gtk_check_version(3, 20, 0) == nullptr)
@@ -1228,7 +1231,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     // plus its actual draw rect excluding adornment
     areaRect = rControlRectangle;
 
-    buttonRect = NWGetComboBoxButtonRect( ControlPart::ButtonDown, areaRect );
+    buttonRect = NWGetComboBoxButtonRect(ControlType::Combobox, ControlPart::ButtonDown, areaRect);
 
     tools::Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
@@ -2787,12 +2790,12 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     else if ( (nType==ControlType::Combobox) &&
               ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
+        aEditRect = NWGetComboBoxButtonRect(nType, nPart, rControlRegion);
     }
     else if ( (nType==ControlType::Listbox) &&
               ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
+        aEditRect = NWGetComboBoxButtonRect(nType, nPart, rControlRegion);
     }
     else if (nType == ControlType::Editbox && nPart == ControlPart::Entire)
     {
