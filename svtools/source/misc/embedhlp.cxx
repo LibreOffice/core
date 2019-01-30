@@ -434,12 +434,14 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         mpImpl->mnGraphicVersion++;
     }
 
-    if (bUpdate && !*mpImpl->pGraphic && aOldGraphic)
+    // note that UpdateReplacementOnDemand which resets mpImpl->pGraphic to null may have been called
+    // e.g. when exporting ooo58458-1.odt to doc
+    if (bUpdate && (!mpImpl->pGraphic || !*mpImpl->pGraphic) && aOldGraphic)
     {
         // We used to have an old graphic, tried to update and the update
         // failed. Go back to the old graphic instead of having no graphic at
         // all.
-        (*mpImpl->pGraphic) = aOldGraphic;
+        mpImpl->pGraphic.reset(new Graphic(aOldGraphic));
         SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: update failed");
     }
 }
