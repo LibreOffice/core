@@ -55,6 +55,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 			) \
+			$(if $(filter GCC-INTEL,$(COM)-$(CPUNAME)),-Di386=1) \
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_USE_DEBUG_RUNTIME)) \
