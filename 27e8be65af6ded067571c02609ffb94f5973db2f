@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_81887f1f",
+        "filename": "include/sal/log-areas.dox",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-30T14:55:26Z",
+      "side": 1,
+      "message": "please keep the list sorted",
+      "revId": "27e8be65af6ded067571c02609ffb94f5973db2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
