@@ -98,6 +98,8 @@ public:
 
 private:
     Q_DISABLE_COPY(KDE5FilePicker)
+    // adds the custom controls to the dialog
+    void setupCustomWidgets();
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
