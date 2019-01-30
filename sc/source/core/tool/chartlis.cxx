@@ -125,9 +125,8 @@ ScChartListener::~ScChartListener()
         // Stop listening to all external files.
         ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
         const std::unordered_set<sal_uInt16>& rFileIds = mpExtRefListener->getAllFileIds();
-        std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
-        for (; itr != itrEnd; ++itr)
-            pRefMgr->removeLinkListener(*itr, mpExtRefListener.get());
+        for (const auto& rFileId : rFileIds)
+            pRefMgr->removeLinkListener(rFileId, mpExtRefListener.get());
     }
 }
 
@@ -587,11 +586,11 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
         StartTimer();
 
     // New hidden range listener implementation
-    for (auto itr = maHiddenListeners.begin(); itr != maHiddenListeners.end(); ++itr)
+    for (auto& [pListener, rHiddenRange] : maHiddenListeners)
     {
-        if (itr->second.Intersects(rRange))
+        if (rHiddenRange.Intersects(rRange))
         {
-            itr->first->notify();
+            pListener->notify();
         }
     }
 }
@@ -609,17 +608,13 @@ bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
 {
     // Do not use ScStrCollection::operator==() here that uses IsEqual and Compare.
     // Use ScChartListener::operator==() instead.
-    if (pDoc != r.pDoc || m_Listeners.size() != r.m_Listeners.size())
+    if (pDoc != r.pDoc)
         return false;
 
-    ListenersType::const_iterator it = m_Listeners.begin(), itEnd = m_Listeners.end();
-    ListenersType::const_iterator it2 = r.m_Listeners.begin();
-    for (; it != itEnd; ++it, ++it2)
-    {
-        if (it->first != it2->first || *it->second != *it2->second)
-            return false;
-    }
-    return true;
+    return std::equal(m_Listeners.begin(), m_Listeners.end(), r.m_Listeners.begin(), r.m_Listeners.end(),
+        [](const ListenersType::value_type& lhs, const ListenersType::value_type& rhs) {
+            return (lhs.first == rhs.first) && (*lhs.second == *rhs.second);
+        });
 }
 
 void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )

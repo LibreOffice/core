@@ -482,26 +482,21 @@ void ScChangeAction::GetDescription(
     {
         ScChangeActionMap aMap;
         pCT->GetDependents( pReject, aMap, false, true );
-        ScChangeActionMap::iterator itChangeAction;
-        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
+        ScChangeActionMap::iterator itChangeAction = std::find_if(aMap.begin(), aMap.end(),
+            [&pReject](const ScChangeActionMap::value_type& rEntry) {
+                return rEntry.second->GetType() == SC_CAT_MOVE || pReject->IsDeleteType(); });
+        if (itChangeAction != aMap.end())
         {
             if( itChangeAction->second->GetType() == SC_CAT_MOVE)
-            {
                 aBuf.append(
                     ScResId(STR_CHANGED_MOVE_REJECTION_WARNING));
-                aBuf.append(' ');
-                rStr = aBuf.makeStringAndClear();
-                return;
-            }
-
-            if (pReject->IsDeleteType())
-            {
+            else
                 aBuf.append(
                     ScResId(STR_CHANGED_DELETE_REJECTION_WARNING));
-                aBuf.append(' ');
-                rStr = aBuf.makeStringAndClear();
-                return;
-            }
+
+            aBuf.append(' ');
+            rStr = aBuf.makeStringAndClear();
+            return;
         }
     }
 }
@@ -2127,7 +2122,6 @@ void ScChangeTrack::DtorClear()
 {
     ScChangeAction* p;
     ScChangeAction* pNext;
-    ScChangeActionMap::iterator itChangeAction;
     for ( p = GetFirst(); p; p = pNext )
     {
         pNext = p->GetNext();
@@ -2138,9 +2132,9 @@ void ScChangeTrack::DtorClear()
         pNext = p->GetNext();
         delete p;
     }
-    for( itChangeAction = aPasteCutMap.begin(); itChangeAction != aPasteCutMap.end(); ++itChangeAction )
+    for( auto& rEntry : aPasteCutMap )
     {
-        delete itChangeAction->second;
+        delete rEntry.second;
     }
     pLastCutMove.reset();
     ClearMsgQueue();
@@ -4132,13 +4126,12 @@ bool ScChangeTrack::Accept( ScChangeAction* pAct )
     if ( pAct->IsDeleteType() || pAct->GetType() == SC_CAT_CONTENT )
     {
         ScChangeActionMap aActionMap;
-        ScChangeActionMap::iterator itChangeAction;
 
         GetDependents( pAct, aActionMap, false, true );
 
-        for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
+        for( auto& rEntry : aActionMap )
         {
-            itChangeAction->second->Accept();
+            rEntry.second->Accept();
         }
     }
     pAct->Accept();

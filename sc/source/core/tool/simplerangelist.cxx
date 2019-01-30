@@ -132,10 +132,8 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
         // This should never happen!
         return;
 
-    list<Range>::iterator itr = pRef->begin(), itrEnd = pRef->end();
-    for (; itr != itrEnd; ++itr)
+    for (Range& r : *pRef)
     {
-        Range& r = *itr;
         if (r.mnCol2 < nCol)
             // insertion point to the right of the range.
             continue;
@@ -157,14 +155,10 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
 void ScSimpleRangeList::getRangeList(list<ScRange>& rList) const
 {
     list<ScRange> aList;
-    for (TabType::const_iterator itrTab = maTabs.begin(), itrTabEnd = maTabs.end(); itrTab != itrTabEnd; ++itrTab)
+    for (const auto& [nTab, pRanges] : maTabs)
     {
-        SCTAB nTab = itrTab->first;
-        const RangeListRef& pRanges = itrTab->second;
-        list<Range>::const_iterator itr = pRanges->begin(), itrEnd = pRanges->end();
-        for (; itr != itrEnd; ++itr)
+        for (const Range& r : *pRanges)
         {
-            const Range& r = *itr;
             aList.emplace_back(r.mnCol1, r.mnRow1, nTab, r.mnCol2, r.mnRow2, nTab);
         }
     }

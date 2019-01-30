@@ -879,20 +879,10 @@ void ScRangeName::clear()
 
 bool ScRangeName::operator== (const ScRangeName& r) const
 {
-    if (m_Data.size() != r.m_Data.size())
-    {
-        return false;
-    }
-    for (auto iter1 = m_Data.begin(), iter2 = r.m_Data.begin();
-         iter1 != m_Data.end();
-         ++iter1, ++iter2)
-    {
-        if (!(iter1->first == iter2->first && *iter1->second == *iter2->second))
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::equal(m_Data.begin(), m_Data.end(), r.m_Data.begin(), r.m_Data.end(),
+        [](const DataType::value_type& lhs, const DataType::value_type& rhs) {
+            return (lhs.first == rhs.first) && (*lhs.second == *rhs.second);
+        });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

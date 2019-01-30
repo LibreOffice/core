@@ -135,10 +135,8 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSr
                     ::std::vector< ScRangeList > aRangesVector;
                     pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
 
-                    ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
-                    for( ; aIt!=aRangesVector.end(); ++aIt )
+                    for( ScRangeList& rScRangeList : aRangesVector )
                     {
-                        ScRangeList& rScRangeList( *aIt );
                         lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
                     }
                     pDestDoc->SetChartRanges( aChartName, aRangesVector );

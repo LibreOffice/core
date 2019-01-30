@@ -111,9 +111,8 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     p->bValid = true;
     p->Broadcast( ScHint(SfxHintId::ScDataChanged, ScAddress()) );
 
-    for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )
+    for ( ScDocument* pDoc : *p->pDocs )
     {
-        ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     }

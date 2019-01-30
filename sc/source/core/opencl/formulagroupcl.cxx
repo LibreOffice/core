@@ -2340,10 +2340,9 @@ public:
     virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) override
     {
         unsigned i = 0;
-        for (SubArgumentsType::iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
-            ++it)
+        for (const auto& rxSubArgument : mvSubArguments)
         {
-            i += (*it)->Marshal(k, argno + i, nVectorWidth, pProgram);
+            i += rxSubArgument->Marshal(k, argno + i, nVectorWidth, pProgram);
         }
         if (dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
         {
@@ -2353,10 +2352,9 @@ public:
             cl_mem pClmem2;
 
             std::vector<cl_mem> vclmem;
-            for (SubArgumentsType::iterator it = mvSubArguments.begin(),
-                e = mvSubArguments.end(); it != e; ++it)
+            for (const auto& rxSubArgument : mvSubArguments)
             {
-                if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
+                if (VectorRef* VR = dynamic_cast<VectorRef*>(rxSubArgument.get()))
                     vclmem.push_back(VR->GetCLBuffer());
                 else
                     vclmem.push_back(nullptr);
@@ -2422,12 +2420,11 @@ public:
                 size_t nCurWindowSize = slidingArgPtr->GetWindowSize();
                 std::vector<SumIfsArgs> vclmem;
 
-                for (SubArgumentsType::iterator it = mvSubArguments.begin(),
-                    e = mvSubArguments.end(); it != e; ++it)
+                for (const auto& rxSubArgument : mvSubArguments)
                 {
-                    if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
+                    if (VectorRef* VR = dynamic_cast<VectorRef*>(rxSubArgument.get()))
                         vclmem.emplace_back(VR->GetCLBuffer());
-                    else if (DynamicKernelConstantArgument* CA = dynamic_cast<DynamicKernelConstantArgument*>(it->get()))
+                    else if (DynamicKernelConstantArgument* CA = dynamic_cast<DynamicKernelConstantArgument*>(rxSubArgument.get()))
                         vclmem.emplace_back(CA->GetDouble());
                     else
                         vclmem.emplace_back(nullptr);
@@ -3880,16 +3877,14 @@ void DynamicKernel::CodeGen()
     // preambles
     decl << publicFunc;
     DK->DumpInlineFun(inlineDecl, inlineFun);
-    for (std::set<std::string>::iterator set_iter = inlineDecl.begin();
-        set_iter != inlineDecl.end(); ++set_iter)
+    for (const auto& rItem : inlineDecl)
     {
-        decl << *set_iter;
+        decl << rItem;
     }
 
-    for (std::set<std::string>::iterator set_iter = inlineFun.begin();
-        set_iter != inlineFun.end(); ++set_iter)
+    for (const auto& rItem : inlineFun)
     {
-        decl << *set_iter;
+        decl << rItem;
     }
     mSyms.DumpSlidingWindowFunctions(decl);
     mKernelSignature = DK->DumpOpName();

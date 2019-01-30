@@ -98,11 +98,12 @@ ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
 SCROW ScLookupCache::lookup( const QueryCriteria & rCriteria ) const
 {
     // try to find the row index for which we have already performed lookup
-    for (auto it = maQueryMap.begin(); it != maQueryMap.end(); ++it)
-    {
-        if (it->second.maCriteria == rCriteria)
-            return it->first.mnRow;
-    }
+    auto it = std::find_if(maQueryMap.begin(), maQueryMap.end(),
+        [&rCriteria](const std::pair<QueryKey, QueryCriteriaAndResult>& rEntry) {
+            return rEntry.second.maCriteria == rCriteria;
+        });
+    if (it != maQueryMap.end())
+        return it->first.mnRow;
 
     // not found
     return -1;

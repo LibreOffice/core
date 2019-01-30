@@ -6148,10 +6148,12 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     return;
                 }
 
-                std::vector<sal_uInt32>::iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
                 std::vector<double>::const_iterator itThisRes = aResValues.begin();
-                for (; itRes != itResEnd; ++itRes, ++itThisRes)
-                    *itRes += *itThisRes;
+                for (auto& rCondition : vConditions)
+                {
+                    rCondition += *itThisRes;
+                    ++itThisRes;
+                }
             }
             else
             {

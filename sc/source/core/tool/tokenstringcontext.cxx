@@ -52,9 +52,8 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     // Fetch all sheet names.
     maTabNames = pDoc->GetAllTableNames();
     {
-        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
-        for (; it != itEnd; ++it)
-            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
+        for (auto& rTabName : maTabNames)
+            ScCompiler::CheckTabQuotes(rTabName, formula::FormulaGrammar::extractRefConvention(eGram));
     }
 
     // Fetch all named range names.
@@ -66,14 +65,11 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     {
         ScRangeName::TabNameCopyMap aTabRangeNames;
         pDoc->GetAllTabRangeNames(aTabRangeNames);
-        ScRangeName::TabNameCopyMap::const_iterator it = aTabRangeNames.begin(), itEnd = aTabRangeNames.end();
-        for (; it != itEnd; ++it)
+        for (const auto& [nTab, pSheetNames] : aTabRangeNames)
         {
-            const ScRangeName* pSheetNames = it->second;
             if (!pSheetNames)
                 continue;
 
-            SCTAB nTab = it->first;
             IndexNameMapType aNames;
             insertAllNames(aNames, *pSheetNames);
             maSheetRangeNames.emplace(nTab, aNames);
@@ -85,10 +81,9 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     if (pDBs)
     {
         const ScDBCollection::NamedDBs& rNamedDBs = pDBs->getNamedDBs();
-        ScDBCollection::NamedDBs::const_iterator it = rNamedDBs.begin(), itEnd = rNamedDBs.end();
-        for (; it != itEnd; ++it)
+        for (const auto& rxNamedDB : rNamedDBs)
         {
-            const ScDBData& rData = **it;
+            const ScDBData& rData = *rxNamedDB;
             maNamedDBs.emplace(rData.GetIndex(), rData.GetName());
         }
     }
@@ -126,9 +121,8 @@ void CompileFormulaContext::updateTabNames()
     // Fetch all sheet names.
     maTabNames = mpDoc->GetAllTableNames();
     {
-        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
-        for (; it != itEnd; ++it)
-            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGram));
+        for (auto& rTabName : maTabNames)
+            ScCompiler::CheckTabQuotes(rTabName, formula::FormulaGrammar::extractRefConvention(meGram));
     }
 }
 

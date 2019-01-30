@@ -2441,18 +2441,14 @@ void ScInterpreter::ScIntersect()
 
         ScTokenRef xRes = new ScRefListToken;
         ScRefList* pRefList = xRes->GetRefList();
-        ScRefList::const_iterator end1( x1->GetRefList()->end());
-        ScRefList::const_iterator end2( x2->GetRefList()->end());
-        for (ScRefList::const_iterator it1( x1->GetRefList()->begin());
-                it1 != end1; ++it1)
+        for (const auto& rRef1 : *x1->GetRefList())
         {
-            const ScAddress& r11 = (*it1).Ref1.toAbs(aPos);
-            const ScAddress& r12 = (*it1).Ref2.toAbs(aPos);
-            for (ScRefList::const_iterator it2( x2->GetRefList()->begin());
-                    it2 != end2; ++it2)
+            const ScAddress& r11 = rRef1.Ref1.toAbs(aPos);
+            const ScAddress& r12 = rRef1.Ref2.toAbs(aPos);
+            for (const auto& rRef2 : *x2->GetRefList())
             {
-                const ScAddress& r21 = (*it2).Ref1.toAbs(aPos);
-                const ScAddress& r22 = (*it2).Ref2.toAbs(aPos);
+                const ScAddress& r21 = rRef2.Ref1.toAbs(aPos);
+                const ScAddress& r22 = rRef2.Ref2.toAbs(aPos);
                 SCCOL nCol1 = ::std::max( r11.Col(), r21.Col());
                 SCROW nRow1 = ::std::max( r11.Row(), r21.Row());
                 SCTAB nTab1 = ::std::max( r11.Tab(), r21.Tab());
@@ -2616,11 +2612,9 @@ void ScInterpreter::ScUnionFunc()
             case svRefList:
                 {
                     const ScRefList* p = pt[i]->GetRefList();
-                    ScRefList::const_iterator it( p->begin());
-                    ScRefList::const_iterator end( p->end());
-                    for ( ; it != end; ++it)
+                    for (const auto& rRef : *p)
                     {
-                        pRes->push_back( *it);
+                        pRes->push_back( rRef);
                     }
                 }
                 break;

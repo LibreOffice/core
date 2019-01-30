@@ -242,9 +242,8 @@ std::vector<OUString> &ScCompiler::GetSetupTabNames() const
     if (pDoc && rTabNames.empty())
     {
         rTabNames = pDoc->GetAllTableNames();
-        std::vector<OUString>::iterator it = rTabNames.begin(), itEnd = rTabNames.end();
-        for (; it != itEnd; ++it)
-            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
+        for (auto& rTabName : rTabNames)
+            ScCompiler::CheckTabQuotes(rTabName, formula::FormulaGrammar::extractRefConvention(meGrammar));
     }
 
     return rTabNames;
@@ -3559,11 +3558,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             //  Loop through the found positions, similar to the inner part of the loop in the "else" branch.
             //  The order of addresses in the vector is the same as from ScCellIterator.
 
-            ScAutoNameAddresses::const_iterator aEnd(rAddresses.end());
-            for ( ScAutoNameAddresses::const_iterator aAdrIter(rAddresses.begin()); aAdrIter != aEnd; ++aAdrIter )
+            for ( const ScAddress& aAddress : rAddresses )
             {
-                ScAddress aAddress( *aAdrIter );        // cell address with an equal string
-
                 if ( bFound )
                 {   // stop if everything else is further away
                     if ( nMax < static_cast<long>(aAddress.Col()) )

@@ -158,11 +158,10 @@ bool ScRefTokenHelper::getRangeFromToken(
 void ScRefTokenHelper::getRangeListFromTokens(
     ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens, const ScAddress& rPos)
 {
-    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rToken : rTokens)
     {
         ScRange aRange;
-        getRangeFromToken(aRange, *itr, rPos);
+        getRangeFromToken(aRange, rToken, rPos);
         rRangeList.push_back(aRange);
     }
 }
@@ -235,10 +234,8 @@ bool ScRefTokenHelper::intersects(
     ScRange aRange;
     getRangeFromToken(aRange, pToken, rPos, bExternal);
 
-    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
-    for (; itr != itrEnd; ++itr)
+    for (const ScTokenRef& p : rTokens)
     {
-        const ScTokenRef& p = *itr;
         if (!isRef(p))
             continue;
 
@@ -318,11 +315,8 @@ private:
         svl::SharedString aTabName = bExternal ? pToken->GetString() : svl::SharedString::getEmptyString();
 
         bool bJoined = false;
-        vector<ScTokenRef>::iterator itr = rTokens.begin(), itrEnd = rTokens.end();
-        for (; itr != itrEnd; ++itr)
+        for (ScTokenRef& pOldToken : rTokens)
         {
-            ScTokenRef& pOldToken = *itr;
-
             if (!ScRefTokenHelper::isRef(pOldToken))
                 // A non-ref token should not have been added here in the first
                 // place!

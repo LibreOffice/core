@@ -854,11 +854,9 @@ void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 
 void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 {
-    ScRefList::const_iterator it( rRefList.begin());
-    ScRefList::const_iterator end( rRefList.end());
-    for ( ; it != end; ++it)
+    for (const auto& rRef : rRefList)
     {
-        ValidateRef( *it);
+        ValidateRef( rRef);
     }
 }
 
@@ -3570,12 +3568,9 @@ void ScInterpreter::ScTableOp()
     {
         pTableOp->aNotifiedFormulaPos = pDok->aLastTableOpParams.aNotifiedFormulaPos;
         pTableOp->bRefresh = true;
-        for ( ::std::vector< ScAddress >::const_iterator iBroadcast(
-                    pTableOp->aNotifiedFormulaPos.begin() );
-                iBroadcast != pTableOp->aNotifiedFormulaPos.end();
-                ++iBroadcast )
+        for ( const auto& rPos : pTableOp->aNotifiedFormulaPos )
         {   // emulate broadcast and indirectly collect cell pointers
-            ScRefCellValue aCell(*pDok, *iBroadcast);
+            ScRefCellValue aCell(*pDok, rPos);
             if (aCell.meType == CELLTYPE_FORMULA)
                 aCell.mpFormula->SetTableOpDirty();
         }
@@ -3610,12 +3605,9 @@ void ScInterpreter::ScTableOp()
     }
 
     // set dirty again once more to be able to recalculate original
-    for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast(
-                pTableOp->aNotifiedFormulaCells.begin() );
-            iBroadcast != pTableOp->aNotifiedFormulaCells.end();
-            ++iBroadcast )
+    for ( const auto& pCell : pTableOp->aNotifiedFormulaCells )
     {
-        (*iBroadcast)->SetTableOpDirty();
+        pCell->SetTableOpDirty();
     }
 
     // save these params for next incarnation
@@ -3631,12 +3623,9 @@ void ScInterpreter::ScTableOp()
     // Reset all dirty flags so next incarnation does really collect all cell
     // pointers during notifications and not just non-dirty ones, which may
     // happen if a formula cell is used by more than one TableOp block.
-    for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast2(
-                pTableOp->aNotifiedFormulaCells.begin() );
-            iBroadcast2 != pTableOp->aNotifiedFormulaCells.end();
-            ++iBroadcast2 )
+    for ( const auto& pCell : pTableOp->aNotifiedFormulaCells )
     {
-        (*iBroadcast2)->ResetTableOpDirtyVar();
+        pCell->ResetTableOpDirtyVar();
     }
     pTableOp.reset();
 

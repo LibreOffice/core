@@ -150,14 +150,12 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
         const OUString& aSearch( aLanguageTag.getBcp47());
 
         // First, check exact match without fallback overhead.
-        ::std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());
-        for ( ; itNames != rCompNames.end(); ++itNames)
+        ::std::vector<LocalizedName>::const_iterator itNames = std::find_if(rCompNames.begin(), rCompNames.end(),
+            [&aSearch](const LocalizedName& rName) { return rName.maLocale == aSearch; });
+        if (itNames != rCompNames.end())
         {
-            if ((*itNames).maLocale == aSearch)
-            {
-                rRetExcelName = (*itNames).maName;
-                return true;
-            }
+            rRetExcelName = (*itNames).maName;
+            return true;
         }
 
         // Second, try match of fallback search with fallback locales,
@@ -171,22 +169,16 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
                 aFallbackSearch.emplace_back("en");
             }
         }
-        ::std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
-        for ( ; itSearch != aFallbackSearch.end(); ++itSearch)
+        for (const auto& rSearch : aFallbackSearch)
         {
-            itNames = rCompNames.begin();
-            for ( ; itNames != rCompNames.end(); ++itNames)
+            for (const auto& rCompName : rCompNames)
             {
                 // We checked already the full tag, start with second.
-                ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings( false));
-                for (::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
-                        itLocales != aFallbackLocales.end(); ++itLocales)
+                ::std::vector< OUString > aFallbackLocales( LanguageTag( rCompName.maLocale).getFallbackStrings( false));
+                if (std::find(aFallbackLocales.begin(), aFallbackLocales.end(), rSearch) != aFallbackLocales.end())
                 {
-                    if (*itLocales == *itSearch)
-                    {
-                        rRetExcelName = (*itNames).maName;
-                        return true;
-                    }
+                    rRetExcelName = rCompName.maName;
+                    return true;
                 }
             }
         }
@@ -605,17 +597,16 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
         if ( pFuncData )
         {
             const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
-            ::std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
-            for ( ; it != rNames.end(); ++it)
+            auto bFound = std::any_of(rNames.begin(), rNames.end(),
+                [&aUpperCmp](const ScUnoAddInFuncData::LocalizedName& rName) {
+                    return ScGlobal::pCharClass->uppercase( rName.maName ) == aUpperCmp; });
+            if (bFound)
             {
-                if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
-                {
-                    //TODO: store upper case for comparing?
+                //TODO: store upper case for comparing?
 
-                    //  use the first function that has this name for any language
-                    rRetCalcName = pFuncData->GetOriginalName();
-                    return true;
-                }
+                //  use the first function that has this name for any language
+                rRetCalcName = pFuncData->GetOriginalName();
+                return true;
             }
         }
     }
