@@ -815,10 +815,10 @@ PersonaInfo parseSingleResponse(const std::string& rResponse)
         return PersonaInfo();
     }
 
-    auto theme_data = aDocumentRoot.child("theme_data");
-
     try
     {
+        auto theme_data = aDocumentRoot.child("theme_data");
+
         PersonaInfo aNewPersona = {
             OUString(),
             OStringToOUString( OString(theme_data.child("name").string_value().get()),
