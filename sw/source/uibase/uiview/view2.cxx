@@ -1448,7 +1448,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
                         nFac = std::min( nFac, nVisPercent );
 
-                        aZoomSliderItem.AddSnappingPoint( nFac );
+                        if (nFac >= MINZOOM)
+                        {
+                            aZoomSliderItem.AddSnappingPoint( nFac );
+                        }
 
                         if ( bAutomaticViewLayout )
                         {
