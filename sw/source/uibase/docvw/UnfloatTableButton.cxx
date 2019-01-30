@@ -114,12 +114,24 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     // of the text node otherwise LO will create a page break after the table
     if (pTextFrame->GetTextNodeFirst())
     {
-        SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-                        svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
-        aSet.Put(SwFormatPageDesc(nullptr));
-        SwPaM aPaM(*pTextFrame->GetTextNodeFirst());
-        rDoc.getIDocumentContentOperations().InsertItemSet(aPaM, aSet, SetAttrMode::DEFAULT,
-                                                           GetPageFrame()->getRootFrame());
+        const SwPageDesc* pPageDesc
+            = pTextFrame->GetPageDescItem().GetPageDesc(); // First text node of the page has this
+        if (pPageDesc)
+        {
+            // First set the existing page desc for the table node
+            SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
+                            svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
+            aSet.Put(SwFormatPageDesc(pPageDesc));
+            SwPaM aPaMTable(*pTableNode);
+            rDoc.getIDocumentContentOperations().InsertItemSet(
+                aPaMTable, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
+
+            // Then remove pagedesc from the attributes of the text node
+            aSet.Put(SwFormatPageDesc(nullptr));
+            SwPaM aPaMTextNode(*pTextFrame->GetTextNodeFirst());
+            rDoc.getIDocumentContentOperations().InsertItemSet(
+                aPaMTextNode, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
+        }
     }
 
     // Move the table outside of the text frame
