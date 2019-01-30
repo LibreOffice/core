@@ -93,12 +93,12 @@ namespace
         return convertedGuid;
     }
 
-    inline bool IsSetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
+    bool IsSetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
         return (GetMsiPropertyW(handle, sProperty).length() > 0);
     }
 
-    inline void SetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
+    void SetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
         MsiSetPropertyW(handle, sProperty.c_str(), L"1");
     }

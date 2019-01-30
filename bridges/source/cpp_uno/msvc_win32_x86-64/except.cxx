@@ -265,7 +265,7 @@ namespace CPPU_CURRENT_NAMESPACE
     static int mscx_getRTTI_len(OUString const & rUNOname);
 
 
-static inline OUString toUNOname(
+static OUString toUNOname(
     OUString const & rRTTIname )
     throw ()
 {
@@ -285,7 +285,7 @@ static inline OUString toUNOname(
     return aRet.makeStringAndClear();
 }
 
-static inline OUString toRTTIname(
+static OUString toRTTIname(
     OUString const & rUNOname )
     throw ()
 {

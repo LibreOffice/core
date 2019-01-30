@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <vector>
 using std::min;
-static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { memcpy(dest, source, length*sizeof(sal_Unicode)); }
+static void copy_ustr_n( void *dest, const void *source, size_t length ) { memcpy(dest, source, length*sizeof(sal_Unicode)); }
 
 #define LINES_INI       32
 #define LINES_ADD       10

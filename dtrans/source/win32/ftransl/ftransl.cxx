@@ -441,7 +441,7 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
     }
 }
 
-inline bool isTextPlainMediaType( const OUString& fullMediaType )
+bool isTextPlainMediaType( const OUString& fullMediaType )
 {
     return fullMediaType.equalsIgnoreAsciiCase("text/plain");
 }

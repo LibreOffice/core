@@ -2500,7 +2500,7 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
 }
 
-static inline Color ImplWinColorToSal( COLORREF nColor )
+static Color ImplWinColorToSal( COLORREF nColor )
 {
     return Color( GetRValue( nColor ), GetGValue( nColor ), GetBValue( nColor ) );
 }
@@ -3668,7 +3668,7 @@ enum class DeferPolicy
 };
 
 // Remember to release the solar mutex on success!
-static inline WinSalFrame* ProcessOrDeferMessage( HWND hWnd, INT nMsg, WPARAM pWParam = 0,
+static WinSalFrame* ProcessOrDeferMessage( HWND hWnd, INT nMsg, WPARAM pWParam = 0,
                                                   DeferPolicy eCanDefer = DeferPolicy::Allowed )
 {
     bool bFailedCondition = false, bGotMutex = false;

@@ -146,8 +146,8 @@ namespace dxcanvas
                 ImplRenderModuleGuard(const ImplRenderModuleGuard&) = delete;
                 const ImplRenderModuleGuard& operator=(const ImplRenderModuleGuard&) = delete;
 
-                explicit inline ImplRenderModuleGuard( DXRenderModule& rRenderModule );
-                inline ~ImplRenderModuleGuard();
+                explicit ImplRenderModuleGuard( DXRenderModule& rRenderModule );
+                ~ImplRenderModuleGuard();
 
             private:
                 DXRenderModule& mrRenderModule;
@@ -246,14 +246,14 @@ namespace dxcanvas
         // DXSurface::ImplRenderModuleGuard
 
 
-        inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard(
+        DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard(
             DXRenderModule& rRenderModule ) :
             mrRenderModule( rRenderModule )
         {
             mrRenderModule.lock();
         }
 
-        inline DXSurface::ImplRenderModuleGuard::~ImplRenderModuleGuard()
+        DXSurface::ImplRenderModuleGuard::~ImplRenderModuleGuard()
         {
             mrRenderModule.unlock();
         }

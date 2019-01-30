@@ -86,7 +86,7 @@ std::wstring GetQuickstarterLinkNameW(MSIHANDLE handle)
     return quickstarterlinkname;
 }
 
-static inline bool IsValidHandle( HANDLE handle )
+static bool IsValidHandle( HANDLE handle )
 {
     return nullptr != handle && INVALID_HANDLE_VALUE != handle;
 }

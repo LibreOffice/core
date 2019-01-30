@@ -84,7 +84,7 @@ inline void OutputDebugStringFormatW( LPCWSTR pFormat, ... )
     va_end(args);
 }
 #else
-static inline void OutputDebugStringFormatW( LPCWSTR, ... )
+static void OutputDebugStringFormatW( LPCWSTR, ... )
 {
 }
 #endif

@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star::uno;
 
-static inline typelib_TypeClass cpp2uno_call(
+static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTD,
     typelib_TypeDescriptionReference * pReturnTypeRef, // NULL indicates void return

@@ -105,7 +105,6 @@ public:
     explicit CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
 };
 
-inline
 void validateFormatEtc( LPFORMATETC lpFormatEtc )
 {
     OSL_ASSERT( lpFormatEtc );
@@ -132,13 +131,11 @@ void validateFormatEtc( LPFORMATETC lpFormatEtc )
         throw CInvalidFormatEtcException( DV_E_TYMED );
 }
 
-inline
 void invalidateStgMedium( STGMEDIUM& stgmedium )
 {
     stgmedium.tymed = TYMED_NULL;
 }
 
-inline
 HRESULT translateStgExceptionCode( HRESULT hr )
 {
     HRESULT hrTransl;

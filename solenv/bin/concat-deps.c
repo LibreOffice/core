@@ -129,7 +129,7 @@ static size_t work_dir_len;
 #ifdef __GNUC__
 #define clz __builtin_clz
 #else
-static inline int clz(unsigned int value)
+static int clz(unsigned int value)
 {
 int result = 32;
 
