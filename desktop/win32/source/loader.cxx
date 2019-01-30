@@ -89,12 +89,12 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
         *nameEnd++ = *p;
     }
     if (!(nameEnd - name >= 4 && nameEnd[-4] == L'.' &&
-         ((nameEnd[-3] == L'E' || nameEnd[-3] == L'e') &&
-          (nameEnd[-2] == L'X' || nameEnd[-2] == L'x') &&
-          (nameEnd[-1] == L'E' || nameEnd[-1] == L'e') ||
-          (nameEnd[-3] == L'C' || nameEnd[-3] == L'c') &&
-          (nameEnd[-2] == L'O' || nameEnd[-2] == L'o') &&
-          (nameEnd[-1] == L'M' || nameEnd[-1] == L'm'))))
+         (((nameEnd[-3] == L'E' || nameEnd[-3] == L'e') &&
+           (nameEnd[-2] == L'X' || nameEnd[-2] == L'x') &&
+           (nameEnd[-1] == L'E' || nameEnd[-1] == L'e')) ||
+          ((nameEnd[-3] == L'C' || nameEnd[-3] == L'c') &&
+           (nameEnd[-2] == L'O' || nameEnd[-2] == L'o') &&
+           (nameEnd[-1] == L'M' || nameEnd[-1] == L'm')))))
     {
         *nameEnd = L'.';
         nameEnd += 4;
