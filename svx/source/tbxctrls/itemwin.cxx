@@ -419,8 +419,8 @@ SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     nCurPos ( 0 ),
     bSelect ( false )
 {
-    SetSizePixel(LogicToPixel(Size(40, 40), MapMode(MapUnit::MapAppFont)));
     Fill();
+    SetSizePixel(get_preferred_size());
     SelectEntryPos( sal_Int32(drawing::FillStyle_SOLID) );
     Show();
 }
