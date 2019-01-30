@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
+
 #include "kde5_filepicker.hxx"
 
 #include <KWindowSystem>
@@ -57,7 +59,7 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
 
-    qApp->installEventFilter(this);
+    setupCustomWidgets();
 }
 
 void KDE5FilePicker::enableFolderMode()
@@ -231,6 +233,28 @@ void KDE5FilePicker::initialize(bool saveDialog)
 }
 
 void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
+
+void KDE5FilePicker::setupCustomWidgets()
+{
+    // When using the platform-native Plasma/KDE5 file picker, we currently rely on KFileWidget
+    // being present to add the custom controls visible (s. 'eventFilter' method).
+    // Since this doesn't work for other desktop environments, use a non-native
+    // dialog there in order not to lose the custom controls and insert the custom
+    // widget in the layout returned by QFileDialog::layout()
+    // (which returns nullptr for native file dialogs)
+    if (Application::GetDesktopEnvironment() == "KDE5")
+    {
+        qApp->installEventFilter(this);
+    }
+    else
+    {
+        _dialog->setOption(QFileDialog::DontUseNativeDialog);
+        QGridLayout* pLayout = static_cast<QGridLayout*>(_dialog->layout());
+        assert(pLayout);
+        const int row = pLayout->rowCount();
+        pLayout->addWidget(_extraControls, row, 1);
+    }
+}
 
 bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
 {
