@@ -115,7 +115,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     // take anti-aliasing into consideration. Let's hope that leaving
     // "extra" space between glyphs will help.
     std::vector<float> aGlyphAdv(1);   // offsets between glyphs
-    std::vector<DWRITE_GLYPH_OFFSET> aGlyphOffset(1, DWRITE_GLYPH_OFFSET{0.0f, 0.0f});
+    std::vector<DWRITE_GLYPH_OFFSET> aGlyphOffset(1, {0.0f, 0.0f});
     std::vector<int> aEnds(1); // end of each glyph box
     float totWidth = 0;
     {

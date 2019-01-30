@@ -127,7 +127,7 @@ public:
     void PutDrawElementInCache(const OpenGLGlyphDrawElement& rElement, int nGlyphIndex)
     {
         assert(!IsGlyphCached(nGlyphIndex));
-        maOpenGLTextureCache[nGlyphIndex] = OpenGLGlyphDrawElement(rElement);
+        maOpenGLTextureCache[nGlyphIndex] = rElement;
     }
 
     OpenGLGlyphDrawElement& GetDrawElement(int nGlyphIndex)
