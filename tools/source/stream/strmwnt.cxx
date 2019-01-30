@@ -343,7 +343,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         ErrCode nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
-            nMode &= (~StreamMode::WRITE);
+            nMode &= ~StreamMode::WRITE;
             nAccessMode = GENERIC_READ;
             // OV, 28.1.97: Win32 sets file to length 0
             // if Openaction is CREATE_ALWAYS

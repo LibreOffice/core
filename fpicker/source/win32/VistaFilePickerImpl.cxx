@@ -425,7 +425,7 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     OUString sTitle;
-    ::sal_Int32     nRealIndex = (nIndex-1); // COM dialog base on 1 ... filter container on 0 .-)
+    ::sal_Int32     nRealIndex = nIndex-1; // COM dialog base on 1 ... filter container on 0 .-)
     if (
         (nRealIndex >= 0                         ) &&
         (m_lFilters.getFilterNameByIndex(nRealIndex, sTitle))
@@ -1002,7 +1002,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     if ( SUCCEEDED(hResult) && nFileType > 0 )
                     {
                         // COM dialog base on 1 ... filter container on 0 .-)
-                        ::size_t nRealIndex = (nFileType-1);
+                        ::size_t nRealIndex = nFileType-1;
                         OUString sFilter;
                         if (m_lFilters.getFilterByIndex(nRealIndex, sFilter))
                         {

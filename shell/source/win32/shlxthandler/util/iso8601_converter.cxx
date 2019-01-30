@@ -139,7 +139,7 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     if (days.length() > 0)
     {
-        int h = ((_wtoi(days.c_str()) * 24) + _wtoi(hours.c_str()));
+        int h = (_wtoi(days.c_str()) * 24) + _wtoi(hours.c_str());
         wchar_t buff[10];
         _itow(h, buff, 10);
         hours = buff;
