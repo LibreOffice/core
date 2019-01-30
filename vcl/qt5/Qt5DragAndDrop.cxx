@@ -30,7 +30,7 @@ Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
 {
 }
 
-css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor&)
 {
     uno::Any aAny;
     assert(m_pMimeData);
