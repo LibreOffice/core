@@ -19,6 +19,8 @@
 
 
 #include "main.hxx"
+#include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <memory>
 
@@ -308,6 +310,12 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest )
 {
+    if (utl::ConfigManager::IsFuzzing() && rDest.mxBitmap.GetSizePixel().Height() + rSource.mnY > SAL_MAX_UINT16)
+    {
+        SAL_WARN("filter.icgm", "bitmap would expand too much");
+        rDest.mbStatus = false;
+        return;
+    }
     rDest.mxBitmap.Expand( 0, rSource.mnY );
     rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
         tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), &rSource.mxBitmap );
