@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7eaf5e94",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-01-30T06:21:57Z",
+      "side": 1,
+      "message": "Honestly speaking, I don\u0027t understand well why we need the lines 2656-2657 when we have assert in the line 2655 and the lines 2647-2651.",
+      "revId": "34fcd7ad5b3f8be0bec3bc7dc1fb496abe2bbf74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
