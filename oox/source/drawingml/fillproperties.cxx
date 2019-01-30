@@ -154,6 +154,30 @@ const awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const R
     return aSizeHmm;
 }
 
+/**
+ * Looks for a last gradient transition and possibly sets a gradient border
+ * based on that.
+ */
+void extractGradientBorderFromStops(const GradientFillProperties& rGradientProps,
+                                    const GraphicHelper& rGraphicHelper, ::Color nPhClr,
+                                    awt::Gradient& rGradient)
+{
+    if (rGradientProps.maGradientStops.size() <= 1)
+        return;
+
+    auto it = rGradientProps.maGradientStops.rbegin();
+    double fLastPos = it->first;
+    Color aLastColor = it->second;
+    ++it;
+    double fLastButOnePos = it->first;
+    Color aLastButOneColor = it->second;
+    if (!aLastColor.equals(aLastButOneColor, rGraphicHelper, nPhClr))
+        return;
+
+    // Last transition has the same color, we can map that to a border.
+    rGradient.Border = rtl::math::round((fLastPos - fLastButOnePos) * 100);
+}
+
 } // namespace
 
 void GradientFillProperties::assignUsed( const GradientFillProperties& rSourceProps )
@@ -354,15 +378,28 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                     if( maGradientProps.moGradientPath.has() )
                     {
-                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
-                        // position of gradient center (limited to [30%;70%], otherwise gradient is too hidden)
+                        // position of gradient center (limited to [30%;100%], otherwise gradient is too hidden)
                         IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                         sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
-                        aGradient.XOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterX / PER_PERCENT, 30, 70 );
+                        aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                            nCenterX / PER_PERCENT, 30, 100);
+
+                        // Style should be radial at least when the horizontal center is at 50%.
+                        awt::GradientStyle eCircle = aGradient.XOffset == 50
+                                                         ? awt::GradientStyle_RADIAL
+                                                         : awt::GradientStyle_ELLIPTICAL;
+                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle)
+                                              ? eCircle
+                                              : awt::GradientStyle_RECT;
+
                         sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
-                        aGradient.YOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterY / PER_PERCENT, 30, 70 );
+                        aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                            nCenterY / PER_PERCENT, 30, 100);
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
                         ::std::swap( nStartTrans, nEndTrans );
+
+                        extractGradientBorderFromStops(maGradientProps, rGraphicHelper, nPhClr,
+                                                       aGradient);
                     }
                     else if (!maGradientProps.maGradientStops.empty())
                     {
@@ -394,8 +431,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             GradientFillProperties::GradientStopMap::const_iterator aItZ(std::prev(aGradientStops.end()));
                             while( bSymmetric && aItA->first < aItZ->first )
                             {
-                                if( aItA->second.getColor( rGraphicHelper, nPhClr ) != aItZ->second.getColor( rGraphicHelper, nPhClr ) ||
-                                    aItA->second.getTransparency() != aItZ->second.getTransparency() )
+                                if (!aItA->second.equals(aItZ->second, rGraphicHelper, nPhClr))
                                     bSymmetric = false;
                                 else
                                 {
