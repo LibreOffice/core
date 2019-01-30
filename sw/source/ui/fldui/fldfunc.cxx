@@ -183,11 +183,11 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
 
     if( !IsRefresh() )
     {
-        OUString sUserData = GetUserData();
-        if(sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
+        const OUString sUserData = GetUserData();
+        sal_Int32 nIdx{ 0 };
+        if(sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(1, ';');
-            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
+            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sUserData.getToken(0, ';', nIdx).toInt32());
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
@@ -361,8 +361,9 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
             m_pNameED->SetDropEnable(true);
             if (IsFieldEdit())
             {
-                m_pCond1ED->SetText(GetCurField()->GetPar2().getToken(0, '|'));
-                m_pCond2ED->SetText(GetCurField()->GetPar2().getToken(1, '|'));
+                sal_Int32 nIdx{ 0 };
+                m_pCond1ED->SetText(GetCurField()->GetPar2().getToken(0, '|', nIdx));
+                m_pCond2ED->SetText(GetCurField()->GetPar2().getToken(0, '|', nIdx));
             }
 
             bName = bValue = true;
