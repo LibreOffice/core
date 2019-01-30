@@ -1132,6 +1132,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 // insert / change comment
                 pSh->SetRedlineComment(sMsg);
                 m_pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
+                Init();
             }
 
             SwViewShell::SetCareDialog(nullptr);
