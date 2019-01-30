@@ -105,7 +105,6 @@
 #define FILE_O_RDONLY     _O_RDONLY
 #define FILE_O_BINARY     _O_BINARY
 #define PATHNCMP _strnicmp /* MSVC converts paths to lower-case sometimes? */
-#define inline __inline
 #define ssize_t long
 #define S_ISREG(mode) (((mode) & _S_IFMT) == (_S_IFREG)) /* MSVC does not have this macro */
 #else /* not windaube */
