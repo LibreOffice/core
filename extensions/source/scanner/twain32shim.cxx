@@ -143,7 +143,7 @@ LRESULT CALLBACK ImpTwain::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    return CallNextHookEx(0, nCode, wParam, lParam);
+    return CallNextHookEx(nullptr, nCode, wParam, lParam);
 }
 
 HANDLE GetProcOfThread(HANDLE hThread)
