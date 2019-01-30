@@ -268,13 +268,13 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
 
     if ( bCreateNew )
     {
-        mpThemePropertiesDialog->StartExecuteAsync([=](sal_Int32 nResult){
+        mpThemePropertiesDialog->StartExecuteAsync([this](sal_Int32 nResult){
             EndNewThemePropertiesDlgHdl(nResult);
         });
     }
     else
     {
-        mpThemePropertiesDialog->StartExecuteAsync([=](sal_Int32 nResult){
+        mpThemePropertiesDialog->StartExecuteAsync([this](sal_Int32 nResult){
             EndThemePropertiesDlgHdl(nResult);
         });
     }
@@ -410,7 +410,9 @@ void GalleryBrowser1::Resize()
 void GalleryBrowser1::GetFocus()
 {
     Control::GetFocus();
-    if( mpThemes )
+    if( maNewTheme->IsEnabled() )
+        maNewTheme->GrabFocus();
+    else
         mpThemes->GrabFocus();
 }
 
