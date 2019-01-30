@@ -531,10 +531,10 @@ void ImpTwain::ImplRequestHdl(WPARAM nRequest)
             Destroy();
             break;
         case TWAIN_REQUEST_SELECTSOURCE:
-            NotifyParent(TWAIN_EVENT_REQUESTRESULT, SelectSource());
+            NotifyParent(TWAIN_EVENT_REQUESTRESULT, LPARAM(SelectSource()));
             break;
         case TWAIN_REQUEST_INITXFER:
-            NotifyParent(TWAIN_EVENT_REQUESTRESULT, InitXfer());
+            NotifyParent(TWAIN_EVENT_REQUESTRESULT, LPARAM(InitXfer()));
             break;
     }
 }
