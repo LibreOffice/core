@@ -285,10 +285,9 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
                         break;
                     }
                 }
-                sVal = sUserData.getToken(0, ';', nIdx);
-                if(!sVal.isEmpty())
+                if (nIdx>=0 && nIdx<sUserData.getLength())
                 {
-                    nFormatBoxPosition = static_cast< sal_uInt16 >(sVal.toInt32());
+                    nFormatBoxPosition = static_cast< sal_uInt16 >(sUserData.getToken(0, ';', nIdx).toInt32());
                 }
             }
         }
