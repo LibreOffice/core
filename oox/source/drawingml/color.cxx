@@ -425,6 +425,14 @@ sal_Int32 Color::getColorTransformationToken( const OUString& sName )
     return XML_TOKEN_INVALID;
 }
 
+bool Color::equals(const Color& rOther, const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr) const
+{
+    if (getColor(rGraphicHelper, nPhClr) != rOther.getColor(rGraphicHelper, nPhClr))
+        return false;
+
+    return getTransparency() == rOther.getTransparency();
+}
+
 void Color::clearTransparence()
 {
     mnAlpha = MAX_PERCENT;
