@@ -242,7 +242,7 @@ void Twain::ShimListenerThread::execute()
             rtl::Bootstrap::expandMacros(shimURL);
 
             OUString sCmdLine;
-            if (osl::FileBase::getSystemPathFromFileURL(shimURL, sCmdLine) != osl_File_E_None)
+            if (osl::FileBase::getSystemPathFromFileURL(shimURL, sCmdLine) != osl::FileBase::E_None)
                 throw std::exception("getSystemPathFromFileURL failed!");
 
             HANDLE hDup;
