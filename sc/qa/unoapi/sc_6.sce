@@ -18,5 +18,4 @@
 -o sc.ScModelObj
 # -o sc.ScShapeObj
 # -o sc.ScSheetLinkObj
--o sc.ScSpreadsheetSettingsObj
 -o sc.ScStyleFamilyObj

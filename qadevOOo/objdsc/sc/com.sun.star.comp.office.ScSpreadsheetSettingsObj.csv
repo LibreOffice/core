@@ -1,7 +1,0 @@
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
-"ScSpreadsheetSettingsObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"

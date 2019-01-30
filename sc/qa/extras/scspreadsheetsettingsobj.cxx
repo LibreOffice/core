@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -23,7 +24,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScSpreadsheetSettingsObj : public CalcUnoApiTest, public apitest::SpreadsheetDocumentSettings
+class ScSpreadsheetSettingsObj : public CalcUnoApiTest,
+                                 public apitest::SpreadsheetDocumentSettings,
+                                 public apitest::XPropertySet
 {
 public:
     ScSpreadsheetSettingsObj();
@@ -37,6 +40,13 @@ public:
     // SpreadsheetDocumentSettings
     CPPUNIT_TEST(testSpreadsheetDocumentSettingsProperties);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -45,6 +55,21 @@ private:
 
 ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XPropertySet({
+          "AreaLinks",
+          "CharLocale",
+          "CharLocaleAsian",
+          "CharLocaleComplex",
+          "ColumnLabelRanges",
+          "DDELinks",
+          "DatabaseRanges",
+          "ExternalDocLinks",
+          "InteropGrabBag",
+          "NamedRanges",
+          "NullDate",
+          "RowLabelRanges",
+          "SheetLinks",
+      })
 {
 }
 
@@ -69,7 +94,7 @@ void ScSpreadsheetSettingsObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSpreadsheetSettingsObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
