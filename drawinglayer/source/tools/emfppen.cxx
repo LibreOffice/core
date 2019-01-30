@@ -95,7 +95,7 @@ namespace emfplushelper
         return 0;
     }
 
-    void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
+    void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 graphicsVersion, penType;
         int i;
@@ -274,7 +274,7 @@ namespace emfplushelper
             customEndCapLen = 0;
         }
 
-        EMFPBrush::Read(s, rR);
+        EMFPBrush::Read(s, rR, dataSize, bUseWholeStream);
     }
 }
 

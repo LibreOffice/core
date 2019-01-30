@@ -42,7 +42,7 @@ namespace emfplushelper
         sal_uInt32 pixelFormat;
         Graphic graphic;
 
-        void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
+        void Read(SvStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
     };
 }
 

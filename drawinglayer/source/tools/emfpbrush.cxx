@@ -62,7 +62,7 @@ namespace emfplushelper
     {
     }
 
-    void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
+    void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 header;
 
@@ -99,7 +99,31 @@ namespace emfplushelper
             }
             case BrushTypeTextureFill:
             {
-                SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
+
+                if (additionalFlags & 0x02) // BrushDataTransform
+                {
+                    EmfPlusHelperData::readXForm(s, brush_transformation);
+                    hasTransformation = true;
+                    SAL_INFO("drawinglayer", "EMF+\tuse brush transformation: " << brush_transformation);
+                }
+
+                if (additionalFlags & 0x80) // BrushDataIsGammaCorrected
+                {
+                    SAL_WARN("drawinglayer", "EMF+\tTODO: BrushDataIsGammaCorrected");
+                }
+                if (additionalFlags & 0x100) // BrushDataDoNotTransform
+                {
+                    SAL_WARN("drawinglayer", "EMF+\tTODO: BrushDataDoNotTransform");
+                }
+
+                image = new EMFPImage;
+                image->type = ImageDataTypeUnknown;
+                image->width = 0;
+                image->height = 0;
+                image->stride = 0;
+                image->pixelFormat = 0;
+                image->Read(s, dataSize, bUseWholeStream);
                 break;
             }
             case BrushTypePathGradient:
@@ -131,7 +155,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\tsurround color[" << i << "]: 0x" << std::hex << color << std::dec);
                 }
 
-                if (additionalFlags & 0x01)
+                if (additionalFlags & 0x01) // BrushDataPath
                 {
                     sal_Int32 pathLength;
 
@@ -175,36 +199,14 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
                 }
 
-                if (additionalFlags & 0x02)
+                if (additionalFlags & 0x02) // BrushDataTransform
                 {
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
                     SAL_INFO("drawinglayer", "EMF+\tuse brush transformation: " << brush_transformation);
                 }
 
-                if (additionalFlags & 0x08)
-                {
-                    s.ReadInt32(blendPoints);
-                    SAL_INFO("drawinglayer", "EMF+\tuse blend, points: " << blendPoints);
-                    if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
-                        blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
-                    blendPositions.reset( new float[2 * blendPoints] );
-                    blendFactors = blendPositions.get() + blendPoints;
-
-                    for (int i = 0; i < blendPoints; i++)
-                    {
-                        s.ReadFloat(blendPositions[i]);
-                        SAL_INFO("drawinglayer", "EMF+\tposition[" << i << "]: " << blendPositions[i]);
-                    }
-
-                    for (int i = 0; i < blendPoints; i++)
-                    {
-                        s.ReadFloat(blendFactors[i]);
-                        SAL_INFO("drawinglayer", "EMF+\tfactor[" << i << "]: " << blendFactors[i]);
-                    }
-                }
-
-                if (additionalFlags & 0x04)
+                if (additionalFlags & 0x04) // BrushDataPresetColors
                 {
                     s.ReadInt32(colorblendPoints);
                     SAL_INFO("drawinglayer", "EMF+\tuse color blend, points: " << colorblendPoints);
@@ -233,6 +235,28 @@ namespace emfplushelper
                         s.ReadUInt32(color);
                         colorblendColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("drawinglayer", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
+                    }
+                }
+
+                if (additionalFlags & 0x08) // BrushDataBlendFactorsH
+                {
+                    s.ReadInt32(blendPoints);
+                    SAL_INFO("drawinglayer", "EMF+\tuse blend, points: " << blendPoints);
+                    if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+                        blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
+                    blendPositions.reset( new float[2 * blendPoints] );
+                    blendFactors = blendPositions.get() + blendPoints;
+
+                    for (int i = 0; i < blendPoints; i++)
+                    {
+                        s.ReadFloat(blendPositions[i]);
+                        SAL_INFO("drawinglayer", "EMF+\tposition[" << i << "]: " << blendPositions[i]);
+                    }
+
+                    for (int i = 0; i < blendPoints; i++)
+                    {
+                        s.ReadFloat(blendFactors[i]);
+                        SAL_INFO("drawinglayer", "EMF+\tfactor[" << i << "]: " << blendFactors[i]);
                     }
                 }
 

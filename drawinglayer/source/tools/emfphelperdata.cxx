@@ -161,14 +161,14 @@ namespace emfplushelper
             {
                 EMFPBrush *brush = new EMFPBrush();
                 maEMFPObjects[index].reset(brush);
-                brush->Read(rObjectStream, *this);
+                brush->Read(rObjectStream, *this, dataSize, bUseWholeStream);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
-                pen->Read(rObjectStream, *this);
+                pen->Read(rObjectStream, *this, dataSize, bUseWholeStream);
                 break;
             }
             case EmfPlusObjectTypePath:
@@ -195,7 +195,7 @@ namespace emfplushelper
             {
                 EMFPImage *image = new EMFPImage;
                 maEMFPObjects[index].reset(image);
-                image->type = 0;
+                image->type = ImageDataTypeUnknown;
                 image->width = 0;
                 image->height = 0;
                 image->stride = 0;
@@ -579,7 +579,33 @@ namespace emfplushelper
             }
             else if (brush->type == BrushTypeTextureFill)
             {
-                SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                basegfx::B2DHomMatrix aTransformMatrix;
+                if (brush->hasTransformation)
+                    aTransformMatrix = maMapTransform * brush->brush_transformation;
+                else
+                    aTransformMatrix = maMapTransform;
+
+                if (brush->image->type == ImageDataTypeBitmap)
+                {
+                    BitmapEx aBmp(brush->image->graphic.GetBitmapEx());
+                    Size aSize(aBmp.GetSizePixel());
+                    SAL_INFO("drawinglayer", "EMF+\t bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                    if (aSize.Width() > 0 && aSize.Height() > 0)
+                    {
+                        mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
+                    }
+                    else
+                    {
+                        SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
+                    }
+                }
+                else if (brush->image->type == ImageDataTypeMetafile)
+                {
+                    GDIMetaFile aGDI(brush->image->graphic.GetGDIMetaFile());
+                    mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
+                }
             }
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 

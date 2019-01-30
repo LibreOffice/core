@@ -22,7 +22,7 @@
 
 namespace emfplushelper
 {
-    void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
+    void EMFPImage::Read(SvStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 header, bitmapType;
         s.ReadUInt32(header).ReadUInt32(type);

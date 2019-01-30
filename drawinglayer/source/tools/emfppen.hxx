@@ -67,7 +67,7 @@ namespace emfplushelper
 
         virtual ~EMFPPen() override;
 
-        void Read(SvStream& s, EmfPlusHelperData const & rR);
+        void Read(SvStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream);
 
         static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
         static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);
