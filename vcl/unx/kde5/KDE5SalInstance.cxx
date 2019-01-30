@@ -70,7 +70,15 @@ KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& 
         return Q_EMIT createFilePickerSignal(xMSF);
     }
 
-    return uno::Reference<ui::dialogs::XFilePicker2>(new KDE5FilePicker(QFileDialog::ExistingFile));
+    // In order to insert custom controls, KDE5FilePicker currently relies on KFileWidget
+    // being used in the native file picker, which is only the case for KDE Plasma.
+    // Therefore, return the plain qt5 one in order to not lose custom controls.
+    if (Application::GetDesktopEnvironment() == "KDE5")
+    {
+        return uno::Reference<ui::dialogs::XFilePicker2>(
+            new KDE5FilePicker(QFileDialog::ExistingFile));
+    }
+    return Qt5Instance::createFilePicker(xMSF);
 }
 
 uno::Reference<ui::dialogs::XFolderPicker2>
