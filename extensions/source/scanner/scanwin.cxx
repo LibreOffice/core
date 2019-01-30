@@ -231,7 +231,7 @@ void Twain::ShimListenerThread::execute()
 {
     MSG msg;
     // Initialize thread message queue before launching shim process
-    PeekMessageW(&msg, 0, 0, 0, PM_NOREMOVE);
+    PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
 
     try
     {
