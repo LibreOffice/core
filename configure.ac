@@ -6241,6 +6241,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             #include <algorithm>
+            #include <cmath>
             #include <functional>
             #include <vector>
 
@@ -6260,6 +6261,13 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
             }
+
+            // At least with glibc-headers-2.28-26.fc29.x86_64, when building for Linux x86 32-bit
+            // (via -m32) and passed-in CXXFLAGS setting -O1 (or higher; overriding -Os as set in
+            // solenv/gbuild/platform/LINUX_INTEL_GCC.mk), std=gnu* would cause math_errhandling to
+            // get undef'ed in /usr/include/bits/mathinline.h, while std=c* keeps it defined (as
+            // needed by sc/source/core/tool/math.cxx):
+            int g() { return math_errhandling; }
             ]])],[CXXFLAGS_CXX11=$flag $my_float128hack])
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
