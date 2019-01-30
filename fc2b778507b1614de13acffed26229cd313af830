@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_be8ef62b",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-30T06:35:42Z",
+      "side": 1,
+      "message": "I tend to disagree.\n\nCurrent commit message is \"use ScopedGDI in WinSalVirtualDevice\". And what I asked here is if the required change here is to introduce smart resource management, or to change the logic to not need that smart management at all - these are mutually exclusive approaches.\n\nCurrent code tries to create a HDC, then unconditionally creates a HBITMAP; then in case HDC creation failed, it frees HBITMAP and exits. So it looks inefficient and wrong in the first place to create the HBITMAP in case of failed HDC creation.\n\nOTOH, in case of successful HDC creation, the suggested patch releases HBITMAP, i.e. the introduced smart management is only used for this supposedly useless failure case. So *either* your proposed patch (inefficient IMO), or my change, but not both one after another, could be needed.",
+      "parentUuid": "1f485f77_bed71624",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 84
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c576913f",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
