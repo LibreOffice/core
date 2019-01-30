@@ -213,7 +213,7 @@ private:
 
     static tools::Rectangle NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
     static tools::Rectangle NWGetSpinButtonRect( ControlPart nPart, tools::Rectangle aAreaRect);
-    static tools::Rectangle NWGetComboBoxButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
+    static tools::Rectangle NWGetComboBoxButtonRect(ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect);
 
     static void PaintScrollbar(GtkStyleContext *context,
                         cairo_t *cr,
