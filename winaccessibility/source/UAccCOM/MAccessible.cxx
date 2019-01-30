@@ -2907,7 +2907,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
             bool bBoolean(false);
             rAnyVal >>= bBoolean;
             pvData->vt = VT_BOOL;
-            pvData->boolVal = bBoolean; // boolVal is a VARIANT_BOOL, a 16bit field
+            pvData->boolVal = VARIANT_BOOL(bBoolean); // boolVal is a VARIANT_BOOL, a 16bit field
             break;
         }
         case TypeClass_BYTE:
