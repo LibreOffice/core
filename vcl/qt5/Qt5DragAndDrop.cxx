@@ -26,7 +26,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
-    : m_pMimeData(pMimeData)
+    : Qt5Transferable(QClipboard::Clipboard)
+    , m_pMimeData(pMimeData)
 {
 }
 
