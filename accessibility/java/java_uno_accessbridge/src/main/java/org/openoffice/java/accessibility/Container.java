@@ -49,7 +49,7 @@ public class Container extends java.awt.Container implements javax.accessibility
             xAccessibleContext);
 
         // Add the event listener right away, because the global focus notification doesn't
-        // work yet ..
+        // work yet...
         XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
             UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
             unoAccessibleContext);
@@ -62,8 +62,8 @@ public class Container extends java.awt.Container implements javax.accessibility
     * Determines whether this <code>Container</code> is showing on screen.
     * This means that the component must be visible, and it must be in a
     * <code>container</code> that is visible and showing.
-    * @see       #addNotify
-    * @see       #removeNotify
+    * @see #addNotify
+    * @see #removeNotify
     * @since JDK1.0
     */
     public boolean isShowing() {
@@ -79,8 +79,8 @@ public class Container extends java.awt.Container implements javax.accessibility
     * native screen resource.
     * This method is called internally by the toolkit and should
     * not be called directly by programs.
-    * @see       #isDisplayable
-    * @see       #removeNotify
+    * @see #isDisplayable
+    * @see #removeNotify
     * @since JDK1.0
     */
     public void addNotify() {
@@ -91,15 +91,15 @@ public class Container extends java.awt.Container implements javax.accessibility
     * screen resource.
     * This method is called by the toolkit internally and should
     * not be called directly by programs.
-    * @see       #isDisplayable
-    * @see       #addNotify
+    * @see #isDisplayable
+    * @see #addNotify
     * @since JDK1.0
     */
     public void removeNotify() {
     }
 
     /*
-     * Fake the java focus handling. This is necessary to keep OOo focus
+     * Fake the java focus handling. This is necessary to keep AOO focus
      * in sync with the java focus. See java.awt.DefaultKeyboardFocusManager
      * for implementation details.
      **/
@@ -161,7 +161,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         }
 
         public void run() {
-            // Because this code is executed in the DispatchThread, it is better tocatch every
+            // Because this code is executed in the DispatchThread, it is better to catch every
             // exception that might occur
             try {
                 AccessibleContext ac = Container.this.accessibleContext;
@@ -215,7 +215,7 @@ public class Container extends java.awt.Container implements javax.accessibility
                 case AccessibleStateType.ENABLED:
                     setEnabled(enable);
                     // Since we can't access awt.Componet.accessibleContext, we need to fire
-                    // this event manually ..
+                    // this event manually...
                     fireStatePropertyChange(AccessibleState.ENABLED, enable);
                     break;
                 case AccessibleStateType.FOCUSED:
@@ -228,7 +228,7 @@ public class Container extends java.awt.Container implements javax.accessibility
                     fireStatePropertyChange(AccessibleState.SELECTED, enable);
                     break;
                 case AccessibleStateType.SENSITIVE:
-                    // This state equals ENABLED in OOo (but not in Gtk+) and does not exist in Java 1.5
+                    // This state equals ENABLED in AOO (but not in Gtk+) and does not exist in Java 1.5
                     break;
                 case AccessibleStateType.SHOWING:
                 case AccessibleStateType.VISIBLE:
@@ -245,8 +245,8 @@ public class Container extends java.awt.Container implements javax.accessibility
         protected void handleNameChangedEvent(Object any) {
             try {
                 // This causes the property change event to be fired in the VCL thread
-                // context. If this causes problems, it has to be deligated to the java
-                // dispatch thread ..
+                // context. If this causes problems, it has to be delegated to the java
+                // dispatch thread...
                 if (accessibleContext != null) {
                     accessibleContext.setAccessibleName(AnyConverter.toString(any));
                 }
@@ -258,8 +258,8 @@ public class Container extends java.awt.Container implements javax.accessibility
         protected void handleDescriptionChangedEvent(Object any) {
             try {
                 // This causes the property change event to be fired in the VCL thread
-                // context. If this causes problems, it has to be deligated to the java
-                // dispatch thread ..
+                // context. If this causes problems, it has to be delegated to the java
+                // dispatch thread...
                 if (accessibleContext != null) {
                     accessibleContext.setAccessibleDescription(AnyConverter.toString(any));
                 }
@@ -282,7 +282,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         }
 
         /* This event is only necessary because some objects in the office don't know their parent
-         *  and are therefor unable to revoke and re-insert themselves.
+         * and are therefor unable to revoke and re-insert themselves.
          */
         protected void handleAllChildrenChangedEvent() {
             javax.accessibility.Accessible parent = (javax.accessibility.Accessible) getParent();
@@ -389,7 +389,7 @@ public class Container extends java.awt.Container implements javax.accessibility
                 AccessibleContext ac = createAccessibleContext();
                 if (ac != null) {
                     // Set accessible name and description here to avoid
-                    // unnecessary property change events later ..
+                    // unnecessary property change events later...
                     ac.setAccessibleName(unoAccessibleContext.getAccessibleName());
                     ac.setAccessibleDescription(unoAccessibleContext.getAccessibleDescription());
                     accessibleContext = ac;
@@ -421,25 +421,25 @@ public class Container extends java.awt.Container implements javax.accessibility
 
         /**
         * Fire PropertyChange listener, if one is registered,
-        * when shown/hidden..
+        * when shown/hidden...
         */
         protected class AccessibleComponentHandler implements java.awt.event.ComponentListener {
-            public void componentHidden(java.awt.event.ComponentEvent e)  {
+            public void componentHidden(java.awt.event.ComponentEvent e) {
                 AccessibleContainer.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     AccessibleState.VISIBLE, null);
             }
 
-            public void componentShown(java.awt.event.ComponentEvent e)  {
+            public void componentShown(java.awt.event.ComponentEvent e) {
                 AccessibleContainer.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     null, AccessibleState.VISIBLE);
             }
 
-            public void componentMoved(java.awt.event.ComponentEvent e)  {
+            public void componentMoved(java.awt.event.ComponentEvent e) {
             }
 
-            public void componentResized(java.awt.event.ComponentEvent e)  {
+            public void componentResized(java.awt.event.ComponentEvent e) {
             }
         } // inner class AccessibleContainerHandler
 
@@ -499,7 +499,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         /**
         * Add a PropertyChangeListener to the listener list.
         *
-        * @param listener  The PropertyChangeListener to be added
+        * @param listener The PropertyChangeListener to be added
         */
         public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (propertyChangeListenerCount++ == 0) {
@@ -520,7 +520,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         * This removes a PropertyChangeListener that was registered
         * for all properties.
         *
-        * @param listener  The PropertyChangeListener to be removed
+        * @param listener The PropertyChangeListener to be removed
         */
         public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (--propertyChangeListenerCount == 0) {
@@ -554,7 +554,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         * Gets the current state set of this object.
         *
         * @return an instance of <code>AccessibleStateSet</code>
-        *    containing the current state set of the object
+        *  containing the current state set of the object
         * @see AccessibleState
         */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
@@ -756,4 +756,3 @@ public class Container extends java.awt.Container implements javax.accessibility
         return UnoRuntime.generateOid(unoAccessible);
     }
 }
-

@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+
 package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.*;
@@ -147,7 +148,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     /** Returns the string after a given index
      *
      *  The Java word iterator has a different understanding of what
-     *  a word is than the word iterator used by OOo, so we use the
+     *  a word is than the word iterator used by AOO, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
     public String getAfterIndex(int part, int index) {
@@ -346,7 +347,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                 StyleConstants.setRightIndent(as,
                     (float) (toPointFactor * AnyConverter.toInt(property.Value)));
             }
-            // Set line spacing attribute
+                // Set line spacing attribute
             else if (property.Name.equals("ParaLineSpacing")) {
                 LineSpacing ls = null;
 
@@ -362,13 +363,13 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                         (float) (toPointFactor * ls.Height));
                 }
             }
-            // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
-            // Set space above attribute
+                // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
+                // Set space above attribute
             else if (property.Name.equals("ParaTopMargin")) {
                 StyleConstants.setSpaceAbove(as,
                     (float) (toPointFactor * AnyConverter.toInt(property.Value)));
             }
-            // Set space below attribute
+                // Set space below attribute
             else if (property.Name.equals("ParaBottomMargin")) {
                 StyleConstants.setSpaceBelow(as,
                     (float) (toPointFactor * AnyConverter.toInt(property.Value)));
@@ -439,7 +440,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                 System.err.println("*** ERROR *** " + e.getClass().getName() +
                     " caught for property " + property.Name + ": " +
                     e.getMessage());
-                System.err.println("              value is of type " +
+                System.err.println("            value is of type " +
                     property.Value.getClass().getName());
             }
         }
@@ -494,7 +495,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     /** Returns the string before a given index
      *
      *  The Java word iterator has a different understanding of what
-     *  a word is than the word iterator used by OOo, so we use the
+     *  a word is than the word iterator used by AOO, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
     public java.lang.String getBeforeIndex(int part, int index) {
@@ -572,7 +573,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     /** Returns the string at a given index
      *
      *  The Java word iterator has a different understanding of what
-     *  a word is than the word iterator used by OOo, so we use the
+     *  a word is than the word iterator used by AOO, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
     public java.lang.String getAtIndex(int part, int index) {

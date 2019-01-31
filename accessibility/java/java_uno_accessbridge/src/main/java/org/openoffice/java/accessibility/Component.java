@@ -46,7 +46,7 @@ public abstract class Component extends java.awt.Component {
         unoAccessibleComponent = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
         // Add the event listener right away, because the global focus notification doesn't
-        // work yet ..
+        // work yet...
         XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
             UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
             unoAccessibleComponent);
@@ -59,8 +59,8 @@ public abstract class Component extends java.awt.Component {
     * Determines whether this <code>Component</code> is showing on screen.
     * This means that the component must be visible, and it must be in a
     * <code>container</code> that is visible and showing.
-    * @see       #addNotify
-    * @see       #removeNotify
+    * @see #addNotify
+    * @see #removeNotify
     * @since JDK1.0
     */
     public boolean isShowing() {
@@ -76,8 +76,8 @@ public abstract class Component extends java.awt.Component {
     * native screen resource.
     * This method is called internally by the toolkit and should
     * not be called directly by programs.
-    * @see       #isDisplayable
-    * @see       #removeNotify
+    * @see #isDisplayable
+    * @see #removeNotify
     * @since JDK1.0
     */
     public void addNotify() {
@@ -88,15 +88,15 @@ public abstract class Component extends java.awt.Component {
     * screen resource.
     * This method is called by the toolkit internally and should
     * not be called directly by programs.
-    * @see       #isDisplayable
-    * @see       #addNotify
+    * @see #isDisplayable
+    * @see #addNotify
     * @since JDK1.0
     */
     public void removeNotify() {
     }
 
     /*
-     * Fake the java focus handling. This is necessary to keep OOo focus
+     * Fake the java focus handling. This is necessary to keep AOO focus
      * in sync with the java focus. See java.awt.DefaultKeyboardFocusManager
      * for implementation details.
      **/
@@ -181,10 +181,10 @@ public abstract class Component extends java.awt.Component {
     protected void fireStatePropertyChange(AccessibleState state, boolean set) {
         PropertyChangeBroadcaster broadcaster;
 
-//      if (Build.DEBUG) {
-//          System.err.println("[" + AccessibleRoleAdapter.getAccessibleRole(unoAccessibleContext.getAccessibleRole()) + "] " +
-//                  unoAccessibleContext.getAccessibleName() + " is " + (set ? "now " : "no longer ") + state);
-//      }
+//  if (Build.DEBUG) {
+//      System.err.println("[" + AccessibleRoleAdapter.getAccessibleRole(unoAccessibleContext.getAccessibleRole()) + "] " +
+//              unoAccessibleContext.getAccessibleName() + " is " + (set ? "now " : "no longer ") + state);
+//  }
 
         if (set) {
             broadcaster = new PropertyChangeBroadcaster(
@@ -220,7 +220,7 @@ public abstract class Component extends java.awt.Component {
                 case AccessibleStateType.ENABLED:
                     setEnabled(enable);
                     // Since we can't access awt.Componet.accessibleContext, we need to fire
-                    // this event manually ..
+                    // this event manually...
                     fireStatePropertyChange(AccessibleState.ENABLED, enable);
                     break;
                 case AccessibleStateType.FOCUSED:
@@ -236,7 +236,7 @@ public abstract class Component extends java.awt.Component {
                     fireStatePropertyChange(AccessibleState.SELECTED, enable);
                     break;
                 case AccessibleStateType.SENSITIVE:
-                    // This state equals ENABLED in OOo (but not in Gtk+) and does not exist in Java 1.5
+                    // This state equals ENABLED in AOO (but not in Gtk+) and does not exist in Java 1.5
                     break;
                 case AccessibleStateType.SHOWING:
 //                  fireStatePropertyChange(AccessibleState.SHOWING, enable);
@@ -257,7 +257,7 @@ public abstract class Component extends java.awt.Component {
             try {
                 // This causes the property change event to be fired in the VCL thread
                 // context. If this causes problems, it has to be deligated to the java
-                // dispatch thread ..
+                // dispatch thread...
                 if (accessibleContext != null) {
                     accessibleContext.setAccessibleName(AnyConverter.toString(any));
                 }
@@ -270,7 +270,7 @@ public abstract class Component extends java.awt.Component {
             try {
                 // This causes the property change event to be fired in the VCL thread
                 // context. If this causes problems, it has to be deligated to the java
-                // dispatch thread ..
+                // dispatch thread...
                 if (accessibleContext != null) {
                     accessibleContext.setAccessibleDescription(AnyConverter.toString(any));
                 }
@@ -378,7 +378,7 @@ public abstract class Component extends java.awt.Component {
                 AccessibleContext ac = createAccessibleContext();
                 if (ac != null) {
                     // Set accessible name and description here to avoid
-                    // unnecessary property change events later ..
+                    // unnecessary property change events later...
                     ac.setAccessibleName(unoAccessibleContext.getAccessibleName());
                     ac.setAccessibleDescription(unoAccessibleContext.getAccessibleDescription());
                     accessibleContext = ac;
@@ -396,25 +396,25 @@ public abstract class Component extends java.awt.Component {
 
         /**
         * Fire PropertyChange listener, if one is registered,
-        * when shown/hidden..
+        * when shown/hidden...
         */
         protected class AccessibleComponentHandler implements java.awt.event.ComponentListener {
-            public void componentHidden(java.awt.event.ComponentEvent e)  {
+            public void componentHidden(java.awt.event.ComponentEvent e) {
                 AccessibleUNOComponent.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     AccessibleState.VISIBLE, null);
             }
 
-            public void componentShown(java.awt.event.ComponentEvent e)  {
+            public void componentShown(java.awt.event.ComponentEvent e) {
                 AccessibleUNOComponent.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     null, AccessibleState.VISIBLE);
             }
 
-            public void componentMoved(java.awt.event.ComponentEvent e)  {
+            public void componentMoved(java.awt.event.ComponentEvent e) {
             }
 
-            public void componentResized(java.awt.event.ComponentEvent e)  {
+            public void componentResized(java.awt.event.ComponentEvent e) {
             }
         } // inner class AccessibleComponentHandler
 
@@ -448,7 +448,7 @@ public abstract class Component extends java.awt.Component {
         /**
         * Add a PropertyChangeListener to the listener list.
         *
-        * @param listener  The PropertyChangeListener to be added
+        * @param listener The PropertyChangeListener to be added
         */
         public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (propertyChangeListenerCount++ == 0) {
@@ -466,7 +466,7 @@ public abstract class Component extends java.awt.Component {
         * This removes a PropertyChangeListener that was registered
         * for all properties.
         *
-        * @param listener  The PropertyChangeListener to be removed
+        * @param listener The PropertyChangeListener to be removed
         */
         public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (--propertyChangeListenerCount == 0) {
@@ -483,7 +483,7 @@ public abstract class Component extends java.awt.Component {
         * Gets the current state set of this object.
         *
         * @return an instance of <code>AccessibleStateSet</code>
-        *    containing the current state set of the object
+        *   containing the current state set of the object
         * @see AccessibleState
         */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
@@ -595,9 +595,9 @@ public abstract class Component extends java.awt.Component {
         public java.awt.Point getLocationOnScreen() {
             try {
                 com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocationOnScreen();
-//              if (Build.DEBUG) {
-//                  System.err.println("Returning location on screen( " + unoPoint.X + ", " + unoPoint.Y + " )" );
-//              }
+//          if (Build.DEBUG) {
+//              System.err.println("Returning location on screen( " + unoPoint.X + ", " + unoPoint.Y + " )" );
+//          }
                 return new java.awt.Point(unoPoint.X, unoPoint.Y);
             } catch (com.sun.star.uno.RuntimeException e) {
                 return null;
@@ -733,4 +733,3 @@ public abstract class Component extends java.awt.Component {
         return UnoRuntime.generateOid(unoAccessible);
     }
 }
-
