@@ -567,7 +567,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.EndAction();
 
                     rSh.ClearMark();
-                    rSh.SelNextRedline();   // Select current redline.
+                    // Select current redline.
+                    pActRed = rSh.SelNextRedline();
+                    if (pActRed != pRedline)
+                        rSh.SelPrevRedline();
 
                     rSh.StartAction();
                     rSh.Push();

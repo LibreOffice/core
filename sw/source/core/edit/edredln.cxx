@@ -119,7 +119,10 @@ bool SwEditShell::SetRedlineComment( const OUString& rS )
 
 const SwRangeRedline* SwEditShell::GetCurrRedline() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCursor()->GetPoint(), nullptr );
+    if (const SwRangeRedline* pRed = GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCursor()->GetPoint(), nullptr ))
+        return pRed;
+    // check the other side of the selection to handle completely selected changes, where the Point is at the end
+    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCursor()->GetMark(), nullptr );
 }
 
 void SwEditShell::UpdateRedlineAttr()
