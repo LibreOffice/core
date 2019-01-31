@@ -676,7 +676,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
                                 init = compat::IgnoreImplicit(x->getArg(0));
                             }
                         if (auto x = dyn_cast<CXXMemberCallExpr>(init))
-                            init = x->getImplicitObjectArgument();
+                            init = x->getImplicitObjectArgument()->IgnoreParenImpCasts();
                         if ((memberExpr = dyn_cast<MemberExpr>(init)))
                             break;
                         // look for deletes of an iterator object where the iterator is over a var
