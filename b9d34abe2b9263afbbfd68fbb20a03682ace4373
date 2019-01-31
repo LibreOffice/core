@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_347347ea",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T09:06:47Z",
+      "side": 1,
+      "message": "IIRC just \u0026o3tl::temporary\u003cvoid*\u003e() - why initialize it?",
+      "range": {
+        "startLine": 217,
+        "startChar": 69,
+        "endLine": 217,
+        "endChar": 76
+      },
+      "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
