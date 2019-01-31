@@ -2037,7 +2037,6 @@ bool SVGFilter::implCreateObjects()
 
         if( xDrawPage.is() )
         {
-#ifdef ENABLE_EXPORT_CUSTOM_SLIDE_BACKGROUND
             // TODO complete the implementation for exporting custom background for each slide
             // implementation status:
             // - hatch stroke color is set to 'none' so the hatch is not visible, why?
@@ -2052,13 +2051,13 @@ bool SVGFilter::implCreateObjects()
             if( xBackground.is() )
             {
                 drawing::FillStyle aFillStyle;
-                sal_Bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
-                if( assigned && aFillStyle != drawing::FillStyle_NONE )
+                bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
+                if( assigned && aFillStyle != drawing::FillStyle_NONE
+                             && aFillStyle != drawing::FillStyle_BITMAP )
                 {
                     implCreateObjectsFromBackground( xDrawPage );
                 }
             }
-#endif
             implCreateObjectsFromShapes( xDrawPage, xDrawPage );
         }
     }
