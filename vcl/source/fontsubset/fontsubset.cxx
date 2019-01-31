@@ -99,9 +99,7 @@ bool FontSubsetInfo::CreateFontSubset(
     case FontType::ANY_TYPE1:
         bOK = CreateFontSubsetFromType1( pOutGlyphWidths);
         break;
-        // fall through
     case FontType::NO_FONT:
-        // fall through
     default:
         OSL_FAIL( "unhandled type in CreateFontSubset()");
         break;
