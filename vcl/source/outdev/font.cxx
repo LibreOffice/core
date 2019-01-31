@@ -486,13 +486,19 @@ long OutputDevice::GetFontExtLeading() const
     return mpFontInstance->mxFontMetric->GetExternalLeading();
 }
 
+void OutputDevice::SetNeedNewFont() const
+{
+    mbNewFont = true;
+    ClearLayoutCache();
+}
+
 void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 {
     // the currently selected logical font is no longer needed
     mpFontInstance.clear();
 
     mbInitFont = true;
-    mbNewFont = true;
+    SetNeedNewFont();
 
     if ( bNewFontLists )
     {
@@ -1079,7 +1085,7 @@ bool OutputDevice::ImplNewFont() const
     // mark when lower layers need to get involved
     mbNewFont = false;
     if( bNewFontInstance )
-        mbInitFont = true;
+        SetNeedNewFont();
 
     // select font when it has not been initialized yet
     if (!pFontInstance->mbInit && InitFont())
@@ -1163,7 +1169,7 @@ bool OutputDevice::ImplNewFont() const
             Size aOrigSize = maFont.GetFontSize();
             const_cast<vcl::Font&>(maFont).SetFontSize( Size( nNewWidth, aSize.Height() ) );
             mbMap = false;
-            mbNewFont = true;
+            SetNeedNewFont();
             bRet = ImplNewFont();  // recurse once using stretched width
             mbMap = true;
             const_cast<vcl::Font&>(maFont).SetFontSize( aOrigSize );

@@ -556,7 +556,7 @@ void Printer::ImplReleaseFonts()
     // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
     mpGraphics->ReleaseFonts();
 #endif
-    mbNewFont = true;
+    SetNeedNewFont();
     mbInitFont = true;
 
     mpFontInstance.clear();
@@ -1065,7 +1065,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mxFontCollection.reset();
 
             mbInitFont = true;
-            mbNewFont = true;
+            SetNeedNewFont();
             mpInfoPrinter = nullptr;
         }
 
@@ -1092,7 +1092,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mxFontCache.reset();
             mxFontCollection.reset();
             mbInitFont = true;
-            mbNewFont = true;
+            SetNeedNewFont();
             mpInfoPrinter = nullptr;
         }
 

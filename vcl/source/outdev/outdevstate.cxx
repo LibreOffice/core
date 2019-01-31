@@ -524,7 +524,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
                 mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
         }
         maFont      = aFont;
-        mbNewFont   = true;
+        SetNeedNewFont();
 
         if( mpAlphaVDev )
         {
@@ -591,7 +591,7 @@ void OutputDevice::ImplReleaseFonts()
 {
     mpGraphics->ReleaseFonts();
 
-    mbNewFont = true;
+    SetNeedNewFont();
     mbInitFont = true;
 
     mpFontInstance.clear();

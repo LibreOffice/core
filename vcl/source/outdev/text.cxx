@@ -769,7 +769,7 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
     if ( maFont.GetAlignment() != eAlign )
     {
         maFont.SetAlignment( eAlign );
-        mbNewFont = true;
+        SetNeedNewFont();
     }
 
     if( mpAlphaVDev )
@@ -1051,6 +1051,31 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     }
     return nWidth;
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
+}
+
+const SalLayoutGlyphs* OutputDevice::CacheLayout(const OUString& rStr) const
+{
+    if (rStr == maLayoutCacheString)
+        return mxLayoutCache.get();
+    mxLayoutCache.reset();
+    maLayoutCacheString = rStr;
+    // Calculate glyph items.
+    std::unique_ptr<SalLayout> xLayout = ImplLayout(rStr, 0, rStr.getLength(), Point(0, 0),
+                                                    0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    if (!xLayout)
+        return nullptr;
+    const SalLayoutGlyphs* pGlyphs = xLayout->GetGlyphs();
+    if (!pGlyphs)
+        return nullptr;
+    // Remember the calculation result.
+    mxLayoutCache.reset(new SalLayoutGlyphs(*pGlyphs));
+    return mxLayoutCache.get();
+}
+
+void OutputDevice::ClearLayoutCache() const
+{
+    maLayoutCacheString.clear();
+    mxLayoutCache.reset();
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
@@ -2391,7 +2416,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOldMap )
     {
         const_cast<OutputDevice&>(*this).mbMap = false;
-        const_cast<OutputDevice&>(*this).mbNewFont = true;
+        const_cast<OutputDevice&>(*this).SetNeedNewFont();
     }
 
     std::unique_ptr<SalLayout> pSalLayout;
@@ -2450,7 +2475,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     {
         // restore original font size and map mode
         const_cast<OutputDevice&>(*this).mbMap = bOldMap;
-        const_cast<OutputDevice&>(*this).mbNewFont = true;
+        const_cast<OutputDevice&>(*this).SetNeedNewFont();
     }
 
     return bRet;

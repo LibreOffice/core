@@ -312,6 +312,8 @@ private:
     OutputDevice& operator=(const OutputDevice&) = delete;
 
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
+    mutable std::unique_ptr<SalLayoutGlyphs> mxLayoutCache;
+    mutable OUString                maLayoutCacheString;
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
@@ -390,6 +392,8 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
+
+    void SetNeedNewFont() const;
 
     /** @name Initialization and accessor functions
      */
@@ -949,6 +953,9 @@ private:
     ///@{
 
 public:
+    const SalLayoutGlyphs*      CacheLayout(const OUString& rStr) const;
+    void                        ClearLayoutCache() const;
+
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,

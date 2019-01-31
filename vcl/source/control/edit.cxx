@@ -471,6 +471,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     long nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
     long* pDX = nDXBuffer;
+    const SalLayoutGlyphs* pLayoutCache = nullptr;
 
     if (nLen)
     {
@@ -480,7 +481,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
             pDX = pDXBuffer.get();
         }
 
-        GetCaretPositions(aText, pDX, 0, nLen);
+        pLayoutCache = CacheLayout(aText);
+        GetCaretPositions(aText, pDX, 0, nLen, pLayoutCache);
     }
 
     long nTH = GetTextHeight();
@@ -528,7 +530,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     }
     else if (!bDrawSelection && !mpIMEInfos)
     {
-        rRenderContext.DrawText(aPos, aText, 0, nLen);
+        rRenderContext.DrawText(aPos, aText, 0, nLen, nullptr, nullptr, pLayoutCache);
     }
     else
     {
@@ -1071,7 +1073,8 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             pDX = pDXBuffer.get();
         }
 
-        GetCaretPositions( aText, pDX, 0, aText.getLength() );
+        const SalLayoutGlyphs* pLayoutCache = CacheLayout(aText);
+        GetCaretPositions(aText, pDX, 0, aText.getLength(), pLayoutCache);
 
         if( maSelection.Max() < aText.getLength() )
             nTextPos = pDX[ 2*maSelection.Max() ];
@@ -1192,7 +1195,8 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         pDX = pDXBuffer.get();
     }
 
-    GetCaretPositions( aText, pDX, 0, aText.getLength() );
+    const SalLayoutGlyphs* pLayoutCache = CacheLayout(aText);
+    GetCaretPositions(aText, pDX, 0, aText.getLength(), pLayoutCache);
     long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
@@ -2137,7 +2141,8 @@ void Edit::Command( const CommandEvent& rCEvt )
                     pDX = pDXBuffer.get();
                 }
 
-                GetCaretPositions( aText, pDX, 0, aText.getLength() );
+                const SalLayoutGlyphs* pLayoutCache = CacheLayout(aText);
+                GetCaretPositions(aText, pDX, 0, aText.getLength(), pLayoutCache);
             }
             long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );

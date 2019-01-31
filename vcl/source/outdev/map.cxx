@@ -664,7 +664,7 @@ void OutputDevice::SetMapMode()
         maMapMode   = MapMode();
 
         // create new objects (clip region are not re-scaled)
-        mbNewFont   = true;
+        SetNeedNewFont();
         mbInitFont  = true;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
@@ -762,7 +762,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         maMapMode = rNewMapMode;
 
     // create new objects (clip region are not re-scaled)
-    mbNewFont   = true;
+    SetNeedNewFont();
     mbInitFont  = true;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
