@@ -34,11 +34,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // impress oasis import
-OUString XMLImpressImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLImpressImportOasis_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLImpressImportOasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString XMLImpressStylesImportOasis_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLImpressStylesImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
