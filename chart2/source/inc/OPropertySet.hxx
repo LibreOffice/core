@@ -106,7 +106,7 @@ protected:
           sal_Int32 nHandle,
           const css::uno::Any& rValue ) override;
 
-    /** The same as setFastProperyValue; nHandle is always valid.
+    /** The same as setFastPropertyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
 
         @attention
@@ -128,7 +128,7 @@ protected:
           const css::uno::Any& rValue ) override;
 
     /**
-       The same as getFastProperyValue, but return the value through rValue and
+       The same as getFastPropertyValue, but return the value through rValue and
        nHandle is always valid.
 
         @see ::cppu::OPropertySetHelper
