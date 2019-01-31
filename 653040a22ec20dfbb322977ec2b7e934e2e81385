@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_34690725",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T07:26:09Z",
+      "side": 1,
+      "message": "tdf#119812: Hide \"Windows Share\" server type on Windows.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_74609f33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T07:26:09Z",
+      "side": 1,
+      "message": "is non-functional on Windows",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5455a34f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T07:26:09Z",
+      "side": 1,
+      "message": "removes its entry from dialog",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 10,
+        "endChar": 69
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_74877fd9",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T07:26:09Z",
+      "side": 1,
+      "message": "Let\u0027s re-phrase the comment a little to avoid misconception:\n\n    // Remove Windows Share entry on Windows, where it\u0027s non-functional",
+      "range": {
+        "startLine": 226,
+        "startChar": 7,
+        "endLine": 226,
+        "endChar": 75
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_546c8335",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T07:26:09Z",
+      "side": 1,
+      "message": "It would be helpful to mention here, where that 3 comes from:\n\n    // nPos is the position of first item pre-defined in svtools/uiconfig/ui/placeedit.ui,\n    // after other CMIS server types were inserted",
+      "range": {
+        "startLine": 228,
+        "startChar": 7,
+        "endLine": 228,
+        "endChar": 65
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
