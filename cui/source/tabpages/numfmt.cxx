@@ -1711,7 +1711,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
 
 void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 {
-    sal_uInt16 nCurCategory = m_xLbCategory->get_selected_index();
+    int nCurCategory = m_xLbCategory->get_selected_index();
     sal_uInt16 nTmpCatPos;
 
     if (bOneAreaFlag)
