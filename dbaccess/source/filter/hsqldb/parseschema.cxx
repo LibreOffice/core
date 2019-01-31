@@ -20,6 +20,7 @@
 #include "parseschema.hxx"
 #include "fbcreateparser.hxx"
 #include "fbalterparser.hxx"
+#include "utils.hxx"
 
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -123,7 +124,8 @@ void SchemaParser::parseSchema()
     while (!xTextInput->isEOF())
     {
         // every line contains exactly one DDL statement
-        OUString sSql = xTextInput->readLine();
+        OUString sSql = utils::convertToUTF8(
+            OUStringToOString(xTextInput->readLine(), RTL_TEXTENCODING_UTF8));
 
         IndexStmtParser indexParser{ sSql };
         if (indexParser.isIndexStatement())
