@@ -73,6 +73,14 @@ public:
     }
 
 protected:
+    /// Blacklist handling.
+    bool mustTestImportOf(const char* filename) const override
+    {
+        // If the testcase is stored in some other format, it's pointless to
+        // test.
+        return OString(filename).endsWith(".rtf");
+    }
+
     AllSettings m_aSavedSettings;
 };
 
@@ -1096,6 +1104,15 @@ DECLARE_RTFEXPORT_TEST(testTdf106950, "tdf106950.rtf")
     CPPUNIT_ASSERT_EQUAL(
         style::ParagraphAdjust_CENTER,
         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
+{
+    auto xShape(getShape(1));
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Unknown property: RotateAngle', i.e. export lost the rotation, and then
+    // import created a Writer picture (instead of a Draw one).
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
