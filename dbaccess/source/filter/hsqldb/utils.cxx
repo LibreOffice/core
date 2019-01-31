@@ -28,6 +28,46 @@
 
 using namespace dbahsql;
 
+namespace
+{
+//Find ascii escaped unicode
+sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
+{
+    const OString sHexDigits = "0123456789abcdefABCDEF";
+    sal_Int32 nIndex = rSource.indexOf("\\u", nFrom);
+    if (nIndex == -1)
+    {
+        return -1;
+    }
+    bool bIsUnicode = true;
+    for (short nDist = 2; nDist <= 5; ++nDist)
+    {
+        if (sHexDigits.indexOf(rSource[nIndex + nDist]) == -1)
+        {
+            bIsUnicode = false;
+        }
+    }
+    return bIsUnicode ? nIndex : -1;
+}
+
+} // unnamed namespace
+
+//Convert ascii escaped unicode to utf-8
+OUString utils::convertToUTF8(const OString& original)
+{
+    OString sResult = original;
+    sal_Int32 nIndex = lcl_IndexOfUnicode(sResult);
+    while (nIndex != -1 && nIndex < original.getLength())
+    {
+        const OString sHex = original.copy(nIndex + 2, 4);
+        const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));
+        const OString sNewChar = OString(&cDec, 1, RTL_TEXTENCODING_UTF8);
+        sResult = sResult.replaceAll("\\u" + sHex, sNewChar);
+        nIndex = lcl_IndexOfUnicode(original, nIndex + 1);
+    }
+    return OStringToOUString(sResult, RTL_TEXTENCODING_UTF8);
+}
+
 OUString utils::getTableNameFromStmt(const OUString& sSql)
 {
     auto stmtComponents = comphelper::string::split(sSql, sal_Unicode(u' '));
