@@ -766,9 +766,9 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
     SalTwoRect  aPosAry = rPosAry;
     const HDC hDC = mrParent.getHDC();
 
-    ScopedSelectedHBRUSH(hDC, CreateSolidBrush(RGB(nMaskColor.GetRed(),
-                                                   nMaskColor.GetGreen(),
-                                                   nMaskColor.GetBlue())));
+    ScopedSelectedHBRUSH hBrush(hDC, CreateSolidBrush(RGB(nMaskColor.GetRed(),
+                                                          nMaskColor.GetGreen(),
+                                                          nMaskColor.GetBlue())));
 
     // WIN/WNT seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
@@ -1563,7 +1563,7 @@ void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
         return;
     }
 
-    ScopedSelectedHBRUSH(hDC, CreateSolidBrush(crColor));
+    ScopedSelectedHBRUSH hBrush(hDC, CreateSolidBrush(crColor));
     PatBlt(hDC, static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
 }
 
