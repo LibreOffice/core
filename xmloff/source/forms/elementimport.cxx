@@ -886,10 +886,10 @@ namespace xmloff
         if (TypeClass_ANY == aProp.Type.getTypeClass())
         {
             // we have exactly 2 properties where this type class is allowed:
-            OSL_ENSURE(
-                    _rPropValue.Name != PROPERTY_EFFECTIVE_VALUE
-                &&  _rPropValue.Name != PROPERTY_EFFECTIVE_DEFAULT,
-                "OControlImport::implTranslateValueProperty: invalid property type/name combination!");
+            SAL_WARN_IF(
+                    _rPropValue.Name == PROPERTY_EFFECTIVE_VALUE
+                ||  _rPropValue.Name == PROPERTY_EFFECTIVE_DEFAULT, "xmloff",
+                "OControlImport::implTranslateValueProperty: invalid property type/name combination, Any and " + _rPropValue.Name);
 
             // Both properties are allowed to have a double or a string value,
             // so first try to convert the string into a number
