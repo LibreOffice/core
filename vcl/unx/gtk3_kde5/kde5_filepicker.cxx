@@ -56,8 +56,6 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
-
-    qApp->installEventFilter(this);
 }
 
 void KDE5FilePicker::enableFolderMode()
@@ -81,6 +79,7 @@ bool KDE5FilePicker::execute()
     if (!_currentFilter.isEmpty())
         _dialog->selectNameFilter(_currentFilter);
 
+    qApp->installEventFilter(this);
     _dialog->show();
     //block and wait for user input
     return _dialog->exec() == QFileDialog::Accepted;
@@ -241,7 +240,11 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         {
             KWindowSystem::setMainWindow(w, _winId);
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
+            {
                 fileWidget->setCustomWidget(_extraControls);
+                // remove eventFilter again; the only purpose was to set the custom widget here
+                qApp->removeEventFilter(this);
+            }
         }
     }
     return QObject::eventFilter(o, e);
