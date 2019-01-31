@@ -153,6 +153,7 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(this, &KDE5FilePicker::getFilesSignal, this, &KDE5FilePicker::getFiles,
             Qt::BlockingQueuedConnection);
 
+    // used to set the custom controls
     qApp->installEventFilter(this);
 }
 
@@ -854,7 +855,11 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         if (!w->parentWidget() && w->isModal())
         {
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
+            {
                 fileWidget->setCustomWidget(_extraControls);
+                // remove event filter again; the only purpose was to set the custom widget here
+                qApp->removeEventFilter(this);
+            }
         }
     }
     return QObject::eventFilter(o, e);
