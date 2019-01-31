@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9721dda2",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-31T10:08:44Z",
+      "side": 1,
+      "message": "aGraph?",
+      "revId": "6c7016cc5256caa3f184cd91e6cf785d8a300877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b72cd999",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-31T10:08:44Z",
+      "side": 1,
+      "message": "Catch by const reference?",
+      "revId": "6c7016cc5256caa3f184cd91e6cf785d8a300877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
