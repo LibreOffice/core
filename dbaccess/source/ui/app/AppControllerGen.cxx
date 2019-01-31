@@ -421,7 +421,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     }
 
     if ( !bExistentObject )
-        throw NoSuchElementException( *i_rObjectName, *this );
+        throw NoSuchElementException( SAL_WHERE " " + *i_rObjectName, *this );
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 ObjectType,

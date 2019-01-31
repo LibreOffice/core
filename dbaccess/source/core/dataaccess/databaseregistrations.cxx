@@ -33,6 +33,7 @@
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
+#include <sal/log.hxx>
 
 #include "databaseregistrations.hxx"
 
@@ -172,7 +173,7 @@ namespace dbaccess
 
         if (!aNodeForName.isValid())
         {
-            throw NoSuchElementException( _rName, *this );
+            throw NoSuchElementException( SAL_WHERE " " + _rName, *this );
         }
 
         return aNodeForName;

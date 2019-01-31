@@ -28,6 +28,8 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
+
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -1439,7 +1441,7 @@ void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name)
     sal_Int32 nPos = implGetPos(Name);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     removeByIndex(nPos);
 }
@@ -1450,7 +1452,7 @@ void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& a
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     replaceByIndex(nPos, aElement);
 }
@@ -1461,7 +1463,7 @@ Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName)
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     return makeAny(m_aChildren[nPos]);
 }

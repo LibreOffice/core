@@ -41,6 +41,8 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -546,7 +548,7 @@ Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName )
     OUString sName;
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         return aContent;
-    throw NoSuchElementException(_sName,*this);
+    throw NoSuchElementException(SAL_WHERE " " + _sName,*this);
 }
 
 sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName )
@@ -587,14 +589,14 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sNa
 void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sName )
 {
     if ( _sName.isEmpty() )
-        throw NoSuchElementException(_sName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _sName,*this);
 
     ClearableMutexGuard aGuard(m_aMutex);
     Any aContent;
     OUString sName;
     Reference< XNameContainer > xNameContainer(this);
     if ( !lcl_queryContent(_sName,xNameContainer,aContent,sName) )
-        throw NoSuchElementException(_sName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _sName,*this);
 
     xNameContainer->removeByName(sName);
 }
@@ -611,7 +613,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sN
     OUString sName;
     Reference< XNameContainer > xNameContainer(this);
     if ( !lcl_queryContent(_sName,xNameContainer,aContent,sName) )
-        throw NoSuchElementException(_sName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _sName,*this);
 
     xNameContainer->replaceByName(sName,_aElement);
 }
@@ -692,7 +694,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName )
         throw IllegalArgumentException();
 
     if (!checkExistence(_rName))
-        throw NoSuchElementException(_rName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName,*this);
 
     Reference< XCommandProcessor > xContent( implGetByName( _rName, true ), UNO_QUERY );
     if ( xContent.is() )

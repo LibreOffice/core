@@ -311,7 +311,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     INetURLObject aURL( _sURL );
 
     if ( aURL.GetProtocol() == INetProtocol::NotValid )
-        throw NoSuchElementException( _rName, *this );
+        throw NoSuchElementException(SAL_WHERE " name=" + _rName + " url=" +_sURL, *this );
 
     bool bEmbeddedDataSource = aURL.isSchemeEqualTo(INetProtocol::VndSunStarPkg);
     try
@@ -627,7 +627,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
     if ( _rName.isEmpty() )
-        throw NoSuchElementException(_rName, *this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName, *this);
 
     try
     {

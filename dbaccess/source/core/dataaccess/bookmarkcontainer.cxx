@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -120,7 +121,7 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName )
             throw IllegalArgumentException();
 
         if (!checkExistence(_rName))
-            throw NoSuchElementException();
+            throw NoSuchElementException(SAL_WHERE);
 
         // the old element (for the notifications)
         sOldBookmark = m_aBookmarks[_rName];
@@ -150,7 +151,7 @@ void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const A
 
     // do we have such an element?
     if (!checkExistence(_rName))
-        throw NoSuchElementException();
+        throw NoSuchElementException(SAL_WHERE);
 
     // approve the new object
     OUString sNewLink;
@@ -230,7 +231,7 @@ Any SAL_CALL OBookmarkContainer::getByName( const OUString& _rName )
     MutexGuard aGuard(m_rMutex);
 
     if (!checkExistence(_rName))
-        throw NoSuchElementException();
+        throw NoSuchElementException(SAL_WHERE);
 
     return makeAny(m_aBookmarks[_rName]);
 }

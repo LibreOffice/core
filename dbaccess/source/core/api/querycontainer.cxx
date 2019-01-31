@@ -38,6 +38,8 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
+
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -201,7 +203,7 @@ void SAL_CALL OQueryContainer::dropByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
     if ( !checkExistence(_rName) )
-        throw NoSuchElementException(_rName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName,*this);
 
     if ( !m_xCommandDefinitions.is() )
         throw DisposedException( OUString(), *this );
