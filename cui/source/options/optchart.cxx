@@ -139,12 +139,8 @@ SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 
 void SvxDefaultColorOptPage::dispose()
 {
-    // save changes
     if (pChartOptions)
     {
-        pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
-        pChartOptions->Commit();
-
         pColorConfig.reset();
         pChartOptions.reset();
     }
@@ -197,6 +193,15 @@ void SvxDefaultColorOptPage::FillPaletteLB()
     if (m_pLbPaletteSelector->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         SelectPaletteLbHdl( *m_pLbPaletteSelector );
+    }
+}
+
+void SvxDefaultColorOptPage::SaveChartOptions()
+{
+    if (pChartOptions)
+    {
+        pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
+        pChartOptions->Commit();
     }
 }
 

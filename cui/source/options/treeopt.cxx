@@ -683,6 +683,11 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
                 }
                 pPageInfo->m_pExtPage->SavePage();
             }
+            if ( pPageInfo->m_pPage && RID_OPTPAGE_CHART_DEFCOLORS == pPageInfo->m_nPageId )
+            {
+                SvxDefaultColorOptPage* pPage = static_cast<SvxDefaultColorOptPage *>(pPageInfo->m_pPage.get());
+                pPage->SaveChartOptions();
+            }
         }
         pEntry = pTreeLB->Next(pEntry);
     }
