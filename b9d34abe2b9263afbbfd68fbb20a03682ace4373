@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f485f77_f47c8fb6",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T09:08:38Z",
+      "side": 1,
+      "message": "If getHDC is a simple selector (removing some member - didn\u0027t check), then it\u0027s ok to just use repeated getHDC() which would be optimized away by compiler",
+      "range": {
+        "startLine": 214,
+        "startChar": 20,
+        "endLine": 214,
+        "endChar": 29
+      },
+      "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_347347ea",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 5
