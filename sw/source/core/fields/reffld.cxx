@@ -19,6 +19,7 @@
 
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <o3tl/unreachable.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
@@ -557,16 +558,14 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     nEnd = std::min(nStart + 1, nLen);
                     break;
 
-                default:
-                    assert(false); // fall through to appease MSVC C4701
-#ifdef NDEBUG
-                    [[fallthrough]];
-#endif
                 // "Reference" (whole Text)
                 case REF_CONTENT:
                     nStart = 0;
                     nEnd = nLen;
                     break;
+
+                default:
+                    O3TL_UNREACHABLE;
                 }
                 break;
 
@@ -601,15 +600,13 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 }
                 return;
 
-            default:
-                assert(false); // fall through to appease MSVC C4701
-#ifdef NDEBUG
-                [[fallthrough]];
-#endif
             case REF_SETREFATTR:
                 nStart = nNumStart;
                 nEnd = nNumEnd;
                 break;
+
+            default:
+                O3TL_UNREACHABLE;
             }
 
             if( nStart != nEnd ) // a section?
