@@ -2866,9 +2866,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         if (pDocInfoField != nullptr)
                         {
                             OUString sFieldname = pDocInfoField->GetFieldName();
-                            sal_Int32 nIndex = sFieldname.indexOf(':');
 
-                            if (nIndex != sFieldname.getLength())
+                            const sal_Int32 nIndex = sFieldname.indexOf(':');
+                            if (nIndex >= 0)
                                 sFieldname = sFieldname.copy(nIndex + 1);
 
                             sStr = "\"" + sFieldname + "\"";
