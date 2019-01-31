@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if defined _WIN32 //TODO, see corresponding TODO in compilerplugins/clang/unusedfields.cxx
+// expected-no-diagnostics
+#else
+
 #include <vector>
 #include <ostream>
 #include <com/sun/star/uno/Any.hxx>
@@ -45,8 +49,8 @@ struct Bar
     int m_bar7[5];
     int m_bar8;
     int m_barstream;
-    int m_bar9;
-    int m_bar10;
+    sal_Int32 m_bar9;
+    sal_Int32 m_bar10;
 
     // check that we see reads of fields like m_foo1 when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
@@ -194,5 +198,7 @@ struct ReadOnlyAnalysis4
         x = m_readonlyCss.getArray()[0];
     }
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
