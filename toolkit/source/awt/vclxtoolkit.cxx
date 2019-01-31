@@ -1468,7 +1468,10 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
                         "tabpagecontainer" ) )
                 {
-                    pNewWindow = VclPtr<TabControl>::Create( pParent, nWinBits );
+                    // TabControl has a special case for tabs without border: they are displayed
+                    // in a different way, so we need to ensure that this style is not set, so
+                    // we can guarantee normal tab behavior
+                    pNewWindow = VclPtr<TabControl>::Create( pParent, nWinBits & (~WB_NOBORDER));
                     *ppNewComp = new VCLXTabPageContainer;
                 }
                 else if ( aServiceName == "animatedimages" )
