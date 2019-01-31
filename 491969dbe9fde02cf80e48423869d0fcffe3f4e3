@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d7e87517",
+        "filename": "dbaccess/source/filter/hsqldb/createparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-01-31T11:21:43Z",
+      "side": 1,
+      "message": "Don\u0027t you think rColumnName may need the convert to UTF8 so aColDef is ok?",
+      "range": {
+        "startLine": 255,
+        "startChar": 33,
+        "endLine": 255,
+        "endChar": 44
+      },
+      "revId": "491969dbe9fde02cf80e48423869d0fcffe3f4e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
