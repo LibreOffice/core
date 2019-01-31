@@ -30,12 +30,6 @@ public:
     virtual bool load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
                       SotClipboardFormatId, unsigned int) override;
 
-    void test();
-
-    CPPUNIT_TEST_SUITE(RtfTest);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
-
 private:
     uno::Reference<document::XFilter> m_xFilter;
 };
@@ -72,14 +66,12 @@ bool RtfTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFi
     }
 }
 
-void RtfTest::test()
+CPPUNIT_TEST_FIXTURE(RtfTest, testFilter)
 {
 #ifndef DISABLE_CVE_TESTS
     testDir(OUString(), m_directories.getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"));
 #endif
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(RtfTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
