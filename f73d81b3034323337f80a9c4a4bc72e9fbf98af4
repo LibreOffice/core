@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_17c96d77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-01-31T13:13:59Z",
+      "side": 1,
+      "message": "the bug number looks wrong",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "f73d81b3034323337f80a9c4a4bc72e9fbf98af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
