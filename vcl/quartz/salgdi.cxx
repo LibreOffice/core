@@ -425,10 +425,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     }
 
     if (aGlyphIds.empty())
-    {
-        SAL_WARN("vcl.quartz", "aGlyphIds is empty!?");
         return;
-    }
 
     assert(aGlyphIds.size() == aGlyphPos.size());
 #if 0
