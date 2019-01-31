@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7471bfe0",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T09:04:18Z",
+      "side": 1,
+      "message": "I believe these are redundant and should be removed, since the object dtor has side effects, so no need to \"use\" the object - we do that all the time with mutex guards e.g.",
+      "range": {
+        "startLine": 778,
+        "startChar": 4,
+        "endLine": 778,
+        "endChar": 17
+      },
+      "revId": "e0252442c338db2bc5c6588665f5df26abc849e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
