@@ -16,15 +16,13 @@
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
-#include <com/sun/star/awt/XWindow2.hpp>
-
 #include <cppuhelper/compbase.hxx>
 
-#include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/SidebarDockingWindow.hxx>
-
-#include <sfx2/sidebar/UnoDecks.hxx>
 #include <com/sun/star/ui/XDecks.hpp>
+
+namespace sfx2 { namespace sidebar {
+class SidebarController;
+} }
 
 /** get the sidebar for a given frame
 */
