@@ -220,6 +220,14 @@ int main( int argc, char *argv[] )
         }
         strcat( envstr, "/usr/local/bin" ); /* We are adding at the end */
         putenv( envstr );
+
+        /* https://bz.apache.org/ooo/show_bug.cgi?id=127966 */
+        value = getenv ( "HOME" );
+        if ( value && *value ) {
+          chdir ( value );
+        } else {
+            chdir ( "/tmp" );
+        }
 #endif
     }
     else
