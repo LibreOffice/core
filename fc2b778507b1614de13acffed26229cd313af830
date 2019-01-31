@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_940d5b92",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-01-31T06:27:04Z",
+      "side": 1,
+      "message": "Oh, I got the idea. Sorry, it took too much time to realize. I would suggest to\ndo the following:\n\n* Roll back changes for WinSalInstance::CreateVirtualDevice as we do not use\n  any RAII there and move these changes into a separate patch.\n* Change mhBmp from the raw pointer to scoped version in the current patch.\n\nAlso, I have some doubts about the destructor.\n\n\n    WinSalVirtualDevice::~WinSalVirtualDevice()\n    {\n        mhBmp.reset();\n        mpGraphics.reset();\n    }\n\nWe manually reseting the pointer which seems useless because they will be\ndestroyded automaticaly when the object will go out of scope. Probably there\nare magic requirements for the destruction order, but I did not find any of\nthem. As you might see, to keep my life safe I did the same as the previous\nauthor ;)",
+      "parentUuid": "1f485f77_be8ef62b",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 84
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c576913f",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
