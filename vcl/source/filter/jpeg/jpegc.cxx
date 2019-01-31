@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -216,7 +217,8 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     long nWidth = rContext.cinfo.output_width;
     long nHeight = rContext.cinfo.output_height;
 
-    if (nWidth > 2000 && nHeight > 2000 && utl::ConfigManager::IsFuzzing())
+    long nResult = 0;
+    if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
         return;
 
     bool bGray = (rContext.cinfo.output_components == 1);
