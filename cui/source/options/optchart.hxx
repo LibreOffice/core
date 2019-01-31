@@ -46,6 +46,7 @@ private:
     std::unique_ptr<SvxChartColorTableItem> pColorConfig;
     ImpColorList            aColorList;
     PaletteManager          aPaletteManager;
+    bool                    bSaveOptions;
 
     DECL_LINK( ResetToDefaults, Button *, void );
     DECL_LINK( AddChartColor, Button *, void );
@@ -72,6 +73,8 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool        FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void        Reset( const SfxItemSet* rInAttrs ) override;
+
+    void    SaveOptionsOnDispose( bool bVal = true ) { bSaveOptions = bVal; }
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTCHART_HXX

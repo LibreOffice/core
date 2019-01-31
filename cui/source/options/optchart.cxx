@@ -115,6 +115,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
                                     | WB_ITEMBORDER | WB_NAMEFIELD | WB_VSCROLL );
 
     pChartOptions.reset(new SvxChartOptions);
+    bSaveOptions = false;
 
     const SfxPoolItem* pItem = nullptr;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
@@ -142,9 +143,11 @@ void SvxDefaultColorOptPage::dispose()
     // save changes
     if (pChartOptions)
     {
-        pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
-        pChartOptions->Commit();
-
+        if (bSaveOptions)
+        {
+            pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
+            pChartOptions->Commit();
+        }
         pColorConfig.reset();
         pChartOptions.reset();
     }
