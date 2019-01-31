@@ -197,7 +197,7 @@ namespace basegfx
                     if(nCount > 1)
                     {
                         // these polygons were created above, there exists none with less than two points,
-                        // thus dircet point access below is allowed
+                        // thus direct point access below is allowed
                         const B3DPolygon aFirst(pLineTarget->getB3DPolygon(0));
                         B3DPolygon aLast(pLineTarget->getB3DPolygon(nCount - 1));
 

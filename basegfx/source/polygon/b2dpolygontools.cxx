@@ -1313,7 +1313,7 @@ namespace basegfx
                     if(nCount > 1)
                     {
                         // these polygons were created above, there exists none with less than two points,
-                        // thus dircet point access below is allowed
+                        // thus direct point access below is allowed
                         const B2DPolygon aFirst(pLineTarget->getB2DPolygon(0));
                         B2DPolygon aLast(pLineTarget->getB2DPolygon(nCount - 1));
 
@@ -1335,7 +1335,7 @@ namespace basegfx
                     if(nCount > 1)
                     {
                         // these polygons were created above, there exists none with less than two points,
-                        // thus dircet point access below is allowed
+                        // thus direct point access below is allowed
                         const B2DPolygon aFirst(pGapTarget->getB2DPolygon(0));
                         B2DPolygon aLast(pGapTarget->getB2DPolygon(nCount - 1));
 
