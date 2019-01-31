@@ -3610,15 +3610,18 @@ if test "$_os" = "WINNT"; then
     # needed to support TWAIN scan on both 32- and 64-bit systems
 
     BUILD_X86=
-    CXX_X86_BINARY=
 
     if test "$BITNESS_OVERRIDE" = "64"; then
         AC_MSG_CHECKING([for a x86 compiler and libraries for 32-bit binaries required for TWAIN support])
-        if "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
+        if test -n "$CXX_X86_BINARY"; then
+            BUILD_X86=TRUE
+            AC_MSG_RESULT([preset])
+        elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
             CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
             AC_MSG_RESULT([found])
         else
+            CXX_X86_BINARY=
             AC_MSG_RESULT([not found])
             AC_MSG_WARN([Installation set will not contain 32-bit binaries required for TWAIN support])
         fi
