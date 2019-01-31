@@ -24,13 +24,8 @@ libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
-libnumbertext_LIBS+=-L$(gb_StaticLibrary_WORKDIR)
-
 $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 	$(call gb_ExternalProject_run,build,\
-		$(if $(libnumbertext_LIBS),LIBS='$(libnumbertext_LIBS)') \
-		$(if $(filter iOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
-		autoreconf && \
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		$(SHELL) ./configure --disable-shared --with-pic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
