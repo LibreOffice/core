@@ -111,7 +111,7 @@ protected: //member
 
     std::unique_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
 
-    //Container for the XProperyChangedListener. The listeners are inserted by handle.
+    //Container for the XPropertyChangedListener. The listeners are inserted by handle.
     //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer;
 
     //Container for the XPropertyVetoableListener. The listeners are inserted by handle.
