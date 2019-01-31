@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <propertyids.hxx>
+#include <vcl/svapp.hxx>
 #include <TConnection.hxx>
 
 using namespace ::connectivity::firebird;
@@ -126,7 +127,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                                       XSQLDA*& pOutSqlda,
                                                       XSQLDA* pInSqlda)
 {
-    MutexGuard aGuard(m_aMutex);
+    SolarMutexGuard g; // tdf#122129
 
     freeStatementHandle();
 
