@@ -59,6 +59,7 @@
 #include <o3tl/functional.hxx>
 #include <limits>
 #include <unordered_map>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
