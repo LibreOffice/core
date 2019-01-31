@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_14216bfc",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-31T06:36:35Z",
+      "side": 1,
+      "message": "Agree with limiting the scope of the current patch.\n\nAs to the dtor: while it\u0027s true that those lines looks unnecessary, it *might* be so that their order is somehow important... or maybe not. So you may do one of two things *in this patch*: either leave it as you already did, or remove resetting mpGraphics (but let resetting mhBmp stay, to ensure the order). Removal of the latter you may do in a follow-up patch, which would be trivial to revert in case of need.",
+      "parentUuid": "1f485f77_940d5b92",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 84
+      },
+      "revId": "fc2b778507b1614de13acffed26229cd313af830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c576913f",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
