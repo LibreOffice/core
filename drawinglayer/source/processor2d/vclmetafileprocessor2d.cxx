@@ -2217,38 +2217,14 @@ namespace drawinglayer
         {
             // structured tag primitive
             const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
-            bool bTagUsed(vcl::PDFWriter::NonStructElement != rTagElement);
+            const bool bTagUsed(vcl::PDFWriter::NonStructElement != rTagElement);
+            const bool bIsBackground(rStructureTagCandidate.isBackground());
 
-            //Z For now, just do not create StructureTag(s) for hidden/background
-            // (Graphic)Objects - see '/Artifact' comments below
-            if(bTagUsed && rStructureTagCandidate.isBackground())
+            if(mpPDFExtOutDevData && bTagUsed)
             {
-                bTagUsed = false;
-            }
-
-            if(mpPDFExtOutDevData &&  bTagUsed)
-            {
-                // write start tag
-                mpPDFExtOutDevData->BeginStructureElement(rTagElement);
-
-                // if(rStructureTagCandidate.isBackground())
-                // {
-                //     //Z need to somehow apply '/Artifact' information...
-                //     // - Already experimented with adding two BeginStructureElement adding
-                //     //   a 'vcl::PDFWriter::Artifact' -> not really what e.g. PAC3 expects.
-                //     // - May also be adding someting using 'SetStructureAttribute' and
-                //     //   extending vcl::PDFWriter::StructAttribute...
-                //     // - Simple solution for now (see above): Just do not create
-                //     //   StructureTag(s) for hidden/background (Graphic)Objects. That
-                //     //   works, shows all content in PDF renderers, but hides in
-                //     //   TaggedStructure. But: also not visible in PAC3's 'LogicalStructure'
-                //     //   View where there is a tab for 'Artifacts' - I *guess* a correctly
-                //     //   tagged '/Artifact' should appear there.
-                //     // Unfortunately found no real example - there is https://www.w3.org/TR/WCAG20-TECHS/PDF4.html
-                //     // which claims to have an example in
-                //     // https://www.w3.org/WAI/WCAG20/Techniques/working-examples/PDF4/decorative-image.docx
-                //     // but that file has no '/Artifact' entries at all...
-                // }
+                // Write start tag. For background elements use NonStructElement instead of real element type (e.g. Figure)
+                // to guarantee it gets exported as artifact (tagged PDF)
+                mpPDFExtOutDevData->BeginStructureElement(bIsBackground ? vcl::PDFWriter::NonStructElement : rTagElement);
             }
 
             // process children normally
