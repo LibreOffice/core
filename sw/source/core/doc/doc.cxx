@@ -489,6 +489,8 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     {
         maDBData = rNewData;
         getIDocumentState().SetModified();
+        if (m_pDBManager)
+            m_pDBManager->CommitLastRegistrations();
     }
     getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName)->UpdateFields();
 }
