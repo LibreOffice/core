@@ -368,7 +368,7 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
         {
             // Get the font metrics.
             HDC hDC = m_pGraphics->getHDC();
-            ScopedSelectedHFONT(hDC, CreateFontIndirectW(&aLogFont));
+            ScopedSelectedHFONT hFont(hDC, CreateFontIndirectW(&aLogFont));
             GetTextMetricsW(hDC, &aFontMetric);
         }
 
