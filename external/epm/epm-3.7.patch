@@ -348,7 +348,7 @@ diff -urN epm-3.7-old//epm.c epm-3.7/epm.c
  {
    puts(EPM_VERSION);
    puts("Copyright 1999-2003 by Easy Software Products.");
-+  puts("Patched for OpenOffice.org");
++  puts("Patched for LibreOffice");
    puts("");
    puts("EPM is free software and comes with ABSOLUTELY NO WARRANTY; for details");
    puts("see the GNU General Public License in the file COPYING or at");

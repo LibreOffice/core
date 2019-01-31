@@ -7622,7 +7622,7 @@ if test "$enable_epm" = "yes"; then
         if test "$with_epm" = "no" -a "$_os" != "Darwin"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
                 AC_MSG_CHECKING([whether epm is patched for LibreOffice's needs])
-                if grep "Patched for LibreOffice" $EPM >/dev/null 2>/dev/null; then
+                if grep "Patched for .*Office" $EPM >/dev/null 2>/dev/null; then
                     AC_MSG_RESULT([yes])
                 else
                     AC_MSG_RESULT([no])

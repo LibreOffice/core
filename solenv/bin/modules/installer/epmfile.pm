@@ -759,7 +759,7 @@ sub set_patch_state
     while (<EPMPATCH>)
     {
         chop;
-        if ( $_ =~ /Patched for OpenOffice.org/ ) { $installer::globals::is_special_epm = 1; }
+        if ( $_ =~ /Patched for .*Office/ ) { $installer::globals::is_special_epm = 1; }
     }
 
     close (EPMPATCH);
