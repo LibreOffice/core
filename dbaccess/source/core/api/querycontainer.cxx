@@ -38,6 +38,8 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
+
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -147,7 +149,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 {
     ResettableMutexGuard aGuard(m_aMutex);
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( OUString(), *this );
+        throw DisposedException( SAL_WHERE, *this );
 
     // first clone this object's CommandDefinition part
     Reference< css::sdb::XQueryDefinition > xCommandDefinitionPart = css::sdb::QueryDefinition::create(m_aContext);
@@ -201,10 +203,10 @@ void SAL_CALL OQueryContainer::dropByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
     if ( !checkExistence(_rName) )
-        throw NoSuchElementException(_rName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName,*this);
 
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( OUString(), *this );
+        throw DisposedException( SAL_WHERE, *this );
 
     // now simply forward the remove request to the CommandDefinition container, we're a listener for the removal
     // and thus we do everything necessary in ::elementRemoved
@@ -215,10 +217,10 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_aMutex);
     if ((_nIndex<0) || (_nIndex>getCount()))
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(SAL_WHERE);
 
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( OUString(), *this );
+        throw DisposedException( SAL_WHERE, *this );
 
     OUString sName;
     Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getByIndex(_nIndex),UNO_QUERY);

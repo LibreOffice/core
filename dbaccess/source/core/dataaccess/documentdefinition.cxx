@@ -81,6 +81,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <core_resource.hxx>
 #include <strings.hrc>
@@ -732,7 +733,7 @@ void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
     {
     default:
     case EmbedStates::LOADED:
-        throw embed::WrongStateException( OUString(), *this );
+        throw embed::WrongStateException( SAL_WHERE, *this );
 
     case EmbedStates::RUNNING:
         if ( !i_bShow )
@@ -1787,7 +1788,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( !m_pImpl || !m_pImpl->m_pDataSource )
-        throw DisposedException();
+        throw DisposedException(SAL_WHERE);
 
     Reference< XComponent > xComponent;
     try
@@ -1815,7 +1816,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            SAL_WHERE, *this, ::cppu::getCaughtException() );
     }
 
     return xComponent;
@@ -1863,7 +1864,7 @@ void SAL_CALL ODocumentDefinition::store(  )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            SAL_WHERE, *this, ::cppu::getCaughtException() );
     }
 }
 
@@ -1880,7 +1881,7 @@ sal_Bool SAL_CALL ODocumentDefinition::close(  )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            SAL_WHERE, *this, ::cppu::getCaughtException() );
     }
     return bSuccess;
 }
@@ -2052,11 +2053,11 @@ void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject&, sal_B
     try
     {
         if ( !close() )
-            throw util::CloseVetoException();
+            throw util::CloseVetoException(SAL_WHERE);
     }
     catch(const lang::WrappedTargetException&)
     {
-        throw util::CloseVetoException();
+        throw util::CloseVetoException(SAL_WHERE);
     }
 }
 

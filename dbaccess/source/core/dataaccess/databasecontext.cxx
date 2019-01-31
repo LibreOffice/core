@@ -155,7 +155,7 @@ namespace dbaccess
                 }
                 catch( const CloseVetoException& )
                 {
-                    throw TerminationVetoException();
+                    throw TerminationVetoException(SAL_WHERE);
                 }
             }
         }
@@ -311,7 +311,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     INetURLObject aURL( _sURL );
 
     if ( aURL.GetProtocol() == INetProtocol::NotValid )
-        throw NoSuchElementException( _rName, *this );
+        throw NoSuchElementException(SAL_WHERE " name=" + _rName + " url=" +_sURL, *this );
 
     bool bEmbeddedDataSource = aURL.isSchemeEqualTo(INetProtocol::VndSunStarPkg);
     try
@@ -441,12 +441,12 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
 void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject)
 {
     if ( _rName.isEmpty() )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     Reference< XDocumentDataSource > xDocDataSource( _rxObject, UNO_QUERY );
     Reference< XModel > xModel( xDocDataSource.is() ? xDocDataSource->getDatabaseDocument() : Reference< XOfficeDatabaseDocument >(), UNO_QUERY );
     if ( !xModel.is() )
-        throw IllegalArgumentException( OUString(), *this, 2 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 2 );
 
     OUString sURL = xModel->getURL();
     if ( sURL.isEmpty() )
@@ -627,7 +627,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
     if ( _rName.isEmpty() )
-        throw NoSuchElementException(_rName, *this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName, *this);
 
     try
     {

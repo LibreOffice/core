@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
+#include <sal/log.hxx>
 
 namespace dbaccess
 {
@@ -595,7 +596,7 @@ void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
     }
     catch(const PropertyVetoException&)
     {
-        throw ElementExistException(_sNewName,*this);
+        throw ElementExistException(SAL_WHERE " " + _sNewName,*this);
     }
 }
 

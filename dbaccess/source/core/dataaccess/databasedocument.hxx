@@ -60,6 +60,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 namespace comphelper {
     class NamedValueCollection;
@@ -443,7 +444,7 @@ public:
     void checkInitialized() const
     {
         if ( !impl_isInitialized() )
-            throw css::lang::NotInitializedException( OUString(), getThis() );
+            throw css::lang::NotInitializedException( SAL_WHERE, getThis() );
     }
 
     /** checks the document is currently in the initialization phase, or already initialized.
@@ -455,7 +456,7 @@ public:
             // fine
             return;
 
-        throw css::lang::NotInitializedException( OUString(), getThis() );
+        throw css::lang::NotInitializedException( SAL_WHERE, getThis() );
     }
 
     /** checks whether the document is currently being initialized, or already initialized,
@@ -464,7 +465,7 @@ public:
     void checkNotInitialized() const
     {
         if ( impl_isInitializing() || impl_isInitialized() )
-            throw css::frame::DoubleInitializationException( OUString(), getThis() );
+            throw css::frame::DoubleInitializationException( SAL_WHERE, getThis() );
     }
 
 private:

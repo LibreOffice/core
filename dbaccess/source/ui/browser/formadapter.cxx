@@ -28,6 +28,8 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
+
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -1439,7 +1441,7 @@ void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name)
     sal_Int32 nPos = implGetPos(Name);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     removeByIndex(nPos);
 }
@@ -1450,7 +1452,7 @@ void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& a
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     replaceByIndex(nPos, aElement);
 }
@@ -1461,7 +1463,7 @@ Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName)
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw css::container::NoSuchElementException();
+        throw css::container::NoSuchElementException(SAL_WHERE);
     }
     return makeAny(m_aChildren[nPos]);
 }
@@ -1491,14 +1493,14 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements()
 void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
     implInsert(Element, _rIndex);
 }
 
 void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     Reference< css::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
 
@@ -1527,7 +1529,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     // extract the form component
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
@@ -1594,7 +1596,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getCount()
 Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     Reference< css::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
     return makeAny(xElement);

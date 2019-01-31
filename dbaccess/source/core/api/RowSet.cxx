@@ -2906,7 +2906,7 @@ void ORowSetClone::close()
     {
         MutexGuard aGuard( m_aMutex );
         if (OComponentHelper::rBHelper.bDisposed)
-            throw DisposedException();
+            throw DisposedException(SAL_WHERE);
     }
     dispose();
 }

@@ -282,7 +282,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& )
 {
     // not supported
-    throw IllegalArgumentException( OUString(), *this, 1 );
+    throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 }
 
 Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext()
@@ -315,7 +315,7 @@ Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ )
 {
-    throw NoSupportException( OUString(), *this );
+    throw NoSupportException( SAL_WHERE, *this );
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  )
@@ -342,7 +342,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener
 Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ )
 {
     // no sub controllers, never
-    throw IndexOutOfBoundsException( OUString(), *this );
+    throw IndexOutOfBoundsException( SAL_WHERE, *this );
 }
 
 Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  )
@@ -424,7 +424,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterList
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode )
 {
     if ( !supportsMode( _rMode ) )
-        throw NoSupportException();
+        throw NoSupportException(SAL_WHERE);
 }
 
 OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  )

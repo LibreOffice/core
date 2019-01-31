@@ -33,6 +33,7 @@
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
+#include <sal/log.hxx>
 
 #include "databaseregistrations.hxx"
 
@@ -172,7 +173,7 @@ namespace dbaccess
 
         if (!aNodeForName.isValid())
         {
-            throw NoSuchElementException( _rName, *this );
+            throw NoSuchElementException( SAL_WHERE " " + _rName, *this );
         }
 
         return aNodeForName;
@@ -200,10 +201,10 @@ namespace dbaccess
     void DatabaseRegistrations::impl_checkValidName_common(const OUString& _rName)
     {
         if ( !m_aConfigurationRoot.isValid() )
-            throw RuntimeException( OUString(), *this );
+            throw RuntimeException( SAL_WHERE, *this );
 
         if ( _rName.isEmpty() )
-            throw IllegalArgumentException( OUString(), *this, 1 );
+            throw IllegalArgumentException( SAL_WHERE, *this, 1 );
     }
 
     ::utl::OConfigurationNode DatabaseRegistrations::impl_checkValidName_throw_must_exist(const OUString& _rName)
@@ -221,11 +222,11 @@ namespace dbaccess
     void DatabaseRegistrations::impl_checkValidLocation_throw( const OUString& _rLocation )
     {
         if ( _rLocation.isEmpty() )
-            throw IllegalArgumentException( OUString(), *this, 2 );
+            throw IllegalArgumentException( SAL_WHERE, *this, 2 );
 
         INetURLObject aURL( _rLocation );
         if ( aURL.GetProtocol() == INetProtocol::NotValid )
-            throw IllegalArgumentException( OUString(), *this, 2 );
+            throw IllegalArgumentException( SAL_WHERE, *this, 2 );
     }
 
     sal_Bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name )
@@ -239,7 +240,7 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_aConfigurationRoot.isValid() )
-            throw RuntimeException( OUString(), *this );
+            throw RuntimeException( SAL_WHERE, *this );
 
         Sequence< OUString > aProgrammaticNames( m_aConfigurationRoot.getNodeNames() );
         Sequence< OUString > aDisplayNames( aProgrammaticNames.getLength() );
@@ -301,7 +302,7 @@ namespace dbaccess
         if  (   aNodeForName.isReadonly()
             ||  !m_aConfigurationRoot.removeNode( aNodeForName.getLocalName() )
             )
-            throw IllegalAccessException( OUString(), *this );
+            throw IllegalAccessException( SAL_WHERE, *this );
 
         m_aConfigurationRoot.commit();
 
@@ -320,7 +321,7 @@ namespace dbaccess
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(Name);
 
         if  ( aDataSourceRegistration.isReadonly() )
-            throw IllegalAccessException( OUString(), *this );
+            throw IllegalAccessException( SAL_WHERE, *this );
 
         // obtain properties for notification
         OUString sOldLocation;

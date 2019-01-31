@@ -36,6 +36,7 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -180,7 +181,7 @@ void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName )
         throw IllegalArgumentException();
 
     if (!checkExistence(_rName))
-        throw NoSuchElementException(_rName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName,*this);
 
     // the old element (for the notifications)
     Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
@@ -371,7 +372,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
     MutexGuard aGuard(m_aMutex);
 
     if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aDocuments.size())))
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(SAL_WHERE);
 
     Documents::iterator aPos = m_aDocuments[_nIndex];
     Reference<XContent> xProp = aPos->second;
@@ -397,7 +398,7 @@ Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName
 {
     Documents::iterator aMapPos = m_aDocumentMap.find(_rName);
     if (aMapPos == m_aDocumentMap.end())
-        throw NoSuchElementException(_rName,*this);
+        throw NoSuchElementException(SAL_WHERE " " + _rName,*this);
 
     Reference< XContent > xProp = aMapPos->second;
 
@@ -639,7 +640,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
         OUString sNewName;
         aEvent.NewValue >>= sNewName;
         if(hasByName(sNewName))
-            throw PropertyVetoException();
+            throw PropertyVetoException(SAL_WHERE);
     }
 }
 

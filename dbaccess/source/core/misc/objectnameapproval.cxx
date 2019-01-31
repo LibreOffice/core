@@ -25,6 +25,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
 
 namespace dbaccess
 {
@@ -63,7 +64,7 @@ namespace dbaccess
     {
         Reference< XConnection > xConnection( m_pImpl->aConnection );
         if ( !xConnection.is() )
-            throw DisposedException();
+            throw DisposedException(SAL_WHERE);
 
         Reference< XConnectionTools > xConnectionTools( xConnection, UNO_QUERY_THROW );
         Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), UNO_QUERY_THROW );

@@ -28,6 +28,8 @@
 
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
+
 
 namespace sdbtools
 {
@@ -127,14 +129,14 @@ namespace sdbtools
         }
         catch( const WrappedTargetException& )
         {
-            throw NoSuchElementException();
+            throw NoSuchElementException(SAL_WHERE);
         }
         catch( const RuntimeException& ) { throw; }
         catch( const NoSuchElementException& ) { throw; }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
-            throw NoSuchElementException();
+            throw NoSuchElementException(SAL_WHERE);
         }
 
         return xTable;

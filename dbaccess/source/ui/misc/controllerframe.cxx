@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -277,7 +278,7 @@ namespace dbaui
     void FrameWindowActivationListener::impl_checkDisposed_throw() const
     {
         if ( !m_pData )
-            throw DisposedException( OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
+            throw DisposedException( SAL_WHERE, *const_cast< FrameWindowActivationListener* >( this ) );
     }
 
     void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ )

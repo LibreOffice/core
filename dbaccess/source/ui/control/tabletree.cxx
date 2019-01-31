@@ -167,7 +167,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // a non-SQLException exception occurred ... simply throw an SQLException
-        throw SQLException(sCurrentActionError, nullptr, "", 0, anyEx);
+        throw SQLException(SAL_WHERE " " + sCurrentActionError, nullptr, "", 0, anyEx);
     }
 
     UpdateTableList( _rxConnection, sTables, sViews );

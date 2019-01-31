@@ -83,7 +83,7 @@ namespace dbmm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_bInitialized )
-            throw AlreadyInitializedException( OUString(), *this );
+            throw AlreadyInitializedException( SAL_WHERE, *this );
 
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(

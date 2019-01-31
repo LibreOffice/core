@@ -57,6 +57,7 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
@@ -1234,7 +1235,7 @@ namespace dbmm
 
             SharedStorage xScriptsRoot( aDocStorage.getScriptsRoot( _eScriptType ) );
             if ( !xScriptsRoot.is() )
-                throw RuntimeException("internal error");
+                throw RuntimeException(SAL_WHERE "internal error");
 
             // loop through the script libraries
             Sequence< OUString > aStorageElements( xScriptsRoot->getElementNames() );

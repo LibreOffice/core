@@ -63,7 +63,7 @@ namespace dbaui
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );
         if(i < 0 || i >= getAccessibleChildCount() || !m_pTableView)
-            throw IndexOutOfBoundsException();
+            throw IndexOutOfBoundsException(SAL_WHERE);
         // check if we should return a table window or a connection
         sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
         if( i < nTableWindowCount )

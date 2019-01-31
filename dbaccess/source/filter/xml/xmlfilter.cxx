@@ -362,7 +362,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             catch (const Exception&)
             {
                 Any aError = ::cppu::getCaughtException();
-                throw lang::WrappedTargetRuntimeException(OUString(), *this, aError);
+                throw lang::WrappedTargetRuntimeException(SAL_WHERE, *this, aError);
             }
         }
 

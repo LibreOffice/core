@@ -662,7 +662,7 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        throw WrappedTargetException( OUString(), *this, aError );
+        throw WrappedTargetException( SAL_WHERE, *this, aError );
     }
 }
 
@@ -673,7 +673,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
         DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
 
         if ( i_SourceLocation.isEmpty() )
-            throw IllegalArgumentException( OUString(), *this, 1 );
+            throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
 
         // load the document itself, by simply delegating to our "load" method
@@ -714,7 +714,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        throw WrappedTargetException( OUString(), *this, aError );
+        throw WrappedTargetException( SAL_WHERE, *this, aError );
     }
 }
 
@@ -740,7 +740,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, cons
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        throw WrappedTargetRuntimeException( OUString(), *this, aError );
+        throw WrappedTargetRuntimeException( SAL_WHERE, *this, aError );
     }
     return bRet;
 }
@@ -800,7 +800,7 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  )
 
 void SAL_CALL ODatabaseDocument::setArgs(const Sequence<beans::PropertyValue>& /* aArgs */)
 {
-    throw NoSupportException();
+    throw NoSupportException(SAL_WHERE);
 }
 
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController )
@@ -968,7 +968,7 @@ void SAL_CALL ODatabaseDocument::store(  )
     {
         if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
             if ( m_pImpl->m_bDocumentReadOnly )
-                throw IOException();
+                throw IOException(SAL_WHERE);
 
         impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getMediaDescriptor(), SAVE, aGuard );
         return;
@@ -1160,7 +1160,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
     bool bImplicitInitialization = !impl_isInitialized();
     // implicit initialization while another initialization is just running is not possible
     if ( bImplicitInitialization && impl_isInitializing() )
-        throw RuntimeException();
+        throw RuntimeException(SAL_WHERE);
 
     if ( bImplicitInitialization )
         impl_setInitializing();
@@ -1201,10 +1201,10 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
                                                    DocumentGuard& _rDocGuard ) const
 {
     if ( !_rxTargetStorage.is() )
-        throw IllegalArgumentException( OUString(), *const_cast< ODatabaseDocument* >( this ), 1 );
+        throw IllegalArgumentException( SAL_WHERE, *const_cast< ODatabaseDocument* >( this ), 1 );
 
     if ( !m_pImpl.is() )
-        throw DisposedException( OUString(), *const_cast< ODatabaseDocument* >( this ) );
+        throw DisposedException( SAL_WHERE, *const_cast< ODatabaseDocument* >( this ) );
 
     try
     {
@@ -1355,7 +1355,7 @@ void SAL_CALL ODatabaseDocument::removeDocumentEventListener( const Reference< X
 void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const OUString& EventName, const Reference< XController2 >& ViewController, const Any& Supplement )
 {
     if ( EventName.isEmpty() )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     // SYNCHRONIZED ->
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
@@ -2053,9 +2053,9 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewControlle
 Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const OUString& ViewName, const Sequence< PropertyValue >& Arguments, const Reference< XFrame >& Frame )
 {
     if ( ViewName != "Default" && ViewName != "Preview" )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
     if ( !Frame.is() )
-        throw IllegalArgumentException( OUString(), *this, 3 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 3 );
 
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     aGuard.clear();

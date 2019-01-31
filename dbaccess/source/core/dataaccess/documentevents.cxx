@@ -28,6 +28,8 @@
 #include <algorithm>
 #include <functional>
 #include <o3tl/functional.hxx>
+#include <sal/log.hxx>
+
 
 namespace dbaccess
 {
@@ -149,7 +151,7 @@ namespace dbaccess
 
         DocumentEventsData::iterator elementPos = m_pData->rEventsData.find( Name );
         if ( elementPos == m_pData->rEventsData.end() )
-            throw NoSuchElementException( Name, *this );
+            throw NoSuchElementException( SAL_WHERE " " + Name, *this );
 
         Sequence< PropertyValue > aEventDescriptor;
         if ( Element.hasValue() && !( Element >>= aEventDescriptor ) )
@@ -182,7 +184,7 @@ namespace dbaccess
 
         DocumentEventsData::const_iterator elementPos = m_pData->rEventsData.find( Name );
         if ( elementPos == m_pData->rEventsData.end() )
-            throw NoSuchElementException( Name, *this );
+            throw NoSuchElementException( SAL_WHERE " " + Name, *this );
 
         Any aReturn;
         const Sequence< PropertyValue >& rEventDesc( elementPos->second );

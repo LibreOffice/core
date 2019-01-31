@@ -341,7 +341,7 @@ beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySu
     OUString sName;
 
     if ( !m_pSubComponentManager->lookupSubComponent( i_rSubComponent, sName, nType ) )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     if ( nType == SID_DB_APP_DSRELDESIGN )
         // this is somewhat hacky ... we're expected to return a DatabaseObject value. However, there is no such
@@ -392,7 +392,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         &&  ( _nObjectType != DatabaseObject::FORM )
         &&  ( _nObjectType != DatabaseObject::REPORT )
         )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     if ( !i_rObjectName )
         return;
@@ -402,7 +402,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     if ( !xContainer.is() )
         // all possible reasons for this (e.g. not being connected currently) should
         // have been handled before
-        throw RuntimeException( OUString(), *this );
+        throw RuntimeException( SAL_WHERE, *this );
 
     bool bExistentObject = false;
     switch ( _nObjectType )
@@ -421,7 +421,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     }
 
     if ( !bExistentObject )
-        throw NoSuchElementException( *i_rObjectName, *this );
+        throw NoSuchElementException( SAL_WHERE " " + *i_rObjectName, *this );
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 ObjectType,

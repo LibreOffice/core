@@ -943,7 +943,7 @@ sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend)
     {
         m_bInSuspend = true;
         if ( rBHelper.bDisposed )
-            throw DisposedException( OUString(), *this );
+            throw DisposedException( SAL_WHERE, *this );
 
         bRet = SbaXDataBrowserController::suspend(bSuspend);
         if ( bRet && getView() )
@@ -1403,7 +1403,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
 
     Sequence< PropertyValue > aDescriptorSequence;
     if (!(_rSelection >>= aDescriptorSequence))
-        throw IllegalArgumentException(OUString(), *this, 1);
+        throw IllegalArgumentException(SAL_WHERE, *this, 1);
         // TODO: error message
 
     ODataAccessDescriptor aDescriptor;
@@ -1418,7 +1418,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
 
     // check the presence of the props we need
     if ( !(aDescriptor.has(DataAccessDescriptorProperty::DataSource) || aDescriptor.has(DataAccessDescriptorProperty::DatabaseLocation)) || !aDescriptor.has(DataAccessDescriptorProperty::Command) || !aDescriptor.has(DataAccessDescriptorProperty::CommandType))
-        throw IllegalArgumentException(OUString(), *this, 1);
+        throw IllegalArgumentException(SAL_WHERE, *this, 1);
         // TODO: error message
 
     return implSelect(aDescriptor,true);
