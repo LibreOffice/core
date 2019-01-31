@@ -34,6 +34,7 @@ class chartDefaultColors(UITestCase):
         xDefault = xDialogOpt.getChild("default")
         #click Default - reset
         xDefault.executeAction("CLICK", tuple())
+        nrDefaultColors = get_state_as_dict(xColors)["EntryCount"]
         nrDefaultColors1 = int(nrDefaultColors) + 1
         xAdd.executeAction("CLICK", tuple())    #add new color
         self.assertEqual(get_state_as_dict(xColors)["EntryCount"], str(nrDefaultColors1))
