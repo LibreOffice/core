@@ -22,6 +22,30 @@
       "revId": "eec3bf68643860c980b4297d922a30240a00f6c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_1735edda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-31T10:12:56Z",
+      "side": 1,
+      "message": "...and \u003chttps://gitlab.com/freedesktop-sdk/freedesktop-sdk/issues/626\u003e \"org.freedesktop.Sdk/i386/18.08 glibc math.h can lack math_errhandling\"",
+      "parentUuid": "1f485f77_c17d57e8",
+      "range": {
+        "startLine": 12,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "eec3bf68643860c980b4297d922a30240a00f6c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
