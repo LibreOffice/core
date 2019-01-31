@@ -1218,6 +1218,7 @@ DECLARE_OOXMLEXPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("Follow Header"), xHeaderText->getString() );
 }
 
+#if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
 {
     //Header wasn't replaced  and columns were missing because no new style was created.
@@ -1234,6 +1235,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
     uno::Reference<beans::XPropertySet> xStyle(xParaStyles->getByName("Pull quote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6736947), getProperty<sal_Int32>(xStyle, "CharColor"));
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
