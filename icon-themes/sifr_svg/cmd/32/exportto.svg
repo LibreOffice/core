@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <path
-     style="fill:#fff"
-     d="M 8,5 V 27 H 22 V 26 26 11 H 18 V 5 Z"
+     style="fill:#ffffff"
+     d="m 8,5 v 22 h 14 v -1 h 3 V 11 H 18 V 5 Z"
      />
   <path
      style="fill:#555753"
