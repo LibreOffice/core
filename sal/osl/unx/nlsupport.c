@@ -878,6 +878,9 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
      * we need to update PATH on macOS. Doing it here ensures
      * that it's done but it's not the right location to be doing
      * this.
+     *
+     * Also address https://bz.apache.org/ooo/show_bug.cgi?id=127966
+     * here as well :/
      */
     opath = getenv ( "PATH" );
     slen = strlen( "/usr/local/bin" ) + 1;
@@ -892,6 +895,14 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     strcat( npath, "/usr/local/bin" ); /* We are adding at the end */
     setenv("PATH", npath, 1 );
     free(npath);
+
+/* https://bz.apache.org/ooo/show_bug.cgi?id=127966 */
+    opath = getenv ( "HOME" );
+    if ( opath && *opath ) {
+        chdir ( opath );
+    } else {
+        chdir ( "/tmp" );
+    }
 
 #ifdef DEBUG
     fprintf( stderr, "nlsupport.c:  _imp_getProcessLocale() returning %s as current locale.\n", locale );
