@@ -4744,7 +4744,8 @@ void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, S
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] &&
+         nCol < maTabs[nTab]->GetAllocatedColumnsCount())
     {
         const SfxPoolItem* pTemp = maTabs[nTab]->GetAttr( nCol, nRow, nWhich );
         if (pTemp)
@@ -6535,7 +6536,8 @@ ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
 
 ScPostIt* ScDocument::GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) &&
+        nCol < maTabs[nTab]->GetAllocatedColumnsCount())
         return maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
     else
         return nullptr;
@@ -6564,6 +6566,9 @@ bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
+        return false;
+
+    if (nCol >= pTab->GetAllocatedColumnsCount())
         return false;
 
     const ScPostIt* pNote = pTab->aCol[nCol].GetCellNote(nRow);

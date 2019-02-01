@@ -21,7 +21,7 @@
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
-    if (!ValidCol(nCol))
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount() )
         return false;
 
     return aCol[nCol].IsMerged(nRow);
@@ -128,7 +128,7 @@ void ScTable::CopyOneCellFromClip(
         SCCOL nColOffset = nCol - nCol1;
         nColOffset = nColOffset % nSrcColSize;
         assert(nColOffset >= 0);
-        aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
+        CreateColumnIfNotExists(nCol).CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
 
         if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
         {
@@ -318,9 +318,7 @@ void ScTable::EndListeningIntersectedGroups(
     if (nCol2 < nCol1 || !IsColValid(nCol1) || !ValidCol(nCol2))
         return;
 
-    const SCCOL nMaxCol2 = std::min<SCCOL>( nCol2, aCol.size() - 1 );
-
-    for (SCCOL nCol = nCol1; nCol <= nMaxCol2; ++nCol)
+    for (SCCOL nCol : GetColumnsRange(nCol1, nCol2))
         aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
 }
 
@@ -345,7 +343,7 @@ bool ScTable::IsEditActionAllowed(
 {
     if (!IsProtected())
     {
-        SCCOL nCol1 = 0, nCol2 = MAXCOL;
+        SCCOL nCol1 = 0, nCol2 = aCol.size() - 1;
         SCROW nRow1 = 0, nRow2 = MAXROW;
 
         switch (eAction)

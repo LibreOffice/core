@@ -166,7 +166,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
             do
             {
                 ++mnCol;
-                if (mnCol > maEndPos.Col())
+                if (mnCol > maEndPos.Col() || mnCol >= pDoc->maTabs[mnTab]->GetAllocatedColumnsCount())
                 {
                     mnCol = maStartPos.Col();
                     ++mnTab;
@@ -829,6 +829,7 @@ ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, Subtota
     maEndPos(rRange.aEnd),
     mnSubTotalFlags(nSubTotalFlags)
 {
+    maEndPos.SetCol( pDoc->ClampToAllocatedColumns(maStartPos.Tab(), maEndPos.Col()) );
     init();
 }
 
@@ -1922,7 +1923,9 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     if (mnTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
 
-    maColPositions.reserve( nCol2-nCol1+1 );
+    nEndCol = pDoc->maTabs[mnTab]->ClampToAllocatedColumns(nEndCol);
+
+    maColPositions.reserve( nEndCol-nStartCol+1 );
 
     SetTab( mnTab );
 }
@@ -2233,6 +2236,8 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
         OSL_FAIL("try to access index out of bounds, FIX IT");
     OSL_ENSURE( pDoc->maTabs[nTab], "Table does not exist" );
 
+    nEndCol = pDoc->maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
+
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
@@ -2483,7 +2488,10 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
     nCol( nCol1 )
 {
     if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
+    {
+        nEndCol = pDoc->maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
         pColIter.reset( pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow ) );
+    }
 }
 
 ScDocAttrIterator::~ScDocAttrIterator()
@@ -2612,6 +2620,7 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
 {
     if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
     {
+        nEndCol = pDoc->maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
         pColIter.reset( pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow ) );
         while ( nIterEndCol < nEndCol &&
                 pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
