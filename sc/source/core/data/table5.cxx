@@ -1084,7 +1084,7 @@ void ScTable::StartListening( const ScAddress& rAddress, SvtListener* pListener 
     if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[rAddress.Col()].StartListening( *pListener, rAddress.Row() );
+    CreateColumnIfNotExists(rAddress.Col()).StartListening( *pListener, rAddress.Row() );
 }
 
 void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
@@ -1092,7 +1092,8 @@ void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
     if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
+    if (rAddress.Col() < aCol.size())
+        aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
 void ScTable::StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener )
