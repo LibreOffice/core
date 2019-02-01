@@ -84,6 +84,9 @@ public:
     };
 
 private:
+    void RequestLayoutInternal();
+
+private:
     const OUString msId;
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnMinimalHeight;
