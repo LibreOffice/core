@@ -738,7 +738,7 @@ void OQueryController::impl_initialize()
         break;
     default:
         OSL_FAIL( "OQueryController::impl_initialize: logic error in code!" );
-        throw RuntimeException();
+        throw RuntimeException(SAL_WHERE);
     }
 
     // more legacy parameters
@@ -820,7 +820,7 @@ void OQueryController::impl_initialize()
                 bClose = aDlg.run() == RET_NO;
             }
             if ( bClose )
-                throw VetoException();
+                throw VetoException(SAL_WHERE);
         }
 
         // now if we are to edit an existing view, check whether this is possible
@@ -1311,7 +1311,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
             xElements->getByName( m_sName ) >>= xQuery;
         }
         if ( !xQuery.is() )
-            throw RuntimeException();
+            throw RuntimeException(SAL_WHERE);
 
         // the new commands
         if ( editingView() && !bNew )

@@ -372,7 +372,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
     MutexGuard aGuard(m_aMutex);
 
     if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aDocuments.size())))
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(SAL_WHERE);
 
     Documents::iterator aPos = m_aDocuments[_nIndex];
     Reference<XContent> xProp = aPos->second;
@@ -640,7 +640,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
         OUString sNewName;
         aEvent.NewValue >>= sNewName;
         if(hasByName(sNewName))
-            throw PropertyVetoException();
+            throw PropertyVetoException(SAL_WHERE);
     }
 }
 

@@ -25,6 +25,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 namespace dbaccess
 {
@@ -168,7 +169,7 @@ namespace dbaccess
     void DocumentEventNotifier_Impl::onDocumentInitialized()
     {
         if ( m_bInitialized )
-            throw DoubleInitializationException();
+            throw DoubleInitializationException(SAL_WHERE);
 
         m_bInitialized = true;
         if (m_pEventBroadcaster)

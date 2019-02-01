@@ -466,7 +466,7 @@ namespace dbmm
                     OSL_FAIL( "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
                     // ignoring this would be at the cost of a crash (potentially)
                     // so, we cannot continue here.
-                    throw CloseVetoException();
+                    throw CloseVetoException(SAL_WHERE);
                 }
 
                 aViews.emplace_back( xFrame, sViewName );

@@ -113,7 +113,7 @@ namespace dbaui
                     break;
                 }
                 default:
-                    throw IndexOutOfBoundsException();
+                    throw IndexOutOfBoundsException(SAL_WHERE);
             }
         }
         return aRet;
@@ -188,7 +188,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         if( nIndex < 0 || nIndex >= getRelationCount() )
-            throw IndexOutOfBoundsException();
+            throw IndexOutOfBoundsException(SAL_WHERE);
 
         AccessibleRelation aRet;
         if( m_pTable )

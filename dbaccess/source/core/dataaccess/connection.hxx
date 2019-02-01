@@ -48,6 +48,7 @@
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
+#include <sal/log.hxx>
 
 namespace dbaccess
 {
@@ -200,7 +201,7 @@ private:
     void checkDisposed()
     {
         if ( rBHelper.bDisposed || !m_xConnection.is() )
-            throw css::lang::DisposedException();
+            throw css::lang::DisposedException(SAL_WHERE);
     }
 
     css::uno::Reference< css::sdbcx::XTablesSupplier > const & getMasterTables();

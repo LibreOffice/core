@@ -88,7 +88,7 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     MutexGuard aGuard(m_rMutex);
 
     if (checkExistence(_rName))
-        throw ElementExistException();
+        throw ElementExistException(SAL_WHERE);
 
     if (_rName.isEmpty())
         throw IllegalArgumentException();
@@ -221,7 +221,7 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex )
     MutexGuard aGuard(m_rMutex);
 
     if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aBookmarksIndexed.size())))
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(SAL_WHERE);
 
     return makeAny(m_aBookmarksIndexed[_nIndex]->second);
 }
@@ -311,7 +311,7 @@ Reference< XInterface > SAL_CALL OBookmarkContainer::getParent(  )
 
 void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Parent*/ )
 {
-    throw NoSupportException();
+    throw NoSupportException(SAL_WHERE);
 }
 
 }   // namespace dbaccess

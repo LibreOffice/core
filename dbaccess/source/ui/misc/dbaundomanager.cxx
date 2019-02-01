@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <sal/log.hxx>
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/undomanagerhelper.hxx>
@@ -123,7 +124,7 @@ namespace dbaui
         {
             // throw if the instance is already disposed
             if ( i_impl.bDisposed )
-                throw DisposedException( OUString(), i_impl.getThis() );
+                throw DisposedException( SAL_WHERE, i_impl.getThis() );
         }
         virtual ~UndoManagerMethodGuard()
         {
@@ -314,7 +315,7 @@ namespace dbaui
 
     void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )
     {
-        throw NoSupportException( OUString(), m_xImpl->getThis() );
+        throw NoSupportException( SAL_WHERE, m_xImpl->getThis() );
     }
 
 } // namespace dbaui

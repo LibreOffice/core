@@ -49,6 +49,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <querycomposer.hxx>
 #include <composertools.hxx>
+#include <sal/log.hxx>
 
 using namespace dbaccess;
 using namespace ::connectivity;

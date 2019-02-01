@@ -192,7 +192,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 // Extended for usage also with a string
                 OUString sClassIDString;
                 if ( !( aClassIDArg >>= sClassIDString ) )
-                    throw IllegalArgumentException( OUString(), *this, 2 );
+                    throw IllegalArgumentException( SAL_WHERE, *this, 2 );
 
                 aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( sClassIDString );
             }

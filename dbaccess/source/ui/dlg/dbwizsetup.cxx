@@ -950,7 +950,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
         void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ )
         {
-            throw TerminationVetoException();
+            throw TerminationVetoException(SAL_WHERE);
         }
 
         void SAL_CALL AsyncLoader::notifyTermination( const css::lang::EventObject& /*Event*/ )

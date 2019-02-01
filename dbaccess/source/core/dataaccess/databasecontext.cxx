@@ -155,7 +155,7 @@ namespace dbaccess
                 }
                 catch( const CloseVetoException& )
                 {
-                    throw TerminationVetoException();
+                    throw TerminationVetoException(SAL_WHERE);
                 }
             }
         }
@@ -441,12 +441,12 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
 void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject)
 {
     if ( _rName.isEmpty() )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     Reference< XDocumentDataSource > xDocDataSource( _rxObject, UNO_QUERY );
     Reference< XModel > xModel( xDocDataSource.is() ? xDocDataSource->getDatabaseDocument() : Reference< XOfficeDatabaseDocument >(), UNO_QUERY );
     if ( !xModel.is() )
-        throw IllegalArgumentException( OUString(), *this, 2 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 2 );
 
     OUString sURL = xModel->getURL();
     if ( sURL.isEmpty() )

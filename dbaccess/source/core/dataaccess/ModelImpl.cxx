@@ -239,7 +239,7 @@ void DocumentStorageAccess::commitStorages()
     catch(const WrappedTargetException&)
     {
         // WrappedTargetException not allowed to leave
-        throw IOException();
+        throw IOException(SAL_WHERE);
     }
 }
 
@@ -480,7 +480,7 @@ namespace
         case ODatabaseModelImpl::E_QUERY:  pAsciiName = "queries"; break;
         case ODatabaseModelImpl::E_TABLE:  pAsciiName = "tables"; break;
         default:
-            throw RuntimeException();
+            throw RuntimeException(SAL_WHERE);
         }
         return OUString::createFromAscii( pAsciiName );
     }
@@ -1087,7 +1087,7 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
     catch( const Exception& )
     {
         throw WrappedTargetRuntimeException(
-            OUString(),
+            SAL_WHERE,
             xDocument,
             ::cppu::getCaughtException()
         );

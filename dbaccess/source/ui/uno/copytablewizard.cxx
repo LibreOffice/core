@@ -360,7 +360,7 @@ public:
     {
         m_rWizard.getMutex().acquire();
         if ( !m_rWizard.isInitialized() )
-            throw NotInitializedException();
+            throw NotInitializedException(SAL_WHERE);
     }
 
     ~CopyTableAccessGuard()
@@ -455,7 +455,7 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation )
         &&  ( _operation != CopyTableOperation::CreateAsView )
         &&  ( _operation != CopyTableOperation::AppendData )
         )
-        throw IllegalArgumentException( OUString(), *this, 1 );
+        throw IllegalArgumentException( SAL_WHERE, *this, 1 );
 
     if  (   ( _operation == CopyTableOperation::CreateAsView )
         &&  !OCopyTableWizard::supportsViews( m_xDestConnection )
@@ -1449,7 +1449,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( isInitialized() )
-        throw AlreadyInitializedException( OUString(), *this );
+        throw AlreadyInitializedException( SAL_WHERE, *this );
 
     sal_Int32 nArgCount( _rArguments.getLength() );
     if ( ( nArgCount != 2 ) && ( nArgCount != 3 ) )

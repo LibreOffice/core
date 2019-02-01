@@ -498,7 +498,7 @@ Reference< XInterface >  OConnection::getParent()
 
 void OConnection::setParent(const Reference< XInterface > & /*Parent*/)
 {
-    throw NoSupportException();
+    throw NoSupportException(SAL_WHERE);
 }
 
 // XSQLQueryComposerFactory

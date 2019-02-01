@@ -388,7 +388,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // wrap the exception into an SQLException
-        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, anyEx);
+        throw SQLException(SAL_WHERE " " + sCurrentActionError, getORB(), "S1000", 0, anyEx);
     }
 
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
@@ -397,7 +397,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
         sCurrentActionError = DBA_RES(STR_NOREGISTEREDDRIVER);
         sCurrentActionError = sCurrentActionError.replaceFirst("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
-        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, Any());
+        throw SQLException(SAL_WHERE " " + sCurrentActionError, getORB(), "S1000", 0, Any());
     }
     return xDriver;
 }

@@ -45,6 +45,7 @@
 #include <querycomposer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ContainerMediator.hxx>
+#include <sal/log.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -164,7 +165,7 @@ void OQuery::rebuildColumns()
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex ).release();
             if ( !xColumns.is() )
-                throw RuntimeException();
+                throw RuntimeException(SAL_WHERE);
         }
 
         for ( const OUString& rName : xColumns->getElementNames() )

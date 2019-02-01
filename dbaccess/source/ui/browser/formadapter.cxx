@@ -1493,14 +1493,14 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements()
 void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
     implInsert(Element, _rIndex);
 }
 
 void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     Reference< css::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
 
@@ -1529,7 +1529,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     // extract the form component
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
@@ -1596,7 +1596,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getCount()
 Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
-        throw css::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException(SAL_WHERE);
 
     Reference< css::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
     return makeAny(xElement);

@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 
 #include <comphelper/property.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -74,7 +75,7 @@ namespace dbaccess
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_xDestContainer.is() )
-            throw DisposedException( OUString(), *this );
+            throw DisposedException( SAL_WHERE, *this );
 
         try
         {
@@ -116,7 +117,7 @@ namespace dbaccess
         ::osl::MutexGuard aGuard(m_aMutex);
 
         if ( !m_xSource.is() )
-            throw DisposedException( OUString(), *this );
+            throw DisposedException( SAL_WHERE, *this );
 
         m_xSource->removePropertyChangeListener( OUString(), this );
         m_xSource = nullptr;
