@@ -42,12 +42,6 @@
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 
-#ifndef OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY
-// Our rotation is counter-clockwise and is in 100ths of a degree.
-// drawingML rotation is clockwise and is in 60000ths of a degree.
-#define OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(input) ((21600000-input*600)%21600000)
-#endif
-
 class Graphic;
 class SdrObjCustomShape;
 
@@ -101,6 +95,13 @@ namespace core {
 }
 
 namespace drawingml {
+
+// Our rotation is counter-clockwise and is in 100ths of a degree.
+// drawingML rotation is clockwise and is in 60000ths of a degree.
+template <typename T> T ExportRotateClockwisify(T input)
+{
+    return ((21600000 - input * 600) % 21600000);
+}
 
 /// Interface to be implemented by the parent exporter that knows how to handle shape text.
 class OOX_DLLPUBLIC DMLTextExport
