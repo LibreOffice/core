@@ -148,7 +148,7 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*r
 
 void Deck::DataChanged (const DataChangedEvent&)
 {
-    RequestLayout();
+    RequestLayoutInternal();
 }
 
 bool Deck::EventNotify(NotifyEvent& rEvent)
@@ -215,10 +215,10 @@ void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
     }
     maPanels = rPanelContainer;
 
-    RequestLayout();
+    RequestLayoutInternal();
 }
 
-void Deck::RequestLayout()
+void Deck::RequestLayoutInternal()
 {
     mnMinimalWidth = 0;
     mnMinimalHeight = 0;
@@ -226,6 +226,17 @@ void Deck::RequestLayout()
     DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
                              *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
                              *mpFiller, *mpVerticalScrollBar);
+}
+
+void Deck::RequestLayout()
+{
+    RequestLayoutInternal();
+    if (comphelper::LibreOfficeKit::isActive() && mnMinimalHeight > 0)
+    {
+        const Size aParentSize = Size(GetParent()->GetSizePixel().Width(), mnMinimalHeight);
+        GetParent()->SetSizePixel(aParentSize);
+        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+    }
 }
 
 vcl::Window* Deck::GetPanelParentWindow()
