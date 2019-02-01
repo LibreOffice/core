@@ -11,7 +11,6 @@
 
 #include <memory>
 
-#include <o3tl/unreachable.hxx>
 #include <vcl/mtfxmldump.hxx>
 
 namespace {
@@ -97,7 +96,6 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
     {
         case XPATH_UNDEFINED:
             CPPUNIT_FAIL("Undefined XPath type");
-            O3TL_UNREACHABLE;
         case XPATH_NODESET:
         {
             xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -132,7 +130,6 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
     }
 
     CPPUNIT_FAIL("Invalid XPath type");
-    return OUString(); // to suppress "Not all control paths return a value" warning on MSVC
 }
 
 void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
