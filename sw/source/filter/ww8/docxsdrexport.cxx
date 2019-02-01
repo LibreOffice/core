@@ -1588,7 +1588,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         }
         aRotation >>= m_pImpl->getDMLandVMLTextFrameRotation();
         OString sRotation(OString::number(
-            (OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(m_pImpl->getDMLandVMLTextFrameRotation()))));
+            oox::drawingml::ExportRotateClockwisify(m_pImpl->getDMLandVMLTextFrameRotation())));
         // Shape properties
         pFS->startElementNS(XML_wps, XML_spPr, FSEND);
         if (m_pImpl->getDMLandVMLTextFrameRotation())

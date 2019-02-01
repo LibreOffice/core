@@ -1493,7 +1493,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         nRotation = nRotation * -1 + 36000;
 
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), IsGroupShape( rXShape ));
+            bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation), IsGroupShape( rXShape ));
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,

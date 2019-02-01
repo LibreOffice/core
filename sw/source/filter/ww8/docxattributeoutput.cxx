@@ -4775,7 +4775,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         if (sal_uInt32 nRot = rSet.Get(RES_GRFATR_ROTATION).GetValue())
         {
             // RES_GRFATR_ROTATION is in 10ths of degree; convert to 100ths for macro
-            sal_uInt32 mOOXMLRot = OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRot*10);
+            sal_uInt32 mOOXMLRot = oox::drawingml::ExportRotateClockwisify(nRot*10);
             xFrameAttributes->add(XML_rot, OString::number(mOOXMLRot));
             aSize = pGrfNode->GetTwipSize();
         }
