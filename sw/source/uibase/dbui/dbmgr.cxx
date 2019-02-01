@@ -303,7 +303,7 @@ void SwDataSourceRemovedListener::Dispose()
 
 struct SwDBManager::SwDBManager_Impl
 {
-    SwDSParam                    *pMergeData;
+    std::unique_ptr<SwDSParam> pMergeData;
     VclPtr<AbstractMailMergeDlg>  pMergeDialog;
     rtl::Reference<SwDBManager::ConnectionDisposedListener_Impl> m_xDisposeListener;
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
@@ -311,8 +311,7 @@ struct SwDBManager::SwDBManager_Impl
     uno::Reference< mail::XMailMessage> m_xLastMessage;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
-        : pMergeData( nullptr )
-        , m_xDisposeListener(new ConnectionDisposedListener_Impl(rDBManager))
+        : m_xDisposeListener(new ConnectionDisposedListener_Impl(rDBManager))
         {}
 
     ~SwDBManager_Impl()
@@ -484,7 +483,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         return false;
     }
 
-    pImpl->pMergeData = new SwDSParam(aData, xResSet, aSelection);
+    pImpl->pMergeData.reset(new SwDSParam(aData, xResSet, aSelection));
     SwDSParam*  pTemp = FindDSData(aData, false);
     if(pTemp)
         *pTemp = *pImpl->pMergeData;
@@ -516,7 +515,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         pImpl->pMergeData->xConnection = xConnection;
     // add an XEventListener
 
-    lcl_ToNextRecord(pImpl->pMergeData, SwDBNextRecord::FIRST);
+    lcl_ToNextRecord(pImpl->pMergeData.get(), SwDBNextRecord::FIRST);
 
     uno::Reference<sdbc::XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,aData.sDataSource);
 
@@ -564,7 +563,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
             break;
     }
 
-    DELETEZ( pImpl->pMergeData );
+    pImpl->pMergeData.reset();
 
     if( xWorkObjSh.Is() )
     {
@@ -1343,7 +1342,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( !bIsMergeSilent && !bMT_PRINTER )
         {
             sal_Int32 nRecordCount = 1;
-            lcl_getCountFromResultSet( nRecordCount, pImpl->pMergeData );
+            lcl_getCountFromResultSet( nRecordCount, pImpl->pMergeData.get() );
 
             // Synchronized docs don't auto-advance the record set, but there is a
             // "security" check, which will always advance the record set, if there
@@ -2123,7 +2122,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         rSourceName == pImpl->pMergeData->sDataSource &&
         rTableName == pImpl->pMergeData->sCommand)
     {
-        pFound = pImpl->pMergeData;
+        pFound = pImpl->pMergeData.get();
     }
     else
     {
@@ -2184,14 +2183,14 @@ bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, LanguageType
         return false;
     }
 
-    bool bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
+    bool bRet = lcl_GetColumnCnt(pImpl->pMergeData.get(), rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
 
 bool SwDBManager::ToNextMergeRecord()
 {
     assert( pImpl->pMergeData && pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
-    return lcl_ToNextRecord( pImpl->pMergeData );
+    return lcl_ToNextRecord( pImpl->pMergeData.get() );
 }
 
 bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
@@ -2225,7 +2224,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             aType >>= nColumnType;
             double aNumber = DBL_MAX;
 
-            lcl_GetColumnCnt( pImpl->pMergeData, xColumnProps, nLanguage, aString, &aNumber );
+            lcl_GetColumnCnt( pImpl->pMergeData.get(), xColumnProps, nLanguage, aString, &aNumber );
 
             sal_uInt32 nFormat = GetColumnFormat( pImpl->pMergeData->sDataSource,
                                             pImpl->pMergeData->sCommand,
@@ -2267,7 +2266,7 @@ void SwDBManager::ToNextRecord(
         rDataSource == pImpl->pMergeData->sDataSource &&
         rCommand == pImpl->pMergeData->sCommand)
     {
-        pFound = pImpl->pMergeData;
+        pFound = pImpl->pMergeData.get();
     }
     else
     {
@@ -2374,7 +2373,7 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
     bool bRet = false;
     sal_Int32 nAbsPos = nSet;
     assert(nAbsPos >= 0);
-    bRet = lcl_MoveAbsolute(pImpl->pMergeData, nAbsPos);
+    bRet = lcl_MoveAbsolute(pImpl->pMergeData.get(), nAbsPos);
     pImpl->pMergeData->bEndOfDB = !bRet;
     return bRet;
 }
@@ -2502,7 +2501,7 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
     //all connections stay open
     for (auto & pParam : m_DataSourceParams)
     {
-        if(bIncludingMerge || pParam.get() != pImpl->pMergeData)
+        if (bIncludingMerge || pParam.get() != pImpl->pMergeData.get())
         {
             pParam->nSelectionIndex = 0;
             pParam->bEndOfDB = false;
@@ -2527,7 +2526,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
         (rData.nCommandType == -1 || rData.nCommandType == pImpl->pMergeData->nCommandType ||
         (bCreate && pImpl->pMergeData->nCommandType == -1)))
     {
-        return pImpl->pMergeData;
+        return pImpl->pMergeData.get();
     }
 
     SwDSParam* pFound = nullptr;
@@ -2571,7 +2570,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
     if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
     {
         SetAsUsed(rDataSource);
-        return pImpl->pMergeData;
+        return pImpl->pMergeData.get();
     }
     SwDSParam* pFound = nullptr;
     for (auto & pParam : m_DataSourceParams)
