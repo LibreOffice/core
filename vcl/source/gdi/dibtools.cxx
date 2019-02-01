@@ -29,6 +29,7 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
@@ -544,6 +545,12 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             rIStm.ReadUInt32( nBMask );
         }
 
+        const long nWidth(rHeader.nWidth);
+        const long nHeight(rHeader.nHeight);
+        long nResult = 0;
+        if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
+            return false;
+
         if (bRLE)
         {
             if(!rHeader.nSizeImage)
@@ -561,8 +568,6 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         }
         else
         {
-            const long nWidth(rHeader.nWidth);
-            const long nHeight(rHeader.nHeight);
             if (nAlignedWidth > rIStm.remainingSize())
             {
                 // ofz#11188 avoid timeout
