@@ -177,9 +177,6 @@ tools::Rectangle LayoutPanels (
         nTotalPreferredHeight += rItem.maLayoutSize.Preferred;
     }
 
-    // rMinimalHeight = nTotalMinimumHeight;
-    rMinimalHeight = aBox.GetHeight();
-
     if (nTotalMinimumHeight > nAvailableHeight
         && ! bShowVerticalScrollBar)
     {
@@ -252,6 +249,7 @@ tools::Rectangle LayoutPanels (
 
     const sal_Int32 nUsedHeight (PlacePanels(rLayoutItems, nWidth, eMode, rScrollContainer));
     aBox.AdjustTop(nUsedHeight );
+    rMinimalHeight = nUsedHeight;
     return aBox;
 }
 
