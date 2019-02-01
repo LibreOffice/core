@@ -242,8 +242,9 @@ void SectRepr::SetFilter( const OUString& rFilter )
 {
     OUString sNewFile;
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    const OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator ) );
-    const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
+    sal_Int32 nIdx{ 0 };
+    const OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator, nIdx ) ); // token 0
+    const OUString sSub( sOldFileName.getToken( 1, sfx2::cTokenSeparator, nIdx ) );  // token 2
 
     if( !sFile.isEmpty() )
         sNewFile = sFile + OUStringLiteral1(sfx2::cTokenSeparator) +
