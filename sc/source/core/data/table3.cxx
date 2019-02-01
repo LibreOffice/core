@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/math.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <unotools/textsearch.hxx>
@@ -1825,7 +1824,7 @@ bool ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
     SCROW nStartRow = rParam.nRow1 + 1;     // Header
-    SCCOL nEndCol   = rParam.nCol2;
+    SCCOL nEndCol   = ClampToAllocatedColumns(rParam.nCol2);
     SCROW nEndRow    = rParam.nRow2;
 
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
@@ -1859,7 +1858,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
     SCROW nStartRow = rParam.nRow1 + 1;     // Header
-    SCCOL nEndCol   = rParam.nCol2;
+    SCCOL nEndCol   = ClampToAllocatedColumns(rParam.nCol2);
     SCROW nEndRow    = rParam.nRow2;        // will change
 
     RemoveSubTotalsHandler aFunc;
@@ -3541,7 +3540,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
         aMarkArea.aEnd.SetCol(MAXCOL);
     }
     const SCCOL nStartCol = aMarkArea.aStart.Col();
-    const SCCOL nEndCol = aMarkArea.aEnd.Col();
+    const SCCOL nEndCol = ClampToAllocatedColumns(aMarkArea.aEnd.Col());
     for (SCCOL nCol = nStartCol; nCol <= nEndCol && !rData.getError(); ++nCol)
     {
         if (mpColFlags && ColHidden(nCol))

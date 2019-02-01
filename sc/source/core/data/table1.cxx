@@ -237,7 +237,7 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
-    aCol( MAXCOLCOUNT ),
+    aCol( INITIALCOLCOUNT ),
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
@@ -1705,7 +1705,7 @@ void ScTable::UpdateReference(
         mpRangeName->UpdateReference(rCxt, nTab);
 
     for ( ; i<=iMax; i++)
-        bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);
+        bUpdated |= CreateColumnIfNotExists(i).UpdateReference(rCxt, pUndoDoc);
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
@@ -2434,11 +2434,12 @@ void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
 {
     size_t nMatCol = 0;
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nMatCol)
-        aCol[nCol].FillMatrix(rMat, nMatCol, nRow1, nRow2, pPool);
+        CreateColumnIfNotExists(nCol).FillMatrix(rMat, nMatCol, nRow1, nRow2, pPool);
 }
 
 void ScTable::InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
+    nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         aCol[nCol].InterpretDirtyCells(nRow1, nRow2);
 }
@@ -2509,28 +2510,39 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
 
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
-    // Because the range is inclusive, some code will pass nColEnd<nColBegin to
-    // indicate an empty range. Ensure that we create only valid iterators for
-    // the range, limit columns to bounds.
-    SCCOL nEffBegin, nEffEnd;
-    if (nColBegin <= nColEnd)
+    ScColContainer::ScColumnVector::const_iterator beginIter;
+    ScColContainer::ScColumnVector::const_iterator endIter;
+
+    // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
+    if (nColEnd < nColBegin)
     {
-        if (nColBegin < 0)
-            nEffBegin = 0;
-        else
-            nEffBegin = std::min<SCCOL>( nColBegin, aCol.size());
-        if (nColEnd < 0)
-            nEffEnd = 0;
-        else
-            nEffEnd = std::min<SCCOL>( nColEnd + 1, aCol.size());
+        beginIter = aCol.end();
+        endIter = aCol.end();
     }
     else
     {
-        // Any empty will do.
-        nEffBegin = nEffEnd = 0;
+        // clamp begin of range to available columns
+        if (nColBegin >= aCol.size())
+            nColBegin = aCol.size() - 1;
+        // clamp end of range to available columns
+        if (nColEnd >= aCol.size())
+            nColEnd = aCol.size() - 1;
+        beginIter = aCol.begin() + nColBegin;
+        endIter = aCol.begin() + nColEnd + 1;
     }
-    return ScColumnsRange( ScColumnsRange::Iterator( aCol.begin() + nEffBegin),
-                           ScColumnsRange::Iterator( aCol.begin() + nEffEnd));
+    return ScColumnsRange(ScColumnsRange::Iterator(beginIter), ScColumnsRange::Iterator(endIter));
+}
+
+SCCOL ScTable::ClampToAllocatedColumns(SCCOL nCol) const
+{
+    if (nCol >= aCol.size())
+        nCol = aCol.size() - 1;
+    return nCol;
+}
+
+SCCOL ScTable::GetAllocatedColumnsCount() const
+{
+    return aCol.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
