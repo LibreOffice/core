@@ -384,13 +384,21 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
                             nCenterX / PER_PERCENT, 30, 100);
 
-                        // Style should be radial at least when the horizontal center is at 50%.
-                        awt::GradientStyle eCircle = aGradient.XOffset == 50
-                                                         ? awt::GradientStyle_RADIAL
-                                                         : awt::GradientStyle_ELLIPTICAL;
-                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle)
-                                              ? eCircle
-                                              : awt::GradientStyle_RECT;
+                        if (maGradientProps.moGradientPath.get() == XML_circle)
+                        {
+                            // Style should be radial at least when the horizontal center is at 50
+                            aGradient.Style = (aGradient.XOffset == 50)
+                                                  ? awt::GradientStyle_RADIAL
+                                                  : awt::GradientStyle_ELLIPTICAL;
+                        }
+                        else
+                        {
+                            // Style should be quadratic at least when the horizontal center is at 50
+                            aGradient.Style = (aGradient.XOffset == 50)
+                                                  ? awt::GradientStyle_SQUARE
+                                                  : awt::GradientStyle_RECT;
+                        }
+
 
                         sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
                         aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
