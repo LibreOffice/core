@@ -342,7 +342,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
             if ( bSortByRows )
             {
                 OUString  aFieldName;
-                SCCOL   nMaxCol = aSortData.nCol2;
+                SCCOL   nMaxCol = pDoc->ClampToAllocatedColumns(nTab, aSortData.nCol2);
                 SCCOL   col;
 
                 for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )

@@ -442,7 +442,7 @@ void ScDocument::FillInfo(
     {
         SCCOL nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
 
-        if ( ValidCol(nX) )
+        if ( ValidCol(nX) && nX < maTabs[nTab]->GetAllocatedColumnsCount() )
         {
             // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
             // will disturb the output

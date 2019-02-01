@@ -578,6 +578,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
     Fraction aZoomFract(nZoom, 100);
 
+    aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
     std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
@@ -645,6 +646,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 nRestart++;
                 bNewTab = true;
             }
+
+            aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
 
             if ( nRestart < 2 )
             {
