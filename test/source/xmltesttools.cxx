@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include <o3tl/unreachable.hxx>
 #include <vcl/mtfxmldump.hxx>
 
 namespace {
@@ -96,6 +97,7 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
     {
         case XPATH_UNDEFINED:
             CPPUNIT_FAIL("Undefined XPath type");
+            O3TL_UNREACHABLE;
         case XPATH_NODESET:
         {
             xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
