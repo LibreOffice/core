@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <sstream>
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
@@ -145,20 +146,14 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
 
 void tools::Rectangle::Justify()
 {
-    long nHelp;
-
     if ( (nRight < nLeft) && (nRight != RECT_EMPTY) )
     {
-        nHelp = nLeft;
-        nLeft = nRight;
-        nRight = nHelp;
+        std::swap(nLeft, nRight);
     }
 
     if ( (nBottom < nTop) && (nBottom != RECT_EMPTY) )
     {
-        nHelp = nBottom;
-        nBottom = nTop;
-        nTop = nHelp;
+        std::swap(nBottom, nTop);
     }
 }
 
