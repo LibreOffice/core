@@ -125,9 +125,10 @@ void SwChangeDBDlg::FillDBPopup()
 
 SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
 {
-    const OUString sDBName(rDBName.getToken(0, DB_DELIM));
-    const OUString sTableName(rDBName.getToken(1, DB_DELIM));
-    sal_IntPtr nCommandType = rDBName.getToken(2, DB_DELIM).toInt32();
+    sal_Int32 nIdx{ 0 };
+    const OUString sDBName(rDBName.getToken(0, DB_DELIM, nIdx));
+    const OUString sTableName(rDBName.getToken(0, DB_DELIM, nIdx));
+    sal_IntPtr nCommandType = rDBName.getToken(0, DB_DELIM, nIdx).toInt32();
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;
 
