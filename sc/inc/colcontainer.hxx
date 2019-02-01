@@ -28,10 +28,9 @@
 
 class ScColContainer
 {
-    typedef std::vector<std::unique_ptr<ScColumn>> ScColumnVector;
-    ScColumnVector    aCols;
-
 public:
+    typedef std::vector<std::unique_ptr<ScColumn>> ScColumnVector;
+
     ScColContainer( const size_t nSize );
     ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
 
@@ -73,6 +72,9 @@ public:
 
     ScColumnVector::const_iterator begin() const { return aCols.begin(); }
     ScColumnVector::const_iterator end() const { return aCols.end(); }
+
+private:
+    ScColumnVector    aCols;
 };
 
 
