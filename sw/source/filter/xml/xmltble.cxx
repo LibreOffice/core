@@ -1112,12 +1112,13 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 
             // DDE command
             const OUString& sCmd = pDDEFieldType->GetCmd();
+            sal_Int32 nIdx{ 0 };
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.getToken(0, sfx2::cTokenSeparator) );
+                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.getToken(1, sfx2::cTokenSeparator) );
+                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.getToken(2, sfx2::cTokenSeparator) );
+                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
 
             // auto update
             if (pDDEFieldType->GetType() == SfxLinkUpdateMode::ALWAYS)
