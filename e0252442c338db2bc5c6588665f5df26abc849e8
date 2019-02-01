@@ -22,6 +22,30 @@
       "revId": "e0252442c338db2bc5c6588665f5df26abc849e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b2e187d3",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-01T07:14:49Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "1f485f77_7471bfe0",
+      "range": {
+        "startLine": 778,
+        "startChar": 4,
+        "endLine": 778,
+        "endChar": 17
+      },
+      "revId": "e0252442c338db2bc5c6588665f5df26abc849e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
