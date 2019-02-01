@@ -1458,7 +1458,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             nTmpWidth += aPageSize.Width() + pVOpt->GetGapBetweenPages();
                             nFac = aWindowSize.Width() * 100 / nTmpWidth;
                             nFac = std::min( nFac, nVisPercent );
-                            aZoomSliderItem.AddSnappingPoint( nFac );
+                            if (nFac >= MINZOOM)
+                            {
+                                aZoomSliderItem.AddSnappingPoint( nFac );
+                            }
                         }
                     }
 
