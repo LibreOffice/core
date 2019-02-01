@@ -21,6 +21,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -1591,6 +1592,13 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 {
                     bStatus = false;
                 }
+            }
+
+            if (bStatus)
+            {
+                sal_Int32 nResult = 0;
+                if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nImageWidth, nImageLength, nResult) || nResult > 4000000))
+                    bStatus = false;
             }
 
             if ( bStatus )
