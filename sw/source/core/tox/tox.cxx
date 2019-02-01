@@ -840,8 +840,9 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     const OUString sAuthFieldEnum = sToken.copy( 2, 2 );
     sToken = sToken.copy( nTokenLen, sToken.getLength() - nTokenLen - 1);
 
-    eRet.sCharStyleName = sToken.getToken( 0, ',');
-    OUString sTmp( sToken.getToken( 1, ',' ));
+    sal_Int32 nIdx{ 0 };
+    eRet.sCharStyleName = sToken.getToken( 0, ',', nIdx );
+    OUString sTmp( sToken.getToken( 0, ',', nIdx ));
     if( !sTmp.isEmpty() )
         eRet.nPoolId = static_cast<sal_uInt16>(sTmp.toInt32());
 
@@ -851,10 +852,10 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     case TOKEN_CHAPTER_INFO:
 //i53420
     case TOKEN_ENTRY_NO:
-        sTmp = sToken.getToken( 2, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 2
         if( !sTmp.isEmpty() )
             eRet.nChapterFormat = static_cast<sal_uInt16>(sTmp.toInt32());
-        sTmp = sToken.getToken( 3, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 3
         if( !sTmp.isEmpty() )
             eRet.nOutlineLevel = static_cast<sal_uInt16>(sTmp.toInt32()); //the maximum outline level to examine
         break;
@@ -876,19 +877,19 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
         break;
 
     case TOKEN_TAB_STOP:
-        sTmp = sToken.getToken( 2, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 2
         if( !sTmp.isEmpty() )
             eRet.nTabStopPosition = sTmp.toInt32();
 
-        sTmp = sToken.getToken( 3, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 3
         if( !sTmp.isEmpty() )
             eRet.eTabAlign = static_cast<SvxTabAdjust>(sTmp.toInt32());
 
-        sTmp = sToken.getToken( 4, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 4
         if( !sTmp.isEmpty() )
             eRet.cTabFillChar = sTmp[0];
 
-        sTmp = sToken.getToken( 5, ',' );
+        sTmp = sToken.getToken( 0, ',', nIdx ); // token 5
         if( !sTmp.isEmpty() )
             eRet.bWithTab = 0 != sTmp.toInt32();
         break;
