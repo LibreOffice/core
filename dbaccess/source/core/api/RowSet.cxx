@@ -569,7 +569,7 @@ void ORowSet::freeResources( bool _bComplete )
         // let our warnings container forget the reference to the (possibly disposed) old result set
         m_aWarnings.setExternalWarnings( nullptr );
 
-        DELETEZ(m_pCache);
+        m_pCache.reset();
 
         impl_resetTables_nothrow();
 
@@ -1700,13 +1700,9 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, false, ::dbtools::EComposeRule::InDataManipulation );
 
     SAL_INFO("dbaccess", "ORowSet::impl_prepareAndExecute_throw: creating cache" );
-    if(m_pCache)
-    {
-        DELETEZ(m_pCache);
-    }
-    m_pCache
-        = new ORowSetCache(xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName,
-                           m_bModified, m_bNew, *m_aParameterValueForCache, m_aFilter, m_nMaxRows);
+    m_pCache.reset(
+        new ORowSetCache(xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName,
+               m_bModified, m_bNew, *m_aParameterValueForCache, m_aFilter, m_nMaxRows));
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
     {
         m_nPrivileges = Privilege::SELECT;
