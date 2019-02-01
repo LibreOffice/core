@@ -2202,7 +2202,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     {
                        sStr += sName + sEntryEnd;
                     }
-                 }
+                }
 
                 if (!pTOX->GetTOXForm().IsCommaSeparated())
                 {
@@ -2370,35 +2370,35 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr +="\\u " ;
                     }
 
-                        if( SwTOXElement::Template & pTOX->GetCreateType() )
+                    if( SwTOXElement::Template & pTOX->GetCreateType() )
+                    {
+                        // #i99641# - Consider additional styles regardless of TOX-outlinelevel
+                        for( n = 0; n < MAXLEVEL; ++n )
                         {
-                            // #i99641# - Consider additional styles regardless of TOX-outlinelevel
-                            for( n = 0; n < MAXLEVEL; ++n )
+                            const OUString& rStyles = pTOX->GetStyleNames( n );
+                            if( !rStyles.isEmpty() )
                             {
-                                const OUString& rStyles = pTOX->GetStyleNames( n );
-                                if( !rStyles.isEmpty() )
-                                {
-                                    sal_Int32 nPos = 0;
-                                    const OUString sLvl{ "," + OUString::number( n + 1 ) };
-                                    do {
-                                        const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
-                                        if( !sStyle.isEmpty() )
+                                sal_Int32 nPos = 0;
+                                const OUString sLvl{ "," + OUString::number( n + 1 ) };
+                                do {
+                                    const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
+                                    if( !sStyle.isEmpty() )
+                                    {
+                                        SwTextFormatColl* pColl = GetExport().m_pDoc->FindTextFormatCollByName(sStyle);
+                                        if (pColl)
                                         {
-                                            SwTextFormatColl* pColl = GetExport().m_pDoc->FindTextFormatCollByName(sStyle);
-                                            if (pColl)
+                                            if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                             {
-                                                if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
-                                                {
-                                                    if( !sTOption.isEmpty() )
-                                                        sTOption += ",";
-                                                    sTOption += sStyle + sLvl;
-                                                }
+                                                if( !sTOption.isEmpty() )
+                                                    sTOption += ",";
+                                                sTOption += sStyle + sLvl;
                                             }
                                         }
-                                    } while( -1 != nPos );
-                                }
+                                    }
+                                } while( -1 != nPos );
                             }
                         }
+                    }
 
                     // No 'else' branch; why the below snippet is a block I have no idea.
                     {
@@ -2454,8 +2454,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr += "\\t \"" + sTOption + sEntryEnd;
                     }
 
-                        if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                            sStr += "\\h";
+                    if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                        sStr += "\\h";
                     break;
                 }
             }
