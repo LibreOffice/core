@@ -85,7 +85,7 @@ namespace dbaccess
         connectivity::ORowSetValue              m_aEmptyValue;      // only for error case
 
         ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
-        ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
+        std::shared_ptr<ORowSetCache>           m_pCache;           // the cache is used by the rowset and his clone (shared)
         std::unique_ptr<ORowSetDataColumns>     m_pColumns;         // represent the select columns
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
         // is used when the formatkey for database types is set
