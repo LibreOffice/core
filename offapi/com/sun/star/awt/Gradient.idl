@@ -60,9 +60,9 @@ published struct Gradient
     short Border;
 
 
-    /** Specifies the X-coordinate, where the gradient begins,
-     *  whatever that means. Possibly means the *center* of the
-     *  ELLIPTICAL, SQUARE and RECT style gradients?
+    /** Specifies the X-coordinate, where the gradient begins.
+     *  This is effectively the center of the RADIAL, ELLIPTICAL, SQUARE and
+     *  RECT style gradients.
      */
     short XOffset;
 
