@@ -97,12 +97,6 @@ namespace o3tl
     template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
 }
 
-typedef DialogMask WindowDisplayErrorFunc(
-    weld::Window*, DialogMask nMask, const OUString &rErr, const OUString &rAction);
-
-typedef void BasicDisplayErrorFunc(
-    const OUString &rErr, const OUString &rAction);
-
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
     friend class ErrorStringFactory;
