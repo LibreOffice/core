@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7212efb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T08:40:44Z",
+      "side": 1,
+      "message": "I believe that this patch does not add support for more than 1024 columns, but makes number of columns dynamic?\n\nMy concern is that the wording is self-contradicting (we add support for more columns, but we keep maximum same). People would be confused :-)",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
