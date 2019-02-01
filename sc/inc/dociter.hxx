@@ -370,7 +370,7 @@ class ScDocAttrIterator             // all attribute areas
 private:
     ScDocument*     pDoc;
     SCTAB           nTab;
-    SCCOL const     nEndCol;
+    SCCOL           nEndCol;
     SCROW const     nStartRow;
     SCROW const     nEndRow;
     SCCOL           nCol;
@@ -391,7 +391,7 @@ class ScAttrRectIterator            // all attribute areas, including areas stre
 private:
     ScDocument*     pDoc;
     SCTAB           nTab;
-    SCCOL const     nEndCol;
+    SCCOL           nEndCol;
     SCROW const     nStartRow;
     SCROW const     nEndRow;
     SCCOL           nIterStartCol;
@@ -423,7 +423,7 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     ScDocument*     pDoc;
     SCTAB           mnTab;
     SCCOL const           nStartCol;
-    SCCOL const           nEndCol;
+    SCCOL                 nEndCol;
     SCROW const           nStartRow;
     SCROW const           nEndRow;
     SCCOL           mnCol;
@@ -482,7 +482,7 @@ private:
     SCTAB                   nTab;
     SCCOL const             nStartCol;
     SCROW const             nStartRow;
-    SCCOL const             nEndCol;
+    SCCOL                   nEndCol;
     SCROW const             nEndRow;
 
     std::unique_ptr<SCROW[]>  pNextEnd;
