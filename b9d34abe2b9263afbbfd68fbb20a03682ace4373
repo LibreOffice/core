@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_329fd751",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-01T05:53:24Z",
+      "side": 1,
+      "message": "Yep, simple selector. Fixed.",
+      "parentUuid": "1f485f77_f47c8fb6",
+      "range": {
+        "startLine": 214,
+        "startChar": 20,
+        "endLine": 214,
+        "endChar": 29
+      },
+      "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_347347ea",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-31T09:06:47Z",
       "side": 1,
       "message": "IIRC just \u0026o3tl::temporary\u003cvoid*\u003e() - why initialize it?",
+      "range": {
+        "startLine": 217,
+        "startChar": 69,
+        "endLine": 217,
+        "endChar": 76
+      },
+      "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d28e4326",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-01T05:53:24Z",
+      "side": 1,
+      "message": "o3tl::temporary is a function that takes rvalue and returns lvalue of type T.\nAs a result we need to provide rvalue object to it.",
+      "parentUuid": "1f485f77_347347ea",
       "range": {
         "startLine": 217,
         "startChar": 69,
