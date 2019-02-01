@@ -285,8 +285,9 @@ void SwEnvPage::InitDatabaseBox()
         for (sal_Int32 i = 0; i < aDataNames.getLength(); ++i)
             m_xDatabaseLB->append_text(pDataNames[i]);
 
-        OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM );
-        OUString sTableName = m_sActDBName.getToken( 1, DB_DELIM );
+        sal_Int32 nIdx{ 0 };
+        OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
+        OUString sTableName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
         m_xDatabaseLB->set_active_text(sDBName);
         if (m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
         {
