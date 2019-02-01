@@ -929,15 +929,13 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
         case REF_SETREFATTR:
             if ( pName )
             {
-                sRet += "Ref_";
-                sRet += *pName;
+                sRet = "Ref_" + *pName;
             }
             break;
         case REF_SEQUENCEFLD:
         {
             assert(pName);
-            sRet += "Ref_";
-            sRet += *pName;
+            sRet = "Ref_" + *pName;
             break;
         }
         case REF_BOOKMARK:
@@ -947,12 +945,10 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
         case REF_OUTLINE:
             break;      // ???
         case REF_FOOTNOTE:
-            sRet += "_RefF";
-            sRet += OUString::number( nSeqNo );
+            sRet = "_RefF" + OUString::number( nSeqNo );
             break;
         case REF_ENDNOTE:
-            sRet += "_RefE";
-            sRet += OUString::number( nSeqNo );
+            sRet = "_RefE" + OUString::number( nSeqNo );
             break;
     }
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
@@ -1698,10 +1694,8 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
 static OUString lcl_GetExpandedField(const SwField &rField)
 {
-    OUString sRet(rField.ExpandField(true, nullptr));
-
     //replace LF 0x0A with VT 0x0B
-    return sRet.replace(0x0A, 0x0B);
+    return rField.ExpandField(true, nullptr).replace(0x0A, 0x0B);
 }
 
 WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
@@ -1876,15 +1870,13 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
 
 void WW8Export::StartCommentOutput(const OUString& rName)
 {
-    OUString sStr(FieldString(ww::eQUOTE));
-    sStr += "[" + rName + "] ";
+    const OUString sStr{ FieldString(ww::eQUOTE) + "[" + rName + "] " };
     OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::Start | FieldFlags::CmdStart);
 }
 
 void WW8Export::EndCommentOutput(const OUString& rName)
 {
-    OUString sStr(" [");
-    sStr += rName + "] ";
+    const OUString sStr{ " [" + rName + "] " };
     OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::CmdEnd | FieldFlags::End |
         FieldFlags::Close);
 }
@@ -2075,15 +2067,13 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                         }
                                     }
                                     // Generate bookmarks on the right position
-                                    OUString sName("Ref_" + pRefField->GetSetRefName());
-                                    sName += OUString::number(pRefField->GetSeqNo());
+                                    OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
                                     switch (pRefField->GetFormat())
                                     {
                                         case REF_PAGE:
                                         case REF_PAGE_PGDESC:
                                         case REF_CONTENT:
                                         case REF_UPDOWN:
-                                            sName += "_full";
                                             if(!bHaveFullBkm)
                                             {
                                                 sal_Int32 nLastAttrStart = 0;
@@ -2094,15 +2084,15 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                                     aLocalAttrIter.NextPos();
                                                     nActAttr = aLocalAttrIter.WhereNext();
                                                 }
-                                                WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
+                                                WriteBookmarkInActParagraph( sName + "_full", std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
                                                 bHaveFullBkm = true;
                                             }
                                             break;
                                         case REF_ONLYNUMBER:
                                         {
-                                            sName += "_label_and_number";
                                             if(!bHaveLabelAndNumberBkm)
                                             {
+                                                sName += "_label_and_number";
                                                 if(bCategoryFirst)
                                                     WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
                                                 else
@@ -2125,7 +2115,6 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                         }
                                         case REF_ONLYCAPTION:
                                         {
-                                            sName += "_caption_only";
                                             if(!bHaveCaptionOnlyBkm)
                                             {
                                                 // Find last run
@@ -2137,17 +2126,16 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                                     aLocalAttrIter.NextPos();
                                                     nActAttr = aLocalAttrIter.WhereNext();
                                                 }
-                                                WriteBookmarkInActParagraph( sName, nRefTextPos, nLastAttrStart );
+                                                WriteBookmarkInActParagraph( sName + "_caption_only", nRefTextPos, nLastAttrStart );
                                                 bHaveCaptionOnlyBkm = true;
                                             }
                                             break;
                                         }
                                         case REF_ONLYSEQNO:
                                         {
-                                            sName += "_number_only";
                                             if(!bHaveNumberOnlyBkm)
                                             {
-                                                WriteBookmarkInActParagraph( sName, pHt->GetStart(), pHt->GetStart() );
+                                                WriteBookmarkInActParagraph( sName + "_number_only", pHt->GetStart(), pHt->GetStart() );
                                                 bHaveNumberOnlyBkm = true;
                                             }
                                             break;
@@ -2212,8 +2200,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     const OUString& sName = pTOX->GetEntryTypeName();
                     if(!sName.isEmpty())
                     {
-                       sStr += sName;
-                       sStr += sEntryEnd;
+                       sStr += sName + sEntryEnd;
                     }
                  }
 
@@ -2233,9 +2220,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         else
                             aFillText.clear();
                     }
-                    sStr += "\\e \"";
-                    sStr += aFillText;
-                    sStr += sEntryEnd;
+                    sStr += "\\e \"" + aFillText + sEntryEnd;
                 }
                 break;
 
@@ -2244,15 +2229,11 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             case TOX_TABLES:
                 if (!pTOX->IsFromObjectNames())
                 {
-                    sStr = FieldString(eCode);
-
-                    sStr += "\\c ";
+                    sStr = FieldString(eCode) + "\\c ";
                     const OUString& seqName = pTOX->GetSequenceName();
                     if(!seqName.isEmpty())
                     {
-                        sStr += "\"";
-                        sStr += seqName;
-                        sStr += sEntryEnd;
+                        sStr += "\"" + seqName + sEntryEnd;
                     }
                     OUString aText;
                     int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aText );
@@ -2260,9 +2241,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr += "\\n ";
                     else if( 3 == nRet || 4 == nRet )
                     {
-                        sStr += "\\p \"";
-                        sStr += aText;
-                        sStr += sEntryEnd;
+                        sStr += "\\p \"" + aText + sEntryEnd;
                     }
                 }
                 break;
@@ -2302,17 +2281,14 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                         if( TOX_USER == pTOX->GetType() )
                         {
-                            sStr += "\"";
-                            sStr += OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
-                            sStr += sEntryEnd;
+                            sStr += "\""
+                                + OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
+                                + sEntryEnd;
                         }
                     }
                     if(SwTOXElement::Bookmark & pTOX->GetCreateType())
                     {
-                        sStr += "\\b \"";
-                        const OUString& bName = pTOX->GetBookmarkName();
-                        sStr += bName;
-                        sStr += sEntryEnd;
+                        sStr += "\\b \"" + pTOX->GetBookmarkName() + sEntryEnd;
                     }
 
                     if( SwTOXElement::OutlineLevel & pTOX->GetCreateType() )
@@ -2364,9 +2340,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
                                 nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
 
-                            sStr += "\\o \"1-";
-                            sStr += OUString::number(nMaxMSAutoEvaluate);
-                            sStr += sEntryEnd;
+                            sStr += "\\o \"1-" + OUString::number(nMaxMSAutoEvaluate) + sEntryEnd;
                         }
 
                         //collect up any other styles in the writer TOC which will
@@ -2405,10 +2379,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 if( !rStyles.isEmpty() )
                                 {
                                     sal_Int32 nPos = 0;
-                                    OUString sLvl = OUString(',');
-                                    sLvl += OUString::number( n + 1 );
+                                    const OUString sLvl{ "," + OUString::number( n + 1 ) };
                                     do {
-                                        OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
+                                        const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
                                         if( !sStyle.isEmpty() )
                                         {
                                             SwTextFormatColl* pColl = GetExport().m_pDoc->FindTextFormatCollByName(sStyle);
@@ -2464,25 +2437,21 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         {
                             if (WW8ListManager::nMaxLevel < nNoPgEnd)
                                 nNoPgEnd = WW8ListManager::nMaxLevel;
-                            sStr += "\\n ";
-                            sStr += OUString::number( nNoPgStt );
-                            sStr += "-";
-                            sStr += OUString::number( nNoPgEnd  );
-                            sStr += " ";
+                            sStr += "\\n "
+                                + OUString::number( nNoPgStt )
+                                + "-"
+                                + OUString::number( nNoPgEnd )
+                                + " ";
                         }
                         if( bOnlyText )
                         {
-                            sStr += "\\p \"";
-                            sStr += aFillText;
-                            sStr += sEntryEnd;
+                            sStr += "\\p \"" + aFillText + sEntryEnd;
                         }
                     }
 
                     if( !sTOption.isEmpty() )
                     {
-                        sStr += "\\t \"";
-                        sStr += sTOption;
-                        sStr += sEntryEnd;
+                        sStr += "\\t \"" + sTOption + sEntryEnd;
                     }
 
                         if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
@@ -2615,10 +2584,9 @@ OUString FieldString(ww::eField eIndex)
 
 void WW8AttributeOutput::HiddenField( const SwField& rField )
 {
-    OUString sExpand(rField.GetPar2());
-
     //replace LF 0x0A with VT 0x0B
-    sExpand = sExpand.replace(0x0A, 0x0B);
+    const OUString sExpand(rField.GetPar2().replace(0x0A, 0x0B));
+
     m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell());
     SwWW8Writer::WriteString16(m_rWW8Export.Strm(), sExpand, false);
     static sal_uInt8 aArr[] =
@@ -2681,11 +2649,10 @@ bool WW8AttributeOutput::PlaceholderField( const SwField* )
 
 void WW8AttributeOutput::RefField( const SwField &rField, const OUString &rRef)
 {
-    OUString sStr( FieldString( ww::eREF ) );
-    sStr += "\"" + rRef + "\" ";
+    const OUString sStr{ FieldString( ww::eREF ) + "\"" + rRef + "\" " };
     m_rWW8Export.OutputField( &rField, ww::eREF, sStr, FieldFlags::Start |
         FieldFlags::CmdStart | FieldFlags::CmdEnd );
-    OUString sVar = lcl_GetExpandedField( rField );
+    const OUString sVar = lcl_GetExpandedField( rField );
     if ( !sVar.isEmpty() )
     {
         SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sVar, false );
@@ -2695,8 +2662,7 @@ void WW8AttributeOutput::RefField( const SwField &rField, const OUString &rRef)
 
 void WW8AttributeOutput::WriteExpand( const SwField* pField )
 {
-    OUString sExpand( lcl_GetExpandedField( *pField ) );
-    SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
+    SwWW8Writer::WriteString16( m_rWW8Export.Strm(), lcl_GetExpandedField( *pField ), false );
 }
 
 namespace
@@ -2761,7 +2727,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         {
             OUString sStr;
             if (GetExport().FieldsQuoted())
-                sStr = FieldString(ww::eSEQ) +  pField->GetTyp()->GetName() + " ";
+                sStr = FieldString(ww::eSEQ) + pField->GetTyp()->GetName() + " ";
             else
                 sStr = FieldString(ww::eSEQ) + "\"" + pField->GetTyp()->GetName() +"\" ";
             GetNumberPara( sStr, *pField );
@@ -2894,7 +2860,6 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DI_CUSTOM:
                     eField = ww::eDOCPROPERTY;
                     {
-                        OUString sQuotes('\"');
                         const SwDocInfoField * pDocInfoField =
                         dynamic_cast<const SwDocInfoField *> (pField);
 
@@ -2906,7 +2871,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             if (nIndex != sFieldname.getLength())
                                 sFieldname = sFieldname.copy(nIndex + 1);
 
-                            sStr = sQuotes + sFieldname + sQuotes;
+                            sStr = "\"" + sFieldname + "\"";
                         }
                     }
                     break;
@@ -3080,8 +3045,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     }
                     // Generate a unique bookmark name
                     {
-                        OUString sName(rRField.GetSetRefName());
-                        sName += OUString::number(rRField.GetSeqNo());
+                        OUString sName{rRField.GetSetRefName() + OUString::number(rRField.GetSeqNo())};
                         switch (pField->GetFormat())
                         {
                             case REF_PAGE:
