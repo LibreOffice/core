@@ -43,7 +43,7 @@ private:
 
     sal_Int32 SAL_CALL readBytes(css::uno::Sequence<sal_Int8> &, sal_Int32)
         override
-    { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); return 0;}
+    { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); }
 
     sal_Int32 SAL_CALL readSomeBytes(
         css::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead) override
