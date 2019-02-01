@@ -30,24 +30,24 @@ using namespace dbahsql;
 
 namespace
 {
-//Find ascii escaped unicode
-sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
+int getHexValue(sal_Unicode c)
 {
-    const OString sHexDigits = "0123456789abcdefABCDEF";
-    sal_Int32 nIndex = rSource.indexOf("\\u", nFrom);
-    if (nIndex == -1)
+    if (c >= '0' && c <= '9')
+    {
+        return c - '0';
+    }
+    else if (c >= 'A' && c <= 'F')
+    {
+        return c - 'A' + 10;
+    }
+    else if (c >= 'a' && c <= 'f')
+    {
+        return c - 'a' + 10;
+    }
+    else
     {
         return -1;
     }
-    bool bIsUnicode = true;
-    for (short nDist = 2; nDist <= 5; ++nDist)
-    {
-        if (sHexDigits.indexOf(rSource[nIndex + nDist]) == -1)
-        {
-            bIsUnicode = false;
-        }
-    }
-    return bIsUnicode ? nIndex : -1;
 }
 
 } // unnamed namespace
@@ -55,17 +55,38 @@ sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
 //Convert ascii escaped unicode to utf-8
 OUString utils::convertToUTF8(const OString& original)
 {
-    OString sResult = original;
-    sal_Int32 nIndex = lcl_IndexOfUnicode(sResult);
-    while (nIndex != -1 && nIndex < original.getLength())
+    OUString res = OStringToOUString(original, RTL_TEXTENCODING_UTF8);
+    for (sal_Int32 i = 0;;)
     {
-        const OString sHex = original.copy(nIndex + 2, 4);
-        const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));
-        const OString sNewChar = OString(&cDec, 1, RTL_TEXTENCODING_UTF8);
-        sResult = sResult.replaceAll("\\u" + sHex, sNewChar);
-        nIndex = lcl_IndexOfUnicode(original, nIndex + 1);
+        i = res.indexOf("\\u", i);
+        if (i == -1)
+        {
+            break;
+        }
+        i += 2;
+        if (res.getLength() - i >= 4)
+        {
+            bool escape = true;
+            sal_Unicode c = 0;
+            for (sal_Int32 j = 0; j != 4; ++j)
+            {
+                auto const n = getHexValue(res[i + j]);
+                if (n == -1)
+                {
+                    escape = false;
+                    break;
+                }
+                c = (c << 4) | n;
+            }
+            if (escape)
+            {
+                i -= 2;
+                res = res.replaceAt(i, 6, OUString(c));
+                ++i;
+            }
+        }
     }
-    return OStringToOUString(sResult, RTL_TEXTENCODING_UTF8);
+    return res;
 }
 
 OUString utils::getTableNameFromStmt(const OUString& sSql)
