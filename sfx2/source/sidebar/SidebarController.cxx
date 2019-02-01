@@ -419,13 +419,15 @@ void SidebarController::NotifyResize()
         // Place the deck first.
         if (bIsDeckVisible)
         {
-            // No TabBar in LOK.
             if (comphelper::LibreOfficeKit::isActive())
             {
-                // The minimal deck height is unreliable because of
-                // the fluid way the panels are stretched. Fix minimum manually.
-                // const sal_Int32 nMinimalHeight = mpCurrentDeck->GetMinimalHeight();
-                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, 600);
+                // No TabBar in LOK (use nWidth in full).
+                // Use the minimum height that is large enough to let the
+                // layouter expand the panes maximally (that have a minimal
+                // height before the scrollbar is shown), so we never get
+                // scrollbars (we want scrolling to be done on the rendered
+                // image in the client, which is much faster).
+                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, 650);
             }
             else
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
