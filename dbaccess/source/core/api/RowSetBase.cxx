@@ -81,7 +81,6 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     :OPropertyStateContainer(_rBHelper)
     ,m_pMutex(_pMutex)
     ,m_pMySelf(nullptr)
-    ,m_pCache(nullptr)
     ,m_rBHelper(_rBHelper)
     ,m_aContext( _rContext )
     ,m_nLastColumnIndex(-1)
@@ -793,7 +792,7 @@ bool SAL_CALL ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aChe
 
         bool bMoved = ( bWasNew || !_aCheckFunctor(this) );
 
-        bRet = _aMovementFunctor(m_pCache);
+        bRet = _aMovementFunctor(m_pCache.get());
         doCancelModification( );
 
         if ( bRet )
