@@ -22,6 +22,98 @@
       "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_12217bfc",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T09:47:40Z",
+      "side": 1,
+      "message": "This file shouldn\u0027t change yet?",
+      "range": {
+        "startLine": 445,
+        "startChar": 28,
+        "endLine": 445,
+        "endChar": 31
+      },
+      "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d27883f9",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2068,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T09:47:40Z",
+      "side": 1,
+      "message": "a typo - should have been XFD",
+      "range": {
+        "startLine": 2068,
+        "startChar": 31,
+        "endLine": 2068,
+        "endChar": 36
+      },
+      "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_92820bc8",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T09:47:40Z",
+      "side": 1,
+      "message": "Does it mean that copying to clipboard will allocate columns?\n\nPossibly just modify the aCol[i].CopyToClip to take pointers, possibly nullptrs?",
+      "range": {
+        "startLine": 496,
+        "startChar": 55,
+        "endLine": 496,
+        "endChar": 81
+      },
+      "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5255b34f",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T09:47:40Z",
+      "side": 1,
+      "message": "should description above be updated?",
+      "range": {
+        "startLine": 76,
+        "startChar": 55,
+        "endLine": 76,
+        "endChar": 59
+      },
+      "revId": "733def1affbce6c1812e94bf1c20e3da9dd43f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
