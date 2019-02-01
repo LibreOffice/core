@@ -376,7 +376,7 @@ OString const & MSWordStyles::GetStyleId(sal_uInt16 nId) const
 }
 
 /// For WW8 only - extend pO so that the size of pTableStrm is even.
-static void impl_SkipOdd( ww::bytes* pO, std::size_t nTableStrmTell )
+static void impl_SkipOdd(std::unique_ptr<ww::bytes> const& pO, std::size_t nTableStrmTell)
 {
     if ( ( nTableStrmTell + pO->size() ) & 1 )     // start on even
         pO->push_back( sal_uInt8(0) );         // Address

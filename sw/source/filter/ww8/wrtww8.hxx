@@ -432,7 +432,7 @@ struct MSWordSaveData
 {
     Point* pOldFlyOffset;
     RndStdIds eOldAnchorType;
-    ww::bytes* pOOld;                ///< WW8Export only
+    std::unique_ptr<ww::bytes> pOOld; ///< WW8Export only
     SwPaM* pOldPam, *pOldEnd;
     sal_uLong nOldStart, nOldEnd;
     const ww8::Frame* pOldFlyFormat;
@@ -961,7 +961,7 @@ private:
 class WW8Export : public MSWordExportBase
 {
 public:
-    ww::bytes *pO;                      ///< Buffer
+    std::unique_ptr<ww::bytes> pO;      ///< Buffer
 
     SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
 

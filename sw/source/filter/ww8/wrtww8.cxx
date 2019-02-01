@@ -1946,7 +1946,7 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
     m_bStartTOX = false;
     m_bInWriteTOX = false;
 
-    m_aSaveData.push( aData );
+    m_aSaveData.push( std::move(aData) );
 }
 
 void MSWordExportBase::RestoreData()
@@ -1981,8 +1981,8 @@ void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
 
     if ( !pO->empty() )
     {
-        rData.pOOld = pO;
-        pO = new ww::bytes;
+        rData.pOOld = std::move(pO);
+        pO.reset(new ww::bytes);
     }
     else
         rData.pOOld = nullptr; // reuse pO
@@ -2000,8 +2000,7 @@ void WW8Export::RestoreData()
     OSL_ENSURE( pO->empty(), "pO is not empty in WW8Export::RestoreData()" );
     if ( rData.pOOld )
     {
-        delete pO;
-        pO = rData.pOOld;
+        pO = std::move(rData.pOOld);
     }
 
     MSWordExportBase::RestoreData();
@@ -3340,7 +3339,7 @@ ErrCode WW8Export::ExportDocument_Impl()
 
     m_pPapPlc.reset(new WW8_WrPlcPn( *this, PAP, pFib->m_fcMin ));
     m_pChpPlc.reset(new WW8_WrPlcPn( *this, CHP, pFib->m_fcMin ));
-    pO = new ww::bytes;
+    pO.reset(new ww::bytes);
     m_pStyles.reset(new MSWordStyles( *this ));
     m_pFieldMain.reset(new WW8_WrPlcField( 2, TXT_MAINTEXT ));
     m_pFieldHdFt.reset(new WW8_WrPlcField( 2, TXT_HDFT ));
@@ -3435,7 +3434,7 @@ ErrCode WW8Export::ExportDocument_Impl()
     m_pFieldHdFt.reset();;
     m_pFieldMain.reset();;
     m_pStyles.reset();;
-    DELETEZ( pO );
+    pO.reset();
     m_pChpPlc.reset();;
     m_pPapPlc.reset();;
     pSepx.reset();
@@ -3650,7 +3649,6 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
         SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
         bool bDot )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam )
-    , pO(nullptr)
     , pTableStrm(nullptr)
     , pDataStrm(nullptr)
     , m_bDot(bDot)

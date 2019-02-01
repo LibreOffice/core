@@ -1022,7 +1022,7 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32 
             if (m_rWW8Export.m_pAtn->IsNewRedlineComment(pRedlineData))
             {
                 m_rWW8Export.m_pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
-                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO.get() );
             }
         }
     }
@@ -2659,7 +2659,7 @@ void WW8AttributeOutput::PostitField( const SwField* pField )
 {
     const SwPostItField *pPField = static_cast<const SwPostItField*>(pField);
     m_rWW8Export.m_pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPField );
-    m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+    m_rWW8Export.WritePostItBegin( m_rWW8Export.pO.get() );
 }
 
 bool WW8AttributeOutput::DropdownField( const SwField* pField )
@@ -3396,18 +3396,18 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
     }
     else
     {
-        ww::bytes aOutArr;
+        std::unique_ptr<ww::bytes> pOwnOutArr(new ww::bytes);
 
         // insert at start of array, so the "hard" attribute overrule the
         // attributes of the character template
-        aOutArr.insert( aOutArr.begin(), aAttrArr.begin(), aAttrArr.end() );
+        pOwnOutArr->insert(pOwnOutArr->begin(), aAttrArr.begin(), aAttrArr.end());
 
         // write for the ftn number in the content, the font of the anchor
         const SwTextFootnote* pTextFootnote = rFootnote.GetTextFootnote();
         if( pTextFootnote )
         {
-            ww::bytes* pOld = pO;
-            pO = &aOutArr;
+            std::unique_ptr<ww::bytes> pOld = std::move(pO);
+            pO = std::move(pOwnOutArr);
             SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_FONT,
                                                   RES_CHRATR_FONT>{} );
 
@@ -3423,10 +3423,11 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
             {
                 m_pAttrOutput->OutputItem( pCFormat->GetAttrSet().Get(RES_CHRATR_FONT) );
             }
-            pO = pOld;
+            pOwnOutArr = std::move(pO);
+            pO = std::move(pOld);
         }
-        m_pChpPlc->AppendFkpEntry( Strm().Tell(), aOutArr.size(),
-                                                aOutArr.data() );
+        m_pChpPlc->AppendFkpEntry( Strm().Tell(), pOwnOutArr->size(),
+                                                pOwnOutArr->data() );
     }
 }
 
@@ -3491,7 +3492,7 @@ void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
         pFootnoteEnd = m_rWW8Export.pFootnote.get();
 
     pFootnoteEnd->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rFootnote );
-    m_rWW8Export.WriteFootnoteBegin( rFootnote, m_rWW8Export.pO );
+    m_rWW8Export.WriteFootnoteBegin( rFootnote, m_rWW8Export.pO.get() );
 }
 
 void WW8AttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat )
