@@ -93,6 +93,30 @@
       "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b22f47f5",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-01T08:20:53Z",
+      "side": 1,
+      "message": "Well - I remembered that it\u0027s expected to be used differently - should have checked myself, sorry.\n\nLook here: https://opengrok.libreoffice.org/search?project\u003dcore\u0026q\u003d\"o3tl%3A%3Atemporary\"\n\nThe intended syntax is \u0026o3tl::temporary(void*()), so that it deduces its template argument from actual argument.",
+      "parentUuid": "1f485f77_d28e4326",
+      "range": {
+        "startLine": 217,
+        "startChar": 69,
+        "endLine": 217,
+        "endChar": 76
+      },
+      "revId": "b9d34abe2b9263afbbfd68fbb20a03682ace4373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
