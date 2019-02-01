@@ -146,9 +146,10 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
     sal_Int32 nSelEntryData = LISTBOX_ENTRY_NOTFOUND;
     const OUString sUserData = GetUserData();
-    if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
+    sal_Int32 nIdx{ 0 };
+    if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
-        nSelEntryData = sUserData.getToken(1, ';').toInt32();
+        nSelEntryData = sUserData.getToken(0, ';', nIdx).toInt32();
     }
 
     std::vector<OUString> aLst;
