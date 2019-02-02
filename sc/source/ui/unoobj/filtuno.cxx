@@ -40,6 +40,7 @@
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <memory>
 
@@ -208,7 +209,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         {
             // HTML import.
             ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
-                pFact->CreateScTextImportOptionsDlg(nullptr));
+                pFact->CreateScTextImportOptionsDlg(Application::GetFrameWeld(xDialogParent)));
 
             if (pDlg->Execute() == RET_OK)
             {
@@ -352,6 +353,15 @@ void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::
 void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
 {
     bExport = true;
+}
+
+// XInitialization
+
+void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<uno::Any>& rArguments)
+{
+    ::comphelper::NamedValueCollection aProperties(rArguments);
+    if (aProperties.has("ParentWindow"))
+        aProperties.get("ParentWindow") >>= xDialogParent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
