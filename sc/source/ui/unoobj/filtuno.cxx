@@ -208,7 +208,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         {
             // HTML import.
             ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
-                pFact->CreateScTextImportOptionsDlg());
+                pFact->CreateScTextImportOptionsDlg(nullptr));
 
             if (pDlg->Execute() == RET_OK)
             {
