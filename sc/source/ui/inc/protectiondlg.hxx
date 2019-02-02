@@ -20,23 +20,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PROTECTIONDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PROTECTIONDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <svx/checklbx.hxx>
-
+#include <vcl/weld.hxx>
 #include <scdllapi.h>
 
 namespace vcl { class Window; }
 class ScTableProtection;
 
-class ScTableProtectionDlg : public ModalDialog
+class ScTableProtectionDlg : public weld::GenericDialogController
 {
 public:
     ScTableProtectionDlg() = delete;
-    explicit SC_DLLPUBLIC ScTableProtectionDlg(vcl::Window* pParent);
+    explicit SC_DLLPUBLIC ScTableProtectionDlg(weld::Window* pParent);
     virtual ~ScTableProtectionDlg() override;
-    virtual void dispose() override;
 
     void SetDialogData(const ScTableProtection& rData);
 
@@ -47,17 +42,6 @@ private:
 
     void EnableOptionalWidgets(bool bEnable);
 
-    VclPtr<CheckBox>        m_pBtnProtect;
-
-    VclPtr<VclContainer>    m_pPasswords;
-    VclPtr<VclContainer>    m_pOptions;
-    VclPtr<Edit>            m_pPassword1Edit;
-    VclPtr<Edit>            m_pPassword2Edit;
-
-    VclPtr<SvxCheckListBox> m_pOptionsListBox;
-
-    VclPtr<OKButton>        m_pBtnOk;
-
     OUString         m_aSelectLockedCells;
     OUString         m_aSelectUnlockedCells;
     OUString         m_aInsertColumns;
@@ -65,9 +49,25 @@ private:
     OUString         m_aDeleteColumns;
     OUString         m_aDeleteRows;
 
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( CheckBoxHdl, Button*, void );
-    DECL_LINK( PasswordModifyHdl, Edit&, void );
+    std::unique_ptr<weld::CheckButton> m_xBtnProtect;
+    std::unique_ptr<weld::Container> m_xPasswords;
+    std::unique_ptr<weld::Container> m_xOptions;
+    std::unique_ptr<weld::Entry> m_xPassword1Edit;
+    std::unique_ptr<weld::Entry> m_xPassword2Edit;
+    std::unique_ptr<weld::TreeView> m_xOptionsListBox;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Label> m_xProtected;
+    std::unique_ptr<weld::Label> m_xUnprotected;
+    std::unique_ptr<weld::Label> m_xInsertColumns;
+    std::unique_ptr<weld::Label> m_xInsertRows;
+    std::unique_ptr<weld::Label> m_xDeleteColumns;
+    std::unique_ptr<weld::Label> m_xDeleteRows;
+
+    void InsertEntry(const OUString& rTxt);
+
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(PasswordModifyHdl, weld::Entry&, void);
 };
 
 #endif
