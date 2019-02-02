@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_287ac823",
+        "filename": "dbaccess/source/core/api/RowSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-02T16:35:19Z",
+      "side": 1,
+      "message": "no need for the \n   if(m_pCache)\n    {\n        m_pCache.reset();\n    }\nnow, since we\u0027re assigning a new value to it",
+      "revId": "40d6c7c728e9bf0d0ff754b73a2b1cd4216297a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
