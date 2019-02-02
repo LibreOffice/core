@@ -19,7 +19,6 @@
 -o sc.ScDataPilotFieldGroupObj
 -o sc.ScDataPilotFieldGroupsObj
 -o sc.ScDataPilotFieldObj
--o sc.ScDataPilotFieldsObj
 # i84653 -o sc.ScPageObj
 # i84554 -o sc.AccessibleEditableTextPara_PreviewNote
 # i88241 -o sc.AccessibleEditableTextPara_HeaderFooter

@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
@@ -33,6 +34,7 @@ namespace sc_apitest
 {
 class ScDataPilotFieldsObj : public CalcUnoApiTest,
                              public apitest::XElementAccess,
+                             public apitest::XEnumerationAccess,
                              public apitest::XIndexAccess,
                              public apitest::XNameAccess
 {
@@ -47,6 +49,9 @@ public:
     // XElementAccess
     CPPUNIT_TEST(testHasElements);
     CPPUNIT_TEST(testGetElementType);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
