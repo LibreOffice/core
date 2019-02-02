@@ -257,6 +257,14 @@
           <value>2</value>
         </prop>
       </group>
+      <prop oor:name="ErrorRectangle" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Advanced -->
+        <info>
+          <desc>Option to show errors as rectangles in charts</desc>
+          <label>Error rectangles</label>
+        </info>
+        <value>1</value>
+      </prop>
     </group>
     <group oor:name="Layout">
       <info>
