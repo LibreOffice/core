@@ -310,8 +310,9 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     // this for html pasting only, but in the future it may
                     // make sense to do it for other data types too.
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    vcl::Window* pParent = GetActiveWin();
                     ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
-                        pFact->CreateScTextImportOptionsDlg());
+                        pFact->CreateScTextImportOptionsDlg(pParent ? pParent->GetFrameWeld() : nullptr));
 
                     if (pDlg->Execute() == RET_OK)
                     {

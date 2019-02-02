@@ -505,7 +505,14 @@ class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
 
 class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScTextImportOptionsDlg_Impl, ScTextImportOptionsDlg)
+protected:
+    std::unique_ptr<ScTextImportOptionsDlg> m_xDlg;
+public:
+    explicit AbstractScTextImportOptionsDlg_Impl(std::unique_ptr<ScTextImportOptionsDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual LanguageType GetLanguageType() const override;
     virtual bool IsDateConversionSet() const override;
 };
@@ -552,7 +559,7 @@ public:
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) override;
 
-    virtual VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg() override;
+    virtual VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(vcl::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,

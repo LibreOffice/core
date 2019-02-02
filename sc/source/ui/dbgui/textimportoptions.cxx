@@ -21,82 +21,68 @@
 
 #include <textimportoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-ScTextImportOptionsDlg::ScTextImportOptionsDlg(vcl::Window* pParent)
-    : ModalDialog(pParent, "TextImportOptionsDialog", "modules/scalc/ui/textimportoptions.ui")
+ScTextImportOptionsDlg::ScTextImportOptionsDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/textimportoptions.ui", "TextImportOptionsDialog")
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xRbAutomatic(m_xBuilder->weld_radio_button("automatic"))
+    , m_xRbCustom(m_xBuilder->weld_radio_button("custom"))
+    , m_xBtnConvertDate(m_xBuilder->weld_check_button("convertdata"))
+    , m_xLbCustomLang(new LanguageBox(m_xBuilder->weld_combo_box("lang")))
 {
-    get(m_pBtnOk, "ok");
-    get(m_pRbAutomatic, "automatic");
-    get(m_pRbCustom, "custom");
-    get(m_pBtnConvertDate, "convertdata");
-    get(m_pLbCustomLang, "lang");
     init();
 }
 
 ScTextImportOptionsDlg::~ScTextImportOptionsDlg()
 {
-    disposeOnce();
 }
-
-void ScTextImportOptionsDlg::dispose()
-{
-    m_pBtnOk.clear();
-    m_pRbAutomatic.clear();
-    m_pRbCustom.clear();
-    m_pLbCustomLang.clear();
-    m_pBtnConvertDate.clear();
-    ModalDialog::dispose();
-}
-
 
 LanguageType ScTextImportOptionsDlg::getLanguageType() const
 {
-    if (m_pRbAutomatic->IsChecked())
+    if (m_xRbAutomatic->get_active())
         return LANGUAGE_SYSTEM;
 
-    return m_pLbCustomLang->GetSelectedLanguage();
+    return m_xLbCustomLang->get_active_id();
 }
 
 bool ScTextImportOptionsDlg::isDateConversionSet() const
 {
-    return m_pBtnConvertDate->IsChecked();
+    return m_xBtnConvertDate->get_active();
 }
 
 void ScTextImportOptionsDlg::init()
 {
-    Link<Button*,void> aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
-    m_pBtnOk->SetClickHdl(aLink);
-    aLink = LINK( this, ScTextImportOptionsDlg, RadioHdl );
-    m_pRbAutomatic->SetClickHdl(aLink);
-    m_pRbCustom->SetClickHdl(aLink);
+    m_xBtnOk->connect_clicked(LINK(this, ScTextImportOptionsDlg, OKHdl));
+    Link<weld::ToggleButton&,void> aLink = LINK(this, ScTextImportOptionsDlg, RadioHdl);
+    m_xRbAutomatic->connect_toggled(aLink);
+    m_xRbCustom->connect_toggled(aLink);
 
-    m_pRbAutomatic->Check();
+    m_xRbAutomatic->set_active(true);
 
-    m_pLbCustomLang->SetLanguageList(
+    m_xLbCustomLang->SetLanguageList(
         SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
 
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-    m_pLbCustomLang->SelectLanguage(eLang);
-    m_pLbCustomLang->Disable();
+    m_xLbCustomLang->set_active_id(eLang);
+    m_xLbCustomLang->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl, weld::Button&, void)
 {
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( ScTextImportOptionsDlg, RadioHdl, Button*, pBtn, void )
+IMPL_LINK(ScTextImportOptionsDlg, RadioHdl, weld::ToggleButton&, rBtn, void)
 {
-    if (pBtn == m_pRbAutomatic)
+    if (&rBtn == m_xRbAutomatic.get())
     {
-        m_pLbCustomLang->Disable();
+        m_xLbCustomLang->set_sensitive(false);
     }
-    else if (pBtn == m_pRbCustom)
+    else if (&rBtn == m_xRbCustom.get())
     {
-        m_pLbCustomLang->Enable();
+        m_xLbCustomLang->set_sensitive(true);
     }
 }
 

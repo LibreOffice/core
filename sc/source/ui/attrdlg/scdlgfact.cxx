@@ -198,7 +198,12 @@ short AbstractScTabBgColorDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
+
+short AbstractScTextImportOptionsDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
 
 AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
@@ -684,12 +689,12 @@ void AbstractScImportOptionsDlg_Impl::SaveImportOptions() const
 
 LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
 {
-    return pDlg->getLanguageType();
+    return m_xDlg->getLanguageType();
 }
 
 bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 {
-    return pDlg->isDateConversionSet();
+    return m_xDlg->isDateConversionSet();
 }
 
 short ScAbstractTabController_Impl::Execute()
@@ -737,10 +742,9 @@ VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsc
     return VclPtr<AbstractScImportAsciiDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg()
+VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(weld::Window* pParent)
 {
-    VclPtr<ScTextImportOptionsDlg> pDlg = VclPtr<ScTextImportOptionsDlg>::Create(nullptr);
-    return VclPtr<AbstractScTextImportOptionsDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScTextImportOptionsDlg_Impl>::Create(std::make_unique<ScTextImportOptionsDlg>(pParent));
 }
 
 VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(vcl::Window* pParent,

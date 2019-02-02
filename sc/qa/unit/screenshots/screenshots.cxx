@@ -209,7 +209,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 10: // "modules/scalc/ui/textimportoptions.ui"
         {
-            pReturnDialog = mpFact->CreateScTextImportOptionsDlg();
+            pReturnDialog = mpFact->CreateScTextImportOptionsDlg(mpViewShell->GetFrameWeld());
             break;
         }
 

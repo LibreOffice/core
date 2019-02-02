@@ -398,7 +398,7 @@ public:
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) = 0;
 
-    virtual     VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg() = 0;
+    virtual     VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg(weld::Window* pParent) = 0;
 
     virtual     VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(vcl::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
