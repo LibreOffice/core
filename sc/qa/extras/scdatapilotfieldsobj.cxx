@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 
 #include <cppu/unotype.hxx>
 
@@ -36,7 +37,8 @@ class ScDataPilotFieldsObj : public CalcUnoApiTest,
                              public apitest::XElementAccess,
                              public apitest::XEnumerationAccess,
                              public apitest::XIndexAccess,
-                             public apitest::XNameAccess
+                             public apitest::XNameAccess,
+                             public apitest::XServiceInfo
 {
 public:
     ScDataPilotFieldsObj();
@@ -62,6 +64,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -73,6 +80,7 @@ ScDataPilotFieldsObj::ScDataPilotFieldsObj()
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(6)
     , XNameAccess("")
+    , XServiceInfo("ScDataPilotFieldsObj", "com.sun.star.sheet.DataPilotFields")
 {
 }
 
