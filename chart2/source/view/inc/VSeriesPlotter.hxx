@@ -367,6 +367,21 @@ protected:
         , const double* pfScaledLogicX
         );
 
+    void createErrorRectangle(
+          const css::drawing::Position3D& rUnscaledLogicPosition
+        , VDataSeries& rVDataSeries
+        , sal_Int32 nIndex
+        , const css::uno::Reference< css::drawing::XShapes >& rTarget
+        , bool bUseXErrorData
+        , bool bUseYErrorData
+    );
+
+    void addErrorBorder(
+          const css::drawing::Position3D& rPos0
+        , const css::drawing::Position3D& rPos1
+        , const css::uno::Reference< css::drawing::XShapes >& rTarget
+        , const css::uno::Reference< css::beans::XPropertySet >& rErrorBorderProp );
+
     void createErrorBar_X( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const css::uno::Reference< css::drawing::XShapes >& xTarget );

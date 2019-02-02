@@ -1070,6 +1070,167 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
+void VSeriesPlotter::addErrorBorder(
+      const drawing::Position3D& rPos0
+     ,const drawing::Position3D& rPos1
+     ,const uno::Reference< drawing::XShapes >& rTarget
+     ,const uno::Reference< beans::XPropertySet >& rErrorBorderProp )
+{
+    drawing::PolyPolygonShape3D aPoly;
+    sal_Int32 nSequenceIndex = 0;
+    AddPointToPoly( aPoly, rPos0, nSequenceIndex );
+    AddPointToPoly( aPoly, rPos1, nSequenceIndex );
+    uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                    rTarget, PolyToPointSequence( aPoly) );
+    setMappedProperties( xShape, rErrorBorderProp,
+                    PropertyMapper::getPropertyNameMapForLineProperties() );
+}
+
+void VSeriesPlotter::createErrorRectangle(
+      const drawing::Position3D& rUnscaledLogicPosition
+     ,VDataSeries& rVDataSeries
+     ,sal_Int32 nIndex
+     ,const uno::Reference< drawing::XShapes >& rTarget
+     ,bool bUseXErrorData
+     ,bool bUseYErrorData )
+{
+    if ( m_nDimension != 2 )
+        return;
+
+    // error border properties
+    Reference< beans::XPropertySet > xErrorBorderPropX, xErrorBorderPropY;
+    if ( bUseXErrorData )
+    {
+        xErrorBorderPropX = rVDataSeries.getXErrorBarProperties( nIndex );
+        if ( !xErrorBorderPropX.is() )
+            return;
+    }
+    uno::Reference< drawing::XShapes > xErrorBorder_ShapesX(
+        getErrorBarsGroupShape( rVDataSeries, rTarget, false ) );
+
+    if ( bUseYErrorData )
+    {
+        xErrorBorderPropY = rVDataSeries.getYErrorBarProperties( nIndex );
+        if ( !xErrorBorderPropY.is() )
+            return;
+    }
+    uno::Reference< drawing::XShapes > xErrorBorder_ShapesY(
+        getErrorBarsGroupShape( rVDataSeries, rTarget, true ) );
+
+    if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
+        return;
+
+    try
+    {
+        bool bShowXPositive = false;
+        bool bShowXNegative = false;
+        bool bShowYPositive = false;
+        bool bShowYNegative = false;
+
+        sal_Int32 nErrorBorderStyleX = css::chart::ErrorBarStyle::VARIANCE;
+        sal_Int32 nErrorBorderStyleY = css::chart::ErrorBarStyle::VARIANCE;
+
+        if ( bUseXErrorData )
+        {
+            xErrorBorderPropX->getPropertyValue( "ErrorBarStyle" ) >>= nErrorBorderStyleX;
+            xErrorBorderPropX->getPropertyValue( "ShowPositiveError") >>= bShowXPositive;
+            xErrorBorderPropX->getPropertyValue( "ShowNegativeError") >>= bShowXNegative;
+        }
+        if ( bUseYErrorData )
+        {
+            xErrorBorderPropY->getPropertyValue( "ErrorBarStyle" ) >>= nErrorBorderStyleY;
+            xErrorBorderPropY->getPropertyValue( "ShowPositiveError") >>= bShowYPositive;
+            xErrorBorderPropY->getPropertyValue( "ShowNegativeError") >>= bShowYNegative;
+        }
+
+        if ( bUseXErrorData && nErrorBorderStyleX == css::chart::ErrorBarStyle::NONE )
+            bUseXErrorData = false;
+        if ( bUseYErrorData && nErrorBorderStyleY == css::chart::ErrorBarStyle::NONE )
+            bUseYErrorData = false;
+
+        if ( !bShowXPositive && !bShowXNegative && !bShowYPositive && !bShowYNegative )
+            return;
+
+        if ( !m_pPosHelper )
+            return;
+
+        drawing::Position3D aUnscaledLogicPosition( rUnscaledLogicPosition );
+        if ( bUseXErrorData && nErrorBorderStyleX == css::chart::ErrorBarStyle::STANDARD_DEVIATION )
+            aUnscaledLogicPosition.PositionX = rVDataSeries.getXMeanValue();
+        if ( bUseYErrorData && nErrorBorderStyleY == css::chart::ErrorBarStyle::STANDARD_DEVIATION )
+            aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
+
+        const double fX = aUnscaledLogicPosition.PositionX;
+        const double fY = aUnscaledLogicPosition.PositionY;
+        const double fZ = aUnscaledLogicPosition.PositionZ;
+        double fScaledX = fX;
+        m_pPosHelper->doLogicScaling( &fScaledX, nullptr, nullptr );
+
+        uno::Sequence< double > aDataX( rVDataSeries.getAllX() );
+        uno::Sequence< double > aDataY( rVDataSeries.getAllY() );
+
+        double fPosX = 0.0;
+        double fPosY = 0.0;
+        double fNegX = 0.0;
+        double fNegY = 0.0;
+        if ( bUseXErrorData )
+        {
+            if ( bShowXPositive )
+                fPosX = lcl_getErrorBarLogicLength( aDataX, xErrorBorderPropX,
+                                nErrorBorderStyleX, nIndex, true, false );
+            if ( bShowXNegative )
+                fNegX = lcl_getErrorBarLogicLength( aDataX, xErrorBorderPropX,
+                                nErrorBorderStyleX, nIndex, false, false );
+        }
+
+        if ( bUseYErrorData )
+        {
+            if ( bShowYPositive )
+                fPosY = lcl_getErrorBarLogicLength( aDataY, xErrorBorderPropY,
+                                nErrorBorderStyleY, nIndex, true, true );
+            if ( bShowYNegative )
+                fNegY = lcl_getErrorBarLogicLength( aDataY, xErrorBorderPropY,
+                                nErrorBorderStyleY, nIndex, false, true );
+        }
+
+        if ( !( ::rtl::math::isFinite( fPosX ) &&
+                ::rtl::math::isFinite( fPosY ) &&
+                ::rtl::math::isFinite( fNegX ) &&
+                ::rtl::math::isFinite( fNegY ) ) )
+            return;
+
+        drawing::Position3D aBottomLeft( lcl_transformMixedToScene( m_pPosHelper,
+                                             fX - fNegX, fY - fNegY, fZ ) );
+        drawing::Position3D aTopLeft( lcl_transformMixedToScene( m_pPosHelper,
+                                             fX - fNegX, fY + fPosY, fZ ) );
+        drawing::Position3D aTopRight( lcl_transformMixedToScene( m_pPosHelper,
+                                             fX + fPosX, fY + fPosY, fZ ) );
+        drawing::Position3D aBottomRight( lcl_transformMixedToScene( m_pPosHelper,
+                                             fX + fPosX, fY - fNegY, fZ ) );
+        if ( bUseXErrorData )
+        {
+            // top border
+            addErrorBorder( aTopLeft, aTopRight, xErrorBorder_ShapesX, xErrorBorderPropX );
+
+            // bottom border
+            addErrorBorder( aBottomRight, aBottomLeft, xErrorBorder_ShapesX, xErrorBorderPropX );
+        }
+
+        if ( bUseYErrorData )
+        {
+            // left border
+            addErrorBorder( aBottomLeft, aTopLeft, xErrorBorder_ShapesY, xErrorBorderPropY );
+
+            // right border
+            addErrorBorder( aTopRight, aBottomRight, xErrorBorder_ShapesY, xErrorBorderPropY );
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2", "Exception in createErrorRectangle(). ");
+    }
+}
+
 void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget )
