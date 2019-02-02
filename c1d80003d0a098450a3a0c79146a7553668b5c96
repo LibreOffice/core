@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_682680ba",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-02T07:56:10Z",
+      "side": 1,
+      "message": "Last documentation nitpicks:\n\n1. nPos is not the position of Windows Share entry; it\u0027s the position of WebDAV (first in placeedit.ui, not in PlaceEditDialog.cxx!) - only nPos + 3 is the position of Windows Share!\n\n2. Please use forward-slashes, not backslashes in paths; so \"pre-defined in svtools/uiconfig/ui/placeedit.ui\"",
+      "range": {
+        "startLine": 228,
+        "startChar": 7,
+        "endLine": 228,
+        "endChar": 142
+      },
+      "revId": "c1d80003d0a098450a3a0c79146a7553668b5c96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
