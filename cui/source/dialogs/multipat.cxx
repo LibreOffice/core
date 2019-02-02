@@ -41,33 +41,54 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl, weld::TreeView&, void)
 {
-    sal_uLong nCount = m_pRadioLB->GetEntryCount();
-    bool bIsSelected = m_pRadioLB->FirstSelected() != nullptr;
+    auto nCount = m_xRadioLB->n_children();
+    bool bIsSelected = m_xRadioLB->get_selected_index() != -1;
     bool bEnable = nCount > 1;
-    m_pDelBtn->Enable(bEnable && bIsSelected);
+    m_xDelBtn->set_sensitive(bEnable && bIsSelected);
 }
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 {
-    sal_uLong nCount = m_xPathLB->n_children();
+    auto nCount = m_xPathLB->n_children();
     bool bIsSelected = m_xPathLB->get_selected_index() != -1;
     bool bEnable = nCount > 1;
     m_xDelBtn->set_sensitive(bEnable && bIsSelected);
 }
 
-IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, SvTreeListBox*, pBox, void )
+void SvxMultiPathDialog::HandleEntryChecked(int nRow)
 {
-    SvTreeListEntry* pEntry =
-        pBox
-        ? pBox->GetEntry( static_cast<svx::SvxRadioButtonListBox*>(pBox)->GetCurMousePoint() )
-        : m_pRadioLB->FirstSelected();
-    if ( pEntry )
-        m_pRadioLB->HandleEntryChecked( pEntry );
+    m_xRadioLB->select(nRow);
+    bool bChecked = m_xRadioLB->get_toggle(nRow, 0);
+    if (bChecked)
+    {
+        // we have radio button behavior -> so uncheck the other entries
+        int nCount = m_xRadioLB->n_children();
+        for (int i = 0; i < nCount; ++i)
+        {
+            if (i != nRow)
+                m_xRadioLB->set_toggle(i, false, 0);
+        }
+    }
 }
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
+IMPL_LINK(SvxMultiPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
+{
+    HandleEntryChecked(rRowCol.first);
+}
+
+void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
+{
+    m_xRadioLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
+                       nullptr, nullptr, false);
+    const int nRow = m_xRadioLB->n_children() - 1;
+    m_xRadioLB->set_toggle(nRow, false, 0);
+    m_xRadioLB->set_text(nRow, rText, 1);
+    m_xRadioLB->set_id(nRow, rId);
+}
+
+IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
@@ -80,25 +101,20 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
         OUString sInsPath;
         osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
-        sal_uLong nPos = m_pRadioLB->GetEntryPos( sInsPath, 1 );
-        if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
-        {
-            OUString sNewEntry( '\t' );
-            sNewEntry += sInsPath;
-            SvTreeListEntry* pEntry = m_pRadioLB->InsertEntry( sNewEntry );
-            OUString* pData = new OUString( aURL );
-            pEntry->SetUserData( pData );
-        }
-        else
+        if (m_xRadioLB->find_text(sInsPath) != -1)
         {
             OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok, sMsg));
             xInfoBox->run();
         }
+        else
+        {
+            AppendEntry(sInsPath, aURL);
+        }
 
-        SelectHdl_Impl( nullptr );
+        SelectHdl_Impl(*m_xRadioLB);
     }
 }
 
@@ -132,30 +148,27 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)
 {
-    SvTreeListEntry* pEntry = m_pRadioLB->FirstSelected();
-    delete static_cast<OUString*>(pEntry->GetUserData());
-    bool bChecked = m_pRadioLB->GetCheckButtonState( pEntry ) == SvButtonState::Checked;
-    sal_uLong nPos = m_pRadioLB->GetEntryPos( pEntry );
-    m_pRadioLB->RemoveEntry( pEntry );
-    sal_uLong nCnt = m_pRadioLB->GetEntryCount();
-    if ( nCnt )
+    int nPos = m_xRadioLB->get_selected_index();
+    bool bChecked = m_xRadioLB->get_toggle(nPos, 0);
+    m_xRadioLB->remove(nPos);
+    int nCnt = m_xRadioLB->n_children();
+    if (nCnt)
     {
-        nCnt--;
+        --nCnt;
+
         if ( nPos > nCnt )
             nPos = nCnt;
-        pEntry = m_pRadioLB->GetEntry( nPos );
-        if ( bChecked )
+        if (bChecked)
         {
-            m_pRadioLB->SetCheckButtonState( pEntry, SvButtonState::Checked );
-            m_pRadioLB->HandleEntryChecked( pEntry );
+            m_xRadioLB->set_toggle(nPos, true, 0);
+            HandleEntryChecked(nPos);
         }
-        else
-            m_pRadioLB->Select( pEntry );
+        m_xRadioLB->select(nPos);
     }
 
-    SelectHdl_Impl( nullptr );
+    SelectHdl_Impl(*m_xRadioLB);
 }
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, weld::Button&, void)
@@ -176,33 +189,28 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, weld::Button&, void)
     SelectHdl_Impl(*m_xPathLB);
 }
 
-SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
-    : ModalDialog(pParent, "MultiPathDialog", "cui/ui/multipathdialog.ui")
+SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/multipathdialog.ui", "MultiPathDialog")
+    , m_xRadioLB(m_xBuilder->weld_tree_view("paths"))
+    , m_xAddBtn(m_xBuilder->weld_button("add"))
+    , m_xDelBtn(m_xBuilder->weld_button("delete"))
 {
-    get(m_pAddBtn, "add");
-    get(m_pDelBtn, "delete");
+    m_xRadioLB->set_size_request(m_xRadioLB->get_approximate_digit_width() * 60,
+                                 m_xRadioLB->get_text_height() * 10);
 
-    SvSimpleTableContainer* pRadioLBContainer = get<SvSimpleTableContainer>("paths");
-    Size aSize(LogicToPixel(Size(195, 77), MapMode(MapUnit::MapAppFont)));
-    pRadioLBContainer->set_width_request(aSize.Width());
-    pRadioLBContainer->set_height_request(aSize.Height());
-    m_pRadioLB = VclPtr<svx::SvxRadioButtonListBox>::Create(*pRadioLBContainer, 0);
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xRadioLB->get_approximate_digit_width() * 3 + 6);
+    m_xRadioLB->set_column_fixed_widths(aWidths);
 
-    static long aStaticTabs[]= { 0, 12 };
-    m_pRadioLB->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
-    OUString sHeader(get<FixedText>("pathlist")->GetText());
-    m_pRadioLB->SetQuickHelpText( sHeader );
-    sHeader = "\t" + sHeader;
-    m_pRadioLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT );
+    std::vector<int> aRadioColumns;
+    aRadioColumns.push_back(0);
+    m_xRadioLB->set_toggle_columns_as_radio(aRadioColumns);
+    m_xRadioLB->connect_toggled(LINK(this, SvxMultiPathDialog, CheckHdl_Impl));
+    m_xRadioLB->connect_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
+    m_xAddBtn->connect_clicked(LINK(this, SvxMultiPathDialog, AddHdl_Impl));
+    m_xDelBtn->connect_clicked(LINK(this, SvxMultiPathDialog, DelHdl_Impl));
 
-    m_pRadioLB->SetSelectHdl( LINK( this, SvxMultiPathDialog, SelectHdl_Impl ) );
-    m_pRadioLB->SetCheckButtonHdl( LINK( this, SvxMultiPathDialog, CheckHdl_Impl ) );
-    m_pAddBtn->SetClickHdl( LINK( this, SvxMultiPathDialog, AddHdl_Impl ) );
-    m_pDelBtn->SetClickHdl( LINK( this, SvxMultiPathDialog, DelHdl_Impl ) );
-
-    SelectHdl_Impl( nullptr );
-
-    m_pRadioLB->ShowTable();
+    SelectHdl_Impl(*m_xRadioLB);
 }
 
 SvxPathSelectDialog::SvxPathSelectDialog(weld::Window* pParent)
@@ -223,25 +231,6 @@ SvxPathSelectDialog::SvxPathSelectDialog(weld::Window* pParent)
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
-    disposeOnce();
-}
-
-void SvxMultiPathDialog::dispose()
-{
-    if (m_pRadioLB)
-    {
-        sal_uInt16 nPos = static_cast<sal_uInt16>(m_pRadioLB->GetEntryCount());
-        while ( nPos-- )
-        {
-            SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
-            delete static_cast<OUString*>(pEntry->GetUserData());
-        }
-    }
-
-    m_pRadioLB.disposeAndClear();
-    m_pAddBtn.clear();
-    m_pDelBtn.clear();
-    ModalDialog::dispose();
 }
 
 OUString SvxMultiPathDialog::GetPath() const
@@ -250,19 +239,18 @@ OUString SvxMultiPathDialog::GetPath() const
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
     OUString sWritable;
-    for ( sal_uLong i = 0; i < m_pRadioLB->GetEntryCount(); ++i )
+    for (int i = 0, nCount = m_xRadioLB->n_children(); i < nCount; ++i)
     {
-        SvTreeListEntry* pEntry = m_pRadioLB->GetEntry(i);
-        if ( m_pRadioLB->GetCheckButtonState( pEntry ) == SvButtonState::Checked )
-            sWritable = *static_cast<OUString*>(pEntry->GetUserData());
+        if (m_xRadioLB->get_toggle(i, 0))
+            sWritable = m_xRadioLB->get_id(i);
         else
         {
-            if ( !sNewPath.isEmpty() )
+            if (!sNewPath.isEmpty())
                 sNewPath.append(cDelim);
-            sNewPath.append( *static_cast<OUString*>(pEntry->GetUserData()) );
+            sNewPath.append(m_xRadioLB->get_id(i));
         }
     }
-    if ( !sNewPath.isEmpty() )
+    if (!sNewPath.isEmpty())
         sNewPath.append(cDelim);
     sNewPath.append(sWritable);
 
@@ -288,7 +276,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     if ( !rPath.isEmpty() )
     {
         const sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
-        sal_uLong nCount = 0;
+        int nCount = 0;
         sal_Int32 nIndex = 0;
         do
         {
@@ -297,23 +285,20 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-            const OUString sEntry( "\t" + (bIsSystemPath ? sSystemPath : sPath));
-            SvTreeListEntry* pEntry = m_pRadioLB->InsertEntry( sEntry );
-            OUString* pURL = new OUString( sPath );
-            pEntry->SetUserData( pURL );
+            const OUString sEntry((bIsSystemPath ? sSystemPath : sPath));
+            AppendEntry(sEntry, sPath);
             ++nCount;
         }
         while (nIndex >= 0);
 
-        SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nCount - 1 );
-        if ( pEntry )
+        if (nCount)
         {
-            m_pRadioLB->SetCheckButtonState( pEntry, SvButtonState::Checked );
-            m_pRadioLB->HandleEntryChecked( pEntry );
+            m_xRadioLB->set_toggle(nCount - 1, true, 0);
+            HandleEntryChecked(nCount - 1);
         }
     }
 
-    SelectHdl_Impl( nullptr );
+    SelectHdl_Impl(*m_xRadioLB);
 }
 
 void SvxPathSelectDialog::SetPath(const OUString& rPath)

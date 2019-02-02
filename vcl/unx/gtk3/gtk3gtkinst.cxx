@@ -5261,7 +5261,7 @@ public:
 
     virtual int find_text(const OUString& rText) const override
     {
-        Search aSearch(rText, 0);
+        Search aSearch(rText, m_nTextCol);
         gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
         return aSearch.index;
     }
@@ -7185,7 +7185,8 @@ public:
 
     virtual int find_id(const OUString& rId) const override
     {
-        return find(rId, 1);
+        gint id_column = gtk_combo_box_get_id_column(m_pComboBox);
+        return find(rId, id_column);
     }
 
     virtual void clear() override
