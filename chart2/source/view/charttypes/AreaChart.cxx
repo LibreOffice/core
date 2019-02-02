@@ -30,6 +30,7 @@
 #include <Stripe.hxx>
 #include <DateHelper.hxx>
 #include <unonames.hxx>
+#include <ConfigAccess.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -873,12 +874,28 @@ void AreaChart::createShapes()
                                 //@todo other symbol styles
                             }
                         }
-                        //create error bars
-                        if (bCreateXErrorBar)
-                            createErrorBar_X( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget );
+                        //create error bars or rectangles, depending on configuration
+                        if ( ConfigAccess::getUseErrorRectangle() )
+                        {
+                            if ( bCreateXErrorBar || bCreateYErrorBar )
+                            {
+                                createErrorRectangle(
+                                      aUnscaledLogicPosition,
+                                      *pSeries,
+                                      nIndex,
+                                      m_xErrorBarTarget,
+                                      bCreateXErrorBar,
+                                      bCreateYErrorBar );
+                            }
+                        }
+                        else
+                        {
+                            if (bCreateXErrorBar)
+                                createErrorBar_X( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget );
 
-                        if (bCreateYErrorBar)
-                            createErrorBar_Y( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget, nullptr );
+                            if (bCreateYErrorBar)
+                                createErrorBar_Y( aUnscaledLogicPosition, *pSeries, nIndex, m_xErrorBarTarget, nullptr );
+                        }
 
                         //create data point label
                         if( pSeries->getDataPointLabelIfLabel(nIndex) )

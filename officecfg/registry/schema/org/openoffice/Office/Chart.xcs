@@ -39,5 +39,18 @@
         <!-- 0x004586 0xff420e 0xffd320 0x579d1c 0x7e0021 0x83caff 0x314004 0xaecf00 0x4b1f6f 0xff950e 0xc5000b 0x0084d1 -->
       </prop>
     </group>
+    <group oor:name="ErrorProperties">
+      <info>
+        <desc>Specifies properties for error presentation in new charts.</desc>
+      </info>
+      <prop oor:name="ErrorRectangle" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Advanced -->
+        <info>
+          <desc>Option to show errors as rectangles in charts.</desc>
+          <label>Error rectangles</label>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
