@@ -1157,18 +1157,19 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Protect a current sheet.
 
-                VclPtrInstance< ScTableProtectionDlg > pDlg(GetDialogParent());
+                vcl::Window* pWin = GetDialogParent();
+                ScTableProtectionDlg aDlg(pWin ? pWin->GetFrameWeld() : nullptr);
 
                 ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
                 if (pProtect)
-                    pDlg->SetDialogData(*pProtect);
+                    aDlg.SetDialogData(*pProtect);
 
-                if (pDlg->Execute() == RET_OK)
+                if (aDlg.run() == RET_OK)
                 {
                     pScMod->InputEnterHandler();
 
                     ScTableProtection aNewProtect;
-                    pDlg->WriteData(aNewProtect);
+                    aDlg.WriteData(aNewProtect);
                     ProtectSheet(nTab, aNewProtect);
                     if (!pReqArgs)
                     {

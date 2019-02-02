@@ -38,118 +38,123 @@ const std::vector<ScTableProtection::Option> aOptions = {
 
 }
 
-ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
-    : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )
+ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
+    : weld::GenericDialogController(pParent, "modules/scalc/ui/protectsheetdlg.ui", "ProtectSheetDialog")
+    , m_xBtnProtect(m_xBuilder->weld_check_button("protect"))
+    , m_xPasswords(m_xBuilder->weld_container("passwords"))
+    , m_xOptions(m_xBuilder->weld_container("options"))
+    , m_xPassword1Edit(m_xBuilder->weld_entry("password1"))
+    , m_xPassword2Edit(m_xBuilder->weld_entry("password2"))
+    , m_xOptionsListBox(m_xBuilder->weld_tree_view("checklist"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xProtected(m_xBuilder->weld_label("protected"))
+    , m_xUnprotected(m_xBuilder->weld_label("unprotected"))
+    , m_xInsertColumns(m_xBuilder->weld_label("insert-columns"))
+    , m_xInsertRows(m_xBuilder->weld_label("insert-rows"))
+    , m_xDeleteColumns(m_xBuilder->weld_label("delete-columns"))
+    , m_xDeleteRows(m_xBuilder->weld_label("delete-rows"))
 {
-    get(m_pPasswords, "passwords");
-    get(m_pOptions, "options");
-    get(m_pBtnProtect, "protect");
-    get(m_pOptionsListBox, "checklist");
-    get(m_pPassword1Edit, "password1");
-    get(m_pPassword2Edit, "password2");
-    get(m_pBtnOk, "ok");
+    m_aSelectLockedCells = m_xProtected->get_label();
+    m_aSelectUnlockedCells = m_xUnprotected->get_label();
+    m_aInsertColumns = m_xInsertColumns->get_label();
+    m_aInsertRows = m_xInsertRows->get_label();
+    m_aDeleteColumns = m_xDeleteColumns->get_label();
+    m_aDeleteRows = m_xDeleteRows->get_label();
 
-    m_aSelectLockedCells = get<FixedText>("protected")->GetText();
-    m_aSelectUnlockedCells = get<FixedText>("unprotected")->GetText();
-    m_aInsertColumns = get<FixedText>("insert-columns")->GetText();
-    m_aInsertRows = get<FixedText>("insert-rows")->GetText();
-    m_aDeleteColumns = get<FixedText>("delete-columns")->GetText();
-    m_aDeleteRows = get<FixedText>("delete-rows")->GetText();
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xOptionsListBox->get_approximate_digit_width() * 3 + 6);
+    m_xOptionsListBox->set_column_fixed_widths(aWidths);
 
     Init();
 }
 
 ScTableProtectionDlg::~ScTableProtectionDlg()
 {
-    disposeOnce();
-}
-
-void ScTableProtectionDlg::dispose()
-{
-    m_pBtnProtect.clear();
-    m_pPasswords.clear();
-    m_pOptions.clear();
-    m_pPassword1Edit.clear();
-    m_pPassword2Edit.clear();
-    m_pOptionsListBox.clear();
-    m_pBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
     for (size_t i = 0; i < aOptions.size(); ++i)
-        m_pOptionsListBox->CheckEntryPos(i, rData.isOptionEnabled(aOptions[i]));
+        m_xOptionsListBox->set_toggle(i, rData.isOptionEnabled(aOptions[i]), 0);
 }
 
 void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 {
-    rData.setProtected(m_pBtnProtect->IsChecked());
+    rData.setProtected(m_xBtnProtect->get_active());
 
     // We assume that the two password texts match.
-    rData.setPassword(m_pPassword1Edit->GetText());
+    rData.setPassword(m_xPassword1Edit->get_text());
 
     for (size_t i = 0; i < aOptions.size(); ++i)
-        rData.setOption(aOptions[i], m_pOptionsListBox->IsChecked(i));
+        rData.setOption(aOptions[i], m_xOptionsListBox->get_toggle(i, 0));
+}
+
+void ScTableProtectionDlg::InsertEntry(const OUString& rTxt)
+{
+    m_xOptionsListBox->insert(nullptr, -1, nullptr, nullptr, nullptr,
+                              nullptr, nullptr, false);
+    const int nRow = m_xOptionsListBox->n_children() - 1;
+    m_xOptionsListBox->set_toggle(nRow, false, 0);
+    m_xOptionsListBox->set_text(nRow, rTxt, 1);
 }
 
 void ScTableProtectionDlg::Init()
 {
-    m_pBtnProtect->SetClickHdl(LINK( this, ScTableProtectionDlg, CheckBoxHdl ));
+    m_xBtnProtect->connect_toggled(LINK(this, ScTableProtectionDlg, CheckBoxHdl));
 
-    m_pBtnOk->SetClickHdl(LINK( this, ScTableProtectionDlg, OKHdl ));
+    m_xBtnOk->connect_clicked(LINK(this, ScTableProtectionDlg, OKHdl));
 
-    Link<Edit&,void> aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
-    m_pPassword1Edit->SetModifyHdl(aLink);
-    m_pPassword2Edit->SetModifyHdl(aLink);
+    Link<weld::Entry&,void> aLink = LINK(this, ScTableProtectionDlg, PasswordModifyHdl);
+    m_xPassword1Edit->connect_changed(aLink);
+    m_xPassword2Edit->connect_changed(aLink);
 
-    m_pOptionsListBox->SetUpdateMode(false);
-    m_pOptionsListBox->Clear();
+    m_xOptionsListBox->freeze();
+    m_xOptionsListBox->clear();
 
-    m_pOptionsListBox->InsertEntry(m_aSelectLockedCells);
-    m_pOptionsListBox->InsertEntry(m_aSelectUnlockedCells);
-    m_pOptionsListBox->InsertEntry(m_aInsertColumns);
-    m_pOptionsListBox->InsertEntry(m_aInsertRows);
-    m_pOptionsListBox->InsertEntry(m_aDeleteColumns);
-    m_pOptionsListBox->InsertEntry(m_aDeleteRows);
+    InsertEntry(m_aSelectLockedCells);
+    InsertEntry(m_aSelectUnlockedCells);
+    InsertEntry(m_aInsertColumns);
+    InsertEntry(m_aInsertRows);
+    InsertEntry(m_aDeleteColumns);
+    InsertEntry(m_aDeleteRows);
 
-    m_pOptionsListBox->CheckEntryPos(0);
-    m_pOptionsListBox->CheckEntryPos(1);
+    m_xOptionsListBox->set_toggle(0, true, 0);
+    m_xOptionsListBox->set_toggle(1, true, 0);
 
-    m_pOptionsListBox->SetUpdateMode(true);
+    m_xOptionsListBox->thaw();
 
     // Set the default state of the dialog.
-    m_pBtnProtect->Check();
-    m_pPassword1Edit->GrabFocus();
+    m_xBtnProtect->set_active(true);
+    m_xPassword1Edit->grab_focus();
 }
 
 void ScTableProtectionDlg::EnableOptionalWidgets(bool bEnable)
 {
-    m_pPasswords->Enable(bEnable);
-    m_pOptions->Enable(bEnable);
-    m_pOptionsListBox->Invalidate();
+    m_xPasswords->set_sensitive(bEnable);
+    m_xOptions->set_sensitive(bEnable);
+//TODO    m_xOptionsListBox->Invalidate();
 }
 
-IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, Button*, pBtn, void )
+IMPL_LINK(ScTableProtectionDlg, CheckBoxHdl, weld::ToggleButton&, rBtn, void)
 {
-    if (pBtn == m_pBtnProtect)
+    if (&rBtn == m_xBtnProtect.get())
     {
-        bool bChecked = m_pBtnProtect->IsChecked();
+        bool bChecked = m_xBtnProtect->get_active();
         EnableOptionalWidgets(bChecked);
-        m_pBtnOk->Enable(bChecked);
+        m_xBtnOk->set_sensitive(bChecked);
     }
 }
 
-IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl, weld::Button&, void)
 {
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl, weld::Entry&, void)
 {
-    OUString aPass1 = m_pPassword1Edit->GetText();
-    OUString aPass2 = m_pPassword2Edit->GetText();
-    m_pBtnOk->Enable(aPass1 == aPass2);
+    OUString aPass1 = m_xPassword1Edit->get_text();
+    OUString aPass2 = m_xPassword2Edit->get_text();
+    m_xBtnOk->set_sensitive(aPass1 == aPass2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
