@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_6d18d280",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-02T07:36:27Z",
+      "side": 1,
+      "message": "Hey! The \"Windows Share\" server type is not non-functional, but only non-functional *on Windows*! Please make the description as unambiguous and correct as possible. The current text creates an impression that some generally useless item is for some unclear reason only disabled on Windows.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "080d47507a75a7d247caea56b42e573f70dcefd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
