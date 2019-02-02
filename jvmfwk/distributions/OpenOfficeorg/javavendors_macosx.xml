@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0">
-  <updated>2019-01-19</updated>
+  <updated>2019-02-02</updated>
   <vendorInfos>
     <vendor name="Oracle Corporation">
       <minVersion>1.7.0</minVersion>
@@ -32,6 +32,9 @@
       <minVersion>1.6.0</minVersion>
     </vendor>
     <vendor name="AdoptOpenJdk">
+      <minVersion>1.8.0</minVersion>
+    </vendor>
+    <vendor name="Amazon.com Inc.">
       <minVersion>1.8.0</minVersion>
     </vendor>
   </vendorInfos>
