@@ -1629,7 +1629,6 @@ static bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldNa
 
 ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
-// TODO
     if (ScDPObject* pObj = GetDPObject())
     {
         ScFieldIdentifier aFieldId;
@@ -1663,7 +1662,6 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
 sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount()
 {
     SolarMutexGuard aGuard;
-// TODO
     ScDPObject* pDPObj = GetDPObject();
     return pDPObj ? lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) : 0;
 }
@@ -1705,7 +1703,6 @@ Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
 Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
-// TODO
     if (ScDPObject* pDPObj = GetDPObject())
     {
         Sequence< OUString > aSeq( lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) );
