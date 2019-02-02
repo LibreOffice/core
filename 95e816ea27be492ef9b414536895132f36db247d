@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_0d071e1f",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-02T07:42:26Z",
+      "side": 1,
+      "message": "This formatting-only part is IMO irrelevant, and should be reverted. When you\u0027ll happen to work on this function, you\u0027d have a chance to tidy it up ;-)",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "95e816ea27be492ef9b414536895132f36db247d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

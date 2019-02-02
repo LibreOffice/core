@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_c8fe9404",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-02T07:42:26Z",
+      "side": 0,
+      "message": "Hmm... This is also functional part, and totally unrelated to change in WinSalInstance::CreateVirtualDevice. Regressions are possible in both, so let\u0027s make this small change a separate commit.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 23
+      },
+      "revId": "bc5cfa6c95c43e407911425d9cbdc659f9907e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
