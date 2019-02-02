@@ -917,7 +917,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                                ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
+                                vcl::Window* pWin = GetActiveDialogParent();
+                                ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pWin ? pWin->GetFrameWeld() : nullptr, aName, true, bSheetProtected));
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {

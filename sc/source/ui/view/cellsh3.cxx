@@ -504,7 +504,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             bool bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                            ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
+                            ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetFrameWeld(), aName, false, bSheetProtected));
                             if ( pNewDlg->Execute() == RET_OK )
                             {
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );

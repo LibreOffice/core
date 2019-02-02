@@ -172,7 +172,10 @@ short AbstractScDPShowDetailDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
+short AbstractScNewScenarioDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScShowTabDlg_Impl::Execute()
 {
@@ -623,13 +626,13 @@ OUString AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 void AbstractScNewScenarioDlg_Impl::SetScenarioData(
     const OUString& rName, const OUString& rComment, const Color& rColor, ScScenarioFlags nFlags )
 {
-    pDlg->SetScenarioData(rName, rComment, rColor, nFlags);
+    m_xDlg->SetScenarioData(rName, rComment, rColor, nFlags);
 }
 
 void AbstractScNewScenarioDlg_Impl::GetScenarioData(
     OUString& rName, OUString& rComment, Color& rColor, ScScenarioFlags& rFlags ) const
 {
-    pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
+    m_xDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }
 
 void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected )
@@ -923,11 +926,10 @@ VclPtr<AbstractScDPShowDetailDlg> ScAbstractDialogFactory_Impl::CreateScDPShowDe
     return VclPtr<AbstractScDPShowDetailDlg_Impl>::Create(new ScDPShowDetailDlg(pParent, rDPObj, nOrient));
 }
 
-VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(vcl::Window* pParent, const OUString& rName,
+VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
     bool bEdit, bool bSheetProtected)
 {
-    VclPtr<ScNewScenarioDlg> pDlg = VclPtr<ScNewScenarioDlg>::Create(pParent, rName, bEdit, bSheetProtected);
-    return VclPtr<AbstractScNewScenarioDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScNewScenarioDlg_Impl>::Create(new ScNewScenarioDlg(pParent, rName, bEdit, bSheetProtected));
 }
 
 VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(weld::Window* pParent)

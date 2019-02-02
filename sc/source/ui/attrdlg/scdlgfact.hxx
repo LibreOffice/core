@@ -426,7 +426,14 @@ public:
 
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg )
+    std::unique_ptr<ScNewScenarioDlg> m_xDlg;
+public:
+    explicit AbstractScNewScenarioDlg_Impl(ScNewScenarioDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
+
     virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
                             const Color& rColor, ScScenarioFlags nFlags ) override;
 
@@ -641,8 +648,8 @@ public:
                                                                 ScDPObject& rDPObj,
                                                                 css::sheet::DataPilotFieldOrientation nOrient) override;
 
-    virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
-                                                                bool bEdit, bool bSheetProtected ) override;
+    virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
+                                                                    bool bEdit, bool bSheetProtected) override;
     virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg(weld::Window* pParent,
