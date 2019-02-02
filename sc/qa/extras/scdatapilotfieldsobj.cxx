@@ -8,9 +8,13 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
+#include <cppu/unotype.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
@@ -28,6 +32,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScDataPilotFieldsObj : public CalcUnoApiTest,
+                             public apitest::XElementAccess,
                              public apitest::XIndexAccess,
                              public apitest::XNameAccess
 {
@@ -38,6 +43,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testHasElements);
+    CPPUNIT_TEST(testGetElementType);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -56,6 +65,7 @@ private:
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(6)
     , XNameAccess("")
 {
