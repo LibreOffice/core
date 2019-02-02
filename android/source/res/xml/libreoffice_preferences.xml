@@ -8,12 +8,14 @@
             android:summary="@string/pref_filter_summary"
             android:entries="@array/FilterTypeNames"
             android:entryValues="@array/FilterTypeStringValues"
+            android:defaultValue="-1"
             android:key="FILTER_MODE"/>
         <ListPreference
             android:summary="@string/pref_sort_summary"
             android:key="SORT_MODE"
             android:title="@string/pref_sort_title"
             android:entries="@array/SortModeNames"
+            android:defaultValue="0"
             android:entryValues="@array/SortModeStringValues"/>
         <ListPreference
             android:entries="@array/ViewModeNames"
@@ -28,6 +30,7 @@
             android:summary="@string/display_language_summary"
             android:entries="@array/SupportedLanguages"
             android:entryValues="@array/SupportedLanguagesValues"
+            android:defaultValue="en"
             android:key="DISPLAY_LANGUAGE"
             />
 
