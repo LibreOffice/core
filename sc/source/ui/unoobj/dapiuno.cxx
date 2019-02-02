@@ -1677,6 +1677,8 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
     return Any( xField );
 }
 
+// XElementAccess
+
 uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
 {
     SolarMutexGuard aGuard;
@@ -1688,6 +1690,8 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements()
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
+
+// XNameAccess
 
 Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
 {
