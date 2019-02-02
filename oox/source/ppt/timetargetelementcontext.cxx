@@ -27,7 +27,7 @@
 #include <drawingml/embeddedwavaudiofile.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/core/filterbase.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <avmedia/mediaitem.hxx>
 
