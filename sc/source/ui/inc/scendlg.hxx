@@ -20,20 +20,17 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 enum class ScScenarioFlags;
-class Edit;
 
-class SvxColorListBox;
+class ColorListBox;
 
-class ScNewScenarioDlg : public ModalDialog
+class ScNewScenarioDlg : public weld::GenericDialogController
 {
 public:
-    ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected);
+    ScNewScenarioDlg(weld::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected);
     virtual ~ScNewScenarioDlg() override;
-    virtual void dispose() override;
     void SetScenarioData( const OUString& rName, const OUString& rComment,
                           const Color& rColor, ScScenarioFlags nFlags );
 
@@ -41,19 +38,22 @@ public:
                           Color& rColor, ScScenarioFlags &rFlags) const;
 
 private:
-    VclPtr<Edit>               m_pEdName;
-    VclPtr<VclMultiLineEdit>   m_pEdComment;
-    VclPtr<CheckBox>           m_pCbShowFrame;
-    VclPtr<SvxColorListBox>    m_pLbColor;
-    VclPtr<CheckBox>           m_pCbTwoWay;
-    VclPtr<CheckBox>           m_pCbCopyAll;
-    VclPtr<CheckBox>           m_pCbProtect;
-    VclPtr<OKButton>           m_pBtnOk;
     const OUString      aDefScenarioName;
     bool const                bIsEdit;
+    std::unique_ptr<weld::Entry> m_xEdName;
+    std::unique_ptr<weld::TextView> m_xEdComment;
+    std::unique_ptr<weld::CheckButton> m_xCbShowFrame;
+    std::unique_ptr<ColorListBox> m_xLbColor;
+    std::unique_ptr<weld::CheckButton> m_xCbTwoWay;
+    std::unique_ptr<weld::CheckButton> m_xCbCopyAll;
+    std::unique_ptr<weld::CheckButton> m_xCbProtect;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Label> m_xAltTitle;
+    std::unique_ptr<weld::Label> m_xCreatedFt;
+    std::unique_ptr<weld::Label> m_xOnFt;
 
-    DECL_LINK( OkHdl, Button*, void);
-    DECL_LINK( EnableHdl, Button*, void );
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(EnableHdl, weld::ToggleButton&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
