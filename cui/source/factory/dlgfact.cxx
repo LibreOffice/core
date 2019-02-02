@@ -206,7 +206,10 @@ short AbstractSvxObjectTitleDescDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
+short AbstractSvxMultiPathDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSvxPathSelectDialog_Impl::Execute()
 {
@@ -751,17 +754,17 @@ void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescriptio
 
 OUString AbstractSvxMultiPathDialog_Impl::GetPath() const
 {
-    return pDlg->GetPath();
+    return m_xDlg->GetPath();
 }
 
 void AbstractSvxMultiPathDialog_Impl::SetPath( const OUString& rPath )
 {
-    pDlg->SetPath( rPath );
+    m_xDlg->SetPath( rPath );
 }
 
 void AbstractSvxMultiPathDialog_Impl::SetTitle( const OUString& rNewTitle )
 {
-    pDlg->SetText( rNewTitle );
+    m_xDlg->SetTitle(rNewTitle);
 }
 
 OUString AbstractSvxPathSelectDialog_Impl::GetPath() const
@@ -1230,10 +1233,9 @@ VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxOb
     return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(std::make_unique<SvxObjectTitleDescDialog>(pParent, rTitle, rDescription));
 }
 
-VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(vcl::Window* pParent)
+VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(weld::Window* pParent)
 {
-    VclPtrInstance<SvxMultiPathDialog> pDlg(pParent);
-    return VclPtr<AbstractSvxMultiPathDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxMultiPathDialog_Impl>::Create(std::make_unique<SvxMultiPathDialog>(pParent));
 }
 
 VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxPathSelectDialog(weld::Window* pParent)

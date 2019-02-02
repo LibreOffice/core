@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="MultiPathDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="multipathdialog|MultiPathDialog">Select Paths</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -140,28 +154,58 @@
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <child>
-                          <object class="svtlo-SvSimpleTableContainer" id="paths">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="search_column">0</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Simple Table Container-selection"/>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="paths">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                    <property name="resizable">True</property>
+                                    <property name="spacing">6</property>
+                                    <property name="alignment">0.5</property>
+                                    <child>
+                                      <object class="GtkCellRendererToggle" id="cellrenderer5">
+                                        <property name="radio">True</property>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="visible">3</attribute>
+                                        <attribute name="active">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                                    <property name="resizable">True</property>
+                                    <property name="spacing">6</property>
+                                    <property name="title" translatable="yes" context="multipathdialog|pathlist">Path list</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderer4"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="pathlist">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes" context="multipathdialog|pathlist">Path list:</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
