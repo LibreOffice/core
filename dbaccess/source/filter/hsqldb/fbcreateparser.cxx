@@ -189,13 +189,23 @@ OUString FbCreateStmtParser::compose() const
 
     sSql.append("PRIMARY KEY(");
     const std::vector<OUString>& sPrimaryKeys = getPrimaryKeys();
-    auto it = sPrimaryKeys.cbegin();
-    while (it != sPrimaryKeys.end())
+    // It might happen, that no primary key defined. In this case, we can use
+    // the first column as primary key (probably only one column is allowed in
+    // this case)
+    if (sPrimaryKeys.empty())
     {
-        sSql.append(*it);
-        ++it;
-        if (it != sPrimaryKeys.end())
-            sSql.append(",");
+        sSql.append(rColumns.at(0).getName());
+    }
+    else
+    {
+        auto it = sPrimaryKeys.cbegin();
+        while (it != sPrimaryKeys.end())
+        {
+            sSql.append(*it);
+            ++it;
+            if (it != sPrimaryKeys.end())
+                sSql.append(",");
+        }
     }
 
     sSql.append("))"); // end of column declaration and primary keys
