@@ -44,9 +44,18 @@ css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataF
 
         if (urlList.size() > 0)
         {
-            //FIXME: multiple URLs, here we take only 1st one
-            QString url = urlList.at(0).path();
-            std::string aStr = url.toStdString();
+            std::string aStr;
+
+            // transfer data is list of URLs
+            for (int i = 0; i < urlList.size(); ++i)
+            {
+                QString url = urlList.at(i).path();
+                aStr += url.toStdString();
+                // separated by newline if more than 1
+                if (i < urlList.size() - 1)
+                    aStr += "\n";
+            }
+
             Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
             aAny <<= aSeq;
         }
