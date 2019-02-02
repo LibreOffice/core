@@ -43,6 +43,7 @@ public:
     void testTimestampWithParam();
     void testDefaultValueNow();
     void testEvilNullColumnName();
+    void testTableWithoutPrimary();
     // TODO testForeign, testDecomposer
 
     CPPUNIT_TEST_SUITE(HsqlSchemaImportTest);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testTimestampWithParam);
     CPPUNIT_TEST(testDefaultValueNow);
     CPPUNIT_TEST(testEvilNullColumnName);
+    CPPUNIT_TEST(testTableWithoutPrimary);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -225,6 +227,16 @@ void HsqlSchemaImportTest::testEvilNullColumnName()
     const ColumnDefinition* colVarchar = lcl_findByType(columns, css::sdbc::DataType::VARCHAR);
     CPPUNIT_ASSERT(colVarchar != nullptr);
     CPPUNIT_ASSERT(colVarchar->isNullable());
+}
+
+void HsqlSchemaImportTest::testTableWithoutPrimary()
+{
+    const OUString sql{ "CREATE CACHED TABLE \"myTable\"(\"name\" VARCHAR(100))" };
+    FbCreateStmtParser aCreateParser;
+    aCreateParser.parse(sql);
+
+    OUString fbSql = aCreateParser.compose();
+    CPPUNIT_ASSERT(fbSql.indexOf("PRIMARY KEY") > 0); //contains primary key definition
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HsqlSchemaImportTest);
