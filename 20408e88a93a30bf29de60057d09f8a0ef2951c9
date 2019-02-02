@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_8821bca2",
+        "filename": "sc/qa/uitest/options/tdf122977.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-02-02T07:58:02Z",
+      "side": 1,
+      "message": "Does this need\nnrDefaultColors \u003d get_state_as_dict(xColors)[\"EntryCount\"]",
+      "revId": "20408e88a93a30bf29de60057d09f8a0ef2951c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
