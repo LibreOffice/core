@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f485f77_e8183076",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-02T07:50:09Z",
+      "side": 0,
+      "message": "In original code, the new bitmap is only created in this branch. In changed version, it\u0027s created unconditionally (I mean, when hDC is valid, of course), i.e., including cases when hDC is valid after if() branch above.\n\nI\u0027d add a boolean like bCreateBMP to control creation below.",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 110
+      },
+      "revId": "bc5cfa6c95c43e407911425d9cbdc659f9907e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c8fe9404",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
