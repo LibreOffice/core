@@ -1418,7 +1418,7 @@ TaskManager::copy(
         }
         case NameClash::RENAME:
         {
-            OUString newDstUnqPath;
+            OUString newDstUnqPath = dstUnqPath;
             nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
 
             if( nError == osl::FileBase::E_EXIST )
