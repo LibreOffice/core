@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_c830d40a",
+        "filename": "dbaccess/source/filter/hsqldb/fbcreateparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-03T13:59:59Z",
+      "side": 1,
+      "message": "why not just skip this section if sPrimaryKeys is empty? i.e. the part from \"PRIMARY KEY(\" until the next \")\", since \n  PRIMARY KEY\nis an optional part of this SQL statement.\n\nYou can\u0027t just make the first column primary, because a primary key must be unique, and the first column might contain duplicate values.\n\nIf you absolutely have to have a primary key, you will need to generate a new column (e.g. an IDENTITY column) to become the primary key",
+      "revId": "d6486768e958126cd33d9a260890c3b6ba7d163c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
