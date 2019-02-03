@@ -74,9 +74,8 @@ public:
 
     OUString getTableName() const
     {
-        // SET TABLE "<table name which can contain several words>" INDEX'...
-        // 9 corresponds to nb chars in "SET TABLE"
-        return m_sql.copy(m_sql.indexOf("\""), m_sql.lastIndexOf("\"") - 9);
+        // SET TABLE <tableName>
+        return string::split(m_sql, u' ')[2];
     }
 };
 
