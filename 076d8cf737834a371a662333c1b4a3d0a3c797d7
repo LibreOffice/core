@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_c819f488",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2148,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2019-02-03T14:46:33Z",
+      "side": 1,
+      "message": "Should be STR_STYLE_NEW_STYLE_ACTION (but IMHO the whole comment is redundant).",
+      "range": {
+        "startLine": 2148,
+        "startChar": 17,
+        "endLine": 2148,
+        "endChar": 39
+      },
+      "revId": "076d8cf737834a371a662333c1b4a3d0a3c797d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
