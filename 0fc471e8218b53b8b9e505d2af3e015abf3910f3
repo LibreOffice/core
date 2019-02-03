@@ -34,6 +34,24 @@
       "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_031c8f68",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-03T16:52:48Z",
+      "side": 1,
+      "message": "I don\u0027t understand exactly what you claim is broken.  Can you be more specific please?  (As you mention \"version 6.0\", it seems that you are talking about a generic issue, not a specific issue with this patch?  But there are certainly many properties of boolean type in the registry, and I don\u0027t see a reason why this specific property should be of type int when it actually models a yes/no option.)",
+      "parentUuid": "1f485f77_630d8336",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
