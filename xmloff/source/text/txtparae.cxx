@@ -120,6 +120,7 @@
 #include <algorithm>
 #include <iterator>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/graph.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -3181,7 +3182,12 @@ void XMLTextParagraphExport::_exportTextGraphic(
         if (xGraphic.is())
         {
             SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true );
-            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
+
+            Graphic aGraphic(xGraphic);
+            if (aGraphic.getOriginURL().isEmpty()) // don't add the base64 if the origin URL is set (image is from an external URL)
+            {
+                GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
+            }
         }
     }
 
