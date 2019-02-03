@@ -2660,8 +2660,8 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
         rName = rName.copy(RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER_CC));
 
     SwFieldIds nResId = SwFieldIds::Unknown;
-    sal_Int32 nFound = 0;
-    rTypeName = rName.getToken( 0, '.', nFound );
+    sal_Int32 nIdx = 0;
+    rTypeName = rName.getToken( 0, '.', nIdx );
     if (rTypeName == "User")
         nResId = SwFieldIds::User;
     else if (rTypeName == "DDE")
@@ -2670,7 +2670,7 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     {
         nResId = SwFieldIds::SetExp;
 
-        const OUString sFieldTypName( rName.getToken( 1, '.' ));
+        const OUString sFieldTypName( rName.getToken( 0, '.', nIdx ));
         const OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFieldTypName ) );
 
         if( sUIName != sFieldTypName )
