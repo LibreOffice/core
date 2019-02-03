@@ -75,8 +75,12 @@ public:
     OUString getTableName() const
     {
         // SET TABLE "<table name which can contain several words>" INDEX'...
-        // 9 corresponds to nb chars in "SET TABLE"
-        return m_sql.copy(m_sql.indexOf("\""), m_sql.lastIndexOf("\"") - 9);
+        constexpr int SET_TABLE_LITERAL_SIZE = 9;
+        if (m_sql.indexOf("\"") >= 0) // delimited identifier
+            return m_sql.copy(m_sql.indexOf("\""),
+                              m_sql.lastIndexOf("\"") - SET_TABLE_LITERAL_SIZE);
+        else
+            return string::split(m_sql, u' ')[2];
     }
 };
 
