@@ -1365,9 +1365,10 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 #if HAVE_FEATURE_DBCONNECTIVITY
             if( pMgr)
             {
+                sal_Int32 nIdx{ 0 };
                 OUString sDBName( GetDBName( sTmpName, pDoc ));
-                OUString sDataSource(sDBName.getToken(0, DB_DELIM));
-                OUString sDataTableOrQuery(sDBName.getToken(1, DB_DELIM));
+                OUString sDataSource(sDBName.getToken(0, DB_DELIM, nIdx));
+                OUString sDataTableOrQuery(sDBName.getToken(0, DB_DELIM, nIdx));
                 if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
                     pMgr->IsDataSourceOpen( sDataSource,
                                                 sDataTableOrQuery, false))
