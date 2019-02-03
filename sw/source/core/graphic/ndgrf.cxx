@@ -593,7 +593,7 @@ void SwGrfNode::ReleaseLink()
 {
     if( refLink.is() )
     {
-        const Graphic aLocalGraphic(maGrfObj.GetGraphic());
+        Graphic aLocalGraphic(maGrfObj.GetGraphic());
         const bool bHasOriginalData(aLocalGraphic.IsGfxLink());
 
         {
@@ -605,6 +605,7 @@ void SwGrfNode::ReleaseLink()
 
         getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
         refLink.clear();
+        aLocalGraphic.setOriginURL("");
 
         // #i15508# added extra processing after getting rid of the link. Use whatever is
         // known from the formerly linked graphic to get to a state as close to a directly
