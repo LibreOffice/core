@@ -16,6 +16,24 @@
       "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_630d8336",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-02-03T16:36:19Z",
+      "side": 1,
+      "message": "Good question, I forgot to mention why. For reasons unknown to me, boolean configuration settings are read only on the expert configuration dialog, int/long values can be edited. This is not just in master, but e.g. in version 6.0 as part of openSUSE too. I didn\u0027t investigate whether this is as designed or a bug, as the focus of the current patch is the error rectangle code.\nStoring the setting in configuration and/or in the document and UI implementation to (un)set isn\u0027t final yet.",
+      "parentUuid": "1f485f77_e803900e",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
