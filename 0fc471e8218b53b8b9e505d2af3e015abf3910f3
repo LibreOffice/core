@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_e803900e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-03T16:10:12Z",
+      "side": 1,
+      "message": "what is the meaning of integer values like 1 here?  (or should this rather be a boolean prop?)",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
