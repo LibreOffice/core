@@ -407,13 +407,18 @@ void SidebarController::NotifyResize()
         {
             if (comphelper::LibreOfficeKit::isActive())
             {
+                // We want to let the layouter use up as much of the
+                // height as necessary to make sure no scrollbar is
+                // visible. This only works when there are no greedy
+                // panes that fill up all available area. So we only
+                // use this for the PropertyDeck, which has no such
+                // panes, while most other do. This is fine, since
+                // it's the PropertyDeck that really has many panes
+                // that can collapse or expand. For others, limit
+                // the height to something sensible.
+                const sal_Int32 nExtHeight = (msCurrentDeckId == "PropertyDeck" ? 2000 : 600);
                 // No TabBar in LOK (use nWidth in full).
-                // Use the minimum height that is large enough to let the
-                // layouter expand the panes maximally (that have a minimal
-                // height before the scrollbar is shown), so we never get
-                // scrollbars (we want scrolling to be done on the rendered
-                // image in the client, which is much faster).
-                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, 650);
+                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nExtHeight);
             }
             else
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
