@@ -37,14 +37,9 @@ struct VendorSupportMapEntry
 
 extern VendorSupportMapEntry const gVendorMap[];
 
-#define BEGIN_VENDOR_MAP() \
-VendorSupportMapEntry const gVendorMap[] ={
-
-#define VENDOR_MAP_ENTRY(x,y) \
-    {x, & y::getJavaExePaths, & y::createInstance},
-
-#define END_VENDOR_MAP() \
-    {nullptr, nullptr, nullptr} };
+template<typename y> constexpr VendorSupportMapEntry VENDOR_MAP_ENTRY(char const * x) {
+    return {x, & y::getJavaExePaths, & y::createInstance};
+}
 
 /* Examines if the vendor supplied in parameter sVendor is part of the
    list of supported vendors. That is the arry of VendorSupportMapEntry
