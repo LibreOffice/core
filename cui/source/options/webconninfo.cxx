@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/layout.hxx>
 
@@ -268,8 +269,9 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
                   = new ::comphelper::SimplePasswordRequest;
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
+            auto xWindow = VCLUnoHelper::GetInterface(this);
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr),
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), xWindow),
                 uno::UNO_QUERY );
             xInteractionHandler->handle( rRequest );
 
