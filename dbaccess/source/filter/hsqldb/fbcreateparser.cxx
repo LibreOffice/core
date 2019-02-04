@@ -106,6 +106,26 @@ OUString lcl_getTypeModifier(sal_Int32 eType)
 
 namespace dbahsql
 {
+void FbCreateStmtParser::appendPrimaryKeyPart(OUStringBuffer& rSql) const
+{
+    const std::vector<OUString>& sPrimaryKeys = getPrimaryKeys();
+    if (sPrimaryKeys.empty())
+        return; // no primary key specified
+
+    rSql.append(",");
+    rSql.append("PRIMARY KEY(");
+    auto it = sPrimaryKeys.cbegin();
+    while (it != sPrimaryKeys.end())
+    {
+        rSql.append(*it);
+        ++it;
+        if (it != sPrimaryKeys.end())
+            rSql.append(",");
+    }
+
+    rSql.append(")"); // end of primary key declaration
+}
+
 void FbCreateStmtParser::ensureProperTableLengths() const
 {
     const std::vector<ColumnDefinition>& rColumns = getColumnDef();
@@ -119,7 +139,7 @@ OUString FbCreateStmtParser::compose() const
     OUStringBuffer sSql("CREATE TABLE ");
     sSql.append(getTableName());
 
-    lcl_appendWithSpace(sSql, "(");
+    lcl_appendWithSpace(sSql, "("); // column declaration
     auto& rColumns = getColumnDef();
     auto columnIter = rColumns.cbegin();
     while (columnIter != rColumns.end())
@@ -184,21 +204,13 @@ OUString FbCreateStmtParser::compose() const
         }
 
         ++columnIter;
-        sSql.append(",");
-    }
-
-    sSql.append("PRIMARY KEY(");
-    const std::vector<OUString>& sPrimaryKeys = getPrimaryKeys();
-    auto it = sPrimaryKeys.cbegin();
-    while (it != sPrimaryKeys.end())
-    {
-        sSql.append(*it);
-        ++it;
-        if (it != sPrimaryKeys.end())
+        if (columnIter != rColumns.end())
             sSql.append(",");
     }
 
-    sSql.append("))"); // end of column declaration and primary keys
+    appendPrimaryKeyPart(sSql);
+
+    sSql.append(")"); // end of column declaration
     return sSql.makeStringAndClear();
 }
 

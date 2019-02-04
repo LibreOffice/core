@@ -18,6 +18,7 @@ class SAL_DLLPUBLIC_EXPORT FbCreateStmtParser : public CreateStmtParser
 {
 protected:
     void ensureProperTableLengths() const;
+    void appendPrimaryKeyPart(rtl::OUStringBuffer& rSql) const;
 
 public:
     /**
