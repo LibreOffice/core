@@ -78,7 +78,6 @@
 #include <svx/svdouno.hxx>
 #include <tools/globname.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -2523,7 +2522,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
             if (!bMerged)
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoOverwrite>(&m_rDoc, rPt, c) );
+                    std::make_unique<SwUndoOverwrite>(&m_rDoc, rPt, c) );
             }
         }
         else
@@ -2608,7 +2607,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         if (bDoesUndo)
         {
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                o3tl::make_unique<SwUndoInsert>(rPos.nNode,
+                std::make_unique<SwUndoInsert>(rPos.nNode,
                         rPos.nContent.GetIndex(), ins.getLength(), nInsertMode));
         }
     }
@@ -2828,7 +2827,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoReRead>(rPam, *pGrfNd));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoReRead>(rPam, *pGrfNd));
         }
 
         // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
@@ -2945,7 +2944,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0) );
     }
 
     m_rDoc.getIDocumentState().SetModified();
@@ -3113,7 +3112,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsert>( rPos.nNode ) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsert>( rPos.nNode ) );
     }
 
     // To-Do - add 'SwExtraRedlineTable' also ?
@@ -3697,7 +3696,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
     std::vector<SwRangeRedline*> redlines;
     {
-        auto pRedline(o3tl::make_unique<SwRangeRedline>(nsRedlineType_t::REDLINE_DELETE, rPam));
+        auto pRedline(std::make_unique<SwRangeRedline>(nsRedlineType_t::REDLINE_DELETE, rPam));
         if (pRedline->HasValidRange())
         {
             redlines.push_back(pRedline.release());
@@ -3725,7 +3724,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         {
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
+                MarkUndos.emplace_back(std::make_unique<SwUndoDeleteBookmark>(**iter));
             }
             // iter is into annotation mark vector so must be dereferenced!
             rDMA.deleteMark(&**iter);
@@ -3758,7 +3757,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         for (SwRangeRedline * pRedline : redlines)
         {
             assert(pRedline->HasValidRange());
-            undos.emplace_back(o3tl::make_unique<SwUndoRedlineDelete>(
+            undos.emplace_back(std::make_unique<SwUndoRedlineDelete>(
                         *pRedline, SwUndoId::DELETE));
         }
         const SwRewriter aRewriter = undos.front()->GetRewriter();
@@ -3925,7 +3924,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         }
         if (!bMerged)
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDelete>( rPam ) );
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDelete>( rPam ) );
         }
 
         m_rDoc.getIDocumentState().SetModified();
@@ -4164,7 +4163,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoRedlineDelete>( aDelPam, SwUndoId::REPLACE ));
+                    std::make_unique<SwUndoRedlineDelete>( aDelPam, SwUndoId::REPLACE ));
             }
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
 

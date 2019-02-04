@@ -494,7 +494,6 @@
 #include <numrule.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/enumrange.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

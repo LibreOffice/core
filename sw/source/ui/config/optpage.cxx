@@ -55,7 +55,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxenum.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/request.hxx>
@@ -779,7 +778,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     }
     else
     {
-        auto pPrinterSet = o3tl::make_unique<SfxItemSet>( *rSet->GetPool(),
+        auto pPrinterSet = std::make_unique<SfxItemSet>( *rSet->GetPool(),
                     svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
         m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));

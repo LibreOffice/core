@@ -86,7 +86,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <o3tl/make_unique.hxx>
 #include <svl/grabbagitem.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
@@ -938,10 +937,10 @@ void RtfAttributeOutput::InitTableHelper(
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
-        m_pTableWrt = o3tl::make_unique<SwWriteTable>(pTable, pLayout);
+        m_pTableWrt = std::make_unique<SwWriteTable>(pTable, pLayout);
     else
-        m_pTableWrt = o3tl::make_unique<SwWriteTable>(pTable, pTable->GetTabLines(), nPageSize,
-                                                      nTableSz, false);
+        m_pTableWrt = std::make_unique<SwWriteTable>(pTable, pTable->GetTabLines(), nPageSize,
+                                                     nTableSz, false);
 }
 
 void RtfAttributeOutput::StartTable()

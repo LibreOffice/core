@@ -34,7 +34,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -645,7 +644,7 @@ OUString SwTemplNameField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwTemplNameField::Copy() const
 {
-    return o3tl::make_unique<SwTemplNameField>(static_cast<SwTemplNameFieldType*>(GetTyp()), GetFormat());
+    return std::make_unique<SwTemplNameField>(static_cast<SwTemplNameFieldType*>(GetTyp()), GetFormat());
 }
 
 bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -772,7 +771,7 @@ OUString SwDocStatField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwDocStatField::Copy() const
 {
-    return o3tl::make_unique<SwDocStatField>(
+    return std::make_unique<SwDocStatField>(
                     static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, GetFormat() );
 }
 
@@ -1776,7 +1775,7 @@ std::unique_ptr<SwField> SwPostItField::Copy() const
     std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
                                              m_aDateTime, m_nPostItId));
     if (mpText)
-        pRet->SetTextObject( o3tl::make_unique<OutlinerParaObject>(*mpText) );
+        pRet->SetTextObject( std::make_unique<OutlinerParaObject>(*mpText) );
 
     // Note: member <m_xTextObject> not copied.
 
@@ -1848,7 +1847,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             {
                 SwPostItFieldType* pGetType = static_cast<SwPostItFieldType*>(GetTyp());
                 SwDoc* pDoc = pGetType->GetDoc();
-                auto pObj = o3tl::make_unique<SwTextAPIEditSource>( pDoc );
+                auto pObj = std::make_unique<SwTextAPIEditSource>( pDoc );
                 const_cast <SwPostItField*> (this)->m_xTextObject = new SwTextAPIObject( std::move(pObj) );
             }
 
@@ -2096,7 +2095,7 @@ OUString SwRefPageSetField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwRefPageSetField::Copy() const
 {
-    return o3tl::make_unique<SwRefPageSetField>( static_cast<SwRefPageSetFieldType*>(GetTyp()), m_nOffset, m_bOn );
+    return std::make_unique<SwRefPageSetField>( static_cast<SwRefPageSetFieldType*>(GetTyp()), m_nOffset, m_bOn );
 }
 
 OUString SwRefPageSetField::GetPar2() const
@@ -2473,7 +2472,7 @@ OUString SwJumpEditField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwJumpEditField::Copy() const
 {
-    return o3tl::make_unique<SwJumpEditField>( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
+    return std::make_unique<SwJumpEditField>( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
                                 m_sText, m_sHelp );
 }
 
@@ -2593,7 +2592,7 @@ OUString SwCombinedCharField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwCombinedCharField::Copy() const
 {
-    return o3tl::make_unique<SwCombinedCharField>( static_cast<SwCombinedCharFieldType*>(GetTyp()),
+    return std::make_unique<SwCombinedCharField>( static_cast<SwCombinedCharFieldType*>(GetTyp()),
                                         m_sCharacters );
 }
 

@@ -65,7 +65,6 @@
 #include <svx/swframetypes.hxx>
 #include <svx/svxids.hrc>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -393,7 +392,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-                o3tl::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
+                std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
@@ -634,7 +633,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoPageDescDelete>(rDel, this));
+            std::make_unique<SwUndoPageDescDelete>(rDel, this));
     }
 
     PreDelPageDesc(&rDel); // #i7983#
@@ -683,7 +682,7 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoPageDescCreate>(pNew, this));
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDescCreate>(pNew, this));
     }
 
     getIDocumentState().SetModified();

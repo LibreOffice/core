@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <rtl/character.hxx>
 #include <vcl/vclenum.hxx>
-#include <o3tl/make_unique.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
@@ -1680,7 +1679,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if (rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoCompDoc>( *pTmp, false ));
+                    std::make_unique<SwUndoCompDoc>( *pTmp, false ));
             }
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
 
@@ -1760,7 +1759,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoCompDoc>( *pTmp, true ));
+                    std::make_unique<SwUndoCompDoc>( *pTmp, true ));
             }
         } while( pInsRing.get() != ( pTmp = pTmp->GetNext()) );
     }

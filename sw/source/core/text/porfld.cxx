@@ -22,7 +22,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <vcl/graph.hxx>
-#include <o3tl/make_unique.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -404,7 +403,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             SwFieldPortion *pField = Clone( aNew );
             if( !aNew.isEmpty() && !pField->GetFont() )
             {
-                pField->SetFont( o3tl::make_unique<SwFont>( *rInf.GetFont() ) );
+                pField->SetFont( std::make_unique<SwFont>( *rInf.GetFont() ) );
             }
             pField->SetFollow( true );
             SetHasFollow( true );

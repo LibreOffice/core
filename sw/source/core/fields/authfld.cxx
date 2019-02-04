@@ -24,7 +24,6 @@
 #include <editeng/langitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <swtypes.hxx>
 #include <strings.hrc>
 #include <authfld.hxx>
@@ -538,7 +537,7 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField,
 std::unique_ptr<SwField> SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(GetTyp());
-    return o3tl::make_unique<SwAuthorityField>(pAuthType, m_xAuthEntry.get());
+    return std::make_unique<SwAuthorityField>(pAuthType, m_xAuthEntry.get());
 }
 
 OUString SwAuthorityField::GetFieldText(ToxAuthorityField eField) const

@@ -22,7 +22,6 @@
 #include <utility>
 
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/textenc.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -188,7 +187,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : nullptr;
             if( !pPrt )
             {
-                auto pSet = o3tl::make_unique<SfxItemSet>( rDocSh.GetPool(),
+                auto pSet = std::make_unique<SfxItemSet>( rDocSh.GetPool(),
                             svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
                 pPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );

@@ -13,7 +13,6 @@
 #include <docsh.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sax/fastattribs.hxx>
 
 #include <boost/optional.hpp>
@@ -741,7 +740,7 @@ void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSer
 
 DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc,
                                            const sax_fastparser::FSHelperPtr& pSerializer)
-    : m_pImpl(o3tl::make_unique<Impl>(pDoc))
+    : m_pImpl(std::make_unique<Impl>(pDoc))
 {
     m_pImpl->setSerializer(pSerializer);
 }

@@ -32,7 +32,6 @@
 #include <swtypes.hxx>
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
-#include <o3tl/make_unique.hxx>
 #include <xmloff/odffields.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/random.hxx>
@@ -173,13 +172,13 @@ namespace sw { namespace mark
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
-        o3tl::make_unique<SwPosition>(rNewPos).swap(m_pPos1);
+        std::make_unique<SwPosition>(rNewPos).swap(m_pPos1);
         m_pPos1->nContent.SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
-        o3tl::make_unique<SwPosition>(rNewPos).swap(m_pPos2);
+        std::make_unique<SwPosition>(rNewPos).swap(m_pPos2);
         m_pPos2->nContent.SetMark(this);
     }
 
@@ -297,7 +296,7 @@ namespace sw { namespace mark
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoInsBookmark>(*this));
+                    std::make_unique<SwUndoInsBookmark>(*this));
         }
         io_pDoc->getIDocumentState().SetModified();
     }
@@ -309,7 +308,7 @@ namespace sw { namespace mark
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoDeleteBookmark>(*this));
+                    std::make_unique<SwUndoDeleteBookmark>(*this));
         }
         io_pDoc->getIDocumentState().SetModified();
     }

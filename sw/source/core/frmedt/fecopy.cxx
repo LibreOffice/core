@@ -77,7 +77,6 @@
 #include <textboxhelper.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1571,7 +1570,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
         }
         else
         {
-            pView->AddUndo(o3tl::make_unique<SdrUndoAttrObj>(*pObj));
+            pView->AddUndo(std::make_unique<SdrUndoAttrObj>(*pObj));
 
             SfxItemSet aSet(pView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
 

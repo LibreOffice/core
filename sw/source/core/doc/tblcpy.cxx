@@ -47,7 +47,6 @@
 #include <deque>
 #include <memory>
 #include <numeric>
-#include <o3tl/make_unique.hxx>
 
 static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                     SwTable& rDstTable, SwTableBox* pDstBox,
@@ -211,7 +210,7 @@ namespace
                         SwTableLine *pLine2 = rLines[ ++nEndLn ];
                         SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
                         FndLine_ *pInsLine = new FndLine_( pLine2, &rFndBox );
-                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), o3tl::make_unique<FndBox_>(pTmpBox, pInsLine));
+                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), std::make_unique<FndBox_>(pTmpBox, pInsLine));
                         rFndLines.push_back(std::unique_ptr<FndLine_>(pInsLine));
                     }
                 }

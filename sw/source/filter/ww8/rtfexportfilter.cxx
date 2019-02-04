@@ -27,7 +27,6 @@
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,7 +70,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDes
     aPam.SetMark();
     aPam.Move(fnMoveBackward, GoInDoc);
 
-    auto pCurPam = o3tl::make_unique<SwPaM>(*aPam.End(), *aPam.Start());
+    auto pCurPam = std::make_unique<SwPaM>(*aPam.End(), *aPam.Start());
 
     // export the document
     // (in a separate block so that it's destructed before the commit)

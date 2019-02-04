@@ -26,7 +26,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <shellio.hxx>
@@ -118,7 +117,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
  */
 
 Writer::Writer()
-    : m_pImpl(o3tl::make_unique<Writer_Impl>())
+    : m_pImpl(std::make_unique<Writer_Impl>())
     , m_pOrigFileName(nullptr), m_pDoc(nullptr), m_pOrigPam(nullptr), m_pCurrentPam(nullptr)
     , m_bHideDeleteRedlines(false)
 {

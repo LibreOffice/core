@@ -67,7 +67,6 @@
 #include "htmlatr.hxx"
 #include "htmlfly.hxx"
 #include "htmlreqifreader.hxx"
-#include <o3tl/make_unique.hxx>
 
 using namespace css;
 
@@ -349,7 +348,7 @@ void SwHTMLWriter::CollectFlyFrames()
         if( !m_pHTMLPosFlyFrames )
             m_pHTMLPosFlyFrames.reset(new SwHTMLPosFlyFrames);
 
-        m_pHTMLPosFlyFrames->insert( o3tl::make_unique<SwHTMLPosFlyFrame>(*rpItem, pSdrObj, nMode) );
+        m_pHTMLPosFlyFrames->insert( std::make_unique<SwHTMLPosFlyFrame>(*rpItem, pSdrObj, nMode) );
     }
 }
 

@@ -36,7 +36,6 @@
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
-#include <o3tl/make_unique.hxx>
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
@@ -298,7 +297,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFootNoteInfo>(rOld, this) );
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFootNoteInfo>(rOld, this) );
     }
 
     bool bFootnotePos  = rInfo.ePos != rOld.ePos;
@@ -370,7 +369,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     if(GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), this ) );
+            std::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), this ) );
     }
 
     bool bNumChg  = rInfo.nFootnoteOffset != GetEndNoteInfo().nFootnoteOffset;

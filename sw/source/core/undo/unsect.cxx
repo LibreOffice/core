@@ -41,7 +41,6 @@
 /// OD 04.10.2002 #102894#
 /// class Calc needed for calculation of the hidden condition of a section.
 #include <calc.hxx>
-#include <o3tl/make_unique.hxx>
 
 static std::unique_ptr<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
 {
@@ -296,7 +295,7 @@ public:
 
 std::unique_ptr<SwUndo> MakeUndoDelSection(SwSectionFormat const& rFormat)
 {
-    return o3tl::make_unique<SwUndoDelSection>(rFormat, *rFormat.GetSection(),
+    return std::make_unique<SwUndoDelSection>(rFormat, *rFormat.GetSection(),
                 rFormat.GetContent().GetContentIdx());
 }
 
@@ -399,7 +398,7 @@ public:
 std::unique_ptr<SwUndo>
 MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)
 {
-    return o3tl::make_unique<SwUndoUpdateSection>(*rFormat.GetSection(),
+    return std::make_unique<SwUndoUpdateSection>(*rFormat.GetSection(),
                 rFormat.GetContent().GetContentIdx(), bOnlyAttr);
 }
 

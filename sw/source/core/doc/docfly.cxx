@@ -62,7 +62,6 @@
 #include <undoflystrattr.hxx>
 #include <calbck.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlndsit.hxx>
@@ -586,7 +585,7 @@ void SwDoc::SetFlyFrameTitle( SwFlyFrameFormat& rFlyFrameFormat,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
                                           SwUndoId::FLYFRMFMT_TITLE,
                                           rFlyFrameFormat.GetObjTitle(),
                                           sNewTitle ) );
@@ -609,7 +608,7 @@ void SwDoc::SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
                                           SwUndoId::FLYFRMFMT_DESCRIPTION,
                                           rFlyFrameFormat.GetObjDescription(),
                                           sNewDescription ) );

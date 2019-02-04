@@ -24,7 +24,6 @@
 
 #include <sal/log.hxx>
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
@@ -97,7 +96,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         }
 
     // Options/Edit
-    auto pRet = o3tl::make_unique<SfxItemSet>(
+    auto pRet = std::make_unique<SfxItemSet>(
         GetPool(),
         svl::Items<
             RES_BACKGROUND, RES_BACKGROUND,

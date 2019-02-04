@@ -19,7 +19,6 @@
 
 #include <memory>
 
-#include <o3tl/make_unique.hxx>
 #include <tools/stream.hxx>
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
@@ -102,7 +101,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
     pArr.reset( new sal_Char [ ASC_BUFFLEN + 2 ] );
 
-    pItemSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
+    pItemSet = std::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
                 svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE>{} );

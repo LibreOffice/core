@@ -45,7 +45,6 @@
 #include <svx/svxids.hrc>
 
 #include <comphelper/random.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/multisel.hxx>
@@ -1422,7 +1421,7 @@ bool SwDoc::RemoveInvisibleContent()
         for (SwFieldType* pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (FieldCanHideParaWeight(pType->Which()))
-                aHidingFieldTypes.push_back(o3tl::make_unique<FieldTypeGuard>(pType));
+                aHidingFieldTypes.push_back(std::make_unique<FieldTypeGuard>(pType));
         }
         for (const auto& pTypeGuard : aHidingFieldTypes)
         {
@@ -1736,7 +1735,7 @@ void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew,
         GetIDocumentUndoRedo().DelAllUndoObj();
 
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoTOXChange>(this, &rTOX, rNew));
+            std::make_unique<SwUndoTOXChange>(this, &rTOX, rNew));
     }
 
     rTOX = rNew;

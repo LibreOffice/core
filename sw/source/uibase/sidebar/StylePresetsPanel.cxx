@@ -35,7 +35,6 @@
 #include <docsh.hxx>
 
 #include <comphelper/documentconstants.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/docfile.hxx>
 
 namespace sw { namespace sidebar {
@@ -179,7 +178,7 @@ void StylePresetsPanel::RefreshList()
                 OUString aURL = aTemplates.GetPath(i,j);
                 BitmapEx aPreview = CreatePreview(aURL, aName);
                 mpValueSet->InsertItem(j, Image(aPreview), aName);
-                maTemplateEntries.push_back(o3tl::make_unique<TemplateEntry>(aURL));
+                maTemplateEntries.push_back(std::make_unique<TemplateEntry>(aURL));
                 mpValueSet->SetItemData(j, maTemplateEntries.back().get());
             }
         }

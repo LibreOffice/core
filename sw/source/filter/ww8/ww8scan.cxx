@@ -40,7 +40,6 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/settings.hxx>
@@ -1729,7 +1728,7 @@ std::unique_ptr<WW8PLCFpcd> WW8ScannerBase::OpenPieceTable( SvStream* pStr, cons
     else
         pStr->ReadInt32( nPLCFfLen );
     OSL_ENSURE( 65536 > nPLCFfLen, "PLCFfpcd above 64 k" );
-    return o3tl::make_unique<WW8PLCFpcd>( pStr, pStr->Tell(), nPLCFfLen, 8 );
+    return std::make_unique<WW8PLCFpcd>( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
 
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,

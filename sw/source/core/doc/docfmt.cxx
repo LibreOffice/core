@@ -35,7 +35,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/misccfg.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <fmtpdsc.hxx>
@@ -628,7 +627,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDefaultAttr>( aOld, this ) );
+            GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDefaultAttr>( aOld, this ) );
         }
 
         const SfxPoolItem* pTmpItem;
@@ -694,7 +693,7 @@ void SwDoc::DelCharFormat(size_t nFormat, bool bBroadcast)
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoCharFormatDelete>(pDel, this));
+            std::make_unique<SwUndoCharFormatDelete>(pDel, this));
     }
 
     delete (*mpCharFormatTable)[nFormat];
@@ -731,7 +730,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().AppendUndo(
-                    o3tl::make_unique<SwUndoFrameFormatDelete>(pFormat, this));
+                    std::make_unique<SwUndoFrameFormatDelete>(pFormat, this));
             }
 
             mpFrameFormatTable->erase( pFormat );
@@ -841,7 +840,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoFrameFormatCreate>(pFormat, pDerivedFrom, this));
+            std::make_unique<SwUndoFrameFormatCreate>(pFormat, pDerivedFrom, this));
     }
 
     if (bBroadcast)
@@ -874,7 +873,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoCharFormatCreate>(pFormat, pDerivedFrom, this));
+            std::make_unique<SwUndoCharFormatCreate>(pFormat, pDerivedFrom, this));
     }
 
     if (bBroadcast)
@@ -909,7 +908,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoTextFormatCollCreate>(pFormatColl, pDerivedFrom,
+            std::make_unique<SwUndoTextFormatCollCreate>(pFormatColl, pDerivedFrom,
                                                     this));
     }
 
@@ -943,7 +942,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoCondTextFormatCollCreate>(pFormatColl, pDerivedFrom,
+            std::make_unique<SwUndoCondTextFormatCollCreate>(pFormatColl, pDerivedFrom,
                                                         this));
     }
 
@@ -1713,7 +1712,7 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
         bRet = pTextNd->DontExpandFormat( rPos.nContent, bFlag );
         if( bRet && GetIDocumentUndoRedo().DoesUndo() )
         {
-            GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDontExpandFormat>(rPos) );
+            GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDontExpandFormat>(rPos) );
         }
     }
     return bRet;
@@ -1899,7 +1898,7 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
         }
 
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoFormatAttr>(aOldSet, rFormat, /*bSaveDrawPt*/true));
+            std::make_unique<SwUndoFormatAttr>(aOldSet, rFormat, /*bSaveDrawPt*/true));
     }
 
     rFormat.SetFormatAttr(rSet);

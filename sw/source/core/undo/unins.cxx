@@ -24,7 +24,6 @@
 #include <sot/storage.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
@@ -513,7 +512,7 @@ public:
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
     : SwUndo( SwUndoId::REPLACE, rPam.GetDoc() )
-    , m_pImpl(o3tl::make_unique<Impl>(rPam, rIns, bRegExp))
+    , m_pImpl(std::make_unique<Impl>(rPam, rIns, bRegExp))
 {
 }
 
@@ -755,7 +754,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pHistory )
     {
-        auto xSave = o3tl::make_unique<SwHistory>();
+        auto xSave = std::make_unique<SwHistory>();
         std::swap(pHistory, xSave);
 
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );

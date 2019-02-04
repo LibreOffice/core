@@ -22,7 +22,6 @@
 
 #include <formatclipboard.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <svx/svxids.hrc>
 #include <cmdid.h>
 #include <charfmt.hxx>
@@ -49,7 +48,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     std::unique_ptr<SfxItemSet> pItemSet;
     if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
     {
-        pItemSet = o3tl::make_unique<SfxItemSet>(
+        pItemSet = std::make_unique<SfxItemSet>(
             rPool,
             svl::Items<
                 RES_FRMATR_BEGIN, RES_FILL_ORDER,
@@ -73,10 +72,10 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     else if( nSelectionType & SelectionType::Text )
     {
         if( bNoParagraphFormats )
-            pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
+            pItemSet = std::make_unique<SfxItemSet>(rPool,
                     svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
         else
-            pItemSet = o3tl::make_unique<SfxItemSet>(
+            pItemSet = std::make_unique<SfxItemSet>(
                 rPool,
                 svl::Items<
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
@@ -368,7 +367,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         {
             if( pDrawView->AreObjectsMarked() )
             {
-                pItemSet_TextAttr = o3tl::make_unique<SfxItemSet>( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
+                pItemSet_TextAttr = std::make_unique<SfxItemSet>( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
                 //remove attributes defining the type/data of custom shapes
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
@@ -379,7 +378,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     if( nSelectionType & SelectionType::TableCell )//only copy table attributes if really cells are selected (not only text in tables)
     {
-        m_pTableItemSet = o3tl::make_unique<SfxItemSet>(
+        m_pTableItemSet = std::make_unique<SfxItemSet>(
             rPool,
             svl::Items<
                 RES_PAGEDESC, RES_BREAK,

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/frame/XTitle.hpp>
-#include <o3tl/make_unique.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
@@ -240,7 +239,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         {
             // we create a default SfxPrinter.
             // ItemSet is deleted by Sfx!
-            auto pSet = o3tl::make_unique<SfxItemSet>(
+            auto pSet = std::make_unique<SfxItemSet>(
                 xDocSh->GetDoc()->GetAttrPool(),
                 svl::Items<
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,

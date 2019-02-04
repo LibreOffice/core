@@ -38,7 +38,6 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
@@ -302,7 +301,7 @@ public:
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, const sax_fastparser::FSHelperPtr& pSerializer,
                              oox::drawingml::DrawingML* pDrawingML)
-    : m_pImpl(o3tl::make_unique<Impl>(rExport, pSerializer, pDrawingML))
+    : m_pImpl(std::make_unique<Impl>(rExport, pSerializer, pDrawingML))
 {
 }
 

@@ -31,7 +31,6 @@
 #include <UndoBookmark.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace sw { namespace mark
 {
@@ -70,7 +69,7 @@ namespace sw { namespace mark
 
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsBookmark>(*this) );
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsBookmark>(*this) );
         }
         io_pDoc->getIDocumentState().SetModified();
     }

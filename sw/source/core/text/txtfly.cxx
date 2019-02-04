@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
@@ -248,7 +247,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         const SvxULSpaceItem &rULSpace = pFormat->GetULSpace();
         CacheItem item {
             pObj, // due to #37347 the Object must be entered only after GetContour()
-            o3tl::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon.get(), 20,
+            std::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon.get(), 20,
                 static_cast<sal_uInt16>(rLRSpace.GetLeft()), static_cast<sal_uInt16>(rLRSpace.GetRight()),
                 pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() )
         };

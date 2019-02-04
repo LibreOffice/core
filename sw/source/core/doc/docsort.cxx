@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <unotools/collatorwrapper.hxx>
@@ -753,7 +752,7 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBoxRef) :
 
         // Create linear array
         size_t nCount = static_cast<size_t>(nRows) * nCols;
-        pArr = o3tl::make_unique<FndBox_ const *[]>(nCount);
+        pArr = std::make_unique<FndBox_ const *[]>(nCount);
         memset(pArr.get(), 0, sizeof(const FndBox_*) * nCount);
 
         FillFlat( rBoxRef );
@@ -888,7 +887,7 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA ) ||
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
-                    auto pSet = o3tl::make_unique<SfxItemSet>(
+                    auto pSet = std::make_unique<SfxItemSet>(
                         pDoc->GetAttrPool(),
                         svl::Items<
                             RES_VERT_ORIENT, RES_VERT_ORIENT,

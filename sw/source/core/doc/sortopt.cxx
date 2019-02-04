@@ -19,7 +19,6 @@
 
 #include <i18nlangtag/lang.h>
 #include <sortopt.hxx>
-#include <o3tl/make_unique.hxx>
 
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
@@ -54,7 +53,7 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
 {
     for(auto const & pKey : rOpt.aKeys)
     {
-        aKeys.push_back( o3tl::make_unique<SwSortKey>(*pKey) );
+        aKeys.push_back( std::make_unique<SwSortKey>(*pKey) );
     }
 }
 

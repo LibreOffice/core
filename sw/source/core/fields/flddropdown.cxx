@@ -23,7 +23,6 @@
 
 #include <svl/poolitem.hxx>
 #include <comphelper/sequence.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <unofldmid.h>
 #include <unoprnms.hxx>
@@ -79,7 +78,7 @@ OUString SwDropDownField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwDropDownField::Copy() const
 {
-    return o3tl::make_unique<SwDropDownField>(*this);
+    return std::make_unique<SwDropDownField>(*this);
 }
 
 OUString SwDropDownField::GetPar1() const
