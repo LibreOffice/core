@@ -463,7 +463,10 @@ protected:
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
-    bool signal_expanding(TreeIter& rIter) { return m_aExpandingHdl.Call(rIter); }
+    bool signal_expanding(TreeIter& rIter)
+    {
+        return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
+    }
     // arg is pair<row,col>
     void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
 
@@ -566,6 +569,15 @@ public:
     // set iter to point to next node, depth first, then sibling
     virtual bool iter_next(TreeIter& rIter) const = 0;
     virtual bool iter_children(TreeIter& rIter) const = 0;
+    bool iter_nth_child(TreeIter& rIter, int nChild) const
+    {
+        if (!iter_children(rIter))
+            return false;
+        bool bRet = true;
+        for (int i = 0; i < nChild && bRet; ++i)
+            bRet = iter_next(rIter);
+        return bRet;
+    }
     virtual bool iter_parent(TreeIter& rIter) const = 0;
     virtual int get_iter_depth(const TreeIter& rIter) const = 0;
     virtual bool iter_has_child(const TreeIter& rIter) const = 0;
