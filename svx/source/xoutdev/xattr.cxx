@@ -33,7 +33,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
 #include <tools/stream.hxx>
@@ -866,7 +865,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel* pMod
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return o3tl::make_unique<XLineDashItem>( aUniqueName, aDash );
+            return std::make_unique<XLineDashItem>( aUniqueName, aDash );
     }
 
     return nullptr;
@@ -1078,7 +1077,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
                 return nullptr;
 
             // force empty name for empty polygons
-            return o3tl::make_unique<XLineStartItem>( "", maPolyPolygon );
+            return std::make_unique<XLineStartItem>( "", maPolyPolygon );
         }
 
         if( maPolyPolygon.count() > 1 )
@@ -1266,7 +1265,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
             }
             else
             {
-                return o3tl::make_unique<XLineStartItem>( aUniqueName, maPolyPolygon );
+                return std::make_unique<XLineStartItem>( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -1329,7 +1328,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
                 return nullptr;
 
             // force empty name for empty polygons
-            return o3tl::make_unique<XLineEndItem>( "", maPolyPolygon );
+            return std::make_unique<XLineEndItem>( "", maPolyPolygon );
         }
 
         if( maPolyPolygon.count() > 1 )
@@ -1517,7 +1516,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
             }
             else
             {
-                return o3tl::make_unique<XLineEndItem>( aUniqueName, maPolyPolygon );
+                return std::make_unique<XLineEndItem>( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -2264,7 +2263,7 @@ std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrMod
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return o3tl::make_unique<XFillGradientItem>( aUniqueName, aGradient, Which() );
+            return std::make_unique<XFillGradientItem>( aUniqueName, aGradient, Which() );
     }
 
     return nullptr;
@@ -2360,7 +2359,7 @@ std::unique_ptr<XFillFloatTransparenceItem> XFillFloatTransparenceItem::checkFor
             // if the given name is not valid, replace it!
             if( aUniqueName != GetName() )
             {
-                return o3tl::make_unique<XFillFloatTransparenceItem>( aUniqueName, GetGradientValue(), true );
+                return std::make_unique<XFillFloatTransparenceItem>( aUniqueName, GetGradientValue(), true );
             }
         }
     }
@@ -2369,7 +2368,7 @@ std::unique_ptr<XFillFloatTransparenceItem> XFillFloatTransparenceItem::checkFor
         // #85953# if disabled, force name to empty string
         if( !GetName().isEmpty() )
         {
-            return o3tl::make_unique<XFillFloatTransparenceItem>(OUString(), GetGradientValue(), false);
+            return std::make_unique<XFillFloatTransparenceItem>(OUString(), GetGradientValue(), false);
         }
     }
 
@@ -2616,7 +2615,7 @@ std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel* pM
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return o3tl::make_unique<XFillHatchItem>( aUniqueName, aHatch );
+            return std::make_unique<XFillHatchItem>( aUniqueName, aHatch );
     }
 
     return nullptr;
@@ -2837,7 +2836,7 @@ XLineAttrSetItem::XLineAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
+        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
 {
 }
 
@@ -2865,7 +2864,7 @@ XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
+        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
 {
 }
 

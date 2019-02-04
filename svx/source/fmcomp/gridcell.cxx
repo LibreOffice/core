@@ -55,7 +55,6 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/lang.h>
-#include <o3tl/make_unique.hxx>
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
@@ -1789,7 +1788,7 @@ OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rx
 
     if (!rpFormatter)
     {
-        rpFormatter = o3tl::make_unique< FormattedColumnValue> (
+        rpFormatter = std::make_unique< FormattedColumnValue> (
             m_xContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
         OSL_ENSURE(rpFormatter, "DbPatternField::Init: no value formatter!");
     }

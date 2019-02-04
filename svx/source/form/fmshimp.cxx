@@ -96,7 +96,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -1266,7 +1265,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
             DBG_ASSERT(pModel != nullptr, "FmXFormShell::executeControlConversionSlot: my shell has no model !");
             if (pModel && pModel->IsUndoEnabled() )
             {
-                pModel->AddUndo(o3tl::make_unique<FmUndoModelReplaceAction>(*pModel, pFormObject, xOldModel));
+                pModel->AddUndo(std::make_unique<FmUndoModelReplaceAction>(*pModel, pFormObject, xOldModel));
             }
             else
             {

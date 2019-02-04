@@ -19,7 +19,6 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <o3tl/make_unique.hxx>
 #include <tools/stream.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
@@ -333,7 +332,7 @@ std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel* 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
         {
-            return o3tl::make_unique<XFillBitmapItem>(aUniqueName, maGraphicObject);
+            return std::make_unique<XFillBitmapItem>(aUniqueName, maGraphicObject);
         }
     }
 

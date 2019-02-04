@@ -34,18 +34,17 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> E3dLatheObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfE3dLathe>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfE3dLathe>(*this);
 }
 
 std::unique_ptr<sdr::properties::BaseProperties> E3dLatheObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::E3dLatheProperties>(*this);
+    return std::make_unique<sdr::properties::E3dLatheProperties>(*this);
 }
 
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates

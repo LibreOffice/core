@@ -49,7 +49,6 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -94,7 +93,7 @@ static Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrCircObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::CircleProperties>(*this);
+    return std::make_unique<sdr::properties::CircleProperties>(*this);
 }
 
 
@@ -102,7 +101,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrCircObj::CreateObjectSpecifi
 
 std::unique_ptr<sdr::contact::ViewContact> SdrCircObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfSdrCircObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrCircObj>(*this);
 }
 
 SdrCircObj::SdrCircObj(

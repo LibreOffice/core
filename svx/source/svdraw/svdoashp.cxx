@@ -83,7 +83,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svdobjplusdata.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -807,7 +806,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjCustomShape::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::CustomShapeProperties>(*this);
+    return std::make_unique<sdr::properties::CustomShapeProperties>(*this);
 }
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
@@ -3038,7 +3037,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 
 std::unique_ptr<sdr::contact::ViewContact> SdrObjCustomShape::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfSdrObjCustomShape>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrObjCustomShape>(*this);
 }
 
 // #i33136#

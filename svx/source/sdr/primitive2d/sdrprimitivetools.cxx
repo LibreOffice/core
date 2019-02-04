@@ -19,7 +19,6 @@
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <osl/mutex.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
 
@@ -57,7 +56,7 @@ namespace drawinglayer
                 BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 12, 32);
 
                 // create and exchange at aRetVal
-                aRetVal.set(o3tl::make_unique<BitmapEx>(aBitmap));
+                aRetVal.set(std::make_unique<BitmapEx>(aBitmap));
             }
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();

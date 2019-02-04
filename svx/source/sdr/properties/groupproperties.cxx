@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sdr/properties/groupproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
@@ -40,7 +39,7 @@ namespace sdr
             // Groups have in principle no ItemSet. To support methods like
             // GetMergedItemSet() the local one is used. Thus, all items in the pool
             // may be used and a pool itemset is created.
-            return o3tl::make_unique<SfxItemSet>(rPool);
+            return std::make_unique<SfxItemSet>(rPool);
         }
 
         GroupProperties::GroupProperties(SdrObject& rObj)

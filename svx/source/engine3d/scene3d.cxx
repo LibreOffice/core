@@ -46,7 +46,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 class ImpRemap3DDepth
@@ -159,7 +158,7 @@ sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const
 
 std::unique_ptr<sdr::properties::BaseProperties> E3dScene::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::E3dSceneProperties>(*this);
+    return std::make_unique<sdr::properties::E3dSceneProperties>(*this);
 }
 
 
@@ -167,7 +166,7 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dScene::CreateObjectSpecificP
 
 std::unique_ptr<sdr::contact::ViewContact> E3dScene::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfE3dScene>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfE3dScene>(*this);
 }
 
 

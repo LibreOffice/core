@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -266,7 +265,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& r
     if( !(rAny >>= aColor) )
         return std::unique_ptr<XPropertyEntry>();
 
-    return o3tl::make_unique<XColorEntry>(aColor, rName);
+    return std::make_unique<XColorEntry>(aColor, rName);
 }
 
 // XElementAccess
@@ -333,7 +332,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString&
     // #86265# make sure polygon is closed
     aPolyPolygon.setClosed(true);
 
-    return o3tl::make_unique<XLineEndEntry>(aPolyPolygon, rName);
+    return std::make_unique<XLineEndEntry>(aPolyPolygon, rName);
 }
 
 // XElementAccess
@@ -410,7 +409,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rN
     aXDash.SetDashLen(aLineDash.DashLen);
     aXDash.SetDistance(aLineDash.Distance);
 
-    return o3tl::make_unique<XDashEntry>(aXDash, rName);
+    return std::make_unique<XDashEntry>(aXDash, rName);
 }
 
 // XElementAccess
@@ -482,7 +481,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( aUnoHatch.Angle );
 
-    return o3tl::make_unique<XHatchEntry>(aXHatch, rName);
+    return std::make_unique<XHatchEntry>(aXHatch, rName);
 }
 
 // XElementAccess
@@ -566,7 +565,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
     aXGradient.SetEndIntens( aGradient.EndIntensity );
     aXGradient.SetSteps( aGradient.StepCount );
 
-    return o3tl::make_unique<XGradientEntry>(aXGradient, rName);
+    return std::make_unique<XGradientEntry>(aXGradient, rName);
 }
 
 // XElementAccess
@@ -637,7 +636,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& 
         return nullptr;
 
     GraphicObject aGraphicObject(aGraphic);
-    return o3tl::make_unique<XBitmapEntry>(aGraphicObject, rName);
+    return std::make_unique<XBitmapEntry>(aGraphicObject, rName);
 }
 
 // XElementAccess

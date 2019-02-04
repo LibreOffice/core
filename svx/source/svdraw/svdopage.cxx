@@ -31,14 +31,13 @@
 #include <svl/itemset.hxx>
 #include <sdr/properties/pageproperties.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 // BaseProperties section
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrPageObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::PageProperties>(*this);
+    return std::make_unique<sdr::properties::PageProperties>(*this);
 }
 
 
@@ -46,7 +45,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrPageObj::CreateObjectSpecifi
 
 std::unique_ptr<sdr::contact::ViewContact> SdrPageObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfPageObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfPageObj>(*this);
 }
 
 

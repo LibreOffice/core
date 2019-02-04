@@ -18,7 +18,6 @@
  */
 
 #include <svx/fontlb.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

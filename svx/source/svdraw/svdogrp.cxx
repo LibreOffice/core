@@ -49,18 +49,17 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <libxml/xmlwriter.h>
-#include <o3tl/make_unique.hxx>
 
 // BaseProperties section
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::GroupProperties>(*this);
+    return std::make_unique<sdr::properties::GroupProperties>(*this);
 }
 
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> SdrObjGroup::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfGroup>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfGroup>(*this);
 }
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)

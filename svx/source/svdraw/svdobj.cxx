@@ -131,7 +131,6 @@
 #include <rtl/strbuf.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
@@ -218,7 +217,7 @@ struct SdrObject::Impl
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrObject::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::EmptyProperties>(*this);
+    return std::make_unique<sdr::properties::EmptyProperties>(*this);
 }
 
 sdr::properties::BaseProperties& SdrObject::GetProperties() const
@@ -259,7 +258,7 @@ void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
 
 std::unique_ptr<sdr::contact::ViewContact> SdrObject::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfSdrObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrObj>(*this);
 }
 
 sdr::contact::ViewContact& SdrObject::GetViewContact() const

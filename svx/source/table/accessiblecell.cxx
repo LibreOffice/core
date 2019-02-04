@@ -38,7 +38,7 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
-#include <o3tl/make_unique.hxx>
+
 using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,7 +83,7 @@ void AccessibleCell::Init()
         {
             // non-empty text -> use full-fledged edit source right away
 
-            mpText.reset( new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
+            mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
             if( mxCell.is() && mxCell.get()->IsActiveCell() )
                 mpText->SetFocus();
             mpText->SetEventSource(this);

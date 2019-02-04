@@ -46,7 +46,6 @@
 #include <svx/svdotable.hxx> // #i124389#
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -266,7 +265,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
         for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
         {
             pUndoGroup->AddAction(
-                o3tl::make_unique<SdrUndoAttrObj>(*pOL->GetObj(nObjNum), bStyleSheet1));
+                std::make_unique<SdrUndoAttrObj>(*pOL->GetObj(nObjNum), bStyleSheet1));
         }
     }
 
@@ -389,7 +388,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pTextUndo));
+            pObj->SetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pTextUndo));
         }
     }
 
@@ -467,7 +466,7 @@ void SdrUndoAttrObj::Redo()
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pTextRedo));
+            pObj->SetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pTextRedo));
         }
     }
 
@@ -569,7 +568,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
-            pUndoGroup->AddAction(o3tl::make_unique<SdrUndoGeoObj>(*pOL->GetObj(nObjNum)));
+            pUndoGroup->AddAction(std::make_unique<SdrUndoGeoObj>(*pOL->GetObj(nObjNum)));
         }
     }
     else
@@ -1145,7 +1144,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             if (pTextObj!=nullptr)
             {
                 if( bUndo )
-                    rView.AddUndo(o3tl::make_unique<SdrUndoObjSetText>(*pTextObj,0));
+                    rView.AddUndo(std::make_unique<SdrUndoObjSetText>(*pTextObj,0));
 
                 std::unique_ptr<OutlinerParaObject> pText1;
                 if (pNewText)
@@ -1687,62 +1686,62 @@ SdrUndoFactory::~SdrUndoFactory(){}
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const Size& rDist )
 {
-    return o3tl::make_unique<SdrUndoMoveObj>( rObject, rDist );
+    return std::make_unique<SdrUndoMoveObj>( rObject, rDist );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 {
-    return o3tl::make_unique<SdrUndoGeoObj>( rObject );
+    return std::make_unique<SdrUndoGeoObj>( rObject );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return o3tl::make_unique<SdrUndoAttrObj>( rObject, bStyleSheet1, bSaveText );
+    return std::make_unique<SdrUndoAttrObj>( rObject, bStyleSheet1, bSaveText );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoRemoveObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoRemoveObj>( rObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoInsertObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoInsertObj>( rObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoDelObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoDelObj>( rObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoNewObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoNewObj>( rObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoCopyObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoCopyObj>( rObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
 {
-    return o3tl::make_unique<SdrUndoObjOrdNum>( rObject, nOldOrdNum1, nNewOrdNum1 );
+    return std::make_unique<SdrUndoObjOrdNum>( rObject, nOldOrdNum1, nNewOrdNum1 );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return o3tl::make_unique<SdrUndoReplaceObj>( rOldObject, rNewObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoReplaceObj>( rOldObject, rNewObject, bOrdNumDirect );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )
 {
-    return o3tl::make_unique<SdrUndoObjectLayerChange>( rObject, aOldLayer, aNewLayer );
+    return std::make_unique<SdrUndoObjectLayerChange>( rObject, aOldLayer, aNewLayer );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
 {
-    return o3tl::make_unique<SdrUndoObjSetText>( rNewObj, nText );
+    return std::make_unique<SdrUndoObjSetText>( rNewObj, nText );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectStrAttr( SdrObject& rObject,
@@ -1750,50 +1749,50 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectStrAttr( SdrObjec
                                                         const OUString& sOldStr,
                                                         const OUString& sNewStr )
 {
-    return o3tl::make_unique<SdrUndoObjStrAttr>( rObject, eObjStrAttrType, sOldStr, sNewStr );
+    return std::make_unique<SdrUndoObjStrAttr>( rObject, eObjStrAttrType, sOldStr, sNewStr );
 }
 
 
 // layer
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
-    return o3tl::make_unique<SdrUndoNewLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
+    return std::make_unique<SdrUndoNewLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
-    return o3tl::make_unique<SdrUndoDelLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
+    return std::make_unique<SdrUndoDelLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
 // page
 std::unique_ptr<SdrUndoAction>  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
-    return o3tl::make_unique<SdrUndoDelPage>(rPage);
+    return std::make_unique<SdrUndoDelPage>(rPage);
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewPage(SdrPage& rPage)
 {
-    return o3tl::make_unique<SdrUndoNewPage>( rPage );
+    return std::make_unique<SdrUndoNewPage>( rPage );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoCopyPage(SdrPage& rPage)
 {
-    return o3tl::make_unique<SdrUndoCopyPage>( rPage );
+    return std::make_unique<SdrUndoCopyPage>( rPage );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
 {
-    return o3tl::make_unique<SdrUndoSetPageNum>( rNewPg, nOldPageNum1, nNewPageNum1 );
+    return std::make_unique<SdrUndoSetPageNum>( rNewPg, nOldPageNum1, nNewPageNum1 );
 }
     // master page
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 {
-    return o3tl::make_unique<SdrUndoPageRemoveMasterPage>( rChangedPage );
+    return std::make_unique<SdrUndoPageRemoveMasterPage>( rChangedPage );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChangedPage)
 {
-    return o3tl::make_unique<SdrUndoPageChangeMasterPage>(rChangedPage);
+    return std::make_unique<SdrUndoPageChangeMasterPage>(rChangedPage);
 }
 
 

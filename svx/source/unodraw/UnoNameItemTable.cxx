@@ -20,8 +20,6 @@
 
 #include <set>
 
-#include <o3tl/make_unique.hxx>
-
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -80,7 +78,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 
 void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    maItemSetVector.push_back( o3tl::make_unique< SfxItemSet >( *mpModelPool, std::initializer_list<SfxItemSet::Pair>{{mnWhich, mnWhich}} ) );
+    maItemSetVector.push_back( std::make_unique< SfxItemSet >( *mpModelPool, std::initializer_list<SfxItemSet::Pair>{{mnWhich, mnWhich}} ) );
 
     std::unique_ptr<NameOrIndex> xNewItem(createItem());
     xNewItem->SetName(aName);

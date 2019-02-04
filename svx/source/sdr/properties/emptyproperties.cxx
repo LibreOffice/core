@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sdr/properties/emptyproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
@@ -37,7 +36,7 @@ namespace sdr
         {
             // Basic implementation; Basic object has NO attributes
             assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            return o3tl::make_unique<SfxItemSet>(rPool);
+            return std::make_unique<SfxItemSet>(rPool);
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)

@@ -62,7 +62,6 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
 #include <vcl/GraphicLoader.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -127,7 +126,7 @@ void SdrGraphicLink::Closed()
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrGrafObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::GraphicProperties>(*this);
+    return std::make_unique<sdr::properties::GraphicProperties>(*this);
 }
 
 
@@ -135,7 +134,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrGrafObj::CreateObjectSpecifi
 
 std::unique_ptr<sdr::contact::ViewContact> SdrGrafObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfGraphic>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfGraphic>(*this);
 }
 
 // check if SVG and if try to get ObjectInfoPrimitive2D and extract info
@@ -1231,7 +1230,7 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
             }
 
             rTarget.AddHdl(
-                o3tl::make_unique<SdrCropViewHdl>(
+                std::make_unique<SdrCropViewHdl>(
                     aMatrixForCropViewHdl,
                     GetGraphicObject().GetGraphic(),
                     fCropLeft,
@@ -1244,21 +1243,21 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     basegfx::B2DPoint aPos;
 
     aPos = aMatrix * basegfx::B2DPoint(0.0, 0.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.5, 0.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 0.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.0, 0.5);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 0.5);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.0, 1.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.5, 1.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 1.0);
-    rTarget.AddHdl(o3tl::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

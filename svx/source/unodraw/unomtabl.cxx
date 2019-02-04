@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <o3tl/make_unique.hxx>
 #include <svl/style.hxx>
 
 #include <comphelper/sequence.hxx>
@@ -142,7 +141,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
 void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
     maItemSetVector.push_back(
-        o3tl::make_unique<SfxItemSet>( *mpModelPool, svl::Items<XATTR_LINESTART, XATTR_LINEEND>{} ));
+        std::make_unique<SfxItemSet>( *mpModelPool, svl::Items<XATTR_LINESTART, XATTR_LINEEND>{} ));
     auto pInSet = maItemSetVector.back().get();
 
     XLineEndItem aEndMarker(XATTR_LINEEND);

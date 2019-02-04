@@ -27,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
@@ -177,7 +176,7 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
+            return std::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -519,7 +518,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
         // not set (!)
         if(nullptr != xSourceCell->GetOutlinerParaObject())
         {
-            SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
+            SetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
         }
 
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
@@ -822,7 +821,7 @@ void Cell::AddUndo()
     if( rObj.IsInserted() && rObj.getSdrModelFromSdrObject().IsUndoEnabled() )
     {
         CellRef xCell( this );
-        rObj.getSdrModelFromSdrObject().AddUndo( o3tl::make_unique<CellUndo>( &rObj, xCell ) );
+        rObj.getSdrModelFromSdrObject().AddUndo( std::make_unique<CellUndo>( &rObj, xCell ) );
 
         // Undo action for the after-text-edit-ended stack.
         SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(&rObj);

@@ -47,7 +47,6 @@
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
-#include <o3tl/make_unique.hxx>
 
 void SdrObjConnection::ResetVars()
 {
@@ -145,7 +144,7 @@ long SdrEdgeInfoRec::ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon&
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrEdgeObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::ConnectorProperties>(*this);
+    return std::make_unique<sdr::properties::ConnectorProperties>(*this);
 }
 
 
@@ -153,7 +152,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrEdgeObj::CreateObjectSpecifi
 
 std::unique_ptr<sdr::contact::ViewContact> SdrEdgeObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfSdrEdgeObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrEdgeObj>(*this);
 }
 
 
