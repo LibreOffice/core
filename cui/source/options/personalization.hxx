@@ -94,25 +94,24 @@ private:
 };
 
 /** Dialog that will allow the user to choose a Persona to use. */
-class SelectPersonaDialog : public ModalDialog
+class SelectPersonaDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit> m_pEdit;                                   ///< The input line for the search term
-    VclPtr<PushButton> m_pSearchButton;                     ///< The search button
-    VclPtr<FixedText> m_pProgressLabel;                     ///< The label for showing progress of search
-    VclPtr<PushButton> m_vResultList[MAX_RESULTS];                    ///< List of buttons to show search results
-    VclPtr<ListBox> m_pCategories;                         ///< The list of categories
-    VclPtr<PushButton> m_pOkButton;                         ///< The OK button
-    VclPtr<PushButton> m_pCancelButton;                     ///< The Cancel button
-
     std::vector<OUString> m_vPersonaSettings;
     OUString m_aSelectedPersona;
     OUString m_aAppliedPersona;
 
+    std::unique_ptr<weld::Entry> m_xEdit;                              ///< The input line for the search term
+    std::unique_ptr<weld::Button> m_xSearchButton;                     ///< The search button
+    std::unique_ptr<weld::Label> m_xProgressLabel;                     ///< The label for showing progress of search
+    std::unique_ptr<weld::ComboBox> m_xCategories;                     ///< The list of categories
+    std::unique_ptr<weld::Button> m_xOkButton;                         ///< The OK button
+    std::unique_ptr<weld::Button> m_xCancelButton;                     ///< The Cancel button
+    std::unique_ptr<weld::Button> m_vResultList[MAX_RESULTS];          ///< List of buttons to show search results
+
 public:
-    explicit SelectPersonaDialog( vcl::Window *pParent );
+    explicit SelectPersonaDialog(weld::Window *pParent);
     virtual ~SelectPersonaDialog() override;
-    virtual void dispose() override;
     ::rtl::Reference< SearchAndParseThread >    m_pSearchThread;
     ::rtl::Reference< GetPersonaThread >        m_pGetPersonaThread;
 
@@ -124,7 +123,7 @@ public:
      * @param sName Name of the persona
      * @param nIndex Index number of the result button
      */
-    void SetImages(const Image& aPreviewImage, const OUString& sName, const sal_Int32& nIndex );
+    void SetImages( VirtualDevice& rPreviewImage, const OUString& sName, const sal_Int32& nIndex );
     void AddPersonaSetting( OUString const & );
     void ClearSearchResults();
     void SetAppliedPersonaSetting( OUString const & );
@@ -132,19 +131,19 @@ public:
 
 private:
     /// Handle the Search button
-    DECL_LINK( SearchPersonas, Button*, void );
+    DECL_LINK( SearchPersonas, weld::Button&, void );
     /// Handle persona categories list box
-    DECL_LINK( SelectCategory, ListBox&, void );
-    DECL_LINK( SelectPersona, Button*, void );
-    DECL_LINK( ActionOK, Button*, void );
-    DECL_LINK( ActionCancel, Button*, void );
+    DECL_LINK( SelectCategory, weld::ComboBox&, void );
+    DECL_LINK( SelectPersona, weld::Button&, void );
+    DECL_LINK( ActionOK, weld::Button&, void );
+    DECL_LINK( ActionCancel, weld::Button&, void );
 };
 
 class SearchAndParseThread: public salhelper::Thread
 {
 private:
 
-    VclPtr<SelectPersonaDialog> m_pPersonaDialog;
+    SelectPersonaDialog* m_pPersonaDialog;
     OUString m_aURL;
     std::atomic<bool> m_bExecute;
     bool m_bDirectURL;
@@ -164,7 +163,7 @@ class GetPersonaThread: public salhelper::Thread
 {
 private:
 
-    VclPtr<SelectPersonaDialog> m_pPersonaDialog;
+    SelectPersonaDialog* m_pPersonaDialog;
     OUString m_aSelectedPersona;
     std::atomic<bool> m_bExecute;
 
