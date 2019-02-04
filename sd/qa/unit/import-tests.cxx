@@ -192,7 +192,6 @@ public:
     void testTdf119015();
     void testTdf120028();
     void testTdf120028b();
-    void testTdf94238();
     void testTdf44223();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
@@ -277,7 +276,6 @@ public:
     CPPUNIT_TEST(testTdf119015);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
-    CPPUNIT_TEST(testTdf94238);
     CPPUNIT_TEST(testTdf44223);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2596,35 +2594,6 @@ void SdImportTest::testTdf120028b()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf94238()
-{
-    // Assert how the gradient fill of the only shape in the document is
-    // imported.
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf94238.pptx"), PPTX);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDoc.is());
-
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPage.is());
-
-    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
-    CPPUNIT_ASSERT(xShape.is());
-
-    awt::Gradient aGradient;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= aGradient);
-
-    // Without the accompanying fix in place, this test would have failed with
-    // the following details:
-    // - aGradient.Style was awt::GradientStyle_ELLIPTICAL
-    // - aGradient.YOffset was 70
-    // - aGradient.Border was 0
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), aGradient.YOffset);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(39), aGradient.Border);
 }
 
 void SdImportTest::testTdf44223()
