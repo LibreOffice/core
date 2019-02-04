@@ -1048,6 +1048,10 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
 
         FcFontSetDestroy( pSet );
     }
+
+    SAL_INFO("vcl.fonts", "PrintFontManager::Substitute: replacing missing font: '"
+                              << rPattern.maTargetName << "' with '" << rPattern.maSearchName
+                              << "'");
 }
 
 FontConfigFontOptions::~FontConfigFontOptions()
