@@ -131,7 +131,6 @@
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <o3tl/make_unique.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -401,7 +400,7 @@ SwDocShell::LockAllViewsGuard::~LockAllViewsGuard()
 
 std::unique_ptr<SwDocShell::LockAllViewsGuard> SwDocShell::LockAllViews()
 {
-    return o3tl::make_unique<LockAllViewsGuard>(GetEditShell());
+    return std::make_unique<LockAllViewsGuard>(GetEditShell());
 }
 
 // Save using the Defaultformat

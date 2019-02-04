@@ -112,7 +112,6 @@
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/charclass.hxx>
 
 #include <unomailmerge.hxx>
@@ -499,7 +498,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
             *pTemp = *pImpl->pMergeData;
         else
         {
-            m_DataSourceParams.push_back(o3tl::make_unique<SwDSParam>(*pImpl->pMergeData));
+            m_DataSourceParams.push_back(std::make_unique<SwDSParam>(*pImpl->pMergeData));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
@@ -904,7 +903,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     // aTempFile is not deleted, but that seems to be intentional
     utl::TempFile aTempFile( basename, true, &sExt, &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
-    auto pDstMed = o3tl::make_unique<SfxMedium>(
+    auto pDstMed = std::make_unique<SfxMedium>(
         aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
         StreamMode::STD_READWRITE );
     bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );

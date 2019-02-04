@@ -30,7 +30,6 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 bool SwEditShell::IsGlobalDoc() const
@@ -118,7 +117,7 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsContentNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
-                rArr.insert( o3tl::make_unique<SwGlblDocContent>( nSttIdx ) );
+                rArr.insert( std::make_unique<SwGlblDocContent>( nSttIdx ) );
                 break;
             }
     }

@@ -58,7 +58,6 @@
 #include <hints.hxx>
 #include <memory>
 #include "ndsect.hxx"
-#include <o3tl/make_unique.hxx>
 #include <tools/datetimeutils.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.
@@ -537,7 +536,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             {
                 SwNodeIndex aUpdIdx( *pIdx );
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
-                GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDelete>( aPaM ));
+                GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDelete>( aPaM ));
                 if( pFootnoteEndAtTextEnd )
                     GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
                 getIDocumentState().SetModified();

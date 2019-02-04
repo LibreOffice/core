@@ -59,7 +59,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <pam.hxx>
-#include <o3tl/make_unique.hxx>
 
 bool SwFlowFrame::m_bMoveBwdJump = false;
 
@@ -1374,7 +1373,7 @@ static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame
 static bool lcl_getContextualSpacing(const SwFrame* pPrevFrame)
 {
     bool bRet;
-    auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pPrevFrame);
+    auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pPrevFrame);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     bRet = pAttrs->GetULSpace().GetContext();
@@ -1405,7 +1404,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
         else
             pOwn = &m_rThis;
-        pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pOwn);
+        pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pOwn);
         pAttrs = pAccess->Get();
     }
     else
@@ -1668,7 +1667,7 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
     if ( !_pAttrs )
     {
-        pAttrAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), &m_rThis);
+        pAttrAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), &m_rThis);
         _pAttrs = pAttrAccess->Get();
     }
 
@@ -1726,7 +1725,7 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
         std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
         if (pFrame && (!_pAttrs || pFrame != &m_rThis))
         {
-            pAttrAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pFrame);
+            pAttrAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pFrame);
             _pAttrs = pAttrAccess->Get();
         }
 

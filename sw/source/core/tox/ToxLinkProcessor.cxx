@@ -12,7 +12,6 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <stdexcept>
@@ -23,7 +22,7 @@ void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
     SAL_INFO_IF(m_pStartedLink, "sw.core", "ToxLinkProcessor: LS without LE");
-    m_pStartedLink = o3tl::make_unique<StartedLink>(
+    m_pStartedLink = std::make_unique<StartedLink>(
                 startPosition, characterStyle);
 }
 

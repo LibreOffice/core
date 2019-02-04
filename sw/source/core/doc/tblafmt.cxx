@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -1170,7 +1169,7 @@ void SwTableAutoFormatTable::AddAutoFormat(const SwTableAutoFormat& rTableStyle)
     if (FindAutoFormat(rTableStyle.GetName()))
         return;
 
-    InsertAutoFormat(size(), o3tl::make_unique<SwTableAutoFormat>(rTableStyle));
+    InsertAutoFormat(size(), std::make_unique<SwTableAutoFormat>(rTableStyle));
 }
 
 void SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)
@@ -1416,7 +1415,7 @@ SwCellStyleDescriptor SwCellStyleTable::operator[](size_t i) const
 
 void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName)
 {
-    m_aCellStyles.emplace_back(sName, o3tl::make_unique<SwBoxAutoFormat>(rBoxFormat));
+    m_aCellStyles.emplace_back(sName, std::make_unique<SwBoxAutoFormat>(rBoxFormat));
 }
 
 void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)

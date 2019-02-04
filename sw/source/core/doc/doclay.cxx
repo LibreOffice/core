@@ -35,7 +35,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -291,7 +290,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
         const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
+            std::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
     }
 
     getIDocumentState().SetModified();

@@ -24,7 +24,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <o3tl/numeric.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
@@ -340,7 +339,7 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
 
     for( sal_uInt32 i=0U; i<nCells; ++i )
     {
-        m_Cells.push_back(o3tl::make_unique<SwXMLTableCell_Impl>());
+        m_Cells.push_back(std::make_unique<SwXMLTableCell_Impl>());
     }
 }
 
@@ -364,7 +363,7 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
     sal_uInt32 nColSpan = nCells - m_Cells.size();
     for (size_t i = m_Cells.size(); i < nCells; ++i)
     {
-        m_Cells.push_back(o3tl::make_unique<SwXMLTableCell_Impl>(
+        m_Cells.push_back(std::make_unique<SwXMLTableCell_Impl>(
                 1UL, bOneCell ? nColSpan : 1UL));
         nColSpan--;
     }
@@ -1596,7 +1595,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     if (m_pRows->size() < nRowsReq)
     {
         for (size_t i = m_pRows->size(); i < nRowsReq; ++i)
-            m_pRows->push_back(o3tl::make_unique<SwXMLTableRow_Impl>(
+            m_pRows->push_back(std::make_unique<SwXMLTableRow_Impl>(
                         "", GetColumnCount()));
     }
 
@@ -1657,7 +1656,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     else
     {
         // add a new row
-        m_pRows->push_back(o3tl::make_unique<SwXMLTableRow_Impl>(
+        m_pRows->push_back(std::make_unique<SwXMLTableRow_Impl>(
                 rStyleName, GetColumnCount(),
                                        &rDfltCellStyleName, i_rXmlId));
     }

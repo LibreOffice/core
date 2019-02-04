@@ -90,7 +90,6 @@
 #include <IDocumentMarkAccess.hxx>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <swuiexp.hxx>
@@ -854,14 +853,14 @@ static void lcl_InsTextInArr( const OUString& rText, DB_Columns& rColArr )
     {
         if( 1 < nFndPos )
         {
-            rColArr.push_back(o3tl::make_unique<DB_Column>(rText.copy(nSttPos, nFndPos -1)));
+            rColArr.push_back(std::make_unique<DB_Column>(rText.copy(nSttPos, nFndPos -1)));
         }
-        rColArr.push_back(o3tl::make_unique<DB_Column>());
+        rColArr.push_back(std::make_unique<DB_Column>());
         nSttPos = nFndPos + 1;
     }
     if( nSttPos < rText.getLength() )
     {
-        rColArr.push_back(o3tl::make_unique<DB_Column>(rText.copy(nSttPos)));
+        rColArr.push_back(std::make_unique<DB_Column>(rText.copy(nSttPos)));
     }
 }
 

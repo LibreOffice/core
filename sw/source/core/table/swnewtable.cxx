@@ -41,7 +41,6 @@
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
 #include <calbck.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #ifdef DBG_UTIL
@@ -372,7 +371,7 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
     bool bOkay = true;
     long nMid = ( nMin + nMax ) / 2;
 
-    auto pRet(o3tl::make_unique<SwBoxSelection>());
+    auto pRet(std::make_unique<SwBoxSelection>());
     std::vector< std::pair< SwTableBox*, long > > aNewWidthVector;
     size_t nCheckBottom = nBottom;
     long nLeftSpan = 0;

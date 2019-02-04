@@ -45,7 +45,6 @@
 #include <dview.hxx>
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
-#include <o3tl/make_unique.hxx>
 
 struct SwUndoGroupObjImpl
 {
@@ -66,7 +65,7 @@ void SwDoc::AddDrawUndo( std::unique_ptr<SdrUndoAction> pUndo )
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwSdrUndo>(std::move(pUndo), pMarkList, this) );
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwSdrUndo>(std::move(pUndo), pMarkList, this) );
     }
 }
 

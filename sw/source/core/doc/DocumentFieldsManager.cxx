@@ -54,7 +54,6 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <o3tl/deleter.hxx>
-#include <o3tl/make_unique.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -506,7 +505,7 @@ void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
         pField->QueryValue(aOldVal, nWhich))
     {
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-            o3tl::make_unique<SwUndoFieldFromAPI>(rPos, aOldVal, rVal, nWhich));
+            std::make_unique<SwUndoFieldFromAPI>(rPos, aOldVal, rVal, nWhich));
     }
 
     pField->PutValue(rVal, nWhich);
@@ -534,7 +533,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             aPosition.nContent = pDstTextField->GetStart();
 
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                o3tl::make_unique<SwUndoFieldFromDoc>( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );
+                std::make_unique<SwUndoFieldFromDoc>( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );
         }
 
         pDstFormatField->SetField(rSrcField.CopyField());

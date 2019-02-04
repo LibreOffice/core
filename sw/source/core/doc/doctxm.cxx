@@ -70,7 +70,6 @@
 #include <calbck.hxx>
 #include <ToxTextGenerator.hxx>
 #include <ToxTabStopTokenHandler.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/datetimeutils.hxx>
 #include <tools/globname.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

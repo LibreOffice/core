@@ -20,7 +20,6 @@
 #include <unoport.hxx>
 
 #include <cmdid.h>
-#include <o3tl/make_unique.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
@@ -358,7 +357,7 @@ void SwXTextPortion::GetPropertyValue(
             {
                 if(!pSet)
                 {
-                    pSet = o3tl::make_unique<SfxItemSet>(
+                    pSet = std::make_unique<SfxItemSet>(
                         pUnoCursor->GetDoc()->GetAttrPool(),
                         svl::Items<
                             RES_CHRATR_BEGIN, RES_FRMATR_END - 1,

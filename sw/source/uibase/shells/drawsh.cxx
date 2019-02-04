@@ -163,7 +163,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
                 }
                 else // if(rObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rObject))
                 {
-                    pSdrView->AddUndo(o3tl::make_unique<SdrUndoAttrObj>(rObject));
+                    pSdrView->AddUndo(std::make_unique<SdrUndoAttrObj>(rObject));
 
                     SfxItemSet aSet(pSdrView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
 

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
@@ -355,7 +354,7 @@ OUString SwDDEField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwDDEField::Copy() const
 {
-    return o3tl::make_unique<SwDDEField>(static_cast<SwDDEFieldType*>(GetTyp()));
+    return std::make_unique<SwDDEField>(static_cast<SwDDEFieldType*>(GetTyp()));
 }
 
 /// get field type name

@@ -25,7 +25,6 @@
 #include <utility>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include "SwXDocumentSettings.hxx"
 #include <comphelper/MasterPropertySetInfo.hxx>
@@ -447,7 +446,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0
                 };
-                auto pItemSet = o3tl::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
+                auto pItemSet = std::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
                 assert (! pPrinter->isDisposed() );
                 // set printer only once; in _postSetValues

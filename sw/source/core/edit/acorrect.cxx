@@ -36,7 +36,6 @@
 #include <viscrs.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -503,7 +502,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
 {
     sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCursor.GetPoint()->nNode.GetIndex();
     LanguageType eLang = GetLanguage(nPos);
-    rEditSh.GetDoc()->SetAutoCorrExceptWord( o3tl::make_unique<SwAutoCorrExceptWord>( nFlag,
+    rEditSh.GetDoc()->SetAutoCorrExceptWord( std::make_unique<SwAutoCorrExceptWord>( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
 }
 

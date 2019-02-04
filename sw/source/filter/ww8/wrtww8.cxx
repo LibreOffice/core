@@ -30,7 +30,6 @@
 #include <string.h>
 #include <osl/endian.h>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 
@@ -987,7 +986,7 @@ WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
     , nFkpStartPage(0)
     , ePlc(ePl)
 {
-    m_Fkps.push_back(o3tl::make_unique<WW8_WrFkp>(ePlc, nStartFc));
+    m_Fkps.push_back(std::make_unique<WW8_WrFkp>(ePlc, nStartFc));
 }
 
 WW8_WrPlcPn::~WW8_WrPlcPn()
@@ -1379,7 +1378,7 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc)
         nStartCp += m_Pcts.back()->GetStartCp();
     }
 
-    m_Pcts.push_back(o3tl::make_unique<WW8_WrPc>(nStartFc, nStartCp));
+    m_Pcts.push_back(std::make_unique<WW8_WrPc>(nStartFc, nStartCp));
 }
 
 void WW8_WrPct::WritePc( WW8Export& rWrt )

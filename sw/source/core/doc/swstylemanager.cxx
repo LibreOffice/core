@@ -25,7 +25,6 @@
 #include <swtypes.hxx>
 #include <istyleaccess.hxx>
 #include <unordered_map>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 typedef std::unordered_map< OUString,
@@ -80,7 +79,7 @@ public:
 
 std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems )
 {
-    return o3tl::make_unique<SwStyleManager>( pIgnorableParagraphItems );
+    return std::make_unique<SwStyleManager>( pIgnorableParagraphItems );
 }
 
 void SwStyleManager::clearCaches()

@@ -91,7 +91,6 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <o3tl/deleter.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <paratr.hxx>
@@ -588,7 +587,7 @@ std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(const OUString& s
 
     SwReader aReader(aSrcMed, rURL, pDoc);
     Reader* pDOCXReader = SwReaderWriter::GetDOCXReader();
-    auto pGlossary = o3tl::make_unique<SwTextBlocks>(rURL);
+    auto pGlossary = std::make_unique<SwTextBlocks>(rURL);
 
     CPPUNIT_ASSERT(pDOCXReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(!bEmpty, aReader.ReadGlossaries(*pDOCXReader, *pGlossary, false));

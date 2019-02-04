@@ -22,7 +22,6 @@
 #include <string_view>
 
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/whiter.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <swmodule.hxx>
@@ -291,7 +290,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             pSectionNode->DelFrames(rFrame.getRootFrame());
         }
     }
-    auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),
+    auto pRet(std::make_unique<sw::MergedPara>(rFrame, std::move(extents),
                 mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode,
                 nodes.back()));
     for (SwTextNode * pTmp : nodes)
@@ -574,7 +573,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     {
                         SwAttrPool& rPool =
                             const_cast<SwDoc&>(m_rDoc).GetAttrPool();
-                        m_pSet = o3tl::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
+                        m_pSet = std::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
                     }
 
                     if( 1 < pRed->GetStackCount() )

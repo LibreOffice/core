@@ -40,7 +40,6 @@
 #include <swtable.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/request.hxx>
 #include <memory>
 
@@ -267,7 +266,7 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB1->get_active_id();
 
         aOptions.aKeys.push_back(
-            o3tl::make_unique<SwSortKey>( nCol1, sEntry,
+            std::make_unique<SwSortKey>( nCol1, sEntry,
                                     bAsc1 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 
@@ -280,7 +279,7 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB2->get_active_id();
 
         aOptions.aKeys.push_back(
-            o3tl::make_unique<SwSortKey>( nCol2, sEntry,
+            std::make_unique<SwSortKey>( nCol2, sEntry,
                                     bAsc2 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 
@@ -293,7 +292,7 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB3->get_active_id();
 
         aOptions.aKeys.push_back(
-            o3tl::make_unique<SwSortKey>( nCol3, sEntry,
+            std::make_unique<SwSortKey>( nCol3, sEntry,
                                     bAsc3 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 

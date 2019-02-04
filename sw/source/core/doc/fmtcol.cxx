@@ -37,7 +37,6 @@
 #include <calbck.hxx>
 #include <svl/intitem.hxx>
 
-#include <o3tl/make_unique.hxx>
 namespace TextFormatCollFunc
 {
     // #i71574#
@@ -542,7 +541,7 @@ void SwConditionTextFormatColl::InsertCondition( const SwCollCondition& rCond )
     }
 
     // Not found -> so insert it
-    m_CondColls.push_back( o3tl::make_unique<SwCollCondition> (rCond) );
+    m_CondColls.push_back( std::make_unique<SwCollCondition> (rCond) );
 }
 
 void SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )

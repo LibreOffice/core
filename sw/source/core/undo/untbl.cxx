@@ -67,7 +67,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <o3tl/make_unique.hxx>
+
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
@@ -684,7 +684,7 @@ void SwUndoTableToText::SetRange( const SwNodeRange& rRg )
 
 void SwUndoTableToText::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, sal_Int32 nContentIdx )
 {
-    m_vBoxSaves.push_back(o3tl::make_unique<SwTableToTextSave>(rDoc, nNdIdx, nEndIdx, nContentIdx));
+    m_vBoxSaves.push_back(std::make_unique<SwTableToTextSave>(rDoc, nNdIdx, nEndIdx, nContentIdx));
 }
 
 SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
@@ -2485,11 +2485,11 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                 else
                     *aPam.GetPoint() = SwPosition( aTmpIdx );
             }
-            pUndo = o3tl::make_unique<SwUndoDelete>( aPam, bDeleteCompleteParagraph, true );
+            pUndo = std::make_unique<SwUndoDelete>( aPam, bDeleteCompleteParagraph, true );
         }
         else
         {
-            pUndo = o3tl::make_unique<SwUndoDelete>( aPam, true );
+            pUndo = std::make_unique<SwUndoDelete>( aPam, true );
             if( pEntry->pUndo )
             {
                 pEntry->pUndo->UndoImpl(rContext);
@@ -2522,7 +2522,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = o3tl::make_unique<SfxItemSet>(
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
                 rDoc.GetAttrPool(),
                 svl::Items<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
@@ -2566,7 +2566,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         // b62341295: Redline for copying tables - Start.
         rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        std::unique_ptr<SwUndo> pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ? nullptr : o3tl::make_unique<SwUndoDelete>( aPam, true );
+        std::unique_ptr<SwUndo> pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ? nullptr : std::make_unique<SwUndoDelete>( aPam, true );
         if( pEntry->pUndo )
         {
             pEntry->pUndo->UndoImpl(rContext);
@@ -2617,7 +2617,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = o3tl::make_unique<SfxItemSet>(
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
                 rDoc.GetAttrPool(),
                 svl::Items<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
@@ -2647,10 +2647,10 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-            pEntry->pUndo = o3tl::make_unique<SwUndoDelete>( aPam, true );
+            pEntry->pUndo = std::make_unique<SwUndoDelete>( aPam, true );
     }
 
-    pEntry->pBoxNumAttr = o3tl::make_unique<SfxItemSet>(
+    pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
         pDoc->GetAttrPool(),
         svl::Items<
             RES_VERT_ORIENT, RES_VERT_ORIENT,
@@ -2739,7 +2739,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     if( aDeleteStart != aCellEnd )
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
-        pUndo = o3tl::make_unique<SwUndoRedlineDelete>( aDeletePam, SwUndoId::DELETE );
+        pUndo = std::make_unique<SwUndoRedlineDelete>( aDeletePam, SwUndoId::DELETE );
         pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDeletePam ), true );
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
@@ -2747,7 +2747,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
         aCellEnd = SwPosition(
             SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() ));
         SwPaM aTmpPam( aDeleteStart, aCellEnd );
-        pUndo = o3tl::make_unique<SwUndoDelete>( aTmpPam, true );
+        pUndo = std::make_unique<SwUndoDelete>( aTmpPam, true );
     }
     SwPosition aCellStart( SwNodeIndex( *rBox.GetSttNd(), 2 ) );
     pText = aCellStart.nNode.GetNode().GetTextNode();

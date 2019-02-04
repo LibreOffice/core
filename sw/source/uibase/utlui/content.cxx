@@ -26,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <o3tl/enumrange.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
@@ -711,7 +710,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             for (const auto& rRefMark : aRefMarks)
             {
                 // References sorted alphabetically
-                pMember->insert(o3tl::make_unique<SwContent>(this, rRefMark, 0));
+                pMember->insert(std::make_unique<SwContent>(this, rRefMark, 0));
             }
         }
         break;
@@ -3620,7 +3619,7 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    pEntry->ReplaceItem(o3tl::make_unique<SwContentLBoxString>(rCol.GetText()), nColToHilite);
+    pEntry->ReplaceItem(std::make_unique<SwContentLBoxString>(rCol.GetText()), nColToHilite);
 }
 
 void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

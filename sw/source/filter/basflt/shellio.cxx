@@ -60,7 +60,6 @@
 #include <swerror.h>
 #include <paratr.hxx>
 #include <pausethreadstarting.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -270,7 +269,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                                 // UGLY: temp. enable undo
                                 mxDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 mxDoc->GetIDocumentUndoRedo().AppendUndo(
-                                    o3tl::make_unique<SwUndoInsLayFormat>( pFrameFormat,0,0 ) );
+                                    std::make_unique<SwUndoInsLayFormat>( pFrameFormat,0,0 ) );
                                 mxDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
                             }

@@ -26,7 +26,6 @@
 #include <editeng/colritem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
@@ -2699,7 +2698,7 @@ bool SwTableCellInfo::Impl::getNext()
 }
 
 SwTableCellInfo::SwTableCellInfo(const SwTable * pTable)
-    : m_pImpl(o3tl::make_unique<Impl>())
+    : m_pImpl(std::make_unique<Impl>())
 {
     m_pImpl->setTable(pTable);
 }

@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -770,7 +769,7 @@ void SwHTMLParser::SplitPREListingXMP( HTMLAttrContext *pCntxt )
 SfxItemSet *HTMLAttrContext::GetFrameItemSet( SwDoc *pCreateDoc )
 {
     if( !m_pFrameItemSet && pCreateDoc )
-        m_pFrameItemSet = o3tl::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
+        m_pFrameItemSet = std::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
                         svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
     return m_pFrameItemSet.get();
 }

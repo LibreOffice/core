@@ -57,7 +57,6 @@
 #include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -1861,7 +1860,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     const bool bFootnotesInDoc = !GetFormat()->GetDoc()->GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
-    auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+    auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
@@ -1976,7 +1975,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     pAccess.reset();
                     m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrame( *this ) );
-                    pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                     pAttrs = pAccess->Get();
                 }
 
@@ -2016,7 +2015,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 pAccess.reset();
                 m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrame( *this ) );
-                pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                 pAttrs = pAccess->Get();
             }
             if ( aOldPrtPos != aRectFnSet.GetPos(getFramePrintArea()) )
@@ -2066,7 +2065,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrame( *this ) );
 
-                            pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                             pAttrs = pAccess->Get();
                         }
 
@@ -2255,7 +2254,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // is found, get its first content.
                     const SwFrame* pTmpNxt = sw_FormatNextContentForKeep( this );
 
-                    pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                     pAttrs = pAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
@@ -2497,7 +2496,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                             GetFollow()->MakeAll(pRenderContext);
 
-                            pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                             pAttrs = pAccess->Get();
 
                             GetFollow()->SetLowersFormatted(false);

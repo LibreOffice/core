@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -376,7 +375,7 @@ SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
         if( xCond->IsValid() )
         {
             if( !pConditions )
-               pConditions = o3tl::make_unique<SwXMLConditions_Impl>();
+               pConditions = std::make_unique<SwXMLConditions_Impl>();
             pConditions->push_back( xCond );
         }
         xContext = xCond.get();

@@ -50,7 +50,6 @@
 #include <swtypes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -906,7 +905,7 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
     CSS1Map::iterator itr = rMap.find(rKey);
     if (itr == rMap.end())
     {
-        rMap.insert(std::make_pair(rKey, o3tl::make_unique<SvxCSS1MapEntry>(rItemSet, rProp)));
+        rMap.insert(std::make_pair(rKey, std::make_unique<SvxCSS1MapEntry>(rItemSet, rProp)));
     }
     else
     {

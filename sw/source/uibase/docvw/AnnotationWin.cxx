@@ -31,7 +31,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -231,7 +230,7 @@ void SwAnnotationWin::UpdateData()
             SwPosition aPosition( pTextField->GetTextNode() );
             aPosition.nContent = pTextField->GetStart();
             rUndoRedo.AppendUndo(
-                o3tl::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
+                std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         mrMgr.SetLayout();
@@ -394,7 +393,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
         SwPosition aPosition( pTextField->GetTextNode() );
         aPosition.nContent = pTextField->GetStart();
         rUndoRedo.AppendUndo(
-            o3tl::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
+            std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
     }
     mpOutliner->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     mpOutliner->ClearModifyFlag();

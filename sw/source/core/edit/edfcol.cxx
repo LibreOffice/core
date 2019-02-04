@@ -676,7 +676,7 @@ void lcl_ValidateParagraphSignatures(SwDoc* pDoc, const uno::Reference<text::XTe
         {
             pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
             pDoc->GetIDocumentUndoRedo().AppendUndo(
-                o3tl::make_unique<SwUndoParagraphSigning>(pDoc, xField, xParagraph, false));
+                std::make_unique<SwUndoParagraphSigning>(pDoc, xField, xParagraph, false));
             lcl_RemoveParagraphMetadataField(xField);
             pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
         }
@@ -1812,7 +1812,7 @@ void SwEditShell::SignParagraph()
     lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xParagraph, xField, utf8Text);
 
     GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-        o3tl::make_unique<SwUndoParagraphSigning>(GetDoc(), xField, xParagraph, true));
+        std::make_unique<SwUndoParagraphSigning>(GetDoc(), xField, xParagraph, true));
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }

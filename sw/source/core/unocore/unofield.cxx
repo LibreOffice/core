@@ -89,7 +89,6 @@
 #include <svl/listener.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
@@ -2376,7 +2375,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                     if (!m_pImpl->m_xTextObject.is())
                     {
                         m_pImpl->m_xTextObject
-                            = new SwTextAPIObject( o3tl::make_unique<SwTextAPIEditSource>(m_pImpl->m_pDoc) );
+                            = new SwTextAPIObject( std::make_unique<SwTextAPIEditSource>(m_pImpl->m_pDoc) );
                     }
 
                     uno::Reference<text::XText> xText(m_pImpl->m_xTextObject.get());

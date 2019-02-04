@@ -19,7 +19,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
@@ -246,7 +245,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GraphicObject const*const pGraphicObject(rSh.GetGraphicObj());
             if(nullptr != pGraphicObject)
             {
-                m_ExternalEdits.push_back(o3tl::make_unique<SwExternalToolEdit>(
+                m_ExternalEdits.push_back(std::make_unique<SwExternalToolEdit>(
                             &rSh));
                 m_ExternalEdits.back()->Edit(pGraphicObject);
             }
