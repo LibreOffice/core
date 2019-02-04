@@ -193,6 +193,7 @@ public:
     void testTdf120028();
     void testTdf120028b();
     void testTdf44223();
+    void testDescriptionImport();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -277,6 +278,7 @@ public:
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testTdf44223);
+    CPPUNIT_TEST(testDescriptionImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2615,6 +2617,22 @@ void SdImportTest::testTdf44223()
 
     CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio1.wav"));
     CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio2.wav"));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testDescriptionImport()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/altdescription.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getShapeFromPage(/*nShape=*/2, /*nPage=*/0, xDocShRef));
+    OUString sDesc;
+
+    xPropertySet->getPropertyValue("Description") >>= sDesc;
+
+    CPPUNIT_ASSERT_EQUAL(OUString("We Can Do It!"), sDesc);
 
     xDocShRef->DoClose();
 }
