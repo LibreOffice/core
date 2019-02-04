@@ -51,4 +51,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_graphic_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_graphic_test))
 
+# we need to explicitly depend on Library_gie because it's dynamically loaded for .gif
+$(call gb_CppunitTest_get_target,vcl_graphic_test) : $(call gb_Library_get_target,gie)
+
 # vim: set noet sw=4 ts=4:
