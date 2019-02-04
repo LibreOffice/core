@@ -3832,7 +3832,7 @@ dnl ===================================================================
 dnl Select the linker to use (gold/lld/ld.bfd).
 dnl This is done only after compiler checks (need to know if Clang is
 dnl used, for different defaults) and after checking if a debug build
-dnl is wanted (non-debug builds get the default linker if not explictly
+dnl is wanted (non-debug builds get the default linker if not explicitly
 dnl specified otherwise).
 dnl All checks for linker features/options should come after this.
 dnl ===================================================================
@@ -7936,7 +7936,7 @@ if test "$with_system_jpeg" = "yes"; then
     AC_CHECK_HEADER(jpeglib.h, [ LIBJPEG_CFLAGS= ],
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ LIBJPEG_LIBS="-ljpeg" ],
-        [AC_MSG_ERROR(jpeg library not found or fuctional)], [])
+        [AC_MSG_ERROR(jpeg library not found or functional)], [])
 else
     SYSTEM_LIBJPEG=
     AC_MSG_RESULT([internal, libjpeg-turbo])
@@ -9663,8 +9663,8 @@ AC_MSG_CHECKING([whether to execute CVE tests])
 if test -z "$enable_cve_tests"; then
     case "$OS" in
     WNT)
-        # Default cves off for windows with its wild and wonderful
-        # varienty of AV software kicking in and panicking
+        # Default cves off for Windows with its wild and wonderful
+        # variety of AV software kicking in and panicking
         enable_cve_tests=no
         ;;
     *)
