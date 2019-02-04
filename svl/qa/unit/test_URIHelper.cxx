@@ -300,12 +300,7 @@ void Test::testFindFirstURLInText() {
           "ftp://bla.bla.bla/blubber/", 3, 29 },
         { "..\\ftp://bla.bla.bla/blubber/...", nullptr, 0, 0 },
         { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
-//Sync with tools/source/fsys/urlobj.cxx and changeScheme
-#ifdef LINUX
-          "smb://bla.bla.bla/blubber%2F", 7, 29 },
-#else
           "file://bla.bla.bla/blubber%2F", 7, 29 },
-#endif
         { "http://sun.com", "http://sun.com/", 0, 14 },
         { "http://sun.com/", "http://sun.com/", 0, 15 },
         { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", nullptr, 0, 0 },

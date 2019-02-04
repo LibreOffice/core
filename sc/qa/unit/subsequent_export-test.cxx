@@ -4163,18 +4163,12 @@ void ScExportTest::testTdf118990()
     // file:///share/lookupsource.xlsx - which is incorrect, since it points to local filesystem
     // and not to Windows network share.
 
-#if defined LINUX // following INetURLObject::setAbsURIRef
-#define TDF118990_SCHEME "smb:"
-#else // for Windows and macOS
-#define TDF118990_SCHEME "file:"
-#endif
-
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 1, 0),
-                         "VLOOKUP(B1,'" TDF118990_SCHEME "//192.168.1.1/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
+                         "VLOOKUP(B1,'file://192.168.1.1/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
                          "Wrong Windows share (using host IP) URL in A2");
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 2, 0),
-                         "VLOOKUP(B1,'" TDF118990_SCHEME "//NETWORKHOST/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
+                         "VLOOKUP(B1,'file://NETWORKHOST/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
                          "Wrong Windows share (using hostname) URL in A3");
 
     xDocSh->DoClose();
