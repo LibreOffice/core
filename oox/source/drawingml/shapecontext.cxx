@@ -74,6 +74,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
         mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
         mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
+        mpShapePtr->setDescription( rAttribs.getString( XML_descr ).get() );
         break;
     }
     case XML_hlinkMouseOver:
