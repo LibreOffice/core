@@ -120,10 +120,6 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     pPasswordsLBContainer->set_height_request(m_pPasswordsLB->GetTextHeight()*8);
 
     m_pPasswordsLB->SetHeaderBarClickHdl( LINK( this, WebConnectionInfoDialog, HeaderBarClickedHdl ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
-    m_pRemoveAllBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
-    m_pChangeBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
-
 
     FillPasswordList();
 
