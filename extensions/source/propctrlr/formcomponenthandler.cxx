@@ -2855,11 +2855,12 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ScopedVclPtrInstance< OSelectLabelDialog > dlgSelectLabel( impl_getDefaultDialogParent_nothrow(), m_xComponent );
+        vcl::Window* pParent = impl_getDefaultDialogParent_nothrow();
+        OSelectLabelDialog dlgSelectLabel(pParent ? pParent->GetFrameWeld() : nullptr, m_xComponent);
         _rClearBeforeDialog.clear();
-        bool bSuccess = ( RET_OK == dlgSelectLabel->Execute() );
+        bool bSuccess = (RET_OK == dlgSelectLabel.run());
         if ( bSuccess )
-            _out_rNewValue <<= dlgSelectLabel->GetSelected();
+            _out_rNewValue <<= dlgSelectLabel.GetSelected();
         return bSuccess;
     }
 

@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="LabelSelectionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="labelselectiondialog|LabelSelectionDialog">Label Field Selection</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
@@ -86,7 +102,8 @@
                 <property name="label" translatable="yes" context="labelselectiondialog|label">These are control fields that can be used as label fields for the $controlclass$ $controlname$.</property>
                 <property name="use_underline">True</property>
                 <property name="wrap">True</property>
-                <property name="mnemonic_widget">control:border</property>
+                <property name="mnemonic_widget">control</property>
+                <property name="width_chars">60</property>
                 <property name="max_width_chars">60</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
@@ -98,15 +115,44 @@
               </packing>
             </child>
             <child>
-              <object class="vcllo-SvTreeListBox" id="control:border">
-                <property name="width_request">200</property>
-                <property name="height_request">150</property>
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="control">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">1</property>
+                    <property name="show_expanders">True</property>
+                    <property name="enable_tree_lines">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
