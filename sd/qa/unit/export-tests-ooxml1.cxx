@@ -101,6 +101,7 @@ public:
     void testTdf111884();
     void testTdf112633();
     void testCustomXml();
+    void testTdf94238();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testTdf111884);
     CPPUNIT_TEST(testTdf112633);
     CPPUNIT_TEST(testCustomXml);
+    CPPUNIT_TEST(testTdf94238);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -844,6 +846,38 @@ void SdOOXMLExportTest1::testCustomXml()
 
     std::shared_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
+}
+
+void SdOOXMLExportTest1::testTdf94238()
+{
+    // Load document and export it to a temporary file.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf94238.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+
+    awt::Gradient aGradient;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= aGradient);
+
+    // Without the accompanying fix in place, this test would have failed with
+    // the following details:
+    // - aGradient.Style was awt::GradientStyle_ELLIPTICAL
+    // - aGradient.YOffset was 70
+    // - aGradient.Border was 0
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), aGradient.YOffset);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(39), aGradient.Border);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
