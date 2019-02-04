@@ -813,10 +813,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
 {
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
-
-    ScopedVclPtrInstance<TSAURLsDialog> pTSAURLsDlg(this);
-
-    pTSAURLsDlg->Execute();
+    TSAURLsDialog aTSAURLsDlg(GetDialogFrameWeld());
+    aTSAURLsDlg.run();
 }
 
 IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)

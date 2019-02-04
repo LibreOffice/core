@@ -10,32 +10,31 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_TSAURLS_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_TSAURLS_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
-class TSAURLsDialog : public ModalDialog
+class TSAURLsDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>    m_pURLListBox;
-    VclPtr<PushButton> m_pAddBtn;
-    VclPtr<PushButton> m_pDeleteBtn;
-    VclPtr<OKButton>   m_pOKBtn;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xDeleteBtn;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::TreeView> m_xURLListBox;
+    std::unique_ptr<weld::Label> m_xEnterAUrl;
 
-    DECL_LINK(AddHdl_Impl, Button*, void);
-    DECL_LINK(DeleteHdl_Impl, Button*, void);
-    DECL_LINK(OKHdl_Impl, Button*, void);
-    // After operations in a ListBox we have nothing selected
-    // Is Selected element handler for the ListBox
-    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(DeleteHdl_Impl, weld::Button&, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    // After operations in a TreeView we have nothing selected
+    // Is Selected element handler for the TreeView
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
     std::set<OUString> m_aURLs;
 
     void AddTSAURL(const OUString &rURL);
 
 public:
-    explicit TSAURLsDialog(vcl::Window* pParent);
+    explicit TSAURLsDialog(weld::Window* pParent);
     virtual ~TSAURLsDialog() override;
-    virtual void dispose() override;
 };
 
 #endif
