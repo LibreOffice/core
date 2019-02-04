@@ -932,8 +932,28 @@ void DocxExport::WriteSettings()
     // Zoom
     if (pViewShell)
     {
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(
+            sax_fastparser::FastSerializerHelper::createAttrList());
+
+        switch (pViewShell->GetViewOptions()->GetZoomType())
+        {
+            case SvxZoomType::WHOLEPAGE:
+                pAttributeList->add(FSNS(XML_w, XML_val), "fullPage");
+                break;
+            case SvxZoomType::PAGEWIDTH:
+                pAttributeList->add(FSNS(XML_w, XML_val), "bestFit");
+                break;
+            case SvxZoomType::OPTIMAL:
+                pAttributeList->add(FSNS(XML_w, XML_val), "textFit");
+                break;
+            default:
+                break;
+        }
+
         OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
-        pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
+        pAttributeList->add(FSNS(XML_w, XML_percent), aZoom);
+        sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList.get());
+        pFS->singleElementNS(XML_w, XML_zoom, xAttributeList);
     }
 
     // Display Background Shape
