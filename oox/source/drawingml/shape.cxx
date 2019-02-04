@@ -851,6 +851,11 @@ Reference< XShape > const & Shape::createAndInsert(
             if( xNamed.is() )
                 xNamed->setName( msName );
         }
+        if( !msDescription.isEmpty() )
+        {
+            const OUString sDescription( "Description" );
+            xSet->setPropertyValue( sDescription, Any( msDescription ) );
+        }
         if (aServiceName != "com.sun.star.text.TextFrame")
             rxShapes->add( mxShape );
 
