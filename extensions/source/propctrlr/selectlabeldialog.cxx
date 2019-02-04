@@ -48,32 +48,20 @@ namespace pcr
 
 
     // OSelectLabelDialog
-
-
-    OSelectLabelDialog::OSelectLabelDialog( vcl::Window* pParent, Reference< XPropertySet > const & _xControlModel )
-        :ModalDialog(pParent, "LabelSelectionDialog", "modules/spropctrlr/ui/labelselectiondialog.ui")
-        ,m_xControlModel(_xControlModel)
-        ,m_pInitialSelection(nullptr)
-        ,m_pLastSelected(nullptr)
-        ,m_bHaveAssignableControl(false)
+    OSelectLabelDialog::OSelectLabelDialog(weld::Window* pParent, Reference< XPropertySet > const & _xControlModel)
+        : GenericDialogController(pParent, "modules/spropctrlr/ui/labelselectiondialog.ui", "LabelSelectionDialog")
+        , m_xControlModel(_xControlModel)
+        , m_bLastSelected(false)
+        , m_bHaveAssignableControl(false)
+        , m_xMainDesc(m_xBuilder->weld_label("label"))
+        , m_xControlTree(m_xBuilder->weld_tree_view("control"))
+        , m_xNoAssignment(m_xBuilder->weld_check_button("noassignment"))
     {
-        get(m_pMainDesc, "label");
-        get(m_pControlTree, "control");
-        get(m_pNoAssignment, "noassignment");
-
-        // initialize the TreeListBox
-        m_pControlTree->SetSelectionMode( SelectionMode::Single );
-        m_pControlTree->SetDragDropMode( DragDropMode::NONE );
-        m_pControlTree->EnableInplaceEditing( false );
-        m_pControlTree->SetStyle(m_pControlTree->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
-
-        m_pControlTree->SetNodeBitmaps(Image(StockImage::Yes, RID_EXTBMP_COLLAPSEDNODE),
-                                       Image(StockImage::Yes, RID_EXTBMP_EXPANDEDNODE));
-        m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
-        m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+        m_xControlTree->connect_changed(LINK(this, OSelectLabelDialog, OnEntrySelected));
+        m_xControlTree->set_size_request(-1, m_xControlTree->get_height_rows(8));
 
         // fill the description
-        OUString sDescription = m_pMainDesc->GetText();
+        OUString sDescription = m_xMainDesc->get_label();
         sal_Int16 nClassID = FormComponentType::CONTROL;
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
@@ -82,7 +70,7 @@ namespace pcr
             GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
         OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
         sDescription = sDescription.replaceAll("$controlname$", sName);
-        m_pMainDesc->SetText(sDescription);
+        m_xMainDesc->set_label(sDescription);
 
         // search for the root of the form hierarchy
         Reference< XChild >  xCont(m_xControlModel, UNO_QUERY);
@@ -102,9 +90,9 @@ namespace pcr
             sal_Int16 nClassId = 0;
             try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
             m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(SERVICE_COMPONENT_GROUPBOX) : OUString(SERVICE_COMPONENT_FIXEDTEXT);
-            m_aRequiredControlImage = Image(StockImage::Yes, FormComponentType::RADIOBUTTON == nClassId ? OUStringLiteral(RID_EXTBMP_GROUPBOX) : OUStringLiteral(RID_EXTBMP_FIXEDTEXT));
+            m_aRequiredControlImage = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(RID_EXTBMP_GROUPBOX) : OUString(RID_EXTBMP_FIXEDTEXT);
 
-            // calc the currently set label control (so InsertEntries can calc m_pInitialSelection)
+            // calc the currently set label control (so InsertEntries can calc m_xInitialSelection)
             Any aCurrentLabelControl( m_xControlModel->getPropertyValue(PROPERTY_CONTROLLABEL) );
             DBG_ASSERT((aCurrentLabelControl.getValueTypeClass() == TypeClass_INTERFACE) || !aCurrentLabelControl.hasValue(),
 
@@ -113,62 +101,49 @@ namespace pcr
                 aCurrentLabelControl >>= m_xInitialLabelControl;
 
             // insert the root
-            Image aRootImage(StockImage::Yes, RID_EXTBMP_FORMS);
-            SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
+            OUString sRootName(PcrRes(RID_STR_FORMS));
+            OUString aFormImage(RID_EXTBMP_FORMS);
+            m_xControlTree->insert(nullptr, -1, &sRootName, nullptr,
+                                   nullptr, nullptr, &aFormImage, false);
 
             // build the tree
-            m_pInitialSelection = nullptr;
+            m_xInitialSelection.reset();
             m_bHaveAssignableControl = false;
-            InsertEntries(xSearch, pRoot);
-            m_pControlTree->Expand(pRoot);
+            std::unique_ptr<weld::TreeIter> xRoot = m_xControlTree->make_iterator();
+            m_xControlTree->get_iter_first(*xRoot);
+            InsertEntries(xSearch, *xRoot);
+            m_xControlTree->expand_row(*xRoot);
         }
 
-        if (m_pInitialSelection)
+        if (m_xInitialSelection)
         {
-            m_pControlTree->MakeVisible(m_pInitialSelection, true);
-            m_pControlTree->Select(m_pInitialSelection);
+            m_xControlTree->scroll_to_row(*m_xInitialSelection);
+            m_xControlTree->select(*m_xInitialSelection);
         }
         else
         {
-            m_pControlTree->MakeVisible(m_pControlTree->First(), true);
-            if (m_pControlTree->FirstSelected())
-                m_pControlTree->Select(m_pControlTree->FirstSelected(), false);
-            m_pNoAssignment->Check();
+            m_xControlTree->scroll_to_row(0);
+            m_xControlTree->unselect_all();
+            m_xNoAssignment->set_active(true);
         }
 
         if (!m_bHaveAssignableControl)
         {   // no controls which can be assigned
-            m_pNoAssignment->Check();
-            m_pNoAssignment->Enable(false);
+            m_xNoAssignment->set_active(true);
+            m_xNoAssignment->set_sensitive(false);
         }
 
-        m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
-        m_pNoAssignment->GetClickHdl().Call(m_pNoAssignment);
+        m_xLastSelected = m_xControlTree->make_iterator(nullptr);
+
+        m_xNoAssignment->connect_toggled(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
+        OnNoAssignmentClicked(*m_xNoAssignment);
     }
 
     OSelectLabelDialog::~OSelectLabelDialog()
     {
-        disposeOnce();
     }
 
-    void OSelectLabelDialog::dispose()
-    {
-        // delete the entry datas of the listbox entries
-        SvTreeListEntry* pLoop = m_pControlTree->First();
-        while (pLoop)
-        {
-            void* pData = pLoop->GetUserData();
-            if (pData)
-                delete static_cast<Reference< XPropertySet > *>(pData);
-            pLoop = m_pControlTree->Next(pLoop);
-        }
-        m_pMainDesc.clear();
-        m_pControlTree.clear();
-        m_pNoAssignment.clear();
-        ModalDialog::dispose();
-    }
-
-    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)
+    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, weld::TreeIter& rContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
         if (!xContainer.is())
@@ -201,19 +176,21 @@ namespace pcr
                 Reference< XIndexAccess >  xCont(xAsSet, UNO_QUERY);
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
-                    Image aFormImage(StockImage::Yes, RID_EXTBMP_FORM);
-                    SvTreeListEntry* pCont = m_pControlTree->InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
-                    sal_Int32 nContChildren = InsertEntries(xCont, pCont);
+                    OUString aFormImage(RID_EXTBMP_FORM);
+
+                    m_xControlTree->insert(&rContainerEntry, -1, &sName, nullptr,
+                                           nullptr, nullptr, &aFormImage, false);
+                    auto xIter = m_xControlTree->make_iterator(&rContainerEntry);
+                    m_xControlTree->iter_nth_child(*xIter, nChildren);
+                    sal_Int32 nContChildren = InsertEntries(xCont, *xIter);
                     if (nContChildren)
                     {
-                        m_pControlTree->Expand(pCont);
+                        m_xControlTree->expand_row(*xIter);
                         ++nChildren;
                     }
                     else
                     {   // oops, no valid children -> remove the entry
-                        m_pControlTree->ModelIsRemoving(pCont);
-                        m_pControlTree->GetModel()->Remove(pCont);
-                        m_pControlTree->ModelHasRemoved(pCont);
+                        m_xControlTree->remove(*xIter);
                     }
                 }
                 continue;
@@ -229,71 +206,71 @@ namespace pcr
                 makeStringAndClear();
 
             // all requirements met -> insert
-            SvTreeListEntry* pCurrent = m_pControlTree->InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
-            pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
-            ++nChildren;
+            m_xUserData.emplace_back(new Reference<XPropertySet>(xAsSet));
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_xUserData.back().get())));
+            m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, &m_aRequiredControlImage, false);
 
             if (m_xInitialLabelControl == xAsSet)
-                m_pInitialSelection = pCurrent;
+            {
+                m_xInitialSelection = m_xControlTree->make_iterator(&rContainerEntry);
+                m_xControlTree->iter_nth_child(*m_xInitialSelection, nChildren);
+            }
 
+            ++nChildren;
             m_bHaveAssignableControl = true;
         }
 
         return nChildren;
     }
 
-
-    IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB, void)
+    IMPL_LINK(OSelectLabelDialog, OnEntrySelected, weld::TreeView&, rLB, void)
     {
-        DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
-        SvTreeListEntry* pSelected = m_pControlTree->FirstSelected();
-        void* pData = pSelected ? pSelected->GetUserData() : nullptr;
-
-        if (pData)
-            m_xSelectedControl.set(*static_cast<Reference< XPropertySet > *>(pData));
-
-        m_pNoAssignment->SetClickHdl(Link<Button*,void>());
-        m_pNoAssignment->Check(pData == nullptr);
-        m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
+        DBG_ASSERT(&rLB == m_xControlTree.get(), "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
+        std::unique_ptr<weld::TreeIter> xIter = m_xControlTree->make_iterator();
+        bool bSelected = m_xControlTree->get_selected(xIter.get());
+        OUString sData = bSelected ? m_xControlTree->get_id(*xIter) : OUString();
+        if (!sData.isEmpty())
+            m_xSelectedControl.set(*reinterpret_cast<Reference<XPropertySet>*>(sData.toInt64()));
+        m_xNoAssignment->set_active(sData.isEmpty());
     }
 
-
-    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton, void)
+    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, weld::ToggleButton&, rButton, void)
     {
-        DBG_ASSERT(pButton == m_pNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
+        DBG_ASSERT(&rButton == m_xNoAssignment.get(), "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
 
-        if (m_pNoAssignment->IsChecked())
-            m_pLastSelected = m_pControlTree->FirstSelected();
+        if (m_xNoAssignment->get_active())
+        {
+            m_bLastSelected = m_xControlTree->get_selected(m_xLastSelected.get());
+        }
         else
         {
             DBG_ASSERT(m_bHaveAssignableControl, "OSelectLabelDialog::OnNoAssignmentClicked");
             // search the first assignable entry
-            SvTreeListEntry* pSearch = m_pControlTree->First();
-            while (pSearch)
+            auto xSearch = m_xControlTree->make_iterator(nullptr);
+            bool bSearch = m_xControlTree->get_iter_first(*xSearch);
+            while (bSearch)
             {
-                if (pSearch->GetUserData())
+                if (m_xControlTree->get_id(*xSearch).toInt64())
                     break;
-                pSearch = m_pControlTree->Next(pSearch);
+                bSearch = m_xControlTree->iter_next(*xSearch);
             }
             // and select it
-            if (pSearch)
+            if (bSearch)
             {
-                m_pControlTree->Select(pSearch);
-                m_pLastSelected = pSearch;
+                m_xControlTree->copy_iterator(*xSearch, *m_xLastSelected);
+                m_xControlTree->select(*m_xLastSelected);
+                m_bLastSelected = true;
             }
         }
 
-        if (m_pLastSelected)
+        if (m_bLastSelected)
         {
-            m_pControlTree->SetSelectHdl(Link<SvTreeListBox*,void>());
-            m_pControlTree->SetDeselectHdl(Link<SvTreeListBox*,void>());
-            m_pControlTree->Select(m_pLastSelected, !m_pNoAssignment->IsChecked());
-            m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
-            m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+            if (!m_xNoAssignment->get_active())
+                m_xControlTree->select(*m_xLastSelected);
+            else
+                m_xControlTree->unselect(*m_xLastSelected);
         }
     }
-
-
 }   // namespace pcr
 
 

@@ -5625,7 +5625,7 @@ public:
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, &rGtkIter.iter);
         if (!gtk_tree_view_row_expanded(m_pTreeView, path))
-            gtk_tree_view_expand_row(m_pTreeView, path, false);
+            gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_path_free(path);
     }
 
