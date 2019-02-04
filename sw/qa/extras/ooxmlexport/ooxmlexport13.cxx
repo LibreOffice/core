@@ -18,6 +18,8 @@
 #include <sfx2/docfilt.hxx>
 #include <svx/xfillit0.hxx>
 
+#include <editsh.hxx>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -48,6 +50,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "HeaderText");
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 3; Actual  : 0', i.e. page width zoom was lost on export.
+    CPPUNIT_ASSERT_EQUAL(SvxZoomType::PAGEWIDTH, pEditShell->GetViewOptions()->GetZoomType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
