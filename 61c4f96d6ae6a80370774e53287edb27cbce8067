@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_43cba752",
+        "filename": "jvmfwk/distributions/OpenOfficeorg/javavendors_freebsd.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-04T08:25:52Z",
+      "side": 1,
+      "message": "Oh, at \u003chttps://adoptopenjdk.net/archive.html\u003e I don\u0027t see any builds for FreeBSD (or any other *BSD); does it make sense to have this entry here?",
+      "revId": "61c4f96d6ae6a80370774e53287edb27cbce8067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
