@@ -149,7 +149,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_1,rPar1.getToken(1, DB_DELIM)));
                 aReq.AppendItem(SfxInt32Item
-                        (FN_PARAM_3,rPar1.getToken(1, DB_DELIM).toInt32()));
+                        (FN_PARAM_3,rPar1.getToken(2, DB_DELIM).toInt32()));
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_2,rPar1.getToken(3, DB_DELIM)));
             }
