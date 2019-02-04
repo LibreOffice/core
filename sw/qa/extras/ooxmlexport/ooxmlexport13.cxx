@@ -20,6 +20,8 @@
 #include <sfx2/docfilt.hxx>
 #include <svx/xfillit0.hxx>
 
+#include <editsh.hxx>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -86,6 +88,14 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u" ");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 3; Actual  : 0', i.e. page width zoom was lost on export.
+    CPPUNIT_ASSERT_EQUAL(SvxZoomType::PAGEWIDTH, pEditShell->GetViewOptions()->GetZoomType());
+}
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {

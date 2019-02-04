@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -36,6 +37,24 @@
 using namespace com::sun::star;
 
 namespace writerfilter {
+namespace
+{
+/// Maps OOXML <w:zoom w:val="..."> to SvxZoomType.
+sal_Int16 lcl_GetZoomType(Id nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_Value_doc_ST_Zoom_fullPage:
+            return sal_Int16(SvxZoomType::WHOLEPAGE);
+        case NS_ooxml::LN_Value_doc_ST_Zoom_bestFit:
+            return sal_Int16(SvxZoomType::PAGEWIDTH);
+        case NS_ooxml::LN_Value_doc_ST_Zoom_textFit:
+            return sal_Int16(SvxZoomType::OPTIMAL);
+    }
+
+    return sal_Int16(SvxZoomType::PERCENT);
+}
+}
 
 namespace dmapper
 {
@@ -221,6 +240,7 @@ struct SettingsTable_Impl
     bool                m_bRecordChanges;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
+    sal_Int16 m_nZoomType = 0;
     Id                  m_nView;
     bool                m_bEvenAndOddHeaders;
     bool                m_bUsePrinterMetrics;
@@ -292,6 +312,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     case NS_ooxml::LN_CT_Zoom_percent:
         m_pImpl->m_nZoomFactor = nIntValue;
     break;
+    case NS_ooxml::LN_CT_Zoom_val:
+        m_pImpl->m_nZoomType = lcl_GetZoomType(nIntValue);
+        break;
     case NS_ooxml::LN_CT_Language_val:
         m_pImpl->m_pThemeFontLangProps[0].Name = "val";
         m_pImpl->m_pThemeFontLangProps[0].Value <<= sStringValue;
@@ -502,6 +525,8 @@ sal_Int16 SettingsTable::GetZoomFactor() const
 {
     return m_pImpl->m_nZoomFactor;
 }
+
+sal_Int16 SettingsTable::GetZoomType() const { return m_pImpl->m_nZoomType; }
 
 Id SettingsTable::GetView() const
 {
