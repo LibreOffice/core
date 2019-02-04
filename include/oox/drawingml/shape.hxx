@@ -148,6 +148,7 @@ public:
     const OUString&                 getInternalName() const { return msInternalName; }
     void                            setId( const OUString& rId ) { msId = rId; }
     const OUString&                 getId() { return msId; }
+    void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
@@ -291,6 +292,7 @@ protected:
     OUString                    msName;
     OUString                    msInternalName; // used by diagram; not displayed in UI
     OUString                    msId;
+    OUString                    msDescription;
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
     OptValue< sal_Int32 >       moSubTypeIndex;
 
