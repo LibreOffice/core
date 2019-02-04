@@ -33,7 +33,6 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -68,17 +67,17 @@ bool XGradientList::Create()
     OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT));
     aStr.append(" 1");
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_BLACK,   COL_WHITE, css::awt::GradientStyle_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLACK,   COL_WHITE, css::awt::GradientStyle_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_BLUE,    COL_RED,   css::awt::GradientStyle_AXIAL     ,  300,20,20,10,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLUE,    COL_RED,   css::awt::GradientStyle_AXIAL     ,  300,20,20,10,100,100),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_RED,     COL_YELLOW,css::awt::GradientStyle_RADIAL    ,  600,30,30,20,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_RED,     COL_YELLOW,css::awt::GradientStyle_RADIAL    ,  600,30,30,20,100,100),aStr.toString()));
     aStr[nLen] = '4';
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_YELLOW , COL_GREEN, css::awt::GradientStyle_ELLIPTICAL,  900,40,40,30,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_YELLOW , COL_GREEN, css::awt::GradientStyle_ELLIPTICAL,  900,40,40,30,100,100),aStr.toString()));
     aStr[nLen] = '5';
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_GREEN  , COL_MAGENTA,css::awt::GradientStyle_SQUARE    , 1200,50,50,40,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_GREEN  , COL_MAGENTA,css::awt::GradientStyle_SQUARE    , 1200,50,50,40,100,100),aStr.toString()));
     aStr[nLen] = '6';
-    Insert(o3tl::make_unique<XGradientEntry>(XGradient(COL_MAGENTA, COL_YELLOW ,css::awt::GradientStyle_RECT      , 1900,60,60,50,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_MAGENTA, COL_YELLOW ,css::awt::GradientStyle_RECT      , 1900,60,60,50,100,100),aStr.toString()));
 
     return true;
 }

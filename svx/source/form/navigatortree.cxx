@@ -1054,7 +1054,7 @@ namespace svxform
             // UndoAction for removal
             if ( bUndo && GetNavModel()->m_pPropChangeList->CanUndo())
             {
-                pFormModel->AddUndo(o3tl::make_unique<FmUndoContainerAction>(*pFormModel, FmUndoContainerAction::Removed,
+                pFormModel->AddUndo(std::make_unique<FmUndoContainerAction>(*pFormModel, FmUndoContainerAction::Removed,
                                                             xContainer, xCurrentChild, nIndex));
             }
             else if( !GetNavModel()->m_pPropChangeList->CanUndo() )
@@ -1086,7 +1086,7 @@ namespace svxform
 
             // UndoAction for insertion
             if ( bUndo && GetNavModel()->m_pPropChangeList->CanUndo())
-                pFormModel->AddUndo(o3tl::make_unique<FmUndoContainerAction>(*pFormModel, FmUndoContainerAction::Inserted,
+                pFormModel->AddUndo(std::make_unique<FmUndoContainerAction>(*pFormModel, FmUndoContainerAction::Inserted,
                                                          xContainer, xCurrentChild, nIndex));
 
             // insert in new container

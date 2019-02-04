@@ -35,7 +35,6 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 #include <sfx2/opengrf.hxx>
-#include <o3tl/make_unique.hxx>
 #include <bitmaps.hlst>
 
 using namespace css;
@@ -224,7 +223,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
                 }
             }
 
-            pList->Insert(o3tl::make_unique<XBitmapEntry>(aGraphic, aName));
+            pList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName));
             pList->Save();
             mpLbFillAttr->Clear();
             mpLbFillAttr->Fill(pList);

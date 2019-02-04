@@ -32,7 +32,6 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -63,7 +62,7 @@ bool XLineEndList::Create()
     aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
     aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
     aTriangle.setClosed(true);
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aTriangle), SvxResId( RID_SVXSTR_ARROW ) ) );
+    Insert( std::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aTriangle), SvxResId( RID_SVXSTR_ARROW ) ) );
 
     basegfx::B2DPolygon aSquare;
     aSquare.append(basegfx::B2DPoint(0.0, 0.0));
@@ -71,10 +70,10 @@ bool XLineEndList::Create()
     aSquare.append(basegfx::B2DPoint(10.0, 10.0));
     aSquare.append(basegfx::B2DPoint(0.0, 10.0));
     aSquare.setClosed(true);
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aSquare), SvxResId( RID_SVXSTR_SQUARE ) ) );
+    Insert( std::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aSquare), SvxResId( RID_SVXSTR_SQUARE ) ) );
 
     basegfx::B2DPolygon aCircle(basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aCircle), SvxResId( RID_SVXSTR_CIRCLE ) ) );
+    Insert( std::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aCircle), SvxResId( RID_SVXSTR_CIRCLE ) ) );
 
     return true;
 }

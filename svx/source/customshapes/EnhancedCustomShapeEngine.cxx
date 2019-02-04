@@ -52,7 +52,6 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -194,7 +193,7 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
             OutlinerParaObject* pParaObj(rSdrObjCustomShape.GetOutlinerParaObject());
 
             if( pParaObj )
-                pTextObj->NbcSetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*pParaObj) );
+                pTextObj->NbcSetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*pParaObj) );
 
             // copy all attributes
             SfxItemSet aTargetItemSet(rSdrObjCustomShape.GetMergedItemSet());

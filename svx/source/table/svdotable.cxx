@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <o3tl/make_unique.hxx>
 #include <vcl/canvastools.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -127,7 +126,7 @@ void TableProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNe
 // create a new itemset
 std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 {
-    return o3tl::make_unique<SfxItemSet>(rPool,
+    return std::make_unique<SfxItemSet>(rPool,
 
         // range from SdrAttrObj
         svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -834,7 +833,7 @@ void SdrTableObjImpl::UpdateCells( tools::Rectangle const & rArea )
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrTableObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<TableProperties>(*this);
+    return std::make_unique<TableProperties>(*this);
 }
 
 
@@ -843,7 +842,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrTableObj::CreateObjectSpecif
 
 std::unique_ptr<sdr::contact::ViewContact> SdrTableObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfTableObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfTableObj>(*this);
 }
 
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
@@ -2147,15 +2146,15 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 
     // add remaining handles
     SdrHdlList tempList(nullptr);
-    tempList.AddHdl( o3tl::make_unique<TableBorderHdl>( maRect, !IsTextEditActive() ) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopLeft(),SdrHdlKind::UpperLeft) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopCenter(),SdrHdlKind::Upper) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopRight(),SdrHdlKind::UpperRight) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.LeftCenter(),SdrHdlKind::Left) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.RightCenter(),SdrHdlKind::Right) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomLeft(),SdrHdlKind::LowerLeft) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomCenter(),SdrHdlKind::Lower) );
-    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomRight(),SdrHdlKind::LowerRight) );
+    tempList.AddHdl( std::make_unique<TableBorderHdl>( maRect, !IsTextEditActive() ) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.TopLeft(),SdrHdlKind::UpperLeft) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.TopCenter(),SdrHdlKind::Upper) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.TopRight(),SdrHdlKind::UpperRight) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.LeftCenter(),SdrHdlKind::Left) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.RightCenter(),SdrHdlKind::Right) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.BottomLeft(),SdrHdlKind::LowerLeft) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.BottomCenter(),SdrHdlKind::Lower) );
+    tempList.AddHdl( std::make_unique<SdrHdl>(maRect.BottomRight(),SdrHdlKind::LowerRight) );
     for( size_t nHdl = 0; nHdl < tempList.GetHdlCount(); ++nHdl )
         tempList.GetHdl(nHdl)->SetMoveOutside(true);
     tempList.MoveTo(rHdlList);

@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sdr/properties/graphicproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -52,7 +51,7 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> GraphicProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
+            return std::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,

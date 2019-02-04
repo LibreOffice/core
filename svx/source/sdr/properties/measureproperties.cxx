@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sdr/properties/measureproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -41,7 +40,7 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(
+            return std::make_unique<SfxItemSet>(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj, SdrMeasureObj:

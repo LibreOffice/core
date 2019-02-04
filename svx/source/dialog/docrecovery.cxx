@@ -56,7 +56,7 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/treelistentry.hxx>
 #include <officecfg/Office/Recovery.hxx>
-#include <o3tl/make_unique.hxx>
+
 namespace svx{
     namespace DocRecovery{
 
@@ -797,7 +797,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure mismatch" );
 
     SvLBoxString&       rCol = static_cast<SvLBoxString&>(pEntry->GetItem(2));
-    pEntry->ReplaceItem(o3tl::make_unique<RecovDocListEntry>(rCol.GetText()), 2);
+    pEntry->ReplaceItem(std::make_unique<RecovDocListEntry>(rCol.GetText()), 2);
 }
 
 

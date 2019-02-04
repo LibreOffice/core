@@ -287,7 +287,7 @@ namespace svxform
             // UndoAction
             if ( bUndo && m_pPropChangeList->CanUndo())
             {
-                m_pFormModel->AddUndo(o3tl::make_unique<FmUndoContainerAction>(*m_pFormModel,
+                m_pFormModel->AddUndo(std::make_unique<FmUndoContainerAction>(*m_pFormModel,
                                                          FmUndoContainerAction::Inserted,
                                                          xContainer,
                                                          xElement,
@@ -396,7 +396,7 @@ namespace svxform
             {
                 if ( bUndo && m_pPropChangeList->CanUndo())
                 {
-                    m_pFormModel->AddUndo(o3tl::make_unique<FmUndoContainerAction>(*m_pFormModel,
+                    m_pFormModel->AddUndo(std::make_unique<FmUndoContainerAction>(*m_pFormModel,
                                                           FmUndoContainerAction::Removed,
                                                           xContainer,
                                                           xElement, nContainerIndex ));

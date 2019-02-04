@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -458,7 +457,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if(mpRemember2DAttributes)
         mpRemember2DAttributes->ClearItem();
     else
-        mpRemember2DAttributes = o3tl::make_unique<SfxItemSet>(*rAttrs.GetPool(),
+        mpRemember2DAttributes = std::make_unique<SfxItemSet>(*rAttrs.GetPool(),
             svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
             SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
 

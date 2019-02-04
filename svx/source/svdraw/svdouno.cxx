@@ -49,7 +49,6 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdograf.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace sdr::contact;
@@ -522,7 +521,7 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
 
 std::unique_ptr<sdr::contact::ViewContact> SdrUnoObj::CreateObjectSpecificViewContact()
 {
-  return o3tl::make_unique<sdr::contact::ViewContactOfUnoControl>( *this );
+  return std::make_unique<sdr::contact::ViewContactOfUnoControl>( *this );
 }
 
 

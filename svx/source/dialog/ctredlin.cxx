@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
@@ -331,21 +330,21 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 {
     if (nTreeFlags & SvTreeFlags::CHKBTN)
     {
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
+        pEntry->AddItem(std::make_unique<SvLBoxButton>(
                 eButtonKind, pCheckButtonData));
     }
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(
                 rColl, rExp, true));
 
     // the type of the change
     assert((rStr.isEmpty() && !!maEntryImage) || (!rStr.isEmpty() && !maEntryImage));
 
     if (rStr.isEmpty())
-        pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(
                         maEntryImage, maEntryImage, true));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxColorString>(
+        pEntry->AddItem(std::make_unique<SvLBoxColorString>(
                     rStr, maEntryColor));
 
     // the change tracking entries
@@ -354,7 +353,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for (sal_uInt16 nToken = 0; nToken < nCount; nToken++)
     {
         const OUString aToken = GetToken(maEntryString, nIndex);
-        pEntry->AddItem(o3tl::make_unique<SvLBoxColorString>(
+        pEntry->AddItem(std::make_unique<SvLBoxColorString>(
                     aToken, maEntryColor));
     }
 }

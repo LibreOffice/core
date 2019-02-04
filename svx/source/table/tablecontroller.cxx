@@ -69,7 +69,6 @@
 #include <memory>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
-#include <o3tl/make_unique.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
@@ -1080,7 +1079,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
             if( bUndo )
             {
                 rModel.BegUndo(SvxResId(STR_TABLE_STYLE));
-                rModel.AddUndo(o3tl::make_unique<TableStyleUndo>(rTableObj));
+                rModel.AddUndo(std::make_unique<TableStyleUndo>(rTableObj));
             }
 
             rTableObj.setTableStyle( xNewTableStyle );
@@ -1174,7 +1173,7 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     if( bUndo )
     {
         rModel.BegUndo( SvxResId(STR_TABLE_STYLE_SETTINGS) );
-        rModel.AddUndo(o3tl::make_unique<TableStyleUndo>(rTableObj));
+        rModel.AddUndo(std::make_unique<TableStyleUndo>(rTableObj));
     }
 
     rTableObj.setTableStyleSettings( aSettings );

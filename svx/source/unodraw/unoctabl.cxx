@@ -25,7 +25,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <svx/xtable.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -98,7 +97,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
 
     if( pList.is() )
     {
-        pList->Insert(o3tl::make_unique<XColorEntry>(aColor, aName));
+        pList->Insert(std::make_unique<XColorEntry>(aColor, aName));
     }
 }
 
@@ -122,7 +121,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(nColor, aName ));
+    pList->Replace(nIndex, std::make_unique<XColorEntry>(nColor, aName ));
 }
 
 // XNameAccess

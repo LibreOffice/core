@@ -19,7 +19,6 @@
 
 #include "svdfmtf.hxx"
 #include <editeng/editdata.hxx>
-#include <o3tl/make_unique.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
@@ -108,9 +107,9 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mpVD->SetLineColor();
     mpVD->SetFillColor();
     maOldLineColor.SetRed( mpVD->GetLineColor().GetRed() + 1 );
-    mpLineAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
-    mpFillAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-    mpTextAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+    mpLineAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
+    mpFillAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+    mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
     checkClip();
 }
 

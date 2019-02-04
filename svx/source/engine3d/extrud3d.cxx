@@ -36,18 +36,17 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> E3dExtrudeObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfE3dExtrude>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfE3dExtrude>(*this);
 }
 
 std::unique_ptr<sdr::properties::BaseProperties> E3dExtrudeObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::E3dExtrudeProperties>(*this);
+    return std::make_unique<sdr::properties::E3dExtrudeProperties>(*this);
 }
 
 // Constructor creates a two cover surface tools::PolyPolygon and (point-count 1) side

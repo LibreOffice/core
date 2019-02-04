@@ -69,7 +69,6 @@
 #include <svx/xpoly.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
@@ -188,7 +187,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrMeasureObj::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::MeasureProperties>(*this);
+    return std::make_unique<sdr::properties::MeasureProperties>(*this);
 }
 
 
@@ -196,7 +195,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrMeasureObj::CreateObjectSpec
 
 std::unique_ptr<sdr::contact::ViewContact> SdrMeasureObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfSdrMeasureObj>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrMeasureObj>(*this);
 }
 
 

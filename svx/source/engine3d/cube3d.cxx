@@ -25,14 +25,13 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <sdr/contact/viewcontactofe3dcube.hxx>
-#include <o3tl/make_unique.hxx>
 
 
 // DrawContact section
 
 std::unique_ptr<sdr::contact::ViewContact> E3dCubeObj::CreateObjectSpecificViewContact()
 {
-    return o3tl::make_unique<sdr::contact::ViewContactOfE3dCube>(*this);
+    return std::make_unique<sdr::contact::ViewContactOfE3dCube>(*this);
 }
 
 

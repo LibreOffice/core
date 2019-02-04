@@ -47,7 +47,6 @@
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
 #include <connectivity/dbtools.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -420,7 +419,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             if( rModel.IsUndoEnabled() )
             {
                 rModel.AddUndo(
-                    o3tl::make_unique<FmUndoContainerAction>(
+                    std::make_unique<FmUndoContainerAction>(
                         static_cast< FmFormModel& >(rModel),
                         FmUndoContainerAction::Inserted,
                         xForms,
@@ -517,7 +516,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             {
                 Reference< css::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
                 rModel.AddUndo(
-                    o3tl::make_unique<FmUndoContainerAction>(
+                    std::make_unique<FmUndoContainerAction>(
                         static_cast< FmFormModel& >(rModel),
                         FmUndoContainerAction::Inserted,
                         xContainer,

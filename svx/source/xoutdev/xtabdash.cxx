@@ -32,7 +32,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -68,9 +67,9 @@ bool XDashList::Create()
 {
     const OUString aStr(SvxResId(RID_SVXSTR_LINESTYLE));
 
-    Insert(o3tl::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1, 50,1, 50, 50),aStr + " 1"));
-    Insert(o3tl::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1,500,1,500,500),aStr + " 2"));
-    Insert(o3tl::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,2, 50,3,250,120),aStr + " 3"));
+    Insert(std::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1, 50,1, 50, 50),aStr + " 1"));
+    Insert(std::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1,500,1,500,500),aStr + " 2"));
+    Insert(std::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,2, 50,3,250,120),aStr + " 3"));
 
     return true;
 }

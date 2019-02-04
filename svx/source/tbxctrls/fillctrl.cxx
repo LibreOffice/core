@@ -37,7 +37,6 @@
 #include <svx/fillctrl.hxx>
 #include <svx/itemwin.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 
 using namespace ::com::sun::star;
@@ -372,7 +371,7 @@ void SvxFillToolBoxControl::Update()
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                             XGradientList aGradientList( "", ""/*TODO?*/ );
-                            aGradientList.Insert(o3tl::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
+                            aGradientList.Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
                             aGradientList.SetDirty( false );
                             const BitmapEx aBmp = aGradientList.GetUiBitmap( 0 );
 
@@ -430,7 +429,7 @@ void SvxFillToolBoxControl::Update()
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                             XHatchList aHatchList( "", ""/*TODO?*/ );
-                            aHatchList.Insert(o3tl::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
+                            aHatchList.Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                             aHatchList.SetDirty( false );
                             const BitmapEx & aBmp = aHatchList.GetUiBitmap( 0 );
 
@@ -491,7 +490,7 @@ void SvxFillToolBoxControl::Update()
                                 XPropertyList::AsBitmapList(
                                     XPropertyList::CreatePropertyList(
                                         XPropertyListType::Bitmap, "TmpList", ""/*TODO?*/));
-                            xBitmapList->Insert(o3tl::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
+                            xBitmapList->Insert(std::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
                             xBitmapList->SetDirty( false );
                             mpLbFillAttr->Fill( xBitmapList );
                             mpLbFillAttr->SelectEntryPos(mpLbFillAttr->GetEntryCount() - 1);

@@ -59,7 +59,6 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 
@@ -640,9 +639,9 @@ namespace svx
 
         std::unique_ptr<SfxTabDialogController> xDialog;
         if (_eSet == eCharAttribs)
-            xDialog = o3tl::make_unique<TextControlCharAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems, *pFontList);
+            xDialog = std::make_unique<TextControlCharAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems, *pFontList);
         else
-            xDialog = o3tl::make_unique<TextControlParaAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems);
+            xDialog = std::make_unique<TextControlParaAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems);
         if ( RET_OK == xDialog->run() )
         {
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();

@@ -75,13 +75,12 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
 std::unique_ptr<sdr::properties::BaseProperties> E3dObject::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::E3dProperties>(*this);
+    return std::make_unique<sdr::properties::E3dProperties>(*this);
 }
 
 E3dObject::E3dObject(SdrModel& rSdrModel)
@@ -489,7 +488,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 
 std::unique_ptr<sdr::properties::BaseProperties> E3dCompoundObject::CreateObjectSpecificProperties()
 {
-    return o3tl::make_unique<sdr::properties::E3dCompoundProperties>(*this);
+    return std::make_unique<sdr::properties::E3dCompoundProperties>(*this);
 }
 
 E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)
@@ -574,7 +573,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
                 // to 2d world coor
                 aPos2D *= rVCScene.getObjectTransformation();
 
-                rHdlList.AddHdl(o3tl::make_unique<SdrHdl>(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
+                rHdlList.AddHdl(std::make_unique<SdrHdl>(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
             }
         }
     }
@@ -583,7 +582,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
 
     if(aPolyPolygon.count())
     {
-        rHdlList.AddHdl(o3tl::make_unique<E3dVolumeMarker>(aPolyPolygon));
+        rHdlList.AddHdl(std::make_unique<E3dVolumeMarker>(aPolyPolygon));
     }
 }
 
