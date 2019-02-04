@@ -2082,6 +2082,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                 break;
         }
 
+        if (nStartCp == aRes.nEndPos)
+        {
+            SAL_WARN("sw.ww8", "WW8TabDesc End same as Start, abandoning to avoid looping");
+            break;
+        }
         nStartCp = aRes.nEndPos;
     }
     while(true);
