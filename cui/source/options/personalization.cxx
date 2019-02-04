@@ -29,6 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/virdev.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
 
@@ -162,51 +163,40 @@ void curlDownload(const OString& rURL, const OUString& sFileURL)
 }
 
 } //End of anonymous namespace
-
-SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
-    : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
+SelectPersonaDialog::SelectPersonaDialog(weld::Window *pParent)
+    : GenericDialogController(pParent, "cui/ui/select_persona_dialog.ui", "SelectPersonaDialog")
+    , m_xEdit(m_xBuilder->weld_entry("search_term"))
+    , m_xSearchButton(m_xBuilder->weld_button("search_personas"))
+    , m_xProgressLabel(m_xBuilder->weld_label("progress_label"))
+    , m_xCategories(m_xBuilder->weld_combo_box("categoriesCB"))
+    , m_xOkButton(m_xBuilder->weld_button("ok"))
+    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
+    , m_vResultList{ m_xBuilder->weld_button("result1"),
+                     m_xBuilder->weld_button("result2"),
+                     m_xBuilder->weld_button("result3"),
+                     m_xBuilder->weld_button("result4"),
+                     m_xBuilder->weld_button("result5"),
+                     m_xBuilder->weld_button("result6"),
+                     m_xBuilder->weld_button("result7"),
+                     m_xBuilder->weld_button("result8"),
+                     m_xBuilder->weld_button("result9") }
 {
-    get( m_pSearchButton, "search_personas" );
-    m_pSearchButton->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+    m_xSearchButton->connect_clicked( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+    m_xCategories->connect_changed( LINK( this, SelectPersonaDialog, SelectCategory ) );
+    m_xOkButton->connect_clicked( LINK( this, SelectPersonaDialog, ActionOK ) );
+    m_xCancelButton->connect_clicked( LINK( this, SelectPersonaDialog, ActionCancel ) );
 
-    get( m_pEdit, "search_term" );
-
-    get( m_pCategories, "categoriesCB" );
-    m_pCategories->SetSelectHdl( LINK( this, SelectPersonaDialog, SelectCategory ) );
-
-    get( m_pProgressLabel, "progress_label" );
-
-    get( m_pOkButton, "ok" );
-    m_pOkButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionOK ) );
-
-    get( m_pCancelButton, "cancel" );
-    m_pCancelButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionCancel ) );
-    get( m_vResultList[0], "result1" );
-    get( m_vResultList[1], "result2" );
-    get( m_vResultList[2], "result3" );
-    get( m_vResultList[3], "result4" );
-    get( m_vResultList[4], "result5" );
-    get( m_vResultList[5], "result6" );
-    get( m_vResultList[6], "result7" );
-    get( m_vResultList[7], "result8" );
-    get( m_vResultList[8], "result9" );
-
-    for (VclPtr<PushButton> & nIndex : m_vResultList)
+    for (auto & nIndex : m_vResultList)
     {
-        nIndex->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-        nIndex->Disable();
+        nIndex->connect_clicked( LINK( this, SelectPersonaDialog, SelectPersona ) );
+        nIndex->set_sensitive(false);
     }
 
-    m_pCategories->SelectEntry("Featured");
-    m_pCategories->GetSelectHdl().Call(*m_pCategories);
+    m_xCategories->set_active_text("Featured");
+    SelectCategory(*m_xCategories);
 }
 
 SelectPersonaDialog::~SelectPersonaDialog()
-{
-    disposeOnce();
-}
-
-void SelectPersonaDialog::dispose()
 {
     if (m_pSearchThread.is())
     {
@@ -216,16 +206,6 @@ void SelectPersonaDialog::dispose()
         SolarMutexReleaser aReleaser;
         m_pSearchThread->join();
     }
-
-    m_pCategories.clear();
-    m_pEdit.clear();
-    m_pSearchButton.clear();
-    m_pProgressLabel.clear();
-    for (VclPtr<PushButton>& vp : m_vResultList)
-        vp.clear();
-    m_pOkButton.clear();
-    m_pCancelButton.clear();
-    ModalDialog::dispose();
 }
 
 OUString SelectPersonaDialog::GetSelectedPersona() const
@@ -236,9 +216,9 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
     return OUString();
 }
 
-IMPL_LINK_NOARG( SelectPersonaDialog, SearchPersonas, Button*, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, SearchPersonas, weld::Button&, void )
 {
-    OUString searchTerm = m_pEdit->GetText();
+    OUString searchTerm = m_xEdit->get_text();
 
     if( searchTerm.isEmpty( ) )
         return;
@@ -284,7 +264,7 @@ IMPL_LINK_NOARG( SelectPersonaDialog, SearchPersonas, Button*, void )
     m_pSearchThread->launch();
 }
 
-IMPL_LINK_NOARG( SelectPersonaDialog, ActionOK, Button*, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, ActionOK, weld::Button&, void )
 {
     OUString aSelectedPersona = GetSelectedPersona();
 
@@ -299,23 +279,23 @@ IMPL_LINK_NOARG( SelectPersonaDialog, ActionOK, Button*, void )
         if ( m_pSearchThread.is() )
             m_pSearchThread->StopExecution();
 
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 }
 
-IMPL_LINK_NOARG( SelectPersonaDialog, ActionCancel, Button*, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, ActionCancel, weld::Button&, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
     if( m_pGetPersonaThread.is() )
         m_pGetPersonaThread->StopExecution();
 
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG( SelectPersonaDialog, SelectCategory, ListBox&, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, SelectCategory, weld::ComboBox&, void )
 {
-    OUString searchTerm = *static_cast<OUString*>(m_pCategories->GetSelectedEntryData());
+    OUString searchTerm = m_xCategories->get_active_id();
     OUString rSearchURL;
 
     if (searchTerm.isEmpty())
@@ -335,7 +315,7 @@ IMPL_LINK_NOARG( SelectPersonaDialog, SelectCategory, ListBox&, void )
     m_pSearchThread->launch();
 }
 
-IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
+IMPL_LINK( SelectPersonaDialog, SelectPersona, weld::Button&, rButton, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
@@ -344,7 +324,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
 
     for( sal_Int32 index = 0; index < MAX_RESULTS; index++ )
     {
-        if( pButton == m_vResultList[index] )
+        if( &rButton == m_vResultList[index].get() )
         {
             if( !m_vPersonaSettings[index].isEmpty() )
             {
@@ -374,21 +354,21 @@ const OUString& SelectPersonaDialog::GetAppliedPersonaSetting() const
 void SelectPersonaDialog::SetProgress( const OUString& rProgress )
 {
     if(rProgress.isEmpty())
-        m_pProgressLabel->Hide();
+        m_xProgressLabel->hide();
     else
     {
         SolarMutexGuard aGuard;
-        m_pProgressLabel->Show();
-        m_pProgressLabel->SetText( rProgress );
-        setOptimalLayoutSize();
+        m_xProgressLabel->show();
+        m_xProgressLabel->set_label( rProgress );
+        m_xDialog->resize_to_request(); //TODO
     }
 }
 
-void SelectPersonaDialog::SetImages( const Image& aImage, const OUString& sName, const sal_Int32& nIndex )
+void SelectPersonaDialog::SetImages( VirtualDevice& rImage, const OUString& sName, const sal_Int32& nIndex )
 {
-    m_vResultList[nIndex]->Enable();
-    m_vResultList[nIndex]->SetModeImage( aImage );
-    m_vResultList[nIndex]->SetQuickHelpText( sName );
+    m_vResultList[nIndex]->set_sensitive(true);
+    m_vResultList[nIndex]->set_image(&rImage);
+    m_vResultList[nIndex]->set_tooltip_text( sName );
 }
 
 void SelectPersonaDialog::AddPersonaSetting( OUString const & rPersonaSetting )
@@ -402,10 +382,10 @@ void SelectPersonaDialog::ClearSearchResults()
     SolarMutexGuard aGuard;
     m_vPersonaSettings.clear();
     m_aSelectedPersona.clear();
-    for(VclPtr<PushButton> & nIndex : m_vResultList)
+    for(auto & nIndex : m_vResultList)
     {
-        nIndex->Disable();
-        nIndex->SetModeImage(Image());
+        nIndex->set_sensitive(false);
+        nIndex->set_image(nullptr);
     }
 }
 
@@ -655,11 +635,11 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
 IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectPersona, Button*, void )
 {
     m_pOwnPersona->Check();
-    ScopedVclPtrInstance< SelectPersonaDialog > aDialog(nullptr);
+    SelectPersonaDialog aDialog(GetDialogFrameWeld());
 
-    if ( aDialog->Execute() == RET_OK )
+    if (aDialog.run() == RET_OK)
     {
-        OUString aPersonaSetting( aDialog->GetAppliedPersonaSetting() );
+        OUString aPersonaSetting(aDialog.GetAppliedPersonaSetting());
         if ( !aPersonaSetting.isEmpty() )
         {
             SetPersonaSettings( aPersonaSetting );
@@ -908,8 +888,11 @@ void SearchAndParseThread::execute()
                 aFilter.ImportGraphic( aGraphic, aURLObj );
                 BitmapEx aBmp = aGraphic.GetBitmapEx();
 
-                m_pPersonaDialog->SetImages( Image( aBmp ), personaInfo.sName, nIndex );
-                m_pPersonaDialog->setOptimalLayoutSize();
+                ScopedVclPtr<VirtualDevice> xVirDev(VclPtr<VirtualDevice>::Create());
+                xVirDev->SetOutputSizePixel(aBmp.GetSizePixel());
+                xVirDev->DrawBitmapEx(Point(0, 0), aBmp);
+
+                m_pPersonaDialog->SetImages(*xVirDev, personaInfo.sName, nIndex );
 
                 if (++nIndex >= MAX_RESULTS)
                     break;
@@ -971,8 +954,11 @@ void SearchAndParseThread::execute()
             aFilter.ImportGraphic( aGraphic, aURLObj );
             BitmapEx aBmp = aGraphic.GetBitmapEx();
 
-            m_pPersonaDialog->SetImages( Image( aBmp ), aPersonaInfo.sName, 0 );
-            m_pPersonaDialog->setOptimalLayoutSize();
+            ScopedVclPtr<VirtualDevice> xVirDev(VclPtr<VirtualDevice>::Create());
+            xVirDev->SetOutputSizePixel(aBmp.GetSizePixel());
+            xVirDev->DrawBitmapEx(Point(0, 0), aBmp);
+
+            m_pPersonaDialog->SetImages( *xVirDev, aPersonaInfo.sName, 0 );
         }
 
     }
@@ -983,7 +969,6 @@ void SearchAndParseThread::execute()
     SolarMutexGuard aGuard;
     sProgress.clear();
     m_pPersonaDialog->SetProgress( sProgress );
-    m_pPersonaDialog->setOptimalLayoutSize();
 }
 
 GetPersonaThread::GetPersonaThread( SelectPersonaDialog* pDialog,
@@ -1062,7 +1047,7 @@ void GetPersonaThread::execute()
             + ";" + aTextColor;
 
     m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
-    m_pPersonaDialog->EndDialog( RET_OK );
+    m_pPersonaDialog->response( RET_OK );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

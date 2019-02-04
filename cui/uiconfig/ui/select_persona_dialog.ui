@@ -6,6 +6,9 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="select_persona_dialog|SelectPersonaDialog">Select Firefox Theme</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -68,7 +71,9 @@
               <object class="GtkLabel" id="progress_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="ellipsize">end</property>
+                <property name="width_chars">45</property>
                 <property name="max_width_chars">45</property>
                 <property name="xalign">0</property>
               </object>
@@ -98,6 +103,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="placeholder_text" translatable="yes" context="select_persona_dialog|search_term">Search term or address</property>
@@ -142,7 +148,7 @@
               <object class="GtkLabel" id="categories_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" context="select_persona_dialog|categories_label" translatable="yes">Ca_tegory:</property>
+                <property name="label" translatable="yes" context="select_persona_dialog|categories_label">Ca_tegory:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">categoriesCB</property>
               </object>
