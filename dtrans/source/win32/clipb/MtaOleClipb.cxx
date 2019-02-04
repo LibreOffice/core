@@ -62,11 +62,72 @@ namespace /* private */
     const sal_uInt32 MAX_WAITTIME                   = 10000;  // msec
     const sal_uInt32 MAX_WAIT_SHUTDOWN              = 10000; // msec
 
-    const bool MANUAL_RESET                     = true;
-    const bool INIT_NONSIGNALED                 = false;
+    const BOOL MANUAL_RESET = TRUE;
+    const BOOL INIT_NONSIGNALED = FALSE;
+
+    /*  Cannot use osl conditions because they are blocking
+        without waking up on messages sent by another thread
+        this leads to deadlocks because we are blocking the
+        communication between inter-thread marshalled COM
+        pointers.
+        COM Proxy-Stub communication uses SendMessages for
+        synchronization purposes.
+    */
+    class Win32Condition
+    {
+    public:
+        Win32Condition() = default;
+
+        ~Win32Condition() { CloseHandle(m_hEvent); }
+
+        // wait infinite for own event (or abort event) be signaled
+        // leave messages sent through
+        bool wait(HANDLE hEvtAbort)
+        {
+            const HANDLE hWaitArray[2] = { m_hEvent, hEvtAbort };
+            while (true)
+            {
+                DWORD dwResult
+                    = MsgWaitForMultipleObjects(2, hWaitArray, FALSE, INFINITE, QS_SENDMESSAGE);
+
+                switch (dwResult)
+                {
+                    case WAIT_OBJECT_0: // wait successful
+                        return true;
+
+                    case WAIT_OBJECT_0 + 1: // wait aborted
+                        return false;
+
+                    case WAIT_OBJECT_0 + 2:
+                    {
+                        /* PeekMessage processes all messages in the SendMessage
+                           queue that's what we want, messages from the PostMessage
+                           queue stay untouched */
+                        MSG msg;
+                        PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        // set the event
+        void set() { SetEvent(m_hEvent); }
+
+    private:
+        HANDLE m_hEvent = CreateEventW(nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr);
+
+        // prevent copy/assignment
+        Win32Condition(const Win32Condition&) = delete;
+        Win32Condition& operator=(const Win32Condition&) = delete;
+    };
+
+    // we use one condition for every request
 
     struct MsgCtx
     {
+        Win32Condition  aCondition;
         HRESULT         hr;
     };
 
@@ -159,6 +220,8 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_uOleThreadId( 0 ),
     m_hEvtThrdReady( nullptr ),
     m_hwndMtaOleReqWnd( nullptr ),
+    // signals that the window is destroyed - to stop waiting any winproc result
+    m_hEvtWndDisposed(CreateEventW(nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr)),
     m_MtaOleReqWndClassAtom( 0 ),
     m_pfncClipViewerCallback( nullptr ),
     m_bRunClipboardNotifierThread( true ),
@@ -170,6 +233,7 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hEvtThrdReady  = CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr );
 
     OSL_ASSERT( nullptr != m_hEvtThrdReady );
+    SAL_WARN_IF(!m_hEvtWndDisposed, "dtrans", "CreateEventW failed: m_hEvtWndDisposed is nullptr");
 
     s_theMtaOleClipboardInst = this;
 
@@ -253,11 +317,10 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 
     MsgCtx  aMsgCtx;
 
-    sendMessage( MSG_FLUSHCLIPBOARD,
-                 static_cast< WPARAM >( 0 ),
-                 reinterpret_cast< LPARAM >( &aMsgCtx ) );
+    const bool bWaitSuccess = postMessage(MSG_FLUSHCLIPBOARD, 0, reinterpret_cast<LPARAM>(&aMsgCtx))
+                              && aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
 
-    return aMsgCtx.hr;
+    return bWaitSuccess ? aMsgCtx.hr : E_ABORT;
 }
 
 HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
@@ -279,11 +342,11 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 
     MsgCtx    aMsgCtx;
 
-    sendMessage( MSG_GETCLIPBOARD,
-                 reinterpret_cast< WPARAM >( &lpStream ),
-                 reinterpret_cast< LPARAM >( &aMsgCtx ) );
+    const bool bWaitSuccess = postMessage(MSG_GETCLIPBOARD, reinterpret_cast<WPARAM>(&lpStream),
+                                          reinterpret_cast<LPARAM>(&aMsgCtx))
+                              && aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
 
-    HRESULT hr = aMsgCtx.hr;
+    HRESULT hr = bWaitSuccess ? aMsgCtx.hr : E_ABORT;
 
     if ( SUCCEEDED( hr ) )
     {
@@ -342,7 +405,11 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
-    sendMessage(MSG_REGCLIPVIEWER, reinterpret_cast<WPARAM>(pfncClipViewerCallback), 0);
+    MsgCtx aMsgCtx;
+
+    if (postMessage(MSG_REGCLIPVIEWER, reinterpret_cast<WPARAM>(pfncClipViewerCallback),
+                    reinterpret_cast<LPARAM>(&aMsgCtx)))
+        aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
 
     return false;
 }
@@ -481,6 +548,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             OSL_ASSERT( aMsgCtx );
 
             aMsgCtx->hr = CMtaOleClipboard::onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
+            aMsgCtx->aCondition.set( );
         }
         break;
 
@@ -490,12 +558,19 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             OSL_ASSERT( aMsgCtx );
 
             aMsgCtx->hr = CMtaOleClipboard::onFlushClipboard( );
+            aMsgCtx->aCondition.set( );
         }
         break;
 
     case MSG_REGCLIPVIEWER:
-        pImpl->onRegisterClipViewer(
-            reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
+        {
+            MsgCtx* pMsgCtx = reinterpret_cast<MsgCtx*>(lParam);
+            SAL_WARN_IF(!pMsgCtx, "dtrans", "pMsgCtx is nullptr");
+
+            pImpl->onRegisterClipViewer(
+                reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
+            pMsgCtx->aCondition.set();
+        }
         break;
 
     case WM_CLIPBOARDUPDATE:
@@ -508,6 +583,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 
     // force the sta thread to end
     case WM_DESTROY:
+        SetEvent(pImpl->m_hEvtWndDisposed); // stop waiting for conditions set by this wndproc
         PostQuitMessage( 0 );
         break;
 

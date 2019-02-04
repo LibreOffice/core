@@ -87,6 +87,7 @@ private:
     unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
+    HANDLE                      m_hEvtWndDisposed;
     ATOM                        m_MtaOleReqWndClassAtom;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     bool                        m_bInRegisterClipViewer;
