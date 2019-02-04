@@ -20,7 +20,6 @@
 #include <config_folders.h>
 
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/threadpool.hxx>
@@ -1371,10 +1370,10 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                     else
                     {
                         Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmapRef());
-                        rContext.m_pAccess = o3tl::make_unique<BitmapScopedWriteAccess>(rBitmap);
+                        rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
-                            rSharedPool.pushTask(o3tl::make_unique<GraphicImportTask>(pTag, rContext));
+                            rSharedPool.pushTask(std::make_unique<GraphicImportTask>(pTag, rContext));
                         else
                             GraphicImportTask::doImport(rContext);
                     }
@@ -2021,7 +2020,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                     if (aShortName == "PCD")
                     {
                         OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
-                        pFilterConfigItem = o3tl::make_unique<FilterConfigItem>( aFilterConfigPath );
+                        pFilterConfigItem = std::make_unique<FilterConfigItem>( aFilterConfigPath );
                     }
                 }
                 if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem.get() ) )

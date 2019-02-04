@@ -60,7 +60,6 @@
 
 #include <print.h>
 #include <salimestatus.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -334,7 +333,7 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 }
 
 AquaSalInstance::AquaSalInstance()
-    : SalInstance(o3tl::make_unique<SalYieldMutex>())
+    : SalInstance(std::make_unique<SalYieldMutex>())
     , mnActivePrintJobs( 0 )
     , mbIsLiveResize( false )
     , mbNoYieldLock( false )

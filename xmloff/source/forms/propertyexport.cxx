@@ -21,8 +21,6 @@
 
 #include <memory>
 
-#include <o3tl/make_unique.hxx>
-
 #include <xmloff/xmlexp.hxx>
 #include "strings.hxx"
 #include <xmloff/xmlnmspe.hxx>
@@ -124,7 +122,7 @@ namespace xmloff
 
             // now that we have the first sub-tag we need the form:properties element
             if (!pPropertiesTag)
-                pPropertiesTag = o3tl::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
+                pPropertiesTag = std::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
 
             // add the name attribute
             AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, rProperty);

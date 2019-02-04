@@ -23,7 +23,6 @@
 #include <memory>
 #include <utility>
 
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
@@ -104,7 +103,7 @@ DataSupplier::DataSupplier(
             const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-: m_pImpl(o3tl::make_unique<DataSupplier_Impl>(rxContext, rContent, nOpenMode))
+: m_pImpl(std::make_unique<DataSupplier_Impl>(rxContext, rContent, nOpenMode))
 {
 }
 
@@ -406,7 +405,7 @@ bool DataSupplier::getData()
                     }
 
                     std::unique_ptr<ContentProperties> pContentProperties
-                        = o3tl::make_unique<ContentProperties>( rRes );
+                        = std::make_unique<ContentProperties>( rRes );
 
                     // Check resource against open mode.
                     switch ( m_pImpl->m_nOpenMode )

@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
@@ -167,7 +166,7 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
     mnSize = nSize;
     mnRealSize = 0;
 
-    mpArray = o3tl::make_unique<Point[]>( nTotal );
+    mpArray = std::make_unique<Point[]>( nTotal );
 }
 
 inline Point& ImplPointArray::operator[]( sal_uLong nPos )

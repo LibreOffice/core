@@ -17,7 +17,6 @@
 #include <headless/svpdummies.hxx>
 #include <unx/gendata.hxx>
 #include <osl/detail/android-bootstrap.h>
-#include <o3tl/make_unique.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -187,7 +186,7 @@ SalData::~SalData()
 SalInstance *CreateSalInstance()
 {
     LOGI("Android: CreateSalInstance!");
-    AndroidSalInstance* pInstance = new AndroidSalInstance( o3tl::make_unique<SvpSalYieldMutex>() );
+    AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new AndroidSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;

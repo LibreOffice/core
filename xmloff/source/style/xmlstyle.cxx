@@ -29,7 +29,6 @@
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include "PageMasterPropMapper.hxx"
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -299,7 +298,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
 
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
-        pIndices = o3tl::make_unique<IndicesType>(aStyles.begin(), aStyles.end());
+        pIndices = std::make_unique<IndicesType>(aStyles.begin(), aStyles.end());
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff.style", "Here is a duplicate Style");
 #if OSL_DEBUG_LEVEL > 0
         SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",

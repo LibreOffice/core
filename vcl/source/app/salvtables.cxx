@@ -57,7 +57,6 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
-#include <o3tl/make_unique.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
@@ -2027,7 +2026,7 @@ public:
         void* pUserData;
         if (pId)
         {
-            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
             pUserData = m_aUserData.back().get();
         }
         else
@@ -2037,15 +2036,15 @@ public:
         if (pIconName || pImageSurface)
         {
             Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
         }
         else
         {
             Image aDummy;
-            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         }
         if (pStr)
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(*pStr));
+            pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
         pEntry->SetUserData(pUserData);
         m_xTreeView->Insert(pEntry, iter, nInsertPos);
 
@@ -2205,11 +2204,11 @@ public:
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col ; ++i)
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rText));
+            pEntry->AddItem(std::make_unique<SvLBoxString>(rText));
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
             m_xTreeView->InitViewData(pViewData, pEntry);
         }
@@ -2247,11 +2246,11 @@ public:
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col ; ++i)
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
-            pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox,
+            pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox,
                                                             bRadio ? &m_aRadioButtonData : &m_aCheckButtonData));
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
             m_xTreeView->InitViewData(pViewData, pEntry);
@@ -2285,7 +2284,7 @@ public:
     virtual void set_id(int pos, const OUString& rId) override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        m_aUserData.emplace_back(std::make_unique<OUString>(rId));
         pEntry->SetUserData(m_aUserData.back().get());
     }
 
@@ -3155,7 +3154,7 @@ public:
 
     virtual void set_id(int row, const OUString& rId) override
     {
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        m_aUserData.emplace_back(std::make_unique<OUString>(rId));
         m_xComboBox->SetEntryData(row, m_aUserData.back().get());
     }
 
@@ -3249,7 +3248,7 @@ public:
             nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
         if (pId)
         {
-            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
             m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
         }
     }
@@ -3363,7 +3362,7 @@ public:
             nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
         if (pId)
         {
-            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
             m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
         }
     }
@@ -3574,19 +3573,19 @@ public:
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
-        return pWindow ? o3tl::make_unique<SalInstanceWindow>(pWindow, bTakeOwnership) : nullptr;
+        return pWindow ? std::make_unique<SalInstanceWindow>(pWindow, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id, bool bTakeOwnership) override
     {
         vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
-        return pWidget ? o3tl::make_unique<SalInstanceWidget>(pWidget, bTakeOwnership) : nullptr;
+        return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Container> weld_container(const OString &id, bool bTakeOwnership) override
     {
         vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
-        return pContainer ? o3tl::make_unique<SalInstanceContainer>(pContainer, bTakeOwnership) : nullptr;
+        return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override
@@ -3605,73 +3604,73 @@ public:
     virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bTakeOwnership) override
     {
         VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
-        return pScrolledWindow ? o3tl::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, bTakeOwnership) : nullptr;
+        return pScrolledWindow ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
     {
         TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-        return pNotebook ? o3tl::make_unique<SalInstanceNotebook>(pNotebook, bTakeOwnership) : nullptr;
+        return pNotebook ? std::make_unique<SalInstanceNotebook>(pNotebook, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Button> weld_button(const OString &id, bool bTakeOwnership) override
     {
         Button* pButton = m_xBuilder->get<Button>(id);
-        return pButton ? o3tl::make_unique<SalInstanceButton>(pButton, bTakeOwnership) : nullptr;
+        return pButton ? std::make_unique<SalInstanceButton>(pButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id, bool bTakeOwnership) override
     {
         MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
-        return pButton ? o3tl::make_unique<SalInstanceMenuButton>(pButton, bTakeOwnership) : nullptr;
+        return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id, bool bTakeOwnership) override
     {
         PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
-        return pToggleButton ? o3tl::make_unique<SalInstanceToggleButton>(pToggleButton, bTakeOwnership) : nullptr;
+        return pToggleButton ? std::make_unique<SalInstanceToggleButton>(pToggleButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id, bool bTakeOwnership) override
     {
         RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
-        return pRadioButton ? o3tl::make_unique<SalInstanceRadioButton>(pRadioButton, bTakeOwnership) : nullptr;
+        return pRadioButton ? std::make_unique<SalInstanceRadioButton>(pRadioButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id, bool bTakeOwnership) override
     {
         CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
-        return pCheckButton ? o3tl::make_unique<SalInstanceCheckButton>(pCheckButton, bTakeOwnership) : nullptr;
+        return pCheckButton ? std::make_unique<SalInstanceCheckButton>(pCheckButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id, bool bTakeOwnership) override
     {
         Slider* pSlider = m_xBuilder->get<Slider>(id);
-        return pSlider ? o3tl::make_unique<SalInstanceScale>(pSlider, bTakeOwnership) : nullptr;
+        return pSlider ? std::make_unique<SalInstanceScale>(pSlider, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id, bool bTakeOwnership) override
     {
         ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
-        return pProgress ? o3tl::make_unique<SalInstanceProgressBar>(pProgress, bTakeOwnership) : nullptr;
+        return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override
     {
         FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
-        return pImage ? o3tl::make_unique<SalInstanceImage>(pImage, bTakeOwnership) : nullptr;
+        return pImage ? std::make_unique<SalInstanceImage>(pImage, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override
     {
         Edit* pEntry = m_xBuilder->get<Edit>(id);
-        return pEntry ? o3tl::make_unique<SalInstanceEntry>(pEntry, bTakeOwnership) : nullptr;
+        return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id, bool bTakeOwnership) override
     {
         FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-        return pSpinButton ? o3tl::make_unique<SalInstanceSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
+        return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
@@ -3683,14 +3682,14 @@ public:
             SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(*xButton);
             rButton.SetUseThousandSep();
         }
-        return o3tl::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
+        return std::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
     }
 
     virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString& id,
                                                                                   bool bTakeOwnership) override
     {
         FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-        return pSpinButton ? o3tl::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
+        return pSpinButton ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
@@ -3707,59 +3706,59 @@ public:
         vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
         ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
         if (pComboBox)
-            return o3tl::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, bTakeOwnership);
+            return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, bTakeOwnership);
         ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-        return pListBox ? o3tl::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
+        return pListBox ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
     {
         vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
-        return pContainer ? o3tl::make_unique<SalInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
+        return pContainer ? std::make_unique<SalInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
                                                                         weld_tree_view(treeviewid, bTakeOwnership)) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
         SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
-        return pTreeView ? o3tl::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
+        return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
     {
         FixedText* pLabel = m_xBuilder->get<FixedText>(id);
-        return pLabel ? o3tl::make_unique<SalInstanceLabel>(pLabel, bTakeOwnership) : nullptr;
+        return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id, bool bTakeOwnership) override
     {
         VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-        return pTextView ? o3tl::make_unique<SalInstanceTextView>(pTextView, bTakeOwnership) : nullptr;
+        return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id, bool bTakeOwnership) override
     {
         VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
-        return pExpander ? o3tl::make_unique<SalInstanceExpander>(pExpander, bTakeOwnership) : nullptr;
+        return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11yImpl,
             FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership) override
     {
         VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
-        return pDrawingArea ? o3tl::make_unique<SalInstanceDrawingArea>(pDrawingArea, rA11yImpl,
+        return pDrawingArea ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, rA11yImpl,
                 pUITestFactoryFunction, pUserData, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id, bool bTakeOwnership) override
     {
         PopupMenu* pMenu = m_xBuilder->get_menu(id);
-        return pMenu ? o3tl::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
+        return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override
     {
-        return o3tl::make_unique<SalInstanceSizeGroup>();
+        return std::make_unique<SalInstanceSizeGroup>();
     }
 
     virtual ~SalInstanceBuilder() override

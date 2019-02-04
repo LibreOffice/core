@@ -87,7 +87,6 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <rtl/math.hxx>
@@ -3289,7 +3288,7 @@ void XMLShapeExport::ImpExportMediaShape(
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
     // write plugin
-    auto pPluginOBJ = o3tl::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
+    auto pPluginOBJ = std::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
 
     // export parameters
     const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );

@@ -42,7 +42,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
@@ -2090,8 +2089,8 @@ void PDFWriterImpl::beginCompression()
 {
     if (!g_bDebugDisableCompression)
     {
-        m_pCodec = o3tl::make_unique<ZCodec>( 0x4000, 0x4000 );
-        m_pMemStream = o3tl::make_unique<SvMemoryStream>();
+        m_pCodec = std::make_unique<ZCodec>( 0x4000, 0x4000 );
+        m_pMemStream = std::make_unique<SvMemoryStream>();
         m_pCodec->BeginCompression();
     }
 }

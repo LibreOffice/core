@@ -34,7 +34,6 @@
 #include <vcleventlisteners.hxx>
 #include <vcl/lazydelete.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <o3tl/make_shared.hxx>
 
 #include <opengl/zone.hxx>
@@ -414,11 +413,11 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
         TextureAtlasVector &sTextureAtlases = *gTextureAtlases.get();
         if (sTextureAtlases.empty())
         {
-            sTextureAtlases.push_back(o3tl::make_unique<FixedTextureAtlasManager>(8, 8, 16));
-            sTextureAtlases.push_back(o3tl::make_unique<FixedTextureAtlasManager>(8, 8, 24));
-            sTextureAtlases.push_back(o3tl::make_unique<FixedTextureAtlasManager>(8, 8, 32));
-            sTextureAtlases.push_back(o3tl::make_unique<FixedTextureAtlasManager>(8, 8, 48));
-            sTextureAtlases.push_back(o3tl::make_unique<FixedTextureAtlasManager>(8, 8, 64));
+            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 16));
+            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 24));
+            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 32));
+            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 48));
+            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 64));
         }
         for (std::unique_ptr<FixedTextureAtlasManager> & pTextureAtlas : sTextureAtlases)
         {

@@ -19,8 +19,6 @@
 
 #include <xmloff/controlpropertyhdl.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
@@ -59,49 +57,49 @@ namespace xmloff
         {
             case XML_TYPE_TEXT_ALIGN:
                 if (!m_pTextAlignHandler)
-                    m_pTextAlignHandler = o3tl::make_unique<XMLConstantsPropertyHandler>(aTextAlignMap, XML_TOKEN_INVALID );
+                    m_pTextAlignHandler = std::make_unique<XMLConstantsPropertyHandler>(aTextAlignMap, XML_TOKEN_INVALID );
                 pHandler = m_pTextAlignHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_BORDER:
                 if (!m_pControlBorderStyleHandler)
-                    m_pControlBorderStyleHandler = o3tl::make_unique<OControlBorderHandler>( OControlBorderHandler::STYLE );
+                    m_pControlBorderStyleHandler = std::make_unique<OControlBorderHandler>( OControlBorderHandler::STYLE );
                 pHandler = m_pControlBorderStyleHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_BORDER_COLOR:
                 if ( !m_pControlBorderColorHandler )
-                    m_pControlBorderColorHandler = o3tl::make_unique<OControlBorderHandler>( OControlBorderHandler::COLOR );
+                    m_pControlBorderColorHandler = std::make_unique<OControlBorderHandler>( OControlBorderHandler::COLOR );
                 pHandler = m_pControlBorderColorHandler.get();
                 break;
 
             case XML_TYPE_ROTATION_ANGLE:
                 if (!m_pRotationAngleHandler)
-                    m_pRotationAngleHandler = o3tl::make_unique<ORotationAngleHandler>();
+                    m_pRotationAngleHandler = std::make_unique<ORotationAngleHandler>();
                 pHandler = m_pRotationAngleHandler.get();
                 break;
 
             case XML_TYPE_FONT_WIDTH:
                 if (!m_pFontWidthHandler)
-                    m_pFontWidthHandler = o3tl::make_unique<OFontWidthHandler>();
+                    m_pFontWidthHandler = std::make_unique<OFontWidthHandler>();
                 pHandler = m_pFontWidthHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
                 if (!m_pFontEmphasisHandler)
-                    m_pFontEmphasisHandler = o3tl::make_unique<XMLConstantsPropertyHandler>( aFontEmphasisMap, XML_NONE );
+                    m_pFontEmphasisHandler = std::make_unique<XMLConstantsPropertyHandler>( aFontEmphasisMap, XML_NONE );
                 pHandler = m_pFontEmphasisHandler.get();
                 break;
 
             case XML_TYPE_TEXT_FONT_RELIEF:
                 if (!m_pFontReliefHandler)
-                    m_pFontReliefHandler = o3tl::make_unique<XMLConstantsPropertyHandler>( aFontReliefMap, XML_NONE );
+                    m_pFontReliefHandler = std::make_unique<XMLConstantsPropertyHandler>( aFontReliefMap, XML_NONE );
                 pHandler = m_pFontReliefHandler.get();
                 break;
             case XML_TYPE_TEXT_LINE_MODE:
                 if (!m_pTextLineModeHandler)
                 {
-                    m_pTextLineModeHandler = o3tl::make_unique<XMLNamedBoolPropertyHdl>(
+                    m_pTextLineModeHandler = std::make_unique<XMLNamedBoolPropertyHdl>(
                             ::xmloff::token::XML_SKIP_WHITE_SPACE,
                             ::xmloff::token::XML_CONTINUOUS);
                 }

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
@@ -1690,7 +1689,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
                        bool bMap )
 {
     OSL_ENSURE( !m_pHyperlink, "recursive SetHyperlink call" );
-    m_pHyperlink = o3tl::make_unique<XMLTextFrameContextHyperlink_Impl>(
+    m_pHyperlink = std::make_unique<XMLTextFrameContextHyperlink_Impl>(
                 rHRef, rName, rTargetFrameName, bMap );
 }
 

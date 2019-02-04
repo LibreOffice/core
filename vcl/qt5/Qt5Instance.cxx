@@ -42,7 +42,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
-#include <o3tl/make_unique.hxx>
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
 #include <osl/process.h>
@@ -50,7 +49,7 @@
 #include <headless/svpbmp.hxx>
 
 Qt5Instance::Qt5Instance(bool bUseCairo)
-    : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
+    : SalGenericInstance(std::make_unique<SalYieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {

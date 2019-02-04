@@ -13,7 +13,6 @@
 #include <osl/file.hxx>
 #include <string.h>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <o3tl/make_unique.hxx>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #endif
@@ -30,12 +29,12 @@ bool IsMappedWebDAVPath(const INetURLObject& aURL)
         if (osl::FileBase::getSystemPathFromFileURL(sURL, aSystemPath) == osl::FileBase::E_None)
         {
             DWORD nSize = MAX_PATH;
-            auto bufUNC(o3tl::make_unique<char[]>(nSize));
+            auto bufUNC(std::make_unique<char[]>(nSize));
             DWORD nResult = WNetGetUniversalNameW(o3tl::toW(aSystemPath.getStr()),
                                                   UNIVERSAL_NAME_INFO_LEVEL, bufUNC.get(), &nSize);
             if (nResult == ERROR_MORE_DATA)
             {
-                bufUNC = o3tl::make_unique<char[]>(nSize);
+                bufUNC = std::make_unique<char[]>(nSize);
                 nResult = WNetGetUniversalNameW(o3tl::toW(aSystemPath.getStr()),
                                                 UNIVERSAL_NAME_INFO_LEVEL, bufUNC.get(), &nSize);
             }
@@ -50,12 +49,12 @@ bool IsMappedWebDAVPath(const INetURLObject& aURL)
                     aReq.lpRemoteName = pInfo->lpUniversalName;
                 }
                 nSize = 1024;
-                auto bufInfo(o3tl::make_unique<char[]>(nSize));
+                auto bufInfo(std::make_unique<char[]>(nSize));
                 LPWSTR pSystem = nullptr;
                 nResult = WNetGetResourceInformationW(&aReq, bufInfo.get(), &nSize, &pSystem);
                 if (nResult == ERROR_MORE_DATA)
                 {
-                    bufInfo = o3tl::make_unique<char[]>(nSize);
+                    bufInfo = std::make_unique<char[]>(nSize);
                     nResult = WNetGetResourceInformationW(&aReq, bufInfo.get(), &nSize, &pSystem);
                 }
                 if (nResult == NO_ERROR)

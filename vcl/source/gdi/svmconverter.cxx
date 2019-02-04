@@ -35,7 +35,6 @@
 #include <svmconverter.hxx>
 
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 // Inlines
 static void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
@@ -994,7 +993,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_PUSH_ACTION:
             {
-                aLIStack.push(o3tl::make_unique<LineInfo>(aLineInfo));
+                aLIStack.push(std::make_unique<LineInfo>(aLineInfo));
                 rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
                 // #106172# Track font relevant data in shadow VDev

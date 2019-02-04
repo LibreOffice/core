@@ -9,7 +9,6 @@
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
 #include <unx/gendata.hxx>
-#include <o3tl/make_unique.hxx>
 
 class HeadlessSalInstance : public SvpSalInstance
 {
@@ -86,7 +85,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    HeadlessSalInstance* pInstance = new HeadlessSalInstance(o3tl::make_unique<SvpSalYieldMutex>());
+    HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
     new HeadlessSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;

@@ -9,7 +9,6 @@
 
 #include <font/FeatureCollector.hxx>
 #include <font/OpenTypeFeatureDefinitonList.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <hb-ot.h>
 #include <hb-graphite2.h>

@@ -65,8 +65,6 @@
 #include <algorithm>
 #include <cstddef>
 
-#include <o3tl/make_unique.hxx>
-
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
 {
 }
@@ -174,8 +172,8 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
 
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
 
-    mpImpl->mpSelFuncSet = o3tl::make_unique<TextSelFunctionSet>( this );
-    mpImpl->mpSelEngine = o3tl::make_unique<SelectionEngine>( mpImpl->mpWindow, mpImpl->mpSelFuncSet.get() );
+    mpImpl->mpSelFuncSet = std::make_unique<TextSelFunctionSet>( this );
+    mpImpl->mpSelEngine = std::make_unique<SelectionEngine>( mpImpl->mpWindow, mpImpl->mpSelFuncSet.get() );
     mpImpl->mpSelEngine->SetSelectionMode( SelectionMode::Range );
     mpImpl->mpSelEngine->EnableDrag( true );
 
@@ -822,7 +820,7 @@ void TextView::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ GetSelection().GetEnd().GetPara() ].get();
-        mpImpl->mpTextEngine->mpIMEInfos = o3tl::make_unique<TEIMEInfos>( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
+        mpImpl->mpTextEngine->mpIMEInfos = std::make_unique<TEIMEInfos>( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
         mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )

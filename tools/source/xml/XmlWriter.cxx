@@ -9,7 +9,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <libxml/xmlwriter.h>
 
@@ -45,7 +44,7 @@ struct XmlWriterImpl
 };
 
 XmlWriter::XmlWriter(SvStream* pStream)
-    : mpImpl(o3tl::make_unique<XmlWriterImpl>(pStream))
+    : mpImpl(std::make_unique<XmlWriterImpl>(pStream))
 {
 }
 

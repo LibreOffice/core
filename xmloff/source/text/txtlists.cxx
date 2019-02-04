@@ -21,8 +21,6 @@
 #include <txtlists.hxx>
 #include <comphelper/random.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <tools/datetime.hxx>
 #include <sal/log.hxx>
 
@@ -116,7 +114,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
 
     if ( !mpProcessedLists )
     {
-        mpProcessedLists = o3tl::make_unique<tMapForLists>();
+        mpProcessedLists = std::make_unique<tMapForLists>();
     }
 
     ::std::pair< OUString, OUString >
@@ -131,7 +129,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     {
         if ( !mpMapListIdToListStyleDefaultListId )
         {
-            mpMapListIdToListStyleDefaultListId = o3tl::make_unique<tMapForLists>();
+            mpMapListIdToListStyleDefaultListId = std::make_unique<tMapForLists>();
         }
 
         if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
@@ -257,7 +255,7 @@ void XMLTextListsHelper::StoreLastContinuingList( const OUString& sListId,
 {
     if ( !mpContinuingLists )
     {
-        mpContinuingLists = o3tl::make_unique<tMapForContinuingLists>();
+        mpContinuingLists = std::make_unique<tMapForContinuingLists>();
     }
 
     (*mpContinuingLists)[ sListId ] = sContinuingListId;
@@ -284,7 +282,7 @@ void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
 {
     if ( !mpListStack )
     {
-        mpListStack = o3tl::make_unique<tStackForLists>();
+        mpListStack = std::make_unique<tStackForLists>();
     }
     ::std::pair< OUString, OUString >
                                 aListData( sListId, sListStyleName );

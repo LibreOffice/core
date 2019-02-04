@@ -26,7 +26,6 @@
 #include <svl/cryptosign.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/pdfwriter.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -2681,7 +2680,7 @@ void PDFObjectElement::ParseStoredObjects()
         size_t nLen = aLengths[nObject];
 
         aStream.Seek(nOffset);
-        m_aStoredElements.push_back(o3tl::make_unique<PDFObjectElement>(m_rDoc, nObjNum, 0));
+        m_aStoredElements.push_back(std::make_unique<PDFObjectElement>(m_rDoc, nObjNum, 0));
         PDFObjectElement* pStored = m_aStoredElements.back().get();
 
         aBuf.clear();
