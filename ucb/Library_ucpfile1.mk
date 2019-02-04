@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_libraries,ucpfile1,\
 	cppu \
 	cppuhelper \
 	sal \
+	tl \
 	ucbhelper \
 ))
 
