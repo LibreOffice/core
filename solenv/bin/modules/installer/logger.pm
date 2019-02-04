@@ -8,7 +8,7 @@
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
 #
-#    http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
@@ -45,9 +45,9 @@ sub Die ($);
 
 =head1 DESCRIPTION
 
-    This module is in a transition state from a set of loosly connected functions to a single class.
+    This module is in a transition state from a set of loosely connected functions to a single class.
 
-    There are three globaly available logger objects:
+    There are three globally available logger objects:
 
 =over
 
@@ -59,7 +59,7 @@ sub Die ($);
 
 =item $Glob
 
-    is independent of the current language.  Its messages are prepended to each $Lang logger.
+    is independent of the current language. Its messages are prepended to each $Lang logger.
 
 =cut
 
@@ -146,19 +146,19 @@ sub new ($$@)
         # When true then lines are printed to the console.
         'is_print_to_console' => 1,
         'is_save_lines' => 0,
-        # A container of printed lines.  Lines are added only when 'is_save_lines' is true.
+        # A container of printed lines. Lines are added only when 'is_save_lines' is true.
         'lines' => [],
         # Another logger to which all prints are forwarded.
         'forward' => [],
-        # A filter function that for example can recoginze build errors.
+        # A filter function that for example can recognize build errors.
         'filter' => undef,
         # Show relative time
         'is_show_relative_time' => 0,
-        # Show log id (mostly for debugging the logger)
+        # Show log id (mostly for debugging the logger).
         'is_show_log_id' => 0,
         # Show the process id, useful on the console when doing a multiprocessor build.
         'is_show_process_id' => 0,
-        # Current indentation
+        # Current indentation.
         'indentation' => "",
     };
     while (scalar @arguments >= 2)
@@ -200,7 +200,7 @@ sub printf ($$@)
 
     Print the given message.
     If the optional $force parameter is given and it evaluates to true then the message
-    is printed even when the golbal $installer::globals::quiet is true.
+    is printed even when the global $installer::globals::quiet is true.
 
 =cut
 sub print ($$;$)
@@ -325,7 +325,7 @@ sub set_filename ($$)
 
 =head2 set_filter ($self, $filter)
 
-    Sets $filter (a function reference) as line filter.  It is applied to each line.
+    Sets $filter (a function reference) as line filter. It is applied to each line.
     The filter can extract information from the given message and modify it before it is printed.
 
 =cut
@@ -377,7 +377,7 @@ sub copy_lines_from ($$)
 
 =head2 set_forward ($self, $other)
 
-    Set a forwarding target.  All future messages are forwarded (copied) to $other.
+    Set a forwarding target. All future messages are forwarded (copied) to $other.
     A typical use is to tie $Info to $Lang so that all messages sent to $Info are
     printed to the console AND written to the log file.
 
@@ -454,7 +454,7 @@ sub include_header_into_globallogfile
 
 sub include_timestamp_into_logfile
 {
-    Die "deprected";
+    Die "deprecated";
     my ($message) = @_;
 
     my $infoline;
@@ -523,7 +523,7 @@ sub copy_globalinfo_into_logfile
 
 sub debuginfo
 {
-    my  ( $message ) = @_;
+    my ( $message ) = @_;
 
     $message = $message . "\n";
     push(@installer::globals::functioncalls, $message);
@@ -741,7 +741,5 @@ sub Die ($)
     PrintStackTrace();
     die $message;
 }
-
-
 
 1;
