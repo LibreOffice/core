@@ -19,22 +19,22 @@
 
 using namespace ::com::sun::star;
 
-TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
-    : ModalDialog(pParent, "TSAURLDialog", "cui/ui/tsaurldialog.ui")
+TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/tsaurldialog.ui", "TSAURLDialog")
+    , m_xAddBtn(m_xBuilder->weld_button("add"))
+    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xURLListBox(m_xBuilder->weld_tree_view("urls"))
+    , m_xEnterAUrl(m_xBuilder->weld_label("enteraurl"))
 {
-    get(m_pAddBtn, "add");
-    get(m_pDeleteBtn, "delete");
-    get(m_pOKBtn, "ok");
-    get(m_pURLListBox, "urls");
+    m_xURLListBox->set_size_request(m_xURLListBox->get_approximate_digit_width() * 28,
+                                    m_xURLListBox->get_height_rows(8));
+    m_xOKBtn->set_sensitive(false);
 
-    m_pURLListBox->SetDropDownLineCount(8);
-    m_pURLListBox->set_width_request(m_pURLListBox->approximate_char_width() * 32);
-    m_pOKBtn->Disable();
-
-    m_pAddBtn->SetClickHdl( LINK( this, TSAURLsDialog, AddHdl_Impl ) );
-    m_pDeleteBtn->SetClickHdl( LINK( this, TSAURLsDialog, DeleteHdl_Impl ) );
-    m_pOKBtn->SetClickHdl( LINK( this, TSAURLsDialog, OKHdl_Impl ) );
-    m_pURLListBox->SetSelectHdl( LINK( this, TSAURLsDialog, SelectHdl ) );
+    m_xAddBtn->connect_clicked( LINK( this, TSAURLsDialog, AddHdl_Impl ) );
+    m_xDeleteBtn->connect_clicked( LINK( this, TSAURLsDialog, DeleteHdl_Impl ) );
+    m_xOKBtn->connect_clicked( LINK( this, TSAURLsDialog, OKHdl_Impl ) );
+    m_xURLListBox->connect_changed( LINK( this, TSAURLsDialog, SelectHdl ) );
 
     try
     {
@@ -53,88 +53,77 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
         SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): " << e);
     }
 
-    if ( m_pURLListBox->GetSelectedEntryCount() == 0 )
+    if (m_xURLListBox->get_selected_index() == -1)
     {
-        m_pDeleteBtn->Disable();
+        m_xDeleteBtn->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl, weld::Button&, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence(m_aURLs), batch);
     batch->commit();
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 TSAURLsDialog::~TSAURLsDialog()
 {
-    disposeOnce();
-}
-
-void TSAURLsDialog::dispose()
-{
-    m_pAddBtn.clear();
-    m_pDeleteBtn.clear();
-    m_pOKBtn.clear();
-    m_pURLListBox.clear();
-
-    ModalDialog::dispose();
 }
 
 void TSAURLsDialog::AddTSAURL(const OUString& rURL)
 {
     m_aURLs.insert(rURL);
 
-    m_pURLListBox->SetUpdateMode(false);
-    m_pURLListBox->Clear();
+    m_xURLListBox->freeze();
+    m_xURLListBox->clear();
 
     for (auto const& url : m_aURLs)
     {
-        m_pURLListBox->InsertEntry(url);
+        m_xURLListBox->append_text(url);
     }
 
-    m_pURLListBox->SetUpdateMode(true);
+    m_xURLListBox->thaw();
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, weld::Button&, void)
 {
     OUString aURL;
-    OUString aDesc( get<FixedText>("enteraurl")->GetText() );
+    OUString aDesc(m_xEnterAUrl->get_label());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(m_pAddBtn->GetFrameWeld(), aURL, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(m_xDialog.get(), aURL, aDesc));
 
-    if ( pDlg->Execute() == RET_OK )
+    if (pDlg->Execute() == RET_OK)
     {
-        pDlg->GetName( aURL );
-
+        pDlg->GetName(aURL);
         AddTSAURL(aURL);
-        m_pOKBtn->Enable();
+        m_xOKBtn->set_sensitive(true);
     }
+    m_xURLListBox->unselect_all();
     // After operations in a ListBox we have nothing selected
-    m_pDeleteBtn->Disable();
+    m_xDeleteBtn->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, weld::TreeView&, void)
 {
-    m_pDeleteBtn->Enable();
+    m_xDeleteBtn->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, weld::Button&, void)
 {
-    sal_Int32 nSel = m_pURLListBox->GetSelectedEntryPos();
-
-    if (nSel == LISTBOX_ENTRY_NOTFOUND)
+    int nSel = m_xURLListBox->get_selected_index();
+    if (nSel == -1)
         return;
 
-    m_aURLs.erase(m_pURLListBox->GetEntry(nSel));
-    m_pURLListBox->RemoveEntry(nSel);
+    m_aURLs.erase(m_xURLListBox->get_text(nSel));
+    m_xURLListBox->remove(nSel);
+    m_xURLListBox->unselect_all();
     // After operations in a ListBox we have nothing selected
-    m_pDeleteBtn->Disable();
-    m_pOKBtn->Enable();
+    m_xDeleteBtn->set_sensitive(false);
+    m_xOKBtn->set_sensitive(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
