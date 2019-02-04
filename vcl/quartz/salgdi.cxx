@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
@@ -508,7 +507,7 @@ std::unique_ptr<GenericSalLayout> AquaSalGraphics::GetTextLayout(int nFallbackLe
     assert(mpTextStyle[nFallbackLevel]);
     if (!mpTextStyle[nFallbackLevel])
         return nullptr;
-    return o3tl::make_unique<GenericSalLayout>(*mpTextStyle[nFallbackLevel]);
+    return std::make_unique<GenericSalLayout>(*mpTextStyle[nFallbackLevel]);
 }
 
 const FontCharMapRef AquaSalGraphics::GetFontCharMap() const

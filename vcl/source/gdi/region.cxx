@@ -35,7 +35,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/poly.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace
 {
@@ -92,7 +91,7 @@ namespace
         OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
 
         // Create a new RegionBand object as container of the bands.
-        std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
+        std::unique_ptr<RegionBand> pRegionBand( std::make_unique<RegionBand>() );
         long nLineId = 0;
 
         // Iterate over all polygons.
@@ -190,7 +189,7 @@ namespace
         long nLineID = 0;
 
         // initialisation and creation of Bands
-        std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
+        std::unique_ptr<RegionBand> pRegionBand( std::make_unique<RegionBand>() );
         pRegionBand->CreateBandRange(rPolygonBoundingBox.Top(), rPolygonBoundingBox.Bottom());
 
         // insert polygons
@@ -565,7 +564,7 @@ void vcl::Region::Union( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -656,7 +655,7 @@ void vcl::Region::Intersect( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -735,7 +734,7 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -818,7 +817,7 @@ void vcl::Region::XOr( const tools::Rectangle& rRect )
     }
 
     // only region band mode possibility left here or null/empty
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*getRegionBand()));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*getRegionBand()));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -913,7 +912,7 @@ void vcl::Region::Union( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     pNew->Union(*pSource);
@@ -1031,7 +1030,7 @@ void vcl::Region::Intersect( const vcl::Region& rRegion )
     else
     {
         // prepare new regionBand
-        std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+        std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
         // intersect with source
         pNew->Intersect(*pSource);
@@ -1115,7 +1114,7 @@ void vcl::Region::Exclude( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     const bool bSuccess(pNew->Exclude(*pSource));
@@ -1202,7 +1201,7 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
+    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     pNew->XOr(*pSource);

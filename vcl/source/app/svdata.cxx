@@ -63,7 +63,6 @@
 #endif
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -116,7 +115,7 @@ namespace
     public:
         SystemDependentDataBuffer(const sal_Char* pDebugName)
         :   basegfx::SystemDependentDataManager(),
-            maTimer(o3tl::make_unique<Timer>(pDebugName)),
+            maTimer(std::make_unique<Timer>(pDebugName)),
             maEntries()
         {
             maTimer->SetTimeout(1000);

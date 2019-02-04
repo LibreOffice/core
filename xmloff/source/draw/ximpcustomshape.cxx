@@ -20,7 +20,6 @@
 #include "ximpcustomshape.hxx"
 #include "ximpshap.hxx"
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -1190,7 +1189,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
     if ( !maEquations.empty() )
     {
         // creating hash map containing the name and index of each equation
-        std::unique_ptr<EquationHashMap> pH = o3tl::make_unique<EquationHashMap>();
+        std::unique_ptr<EquationHashMap> pH = std::make_unique<EquationHashMap>();
         std::vector< OUString >::iterator aEquationNameIter = maEquationNames.begin();
         std::vector< OUString >::iterator aEquationNameEnd  = maEquationNames.end();
         while( aEquationNameIter != aEquationNameEnd )

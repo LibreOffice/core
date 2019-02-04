@@ -18,7 +18,6 @@
  */
 
 #include <xexptran.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
@@ -37,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-using o3tl::make_unique;
+using std::make_unique;
 
 // parsing help functions for simple chars
 static void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)

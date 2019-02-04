@@ -25,7 +25,6 @@
 #include "headless/svpdummies.hxx"
 #include "unx/gendata.hxx"
 #include "quartz/utils.h"
-#include <o3tl/make_unique.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
@@ -166,7 +165,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    IosSalInstance* pInstance = new IosSalInstance( o3tl::make_unique<SvpSalYieldMutex>() );
+    IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new IosSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;

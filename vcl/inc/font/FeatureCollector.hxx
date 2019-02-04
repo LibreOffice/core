@@ -12,7 +12,6 @@
 #define INCLUDED_VCL_INC_FONT_FEATURECOLLECTOR_HXX
 
 #include <vcl/font/Feature.hxx>
-#include <o3tl/make_unique.hxx>
 #include <hb.h>
 #include <i18nlangtag/lang.h>
 

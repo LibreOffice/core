@@ -21,7 +21,6 @@
 #include <string.h>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -44,7 +43,7 @@ SvUnoAttributeContainer::SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrConta
 : mpContainer( std::move( pContainer ) )
 {
     if( !mpContainer )
-        mpContainer = o3tl::make_unique<SvXMLAttrContainerData>();
+        mpContainer = std::make_unique<SvXMLAttrContainerData>();
 }
 
 // container::XElementAccess

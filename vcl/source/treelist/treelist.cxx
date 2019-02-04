@@ -22,7 +22,6 @@
 #include <vcl/viewdataentry.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <map>
@@ -1123,7 +1122,7 @@ void SvListView::Impl::InitTable()
     pEntry = m_rThis.pModel->First();
     while( pEntry )
     {
-        pViewData = o3tl::make_unique<SvViewDataEntry>();
+        pViewData = std::make_unique<SvViewDataEntry>();
         m_rThis.InitViewData( pViewData.get(), pEntry );
         m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
         pEntry = m_rThis.pModel->Next( pEntry );

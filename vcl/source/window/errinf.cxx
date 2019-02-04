@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/window.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <vector>
 #include <limits.h>
@@ -264,7 +263,7 @@ std::unique_ptr<ErrorInfo> ImplDynamicErrorInfo::GetDynamicErrorInfo(ErrCode nId
     if(pDynErrInfo && ErrCode(*pDynErrInfo)==nId)
         return std::unique_ptr<ErrorInfo>(pDynErrInfo);
     else
-        return o3tl::make_unique<ErrorInfo>(nId.StripDynamic());
+        return std::make_unique<ErrorInfo>(nId.StripDynamic());
 }
 
 std::unique_ptr<ErrorInfo> ErrorInfo::GetErrorInfo(ErrCode nId)
@@ -272,7 +271,7 @@ std::unique_ptr<ErrorInfo> ErrorInfo::GetErrorInfo(ErrCode nId)
     if(nId.IsDynamic())
         return ImplDynamicErrorInfo::GetDynamicErrorInfo(nId);
     else
-        return o3tl::make_unique<ErrorInfo>(nId);
+        return std::make_unique<ErrorInfo>(nId);
 }
 
 ErrorInfo::~ErrorInfo()

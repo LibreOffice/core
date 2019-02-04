@@ -19,8 +19,6 @@
 
 #include "elementexport.hxx"
 
-#include <o3tl/make_unique.hxx>
-
 #include "strings.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include "eventexport.hxx"
@@ -144,7 +142,7 @@ namespace xmloff
 
     void OElementExport::implStartElement(const sal_Char* _pName)
     {
-        m_pXMLElement = o3tl::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
+        m_pXMLElement = std::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
     }
 
     void OElementExport::implEndElement()
@@ -1396,7 +1394,7 @@ namespace xmloff
         // before we let the base class start it's outer element, we add a wrapper element
         const sal_Char *pOuterElementName = getOuterXMLElementName();
         if (pOuterElementName)
-            m_pOuterElement = o3tl::make_unique<SvXMLElementExport>(
+            m_pOuterElement = std::make_unique<SvXMLElementExport>(
                                         m_rContext.getGlobalContext(),
                                         XML_NAMESPACE_FORM,
                                         pOuterElementName, true,

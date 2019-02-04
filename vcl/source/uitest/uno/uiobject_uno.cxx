@@ -10,7 +10,6 @@
 #include <memory>
 #include "uiobject_uno.hxx"
 #include <utility>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
@@ -108,7 +107,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     mAction = rAction;
     mPropValues = rPropValues;
     mReady = false;
-    auto aIdle = o3tl::make_unique<Idle>();
+    auto aIdle = std::make_unique<Idle>();
     aIdle->SetDebugName("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
 

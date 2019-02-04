@@ -32,7 +32,6 @@
 
 #include <salinst.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>
 
@@ -50,7 +49,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGrap
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
-    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, o3tl::make_unique<X11SalGraphics>());
+    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
 
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,

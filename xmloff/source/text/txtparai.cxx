@@ -26,8 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -1064,7 +1062,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             {
                 ProcessAttributes(xAttrList, xMark);
                 m_rHints.push_back(
-                    o3tl::make_unique<XMLIndexMarkHint_Impl>(xMark, xPos));
+                    std::make_unique<XMLIndexMarkHint_Impl>(xMark, xPos));
             }
             // else: can't create mark -> ignore
             break;
@@ -1084,7 +1082,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
                 {
                     // process only if we find an ID
                     m_rHints.push_back(
-                        o3tl::make_unique<XMLIndexMarkHint_Impl>(xMark, xPos, sID));
+                        std::make_unique<XMLIndexMarkHint_Impl>(xMark, xPos, sID));
                 }
                 // else: no ID -> we'll never find the end -> ignore
             }
@@ -1636,7 +1634,7 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
             if( TextContentAnchorType_AT_CHARACTER ==
                                             pTextFrameContext->GetAnchorType() )
             {
-                rHints.push_back(o3tl::make_unique<XMLTextFrameHint_Impl>(
+                rHints.push_back(std::make_unique<XMLTextFrameHint_Impl>(
                                     pTextFrameContext, xAnchorPos));
             }
             pContext = pTextFrameContext;
@@ -1651,7 +1649,7 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
                                         rLocalName, xAttrList,
                                         TextContentAnchorType_AS_CHARACTER );
             rHints.push_back(
-                o3tl::make_unique<XMLTextFrameHint_Impl>(pContext, xAnchorPos));
+                std::make_unique<XMLTextFrameHint_Impl>(pContext, xAnchorPos));
         }
         break;
 
@@ -1726,7 +1724,7 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
             Reference < XTextRange > xAnchorPos =
                 rImport.GetTextImport()->GetCursor()->getStart();
             rHints.push_back(
-                o3tl::make_unique<XMLDrawHint_Impl>(pShapeContext, xAnchorPos));
+                std::make_unique<XMLDrawHint_Impl>(pShapeContext, xAnchorPos));
         }
         if( !pContext )
         {

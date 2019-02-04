@@ -22,7 +22,6 @@
 #include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
@@ -190,7 +189,7 @@ std::unique_ptr<GenericSalLayout> Qt5Graphics::GetTextLayout(int nFallbackLevel)
     assert(m_pTextStyle[nFallbackLevel]);
     if (!m_pTextStyle[nFallbackLevel])
         return nullptr;
-    return o3tl::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
+    return std::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
 void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)

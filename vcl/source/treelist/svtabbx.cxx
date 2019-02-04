@@ -27,7 +27,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
@@ -89,7 +88,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         const OUString aToken = GetToken(aCurEntry, nIndex);
-        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aToken));
+        pEntry->AddItem(std::make_unique<SvLBoxString>(aToken));
     }
 }
 

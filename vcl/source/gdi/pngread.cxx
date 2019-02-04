@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
-#include <o3tl/make_unique.hxx>
 #include <bitmapwriteaccess.hxx>
 
 namespace vcl
@@ -666,14 +665,14 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if ( !mpInflateInBuf || !mpScanPrior )
         return false;
 
-    mpBmp = o3tl::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
+    mpBmp = std::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
     mxAcc = BitmapScopedWriteAccess(*mpBmp);
     if (!mxAcc)
         return false;
 
     if ( mbAlphaChannel )
     {
-        mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
+        mpAlphaMask = std::make_unique<AlphaMask>( maTargetSize );
         mpAlphaMask->Erase( 128 );
         mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
         mpMaskAcc = mxAlphaAcc.get();
@@ -791,13 +790,13 @@ bool PNGReaderImpl::ImplReadTransparent()
     {
         if( bNeedAlpha)
         {
-            mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
+            mpAlphaMask = std::make_unique<AlphaMask>( maTargetSize );
             mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
             mpMaskAcc = mxAlphaAcc.get();
         }
         else
         {
-            mpMaskBmp = o3tl::make_unique<Bitmap>( maTargetSize, 1 );
+            mpMaskBmp = std::make_unique<Bitmap>( maTargetSize, 1 );
             mxMaskAcc = BitmapScopedWriteAccess(*mpMaskBmp);
             mpMaskAcc = mxMaskAcc.get();
         }

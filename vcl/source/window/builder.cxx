@@ -60,7 +60,6 @@
 #include <strings.hrc>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
-#include <o3tl/make_unique.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
@@ -3493,7 +3492,7 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
         sal_Int32 nPos = pContainer->InsertEntry(item.m_sItem);
         if (!item.m_sId.isEmpty())
         {
-            rUserData.emplace_back(o3tl::make_unique<OUString>(OUString::fromUtf8(item.m_sId)));
+            rUserData.emplace_back(std::make_unique<OUString>(OUString::fromUtf8(item.m_sId)));
             pContainer->SetEntryData(nPos, rUserData.back().get());
         }
     }
@@ -4142,7 +4141,7 @@ void VclBuilder::mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt
             {
                 if (!rRow[1].isEmpty())
                 {
-                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    m_aUserData.emplace_back(std::make_unique<OUString>(rRow[1]));
                     rTarget.SetEntryData(nEntry, m_aUserData.back().get());
                 }
             }
@@ -4169,7 +4168,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
             {
                 if (!rRow[1].isEmpty())
                 {
-                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    m_aUserData.emplace_back(std::make_unique<OUString>(rRow[1]));
                     rTarget.SetEntryData(nEntry, m_aUserData.back().get());
                 }
             }
@@ -4196,7 +4195,7 @@ void VclBuilder::mungeModel(SvTabListBox& rTarget, const ListStore &rStore, sal_
             {
                 if (!rRow[1].isEmpty())
                 {
-                    m_aUserData.emplace_back(o3tl::make_unique<OUString>(rRow[1]));
+                    m_aUserData.emplace_back(std::make_unique<OUString>(rRow[1]));
                     pEntry->SetUserData(m_aUserData.back().get());
                 }
             }

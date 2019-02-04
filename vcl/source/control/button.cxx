@@ -42,7 +42,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -95,7 +94,7 @@ mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(Sy
 
 Button::Button( WindowType nType ) :
     Control( nType ),
-    mpButtonData( o3tl::make_unique<ImplCommonButtonData>() )
+    mpButtonData( std::make_unique<ImplCommonButtonData>() )
 {
 }
 

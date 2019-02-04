@@ -21,7 +21,6 @@
 #define VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
 
 #include <vcl/BitmapFilter.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include "ResampleKernel.hxx"
 
@@ -49,7 +48,7 @@ class VCL_DLLPUBLIC BitmapScaleBilinearFilter : public BitmapScaleConvolutionFil
 {
 public:
     BitmapScaleBilinearFilter(const double& rScaleX, const double& rScaleY)
-        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, o3tl::make_unique<BilinearKernel>())
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, std::make_unique<BilinearKernel>())
     {
     }
 };
@@ -58,7 +57,7 @@ class VCL_DLLPUBLIC BitmapScaleBicubicFilter : public BitmapScaleConvolutionFilt
 {
 public:
     BitmapScaleBicubicFilter(const double& rScaleX, const double& rScaleY)
-      : BitmapScaleConvolutionFilter(rScaleX, rScaleY, o3tl::make_unique<BicubicKernel>())
+      : BitmapScaleConvolutionFilter(rScaleX, rScaleY, std::make_unique<BicubicKernel>())
     {
     }
 };
@@ -67,7 +66,7 @@ class VCL_DLLPUBLIC BitmapScaleLanczos3Filter : public BitmapScaleConvolutionFil
 {
 public:
     BitmapScaleLanczos3Filter(const double& rScaleX, const double& rScaleY)
-        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, o3tl::make_unique<Lanczos3Kernel>())
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, std::make_unique<Lanczos3Kernel>())
     {
     }
 };

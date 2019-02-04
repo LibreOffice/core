@@ -41,7 +41,6 @@
 #include "curl.hxx"
 #include <curl/easy.h>
 #include <comphelper/propertysequence.hxx>
-#include <o3tl/make_unique.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/fd_inputstream.hxx>
@@ -486,7 +485,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         = new DynamicResultSet(
                             m_xContext,
                             aOpenCommand,
-                            o3tl::make_unique<ResultSetFactory>(m_xContext,
+                            std::make_unique<ResultSetFactory>(m_xContext,
                                                  m_xProvider.get(),
                                                  aOpenCommand.Properties,
                                                  resvec));

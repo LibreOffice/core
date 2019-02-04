@@ -39,7 +39,6 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
-#include <o3tl/make_unique.hxx>
 #include "content.hxx"
 #include "provider.hxx"
 #include "resultset.hxx"
@@ -291,7 +290,7 @@ uno::Any SAL_CALL Content::execute(
                 = new DynamicResultSet(
                     m_xContext,
                     aOpenCommand,
-                    o3tl::make_unique<ResultSetForRootFactory>(
+                    std::make_unique<ResultSetForRootFactory>(
                         m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Properties,
@@ -305,7 +304,7 @@ uno::Any SAL_CALL Content::execute(
                 = new DynamicResultSet(
                     m_xContext,
                     aOpenCommand,
-                    o3tl::make_unique<ResultSetForQueryFactory>(
+                    std::make_unique<ResultSetForQueryFactory>(
                         m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Properties,

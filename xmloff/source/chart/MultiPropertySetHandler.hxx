@@ -22,7 +22,6 @@
 
 #include <memory>
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -135,7 +134,7 @@ public:
     */
     template<class T> void  Add (const OUString & sName, T& rValue)
     {
-        aPropertyList[sName] = o3tl::make_unique<PropertyWrapper<T>>(sName, rValue);
+        aPropertyList[sName] = std::make_unique<PropertyWrapper<T>>(sName, rValue);
     }
 
     /** @descr  Try to get the values for all properties added with the Add

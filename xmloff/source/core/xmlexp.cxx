@@ -100,7 +100,6 @@
 
 #include <comphelper/xmltools.hxx>
 #include <comphelper/graphicmimetype.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -2020,8 +2019,8 @@ XMLEventExport& SvXMLExport::GetEventExport()
         mpEventExport.reset( new XMLEventExport(*this) );
 
         // and register standard handlers + names
-        mpEventExport->AddHandler("StarBasic", o3tl::make_unique<XMLStarBasicExportHandler>());
-        mpEventExport->AddHandler("Script", o3tl::make_unique<XMLScriptExportHandler>());
+        mpEventExport->AddHandler("StarBasic", std::make_unique<XMLStarBasicExportHandler>());
+        mpEventExport->AddHandler("Script", std::make_unique<XMLScriptExportHandler>());
         mpEventExport->AddTranslationTable(aStandardEventTable);
     }
 

@@ -24,7 +24,6 @@
 #include "SchXMLTools.hxx"
 #include <facreg.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
@@ -145,7 +144,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpChartDocElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aDocElemTokenMap );
+        mpChartDocElemTokenMap = std::make_unique<SvXMLTokenMap>( aDocElemTokenMap );
     } // if( ! mpChartDocElemTokenMap )
 
     return *mpChartDocElemTokenMap;
@@ -166,7 +165,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
         XML_TOKEN_MAP_END
     };
 
-        mpTableElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aTableElemTokenMap );
+        mpTableElemTokenMap = std::make_unique<SvXMLTokenMap>( aTableElemTokenMap );
     } // if( ! mpTableElemTokenMap )
 
     return *mpTableElemTokenMap;
@@ -186,7 +185,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpChartElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aChartElemTokenMap );
+        mpChartElemTokenMap = std::make_unique<SvXMLTokenMap>( aChartElemTokenMap );
     } // if( ! mpChartElemTokenMap )
 
     return *mpChartElemTokenMap;
@@ -211,7 +210,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpPlotAreaElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aPlotAreaElemTokenMap );
+        mpPlotAreaElemTokenMap = std::make_unique<SvXMLTokenMap>( aPlotAreaElemTokenMap );
     } // if( ! mpPlotAreaElemTokenMap )
 
     return *mpPlotAreaElemTokenMap;
@@ -232,7 +231,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpSeriesElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aSeriesElemTokenMap );
+        mpSeriesElemTokenMap = std::make_unique<SvXMLTokenMap>( aSeriesElemTokenMap );
     } // if( ! mpSeriesElemTokenMap )
 
     return *mpSeriesElemTokenMap;
@@ -255,7 +254,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpChartAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aChartAttrTokenMap );
+        mpChartAttrTokenMap = std::make_unique<SvXMLTokenMap>( aChartAttrTokenMap );
     } // if( ! mpChartAttrTokenMap )
 
     return *mpChartAttrTokenMap;
@@ -288,7 +287,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpPlotAreaAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aPlotAreaAttrTokenMap );
+        mpPlotAreaAttrTokenMap = std::make_unique<SvXMLTokenMap>( aPlotAreaAttrTokenMap );
     } // if( ! mpPlotAreaAttrTokenMap )
 
     return *mpPlotAreaAttrTokenMap;
@@ -305,7 +304,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpCellAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aCellAttrTokenMap );
+        mpCellAttrTokenMap = std::make_unique<SvXMLTokenMap>( aCellAttrTokenMap );
     } // if( ! mpCellAttrTokenMap )
 
     return *mpCellAttrTokenMap;
@@ -327,7 +326,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpSeriesAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aSeriesAttrTokenMap );
+        mpSeriesAttrTokenMap = std::make_unique<SvXMLTokenMap>( aSeriesAttrTokenMap );
     } // if( ! mpSeriesAttrTokenMap )
 
     return *mpSeriesAttrTokenMap;
@@ -344,7 +343,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPropMappingAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpPropMappingAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aPropMappingAttrTokenMap );
+        mpPropMappingAttrTokenMap = std::make_unique<SvXMLTokenMap>( aPropMappingAttrTokenMap );
     }
 
     return *mpPropMappingAttrTokenMap;
@@ -364,7 +363,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpRegEquationAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aRegressionEquationAttrTokenMap );
+        mpRegEquationAttrTokenMap = std::make_unique<SvXMLTokenMap>( aRegressionEquationAttrTokenMap );
     } // if( ! mpRegEquationAttrTokenMap )
 
     return *mpRegEquationAttrTokenMap;

@@ -24,7 +24,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
 #include <tools/debug.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
@@ -887,8 +886,8 @@ SdXMLStylesContext::SdXMLStylesContext(
     mbIsAutoStyle(bIsAutoStyle)
 {
     Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();
-    mpNumFormatter = o3tl::make_unique<SvNumberFormatter>( xContext, LANGUAGE_SYSTEM );
-    mpNumFmtHelper = o3tl::make_unique<SvXMLNumFmtHelper>( mpNumFormatter.get(), xContext );
+    mpNumFormatter = std::make_unique<SvNumberFormatter>( xContext, LANGUAGE_SYSTEM );
+    mpNumFmtHelper = std::make_unique<SvXMLNumFmtHelper>( mpNumFormatter.get(), xContext );
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(

@@ -26,7 +26,6 @@
 #include <wall2.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/make_unique.hxx>
 
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT ), meStyle( WallpaperStyle::NONE )
@@ -37,13 +36,13 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
     maColor( rImplWallpaper.maColor ), meStyle(rImplWallpaper.meStyle)
 {
     if ( rImplWallpaper.mpBitmap )
-        mpBitmap = o3tl::make_unique<BitmapEx>( *rImplWallpaper.mpBitmap );
+        mpBitmap = std::make_unique<BitmapEx>( *rImplWallpaper.mpBitmap );
 
     if( rImplWallpaper.mpCache )
-        mpCache = o3tl::make_unique<BitmapEx>( *rImplWallpaper.mpCache );
+        mpCache = std::make_unique<BitmapEx>( *rImplWallpaper.mpCache );
 
     if ( rImplWallpaper.mpGradient )
-        mpGradient = o3tl::make_unique<Gradient>( *rImplWallpaper.mpGradient );
+        mpGradient = std::make_unique<Gradient>( *rImplWallpaper.mpGradient );
 
     if ( rImplWallpaper.mpRect )
         mpRect = *rImplWallpaper.mpRect;
@@ -82,13 +81,13 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
         if( bGrad )
         {
-            rImplWallpaper.mpGradient = o3tl::make_unique<Gradient>();
+            rImplWallpaper.mpGradient = std::make_unique<Gradient>();
             ReadGradient( rIStm, *rImplWallpaper.mpGradient );
         }
 
         if( bBmp )
         {
-            rImplWallpaper.mpBitmap = o3tl::make_unique<BitmapEx>();
+            rImplWallpaper.mpBitmap = std::make_unique<BitmapEx>();
             ReadDIBBitmapEx(*rImplWallpaper.mpBitmap, rIStm);
         }
 
@@ -154,13 +153,13 @@ Wallpaper::Wallpaper( const Color& rColor ) : mpImplWallpaper()
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx ) : mpImplWallpaper()
 {
-    mpImplWallpaper->mpBitmap   = o3tl::make_unique<BitmapEx>( rBmpEx );
+    mpImplWallpaper->mpBitmap   = std::make_unique<BitmapEx>( rBmpEx );
     mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
 Wallpaper::Wallpaper( const Gradient& rGradient ) : mpImplWallpaper()
 {
-    mpImplWallpaper->mpGradient = o3tl::make_unique<Gradient>( rGradient );
+    mpImplWallpaper->mpGradient = std::make_unique<Gradient>( rGradient );
     mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
@@ -169,7 +168,7 @@ Wallpaper::~Wallpaper() = default;
 void Wallpaper::ImplSetCachedBitmap( BitmapEx& rBmp ) const
 {
    if( !mpImplWallpaper->mpCache )
-      const_cast< ImplWallpaper* >(mpImplWallpaper.get())->mpCache = o3tl::make_unique<BitmapEx>( rBmp );
+      const_cast< ImplWallpaper* >(mpImplWallpaper.get())->mpCache = std::make_unique<BitmapEx>( rBmp );
    else
       *const_cast< ImplWallpaper* >(mpImplWallpaper.get())->mpCache = rBmp;
 }
@@ -229,7 +228,7 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
         if ( mpImplWallpaper->mpBitmap )
             *(mpImplWallpaper->mpBitmap) = rBitmap;
         else
-            mpImplWallpaper->mpBitmap = o3tl::make_unique<BitmapEx>( rBitmap );
+            mpImplWallpaper->mpBitmap = std::make_unique<BitmapEx>( rBitmap );
     }
 
     if( WallpaperStyle::NONE == mpImplWallpaper->meStyle || WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle)
@@ -256,7 +255,7 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
     if ( mpImplWallpaper->mpGradient )
         *(mpImplWallpaper->mpGradient) = rGradient;
     else
-        mpImplWallpaper->mpGradient = o3tl::make_unique<Gradient>( rGradient );
+        mpImplWallpaper->mpGradient = std::make_unique<Gradient>( rGradient );
 
     if( WallpaperStyle::NONE == mpImplWallpaper->meStyle || WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle )
         mpImplWallpaper->meStyle = WallpaperStyle::Tile;

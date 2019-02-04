@@ -40,7 +40,6 @@
 #include <cairo.h>
 #include <cairo-ft.h>
 #include <sallayout.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace {
 
@@ -447,7 +446,7 @@ std::unique_ptr<GenericSalLayout> CairoTextRender::GetTextLayout(int nFallbackLe
     assert(mpFreetypeFont[nFallbackLevel]);
     if (!mpFreetypeFont[nFallbackLevel])
         return nullptr;
-    return o3tl::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]->GetFontInstance());
+    return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]->GetFontInstance());
 }
 
 #if ENABLE_CAIRO_CANVAS

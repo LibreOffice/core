@@ -54,8 +54,6 @@
 
 #include <vector>
 
-#include <o3tl/make_unique.hxx>
-
 #include <xmloff/xmltypes.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -161,7 +159,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpAnimationNodeTokenMap = o3tl::make_unique<SvXMLTokenMap>( aAnimationNodeTokenMap );
+        mpAnimationNodeTokenMap = std::make_unique<SvXMLTokenMap>( aAnimationNodeTokenMap );
     }
 
     return *mpAnimationNodeTokenMap;
@@ -280,7 +278,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
             XML_TOKEN_MAP_END
         };
 
-        mpAnimationNodeAttributeTokenMap = o3tl::make_unique<SvXMLTokenMap>( aAnimationNodeAttributeTokenMap );
+        mpAnimationNodeAttributeTokenMap = std::make_unique<SvXMLTokenMap>( aAnimationNodeAttributeTokenMap );
     }
 
     return *mpAnimationNodeAttributeTokenMap;

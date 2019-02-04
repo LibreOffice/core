@@ -25,7 +25,6 @@
 #include <limits>
 
 #include <o3tl/make_shared.hxx>
-#include <o3tl/make_unique.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
@@ -539,12 +538,12 @@ std::unique_ptr<ImplPixelFormat> ImplPixelFormat::GetFormat( sal_uInt16 nBits, c
 {
     switch( nBits )
     {
-    case 1: return o3tl::make_unique<ImplPixelFormat1>( rPalette );
-    case 4: return o3tl::make_unique<ImplPixelFormat4>( rPalette );
-    case 8: return o3tl::make_unique<ImplPixelFormat8>( rPalette );
-    case 16: return o3tl::make_unique<ImplPixelFormat16>();
-    case 24: return o3tl::make_unique<ImplPixelFormat24>();
-    case 32: return o3tl::make_unique<ImplPixelFormat32>();
+    case 1: return std::make_unique<ImplPixelFormat1>( rPalette );
+    case 4: return std::make_unique<ImplPixelFormat4>( rPalette );
+    case 8: return std::make_unique<ImplPixelFormat8>( rPalette );
+    case 16: return std::make_unique<ImplPixelFormat16>();
+    case 24: return std::make_unique<ImplPixelFormat24>();
+    case 32: return std::make_unique<ImplPixelFormat32>();
     default:
         assert(false);
         return nullptr;

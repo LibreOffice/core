@@ -13,8 +13,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #include <ucbhelper/content.hxx>
 
 #include <test/bootstrapfixture.hxx>

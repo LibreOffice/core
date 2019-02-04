@@ -27,7 +27,6 @@
 #include <QtGui/QClipboard>
 #include <QtWidgets/QFrame>
 
-#include <o3tl/make_unique.hxx>
 #include <osl/process.h>
 #include <sal/log.hxx>
 

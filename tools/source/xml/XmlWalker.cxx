@@ -9,7 +9,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/XmlWalker.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <libxml/tree.h>
 #include <libxml/parser.h>
@@ -35,7 +34,7 @@ struct XmlWalkerImpl
 };
 
 XmlWalker::XmlWalker()
-    : mpImpl(o3tl::make_unique<XmlWalkerImpl>())
+    : mpImpl(std::make_unique<XmlWalkerImpl>())
 {
 }
 

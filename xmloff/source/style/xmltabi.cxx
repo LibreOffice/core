@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/style/TabAlign.hpp>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -186,7 +185,7 @@ SvXMLImportContextRef SvxXMLTabStopImportContext::CreateChildContext(
 
         // add new tabstop to array of tabstops
         if( !mpTabStops )
-            mpTabStops = o3tl::make_unique<SvxXMLTabStopArray_Impl>();
+            mpTabStops = std::make_unique<SvxXMLTabStopArray_Impl>();
 
         mpTabStops->push_back( xTabStopContext );
 

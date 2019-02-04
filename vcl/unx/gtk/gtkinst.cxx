@@ -37,7 +37,6 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <rtl/uri.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <vcl/settings.hxx>
 
@@ -110,7 +109,7 @@ extern "C"
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
         SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
 
-        auto pYieldMutex = o3tl::make_unique<GtkYieldMutex>();
+        auto pYieldMutex = std::make_unique<GtkYieldMutex>();
 
         gdk_threads_init();
 
@@ -347,7 +346,7 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
     GtkSalGraphics *pGtkSalGraphics = dynamic_cast<GtkSalGraphics*>(pG);
     assert(pGtkSalGraphics);
     return CreateX11VirtualDevice(pG, nDX, nDY, eFormat, pGd,
-            o3tl::make_unique<GtkSalGraphics>(pGtkSalGraphics->GetGtkFrame(),
+            std::make_unique<GtkSalGraphics>(pGtkSalGraphics->GetGtkFrame(),
                                pGtkSalGraphics->GetGtkWidget(),
                                pGtkSalGraphics->GetScreenNumber()));
 #endif

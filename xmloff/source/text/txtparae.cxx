@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1311,7 +1310,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
-    pFieldExport.reset( new XMLTextFieldExport( rExp, o3tl::make_unique<XMLPropertyState>( nIndex, uno::makeAny(true) ) ) );
+    pFieldExport.reset( new XMLTextFieldExport( rExp, std::make_unique<XMLPropertyState>( nIndex, uno::makeAny(true) ) ) );
     PushNewTextListsHelper();
 }
 

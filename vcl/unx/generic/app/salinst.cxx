@@ -35,7 +35,6 @@
 #include <unx/helper.hxx>
 
 #include <vcl/inputtypes.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <salwtype.hxx>
 #include <sal/macros.h>
@@ -55,7 +54,7 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
-        X11SalInstance* pInstance = new X11SalInstance( o3tl::make_unique<SalYieldMutex>() );
+        X11SalInstance* pInstance = new X11SalInstance( std::make_unique<SalYieldMutex>() );
 
         // initialize SalData
         X11SalData *pSalData = new X11SalData( SAL_DATA_UNX, pInstance );

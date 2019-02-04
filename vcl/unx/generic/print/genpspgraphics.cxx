@@ -55,7 +55,6 @@
 #include <salbmp.hxx>
 #include <salprn.hxx>
 #include <sallayout.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace psp;
 
@@ -738,7 +737,7 @@ std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLev
     assert(m_pFreetypeFont[nFallbackLevel]);
     if (!m_pFreetypeFont[nFallbackLevel])
         return nullptr;
-    return o3tl::make_unique<PspSalLayout>(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
+    return std::make_unique<PspSalLayout>(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
 }
 
 bool GenPspGraphics::CreateFontSubset(

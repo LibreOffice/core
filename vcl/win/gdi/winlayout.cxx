@@ -24,7 +24,6 @@
 
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <opengl/texture.hxx>
 #include <opengl/win/gdiimpl.hxx>
@@ -295,7 +294,7 @@ std::unique_ptr<GenericSalLayout> WinSalGraphics::GetTextLayout(int nFallbackLev
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
     mpWinFontEntry[nFallbackLevel]->SetGraphics(this);
-    return o3tl::make_unique<GenericSalLayout>(*mpWinFontEntry[nFallbackLevel]);
+    return std::make_unique<GenericSalLayout>(*mpWinFontEntry[nFallbackLevel]);
 }
 
 WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const FontSelectPattern& rFSP)

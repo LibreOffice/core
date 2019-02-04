@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/make_unique.hxx>
-
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -200,7 +198,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpGroupShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aGroupShapeElemTokenMap);
+        mpGroupShapeElemTokenMap = std::make_unique<SvXMLTokenMap>(aGroupShapeElemTokenMap);
     }
 
     return *mpGroupShapeElemTokenMap;
@@ -223,7 +221,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpFrameShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aFrameShapeElemTokenMap);
+        mpFrameShapeElemTokenMap = std::make_unique<SvXMLTokenMap>(aFrameShapeElemTokenMap);
     }
 
     return *mpFrameShapeElemTokenMap;
@@ -243,7 +241,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DSceneShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DSceneShapeElemTokenMap);
+        mp3DSceneShapeElemTokenMap = std::make_unique<SvXMLTokenMap>(a3DSceneShapeElemTokenMap);
     }
 
     return *mp3DSceneShapeElemTokenMap;
@@ -260,7 +258,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DObjectAttrTokenMap);
+        mp3DObjectAttrTokenMap = std::make_unique<SvXMLTokenMap>(a3DObjectAttrTokenMap);
     }
 
     return *mp3DObjectAttrTokenMap;
@@ -277,7 +275,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DPolygonBasedAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DPolygonBasedAttrTokenMap);
+        mp3DPolygonBasedAttrTokenMap = std::make_unique<SvXMLTokenMap>(a3DPolygonBasedAttrTokenMap);
     }
 
     return *mp3DPolygonBasedAttrTokenMap;
@@ -294,7 +292,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DCubeObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DCubeObjectAttrTokenMap);
+        mp3DCubeObjectAttrTokenMap = std::make_unique<SvXMLTokenMap>(a3DCubeObjectAttrTokenMap);
     }
 
     return *mp3DCubeObjectAttrTokenMap;
@@ -311,7 +309,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DSphereObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DSphereObjectAttrTokenMap);
+        mp3DSphereObjectAttrTokenMap = std::make_unique<SvXMLTokenMap>(a3DSphereObjectAttrTokenMap);
     }
 
     return *mp3DSphereObjectAttrTokenMap;
@@ -330,7 +328,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mp3DLightAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DLightAttrTokenMap);
+        mp3DLightAttrTokenMap = std::make_unique<SvXMLTokenMap>(a3DLightAttrTokenMap);
     }
 
     return *mp3DLightAttrTokenMap;
