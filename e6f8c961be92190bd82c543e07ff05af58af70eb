@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_aa458b19",
+        "filename": "sw/source/uibase/shells/textsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-02-05T10:49:30Z",
+      "side": 1,
+      "message": "On Linux, the new function adds E280AF to the document, which is U+202F. On macOS the same code adds C2A0, U+A0/No-Break Space- and shows it as such highlighted when field shading is on. In a nutshell: macOS does not properly distinguish between alt and cmd.",
+      "revId": "e6f8c961be92190bd82c543e07ff05af58af70eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
