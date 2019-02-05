@@ -103,10 +103,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
 
     // XFilePicker
-    connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setDisplayDirectorySignal, this,
-            &KDE5FilePicker::setDisplayDirectorySlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
             &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
     // XFolderPicker
@@ -161,29 +157,6 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
     m_pFileDialog->show();
     //block and wait for user input
     return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
-}
-
-void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDefaultNameSignal(name);
-    }
-
-    m_pFileDialog->selectFile(toQString(name));
-}
-
-void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDisplayDirectorySignal(dir);
-    }
-
-    QString qDir(toQString(dir));
-    m_pFileDialog->setDirectoryUrl(QUrl(qDir));
 }
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
