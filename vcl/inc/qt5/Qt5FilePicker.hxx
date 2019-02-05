@@ -63,6 +63,8 @@ protected:
 
     QStringList m_aNamedFilterList; ///< to keep the original sequence
     QHash<QString, QString> m_aTitleToFilterMap;
+    // to retrieve the filename extension for a given filter
+    QHash<QString, QString> m_aNamedFilterToExtensionMap;
     QString m_aCurrentFilter;
 
     QWidget* m_pExtraControls; ///< widget to contain extra custom controls
@@ -262,6 +264,8 @@ private Q_SLOTS:
     void filterSelected(const QString&);
     // emit XFilePickerListener fileSelectionChanged event
     void currentChanged(const QString&);
+    // (un)set automatic file extension
+    void updateAutomaticFileExtension();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
