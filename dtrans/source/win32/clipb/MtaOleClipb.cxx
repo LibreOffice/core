@@ -108,6 +108,9 @@ namespace /* private */
 
                         break;
                     }
+
+                    default: // WAIT_FAILED?
+                        return false;
                 }
             }
         }
@@ -268,6 +271,10 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     m_bRunClipboardNotifierThread = false;
     SetEvent( m_hTerminateClipboardChangedNotifierEvent );
 
+    // unblock whoever could still wait for event processing
+    if (m_hEvtWndDisposed)
+        SetEvent(m_hEvtWndDisposed);
+
     sal_uInt32 dwResult = WaitForSingleObject(
         m_hClipboardChangedNotifierThread, MAX_WAIT_SHUTDOWN );
 
@@ -296,6 +303,9 @@ CMtaOleClipboard::~CMtaOleClipboard( )
 
     if ( nullptr != m_hEvtThrdReady )
         CloseHandle( m_hEvtThrdReady );
+
+    if (m_hEvtWndDisposed)
+        CloseHandle(m_hEvtWndDisposed);
 
     if ( m_MtaOleReqWndClassAtom )
         UnregisterClassW( g_szWndClsName, nullptr );
