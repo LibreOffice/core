@@ -99,10 +99,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
         QStringLiteral("smb"),
     });
 
-    connect(m_pFileDialog.get(), &QFileDialog::filterSelected, this,
-            &KDE5FilePicker::filterChanged);
-    connect(m_pFileDialog.get(), &QFileDialog::fileSelected, this,
-            &KDE5FilePicker::selectionChanged);
     connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
             Qt::BlockingQueuedConnection);
 
@@ -151,19 +147,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 }
 
 KDE5FilePicker::~KDE5FilePicker() { delete _extraControls; }
-
-void SAL_CALL
-KDE5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
-{
-    SolarMutexGuard aGuard;
-    m_xListener = xListener;
-}
-
-void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFilePickerListener>&)
-{
-    SolarMutexGuard aGuard;
-    m_xListener.clear();
-}
 
 // XExecutableDialog
 void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
@@ -802,23 +785,6 @@ sal_Bool SAL_CALL KDE5FilePicker::supportsService(const OUString& ServiceName)
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
-}
-
-void KDE5FilePicker::filterChanged()
-{
-    FilePickerEvent aEvent;
-    aEvent.ElementId = LISTBOX_FILTER;
-    OSL_TRACE("filter changed");
-    if (m_xListener.is())
-        m_xListener->controlStateChanged(aEvent);
-}
-
-void KDE5FilePicker::selectionChanged()
-{
-    FilePickerEvent aEvent;
-    OSL_TRACE("file selection changed");
-    if (m_xListener.is())
-        m_xListener->fileSelectionChanged(aEvent);
 }
 
 bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)

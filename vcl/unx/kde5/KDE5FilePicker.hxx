@@ -51,7 +51,6 @@ class KDE5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
 protected:
-    css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
     osl::Mutex _helperMutex;
 
     //running filter string to add to dialog
@@ -76,12 +75,6 @@ protected:
 public:
     explicit KDE5FilePicker(QFileDialog::FileMode);
     virtual ~KDE5FilePicker() override;
-
-    // XFilePickerNotifier
-    virtual void SAL_CALL addFilePickerListener(
-        const css::uno::Reference<css::ui::dialogs::XFilePickerListener>& xListener) override;
-    virtual void SAL_CALL removeFilePickerListener(
-        const css::uno::Reference<css::ui::dialogs::XFilePickerListener>& xListener) override;
 
     // XExecutableDialog functions
     virtual void SAL_CALL setTitle(const OUString& rTitle) override;
@@ -151,11 +144,6 @@ private:
     void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction, const css::uno::Any& rValue);
     css::uno::Any handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction);
     OUString implGetDirectory();
-
-    // emit XFilePickerListener controlStateChanged event
-    void filterChanged();
-    // emit XFilePickerListener fileSelectionChanged event
-    void selectionChanged();
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
