@@ -1900,7 +1900,7 @@ int nRTFMathControlWords = SAL_N_ELEMENTS(aRTFMathControlWords);
 
 bool RTFMathSymbol::operator<(const RTFMathSymbol& rOther) const
 {
-    return eKeyword < rOther.eKeyword;
+    return m_eKeyword < rOther.m_eKeyword;
 }
 
 } // namespace rtftok
