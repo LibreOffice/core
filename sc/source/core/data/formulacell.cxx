@@ -4689,16 +4689,16 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                      ScDocument* pDocument2,
                      ScInterpreterContext* pContext,
                      const ScAddress& rTopPos,
-                     SCROW nStartOffset,
-                     SCROW nEndOffset) :
+                     SCROW nStartOff,
+                     SCROW nEndOff) :
                 comphelper::ThreadTask(rTag),
                 mnThisThread(nThisThread),
                 mnThreadsTotal(nThreadsTotal),
                 mpDocument(pDocument2),
                 mpContext(pContext),
                 mrTopPos(rTopPos),
-                mnStartOffset(nStartOffset),
-                mnEndOffset(nEndOffset)
+                mnStartOffset(nStartOff),
+                mnEndOffset(nEndOff)
             {
             }
 
