@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_ca6c470a",
+        "filename": "toolkit/source/controls/tabpagemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-05T17:51:15Z",
+      "side": 1,
+      "message": "but this property appears to have a type of \"Reference\u003c css::container::XNameContainer \u003e\", so it should return a nullptr of that type instead of a bool?",
+      "revId": "f8b22d029db3a2241c3767a5342677fb6773356b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
