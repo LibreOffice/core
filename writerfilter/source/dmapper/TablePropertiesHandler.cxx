@@ -273,6 +273,7 @@ namespace dmapper {
                     }
                 }
             break;
+/*          // tdf#123189 skip to keep MSO interoperability
             case NS_ooxml::LN_CT_TblPrBase_shd:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -284,6 +285,7 @@ namespace dmapper {
                     insertTableProps( pCellColorHandler->getProperties() );
                 }
             }
+*/
             break;
             case NS_ooxml::LN_CT_TcPrBase_shd:
             {
