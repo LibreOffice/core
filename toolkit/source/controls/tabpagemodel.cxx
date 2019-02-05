@@ -86,9 +86,9 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             break;
         case BASEPROPERTY_USERFORMCONTAINEES:
         {
-            // We do not have here any usercontainers (yet?), but let's return something back
+            // We do not have here any usercontainers (yet?), but let's return empty container back
             // so normal properties could be set without triggering UnknownPropertyException
-            return makeAny(true);
+            aAny <<= uno::Reference< XNameContainer >();
         }
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
