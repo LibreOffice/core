@@ -82,7 +82,7 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 // KDE5FilePicker
 
 KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
-    : KDE5FilePicker_Base(_helperMutex)
+    : Qt5FilePicker(eMode)
     , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
