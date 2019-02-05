@@ -77,7 +77,6 @@ public:
     virtual ~KDE5FilePicker() override;
 
     // XExecutableDialog functions
-    virtual void SAL_CALL setTitle(const OUString& rTitle) override;
     virtual sal_Int16 SAL_CALL execute() override;
 
     // XFilePicker functions
@@ -151,7 +150,6 @@ protected:
 
 Q_SIGNALS:
     sal_Int16 executeSignal();
-    void setTitleSignal(const OUString& rTitle);
     void setDefaultNameSignal(const OUString& rName);
     void setDisplayDirectorySignal(const OUString& rDir);
     OUString getDisplayDirectorySignal();
@@ -171,7 +169,6 @@ Q_SIGNALS:
     css::uno::Sequence<OUString> getSelectedFilesSignal();
 
 private Q_SLOTS:
-    void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
     void setDefaultNameSlot(const OUString& rName) { return setDefaultName(rName); }
     void setDisplayDirectorySlot(const OUString& rDir) { return setDisplayDirectory(rDir); }
     OUString getDisplayDirectorySlot() { return implGetDirectory(); }
