@@ -1329,6 +1329,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
 
 void ScDocShell::DoRecalc( bool bApi )
 {
+    ScDocShellRecalcGuard aGuard(m_aDocument);
     bool bDone = false;
     ScTabViewShell* pSh = GetBestViewShell();
     ScInputHandler* pHdl = ( pSh ? SC_MOD()->GetInputHdl( pSh ) : nullptr );
@@ -1375,6 +1376,7 @@ void ScDocShell::DoRecalc( bool bApi )
 void ScDocShell::DoHardRecalc()
 {
     auto start = std::chrono::steady_clock::now();
+    ScDocShellRecalcGuard aGuard(m_aDocument);
     WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
     if ( pSh )
