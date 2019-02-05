@@ -2574,9 +2574,9 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
         m_bParametersDirty = true;
         x->closeInput();
     }
-    catch( Exception& )
+    catch( Exception const & ex)
     {
-        throw SQLException();
+        throw SQLException("ORowSet::setBinaryStream", *this, "S1000", 0, Any(ex));
     }
 }
 
@@ -2597,9 +2597,9 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         rParamValue.setTypeKind( DataType::LONGVARCHAR );
         x->closeInput();
     }
-    catch( Exception& )
+    catch( Exception const & ex )
     {
-        throw SQLException();
+        throw SQLException("ORowSet::setCharacterStream", *this, "S1000", 0, Any(ex));
     }
 }
 
