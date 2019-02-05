@@ -24,6 +24,13 @@
 #include <osx/salnsmenu.h>
 #include <osx/salinst.h>
 #include <o3tl/enumarray.hxx>
+#include <tools/stream.hxx>
+#include <vcl/ImageTree.hxx>
+#include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <sal/log.hxx>
+#include <bitmaps.hlst>
+#include <cursor_hotspots.hxx>
 
 #import "apple_remote/RemoteMainController.h"
 
@@ -114,134 +121,152 @@ void SalData::ensureThreadAutoreleasePool()
     }
 }
 
-struct curs_ent
-{
-    const char*         pBaseName;
-    const NSPoint       aHotSpot;
-};
 
-const o3tl::enumarray<PointerStyle, curs_ent> aCursorTab =
+NSImage* load_icon_by_name(const OUString& rIconName)
 {
-curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
-{ "nullptr", { 16, 16 } }, //PointerStyle::Null
-{ "hourglass", { 15, 15 } }, //PointerStyle::Wait
-{ nullptr, { 0, 0 } }, //PointerStyle::Text
-{ "help", { 0, 0 } }, //PointerStyle::Help
-{ nullptr, { 0, 0 } }, //PointerStyle::Cross
-{ nullptr, { 0, 0 } }, //PointerStyle::Move
-{ nullptr, { 0, 0 } }, //PointerStyle::NSize
-{ nullptr, { 0, 0 } }, //PointerStyle::SSize
-{ nullptr, { 0, 0 } }, //PointerStyle::WSize
-{ nullptr, { 0, 0 } }, //PointerStyle::ESize
-{ "nwsesize", { 15, 15 } }, //PointerStyle::NWSize
-{ "neswsize", { 15, 15 } }, //PointerStyle::NESize
-{ "neswsize", { 15, 15 } }, //PointerStyle::SWSize
-{ "nwsesize", { 15, 15 } }, //PointerStyle::SESize
-{ nullptr, { 0, 0 } }, //PointerStyle::WindowNSize
-{ nullptr, { 0, 0 } }, //PointerStyle::WindowSSize
-{ nullptr, { 0, 0 } }, //PointerStyle::WindowWSize
-{ nullptr, { 0, 0 } }, //PointerStyle::WindowESize
-{ "nwsesize", { 15, 15 } }, //PointerStyle::WindowNWSize
-{ "neswsize", { 15, 15 } }, //PointerStyle::WindowNESize
-{ "neswsize", { 15, 15 } }, //PointerStyle::WindowSWSize
-{ "nwsesize", { 15, 15 } }, //PointerStyle::WindowSESize
-{ nullptr, { 0, 0 } }, //PointerStyle::HSplit
-{ nullptr, { 0, 0 } }, //PointerStyle::VSplit
-{ nullptr, { 0, 0 } }, //PointerStyle::HSizeBar
-{ nullptr, { 0, 0 } }, //PointerStyle::VSizeBar
-{ nullptr, { 0, 0 } }, //PointerStyle::Hand
-{ nullptr, { 0, 0 } }, //PointerStyle::RefHand
-{ "pen", { 3, 27 } }, //PointerStyle::Pen
-{ "magnify", { 12, 13 } }, //PointerStyle::Magnify
-{ "fill", { 10, 22 } }, //PointerStyle::Fill
-{ "rotate", { 15, 15 } }, //PointerStyle::Rotate
-{ "hshear", { 15, 15 } }, //PointerStyle::HShear
-{ "vshear", { 15, 15 } }, //PointerStyle::VShear
-{ "mirror", { 14, 12 } }, //PointerStyle::Mirror
-{ "crook", { 15, 14 } }, //PointerStyle::Crook
-{ "crop", { 9, 9 } }, //PointerStyle::Crop
-{ "movept", { 0, 0 } }, //PointerStyle::MovePoint
-{ "movebw", { 0, 0 } }, //PointerStyle::MoveBezierWeight
-{ "movedata", { 0, 0 } }, //PointerStyle::MoveData
-{ "copydata", { 0, 0 } }, //PointerStyle::CopyData
-{ "linkdata", { 0, 0 } }, //PointerStyle::LinkData
-{ "movedlnk", { 0, 0 } }, //PointerStyle::MoveDataLink
-{ "copydlnk", { 0, 0 } }, //PointerStyle::CopyDataLink
-{ "movef", { 8, 8 } }, //PointerStyle::MoveFile
-{ "copyf", { 8, 8 } }, //PointerStyle::CopyFile
-{ "linkf", { 8, 8 } }, //PointerStyle::LinkFile
-{ "moveflnk", { 8, 8 } }, //PointerStyle::MoveFileLink
-{ "copyflnk", { 8, 8 } }, //PointerStyle::CopyFileLink
-{ "movef2", { 7, 8 } }, //PointerStyle::MoveFiles
-{ "copyf2", { 7, 8 } }, //PointerStyle::CopyFiles
-{ "notallow", { 15, 15 } }, //PointerStyle::NotAllowed
-{ "dline", { 8, 8 } }, //PointerStyle::DrawLine
-{ "drect", { 8, 8 } }, //PointerStyle::DrawRect
-{ "dpolygon", { 8, 8 } }, //PointerStyle::DrawPolygon
-{ "dbezier", { 8, 8 } }, //PointerStyle::DrawBezier
-{ "darc", { 8, 8 } }, //PointerStyle::DrawArc
-{ "dpie", { 8, 8 } }, //PointerStyle::DrawPie
-{ "dcirccut", { 8, 8 } }, //PointerStyle::DrawCircleCut
-{ "dellipse", { 8, 8 } }, //PointerStyle::DrawEllipse
-{ "dfree", { 8, 8 } }, //PointerStyle::DrawFreehand
-{ "dconnect", { 8, 8 } }, //PointerStyle::DrawConnect
-{ "dtext", { 8, 8 } }, //PointerStyle::DrawText
-{ "dcapt", { 8, 8 } }, //PointerStyle::DrawCaption
-{ "chart", { 15, 16 } }, //PointerStyle::Chart
-{ "detectiv", { 12, 13 } }, //PointerStyle::Detective
-{ "pivotcol", { 7, 5 } }, //PointerStyle::PivotCol
-{ "pivotrow", { 8, 7 } }, //PointerStyle::PivotRow
-{ "pivotfld", { 8, 7 } }, //PointerStyle::PivotField
-{ "chain", { 0, 2 } }, //PointerStyle::Chain
-{ "chainnot", { 2, 2 } }, //PointerStyle::ChainNotAllowed
-{ "asn", { 16, 12 } }, //PointerStyle::AutoScrollN
-{ "ass", { 15, 19 } }, //PointerStyle::AutoScrollS
-{ "asw", { 12, 15 } }, //PointerStyle::AutoScrollW
-{ "ase", { 19, 16 } }, //PointerStyle::AutoScrollE
-{ "asnw", { 10, 10 } }, //PointerStyle::AutoScrollNW
-{ "asne", { 21, 10 } }, //PointerStyle::AutoScrollNE
-{ "assw", { 21, 21 } }, //PointerStyle::AutoScrollSW
-{ "asse", { 21, 21 } }, //PointerStyle::AutoScrollSE
-{ "asns", { 15, 15 } }, //PointerStyle::AutoScrollNS
-{ "aswe", { 15, 15 } }, //PointerStyle::AutoScrollWE
-{ "asnswe", { 15, 15 } }, //PointerStyle::AutoScrollNSWE
-{ "vtext", { 15, 15 } }, //PointerStyle::TextVertical
-{ "pivotdel", { 18, 15 } }, //PointerStyle::PivotDelete
-{ "tblsels", { 15, 30 } }, //PointerStyle::TabSelectS
-{ "tblsele", { 30, 16 } }, //PointerStyle::TabSelectE
-{ "tblselse", { 30, 30 } }, //PointerStyle::TabSelectSE
-{ "tblselw", { 1, 16 } }, //PointerStyle::TabSelectW
-{ "tblselsw", { 1, 30 } }, //PointerStyle::TabSelectSW
-{ "wshide", { 16, 16 } }, //PointerStyle::HideWhitespace
-{ "wsshow", { 16, 16 } } //PointerStyle::ShowWhitespace
-};
+    OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+    auto xMemStm = ImageTree::get().getImageStream(rIconName, sIconTheme, sUILang);
+    if (!xMemStm)
+        return nullptr;
+
+    auto data = xMemStm->GetData();
+    auto length = xMemStm->TellEnd();
+    NSData * byteData = [NSData dataWithBytes:data length:length];
+    NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:byteData];
+    NSSize imageSize = NSMakeSize(CGImageGetWidth([imageRep CGImage]), CGImageGetHeight([imageRep CGImage]));
+
+    NSImage * image = [[NSImage alloc] initWithSize:imageSize];
+    [image addRepresentation:imageRep];
+    return image;
+}
+
+#define MAKE_CURSOR( vcl_name, name, name2 ) \
+    case vcl_name: \
+        aHotSpot = NSPoint{name##curs_x_hot, name##curs_y_hot}; \
+        aIconName = name2; \
+        break
 
 NSCursor* SalData::getCursor( PointerStyle i_eStyle )
 {
     NSCursor* pCurs = maCursors[ i_eStyle ];
-    if( pCurs == INVALID_CURSOR_PTR )
+    if( pCurs != INVALID_CURSOR_PTR )
+        return pCurs;
+
+    NSPoint aHotSpot;
+    OUString aIconName;
+
+    switch( i_eStyle )
     {
-        pCurs = nil;
-        if( aCursorTab[ i_eStyle ].pBaseName )
-        {
-            NSPoint aHotSpot = aCursorTab[ i_eStyle ].aHotSpot;
-            CFStringRef pCursorName =
-                CFStringCreateWithCStringNoCopy(
-                    kCFAllocatorDefault,
-                    aCursorTab[ i_eStyle ].pBaseName,
-                    kCFStringEncodingASCII,
-                    kCFAllocatorNull );
-            CFBundleRef hMain = CFBundleGetMainBundle();
-            CFURLRef hURL = CFBundleCopyResourceURL( hMain, pCursorName, CFSTR("png"), CFSTR("cursors") );
-            if( hURL )
-            {
-                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(reinterpret_cast<NSURL const *>(hURL))] hotSpot: aHotSpot];
-                CFRelease( hURL );
-            }
-            CFRelease( pCursorName );
-        }
-        maCursors[ i_eStyle ] = pCurs;
+        // TODO
+        MAKE_CURSOR( PointerStyle::Wait, wait_, RID_CURSOR_WAIT );
+        MAKE_CURSOR( PointerStyle::NWSize, nwsize_, RID_CURSOR_NWSIZE );
+        MAKE_CURSOR( PointerStyle::NESize, nesize_, RID_CURSOR_NESIZE );
+        MAKE_CURSOR( PointerStyle::SWSize, swsize_, RID_CURSOR_SWSIZE );
+        MAKE_CURSOR( PointerStyle::SESize, sesize_, RID_CURSOR_SESIZE );
+        MAKE_CURSOR( PointerStyle::WindowNWSize, window_nwsize_, RID_CURSOR_WINDOW_NWSIZE );
+        MAKE_CURSOR( PointerStyle::WindowNESize, window_nesize_, RID_CURSOR_WINDOW_NESIZE );
+        MAKE_CURSOR( PointerStyle::WindowSWSize, window_swsize_, RID_CURSOR_WINDOW_SWSIZE );
+        MAKE_CURSOR( PointerStyle::WindowSESize, window_sesize_, RID_CURSOR_WINDOW_SESIZE );
+
+        MAKE_CURSOR( PointerStyle::Help, help_, RID_CURSOR_HELP );
+        MAKE_CURSOR( PointerStyle::Pen, pen_, RID_CURSOR_PEN );
+        MAKE_CURSOR( PointerStyle::Null, null, RID_CURSOR_NULL );
+        MAKE_CURSOR( PointerStyle::Magnify, magnify_, RID_CURSOR_MAGNIFY );
+        MAKE_CURSOR( PointerStyle::Fill, fill_, RID_CURSOR_FILL );
+        MAKE_CURSOR( PointerStyle::MoveData, movedata_, RID_CURSOR_MOVE_DATA );
+        MAKE_CURSOR( PointerStyle::CopyData, copydata_, RID_CURSOR_COPY_DATA );
+        MAKE_CURSOR( PointerStyle::MoveFile, movefile_, RID_CURSOR_MOVE_FILE );
+        MAKE_CURSOR( PointerStyle::CopyFile, copyfile_, RID_CURSOR_COPY_FILE );
+        MAKE_CURSOR( PointerStyle::MoveFiles, movefiles_, RID_CURSOR_MOVE_FILES );
+        MAKE_CURSOR( PointerStyle::CopyFiles, copyfiles_, RID_CURSOR_COPY_FILES );
+        MAKE_CURSOR( PointerStyle::NotAllowed, nodrop_, RID_CURSOR_NOT_ALLOWED );
+        MAKE_CURSOR( PointerStyle::Rotate, rotate_, RID_CURSOR_ROTATE );
+        MAKE_CURSOR( PointerStyle::HShear, hshear_, RID_CURSOR_H_SHEAR );
+        MAKE_CURSOR( PointerStyle::VShear, vshear_, RID_CURSOR_V_SHEAR );
+        MAKE_CURSOR( PointerStyle::DrawLine, drawline_, RID_CURSOR_DRAW_LINE );
+        MAKE_CURSOR( PointerStyle::DrawRect, drawrect_, RID_CURSOR_DRAW_RECT );
+        MAKE_CURSOR( PointerStyle::DrawPolygon, drawpolygon_, RID_CURSOR_DRAW_POLYGON );
+        MAKE_CURSOR( PointerStyle::DrawBezier, drawbezier_, RID_CURSOR_DRAW_BEZIER );
+        MAKE_CURSOR( PointerStyle::DrawArc, drawarc_, RID_CURSOR_DRAW_ARC );
+        MAKE_CURSOR( PointerStyle::DrawPie, drawpie_, RID_CURSOR_DRAW_PIE );
+        MAKE_CURSOR( PointerStyle::DrawCircleCut, drawcirclecut_, RID_CURSOR_DRAW_CIRCLE_CUT );
+        MAKE_CURSOR( PointerStyle::DrawEllipse, drawellipse_, RID_CURSOR_DRAW_ELLIPSE );
+        MAKE_CURSOR( PointerStyle::DrawConnect, drawconnect_, RID_CURSOR_DRAW_CONNECT );
+        MAKE_CURSOR( PointerStyle::DrawText, drawtext_, RID_CURSOR_DRAW_TEXT );
+        MAKE_CURSOR( PointerStyle::Mirror, mirror_, RID_CURSOR_MIRROR );
+        MAKE_CURSOR( PointerStyle::Crook, crook_, RID_CURSOR_CROOK );
+        MAKE_CURSOR( PointerStyle::Crop, crop_, RID_CURSOR_CROP );
+        MAKE_CURSOR( PointerStyle::MovePoint, movepoint_, RID_CURSOR_MOVE_POINT );
+        MAKE_CURSOR( PointerStyle::MoveBezierWeight, movebezierweight_, RID_CURSOR_MOVE_BEZIER_WEIGHT );
+        MAKE_CURSOR( PointerStyle::DrawFreehand, drawfreehand_, RID_CURSOR_DRAW_FREEHAND );
+        MAKE_CURSOR( PointerStyle::DrawCaption, drawcaption_, RID_CURSOR_DRAW_CAPTION );
+        MAKE_CURSOR( PointerStyle::LinkData, linkdata_, RID_CURSOR_LINK_DATA );
+        MAKE_CURSOR( PointerStyle::MoveDataLink, movedlnk_, RID_CURSOR_MOVE_DATA_LINK );
+        MAKE_CURSOR( PointerStyle::CopyDataLink, copydlnk_, RID_CURSOR_COPY_DATA_LINK );
+        MAKE_CURSOR( PointerStyle::LinkFile, linkfile_, RID_CURSOR_LINK_FILE );
+        MAKE_CURSOR( PointerStyle::MoveFileLink, moveflnk_, RID_CURSOR_MOVE_FILE_LINK );
+        MAKE_CURSOR( PointerStyle::CopyFileLink, copyflnk_, RID_CURSOR_COPY_FILE_LINK );
+        MAKE_CURSOR( PointerStyle::Chart, chart_, RID_CURSOR_CHART );
+        MAKE_CURSOR( PointerStyle::Detective, detective_, RID_CURSOR_DETECTIVE );
+        MAKE_CURSOR( PointerStyle::PivotCol, pivotcol_, RID_CURSOR_PIVOT_COLUMN );
+        MAKE_CURSOR( PointerStyle::PivotRow, pivotrow_, RID_CURSOR_PIVOT_ROW );
+        MAKE_CURSOR( PointerStyle::PivotField, pivotfld_, RID_CURSOR_PIVOT_FIELD );
+        MAKE_CURSOR( PointerStyle::PivotDelete, pivotdel_, RID_CURSOR_PIVOT_DELETE );
+        MAKE_CURSOR( PointerStyle::Chain, chain_, RID_CURSOR_CHAIN );
+        MAKE_CURSOR( PointerStyle::ChainNotAllowed, chainnot_, RID_CURSOR_CHAIN_NOT_ALLOWED );
+        MAKE_CURSOR( PointerStyle::AutoScrollN, asn_, RID_CURSOR_AUTOSCROLL_N );
+        MAKE_CURSOR( PointerStyle::AutoScrollS, ass_, RID_CURSOR_AUTOSCROLL_S );
+        MAKE_CURSOR( PointerStyle::AutoScrollW, asw_, RID_CURSOR_AUTOSCROLL_W );
+        MAKE_CURSOR( PointerStyle::AutoScrollE, ase_, RID_CURSOR_AUTOSCROLL_E );
+        MAKE_CURSOR( PointerStyle::AutoScrollNW, asnw_, RID_CURSOR_AUTOSCROLL_NW );
+        MAKE_CURSOR( PointerStyle::AutoScrollNE, asne_, RID_CURSOR_AUTOSCROLL_NE );
+        MAKE_CURSOR( PointerStyle::AutoScrollSW, assw_, RID_CURSOR_AUTOSCROLL_SW );
+        MAKE_CURSOR( PointerStyle::AutoScrollSE, asse_, RID_CURSOR_AUTOSCROLL_SE );
+        MAKE_CURSOR( PointerStyle::AutoScrollNS, asns_, RID_CURSOR_AUTOSCROLL_NS );
+        MAKE_CURSOR( PointerStyle::AutoScrollWE, aswe_, RID_CURSOR_AUTOSCROLL_WE );
+        MAKE_CURSOR( PointerStyle::AutoScrollNSWE, asnswe_, RID_CURSOR_AUTOSCROLL_NSWE );
+        MAKE_CURSOR( PointerStyle::TextVertical, vertcurs_, RID_CURSOR_TEXT_VERTICAL );
+
+        // #i32329#
+        MAKE_CURSOR( PointerStyle::TabSelectS, tblsels_, RID_CURSOR_TAB_SELECT_S );
+        MAKE_CURSOR( PointerStyle::TabSelectE, tblsele_, RID_CURSOR_TAB_SELECT_E );
+        MAKE_CURSOR( PointerStyle::TabSelectSE, tblselse_, RID_CURSOR_TAB_SELECT_SE );
+        MAKE_CURSOR( PointerStyle::TabSelectW, tblselw_, RID_CURSOR_TAB_SELECT_W );
+        MAKE_CURSOR( PointerStyle::TabSelectSW, tblselsw_, RID_CURSOR_TAB_SELECT_SW );
+
+        MAKE_CURSOR( PointerStyle::HideWhitespace, hidewhitespace_, RID_CURSOR_HIDE_WHITESPACE );
+        MAKE_CURSOR( PointerStyle::ShowWhitespace, showwhitespace_, RID_CURSOR_SHOW_WHITESPACE );
+
+    default:
+        SAL_WARN( "vcl", "pointer style " << static_cast<sal_Int32>(i_eStyle) << "not implemented" );
+        assert( false && "pointer style not implemented" );
+        break;
     }
+
+    NSImage* theImage = load_icon_by_name(aIconName);
+    assert ([theImage size].width == 128 || [theImage size].width == 32);
+    if ([theImage size].width == 128)
+    {
+        // If we have a 128x128 image, generate scaled versions of it.
+        // This will result in macOS picking a reasonably sized image for different screen dpi.
+        NSSize cursorSize = NSMakeSize(32,32);
+        NSImage *multiResImage = [[NSImage alloc] initWithSize:cursorSize];
+        for (int scale = 1; scale <= 4; scale++) {
+            NSAffineTransform *xform = [[NSAffineTransform alloc] init];
+            [xform scaleBy:scale];
+            id hints = @{ NSImageHintCTM: xform };
+            CGImageRef rasterCGImage = [theImage CGImageForProposedRect:NULL context:nil hints:hints];
+            NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:rasterCGImage];
+            [rep setSize:cursorSize];
+            [multiResImage addRepresentation:rep];
+        }
+        pCurs = [[NSCursor alloc] initWithImage: multiResImage hotSpot: aHotSpot];
+    }
+    else
+        pCurs = [[NSCursor alloc] initWithImage: theImage hotSpot: aHotSpot];
+
+    maCursors[ i_eStyle ] = pCurs;
     return pCurs;
 }
 
