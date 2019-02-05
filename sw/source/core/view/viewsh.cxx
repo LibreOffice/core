@@ -569,9 +569,8 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
 
 const SwRect& SwViewShell::VisArea() const
 {
-    // when using the tiled rendering, consider the entire document as our
-    // visible area
-    return comphelper::LibreOfficeKit::isActive()? GetLayout()->getFrameArea(): maVisArea;
+    // When running headless, consider the entire document as visible area (would be empty otherwise)
+    return Application::IsHeadlessModeEnabled() ? GetLayout()->getFrameArea() : maVisArea;
 }
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
