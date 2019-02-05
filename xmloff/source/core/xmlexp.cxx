@@ -1912,9 +1912,6 @@ bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> 
                 XMLBase64Export aBase64Exp(*this);
                 return aBase64Exp.exportOfficeBinaryDataElement(xInputStream);
             }
-
-            XMLBase64Export aBase64Exp(*this);
-            return aBase64Exp.exportOfficeBinaryDataElement(xInputStream);
         }
     }
 
