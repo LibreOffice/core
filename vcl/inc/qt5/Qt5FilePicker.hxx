@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vclpluginapi.h>
+
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -50,7 +52,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::ui::dialogs::XFolderPicker2, css::lang::XInitialization, css::lang::XServiceInfo>
     Qt5FilePicker_Base;
 
-class Qt5FilePicker : public QObject, public Qt5FilePicker_Base
+class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Base
 {
     Q_OBJECT
 
