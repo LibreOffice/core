@@ -104,8 +104,8 @@ public class SwAccessibleTextGraphicObject extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                        //change zoom value to 15%
-                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("15"));
+                        //change zoom value to 20%
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
                         //and back to 100%
                         PropSet.setPropertyValue("ZoomValue", Short.valueOf("100"));
                     } catch ( com.sun.star.lang.WrappedTargetException e ) {
