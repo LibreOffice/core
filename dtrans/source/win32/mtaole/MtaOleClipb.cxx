@@ -540,16 +540,16 @@ sal_Bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfn
 //
 //--------------------------------------------------------------------
 
-LRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
+HRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 {
-    return static_cast<LRESULT>( OleSetClipboard( pIDataObject ) );
+    return OleSetClipboard( pIDataObject );
 }
 
 //--------------------------------------------------------------------
 //
 //--------------------------------------------------------------------
 
-LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
+HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
 {
     OSL_ASSERT(NULL != ppStream);
 
@@ -562,16 +562,16 @@ LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
         hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
         OSL_ENSURE(SUCCEEDED(hr), "marshalling cliboard data object failed");
     }
-    return static_cast<LRESULT>(hr);
+    return hr;
 }
 
 //--------------------------------------------------------------------
 // flush the ole-clipboard
 //--------------------------------------------------------------------
 
-LRESULT CMtaOleClipboard::onFlushClipboard( )
+HRESULT CMtaOleClipboard::onFlushClipboard( )
 {
-    return static_cast<LRESULT>( OleFlushClipboard( ) );
+    return OleFlushClipboard( );
 }
 
 //--------------------------------------------------------------------
@@ -585,7 +585,7 @@ LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
     else if ( IsWindow( m_hwndNextClipViewer ) )
     {
         // forward the message to the next one
-        DWORD dwResult;
+        DWORD_PTR dwResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_CHANGECBCHAIN,
@@ -620,7 +620,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
     // forward the message to the next viewer in the chain
     if ( IsWindow( m_hwndNextClipViewer ) )
     {
-        DWORD dwResult;
+        DWORD_PTR dwResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_DRAWCLIPBOARD,

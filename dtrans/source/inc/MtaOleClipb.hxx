@@ -81,9 +81,9 @@ private:
     // from a different thread context!
     //---------------------------------------------------------------
 
-    LRESULT  onSetClipboard( IDataObject* pIDataObject );
-    LRESULT  onGetClipboard( LPSTREAM* ppStream );
-    LRESULT  onFlushClipboard( );
+    HRESULT  onSetClipboard( IDataObject* pIDataObject );
+    HRESULT  onGetClipboard( LPSTREAM* ppStream );
+    HRESULT  onFlushClipboard( );
     sal_Bool onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
     // win32 clipboard-viewer support
