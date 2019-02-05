@@ -129,7 +129,7 @@ private:
     std::unique_ptr<SvtSecurityOptions>         mpSecOptions;
     std::unique_ptr<svx::SecurityOptionsDialog> m_xSecOptDlg;
 
-    VclPtr<CertPathDialog> mpCertPathDlg;
+    std::unique_ptr<CertPathDialog> mpCertPathDlg;
 
     OUString            m_sPasswordStoringDeactivateStr;
 

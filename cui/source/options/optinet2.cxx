@@ -575,7 +575,6 @@ IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
-    , mpCertPathDlg(nullptr)
 {
     get(m_pSecurityOptionsPB, "options");
     get(m_pSavePasswordsCB, "savepassword");
@@ -624,7 +623,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 void SvxSecurityTabPage::dispose()
 {
     mpSecOptions.reset();
-    mpCertPathDlg.disposeAndClear();
+    mpCertPathDlg.reset();
     m_xSecOptDlg.reset();
     m_pSecurityOptionsPB.clear();
     m_pSavePasswordsCB.clear();
@@ -796,10 +795,10 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
 IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
 {
     if (!mpCertPathDlg)
-        mpCertPathDlg = VclPtr<CertPathDialog>::Create(this);
+        mpCertPathDlg.reset(new CertPathDialog(GetDialogFrameWeld()));
 
     OUString sOrig = mpCertPathDlg->getDirectory();
-    short nRet = mpCertPathDlg->Execute();
+    short nRet = mpCertPathDlg->run();
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
