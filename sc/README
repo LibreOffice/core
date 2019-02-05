@@ -41,3 +41,44 @@ ColumnBlock:
             * for each cell: 32 bit signed string length followed by string length bytes of the string (UTF-8)
         - 3 : formula
             * for each cell: 32 bit signed string length followed by the formula in R1C1 notation as a string
+
+
+=== Functions supporting Wildcards or Regular Expressions ===
+
+As this comes up every now and then, and rather should be documented in an
+extra list of the Help system, functions that support Wildcards or Regular
+Expressions *and* depend on the setting under
+Tools -> Options -> Calc -> Calculate are those that in ODF OpenFormula (ODFF)
+are defined to depend on the HOST-USE-REGULAR-EXPRESSIONS or HOST-USE-WILDCARDS
+properties, see
+https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html
+
+* Database Functions
+  * DAVERAGE
+  * DCOUNT
+  * DCOUNTA
+  * DGET
+  * DMAX
+  * DMIN
+  * DPRODUCT
+  * DSTDEV
+  * DSTDEVP
+  * DSUM
+  * DVAR
+  * DVARP
+* Information Functions
+  * COUNTIF
+  * COUNTIFS
+* Lookup Functions
+  * HLOOKUP
+  * LOOKUP
+  * MATCH
+  * VLOOKUP
+* Mathematical Functions
+  * SUMIF
+  * SUMIFS
+* Statistical Functions
+  * AVERAGEIF
+  * AVERAGEIFS
+* Text Functions
+  * SEARCH
