@@ -6933,7 +6933,6 @@ if test "$ENABLE_JAVA" != ""; then
     fi
 fi
 
-HAVE_JAVA9=
 dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
@@ -6985,9 +6984,6 @@ you must use the "--with-jdk-home" configure option explicitly])
             if test "$_jdk_ver" -gt 10600; then
                 JAVA_CLASSPATH_NOT_SET=TRUE
             fi
-            if test "$_jdk_ver" -ge 10900; then
-                HAVE_JAVA9=TRUE
-            fi
 
             AC_MSG_RESULT([checked (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
@@ -7010,23 +7006,12 @@ else
 fi
 
 dnl ===================================================================
-dnl Set target Java bytecode version
-dnl ===================================================================
-if test "$ENABLE_JAVA" != ""; then
-    if test "$HAVE_JAVA9" = "TRUE"; then
-        _java_target_ver="1.6"
-    else
-        _java_target_ver="1.5"
-    fi
-    JAVA_SOURCE_VER="$_java_target_ver"
-    JAVA_TARGET_VER="$_java_target_ver"
-fi
-
-dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
     javacompiler="javac"
+    JAVA_SOURCE_VER="1.6"
+    JAVA_TARGET_VER="1.6"
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
