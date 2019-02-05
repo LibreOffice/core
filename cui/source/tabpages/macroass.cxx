@@ -197,8 +197,8 @@ void SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
         const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.at(nNo);
-            AddEvent( pOwn->maUIName, pOwn->mnId );
+            const SfxEventName &rOwn = rList.at(nNo);
+            AddEvent( rOwn.maUIName, rOwn.mnId );
         }
     }
 }
@@ -216,8 +216,8 @@ void SfxMacroTabPage::Reset( const SfxItemSet* rSet )
         const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.at(nNo);
-            AddEvent( pOwn->maUIName, pOwn->mnId );
+            const SfxEventName &rOwn = rList.at(nNo);
+            AddEvent( rOwn.maUIName, rOwn.mnId );
         }
     }
 

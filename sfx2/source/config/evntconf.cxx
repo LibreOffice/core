@@ -49,17 +49,7 @@
 
 using namespace com::sun::star;
 
-SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
-{
-    aEventNamesList.clear();
-    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
-    {
-        SfxEventName* pTmp = rTbl.at( i );
-        std::unique_ptr<SfxEventName> pNew(new SfxEventName( *pTmp ));
-        aEventNamesList.push_back( std::move(pNew) );
-    }
-    return *this;
-}
+SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& ) = default;
 
 SfxEventNamesList::~SfxEventNamesList()
 {
@@ -77,11 +67,11 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
 
     for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
-        const SfxEventName *pOwn = rOwn.at( nNo );
-        const SfxEventName *pOther = rOther.at( nNo );
-        if (    pOwn->mnId != pOther->mnId ||
-                pOwn->maEventName != pOther->maEventName ||
-                pOwn->maUIName != pOther->maUIName )
+        const SfxEventName &rOwnEvent = rOwn.at( nNo );
+        const SfxEventName &rOtherEvent = rOther.at( nNo );
+        if (    rOwnEvent.mnId != rOtherEvent.mnId ||
+                rOwnEvent.maEventName != rOtherEvent.maEventName ||
+                rOwnEvent.maUIName != rOtherEvent.maUIName )
             return false;
     }
 
@@ -112,7 +102,7 @@ sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 
 void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, SvMacroItemId nID )
 {
-    aEventsList.push_back( std::unique_ptr<SfxEventName>(new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName )) );
+    aEventsList.push_back( SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
 }
 
 
