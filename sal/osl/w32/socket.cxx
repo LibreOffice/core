@@ -20,6 +20,7 @@
 #include "system.h"
 
 #include <osl/socket.h>
+#include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
@@ -607,7 +608,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
         sal_Char Host[256]= "";
         if (gethostname(Host, sizeof(Host)) == 0)
         {
-            /* check if we have an FQDN */
+            /* check if we have an FQDN; if not, try to determine it via dns first: */
             if (strchr(Host, '.') == nullptr)
             {
                 oslHostAddr pAddr;
@@ -618,7 +619,6 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                     RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
                 OSL_ASSERT(hostName != nullptr);
 
-                /* no, determine it via dns */
                 pAddr = osl_createHostAddrByName(hostName);
                 rtl_uString_release (hostName);
 
@@ -628,6 +628,19 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                     memset(LocalHostname, 0, sizeof(LocalHostname));
 
                 osl_destroyHostAddr (pAddr);
+            }
+            if (LocalHostname[0] == u'\0')
+            {
+                OUString u;
+                if (rtl_convertStringToUString(
+                        &u.pData, Host, strlen(Host), osl_getThreadTextEncoding(),
+                        (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                         | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
+                    && u.getLength() < SAL_N_ELEMENTS(LocalHostname))
+                {
+                    memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof sal_Unicode);
+                }
             }
         }
     }
