@@ -1902,8 +1902,12 @@ bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> 
         Reference<XInputStream> xInputStream(mxGraphicStorageHandler->createInputStream(rxGraphic));
         if (xInputStream.is())
         {
-            XMLBase64Export aBase64Exp(*this);
-            return aBase64Exp.exportOfficeBinaryDataElement(xInputStream);
+            Graphic aGraphic(rxGraphic);
+            if (aGraphic.getOriginURL().isEmpty()) // don't add the base64 if the origin URL is set (image is from an external URL)
+            {
+                XMLBase64Export aBase64Exp(*this);
+                return aBase64Exp.exportOfficeBinaryDataElement(xInputStream);
+            }
         }
     }
 
