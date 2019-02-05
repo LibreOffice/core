@@ -2214,7 +2214,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                 Any aError = ::cppu::getCaughtException();
                 OUString sMessage = ResourceManager::loadString( RID_NO_SUCH_DATA_SOURCE,
                     "$name$", m_aDataSourceName, "$error$", extractExceptionMessage( m_aContext, aError ) );
-                ::dbtools::throwGenericSQLException( sMessage, *this );
+                ::dbtools::throwGenericSQLException( sMessage, *this, aError );
             }
         }
         setActiveConnection(xNewConn);
@@ -2574,9 +2574,10 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
         m_bParametersDirty = true;
         x->closeInput();
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        throw SQLException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw SQLException("ORowSet::setBinaryStream", *this, "S1000", 0,anyEx);
     }
 }
 
@@ -2597,9 +2598,10 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         rParamValue.setTypeKind( DataType::LONGVARCHAR );
         x->closeInput();
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        throw SQLException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw SQLException("ORowSet::setCharacterStream", *this, "S1000", 0, anyEx);
     }
 }
 
