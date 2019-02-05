@@ -159,6 +159,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbEmbedFontScriptComplex(true),
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),
+        mbDocShellRecalc(false),
         mnMutationGuardFlags(0)
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
