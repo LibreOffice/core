@@ -249,7 +249,9 @@ void SAL_CALL Qt5FilePicker::setDisplayDirectory(const OUString& dir)
         SolarMutexReleaser aReleaser;
         return Q_EMIT setDisplayDirectorySignal(dir);
     }
-    m_pFileDialog->setDirectory(toQString(dir));
+
+    QString qDir(toQString(dir));
+    m_pFileDialog->setDirectoryUrl(QUrl(qDir));
 }
 
 OUString SAL_CALL Qt5FilePicker::getDisplayDirectory()
