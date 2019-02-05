@@ -56,19 +56,19 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
         show_where_not = FALSE;
     }
 
-    if (newfile) {
+    if (!newfile)
+        return;
 
-        /* Only add new dependency files if they don't have "/usr/include" in them. */
-        if (!(newfile->i_file && strstr(newfile->i_file, "/usr/"))) {
-            included_by(file, newfile);
-        }
+    /* Only add new dependency files if they don't have "/usr/include" in them. */
+    if (!(newfile->i_file && strstr(newfile->i_file, "/usr/"))) {
+        included_by(file, newfile);
+    }
 
-        if (!newfile->i_searched) {
-            newfile->i_searched = TRUE;
-            content = getfile(newfile->i_file);
-            find_includes(content, newfile, file_red, 0, failOK, incCollection, symbols);
-            freefile(content);
-        }
+    if (!newfile->i_searched) {
+        newfile->i_searched = TRUE;
+        content = getfile(newfile->i_file);
+        find_includes(content, newfile, file_red, 0, failOK, incCollection, symbols);
+        freefile(content);
     }
 }
 

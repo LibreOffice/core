@@ -227,24 +227,24 @@ void
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
-    if (Cplusplus)
-    {
-        ta.t = p = (uchar *) outptr;
+    if (!Cplusplus)
+        return;
 
-        if (! end)
-            strcpy((char *) p, "extern \"C\" {");
-        else
-            strcpy((char *) p, "}");
+    ta.t = p = (uchar *) outptr;
 
-        p += strlen((char *) p);
+    if (! end)
+        strcpy((char *) p, "extern \"C\" {");
+    else
+        strcpy((char *) p, "}");
 
-        *p++ = '\n';
+    p += strlen((char *) p);
 
-        ta.len = (char *) p - outptr;
-        outptr = (char *) p;
-        tr.tp = tr.bp;
-        puttokens(&tr);
-    }
+    *p++ = '\n';
+
+    ta.len = (char *) p - outptr;
+    outptr = (char *) p;
+    tr.tp = tr.bp;
+    puttokens(&tr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
