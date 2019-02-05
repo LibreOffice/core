@@ -78,11 +78,18 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode)
     : Qt5FilePicker_Base(m_aHelperMutex)
-    , m_pFileDialog(new QFileDialog())
+    , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
+    , m_bIsFolderPicker(eMode == QFileDialog::Directory)
 {
     m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
     m_pFileDialog->setFileMode(eMode);
     m_pFileDialog->setWindowModality(Qt::ApplicationModal);
+
+    if (m_bIsFolderPicker)
+    {
+        m_pFileDialog->setOption(QFileDialog::ShowDirsOnly, true);
+        m_pFileDialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
+    }
 
     m_pExtraControls = new QWidget();
     m_pLayout = dynamic_cast<QGridLayout*>(m_pFileDialog->layout());
@@ -232,10 +239,11 @@ void SAL_CALL Qt5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
         return Q_EMIT setMultiSelectionModeSignal(multiSelect);
     }
 
-    if (multiSelect)
-        m_pFileDialog->setFileMode(QFileDialog::ExistingFiles);
-    else
-        m_pFileDialog->setFileMode(QFileDialog::ExistingFile);
+    if (m_bIsFolderPicker || m_pFileDialog->acceptMode() == QFileDialog::AcceptSave)
+        return;
+
+    m_pFileDialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles
+                                           : QFileDialog::ExistingFile);
 }
 
 void SAL_CALL Qt5FilePicker::setDefaultName(const OUString& name)

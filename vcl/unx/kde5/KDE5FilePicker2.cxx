@@ -82,13 +82,14 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     : Qt5FilePicker(eMode)
-    , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
     , allowRemoteUrls(false)
-    , mbIsFolderPicker(eMode == QFileDialog::Directory)
 {
-    _dialog->setSupportedSchemes({
+    // use native dialog
+    m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
+
+    m_pFileDialog->setSupportedSchemes({
         QStringLiteral("file"),
         QStringLiteral("ftp"),
         QStringLiteral("http"),
@@ -98,16 +99,10 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
         QStringLiteral("smb"),
     });
 
-    _dialog->setFileMode(eMode);
-
-    if (mbIsFolderPicker)
-    {
-        _dialog->setOption(QFileDialog::ShowDirsOnly, true);
-        _dialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
-    }
-
-    connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
-    connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
+    connect(m_pFileDialog.get(), &QFileDialog::filterSelected, this,
+            &KDE5FilePicker::filterChanged);
+    connect(m_pFileDialog.get(), &QFileDialog::fileSelected, this,
+            &KDE5FilePicker::selectionChanged);
     connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
             Qt::BlockingQueuedConnection);
 
@@ -115,8 +110,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(this, &KDE5FilePicker::setTitleSignal, this, &KDE5FilePicker::setTitleSlot,
             Qt::BlockingQueuedConnection);
     // XFilePicker
-    connect(this, &KDE5FilePicker::setMultiSelectionSignal, this,
-            &KDE5FilePicker::setMultiSelectionSlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setDisplayDirectorySignal, this,
@@ -157,11 +150,7 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     qApp->installEventFilter(this);
 }
 
-KDE5FilePicker::~KDE5FilePicker()
-{
-    delete _extraControls;
-    delete _dialog;
-}
+KDE5FilePicker::~KDE5FilePicker() { delete _extraControls; }
 
 void SAL_CALL
 KDE5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
@@ -185,7 +174,7 @@ void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
         return Q_EMIT setTitleSignal(title);
     }
 
-    _dialog->setWindowTitle(toQString(title));
+    m_pFileDialog->setWindowTitle(toQString(title));
 }
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
@@ -197,28 +186,13 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
     }
 
     if (!_filters.isEmpty())
-        _dialog->setNameFilters(_filters);
+        m_pFileDialog->setNameFilters(_filters);
     if (!_currentFilter.isEmpty())
-        _dialog->selectNameFilter(_currentFilter);
+        m_pFileDialog->selectNameFilter(_currentFilter);
 
-    _dialog->show();
+    m_pFileDialog->show();
     //block and wait for user input
-    return _dialog->exec() == QFileDialog::Accepted ? 1 : 0;
-}
-
-// XFilePicker
-void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setMultiSelectionSignal(multiSelect);
-    }
-
-    if (mbIsFolderPicker || _dialog->acceptMode() == QFileDialog::AcceptSave)
-        return;
-
-    _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
+    return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
 }
 
 void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
@@ -229,7 +203,7 @@ void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
         return Q_EMIT setDefaultNameSignal(name);
     }
 
-    _dialog->selectFile(toQString(name));
+    m_pFileDialog->selectFile(toQString(name));
 }
 
 void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
@@ -241,7 +215,7 @@ void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
     }
 
     QString qDir(toQString(dir));
-    _dialog->setDirectoryUrl(QUrl(qDir));
+    m_pFileDialog->setDirectoryUrl(QUrl(qDir));
 }
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
@@ -278,7 +252,7 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
         return Q_EMIT getSelectedFilesSignal();
     }
 
-    QList<QUrl> aURLs = _dialog->selectedUrls();
+    QList<QUrl> aURLs = m_pFileDialog->selectedUrls();
     uno::Sequence<OUString> seq(aURLs.size());
 
     size_t i = 0;
@@ -334,7 +308,7 @@ OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
         return Q_EMIT getCurrentFilterSignal();
     }
 
-    OUString filter = toOUString(_titleToFilters.key(_dialog->selectedNameFilter()));
+    OUString filter = toOUString(_titleToFilters.key(m_pFileDialog->selectedNameFilter()));
 
     //default if not found
     if (filter.isEmpty())
@@ -673,7 +647,7 @@ uno::Any KDE5FilePicker::handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAc
 
 OUString KDE5FilePicker::implGetDirectory()
 {
-    OUString dir = toOUString(_dialog->directoryUrl().url());
+    OUString dir = toOUString(m_pFileDialog->directoryUrl().url());
     return dir;
 }
 
@@ -786,12 +760,12 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     QFileDialog::AcceptMode operationMode
         = saveDialog ? QFileDialog::AcceptSave : QFileDialog::AcceptOpen;
 
-    _dialog->setAcceptMode(operationMode);
+    m_pFileDialog->setAcceptMode(operationMode);
 
     if (saveDialog)
     {
-        _dialog->setConfirmOverwrite(true);
-        _dialog->setFileMode(QFileDialog::AnyFile);
+        m_pFileDialog->setConfirmOverwrite(true);
+        m_pFileDialog->setFileMode(QFileDialog::AnyFile);
     }
 
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));

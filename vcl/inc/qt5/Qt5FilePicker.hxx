@@ -75,6 +75,8 @@ protected:
     QLabel* m_pFilterLabel; ///< label to display the filter
     QHash<sal_Int16, QWidget*> m_aCustomWidgetsMap; ///< map of SAL control ID's to widget
 
+    bool m_bIsFolderPicker;
+
 public:
     explicit Qt5FilePicker(QFileDialog::FileMode);
     virtual ~Qt5FilePicker() override;
