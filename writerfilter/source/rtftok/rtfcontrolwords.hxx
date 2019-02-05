@@ -2024,11 +2024,25 @@ extern RTFSymbol const aRTFControlWords[];
 extern int nRTFControlWords;
 
 /// Represents an RTF Math Control Word
-struct RTFMathSymbol
+class RTFMathSymbol
 {
-    RTFKeyword eKeyword;
-    int nToken; ///< This is the OOXML token equivalent.
-    Destination eDestination;
+    RTFKeyword m_eKeyword;
+    int m_nToken; ///< This is the OOXML token equivalent.
+    Destination m_eDestination;
+
+public:
+    RTFMathSymbol(RTFKeyword eKeyword, int nToken = 0,
+                  Destination eDestination = Destination::NORMAL)
+        : m_eKeyword(eKeyword)
+        , m_nToken(nToken)
+        , m_eDestination(eDestination)
+    {
+    }
+
+    int GetToken() const { return m_nToken; }
+
+    Destination GetDestination() const { return m_eDestination; }
+
     bool operator<(const RTFMathSymbol& rOther) const;
 };
 
