@@ -153,6 +153,57 @@ LayoutManager::~LayoutManager()
     m_pGlobalSettings.reset();
 }
 
+void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
+{
+    SolarMutexClearableGuard aWriteLock;
+
+    if (!m_bInplaceMenuSet && !m_xMenuBar.is())
+    {
+        m_xMenuBar = implts_createElement( rMenuBarName );
+        if ( m_xMenuBar.is() )
+        {
+            SolarMutexGuard aGuard;
+
+            SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
+            if ( pSysWindow )
+            {
+                Reference< awt::XMenuBar > xMenuBar;
+
+                Reference< XPropertySet > xPropSet( m_xMenuBar, UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    try
+                    {
+                        xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
+                    }
+                    catch (const beans::UnknownPropertyException&)
+                    {
+                    }
+                    catch (const lang::WrappedTargetException&)
+                    {
+                    }
+                }
+
+                if ( xMenuBar.is() )
+                {
+                    VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
+                    if ( pAwtMenuBar )
+                    {
+                        MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
+                        if ( pMenuBar )
+                        {
+                            pSysWindow->SetMenuBar(pMenuBar);
+                            pMenuBar->SetDisplayable( m_bMenuVisible );
+                            implts_updateMenuBarClose();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    aWriteLock.clear();
+}
+
 // Internal helper function
 void LayoutManager::impl_clearUpMenuBar()
 {
@@ -1379,7 +1430,6 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
 
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame = m_xFrame;
-    bool    bInPlaceMenu = m_bInplaceMenuSet;
     aReadLock.clear();
 
     if ( !xFrame.is() )
@@ -1415,55 +1465,13 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
             bMustBeLayouted = m_xToolbarManager->isLayoutDirty();
         }
         else if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
-                  aElementName.equalsIgnoreAsciiCase("menubar") )
+                  aElementName.equalsIgnoreAsciiCase("menubar") &&
+                  implts_isFrameOrWindowTop(xFrame) )
         {
-            // #i38743# don't create a menubar if frame isn't top
-            if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
-            {
-                m_xMenuBar = implts_createElement( aName );
-                if ( m_xMenuBar.is() )
-                {
-                    SolarMutexGuard aGuard;
+            implts_createMenuBar( aName );
+            if (m_bMenuVisible)
+                bNotify = true;
 
-                    SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
-                    if ( pSysWindow )
-                    {
-                        Reference< awt::XMenuBar > xMenuBar;
-
-                        Reference< XPropertySet > xPropSet( m_xMenuBar, UNO_QUERY );
-                        if ( xPropSet.is() )
-                        {
-                            try
-                            {
-                                xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
-                            }
-                            catch (const beans::UnknownPropertyException&)
-                            {
-                            }
-                            catch (const lang::WrappedTargetException&)
-                            {
-                            }
-                        }
-
-                        if ( xMenuBar.is() )
-                        {
-                            VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
-                            if ( pAwtMenuBar )
-                            {
-                                MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
-                                if ( pMenuBar )
-                                {
-                                    pSysWindow->SetMenuBar(pMenuBar);
-                                    pMenuBar->SetDisplayable( m_bMenuVisible );
-                                    if ( m_bMenuVisible )
-                                        bNotify = true;
-                                    implts_updateMenuBarClose();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             aWriteLock.clear();
         }
         else if ( aElementType.equalsIgnoreAsciiCase("statusbar") &&
