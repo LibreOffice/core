@@ -922,7 +922,7 @@ NSCursor* AquaSalFrame::getCurrentCursor()
         pCursor = GetSalData()->getCursor( mePointerStyle );
         if( pCursor == nil )
         {
-            OSL_FAIL( "unmapped cursor" );
+            assert( false && "unmapped cursor" );
             pCursor = [NSCursor arrowCursor];
         }
         break;

@@ -215,6 +215,15 @@
 #define RID_CURSOR_TEXT_VERTICAL     "vcl/res/text_vertical.png"
 #define RID_CURSOR_HIDE_WHITESPACE   "vcl/res/hide_whitespace.png"
 #define RID_CURSOR_SHOW_WHITESPACE   "vcl/res/show_whitespace.png"
+#define RID_CURSOR_WAIT              "vcl/res/wait.png"
+#define RID_CURSOR_NWSIZE            "vcl/res/nwsize.png"
+#define RID_CURSOR_NESIZE            "vcl/res/nesize.png"
+#define RID_CURSOR_SWSIZE            "vcl/res/swsize.png"
+#define RID_CURSOR_SESIZE            "vcl/res/sesize.png"
+#define RID_CURSOR_WINDOW_NWSIZE     "vcl/res/window_nwsize.png"
+#define RID_CURSOR_WINDOW_NESIZE     "vcl/res/window_nesize.png"
+#define RID_CURSOR_WINDOW_SWSIZE     "vcl/res/window_swsize.png"
+#define RID_CURSOR_WINDOW_SESIZE     "vcl/res/window_sesize.png"
 
 #define CHEVRON                      "sfx2/res/chevron.png"
 
