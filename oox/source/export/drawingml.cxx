@@ -417,7 +417,9 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         }
 
         // check if an ooxml gradient had been imported and if the user has modified it
-        if( EqualGradients( aOriginalGradient, aGradient ) )
+        // Gradient grab-bag depends on theme grab-bag, which is implemented
+        // only for DOCX.
+        if( EqualGradients( aOriginalGradient, aGradient ) && GetDocumentType() == DOCUMENT_DOCX)
         {
             // If we have no gradient stops that means original gradient were defined by a theme.
             if( aGradientStops.hasElements() )
