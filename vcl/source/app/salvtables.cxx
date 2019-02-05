@@ -1936,6 +1936,7 @@ private:
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
     DECL_LINK(EndDragHdl, HeaderBar*, void);
+    DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
@@ -1956,6 +1957,7 @@ public:
             //make the last entry fill available space
             pHeaderBar->SetItemSize(pHeaderBar->GetItemId(pHeaderBar->GetItemCount() - 1 ), HEADERBAR_FULLSIZE);
             pHeaderBar->SetEndDragHdl(LINK(this, SalInstanceTreeView, EndDragHdl));
+            pHeaderBar->SetSelectHdl(LINK(this, SalInstanceTreeView, HeaderBarClickedHdl));
         }
         m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
@@ -2487,7 +2489,36 @@ public:
     virtual void make_sorted() override
     {
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
-        m_xTreeView->GetModel()->Resort();
+        set_sort_order(true);
+    }
+
+    virtual void set_sort_order(bool bAscending) override
+    {
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            sal_uInt16 nTextId = pHeaderBar->GetItemId(0);
+            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
+            if (nBits & HeaderBarItemBits::CLICKABLE)
+            {
+                nBits &= ~HeaderBarItemBits::UPARROW;
+                nBits &= ~HeaderBarItemBits::DOWNARROW;
+                if (bAscending)
+                    nBits |= HeaderBarItemBits::DOWNARROW;
+                else
+                    nBits |= HeaderBarItemBits::UPARROW;
+                pHeaderBar->SetItemBits(nTextId, nBits);
+            }
+        }
+
+        SvTreeList* pListModel = m_xTreeView->GetModel();
+        pListModel->SetSortMode(bAscending ? SortAscending : SortDescending);
+        pListModel->Resort();
+    }
+
+    virtual bool get_sort_order() const override
+    {
+        return m_xTreeView->GetModel()->GetSortMode() == SortAscending;
     }
 
     SvTabListBox& getTreeView()
@@ -2500,6 +2531,7 @@ public:
         SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
         if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
         {
+            pHeaderBar->SetSelectHdl(Link<HeaderBar*, void>());
             pHeaderBar->SetEndDragHdl(Link<HeaderBar*, void>());
         }
         m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
@@ -2552,6 +2584,14 @@ IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
     for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
         aTabPositions.push_back(aTabPositions[i] + pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));
     m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
+}
+
+IMPL_LINK(SalInstanceTreeView, HeaderBarClickedHdl, HeaderBar*, pHeaderBar, void)
+{
+    sal_uInt16 nId = pHeaderBar->GetCurItemId();
+    if (!(pHeaderBar->GetItemBits(nId) & HeaderBarItemBits::CLICKABLE))
+        return;
+    signal_column_clicked(pHeaderBar->GetItemPos(nId));
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)

@@ -455,6 +455,7 @@ class VCL_DLLPUBLIC TreeView : virtual public Container
 protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, void> m_aRowActivatedHdl;
+    Link<int, void> m_aColumnClickedHdl;
     Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
     // if handler returns false, the expansion of the row is refused
     Link<TreeIter&, bool> m_aExpandingHdl;
@@ -463,6 +464,7 @@ protected:
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
+    void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
     bool signal_expanding(TreeIter& rIter)
     {
         return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
@@ -515,6 +517,7 @@ public:
     {
         m_aRadioToggleHdl = rLink;
     }
+    void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
 
     //by index
     virtual int get_selected_index() const = 0;
@@ -599,6 +602,8 @@ public:
 
     virtual int n_children() const = 0;
     virtual void make_sorted() = 0;
+    virtual bool get_sort_order() const = 0;
+    virtual void set_sort_order(bool bAscending) = 0;
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
 

@@ -4956,15 +4956,19 @@ private:
     GtkTreeView* m_pTreeView;
     GtkTreeStore* m_pTreeStore;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    GList *m_pColumns;
+    std::vector<gulong> m_aColumnSignalIds;
     // map from toggle column to toggle visibility column
     std::map<int, int> m_aToggleVisMap;
     gint m_nTextCol;
+    gint m_nTextColHeader;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
+    GtkSortType m_eSortType;
 
     DECL_LINK(async_signal_changed, void*, void);
 
@@ -5142,30 +5146,57 @@ private:
         gtk_tree_path_free(tree_path);
     }
 
+    void signal_column_clicked(GtkTreeViewColumn* pClickedColumn)
+    {
+        int nIndex(0);
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            if (pColumn == pClickedColumn)
+            {
+                TreeView::signal_column_clicked(nIndex);
+                break;
+            }
+            ++nIndex;
+        }
+    }
+
+    static void signalColumnClicked(GtkTreeViewColumn* pColumn, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->signal_column_clicked(pColumn);
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_nTextCol(-1)
+        , m_nTextColHeader(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
+        , m_eSortType(GTK_SORT_ASCENDING)
     {
-        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        int nIndex(0);
-        for (GList* pEntry = g_list_first(pColumns); pEntry; pEntry = g_list_next(pEntry))
+        m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        int nIndex(0), nHeader(0);
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            m_aColumnSignalIds.push_back(g_signal_connect(pColumn, "clicked", G_CALLBACK(signalColumnClicked), this));
             GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
             for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
                 if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+                {
                     m_nTextCol = nIndex;
+                    m_nTextColHeader = nHeader;
+                }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
                     g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
@@ -5183,8 +5214,8 @@ public:
                 ++nIndex;
             }
             g_list_free(pRenderers);
+            ++nHeader;
         }
-        g_list_free(pColumns);
         m_nIdCol = nIndex++;
         for (auto& a : m_aToggleVisMap)
         {
@@ -5194,8 +5225,7 @@ public:
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
     {
-        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        GList* pEntry = g_list_first(pColumns);
+        GList* pEntry = g_list_first(m_pColumns);
         for (auto nWidth : rWidths)
         {
             assert(pEntry && "wrong count");
@@ -5203,27 +5233,22 @@ public:
             gtk_tree_view_column_set_fixed_width(pColumn, nWidth);
             pEntry = g_list_next(pEntry);
         }
-        g_list_free(pColumns);
     }
 
     virtual OUString get_column_title(int nColumn) const override
     {
-        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(pColumns, nColumn));
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
         const gchar* pTitle = gtk_tree_view_column_get_title(pColumn);
         OUString sRet = OUString(pTitle, pTitle ? strlen(pTitle) : 0, RTL_TEXTENCODING_UTF8);
-        g_list_free(pColumns);
         return sRet;
     }
 
     virtual void set_column_title(int nColumn, const OUString& rTitle) override
     {
-        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(pColumns, nColumn));
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
         gtk_tree_view_column_set_title(pColumn, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
-        g_list_free(pColumns);
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
@@ -5310,9 +5335,23 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
+        set_sort_order(true);
+    }
+
+    virtual void set_sort_order(bool bAscending) override
+    {
+        m_eSortType = bAscending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-        gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
-        gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sort_func, m_xSorter.get(), nullptr);
+        gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, m_eSortType);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextColHeader));
+        assert(pColumn && "wrong count");
+        if (gtk_tree_view_column_get_sort_indicator(pColumn))
+            gtk_tree_view_column_set_sort_order(pColumn, m_eSortType);
+    }
+
+    virtual bool get_sort_order() const override
+    {
+        return m_eSortType == GTK_SORT_ASCENDING;
     }
 
     virtual int n_children() const override
@@ -5681,7 +5720,7 @@ public:
         if (m_xSorter)
         {
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, m_eSortType);
         }
         enable_notify_events();
     }
@@ -5692,7 +5731,7 @@ public:
         if (m_xSorter)
         {
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-            gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
+            gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, m_eSortType);
         }
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore));
         GtkInstanceContainer::thaw();
@@ -5703,8 +5742,7 @@ public:
     virtual int get_height_rows(int nRows) const override
     {
         gint nMaxRowHeight = 0;
-        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        for (GList* pEntry = g_list_first(pColumns); pEntry; pEntry = g_list_next(pEntry))
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
             GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
@@ -5714,7 +5752,6 @@ public:
             nMaxRowHeight = std::max(nMaxRowHeight, nRowHeight);
             g_list_free(pRenderers);
         }
-        g_list_free(pColumns);
 
         gint nVerticalSeparator;
         gtk_widget_style_get(GTK_WIDGET(m_pTreeView), "vertical-separator", &nVerticalSeparator, nullptr);
@@ -5807,6 +5844,14 @@ public:
         g_signal_handler_disconnect(m_pTreeView, m_nTestExpandRowSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
+
+        for (GList* pEntry = g_list_last(m_pColumns); pEntry; pEntry = g_list_previous(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            g_signal_handler_disconnect(pColumn, m_aColumnSignalIds.back());
+            m_aColumnSignalIds.pop_back();
+        }
+        g_list_free(m_pColumns);
     }
 };
 

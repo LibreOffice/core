@@ -1123,6 +1123,30 @@ namespace
         return bHeadersVisible;
     }
 
+    bool extractSortIndicator(VclBuilder::stringmap &rMap)
+    {
+        bool bSortIndicator = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("sort-indicator"));
+        if (aFind != rMap.end())
+        {
+            bSortIndicator = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bSortIndicator;
+    }
+
+    bool extractClickable(VclBuilder::stringmap &rMap)
+    {
+        bool bClickable = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("clickable"));
+        if (aFind != rMap.end())
+        {
+            bClickable = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bClickable;
+    }
+
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame)
     {
         if (!rFrame.is())
@@ -1950,8 +1974,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             SvHeaderTabListBox* pTreeView = dynamic_cast<SvHeaderTabListBox*>(pParent);
             if (HeaderBar* pHeaderBar = pTreeView ? pTreeView->GetHeaderBar() : nullptr)
             {
-                OUString sTitle(extractTitle(rMap));
-                HeaderBarItemBits nBits = HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::CLICKABLE;
+                HeaderBarItemBits nBits = HeaderBarItemBits::LEFTIMAGE;
+                if (extractClickable(rMap))
+                    nBits |= HeaderBarItemBits::CLICKABLE;
+                if (extractSortIndicator(rMap))
+                    nBits |= HeaderBarItemBits::DOWNARROW;
                 float fAlign = extractAlignment(rMap);
                 if (fAlign == 0.0)
                     nBits |= HeaderBarItemBits::LEFT;
@@ -1960,6 +1987,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 else if (fAlign == 0.5)
                     nBits |= HeaderBarItemBits::CENTER;
                 auto nItemId = pHeaderBar->GetItemCount() + 1;
+                OUString sTitle(extractTitle(rMap));
                 pHeaderBar->InsertItem(nItemId, sTitle, 100, nBits);
             }
         }
