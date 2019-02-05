@@ -514,7 +514,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             // if there's no viewport set, all fly-frames will be painted,
             // which is slow, wastes memory, and can cause other trouble.
             (void) rViewInformation; // suppress "unused parameter" warning
-            assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
+            assert(Application::IsHeadlessModeEnabled() || !rViewInformation.getViewport().isEmpty());
             if ( !m_pFlyFrame->IsFlyInContentFrame() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
