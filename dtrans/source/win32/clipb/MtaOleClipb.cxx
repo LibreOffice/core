@@ -458,12 +458,12 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
     return bRet;
 }
 
-LRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
+HRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 {
-    return static_cast<LRESULT>( OleSetClipboard( pIDataObject ) );
+    return OleSetClipboard( pIDataObject );
 }
 
-LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
+HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
 {
     OSL_ASSERT(nullptr != ppStream);
 
@@ -476,14 +476,14 @@ LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
         hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
         OSL_ENSURE(SUCCEEDED(hr), "marshalling cliboard data object failed");
     }
-    return static_cast<LRESULT>(hr);
+    return hr;
 }
 
 // flush the ole-clipboard
 
-LRESULT CMtaOleClipboard::onFlushClipboard( )
+HRESULT CMtaOleClipboard::onFlushClipboard( )
 {
-    return static_cast<LRESULT>( OleFlushClipboard( ) );
+    return OleFlushClipboard();
 }
 
 // handle clipboard update event
