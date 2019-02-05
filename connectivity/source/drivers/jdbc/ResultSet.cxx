@@ -35,6 +35,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <TConnection.hxx>
@@ -729,7 +730,8 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     }
     catch(const Exception&)
     {
-        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateBinaryStream", *this );
+        Any anyEx = ::cppu::getCaughtException();
+        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateBinaryStream", *this, anyEx );
     }
 }
 
@@ -760,7 +762,8 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     }
     catch(const Exception&)
     {
-        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateCharacterStream", *this );
+        Any anyEx = ::cppu::getCaughtException();
+        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateCharacterStream", *this, anyEx );
     }
 }
 

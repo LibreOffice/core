@@ -400,7 +400,7 @@ void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 0, _rNextException);
 }
 
-void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext )
+void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any& _rNextException )
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -413,7 +413,7 @@ void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, cons
         _rxContext,
         getStandardSQLState( StandardSQLState::FEATURE_NOT_IMPLEMENTED ),
         0,
-        Any()
+        _rNextException
     );
 }
 

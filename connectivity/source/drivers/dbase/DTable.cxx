@@ -1068,12 +1068,12 @@ bool ODbaseTable::CreateImpl()
             }
             catch(const Exception&)
             {
-
+                css::uno::Any anyEx = cppu::getCaughtException();
                 const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                         STR_COULD_NOT_DELETE_FILE,
                         "$name$", aName
                      ) );
-                ::dbtools::throwGenericSQLException( sError, *this );
+                ::dbtools::throwGenericSQLException( sError, *this, anyEx );
             }
         }
         if (!CreateMemoFile(aURL))
@@ -1086,11 +1086,12 @@ bool ODbaseTable::CreateImpl()
             }
             catch(const ContentCreationException&)
             {
+                css::uno::Any anyEx = cppu::getCaughtException();
                 const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                         STR_COULD_NOT_DELETE_FILE,
                         "$name$", aName
                      ) );
-                ::dbtools::throwGenericSQLException( sError, *this );
+                ::dbtools::throwGenericSQLException( sError, *this, anyEx );
             }
             return false;
         }

@@ -272,7 +272,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
-        const css::uno::Reference< css::uno::XInterface >& _rxContext
+        const css::uno::Reference< css::uno::XInterface >& _rxContext,
+        const css::uno::Any& _rNextException = css::uno::Any()
     );
 
 /** throw a RuntimeException (Optional feature not implemented)
