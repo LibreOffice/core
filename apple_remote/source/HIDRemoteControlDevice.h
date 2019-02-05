@@ -50,7 +50,7 @@
     int supportedButtonEvents;
 }
 
-// When your application needs to much time on the main thread when processing an event other events
+// When your application needs too much time on the main thread when processing an event other events
 // may already be received which are put on a backlog. As soon as your main thread
 // has some spare time this backlog is processed and may flood your delegate with calls.
 // Backlog processing is turned off by default.
