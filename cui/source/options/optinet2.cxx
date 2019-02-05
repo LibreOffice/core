@@ -784,8 +784,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword(xTmpHandler) )
         {
-            ScopedVclPtrInstance< svx::WebConnectionInfoDialog > aDlg(this);
-            aDlg->Execute();
+            svx::WebConnectionInfoDialog aDlg(GetDialogFrameWeld());
+            aDlg.run();
         }
     }
     catch (const Exception&)
