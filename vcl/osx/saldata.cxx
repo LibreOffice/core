@@ -219,29 +219,49 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 NSCursor* SalData::getCursor( PointerStyle i_eStyle )
 {
     NSCursor* pCurs = maCursors[ i_eStyle ];
-    if( pCurs == INVALID_CURSOR_PTR )
-    {
-        pCurs = nil;
-        if( aCursorTab[ i_eStyle ].pBaseName )
-        {
-            NSPoint aHotSpot = aCursorTab[ i_eStyle ].aHotSpot;
-            CFStringRef pCursorName =
+    if( pCurs != INVALID_CURSOR_PTR )
+        return pCurs;
+
+    assert( aCursorTab[ i_eStyle ].pBaseName );
+    if( !aCursorTab[ i_eStyle ].pBaseName )
+        return nil;
+
+    NSPoint aHotSpot = aCursorTab[ i_eStyle ].aHotSpot;
+    CFStringRef pCursorName =
                 CFStringCreateWithCStringNoCopy(
                     kCFAllocatorDefault,
                     aCursorTab[ i_eStyle ].pBaseName,
                     kCFStringEncodingASCII,
                     kCFAllocatorNull );
-            CFBundleRef hMain = CFBundleGetMainBundle();
-            CFURLRef hURL = CFBundleCopyResourceURL( hMain, pCursorName, CFSTR("png"), CFSTR("cursors") );
-            if( hURL )
-            {
-                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(reinterpret_cast<NSURL const *>(hURL))] hotSpot: aHotSpot];
-                CFRelease( hURL );
+    CFBundleRef hMain = CFBundleGetMainBundle();
+    CFURLRef hURL = CFBundleCopyResourceURL( hMain, pCursorName, CFSTR("png"), CFSTR("cursors") );
+    assert(hURL);
+    if( hURL )
+    {
+        NSImage* theImage = [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(reinterpret_cast<NSURL const *>(hURL))];
+        if ([theImage size].width == 128)
+        {
+            // If we have a 128x128 image, generate scaled versions of it.
+            // This will result in macOS picking a reasonably sized image for different screen dpi.
+            NSSize cursorSize = NSMakeSize(32,32);
+            NSImage *multiResImage = [[NSImage alloc] initWithSize:cursorSize];
+            for (int scale = 1; scale <= 4; scale++) {
+                NSAffineTransform *xform = [[NSAffineTransform alloc] init];
+                [xform scaleBy:scale];
+                id hints = @{ NSImageHintCTM: xform };
+                CGImageRef rasterCGImage = [theImage CGImageForProposedRect:NULL context:nil hints:hints];
+                NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:rasterCGImage];
+                [rep setSize:cursorSize];
+                [multiResImage addRepresentation:rep];
             }
-            CFRelease( pCursorName );
+            pCurs = [[NSCursor alloc] initWithImage: multiResImage hotSpot: aHotSpot];
         }
-        maCursors[ i_eStyle ] = pCurs;
+        else
+            pCurs = [[NSCursor alloc] initWithImage: theImage hotSpot: aHotSpot];
+        CFRelease( hURL );
     }
+    CFRelease( pCursorName );
+    maCursors[ i_eStyle ] = pCurs;
     return pCurs;
 }
 
