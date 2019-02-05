@@ -4381,9 +4381,26 @@ struct ScDependantsCalculator
 
         // Self references should be checked by considering the entire formula-group not just the provided span.
         bool bHasSelfReferences = false;
+        bool bInDocShellRecalc = mrDoc.IsInDocShellRecalc();
 
-        for (auto p: mrCode.RPNTokens())
+        FormulaToken** pRPNArray = mrCode.GetCode();
+        sal_uInt16 nCodeLen = mrCode.GetCodeLen();
+        for (sal_Int32 nTokenIdx = nCodeLen-1; nTokenIdx >= 0; --nTokenIdx)
         {
+            auto p = pRPNArray[nTokenIdx];
+            if (!bInDocShellRecalc)
+            {
+                // The dependency evaluator evaluates all arguments of IF/IFS/SWITCH irrespective
+                // of the result of the condition expression.
+                // This is a perf problem if we *don't* intent on recalc'ing all dirty cells
+                // in the document. So lets disable threading and stop dependency evaluation if
+                // the call did not originate from ScDocShell::DoRecalc()/ScDocShell::DoHardRecalc()
+                // for formulae with IF/IFS/SWITCH
+                OpCode nOpCode = p->GetOpCode();
+                if (nOpCode == ocIf || nOpCode == ocIfs_MS || nOpCode == ocSwitch_MS)
+                    return false;
+            }
+
             switch (p->GetType())
             {
             case svSingleRef:

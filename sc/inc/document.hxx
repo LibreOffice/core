@@ -543,6 +543,8 @@ private:
 
     bool                mbTrackFormulasPending  : 1;
     bool                mbFinalTrackFormulas    : 1;
+    // This indicates if a ScDocShell::DoRecalc() or ScDocShell::DoHardRecalc() is in progress.
+    bool                mbDocShellRecalc        : 1;
 
     size_t              mnMutationGuardFlags;
 
@@ -2469,6 +2471,9 @@ public:
 
     SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
+    bool IsInDocShellRecalc() const   { return mbDocShellRecalc; }
+    void SetDocShellRecalc(bool bSet) { mbDocShellRecalc = bSet; }
+
 private:
 
     /**
@@ -2591,6 +2596,25 @@ struct ScMutationGuard
     size_t mnFlags;
     ScDocument* mpDocument;
 #endif
+
+};
+
+class ScDocShellRecalcGuard
+{
+    ScDocument& mrDoc;
+
+public:
+    ScDocShellRecalcGuard(ScDocument& rDoc)
+        : mrDoc(rDoc)
+    {
+        assert(!mrDoc.IsInDocShellRecalc());
+        mrDoc.SetDocShellRecalc(true);
+    }
+
+    ~ScDocShellRecalcGuard()
+    {
+        mrDoc.SetDocShellRecalc(false);
+    }
 };
 
 #endif
