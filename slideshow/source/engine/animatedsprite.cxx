@@ -119,34 +119,34 @@ namespace slideshow
                 bNeedResize = true;
             }
 
-            if( bNeedResize )
+            if( !bNeedResize )
+                return;
+
+            // as the old sprite might have already been altered
+            // (and therefore been placed in the update list of
+            // the spritecanvas for this frame), must hide it
+            // here, to ensure it's not visible on screen any
+            // longer.
+            mpSprite->hide();
+
+            maEffectiveSpriteSizePixel = aNewSize;
+            mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
+                                                  mnSpritePrio );
+
+            ENSURE_OR_THROW( mpSprite,
+                              "AnimatedSprite::resize(): Could not create new sprite" );
+
+            // set attributes similar to previous sprite
+            if (mbSpriteVisible)
             {
-                // as the old sprite might have already been altered
-                // (and therefore been placed in the update list of
-                // the spritecanvas for this frame), must hide it
-                // here, to ensure it's not visible on screen any
-                // longer.
-                mpSprite->hide();
+                mpSprite->show();
+                mpSprite->setAlpha( mnAlpha );
 
-                maEffectiveSpriteSizePixel = aNewSize;
-                mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
-                                                      mnSpritePrio );
+                if( maPosPixel )
+                    mpSprite->movePixel( *maPosPixel );
 
-                ENSURE_OR_THROW( mpSprite,
-                                  "AnimatedSprite::resize(): Could not create new sprite" );
-
-                // set attributes similar to previous sprite
-                if (mbSpriteVisible)
-                {
-                    mpSprite->show();
-                    mpSprite->setAlpha( mnAlpha );
-
-                    if( maPosPixel )
-                        mpSprite->movePixel( *maPosPixel );
-
-                    if( maClip )
-                        mpSprite->setClip( *maClip );
-                }
+                if( maClip )
+                    mpSprite->setClip( *maClip );
             }
         }
 

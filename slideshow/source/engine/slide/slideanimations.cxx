@@ -45,18 +45,18 @@ namespace slideshow
 
         SlideAnimations::~SlideAnimations() COVERITY_NOEXCEPT_FALSE
         {
-            if( mpRootNode )
-            {
-                SHOW_NODE_TREE( mpRootNode );
+            if( !mpRootNode )
+                return;
 
-                try
-                {
-                    mpRootNode->dispose();
-                }
-                catch (uno::Exception &)
-                {
-                    SAL_WARN( "slideshow", comphelper::anyToString(cppu::getCaughtException() ) );
-                }
+            SHOW_NODE_TREE( mpRootNode );
+
+            try
+            {
+                mpRootNode->dispose();
+            }
+            catch (uno::Exception &)
+            {
+                SAL_WARN( "slideshow", comphelper::anyToString(cppu::getCaughtException() ) );
             }
         }
 

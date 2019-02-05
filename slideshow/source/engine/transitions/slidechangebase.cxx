@@ -148,24 +148,24 @@ void SlideChangeBase::renderBitmap(
     SlideBitmapSharedPtr const & pSlideBitmap,
     cppcanvas::CanvasSharedPtr const & pCanvas )
 {
-    if( pSlideBitmap && pCanvas )
-    {
-        // need to render without any transformation (we
-        // assume device units):
-        const basegfx::B2DHomMatrix viewTransform(
-            pCanvas->getTransformation() );
-        const basegfx::B2DPoint pageOrigin(
-            viewTransform * basegfx::B2DPoint() );
-        const cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
-            pCanvas->clone() );
+    if( !(pSlideBitmap && pCanvas) )
+        return;
 
-        // render at output position, don't modify bitmap object (no move!):
-        const basegfx::B2DHomMatrix transform(basegfx::utils::createTranslateB2DHomMatrix(
-            pageOrigin.getX(), pageOrigin.getY()));
+    // need to render without any transformation (we
+    // assume device units):
+    const basegfx::B2DHomMatrix viewTransform(
+        pCanvas->getTransformation() );
+    const basegfx::B2DPoint pageOrigin(
+        viewTransform * basegfx::B2DPoint() );
+    const cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
+        pCanvas->clone() );
 
-        pDevicePixelCanvas->setTransformation( transform );
-        pSlideBitmap->draw( pDevicePixelCanvas );
-    }
+    // render at output position, don't modify bitmap object (no move!):
+    const basegfx::B2DHomMatrix transform(basegfx::utils::createTranslateB2DHomMatrix(
+        pageOrigin.getX(), pageOrigin.getY()));
+
+    pDevicePixelCanvas->setTransformation( transform );
+    pSlideBitmap->draw( pDevicePixelCanvas );
 }
 
 void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,

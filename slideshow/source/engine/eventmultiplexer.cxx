@@ -398,21 +398,21 @@ bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers con
 template <typename XSlideShowViewFunc>
 void EventMultiplexerImpl::forEachView( XSlideShowViewFunc pViewMethod )
 {
-    if( pViewMethod )
+    if( !pViewMethod )
+        return;
+
+    // (un)register mouse listener on all views
+    for( UnoViewVector::const_iterator aIter( mrViewContainer.begin() ),
+             aEnd( mrViewContainer.end() ); aIter != aEnd; ++aIter )
     {
-        // (un)register mouse listener on all views
-        for( UnoViewVector::const_iterator aIter( mrViewContainer.begin() ),
-                 aEnd( mrViewContainer.end() ); aIter != aEnd; ++aIter )
+        uno::Reference<presentation::XSlideShowView> xView ((*aIter)->getUnoView());
+        if (xView.is())
         {
-            uno::Reference<presentation::XSlideShowView> xView ((*aIter)->getUnoView());
-            if (xView.is())
-            {
-                (xView.get()->*pViewMethod)( mxListener.get() );
-            }
-            else
-            {
-                OSL_ASSERT(xView.is());
-            }
+            (xView.get()->*pViewMethod)( mxListener.get() );
+        }
+        else
+        {
+            OSL_ASSERT(xView.is());
         }
     }
 }

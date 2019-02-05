@@ -51,46 +51,46 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
 
 void ShapeManagerImpl::activate()
 {
-    if( !mbEnabled )
-    {
-        mbEnabled = true;
+    if( mbEnabled )
+        return;
 
-        // register this handler on EventMultiplexer.
-        // Higher prio (overrides other engine handlers)
-        mrMultiplexer.addMouseMoveHandler( shared_from_this(), 2.0 );
-        mrMultiplexer.addClickHandler( shared_from_this(), 2.0 );
-        mrMultiplexer.addShapeListenerHandler( shared_from_this() );
+    mbEnabled = true;
 
-        // clone listener map
-        uno::Reference<presentation::XShapeEventListener> xDummyListener;
-        for( const auto& rListener : mrGlobalListenersMap )
-            listenerAdded( xDummyListener, rListener.first );
+    // register this handler on EventMultiplexer.
+    // Higher prio (overrides other engine handlers)
+    mrMultiplexer.addMouseMoveHandler( shared_from_this(), 2.0 );
+    mrMultiplexer.addClickHandler( shared_from_this(), 2.0 );
+    mrMultiplexer.addShapeListenerHandler( shared_from_this() );
 
-        // clone cursor map
-        for( const auto& rListener : mrGlobalCursorMap )
-            cursorChanged( rListener.first, rListener.second );
+    // clone listener map
+    uno::Reference<presentation::XShapeEventListener> xDummyListener;
+    for( const auto& rListener : mrGlobalListenersMap )
+        listenerAdded( xDummyListener, rListener.first );
 
-        if( mpLayerManager )
-            mpLayerManager->activate();
-    }
+    // clone cursor map
+    for( const auto& rListener : mrGlobalCursorMap )
+        cursorChanged( rListener.first, rListener.second );
+
+    if( mpLayerManager )
+        mpLayerManager->activate();
 }
 
 void ShapeManagerImpl::deactivate()
 {
-    if( mbEnabled )
-    {
-        mbEnabled = false;
+    if( !mbEnabled )
+        return;
 
-        if( mpLayerManager )
-            mpLayerManager->deactivate();
+    mbEnabled = false;
 
-        maShapeListenerMap.clear();
-        maShapeCursorMap.clear();
+    if( mpLayerManager )
+        mpLayerManager->deactivate();
 
-        mrMultiplexer.removeShapeListenerHandler( shared_from_this() );
-        mrMultiplexer.removeMouseMoveHandler( shared_from_this() );
-        mrMultiplexer.removeClickHandler( shared_from_this() );
-    }
+    maShapeListenerMap.clear();
+    maShapeCursorMap.clear();
+
+    mrMultiplexer.removeShapeListenerHandler( shared_from_this() );
+    mrMultiplexer.removeMouseMoveHandler( shared_from_this() );
+    mrMultiplexer.removeClickHandler( shared_from_this() );
 }
 
 void ShapeManagerImpl::dispose()

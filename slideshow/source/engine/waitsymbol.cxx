@@ -73,24 +73,24 @@ WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
 
 void WaitSymbol::setVisible( const bool bVisible )
 {
-    if( mbVisible != bVisible )
+    if( mbVisible == bVisible )
+        return;
+
+    mbVisible = bVisible;
+
+    for( const auto& rView : maViews )
     {
-        mbVisible = bVisible;
-
-        for( const auto& rView : maViews )
+        if( rView.second )
         {
-            if( rView.second )
-            {
-                if( bVisible )
-                    rView.second->show();
-                else
-                    rView.second->hide();
-            }
+            if( bVisible )
+                rView.second->show();
+            else
+                rView.second->hide();
         }
-
-        // sprites changed, need a screen update for this frame.
-        mrScreenUpdater.requestImmediateUpdate();
     }
+
+    // sprites changed, need a screen update for this frame.
+    mrScreenUpdater.requestImmediateUpdate();
 }
 
 basegfx::B2DPoint WaitSymbol::calcSpritePos(

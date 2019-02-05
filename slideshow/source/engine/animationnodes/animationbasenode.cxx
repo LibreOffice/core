@@ -327,30 +327,30 @@ void AnimationBaseNode::deactivate_st( NodeState eDestState )
         }
     }
 
-    if (eDestState == ENDED) {
+    if (eDestState != ENDED)
+        return;
 
-        // no shape anymore, no layer needed:
-        maAttributeLayerHolder.reset();
+    // no shape anymore, no layer needed:
+    maAttributeLayerHolder.reset();
 
-        if (! isDependentSubsettedShape()) {
+    if (! isDependentSubsettedShape()) {
 
-            // for all other shapes, removing the
-            // attribute layer quite possibly changes
-            // shape display. Thus, force update
-            AttributableShapeSharedPtr const pShape( getShape() );
+        // for all other shapes, removing the
+        // attribute layer quite possibly changes
+        // shape display. Thus, force update
+        AttributableShapeSharedPtr const pShape( getShape() );
 
-            // don't anybody dare to check against
-            // pShape->isVisible() here, removing the
-            // attribute layer might actually make the
-            // shape invisible!
-            getContext().mpSubsettableShapeManager->notifyShapeUpdate( pShape );
-        }
+        // don't anybody dare to check against
+        // pShape->isVisible() here, removing the
+        // attribute layer might actually make the
+        // shape invisible!
+        getContext().mpSubsettableShapeManager->notifyShapeUpdate( pShape );
+    }
 
-        if (mpActivity) {
-            // kill activity, if still running
-            mpActivity->dispose();
-            mpActivity.reset();
-        }
+    if (mpActivity) {
+        // kill activity, if still running
+        mpActivity->dispose();
+        mpActivity.reset();
     }
 }
 
