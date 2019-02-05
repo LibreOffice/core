@@ -67,9 +67,9 @@ private:
     // message handler functions; remember these functions are called
     // from a different thread context!
 
-    static LRESULT onSetClipboard( IDataObject* pIDataObject );
-    static LRESULT onGetClipboard( LPSTREAM* ppStream );
-    static LRESULT onFlushClipboard( );
+    static HRESULT onSetClipboard( IDataObject* pIDataObject );
+    static HRESULT onGetClipboard( LPSTREAM* ppStream );
+    static HRESULT onFlushClipboard( );
     bool     onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
     // win32 clipboard listener support
