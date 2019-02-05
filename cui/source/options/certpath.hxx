@@ -10,32 +10,29 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
 
-#include <sfx2/basedlgs.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <radiobtnbox.hxx>
+#include <vcl/weld.hxx>
 
-class CertPathDialog : public ModalDialog
+class CertPathDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<SvSimpleTableContainer> m_pCertPathListContainer;
-    VclPtr<svx::SvxRadioButtonListBox> m_pCertPathList;
-    VclPtr<PushButton> m_pAddBtn;
-    VclPtr<OKButton>   m_pOKBtn;
-    OUString    m_sAddDialogText;
-    OUString    m_sManual;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::TreeView> m_xCertPathList;
+    std::unique_ptr<weld::Label> m_xAddDialogLabel;
+    std::unique_ptr<weld::Label> m_xManualLabel;
+    OUString m_sAddDialogText;
+    OUString m_sManual;
 
-    DECL_LINK(CheckHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(AddHdl_Impl, Button*, void);
-    DECL_LINK(OKHdl_Impl, Button*, void);
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(CheckHdl_Impl, const row_col&, void);
+    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
-    void HandleCheckEntry(SvTreeListEntry* _pEntry);
+    void HandleEntryChecked(int nRow);
     void AddCertPath(const OUString &rProfile, const OUString &rPath);
 public:
-    explicit CertPathDialog(vcl::Window* pParent);
+    explicit CertPathDialog(weld::Window* pParent);
     virtual ~CertPathDialog() override;
-    virtual void dispose() override;
 
     OUString getDirectory() const;
 };
