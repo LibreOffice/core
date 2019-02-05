@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <Qt5FilePicker.hxx>
+
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,15 +47,7 @@ class QGridLayout;
 class QWidget;
 class QComboBox;
 
-typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
-                                        css::ui::dialogs::XFilePickerControlAccess,
-                                        css::ui::dialogs::XFolderPicker2
-                                        // TODO css::ui::dialogs::XFilePreview
-                                        ,
-                                        css::lang::XInitialization, css::lang::XServiceInfo>
-    KDE5FilePicker_Base;
-
-class KDE5FilePicker : public QObject, public KDE5FilePicker_Base
+class KDE5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
 protected:
