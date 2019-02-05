@@ -1315,22 +1315,22 @@ void UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     if( n < 0 )
         return;
 
-    if( pDestStm->SetSize( n ) && n )
+    if( !pDestStm->SetSize( n ) || !n )
+        return;
+
+    std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
+    Seek( 0 );
+    pDestStm->Seek( 0 );
+    while( n )
     {
-        std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
-        Seek( 0 );
-        pDestStm->Seek( 0 );
-        while( n )
-        {
-            sal_uInt32 nn = n;
-            if( nn > 4096 )
-                nn = 4096;
-            if( Read( p.get(), nn ) != nn )
-                break;
-            if( pDestStm->Write( p.get(), nn ) != nn )
-                break;
-            n -= nn;
-        }
+        sal_uInt32 nn = n;
+        if( nn > 4096 )
+            nn = 4096;
+        if( Read( p.get(), nn ) != nn )
+            break;
+        if( pDestStm->Write( p.get(), nn ) != nn )
+            break;
+        n -= nn;
     }
 }
 
@@ -1630,23 +1630,23 @@ void UCBStorage_Impl::Init()
         }
     }
 
-    if ( !m_aContentType.isEmpty() )
-    {
-        // get the clipboard format using the content type
-        css::datatransfer::DataFlavor aDataFlavor;
-        aDataFlavor.MimeType = m_aContentType;
-        m_nFormat = SotExchange::GetFormat( aDataFlavor );
+    if ( m_aContentType.isEmpty() )
+        return;
 
-        // get the ClassId using the clipboard format ( internal table )
-        m_aClassId = GetClassId_Impl( m_nFormat );
+    // get the clipboard format using the content type
+    css::datatransfer::DataFlavor aDataFlavor;
+    aDataFlavor.MimeType = m_aContentType;
+    m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
-        // get human presentable name using the clipboard format
-        SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
-        m_aUserTypeName = aDataFlavor.HumanPresentableName;
+    // get the ClassId using the clipboard format ( internal table )
+    m_aClassId = GetClassId_Impl( m_nFormat );
 
-        if( m_pContent && !m_bIsLinked && m_aClassId != SvGlobalName() )
-            ReadContent();
-    }
+    // get human presentable name using the clipboard format
+    SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+    m_aUserTypeName = aDataFlavor.HumanPresentableName;
+
+    if( m_pContent && !m_bIsLinked && m_aClassId != SvGlobalName() )
+        ReadContent();
 }
 
 void UCBStorage_Impl::CreateContent()
@@ -1874,20 +1874,20 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
         }
     }
 
-    if ( !m_aContentType.isEmpty() )
-    {
-        // get the clipboard format using the content type
-        css::datatransfer::DataFlavor aDataFlavor;
-        aDataFlavor.MimeType = m_aContentType;
-        m_nFormat = SotExchange::GetFormat( aDataFlavor );
+    if ( m_aContentType.isEmpty() )
+        return;
 
-        // get the ClassId using the clipboard format ( internal table )
-        m_aClassId = GetClassId_Impl( m_nFormat );
+    // get the clipboard format using the content type
+    css::datatransfer::DataFlavor aDataFlavor;
+    aDataFlavor.MimeType = m_aContentType;
+    m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
-        // get human presentable name using the clipboard format
-        SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
-        m_aUserTypeName = aDataFlavor.HumanPresentableName;
-    }
+    // get the ClassId using the clipboard format ( internal table )
+    m_aClassId = GetClassId_Impl( m_nFormat );
+
+    // get human presentable name using the clipboard format
+    SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+    m_aUserTypeName = aDataFlavor.HumanPresentableName;
 }
 
 void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )

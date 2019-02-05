@@ -105,20 +105,20 @@ void StgIo::SetupStreams()
 
     m_pFAT = new StgFATStrm(*this, nFatStrmSize);
     m_pTOC = new StgDirStrm(*this);
-    if( !GetError() )
+    if( GetError() )
+        return;
+
+    StgDirEntry* pRoot = m_pTOC->GetRoot();
+    if( pRoot )
     {
-        StgDirEntry* pRoot = m_pTOC->GetRoot();
-        if( pRoot )
-        {
-            m_pDataFAT = new StgDataStrm( *this, m_aHdr.GetDataFATStart(), -1 );
-            m_pDataStrm = new StgDataStrm( *this, *pRoot );
-            m_pDataFAT->SetIncrement( 1 << m_aHdr.GetPageSize() );
-            m_pDataStrm->SetIncrement( GetDataPageSize() );
-            m_pDataStrm->SetEntry( *pRoot );
-        }
-        else
-            SetError( SVSTREAM_FILEFORMAT_ERROR );
+        m_pDataFAT = new StgDataStrm( *this, m_aHdr.GetDataFATStart(), -1 );
+        m_pDataStrm = new StgDataStrm( *this, *pRoot );
+        m_pDataFAT->SetIncrement( 1 << m_aHdr.GetPageSize() );
+        m_pDataStrm->SetIncrement( GetDataPageSize() );
+        m_pDataStrm->SetEntry( *pRoot );
     }
+    else
+        SetError( SVSTREAM_FILEFORMAT_ERROR );
 }
 
 // get the logical data page size

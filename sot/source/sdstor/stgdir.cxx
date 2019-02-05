@@ -148,20 +148,19 @@ void StgDirEntry::DelTemp( bool bForce )
             bForce = true;
         m_pDown->DelTemp( bForce );
     }
-    if( ( bForce || m_bInvalid )
-     && ( m_aEntry.GetType() != STG_ROOT ) /* && ( nRefCnt <= 1 ) */ )
+    if( !( bForce || m_bInvalid ) || ( m_aEntry.GetType() == STG_ROOT ) )
+        return;
+
+    Close();
+    if( m_pUp )
     {
-        Close();
-        if( m_pUp )
+        // this deletes the element if refcnt == 0!
+        bool bDel = m_nRefCnt == 0;
+        StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&m_pUp->m_pDown), this, bDel );
+        if( !bDel )
         {
-            // this deletes the element if refcnt == 0!
-            bool bDel = m_nRefCnt == 0;
-            StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&m_pUp->m_pDown), this, bDel );
-            if( !bDel )
-            {
-                m_pLeft = m_pRight = m_pDown = nullptr;
-                m_bInvalid = m_bZombie = true;
-            }
+            m_pLeft = m_pRight = m_pDown = nullptr;
+            m_bInvalid = m_bZombie = true;
         }
     }
 }
@@ -494,26 +493,26 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
 void StgDirEntry::Copy( BaseStorageStream& rDest )
 {
     sal_Int32 n = GetSize();
-    if( rDest.SetSize( n ) && n )
+    if( !(rDest.SetSize( n ) && n) )
+        return;
+
+    sal_uLong Pos = rDest.Tell();
+    sal_uInt8 aTempBytes[ 4096 ];
+    void* p = static_cast<void*>( aTempBytes );
+    Seek( 0 );
+    rDest.Seek( 0 );
+    while( n )
     {
-        sal_uLong Pos = rDest.Tell();
-        sal_uInt8 aTempBytes[ 4096 ];
-        void* p = static_cast<void*>( aTempBytes );
-        Seek( 0 );
-        rDest.Seek( 0 );
-        while( n )
-        {
-            sal_Int32 nn = n;
-            if( nn > 4096 )
-                nn = 4096;
-            if( Read( p, nn ) != nn )
-                break;
-            if( sal::static_int_cast<sal_Int32>(rDest.Write( p, nn )) != nn )
-                break;
-            n -= nn;
-        }
-        rDest.Seek( Pos );             // ?! Seems to be undocumented !
+        sal_Int32 nn = n;
+        if( nn > 4096 )
+            nn = 4096;
+        if( Read( p, nn ) != nn )
+            break;
+        if( sal::static_int_cast<sal_Int32>(rDest.Write( p, nn )) != nn )
+            break;
+        n -= nn;
     }
+    rDest.Seek( Pos );             // ?! Seems to be undocumented !
 }
 
 // Commit this entry
@@ -733,71 +732,71 @@ StgDirStrm::~StgDirStrm()
 void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 {
     void* p = ( n == STG_FREE ) ? nullptr : GetEntry( n, false );
-    if( p )
+    if( !p )
+        return;
+
+    SvStream *pUnderlyingStream = m_rIo.GetStrm();
+    sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->TellEnd();
+
+    bool bOk(false);
+    std::unique_ptr<StgDirEntry> pCur(new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk ));
+
+    if( !bOk )
     {
-        SvStream *pUnderlyingStream = m_rIo.GetStrm();
-        sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->TellEnd();
+        m_rIo.SetError( SVSTREAM_GENERALERROR );
+        // an error occurred
+        return;
+    }
 
-        bool bOk(false);
-        std::unique_ptr<StgDirEntry> pCur(new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk ));
+    // better it is
+    if( !pUpper )
+        pCur->m_aEntry.SetType( STG_ROOT );
 
-        if( !bOk )
+    sal_Int32 nLeft = pCur->m_aEntry.GetLeaf( STG_LEFT );
+    sal_Int32 nRight = pCur->m_aEntry.GetLeaf( STG_RIGHT );
+    // substorage?
+    sal_Int32 nLeaf = STG_FREE;
+    if( pCur->m_aEntry.GetType() == STG_STORAGE || pCur->m_aEntry.GetType() == STG_ROOT )
+    {
+        nLeaf = pCur->m_aEntry.GetLeaf( STG_CHILD );
+        if (nLeaf != STG_FREE && nLeaf == n)
         {
             m_rIo.SetError( SVSTREAM_GENERALERROR );
-            // an error occurred
             return;
         }
-
-        // better it is
-        if( !pUpper )
-            pCur->m_aEntry.SetType( STG_ROOT );
-
-        sal_Int32 nLeft = pCur->m_aEntry.GetLeaf( STG_LEFT );
-        sal_Int32 nRight = pCur->m_aEntry.GetLeaf( STG_RIGHT );
-        // substorage?
-        sal_Int32 nLeaf = STG_FREE;
-        if( pCur->m_aEntry.GetType() == STG_STORAGE || pCur->m_aEntry.GetType() == STG_ROOT )
-        {
-            nLeaf = pCur->m_aEntry.GetLeaf( STG_CHILD );
-            if (nLeaf != STG_FREE && nLeaf == n)
-            {
-                m_rIo.SetError( SVSTREAM_GENERALERROR );
-                return;
-            }
-        }
-
-        if( nLeaf != 0 && nLeft != 0 && nRight != 0 )
-        {
-            //fdo#41642
-            StgDirEntry *pUp = pUpper;
-            while (pUp)
-            {
-                if (pUp->m_aEntry.GetLeaf(STG_CHILD) == nLeaf)
-                {
-                    SAL_WARN("sot", "Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
-                    return;
-                }
-                pUp = pUp->m_pUp;
-            }
-
-            if( StgAvlNode::Insert
-                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur.get() ) )
-            {
-                pCur->m_pUp    = pUpper;
-            }
-            else
-            {
-                // bnc#682484: There are some really broken docs out there
-                // that contain duplicate entries in 'Directory' section
-                // so don't set the error flag here and just skip those
-                // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
-                return;
-            }
-            SetupEntry( nLeft, pUpper );
-            SetupEntry( nRight, pUpper );
-            SetupEntry( nLeaf, pCur.release() );
-        }
     }
+
+    if( !(nLeaf != 0 && nLeft != 0 && nRight != 0) )
+        return;
+
+    //fdo#41642
+    StgDirEntry *pUp = pUpper;
+    while (pUp)
+    {
+        if (pUp->m_aEntry.GetLeaf(STG_CHILD) == nLeaf)
+        {
+            SAL_WARN("sot", "Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
+            return;
+        }
+        pUp = pUp->m_pUp;
+    }
+
+    if( StgAvlNode::Insert
+        ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur.get() ) )
+    {
+        pCur->m_pUp    = pUpper;
+    }
+    else
+    {
+        // bnc#682484: There are some really broken docs out there
+        // that contain duplicate entries in 'Directory' section
+        // so don't set the error flag here and just skip those
+        // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
+        return;
+    }
+    SetupEntry( nLeft, pUpper );
+    SetupEntry( nRight, pUpper );
+    SetupEntry( nLeaf, pCur.release() );
 }
 
 // Extend or shrink the directory stream.
