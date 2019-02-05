@@ -629,7 +629,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_ZOOM                   :
         {
             sal_Int16 nZoom = 0;
-            if(!(rValue >>= nZoom) || nZoom > 1000 || nZoom < 5)
+            if(!(rValue >>= nZoom) || nZoom > MAXZOOM || nZoom < MINZOOM)
                 throw lang::IllegalArgumentException();
             mpViewOption->SetZoom(static_cast<sal_uInt16>(nZoom));
             mbApplyZoom = true;

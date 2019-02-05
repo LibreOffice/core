@@ -83,9 +83,9 @@ public class SwAccessibleEndnoteView extends TestCase {
         xController);
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
-        //change zoom value to 10%
+        //change zoom value to 20%
         //footer should be in the vissible area of the document
-        xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
+        xPropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -105,10 +105,10 @@ public class SwAccessibleEndnoteView extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                        //change zoom value to 130%
-                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("15"));
-                        //and back to 10%
-                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
+                        //change zoom value to 21%
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("21"));
+                        //and back to 20%
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
                     } catch ( com.sun.star.lang.WrappedTargetException e ) {
 
                     }  catch ( com.sun.star.lang.IllegalArgumentException e ) {
