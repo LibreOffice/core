@@ -228,3 +228,7 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
+
+# writer standard toolbar
+cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
+cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
