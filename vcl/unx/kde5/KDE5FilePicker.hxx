@@ -80,8 +80,6 @@ public:
     virtual sal_Int16 SAL_CALL execute() override;
 
     // XFilePicker functions
-    virtual void SAL_CALL setDefaultName(const OUString& rName) override;
-    virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getFiles() override;
 
@@ -150,8 +148,6 @@ protected:
 
 Q_SIGNALS:
     sal_Int16 executeSignal();
-    void setDefaultNameSignal(const OUString& rName);
-    void setDisplayDirectorySignal(const OUString& rDir);
     OUString getDisplayDirectorySignal();
     OUString getDirectorySignal();
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
@@ -169,8 +165,6 @@ Q_SIGNALS:
     css::uno::Sequence<OUString> getSelectedFilesSignal();
 
 private Q_SLOTS:
-    void setDefaultNameSlot(const OUString& rName) { return setDefaultName(rName); }
-    void setDisplayDirectorySlot(const OUString& rDir) { return setDisplayDirectory(rDir); }
     OUString getDisplayDirectorySlot() { return implGetDirectory(); }
     OUString getDirectorySlot() { return implGetDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
