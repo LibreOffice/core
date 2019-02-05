@@ -54,9 +54,6 @@ protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
     osl::Mutex _helperMutex;
 
-    //the dialog to display
-    QFileDialog* _dialog;
-
     //running filter string to add to dialog
     QStringList _filters;
     // map of filter titles to full filter for selection
@@ -75,7 +72,6 @@ protected:
     QGridLayout* _layout;
 
     bool allowRemoteUrls;
-    bool mbIsFolderPicker;
 
 public:
     explicit KDE5FilePicker(QFileDialog::FileMode);
@@ -92,7 +88,6 @@ public:
     virtual sal_Int16 SAL_CALL execute() override;
 
     // XFilePicker functions
-    virtual void SAL_CALL setMultiSelectionMode(sal_Bool bMode) override;
     virtual void SAL_CALL setDefaultName(const OUString& rName) override;
     virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
@@ -186,7 +181,6 @@ Q_SIGNALS:
     OUString getCurrentFilterSignal();
     css::uno::Sequence<OUString> getFilesSignal();
     css::uno::Sequence<OUString> getSelectedFilesSignal();
-    void setMultiSelectionSignal(bool bMulti);
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
@@ -230,7 +224,6 @@ private Q_SLOTS:
     void setCurrentFilterSlot(const OUString& rFilter) { return setCurrentFilter(rFilter); }
     OUString getCurrentFilterSlot() { return getCurrentFilter(); }
     css::uno::Sequence<OUString> getSelectedFilesSlot() { return getFiles(); }
-    void setMultiSelectionSlot(bool bMulti) { return setMultiSelectionMode(bMulti); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
