@@ -71,24 +71,24 @@ PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitm
 
 void PointerSymbol::setVisible( const bool bVisible )
 {
-    if( mbVisible != bVisible )
+    if( mbVisible == bVisible )
+        return;
+
+    mbVisible = bVisible;
+
+    for( const auto& rView : maViews )
     {
-        mbVisible = bVisible;
-
-        for( const auto& rView : maViews )
+        if( rView.second )
         {
-            if( rView.second )
-            {
-                if( bVisible )
-                    rView.second->show();
-                else
-                    rView.second->hide();
-            }
+            if( bVisible )
+                rView.second->show();
+            else
+                rView.second->hide();
         }
-
-        // sprites changed, need a screen update for this frame.
-        mrScreenUpdater.requestImmediateUpdate();
     }
+
+    // sprites changed, need a screen update for this frame.
+    mrScreenUpdater.requestImmediateUpdate();
 }
 
 basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) const
@@ -176,20 +176,20 @@ void PointerSymbol::viewsChanged()
 
 void PointerSymbol::viewsChanged(const geometry::RealPoint2D pos)
 {
-    if( pos.X != maPos.X || pos.Y != maPos.Y )
-    {
-        maPos = pos;
+    if( pos.X == maPos.X && pos.Y == maPos.Y )
+        return;
 
-        // reposition sprites on all views
-        for( const auto& rView : maViews )
+    maPos = pos;
+
+    // reposition sprites on all views
+    for( const auto& rView : maViews )
+    {
+        if( rView.second )
         {
-            if( rView.second )
-            {
-                rView.second->movePixel(
-                    calcSpritePos( rView.first ) );
-                mrScreenUpdater.notifyUpdate();
-                mrScreenUpdater.commitUpdates();
-            }
+            rView.second->movePixel(
+                calcSpritePos( rView.first ) );
+            mrScreenUpdater.notifyUpdate();
+            mrScreenUpdater.commitUpdates();
         }
     }
 }

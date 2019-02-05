@@ -48,21 +48,21 @@ namespace slideshow
         */
         void ShapeAttributeLayer::updateStateIds()
         {
-            if( haveChild() )
-            {
-                if( mnTransformationState != mpChild->getTransformationState() )
-                    ++mnTransformationState;
-                if( mnClipState != mpChild->getClipState() )
-                    ++mnClipState;
-                if( mnAlphaState != mpChild->getAlphaState() )
-                    ++mnAlphaState;
-                if( mnPositionState != mpChild->getPositionState() )
-                    ++mnPositionState;
-                if( mnContentState != mpChild->getContentState() )
-                    ++mnContentState;
-                if( mnVisibilityState != mpChild->getVisibilityState() )
-                    ++mnVisibilityState;
-            }
+            if( !haveChild() )
+                return;
+
+            if( mnTransformationState != mpChild->getTransformationState() )
+                ++mnTransformationState;
+            if( mnClipState != mpChild->getClipState() )
+                ++mnClipState;
+            if( mnAlphaState != mpChild->getAlphaState() )
+                ++mnAlphaState;
+            if( mnPositionState != mpChild->getPositionState() )
+                ++mnPositionState;
+            if( mnContentState != mpChild->getContentState() )
+                ++mnContentState;
+            if( mnVisibilityState != mpChild->getVisibilityState() )
+                ++mnVisibilityState;
         }
 
         /** Calc attribute value.

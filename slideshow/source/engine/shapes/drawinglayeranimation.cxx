@@ -347,178 +347,178 @@ sal_uInt32 ActivityImpl::GetStepWidthLogic() const
 
 void ActivityImpl::ImpForceScrollTextAnimNodes()
 {
-    if(maVector.empty())
+    if(!maVector.empty())
+        return;
+
+    // prepare values
+    sal_uInt32 nLoopTime;
+    double fZeroLogic, fOneLogic, fInitLogic, fDistanceLogic;
+    double fZeroLogicAlternate = 0.0, fOneLogicAlternate = 0.0;
+    double fZeroRelative, fOneRelative, fInitRelative;
+
+    if(ScrollHorizontal())
     {
-        // prepare values
-        sal_uInt32 nLoopTime;
-        double fZeroLogic, fOneLogic, fInitLogic, fDistanceLogic;
-        double fZeroLogicAlternate = 0.0, fOneLogicAlternate = 0.0;
-        double fZeroRelative, fOneRelative, fInitRelative;
-
-        if(ScrollHorizontal())
-        {
-            if(DoAlternate())
-            {
-                if(maPaintRectangleLogic.GetWidth() >
-                   maScrollRectangleLogic.GetWidth())
-                {
-                    fZeroLogicAlternate = maScrollRectangleLogic.Right() - maPaintRectangleLogic.GetWidth();
-                    fOneLogicAlternate = maScrollRectangleLogic.Left();
-                }
-                else
-                {
-                    fZeroLogicAlternate = maScrollRectangleLogic.Left();
-                    fOneLogicAlternate = maScrollRectangleLogic.Right() - maPaintRectangleLogic.GetWidth();
-                }
-            }
-
-            fZeroLogic = maScrollRectangleLogic.Left() - maPaintRectangleLogic.GetWidth();
-            fOneLogic = maScrollRectangleLogic.Right();
-            fInitLogic = maPaintRectangleLogic.Left();
-        }
-        else
-        {
-            if(DoAlternate())
-            {
-                if(maPaintRectangleLogic.GetHeight() > maScrollRectangleLogic.GetHeight())
-                {
-                    fZeroLogicAlternate = maScrollRectangleLogic.Bottom() - maPaintRectangleLogic.GetHeight();
-                    fOneLogicAlternate = maScrollRectangleLogic.Top();
-                }
-                else
-                {
-                    fZeroLogicAlternate = maScrollRectangleLogic.Top();
-                    fOneLogicAlternate = maScrollRectangleLogic.Bottom() - maPaintRectangleLogic.GetHeight();
-                }
-            }
-
-            fZeroLogic = maScrollRectangleLogic.Top() - maPaintRectangleLogic.GetHeight();
-            fOneLogic = maScrollRectangleLogic.Bottom();
-            fInitLogic = maPaintRectangleLogic.Top();
-        }
-
-        fDistanceLogic = fOneLogic - fZeroLogic;
-        fInitRelative = (fInitLogic - fZeroLogic) / fDistanceLogic;
-
         if(DoAlternate())
         {
-            fZeroRelative =
-                (fZeroLogicAlternate - fZeroLogic) / fDistanceLogic;
-            fOneRelative =
-                (fOneLogicAlternate - fZeroLogic) / fDistanceLogic;
+            if(maPaintRectangleLogic.GetWidth() >
+               maScrollRectangleLogic.GetWidth())
+            {
+                fZeroLogicAlternate = maScrollRectangleLogic.Right() - maPaintRectangleLogic.GetWidth();
+                fOneLogicAlternate = maScrollRectangleLogic.Left();
+            }
+            else
+            {
+                fZeroLogicAlternate = maScrollRectangleLogic.Left();
+                fOneLogicAlternate = maScrollRectangleLogic.Right() - maPaintRectangleLogic.GetWidth();
+            }
+        }
+
+        fZeroLogic = maScrollRectangleLogic.Left() - maPaintRectangleLogic.GetWidth();
+        fOneLogic = maScrollRectangleLogic.Right();
+        fInitLogic = maPaintRectangleLogic.Left();
+    }
+    else
+    {
+        if(DoAlternate())
+        {
+            if(maPaintRectangleLogic.GetHeight() > maScrollRectangleLogic.GetHeight())
+            {
+                fZeroLogicAlternate = maScrollRectangleLogic.Bottom() - maPaintRectangleLogic.GetHeight();
+                fOneLogicAlternate = maScrollRectangleLogic.Top();
+            }
+            else
+            {
+                fZeroLogicAlternate = maScrollRectangleLogic.Top();
+                fOneLogicAlternate = maScrollRectangleLogic.Bottom() - maPaintRectangleLogic.GetHeight();
+            }
+        }
+
+        fZeroLogic = maScrollRectangleLogic.Top() - maPaintRectangleLogic.GetHeight();
+        fOneLogic = maScrollRectangleLogic.Bottom();
+        fInitLogic = maPaintRectangleLogic.Top();
+    }
+
+    fDistanceLogic = fOneLogic - fZeroLogic;
+    fInitRelative = (fInitLogic - fZeroLogic) / fDistanceLogic;
+
+    if(DoAlternate())
+    {
+        fZeroRelative =
+            (fZeroLogicAlternate - fZeroLogic) / fDistanceLogic;
+        fOneRelative =
+            (fOneLogicAlternate - fZeroLogic) / fDistanceLogic;
+    }
+    else
+    {
+        fZeroRelative = 0.0;
+        fOneRelative = 1.0;
+    }
+
+    if(mbVisibleWhenStarted)
+    {
+        double fRelativeStartValue, fRelativeEndValue,fRelativeDistance;
+
+        if(DoScrollForward())
+        {
+            fRelativeStartValue = fInitRelative;
+            fRelativeEndValue = fOneRelative;
+            fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
         }
         else
         {
-            fZeroRelative = 0.0;
-            fOneRelative = 1.0;
+            fRelativeStartValue = fInitRelative;
+            fRelativeEndValue = fZeroRelative;
+            fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
         }
 
-        if(mbVisibleWhenStarted)
+        const double fNumberSteps =
+            (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
+        nLoopTime = FRound(fNumberSteps * mnFrequency);
+
+        // init loop
+        ScrollTextAnimNode aInitNode(
+            nLoopTime, 1,
+            fRelativeStartValue, fRelativeEndValue,
+            mnFrequency, false);
+        maVector.push_back(aInitNode);
+    }
+
+    // prepare main loop values
+    {
+        double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
+
+        if(DoScrollForward())
         {
-            double fRelativeStartValue, fRelativeEndValue,fRelativeDistance;
-
-            if(DoScrollForward())
-            {
-                fRelativeStartValue = fInitRelative;
-                fRelativeEndValue = fOneRelative;
-                fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
-            }
-            else
-            {
-                fRelativeStartValue = fInitRelative;
-                fRelativeEndValue = fZeroRelative;
-                fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
-            }
-
-            const double fNumberSteps =
-                (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
-
-            // init loop
-            ScrollTextAnimNode aInitNode(
-                nLoopTime, 1,
-                fRelativeStartValue, fRelativeEndValue,
-                mnFrequency, false);
-            maVector.push_back(aInitNode);
+            fRelativeStartValue = fZeroRelative;
+            fRelativeEndValue = fOneRelative;
+            fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
+        }
+        else
+        {
+            fRelativeStartValue = fOneRelative;
+            fRelativeEndValue = fZeroRelative;
+            fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
         }
 
-        // prepare main loop values
+        const double fNumberSteps =
+            (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
+        nLoopTime = FRound(fNumberSteps * mnFrequency);
+
+        if(0 == mnRepeat)
         {
-            double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
-
-            if(DoScrollForward())
+            if(!DoScrollIn())
             {
-                fRelativeStartValue = fZeroRelative;
-                fRelativeEndValue = fOneRelative;
-                fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
-            }
-            else
-            {
-                fRelativeStartValue = fOneRelative;
-                fRelativeEndValue = fZeroRelative;
-                fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
-            }
-
-            const double fNumberSteps =
-                (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
-
-            if(0 == mnRepeat)
-            {
-                if(!DoScrollIn())
-                {
-                    // endless main loop
-                    ScrollTextAnimNode aMainNode(
-                        nLoopTime, 0,
-                        fRelativeStartValue, fRelativeEndValue,
-                        mnFrequency, DoAlternate());
-                    maVector.push_back(aMainNode);
-                }
-            }
-            else
-            {
-                sal_uInt32 nNumRepeat(mnRepeat);
-
-                if(DoAlternate() && (nNumRepeat + 1) % 2L)
-                    nNumRepeat += 1;
-
-                // ending main loop
+                // endless main loop
                 ScrollTextAnimNode aMainNode(
-                    nLoopTime, nNumRepeat,
+                    nLoopTime, 0,
                     fRelativeStartValue, fRelativeEndValue,
                     mnFrequency, DoAlternate());
                 maVector.push_back(aMainNode);
             }
         }
-
-        if(mbVisibleWhenStopped)
+        else
         {
-            double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
+            sal_uInt32 nNumRepeat(mnRepeat);
 
-            if(DoScrollForward())
-            {
-                fRelativeStartValue = fZeroRelative;
-                fRelativeEndValue = fInitRelative;
-                fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
-            }
-            else
-            {
-                fRelativeStartValue = fOneRelative;
-                fRelativeEndValue = fInitRelative;
-                fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
-            }
+            if(DoAlternate() && (nNumRepeat + 1) % 2L)
+                nNumRepeat += 1;
 
-            const double fNumberSteps =
-                (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
-
-            // exit loop
-            ScrollTextAnimNode aExitNode(
-                nLoopTime, 1,
-                fRelativeStartValue, fRelativeEndValue, mnFrequency, false);
-            maVector.push_back(aExitNode);
+            // ending main loop
+            ScrollTextAnimNode aMainNode(
+                nLoopTime, nNumRepeat,
+                fRelativeStartValue, fRelativeEndValue,
+                mnFrequency, DoAlternate());
+            maVector.push_back(aMainNode);
         }
     }
+
+    if(!mbVisibleWhenStopped)
+        return;
+
+    double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
+
+    if(DoScrollForward())
+    {
+        fRelativeStartValue = fZeroRelative;
+        fRelativeEndValue = fInitRelative;
+        fRelativeDistance = fRelativeEndValue - fRelativeStartValue;
+    }
+    else
+    {
+        fRelativeStartValue = fOneRelative;
+        fRelativeEndValue = fInitRelative;
+        fRelativeDistance = fRelativeStartValue - fRelativeEndValue;
+    }
+
+    const double fNumberSteps =
+        (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
+    nLoopTime = FRound(fNumberSteps * mnFrequency);
+
+    // exit loop
+    ScrollTextAnimNode aExitNode(
+        nLoopTime, 1,
+        fRelativeStartValue, fRelativeEndValue, mnFrequency, false);
+    maVector.push_back(aExitNode);
 }
 
 ScrollTextAnimNode* ActivityImpl::ImpGetScrollTextAnimNode(
@@ -849,37 +849,37 @@ bool ActivityImpl::enableAnimations()
 
 void ActivityImpl::dispose()
 {
-    if( !mbIsDisposed )
+    if( mbIsDisposed )
+        return;
+
+    end();
+
+    // only remove subset here, since end() is called on slide end
+    // (and we must not spoil the slide preview bitmap with scroll
+    // text)
+    maShapeAttrLayer.reset();
+    if( mpDrawShape )
     {
-        end();
-
-        // only remove subset here, since end() is called on slide end
-        // (and we must not spoil the slide preview bitmap with scroll
-        // text)
-        maShapeAttrLayer.reset();
-        if( mpDrawShape )
-        {
-            // TODO(Q3): Doing this manually, instead of using
-            // ShapeSubset. This is because of lifetime issues
-            // (ShapeSubset generates circular references to parent
-            // shape)
-            DrawShapeSharedPtr pParent( mpParentDrawShape.lock() );
-            if( pParent )
-                maContext.mpSubsettableShapeManager->revokeSubset(
-                    pParent,
-                    mpDrawShape );
-        }
-
-        mpMetaFile.reset();
-        mpDrawShape.reset();
-        mpParentDrawShape.reset();
-        mpWakeupEvent.reset();
-        maContext.dispose();
-        mbIsDisposed = true;
-
-        maContext.mpSubsettableShapeManager->removeIntrinsicAnimationHandler(
-            mpListener );
+        // TODO(Q3): Doing this manually, instead of using
+        // ShapeSubset. This is because of lifetime issues
+        // (ShapeSubset generates circular references to parent
+        // shape)
+        DrawShapeSharedPtr pParent( mpParentDrawShape.lock() );
+        if( pParent )
+            maContext.mpSubsettableShapeManager->revokeSubset(
+                pParent,
+                mpDrawShape );
     }
+
+    mpMetaFile.reset();
+    mpDrawShape.reset();
+    mpParentDrawShape.reset();
+    mpWakeupEvent.reset();
+    maContext.dispose();
+    mbIsDisposed = true;
+
+    maContext.mpSubsettableShapeManager->removeIntrinsicAnimationHandler(
+        mpListener );
 }
 
 double ActivityImpl::calcTimeLag() const

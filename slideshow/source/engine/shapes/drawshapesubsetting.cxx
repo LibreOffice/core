@@ -219,20 +219,20 @@ namespace slideshow
             // would mean "non-subsetting" mode unconditionally, with whole object added to subsets.
             // So to indicate a subset with all parts excluded, add two empty subsets (starting and
             // ending).
-            if (maCurrentSubsets.empty())
+            if (!maCurrentSubsets.empty())
+                return;
+
+            if (maSubset.isEmpty())
             {
-                if (maSubset.isEmpty())
-                {
-                    maCurrentSubsets.emplace_back(0, 0);
-                    maCurrentSubsets.emplace_back(maActionClassVector.size(),
-                                                  maActionClassVector.size());
-                }
-                else
-                {
-                    maCurrentSubsets.emplace_back(maSubset.getStartIndex(),
-                                                  maSubset.getStartIndex());
-                    maCurrentSubsets.emplace_back(maSubset.getEndIndex(), maSubset.getEndIndex());
-                }
+                maCurrentSubsets.emplace_back(0, 0);
+                maCurrentSubsets.emplace_back(maActionClassVector.size(),
+                                              maActionClassVector.size());
+            }
+            else
+            {
+                maCurrentSubsets.emplace_back(maSubset.getStartIndex(),
+                                              maSubset.getStartIndex());
+                maCurrentSubsets.emplace_back(maSubset.getEndIndex(), maSubset.getEndIndex());
             }
         }
 

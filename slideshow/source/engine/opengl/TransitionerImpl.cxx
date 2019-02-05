@@ -371,20 +371,21 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     //pixmap of the non-opengl parent window. If any expose events occur around the start and end of
     //the transition then those windows are default filled by X with the desired start/end image so there's
     //no visible flash
-    if (SystemChildWindow* pChildWindow = mpContext->getChildWindow())
+    SystemChildWindow* pChildWindow = mpContext->getChildWindow();
+    if (!pChildWindow)
+        return;
+
+    css::uno::Reference<css::beans::XFastPropertySet> xEnteringFastPropertySet(mxEnteringBitmap, css::uno::UNO_QUERY);
+    css::uno::Reference<css::beans::XFastPropertySet> xLeavingFastPropertySet(mxLeavingBitmap, css::uno::UNO_QUERY);
+    css::uno::Sequence<css::uno::Any> aEnteringBitmap;
+    css::uno::Sequence<css::uno::Any> aLeavingBitmap;
+    if (xEnteringFastPropertySet.get() && xLeavingFastPropertySet.get())
     {
-        css::uno::Reference<css::beans::XFastPropertySet> xEnteringFastPropertySet(mxEnteringBitmap, css::uno::UNO_QUERY);
-        css::uno::Reference<css::beans::XFastPropertySet> xLeavingFastPropertySet(mxLeavingBitmap, css::uno::UNO_QUERY);
-        css::uno::Sequence<css::uno::Any> aEnteringBitmap;
-        css::uno::Sequence<css::uno::Any> aLeavingBitmap;
-        if (xEnteringFastPropertySet.get() && xLeavingFastPropertySet.get())
-        {
-            xEnteringFastPropertySet->getFastPropertyValue(1) >>= aEnteringBitmap;
-            xLeavingFastPropertySet->getFastPropertyValue(1) >>= aLeavingBitmap;
-        }
-        if (aEnteringBitmap.getLength() == 3 && aLeavingBitmap.getLength() == 3)
-            pChildWindow->SetLeaveEnterBackgrounds(aLeavingBitmap, aEnteringBitmap);
+        xEnteringFastPropertySet->getFastPropertyValue(1) >>= aEnteringBitmap;
+        xLeavingFastPropertySet->getFastPropertyValue(1) >>= aLeavingBitmap;
     }
+    if (aEnteringBitmap.getLength() == 3 && aLeavingBitmap.getLength() == 3)
+        pChildWindow->SetLeaveEnterBackgrounds(aLeavingBitmap, aEnteringBitmap);
 }
 
 

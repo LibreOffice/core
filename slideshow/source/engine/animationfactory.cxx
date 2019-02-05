@@ -478,38 +478,38 @@ namespace slideshow
 
                     // only stop animation once per repeated end() call,
                     // and only if sprites are used for display
-                    if( mbAnimationStarted )
-                    {
-                        mbAnimationStarted = false;
+                    if( !mbAnimationStarted )
+                        return;
 
-                        if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpShapeManager->leaveAnimationMode( mpShape );
+                    mbAnimationStarted = false;
 
-                        // Attention, this notifyShapeUpdate() is
-                        // somewhat delicate here. Calling it
-                        // unconditional (i.e. not guarded by
-                        // mbAnimationStarted) will lead to shapes
-                        // snapping back to their original state just
-                        // before the slide ends. Not calling it at
-                        // all might swallow final animation
-                        // states. The current implementation relies
-                        // on the fact that end() is either called by
-                        // the Activity (then, the last animation
-                        // state has been set, and corresponds to the
-                        // shape's hold state), or by the animation
-                        // node (then, it's a forced end, and we
-                        // _have_ to snap back).
+                    if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
+                        mpShapeManager->leaveAnimationMode( mpShape );
 
-                        // To reiterate: normally, we're called from
-                        // the Activity first, thus the
-                        // notifyShapeUpdate() below will update to
-                        // the last activity value.
+                    // Attention, this notifyShapeUpdate() is
+                    // somewhat delicate here. Calling it
+                    // unconditional (i.e. not guarded by
+                    // mbAnimationStarted) will lead to shapes
+                    // snapping back to their original state just
+                    // before the slide ends. Not calling it at
+                    // all might swallow final animation
+                    // states. The current implementation relies
+                    // on the fact that end() is either called by
+                    // the Activity (then, the last animation
+                    // state has been set, and corresponds to the
+                    // shape's hold state), or by the animation
+                    // node (then, it's a forced end, and we
+                    // _have_ to snap back).
 
-                        // force shape update, activity might have changed
-                        // state in the last round.
-                        if( mpShape->isContentChanged() )
-                            mpShapeManager->notifyShapeUpdate( mpShape );
-                    }
+                    // To reiterate: normally, we're called from
+                    // the Activity first, thus the
+                    // notifyShapeUpdate() below will update to
+                    // the last activity value.
+
+                    // force shape update, activity might have changed
+                    // state in the last round.
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
                 }
 
                 // Derived Animation interface
