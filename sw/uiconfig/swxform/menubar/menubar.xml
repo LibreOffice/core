@@ -143,7 +143,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menu menu:id=".uno:EditCommentsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ReplyComment"/>
@@ -152,6 +151,7 @@
           <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menu menu:id=".uno:EditLinksMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:EditFootnote"/>
@@ -189,11 +189,8 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewBounds"/>
-      <menu:menuitem menu:id=".uno:TableBoundaries"/>
-      <menu:menuitem menu:id=".uno:ShowGraphics"/>
-      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
+      <menu:menuitem menu:id=".uno:HideWhitespace"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -201,18 +198,22 @@
           <menu:menuitem menu:id=".uno:HelplinesMove"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:HideWhitespace"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ViewBounds"/>
+      <menu:menuitem menu:id=".uno:TableBoundaries"/>
+      <menu:menuitem menu:id=".uno:ShowGraphics"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
+      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
       <menu:menu menu:id=".uno:ZoomMenu">
