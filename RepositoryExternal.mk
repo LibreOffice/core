@@ -287,6 +287,12 @@ endif # SYSTEM_GRAPHITE
 
 ifeq ($(SYSTEM_ICU),YES)
 
+define gb_LinkTarget__use_icudata
+$(call gb_LinkTarget_add_libs,$(1),-licudata)
+endef
+define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_add_libs,$(1),-licui18n)
+endef
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_libs,$(1),-licule)
 endef
@@ -296,20 +302,48 @@ endef
 
 else # !SYSTEM_ICU
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    icule \
-    icuuc \
-))
+define gb_LinkTarget__use_icudata
+ifeq ($(OS)$(COM),WNTMSC)
+$(call gb_LinkTarget_add_libs,$(1),icudata.lib)
+else ifeq ($(OS)$(COM),WNTGCC)
+$(call gb_LinkTarget_add_libs,$(1),-licudt40)
+else ifeq ($(OS),OS2)
+$(call gb_LinkTarget_add_libs,$(1),-licudt)
+else
+$(call gb_LinkTarget_add_libs,$(1),-licudata)
+endif
+endef
+
+define gb_LinkTarget__use_icui18n
+ifeq ($(OS)$(COM),WNTMSC)
+$(call gb_LinkTarget_add_libs,$(1),icuin.lib)
+else ifeq ($(OS)$(COM),WNTGCC)
+$(call gb_LinkTarget_add_libs,$(1),-licuin40)
+else ifeq ($(OS),OS2)
+$(call gb_LinkTarget_add_libs,$(1),-licuin)
+else
+$(call gb_LinkTarget_add_libs,$(1),-licui18n)
+endif
+endef
 
 define gb_LinkTarget__use_icule
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    icule \
-)
+ifeq ($(OS)$(COM),WNTMSC)
+$(call gb_LinkTarget_add_libs,$(1),icule.lib)
+else ifeq ($(OS)$(COM),WNTGCC)
+$(call gb_LinkTarget_add_libs,$(1),-licule40)
+else
+$(call gb_LinkTarget_add_libs,$(1),-licule)
+endif
 endef
+
 define gb_LinkTarget__use_icuuc
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    icuuc \
-)
+ifeq ($(OS)$(COM),WNTMSC)
+$(call gb_LinkTarget_add_libs,$(1),icuuc.lib)
+else ifeq ($(OS)$(COM),WNTGCC)
+$(call gb_LinkTarget_add_libs,$(1),-licuuc40)
+else
+$(call gb_LinkTarget_add_libs,$(1),-licuuc)
+endif
 endef
 
 endif # SYSTEM_ICU

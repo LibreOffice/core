@@ -29,6 +29,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmpsum \
     checksingleton \
     g2g \
+    gencoll_rule \
+    genconv_dict \
+    gendict \
+    genindex_data \
     mkunroll \
     rdbedit \
     rdbmaker \
@@ -36,6 +40,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     rsc2 \
     rscdep \
     rscpp \
+    saxparser \
     so_checksum \
     srvdepy \
     svidl \
@@ -85,6 +90,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basegfx \
     cached1 \
     canvastools \
+    collator_data \
     communi \
     cppcanvas \
     ctl \
@@ -97,6 +103,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbpool \
     dbtools \
     desktop_detector \
+    dict_ja \
+    dict_zh \
     dnd \
     drawinglayer \
     dtrans \
@@ -119,10 +127,15 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwm \
     guesslang \
     i18npaper \
+    index_data \
     java_uno_accessbridge \
     juh \
     juhx \
     lng \
+    localedata_en \
+    localedata_es \
+    localedata_euro \
+    localedata_others \
     mcnttype \
     msfilter \
     msword \
@@ -166,6 +179,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sysdtrans \
     textconversiondlgs \
     ootk \
+    textconv_dict \
     tl \
     tvhlp1 \
     ucpchelp1 \
@@ -250,6 +264,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     gdipluscanvas \
     hatchwindowfactory \
     hyphen_uno \
+    i18npool \
+    i18nsearch \
     lnth \
     nullcanvas \
     passwordcontainer \

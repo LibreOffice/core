@@ -187,11 +187,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf (cfp, "\n};\n");
 
     // create function to return arrays
-    fprintf (cfp, "\tconst sal_uInt8* getExistMark() { return existMark; }\n");
-    fprintf (cfp, "\tconst sal_Int16* getIndex1() { return index1; }\n");
-    fprintf (cfp, "\tconst sal_Int32* getIndex2() { return index2; }\n");
-    fprintf (cfp, "\tconst sal_Int32* getLenArray() { return lenArray; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getDataArea() { return dataArea; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt8* getExistMark() { return existMark; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Int16* getIndex1() { return index1; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Int32* getIndex2() { return index2; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Int32* getLenArray() { return lenArray; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getDataArea() { return dataArea; }\n");
     fprintf (cfp, "}\n");
 
     fclose(sfp);

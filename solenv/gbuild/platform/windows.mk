@@ -462,6 +462,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	    $(call gb_Helper_convert_native,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(PCHOBJS) $(NATIVERES))) && \
@@ -668,6 +669,9 @@ gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENT
 endif
 gb_Executable_get_rpath :=
 gb_Executable_TARGETGUI := 
+
+gb_InBuild_Library_Path := $(OUTDIR)/bin
+gb_Augment_Library_Path := PATH="$${PATH}:$(gb_InBuild_Library_Path)"
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\

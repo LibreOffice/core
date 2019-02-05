@@ -293,6 +293,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
@@ -313,6 +314,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		2> /dev/null)
 endef
@@ -418,6 +420,9 @@ gb_StaticLibrary_StaticLibrary_platform =
 # Executable class
 
 gb_Executable_EXT :=
+
+gb_InBuild_Library_Path := $(OUTDIR)/lib
+gb_Augment_Library_Path := LD_LIBRARY_PATH=$(gb_InBuild_Library_Path)
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \

@@ -82,6 +82,8 @@ my_components = \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/i18npool/util/i18npool \
+    component/i18npool/source/search/i18nsearch \
     component/io/source/acceptor/acceptor \
     component/io/source/connector/connector \
     component/io/source/stm/streams \
@@ -159,8 +161,6 @@ my_components = \
     flash \
     flat \
     frm \
-    i18npool \
-    i18nsearch \
     localebe1 \
     log \
     mailmerge \

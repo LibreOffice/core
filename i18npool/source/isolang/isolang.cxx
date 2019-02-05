@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
+#include "precompiled_i18nisolang.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>

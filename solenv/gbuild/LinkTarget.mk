@@ -107,6 +107,26 @@ $(call gb_CObject_get_dep_target,%) :
 gb_CObject_CObject =
 
 
+# GenCObject class
+
+gb_GenCObject_get_source = $(WORKDIR)/$(1).c
+# defined by platform
+#  gb_CObject__command
+
+$(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
+	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_GenCObject_get_target,$*)))
+endif
+
+gb_GenCObject_GenCObject =
+
+
+
+
 # CxxObject class
 
 gb_CxxObject_REPOS := $(gb_REPOS)
@@ -237,6 +257,8 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$*) \
@@ -258,7 +280,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-		$(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+		$(foreach object,$(6),$(call gb_GenCObject_get_dep_target,$(object)))\
+		$(foreach object,$(7),$(call gb_GenCxxObject_get_dep_target,$(object)))\
 		) && \
 	cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
 	rm -f $${RESPONSEFILE}
@@ -271,7 +294,7 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
-	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
+	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCOBJECTS),$(GENCXXOBJECTS))
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -351,6 +374,8 @@ $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
@@ -386,6 +411,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
@@ -505,6 +531,10 @@ endef
 
 define gb_LinkTarget_set_cxx_optimization
 $(foreach object,$(1),$(eval $(call gb_CxxObject_get_target,$(object)) : CXXFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CXXFLAGS)) $(2)))
+endef
+
+define gb_LinkTarget_set_genc_optimization
+$(foreach object,$(1),$(eval $(call gb_GenCObject_get_target,$(object)) : CFLAGS := $(filter-out $(gb_COMPILEROPTFLAGS),$(CFLAGS)) $(2)))
 endef
 
 define gb_LinkTarget_set_gencxx_optimization
@@ -799,6 +829,21 @@ endif
 
 endef
 
+define gb_LinkTarget_add_generated_cobject
+$(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
+$(call gb_GenCObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(3)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCObject_get_dep_target,$(2))
+endif
+
+endef
+
 define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -844,6 +889,10 @@ endef
 
 define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
+endef
+
+define gb_LinkTarget_add_generated_cobjects
+$(foreach obj,$(2),$(call gb_Linktarget_add_generated_cobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_generated_exception_object

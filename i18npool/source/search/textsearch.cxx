@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
+#include "precompiled_search.hxx"
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
@@ -1007,13 +1007,13 @@ SAL_CALL TextSearch_CreateInstance(
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
         void* _pServiceManager, void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;

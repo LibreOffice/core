@@ -154,7 +154,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(fp, "\n};\n\n");
     }
 
-    fprintf(fp, "const sal_uInt16** get_%s(sal_Int16 &max_index)\n{\n\tstatic const sal_uInt16 *idx[]={idx1, idx2, idx3};\n\tmax_index=0x%x;\n\treturn idx;\n}\n\n", argv[3], static_cast<unsigned int>(max_index));
+    fprintf(fp, "SAL_DLLPUBLIC_EXPORT const sal_uInt16** get_%s(sal_Int16 &max_index)\n{\n\tstatic const sal_uInt16 *idx[]={idx1, idx2, idx3};\n\tmax_index=0x%x;\n\treturn idx;\n}\n\n", argv[3], static_cast<unsigned int>(max_index));
     fprintf (fp, "}\n");
 
     fclose(fp);

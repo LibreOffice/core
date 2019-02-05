@@ -84,6 +84,7 @@ $(eval $(foreach method,\
 	add_objcxxobjects \
 	add_exception_objects \
 	add_noexception_objects \
+	add_generated_cobjects \
 	add_generated_exception_objects \
 	add_cflags \
 	set_cflags \

@@ -171,11 +171,11 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     fprintf(cfp, "\n};\n");
 
     // create function to return arrays
-    fprintf (cfp, "\tconst sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
-    fprintf (cfp, "\tconst com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
-    fprintf (cfp, "\tsal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
-    fprintf (cfp, "\tconst sal_uInt16* getHanja2HangulIndex() { return Hanja2HangulIndex; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT sal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getHanja2HangulIndex() { return Hanja2HangulIndex; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
 }
 
 // Simplified/Traditional Chinese character conversion
@@ -321,12 +321,12 @@ void make_stc_char(FILE *sfp, FILE *cfp)
     fprintf(cfp, "\n};\n");
 
     // create function to return arrays
-    fprintf (cfp, "\tconst sal_uInt16* getSTC_CharIndex_S2T() { return STC_CharIndex_S2T; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getSTC_CharData_S2T() { return STC_CharData_S2T; }\n");
-    fprintf (cfp, "\tconst sal_uInt16* getSTC_CharIndex_S2V() { return STC_CharIndex_S2V; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getSTC_CharData_S2V() { return STC_CharData_S2V; }\n");
-    fprintf (cfp, "\tconst sal_uInt16* getSTC_CharIndex_T2S() { return STC_CharIndex_T2S; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getSTC_CharData_T2S() { return STC_CharData_T2S; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_CharIndex_S2T() { return STC_CharIndex_S2T; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getSTC_CharData_S2T() { return STC_CharData_S2T; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_CharIndex_S2V() { return STC_CharIndex_S2V; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getSTC_CharData_S2V() { return STC_CharData_S2V; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_CharIndex_T2S() { return STC_CharIndex_T2S; }\n");
+    fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getSTC_CharData_T2S() { return STC_CharData_T2S; }\n");
 }
 
 
@@ -403,9 +403,9 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %ld;\n", sal::static_int_cast< long >(char_total));
 
         // create function to return arrays
-        fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = STC_WordData_Count; return STC_WordData; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getSTC_WordData(sal_Int32& count) { count = STC_WordData_Count; return STC_WordData; }\n");
     } else {
-        fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = 0; return NULL; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_Unicode* getSTC_WordData(sal_Int32& count) { count = 0; return NULL; }\n");
     }
 
     sal_uInt16 STC_WordIndex[0x100];
@@ -436,11 +436,11 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         fprintf(cfp, "\n};\n");
 
         fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_S2T_Count = %ld;\n", sal::static_int_cast< long >(length));
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_S2T() { return STC_WordEntry_S2T; }\n");
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = STC_WordIndex_S2T_Count; return STC_WordIndex_S2T; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordEntry_S2T() { return STC_WordEntry_S2T; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = STC_WordIndex_S2T_Count; return STC_WordIndex_S2T; }\n");
     } else {
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_S2T() { return NULL; }\n");
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = 0; return NULL; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordEntry_S2T() { return NULL; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = 0; return NULL; }\n");
     }
 
     if (count_T2S > 0) {
@@ -469,11 +469,11 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         fprintf(cfp, "\n};\n");
 
         fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_T2S_Count = %ld;\n\n", sal::static_int_cast< long >(length));
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_T2S() { return STC_WordEntry_T2S; }\n");
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = STC_WordIndex_T2S_Count; return STC_WordIndex_T2S; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordEntry_T2S() { return STC_WordEntry_T2S; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = STC_WordIndex_T2S_Count; return STC_WordIndex_T2S; }\n");
     } else {
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_T2S() { return NULL; }\n");
-        fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = 0; return NULL; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordEntry_T2S() { return NULL; }\n");
+        fprintf (cfp, "\tSAL_DLLPUBLIC_EXPORT const sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = 0; return NULL; }\n");
     }
 }
 

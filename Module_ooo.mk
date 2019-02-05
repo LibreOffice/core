@@ -57,6 +57,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     fpicker \
     framework \
+    i18npool \
     i18nutil \
     idl \
     idlc \

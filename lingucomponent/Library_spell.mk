@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_linked_libs,spell,\
 	cppu \
 	cppuhelper \
 	i18nisolang1 \
-	icuuc \
 	lng \
 	sal \
 	stl \
@@ -58,9 +57,10 @@ $(eval $(call gb_Library_add_linked_static_libs,spell,\
 	ulingu \
 ))
 
-$(eval $(call gb_Library_use_externals,spell,\
+$(call gb_Library_use_externals,spell,\
 	hunspell \
-))
+	icuuc \
+)
 
 ifneq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,spell,\

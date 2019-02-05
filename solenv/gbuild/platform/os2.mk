@@ -335,6 +335,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(PCHOBJS))) && \
 	$(if $(DLLTARGET), echo EXPORTS >> $(DLLDEF) &&) \
@@ -365,6 +366,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
 	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
 	$(gb_AR) cru\
 		$(1) \
@@ -514,6 +516,9 @@ gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS := 
 #-RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
 gb_Executable_get_rpath :=
+
+gb_InBuild_Library_Path := $(OUTDIR)/bin
+gb_Augment_Library_Path := PATH="$${PATH}:$(gb_InBuild_Library_Path)"
 
 define gb_Executable_Executable_platform
 #$(call gb_LinkTarget_set_auxtargets,$(2),\

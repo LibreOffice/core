@@ -55,6 +55,7 @@ gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
+gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
@@ -147,6 +148,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	CObject \
 	CxxObject \
 	ObjCxxObject \
+	GenCObject \
 	GenCxxObject \
 	LinkTarget \
 	SrsPartTarget \

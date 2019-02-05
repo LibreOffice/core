@@ -107,11 +107,6 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES
 # all other libraries built by AOO and all platform libraries (exceptions see below) are used without an import library
 # we link against their dlls in gcc format directly
 gb_Library_NOILIBFILENAMES:=\
-    icudt \
-    icuin \
-    icule \
-    icutu \
-    icuuc \
     uwinapi \
     winmm \
 
@@ -130,11 +125,6 @@ gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PS
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst hyphen_uno:hyphen_uno.uno%,hyphen_uno:hyphen.uno%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icudt:icudt%,icudt:icudt40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icuin:icuin%,icuin:icuin40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icutu:icutu%,icutu:icutu40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess$(gb_Library_MAJORVER)%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
@@ -163,12 +153,6 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
-gb_Library_NOILIBFILENAMES += \
-    icudt \
-    icuin \
-    icule \
-    icutu \
-    icuuc
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
@@ -180,11 +164,6 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst hyphen_uno:hyphen_uno.uno%,hyphen_uno:hyphen.uno%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icudt:icudt%,icudt:icudt40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icuin:icuin%,icuin:icuin40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icutu:icutu%,icutu:icutu40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif # ifneq ($(USE_MINGW),)
@@ -255,12 +234,7 @@ gb_Library_DLLFILENAMES := $(patsubst uuresolver:uuresolver%,uuresolver:uuresolv
 gb_Library_DLLFILENAMES := $(patsubst ucpexpand1:ucpexpand1%,ucpexpand1:ucpexpan%,$(gb_Library_DLLFILENAMES))
 
 gb_Library_NOILIBFILENAMES:=\
-    ft2lib \
-    icudt \
-    icuin \
-    icule \
-    icutu \
-    icuuc
+    ft2lib
 
 gb_Library_ILIBFILENAMES:=\
     ft2lib \

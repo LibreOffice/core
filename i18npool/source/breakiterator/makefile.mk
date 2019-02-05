@@ -96,6 +96,8 @@ $(MISC)$/%_brk.c : $(MISC)$/%.brk
 # so the output (OpenOffice_icu_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
 $(MISC)$/OpenOffice_%.c : $(MY_BRK_BRKFILES:s/.brk/_brk.c/)
+    echo $(GENCMN) -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
+    cat $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
     $(WRAPCMD) $(GENCMN) -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
     echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
     echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@

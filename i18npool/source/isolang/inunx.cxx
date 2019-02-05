@@ -22,7 +22,7 @@
 
 
 
-// no include "precompiled_i18npool.hxx" because this file is included in insys.cxx
+// no include "precompiled_i18nisolang.hxx" because this file is included in insys.cxx
 
 #include <stdlib.h>  // for getenv()
 #include <stdio.h>

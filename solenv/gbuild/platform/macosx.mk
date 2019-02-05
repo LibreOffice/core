@@ -311,6 +311,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
@@ -330,6 +331,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		2> /dev/null)
 endef
@@ -418,6 +420,9 @@ gb_StaticLibrary_StaticLibrary_platform =
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := -bind_at_load
+
+gb_InBuild_Library_Path := $(OUTDIR)/lib
+gb_Augment_Library_Path := DYLD_LIBRARY_PATH=$(gb_InBuild_Library_Path)
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
