@@ -150,6 +150,10 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode)
             SLOT(filterSelected(const QString&)));
     connect(m_pFileDialog.get(), SIGNAL(currentChanged(const QString&)), this,
             SLOT(currentChanged(const QString&)));
+
+    // update automatic file extension when filter is changed
+    connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
+            SLOT(updateAutomaticFileExtension()));
 }
 
 Qt5FilePicker::~Qt5FilePicker() {}
@@ -211,6 +215,8 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
         m_pFileDialog->window()->windowHandle()->setTransientParent(pTransientWindow);
         m_pFileDialog->setFocusProxy(pTransientParent);
     }
+
+    updateAutomaticFileExtension();
 
     int result = m_pFileDialog->exec();
     if (QFileDialog::Rejected == result)
@@ -319,6 +325,7 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
 
     m_aNamedFilterList << QStringLiteral("%1 (%2)").arg(n, f);
     m_aTitleToFilterMap[t] = m_aNamedFilterList.constLast();
+    m_aNamedFilterToExtensionMap[m_aNamedFilterList.constLast()] = f;
 }
 
 void SAL_CALL Qt5FilePicker::setCurrentFilter(const OUString& title)
@@ -562,6 +569,7 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
     QWidget* widget = nullptr;
     QLabel* label = nullptr;
     const char* resId = nullptr;
+    QCheckBox* pCheckbox = nullptr;
 
     switch (controlId)
     {
@@ -611,6 +619,12 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
     switch (controlId)
     {
         case CHECKBOX_AUTOEXTENSION:
+            pCheckbox = new QCheckBox(getResString(resId), m_pExtraControls);
+            // to add/remove automatic file extension based on checkbox
+            connect(pCheckbox, SIGNAL(stateChanged(int)), this,
+                    SLOT(updateAutomaticFileExtension()));
+            widget = pCheckbox;
+            break;
         case CHECKBOX_PASSWORD:
         case CHECKBOX_FILTEROPTIONS:
         case CHECKBOX_READONLY:
@@ -794,6 +808,33 @@ sal_Bool SAL_CALL Qt5FilePicker::supportsService(const OUString& ServiceName)
 uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
+}
+
+void Qt5FilePicker::updateAutomaticFileExtension()
+{
+    bool bSetAutoExtension
+        = getValue(CHECKBOX_AUTOEXTENSION, ControlActions::GET_SELECTED_ITEM).get<bool>();
+    if (bSetAutoExtension)
+    {
+        QString sSuffix = m_aNamedFilterToExtensionMap.value(m_pFileDialog->selectedNameFilter());
+        // string is "*.<SUFFIX>" if a specific filter was selected that has exactly one possible file extension
+        if (sSuffix.lastIndexOf("*.") == 0)
+        {
+            sSuffix = sSuffix.remove("*.");
+            m_pFileDialog->setDefaultSuffix(sSuffix);
+        }
+        else
+        {
+            // fall back to setting none otherwise
+            SAL_INFO(
+                "vcl.qt5",
+                "Unable to retrieve unambiguous file extension. Will not add any automatically.");
+            bSetAutoExtension = false;
+        }
+    }
+
+    if (!bSetAutoExtension)
+        m_pFileDialog->setDefaultSuffix("");
 }
 
 void Qt5FilePicker::filterSelected(const QString&)
