@@ -407,6 +407,9 @@ public:
     virtual void SAL_CALL storeToURL(   const   OUString& sURL,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
 
+    SAL_DLLPRIVATE void
+    impl_store(const OUString& sURL,
+               const css::uno::Sequence<css::beans::PropertyValue>& seqArguments, bool bSaveTo);
 
     //  XLoadable
 
@@ -714,10 +717,6 @@ private:
     void impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE OUString GetMediumFilterName_Impl();
-
-    SAL_DLLPRIVATE void impl_store( const OUString& sURL,
-                        const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ,
-                                bool                    bSaveTo         ) ;
 
     SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 
