@@ -322,7 +322,7 @@ SvFileStream::~SvFileStream()
 |*
 *************************************************************************/
 
-sal_uInt32 SvFileStream::GetFileHandle() const
+sal_uIntPtr SvFileStream::GetFileHandle() const
 {
     return (sal_uInt32)pInstanceData->nHandle;
 }

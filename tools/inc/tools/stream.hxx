@@ -733,7 +733,7 @@ private:
     String          aFilename;
     sal_uInt16      nLockCounter;
     sal_Bool            bIsOpen;
-    sal_uInt32      GetFileHandle() const;
+    sal_uIntPtr     GetFileHandle() const;
 
     // Forbidden and not implemented.
     SvFileStream (const SvFileStream&);
