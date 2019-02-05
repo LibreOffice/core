@@ -202,7 +202,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
             aTmpSnappingPoints.insert( static_cast<sal_uInt16>(nSnappingPoint) );
         }
 
-        // remove snapping points that are to close to each other:
+        // remove snapping points that are too close to each other:
         long nLastOffset = 0;
 
         for ( const sal_uInt16 nCurrent : aTmpSnappingPoints )
