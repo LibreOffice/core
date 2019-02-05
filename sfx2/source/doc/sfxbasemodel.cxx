@@ -120,7 +120,7 @@
 #include "printhelper.hxx"
 #include <sfx2/sfxresid.hxx>
 #include <vcl/threadex.hxx>
-
+#include <unotools/mediadescriptor.hxx>
 
 //  namespaces
 
@@ -1471,6 +1471,17 @@ static bool SaveImplStatic(SfxObjectShell* pThis, const SfxItemSet* pParams)
     return pThis->Save_Impl(pParams);
 }
 
+/**
+ * Proxy around SfxBaseModel::impl_store(), as vcl::solarthread::syncExecute()
+ * does not seem to accept lambdas or void functions.
+ */
+static bool ImplStoreStatic(SfxBaseModel* pThis, const OUString& rURL,
+                            const uno::Sequence<beans::PropertyValue>& rArgs, bool bSaveTo)
+{
+    pThis->impl_store(rURL, rArgs, bSaveTo);
+    return true;
+}
+
 //  XStorable2
 
 
@@ -1653,7 +1664,12 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     {
         SfxSaveGuard aSaveGuard(this, m_pData);
         try {
-            impl_store(rURL, rArgs, true);
+            utl::MediaDescriptor aDescriptor(rArgs);
+            bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+            if (bOnMainThread)
+                vcl::solarthread::syncExecute(std::bind(&ImplStoreStatic, this, rURL, rArgs, true));
+            else
+                impl_store(rURL, rArgs, true);
         }
         catch (const uno::Exception &e)
         {
