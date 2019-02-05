@@ -60,6 +60,9 @@ enum RestartReason {
     // For the OpenCL changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_OPENCL,
+    // For restructuring the Forms menu,
+    // %PRODUCTNAME must be restarted:
+    RESTART_REASON_MSCOMPATIBLE_FORMS_MENU,
     // No particular reason:
     RESTART_REASON_NONE
 };
