@@ -2204,7 +2204,7 @@ void SwChartDataSequence::Notify( const SfxHint& rHint)
         m_pTableCursor.reset(nullptr);
         dispose();
     }
-    else
+    else if (dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         setModified( true );
     }
