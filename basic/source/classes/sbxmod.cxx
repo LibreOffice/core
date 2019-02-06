@@ -2541,7 +2541,7 @@ void SbUserFormModule::Unload()
     SbxVariable* pMeth = SbObjModule::Find( "UnloadObject", SbxClassType::Method );
     if( pMeth )
     {
-        SAL_INFO("basic", "Attempting too run the UnloadObjectMethod");
+        SAL_INFO("basic", "Attempting to run the UnloadObjectMethod");
         m_xDialog.clear(); //release ref to the uno object
         SbxValues aVals;
         bool bWaitForDispose = true; // assume dialog is showing
@@ -2556,7 +2556,7 @@ void SbUserFormModule::Unload()
             // we've either already got a dispose or we are never going to get one
             ResetApiObj();
         } // else wait for dispose
-        SAL_INFO("basic", "UnloadObject completed ( we hope )");
+        SAL_INFO("basic", "UnloadObject completed (we hope)");
     }
 }
 
