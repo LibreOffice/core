@@ -43,6 +43,7 @@
 
 #include <memory>
 
+class QComboBox;
 class QGridLayout;
 class QLabel;
 class QWidget;
@@ -146,6 +147,11 @@ public:
     // XFolderPicker functions
     virtual OUString SAL_CALL getDirectory() override;
     virtual void SAL_CALL setDescription(const OUString& rDescription) override;
+
+protected:
+    static css::uno::Any handleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction);
+    static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
+                                   const css::uno::Any& rValue);
 
 private Q_SLOTS:
     // XExecutableDialog functions

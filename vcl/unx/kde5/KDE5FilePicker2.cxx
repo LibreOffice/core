@@ -161,7 +161,7 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
     {
         QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
         if (cb)
-            handleSetListValue(cb, nControlAction, value);
+            Qt5FilePicker::handleSetListValue(cb, nControlAction, value);
     }
     else
         SAL_WARN("vcl.kde5", "set value on unknown control " << controlId);
@@ -194,7 +194,7 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
     {
         QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
         if (cb)
-            return handleGetListValue(cb, nControlAction);
+            return Qt5FilePicker::handleGetListValue(cb, nControlAction);
     }
     else
         SAL_WARN("vcl.kde5", "get value on unknown control" << controlId);
@@ -361,77 +361,6 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             break;
         }
     }
-}
-
-void KDE5FilePicker::handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
-                                        const css::uno::Any& rValue)
-{
-    switch (nAction)
-    {
-        case ControlActions::ADD_ITEM:
-        {
-            OUString sItem;
-            rValue >>= sItem;
-            pQComboBox->addItem(toQString(sItem));
-        }
-        break;
-        case ControlActions::ADD_ITEMS:
-        {
-            Sequence<OUString> aStringList;
-            rValue >>= aStringList;
-            sal_Int32 nItemCount = aStringList.getLength();
-            for (sal_Int32 i = 0; i < nItemCount; ++i)
-            {
-                pQComboBox->addItem(toQString(aStringList[i]));
-            }
-        }
-        break;
-        case ControlActions::SET_SELECT_ITEM:
-        {
-            sal_Int32 nPos = 0;
-            rValue >>= nPos;
-            pQComboBox->setCurrentIndex(nPos);
-        }
-        break;
-        default:
-            SAL_WARN("vcl.kde5", "unknown action on list control " << nAction);
-            break;
-    }
-}
-
-uno::Any KDE5FilePicker::handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction)
-{
-    uno::Any aAny;
-    switch (nAction)
-    {
-        case ControlActions::GET_ITEMS:
-        {
-            uno::Sequence<OUString> aItemList;
-
-            for (int i = 0; i < pQComboBox->count(); ++i)
-            {
-                aItemList[i] = toOUString(pQComboBox->itemText(i));
-            }
-            aAny <<= aItemList;
-        }
-        break;
-        case ControlActions::GET_SELECTED_ITEM:
-        {
-            OUString sItem = toOUString(pQComboBox->currentText());
-            aAny <<= sItem;
-        }
-        break;
-        case ControlActions::GET_SELECTED_ITEM_INDEX:
-        {
-            int nCurrent = pQComboBox->currentIndex();
-            aAny <<= static_cast<sal_Int32>(nCurrent);
-        }
-        break;
-        default:
-            SAL_WARN("vcl.kde5", "unknown action on list control " << nAction);
-            break;
-    }
-    return aAny;
 }
 
 // XInitialization
