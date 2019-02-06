@@ -554,12 +554,6 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
-// XCancellable
-void SAL_CALL KDE5FilePicker::cancel()
-{
-    // TODO
-}
-
 // XServiceInfo
 OUString SAL_CALL KDE5FilePicker::getImplementationName()
 {
