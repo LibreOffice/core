@@ -82,8 +82,7 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // Native kde5 filepicker does not add file extension automatically
     : Qt5FilePicker(eMode, true)
-    , _extraControls(new QWidget)
-    , _layout(new QGridLayout(_extraControls))
+    , _layout(new QGridLayout(m_pExtraControls))
     , allowRemoteUrls(false)
 {
     // use native dialog
@@ -117,8 +116,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // used to set the custom controls
     qApp->installEventFilter(this);
 }
-
-KDE5FilePicker::~KDE5FilePicker() { delete _extraControls; }
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
@@ -326,7 +323,7 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             // code, but the checkbox is hidden and ignored
             bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
 
-            auto widget = new QCheckBox(resString, _extraControls);
+            auto widget = new QCheckBox(resString, m_pExtraControls);
             widget->setHidden(hidden);
             if (!hidden)
             {
@@ -349,7 +346,7 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_TEMPLATE:
         case LISTBOX_VERSION:
         {
-            auto widget = new QComboBox(_extraControls);
+            auto widget = new QComboBox(m_pExtraControls);
             QLabel* label = new QLabel(resString);
             label->setBuddy(widget);
 
@@ -508,7 +505,7 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         {
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
             {
-                fileWidget->setCustomWidget(_extraControls);
+                fileWidget->setCustomWidget(m_pExtraControls);
                 // remove event filter again; the only purpose was to set the custom widget here
                 qApp->removeEventFilter(this);
             }
