@@ -313,20 +313,20 @@ namespace /* private */ {
         recently_used_file& file,
         recently_used_item_list_t& item_list)
     {
-        if (!item_list.empty())
-        {
-            file.truncate();
-            file.reset();
+        if (item_list.empty())
+            return;
 
-            file.write(XML_HEADER, strlen(XML_HEADER));
+        file.truncate();
+        file.reset();
 
-            std::for_each(
-                item_list.begin(),
-                item_list.end(),
-                recent_item_writer(file));
+        file.write(XML_HEADER, strlen(XML_HEADER));
 
-            file.write(XML_FOOTER, strlen(XML_FOOTER));
-        }
+        std::for_each(
+            item_list.begin(),
+            item_list.end(),
+            recent_item_writer(file));
+
+        file.write(XML_FOOTER, strlen(XML_FOOTER));
     }
 
 
