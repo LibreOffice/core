@@ -1078,7 +1078,8 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "ParagraphDialog" ||
              aEvent.FeatureURL.Path == "OutlineBullet" ||
              aEvent.FeatureURL.Path == "InsertIndexesEntry" ||
-             aEvent.FeatureURL.Path == "TransformDialog")
+             aEvent.FeatureURL.Path == "TransformDialog" ||
+             aEvent.FeatureURL.Path == "EditRegion")
 
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));

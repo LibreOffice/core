@@ -1992,7 +1992,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertPageHeader"),
         OUString(".uno:InsertPageFooter"),
         OUString(".uno:OnlineAutoFormat"),
-        OUString(".uno:InsertSymbol")
+        OUString(".uno:InsertSymbol"),
+        OUString(".uno:EditRegion")
     };
 
     util::URL aCommandURL;
