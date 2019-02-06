@@ -1,0 +1,39 @@
+---
+assumeFilename: cppuhelper/source/implbase.cxx
+blacklist:
+    cppuhelper/source/typemanager.hxx:
+    # base class needs full type
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
+    - com/sun/star/container/XSet.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp
+    - cppuhelper/compbase.hxx
+    cppuhelper/source/access_control.cxx:
+    # Needed for UnoType
+    - com/sun/star/security/RuntimePermission.hpp
+    - com/sun/star/io/FilePermission.hpp
+    - com/sun/star/connection/SocketPermission.hpp
+    cppuhelper/source/exc_thrower.cxx:
+    # No hpp -> hdl switch
+    - cppuhelper/detail/XExceptionThrower.hpp
+    # Needed for cppu::throwException
+    - cppuhelper/exc_hlp.hxx
+    cppuhelper/source/defaultbootstrap.cxx:
+    # Needed for template specialization
+    - com/sun/star/lang/XSingleComponentFactory.hpp
+    cppuhelper/source/macro_expander.cxx:
+    # Needed for template specialization
+    - com/sun/star/lang/XSingleComponentFactory.hpp
+    cppuhelper/source/shlib.cxx:
+    # Needed for UnoType
+    - com/sun/star/registry/XRegistryKey.hpp
+    # Needed for loadSharedLibComponentFactory & writeSharedLibComponentInfo
+    - cppuhelper/shlib.hxx
+    # Needed for cppuhelper::detail::getEnvironment
+    - loadsharedlibcomponentfactory.hxx
+    cppuhelper/source/supportsservice.cxx:
+    # Needed for supportsService
+    - cppuhelper/supportsservice.hxx
+    cppuhelper/source/findsofficepath.c:
+    # Needed for cppuhelper_detail_findSofficePath
+    - cppuhelper/findsofficepath.h

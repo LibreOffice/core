@@ -26,20 +26,20 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
-#include <registry/registry.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XSingleComponentFactory;
 } } } }
 namespace cppu { struct ContextEntry_Init; }
+namespace com :: sun :: star :: lang { class XSingleServiceFactory; }
+namespace com :: sun :: star :: uno { class XComponentContext; }
+
+class RegistryKey;
 
 namespace cppuhelper {
 
