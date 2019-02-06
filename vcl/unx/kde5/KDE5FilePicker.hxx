@@ -81,7 +81,6 @@ public:
 
     // XFilePicker functions
     virtual OUString SAL_CALL getDisplayDirectory() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getFiles() override;
 
     // XFilterManager functions
     virtual void SAL_CALL appendFilter(const OUString& rTitle, const OUString& rFilter) override;
@@ -116,9 +115,6 @@ public:
     virtual sal_Bool SAL_CALL   setShowState( sal_Bool bShowState );
     virtual sal_Bool SAL_CALL   getShowState(  );
     */
-
-    // XFilePicker2 functions
-    virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
@@ -160,8 +156,6 @@ Q_SIGNALS:
                                  const css::uno::Sequence<css::beans::StringPair>& rFilters);
     void setCurrentFilterSignal(const OUString& rFilter);
     OUString getCurrentFilterSignal();
-    css::uno::Sequence<OUString> getFilesSignal();
-    css::uno::Sequence<OUString> getSelectedFilesSignal();
 
 private Q_SLOTS:
     OUString getDisplayDirectorySlot() { return implGetDirectory(); }
@@ -201,7 +195,6 @@ private Q_SLOTS:
 
     void setCurrentFilterSlot(const OUString& rFilter) { return setCurrentFilter(rFilter); }
     OUString getCurrentFilterSlot() { return getCurrentFilter(); }
-    css::uno::Sequence<OUString> getSelectedFilesSlot() { return getFiles(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
