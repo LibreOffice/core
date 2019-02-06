@@ -56,6 +56,13 @@ class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Ba
 {
     Q_OBJECT
 
+private:
+    // whether to show (i.e. not remove) the file extension in the filter title,
+    // e.g. whether to use "ODF Text Document (*.odt)" or just
+    // "ODF Text Document" as filter title
+    // (non-native QFileDialog e.g. adds that information by itself anyway)
+    bool m_bShowFileExtensionInFilterTitle;
+
 protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
 
@@ -78,7 +85,7 @@ protected:
     bool m_bIsFolderPicker;
 
 public:
-    explicit Qt5FilePicker(QFileDialog::FileMode);
+    explicit Qt5FilePicker(QFileDialog::FileMode, bool bShowFileExtensionInFilterTitle = false);
     virtual ~Qt5FilePicker() override;
 
     // XFilePickerNotifier
