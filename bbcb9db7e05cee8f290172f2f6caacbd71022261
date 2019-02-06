@@ -16,6 +16,24 @@
       "revId": "bbcb9db7e05cee8f290172f2f6caacbd71022261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_501b661a",
+        "filename": "vcl/source/app/svmain.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-02-06T21:17:04Z",
+      "side": 1,
+      "message": "that\u0027s what I did in the earlier revision. In this cache thing, the SalBitmap dtor removes itself from the maScale cache, so calling clear on the cache when there is still something in the cache results in the SalBitmap dtors triggering during the clear and the dtor hook accesses the intermediate-in-clearing-state cache thing and falls over with a crash",
+      "parentUuid": "1f485f77_f0d6d24f",
+      "revId": "bbcb9db7e05cee8f290172f2f6caacbd71022261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
