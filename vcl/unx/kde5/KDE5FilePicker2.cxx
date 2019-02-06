@@ -81,7 +81,8 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 // KDE5FilePicker
 
 KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
-    : Qt5FilePicker(eMode)
+    // Native kde5 filepicker does not add file extension automatically
+    : Qt5FilePicker(eMode, true)
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
     , allowRemoteUrls(false)
@@ -102,16 +103,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
             Qt::BlockingQueuedConnection);
 
-    // XFilterManager
-    connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setCurrentFilterSignal, this,
-            &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
-            &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
-    // XFilterGroupManager
-    connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
-            &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
     // XFilePickerControlAccess
     connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
             Qt::BlockingQueuedConnection);
@@ -138,85 +129,14 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
         return Q_EMIT executeSignal();
     }
 
-    if (!_filters.isEmpty())
-        m_pFileDialog->setNameFilters(_filters);
-    if (!_currentFilter.isEmpty())
-        m_pFileDialog->selectNameFilter(_currentFilter);
+    if (!m_aNamedFilterList.isEmpty())
+        m_pFileDialog->setNameFilters(m_aNamedFilterList);
+    if (!m_aCurrentFilter.isEmpty())
+        m_pFileDialog->selectNameFilter(m_aCurrentFilter);
 
     m_pFileDialog->show();
     //block and wait for user input
     return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
-}
-
-// XFilterManager
-void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterSignal(title, filter);
-    }
-
-    QString t(toQString(title));
-    QString f(toQString(filter));
-    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
-    //see the docs
-    t.replace("/", "\\/");
-
-    // libreoffice separates by filters by ';' qt dialogs by space
-    f.replace(";", " ");
-
-    // make sure "*.*" is not used as "all files"
-    f.replace("*.*", "*");
-
-    _filters << QStringLiteral("%1 (%2)").arg(t, f);
-    _titleToFilters[t] = _filters.constLast();
-}
-
-void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setCurrentFilterSignal(title);
-    }
-
-    _currentFilter = _titleToFilters.value(toQString(title));
-}
-
-OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getCurrentFilterSignal();
-    }
-
-    OUString filter = toOUString(_titleToFilters.key(m_pFileDialog->selectedNameFilter()));
-
-    //default if not found
-    if (filter.isEmpty())
-        filter = "ODF Text Document (.odt)";
-
-    return filter;
-}
-
-// XFilterGroupManager
-void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
-                                                const uno::Sequence<beans::StringPair>& filters)
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterGroupSignal(rGroupTitle, filters);
-    }
-
-    const sal_uInt16 length = filters.getLength();
-    for (sal_uInt16 i = 0; i < length; ++i)
-    {
-        beans::StringPair aPair = filters[i];
-        appendFilter(aPair.First, aPair.Second);
-    }
 }
 
 // XFilePickerControlAccess
