@@ -384,7 +384,7 @@ void SAL_CALL Qt5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
     }
 }
 
-static uno::Any HandleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
+uno::Any Qt5FilePicker::handleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
 {
     uno::Any aAny;
     switch (nControlAction)
@@ -417,7 +417,8 @@ static uno::Any HandleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
     return aAny;
 }
 
-static void HandleSetListValue(QComboBox* pWidget, sal_Int16 nControlAction, const uno::Any& rValue)
+void Qt5FilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlAction,
+                                       const uno::Any& rValue)
 {
     switch (nControlAction)
     {
@@ -478,7 +479,7 @@ void SAL_CALL Qt5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
         {
             QComboBox* combo = dynamic_cast<QComboBox*>(widget);
             if (combo)
-                HandleSetListValue(combo, nControlAction, value);
+                handleSetListValue(combo, nControlAction, value);
         }
     }
     else
@@ -504,7 +505,7 @@ uno::Any SAL_CALL Qt5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContro
         {
             QComboBox* combo = dynamic_cast<QComboBox*>(widget);
             if (combo)
-                res = HandleGetListValue(combo, nControlAction);
+                res = handleGetListValue(combo, nControlAction);
         }
     }
     else
