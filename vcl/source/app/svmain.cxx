@@ -574,6 +574,8 @@ void DeInitVCL()
 
     pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();
+    pSVData->maGDIData.maScaleCache.remove_if([](const o3tl::lru_map<SalBitmap*, BitmapEx>::key_value_pair_t&)
+                                                { return true; });
 
     // Deinit Sal
     if (pSVData->mpDefInst)
