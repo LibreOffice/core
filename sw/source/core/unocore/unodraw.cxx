@@ -2022,7 +2022,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     // get access to SwDoc
     // (see also SwXTextRange::XTextRangeToSwPaM)
-    SwDoc*      pDoc = nullptr;
+    const SwDoc* pDoc = nullptr;
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     if(xRangeTunnel.is())
     {
@@ -2045,28 +2045,22 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
         if (pRange)
             pDoc = &pRange->GetDoc();
-        else if (!pDoc && pText)
+        else if (pText)
             pDoc = pText->GetDoc();
-        else if (!pDoc && pCursor)
+        else if (pCursor)
             pDoc = pCursor->GetDoc();
-        else if ( !pDoc && pPortion )
-        {
+        else if (pPortion)
             pDoc = pPortion->GetCursor().GetDoc();
-        }
-        else if ( !pDoc && pParagraph && pParagraph->GetTextNode( ) )
-        {
-            pDoc = const_cast<SwDoc*>(pParagraph->GetTextNode()->GetDoc());
-        }
+        else if (pParagraph && pParagraph->GetTextNode())
+            pDoc = pParagraph->GetTextNode()->GetDoc();
 
     }
 
     if(!pDoc)
         throw uno::RuntimeException();
-    SwDocShell *pDocSh = pDoc->GetDocShell();
-    if (pDocSh)
+    if (const SwDocShell* pDocSh = pDoc->GetDocShell())
     {
-        uno::Reference< frame::XModel > xModel;
-        xModel = pDocSh->GetModel();
+        uno::Reference<frame::XModel> xModel = pDocSh->GetModel();
         uno::Reference< drawing::XDrawPageSupplier > xDPS(xModel, uno::UNO_QUERY);
         if (xDPS.is())
         {
