@@ -94,21 +94,21 @@ static void xml_start_element_handler(void* UserData, const XML_Char* name, cons
     xml_parser* pImpl  = get_parser_instance(UserData);
 
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
-    if (pDocHdl)
+    if (!pDocHdl)
+        return;
+
+    xml_tag_attribute_container_t attributes;
+
+    int i = 0;
+
+    while(atts[i])
     {
-        xml_tag_attribute_container_t attributes;
-
-        int i = 0;
-
-        while(atts[i])
-        {
-            attributes[UTF8ToWString(reinterpret_cast<const char*>(get_local_name(atts[i])))] = UTF8ToWString(reinterpret_cast<const char*>(atts[i+1]));
-            i += 2; // skip to next pair
-        }
-
-        pDocHdl->start_element(
-            UTF8ToWString(reinterpret_cast<const char*>(name)), UTF8ToWString(reinterpret_cast<const char*>(get_local_name(name))), attributes);
+        attributes[UTF8ToWString(reinterpret_cast<const char*>(get_local_name(atts[i])))] = UTF8ToWString(reinterpret_cast<const char*>(atts[i+1]));
+        i += 2; // skip to next pair
     }
+
+    pDocHdl->start_element(
+        UTF8ToWString(reinterpret_cast<const char*>(name)), UTF8ToWString(reinterpret_cast<const char*>(get_local_name(name))), attributes);
 }
 
 static void xml_end_element_handler(void* UserData, const XML_Char* name)
