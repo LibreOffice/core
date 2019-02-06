@@ -4541,11 +4541,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
                             aPolyBoundRect = aXP.GetBoundRect();
-                            if ( nNumElemVert >= 3 )
-                            { // arc first command is always wr -- clockwise arc
-                                // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
-                                aStartPt = aXP[2];
-                            }
+
+                            // arc first command is always wr -- clockwise arc
+                            // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
+                            aStartPt = aXP[2];
                         }
                         else
                             aPolyBoundRect = tools::Rectangle( -21600, 0, 21600, 43200 );  // defaulting
