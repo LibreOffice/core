@@ -432,80 +432,78 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
 
 void SidebarController::UpdateConfigurations()
 {
+    if (maCurrentContext == maRequestedContext
+        && mnRequestedForceFlags == SwitchFlag_NoForce)
+        return;
 
-    if (maCurrentContext != maRequestedContext
-        || mnRequestedForceFlags!=SwitchFlag_NoForce)
+    if ((maCurrentContext.msApplication != "none") &&
+         !maCurrentContext.msApplication.isEmpty())
     {
+        mpResourceManager->SaveDecksSettings(maCurrentContext);
+        mpResourceManager->SetLastActiveDeck(maCurrentContext, msCurrentDeckId);
+    }
 
-        if ((maCurrentContext.msApplication != "none") &&
-             !maCurrentContext.msApplication.isEmpty())
+    // get last active deck for this application on first update
+    if (!maRequestedContext.msApplication.isEmpty() &&
+         (maCurrentContext.msApplication != maRequestedContext.msApplication))
+    {
+       OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+       if (!sLastActiveDeck.isEmpty())
+           msCurrentDeckId = sLastActiveDeck;
+    }
+
+    maCurrentContext = maRequestedContext;
+
+    mpResourceManager->InitDeckContext(GetCurrentContext());
+
+    // Find the set of decks that could be displayed for the new context.
+    ResourceManager::DeckContextDescriptorContainer aDecks;
+
+    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+
+    mpResourceManager->GetMatchingDecks (
+        aDecks,
+        maCurrentContext,
+        mbIsDocumentReadOnly,
+        xController);
+
+    // Notify the tab bar about the updated set of decks.
+    mpTabBar->SetDecks(aDecks);
+
+    // Find the new deck.  By default that is the same as the old
+    // one.  If that is not set or not enabled, then choose the
+    // first enabled deck (which is PropertyDeck).
+    OUString sNewDeckId;
+    for (const auto& rDeck : aDecks)
+    {
+        if (rDeck.mbIsEnabled)
         {
-            mpResourceManager->SaveDecksSettings(maCurrentContext);
-            mpResourceManager->SetLastActiveDeck(maCurrentContext, msCurrentDeckId);
-        }
-
-        // get last active deck for this application on first update
-        if (!maRequestedContext.msApplication.isEmpty() &&
-             (maCurrentContext.msApplication != maRequestedContext.msApplication))
-        {
-           OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
-           if (!sLastActiveDeck.isEmpty())
-               msCurrentDeckId = sLastActiveDeck;
-        }
-
-        maCurrentContext = maRequestedContext;
-
-        mpResourceManager->InitDeckContext(GetCurrentContext());
-
-        // Find the set of decks that could be displayed for the new context.
-        ResourceManager::DeckContextDescriptorContainer aDecks;
-
-        css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
-
-        mpResourceManager->GetMatchingDecks (
-            aDecks,
-            maCurrentContext,
-            mbIsDocumentReadOnly,
-            xController);
-
-        // Notify the tab bar about the updated set of decks.
-        mpTabBar->SetDecks(aDecks);
-
-        // Find the new deck.  By default that is the same as the old
-        // one.  If that is not set or not enabled, then choose the
-        // first enabled deck (which is PropertyDeck).
-        OUString sNewDeckId;
-        for (const auto& rDeck : aDecks)
-        {
-            if (rDeck.mbIsEnabled)
+            if (rDeck.msId == msCurrentDeckId)
             {
-                if (rDeck.msId == msCurrentDeckId)
-                {
-                    sNewDeckId = msCurrentDeckId;
-                    break;
-                }
-                else if (sNewDeckId.getLength() == 0)
-                    sNewDeckId = rDeck.msId;
+                sNewDeckId = msCurrentDeckId;
+                break;
             }
+            else if (sNewDeckId.getLength() == 0)
+                sNewDeckId = rDeck.msId;
         }
+    }
 
-        if (sNewDeckId.getLength() == 0)
-        {
-            // We did not find a valid deck.
-            RequestCloseDeck();
-            return;
-        }
+    if (sNewDeckId.getLength() == 0)
+    {
+        // We did not find a valid deck.
+        RequestCloseDeck();
+        return;
+    }
 
-        // Tell the tab bar to highlight the button associated
-        // with the deck.
-        mpTabBar->HighlightDeck(sNewDeckId);
+    // Tell the tab bar to highlight the button associated
+    // with the deck.
+    mpTabBar->HighlightDeck(sNewDeckId);
 
-        std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
+    std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
 
-        if (xDescriptor)
-        {
-            SwitchToDeck(*xDescriptor, maCurrentContext);
-        }
+    if (xDescriptor)
+    {
+        SwitchToDeck(*xDescriptor, maCurrentContext);
     }
 }
 
@@ -593,22 +591,22 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
 {
     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
-    if (xDeckDescriptor)
-    {
-        VclPtr<Deck> aDeck = xDeckDescriptor->mpDeck;
-        if (aDeck.get()==nullptr || bForceCreate)
-        {
-            if (aDeck.get()!=nullptr)
-                aDeck.disposeAndClear();
+    if (!xDeckDescriptor)
+        return;
 
-            aDeck = VclPtr<Deck>::Create(
-                            *xDeckDescriptor,
-                            mpParentWindow,
-                            [this]() { return this->RequestCloseDeck(); });
-        }
-        xDeckDescriptor->mpDeck = aDeck;
-        CreatePanels(rDeckId, rContext);
+    VclPtr<Deck> aDeck = xDeckDescriptor->mpDeck;
+    if (aDeck.get()==nullptr || bForceCreate)
+    {
+        if (aDeck.get()!=nullptr)
+            aDeck.disposeAndClear();
+
+        aDeck = VclPtr<Deck>::Create(
+                        *xDeckDescriptor,
+                        mpParentWindow,
+                        [this]() { return this->RequestCloseDeck(); });
     }
+    xDeckDescriptor->mpDeck = aDeck;
+    CreatePanels(rDeckId, rContext);
 }
 
 void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rContext)
@@ -1141,30 +1139,29 @@ void SidebarController::UpdateDeckOpenState()
 
     // Update (change) the open state when it either has not yet been initialized
     // or when its value differs from the requested state.
-    if ( ! mbIsDeckOpen
-        || mbIsDeckOpen.get() != mbIsDeckRequestedOpen.get())
-    {
-        if (mbIsDeckRequestedOpen.get())
-        {
-            if (mnSavedSidebarWidth <= nTabBarDefaultWidth)
-                SetChildWindowWidth(SidebarChildWindow::GetDefaultWidth(mpParentWindow));
-            else
-                SetChildWindowWidth(mnSavedSidebarWidth);
-        }
-        else
-        {
-            if ( ! mpParentWindow->IsFloatingMode())
-                mnSavedSidebarWidth = SetChildWindowWidth(nTabBarDefaultWidth);
-            if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
-                mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
-            mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
-        }
+    if ( mbIsDeckOpen && mbIsDeckOpen.get() == mbIsDeckRequestedOpen.get() )
+        return;
 
-        mbIsDeckOpen = mbIsDeckRequestedOpen.get();
-        if (mbIsDeckOpen.get() && mpCurrentDeck)
-            mpCurrentDeck->Show(mbIsDeckOpen.get());
-        NotifyResize();
+    if (mbIsDeckRequestedOpen.get())
+    {
+        if (mnSavedSidebarWidth <= nTabBarDefaultWidth)
+            SetChildWindowWidth(SidebarChildWindow::GetDefaultWidth(mpParentWindow));
+        else
+            SetChildWindowWidth(mnSavedSidebarWidth);
     }
+    else
+    {
+        if ( ! mpParentWindow->IsFloatingMode())
+            mnSavedSidebarWidth = SetChildWindowWidth(nTabBarDefaultWidth);
+        if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
+            mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
+        mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
+    }
+
+    mbIsDeckOpen = mbIsDeckRequestedOpen.get();
+    if (mbIsDeckOpen.get() && mpCurrentDeck)
+        mpCurrentDeck->Show(mbIsDeckOpen.get());
+    NotifyResize();
 }
 
 bool SidebarController::CanModifyChildWindowWidth()

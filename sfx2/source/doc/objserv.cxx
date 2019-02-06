@@ -223,29 +223,29 @@ bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseab
 
 SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
 {
-    if ( m_xCloseable.is() && m_xPreventer.is() )
+    if ( !m_xCloseable.is() || !m_xPreventer.is() )
+        return;
+
+    try
     {
-        try
-        {
-            m_xCloseable->removeCloseListener( m_xPreventer.get() );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        m_xCloseable->removeCloseListener( m_xPreventer.get() );
+    }
+    catch( uno::Exception& )
+    {
+    }
 
-        try
+    try
+    {
+        if ( m_xPreventer.is() )
         {
-            if ( m_xPreventer.is() )
-            {
-                m_xPreventer->SetPreventClose( false );
+            m_xPreventer->SetPreventClose( false );
 
-                if ( m_xPreventer->HasOwnership() )
-                    m_xCloseable->close( true ); // TODO: do it asynchronously
-            }
+            if ( m_xPreventer->HasOwnership() )
+                m_xCloseable->close( true ); // TODO: do it asynchronously
         }
-        catch( uno::Exception& )
-        {
-        }
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 

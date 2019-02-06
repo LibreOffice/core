@@ -471,20 +471,20 @@ SfxSaveGuard::~SfxSaveGuard()
     // Now we have to call close() again and delegate the ownership to the next one, which
     // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
 
-    if ( m_pData->m_bSuicide )
+    if ( !m_pData->m_bSuicide )
+        return;
+
+    // Reset this state. In case the new close() request is not accepted by someone else ...
+    // it's not a good idea to have two "owners" for close .-)
+    m_pData->m_bSuicide = false;
+    try
     {
-        // Reset this state. In case the new close() request is not accepted by someone else ...
-        // it's not a good idea to have two "owners" for close .-)
-        m_pData->m_bSuicide = false;
-        try
-        {
-            Reference< util::XCloseable > xClose(m_xModel, UNO_QUERY);
-            if (xClose.is())
-                xClose->close(true);
-        }
-        catch(const util::CloseVetoException&)
-        {}
+        Reference< util::XCloseable > xClose(m_xModel, UNO_QUERY);
+        if (xClose.is())
+            xClose->close(true);
     }
+    catch(const util::CloseVetoException&)
+    {}
 }
 
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
@@ -1522,115 +1522,115 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 {
     SfxModelGuard aGuard( *this );
 
-    if ( m_pData->m_pObjectShell.is() )
+    if ( !m_pData->m_pObjectShell.is() )
+        return;
+
+    SfxSaveGuard aSaveGuard(this, m_pData.get());
+
+    bool bCheckIn = false;
+    bool bOnMainThread = false;
+    for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
     {
-        SfxSaveGuard aSaveGuard(this, m_pData.get());
-
-        bool bCheckIn = false;
-        bool bOnMainThread = false;
-        for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
+        // check that only acceptable parameters are provided here
+        if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
+          && aSeqArgs[nInd].Name != "DontTerminateEdit"
+          && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
+          && aSeqArgs[nInd].Name != "VersionMajor"
+          && aSeqArgs[nInd].Name != "FailOnWarning"
+          && aSeqArgs[nInd].Name != "CheckIn"
+          && aSeqArgs[nInd].Name != "NoFileSync"
+          && aSeqArgs[nInd].Name != "OnMainThread" )
         {
-            // check that only acceptable parameters are provided here
-            if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
-              && aSeqArgs[nInd].Name != "DontTerminateEdit"
-              && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
-              && aSeqArgs[nInd].Name != "VersionMajor"
-              && aSeqArgs[nInd].Name != "FailOnWarning"
-              && aSeqArgs[nInd].Name != "CheckIn"
-              && aSeqArgs[nInd].Name != "NoFileSync"
-              && aSeqArgs[nInd].Name != "OnMainThread" )
+            const OUString aMessage( "Unexpected MediaDescriptor parameter: " + aSeqArgs[nInd].Name );
+            throw lang::IllegalArgumentException( aMessage, Reference< XInterface >(), 1 );
+        }
+        else if ( aSeqArgs[nInd].Name == "CheckIn" )
+        {
+            aSeqArgs[nInd].Value >>= bCheckIn;
+        }
+        else if (aSeqArgs[nInd].Name == "OnMainThread")
+        {
+            aSeqArgs[nInd].Value >>= bOnMainThread;
+        }
+    }
+
+    // Remove CheckIn property if needed
+    sal_uInt16 nSlotId = SID_SAVEDOC;
+    Sequence< beans::PropertyValue >  aArgs = aSeqArgs;
+    if ( bCheckIn )
+    {
+        nSlotId = SID_CHECKIN;
+        sal_Int32 nLength = aSeqArgs.getLength( );
+        aArgs = Sequence< beans::PropertyValue >( nLength - 1 );
+        sal_Int32 nNewI = 0;
+        for ( sal_Int32 i = 0; i < nLength; ++i )
+        {
+            beans::PropertyValue aProp = aSeqArgs[i];
+            if ( aProp.Name != "CheckIn" )
             {
-                const OUString aMessage( "Unexpected MediaDescriptor parameter: " + aSeqArgs[nInd].Name );
-                throw lang::IllegalArgumentException( aMessage, Reference< XInterface >(), 1 );
-            }
-            else if ( aSeqArgs[nInd].Name == "CheckIn" )
-            {
-                aSeqArgs[nInd].Value >>= bCheckIn;
-            }
-            else if (aSeqArgs[nInd].Name == "OnMainThread")
-            {
-                aSeqArgs[nInd].Value >>= bOnMainThread;
+                aArgs[nNewI] = aProp;
+                ++nNewI;
             }
         }
+    }
 
-        // Remove CheckIn property if needed
-        sal_uInt16 nSlotId = SID_SAVEDOC;
-        Sequence< beans::PropertyValue >  aArgs = aSeqArgs;
-        if ( bCheckIn )
+    std::unique_ptr<SfxAllItemSet> pParams(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
+    TransformParameters( nSlotId, aArgs, *pParams );
+
+    SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
+
+    bool bRet = false;
+
+    // TODO/LATER: let the embedded case of saving be handled more careful
+    if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
+    {
+        // If this is an embedded object that has no URL based location it should be stored to own storage.
+        // An embedded object can have a location based on URL in case it is a link, then it should be
+        // stored in normal way.
+        if ( !hasLocation() || getLocation().startsWith("private:") )
         {
-            nSlotId = SID_CHECKIN;
-            sal_Int32 nLength = aSeqArgs.getLength( );
-            aArgs = Sequence< beans::PropertyValue >( nLength - 1 );
-            sal_Int32 nNewI = 0;
-            for ( sal_Int32 i = 0; i < nLength; ++i )
-            {
-                beans::PropertyValue aProp = aSeqArgs[i];
-                if ( aProp.Name != "CheckIn" )
-                {
-                    aArgs[nNewI] = aProp;
-                    ++nNewI;
-                }
-            }
-        }
-
-        std::unique_ptr<SfxAllItemSet> pParams(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
-        TransformParameters( nSlotId, aArgs, *pParams );
-
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
-
-        bool bRet = false;
-
-        // TODO/LATER: let the embedded case of saving be handled more careful
-        if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
-        {
-            // If this is an embedded object that has no URL based location it should be stored to own storage.
-            // An embedded object can have a location based on URL in case it is a link, then it should be
-            // stored in normal way.
-            if ( !hasLocation() || getLocation().startsWith("private:") )
-            {
-                // actually in this very rare case only UI parameters have sense
-                // TODO/LATER: should be done later, after integration of sb19
-                bRet = m_pData->m_pObjectShell->DoSave()
-                    && m_pData->m_pObjectShell->DoSaveCompleted();
-            }
-            else
-            {
-                bRet = m_pData->m_pObjectShell->Save_Impl( pParams.get() );
-            }
+            // actually in this very rare case only UI parameters have sense
+            // TODO/LATER: should be done later, after integration of sb19
+            bRet = m_pData->m_pObjectShell->DoSave()
+                && m_pData->m_pObjectShell->DoSaveCompleted();
         }
         else
         {
-            // Tell the SfxMedium if we are in checkin instead of normal save
-            m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
-            if (bOnMainThread)
-                bRet = vcl::solarthread::syncExecute(
-                    std::bind(&SaveImplStatic, m_pData->m_pObjectShell.get(), pParams.get()));
-            else
-                bRet = m_pData->m_pObjectShell->Save_Impl(pParams.get());
-            m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
+            bRet = m_pData->m_pObjectShell->Save_Impl( pParams.get() );
         }
-
-        pParams.reset();
-
-        ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
-                                                               : ERRCODE_IO_CANTWRITE;
-        m_pData->m_pObjectShell->ResetError();
-
-        if ( bRet )
-        {
-            m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
-
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell.get() ) );
-        }
+    }
+    else
+    {
+        // Tell the SfxMedium if we are in checkin instead of normal save
+        m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
+        if (bOnMainThread)
+            bRet = vcl::solarthread::syncExecute(
+                std::bind(&SaveImplStatic, m_pData->m_pObjectShell.get(), pParams.get()));
         else
-        {
-            // write the contents of the logger to the file
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
+            bRet = m_pData->m_pObjectShell->Save_Impl(pParams.get());
+        m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
+    }
 
-            throw task::ErrorCodeIOException(
-                "SfxBaseModel::storeSelf: " + nErrCode.toHexString(),
-                Reference< XInterface >(), sal_uInt32(nErrCode));
-        }
+    pParams.reset();
+
+    ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
+                                                           : ERRCODE_IO_CANTWRITE;
+    m_pData->m_pObjectShell->ResetError();
+
+    if ( bRet )
+    {
+        m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell.get() ) );
+    }
+    else
+    {
+        // write the contents of the logger to the file
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
+
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::storeSelf: " + nErrCode.toHexString(),
+            Reference< XInterface >(), sal_uInt32(nErrCode));
     }
 
 }
@@ -1655,23 +1655,23 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     SfxModelGuard aGuard( *this );
     comphelper::ProfileZone aZone("storeAs");
 
-    if ( m_pData->m_pObjectShell.is() )
-    {
-        SfxSaveGuard aSaveGuard(this, m_pData.get());
+    if ( !m_pData->m_pObjectShell.is() )
+        return;
 
-        impl_store( rURL, rArgs, false );
+    SfxSaveGuard aSaveGuard(this, m_pData.get());
 
-        Sequence< beans::PropertyValue > aSequence ;
-        TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
-        attachResource( rURL, aSequence );
+    impl_store( rURL, rArgs, false );
 
-        loadCmisProperties( );
+    Sequence< beans::PropertyValue > aSequence ;
+    TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
+    attachResource( rURL, aSequence );
+
+    loadCmisProperties( );
 
 #if OSL_DEBUG_LEVEL > 0
-        const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(m_pData->m_pObjectShell->GetMedium()->GetItemSet(), SID_PASSWORD, false);
-        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+    const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(m_pData->m_pObjectShell->GetMedium()->GetItemSet(), SID_PASSWORD, false);
+    OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
-    }
 }
 
 
@@ -1695,24 +1695,24 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     SfxModelGuard aGuard( *this );
     comphelper::ProfileZone aZone("storeToURL");
 
-    if ( m_pData->m_pObjectShell.is() )
+    if ( !m_pData->m_pObjectShell.is() )
+        return;
+
+    SfxSaveGuard aSaveGuard(this, m_pData.get());
+    try {
+        utl::MediaDescriptor aDescriptor(rArgs);
+        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+        if (bOnMainThread)
+            vcl::solarthread::syncExecute(std::bind(&ImplStoreStatic, this, rURL, rArgs, true));
+        else
+            impl_store(rURL, rArgs, true);
+    }
+    catch (const uno::Exception &e)
     {
-        SfxSaveGuard aSaveGuard(this, m_pData.get());
-        try {
-            utl::MediaDescriptor aDescriptor(rArgs);
-            bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
-            if (bOnMainThread)
-                vcl::solarthread::syncExecute(std::bind(&ImplStoreStatic, this, rURL, rArgs, true));
-            else
-                impl_store(rURL, rArgs, true);
-        }
-        catch (const uno::Exception &e)
-        {
-            // convert to the exception we announce in the throw
-            // (eg. neon likes to throw InteractiveAugmentedIOException which
-            // is not an io::IOException)
-            throw io::IOException(e.Message, e.Context);
-        }
+        // convert to the exception we announce in the throw
+        // (eg. neon likes to throw InteractiveAugmentedIOException which
+        // is not an io::IOException)
+        throw io::IOException(e.Message, e.Context);
     }
 }
 
@@ -1773,21 +1773,21 @@ void SAL_CALL SfxBaseModel::initNew()
 
     // the object shell should exist always
     DBG_ASSERT( m_pData->m_pObjectShell.is(), "Model is useless without an ObjectShell" );
-    if ( m_pData->m_pObjectShell.is() )
-    {
-        if( m_pData->m_pObjectShell->GetMedium() )
-            throw frame::DoubleInitializationException();
+    if ( !m_pData->m_pObjectShell.is() )
+        return;
 
-        bool bRes = m_pData->m_pObjectShell->DoInitNew();
-        ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ?
-                           m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
-        m_pData->m_pObjectShell->ResetError();
+    if( m_pData->m_pObjectShell->GetMedium() )
+        throw frame::DoubleInitializationException();
 
-        if ( !bRes )
-            throw task::ErrorCodeIOException(
-                "SfxBaseModel::initNew: " + nErrCode.toHexString(),
-                Reference< XInterface >(), sal_uInt32(nErrCode));
-    }
+    bool bRes = m_pData->m_pObjectShell->DoInitNew();
+    ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ?
+                       m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
+    m_pData->m_pObjectShell->ResetError();
+
+    if ( !bRes )
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::initNew: " + nErrCode.toHexString(),
+            Reference< XInterface >(), sal_uInt32(nErrCode));
 }
 
 namespace {
@@ -2427,23 +2427,23 @@ void SAL_CALL SfxBaseModel::setCmisProperties( const Sequence< document::CmisPro
 void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::CmisProperty >& aProperties )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
-    {
-        try
-        {
-            ::ucbhelper::Content aContent( pMedium->GetName( ),
-                Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );
+    if ( !pMedium )
+        return;
 
-            aContent.executeCommand( "updateProperties", uno::makeAny( aProperties ) );
-            loadCmisProperties( );
-        }
-        catch (const Exception & e)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException( e.Message,
-                            e.Context, anyEx );
-        }
+    try
+    {
+        ::ucbhelper::Content aContent( pMedium->GetName( ),
+            Reference<ucb::XCommandEnvironment>(),
+            comphelper::getProcessComponentContext() );
+
+        aContent.executeCommand( "updateProperties", uno::makeAny( aProperties ) );
+        loadCmisProperties( );
+    }
+    catch (const Exception & e)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 
 }
@@ -2451,103 +2451,103 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
 void SAL_CALL SfxBaseModel::checkOut(  )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
+    if ( !pMedium )
+        return;
+
+    try
     {
-        try
-        {
-            ::ucbhelper::Content aContent( pMedium->GetName(),
-                Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( pMedium->GetName(),
+            Reference<ucb::XCommandEnvironment>(),
+            comphelper::getProcessComponentContext() );
 
-            Any aResult = aContent.executeCommand( "checkout", Any( ) );
-            OUString sURL;
-            aResult >>= sURL;
+        Any aResult = aContent.executeCommand( "checkout", Any( ) );
+        OUString sURL;
+        aResult >>= sURL;
 
-            m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
-            m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
-            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-            Sequence< beans::PropertyValue > aSequence ;
-            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
-            attachResource( sURL, aSequence );
+        m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
+        m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
+        m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+        Sequence< beans::PropertyValue > aSequence ;
+        TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+        attachResource( sURL, aSequence );
 
-            // Reload the CMIS properties
-            loadCmisProperties( );
-        }
-        catch ( const Exception & e )
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException( e.Message,
-                            e.Context, anyEx );
-        }
+        // Reload the CMIS properties
+        loadCmisProperties( );
+    }
+    catch ( const Exception & e )
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 }
 
 void SAL_CALL SfxBaseModel::cancelCheckOut(  )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
+    if ( !pMedium )
+        return;
+
+    try
     {
-        try
-        {
-            ::ucbhelper::Content aContent( pMedium->GetName(),
-                Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( pMedium->GetName(),
+            Reference<ucb::XCommandEnvironment>(),
+            comphelper::getProcessComponentContext() );
 
-            Any aResult = aContent.executeCommand( "cancelCheckout", Any( ) );
-            OUString sURL;
-            aResult >>= sURL;
+        Any aResult = aContent.executeCommand( "cancelCheckout", Any( ) );
+        OUString sURL;
+        aResult >>= sURL;
 
-            m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
-        }
-        catch ( const Exception & e )
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException( e.Message,
-                            e.Context, anyEx );
-        }
+        m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
+    }
+    catch ( const Exception & e )
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 }
 
 void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
+    if ( !pMedium )
+        return;
+
+    try
     {
-        try
+        Sequence< beans::PropertyValue > aProps( 3 );
+        aProps[0].Name = "VersionMajor";
+        aProps[0].Value <<= bIsMajor;
+        aProps[1].Name = "VersionComment";
+        aProps[1].Value <<= rMessage;
+        aProps[2].Name = "CheckIn";
+        aProps[2].Value <<= true;
+
+        const OUString sName( pMedium->GetName( ) );
+        storeSelf( aProps );
+
+        // Refresh pMedium as it has probably changed during the storeSelf call
+        pMedium = m_pData->m_pObjectShell->GetMedium( );
+        const OUString sNewName( pMedium->GetName( ) );
+
+        // URL has changed, update the document
+        if ( sName != sNewName )
         {
-            Sequence< beans::PropertyValue > aProps( 3 );
-            aProps[0].Name = "VersionMajor";
-            aProps[0].Value <<= bIsMajor;
-            aProps[1].Name = "VersionComment";
-            aProps[1].Value <<= rMessage;
-            aProps[2].Name = "CheckIn";
-            aProps[2].Value <<= true;
+            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+            Sequence< beans::PropertyValue > aSequence ;
+            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+            attachResource( sNewName, aSequence );
 
-            const OUString sName( pMedium->GetName( ) );
-            storeSelf( aProps );
-
-            // Refresh pMedium as it has probably changed during the storeSelf call
-            pMedium = m_pData->m_pObjectShell->GetMedium( );
-            const OUString sNewName( pMedium->GetName( ) );
-
-            // URL has changed, update the document
-            if ( sName != sNewName )
-            {
-                m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-                Sequence< beans::PropertyValue > aSequence ;
-                TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
-                attachResource( sNewName, aSequence );
-
-                // Reload the CMIS properties
-                loadCmisProperties( );
-            }
+            // Reload the CMIS properties
+            loadCmisProperties( );
         }
-        catch ( const Exception & e )
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException( e.Message,
-                            e.Context, anyEx );
-        }
+    }
+    catch ( const Exception & e )
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 }
 
@@ -2628,28 +2628,28 @@ sal_Bool SAL_CALL SfxBaseModel::canCheckIn( )
 void SfxBaseModel::loadCmisProperties( )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
+    if ( !pMedium )
+        return;
+
+    try
     {
-        try
+        ::ucbhelper::Content aContent( pMedium->GetName( ),
+            utl::UCBContentHelper::getDefaultCommandEnvironment(),
+            comphelper::getProcessComponentContext() );
+        Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
+        const OUString aCmisProps( "CmisProperties" );
+        if ( xProps->hasPropertyByName( aCmisProps ) )
         {
-            ::ucbhelper::Content aContent( pMedium->GetName( ),
-                utl::UCBContentHelper::getDefaultCommandEnvironment(),
-                comphelper::getProcessComponentContext() );
-            Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            const OUString aCmisProps( "CmisProperties" );
-            if ( xProps->hasPropertyByName( aCmisProps ) )
-            {
-                Sequence< document::CmisProperty> aCmisProperties;
-                aContent.getPropertyValue( aCmisProps ) >>= aCmisProperties;
-                setCmisProperties( aCmisProperties );
-            }
+            Sequence< document::CmisProperty> aCmisProperties;
+            aContent.getPropertyValue( aCmisProps ) >>= aCmisProperties;
+            setCmisProperties( aCmisProperties );
         }
-        catch (const ucb::ContentCreationException &)
-        {
-        }
-        catch (const ucb::CommandAbortedException &)
-        {
-        }
+    }
+    catch (const ucb::ContentCreationException &)
+    {
+    }
+    catch (const ucb::CommandAbortedException &)
+    {
     }
 }
 
@@ -2729,92 +2729,92 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
     if ( !m_pData )
         return;
 
-    if ( &rBC == m_pData->m_pObjectShell.get() )
+    if ( &rBC != m_pData->m_pObjectShell.get() )
+        return;
+
+    if ( rHint.GetId() == SfxHintId::DocChanged )
+        changing();
+
+    const SfxEventHint* pNamedHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if ( pNamedHint )
     {
-        if ( rHint.GetId() == SfxHintId::DocChanged )
-            changing();
 
-        const SfxEventHint* pNamedHint = dynamic_cast<const SfxEventHint*>(&rHint);
-        if ( pNamedHint )
+        switch ( pNamedHint->GetEventId() )
         {
+        case SfxEventHintId::StorageChanged:
+        {
+            if ( m_pData->m_xUIConfigurationManager.is()
+              && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+            {
+                Reference< embed::XStorage > xConfigStorage;
+                const OUString aUIConfigFolderName( "Configurations2" );
 
-            switch ( pNamedHint->GetEventId() )
-            {
-            case SfxEventHintId::StorageChanged:
-            {
-                if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
+                if ( !xConfigStorage.is() )
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
+
+                if ( xConfigStorage.is() || !m_pData->m_pObjectShell->GetStorage()->hasByName( aUIConfigFolderName ) )
                 {
-                    Reference< embed::XStorage > xConfigStorage;
-                    const OUString aUIConfigFolderName( "Configurations2" );
-
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
-                    if ( !xConfigStorage.is() )
-                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
-
-                    if ( xConfigStorage.is() || !m_pData->m_pObjectShell->GetStorage()->hasByName( aUIConfigFolderName ) )
-                    {
-                        // the storage is different, since otherwise it could not be opened, so it must be exchanged
-                        m_pData->m_xUIConfigurationManager->setStorage( xConfigStorage );
-                    }
-                    else
-                    {
-                        OSL_FAIL( "Unexpected scenario!" );
-                    }
+                    // the storage is different, since otherwise it could not be opened, so it must be exchanged
+                    m_pData->m_xUIConfigurationManager->setStorage( xConfigStorage );
                 }
-
-                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
-            }
-            break;
-
-            case SfxEventHintId::LoadFinished:
-            {
-                impl_getPrintHelper();
-                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
-                m_pData->m_bModifiedSinceLastSave = false;
-            }
-            break;
-
-            case SfxEventHintId::SaveAsDocDone:
-            {
-                m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
-
-                SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
-                Sequence< beans::PropertyValue > aArgs;
-                TransformItems( SID_SAVEASDOC, *pSet, aArgs );
-                addTitle_Impl( aArgs, m_pData->m_pObjectShell->GetTitle() );
-                attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
-            }
-            break;
-
-            case SfxEventHintId::DocCreated:
-            {
-                impl_getPrintHelper();
-                m_pData->m_bModifiedSinceLastSave = false;
-            }
-            break;
-
-            case SfxEventHintId::ModifyChanged:
-            {
-                m_pData->m_bModifiedSinceLastSave = isModified();
-            }
-            break;
-            default: break;
+                else
+                {
+                    OSL_FAIL( "Unexpected scenario!" );
+                }
             }
 
-            const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
-            postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
+            ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
         }
+        break;
 
-        if ( rHint.GetId() == SfxHintId::TitleChanged )
+        case SfxEventHintId::LoadFinished:
         {
-            addTitle_Impl( m_pData->m_seqArguments, m_pData->m_pObjectShell->GetTitle() );
-            postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
+            impl_getPrintHelper();
+            ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
+            m_pData->m_bModifiedSinceLastSave = false;
         }
-        else if ( rHint.GetId() == SfxHintId::ModeChanged )
+        break;
+
+        case SfxEventHintId::SaveAsDocDone:
         {
-            postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
+            m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
+
+            SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
+            Sequence< beans::PropertyValue > aArgs;
+            TransformItems( SID_SAVEASDOC, *pSet, aArgs );
+            addTitle_Impl( aArgs, m_pData->m_pObjectShell->GetTitle() );
+            attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
         }
+        break;
+
+        case SfxEventHintId::DocCreated:
+        {
+            impl_getPrintHelper();
+            m_pData->m_bModifiedSinceLastSave = false;
+        }
+        break;
+
+        case SfxEventHintId::ModifyChanged:
+        {
+            m_pData->m_bModifiedSinceLastSave = isModified();
+        }
+        break;
+        default: break;
+        }
+
+        const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
+        postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
+    }
+
+    if ( rHint.GetId() == SfxHintId::TitleChanged )
+    {
+        addTitle_Impl( m_pData->m_seqArguments, m_pData->m_pObjectShell->GetTitle() );
+        postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
+    }
+    else if ( rHint.GetId() == SfxHintId::ModeChanged )
+    {
+        postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
     }
 }
 
@@ -2979,129 +2979,129 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         }
     }
 
-    if ( !bSaved && m_pData->m_pObjectShell.is() )
+    if ( !(!bSaved && m_pData->m_pObjectShell.is()) )
+        return;
+
+    SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
+                                            m_pData->m_pObjectShell.get() ) );
+
+    std::unique_ptr<SfxAllItemSet> pItemSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
+    pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
+    if ( bSaveTo )
+        pItemSet->Put(SfxBoolItem(SID_SAVETO, true));
+
+    TransformParameters(SID_SAVEASDOC, seqArguments, *pItemSet);
+
+    const SfxBoolItem* pCopyStreamItem = pItemSet->GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
+
+    if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
-                                                m_pData->m_pObjectShell.get() ) );
+        throw frame::IllegalArgumentIOException(
+                "CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!" );
+    }
 
-        std::unique_ptr<SfxAllItemSet> pItemSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
-        pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
-        if ( bSaveTo )
-            pItemSet->Put(SfxBoolItem(SID_SAVETO, true));
+    sal_uInt32 nModifyPasswordHash = 0;
+    Sequence< beans::PropertyValue > aModifyPasswordInfo;
+    const SfxUnoAnyItem* pModifyPasswordInfoItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_MODIFYPASSWORDINFO, false);
+    if ( pModifyPasswordInfoItem )
+    {
+        // it contains either a simple hash or a set of PropertyValues
+        // TODO/LATER: the sequence of PropertyValue should replace the hash completely in future
+        sal_Int32 nMPHTmp = 0;
+        pModifyPasswordInfoItem->GetValue() >>= nMPHTmp;
+        nModifyPasswordHash = static_cast<sal_uInt32>(nMPHTmp);
+        pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
+    }
+    pItemSet->ClearItem(SID_MODIFYPASSWORDINFO);
+    sal_uInt32 nOldModifyPasswordHash = m_pData->m_pObjectShell->GetModifyPasswordHash();
+    m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
+    Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
+    m_pData->m_pObjectShell->SetModifyPasswordInfo( aModifyPasswordInfo );
 
-        TransformParameters(SID_SAVEASDOC, seqArguments, *pItemSet);
+    // since saving a document modifies its DocumentProperties, the current
+    // DocumentProperties must be saved on "SaveTo", so it can be restored
+    // after saving
+    bool bCopyTo =  bSaveTo ||
+        m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
+    Reference<document::XDocumentProperties> xOldDocProps;
+    if ( bCopyTo )
+    {
+        xOldDocProps = getDocumentProperties();
+        const Reference<util::XCloneable> xCloneable(xOldDocProps,
+            UNO_QUERY_THROW);
+        const Reference<document::XDocumentProperties> xNewDocProps(
+            xCloneable->createClone(), UNO_QUERY_THROW);
+        m_pData->m_xDocumentProperties = xNewDocProps;
+    }
 
-        const SfxBoolItem* pCopyStreamItem = pItemSet->GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
+    bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl(sURL, *pItemSet);
 
-        if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
+    if ( bCopyTo )
+    {
+        // restore DocumentProperties if a copy was created
+        m_pData->m_xDocumentProperties = xOldDocProps;
+    }
+
+    Reference < task::XInteractionHandler > xHandler;
+    const SfxUnoAnyItem* pItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_INTERACTIONHANDLER, false);
+    if ( pItem )
+        pItem->GetValue() >>= xHandler;
+
+    pItemSet.reset();
+
+    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorCode();
+    if ( !bRet && !nErrCode )
+    {
+        SAL_WARN("sfx.doc", "Storing has failed, no error is set!");
+        nErrCode = ERRCODE_IO_CANTWRITE;
+    }
+    m_pData->m_pObjectShell->ResetError();
+
+    if ( bRet )
+    {
+        if ( nErrCode )
         {
-            throw frame::IllegalArgumentIOException(
-                    "CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!" );
-        }
-
-        sal_uInt32 nModifyPasswordHash = 0;
-        Sequence< beans::PropertyValue > aModifyPasswordInfo;
-        const SfxUnoAnyItem* pModifyPasswordInfoItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_MODIFYPASSWORDINFO, false);
-        if ( pModifyPasswordInfoItem )
-        {
-            // it contains either a simple hash or a set of PropertyValues
-            // TODO/LATER: the sequence of PropertyValue should replace the hash completely in future
-            sal_Int32 nMPHTmp = 0;
-            pModifyPasswordInfoItem->GetValue() >>= nMPHTmp;
-            nModifyPasswordHash = static_cast<sal_uInt32>(nMPHTmp);
-            pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
-        }
-        pItemSet->ClearItem(SID_MODIFYPASSWORDINFO);
-        sal_uInt32 nOldModifyPasswordHash = m_pData->m_pObjectShell->GetModifyPasswordHash();
-        m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
-        Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
-        m_pData->m_pObjectShell->SetModifyPasswordInfo( aModifyPasswordInfo );
-
-        // since saving a document modifies its DocumentProperties, the current
-        // DocumentProperties must be saved on "SaveTo", so it can be restored
-        // after saving
-        bool bCopyTo =  bSaveTo ||
-            m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
-        Reference<document::XDocumentProperties> xOldDocProps;
-        if ( bCopyTo )
-        {
-            xOldDocProps = getDocumentProperties();
-            const Reference<util::XCloneable> xCloneable(xOldDocProps,
-                UNO_QUERY_THROW);
-            const Reference<document::XDocumentProperties> xNewDocProps(
-                xCloneable->createClone(), UNO_QUERY_THROW);
-            m_pData->m_xDocumentProperties = xNewDocProps;
-        }
-
-        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl(sURL, *pItemSet);
-
-        if ( bCopyTo )
-        {
-            // restore DocumentProperties if a copy was created
-            m_pData->m_xDocumentProperties = xOldDocProps;
-        }
-
-        Reference < task::XInteractionHandler > xHandler;
-        const SfxUnoAnyItem* pItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_INTERACTIONHANDLER, false);
-        if ( pItem )
-            pItem->GetValue() >>= xHandler;
-
-        pItemSet.reset();
-
-        ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorCode();
-        if ( !bRet && !nErrCode )
-        {
-            SAL_WARN("sfx.doc", "Storing has failed, no error is set!");
-            nErrCode = ERRCODE_IO_CANTWRITE;
-        }
-        m_pData->m_pObjectShell->ResetError();
-
-        if ( bRet )
-        {
-            if ( nErrCode )
+            // must be a warning - use Interactionhandler if possible or abandon
+            if ( xHandler.is() )
             {
-                // must be a warning - use Interactionhandler if possible or abandon
-                if ( xHandler.is() )
-                {
-                    // TODO/LATER: a general way to set the error context should be available
-                    SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
+                // TODO/LATER: a general way to set the error context should be available
+                SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
-                    task::ErrorCodeRequest aErrorCode;
-                    aErrorCode.ErrCode = sal_uInt32(nErrCode);
-                    SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), false );
-                }
+                task::ErrorCodeRequest aErrorCode;
+                aErrorCode.ErrCode = sal_uInt32(nErrCode);
+                SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), false );
             }
+        }
 
-            if ( !bSaveTo )
-            {
-                m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
-                m_pData->m_pObjectShell->SetModifyPasswordEntered();
+        if ( !bSaveTo )
+        {
+            m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+            m_pData->m_pObjectShell->SetModifyPasswordEntered();
 
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveAsDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEASDOCDONE), m_pData->m_pObjectShell.get() ) );
-            }
-            else
-            {
-                m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
-                m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
-
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveToDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVETODOCDONE), m_pData->m_pObjectShell.get() ) );
-            }
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveAsDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEASDOCDONE), m_pData->m_pObjectShell.get() ) );
         }
         else
         {
             m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
             m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
-
-            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
-                                                    m_pData->m_pObjectShell.get() ) );
-
-            std::stringstream aErrCode;
-            aErrCode << nErrCode;
-            throw task::ErrorCodeIOException(
-                "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str().c_str()),
-                Reference< XInterface >(), sal_uInt32(nErrCode));
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveToDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVETODOCDONE), m_pData->m_pObjectShell.get() ) );
         }
+    }
+    else
+    {
+        m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
+        m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
+
+
+        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
+                                                m_pData->m_pObjectShell.get() ) );
+
+        std::stringstream aErrCode;
+        aErrCode << nErrCode;
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str().c_str()),
+            Reference< XInterface >(), sal_uInt32(nErrCode));
     }
 }
 
@@ -3231,20 +3231,20 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
 
     ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
                                         cppu::UnoType<document::XEventListener>::get());
-    if( pIC )
+    if( !pIC )
 
+        return;
+
+    ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+    while( aIt.hasMoreElements() )
     {
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
-        while( aIt.hasMoreElements() )
+        try
         {
-            try
-            {
-                static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
-            }
-            catch( RuntimeException& )
-            {
-                aIt.remove();
-            }
+            static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
+        }
+        catch( RuntimeException& )
+        {
+            aIt.remove();
         }
     }
 }
@@ -3438,34 +3438,34 @@ static void GetCommandFromSequence( OUString& rCommand, sal_Int32& nIndex, const
 
 static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< container::XIndexContainer > const & rToolbarDefinition )
 {
-    if ( pDoc )
+    if ( !pDoc )
+        return;
+
+    SfxModule*    pModule( pDoc->GetFactory().GetModule() );
+    Sequence< beans::PropertyValue > aSeqPropValue;
+
+    for ( sal_Int32 i = 0; i < rToolbarDefinition->getCount(); i++ )
     {
-        SfxModule*    pModule( pDoc->GetFactory().GetModule() );
-        Sequence< beans::PropertyValue > aSeqPropValue;
+        sal_Int32 nIndex( -1 );
+        OUString aCommand;
 
-        for ( sal_Int32 i = 0; i < rToolbarDefinition->getCount(); i++ )
+        if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
         {
-            sal_Int32 nIndex( -1 );
-            OUString aCommand;
-
-            if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
+            GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
+            if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
             {
-                GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
-                if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
+                const sal_uInt16 nSlot = aCommand.copy( 5 ).toInt32();
+
+                // We have to replace the old "slot-Command" with our new ".uno:-Command"
+                const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );
+                if ( pSlot )
                 {
-                    const sal_uInt16 nSlot = aCommand.copy( 5 ).toInt32();
+                    OUStringBuffer aStrBuf( ".uno:"  );
+                    aStrBuf.appendAscii( pSlot->GetUnoName() );
 
-                    // We have to replace the old "slot-Command" with our new ".uno:-Command"
-                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );
-                    if ( pSlot )
-                    {
-                        OUStringBuffer aStrBuf( ".uno:"  );
-                        aStrBuf.appendAscii( pSlot->GetUnoName() );
-
-                        aCommand = aStrBuf.makeStringAndClear();
-                        aSeqPropValue[nIndex].Value <<= aCommand;
-                        rToolbarDefinition->replaceByIndex( i, Any( aSeqPropValue ));
-                    }
+                    aCommand = aStrBuf.makeStringAndClear();
+                    aSeqPropValue[nIndex].Value <<= aCommand;
+                    rToolbarDefinition->replaceByIndex( i, Any( aSeqPropValue ));
                 }
             }
         }

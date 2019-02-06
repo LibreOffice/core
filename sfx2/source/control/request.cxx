@@ -157,20 +157,20 @@ SfxRequest::SfxRequest
         pImpl->SetPool( rOrig.pImpl->pPool );
 
     // setup macro recording if it was in the original SfxRequest
-    if (rOrig.pImpl->pViewFrame && rOrig.pImpl->xRecorder.is())
+    if (!rOrig.pImpl->pViewFrame || !rOrig.pImpl->xRecorder.is())
+        return;
+
+    nSlot = rOrig.nSlot;
+    pImpl->pViewFrame = rOrig.pImpl->pViewFrame;
+    if (pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl(nSlot, &pImpl->pShell, &pImpl->pSlot, true, true))
     {
-        nSlot = rOrig.nSlot;
-        pImpl->pViewFrame = rOrig.pImpl->pViewFrame;
-        if (pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl(nSlot, &pImpl->pShell, &pImpl->pSlot, true, true))
-        {
-            pImpl->SetPool( &pImpl->pShell->GetPool() );
-            pImpl->xRecorder = SfxRequest::GetMacroRecorder(pImpl->pViewFrame);
-            pImpl->aTarget = pImpl->pShell->GetName();
-        }
-        else
-        {
-            SAL_WARN("sfx", "Recording unsupported slot: " << pImpl->pPool->GetSlotId(nSlot));
-        }
+        pImpl->SetPool( &pImpl->pShell->GetPool() );
+        pImpl->xRecorder = SfxRequest::GetMacroRecorder(pImpl->pViewFrame);
+        pImpl->aTarget = pImpl->pShell->GetName();
+    }
+    else
+    {
+        SAL_WARN("sfx", "Recording unsupported slot: " << pImpl->pPool->GetSlotId(nSlot));
     }
 }
 
@@ -335,42 +335,42 @@ void SfxRequest_Impl::Record
     OUString aCommand(".uno:");
     aCommand += OUString( pSlot->GetUnoName(), strlen( pSlot->GetUnoName() ), RTL_TEXTENCODING_UTF8 );
     OUString aCmd( aCommand );
-    if(xRecorder.is())
+    if(!xRecorder.is())
+        return;
+
+    uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
+    if ( xReplace.is() && aCmd == ".uno:InsertText" )
     {
-        uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
-        if ( xReplace.is() && aCmd == ".uno:InsertText" )
+        sal_Int32 nCount = xReplace->getCount();
+        if ( nCount )
         {
-            sal_Int32 nCount = xReplace->getCount();
-            if ( nCount )
+            frame::DispatchStatement aStatement;
+            uno::Any aElement = xReplace->getByIndex(nCount-1);
+            if ( (aElement >>= aStatement) && aStatement.aCommand == aCmd )
             {
-                frame::DispatchStatement aStatement;
-                uno::Any aElement = xReplace->getByIndex(nCount-1);
-                if ( (aElement >>= aStatement) && aStatement.aCommand == aCmd )
-                {
-                    OUString aStr;
-                    OUString aNew;
-                    aStatement.aArgs[0].Value >>= aStr;
-                    rArgs[0].Value >>= aNew;
-                    aStr += aNew;
-                    aStatement.aArgs[0].Value <<= aStr;
-                    aElement <<= aStatement;
-                    xReplace->replaceByIndex( nCount-1, aElement );
-                    return;
-                }
+                OUString aStr;
+                OUString aNew;
+                aStatement.aArgs[0].Value >>= aStr;
+                rArgs[0].Value >>= aNew;
+                aStr += aNew;
+                aStatement.aArgs[0].Value <<= aStr;
+                aElement <<= aStatement;
+                xReplace->replaceByIndex( nCount-1, aElement );
+                return;
             }
         }
-
-        uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
-
-        css::util::URL aURL;
-        aURL.Complete = aCmd;
-        xTransform->parseStrict(aURL);
-
-        if (bDone)
-            xRecorder->recordDispatch(aURL,rArgs);
-        else
-            xRecorder->recordDispatchAsComment(aURL,rArgs);
     }
+
+    uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
+
+    css::util::URL aURL;
+    aURL.Complete = aCmd;
+    xTransform->parseStrict(aURL);
+
+    if (bDone)
+        xRecorder->recordDispatch(aURL,rArgs);
+    else
+        xRecorder->recordDispatchAsComment(aURL,rArgs);
 }
 
 

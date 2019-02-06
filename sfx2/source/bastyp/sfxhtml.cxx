@@ -257,43 +257,43 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
 {
     aScriptType = SVX_MACRO_LANGUAGE_JAVASCRIPT;
     eScriptType = JAVASCRIPT;
-    if( pHTTPHeader )
+    if( !pHTTPHeader )
+        return;
+
+    SvKeyValue aKV;
+    for( bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
+         bCont = pHTTPHeader->GetNext( aKV ) )
     {
-        SvKeyValue aKV;
-        for( bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
-             bCont = pHTTPHeader->GetNext( aKV ) )
+        if( aKV.GetKey().equalsIgnoreAsciiCase(
+                                OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         {
-            if( aKV.GetKey().equalsIgnoreAsciiCase(
-                                    OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
+            if( !aKV.GetValue().isEmpty() )
             {
-                if( !aKV.GetValue().isEmpty() )
+                OUString aTmp( aKV.GetValue() );
+                if( aTmp.startsWithIgnoreAsciiCase( "text/" ) )
+                    aTmp = aTmp.copy( 5 );
+                else if( aTmp.startsWithIgnoreAsciiCase( "application/" ) )
+                    aTmp = aTmp.copy( 12 );
+                else
+                    break;
+
+                if( aTmp.startsWithIgnoreAsciiCase( "x-" ) ) // MIME-experimental
                 {
-                    OUString aTmp( aKV.GetValue() );
-                    if( aTmp.startsWithIgnoreAsciiCase( "text/" ) )
-                        aTmp = aTmp.copy( 5 );
-                    else if( aTmp.startsWithIgnoreAsciiCase( "application/" ) )
-                        aTmp = aTmp.copy( 12 );
-                    else
-                        break;
-
-                    if( aTmp.startsWithIgnoreAsciiCase( "x-" ) ) // MIME-experimental
-                    {
-                        aTmp = aTmp.copy( 2 );
-                    }
-
-                    if( aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
-                    {
-                        eScriptType = STARBASIC;
-                        aScriptType = SVX_MACRO_LANGUAGE_STARBASIC;
-                    }
-                    if( !aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
-                    {
-                        eScriptType = EXTENDED_STYPE;
-                        aScriptType = aTmp;
-                    }
+                    aTmp = aTmp.copy( 2 );
                 }
-                break;
+
+                if( aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
+                {
+                    eScriptType = STARBASIC;
+                    aScriptType = SVX_MACRO_LANGUAGE_STARBASIC;
+                }
+                if( !aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
+                {
+                    eScriptType = EXTENDED_STYPE;
+                    aScriptType = aTmp;
+                }
             }
+            break;
         }
     }
 }

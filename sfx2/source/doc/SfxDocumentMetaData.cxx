@@ -2099,38 +2099,38 @@ void SfxDocumentMetaData::createUserDefined()
 {
     // user-defined meta data: create PropertyBag which only accepts property
     // values of allowed types
-    if ( !m_xUserDefined.is() )
-    {
-        css::uno::Sequence<css::uno::Type> types(13);
-        types[ 0] = ::cppu::UnoType<bool>::get();
-        types[ 1] = ::cppu::UnoType< OUString>::get();
-        types[ 2] = ::cppu::UnoType<css::util::DateTime>::get();
-        types[ 3] = ::cppu::UnoType<css::util::Date>::get();
-        types[ 4] = ::cppu::UnoType<css::util::DateTimeWithTimezone>::get();
-        types[ 5] = ::cppu::UnoType<css::util::DateWithTimezone>::get();
-        types[ 6] = ::cppu::UnoType<css::util::Duration>::get();
-        types[ 7] = ::cppu::UnoType<float>::get();
-        types[ 8] = ::cppu::UnoType<double>::get();
-        types[ 9] = ::cppu::UnoType<sal_Int16>::get();
-        types[10] = ::cppu::UnoType<sal_Int32>::get();
-        types[11] = ::cppu::UnoType<sal_Int64>::get();
-        // Time is supported for backward compatibility with OOo 3.x, x<=2
-        types[12] = ::cppu::UnoType<css::util::Time>::get();
-        // #i94175#:  ODF allows empty user-defined property names!
-        m_xUserDefined.set(
-            css::beans::PropertyBag::createWithTypes( m_xContext, types, true/*AllowEmptyPropertyName*/, false/*AutomaticAddition*/ ),
-            css::uno::UNO_QUERY_THROW);
+    if ( m_xUserDefined.is() )
+        return;
 
-        const css::uno::Reference<css::util::XModifyBroadcaster> xMB(
-            m_xUserDefined, css::uno::UNO_QUERY);
-        if (xMB.is())
-        {
-            const std::vector<css::uno::Reference<css::uno::XInterface> >
-                listeners(m_NotifyListeners.getElements());
-            for (const auto& l : listeners) {
-                xMB->addModifyListener(
-                    css::uno::Reference< css::util::XModifyListener >(l, css::uno::UNO_QUERY) );
-            }
+    css::uno::Sequence<css::uno::Type> types(13);
+    types[ 0] = ::cppu::UnoType<bool>::get();
+    types[ 1] = ::cppu::UnoType< OUString>::get();
+    types[ 2] = ::cppu::UnoType<css::util::DateTime>::get();
+    types[ 3] = ::cppu::UnoType<css::util::Date>::get();
+    types[ 4] = ::cppu::UnoType<css::util::DateTimeWithTimezone>::get();
+    types[ 5] = ::cppu::UnoType<css::util::DateWithTimezone>::get();
+    types[ 6] = ::cppu::UnoType<css::util::Duration>::get();
+    types[ 7] = ::cppu::UnoType<float>::get();
+    types[ 8] = ::cppu::UnoType<double>::get();
+    types[ 9] = ::cppu::UnoType<sal_Int16>::get();
+    types[10] = ::cppu::UnoType<sal_Int32>::get();
+    types[11] = ::cppu::UnoType<sal_Int64>::get();
+    // Time is supported for backward compatibility with OOo 3.x, x<=2
+    types[12] = ::cppu::UnoType<css::util::Time>::get();
+    // #i94175#:  ODF allows empty user-defined property names!
+    m_xUserDefined.set(
+        css::beans::PropertyBag::createWithTypes( m_xContext, types, true/*AllowEmptyPropertyName*/, false/*AutomaticAddition*/ ),
+        css::uno::UNO_QUERY_THROW);
+
+    const css::uno::Reference<css::util::XModifyBroadcaster> xMB(
+        m_xUserDefined, css::uno::UNO_QUERY);
+    if (xMB.is())
+    {
+        const std::vector<css::uno::Reference<css::uno::XInterface> >
+            listeners(m_NotifyListeners.getElements());
+        for (const auto& l : listeners) {
+            xMB->addModifyListener(
+                css::uno::Reference< css::util::XModifyListener >(l, css::uno::UNO_QUERY) );
         }
     }
 }

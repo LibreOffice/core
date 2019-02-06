@@ -930,18 +930,18 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
     ClipboardXmlIdMap_t::iterator const& i_rIter,
     OUString const & i_rStream, Metadatable const& i_rObject)
 {
-    if (i_rIter != i_rXmlIdMap.end())
+    if (i_rIter == i_rXmlIdMap.end())
+        return;
+
+    Metadatable *& rMeta = isContentFile(i_rStream)
+        ? i_rIter->second.first : i_rIter->second.second;
+    if (rMeta == &i_rObject)
     {
-        Metadatable *& rMeta = isContentFile(i_rStream)
-            ? i_rIter->second.first : i_rIter->second.second;
-        if (rMeta == &i_rObject)
-        {
-            rMeta = nullptr;
-        }
-        if (!i_rIter->second.first && !i_rIter->second.second)
-        {
-            i_rXmlIdMap.erase(i_rIter);
-        }
+        rMeta = nullptr;
+    }
+    if (!i_rIter->second.first && !i_rIter->second.second)
+    {
+        i_rXmlIdMap.erase(i_rIter);
     }
 }
 

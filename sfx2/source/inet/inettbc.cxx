@@ -90,37 +90,37 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
         return;
 
     Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
-    if ( xDispatchProvider.is() )
+    if ( !xDispatchProvider.is() )
+        return;
+
+    URL             aTargetURL;
+    aTargetURL.Complete = aName;
+
+    getURLTransformer()->parseStrict( aTargetURL );
+    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
+    if ( !xDispatch.is() )
+        return;
+
+    Sequence< PropertyValue > aArgs( 2 );
+    aArgs[0].Name = "Referer";
+    aArgs[0].Value <<= OUString( "private:user" );
+    aArgs[1].Name = "FileName";
+    aArgs[1].Value <<= aName;
+
+    if ( !aFilter.isEmpty() )
     {
-        URL             aTargetURL;
-        aTargetURL.Complete = aName;
-
-        getURLTransformer()->parseStrict( aTargetURL );
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
-        if ( xDispatch.is() )
-        {
-            Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = "Referer";
-            aArgs[0].Value <<= OUString( "private:user" );
-            aArgs[1].Name = "FileName";
-            aArgs[1].Value <<= aName;
-
-            if ( !aFilter.isEmpty() )
-            {
-                aArgs.realloc( 4 );
-                aArgs[2].Name = "FilterOptions";
-                aArgs[2].Value <<= OUString();
-                aArgs[3].Name = "FilterName";
-                aArgs[3].Value <<= aFilter;
-            }
-
-            SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
-            pExecuteInfo->xDispatch     = xDispatch;
-            pExecuteInfo->aTargetURL    = aTargetURL;
-            pExecuteInfo->aArgs         = aArgs;
-            Application::PostUserEvent( LINK( nullptr, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
-        }
+        aArgs.realloc( 4 );
+        aArgs[2].Name = "FilterOptions";
+        aArgs[2].Value <<= OUString();
+        aArgs[3].Name = "FilterName";
+        aArgs[3].Value <<= aFilter;
     }
+
+    SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
+    pExecuteInfo->xDispatch     = xDispatch;
+    pExecuteInfo->aTargetURL    = aTargetURL;
+    pExecuteInfo->aArgs         = aArgs;
+    Application::PostUserEvent( LINK( nullptr, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
 }
 
 
@@ -191,52 +191,52 @@ void SfxURLToolBoxControl_Impl::StateChanged
         GetURLBox()->Enable( SfxItemState::DISABLED != eState );
     }
 
-    if ( GetURLBox()->IsEnabled() )
+    if ( !GetURLBox()->IsEnabled() )
+        return;
+
+    if( nSID == SID_FOCUSURLBOX )
     {
-        if( nSID == SID_FOCUSURLBOX )
+        if ( GetURLBox()->IsVisible() )
+            GetURLBox()->GrabFocus();
+    }
+    else if ( !GetURLBox()->IsModified() && SfxItemState::DEFAULT == eState )
+    {
+        SvtURLBox* pURLBox = GetURLBox();
+        pURLBox->Clear();
+
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
+        for (sal_Int32 i=0; i<lList.getLength(); ++i)
         {
-            if ( GetURLBox()->IsVisible() )
-                GetURLBox()->GrabFocus();
+            css::uno::Sequence< css::beans::PropertyValue > lProps = lList[i];
+            for (sal_Int32 p=0; p<lProps.getLength(); ++p)
+            {
+                if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
+                    continue;
+
+                OUString sURL;
+                if (!(lProps[p].Value>>=sURL) || sURL.isEmpty())
+                    continue;
+
+                INetURLObject aURL    ( sURL );
+                OUString      sMainURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
+                OUString      sFile;
+
+                if (osl::FileBase::getSystemPathFromFileURL(sMainURL, sFile) == osl::FileBase::E_None)
+                    pURLBox->InsertEntry(sFile);
+                else
+                    pURLBox->InsertEntry(sMainURL);
+            }
         }
-        else if ( !GetURLBox()->IsModified() && SfxItemState::DEFAULT == eState )
+
+        const SfxStringItem *pURL = dynamic_cast< const SfxStringItem* >(pState);
+        INetURLObject aURL( pURL->GetValue() );
+        INetProtocol eProt = aURL.GetProtocol();
+        if ( eProt == INetProtocol::File )
         {
-            SvtURLBox* pURLBox = GetURLBox();
-            pURLBox->Clear();
-
-            css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
-            for (sal_Int32 i=0; i<lList.getLength(); ++i)
-            {
-                css::uno::Sequence< css::beans::PropertyValue > lProps = lList[i];
-                for (sal_Int32 p=0; p<lProps.getLength(); ++p)
-                {
-                    if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
-                        continue;
-
-                    OUString sURL;
-                    if (!(lProps[p].Value>>=sURL) || sURL.isEmpty())
-                        continue;
-
-                    INetURLObject aURL    ( sURL );
-                    OUString      sMainURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
-                    OUString      sFile;
-
-                    if (osl::FileBase::getSystemPathFromFileURL(sMainURL, sFile) == osl::FileBase::E_None)
-                        pURLBox->InsertEntry(sFile);
-                    else
-                        pURLBox->InsertEntry(sMainURL);
-                }
-            }
-
-            const SfxStringItem *pURL = dynamic_cast< const SfxStringItem* >(pState);
-            INetURLObject aURL( pURL->GetValue() );
-            INetProtocol eProt = aURL.GetProtocol();
-            if ( eProt == INetProtocol::File )
-            {
-                pURLBox->SetText( aURL.PathToFileName() );
-            }
-            else
-                pURLBox->SetText( aURL.GetURLNoPass() );
+            pURLBox->SetText( aURL.PathToFileName() );
         }
+        else
+            pURLBox->SetText( aURL.GetURLNoPass() );
     }
 }
 

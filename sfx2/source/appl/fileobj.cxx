@@ -257,65 +257,65 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;
-    if( pLink && pLink->GetLinkManager() )
+    if( !pLink || !pLink->GetLinkManager() )
+        return;
+
+    sfx2::LinkManager::GetDisplayNames( pLink, nullptr, &sFile, &sRange, &sTmpFilter );
+
+    switch( pLink->GetObjType() )
     {
-        sfx2::LinkManager::GetDisplayNames( pLink, nullptr, &sFile, &sRange, &sTmpFilter );
-
-        switch( pLink->GetObjType() )
+        case OBJECT_CLIENT_GRF:
         {
-            case OBJECT_CLIENT_GRF:
+            nType = FILETYPE_GRF;       // If not set already
+
+            SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK), pParent);
+            aDlg.EnableLink(false);
+            aDlg.SetPath( sFile, true );
+            aDlg.SetCurrentFilter( sTmpFilter );
+
+            if( !aDlg.Execute() )
             {
-                nType = FILETYPE_GRF;       // If not set already
+                sFile = aDlg.GetPath()
+                    + OUStringLiteral1(sfx2::cTokenSeparator)
+                    + OUStringLiteral1(sfx2::cTokenSeparator)
+                    + aDlg.GetDetectedFilter();
 
-                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK), pParent);
-                aDlg.EnableLink(false);
-                aDlg.SetPath( sFile, true );
-                aDlg.SetCurrentFilter( sTmpFilter );
-
-                if( !aDlg.Execute() )
-                {
-                    sFile = aDlg.GetPath()
-                        + OUStringLiteral1(sfx2::cTokenSeparator)
-                        + OUStringLiteral1(sfx2::cTokenSeparator)
-                        + aDlg.GetDetectedFilter();
-
-                    aEndEditLink.Call( sFile );
-                }
-                else
-                    sFile.clear();
+                aEndEditLink.Call( sFile );
             }
-            break;
-
-            case OBJECT_CLIENT_OLE:
-            {
-                nType = FILETYPE_OBJECT; // if not set already
-
-                ::sfx2::FileDialogHelper & rFileDlg =
-                    pLink->GetInsertFileDialog( OUString() );
-                rFileDlg.StartExecuteModal(
-                        LINK( this, SvFileObject, DialogClosedHdl ) );
-            }
-            break;
-
-            case OBJECT_CLIENT_FILE:
-            {
-                nType = FILETYPE_TEXT; // if not set already
-
-                OUString sFactory;
-                SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
-                if ( pShell )
-                    sFactory = pShell->GetFactory().GetFactoryName();
-
-                ::sfx2::FileDialogHelper & rFileDlg =
-                    pLink->GetInsertFileDialog(sFactory);
-                rFileDlg.StartExecuteModal(
-                        LINK( this, SvFileObject, DialogClosedHdl ) );
-            }
-            break;
-
-            default:
+            else
                 sFile.clear();
         }
+        break;
+
+        case OBJECT_CLIENT_OLE:
+        {
+            nType = FILETYPE_OBJECT; // if not set already
+
+            ::sfx2::FileDialogHelper & rFileDlg =
+                pLink->GetInsertFileDialog( OUString() );
+            rFileDlg.StartExecuteModal(
+                    LINK( this, SvFileObject, DialogClosedHdl ) );
+        }
+        break;
+
+        case OBJECT_CLIENT_FILE:
+        {
+            nType = FILETYPE_TEXT; // if not set already
+
+            OUString sFactory;
+            SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+            if ( pShell )
+                sFactory = pShell->GetFactory().GetFactoryName();
+
+            ::sfx2::FileDialogHelper & rFileDlg =
+                pLink->GetInsertFileDialog(sFactory);
+            rFileDlg.StartExecuteModal(
+                    LINK( this, SvFileObject, DialogClosedHdl ) );
+        }
+        break;
+
+        default:
+            sFile.clear();
     }
 }
 

@@ -327,33 +327,33 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
 
 IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
-    if (pNotebookbar && m_xFrame.is())
-    {
-        Sequence<Any> aArgs {
-            makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
-            makeAny(comphelper::makePropertyValue("Frame", m_xFrame)) };
+    if (!pNotebookbar || !m_xFrame.is())
+        return;
 
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-        Reference<XPopupMenuController> xPopupController(
-            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), UNO_QUERY);
+    Sequence<Any> aArgs {
+        makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
+        makeAny(comphelper::makePropertyValue("Frame", m_xFrame)) };
 
-        Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.PopupMenu", xContext), UNO_QUERY);
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    Reference<XPopupMenuController> xPopupController(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), UNO_QUERY);
 
-        if (!xPopupController.is() || !xPopupMenu.is())
-            return;
+    Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.PopupMenu", xContext), UNO_QUERY);
 
-        xPopupController->setPopupMenu(xPopupMenu);
-        VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
-        PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
-        Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
-        pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+    if (!xPopupController.is() || !xPopupMenu.is())
+        return;
 
-        Reference<css::lang::XComponent> xComponent(xPopupController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-    }
+    xPopupController->setPopupMenu(xPopupMenu);
+    VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
+    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
+    Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
+    pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+
+    Reference<css::lang::XComponent> xComponent(xPopupController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
 }
 
 Size NotebookbarTabControl::calculateRequisition() const

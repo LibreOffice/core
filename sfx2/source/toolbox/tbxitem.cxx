@@ -442,83 +442,83 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
     else if ( m_aCommandURL == rEvent.FeatureURL.Path )
         nSlotId = GetSlotId();
 
-    if ( nSlotId > 0 )
-    {
-        if ( rEvent.Requery )
-            svt::ToolboxController::statusChanged( rEvent );
-        else
-        {
-            SfxItemState eState = SfxItemState::DISABLED;
-            std::unique_ptr<SfxPoolItem> pItem;
-            if ( rEvent.IsEnabled )
-            {
-                eState = SfxItemState::DEFAULT;
-                css::uno::Type aType = rEvent.State.getValueType();
+    if ( nSlotId <= 0 )
+        return;
 
-                if ( aType == cppu::UnoType<void>::get() )
+    if ( rEvent.Requery )
+        svt::ToolboxController::statusChanged( rEvent );
+    else
+    {
+        SfxItemState eState = SfxItemState::DISABLED;
+        std::unique_ptr<SfxPoolItem> pItem;
+        if ( rEvent.IsEnabled )
+        {
+            eState = SfxItemState::DEFAULT;
+            css::uno::Type aType = rEvent.State.getValueType();
+
+            if ( aType == cppu::UnoType<void>::get() )
+            {
+                pItem.reset(new SfxVoidItem( nSlotId ));
+                eState = SfxItemState::UNKNOWN;
+            }
+            else if ( aType == cppu::UnoType<bool>::get() )
+            {
+                bool bTemp = false;
+                rEvent.State >>= bTemp ;
+                pItem.reset(new SfxBoolItem( nSlotId, bTemp ));
+            }
+            else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
+            {
+                sal_uInt16 nTemp = 0;
+                rEvent.State >>= nTemp ;
+                pItem.reset(new SfxUInt16Item( nSlotId, nTemp ));
+            }
+            else if ( aType == cppu::UnoType<sal_uInt32>::get() )
+            {
+                sal_uInt32 nTemp = 0;
+                rEvent.State >>= nTemp ;
+                pItem.reset(new SfxUInt32Item( nSlotId, nTemp ));
+            }
+            else if ( aType == cppu::UnoType<OUString>::get() )
+            {
+                OUString sTemp ;
+                rEvent.State >>= sTemp ;
+                pItem.reset(new SfxStringItem( nSlotId, sTemp ));
+            }
+            else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
+            {
+                ItemStatus aItemStatus;
+                rEvent.State >>= aItemStatus;
+                SfxItemState tmpState = static_cast<SfxItemState>(aItemStatus.State);
+                // make sure no-one tries to send us a combination of states
+                if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
+                    tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
+                    tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
+                    throw css::uno::RuntimeException("unknown status");
+                eState = tmpState;
+                pItem.reset(new SfxVoidItem( nSlotId ));
+            }
+            else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
+            {
+                Visibility aVisibilityStatus;
+                rEvent.State >>= aVisibilityStatus;
+                pItem.reset(new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible ));
+            }
+            else
+            {
+                if ( pSlot )
+                    pItem = pSlot->GetType()->CreateItem();
+                if ( pItem )
                 {
-                    pItem.reset(new SfxVoidItem( nSlotId ));
-                    eState = SfxItemState::UNKNOWN;
-                }
-                else if ( aType == cppu::UnoType<bool>::get() )
-                {
-                    bool bTemp = false;
-                    rEvent.State >>= bTemp ;
-                    pItem.reset(new SfxBoolItem( nSlotId, bTemp ));
-                }
-                else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
-                {
-                    sal_uInt16 nTemp = 0;
-                    rEvent.State >>= nTemp ;
-                    pItem.reset(new SfxUInt16Item( nSlotId, nTemp ));
-                }
-                else if ( aType == cppu::UnoType<sal_uInt32>::get() )
-                {
-                    sal_uInt32 nTemp = 0;
-                    rEvent.State >>= nTemp ;
-                    pItem.reset(new SfxUInt32Item( nSlotId, nTemp ));
-                }
-                else if ( aType == cppu::UnoType<OUString>::get() )
-                {
-                    OUString sTemp ;
-                    rEvent.State >>= sTemp ;
-                    pItem.reset(new SfxStringItem( nSlotId, sTemp ));
-                }
-                else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
-                {
-                    ItemStatus aItemStatus;
-                    rEvent.State >>= aItemStatus;
-                    SfxItemState tmpState = static_cast<SfxItemState>(aItemStatus.State);
-                    // make sure no-one tries to send us a combination of states
-                    if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
-                        tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
-                        tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
-                        throw css::uno::RuntimeException("unknown status");
-                    eState = tmpState;
-                    pItem.reset(new SfxVoidItem( nSlotId ));
-                }
-                else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
-                {
-                    Visibility aVisibilityStatus;
-                    rEvent.State >>= aVisibilityStatus;
-                    pItem.reset(new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible ));
+                    pItem->SetWhich( nSlotId );
+                    pItem->PutValue( rEvent.State, 0 );
                 }
                 else
-                {
-                    if ( pSlot )
-                        pItem = pSlot->GetType()->CreateItem();
-                    if ( pItem )
-                    {
-                        pItem->SetWhich( nSlotId );
-                        pItem->PutValue( rEvent.State, 0 );
-                    }
-                    else
-                        pItem.reset(new SfxVoidItem( nSlotId ));
-                }
+                    pItem.reset(new SfxVoidItem( nSlotId ));
             }
-
-            StateChanged( nSlotId, eState, pItem.get() );
         }
+
+        StateChanged( nSlotId, eState, pItem.get() );
     }
 }
 

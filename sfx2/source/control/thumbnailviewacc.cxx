@@ -48,25 +48,25 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 
 void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( nEventId )
+    if( !nEventId )
+        return;
+
+    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+    accessibility::AccessibleEventObject aEvtObject;
+
+    aEvtObject.EventId = nEventId;
+    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.NewValue = rNewValue;
+    aEvtObject.OldValue = rOldValue;
+
+    for (auto const& tmpListener : aTmpListeners)
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
-        accessibility::AccessibleEventObject aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<uno::XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        for (auto const& tmpListener : aTmpListeners)
+        try
         {
-            try
-            {
-                tmpListener->notifyEvent( aEvtObject );
-            }
-            catch(const uno::Exception&)
-            {
-            }
+            tmpListener->notifyEvent( aEvtObject );
+        }
+        catch(const uno::Exception&)
+        {
         }
     }
 }
@@ -265,22 +265,22 @@ void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    if( rxListener.is() )
+    if( !rxListener.is() )
+        return;
+
+    bool bFound = false;
+
+    for (auto const& eventListener : mxEventListeners)
     {
-        bool bFound = false;
-
-        for (auto const& eventListener : mxEventListeners)
+        if( eventListener == rxListener )
         {
-            if( eventListener == rxListener )
-            {
-                bFound = true;
-                break;
-            }
+            bFound = true;
+            break;
         }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
     }
+
+    if (!bFound)
+        mxEventListeners.push_back( rxListener );
 }
 
 void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
@@ -743,22 +743,22 @@ void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Refer
 {
     const ::osl::MutexGuard aGuard( maMutex );
 
-    if( rxListener.is() )
+    if( !rxListener.is() )
+        return;
+
+    bool bFound = false;
+
+    for (auto const& eventListener : mxEventListeners)
     {
-        bool bFound = false;
-
-        for (auto const& eventListener : mxEventListeners)
+        if( eventListener == rxListener )
         {
-            if( eventListener == rxListener )
-            {
-                bFound = true;
-                break;
-            }
+            bFound = true;
+            break;
         }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
     }
+
+    if (!bFound)
+        mxEventListeners.push_back( rxListener );
 }
 
 void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )

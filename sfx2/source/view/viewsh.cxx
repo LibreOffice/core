@@ -157,18 +157,18 @@ SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, con
 void SfxClipboardChangeListener::ChangedContents()
 {
     const SolarMutexGuard aGuard;
-    if (m_pViewShell)
-    {
-        SfxBindings& rBind = m_pViewShell->GetViewFrame()->GetBindings();
-        rBind.Invalidate(SID_PASTE);
-        rBind.Invalidate(SID_PASTE_SPECIAL);
-        rBind.Invalidate(SID_CLIPBOARD_FORMAT_ITEMS);
+    if (!m_pViewShell)
+        return;
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            // In the future we might send the payload as well.
-            SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, "");
-        }
+    SfxBindings& rBind = m_pViewShell->GetViewFrame()->GetBindings();
+    rBind.Invalidate(SID_PASTE);
+    rBind.Invalidate(SID_PASTE_SPECIAL);
+    rBind.Invalidate(SID_CLIPBOARD_FORMAT_ITEMS);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // In the future we might send the payload as well.
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, "");
     }
 }
 
@@ -1403,26 +1403,26 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
 {
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished )
+    if ( !(pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished) )
+        return;
+
+    if ( !GetController().is() )
+        return;
+
+    // avoid access to dangling ViewShells
+    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+    for (SfxViewFrame* frame : rFrames)
     {
-        if ( GetController().is() )
+        if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
         {
-            // avoid access to dangling ViewShells
-            SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-            for (SfxViewFrame* frame : rFrames)
+            SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
+            const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
+            if ( pItem )
             {
-                if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
-                {
-                    SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                    const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
-                    if ( pItem )
-                    {
-                        pImpl->m_pController->restoreViewData( pItem->GetValue() );
-                        pSet->ClearItem( SID_VIEW_DATA );
-                    }
-                    break;
-                }
+                pImpl->m_pController->restoreViewData( pItem->GetValue() );
+                pSet->ClearItem( SID_VIEW_DATA );
             }
+            break;
         }
     }
 }
@@ -1652,21 +1652,21 @@ void SfxViewShell::CheckIPClient_Impl(
         ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0;
 
     // this method is called when a client is created
-    if (!pIPClient->IsObjectInPlaceActive())
+    if (pIPClient->IsObjectInPlaceActive())
+        return;
+
+    // object in client is currently not active
+    // check if the object wants to be activated always or when it becomes at least partially visible
+    // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
+    if (bAlwaysActive || (bActiveWhenVisible && rVisArea.IsOver(pIPClient->GetObjArea())))
     {
-        // object in client is currently not active
-        // check if the object wants to be activated always or when it becomes at least partially visible
-        // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
-        if (bAlwaysActive || (bActiveWhenVisible && rVisArea.IsOver(pIPClient->GetObjArea())))
+        try
         {
-            try
-            {
-                pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
-            }
-            catch (const uno::Exception& e)
-            {
-                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << e);
-            }
+            pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+        }
+        catch (const uno::Exception& e)
+        {
+            SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << e);
         }
     }
 }

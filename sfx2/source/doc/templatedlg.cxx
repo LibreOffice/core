@@ -942,39 +942,39 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 
     ErrCode nCode = aFileDlg.Execute();
 
-    if ( nCode == ERRCODE_NONE )
+    if ( nCode != ERRCODE_NONE )
+        return;
+
+    css::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
+
+    if (!aFiles.hasElements())
+        return;
+
+    //Import to the selected regions
+    TemplateContainerItem* pContItem = mpLocalView->getRegion(sCategory);
+    if(!pContItem)
+        return;
+
+    OUString aTemplateList;
+
+    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
     {
-        css::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
-
-        if (aFiles.hasElements())
+        if(!mpLocalView->copyFrom(pContItem,aFiles[i]))
         {
-            //Import to the selected regions
-            TemplateContainerItem* pContItem = mpLocalView->getRegion(sCategory);
-            if(pContItem)
-            {
-                OUString aTemplateList;
-
-                for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
-                {
-                    if(!mpLocalView->copyFrom(pContItem,aFiles[i]))
-                    {
-                        if (aTemplateList.isEmpty())
-                            aTemplateList = aFiles[i];
-                        else
-                            aTemplateList = aTemplateList + "\n" + aFiles[i];
-                    }
-                }
-
-                if (!aTemplateList.isEmpty())
-                {
-                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT));
-                    aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
-                                                              aMsg.replaceFirst("$2",aTemplateList)));
-                    xBox->run();
-                }
-            }
+            if (aTemplateList.isEmpty())
+                aTemplateList = aFiles[i];
+            else
+                aTemplateList = aTemplateList + "\n" + aFiles[i];
         }
+    }
+
+    if (!aTemplateList.isEmpty())
+    {
+        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT));
+        aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aMsg.replaceFirst("$2",aTemplateList)));
+        xBox->run();
     }
 }
 
@@ -988,89 +988,89 @@ void SfxTemplateManagerDlg::OnTemplateExport()
     sal_Int16 nResult = xFolderPicker->execute();
     sal_Int16 nCount = maSelTemplates.size();
 
-    if( nResult == ExecutableDialogResults::OK )
+    if( nResult != ExecutableDialogResults::OK )
+        return;
+
+    OUString aTemplateList;
+    INetURLObject aPathObj(xFolderPicker->getDirectory());
+    aPathObj.setFinalSlash();
+
+    if (mpSearchView->IsVisible())
     {
-        OUString aTemplateList;
-        INetURLObject aPathObj(xFolderPicker->getDirectory());
-        aPathObj.setFinalSlash();
+        sal_uInt16 i = 1;
 
-        if (mpSearchView->IsVisible())
+        for (auto const& selTemplate : maSelTemplates)
         {
-            sal_uInt16 i = 1;
+            const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(selTemplate);
 
-            for (auto const& selTemplate : maSelTemplates)
+            INetURLObject aItemPath(pItem->getPath());
+
+            if ( 1 == i )
+                aPathObj.Append(aItemPath.getName());
+            else
+                aPathObj.setName(aItemPath.getName());
+
+            OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+            if (!mpLocalView->exportTo(pItem->mnAssocId,pItem->mnRegionId,aPath))
             {
-                const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(selTemplate);
-
-                INetURLObject aItemPath(pItem->getPath());
-
-                if ( 1 == i )
-                    aPathObj.Append(aItemPath.getName());
+                if (aTemplateList.isEmpty())
+                    aTemplateList = pItem->maTitle;
                 else
-                    aPathObj.setName(aItemPath.getName());
-
-                OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-                if (!mpLocalView->exportTo(pItem->mnAssocId,pItem->mnRegionId,aPath))
-                {
-                    if (aTemplateList.isEmpty())
-                        aTemplateList = pItem->maTitle;
-                    else
-                        aTemplateList = aTemplateList + "\n" + pItem->maTitle;
-                }
-                ++i;
+                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
             }
-
-            mpSearchView->deselectItems();
+            ++i;
         }
-        else
+
+        mpSearchView->deselectItems();
+    }
+    else
+    {
+        // export templates from the current view
+
+        sal_uInt16 i = 1;
+
+        for (auto const& selTemplate : maSelTemplates)
         {
-            // export templates from the current view
+            const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(selTemplate);
 
-            sal_uInt16 i = 1;
+            INetURLObject aItemPath(pItem->getPath());
 
-            for (auto const& selTemplate : maSelTemplates)
+            if ( 1 == i )
+                aPathObj.Append(aItemPath.getName());
+            else
+                aPathObj.setName(aItemPath.getName());
+
+            OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+            if (!mpLocalView->exportTo(pItem->mnDocId + 1,   //mnId w.r.t. region = mDocId + 1
+                mpLocalView->getRegionId(pItem->mnRegionId), //pItem->mnRegionId does not store actual region Id
+                aPath))
             {
-                const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(selTemplate);
-
-                INetURLObject aItemPath(pItem->getPath());
-
-                if ( 1 == i )
-                    aPathObj.Append(aItemPath.getName());
+                if (aTemplateList.isEmpty())
+                    aTemplateList = pItem->maTitle;
                 else
-                    aPathObj.setName(aItemPath.getName());
-
-                OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-                if (!mpLocalView->exportTo(pItem->mnDocId + 1,   //mnId w.r.t. region = mDocId + 1
-                    mpLocalView->getRegionId(pItem->mnRegionId), //pItem->mnRegionId does not store actual region Id
-                    aPath))
-                {
-                    if (aTemplateList.isEmpty())
-                        aTemplateList = pItem->maTitle;
-                    else
-                        aTemplateList = aTemplateList + "\n" + pItem->maTitle;
-                }
-                ++i;
+                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
             }
-
-            mpLocalView->deselectItems();
+            ++i;
         }
 
-        if (!aTemplateList.isEmpty())
-        {
-            OUString aText( SfxResId(STR_MSG_ERROR_EXPORT) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
-                                                      aText.replaceFirst("$1",aTemplateList)));
-            xBox->run();
-        }
-        else
-        {
-            OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
-                                                      sText.replaceFirst("$1", OUString::number(nCount))));
-            xBox->run();
-        }
+        mpLocalView->deselectItems();
+    }
+
+    if (!aTemplateList.isEmpty())
+    {
+        OUString aText( SfxResId(STR_MSG_ERROR_EXPORT) );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aText.replaceFirst("$1",aTemplateList)));
+        xBox->run();
+    }
+    else
+    {
+        OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS) );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                                                  sText.replaceFirst("$1", OUString::number(nCount))));
+        xBox->run();
     }
 }
 
@@ -1116,19 +1116,19 @@ void SfxTemplateManagerDlg::OnCategoryNew()
 
     int ret = dlg.run();
 
-    if (ret)
-    {
-        OUString aName = dlg.GetEntryText();
+    if (!ret)
+        return;
 
-        if(mpLocalView->createRegion(aName))
-            mpCBFolder->InsertEntry(aName);
-        else
-        {
-            OUString aMsg( SfxResId(STR_CREATE_ERROR) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
-                                                      aMsg.replaceFirst("$1", aName)));
-            xBox->run();
-        }
+    OUString aName = dlg.GetEntryText();
+
+    if(mpLocalView->createRegion(aName))
+        mpCBFolder->InsertEntry(aName);
+    else
+    {
+        OUString aMsg( SfxResId(STR_CREATE_ERROR) );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aMsg.replaceFirst("$1", aName)));
+        xBox->run();
     }
 }
 
@@ -1140,27 +1140,27 @@ void SfxTemplateManagerDlg::OnCategoryRename()
     dlg.SetEntryText(sCategory);
     int ret = dlg.run();
 
-    if (ret)
+    if (!ret)
+        return;
+
+    OUString aName = dlg.GetEntryText();
+
+    if(mpLocalView->renameRegion(sCategory, aName))
     {
-        OUString aName = dlg.GetEntryText();
+        sal_Int32 nPos = mpCBFolder->GetEntryPos(sCategory);
+        mpCBFolder->RemoveEntry(nPos);
+        mpCBFolder->InsertEntry(aName, nPos);
+        mpCBFolder->SelectEntryPos(nPos);
 
-        if(mpLocalView->renameRegion(sCategory, aName))
-        {
-            sal_Int32 nPos = mpCBFolder->GetEntryPos(sCategory);
-            mpCBFolder->RemoveEntry(nPos);
-            mpCBFolder->InsertEntry(aName, nPos);
-            mpCBFolder->SelectEntryPos(nPos);
-
-            mpLocalView->reload();
-            mpLocalView->showRegion(aName);
-        }
-        else
-        {
-            OUString aMsg( SfxResId(STR_CREATE_ERROR) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
-                                                      aMsg.replaceFirst("$1", aName)));
-            xBox->run();
-        }
+        mpLocalView->reload();
+        mpLocalView->showRegion(aName);
+    }
+    else
+    {
+        OUString aMsg( SfxResId(STR_CREATE_ERROR) );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aMsg.replaceFirst("$1", aName)));
+        xBox->run();
     }
 }
 

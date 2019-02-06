@@ -56,20 +56,20 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
 
 void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 {
-    if (mbIsCloserVisible != bIsCloserVisible)
-    {
-        mbIsCloserVisible = bIsCloserVisible;
+    if (mbIsCloserVisible == bIsCloserVisible)
+        return;
 
-        if (mbIsCloserVisible)
-        {
-            maToolBox->InsertItem(mnCloserItemIndex,
-                                  Theme::GetImage(Theme::Image_Closer));
-            maToolBox->SetQuickHelpText(mnCloserItemIndex,
-                                        SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
-        }
-        else
-            maToolBox->RemoveItem(maToolBox->GetItemPos(mnCloserItemIndex));
+    mbIsCloserVisible = bIsCloserVisible;
+
+    if (mbIsCloserVisible)
+    {
+        maToolBox->InsertItem(mnCloserItemIndex,
+                              Theme::GetImage(Theme::Image_Closer));
+        maToolBox->SetQuickHelpText(mnCloserItemIndex,
+                                    SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
     }
+    else
+        maToolBox->RemoveItem(maToolBox->GetItemPos(mnCloserItemIndex));
 }
 
 tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)

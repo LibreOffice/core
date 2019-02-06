@@ -890,30 +890,30 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
 #if HAVE_FEATURE_SCRIPTING
     BasicManager* pAppMgr = SfxApplication::GetBasicManager();
     rTheCurrentComponent = _rxComponent;
-    if ( pAppMgr )
-    {
-        // set "ThisComponent" for Basic
-        pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( _rxComponent ) );
+    if ( !pAppMgr )
+        return;
 
-        // set new current component for VBA compatibility
-        if ( _rxComponent.is() )
+    // set "ThisComponent" for Basic
+    pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( _rxComponent ) );
+
+    // set new current component for VBA compatibility
+    if ( _rxComponent.is() )
+    {
+        OUString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
+        if ( !aVBAConstName.isEmpty() )
         {
-            OUString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
-            if ( !aVBAConstName.isEmpty() )
-            {
-                pAppMgr->SetGlobalUNOConstant( aVBAConstName, Any( _rxComponent ) );
-                s_aRegisteredVBAConstants[ _rxComponent.get() ] = aVBAConstName;
-            }
+            pAppMgr->SetGlobalUNOConstant( aVBAConstName, Any( _rxComponent ) );
+            s_aRegisteredVBAConstants[ _rxComponent.get() ] = aVBAConstName;
         }
-        // no new component passed -> remove last registered VBA component
-        else if ( xOldCurrentComp.is() )
+    }
+    // no new component passed -> remove last registered VBA component
+    else if ( xOldCurrentComp.is() )
+    {
+        OUString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
+        if ( !aVBAConstName.isEmpty() )
         {
-            OUString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
-            if ( !aVBAConstName.isEmpty() )
-            {
-                pAppMgr->SetGlobalUNOConstant( aVBAConstName, Any( Reference< XInterface >() ) );
-                s_aRegisteredVBAConstants.erase( xOldCurrentComp.get() );
-            }
+            pAppMgr->SetGlobalUNOConstant( aVBAConstName, Any( Reference< XInterface >() ) );
+            s_aRegisteredVBAConstants.erase( xOldCurrentComp.get() );
         }
     }
 #endif

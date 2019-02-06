@@ -902,189 +902,189 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         aResult = uno::Any();
     }
 
-    if( aResult >>= lFilterProperties )
+    if( !(aResult >>= lFilterProperties) )
+        return;
+
+    // collect information to add filter to container
+    // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
+    SfxFilterFlags       nFlags          = SfxFilterFlags::NONE;
+    SotClipboardFormatId nClipboardId    = SotClipboardFormatId::NONE;
+    sal_Int32       nDocumentIconId = 0 ;
+    sal_Int32       nFormatVersion  = 0 ;
+    OUString sMimeType           ;
+    OUString sType               ;
+    OUString sUIName             ;
+    OUString sHumanName          ;
+    OUString sDefaultTemplate    ;
+    OUString sUserData           ;
+    OUString sExtension          ;
+    OUString sPattern            ;
+    OUString sServiceName        ;
+    bool bEnabled = true         ;
+
+    // first get directly available properties
+    sal_Int32 nFilterPropertyCount = lFilterProperties.getLength();
+    sal_Int32 nFilterProperty      = 0                            ;
+    for( nFilterProperty=0; nFilterProperty<nFilterPropertyCount; ++nFilterProperty )
     {
-        // collect information to add filter to container
-        // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
-        SfxFilterFlags       nFlags          = SfxFilterFlags::NONE;
-        SotClipboardFormatId nClipboardId    = SotClipboardFormatId::NONE;
-        sal_Int32       nDocumentIconId = 0 ;
-        sal_Int32       nFormatVersion  = 0 ;
-        OUString sMimeType           ;
-        OUString sType               ;
-        OUString sUIName             ;
-        OUString sHumanName          ;
-        OUString sDefaultTemplate    ;
-        OUString sUserData           ;
-        OUString sExtension          ;
-        OUString sPattern            ;
-        OUString sServiceName        ;
-        bool bEnabled = true         ;
-
-        // first get directly available properties
-        sal_Int32 nFilterPropertyCount = lFilterProperties.getLength();
-        sal_Int32 nFilterProperty      = 0                            ;
-        for( nFilterProperty=0; nFilterProperty<nFilterPropertyCount; ++nFilterProperty )
+        if ( lFilterProperties[nFilterProperty].Name == "FileFormatVersion" )
         {
-            if ( lFilterProperties[nFilterProperty].Name == "FileFormatVersion" )
+            lFilterProperties[nFilterProperty].Value >>= nFormatVersion;
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "TemplateName" )
+        {
+            lFilterProperties[nFilterProperty].Value >>= sDefaultTemplate;
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
+        {
+            sal_Int32 nTmp(0);
+            lFilterProperties[nFilterProperty].Value >>= nTmp;
+            assert((nTmp & ~o3tl::typed_flags<SfxFilterFlags>::mask) == 0);
+            nFlags = static_cast<SfxFilterFlags>(nTmp);
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "UIName" )
+        {
+            lFilterProperties[nFilterProperty].Value >>= sUIName;
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "UserData" )
+        {
+            uno::Sequence< OUString > lUserData;
+            lFilterProperties[nFilterProperty].Value >>= lUserData;
+            sUserData = implc_convertStringlistToString( lUserData, ',', OUString() );
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "DocumentService" )
+        {
+            lFilterProperties[nFilterProperty].Value >>= sServiceName;
+        }
+        else if (lFilterProperties[nFilterProperty].Name == "ExportExtension")
+        {
+            // Extension preferred by the filter.  This takes precedence
+            // over those that are given in the file format type.
+            lFilterProperties[nFilterProperty].Value >>= sExtension;
+            sExtension = "*." + sExtension;
+        }
+        else if ( lFilterProperties[nFilterProperty].Name == "Type" )
+        {
+            lFilterProperties[nFilterProperty].Value >>= sType;
+            // Try to get filter .. but look for any exceptions!
+            // May be filter was deleted by another thread ...
+            try
             {
-                lFilterProperties[nFilterProperty].Value >>= nFormatVersion;
+                aResult = xTypeCFG->getByName( sType );
             }
-            else if ( lFilterProperties[nFilterProperty].Name == "TemplateName" )
+            catch (const container::NoSuchElementException&)
             {
-                lFilterProperties[nFilterProperty].Value >>= sDefaultTemplate;
+                aResult = uno::Any();
             }
-            else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
-            {
-                sal_Int32 nTmp(0);
-                lFilterProperties[nFilterProperty].Value >>= nTmp;
-                assert((nTmp & ~o3tl::typed_flags<SfxFilterFlags>::mask) == 0);
-                nFlags = static_cast<SfxFilterFlags>(nTmp);
-            }
-            else if ( lFilterProperties[nFilterProperty].Name == "UIName" )
-            {
-                lFilterProperties[nFilterProperty].Value >>= sUIName;
-            }
-            else if ( lFilterProperties[nFilterProperty].Name == "UserData" )
-            {
-                uno::Sequence< OUString > lUserData;
-                lFilterProperties[nFilterProperty].Value >>= lUserData;
-                sUserData = implc_convertStringlistToString( lUserData, ',', OUString() );
-            }
-            else if ( lFilterProperties[nFilterProperty].Name == "DocumentService" )
-            {
-                lFilterProperties[nFilterProperty].Value >>= sServiceName;
-            }
-            else if (lFilterProperties[nFilterProperty].Name == "ExportExtension")
-            {
-                // Extension preferred by the filter.  This takes precedence
-                // over those that are given in the file format type.
-                lFilterProperties[nFilterProperty].Value >>= sExtension;
-                sExtension = "*." + sExtension;
-            }
-            else if ( lFilterProperties[nFilterProperty].Name == "Type" )
-            {
-                lFilterProperties[nFilterProperty].Value >>= sType;
-                // Try to get filter .. but look for any exceptions!
-                // May be filter was deleted by another thread ...
-                try
-                {
-                    aResult = xTypeCFG->getByName( sType );
-                }
-                catch (const container::NoSuchElementException&)
-                {
-                    aResult = uno::Any();
-                }
 
-                uno::Sequence< beans::PropertyValue > lTypeProperties;
-                if( aResult >>= lTypeProperties )
+            uno::Sequence< beans::PropertyValue > lTypeProperties;
+            if( aResult >>= lTypeProperties )
+            {
+                // get indirect available properties then (types)
+                sal_Int32 nTypePropertyCount = lTypeProperties.getLength();
+                sal_Int32 nTypeProperty      = 0                          ;
+                for( nTypeProperty=0; nTypeProperty<nTypePropertyCount; ++nTypeProperty )
                 {
-                    // get indirect available properties then (types)
-                    sal_Int32 nTypePropertyCount = lTypeProperties.getLength();
-                    sal_Int32 nTypeProperty      = 0                          ;
-                    for( nTypeProperty=0; nTypeProperty<nTypePropertyCount; ++nTypeProperty )
+                    if ( lTypeProperties[nTypeProperty].Name == "ClipboardFormat" )
                     {
-                        if ( lTypeProperties[nTypeProperty].Name == "ClipboardFormat" )
+                        lTypeProperties[nTypeProperty].Value >>= sHumanName;
+                    }
+                    else if ( lTypeProperties[nTypeProperty].Name == "DocumentIconID" )
+                    {
+                        lTypeProperties[nTypeProperty].Value >>= nDocumentIconId;
+                    }
+                    else if ( lTypeProperties[nTypeProperty].Name == "MediaType" )
+                    {
+                        lTypeProperties[nTypeProperty].Value >>= sMimeType;
+                    }
+                    else if ( lTypeProperties[nTypeProperty].Name == "Extensions" )
+                    {
+                        if (sExtension.isEmpty())
                         {
-                            lTypeProperties[nTypeProperty].Value >>= sHumanName;
+                            uno::Sequence< OUString > lExtensions;
+                            lTypeProperties[nTypeProperty].Value >>= lExtensions;
+                            sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
                         }
-                        else if ( lTypeProperties[nTypeProperty].Name == "DocumentIconID" )
-                        {
-                            lTypeProperties[nTypeProperty].Value >>= nDocumentIconId;
-                        }
-                        else if ( lTypeProperties[nTypeProperty].Name == "MediaType" )
-                        {
-                            lTypeProperties[nTypeProperty].Value >>= sMimeType;
-                        }
-                        else if ( lTypeProperties[nTypeProperty].Name == "Extensions" )
-                        {
-                            if (sExtension.isEmpty())
-                            {
-                                uno::Sequence< OUString > lExtensions;
-                                lTypeProperties[nTypeProperty].Value >>= lExtensions;
-                                sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
-                            }
-                        }
-                        else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
-                        {
-                                uno::Sequence< OUString > lPattern;
-                                lTypeProperties[nTypeProperty].Value >>= lPattern;
-                                sPattern = implc_convertStringlistToString( lPattern, ';', OUString() );
-                        }
+                    }
+                    else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
+                    {
+                            uno::Sequence< OUString > lPattern;
+                            lTypeProperties[nTypeProperty].Value >>= lPattern;
+                            sPattern = implc_convertStringlistToString( lPattern, ';', OUString() );
                     }
                 }
             }
-            else if ( lFilterProperties[nFilterProperty].Name == "Enabled" )
-            {
-                lFilterProperties[nFilterProperty].Value >>= bEnabled;
-            }
-
         }
-
-        if ( sServiceName.isEmpty() )
-            return;
-
-        // old formats are found ... using HumanPresentableName!
-        if( !sHumanName.isEmpty() )
+        else if ( lFilterProperties[nFilterProperty].Name == "Enabled" )
         {
-            nClipboardId = SotExchange::RegisterFormatName( sHumanName );
-
-            // For external filters ignore clipboard IDs
-            if(nFlags & SfxFilterFlags::STARONEFILTER)
-            {
-                nClipboardId = SotClipboardFormatId::NONE;
-            }
-        }
-        // register SfxFilter
-        // first erase module name from old filter names!
-        // e.g: "scalc: DIF" => "DIF"
-        sal_Int32 nStartRealName = sFilterName.indexOf( ": " );
-        if( nStartRealName != -1 )
-        {
-            SAL_WARN( "sfx.bastyp", "Old format, not supported!");
-            sFilterName = sFilterName.copy( nStartRealName+2 );
+            lFilterProperties[nFilterProperty].Value >>= bEnabled;
         }
 
-        std::shared_ptr<const SfxFilter> pFilter = bUpdate ? SfxFilter::GetFilterByName( sFilterName ) : nullptr;
-        if (!pFilter)
-        {
-            pFilter.reset(new SfxFilter( sFilterName             ,
-                                     sExtension              ,
-                                     nFlags                  ,
-                                     nClipboardId            ,
-                                     sType                   ,
-                                     sMimeType               ,
-                                     sUserData               ,
-                                     sServiceName            ,
-                                     bEnabled ));
-            rList.push_back( pFilter );
-        }
-        else
-        {
-            SfxFilter* pFilt = const_cast<SfxFilter*>(pFilter.get());
-            pFilt->maFilterName  = sFilterName;
-            pFilt->aWildCard    = WildCard(sExtension, ';');
-            pFilt->nFormatType  = nFlags;
-            pFilt->lFormat      = nClipboardId;
-            pFilt->aTypeName    = sType;
-            pFilt->aMimeType    = sMimeType;
-            pFilt->aUserData    = sUserData;
-            pFilt->aServiceName = sServiceName;
-            pFilt->mbEnabled    = bEnabled;
-        }
-
-        SfxFilter* pFilt = const_cast<SfxFilter*>(pFilter.get());
-
-        // Don't forget to set right UIName!
-        // Otherwise internal name is used as fallback ...
-        pFilt->SetUIName( sUIName );
-        pFilt->SetDefaultTemplate( sDefaultTemplate );
-        if( nFormatVersion )
-        {
-            pFilt->SetVersion( nFormatVersion );
-        }
-        pFilt->SetURLPattern(sPattern);
     }
+
+    if ( sServiceName.isEmpty() )
+        return;
+
+    // old formats are found ... using HumanPresentableName!
+    if( !sHumanName.isEmpty() )
+    {
+        nClipboardId = SotExchange::RegisterFormatName( sHumanName );
+
+        // For external filters ignore clipboard IDs
+        if(nFlags & SfxFilterFlags::STARONEFILTER)
+        {
+            nClipboardId = SotClipboardFormatId::NONE;
+        }
+    }
+    // register SfxFilter
+    // first erase module name from old filter names!
+    // e.g: "scalc: DIF" => "DIF"
+    sal_Int32 nStartRealName = sFilterName.indexOf( ": " );
+    if( nStartRealName != -1 )
+    {
+        SAL_WARN( "sfx.bastyp", "Old format, not supported!");
+        sFilterName = sFilterName.copy( nStartRealName+2 );
+    }
+
+    std::shared_ptr<const SfxFilter> pFilter = bUpdate ? SfxFilter::GetFilterByName( sFilterName ) : nullptr;
+    if (!pFilter)
+    {
+        pFilter.reset(new SfxFilter( sFilterName             ,
+                                 sExtension              ,
+                                 nFlags                  ,
+                                 nClipboardId            ,
+                                 sType                   ,
+                                 sMimeType               ,
+                                 sUserData               ,
+                                 sServiceName            ,
+                                 bEnabled ));
+        rList.push_back( pFilter );
+    }
+    else
+    {
+        SfxFilter* pFilt = const_cast<SfxFilter*>(pFilter.get());
+        pFilt->maFilterName  = sFilterName;
+        pFilt->aWildCard    = WildCard(sExtension, ';');
+        pFilt->nFormatType  = nFlags;
+        pFilt->lFormat      = nClipboardId;
+        pFilt->aTypeName    = sType;
+        pFilt->aMimeType    = sMimeType;
+        pFilt->aUserData    = sUserData;
+        pFilt->aServiceName = sServiceName;
+        pFilt->mbEnabled    = bEnabled;
+    }
+
+    SfxFilter* pFilt = const_cast<SfxFilter*>(pFilter.get());
+
+    // Don't forget to set right UIName!
+    // Otherwise internal name is used as fallback ...
+    pFilt->SetUIName( sUIName );
+    pFilt->SetDefaultTemplate( sDefaultTemplate );
+    if( nFormatVersion )
+    {
+        pFilt->SetVersion( nFormatVersion );
+    }
+    pFilt->SetURLPattern(sPattern);
 }
 
 void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )

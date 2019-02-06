@@ -513,36 +513,36 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
     if (pButton == mpExtensionsButton)
         aNode = "AddFeatureURL";
 
-    if (!aNode.isEmpty())
+    if (aNode.isEmpty())
+        return;
+
+    try
     {
-        try
+        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
         {
-            uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
-            {
-                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
-            }));
+            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
+        }));
 
-            Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-            Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
-            if (xNameAccess.is())
-            {
-                OUString sURL;
-                Any value(xNameAccess->getByName(aNode));
-
-                sURL = value.get<OUString>();
-                localizeWebserviceURI(sURL);
-
-                Reference<css::system::XSystemShellExecute> const
-                    xSystemShellExecute(
-                        css::system::SystemShellExecute::create(
-                            ::comphelper::getProcessComponentContext()));
-                xSystemShellExecute->execute(sURL, OUString(),
-                    css::system::SystemShellExecuteFlags::URIS_ONLY);
-            }
-        }
-        catch (const Exception&)
+        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
+        if (xNameAccess.is())
         {
+            OUString sURL;
+            Any value(xNameAccess->getByName(aNode));
+
+            sURL = value.get<OUString>();
+            localizeWebserviceURI(sURL);
+
+            Reference<css::system::XSystemShellExecute> const
+                xSystemShellExecute(
+                    css::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext()));
+            xSystemShellExecute->execute(sURL, OUString(),
+                css::system::SystemShellExecuteFlags::URIS_ONLY);
         }
+    }
+    catch (const Exception&)
+    {
     }
 }
 

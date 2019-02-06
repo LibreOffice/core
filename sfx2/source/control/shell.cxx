@@ -595,26 +595,26 @@ void SfxShell::VerbExec(SfxRequest& rReq)
 {
     sal_uInt16 nId = rReq.GetSlot();
     SfxViewShell *pViewShell = GetViewShell();
-    if ( pViewShell )
+    if ( !pViewShell )
+        return;
+
+    bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
+    css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
+    for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
     {
-        bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
-        css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
-        for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
+        // check for ReadOnly verbs
+        if ( bReadOnly && !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
+            continue;
+
+        // check for verbs that shouldn't appear in the menu
+        if ( !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
+            continue;
+
+        if (nId == SID_VERB_START + nVerb++)
         {
-            // check for ReadOnly verbs
-            if ( bReadOnly && !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
-                continue;
-
-            // check for verbs that shouldn't appear in the menu
-            if ( !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
-                continue;
-
-            if (nId == SID_VERB_START + nVerb++)
-            {
-                pViewShell->DoVerb(aList[n].VerbID);
-                rReq.Done();
-                return;
-            }
+            pViewShell->DoVerb(aList[n].VerbID);
+            rReq.Done();
+            return;
         }
     }
 }

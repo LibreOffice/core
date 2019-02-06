@@ -383,56 +383,56 @@ void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 
 void SfxNotebookBar::ShowMenubar(bool bShow)
 {
-    if (!m_bLock)
+    if (m_bLock)
+        return;
+
+    m_bLock = true;
+
+    Reference<frame::XFrame> xFrame;
+    vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
+
+    if ( SfxViewFrame::Current() )
     {
-        m_bLock = true;
+        xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
+    }
 
-        Reference<frame::XFrame> xFrame;
-        vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
-
-        if ( SfxViewFrame::Current() )
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+    while( pViewFrame )
+    {
+        xFrame = pViewFrame->GetFrame().GetFrameInterface();
+        if ( xFrame.is() )
         {
-            xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
-        }
+            vcl::EnumContext::Application eApp =
+                    vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
 
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-        while( pViewFrame )
-        {
-            xFrame = pViewFrame->GetFrame().GetFrameInterface();
-            if ( xFrame.is() )
+            if ( eApp == eCurrentApp )
             {
-                vcl::EnumContext::Application eApp =
-                        vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
+                const Reference<frame::XLayoutManager>& xLayoutManager =
+                                                        lcl_getLayoutManager( xFrame );
 
-                if ( eApp == eCurrentApp )
+                if (xLayoutManager.is())
                 {
-                    const Reference<frame::XLayoutManager>& xLayoutManager =
-                                                            lcl_getLayoutManager( xFrame );
+                    xLayoutManager->lock();
 
-                    if (xLayoutManager.is())
+                    if (xLayoutManager->getElement(MENUBAR_STR).is())
                     {
-                        xLayoutManager->lock();
-
-                        if (xLayoutManager->getElement(MENUBAR_STR).is())
-                        {
-                            if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
-                                xLayoutManager->hideElement(MENUBAR_STR);
-                            else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
-                                xLayoutManager->showElement(MENUBAR_STR);
-                        }
-
-                        xLayoutManager->unlock();
+                        if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                            xLayoutManager->hideElement(MENUBAR_STR);
+                        else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                            xLayoutManager->showElement(MENUBAR_STR);
                     }
+
+                    xLayoutManager->unlock();
                 }
             }
-
-            pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
         }
-        m_bLock = false;
+
+        pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
     }
+    m_bLock = false;
 }
 
 void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
@@ -469,35 +469,35 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
 
 void SfxNotebookBar::ToggleMenubar()
 {
-    if (SfxViewFrame::Current())
+    if (!SfxViewFrame::Current())
+        return;
+
+    const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    if (!xFrame.is())
+        return;
+
+    const Reference<frame::XLayoutManager>& xLayoutManager =
+                                            lcl_getLayoutManager(xFrame);
+
+    bool bShow = true;
+    if (xLayoutManager.is() && xLayoutManager->getElement(MENUBAR_STR).is())
     {
-        const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-        if (xFrame.is())
+        if (xLayoutManager->isElementVisible(MENUBAR_STR))
         {
-            const Reference<frame::XLayoutManager>& xLayoutManager =
-                                                    lcl_getLayoutManager(xFrame);
-
-            bool bShow = true;
-            if (xLayoutManager.is() && xLayoutManager->getElement(MENUBAR_STR).is())
-            {
-                if (xLayoutManager->isElementVisible(MENUBAR_STR))
-                {
-                    SfxNotebookBar::ShowMenubar(false);
-                    bShow = false;
-                }
-                else
-                    SfxNotebookBar::ShowMenubar(true);
-            }
-
-            // Save menubar settings
-            if (IsActive())
-            {
-                utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
-                utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
-                aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
-                aRoot.commit();
-            }
+            SfxNotebookBar::ShowMenubar(false);
+            bShow = false;
         }
+        else
+            SfxNotebookBar::ShowMenubar(true);
+    }
+
+    // Save menubar settings
+    if (IsActive())
+    {
+        utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
+        utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
+        aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
+        aRoot.commit();
     }
 }
 

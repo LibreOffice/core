@@ -171,92 +171,92 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
 void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
-    if ( aEventData >>= aProperties )
+    if ( !(aEventData >>= aProperties) )
+        return;
+
+    OUString aType;
+    OUString aScript;
+    OUString aLibrary;
+    OUString aMacroName;
+
+    sal_Int32 nCount = aProperties.getLength();
+
+    if ( !nCount )
+        return;
+
+    sal_Int32 nIndex = 0;
+    while ( nIndex < nCount )
     {
-        OUString aType;
-        OUString aScript;
-        OUString aLibrary;
-        OUString aMacroName;
-
-        sal_Int32 nCount = aProperties.getLength();
-
-        if ( !nCount )
-            return;
-
-        sal_Int32 nIndex = 0;
-        while ( nIndex < nCount )
-        {
-            if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
-                aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
-                aProperties[ nIndex ].Value >>= aScript;
-            else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
-                aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
-                aProperties[ nIndex ].Value >>= aMacroName;
-            else {
-                OSL_FAIL("Unknown property value!");
-            }
-            nIndex += 1;
+        if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
+            aProperties[ nIndex ].Value >>= aType;
+        else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
+            aProperties[ nIndex ].Value >>= aScript;
+        else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
+            aProperties[ nIndex ].Value >>= aLibrary;
+        else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
+            aProperties[ nIndex ].Value >>= aMacroName;
+        else {
+            OSL_FAIL("Unknown property value!");
         }
+        nIndex += 1;
+    }
 
-        if (aType == STAR_BASIC && !aScript.isEmpty())
+    if (aType == STAR_BASIC && !aScript.isEmpty())
+    {
+        uno::Any aAny;
+        SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
+    }
+    else if (aType == "Service" ||
+              aType == "Script")
+    {
+        if ( !aScript.isEmpty() )
         {
-            uno::Any aAny;
-            SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
-        }
-        else if (aType == "Service" ||
-                  aType == "Script")
-        {
-            if ( !aScript.isEmpty() )
+            SfxViewFrame* pView = pDoc ?
+                SfxViewFrame::GetFirst( pDoc ) :
+                SfxViewFrame::Current();
+
+            uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+
+            util::URL aURL;
+            aURL.Complete = aScript;
+            xTrans->parseStrict( aURL );
+
+            uno::Reference
+                < frame::XDispatchProvider > xProv;
+
+            if ( pView != nullptr )
             {
-                SfxViewFrame* pView = pDoc ?
-                    SfxViewFrame::GetFirst( pDoc ) :
-                    SfxViewFrame::Current();
+                xProv = uno::Reference
+                    < frame::XDispatchProvider > (
+                        pView->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+            }
+            else
+            {
+                xProv.set( frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
+                           uno::UNO_QUERY );
+            }
 
-                uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference < frame::XDispatch > xDisp;
+            if ( xProv.is() )
+                xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
-                util::URL aURL;
-                aURL.Complete = aScript;
-                xTrans->parseStrict( aURL );
+            if ( xDisp.is() )
+            {
 
-                uno::Reference
-                    < frame::XDispatchProvider > xProv;
-
-                if ( pView != nullptr )
-                {
-                    xProv = uno::Reference
-                        < frame::XDispatchProvider > (
-                            pView->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-                }
-                else
-                {
-                    xProv.set( frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
-                               uno::UNO_QUERY );
-                }
-
-                uno::Reference < frame::XDispatch > xDisp;
-                if ( xProv.is() )
-                    xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
-
-                if ( xDisp.is() )
-                {
-
-                    beans::PropertyValue aEventParam;
-                    aEventParam.Value <<= aTrigger;
-                    uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
-                    xDisp->dispatch( aURL, aDispatchArgs );
-                }
+                beans::PropertyValue aEventParam;
+                aEventParam.Value <<= aTrigger;
+                uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
+                xDisp->dispatch( aURL, aDispatchArgs );
             }
         }
-        else if ( aType.isEmpty() )
-        {
-            // Empty type means no active binding for the event. Just ignore do nothing.
-        }
-        else
-        {
-            SAL_WARN( "sfx.notify", "notifyEvent(): Unsupported event type" );
-        }
+    }
+    else if ( aType.isEmpty() )
+    {
+        // Empty type means no active binding for the event. Just ignore do nothing.
+    }
+    else
+    {
+        SAL_WARN( "sfx.notify", "notifyEvent(): Unsupported event type" );
     }
 }
 
@@ -419,54 +419,54 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     if ( !aScript.isEmpty() )
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
 
-    if ( aType == STAR_BASIC )
-    {
-        if ( !aScript.isEmpty() )
-        {
-            if ( aMacroName.isEmpty() || aLibrary.isEmpty() )
-            {
-                sal_Int32 nThirdSlashPos = aScript.indexOf( '/', 8 );
-                sal_Int32 nArgsPos = aScript.indexOf( '(' );
-                if ( ( nThirdSlashPos != -1 ) && ( nArgsPos == -1 || nThirdSlashPos < nArgsPos ) )
-                {
-                    OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
-                    if ( aBasMgrName == "." )
-                        aLibrary = pDoc->GetTitle();
-                    else
-                        aLibrary = SfxGetpApp()->GetName();
+    if ( aType != STAR_BASIC )
+        return;
 
-                    // Get the macro name
-                    aMacroName = aScript.copy( nThirdSlashPos+1, nArgsPos - nThirdSlashPos - 1 );
-                }
+    if ( !aScript.isEmpty() )
+    {
+        if ( aMacroName.isEmpty() || aLibrary.isEmpty() )
+        {
+            sal_Int32 nThirdSlashPos = aScript.indexOf( '/', 8 );
+            sal_Int32 nArgsPos = aScript.indexOf( '(' );
+            if ( ( nThirdSlashPos != -1 ) && ( nArgsPos == -1 || nThirdSlashPos < nArgsPos ) )
+            {
+                OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
+                if ( aBasMgrName == "." )
+                    aLibrary = pDoc->GetTitle();
                 else
-                {
-                    SAL_WARN( "sfx.notify", "ConvertToMacro: Unknown macro url format" );
-                }
+                    aLibrary = SfxGetpApp()->GetName();
+
+                // Get the macro name
+                aMacroName = aScript.copy( nThirdSlashPos+1, nArgsPos - nThirdSlashPos - 1 );
+            }
+            else
+            {
+                SAL_WARN( "sfx.notify", "ConvertToMacro: Unknown macro url format" );
             }
         }
-        else if ( !aMacroName.isEmpty() )
-        {
-            aScript = "macro://";
-            if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
-                aScript += ".";
-            aScript += "/" + aMacroName + "()";
-        }
-        else
-            // wrong properties
-            return;
-
-        if (aLibrary != "document")
-        {
-            if ( aLibrary.isEmpty() || (pDoc && ( aLibrary == pDoc->GetTitle( SFX_TITLE_APINAME ) || aLibrary == pDoc->GetTitle() )) )
-                aLibrary = "document";
-            else
-                aLibrary = "application";
-        }
-
-        o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
-        o_normalizedDescriptor.put( PROP_LIBRARY, aLibrary );
-        o_normalizedDescriptor.put( PROP_MACRO_NAME, aMacroName );
     }
+    else if ( !aMacroName.isEmpty() )
+    {
+        aScript = "macro://";
+        if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
+            aScript += ".";
+        aScript += "/" + aMacroName + "()";
+    }
+    else
+        // wrong properties
+        return;
+
+    if (aLibrary != "document")
+    {
+        if ( aLibrary.isEmpty() || (pDoc && ( aLibrary == pDoc->GetTitle( SFX_TITLE_APINAME ) || aLibrary == pDoc->GetTitle() )) )
+            aLibrary = "document";
+        else
+            aLibrary = "application";
+    }
+
+    o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
+    o_normalizedDescriptor.put( PROP_LIBRARY, aLibrary );
+    o_normalizedDescriptor.put( PROP_MACRO_NAME, aMacroName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

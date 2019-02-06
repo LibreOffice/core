@@ -221,29 +221,29 @@ void SfxFrame::SetIsClosing_Impl()
 
 void SfxFrame::CancelTransfers()
 {
-    if( !pImpl->bInCancelTransfers )
-    {
-        pImpl->bInCancelTransfers = true;
-        SfxObjectShell* pObj = GetCurrentDocument();
-        if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SfxLoadedFlags::ALL ))
-        {
-            SfxViewFrame* pFrm;
-            for( pFrm = SfxViewFrame::GetFirst( pObj );
-                 pFrm && &pFrm->GetFrame() == this;
-                 pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
-            // No more Frame in Document -> Cancel
-            if( !pFrm )
-            {
-                pObj->CancelTransfers();
-                GetCurrentDocument()->Broadcast( SfxHint(SfxHintId::TitleChanged) );
-            }
-        }
+    if( pImpl->bInCancelTransfers )
+        return;
 
-        //  Check if StarOne-Loader should be canceled
-        SfxFrameWeakRef wFrame( this );
-        if (wFrame.is())
-            pImpl->bInCancelTransfers = false;
+    pImpl->bInCancelTransfers = true;
+    SfxObjectShell* pObj = GetCurrentDocument();
+    if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SfxLoadedFlags::ALL ))
+    {
+        SfxViewFrame* pFrm;
+        for( pFrm = SfxViewFrame::GetFirst( pObj );
+             pFrm && &pFrm->GetFrame() == this;
+             pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
+        // No more Frame in Document -> Cancel
+        if( !pFrm )
+        {
+            pObj->CancelTransfers();
+            GetCurrentDocument()->Broadcast( SfxHint(SfxHintId::TitleChanged) );
+        }
     }
+
+    //  Check if StarOne-Loader should be canceled
+    SfxFrameWeakRef wFrame( this );
+    if (wFrame.is())
+        pImpl->bInCancelTransfers = false;
 }
 
 SfxViewFrame* SfxFrame::GetCurrentViewFrame() const
@@ -577,24 +577,24 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
 {
     pImpl->aBorder = rBorder;
     SfxViewFrame *pF = GetCurrentViewFrame();
-    if ( pF )
-    {
-        Point aPos ( rBorder.Left(), rBorder.Top() );
-        Size aSize( GetWindow().GetOutputSizePixel() );
-        long nDeltaX = rBorder.Left() + rBorder.Right();
-        if ( aSize.Width() > nDeltaX )
-            aSize.AdjustWidth( -nDeltaX );
-        else
-            aSize.setWidth( 0 );
+    if ( !pF )
+        return;
 
-        long nDeltaY = rBorder.Top() + rBorder.Bottom();
-        if ( aSize.Height() > nDeltaY )
-            aSize.AdjustHeight( -nDeltaY );
-        else
-            aSize.setHeight( 0 );
+    Point aPos ( rBorder.Left(), rBorder.Top() );
+    Size aSize( GetWindow().GetOutputSizePixel() );
+    long nDeltaX = rBorder.Left() + rBorder.Right();
+    if ( aSize.Width() > nDeltaX )
+        aSize.AdjustWidth( -nDeltaX );
+    else
+        aSize.setWidth( 0 );
 
-        pF->GetWindow().SetPosSizePixel( aPos, aSize );
-    }
+    long nDeltaY = rBorder.Top() + rBorder.Bottom();
+    if ( aSize.Height() > nDeltaY )
+        aSize.AdjustHeight( -nDeltaY );
+    else
+        aSize.setHeight( 0 );
+
+    pF->GetWindow().SetPosSizePixel( aPos, aSize );
 }
 
 tools::Rectangle SfxFrame::GetTopOuterRectPixel_Impl() const

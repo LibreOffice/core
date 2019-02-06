@@ -331,17 +331,17 @@ void SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, con
     sal_uInt16 nID = sal_uInt16(rDockingWindowName.toInt32());
 
     // Check the range of the provided ID otherwise nothing will happen
-    if ( lcl_checkDockingWindowID( nID ))
+    if ( !lcl_checkDockingWindowID( nID ))
+        return;
+
+    SfxWorkWindow* pWorkWindow = lcl_getWorkWindowFromXFrame( rFrame );
+    if ( pWorkWindow )
     {
-        SfxWorkWindow* pWorkWindow = lcl_getWorkWindowFromXFrame( rFrame );
-        if ( pWorkWindow )
+        SfxChildWindow* pChildWindow = pWorkWindow->GetChildWindow_Impl(nID);
+        if ( !pChildWindow )
         {
-            SfxChildWindow* pChildWindow = pWorkWindow->GetChildWindow_Impl(nID);
-            if ( !pChildWindow )
-            {
-                // Register window at the workwindow child window list
-                pWorkWindow->SetChildWindow_Impl( nID, true, false );
-            }
+            // Register window at the workwindow child window list
+            pWorkWindow->SetChildWindow_Impl( nID, true, false );
         }
     }
 }
@@ -435,39 +435,39 @@ void SfxDockingWindow::Resize()
 {
     DockingWindow::Resize();
     Invalidate();
-    if ( pImpl && pImpl->bConstructed && pMgr )
+    if ( !pImpl || !pImpl->bConstructed || !pMgr )
+        return;
+
+    if ( IsFloatingMode() )
     {
-        if ( IsFloatingMode() )
+        // start timer for saving window status information
+        pImpl->aMoveIdle.Start();
+    }
+    else
+    {
+        Size aSize( GetSizePixel() );
+        switch ( pImpl->GetDockAlignment() )
         {
-            // start timer for saving window status information
-            pImpl->aMoveIdle.Start();
-        }
-        else
-        {
-            Size aSize( GetSizePixel() );
-            switch ( pImpl->GetDockAlignment() )
-            {
-                case SfxChildAlignment::LEFT:
-                case SfxChildAlignment::FIRSTLEFT:
-                case SfxChildAlignment::LASTLEFT:
-                case SfxChildAlignment::RIGHT:
-                case SfxChildAlignment::FIRSTRIGHT:
-                case SfxChildAlignment::LASTRIGHT:
-                    pImpl->nHorizontalSize = aSize.Width();
-                    pImpl->aSplitSize = aSize;
-                    break;
-                case SfxChildAlignment::TOP:
-                case SfxChildAlignment::LOWESTTOP:
-                case SfxChildAlignment::HIGHESTTOP:
-                case SfxChildAlignment::BOTTOM:
-                case SfxChildAlignment::HIGHESTBOTTOM:
-                case SfxChildAlignment::LOWESTBOTTOM:
-                    pImpl->nVerticalSize = aSize.Height();
-                    pImpl->aSplitSize = aSize;
-                    break;
-                default:
-                    break;
-            }
+            case SfxChildAlignment::LEFT:
+            case SfxChildAlignment::FIRSTLEFT:
+            case SfxChildAlignment::LASTLEFT:
+            case SfxChildAlignment::RIGHT:
+            case SfxChildAlignment::FIRSTRIGHT:
+            case SfxChildAlignment::LASTRIGHT:
+                pImpl->nHorizontalSize = aSize.Width();
+                pImpl->aSplitSize = aSize;
+                break;
+            case SfxChildAlignment::TOP:
+            case SfxChildAlignment::LOWESTTOP:
+            case SfxChildAlignment::HIGHESTTOP:
+            case SfxChildAlignment::BOTTOM:
+            case SfxChildAlignment::HIGHESTBOTTOM:
+            case SfxChildAlignment::LOWESTBOTTOM:
+                pImpl->nVerticalSize = aSize.Height();
+                pImpl->aSplitSize = aSize;
+                break;
+            default:
+                break;
         }
     }
 }

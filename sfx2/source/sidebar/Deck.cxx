@@ -240,31 +240,30 @@ Panel* Deck::GetPanel(const OUString & panelId)
 
 void Deck::ShowPanel(const Panel& rPanel)
 {
-    if (mpVerticalScrollBar && mpVerticalScrollBar->IsVisible())
-    {
-        // Get vertical extent of the panel.
-        sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
-        const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
-        // Add the title bar into the extent.
-        if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
-            nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
+    if (!mpVerticalScrollBar || !mpVerticalScrollBar->IsVisible())
+        return;
 
-        // Determine what the new thumb position should be like.
-        // When the whole panel does not fit then make its top visible
-        // and it off at the bottom.
-        sal_Int32 nNewThumbPos (mpVerticalScrollBar->GetThumbPos());
-        if (nPanelBottom >= nNewThumbPos+mpVerticalScrollBar->GetVisibleSize())
-            nNewThumbPos = nPanelBottom - mpVerticalScrollBar->GetVisibleSize();
-        if (nPanelTop < nNewThumbPos)
-            nNewThumbPos = nPanelTop;
+    // Get vertical extent of the panel.
+    sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
+    const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
+    // Add the title bar into the extent.
+    if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
+        nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
 
-        mpVerticalScrollBar->SetThumbPos(nNewThumbPos);
-        mpScrollContainer->SetPosPixel(
-            Point(
-                mpScrollContainer->GetPosPixel().X(),
-                -nNewThumbPos));
+    // Determine what the new thumb position should be like.
+    // When the whole panel does not fit then make its top visible
+    // and it off at the bottom.
+    sal_Int32 nNewThumbPos (mpVerticalScrollBar->GetThumbPos());
+    if (nPanelBottom >= nNewThumbPos+mpVerticalScrollBar->GetVisibleSize())
+        nNewThumbPos = nPanelBottom - mpVerticalScrollBar->GetVisibleSize();
+    if (nPanelTop < nNewThumbPos)
+        nNewThumbPos = nPanelTop;
 
-    }
+    mpVerticalScrollBar->SetThumbPos(nNewThumbPos);
+    mpScrollContainer->SetPosPixel(
+        Point(
+            mpScrollContainer->GetPosPixel().X(),
+            -nNewThumbPos));
 }
 
 static const OUString GetWindowClassification(const vcl::Window* pWindow)

@@ -129,20 +129,20 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
 
     uno::Any aAny;
     ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
-    if( xListener.is() )
-    {
-        // always call dispatchFinished(), because we didn't load a document but
-        // executed a macro instead!
-        frame::DispatchResultEvent aEvent;
+    if( !xListener.is() )
+        return;
 
-        aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
-        if( nErr == ERRCODE_NONE )
-            aEvent.State = frame::DispatchResultState::SUCCESS;
-        else
-            aEvent.State = frame::DispatchResultState::FAILURE;
+    // always call dispatchFinished(), because we didn't load a document but
+    // executed a macro instead!
+    frame::DispatchResultEvent aEvent;
 
-        xListener->dispatchFinished( aEvent ) ;
-    }
+    aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
+    if( nErr == ERRCODE_NONE )
+        aEvent.State = frame::DispatchResultState::SUCCESS;
+    else
+        aEvent.State = frame::DispatchResultState::FAILURE;
+
+    xListener->dispatchFinished( aEvent ) ;
 }
 
 uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(

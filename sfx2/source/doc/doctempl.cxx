@@ -1347,23 +1347,23 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     bool        bFound = false;
     size_t          nPos = GetEntryPos( rTitle, bFound );
 
-    if ( !bFound )
-    {
-        if ( pPos )
-            nPos = *pPos;
+    if ( bFound )
+        return;
 
-        auto pEntry = std::make_unique<DocTempl_EntryData_Impl>(
-            this, rTitle );
-        pEntry->SetTargetURL( rTargetURL );
-        pEntry->SetHierarchyURL( aLinkURL );
-        if ( nPos < maEntries.size() ) {
-            auto it = maEntries.begin();
-            std::advance( it, nPos );
-            maEntries.insert( it, std::move(pEntry) );
-        }
-        else
-            maEntries.push_back( std::move(pEntry) );
+    if ( pPos )
+        nPos = *pPos;
+
+    auto pEntry = std::make_unique<DocTempl_EntryData_Impl>(
+        this, rTitle );
+    pEntry->SetTargetURL( rTargetURL );
+    pEntry->SetHierarchyURL( aLinkURL );
+    if ( nPos < maEntries.size() ) {
+        auto it = maEntries.begin();
+        std::advance( it, nPos );
+        maEntries.insert( it, std::move(pEntry) );
     }
+    else
+        maEntries.push_back( std::move(pEntry) );
 }
 
 
@@ -1514,19 +1514,19 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     }
     catch ( Exception& ) {}
 
-    if ( xResultSet.is() )
-    {
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+    if ( !xResultSet.is() )
+        return;
 
-        try
+    uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+    try
+    {
+        while ( xResultSet->next() )
         {
-            while ( xResultSet->next() )
-            {
-                pRegionTmp->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
-            }
+            pRegionTmp->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
         }
-        catch ( Exception& ) {}
     }
+    catch ( Exception& ) {}
 }
 
 
@@ -1544,24 +1544,24 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
     }
     catch ( Exception& ) {}
 
-    if ( xResultSet.is() )
+    if ( !xResultSet.is() )
+        return;
+
+    uno::Reference< XCommandEnvironment > aCmdEnv;
+    uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+    uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+    try
     {
-        uno::Reference< XCommandEnvironment > aCmdEnv;
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
+        while ( xResultSet->next() )
         {
-            while ( xResultSet->next() )
-            {
-                const OUString aId = xContentAccess->queryContentIdentifierString();
-                Content  aContent( aId, aCmdEnv, comphelper::getProcessComponentContext() );
+            const OUString aId = xContentAccess->queryContentIdentifierString();
+            Content  aContent( aId, aCmdEnv, comphelper::getProcessComponentContext() );
 
-                AddRegion( xRow->getString( 1 ), aContent );
-            }
+            AddRegion( xRow->getString( 1 ), aContent );
         }
-        catch ( Exception& ) {}
     }
+    catch ( Exception& ) {}
 }
 
 
