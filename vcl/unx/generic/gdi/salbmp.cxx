@@ -889,7 +889,7 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
     return false;
 }
 
-bool X11SalBitmap::ScalingSupported() const
+bool X11SalBitmap::ScalingSupported(BmpScaleFlag) const
 {
     return false;
 }

@@ -1006,7 +1006,7 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
     return bRet;
 }
 
-bool QuartzSalBitmap::ScalingSupported() const
+bool QuartzSalBitmap::ScalingSupported(BmpScaleFlag) const
 {
     return false;
 }

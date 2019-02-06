@@ -1042,7 +1042,7 @@ bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
     return bRet;
 }
 
-bool WinSalBitmap::ScalingSupported() const
+bool WinSalBitmap::ScalingSupported(BmpScaleFlag) const
 {
     return false;
 }

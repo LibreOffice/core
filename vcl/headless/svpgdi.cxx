@@ -1523,8 +1523,8 @@ void SvpSalGraphics::copyArea( long nDestX,
     copyBits(aTR, this);
 }
 
-static basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
-                                          cairo_surface_t* source, cairo_operator_t eOperator = CAIRO_OPERATOR_SOURCE)
+basegfx::B2DRange SvpSalGraphics::renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
+                                          cairo_surface_t* source, cairo_operator_t eOperator)
 {
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
@@ -1559,7 +1559,7 @@ static basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
 static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
                                           cairo_surface_t* source)
 {
-    return renderWithOperator(cr, rTR, source, CAIRO_OPERATOR_SOURCE);
+    return SvpSalGraphics::renderWithOperator(cr, rTR, source, CAIRO_OPERATOR_SOURCE);
 }
 
 void SvpSalGraphics::copyWithOperator( const SalTwoRect& rTR, cairo_surface_t* source,
@@ -1952,29 +1952,26 @@ void SvpSalGraphics::updateSettings(AllSettings& rSettings)
     }
 }
 
-namespace
+bool SvpSalBitmap::isCairoCompatible(const BitmapBuffer* pBuffer)
 {
-    bool isCairoCompatible(const BitmapBuffer* pBuffer)
-    {
-        if (!pBuffer)
-            return false;
+    if (!pBuffer)
+        return false;
 
-        // We use Cairo that supports 24-bit RGB.
+    // We use Cairo that supports 24-bit RGB.
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
+    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
 #else
-        if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
+    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
 #endif
-            return false;
+        return false;
 
-        cairo_format_t nFormat = getCairoFormat(*pBuffer);
-        return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
-    }
+    cairo_format_t nFormat = getCairoFormat(*pBuffer);
+    return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
 }
 
 cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
 {
-    if (!isCairoCompatible(pBuffer))
+    if (!SvpSalBitmap::isCairoCompatible(pBuffer))
         return nullptr;
 
     cairo_format_t nFormat = getCairoFormat(*pBuffer);

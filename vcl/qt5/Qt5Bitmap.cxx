@@ -299,7 +299,7 @@ void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 
 bool Qt5Bitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
 
-bool Qt5Bitmap::ScalingSupported() const { return false; }
+bool Qt5Bitmap::ScalingSupported(BmpScaleFlag) const { return false; }
 
 bool Qt5Bitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
                       BmpScaleFlag /*nScaleFlag*/)

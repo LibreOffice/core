@@ -74,7 +74,7 @@ public:
 
     bool            GetSystemData( BitmapSystemData& rData ) override;
 
-    bool            ScalingSupported() const override;
+    bool            ScalingSupported(BmpScaleFlag eScaleFlag) const override;
     bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
 

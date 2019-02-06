@@ -741,7 +741,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     const sal_uInt16 nStartCount(GetBitCount());
 
-    if (mxSalBmp && mxSalBmp->ScalingSupported())
+    if (mxSalBmp && mxSalBmp->ScalingSupported(nScaleFlag))
     {
         // implementation specific scaling
         std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());

@@ -373,7 +373,7 @@ void OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
         SAL_WARN( "vcl.opengl", "Invalid flag for scaling operation" );
 }
 
-bool OpenGLSalBitmap::ScalingSupported() const
+bool OpenGLSalBitmap::ScalingSupported(BmpScaleFlag) const
 {
     return true;
 }

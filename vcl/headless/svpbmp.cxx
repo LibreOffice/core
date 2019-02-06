@@ -98,9 +98,11 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
             pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
         case 24:
             pDIB->mnFormat = SVP_24BIT_FORMAT;
             break;
+#endif
         default:
             nBitCount = 32;
             [[fallthrough]];
@@ -276,14 +278,49 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
     return false;
 }
 
-bool SvpSalBitmap::ScalingSupported() const
+bool SvpSalBitmap::ScalingSupported(BmpScaleFlag eScaleFlag) const
 {
-    return false;
+    if (!isCairoCompatible(mpDIB.get()))
+        return false;
+    return eScaleFlag == BmpScaleFlag::Default ||
+           eScaleFlag == BmpScaleFlag::Fast ||
+           eScaleFlag == BmpScaleFlag::BestQuality;
 }
 
-bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
+bool SvpSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag eScaleFlag)
 {
-    return false;
+    if (!ScalingSupported(eScaleFlag))
+    {
+        fprintf(stderr, "scale fail 1\n");
+        return false;
+    }
+    Size aSize(mpDIB->mnWidth * rScaleX, mpDIB->mnHeight * rScaleY);
+    std::unique_ptr<BitmapBuffer> xDIB(ImplCreateDIB(aSize, mpDIB->mnBitCount, mpDIB->maPalette));
+    if (!xDIB)
+    {
+        fprintf(stderr, "scale fail 2\n");
+        return false;
+    }
+    cairo_surface_t* source = SvpSalGraphics::createCairoSurface(mpDIB.get());
+    if (!source)
+        return false;
+    cairo_surface_t* dest = SvpSalGraphics::createCairoSurface(xDIB.get());
+
+    cairo_t* cr = cairo_create(dest);
+
+    cairo_rectangle(cr, 0, 0, aSize.Width(), aSize.Height());
+
+    SalTwoRect aTR(0, 0, mpDIB->mnWidth, mpDIB->mnHeight, 0, 0, aSize.Width(), aSize.Height());
+    SvpSalGraphics::renderWithOperator(cr, aTR, source);
+
+    cairo_destroy(cr);
+
+    cairo_surface_destroy(dest);
+    cairo_surface_destroy(source);
+
+    mpDIB = std::move(xDIB);
+
+    return true;
 }
 
 bool SvpSalBitmap::Replace( const ::Color& /*rSearchColor*/, const ::Color& /*rReplaceColor*/, sal_uInt8 /*nTol*/ )

@@ -294,6 +294,8 @@ public:
     void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const;
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
+    static basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
+                                                cairo_surface_t* source, cairo_operator_t eOperator = CAIRO_OPERATOR_SOURCE);
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
