@@ -102,9 +102,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
             Qt::BlockingQueuedConnection);
 
-    // XFilePicker
-    connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
-            &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
     // XFolderPicker
     connect(this, &KDE5FilePicker::getDirectorySignal, this, &KDE5FilePicker::getDirectorySlot,
             Qt::BlockingQueuedConnection);
@@ -152,17 +149,6 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
     m_pFileDialog->show();
     //block and wait for user input
     return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
-}
-
-OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getDisplayDirectorySignal();
-    }
-
-    return implGetDirectory();
 }
 
 // XFilterManager
