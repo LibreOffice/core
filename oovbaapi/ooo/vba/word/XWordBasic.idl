@@ -38,6 +38,8 @@ interface XWordBasic
                                   [in] any SQLStatement1,
                                   [in] any OpenExclusive,
                                   [in] any SubType );
+
+    long AppMaximize( [in] string WindowName, [in] any State );
 };
 
 }; }; };
