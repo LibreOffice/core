@@ -22,6 +22,7 @@
 
 #include <config_version.h>
 
+#include <o3tl/lru_map.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
@@ -194,6 +195,7 @@ struct ImplSVGDIData
     std::unique_ptr<ImplPrnQueueList> mpPrinterQueueList;   // List of all printer queue
     std::shared_ptr<PhysicalFontCollection> mxScreenFontList; // Screen-Font-List
     std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
+    o3tl::lru_map<SalBitmap*, BitmapEx> maScaleCache = o3tl::lru_map<SalBitmap*, BitmapEx>(10); // Cache for scaled images
     ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width

@@ -144,8 +144,19 @@ SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE
 {
 }
 
+void SalBitmap::DropScaledCache()
+{
+    if (ImplSVData* pSVData = ImplGetSVData())
+    {
+        auto& rCache = pSVData->maGDIData.maScaleCache;
+        rCache.remove_if([this] (const o3tl::lru_map<SalBitmap*, BitmapEx>::key_value_pair_t& rKeyValuePair)
+                         { return rKeyValuePair.first == this; });
+    }
+}
+
 SalBitmap::~SalBitmap()
 {
+    DropScaledCache();
 }
 
 SalI18NImeStatus::~SalI18NImeStatus()

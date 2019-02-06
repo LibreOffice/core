@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <svdata.hxx>
 #include <sal/log.hxx>
 
 namespace {
@@ -934,6 +935,7 @@ BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 {
     Bitmap aBitmap(rBitmap.GetBitmap());
+    SalBitmap* pKey = aBitmap.ImplGetSalBitmap().get();
 
     bool bRet = false;
 
@@ -952,6 +954,16 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 
     if (nDstW <= 1 || nDstH <= 1)
         return BitmapEx();
+
+    // check cache for a previously scaled version of this
+    ImplSVData* pSVData = ImplGetSVData();
+    auto& rCache = pSVData->maGDIData.maScaleCache;
+    auto aFind = rCache.find(pKey);
+    if (aFind != rCache.end())
+    {
+        if (aFind->second.GetSizePixel().Width() == nDstW && aFind->second.GetSizePixel().Height() == nDstH)
+            return aFind->second;
+    }
 
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
@@ -1076,7 +1088,9 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     {
         tools::Rectangle aRect(Point(0, 0), Point(nDstW, nDstH));
         aBitmap.Crop(aRect);
-        return BitmapEx(aBitmap);
+        BitmapEx aRet(aBitmap);
+        rCache.insert(std::make_pair(pKey, aRet));
+        return aRet;
     }
 
     return BitmapEx();
