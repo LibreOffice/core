@@ -291,12 +291,18 @@ sal_Int32 SAL_CALL SwVbaApplication::getWindowState()
 
 void SAL_CALL SwVbaApplication::setWindowState( sal_Int32 _windowstate )
 {
-    auto xWindow = getActiveWindow();
-    if (xWindow.is())
+    try
     {
-        uno::Any aState;
-        aState <<= _windowstate;
-        xWindow->setWindowState( aState );
+        auto xWindow = getActiveWindow();
+        if (xWindow.is())
+        {
+            uno::Any aState;
+            aState <<= _windowstate;
+            xWindow->setWindowState( aState );
+        }
+    }
+    catch (const uno::RuntimeException&)
+    {
     }
 }
 
