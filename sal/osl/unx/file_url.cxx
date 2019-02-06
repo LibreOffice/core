@@ -30,6 +30,7 @@
 
 #include <osl/file.hxx>
 #include <osl/security.hxx>
+#include <osl/socket.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/process.h>
@@ -136,7 +137,9 @@ oslFileError getSystemPathFromFileUrl(
     // Handle query or fragment:
     if (url.indexOf('?', i) != -1 || url.indexOf('#', i) != -1)
         return osl_File_E_INVAL;
-    // Handle authority:
+    // Handle authority, supporting a host of "localhost", "127.0.0.1", or the exact value (e.g.,
+    // not supporting an additional final dot, for simplicity) reported by osl_getLocalHostname
+    // (and, in each case, ignoring case of ASCII letters):
     if (url.getLength() - i >= 2 && url[i] == '/' && url[i + 1] == '/')
     {
         i += 2;
@@ -153,7 +156,14 @@ oslFileError getSystemPathFromFileUrl(
                     RTL_CONSTASCII_STRINGPARAM("127.0.0.1"))
                 != 0))
         {
-            return osl_File_E_INVAL;
+            OUString hostname;
+            if (osl_getLocalHostname(&hostname.pData) != osl_Socket_Ok
+                || (rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                        url.pData->buffer + i, j - i, hostname.getStr(), hostname.getLength())
+                    != 0))
+            {
+                return osl_File_E_INVAL;
+            }
         }
         i = j;
     }
