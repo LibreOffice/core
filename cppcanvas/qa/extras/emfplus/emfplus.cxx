@@ -68,16 +68,10 @@ public:
         return aResultBitmap.GetBitmap();
     }
 
-    void testFdo77229();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testFdo77229);
-    CPPUNIT_TEST_SUITE_END();
-
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-void Test::testFdo77229()
+CPPUNIT_TEST_FIXTURE(Test, testFdo77229)
 {
     Bitmap aBitmap = load("fdo77229.emf");
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -87,8 +81,6 @@ void Test::testFdo77229()
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), aColor.GetBlue());
     CPPUNIT_ASSERT(aColor.GetGreen() == 0xfe || aColor.GetGreen() == 0xff);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
