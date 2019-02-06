@@ -21,7 +21,6 @@
 
 #include <cstdlib>
 
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/module.h>
@@ -43,7 +42,6 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
 } } }
-namespace rtl { class OUString; }
 
 // Stubs for removed functionality, to be killed when we bump cppuhelper SONAME
 

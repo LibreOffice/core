@@ -19,22 +19,18 @@
 
 #include <sal/types.h>
 
-#include <string.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-class ContainerListener;
 
 struct ContainerStats {
     int m_nAlive;

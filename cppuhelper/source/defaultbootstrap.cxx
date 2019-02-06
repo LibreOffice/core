@@ -15,10 +15,10 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/weak.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -27,6 +27,8 @@
 #include "paths.hxx"
 #include "servicemanager.hxx"
 #include "typemanager.hxx"
+
+namespace com :: sun :: star :: uno { class XComponentContext; }
 
 namespace {
 

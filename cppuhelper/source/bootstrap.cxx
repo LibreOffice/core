@@ -22,26 +22,25 @@
 #include <chrono>
 #include <cstring>
 
-#include <rtl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/random.h>
-#include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/process.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/findsofficepath.h>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 #include "macro_expander.hxx"
+
+namespace com :: sun :: star :: uno { class XComponentContext; }
 
 using namespace ::osl;
 using namespace ::com::sun::star;

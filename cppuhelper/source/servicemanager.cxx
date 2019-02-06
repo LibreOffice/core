@@ -33,13 +33,11 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/shlib.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
