@@ -1062,6 +1062,8 @@ public:
 
     // checks for decimal separator and optional alternative
     bool IsDecimalSep( const OUString& rStr ) const;
+
+    static bool IsGeneralNumberFormat(sal_uInt32 nFormat);
 };
 
 #endif // INCLUDED_SVL_ZFORLIST_HXX

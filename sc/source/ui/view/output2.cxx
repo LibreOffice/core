@@ -1718,7 +1718,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SvxCellHorJustify::Block );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
-                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    if (bBreak && bCellIsValue && SvNumberFormatter::IsGeneralNumberFormat(aVars.GetResultValueFormat()))
                         bBreak = false;
 
                     bool bRepeat = aVars.IsRepeat() && !bBreak;
