@@ -22,7 +22,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/curl-7.26.0_win-proxy.patch \
 	external/curl/CVE-2018-14618.patch \
+	external/curl/CVE-2018-16890.patch \
+	external/curl/CVE-2019-3822.patch \
 ))
+
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-android.patch \
