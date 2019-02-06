@@ -547,7 +547,7 @@ SwWordBasic::FileClose( const css::uno::Any& Save )
 {
     uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
 
-    sal_Bool bSave = false;
+    bool bSave = false;
     if (Save.hasValue() && (Save >>= bSave) && bSave)
         FileSave();
 
