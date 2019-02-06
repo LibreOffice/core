@@ -88,6 +88,14 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // use native dialog
     m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
 
+    // only columns 0 and 1 are used by controls (s. Qt5FilePicker::addCustomControl);
+    // set stretch for (unused) column 2 in order for the controls to only take the space
+    // they actually need and avoid empty space in between
+    _layout->setColumnStretch(2, 1);
+
+    // set layout so custom widgets show up in our native file dialog
+    setCustomControlWidgetLayout(_layout);
+
     m_pFileDialog->setSupportedSchemes({
         QStringLiteral("file"),
         QStringLiteral("ftp"),
@@ -99,18 +107,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     });
 
     connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
-            Qt::BlockingQueuedConnection);
-
-    // XFilePickerControlAccess
-    connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setLabelSignal, this, &KDE5FilePicker::setLabelSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getLabelSignal, this, &KDE5FilePicker::getLabelSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
             Qt::BlockingQueuedConnection);
 
     // used to set the custom controls
@@ -139,29 +135,11 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
 void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                        const uno::Any& value)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setValueSignal(controlId, nControlAction, value);
-    }
+    if (CHECKBOX_AUTOEXTENSION == controlId)
+        // We ignore this one and rely on QFileDialog to provide the functionality
+        return;
 
-    if (_customWidgets.contains(controlId))
-    {
-        bool bChecked = false;
-        value >>= bChecked;
-
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            cb->setChecked(bChecked);
-    }
-    else if (_customListboxes.contains(controlId))
-    {
-        QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
-        if (cb)
-            Qt5FilePicker::handleSetListValue(cb, nControlAction, value);
-    }
-    else
-        SAL_WARN("vcl.kde5", "set value on unknown control " << controlId);
+    Qt5FilePicker::setValue(controlId, nControlAction, value);
 }
 
 uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
@@ -180,184 +158,44 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
         // saves the value of the setting, so LO core is not needed for that either.
         return uno::Any(false);
 
-    bool value = false;
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            value = cb->isChecked();
-    }
-    else if (_customListboxes.contains(controlId))
-    {
-        QComboBox* cb = dynamic_cast<QComboBox*>(_customListboxes.value(controlId));
-        if (cb)
-            return Qt5FilePicker::handleGetListValue(cb, nControlAction);
-    }
-    else
-        SAL_WARN("vcl.kde5", "get value on unknown control" << controlId);
-
-    return uno::Any(value);
+    return Qt5FilePicker::getValue(controlId, nControlAction);
 }
 
 void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT enableControlSignal(controlId, enable);
-    }
+    if (CHECKBOX_AUTOEXTENSION == controlId)
+        // We ignore this one and rely on QFileDialog to provide the functionality
+        return;
 
-    if (_customWidgets.contains(controlId))
-        _customWidgets.value(controlId)->setEnabled(enable);
-    else
-        SAL_WARN("vcl.kde5", "enable on unknown control " << controlId);
+    Qt5FilePicker::enableControl(controlId, enable);
 }
 
 void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setLabelSignal(controlId, label);
-    }
+    if (CHECKBOX_AUTOEXTENSION == controlId)
+        // We ignore this one and rely on QFileDialog to provide the functionality
+        return;
 
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            cb->setText(toQString(label));
-    }
-    else
-        SAL_WARN("vcl.kde5", "set label on unknown control " << controlId);
+    Qt5FilePicker::setLabel(controlId, label);
 }
 
 OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getLabelSignal(controlId);
-    }
+    // We ignore this one and rely on QFileDialog to provide the functionality
+    if (CHECKBOX_AUTOEXTENSION == controlId)
+        return "";
 
-    OUString label;
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            label = toOUString(cb->text());
-    }
-    else
-        SAL_WARN("vcl.kde5", "get label on unknown control " << controlId);
-
-    return label;
+    return Qt5FilePicker::getLabel(controlId);
 }
 
 void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    const char* resId = nullptr;
+    // native kde5 filepicker has its own autoextension checkbox,
+    // therefore avoid adding yet another one
+    if (controlId == CHECKBOX_AUTOEXTENSION)
+        return;
 
-    switch (controlId)
-    {
-        case CHECKBOX_AUTOEXTENSION:
-            resId = STR_FPICKER_AUTO_EXTENSION;
-            break;
-        case CHECKBOX_PASSWORD:
-            resId = STR_FPICKER_PASSWORD;
-            break;
-        case CHECKBOX_FILTEROPTIONS:
-            resId = STR_FPICKER_FILTER_OPTIONS;
-            break;
-        case CHECKBOX_READONLY:
-            resId = STR_FPICKER_READONLY;
-            break;
-        case CHECKBOX_LINK:
-            resId = STR_FPICKER_INSERT_AS_LINK;
-            break;
-        case CHECKBOX_PREVIEW:
-            resId = STR_FPICKER_SHOW_PREVIEW;
-            break;
-        case CHECKBOX_SELECTION:
-            resId = STR_FPICKER_SELECTION;
-            break;
-        case CHECKBOX_GPGENCRYPTION:
-            resId = STR_FPICKER_GPGENCRYPT;
-            break;
-        case PUSHBUTTON_PLAY:
-            resId = STR_FPICKER_PLAY;
-            break;
-        case LISTBOX_VERSION:
-            resId = STR_FPICKER_VERSION;
-            break;
-        case LISTBOX_TEMPLATE:
-            resId = STR_FPICKER_TEMPLATES;
-            break;
-        case LISTBOX_IMAGE_TEMPLATE:
-            resId = STR_FPICKER_IMAGE_TEMPLATE;
-            break;
-        case LISTBOX_IMAGE_ANCHOR:
-            resId = STR_FPICKER_IMAGE_ANCHOR;
-            break;
-        case LISTBOX_VERSION_LABEL:
-        case LISTBOX_TEMPLATE_LABEL:
-        case LISTBOX_IMAGE_TEMPLATE_LABEL:
-        case LISTBOX_IMAGE_ANCHOR_LABEL:
-        case LISTBOX_FILTER_SELECTOR:
-            break;
-    }
-
-    auto resString = toQString(VclResId(resId));
-    resString.replace('~', '&');
-
-    switch (controlId)
-    {
-        case CHECKBOX_AUTOEXTENSION:
-        case CHECKBOX_PASSWORD:
-        case CHECKBOX_FILTEROPTIONS:
-        case CHECKBOX_READONLY:
-        case CHECKBOX_LINK:
-        case CHECKBOX_PREVIEW:
-        case CHECKBOX_SELECTION:
-        case CHECKBOX_GPGENCRYPTION:
-        {
-            // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
-            // code, but the checkbox is hidden and ignored
-            bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
-
-            auto widget = new QCheckBox(resString, m_pExtraControls);
-            widget->setHidden(hidden);
-            if (!hidden)
-            {
-                _layout->addWidget(widget);
-            }
-            _customWidgets.insert(controlId, widget);
-
-            break;
-        }
-        case PUSHBUTTON_PLAY:
-        case LISTBOX_VERSION_LABEL:
-        case LISTBOX_TEMPLATE_LABEL:
-        case LISTBOX_IMAGE_TEMPLATE_LABEL:
-        case LISTBOX_IMAGE_ANCHOR_LABEL:
-        case LISTBOX_FILTER_SELECTOR:
-            break;
-
-        case LISTBOX_IMAGE_ANCHOR:
-        case LISTBOX_IMAGE_TEMPLATE:
-        case LISTBOX_TEMPLATE:
-        case LISTBOX_VERSION:
-        {
-            auto widget = new QComboBox(m_pExtraControls);
-            QLabel* label = new QLabel(resString);
-            label->setBuddy(widget);
-
-            QHBoxLayout* hBox = new QHBoxLayout;
-            hBox->addWidget(label);
-            hBox->addWidget(widget);
-            _layout->addLayout(hBox, _layout->rowCount(), 0, Qt::AlignLeft);
-            _customListboxes.insert(controlId, widget);
-            break;
-        }
-    }
+    Qt5FilePicker::addCustomControl(controlId);
 }
 
 // XInitialization
