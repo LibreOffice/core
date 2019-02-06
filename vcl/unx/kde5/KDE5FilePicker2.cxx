@@ -336,8 +336,6 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
     return label;
 }
 
-void SAL_CALL KDE5FilePicker::setDescription(const OUString&) {}
-
 void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
     const char* resId = nullptr;
