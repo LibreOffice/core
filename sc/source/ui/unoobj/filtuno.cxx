@@ -225,7 +225,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         if ( aFilterString == ScDocShell::GetAsciiFilterName() )
         {
             //  ascii export (import is handled above)
-            eEncoding = RTL_TEXTENCODING_UCS2; // UTF-16 default for LHM
 
             INetURLObject aURL( aFileName );
             OUString aExt(aURL.getExtension());
