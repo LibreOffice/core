@@ -574,6 +574,7 @@ void DeInitVCL()
 
     pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();
+    pSVData->maGDIData.maScaleCache.clear();
 
     // Deinit Sal
     if (pSVData->mpDefInst)
