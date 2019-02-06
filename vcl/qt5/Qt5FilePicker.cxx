@@ -300,9 +300,11 @@ uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getSelectedFiles()
     }
     QList<QUrl> urls = m_pFileDialog->selectedUrls();
     uno::Sequence<OUString> seq(urls.size());
-    int i = 0;
-    foreach (const QUrl& url, urls)
-        seq[i++] = toOUString(url.toString());
+
+    size_t i = 0;
+    for (const QUrl& aURL : urls)
+        seq[i++] = toOUString(aURL.toString());
+
     return seq;
 }
 
