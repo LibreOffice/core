@@ -624,9 +624,13 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_IMAGE_TEMPLATE:
             resId = STR_FPICKER_IMAGE_TEMPLATE;
             break;
+        case LISTBOX_IMAGE_ANCHOR:
+            resId = STR_FPICKER_IMAGE_ANCHOR;
+            break;
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_ANCHOR_LABEL:
         case LISTBOX_FILTER_SELECTOR:
             break;
     }
@@ -653,6 +657,7 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
             break;
         case LISTBOX_VERSION:
         case LISTBOX_TEMPLATE:
+        case LISTBOX_IMAGE_ANCHOR:
         case LISTBOX_IMAGE_TEMPLATE:
         case LISTBOX_FILTER_SELECTOR:
             label = new QLabel(getResString(resId), m_pExtraControls);
@@ -662,6 +667,7 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_ANCHOR_LABEL:
             break;
     }
 
