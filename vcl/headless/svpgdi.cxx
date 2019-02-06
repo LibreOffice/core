@@ -1630,6 +1630,7 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, BitmapBuffer* pBuffer, ca
 {
     cairo_surface_t* source = createCairoSurface( pBuffer );
     copyWithOperator(rTR, source, eOp);
+    cairo_surface_destroy(source);
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
