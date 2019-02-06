@@ -41,11 +41,16 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
     if( !xImpBmp )
         return;
 
-    if( mnAccessMode == BitmapAccessMode::Write && xImpBmp.use_count() > 2 )
+    if (mnAccessMode == BitmapAccessMode::Write)
     {
-        xImpBmp.reset();
-        rBitmap.ImplMakeUnique();
-        xImpBmp = rBitmap.ImplGetSalBitmap();
+        xImpBmp->DropScaledCache();
+
+        if (xImpBmp.use_count() > 2)
+        {
+            xImpBmp.reset();
+            rBitmap.ImplMakeUnique();
+            xImpBmp = rBitmap.ImplGetSalBitmap();
+        }
     }
 
     mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
