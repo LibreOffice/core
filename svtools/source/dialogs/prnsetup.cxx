@@ -198,7 +198,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
         aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
     // Number of jobs
-    sal_uLong nJobs = rInfo.GetJobs();
+    sal_uInt32 nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         OUString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );
