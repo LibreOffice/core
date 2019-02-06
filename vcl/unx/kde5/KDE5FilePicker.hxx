@@ -76,9 +76,6 @@ public:
     // XExecutableDialog functions
     virtual sal_Int16 SAL_CALL execute() override;
 
-    // XFilePicker functions
-    virtual OUString SAL_CALL getDisplayDirectory() override;
-
     // XFilterManager functions
     virtual void SAL_CALL appendFilter(const OUString& rTitle, const OUString& rFilter) override;
     virtual void SAL_CALL setCurrentFilter(const OUString& rTitle) override;
@@ -136,7 +133,6 @@ protected:
 
 Q_SIGNALS:
     sal_Int16 executeSignal();
-    OUString getDisplayDirectorySignal();
     OUString getDirectorySignal();
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
@@ -151,7 +147,6 @@ Q_SIGNALS:
     OUString getCurrentFilterSignal();
 
 private Q_SLOTS:
-    OUString getDisplayDirectorySlot() { return implGetDirectory(); }
     OUString getDirectorySlot() { return implGetDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
