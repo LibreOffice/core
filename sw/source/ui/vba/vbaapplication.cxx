@@ -110,6 +110,7 @@ public:
                                                   const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
                                                   const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
     virtual sal_Int32 SAL_CALL AppMaximize( const OUString& WindowName, const css::uno::Any& State ) override;
+    virtual sal_Int32 SAL_CALL DocMaximize( const css::uno::Any& State ) override;
 };
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
@@ -646,6 +647,15 @@ sal_Int32 SAL_CALL
 SwWordBasic::AppMaximize( const OUString& WindowName, const css::uno::Any& State )
 {
     SAL_INFO("sw.vba", "WordBasic.AppMaximize( WindowName:=" << WindowName << ", State:=" << State);
+
+    // FIXME: Implement if necessary
+    return 0;
+}
+
+sal_Int32 SAL_CALL
+SwWordBasic::DocMaximize( const css::uno::Any& State )
+{
+    SAL_INFO("sw.vba", "WordBasic.DocMaximize(State:=" << State << ")");
 
     // FIXME: Implement if necessary
     return 0;
