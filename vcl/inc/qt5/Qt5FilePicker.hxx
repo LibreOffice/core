@@ -152,6 +152,8 @@ protected:
     static css::uno::Any handleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction);
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
                                    const css::uno::Any& rValue);
+    void addCustomControl(sal_Int16 controlId);
+    void setCustomControlWidgetLayout(QGridLayout* pLayout) { m_pLayout = pLayout; }
 
 private Q_SLOTS:
     // XExecutableDialog functions
@@ -271,8 +273,6 @@ Q_SIGNALS:
 private:
     Qt5FilePicker(const Qt5FilePicker&) = delete;
     Qt5FilePicker& operator=(const Qt5FilePicker&) = delete;
-
-    void addCustomControl(sal_Int16 controlId);
 
     static QString getResString(const char* pRedId);
 
