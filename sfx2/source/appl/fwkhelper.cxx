@@ -32,21 +32,21 @@
 void RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & xFrame )
 {
     SolarMutexGuard aGuard;
-    if ( xFrame.is() )
-    {
-        SfxFrame* pFrame=nullptr;
-        for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
-        {
-            if ( pFrame->GetFrameInterface() == xFrame )
-                break;
-        }
+    if ( !xFrame.is() )
+        return;
 
-        if ( pFrame )
-        {
-            SfxWorkWindow* pWrkWin = pFrame->GetWorkWindow_Impl();
-            if ( pWrkWin )
-                pWrkWin->UpdateObjectBars_Impl();
-        }
+    SfxFrame* pFrame=nullptr;
+    for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+    {
+        if ( pFrame->GetFrameInterface() == xFrame )
+            break;
+    }
+
+    if ( pFrame )
+    {
+        SfxWorkWindow* pWrkWin = pFrame->GetWorkWindow_Impl();
+        if ( pWrkWin )
+            pWrkWin->UpdateObjectBars_Impl();
     }
 }
 

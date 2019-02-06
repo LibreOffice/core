@@ -196,36 +196,36 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< css::beans::PropertyValue >& )
 {
     bool bBack = aURL.Complete == ".uno:Backward";
-    if ( bBack || aURL.Complete == ".uno:Forward" )
+    if ( !bBack && aURL.Complete != ".uno:Forward" )
+        return;
+
+    if ( !m_pHistory )
+        return;
+
+    if(m_pHistory->size() > m_nCurPos)
     {
-        if ( m_pHistory )
+        Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
+        Reference<XController> xController;
+        if(xFrame.is())
+            xController = xFrame->getController();
+        if(xController.is())
         {
-            if(m_pHistory->size() > m_nCurPos)
-            {
-                Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
-                Reference<XController> xController;
-                if(xFrame.is())
-                    xController = xFrame->getController();
-                if(xController.is())
-                {
-                    m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
-                }
-            }
-
-            sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
-                                                    : ( !bBack && m_nCurPos < m_pHistory->size() - 1 )
-                                                    ? ++m_nCurPos
-                                                    : ULONG_MAX;
-
-            if ( nPos < ULONG_MAX )
-            {
-                HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos ).get();
-                m_pWindow->loadHelpContent(pEntry->aURL, false); // false => don't add item to history again!
-            }
-
-            m_pWindow->UpdateToolbox();
+            m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
         }
     }
+
+    sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+                                            : ( !bBack && m_nCurPos < m_pHistory->size() - 1 )
+                                            ? ++m_nCurPos
+                                            : ULONG_MAX;
+
+    if ( nPos < ULONG_MAX )
+    {
+        HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos ).get();
+        m_pWindow->loadHelpContent(pEntry->aURL, false); // false => don't add item to history again!
+    }
+
+    m_pWindow->UpdateToolbox();
 }
 
 

@@ -86,19 +86,21 @@ ImeStatusWindow::ImeStatusWindow(
 
 void ImeStatusWindow::init()
 {
-    if (Application::CanToggleImeStatusWindow())
-        try
-        {
-            bool bShow;
-            if (getConfig()->getPropertyValue("ShowStatusWindow") >>= bShow)
-                Application::ShowImeStatusWindow(bShow);
-        }
-        catch (css::uno::Exception &)
-        {
-            OSL_FAIL("com.sun.star.uno.Exception");
-            // Degrade gracefully and use the VCL-supplied default if no
-            // configuration is available.
-        }
+    if (!Application::CanToggleImeStatusWindow())
+        return;
+
+    try
+    {
+        bool bShow;
+        if (getConfig()->getPropertyValue("ShowStatusWindow") >>= bShow)
+            Application::ShowImeStatusWindow(bShow);
+    }
+    catch (css::uno::Exception &)
+    {
+        OSL_FAIL("com.sun.star.uno.Exception");
+        // Degrade gracefully and use the VCL-supplied default if no
+        // configuration is available.
+    }
 }
 
 bool ImeStatusWindow::isShowing()

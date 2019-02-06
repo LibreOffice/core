@@ -832,37 +832,37 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
 void SfxDocumentPage::ImplUpdateSignatures()
 {
     SfxObjectShell* pDoc = SfxObjectShell::Current();
-    if ( pDoc )
-    {
-        SfxMedium* pMedium = pDoc->GetMedium();
-        if ( pMedium && !pMedium->GetName().isEmpty() && pMedium->GetStorage().is() )
-        {
-            Reference< security::XDocumentDigitalSignatures > xD;
-            try
-            {
-                xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
-            }
-            catch ( const css::uno::DeploymentException& )
-            {
-            }
-            OUString s;
-            Sequence< security::DocumentSignatureInformation > aInfos;
+    if ( !pDoc )
+        return;
 
-            if ( xD.is() )
-                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
-                                                              uno::Reference< io::XInputStream >() );
-            if ( aInfos.getLength() > 1 )
-                s = m_aMultiSignedStr;
-            else if ( aInfos.getLength() == 1 )
-            {
-                const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-                s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-                s += ", ";
-                s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
-            }
-            m_pSignedValFt->SetText( s );
-        }
+    SfxMedium* pMedium = pDoc->GetMedium();
+    if ( !pMedium || pMedium->GetName().isEmpty() || !pMedium->GetStorage().is() )
+        return;
+
+    Reference< security::XDocumentDigitalSignatures > xD;
+    try
+    {
+        xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
     }
+    catch ( const css::uno::DeploymentException& )
+    {
+    }
+    OUString s;
+    Sequence< security::DocumentSignatureInformation > aInfos;
+
+    if ( xD.is() )
+        aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
+                                                      uno::Reference< io::XInputStream >() );
+    if ( aInfos.getLength() > 1 )
+        s = m_aMultiSignedStr;
+    else if ( aInfos.getLength() == 1 )
+    {
+        const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
+        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
+        s += ", ";
+        s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
+    }
+    m_pSignedValFt->SetText( s );
 }
 
 void SfxDocumentPage::ImplCheckPasswordState()

@@ -306,78 +306,77 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
 
-    if ( xProps.is() )
+    if ( !xProps.is() )
+        return;
+
+    SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
+
+    SvGlobalName aName;
+    OUString aFullTypeName, aShortTypeName, aAppName;
+    FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+
+    if ( nClipFormat == SotClipboardFormatId::NONE )
+        return;
+
+    // basic doesn't have a ClipFormat
+    // without MediaType the storage is not really usable, but currently the BasicIDE still
+    // is an SfxObjectShell and so we can't take this as an error
+    datatransfer::DataFlavor aDataFlavor;
+    SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
+    if ( aDataFlavor.MimeType.isEmpty() )
+        return;
+
+    try
     {
-        SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
+        xProps->setPropertyValue("MediaType", uno::makeAny( aDataFlavor.MimeType ) );
+    }
+    catch( uno::Exception& )
+    {
+        const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
+    }
 
-        SvGlobalName aName;
-        OUString aFullTypeName, aShortTypeName, aAppName;
-        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+    SvtSaveOptions::ODFDefaultVersion nDefVersion = SvtSaveOptions::ODFVER_012;
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        SvtSaveOptions aSaveOpt;
+        nDefVersion = aSaveOpt.GetODFDefaultVersion();
+    }
 
-        if ( nClipFormat != SotClipboardFormatId::NONE )
+    // the default values, that should be used for ODF1.1 and older formats
+    uno::Sequence< beans::NamedValue > aEncryptionAlgs
+    {
+        { "StartKeyGenerationAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1) },
+        { "EncryptionAlgorithm", css::uno::makeAny(xml::crypto::CipherID::BLOWFISH_CFB_8) },
+        { "ChecksumAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1_1K) }
+    };
+
+    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+    {
+        try
         {
-            // basic doesn't have a ClipFormat
-            // without MediaType the storage is not really usable, but currently the BasicIDE still
-            // is an SfxObjectShell and so we can't take this as an error
-            datatransfer::DataFlavor aDataFlavor;
-            SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
-            if ( !aDataFlavor.MimeType.isEmpty() )
-            {
-                try
-                {
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aDataFlavor.MimeType ) );
-                }
-                catch( uno::Exception& )
-                {
-                    const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
-                }
-
-                SvtSaveOptions::ODFDefaultVersion nDefVersion = SvtSaveOptions::ODFVER_012;
-                if (!utl::ConfigManager::IsFuzzing())
-                {
-                    SvtSaveOptions aSaveOpt;
-                    nDefVersion = aSaveOpt.GetODFDefaultVersion();
-                }
-
-                // the default values, that should be used for ODF1.1 and older formats
-                uno::Sequence< beans::NamedValue > aEncryptionAlgs
-                {
-                    { "StartKeyGenerationAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1) },
-                    { "EncryptionAlgorithm", css::uno::makeAny(xml::crypto::CipherID::BLOWFISH_CFB_8) },
-                    { "ChecksumAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1_1K) }
-                };
-
-                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
-                {
-                    try
-                    {
-                        // older versions can not have this property set, it exists only starting from ODF1.2
-                        xProps->setPropertyValue("Version", uno::makeAny<OUString>( ODFVER_012_TEXT ) );
-                    }
-                    catch( uno::Exception& )
-                    {
-                    }
-
-                    aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
-                    aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
-                    aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
-                }
-
-                try
-                {
-                    // set the encryption algorithms accordingly;
-                    // the setting does not trigger encryption,
-                    // it just provides the format for the case that contents should be encrypted
-                    uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
-                    xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
-                }
-                catch( uno::Exception& )
-                {
-                    const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
-                }
-
-            }
+            // older versions can not have this property set, it exists only starting from ODF1.2
+            xProps->setPropertyValue("Version", uno::makeAny<OUString>( ODFVER_012_TEXT ) );
         }
+        catch( uno::Exception& )
+        {
+        }
+
+        aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+        aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+    }
+
+    try
+    {
+        // set the encryption algorithms accordingly;
+        // the setting does not trigger encryption,
+        // it just provides the format for the case that contents should be encrypted
+        uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
+        xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
+    }
+    catch( uno::Exception& )
+    {
+        const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
     }
 }
 

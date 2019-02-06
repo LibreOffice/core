@@ -144,46 +144,46 @@ LayoutManagerListener::~LayoutManagerListener()
 void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     SolarMutexGuard aGuard;
-    if ( m_pWrkWin && !m_bHasFrame )
+    if ( !m_pWrkWin || m_bHasFrame )
+        return;
+
+    m_xFrame    = xFrame;
+    m_bHasFrame = true;
+
+    if ( !xFrame.is() )
+        return;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+    css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+    if ( !xPropSet.is() )
+        return;
+
+    try
     {
-        m_xFrame    = xFrame;
-        m_bHasFrame = true;
+        Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
+        aValue >>= xLayoutManager;
 
-        if ( xFrame.is() )
+        if ( xLayoutManager.is() )
+            xLayoutManager->addLayoutManagerEventListener(
+                css::uno::Reference< css::frame::XLayoutManagerListener >(
+                    static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+
+        xPropSet.set( xLayoutManager, UNO_QUERY );
+        if ( xPropSet.is() )
         {
-            css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-            css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
-            if ( xPropSet.is() )
-            {
-                try
-                {
-                    Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
-                    aValue >>= xLayoutManager;
-
-                    if ( xLayoutManager.is() )
-                        xLayoutManager->addLayoutManagerEventListener(
-                            css::uno::Reference< css::frame::XLayoutManagerListener >(
-                                static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
-
-                    xPropSet.set( xLayoutManager, UNO_QUERY );
-                    if ( xPropSet.is() )
-                    {
-                        aValue = xPropSet->getPropertyValue( "LockCount" );
-                        aValue >>= m_pWrkWin->m_nLock;
-                    }
-                }
-                catch ( css::lang::DisposedException& )
-                {
-                }
-                catch ( const css::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( css::uno::Exception& )
-                {
-                }
-            }
+            aValue = xPropSet->getPropertyValue( "LockCount" );
+            aValue >>= m_pWrkWin->m_nLock;
         }
+    }
+    catch ( css::lang::DisposedException& )
+    {
+    }
+    catch ( const css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( css::uno::Exception& )
+    {
     }
 }
 
@@ -210,37 +210,37 @@ void SAL_CALL LayoutManagerListener::dispose()
     m_pWrkWin = nullptr;
 
     css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), css::uno::UNO_QUERY );
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    m_xFrame.clear();
+    m_bHasFrame = false;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+    if ( !xPropSet.is() )
+        return;
+
+    try
     {
-        m_xFrame.clear();
-        m_bHasFrame = false;
+        css::uno::Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
+        aValue >>= xLayoutManager;
 
-        css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
-        css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
-        if ( xPropSet.is() )
-        {
-            try
-            {
-                css::uno::Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
-                aValue >>= xLayoutManager;
-
-                // remove as listener from layout manager
-                if ( xLayoutManager.is() )
-                    xLayoutManager->removeLayoutManagerEventListener(
-                        css::uno::Reference< css::frame::XLayoutManagerListener >(
-                            static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
-            }
-            catch ( css::lang::DisposedException& )
-            {
-            }
-            catch ( const css::uno::RuntimeException& )
-            {
-                throw;
-            }
-            catch ( css::uno::Exception& )
-            {
-            }
-        }
+        // remove as listener from layout manager
+        if ( xLayoutManager.is() )
+            xLayoutManager->removeLayoutManagerEventListener(
+                css::uno::Reference< css::frame::XLayoutManagerListener >(
+                    static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+    }
+    catch ( css::lang::DisposedException& )
+    {
+    }
+    catch ( const css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( css::uno::Exception& )
+    {
     }
 }
 
@@ -265,28 +265,28 @@ void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::uno::Any&                        )
 {
     SolarMutexGuard aGuard;
-    if ( m_pWrkWin )
+    if ( !m_pWrkWin )
+        return;
+
+    if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )
     {
-        if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )
-        {
-            m_pWrkWin->MakeVisible_Impl( true );
-            m_pWrkWin->ShowChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl();
-        }
-        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
-        {
-            m_pWrkWin->MakeVisible_Impl( false );
-            m_pWrkWin->HideChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl();
-        }
-        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
-        {
-            m_pWrkWin->Lock_Impl( true );
-        }
-        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::UNLOCK )
-        {
-            m_pWrkWin->Lock_Impl( false );
-        }
+        m_pWrkWin->MakeVisible_Impl( true );
+        m_pWrkWin->ShowChildren_Impl();
+        m_pWrkWin->ArrangeChildren_Impl();
+    }
+    else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
+    {
+        m_pWrkWin->MakeVisible_Impl( false );
+        m_pWrkWin->HideChildren_Impl();
+        m_pWrkWin->ArrangeChildren_Impl();
+    }
+    else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
+    {
+        m_pWrkWin->Lock_Impl( true );
+    }
+    else if ( eLayoutEvent == css::frame::LayoutManagerEvents::UNLOCK )
+    {
+        m_pWrkWin->Lock_Impl( false );
     }
 }
 
@@ -1330,64 +1330,64 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
     pCW->aInfo.bVisible = true;
 
     SfxChildWindow *pChildWin = SfxChildWindow::CreateChildWindow( pCW->nId, pWorkWin, &GetBindings(), pCW->aInfo).release();
-    if (pChildWin)
+    if (!pChildWin)
+        return;
+
+    if ( bSetFocus )
+        bSetFocus = pChildWin->WantsFocus();
+    pChildWin->SetWorkWindow_Impl( this );
+
+    // At least the extra string is changed during the evaluation,
+    // also get it anewed
+    SfxChildWinInfo aInfo = pChildWin->GetInfo();
+    pCW->aInfo.aExtraString = aInfo.aExtraString;
+    pCW->aInfo.bVisible = aInfo.bVisible;
+    pCW->aInfo.nFlags |= aInfo.nFlags;
+
+    // The creation was successful
+    GetBindings().Invalidate(pCW->nId);
+
+    sal_uInt16 nPos = pChildWin->GetPosition();
+    if (nPos != CHILDWIN_NOPOS)
     {
-        if ( bSetFocus )
-            bSetFocus = pChildWin->WantsFocus();
-        pChildWin->SetWorkWindow_Impl( this );
-
-        // At least the extra string is changed during the evaluation,
-        // also get it anewed
-        SfxChildWinInfo aInfo = pChildWin->GetInfo();
-        pCW->aInfo.aExtraString = aInfo.aExtraString;
-        pCW->aInfo.bVisible = aInfo.bVisible;
-        pCW->aInfo.nFlags |= aInfo.nFlags;
-
-        // The creation was successful
-        GetBindings().Invalidate(pCW->nId);
-
-        sal_uInt16 nPos = pChildWin->GetPosition();
-        if (nPos != CHILDWIN_NOPOS)
+        DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
+        if ( aChildren[TbxMatch(nPos)] )// &&
         {
-            DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
-            if ( aChildren[TbxMatch(nPos)] )// &&
-            {
-                // ChildWindow replaces ObjectBar
-                aChildren[TbxMatch(nPos)]->nVisible ^= SfxChildVisibility::NOT_HIDDEN;
-            }
+            // ChildWindow replaces ObjectBar
+            aChildren[TbxMatch(nPos)]->nVisible ^= SfxChildVisibility::NOT_HIDDEN;
         }
-
-        // make childwin keyboard accessible
-        pWorkWin->GetSystemWindow()->GetTaskPaneList()->AddWindow( pChildWin->GetWindow() );
-
-        pCW->pWin = pChildWin;
-
-        if ( pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT || pChildWin->GetWindow()->GetParent() == pWorkWin)
-        {
-            // The window is not docked or docked outside of one split windows
-            // and must therefore be registered explicitly as a Child
-            if (pChildWin->GetController())
-                pCW->pCli = RegisterChild_Impl(pChildWin->GetController(), pChildWin->GetAlignment());
-            else
-                pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment());
-            pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
-            if ( pChildWin->GetAlignment() != SfxChildAlignment::NOALIGNMENT && bIsFullScreen )
-                pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
-            pCW->pCli->bSetFocus = bSetFocus;
-        }
-        else
-        {
-            // A docked window which parent is not a WorkingWindow, must lie
-            // in a SplitWindow and thus not be explicitly registered.
-            // This happens already in the initialization of SfxDockingWindows!
-        }
-
-        if ( pCW->nInterfaceId != pChildWin->GetContextId() )
-            pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
-
-        // Save the information in the INI file
-        SaveStatus_Impl(pChildWin, pCW->aInfo);
     }
+
+    // make childwin keyboard accessible
+    pWorkWin->GetSystemWindow()->GetTaskPaneList()->AddWindow( pChildWin->GetWindow() );
+
+    pCW->pWin = pChildWin;
+
+    if ( pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT || pChildWin->GetWindow()->GetParent() == pWorkWin)
+    {
+        // The window is not docked or docked outside of one split windows
+        // and must therefore be registered explicitly as a Child
+        if (pChildWin->GetController())
+            pCW->pCli = RegisterChild_Impl(pChildWin->GetController(), pChildWin->GetAlignment());
+        else
+            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment());
+        pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
+        if ( pChildWin->GetAlignment() != SfxChildAlignment::NOALIGNMENT && bIsFullScreen )
+            pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
+        pCW->pCli->bSetFocus = bSetFocus;
+    }
+    else
+    {
+        // A docked window which parent is not a WorkingWindow, must lie
+        // in a SplitWindow and thus not be explicitly registered.
+        // This happens already in the initialization of SfxDockingWindows!
+    }
+
+    if ( pCW->nInterfaceId != pChildWin->GetContextId() )
+        pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
+
+    // Save the information in the INI file
+    SaveStatus_Impl(pChildWin, pCW->aInfo);
 }
 
 void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
@@ -2153,35 +2153,35 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         }
     }
 
-    if ( pMod )
+    if ( !pMod )
+        return;
+
+    SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
+    if ( !pFactories )
+        return;
+
+    SfxChildWinFactArr_Impl &rFactories = *pFactories;
+    for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
     {
-        SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
-        if ( pFactories )
+        pFact = &rFactories[nFactory];
+        if ( pFact->nId == pCW->nSaveId )
         {
-            SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-            {
-                pFact = &rFactories[nFactory];
-                if ( pFact->nId == pCW->nSaveId )
-                {
-                    pCW->aInfo   = pFact->aInfo;
-                    pCW->aInfo.aModule = sModule;
-                    SfxChildWindow::InitializeChildWinFactory_Impl(
-                                                pCW->nSaveId, pCW->aInfo);
-                    pCW->bCreate = pCW->aInfo.bVisible;
-                    SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
-                    if ( nFlags & SfxChildWindowFlags::TASK )
-                        pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
-                    if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
-                        pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
-                    if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
-                        pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
-                    if ( nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE )
-                        pCW->aInfo.nFlags |= SfxChildWindowFlags::ALWAYSAVAILABLE;
-                    pFact->aInfo = pCW->aInfo;
-                    return;
-                }
-            }
+            pCW->aInfo   = pFact->aInfo;
+            pCW->aInfo.aModule = sModule;
+            SfxChildWindow::InitializeChildWinFactory_Impl(
+                                        pCW->nSaveId, pCW->aInfo);
+            pCW->bCreate = pCW->aInfo.bVisible;
+            SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
+            if ( nFlags & SfxChildWindowFlags::TASK )
+                pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
+            if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
+                pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
+            if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
+                pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
+            if ( nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE )
+                pCW->aInfo.nFlags |= SfxChildWindowFlags::ALWAYSAVAILABLE;
+            pFact->aInfo = pCW->aInfo;
+            return;
         }
     }
 }

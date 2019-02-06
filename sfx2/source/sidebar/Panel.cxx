@@ -117,18 +117,18 @@ void Panel::SetExpanded (const bool bIsExpanded)
 {
     SidebarController* pSidebarController = SidebarController::GetSidebarControllerForFrame(mxFrame);
 
-    if (mbIsExpanded != bIsExpanded)
-    {
-        mbIsExpanded = bIsExpanded;
-        maDeckLayoutTrigger();
+    if (mbIsExpanded == bIsExpanded)
+        return;
 
-        if (maContextAccess && pSidebarController)
-        {
-            pSidebarController->GetResourceManager()->StorePanelExpansionState(
-                msPanelId,
-                bIsExpanded,
-                maContextAccess());
-        }
+    mbIsExpanded = bIsExpanded;
+    maDeckLayoutTrigger();
+
+    if (maContextAccess && pSidebarController)
+    {
+        pSidebarController->GetResourceManager()->StorePanelExpansionState(
+            msPanelId,
+            bIsExpanded,
+            maContextAccess());
     }
 }
 

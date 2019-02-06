@@ -66,18 +66,18 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
     // @see basic::BasicManagerRepository::getDocumentBasicManager
     mpBasicManager = _pBasicManager;
 
-    if ( mpBasicManager )
+    if ( !mpBasicManager )
+        return;
+
+    StartListening(*mpBasicManager);
+    try
     {
-        StartListening(*mpBasicManager);
-        try
-        {
-            mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer(), UNO_QUERY_THROW );
-            mxDialogContainer.set( mpBasicManager->GetDialogLibraryContainer(), UNO_QUERY_THROW  );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("sfx.appl");
-        }
+        mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer(), UNO_QUERY_THROW );
+        mxDialogContainer.set( mpBasicManager->GetDialogLibraryContainer(), UNO_QUERY_THROW  );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("sfx.appl");
     }
 #endif
 }

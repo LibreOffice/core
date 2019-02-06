@@ -83,20 +83,20 @@ void ContextList::ToggleVisibilityForContext( const Context &rContext, const boo
 {
     ContextList::Entry *pEntry = GetMatch( rContext );
 
-    if ( pEntry )
-    {
-        const sal_Int32 nMatch( rContext.EvaluateMatch( pEntry->maContext ) );
+    if ( !pEntry )
+        return;
 
-        if ( nMatch & Context::ApplicationWildcardMatch )
-        {
-            // Create a separate context list entry for this app if 'any'
-            // is the only context that matches. Toggling the visibility
-            // for 'any' would change it for all apps, not just this one
-            AddContextDescription( rContext, bVisible, OUString() );
-        }
-        else if ( nMatch == Context::OptimalMatch || nMatch == Context::ContextWildcardMatch )
-            pEntry->mbIsInitiallyVisible = bVisible;
+    const sal_Int32 nMatch( rContext.EvaluateMatch( pEntry->maContext ) );
+
+    if ( nMatch & Context::ApplicationWildcardMatch )
+    {
+        // Create a separate context list entry for this app if 'any'
+        // is the only context that matches. Toggling the visibility
+        // for 'any' would change it for all apps, not just this one
+        AddContextDescription( rContext, bVisible, OUString() );
     }
+    else if ( nMatch == Context::OptimalMatch || nMatch == Context::ContextWildcardMatch )
+        pEntry->mbIsInitiallyVisible = bVisible;
 }
 
 } } // end of namespace sfx2::sidebar

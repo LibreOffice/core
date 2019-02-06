@@ -405,24 +405,24 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     }
 
     // Set a minimum size for Start Center
-    if( pParent && pBack )
-    {
-        long nMenuHeight = 0;
-        vcl::Window* pMenu = pParent->GetWindow(GetWindowType::Next);
-        if( pMenu )
-            nMenuHeight = pMenu->GetSizePixel().Height();
+    if( !pParent || !pBack )
+        return;
 
-        m_aInitialWindowMinSize = pParent->GetMinOutputSizePixel();
-        if (!m_aInitialWindowMinSize.Width())
-            m_aInitialWindowMinSize.AdjustWidth(1);
-        if (!m_aInitialWindowMinSize.Height())
-            m_aInitialWindowMinSize.AdjustHeight(1);
+    long nMenuHeight = 0;
+    vcl::Window* pMenu = pParent->GetWindow(GetWindowType::Next);
+    if( pMenu )
+        nMenuHeight = pMenu->GetSizePixel().Height();
 
-        pParent->SetMinOutputSizePixel(
-            Size(
-                pBack->get_width_request(),
-                pBack->get_height_request() + nMenuHeight));
-    }
+    m_aInitialWindowMinSize = pParent->GetMinOutputSizePixel();
+    if (!m_aInitialWindowMinSize.Width())
+        m_aInitialWindowMinSize.AdjustWidth(1);
+    if (!m_aInitialWindowMinSize.Height())
+        m_aInitialWindowMinSize.AdjustHeight(1);
+
+    pParent->SetMinOutputSizePixel(
+        Size(
+            pBack->get_width_request(),
+            pBack->get_height_request() + nMenuHeight));
 
     /* } SAFE */
 }
@@ -729,24 +729,24 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Bac
 void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
 {
     // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
-    if ( aURL.Path == "ClearRecentFileList" )
-    {
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(m_xWindow);
-        BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow.get());
-        if( pBack )
-        {
-            pBack->clearRecentFileList();
+    if ( aURL.Path != "ClearRecentFileList" )
+        return;
 
-            // Recalculate minimum width
-            css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
-            VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
-            if( pParent )
-            {
-                pParent->SetMinOutputSizePixel( Size(
-                        pBack->get_width_request(),
-                        pParent->GetMinOutputSizePixel().Height()) );
-            }
-        }
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+    BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow.get());
+    if( !pBack )
+        return;
+
+    pBack->clearRecentFileList();
+
+    // Recalculate minimum width
+    css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
+    VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
+    if( pParent )
+    {
+        pParent->SetMinOutputSizePixel( Size(
+                pBack->get_width_request(),
+                pParent->GetMinOutputSizePixel().Height()) );
     }
 }
 

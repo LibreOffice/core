@@ -925,48 +925,48 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl, Button*, void)
 
     pDataObject->pTabPage->Reset( m_pSet.get() );
     // Also reset relevant items of ExampleSet and OutSet to initial state
-    if (pDataObject->fnGetRanges)
+    if (!pDataObject->fnGetRanges)
+        return;
+
+    if (!m_pExampleSet)
+        m_pExampleSet = new SfxItemSet(*m_pSet);
+
+    const SfxItemPool* pPool = m_pSet->GetPool();
+    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+
+    while (*pTmpRanges)
     {
-        if (!m_pExampleSet)
-            m_pExampleSet = new SfxItemSet(*m_pSet);
+        const sal_uInt16* pU = pTmpRanges + 1;
 
-        const SfxItemPool* pPool = m_pSet->GetPool();
-        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+        // Correct Range with multiple values
+        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
 
-        while (*pTmpRanges)
+        if (nTmp > nTmpEnd)
         {
-            const sal_uInt16* pU = pTmpRanges + 1;
-
-            // Correct Range with multiple values
-            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
-            DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
-
-            if (nTmp > nTmpEnd)
-            {
-                // If really sorted wrongly, then set new
-                std::swap(nTmp, nTmpEnd);
-            }
-
-            while (nTmp && nTmp <= nTmpEnd)
-            {
-                // Iterate over the Range and set the Items
-                sal_uInt16 nWh = pPool->GetWhich(nTmp);
-                const SfxPoolItem* pItem;
-                if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
-                {
-                    m_pExampleSet->Put(*pItem);
-                    m_pOutSet->Put(*pItem);
-                }
-                else
-                {
-                    m_pExampleSet->ClearItem(nWh);
-                    m_pOutSet->ClearItem(nWh);
-                }
-                nTmp++;
-            }
-            // Go to the next pair
-            pTmpRanges += 2;
+            // If really sorted wrongly, then set new
+            std::swap(nTmp, nTmpEnd);
         }
+
+        while (nTmp && nTmp <= nTmpEnd)
+        {
+            // Iterate over the Range and set the Items
+            sal_uInt16 nWh = pPool->GetWhich(nTmp);
+            const SfxPoolItem* pItem;
+            if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
+            {
+                m_pExampleSet->Put(*pItem);
+                m_pOutSet->Put(*pItem);
+            }
+            else
+            {
+                m_pExampleSet->ClearItem(nWh);
+                m_pOutSet->ClearItem(nWh);
+            }
+            nTmp++;
+        }
+        // Go to the next pair
+        pTmpRanges += 2;
     }
 }
 
@@ -987,48 +987,48 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl, Button*, void)
     Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
-    if ( pDataObject->fnGetRanges )
+    if ( !pDataObject->fnGetRanges )
+        return;
+
+    if ( !m_pExampleSet )
+        m_pExampleSet = new SfxItemSet( *m_pSet );
+
+    const SfxItemPool* pPool = m_pSet->GetPool();
+    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+    SfxItemSet aTmpSet( *m_pExampleSet );
+
+    while ( *pTmpRanges )
     {
-        if ( !m_pExampleSet )
-            m_pExampleSet = new SfxItemSet( *m_pSet );
+        const sal_uInt16* pU = pTmpRanges + 1;
 
-        const SfxItemPool* pPool = m_pSet->GetPool();
-        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
-        SfxItemSet aTmpSet( *m_pExampleSet );
+        // Correct Range with multiple values
+        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
 
-        while ( *pTmpRanges )
+        if ( nTmp > nTmpEnd )
         {
-            const sal_uInt16* pU = pTmpRanges + 1;
-
-            // Correct Range with multiple values
-            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
-            DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
-
-            if ( nTmp > nTmpEnd )
-            {
-                // If really sorted wrongly, then set new
-                std::swap(nTmp, nTmpEnd);
-            }
-
-            while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
-            {
-                // Iterate over the Range and set the Items
-                sal_uInt16 nWh = pPool->GetWhich( nTmp );
-                m_pExampleSet->ClearItem( nWh );
-                aTmpSet.ClearItem( nWh );
-                // At the Outset of InvalidateItem,
-                // so that the change takes effect
-                m_pOutSet->InvalidateItem( nWh );
-                nTmp++;
-            }
-            // Go to the next pair
-            pTmpRanges += 2;
+            // If really sorted wrongly, then set new
+            std::swap(nTmp, nTmpEnd);
         }
-        // Set all Items as new  -> the call the current Page Reset()
-        DBG_ASSERT( pDataObject->pTabPage, "the Page is gone" );
-        pDataObject->pTabPage->Reset( &aTmpSet );
-        pDataObject->pTabPage->pImpl->mbStandard = true;
+
+        while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
+        {
+            // Iterate over the Range and set the Items
+            sal_uInt16 nWh = pPool->GetWhich( nTmp );
+            m_pExampleSet->ClearItem( nWh );
+            aTmpSet.ClearItem( nWh );
+            // At the Outset of InvalidateItem,
+            // so that the change takes effect
+            m_pOutSet->InvalidateItem( nWh );
+            nTmp++;
+        }
+        // Go to the next pair
+        pTmpRanges += 2;
     }
+    // Set all Items as new  -> the call the current Page Reset()
+    DBG_ASSERT( pDataObject->pTabPage, "the Page is gone" );
+    pDataObject->pTabPage->Reset( &aTmpSet );
+    pDataObject->pTabPage->pImpl->mbStandard = true;
 }
 
 
@@ -1464,48 +1464,48 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
 
     pDataObject->pTabPage->Reset(m_pSet.get());
     // Also reset relevant items of ExampleSet and OutSet to initial state
-    if (pDataObject->fnGetRanges)
+    if (!pDataObject->fnGetRanges)
+        return;
+
+    if (!m_xExampleSet)
+        m_xExampleSet.reset(new SfxItemSet(*m_pSet));
+
+    const SfxItemPool* pPool = m_pSet->GetPool();
+    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+
+    while (*pTmpRanges)
     {
-        if (!m_xExampleSet)
-            m_xExampleSet.reset(new SfxItemSet(*m_pSet));
+        const sal_uInt16* pU = pTmpRanges + 1;
 
-        const SfxItemPool* pPool = m_pSet->GetPool();
-        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+        // Correct Range with multiple values
+        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
 
-        while (*pTmpRanges)
+        if (nTmp > nTmpEnd)
         {
-            const sal_uInt16* pU = pTmpRanges + 1;
-
-            // Correct Range with multiple values
-            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
-            DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
-
-            if (nTmp > nTmpEnd)
-            {
-                // If really sorted wrongly, then set new
-                std::swap(nTmp, nTmpEnd);
-            }
-
-            while (nTmp && nTmp <= nTmpEnd)
-            {
-                // Iterate over the Range and set the Items
-                sal_uInt16 nWh = pPool->GetWhich(nTmp);
-                const SfxPoolItem* pItem;
-                if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
-                {
-                    m_xExampleSet->Put(*pItem);
-                    m_pOutSet->Put(*pItem);
-                }
-                else
-                {
-                    m_xExampleSet->ClearItem(nWh);
-                    m_pOutSet->ClearItem(nWh);
-                }
-                nTmp++;
-            }
-            // Go to the next pair
-            pTmpRanges += 2;
+            // If really sorted wrongly, then set new
+            std::swap(nTmp, nTmpEnd);
         }
+
+        while (nTmp && nTmp <= nTmpEnd)
+        {
+            // Iterate over the Range and set the Items
+            sal_uInt16 nWh = pPool->GetWhich(nTmp);
+            const SfxPoolItem* pItem;
+            if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
+            {
+                m_xExampleSet->Put(*pItem);
+                m_pOutSet->Put(*pItem);
+            }
+            else
+            {
+                m_xExampleSet->ClearItem(nWh);
+                m_pOutSet->ClearItem(nWh);
+            }
+            nTmp++;
+        }
+        // Go to the next pair
+        pTmpRanges += 2;
     }
 }
 
@@ -1522,48 +1522,48 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
     Data_Impl* pDataObject = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
     assert(pDataObject && "Id not known");
 
-    if (pDataObject->fnGetRanges)
+    if (!pDataObject->fnGetRanges)
+        return;
+
+    if (!m_xExampleSet)
+        m_xExampleSet.reset(new SfxItemSet(*m_pSet));
+
+    const SfxItemPool* pPool = m_pSet->GetPool();
+    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+    SfxItemSet aTmpSet(*m_xExampleSet);
+
+    while (*pTmpRanges)
     {
-        if (!m_xExampleSet)
-            m_xExampleSet.reset(new SfxItemSet(*m_pSet));
+        const sal_uInt16* pU = pTmpRanges + 1;
 
-        const SfxItemPool* pPool = m_pSet->GetPool();
-        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
-        SfxItemSet aTmpSet(*m_xExampleSet);
+        // Correct Range with multiple values
+        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
 
-        while (*pTmpRanges)
+        if ( nTmp > nTmpEnd )
         {
-            const sal_uInt16* pU = pTmpRanges + 1;
-
-            // Correct Range with multiple values
-            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
-            DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
-
-            if ( nTmp > nTmpEnd )
-            {
-                // If really sorted wrongly, then set new
-                std::swap(nTmp, nTmpEnd);
-            }
-
-            while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
-            {
-                // Iterate over the Range and set the Items
-                sal_uInt16 nWh = pPool->GetWhich(nTmp);
-                m_xExampleSet->ClearItem(nWh);
-                aTmpSet.ClearItem(nWh);
-                // At the Outset of InvalidateItem,
-                // so that the change takes effect
-                m_pOutSet->InvalidateItem(nWh);
-                nTmp++;
-            }
-            // Go to the next pair
-            pTmpRanges += 2;
+            // If really sorted wrongly, then set new
+            std::swap(nTmp, nTmpEnd);
         }
-        // Set all Items as new  -> the call the current Page Reset()
-        assert(pDataObject->pTabPage && "the Page is gone");
-        pDataObject->pTabPage->Reset( &aTmpSet );
-        pDataObject->pTabPage->pImpl->mbStandard = true;
+
+        while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
+        {
+            // Iterate over the Range and set the Items
+            sal_uInt16 nWh = pPool->GetWhich(nTmp);
+            m_xExampleSet->ClearItem(nWh);
+            aTmpSet.ClearItem(nWh);
+            // At the Outset of InvalidateItem,
+            // so that the change takes effect
+            m_pOutSet->InvalidateItem(nWh);
+            nTmp++;
+        }
+        // Go to the next pair
+        pTmpRanges += 2;
     }
+    // Set all Items as new  -> the call the current Page Reset()
+    assert(pDataObject->pTabPage && "the Page is gone");
+    pDataObject->pTabPage->Reset( &aTmpSet );
+    pDataObject->pTabPage->pImpl->mbStandard = true;
 }
 
 IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)

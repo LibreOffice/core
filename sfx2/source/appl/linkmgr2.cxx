@@ -132,22 +132,22 @@ void LinkManager::Remove( SvBaseLink const *pLink )
 
 void LinkManager::Remove( size_t nPos, size_t nCnt )
 {
-    if( nCnt && nPos < aLinkTbl.size() )
-    {
-        if (sal::static_int_cast<size_t>(nPos + nCnt) > aLinkTbl.size())
-            nCnt = aLinkTbl.size() - nPos;
+    if( !nCnt || nPos >= aLinkTbl.size() )
+        return;
 
-        for( size_t n = nPos; n < nPos + nCnt; ++n)
+    if (sal::static_int_cast<size_t>(nPos + nCnt) > aLinkTbl.size())
+        nCnt = aLinkTbl.size() - nPos;
+
+    for( size_t n = nPos; n < nPos + nCnt; ++n)
+    {
+        tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
+        if( rTmp.is() )
         {
-            tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
-            if( rTmp.is() )
-            {
-                rTmp->Disconnect();
-                rTmp->SetLinkManager( nullptr );
-            }
+            rTmp->Disconnect();
+            rTmp->SetLinkManager( nullptr );
         }
-        aLinkTbl.erase( aLinkTbl.begin() + nPos, aLinkTbl.begin() + nPos + nCnt );
     }
+    aLinkTbl.erase( aLinkTbl.begin() + nPos, aLinkTbl.begin() + nPos + nCnt );
 }
 
 bool LinkManager::Insert( SvBaseLink* pLink )

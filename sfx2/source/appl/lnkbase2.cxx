@@ -586,24 +586,24 @@ bool ImplDdeItem::Put( const DdeData*  )
 void ImplDdeItem::AdviseLoop( bool bOpen )
 {
     // Connection is closed, so also unsubscribe link
-    if( pLink->GetObj() )
+    if( !pLink->GetObj() )
+        return;
+
+    if( bOpen )
     {
-        if( bOpen )
+        // A connection is re-established
+        if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
         {
-            // A connection is re-established
-            if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
-            {
-                pLink->GetObj()->AddDataAdvise( pLink, "text/plain;charset=utf-16",  ADVISEMODE_NODATA );
-                pLink->GetObj()->AddConnectAdvise( pLink );
-            }
+            pLink->GetObj()->AddDataAdvise( pLink, "text/plain;charset=utf-16",  ADVISEMODE_NODATA );
+            pLink->GetObj()->AddConnectAdvise( pLink );
         }
-        else
-        {
-            // So that no-one gets the idea to delete the pointer
-            // when Disconnecting!
-            tools::SvRef<SvBaseLink> aRef( pLink );
-            aRef->Disconnect();
-        }
+    }
+    else
+    {
+        // So that no-one gets the idea to delete the pointer
+        // when Disconnecting!
+        tools::SvRef<SvBaseLink> aRef( pLink );
+        aRef->Disconnect();
     }
 }
 

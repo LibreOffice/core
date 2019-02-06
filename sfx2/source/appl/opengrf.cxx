@@ -199,36 +199,36 @@ void SvxOpenGraphicDialog::SetPath( const OUString& rPath, bool bLinkState )
 
 void SvxOpenGraphicDialog::EnableLink( bool state )
 {
-    if( mpImpl->xCtrlAcc.is() )
+    if( !mpImpl->xCtrlAcc.is() )
+        return;
+
+    try
     {
-        try
-        {
-            mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
-        }
-        catch(const IllegalArgumentException&)
-        {
+        mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+    }
+    catch(const IllegalArgumentException&)
+    {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot enable \"link\" checkbox" );
+        OSL_FAIL( "Cannot enable \"link\" checkbox" );
 #endif
-        }
     }
 }
 
 
 void SvxOpenGraphicDialog::AsLink(bool bState)
 {
-    if( mpImpl->xCtrlAcc.is() )
+    if( !mpImpl->xCtrlAcc.is() )
+        return;
+
+    try
     {
-        try
-        {
-            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(bState) );
-        }
-        catch(const IllegalArgumentException&)
-        {
+        mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(bState) );
+    }
+    catch(const IllegalArgumentException&)
+    {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot check \"link\" checkbox" );
+        OSL_FAIL( "Cannot check \"link\" checkbox" );
 #endif
-        }
     }
 }
 

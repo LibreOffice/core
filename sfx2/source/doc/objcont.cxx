@@ -443,87 +443,87 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             aTempl.GetFull( OUString(), aTemplName, aFoundName );
     }
 
-    if ( !aFoundName.isEmpty() )
+    if ( aFoundName.isEmpty() )
+        return;
+
+    // check existence of template storage
+    aTemplURL = aFoundName;
+
+    // should the document checked against changes in the template ?
+    if ( !IsQueryLoadTemplate() )
+        return;
+
+    bool bLoad = false;
+
+    // load document properties of template
+    bool bOK = false;
+    util::DateTime aTemplDate;
+    try
     {
-        // check existence of template storage
-        aTemplURL = aFoundName;
+        Reference<document::XDocumentProperties> const
+            xTemplateDocProps( document::DocumentProperties::create(
+                    ::comphelper::getProcessComponentContext()));
+        xTemplateDocProps->loadFromMedium(aTemplURL,
+                Sequence<beans::PropertyValue>());
+        aTemplDate = xTemplateDocProps->getModificationDate();
+        bOK = true;
+    }
+    catch (const Exception& e)
+    {
+        SAL_INFO("sfx.doc", e);
+    }
 
-        // should the document checked against changes in the template ?
-        if ( IsQueryLoadTemplate() )
+    // if modify date was read successfully
+    if ( bOK )
+    {
+        // compare modify data of template with the last check date of the document
+        const util::DateTime aInfoDate( xDocProps->getTemplateDate() );
+        if ( aTemplDate > aInfoDate )
         {
-            bool bLoad = false;
-
-            // load document properties of template
-            bool bOK = false;
-            util::DateTime aTemplDate;
-            try
+            // ask user
+            if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
+            || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
+                bLoad = true;
+            else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
             {
-                Reference<document::XDocumentProperties> const
-                    xTemplateDocProps( document::DocumentProperties::create(
-                            ::comphelper::getProcessComponentContext()));
-                xTemplateDocProps->loadFromMedium(aTemplURL,
-                        Sequence<beans::PropertyValue>());
-                aTemplDate = xTemplateDocProps->getModificationDate();
-                bOK = true;
-            }
-            catch (const Exception& e)
-            {
-                SAL_INFO("sfx.doc", e);
+                const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).replaceAll( "$(ARG1)", aTemplName ) );
+                vcl::Window *pWin = GetDialogParent();
+                QueryTemplateBox aBox(pWin ? pWin->GetFrameWeld() : nullptr, sMessage);
+                if (RET_YES == aBox.run())
+                    bLoad = true;
             }
 
-            // if modify date was read successfully
-            if ( bOK )
+            if( !bLoad )
             {
-                // compare modify data of template with the last check date of the document
-                const util::DateTime aInfoDate( xDocProps->getTemplateDate() );
-                if ( aTemplDate > aInfoDate )
-                {
-                    // ask user
-                    if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
-                    || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
-                        bLoad = true;
-                    else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
-                    {
-                        const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).replaceAll( "$(ARG1)", aTemplName ) );
-                        vcl::Window *pWin = GetDialogParent();
-                        QueryTemplateBox aBox(pWin ? pWin->GetFrameWeld() : nullptr, sMessage);
-                        if (RET_YES == aBox.run())
-                            bLoad = true;
-                    }
-
-                    if( !bLoad )
-                    {
-                        // user refuses, so don't ask again for this document
-                        SetQueryLoadTemplate(false);
-                        SetModified();
-                    }
-                }
-            }
-
-            if ( bLoad )
-            {
-                // styles should be updated, create document in organizer mode to read in the styles
-                //TODO: testen!
-                SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER );
-                xTemplDoc->DoInitNew();
-
-                // TODO/MBA: do we need a BaseURL? Then LoadFrom must be extended!
-                //xTemplDoc->SetBaseURL( aFoundName );
-
-                // TODO/LATER: make sure that we don't use binary templates!
-                SfxMedium aMedium( aFoundName, StreamMode::STD_READ );
-                if ( xTemplDoc->LoadFrom( aMedium ) )
-                {
-                    // transfer styles from xTemplDoc to this document
-                    // TODO/MBA: make sure that no BaseURL is needed in *this* document
-                    LoadStyles(*xTemplDoc);
-
-                    // remember date/time of check
-                    xDocProps->setTemplateDate(aTemplDate);
-                    // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
-                }
+                // user refuses, so don't ask again for this document
+                SetQueryLoadTemplate(false);
+                SetModified();
             }
         }
+    }
+
+    if ( !bLoad )
+        return;
+
+    // styles should be updated, create document in organizer mode to read in the styles
+    //TODO: testen!
+    SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER );
+    xTemplDoc->DoInitNew();
+
+    // TODO/MBA: do we need a BaseURL? Then LoadFrom must be extended!
+    //xTemplDoc->SetBaseURL( aFoundName );
+
+    // TODO/LATER: make sure that we don't use binary templates!
+    SfxMedium aMedium( aFoundName, StreamMode::STD_READ );
+    if ( xTemplDoc->LoadFrom( aMedium ) )
+    {
+        // transfer styles from xTemplDoc to this document
+        // TODO/MBA: make sure that no BaseURL is needed in *this* document
+        LoadStyles(*xTemplDoc);
+
+        // remember date/time of check
+        xDocProps->setTemplateDate(aTemplDate);
+        // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
     }
 }
 
@@ -536,32 +536,32 @@ bool SfxObjectShell::IsHelpDocument() const
 void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
 {
     // only care about resetting this data for LibreOffice formats otherwise
-    if ( IsOwnStorageFormat( *GetMedium())  )
+    if ( !IsOwnStorageFormat( *GetMedium())  )
+        return;
+
+    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+    xDocProps->setTemplateURL( OUString() );
+    xDocProps->setTemplateName( OUString() );
+    xDocProps->setTemplateDate( util::DateTime() );
+    xDocProps->resetUserData( OUString() );
+
+    // TODO/REFACTOR:
+    // Title?
+
+    if( !comphelper::isFileUrl( rFileName ) )
+        return;
+
+    OUString aFoundName;
+    if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
     {
-        uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-        xDocProps->setTemplateURL( OUString() );
-        xDocProps->setTemplateName( OUString() );
-        xDocProps->setTemplateDate( util::DateTime() );
-        xDocProps->resetUserData( OUString() );
+        INetURLObject aObj( rFileName );
+        xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
+        xDocProps->setTemplateName( rTemplateName );
 
-        // TODO/REFACTOR:
-        // Title?
+        ::DateTime now( ::DateTime::SYSTEM );
+        xDocProps->setTemplateDate( now.GetUNODateTime() );
 
-        if( comphelper::isFileUrl( rFileName ) )
-        {
-            OUString aFoundName;
-            if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
-            {
-                INetURLObject aObj( rFileName );
-                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
-                xDocProps->setTemplateName( rTemplateName );
-
-                ::DateTime now( ::DateTime::SYSTEM );
-                xDocProps->setTemplateDate( now.GetUNODateTime() );
-
-                SetQueryLoadTemplate( true );
-            }
-        }
+        SetQueryLoadTemplate( true );
     }
 }
 

@@ -367,20 +367,20 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
             pFilter = rMatcher.GetFilter4FilterName( sSelectedFilter );
     }
 
-    if ( pFilter )
-    {
-        io_rDescriptor.put( "FilterName", pFilter->GetFilterName() );
+    if ( !pFilter )
+        return;
 
-        // If detected filter indicates using of an own template format
-        // add property "AsTemplate" to descriptor. But suppress this step
-        // if such property already exists.
-        if ( pFilter->IsOwnTemplateFormat() && !io_rDescriptor.has( "AsTemplate" ) )
-            io_rDescriptor.put( "AsTemplate", true );
+    io_rDescriptor.put( "FilterName", pFilter->GetFilterName() );
 
-        // The DocumentService property will finally be used to determine the document type to create, so
-        // override it with the service name as indicated by the found filter.
-        io_rDescriptor.put( "DocumentService", pFilter->GetServiceName() );
-    }
+    // If detected filter indicates using of an own template format
+    // add property "AsTemplate" to descriptor. But suppress this step
+    // if such property already exists.
+    if ( pFilter->IsOwnTemplateFormat() && !io_rDescriptor.has( "AsTemplate" ) )
+        io_rDescriptor.put( "AsTemplate", true );
+
+    // The DocumentService property will finally be used to determine the document type to create, so
+    // override it with the service name as indicated by the found filter.
+    io_rDescriptor.put( "DocumentService", pFilter->GetServiceName() );
 }
 
 

@@ -80,24 +80,24 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
             if( xComp.is() )
                 xComp->removeEventListener( this );
 
-            if( m_pOwner && m_pData )
+            if( !m_pOwner || !m_pData )
+                return;
+
+            m_pData->xListener.clear();
+
+            if ( m_pData->pWorkWin )
             {
-                m_pData->xListener.clear();
-
-                if ( m_pData->pWorkWin )
-                {
-                    // m_pOwner and m_pData will be killed
-                    m_pData->xFrame.clear();
-                    m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
-                }
-                else
-                {
-                    delete m_pOwner;
-                }
-
-                m_pOwner = nullptr;
-                m_pData  = nullptr;
+                // m_pOwner and m_pData will be killed
+                m_pData->xFrame.clear();
+                m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
             }
+            else
+            {
+                delete m_pOwner;
+            }
+
+            m_pOwner = nullptr;
+            m_pData  = nullptr;
         }
 
     private:
@@ -392,43 +392,43 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     OUString aWinData( aTmp );
     rInfo.aWinState = OUStringToOString(xWinOpt->GetWindowState(), RTL_TEXTENCODING_UTF8);
 
-    if ( !aWinData.isEmpty() )
+    if ( aWinData.isEmpty() )
+        return;
+
+    // Search for version ID
+    if ( aWinData[0] != 0x0056 ) // 'V' = 56h
+        // A version ID, so do not use
+        return;
+
+    // Delete 'V'
+    aWinData = aWinData.copy(1);
+
+    // Read version
+    char cToken = ',';
+    sal_Int32 nPos = aWinData.indexOf( cToken );
+    sal_uInt16 nActVersion = static_cast<sal_uInt16>(aWinData.copy( 0, nPos + 1 ).toInt32());
+    if ( nActVersion != nVersion )
+        return;
+
+    aWinData = aWinData.copy(nPos+1);
+
+    // Load Visibility: is coded as a char
+    rInfo.bVisible = (aWinData[0] == 0x0056); // 'V' = 56h
+    aWinData = aWinData.copy(1);
+    nPos = aWinData.indexOf( cToken );
+    if (nPos == -1)
+        return;
+
+    sal_Int32 nNextPos = aWinData.indexOf( cToken, 2 );
+    if ( nNextPos != -1 )
     {
-        // Search for version ID
-        if ( aWinData[0] != 0x0056 ) // 'V' = 56h
-            // A version ID, so do not use
-            return;
-
-        // Delete 'V'
-        aWinData = aWinData.copy(1);
-
-        // Read version
-        char cToken = ',';
-        sal_Int32 nPos = aWinData.indexOf( cToken );
-        sal_uInt16 nActVersion = static_cast<sal_uInt16>(aWinData.copy( 0, nPos + 1 ).toInt32());
-        if ( nActVersion != nVersion )
-            return;
-
-        aWinData = aWinData.copy(nPos+1);
-
-        // Load Visibility: is coded as a char
-        rInfo.bVisible = (aWinData[0] == 0x0056); // 'V' = 56h
-        aWinData = aWinData.copy(1);
-        nPos = aWinData.indexOf( cToken );
-        if (nPos != -1)
-        {
-            sal_Int32 nNextPos = aWinData.indexOf( cToken, 2 );
-            if ( nNextPos != -1 )
-            {
-                // there is extra information
-                rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32()));
-                aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
-                rInfo.aExtraString = aWinData;
-            }
-            else
-                rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1 ).toInt32()));
-        }
+        // there is extra information
+        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32()));
+        aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
+        rInfo.aExtraString = aWinData;
     }
+    else
+        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1 ).toInt32()));
 }
 
 void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
@@ -700,24 +700,24 @@ const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame()
 void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
 {
     // Do nothing if nothing will be changed ...
-    if( pImpl->xFrame != rFrame )
-    {
-        // ... but stop listening on old frame, if connection exist!
-        if( pImpl->xFrame.is() )
-            pImpl->xFrame->removeEventListener( pImpl->xListener );
+    if( pImpl->xFrame == rFrame )
+        return;
 
-        // If new frame is not NULL -> we must guarantee valid listener for disposing events.
-        // Use already existing or create new one.
-        if( rFrame.is() )
-            if( !pImpl->xListener.is() )
-                pImpl->xListener.set( new DisposeListener( this, pImpl.get() ) );
+    // ... but stop listening on old frame, if connection exist!
+    if( pImpl->xFrame.is() )
+        pImpl->xFrame->removeEventListener( pImpl->xListener );
 
-        // Set new frame in data container
-        // and build new listener connection, if necessary.
-        pImpl->xFrame = rFrame;
-        if( pImpl->xFrame.is() )
-            pImpl->xFrame->addEventListener( pImpl->xListener );
-    }
+    // If new frame is not NULL -> we must guarantee valid listener for disposing events.
+    // Use already existing or create new one.
+    if( rFrame.is() )
+        if( !pImpl->xListener.is() )
+            pImpl->xListener.set( new DisposeListener( this, pImpl.get() ) );
+
+    // Set new frame in data container
+    // and build new listener connection, if necessary.
+    pImpl->xFrame = rFrame;
+    if( pImpl->xFrame.is() )
+        pImpl->xFrame->addEventListener( pImpl->xListener );
 }
 
 void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, std::unique_ptr<SfxChildWinContextFactory> pFact)

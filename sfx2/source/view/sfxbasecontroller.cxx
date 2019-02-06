@@ -516,22 +516,22 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
 
     m_pData->m_xFrame = xFrame;
 
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    xFrame->addFrameActionListener( m_pData->m_xListener ) ;
+    Reference < util::XCloseBroadcaster > xCloseable( xFrame, uno::UNO_QUERY );
+    if ( xCloseable.is() )
+        xCloseable->addCloseListener( m_pData->m_xCloseListener );
+
+    if ( m_pData->m_pViewShell )
     {
-        xFrame->addFrameActionListener( m_pData->m_xListener ) ;
-        Reference < util::XCloseBroadcaster > xCloseable( xFrame, uno::UNO_QUERY );
-        if ( xCloseable.is() )
-            xCloseable->addCloseListener( m_pData->m_xCloseListener );
+        ConnectSfxFrame_Impl( E_CONNECT );
+        ShowInfoBars( );
 
-        if ( m_pData->m_pViewShell )
-        {
-            ConnectSfxFrame_Impl( E_CONNECT );
-            ShowInfoBars( );
-
-            // attaching the frame to the controller is the last step in the creation of a new view, so notify this
-            SfxViewEventHint aHint( SfxEventHintId::ViewCreated, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
-            SfxGetpApp()->NotifyEvent( aHint );
-        }
+        // attaching the frame to the controller is the last step in the creation of a new view, so notify this
+        SfxViewEventHint aHint( SfxEventHintId::ViewCreated, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
+        SfxGetpApp()->NotifyEvent( aHint );
     }
 }
 
@@ -894,22 +894,22 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 {
        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
                         cppu::UnoType<frame::XBorderResizeListener>::get());
-    if ( pContainer )
-    {
-        frame::BorderWidths aBWidths = getBorder();
-        Reference< uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
+    if ( !pContainer )
+        return;
 
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
+    frame::BorderWidths aBWidths = getBorder();
+    Reference< uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
+
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
+    {
+        try
         {
-            try
-            {
-                static_cast<frame::XBorderResizeListener*>(pIterator.next())->borderWidthsChanged( xThis, aBWidths );
-            }
-            catch (const RuntimeException&)
-            {
-                pIterator.remove();
-            }
+            static_cast<frame::XBorderResizeListener*>(pIterator.next())->borderWidthsChanged( xThis, aBWidths );
+        }
+        catch (const RuntimeException&)
+        {
+            pIterator.remove();
         }
     }
 }
@@ -931,56 +931,56 @@ void SAL_CALL SfxBaseController::dispose()
     if ( m_pData->m_pController && m_pData->m_pController->getFrame().is() )
         m_pData->m_pController->getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
 
-    if ( m_pData->m_pViewShell )
+    if ( !m_pData->m_pViewShell )
+        return;
+
+    SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
+    if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
+        pFrame->GetFrame().SetIsClosing_Impl();
+    m_pData->m_pViewShell->DisconnectAllClients();
+
+    if ( !pFrame )
+        return;
+
+    lang::EventObject aObject;
+    aObject.Source = *this ;
+
+    SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
+    SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
+    while( pView )
     {
-        SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
-        if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
-            pFrame->GetFrame().SetIsClosing_Impl();
-        m_pData->m_pViewShell->DisconnectAllClients();
+        // if there is another ViewFrame or currently the ViewShell in my ViewFrame is switched (PagePreview)
+        if ( pView != pFrame || pView->GetViewShell() != m_pData->m_pViewShell )
+            break;
+        pView = SfxViewFrame::GetNext( *pView, pDoc );
+    }
 
-        if ( pFrame )
-        {
-            lang::EventObject aObject;
-            aObject.Source = *this ;
+    SfxGetpApp()->NotifyEvent( SfxViewEventHint(SfxEventHintId::CloseView, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEVIEW ), pDoc, Reference< frame::XController2 >( this ) ) );
+    if ( !pView )
+        SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::CloseDoc, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), pDoc) );
 
-            SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
-            SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
-            while( pView )
-            {
-                // if there is another ViewFrame or currently the ViewShell in my ViewFrame is switched (PagePreview)
-                if ( pView != pFrame || pView->GetViewShell() != m_pData->m_pViewShell )
-                    break;
-                pView = SfxViewFrame::GetNext( *pView, pDoc );
-            }
+    Reference< frame::XModel > xModel = pDoc->GetModel();
+    Reference < util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
+    if ( xModel.is() )
+    {
+        xModel->disconnectController( this );
+        if ( xCloseable.is() )
+            xCloseable->removeCloseListener( m_pData->m_xCloseListener );
+    }
 
-            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SfxEventHintId::CloseView, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEVIEW ), pDoc, Reference< frame::XController2 >( this ) ) );
-            if ( !pView )
-                SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::CloseDoc, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), pDoc) );
+    Reference < frame::XFrame > aXFrame;
+    attachFrame( aXFrame );
 
-            Reference< frame::XModel > xModel = pDoc->GetModel();
-            Reference < util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
-            if ( xModel.is() )
-            {
-                xModel->disconnectController( this );
-                if ( xCloseable.is() )
-                    xCloseable->removeCloseListener( m_pData->m_xCloseListener );
-            }
-
-            Reference < frame::XFrame > aXFrame;
-            attachFrame( aXFrame );
-
-            m_pData->m_xListener->disposing( aObject );
-            SfxViewShell *pShell = m_pData->m_pViewShell;
-            m_pData->m_pViewShell = nullptr;
-            if ( pFrame->GetViewShell() == pShell )
-            {
-                // Enter registrations only allowed if we are the owner!
-                if ( pFrame->GetFrame().OwnsBindings_Impl() )
-                    pFrame->GetBindings().ENTERREGISTRATIONS();
-                pFrame->GetFrame().SetFrameInterface_Impl(  aXFrame );
-                pFrame->GetFrame().DoClose_Impl();
-            }
-        }
+    m_pData->m_xListener->disposing( aObject );
+    SfxViewShell *pShell = m_pData->m_pViewShell;
+    m_pData->m_pViewShell = nullptr;
+    if ( pFrame->GetViewShell() == pShell )
+    {
+        // Enter registrations only allowed if we are the owner!
+        if ( pFrame->GetFrame().OwnsBindings_Impl() )
+            pFrame->GetBindings().ENTERREGISTRATIONS();
+        pFrame->GetFrame().SetFrameInterface_Impl(  aXFrame );
+        pFrame->GetFrame().DoClose_Impl();
     }
 }
 
@@ -1005,22 +1005,22 @@ void SAL_CALL SfxBaseController::removeEventListener( const Reference< lang::XEv
 void SfxBaseController::ReleaseShell_Impl()
 {
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
-    {
-        SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
-        Reference< frame::XModel > xModel = pDoc->GetModel();
-        Reference < util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            xModel->disconnectController( this );
-            if ( xCloseable.is() )
-                xCloseable->removeCloseListener( m_pData->m_xCloseListener );
-        }
-        m_pData->m_pViewShell = nullptr;
+    if ( !m_pData->m_pViewShell )
+        return;
 
-        Reference < frame::XFrame > aXFrame;
-        attachFrame( aXFrame );
+    SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
+    Reference< frame::XModel > xModel = pDoc->GetModel();
+    Reference < util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
+    if ( xModel.is() )
+    {
+        xModel->disconnectController( this );
+        if ( xCloseable.is() )
+            xCloseable->removeCloseListener( m_pData->m_xCloseListener );
     }
+    m_pData->m_pViewShell = nullptr;
+
+    Reference < frame::XFrame > aXFrame;
+    attachFrame( aXFrame );
 }
 
 SfxViewShell* SfxBaseController::GetViewShell_Impl() const
@@ -1360,49 +1360,49 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
 void SfxBaseController::ShowInfoBars( )
 {
-    if ( m_pData->m_pViewShell )
+    if ( !m_pData->m_pViewShell )
+        return;
+
+    // CMIS verifications
+    Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
+    if ( !xCmisDoc.is( ) || !xCmisDoc->canCheckOut( ) )
+        return;
+
+    uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
+
+    if ( !(xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( )) )
+        return;
+
+    // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+    // and find if it is a Google Drive file.
+    bool bIsGoogleFile = false;
+    bool bCheckedOut = false;
+    for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
     {
-        // CMIS verifications
-        Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-        if ( xCmisDoc.is( ) && xCmisDoc->canCheckOut( ) )
-        {
-            uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
-
-            if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
-            {
-                // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                // and find if it is a Google Drive file.
-                bool bIsGoogleFile = false;
-                bool bCheckedOut = false;
-                for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
-                {
-                    if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" ) {
-                        uno::Sequence< sal_Bool > bTmp;
-                        aCmisProperties[i].Value >>= bTmp;
-                        bCheckedOut = bTmp[0];
-                    }
-                    // if it is a Google Drive file, we don't need the checkout bar,
-                    // still need the checkout feature for the version dialog.
-                    if ( aCmisProperties[i].Name == "title" )
-                        bIsGoogleFile = true;
-                }
-
-                if ( !bCheckedOut && !bIsGoogleFile )
-                {
-                    // Get the Frame and show the InfoBar if not checked out
-                    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-                    auto pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), InfoBarType::Warning);
-                    if (pInfoBar)
-                    {
-                        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
-                        xBtn->SetText(SfxResId(STR_CHECKOUT));
-                        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                        xBtn->SetClickHdl(LINK(this, SfxBaseController, CheckOutHandler));
-                        pInfoBar->addButton(xBtn);
-                    }
-                }
-            }
+        if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" ) {
+            uno::Sequence< sal_Bool > bTmp;
+            aCmisProperties[i].Value >>= bTmp;
+            bCheckedOut = bTmp[0];
         }
+        // if it is a Google Drive file, we don't need the checkout bar,
+        // still need the checkout feature for the version dialog.
+        if ( aCmisProperties[i].Name == "title" )
+            bIsGoogleFile = true;
+    }
+
+    if ( !(!bCheckedOut && !bIsGoogleFile) )
+        return;
+
+    // Get the Frame and show the InfoBar if not checked out
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    auto pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), InfoBarType::Warning);
+    if (pInfoBar)
+    {
+        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
+        xBtn->SetText(SfxResId(STR_CHECKOUT));
+        xBtn->SetSizePixel(xBtn->GetOptimalSize());
+        xBtn->SetClickHdl(LINK(this, SfxBaseController, CheckOutHandler));
+        pInfoBar->addButton(xBtn);
     }
 }
 

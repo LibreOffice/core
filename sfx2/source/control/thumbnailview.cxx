@@ -1069,54 +1069,54 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         return;
 
     ThumbnailViewItem* pItem = mFilteredItemList[nItemPos];
-    if (!pItem->isSelected())
+    if (pItem->isSelected())
+        return;
+
+    pItem->setSelection(true);
+    maItemStateHdl.Call(pItem);
+
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+
+    bool bNewOut = IsReallyVisible() && IsUpdateMode();
+
+    // if necessary scroll to the visible area
+    if (mbScroll && nItemId && mnCols)
     {
-        pItem->setSelection(true);
-        maItemStateHdl.Call(pItem);
-
-        if (IsReallyVisible() && IsUpdateMode())
-            Invalidate();
-
-        bool bNewOut = IsReallyVisible() && IsUpdateMode();
-
-        // if necessary scroll to the visible area
-        if (mbScroll && nItemId && mnCols)
+        sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
+        if ( nNewLine < mnFirstLine )
         {
-            sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
-            if ( nNewLine < mnFirstLine )
-            {
-                mnFirstLine = nNewLine;
-            }
-            else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
-            {
-                mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
-            }
+            mnFirstLine = nNewLine;
         }
-
-        if ( bNewOut )
+        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
         {
-            if ( IsReallyVisible() && IsUpdateMode() )
-                Invalidate();
-        }
-
-        if( ImplHasAccessibleListeners() )
-        {
-            // focus event (select)
-            ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( false ) );
-
-            if( pItemAcc )
-            {
-                css::uno::Any aOldAny, aNewAny;
-                aNewAny <<= css::uno::Reference< css::uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* >( pItemAcc ));
-                ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-            }
-
-            // selection event
-            css::uno::Any aOldAny, aNewAny;
-            ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
+            mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
         }
     }
+
+    if ( bNewOut )
+    {
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+
+    if( !ImplHasAccessibleListeners() )
+        return;
+
+    // focus event (select)
+    ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( false ) );
+
+    if( pItemAcc )
+    {
+        css::uno::Any aOldAny, aNewAny;
+        aNewAny <<= css::uno::Reference< css::uno::XInterface >(
+            static_cast< ::cppu::OWeakObject* >( pItemAcc ));
+        ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+    }
+
+    // selection event
+    css::uno::Any aOldAny, aNewAny;
+    ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
 }
 
 bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const

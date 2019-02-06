@@ -192,29 +192,29 @@ static void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEv
                        uno::UNO_QUERY );
     }
 
-    if ( xSupplier.is() )
-    {
-        uno::Reference < container::XNameReplace > xEvents = xSupplier->getEvents();
-        if ( !aEventName.isEmpty() )
-        {
-            uno::Any aEventData = CreateEventData_Impl( pMacro );
+    if ( !xSupplier.is() )
+        return;
 
-            try
-            {
-                xEvents->replaceByName( aEventName, aEventData );
-            }
-            catch( const css::lang::IllegalArgumentException& )
-            {
-                SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
-            }
-            catch( const css::container::NoSuchElementException& )
-            {
-                SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
-            }
+    uno::Reference < container::XNameReplace > xEvents = xSupplier->getEvents();
+    if ( !aEventName.isEmpty() )
+    {
+        uno::Any aEventData = CreateEventData_Impl( pMacro );
+
+        try
+        {
+            xEvents->replaceByName( aEventName, aEventData );
         }
-        else {
-            SAL_INFO( "sfx.config", "PropagateEvents_Impl: Got unknown event" );
+        catch( const css::lang::IllegalArgumentException& )
+        {
+            SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
         }
+        catch( const css::container::NoSuchElementException& )
+        {
+            SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
+        }
+    }
+    else {
+        SAL_INFO( "sfx.config", "PropagateEvents_Impl: Got unknown event" );
     }
 }
 

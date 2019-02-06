@@ -1125,19 +1125,19 @@ void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame const * pNewFrame )
 
 void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
 {
-    if( pSh && !m_nAdjustPosPixelLock )
-    {
-        if ( GetViewShell() && GetWindow().IsVisible() )
-        {
-            if ( GetFrame().IsInPlace() )
-            {
-                return;
-            }
+    if( !pSh || m_nAdjustPosPixelLock )
+        return;
 
-            DoAdjustPosSizePixel( GetViewShell(), Point(),
-                                            GetWindow().GetOutputSizePixel(),
-                                            false );
+    if ( GetViewShell() && GetWindow().IsVisible() )
+    {
+        if ( GetFrame().IsInPlace() )
+        {
+            return;
         }
+
+        DoAdjustPosSizePixel( GetViewShell(), Point(),
+                                        GetWindow().GetOutputSizePixel(),
+                                        false );
     }
 }
 
@@ -1671,30 +1671,30 @@ void SfxViewFrame::GetDocNumber_Impl()
 
 void SfxViewFrame::Enable( bool bEnable )
 {
-    if ( bEnable != m_pImpl->bEnabled )
+    if ( bEnable == m_pImpl->bEnabled )
+        return;
+
+    m_pImpl->bEnabled = bEnable;
+
+    vcl::Window *pWindow = &GetFrame().GetWindow();
+    if ( !bEnable )
+        m_pImpl->bWindowWasEnabled = pWindow->IsInputEnabled();
+    if ( !bEnable || m_pImpl->bWindowWasEnabled )
+        pWindow->EnableInput( bEnable );
+
+    // cursor and focus
+    SfxViewShell* pViewSh = GetViewShell();
+    if ( bEnable )
     {
-        m_pImpl->bEnabled = bEnable;
-
-        vcl::Window *pWindow = &GetFrame().GetWindow();
-        if ( !bEnable )
-            m_pImpl->bWindowWasEnabled = pWindow->IsInputEnabled();
-        if ( !bEnable || m_pImpl->bWindowWasEnabled )
-            pWindow->EnableInput( bEnable );
-
-        // cursor and focus
-        SfxViewShell* pViewSh = GetViewShell();
-        if ( bEnable )
-        {
-            // show cursor
-            if ( pViewSh )
-                pViewSh->ShowCursor();
-        }
-        else
-        {
-            // hide cursor
-            if ( pViewSh )
-                pViewSh->ShowCursor(false);
-        }
+        // show cursor
+        if ( pViewSh )
+            pViewSh->ShowCursor();
+    }
+    else
+    {
+        // hide cursor
+        if ( pViewSh )
+            pViewSh->ShowCursor(false);
     }
 }
 
@@ -1749,41 +1749,41 @@ void SfxViewFrame::LockObjectShell_Impl()
 
 void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
 {
-    if ( GetViewShell() && !GetFrame().IsClosing_Impl() )
+    if ( !GetViewShell() || GetFrame().IsClosing_Impl() )
+        return;
+
+    if ( !IsVisible() )
+        return;
+
+    bool bPreview = false;
+    if (GetObjectShell()->IsPreview())
     {
-        if ( IsVisible() )
+        bPreview = true;
+    }
+
+    css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
+    if (!bPreview)
+    {
+        SetViewFrame(this);
+        GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+        uno::Reference<frame::XFramesSupplier> xSupp(xFrame, uno::UNO_QUERY);
+        if (xSupp.is())
+            xSupp->setActiveFrame(uno::Reference<frame::XFrame>());
+
+        css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+        if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
         {
-            bool bPreview = false;
-            if (GetObjectShell()->IsPreview())
-            {
-                bPreview = true;
-            }
-
-            css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
-            if (!bPreview)
-            {
-                SetViewFrame(this);
-                GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
-                uno::Reference<frame::XFramesSupplier> xSupp(xFrame, uno::UNO_QUERY);
-                if (xSupp.is())
-                    xSupp->setActiveFrame(uno::Reference<frame::XFrame>());
-
-                css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-                if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
-                {
-                    SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
-                    if (!pCli || !pCli->IsObjectUIActive())
-                        GetFrame().GrabFocusOnComponent_Impl();
-                }
-            }
-            else
-            {
-                GetBindings().SetDispatcher(GetDispatcher());
-                GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
-                GetDispatcher()->Update_Impl();
-            }
+            SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
+            if (!pCli || !pCli->IsObjectUIActive())
+                GetFrame().GrabFocusOnComponent_Impl();
         }
+    }
+    else
+    {
+        GetBindings().SetDispatcher(GetDispatcher());
+        GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+        GetDispatcher()->Update_Impl();
     }
 }
 
@@ -2403,21 +2403,21 @@ bool SfxViewFrame::IsInModalMode() const
 void SfxViewFrame::Resize( bool bForce )
 {
     Size aSize = GetWindow().GetOutputSizePixel();
-    if ( bForce || aSize != m_pImpl->aSize )
+    if ( !bForce && aSize == m_pImpl->aSize )
+        return;
+
+    m_pImpl->aSize = aSize;
+    SfxViewShell *pShell = GetViewShell();
+    if ( pShell )
     {
-        m_pImpl->aSize = aSize;
-        SfxViewShell *pShell = GetViewShell();
-        if ( pShell )
+        if ( GetFrame().IsInPlace() )
         {
-            if ( GetFrame().IsInPlace() )
-            {
-                Point aPoint = GetWindow().GetPosPixel();
-                DoAdjustPosSizePixel( pShell, aPoint, aSize, true );
-            }
-            else
-            {
-                DoAdjustPosSizePixel( pShell, Point(), aSize, false );
-            }
+            Point aPoint = GetWindow().GetPosPixel();
+            DoAdjustPosSizePixel( pShell, aPoint, aSize, true );
+        }
+        else
+        {
+            DoAdjustPosSizePixel( pShell, Point(), aSize, false );
         }
     }
 }

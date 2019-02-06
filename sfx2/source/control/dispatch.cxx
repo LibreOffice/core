@@ -314,72 +314,72 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     SFX_STACK(SfxDispatcher::Call_Impl);
 
     // The slot may be called (meaning enabled)
-    if ( rSlot.IsMode(SfxSlotMode::FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) || rShell.IsConditionalFastCall(rReq))
+    if ( !rSlot.IsMode(SfxSlotMode::FASTCALL) && !rShell.CanExecuteSlot_Impl(rSlot) && !rShell.IsConditionalFastCall(rReq) )
+        return;
+
+    if ( GetFrame() )
     {
-        if ( GetFrame() )
+        // Recording may start
+        css::uno::Reference< css::frame::XFrame > xFrame(
+                GetFrame()->GetFrame().GetFrameInterface(),
+                css::uno::UNO_QUERY);
+
+        css::uno::Reference< css::beans::XPropertySet > xSet(
+                xFrame,
+                css::uno::UNO_QUERY);
+
+        if ( xSet.is() )
         {
-            // Recording may start
-            css::uno::Reference< css::frame::XFrame > xFrame(
-                    GetFrame()->GetFrame().GetFrameInterface(),
-                    css::uno::UNO_QUERY);
+            css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+            css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+            css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+            aProp >>= xSupplier;
+            if(xSupplier.is())
+                xRecorder = xSupplier->getDispatchRecorder();
 
-            css::uno::Reference< css::beans::XPropertySet > xSet(
-                    xFrame,
-                    css::uno::UNO_QUERY);
-
-            if ( xSet.is() )
-            {
-                css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
-                css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
-                css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-                aProp >>= xSupplier;
-                if(xSupplier.is())
-                    xRecorder = xSupplier->getDispatchRecorder();
-
-                if ( bRecord && xRecorder.is() && !rSlot.IsMode(SfxSlotMode::NORECORD) )
-                    rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
-            }
+            if ( bRecord && xRecorder.is() && !rSlot.IsMode(SfxSlotMode::NORECORD) )
+                rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
         }
-        // Get all that is needed, because the slot may not have survived the
-        // Execute if it is a 'pseudo slot' for macros or verbs.
-        bool bAutoUpdate = rSlot.IsMode(SfxSlotMode::AUTOUPDATE);
+    }
+    // Get all that is needed, because the slot may not have survived the
+    // Execute if it is a 'pseudo slot' for macros or verbs.
+    bool bAutoUpdate = rSlot.IsMode(SfxSlotMode::AUTOUPDATE);
 
-        // API-call parentheses and document-lock during the calls
+    // API-call parentheses and document-lock during the calls
+    {
+        // 'this' must respond in the Destructor
+        bool bThisDispatcherAlive = true;
+        bool *pOldInCallAliveFlag = xImp->pInCallAliveFlag;
+        xImp->pInCallAliveFlag = &bThisDispatcherAlive;
+
+        SfxExecFunc pFunc = rSlot.GetExecFnc();
+        rShell.CallExec( pFunc, rReq );
+
+        // If 'this' is still alive
+        if ( bThisDispatcherAlive )
+            xImp->pInCallAliveFlag = pOldInCallAliveFlag;
+        else
         {
-            // 'this' must respond in the Destructor
-            bool bThisDispatcherAlive = true;
-            bool *pOldInCallAliveFlag = xImp->pInCallAliveFlag;
-            xImp->pInCallAliveFlag = &bThisDispatcherAlive;
-
-            SfxExecFunc pFunc = rSlot.GetExecFnc();
-            rShell.CallExec( pFunc, rReq );
-
-            // If 'this' is still alive
-            if ( bThisDispatcherAlive )
-                xImp->pInCallAliveFlag = pOldInCallAliveFlag;
-            else
+            if ( pOldInCallAliveFlag )
             {
-                if ( pOldInCallAliveFlag )
-                {
-                    // also protect nested stack frames
-                    *pOldInCallAliveFlag = false;
-                }
-
-                // do nothing after this object is dead
-                return;
+                // also protect nested stack frames
+                *pOldInCallAliveFlag = false;
             }
+
+            // do nothing after this object is dead
+            return;
         }
+    }
 
-        if ( rReq.IsDone() )
+    if ( rReq.IsDone() )
+    {
+        SfxBindings *pBindings = GetBindings();
+
+        // When AutoUpdate update immediately
+        if ( bAutoUpdate && pBindings )
         {
-            SfxBindings *pBindings = GetBindings();
-
-            // When AutoUpdate update immediately
-            if ( bAutoUpdate && pBindings )
-            {
-                pBindings->Invalidate(rSlot.GetSlotId());
-                pBindings->Update(rSlot.GetSlotId());
-            }
+            pBindings->Invalidate(rSlot.GetSlotId());
+            pBindings->Update(rSlot.GetSlotId());
         }
     }
 }
@@ -1075,58 +1075,58 @@ void SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest> pReq)
     SFX_STACK(SfxDispatcher::PostMsgHandler);
 
     // Has also the Pool not yet died?
-    if ( !pReq->IsCancelled() )
-    {
-        if ( !IsLocked() )
-        {
-            Flush();
-            SfxSlotServer aSvr;
-            if ( FindServer_(pReq->GetSlot(), aSvr ) ) // HACK(x), whatever that was supposed to mean
-            {
-                const SfxSlot *pSlot = aSvr.GetSlot();
-                SfxShell *pSh = GetShell(aSvr.GetShellLevel());
+    if ( pReq->IsCancelled() )
+        return;
 
-                // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
-                // be destroyed in the Call_Impl, thus do not use it anymore!
-                pReq->SetSynchronCall( false );
-                Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
-            }
-        }
-        else
+    if ( !IsLocked() )
+    {
+        Flush();
+        SfxSlotServer aSvr;
+        if ( FindServer_(pReq->GetSlot(), aSvr ) ) // HACK(x), whatever that was supposed to mean
         {
-            if ( xImp->bLocked )
-                xImp->aReqArr.emplace_back(std::move(pReq));
-            else
-                xImp->xPoster->Post(std::move(pReq));
+            const SfxSlot *pSlot = aSvr.GetSlot();
+            SfxShell *pSh = GetShell(aSvr.GetShellLevel());
+
+            // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
+            // be destroyed in the Call_Impl, thus do not use it anymore!
+            pReq->SetSynchronCall( false );
+            Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
         }
+    }
+    else
+    {
+        if ( xImp->bLocked )
+            xImp->aReqArr.emplace_back(std::move(pReq));
+        else
+            xImp->xPoster->Post(std::move(pReq));
     }
 }
 
 void SfxDispatcher::SetMenu_Impl()
 {
 #if HAVE_FEATURE_DESKTOP
-    if ( xImp->pFrame )
+    if ( !xImp->pFrame )
+        return;
+
+    SfxViewFrame* pTop = xImp->pFrame->GetTopViewFrame();
+    if ( !pTop || pTop->GetBindings().GetDispatcher() != this )
+        return;
+
+    SfxFrame& rFrame = pTop->GetFrame();
+    if ( !rFrame.IsMenuBarOn_Impl() )
+        return;
+
+    css::uno::Reference < css::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), css::uno::UNO_QUERY );
+    if ( xPropSet.is() )
     {
-        SfxViewFrame* pTop = xImp->pFrame->GetTopViewFrame();
-        if ( pTop && pTop->GetBindings().GetDispatcher() == this )
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        aValue >>= xLayoutManager;
+        if ( xLayoutManager.is() )
         {
-            SfxFrame& rFrame = pTop->GetFrame();
-            if ( rFrame.IsMenuBarOn_Impl() )
-            {
-                css::uno::Reference < css::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), css::uno::UNO_QUERY );
-                if ( xPropSet.is() )
-                {
-                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-                    aValue >>= xLayoutManager;
-                    if ( xLayoutManager.is() )
-                    {
-                        OUString aMenuBarURL( "private:resource/menubar/menubar" );
-                        if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
-                            xLayoutManager->createElement( aMenuBarURL );
-                    }
-                }
-            }
+            OUString aMenuBarURL( "private:resource/menubar/menubar" );
+            if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
+                xLayoutManager->createElement( aMenuBarURL );
         }
     }
 #endif
@@ -1360,22 +1360,22 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         }
     }
 
-    if ( pTaskWin && ( bIsMDIApp || bIsIPOwner ) )
+    if ( !pTaskWin || ( !bIsMDIApp && !bIsIPOwner ) )
+        return;
+
+    bool bIsTaskActive = false;
+
+    SfxDispatcher *pActDispatcher = pTaskWin->GetBindings().GetDispatcher_Impl();
+    if ( pActDispatcher && !bIsTaskActive )
     {
-        bool bIsTaskActive = false;
+        if ( this == pActDispatcher )
+            bIsTaskActive = true;
+    }
 
-        SfxDispatcher *pActDispatcher = pTaskWin->GetBindings().GetDispatcher_Impl();
-        if ( pActDispatcher && !bIsTaskActive )
-        {
-            if ( this == pActDispatcher )
-                bIsTaskActive = true;
-        }
-
-        if (bIsTaskActive && eStatBarId != StatusBarId::None && xImp->pFrame)
-        {
-            // internal frames also may control statusbar
-            xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl(eStatBarId);
-        }
+    if (bIsTaskActive && eStatBarId != StatusBarId::None && xImp->pFrame)
+    {
+        // internal frames also may control statusbar
+        xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl(eStatBarId);
     }
 }
 

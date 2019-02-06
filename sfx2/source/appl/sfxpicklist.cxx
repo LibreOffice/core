@@ -184,64 +184,64 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( pEventHint )
+    if ( !pEventHint )
+        return;
+
+    // only ObjectShell-related events with media interest
+    SfxObjectShell* pDocSh = pEventHint->GetObjShell();
+    if( !pDocSh )
+        return;
+
+    switch ( pEventHint->GetEventId() )
     {
-        // only ObjectShell-related events with media interest
-        SfxObjectShell* pDocSh = pEventHint->GetObjShell();
-        if( !pDocSh )
-            return;
-
-        switch ( pEventHint->GetEventId() )
+        case SfxEventHintId::CreateDoc:
         {
-            case SfxEventHintId::CreateDoc:
-            {
-                bool bAllowModif = pDocSh->IsEnableSetModified();
-                if ( bAllowModif )
-                    pDocSh->EnableSetModified( false );
+            bool bAllowModif = pDocSh->IsEnableSetModified();
+            if ( bAllowModif )
+                pDocSh->EnableSetModified( false );
 
-                using namespace ::com::sun::star;
-                uno::Reference<document::XDocumentProperties> xDocProps(
-                    pDocSh->getDocProperties());
-                if (xDocProps.is()) {
-                    xDocProps->setAuthor( SvtUserOptions().GetFullName() );
-                    ::DateTime now( ::DateTime::SYSTEM );
-                    xDocProps->setCreationDate( now.GetUNODateTime() );
-                }
-
-                if ( bAllowModif )
-                    pDocSh->EnableSetModified( bAllowModif );
+            using namespace ::com::sun::star;
+            uno::Reference<document::XDocumentProperties> xDocProps(
+                pDocSh->getDocProperties());
+            if (xDocProps.is()) {
+                xDocProps->setAuthor( SvtUserOptions().GetFullName() );
+                ::DateTime now( ::DateTime::SYSTEM );
+                xDocProps->setCreationDate( now.GetUNODateTime() );
             }
-            break;
 
-            case SfxEventHintId::OpenDoc:
-            case SfxEventHintId::SaveDocDone:
-            case SfxEventHintId::SaveAsDocDone:
-            case SfxEventHintId::SaveToDocDone:
-            case SfxEventHintId::CloseDoc:
+            if ( bAllowModif )
+                pDocSh->EnableSetModified( bAllowModif );
+        }
+        break;
+
+        case SfxEventHintId::OpenDoc:
+        case SfxEventHintId::SaveDocDone:
+        case SfxEventHintId::SaveAsDocDone:
+        case SfxEventHintId::SaveToDocDone:
+        case SfxEventHintId::CloseDoc:
+        {
+            AddDocumentToPickList(pDocSh);
+        }
+        break;
+
+        case SfxEventHintId::SaveAsDoc:
+        {
+            SfxMedium *pMedium = pDocSh->GetMedium();
+            if (!pMedium)
+                return;
+
+            // We're starting a "Save As". Add the current document (if it's
+            // not a "new" document) to the "Recent Documents" list before we
+            // switch to the new path.
+            // If the current document is new, path will be empty.
+            OUString path = pMedium->GetOrigURL();
+            if (!path.isEmpty())
             {
                 AddDocumentToPickList(pDocSh);
             }
-            break;
-
-            case SfxEventHintId::SaveAsDoc:
-            {
-                SfxMedium *pMedium = pDocSh->GetMedium();
-                if (!pMedium)
-                    return;
-
-                // We're starting a "Save As". Add the current document (if it's
-                // not a "new" document) to the "Recent Documents" list before we
-                // switch to the new path.
-                // If the current document is new, path will be empty.
-                OUString path = pMedium->GetOrigURL();
-                if (!path.isEmpty())
-                {
-                    AddDocumentToPickList(pDocSh);
-                }
-            }
-            break;
-            default: break;
         }
+        break;
+        default: break;
     }
 }
 

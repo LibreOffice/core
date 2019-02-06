@@ -1341,20 +1341,21 @@ DocumentMetadataAccess::storeMetadataToMedium(
     }
     storeMetadataToStorage(xStorage);
 
-    if (sfx) {
-        const bool bOk = aMedium.Commit();
-        aMedium.Close();
-        if ( !bOk ) {
-            ErrCode nError = aMedium.GetError();
-            if ( nError == ERRCODE_NONE ) {
-                nError = ERRCODE_IO_GENERAL;
-            }
-            task::ErrorCodeIOException ex(
-                "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toHexString(),
-                uno::Reference< uno::XInterface >(), sal_uInt32(nError));
-            throw lang::WrappedTargetException(OUString(), *this,
-                    uno::makeAny(ex));
+    if (!sfx)
+        return;
+
+    const bool bOk = aMedium.Commit();
+    aMedium.Close();
+    if ( !bOk ) {
+        ErrCode nError = aMedium.GetError();
+        if ( nError == ERRCODE_NONE ) {
+            nError = ERRCODE_IO_GENERAL;
         }
+        task::ErrorCodeIOException ex(
+            "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toHexString(),
+            uno::Reference< uno::XInterface >(), sal_uInt32(nError));
+        throw lang::WrappedTargetException(OUString(), *this,
+                uno::makeAny(ex));
     }
 }
 

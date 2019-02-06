@@ -151,18 +151,18 @@ SfxPrintHelper::SfxPrintHelper()
 
 void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
-    if ( aArguments.getLength() )
+    if ( !aArguments.getLength() )
+        return;
+
+    css::uno::Reference < css::frame::XModel > xModel;
+    aArguments[0] >>= xModel;
+    uno::Reference < lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
+    uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+    sal_Int64 nHandle = xObj->getSomething( aSeq );
+    if ( nHandle )
     {
-        css::uno::Reference < css::frame::XModel > xModel;
-        aArguments[0] >>= xModel;
-        uno::Reference < lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
-        uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj->getSomething( aSeq );
-        if ( nHandle )
-        {
-            m_pData->m_pObjectShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-            m_pData->StartListening(*m_pData->m_pObjectShell);
-        }
+        m_pData->m_pObjectShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+        m_pData->StartListening(*m_pData->m_pObjectShell);
     }
 }
 
@@ -764,20 +764,20 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     //  a) printing finished                        => move the file directly and forget the watcher thread
     //  b) printing is asynchron and runs currently => start watcher thread and exit this method
     //                                                 This thread make all necessary things by itself.
-    if (pUCBPrintTempFile)
+    if (!pUCBPrintTempFile)
+        return;
+
+    // a)
+    SfxPrinter* pPrinter = pView->GetPrinter();
+    if ( ! pPrinter->IsPrinting() )
+        ImplUCBPrintWatcher::moveAndDeleteTemp(&pUCBPrintTempFile,sUcbUrl);
+    // b)
+    else
     {
-        // a)
-        SfxPrinter* pPrinter = pView->GetPrinter();
-        if ( ! pPrinter->IsPrinting() )
-            ImplUCBPrintWatcher::moveAndDeleteTemp(&pUCBPrintTempFile,sUcbUrl);
-        // b)
-        else
-        {
-            // Note: we create(d) some resource on the heap (thread and temp file).
-            // They will be deleted by the thread automatically if he finish his run() method.
-            ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
-            pWatcher->create();
-        }
+        // Note: we create(d) some resource on the heap (thread and temp file).
+        // They will be deleted by the thread automatically if he finish his run() method.
+        ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
+        pWatcher->create();
     }
 }
 

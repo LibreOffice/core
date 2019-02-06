@@ -314,49 +314,49 @@ void SfxSecurityPage_Impl::Reset_Impl()
 IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButton&, void)
 {
     // when change recording gets disabled protection must be disabled as well
-    if (!m_xRecordChangesCB->get_active())    // the new check state is already present, thus the '!'
+    if (m_xRecordChangesCB->get_active())    // the new check state is already present, thus the '!'
+        return;
+
+    bool bAlreadyDone = false;
+    if (!m_bEndRedliningWarningDone)
     {
-        bool bAlreadyDone = false;
-        if (!m_bEndRedliningWarningDone)
-        {
-            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
-                                                       VclMessageType::Warning, VclButtonsType::YesNo,
-                                                       m_aEndRedliningWarning));
-            xWarn->set_default_response(RET_NO);
-            if (xWarn->run() != RET_YES)
-                bAlreadyDone = true;
-            else
-                m_bEndRedliningWarningDone = true;
-        }
-
-        const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed
-                && m_xProtectPB->get_visible();
-        if (!bAlreadyDone && bNeedPasssword)
-        {
-            OUString aPasswordText;
-
-            // dialog canceled or no password provided
-            if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
-                bAlreadyDone = true;
-
-            // ask for password and if dialog is canceled or no password provided return
-            if (lcl_IsPasswordCorrect( aPasswordText ))
-                m_bOrigPasswordIsConfirmed = true;
-            else
-                bAlreadyDone = true;
-        }
-
-        if (bAlreadyDone)
-            m_xRecordChangesCB->set_active(true);     // restore original state
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                   m_aEndRedliningWarning));
+        xWarn->set_default_response(RET_NO);
+        if (xWarn->run() != RET_YES)
+            bAlreadyDone = true;
         else
-        {
-            // remember required values to change protection and change recording in
-            // FillItemSet_Impl later on if password was correct.
-            m_bNewPasswordIsValid = true;
-            m_aNewPassword.clear();
-            m_xProtectPB->show();
-            m_xUnProtectPB->hide();
-        }
+            m_bEndRedliningWarningDone = true;
+    }
+
+    const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed
+            && m_xProtectPB->get_visible();
+    if (!bAlreadyDone && bNeedPasssword)
+    {
+        OUString aPasswordText;
+
+        // dialog canceled or no password provided
+        if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
+            bAlreadyDone = true;
+
+        // ask for password and if dialog is canceled or no password provided return
+        if (lcl_IsPasswordCorrect( aPasswordText ))
+            m_bOrigPasswordIsConfirmed = true;
+        else
+            bAlreadyDone = true;
+    }
+
+    if (bAlreadyDone)
+        m_xRecordChangesCB->set_active(true);     // restore original state
+    else
+    {
+        // remember required values to change protection and change recording in
+        // FillItemSet_Impl later on if password was correct.
+        m_bNewPasswordIsValid = true;
+        m_aNewPassword.clear();
+        m_xProtectPB->show();
+        m_xUnProtectPB->hide();
     }
 }
 

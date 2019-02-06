@@ -153,93 +153,93 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
         sPath = OUString( aPathBuffer );
     osl::FileBase::getFileURLFromSystemPath( sPath, sUserTemplateURL );
 
-    if ( !sUserTemplateURL.isEmpty())
+    if ( sUserTemplateURL.isEmpty())
+        return;
+
+    try
     {
-        try
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
+            ::comphelper::getProcessComponentContext(), "/org.openoffice.Setup", ::comphelper::EConfigurationModes::Standard );
+
+        OUString aActualFilter;
+        ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
+        bool bChanged(false);
+        ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
+
+        uno::Reference< container::XNameAccess > xFilterFactory(
+            xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xTypeDetection(
+            xFactory->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY_THROW );
+
+        OUString aActualFilterTypeName;
+        uno::Sequence< beans::PropertyValue > aActuralFilterData;
+        xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
+        for ( sal_Int32 nInd = 0; nInd < aActuralFilterData.getLength(); nInd++ )
+            if ( aActuralFilterData[nInd].Name == "Type" )
+                aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
+        ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
+        uno::Sequence< OUString > aAllExt =
+            aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
+        //To-do: check if aAllExt is empty first
+        const OUString aExt = DEF_TPL_STR + aAllExt[0];
+
+        sUserTemplateURL += aExt;
+
+        uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+            ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
+
+        OUString aBackupURL;
+        ::osl::Security().getConfigDir(aBackupURL);
+        aBackupURL += "/temp";
+
+        if ( !xSimpleFileAccess->exists( aBackupURL ) )
+            xSimpleFileAccess->createFolder( aBackupURL );
+
+        aBackupURL += aExt;
+
+        if ( !rTemplateName.isEmpty() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
-                ::comphelper::getProcessComponentContext(), "/org.openoffice.Setup", ::comphelper::EConfigurationModes::Standard );
+            if ( xSimpleFileAccess->exists( sUserTemplateURL ) && !bChanged )
+                xSimpleFileAccess->copy( sUserTemplateURL, aBackupURL );
 
-            OUString aActualFilter;
-            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
-            bool bChanged(false);
-            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
+            uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
+            ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
+            OUString aFilterName =
+                aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
 
-            uno::Reference< container::XNameAccess > xFilterFactory(
-                xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
-            uno::Reference< container::XNameAccess > xTypeDetection(
-                xFactory->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY_THROW );
+            uno::Sequence< beans::PropertyValue > aArgs( 3 );
+            aArgs[0].Name = "FilterName";
+            aArgs[0].Value <<= aFilterName;
+            aArgs[1].Name = "AsTemplate";
+            aArgs[1].Value <<= true;
+            aArgs[2].Name = "URL";
+            aArgs[2].Value <<= rTemplateName;
 
-            OUString aActualFilterTypeName;
-            uno::Sequence< beans::PropertyValue > aActuralFilterData;
-            xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
-            for ( sal_Int32 nInd = 0; nInd < aActuralFilterData.getLength(); nInd++ )
-                if ( aActuralFilterData[nInd].Name == "Type" )
-                    aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
-            ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
-            uno::Sequence< OUString > aAllExt =
-                aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
-            //To-do: check if aAllExt is empty first
-            const OUString aExt = DEF_TPL_STR + aAllExt[0];
+            uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
+            xLoadable->load( aArgs );
 
-            sUserTemplateURL += aExt;
+            aArgs.realloc( 2 );
+            aArgs[1].Name = "Overwrite";
+            aArgs[1].Value <<= true;
 
-            uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
-
-            OUString aBackupURL;
-            ::osl::Security().getConfigDir(aBackupURL);
-            aBackupURL += "/temp";
-
-            if ( !xSimpleFileAccess->exists( aBackupURL ) )
-                xSimpleFileAccess->createFolder( aBackupURL );
-
-            aBackupURL += aExt;
-
-            if ( !rTemplateName.isEmpty() )
-            {
-                if ( xSimpleFileAccess->exists( sUserTemplateURL ) && !bChanged )
-                    xSimpleFileAccess->copy( sUserTemplateURL, aBackupURL );
-
-                uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
-                ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
-                OUString aFilterName =
-                    aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
-
-                uno::Sequence< beans::PropertyValue > aArgs( 3 );
-                aArgs[0].Name = "FilterName";
-                aArgs[0].Value <<= aFilterName;
-                aArgs[1].Name = "AsTemplate";
-                aArgs[1].Value <<= true;
-                aArgs[2].Name = "URL";
-                aArgs[2].Value <<= rTemplateName;
-
-                uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
-                xLoadable->load( aArgs );
-
-                aArgs.realloc( 2 );
-                aArgs[1].Name = "Overwrite";
-                aArgs[1].Value <<= true;
-
-                uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
-                xStorable->storeToURL( sUserTemplateURL, aArgs );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
-                ::comphelper::ConfigurationHelper::flush( xConfig );
-            }
-            else
-            {
-                DBG_ASSERT( bChanged, "invalid ooSetupFactorySystemDefaultTemplateChanged value!" );
-
-                xSimpleFileAccess->copy( aBackupURL, sUserTemplateURL );
-                xSimpleFileAccess->kill( aBackupURL );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
-                ::comphelper::ConfigurationHelper::flush( xConfig );
-            }
+            uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
+            xStorable->storeToURL( sUserTemplateURL, aArgs );
+            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
+            ::comphelper::ConfigurationHelper::flush( xConfig );
         }
-        catch(const uno::Exception&)
+        else
         {
+            DBG_ASSERT( bChanged, "invalid ooSetupFactorySystemDefaultTemplateChanged value!" );
+
+            xSimpleFileAccess->copy( aBackupURL, sUserTemplateURL );
+            xSimpleFileAccess->kill( aBackupURL );
+            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
+            ::comphelper::ConfigurationHelper::flush( xConfig );
         }
+    }
+    catch(const uno::Exception&)
+    {
     }
 }
 

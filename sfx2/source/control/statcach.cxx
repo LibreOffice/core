@@ -329,46 +329,46 @@ void SfxStateCache::SetState
 
 void SfxStateCache::SetVisibleState( bool bShow )
 {
-    if ( bShow != bItemVisible )
+    if ( bShow == bItemVisible )
+        return;
+
+    SfxItemState eState( SfxItemState::DEFAULT );
+    const SfxPoolItem*  pState( nullptr );
+    bool bDeleteItem( false );
+
+    bItemVisible = bShow;
+    if ( bShow )
     {
-        SfxItemState eState( SfxItemState::DEFAULT );
-        const SfxPoolItem*  pState( nullptr );
-        bool bDeleteItem( false );
-
-        bItemVisible = bShow;
-        if ( bShow )
+        if ( IsInvalidItem(pLastItem) || ( pLastItem == nullptr ))
         {
-            if ( IsInvalidItem(pLastItem) || ( pLastItem == nullptr ))
-            {
-                pState = new SfxVoidItem( nId );
-                bDeleteItem = true;
-            }
-            else
-                pState = pLastItem;
-
-            eState = eLastState;
-        }
-        else
-        {
-            pState = new SfxVisibilityItem( nId, false );
+            pState = new SfxVoidItem( nId );
             bDeleteItem = true;
         }
+        else
+            pState = pLastItem;
 
-        // Update Controller
-        if ( !mxDispatch.is() && pController )
-        {
-            for ( SfxControllerItem *pCtrl = pController;
-                    pCtrl;
-                    pCtrl = pCtrl->GetItemLink() )
-                pCtrl->StateChanged( nId, eState, pState );
-        }
-
-        if ( pInternalController )
-            pInternalController->StateChanged( nId, eState, pState );
-
-        if ( bDeleteItem )
-            delete pState;
+        eState = eLastState;
     }
+    else
+    {
+        pState = new SfxVisibilityItem( nId, false );
+        bDeleteItem = true;
+    }
+
+    // Update Controller
+    if ( !mxDispatch.is() && pController )
+    {
+        for ( SfxControllerItem *pCtrl = pController;
+                pCtrl;
+                pCtrl = pCtrl->GetItemLink() )
+            pCtrl->StateChanged( nId, eState, pState );
+    }
+
+    if ( pInternalController )
+        pInternalController->StateChanged( nId, eState, pState );
+
+    if ( bDeleteItem )
+        delete pState;
 }
 
 
@@ -439,23 +439,23 @@ void SfxStateCache::SetCachedState( bool bAlways )
     // Only update if cached item exists and also able to process.
     // (If the State is sent, it must be ensured that a SlotServer is present,
     // see SfxControllerItem:: GetCoreMetric())
-    if ( bAlways || ( !bItemDirty && !bSlotDirty ) )
+    if ( !(bAlways || ( !bItemDirty && !bSlotDirty )) )
+        return;
+
+    // Update Controller
+    if ( !mxDispatch.is() && pController )
     {
-        // Update Controller
-        if ( !mxDispatch.is() && pController )
-        {
-            for ( SfxControllerItem *pCtrl = pController;
-                pCtrl;
-                pCtrl = pCtrl->GetItemLink() )
-                pCtrl->StateChanged( nId, eLastState, pLastItem );
-        }
-
-        if ( pInternalController )
-            static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eLastState, pLastItem, &aSlotServ );
-
-        // Controller is now ok
-        bCtrlDirty = true;
+        for ( SfxControllerItem *pCtrl = pController;
+            pCtrl;
+            pCtrl = pCtrl->GetItemLink() )
+            pCtrl->StateChanged( nId, eLastState, pLastItem );
     }
+
+    if ( pInternalController )
+        static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eLastState, pLastItem, &aSlotServ );
+
+    // Controller is now ok
+    bCtrlDirty = true;
 }
 
 

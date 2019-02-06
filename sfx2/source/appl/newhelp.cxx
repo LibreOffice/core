@@ -516,21 +516,21 @@ bool IndexBox_Impl::EventNotify( NotifyEvent& rNEvt )
 void IndexBox_Impl::SelectExecutableEntry()
 {
     sal_Int32 nPos = GetEntryPos( GetText() );
-    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-    {
-        sal_Int32 nOldPos = nPos;
-        OUString aEntryText;
-        IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( nPos ));
-        sal_Int32 nCount = GetEntryCount();
-        while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
-        {
-            pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( ++nPos ));
-            aEntryText = GetEntry( nPos );
-        }
+    if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
+        return;
 
-        if ( nOldPos != nPos )
-            SetText( aEntryText );
+    sal_Int32 nOldPos = nPos;
+    OUString aEntryText;
+    IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( nPos ));
+    sal_Int32 nCount = GetEntryCount();
+    while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
+    {
+        pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( ++nPos ));
+        aEntryText = GetEntry( nPos );
     }
+
+    if ( nOldPos != nPos )
+        SetText( aEntryText );
 }
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -1016,38 +1016,38 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, ClickHdl, Button*, void)
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
-    if ( !aSearchText.isEmpty() )
-    {
-        EnterWait();
-        ClearSearchResults();
-        RememberSearchText( aSearchText );
-        OUStringBuffer aSearchURL(HELP_URL);
-        aSearchURL.append(aFactory);
-        aSearchURL.append(HELP_SEARCH_TAG);
-        if ( !m_pFullWordsCB->IsChecked() )
-            aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
-        aSearchURL.append(aSearchText);
-        AppendConfigToken(aSearchURL, false);
-        if ( m_pScopeCB->IsChecked() )
-            aSearchURL.append("&Scope=Heading");
-        std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
-        for (const OUString & rRow : aFactories)
-        {
-            sal_Int32 nIdx = 0;
-            OUString aTitle = rRow.getToken( 0, '\t', nIdx );
-            OUString* pURL = new OUString( rRow.getToken( 1, '\t', nIdx ) );
-            const sal_Int32 nPos = m_pResultsLB->InsertEntry( aTitle );
-            m_pResultsLB->SetEntryData( nPos, pURL );
-        }
-        LeaveWait();
+    if ( aSearchText.isEmpty() )
+        return;
 
-        if ( aFactories.empty() )
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                     VclMessageType::Info, VclButtonsType::Ok,
-                                                                     SfxResId(STR_INFO_NOSEARCHRESULTS)));
-            xBox->run();
-        }
+    EnterWait();
+    ClearSearchResults();
+    RememberSearchText( aSearchText );
+    OUStringBuffer aSearchURL(HELP_URL);
+    aSearchURL.append(aFactory);
+    aSearchURL.append(HELP_SEARCH_TAG);
+    if ( !m_pFullWordsCB->IsChecked() )
+        aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
+    aSearchURL.append(aSearchText);
+    AppendConfigToken(aSearchURL, false);
+    if ( m_pScopeCB->IsChecked() )
+        aSearchURL.append("&Scope=Heading");
+    std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
+    for (const OUString & rRow : aFactories)
+    {
+        sal_Int32 nIdx = 0;
+        OUString aTitle = rRow.getToken( 0, '\t', nIdx );
+        OUString* pURL = new OUString( rRow.getToken( 1, '\t', nIdx ) );
+        const sal_Int32 nPos = m_pResultsLB->InsertEntry( aTitle );
+        m_pResultsLB->SetEntryData( nPos, pURL );
+    }
+    LeaveWait();
+
+    if ( aFactories.empty() )
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Info, VclButtonsType::Ok,
+                                                                 SfxResId(STR_INFO_NOSEARCHRESULTS)));
+        xBox->run();
     }
 }
 
@@ -2274,19 +2274,19 @@ IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, CloseHdl, LinkParamNone*, void )
 IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    if ( xConfiguration.is() )
+    if ( !xConfiguration.is() )
+        return;
+
+    bool bChecked = pBox->IsChecked();
+    try
     {
-        bool bChecked = pBox->IsChecked();
-        try
-        {
-            ConfigurationHelper::writeRelativeKey(
-                xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
-            ConfigurationHelper::flush( xConfiguration );
-        }
-        catch( Exception& )
-        {
-            SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
-        }
+        ConfigurationHelper::writeRelativeKey(
+            xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
+        ConfigurationHelper::flush( xConfiguration );
+    }
+    catch( Exception& )
+    {
+        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
     }
 }
 
@@ -2428,21 +2428,21 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
 void SfxHelpTextWindow_Impl::GetFocus()
 {
-    if ( !bIsInClose )
+    if ( bIsInClose )
+        return;
+
+    try
     {
-        try
+        if( xFrame.is() )
         {
-            if( xFrame.is() )
-            {
-                Reference< css::awt::XWindow > xWindow = xFrame->getComponentWindow();
-                if( xWindow.is() )
-                    xWindow->setFocus();
-            }
+            Reference< css::awt::XWindow > xWindow = xFrame->getComponentWindow();
+            if( xWindow.is() )
+                xWindow->setFocus();
         }
-        catch( Exception& )
-        {
-            SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
-        }
+    }
+    catch( Exception& )
+    {
+        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
     }
 }
 
@@ -2553,23 +2553,23 @@ void SfxHelpTextWindow_Impl::CloseFrame()
 
 void SfxHelpTextWindow_Impl::DoSearch()
 {
-    if (!m_xSrchDlg)
+    if (m_xSrchDlg)
+        return;
+
+    // create the search dialog
+    m_xSrchDlg.reset(new sfx2::SearchDialog(pTextWin->GetFrameWeld(), "HelpSearchDialog"));
+    // set handler
+    m_xSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
+    m_xSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
+    // get selected text of the help page to set it as the search text
+    Reference< XTextRange > xCursor = getCursor();
+    if ( xCursor.is() )
     {
-        // create the search dialog
-        m_xSrchDlg.reset(new sfx2::SearchDialog(pTextWin->GetFrameWeld(), "HelpSearchDialog"));
-        // set handler
-        m_xSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
-        m_xSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
-        // get selected text of the help page to set it as the search text
-        Reference< XTextRange > xCursor = getCursor();
-        if ( xCursor.is() )
-        {
-            OUString sText = xCursor->getString();
-            if ( !sText.isEmpty() )
-                m_xSrchDlg->SetSearchText( sText );
-        }
-        sfx2::SearchDialog::runAsync(m_xSrchDlg);
+        OUString sText = xCursor->getString();
+        if ( !sText.isEmpty() )
+            m_xSrchDlg->SetSearchText( sText );
     }
+    sfx2::SearchDialog::runAsync(m_xSrchDlg);
 }
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -2677,21 +2677,21 @@ void SfxHelpWindow_Impl::MakeLayout()
 
 void SfxHelpWindow_Impl::InitSizes()
 {
-    if ( xWindow.is() )
-    {
-        css::awt::Rectangle aRect = xWindow->getPosSize();
-        nHeight = aRect.Height;
+    if ( !xWindow.is() )
+        return;
 
-        if ( bIndex )
-        {
-            nExpandWidth = aRect.Width;
-            nCollapseWidth = nExpandWidth * nTextSize / 100;
-        }
-        else
-        {
-            nCollapseWidth = aRect.Width;
-            nExpandWidth = nTextSize ? nCollapseWidth * 100 / nTextSize : 0;
-        }
+    css::awt::Rectangle aRect = xWindow->getPosSize();
+    nHeight = aRect.Height;
+
+    if ( bIndex )
+    {
+        nExpandWidth = aRect.Width;
+        nCollapseWidth = nExpandWidth * nTextSize / 100;
+    }
+    else
+    {
+        nCollapseWidth = aRect.Width;
+        nExpandWidth = nTextSize ? nCollapseWidth * 100 / nTextSize : 0;
     }
 }
 
@@ -2699,35 +2699,35 @@ void SfxHelpWindow_Impl::InitSizes()
 void SfxHelpWindow_Impl::LoadConfig()
 {
      SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
-    if ( aViewOpt.Exists() )
-    {
-        bIndex = aViewOpt.IsVisible();
-        Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-        OUString aUserData;
-        if ( aUserItem >>= aUserData )
-        {
-            DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
-            sal_Int32 nIdx = 0;
-            nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            nTextSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            sal_Int32 nWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            nHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            aWinPos.setX( aUserData.getToken( 0, ';', nIdx ).toInt32() );
-            aWinPos.setY( aUserData.getToken( 0, ';', nIdx ).toInt32() );
-            if ( bIndex )
-            {
-                nExpandWidth = nWidth;
-                nCollapseWidth = nExpandWidth * nTextSize / 100;
-            }
-            else if (nTextSize != 0)
-            {
-                nCollapseWidth = nWidth;
-                nExpandWidth = nCollapseWidth * 100 / nTextSize;
-            }
-        }
+    if ( !aViewOpt.Exists() )
+        return;
 
-        pTextWin->ToggleIndex( bIndex );
+    bIndex = aViewOpt.IsVisible();
+    Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+    OUString aUserData;
+    if ( aUserItem >>= aUserData )
+    {
+        DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
+        sal_Int32 nIdx = 0;
+        nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        nTextSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        sal_Int32 nWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        nHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        aWinPos.setX( aUserData.getToken( 0, ';', nIdx ).toInt32() );
+        aWinPos.setY( aUserData.getToken( 0, ';', nIdx ).toInt32() );
+        if ( bIndex )
+        {
+            nExpandWidth = nWidth;
+            nCollapseWidth = nExpandWidth * nTextSize / 100;
+        }
+        else if (nTextSize != 0)
+        {
+            nCollapseWidth = nWidth;
+            nExpandWidth = nCollapseWidth * 100 / nTextSize;
+        }
     }
+
+    pTextWin->ToggleIndex( bIndex );
 }
 
 
@@ -2845,40 +2845,40 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
     }
     else
         pIndexWin->GrabFocusBack();
-    if ( bSuccess )
+    if ( !bSuccess )
+        return;
+
+    // set some view settings: "prevent help tips" and "helpid == 68245"
+    try
     {
-        // set some view settings: "prevent help tips" and "helpid == 68245"
-        try
+        Reference < XController > xController = pTextWin->getFrame()->getController();
+        if ( xController.is() )
         {
-            Reference < XController > xController = pTextWin->getFrame()->getController();
-            if ( xController.is() )
-            {
-                Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
-                Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
-                Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
-                xViewProps->setPropertyValue( "ShowContentTips", makeAny( false ) );
-                xViewProps->setPropertyValue( "ShowGraphics", makeAny( true ) );
-                xViewProps->setPropertyValue( "ShowTables", makeAny( true ) );
-                xViewProps->setPropertyValue( "HelpURL", makeAny( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
-                OUString sProperty( "IsExecuteHyperlinks" );
-                if ( xInfo->hasPropertyByName( sProperty ) )
-                    xViewProps->setPropertyValue( sProperty, makeAny( true ) );
-                xController->restoreViewData(Any());
-            }
+            Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
+            Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
+            Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
+            xViewProps->setPropertyValue( "ShowContentTips", makeAny( false ) );
+            xViewProps->setPropertyValue( "ShowGraphics", makeAny( true ) );
+            xViewProps->setPropertyValue( "ShowTables", makeAny( true ) );
+            xViewProps->setPropertyValue( "HelpURL", makeAny( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
+            OUString sProperty( "IsExecuteHyperlinks" );
+            if ( xInfo->hasPropertyByName( sProperty ) )
+                xViewProps->setPropertyValue( sProperty, makeAny( true ) );
+            xController->restoreViewData(Any());
         }
-        catch( Exception& )
-        {
-            OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
-        }
-
-        // When the SearchPage opens the help doc, then select all words, which are equal to its text
-        OUString sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
-        if ( !sSearchText.isEmpty() )
-            pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
-
-        // no page style header -> this prevents a print output of the URL
-        pTextWin->SetPageStyleHeaderOff();
     }
+    catch( Exception& )
+    {
+        OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
+    }
+
+    // When the SearchPage opens the help doc, then select all words, which are equal to its text
+    OUString sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
+    if ( !sSearchText.isEmpty() )
+        pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
+
+    // no page style header -> this prevents a print output of the URL
+    pTextWin->SetPageStyleHeaderOff();
 }
 
 

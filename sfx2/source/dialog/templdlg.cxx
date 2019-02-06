@@ -1020,62 +1020,62 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( bool bEnable )
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     OSL_ENSURE( pTreeBox, "FillTreeBox() without treebox");
-    if (pStyleSheetPool && nActFamily != 0xffff)
+    if (!pStyleSheetPool || nActFamily == 0xffff)
+        return;
+
+    const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    if (!pItem)
+        return;
+    pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SfxStyleSearchBits::AllVisible);
+    StyleTreeArr_Impl aArr;
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+
+    if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
+        pTreeBox->SetDragDropMode(DragDropMode::CTRL_MOVE);
+    else
+        pTreeBox->SetDragDropMode(DragDropMode::NONE);
+
+    while (pStyle)
     {
-        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-        if (!pItem)
-            return;
-        pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SfxStyleSearchBits::AllVisible);
-        StyleTreeArr_Impl aArr;
-        SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
-
-        if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
-            pTreeBox->SetDragDropMode(DragDropMode::CTRL_MOVE);
-        else
-            pTreeBox->SetDragDropMode(DragDropMode::NONE);
-
-        while (pStyle)
-        {
-            StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
-            aArr.emplace_back(pNew);
-            pStyle = pStyleSheetPool->Next();
-        }
-
-        MakeTree_Impl(aArr);
-        std::vector<OUString> aEntries;
-        pTreeBox->MakeExpanded_Impl(aEntries);
-        pTreeBox->SetUpdateMode( false );
-        pTreeBox->Clear();
-        const sal_uInt16 nCount = aArr.size();
-
-        for (sal_uInt16 i = 0; i < nCount; ++i)
-        {
-            FillBox_Impl(pTreeBox, aArr[i].get(), aEntries, pItem->GetFamily(), nullptr);
-            aArr[i].reset();
-        }
-        pTreeBox->Recalc();
-
-        EnableItem(SID_STYLE_WATERCAN, false);
-
-        SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
-
-        if (nCount)
-            pTreeBox->Expand(pTreeBox->First());
-
-        for (SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next(pEntry))
-        {
-            if (IsExpanded_Impl(aEntries, pTreeBox->GetEntryText(pEntry)))
-                pTreeBox->Expand(pEntry);
-        }
-
-        pTreeBox->SetUpdateMode( true );
-
-        OUString aStyle;
-        if(pState)  // Select current entry
-            aStyle = pState->GetStyleName();
-        SelectStyle(aStyle);
-        EnableDelete();
+        StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
+        aArr.emplace_back(pNew);
+        pStyle = pStyleSheetPool->Next();
     }
+
+    MakeTree_Impl(aArr);
+    std::vector<OUString> aEntries;
+    pTreeBox->MakeExpanded_Impl(aEntries);
+    pTreeBox->SetUpdateMode( false );
+    pTreeBox->Clear();
+    const sal_uInt16 nCount = aArr.size();
+
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        FillBox_Impl(pTreeBox, aArr[i].get(), aEntries, pItem->GetFamily(), nullptr);
+        aArr[i].reset();
+    }
+    pTreeBox->Recalc();
+
+    EnableItem(SID_STYLE_WATERCAN, false);
+
+    SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
+
+    if (nCount)
+        pTreeBox->Expand(pTreeBox->First());
+
+    for (SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next(pEntry))
+    {
+        if (IsExpanded_Impl(aEntries, pTreeBox->GetEntryText(pEntry)))
+            pTreeBox->Expand(pEntry);
+    }
+
+    pTreeBox->SetUpdateMode( true );
+
+    OUString aStyle;
+    if(pState)  // Select current entry
+        aStyle = pState->GetStyleName();
+    SelectStyle(aStyle);
+    EnableDelete();
 }
 
 bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
@@ -1112,122 +1112,122 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         nFilter = nAppFilter;
 
     OSL_ENSURE(pStyleSheetPool, "no StyleSheetPool");
-    if(pStyleSheetPool)
+    if(!pStyleSheetPool)
+        return;
+
+    pStyleSheetPool->SetSearchMask(eFam, nFilter);
+    pItem = GetFamilyItem_Impl();
+    if(nFlags & StyleFlags::UpdateFamily)   // Update view type list (Hierarchical, All, etc.
     {
-        pStyleSheetPool->SetSearchMask(eFam, nFilter);
-        pItem = GetFamilyItem_Impl();
-        if(nFlags & StyleFlags::UpdateFamily)   // Update view type list (Hierarchical, All, etc.
+        CheckItem(nActFamily);    // check Button in Toolbox
+        aFilterLb->SetUpdateMode(false);
+        aFilterLb->Clear();
+        //insert hierarchical at the beginning
+        sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL), 0);
+        aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SfxStyleSearchBits::All) );
+        const SfxStyleFilter& rFilter = pItem->GetFilterList();
+        for(const SfxFilterTuple& i : rFilter)
         {
-            CheckItem(nActFamily);    // check Button in Toolbox
-            aFilterLb->SetUpdateMode(false);
-            aFilterLb->Clear();
-            //insert hierarchical at the beginning
-            sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL), 0);
-            aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SfxStyleSearchBits::All) );
-            const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for(const SfxFilterTuple& i : rFilter)
-            {
-                SfxStyleSearchBits nFilterFlags = i.nFlags;
-                nPos = aFilterLb->InsertEntry( i.aName );
-                aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(nFilterFlags) );
-            }
-            if(nActFilter < aFilterLb->GetEntryCount() - 1)
-                aFilterLb->SelectEntryPos(nActFilter + 1);
-            else
-            {
-                nActFilter = 0;
-                aFilterLb->SelectEntryPos(1);
-                SfxStyleSearchBits nFilterFlags = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
-                pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
-            }
-
-            // if the tree view again, select family hierarchy
-            if (pTreeBox->IsVisible() || m_bWantHierarchical)
-            {
-                aFilterLb->SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
-                EnableHierarchical(true);
-            }
-
-            // show maximum 14 entries
-            aFilterLb->SetDropDownLineCount( MAX_FILTER_ENTRIES );
-            aFilterLb->SetUpdateMode(true);
+            SfxStyleSearchBits nFilterFlags = i.nFlags;
+            nPos = aFilterLb->InsertEntry( i.aName );
+            aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(nFilterFlags) );
         }
+        if(nActFilter < aFilterLb->GetEntryCount() - 1)
+            aFilterLb->SelectEntryPos(nActFilter + 1);
         else
         {
-            if (nActFilter < aFilterLb->GetEntryCount() - 1)
-                aFilterLb->SelectEntryPos(nActFilter + 1);
-            else
-            {
-                nActFilter = 0;
-                aFilterLb->SelectEntryPos(1);
-            }
+            nActFilter = 0;
+            aFilterLb->SelectEntryPos(1);
+            SfxStyleSearchBits nFilterFlags = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
+            pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
         }
 
-        if(nFlags & StyleFlags::UpdateFamilyList)
+        // if the tree view again, select family hierarchy
+        if (pTreeBox->IsVisible() || m_bWantHierarchical)
         {
-            EnableItem(SID_STYLE_WATERCAN,false);
+            aFilterLb->SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
+            EnableHierarchical(true);
+        }
 
-            SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
-            SvTreeListEntry* pEntry = aFmtLb->First();
-            std::vector<OUString> aStrings;
-
-            comphelper::string::NaturalStringSorter aSorter(
-                ::comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetLanguageTag().getLocale());
-
-            while( pStyle )
-            {
-                //Bubblesort
-                size_t nPos;
-                for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
-                {};
-                aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
-                pStyle = pStyleSheetPool->Next();
-            }
-
-            size_t nCount = aStrings.size();
-            size_t nPos = 0;
-            while(nPos < nCount && pEntry &&
-                  aStrings[nPos] == aFmtLb->GetEntryText(pEntry))
-            {
-                ++nPos;
-                pEntry = aFmtLb->Next( pEntry );
-            }
-
-            if( nPos < nCount || pEntry )
-            {
-                // Fills the display box
-                aFmtLb->SetUpdateMode(false);
-                aFmtLb->Clear();
-
-                for(nPos = 0; nPos < nCount; ++nPos)
-                {
-                    SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
-                    if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
-                    {
-                        pTreeListEntry->ReplaceItem(std::make_unique<StyleLBoxString>(aStrings[nPos], eFam), 1);
-                    }
-                    aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
-                }
-                aFmtLb->Recalc();
-                aFmtLb->SetUpdateMode(true);
-            }
-            // Selects the current style if any
-            SfxTemplateItem *pState = pFamilyState[nActFamily-1].get();
-            OUString aStyle;
-            if(pState)
-                aStyle = pState->GetStyleName();
-#if defined STYLESPREVIEW
-            mbIgnoreSelect = true; // in case we get a selection change
-            // in any case we should stop any preview
-            Execute_Impl(SID_STYLE_END_PREVIEW,
-            OUString(), OUString(),
-            0, 0, 0, 0 );
-#endif
-            SelectStyle(aStyle);
-            EnableDelete();
+        // show maximum 14 entries
+        aFilterLb->SetDropDownLineCount( MAX_FILTER_ENTRIES );
+        aFilterLb->SetUpdateMode(true);
+    }
+    else
+    {
+        if (nActFilter < aFilterLb->GetEntryCount() - 1)
+            aFilterLb->SelectEntryPos(nActFilter + 1);
+        else
+        {
+            nActFilter = 0;
+            aFilterLb->SelectEntryPos(1);
         }
     }
+
+    if(!(nFlags & StyleFlags::UpdateFamilyList))
+        return;
+
+    EnableItem(SID_STYLE_WATERCAN,false);
+
+    SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
+    SvTreeListEntry* pEntry = aFmtLb->First();
+    std::vector<OUString> aStrings;
+
+    comphelper::string::NaturalStringSorter aSorter(
+        ::comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetLanguageTag().getLocale());
+
+    while( pStyle )
+    {
+        //Bubblesort
+        size_t nPos;
+        for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
+        {};
+        aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
+        pStyle = pStyleSheetPool->Next();
+    }
+
+    size_t nCount = aStrings.size();
+    size_t nPos = 0;
+    while(nPos < nCount && pEntry &&
+          aStrings[nPos] == aFmtLb->GetEntryText(pEntry))
+    {
+        ++nPos;
+        pEntry = aFmtLb->Next( pEntry );
+    }
+
+    if( nPos < nCount || pEntry )
+    {
+        // Fills the display box
+        aFmtLb->SetUpdateMode(false);
+        aFmtLb->Clear();
+
+        for(nPos = 0; nPos < nCount; ++nPos)
+        {
+            SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
+            if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
+            {
+                pTreeListEntry->ReplaceItem(std::make_unique<StyleLBoxString>(aStrings[nPos], eFam), 1);
+            }
+            aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
+        }
+        aFmtLb->Recalc();
+        aFmtLb->SetUpdateMode(true);
+    }
+    // Selects the current style if any
+    SfxTemplateItem *pState = pFamilyState[nActFamily-1].get();
+    OUString aStyle;
+    if(pState)
+        aStyle = pState->GetStyleName();
+#if defined STYLESPREVIEW
+    mbIgnoreSelect = true; // in case we get a selection change
+    // in any case we should stop any preview
+    Execute_Impl(SID_STYLE_END_PREVIEW,
+    OUString(), OUString(),
+    0, 0, 0, 0 );
+#endif
+    SelectStyle(aStyle);
+    EnableDelete();
 }
 
 // Updated display: Watering the house
@@ -1504,22 +1504,22 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
                 bool bForce )   // Force update, even if the new filter is
                                 // equal to the current
 {
-    if( nEntry != nActFilter || bForce )
-    {
-        nActFilter = nEntry;
-        SfxObjectShell *const pDocShell = SaveSelection();
-        SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
-        pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): nullptr;
-        if ( pOldStyleSheetPool != pStyleSheetPool )
-        {
-            if ( pOldStyleSheetPool )
-                EndListening(*pOldStyleSheetPool);
-            if ( pStyleSheetPool )
-                StartListening(*pStyleSheetPool);
-        }
+    if( nEntry == nActFilter && !bForce )
+        return;
 
-        UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
+    nActFilter = nEntry;
+    SfxObjectShell *const pDocShell = SaveSelection();
+    SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
+    pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): nullptr;
+    if ( pOldStyleSheetPool != pStyleSheetPool )
+    {
+        if ( pOldStyleSheetPool )
+            EndListening(*pOldStyleSheetPool);
+        if ( pStyleSheetPool )
+            StartListening(*pStyleSheetPool);
     }
+
+    UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
 }
 
 // Internal: Perform functions through the Dispatcher
@@ -1795,27 +1795,27 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl&, rBox, 
 // Handler for the New-Buttons
 void SfxCommonTemplateDialog_Impl::NewHdl()
 {
-    if ( nActFamily != 0xffff && (pTreeBox->IsVisible() || aFmtLb->GetSelectionCount() <= 1))
+    if ( nActFamily == 0xffff || !(pTreeBox->IsVisible() || aFmtLb->GetSelectionCount() <= 1))
+        return;
+
+    const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
+    const SfxStyleFamily eFam=pItem->GetFamily();
+    SfxStyleSearchBits nMask;
+    if( nActFilter != 0xffff )
     {
-        const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-        const SfxStyleFamily eFam=pItem->GetFamily();
-        SfxStyleSearchBits nMask;
-        if( nActFilter != 0xffff )
-        {
-            nMask = pItem->GetFilterList()[nActFilter].nFlags;
-            if(nMask == SfxStyleSearchBits::Auto)    // automatic
-                nMask = nAppFilter;
-        }
-        else
-            nMask=pStyleSheetPool->GetSearchMask();
-
-        pStyleSheetPool->SetSearchMask(eFam,nMask);
-
-        Execute_Impl(SID_STYLE_NEW,
-                     "", GetSelectedEntry(),
-                     static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
-                     nMask);
+        nMask = pItem->GetFilterList()[nActFilter].nFlags;
+        if(nMask == SfxStyleSearchBits::Auto)    // automatic
+            nMask = nAppFilter;
     }
+    else
+        nMask=pStyleSheetPool->GetSearchMask();
+
+    pStyleSheetPool->SetSearchMask(eFam,nMask);
+
+    Execute_Impl(SID_STYLE_NEW,
+                 "", GetSelectedEntry(),
+                 static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
+                 nMask);
 }
 
 // Handler for the edit-Buttons
@@ -1834,103 +1834,102 @@ void SfxCommonTemplateDialog_Impl::EditHdl()
 // Handler for the Delete-Buttons
 void SfxCommonTemplateDialog_Impl::DeleteHdl()
 {
-    if ( IsInitialized() && HasSelectedStyle() )
+    if ( !IsInitialized() || !HasSelectedStyle() )
+        return;
+
+    bool bUsedStyle = false;     // one of the selected styles are used in the document?
+
+    std::vector<SvTreeListEntry*> aList;
+    SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
+    const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+
+    OUStringBuffer aMsg;
+    aMsg.append(SfxResId(STR_DELETE_STYLE_USED)).append(SfxResId(STR_DELETE_STYLE));
+
+    while (pEntry)
     {
-        bool bUsedStyle = false;     // one of the selected styles are used in the document?
+        aList.push_back( pEntry );
+        // check the style is used or not
+        const OUString aTemplName(pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry));
 
-        std::vector<SvTreeListEntry*> aList;
-        SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
-        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+        SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
 
-        OUStringBuffer aMsg;
-        aMsg.append(SfxResId(STR_DELETE_STYLE_USED)).append(SfxResId(STR_DELETE_STYLE));
-
-        while (pEntry)
+        if ( pStyle->IsUsed() )  // pStyle is in use in the document?
         {
-            aList.push_back( pEntry );
-            // check the style is used or not
-            const OUString aTemplName(pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry));
-
-            SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
-
-            if ( pStyle->IsUsed() )  // pStyle is in use in the document?
-            {
-                if (bUsedStyle) // add a separator for the second and later styles
-                    aMsg.append(", ");
-                aMsg.append(aTemplName);
-                bUsedStyle = true;
-            }
-
-            pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
+            if (bUsedStyle) // add a separator for the second and later styles
+                aMsg.append(", ");
+            aMsg.append(aTemplName);
+            bUsedStyle = true;
         }
 
-        bool aApproved = false;
+        pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
+    }
 
-        // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
-        if ( bUsedStyle )
+    bool aApproved = false;
+
+    // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
+    if ( bUsedStyle )
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Question, VclButtonsType::YesNo,
+                                                                 aMsg.makeStringAndClear()));
+        aApproved = xBox->run() == RET_YES;
+    }
+
+    // if there are no used styles selected or the user approved the changes
+    if ( !(!bUsedStyle || aApproved) )
+        return;
+
+    for (auto const& elem : aList)
+    {
+        const OUString aTemplName(pTreeBox->IsVisible() ? pTreeBox->GetEntryText(elem) : aFmtLb->GetEntryText(elem));
+        bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
+        Execute_Impl( SID_STYLE_DELETE, aTemplName,
+                      OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
+
+        if ( pTreeBox->IsVisible() )
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                     VclMessageType::Question, VclButtonsType::YesNo,
-                                                                     aMsg.makeStringAndClear()));
-            aApproved = xBox->run() == RET_YES;
-        }
-
-        // if there are no used styles selected or the user approved the changes
-        if ( !bUsedStyle || aApproved )
-        {
-            for (auto const& elem : aList)
-            {
-                const OUString aTemplName(pTreeBox->IsVisible() ? pTreeBox->GetEntryText(elem) : aFmtLb->GetEntryText(elem));
-                bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
-                Execute_Impl( SID_STYLE_DELETE, aTemplName,
-                              OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
-
-                if ( pTreeBox->IsVisible() )
-                {
-                    pTreeBox->RemoveParentKeepChildren(elem);
-                    bDontUpdate = false;
-                }
-            }
-            bDontUpdate = false; //if everything is deleted set bDontUpdate back to false
-            UpdateStyles_Impl(StyleFlags::UpdateFamilyList); //and force-update the list
+            pTreeBox->RemoveParentKeepChildren(elem);
+            bDontUpdate = false;
         }
     }
+    bDontUpdate = false; //if everything is deleted set bDontUpdate back to false
+    UpdateStyles_Impl(StyleFlags::UpdateFamilyList); //and force-update the list
 }
 
 void SfxCommonTemplateDialog_Impl::HideHdl()
 {
-    if ( IsInitialized() && HasSelectedStyle() )
+    if ( !IsInitialized() || !HasSelectedStyle() )
+        return;
+
+    SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
+
+    while (pEntry)
     {
-        SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
+        OUString aTemplName = pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
 
-        while (pEntry)
-        {
-            OUString aTemplName = pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
+        Execute_Impl( SID_STYLE_HIDE, aTemplName,
+                      OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
-            Execute_Impl( SID_STYLE_HIDE, aTemplName,
-                          OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
-
-            pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
-        }
+        pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
     }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowHdl()
 {
+    if ( !IsInitialized() || !HasSelectedStyle() )
+        return;
 
-    if ( IsInitialized() && HasSelectedStyle() )
+    SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
+
+    while (pEntry)
     {
-        SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
+        OUString aTemplName = pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
 
-        while (pEntry)
-        {
-            OUString aTemplName = pTreeBox->IsVisible() ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
+        Execute_Impl( SID_STYLE_SHOW, aTemplName,
+                      OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
-            Execute_Impl( SID_STYLE_SHOW, aTemplName,
-                          OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
-
-            pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
-        }
+        pEntry = pTreeBox->IsVisible() ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
     }
 }
 
@@ -2041,27 +2040,27 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
         EnableItem(SID_STYLE_WATERCAN, !bWaterDisabled);
         EnableDelete();
     }
-    if( pListBox )
-    {
-        SelectStyle( pListBox->GetEntryText( pListBox->GetHdlEntry() ));
+    if( !pListBox )
+        return;
+
+    SelectStyle( pListBox->GetEntryText( pListBox->GetHdlEntry() ));
 #if defined STYLESPREVIEW
-        sal_uInt16 nModifier = aFmtLb->GetModifier();
-        if ( mbIgnoreSelect )
-        {
-            Execute_Impl(SID_STYLE_END_PREVIEW,
-            OUString(), OUString(),
-            0, 0, 0, 0 );
-            mbIgnoreSelect = false;
-        }
-        else
-        {
-            Execute_Impl(SID_STYLE_PREVIEW,
-                     GetSelectedEntry(), OUString(),
-                     ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
-                     0, 0, &nModifier );
-        }
-#endif
+    sal_uInt16 nModifier = aFmtLb->GetModifier();
+    if ( mbIgnoreSelect )
+    {
+        Execute_Impl(SID_STYLE_END_PREVIEW,
+        OUString(), OUString(),
+        0, 0, 0, 0 );
+        mbIgnoreSelect = false;
     }
+    else
+    {
+        Execute_Impl(SID_STYLE_PREVIEW,
+                 GetSelectedEntry(), OUString(),
+                 ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
+                 0, 0, &nModifier );
+    }
+#endif
 }
 
 IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
@@ -2374,34 +2373,34 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
 IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
-    if(nEntry == SID_STYLE_NEW_BY_EXAMPLE &&
-            ToolBoxItemBits::DROPDOWN == (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
-    {
-        //create a popup menu in Writer
-        ScopedVclPtrInstance<PopupMenu> pMenu;
-        OUString sTextDoc("com.sun.star.text.TextDocument");
+    if(nEntry != SID_STYLE_NEW_BY_EXAMPLE ||
+            !(pBox->GetItemBits(nEntry) & ToolBoxItemBits::DROPDOWN))
+        return;
 
-        OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleNewByExample", sTextDoc);
-        pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
-        pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+    //create a popup menu in Writer
+    ScopedVclPtrInstance<PopupMenu> pMenu;
+    OUString sTextDoc("com.sun.star.text.TextDocument");
 
-        sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleUpdateByExample", sTextDoc);
-        pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
-        pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
+    OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleNewByExample", sTextDoc);
+    pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+    pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-        pMenu->InsertSeparator();
+    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleUpdateByExample", sTextDoc);
+    pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+    pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-        sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:LoadStyles", sTextDoc);
-        pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
-        pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
+    pMenu->InsertSeparator();
 
-        pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
-        pMenu->Execute( pBox,
-                        pBox->GetItemRect(nEntry),
-                        PopupMenuFlags::ExecuteDown );
-        pBox->EndSelection();
-        pBox->Invalidate();
-    }
+    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:LoadStyles", sTextDoc);
+    pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
+    pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
+
+    pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
+    pMenu->Execute( pBox,
+                    pBox->GetItemRect(nEntry),
+                    PopupMenuFlags::ExecuteDown );
+    pBox->EndSelection();
+    pBox->Invalidate();
 }
 
 IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool)

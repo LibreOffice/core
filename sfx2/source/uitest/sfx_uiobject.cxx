@@ -45,28 +45,28 @@ StringMap SfxTabDialogUIObject::get_state()
 void SfxTabDialogUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    if (rAction == "SELECT")
+    if (rAction != "SELECT")
+        return;
+
+    if (rParameters.find("POS") != rParameters.end())
     {
-        if (rParameters.find("POS") != rParameters.end())
+        auto itr = rParameters.find("POS");
+        sal_uInt32 nPos = itr->second.toUInt32();
+        std::vector<sal_uInt16> aIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
+        sal_uInt16 nPageId = aIds[nPos];
+        mxTabDialog->ShowPage(nPageId);
+    }
+    else if (rParameters.find("NAME") != rParameters.end())
+    {
+        auto itr = rParameters.find("NAME");
+        OUString aName = itr->second;
+        std::vector<sal_uInt16> aIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
+        for (auto const& elem : aIds)
         {
-            auto itr = rParameters.find("POS");
-            sal_uInt32 nPos = itr->second.toUInt32();
-            std::vector<sal_uInt16> aIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
-            sal_uInt16 nPageId = aIds[nPos];
-            mxTabDialog->ShowPage(nPageId);
-        }
-        else if (rParameters.find("NAME") != rParameters.end())
-        {
-            auto itr = rParameters.find("NAME");
-            OUString aName = itr->second;
-            std::vector<sal_uInt16> aIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
-            for (auto const& elem : aIds)
+            if (mxTabDialog->GetPageText(elem) == aName)
             {
-                if (mxTabDialog->GetPageText(elem) == aName)
-                {
-                    mxTabDialog->ShowPage(elem);
-                    break;
-                }
+                mxTabDialog->ShowPage(elem);
+                break;
             }
         }
     }

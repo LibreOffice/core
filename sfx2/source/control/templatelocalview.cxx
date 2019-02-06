@@ -573,109 +573,109 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             pTarget = pRegion.get();
     }
 
-    if (pTarget)
+    if (!pTarget)
+        return;
+
+    bool refresh = false;
+
+    sal_uInt16 nTargetRegion = pTarget->mnRegionId;
+    sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+    std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
+
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
+    for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
     {
-        bool refresh = false;
+        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
+        sal_uInt16 nSrcRegionId = pViewItem->mnRegionId;
 
-        sal_uInt16 nTargetRegion = pTarget->mnRegionId;
-        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
-        std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
-
-        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
-        for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
+        for (auto const & pRegion : maRegions)
         {
-            const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
-            sal_uInt16 nSrcRegionId = pViewItem->mnRegionId;
+            if (pRegion->mnRegionId == nSrcRegionId)
+                pSrc = pRegion.get();
+        }
 
-            for (auto const & pRegion : maRegions)
+        if(pSrc)
+        {
+            bool bCopy = !mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId);
+
+            if (bCopy)
             {
-                if (pRegion->mnRegionId == nSrcRegionId)
-                    pSrc = pRegion.get();
-            }
-
-            if(pSrc)
-            {
-                bool bCopy = !mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId);
-
-                if (bCopy)
+                OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
+                    getRegionName(nTargetRegion));
+                std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, sQuery));
+                if (xQueryDlg->run() != RET_YES)
                 {
-                    OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
-                        getRegionName(nTargetRegion));
-                    std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, sQuery));
-                    if (xQueryDlg->run() != RET_YES)
-                    {
-                        OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
-                        sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                  VclMessageType::Warning, VclButtonsType::Ok, sMsg.replaceFirst( "$2",pViewItem->maTitle)));
-                        xBox->run();
+                    OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
+                    sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Warning, VclButtonsType::Ok, sMsg.replaceFirst( "$2",pViewItem->maTitle)));
+                    xBox->run();
 
-                        return; //return if any single move operation fails
-                    }
-
-                    if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
-                    {
-                        continue;
-                    }
+                    return; //return if any single move operation fails
                 }
 
-                // move template to destination
-
-                TemplateItemProperties aTemplateItem;
-                aTemplateItem.nId = nTargetIdx + 1;
-                aTemplateItem.nDocId = nTargetIdx;
-                aTemplateItem.nRegionId = nTargetRegion;
-                aTemplateItem.aName = pViewItem->maTitle;
-                aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
-                aTemplateItem.aRegionName = pViewItem->maHelpText;
-                aTemplateItem.aThumbnail = pViewItem->maPreview1;
-
-                pTarget->maTemplates.push_back(aTemplateItem);
-
-                if (!bCopy)
+                if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
                 {
-                    // remove template from region cached data
-
-                    std::vector<TemplateItemProperties>::iterator pPropIter;
-                    for (pPropIter = pSrc->maTemplates.begin(); pPropIter != pSrc->maTemplates.end();)
-                    {
-                        if (pPropIter->nDocId == pViewItem->mnDocId)
-                        {
-                            pPropIter = pSrc->maTemplates.erase(pPropIter);
-                            aItemIds.push_back(pViewItem->mnDocId + 1);//mnid
-                        }
-                        else
-                        {
-                            // Keep region document id synchronized with SfxDocumentTemplates
-                            if (pPropIter->nDocId > pViewItem->mnDocId)
-                                --pPropIter->nDocId;
-
-                            ++pPropIter;
-                        }
-                    }
-
-                    // Keep view document id synchronized with SfxDocumentTemplates
-                    for (auto const& item : mItemList)
-                    {
-                        auto pTemplateViewItem = static_cast<TemplateViewItem*>(item.get());
-                        if (pTemplateViewItem->mnDocId > pViewItem->mnDocId)
-                            --pTemplateViewItem->mnDocId;
-                    }
+                    continue;
                 }
             }
 
-            refresh = true;
+            // move template to destination
+
+            TemplateItemProperties aTemplateItem;
+            aTemplateItem.nId = nTargetIdx + 1;
+            aTemplateItem.nDocId = nTargetIdx;
+            aTemplateItem.nRegionId = nTargetRegion;
+            aTemplateItem.aName = pViewItem->maTitle;
+            aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
+            aTemplateItem.aRegionName = pViewItem->maHelpText;
+            aTemplateItem.aThumbnail = pViewItem->maPreview1;
+
+            pTarget->maTemplates.push_back(aTemplateItem);
+
+            if (!bCopy)
+            {
+                // remove template from region cached data
+
+                std::vector<TemplateItemProperties>::iterator pPropIter;
+                for (pPropIter = pSrc->maTemplates.begin(); pPropIter != pSrc->maTemplates.end();)
+                {
+                    if (pPropIter->nDocId == pViewItem->mnDocId)
+                    {
+                        pPropIter = pSrc->maTemplates.erase(pPropIter);
+                        aItemIds.push_back(pViewItem->mnDocId + 1);//mnid
+                    }
+                    else
+                    {
+                        // Keep region document id synchronized with SfxDocumentTemplates
+                        if (pPropIter->nDocId > pViewItem->mnDocId)
+                            --pPropIter->nDocId;
+
+                        ++pPropIter;
+                    }
+                }
+
+                // Keep view document id synchronized with SfxDocumentTemplates
+                for (auto const& item : mItemList)
+                {
+                    auto pTemplateViewItem = static_cast<TemplateViewItem*>(item.get());
+                    if (pTemplateViewItem->mnDocId > pViewItem->mnDocId)
+                        --pTemplateViewItem->mnDocId;
+                }
+            }
         }
 
-        // Remove items from the current view
-        for (auto const& itemId : aItemIds)
-            RemoveItem(itemId);
+        refresh = true;
+    }
 
-        if (refresh)
-        {
-            CalculateItemPositions();
-            Invalidate();
-        }
+    // Remove items from the current view
+    for (auto const& itemId : aItemIds)
+        RemoveItem(itemId);
+
+    if (refresh)
+    {
+        CalculateItemPositions();
+        Invalidate();
     }
 }
 

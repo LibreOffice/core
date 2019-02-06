@@ -2336,45 +2336,45 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
     catch (Exception&) {}
 
-    if ( xResultSet.is() )
+    if ( !xResultSet.is() )
+        return;
+
+    GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
+    pGroup->setHierarchy( true );
+    pGroup->setHierarchyURL( rOwnURL );
+    rList.push_back( std::unique_ptr<GroupData_Impl>(pGroup) );
+
+    uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+    uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+    try
     {
-        GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
-        pGroup->setHierarchy( true );
-        pGroup->setHierarchyURL( rOwnURL );
-        rList.push_back( std::unique_ptr<GroupData_Impl>(pGroup) );
-
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
+        while ( xResultSet->next() )
         {
-            while ( xResultSet->next() )
+            bool             bUpdateType = false;
+            DocTemplates_EntryData_Impl  *pData;
+
+            const OUString aTitle( xRow->getString( 1 ) );
+            const OUString aTargetDir( xRow->getString( 2 ) );
+            OUString aType( xRow->getString( 3 ) );
+            const OUString aHierURL {xContentAccess->queryContentIdentifierString()};
+
+            if ( aType.isEmpty() )
             {
-                bool             bUpdateType = false;
-                DocTemplates_EntryData_Impl  *pData;
+                OUString aTmpTitle;
 
-                const OUString aTitle( xRow->getString( 1 ) );
-                const OUString aTargetDir( xRow->getString( 2 ) );
-                OUString aType( xRow->getString( 3 ) );
-                const OUString aHierURL {xContentAccess->queryContentIdentifierString()};
+                bool bDocHasTitle = false;
+                getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle );
 
-                if ( aType.isEmpty() )
-                {
-                    OUString aTmpTitle;
-
-                    bool bDocHasTitle = false;
-                    getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle );
-
-                    if ( !aType.isEmpty() )
-                        bUpdateType = true;
-                }
-
-                pData = pGroup->addEntry( aTitle, aTargetDir, aType, aHierURL );
-                pData->setUpdateType( bUpdateType );
+                if ( !aType.isEmpty() )
+                    bUpdateType = true;
             }
+
+            pData = pGroup->addEntry( aTitle, aTargetDir, aType, aHierURL );
+            pData->setUpdateType( bUpdateType );
         }
-        catch ( Exception& ) {}
     }
+    catch ( Exception& ) {}
 }
 
 
@@ -2438,30 +2438,30 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     }
     catch ( Exception& ) {}
 
-    if ( xResultSet.is() )
+    if ( !xResultSet.is() )
+        return;
+
+    uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+    uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+    try
     {
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
+        while ( xResultSet->next() )
         {
-            while ( xResultSet->next() )
-            {
-                OUString aChildTitle( xRow->getString( 1 ) );
-                const OUString aTargetURL {xContentAccess->queryContentIdentifierString()};
-                OUString aType;
+            OUString aChildTitle( xRow->getString( 1 ) );
+            const OUString aTargetURL {xContentAccess->queryContentIdentifierString()};
+            OUString aType;
 
-                if ( aChildTitle == "sfx.tlx" || aChildTitle == "groupuinames.xml" )
-                    continue;
+            if ( aChildTitle == "sfx.tlx" || aChildTitle == "groupuinames.xml" )
+                continue;
 
-                bool bDocHasTitle = false;
-                getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle );
+            bool bDocHasTitle = false;
+            getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle );
 
-                pGroup->addEntry( aChildTitle, aTargetURL, aType, OUString() );
-            }
+            pGroup->addEntry( aChildTitle, aTargetURL, aType, OUString() );
         }
-        catch ( Exception& ) {}
     }
+    catch ( Exception& ) {}
 }
 
 
@@ -2496,37 +2496,37 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     }
     catch ( Exception& ) {}
 
-    if ( xResultSet.is() )
+    if ( !xResultSet.is() )
+        return;
+
+    uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+    uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+    try
     {
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
+        while ( xResultSet->next() )
         {
-            while ( xResultSet->next() )
+            // TODO/LATER: clarify the encoding of the Title
+            const OUString aTitle( xRow->getString( 1 ) );
+            const OUString aTargetSubfolderURL( xContentAccess->queryContentIdentifierString() );
+
+            if ( bHierarchy )
+                addHierGroup( rList, aTitle, aTargetSubfolderURL );
+            else
             {
-                // TODO/LATER: clarify the encoding of the Title
-                const OUString aTitle( xRow->getString( 1 ) );
-                const OUString aTargetSubfolderURL( xContentAccess->queryContentIdentifierString() );
+                OUString aUITitle;
+                for (beans::StringPair & rUIName : aUINames)
+                    if ( rUIName.First == aTitle )
+                    {
+                        aUITitle = rUIName.Second;
+                        break;
+                    }
 
-                if ( bHierarchy )
-                    addHierGroup( rList, aTitle, aTargetSubfolderURL );
-                else
-                {
-                    OUString aUITitle;
-                    for (beans::StringPair & rUIName : aUINames)
-                        if ( rUIName.First == aTitle )
-                        {
-                            aUITitle = rUIName.Second;
-                            break;
-                        }
-
-                    addFsysGroup( rList, aTitle, aUITitle, aTargetSubfolderURL, bWriteableContent );
-                }
+                addFsysGroup( rList, aTitle, aUITitle, aTargetSubfolderURL, bWriteableContent );
             }
         }
-        catch ( Exception& ) {}
     }
+    catch ( Exception& ) {}
 }
 
 

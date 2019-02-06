@@ -270,140 +270,140 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
 void SfxPrinterController::printPage( int i_nPage ) const
 {
     VclPtr<Printer> xPrinter( getPrinter() );
-    if( mxRenderable.is() && xPrinter )
+    if( !mxRenderable.is() || !xPrinter )
+        return;
+
+    Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
+    try
     {
-        Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        try
-        {
-            mxRenderable->render( i_nPage, getSelectionObject(), aJobOptions );
-        }
-        catch( lang::IllegalArgumentException& )
-        {
-            // don't care enough about nonexistent page here
-            // to provoke a crash
-        }
-        catch (lang::DisposedException &)
-        {
-            SAL_WARN("sfx", "SfxPrinterController: document disposed while printing");
-            const_cast<SfxPrinterController*>(this)->setJobState(
-                    view::PrintableState_JOB_ABORTED);
-        }
+        mxRenderable->render( i_nPage, getSelectionObject(), aJobOptions );
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        // don't care enough about nonexistent page here
+        // to provoke a crash
+    }
+    catch (lang::DisposedException &)
+    {
+        SAL_WARN("sfx", "SfxPrinterController: document disposed while printing");
+        const_cast<SfxPrinterController*>(this)->setJobState(
+                view::PrintableState_JOB_ABORTED);
     }
 }
 
 void SfxPrinterController::jobStarted()
 {
-    if ( mpObjectShell )
+    if ( !mpObjectShell )
+        return;
+
+    m_bOrigStatus = mpObjectShell->IsEnableSetModified();
+
+    // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+    if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
     {
-        m_bOrigStatus = mpObjectShell->IsEnableSetModified();
-
-        // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-        if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
-        {
-            mpObjectShell->EnableSetModified( false );
-            m_bNeedsChange = true;
-        }
-
-        // refresh document info
-        uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
-        m_aLastPrintedBy = xDocProps->getPrintedBy();
-        m_aLastPrinted = xDocProps->getPrintDate();
-
-        xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
-            ? SvtUserOptions().GetFullName()
-            : OUString() );
-        ::DateTime now( ::DateTime::SYSTEM );
-
-        xDocProps->setPrintDate( now.GetUNODateTime() );
-
-        SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::PrintDoc, GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ), mpObjectShell ) );
-        uno::Sequence < beans::PropertyValue > aOpts;
-        aOpts = getJobProperties( aOpts );
-
-        uno::Reference< frame::XController2 > xController;
-        if ( mpViewShell )
-            xController.set( mpViewShell->GetController(), uno::UNO_QUERY );
-
-        mpObjectShell->Broadcast( SfxPrintingHint(
-            view::PrintableState_JOB_STARTED, aOpts, mpObjectShell, xController ) );
+        mpObjectShell->EnableSetModified( false );
+        m_bNeedsChange = true;
     }
+
+    // refresh document info
+    uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
+    m_aLastPrintedBy = xDocProps->getPrintedBy();
+    m_aLastPrinted = xDocProps->getPrintDate();
+
+    xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
+        ? SvtUserOptions().GetFullName()
+        : OUString() );
+    ::DateTime now( ::DateTime::SYSTEM );
+
+    xDocProps->setPrintDate( now.GetUNODateTime() );
+
+    SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::PrintDoc, GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ), mpObjectShell ) );
+    uno::Sequence < beans::PropertyValue > aOpts;
+    aOpts = getJobProperties( aOpts );
+
+    uno::Reference< frame::XController2 > xController;
+    if ( mpViewShell )
+        xController.set( mpViewShell->GetController(), uno::UNO_QUERY );
+
+    mpObjectShell->Broadcast( SfxPrintingHint(
+        view::PrintableState_JOB_STARTED, aOpts, mpObjectShell, xController ) );
 }
 
 void SfxPrinterController::jobFinished( css::view::PrintableState nState )
 {
-    if ( mpObjectShell )
+    if ( !mpObjectShell )
+        return;
+
+    bool bCopyJobSetup = false;
+    mpObjectShell->Broadcast( SfxPrintingHint( nState ) );
+    switch ( nState )
     {
-        bool bCopyJobSetup = false;
-        mpObjectShell->Broadcast( SfxPrintingHint( nState ) );
-        switch ( nState )
+        case view::PrintableState_JOB_SPOOLING_FAILED :
+        case view::PrintableState_JOB_FAILED :
         {
-            case view::PrintableState_JOB_SPOOLING_FAILED :
-            case view::PrintableState_JOB_FAILED :
+            // "real" problem (not simply printing cancelled by user)
+            OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
+            if ( !m_bApi )
             {
-                // "real" problem (not simply printing cancelled by user)
-                OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
-                if ( !m_bApi )
-                {
-                    vcl::Window* pWindow = mpViewShell->GetWindow();
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
-                                                                             VclMessageType::Warning, VclButtonsType::Ok,
-                                                                             aMsg));
-                    xBox->run();
-                }
-                [[fallthrough]];
+                vcl::Window* pWindow = mpViewShell->GetWindow();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                                         aMsg));
+                xBox->run();
             }
-            case view::PrintableState_JOB_ABORTED :
-            {
-                // printing not successful, reset DocInfo
-                uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
-                xDocProps->setPrintedBy(m_aLastPrintedBy);
-                xDocProps->setPrintDate(m_aLastPrinted);
-                break;
-            }
-
-            case view::PrintableState_JOB_SPOOLED :
-            case view::PrintableState_JOB_COMPLETED :
-            {
-                SfxBindings& rBind = mpViewShell->GetViewFrame()->GetBindings();
-                rBind.Invalidate( SID_PRINTDOC );
-                rBind.Invalidate( SID_PRINTDOCDIRECT );
-                rBind.Invalidate( SID_SETUPPRINTER );
-                bCopyJobSetup = ! m_bTempPrinter;
-                break;
-            }
-
-            default:
-                break;
+            [[fallthrough]];
+        }
+        case view::PrintableState_JOB_ABORTED :
+        {
+            // printing not successful, reset DocInfo
+            uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
+            xDocProps->setPrintedBy(m_aLastPrintedBy);
+            xDocProps->setPrintDate(m_aLastPrinted);
+            break;
         }
 
-        if( bCopyJobSetup && mpViewShell )
+        case view::PrintableState_JOB_SPOOLED :
+        case view::PrintableState_JOB_COMPLETED :
         {
-            // #i114306#
-            // Note: this possibly creates a printer that gets immediately replaced
-            // by a new one. The reason for this is that otherwise we would not get
-            // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
-            // other way here to get the item set.
-            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(true);
-            if( pDocPrt )
+            SfxBindings& rBind = mpViewShell->GetViewFrame()->GetBindings();
+            rBind.Invalidate( SID_PRINTDOC );
+            rBind.Invalidate( SID_PRINTDOCDIRECT );
+            rBind.Invalidate( SID_SETUPPRINTER );
+            bCopyJobSetup = ! m_bTempPrinter;
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    if( bCopyJobSetup && mpViewShell )
+    {
+        // #i114306#
+        // Note: this possibly creates a printer that gets immediately replaced
+        // by a new one. The reason for this is that otherwise we would not get
+        // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
+        // other way here to get the item set.
+        SfxPrinter* pDocPrt = mpViewShell->GetPrinter(true);
+        if( pDocPrt )
+        {
+            if( pDocPrt->GetName() == getPrinter()->GetName() )
+                pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+            else
             {
-                if( pDocPrt->GetName() == getPrinter()->GetName() )
-                    pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
-                else
-                {
-                    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
-                    pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
-                    mpViewShell->SetPrinter( pNewPrt, SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
-                }
+                VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
+                pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+                mpViewShell->SetPrinter( pNewPrt, SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
             }
         }
+    }
 
-        if ( m_bNeedsChange )
-            mpObjectShell->EnableSetModified( m_bOrigStatus );
+    if ( m_bNeedsChange )
+        mpObjectShell->EnableSetModified( m_bOrigStatus );
 
-        if ( mpViewShell )
-        {
-            mpViewShell->pImpl->m_xPrinterController.reset();
-        }
+    if ( mpViewShell )
+    {
+        mpViewShell->pImpl->m_xPrinterController.reset();
     }
 }
 

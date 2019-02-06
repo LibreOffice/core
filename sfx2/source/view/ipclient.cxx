@@ -635,22 +635,22 @@ SfxInPlaceClient::~SfxInPlaceClient()
 
 void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
 {
-    if ( GetObject().is() )
-    {
-        if ( m_xImp->m_nAspect == embed::Aspects::MSOLE_ICON
-          && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
-        {
-            OSL_FAIL( "Iconified object should not be activated inplace!" );
-            return;
-        }
+    if ( !GetObject().is() )
+        return;
 
-        try
-        {
-            GetObject()->changeState( nState );
-        }
-        catch ( uno::Exception& )
-        {}
+    if ( m_xImp->m_nAspect == embed::Aspects::MSOLE_ICON
+      && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
+    {
+        OSL_FAIL( "Iconified object should not be activated inplace!" );
+        return;
     }
+
+    try
+    {
+        GetObject()->changeState( nState );
+    }
+    catch ( uno::Exception& )
+    {}
 }
 
 
@@ -1025,73 +1025,73 @@ void SfxInPlaceClient::FormatChanged()
 
 void SfxInPlaceClient::DeactivateObject()
 {
-    if ( GetObject().is() )
+    if ( !GetObject().is() )
+        return;
+
+    try
     {
-        try
+        m_xImp->m_bUIActive = false;
+        bool bHasFocus = false;
+        uno::Reference< frame::XModel > xModel( m_xImp->m_xObject->getComponent(), uno::UNO_QUERY );
+        if ( xModel.is() )
         {
-            m_xImp->m_bUIActive = false;
-            bool bHasFocus = false;
-            uno::Reference< frame::XModel > xModel( m_xImp->m_xObject->getComponent(), uno::UNO_QUERY );
-            if ( xModel.is() )
+            uno::Reference< frame::XController > xController = xModel->getCurrentController();
+            if ( xController.is() )
             {
-                uno::Reference< frame::XController > xController = xModel->getCurrentController();
-                if ( xController.is() )
-                {
-                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
-                    bHasFocus = pWindow->HasChildPathFocus( true );
-                }
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
+                bHasFocus = pWindow->HasChildPathFocus( true );
             }
-
-            m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
-
-            if ( m_xImp->m_xObject->getStatus( m_xImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-            {
-                m_xImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
-                if (bHasFocus)
-                    m_pViewSh->GetWindow()->GrabFocus();
-            }
-            else
-            {
-                // the links should not stay in running state for long time because of locking
-                uno::Reference< embed::XLinkageSupport > xLink( m_xImp->m_xObject, uno::UNO_QUERY );
-                if ( xLink.is() && xLink->isLink() )
-                    m_xImp->m_xObject->changeState( embed::EmbedStates::LOADED );
-                else
-                    m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
-            }
-
-            SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-            SfxViewFrame::SetViewFrame( pFrame );
-            pFrame->GetFrame().LockResize_Impl(false);
-            pFrame->GetFrame().Resize();
         }
-        catch (css::uno::Exception& )
-        {}
+
+        m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
+
+        if ( m_xImp->m_xObject->getStatus( m_xImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+        {
+            m_xImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            if (bHasFocus)
+                m_pViewSh->GetWindow()->GrabFocus();
+        }
+        else
+        {
+            // the links should not stay in running state for long time because of locking
+            uno::Reference< embed::XLinkageSupport > xLink( m_xImp->m_xObject, uno::UNO_QUERY );
+            if ( xLink.is() && xLink->isLink() )
+                m_xImp->m_xObject->changeState( embed::EmbedStates::LOADED );
+            else
+                m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+        }
+
+        SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
+        SfxViewFrame::SetViewFrame( pFrame );
+        pFrame->GetFrame().LockResize_Impl(false);
+        pFrame->GetFrame().Resize();
     }
+    catch (css::uno::Exception& )
+    {}
 }
 
 void SfxInPlaceClient::ResetObject()
 {
-    if ( GetObject().is() )
+    if ( !GetObject().is() )
+        return;
+
+    try
     {
-        try
+        m_xImp->m_bUIActive = false;
+        if ( m_xImp->m_xObject->getStatus( m_xImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            m_xImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+        else
         {
-            m_xImp->m_bUIActive = false;
-            if ( m_xImp->m_xObject->getStatus( m_xImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-                m_xImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            // the links should not stay in running state for long time because of locking
+            uno::Reference< embed::XLinkageSupport > xLink( m_xImp->m_xObject, uno::UNO_QUERY );
+            if ( xLink.is() && xLink->isLink() )
+                m_xImp->m_xObject->changeState( embed::EmbedStates::LOADED );
             else
-            {
-                // the links should not stay in running state for long time because of locking
-                uno::Reference< embed::XLinkageSupport > xLink( m_xImp->m_xObject, uno::UNO_QUERY );
-                if ( xLink.is() && xLink->isLink() )
-                    m_xImp->m_xObject->changeState( embed::EmbedStates::LOADED );
-                else
-                    m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
-            }
+                m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
         }
-        catch (css::uno::Exception& )
-        {}
     }
+    catch (css::uno::Exception& )
+    {}
 }
 
 bool SfxInPlaceClient::IsUIActive()
