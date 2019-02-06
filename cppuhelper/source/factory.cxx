@@ -21,14 +21,11 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/unload.h>
 
 #include <cppuhelper/propshlp.hxx>

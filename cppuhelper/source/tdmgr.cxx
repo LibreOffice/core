@@ -23,12 +23,9 @@
 
 #include <vector>
 
-#include <sal/alloca.h>
-
 #include <osl/diagnose.h>
-#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
-
+al
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
@@ -48,7 +45,6 @@
 #include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <memory>
 

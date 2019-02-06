@@ -23,7 +23,6 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace cppuhelper { namespace detail {
 

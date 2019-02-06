@@ -17,10 +17,8 @@
 #include <stack>
 #include <vector>
 
-#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/reflection/InvalidTypeNameException.hpp>
 #include <com/sun/star/reflection/NoSuchTypeNameException.hpp>
 #include <com/sun/star/reflection/TypeDescriptionSearchDepth.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
@@ -49,7 +47,6 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>

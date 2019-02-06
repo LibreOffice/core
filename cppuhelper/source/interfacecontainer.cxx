@@ -19,7 +19,6 @@
 
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <osl/diagnose.h>
