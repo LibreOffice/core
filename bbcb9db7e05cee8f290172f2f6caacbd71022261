@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f0d6d24f",
+        "filename": "vcl/source/app/svmain.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-06T17:35:19Z",
+      "side": 1,
+      "message": "clear() ?",
+      "revId": "bbcb9db7e05cee8f290172f2f6caacbd71022261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
