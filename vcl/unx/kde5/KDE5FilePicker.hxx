@@ -96,7 +96,6 @@ public:
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
     // XFolderPicker stuff
-    virtual OUString SAL_CALL getDirectory() override;
     virtual void SAL_CALL setDescription(const OUString& rDescription) override;
 
     /* TODO XFilePreview
@@ -126,14 +125,12 @@ private:
     void addCustomControl(sal_Int16 controlId);
     void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction, const css::uno::Any& rValue);
     css::uno::Any handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAction);
-    OUString implGetDirectory();
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 Q_SIGNALS:
     sal_Int16 executeSignal();
-    OUString getDirectorySignal();
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
     css::uno::Any getValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction);
@@ -147,7 +144,6 @@ Q_SIGNALS:
     OUString getCurrentFilterSignal();
 
 private Q_SLOTS:
-    OUString getDirectorySlot() { return implGetDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
         return setValue(nControlId, nControlAction, rValue);
