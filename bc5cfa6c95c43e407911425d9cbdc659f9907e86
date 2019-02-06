@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_2db53532",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-06T05:55:55Z",
+      "side": 0,
+      "message": "We already have pData variable that allows us to control bitmap creation. I know that using bCreateBMP is more readable but do not want to introduce extra variable.",
+      "parentUuid": "1f485f77_e8183076",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 110
+      },
+      "revId": "bc5cfa6c95c43e407911425d9cbdc659f9907e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c8fe9404",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-02-02T07:42:26Z",
       "side": 0,
       "message": "Hmm... This is also functional part, and totally unrelated to change in WinSalInstance::CreateVirtualDevice. Regressions are possible in both, so let\u0027s make this small change a separate commit.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 23
+      },
+      "revId": "bc5cfa6c95c43e407911425d9cbdc659f9907e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_0d9b99c9",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-06T05:55:55Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1f485f77_c8fe9404",
       "range": {
         "startLine": 188,
         "startChar": 0,

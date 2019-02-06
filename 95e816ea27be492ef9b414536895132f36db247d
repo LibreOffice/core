@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_cda4610b",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-06T05:55:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f485f77_0d071e1f",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "95e816ea27be492ef9b414536895132f36db247d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_88089c28",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-02-02T07:50:09Z",
       "side": 1,
       "message": "I\u0027d even simplify to\n\n    (eFormat \u003d\u003d DeviceFormat::BITMASK) ? 1 : 0;\n\nbut I don\u0027t mind either way",
+      "range": {
+        "startLine": 106,
+        "startChar": 27,
+        "endLine": 106,
+        "endChar": 29
+      },
+      "revId": "95e816ea27be492ef9b414536895132f36db247d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_ed9f1db2",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2019-02-06T05:55:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f485f77_88089c28",
       "range": {
         "startLine": 106,
         "startChar": 27,
