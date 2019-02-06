@@ -223,7 +223,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     static css::uno::Reference< css::xml::sax::XFastTokenHandler > xTokenHandler;
     static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
-    static std::unordered_map< OUString, OUString, OUStringHash > aNamespaceURIPrefixMap;
+    static std::unordered_map< OUString, OUString > aNamespaceURIPrefixMap;
     static bool bIsNSMapsInitialized;
 
     static void initializeNamespaceMaps();

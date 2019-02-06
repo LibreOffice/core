@@ -2370,7 +2370,7 @@ namespace BuilderUtils
     {
         using namespace com::sun::star::accessibility;
 
-        static const std::unordered_map<OString, sal_Int16, OStringHash> aAtkRoleToAccessibleRole = {
+        static const std::unordered_map<OString, sal_Int16> aAtkRoleToAccessibleRole = {
             /* This is in atkobject.h's AtkRole order */
             { "invalid",               AccessibleRole::UNKNOWN },
             { "accelerator label",     AccessibleRole::UNKNOWN },
