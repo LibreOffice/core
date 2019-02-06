@@ -16,6 +16,24 @@
       "revId": "f8b22d029db3a2241c3767a5342677fb6773356b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_4d4ab155",
+        "filename": "toolkit/source/controls/tabpagemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-02-06T00:48:50Z",
+      "side": 1,
+      "message": "While in this case only reason of this fake property just to pass some checks in getter/setter, I agree, that much better to have a valid type.\nBecause these changes are already in master, I\u0027ve provided a new patch with this fix https://gerrit.libreoffice.org/#/c/67431/\nI suppose it is not important for backporting: I see no differences in behavior",
+      "parentUuid": "1f485f77_ca6c470a",
+      "revId": "f8b22d029db3a2241c3767a5342677fb6773356b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
