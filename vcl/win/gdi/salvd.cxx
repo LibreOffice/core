@@ -179,9 +179,6 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )
         DeleteDC( mpGraphics->getHDC() );
-
-    mhBmp.reset();
-    mpGraphics.reset();
 }
 
 SalGraphics* WinSalVirtualDevice::AcquireGraphics()
