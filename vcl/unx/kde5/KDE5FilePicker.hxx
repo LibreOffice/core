@@ -50,10 +50,6 @@ class KDE5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
 protected:
-    //mapping of SAL control ID's to created custom controls
-    QHash<sal_Int16, QWidget*> _customWidgets;
-    QHash<sal_Int16, QWidget*> _customListboxes;
-
     //layout for extra custom controls
     QGridLayout* _layout;
 
@@ -102,35 +98,6 @@ protected:
 
 Q_SIGNALS:
     sal_Int16 executeSignal();
-    void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
-                        const css::uno::Any& rValue);
-    css::uno::Any getValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction);
-    void enableControlSignal(sal_Int16 nControlId, bool bEnable);
-    void setLabelSignal(sal_Int16 nControlId, const OUString& rLabel);
-    OUString getLabelSignal(sal_Int16 nControlId);
-
-private Q_SLOTS:
-    void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
-    {
-        return setValue(nControlId, nControlAction, rValue);
-    }
-
-    css::uno::Any getValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction)
-    {
-        return getValue(nControlId, nControlAction);
-    }
-
-    void enableControlSlot(sal_Int16 nControlId, bool bEnable)
-    {
-        return enableControl(nControlId, bEnable);
-    }
-
-    void setLabelSlot(sal_Int16 nControId, const OUString& rLabel)
-    {
-        return setLabel(nControId, rLabel);
-    }
-
-    OUString getLabelSlot(sal_Int16 nControlId) { return getLabel(nControlId); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
