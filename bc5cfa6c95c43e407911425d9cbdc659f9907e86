@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_add00552",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-06T07:27:51Z",
+      "side": 0,
+      "message": "You are totally right! Overlooked that.",
+      "parentUuid": "1f485f77_2db53532",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 110
+      },
+      "revId": "bc5cfa6c95c43e407911425d9cbdc659f9907e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c8fe9404",
         "filename": "vcl/win/gdi/salvd.cxx",
         "patchSetId": 2
