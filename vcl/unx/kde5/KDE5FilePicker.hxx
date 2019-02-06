@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <functional>
@@ -51,8 +50,6 @@ class KDE5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
 protected:
-    osl::Mutex _helperMutex;
-
     //running filter string to add to dialog
     QStringList _filters;
     // map of filter titles to full filter for selection
