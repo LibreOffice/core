@@ -42,6 +42,7 @@ interface XWordBasic
     long AppMaximize( [in] string WindowName, [in] any State );
     long DocMaximize( [in] any State );
     void AppShow( [in] string WindowName );
+    long AppCount();
 };
 
 }; }; };
