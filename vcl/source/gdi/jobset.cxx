@@ -20,6 +20,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/jobset.hxx>
 #include <jobset.h>
