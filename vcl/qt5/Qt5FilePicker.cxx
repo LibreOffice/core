@@ -76,8 +76,9 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 }
 
-Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode)
+Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle)
     : Qt5FilePicker_Base(m_aHelperMutex)
+    , m_bShowFileExtensionInFilterTitle(bShowFileExtensionInFilterTitle)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
 {
@@ -320,14 +321,17 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
     QString t = toQString(title).replace("/", "\\/");
 
     QString n = t;
-    // strip duplicated type
-    int pos = n.indexOf(" (");
-    if (pos >= 0)
-        n.truncate(pos);
+    if (!m_bShowFileExtensionInFilterTitle)
+    {
+        // strip file extension from filter title
+        int pos = n.indexOf(" (");
+        if (pos >= 0)
+            n.truncate(pos);
+    }
 
     QString f = toQString(filter);
 
-    // openoffice gives us filters separated by ';' qt dialogs just want space separated
+    // LibreOffice gives us filters separated by ';' qt dialogs just want space separated
     f.replace(";", " ");
 
     // make sure "*.*" is not used as "all files"
