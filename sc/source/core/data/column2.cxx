@@ -150,8 +150,18 @@ long ScColumn::GetNeededSize(
 
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
-    // #i111387# disable automatic line breaks only for "General" number format
-    if (bBreak && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+
+    // get "cell is value" flag
+    // Must be synchronized with ScOutputData::LayoutStrings()
+    bool bCellIsValue = (aCell.meType == CELLTYPE_VALUE);
+    if (aCell.meType == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = aCell.mpFormula;
+        bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
+    }
+
+    // #i111387#, tdf#121040: disable automatic line breaks for all number formats
+    if (bBreak && bCellIsValue && (pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER))
     {
         // If a formula cell needs to be interpreted during aCell.hasNumeric()
         // to determine the type, the pattern may get invalidated because the
@@ -173,7 +183,7 @@ long ScColumn::GetNeededSize(
             else
             {
                 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
-                if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                if (pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER)
                     bBreak = false;
             }
         }

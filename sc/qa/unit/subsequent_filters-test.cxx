@@ -189,6 +189,7 @@ public:
     void testMiscRowHeights();
     void testOptimalHeightReset();
     void testCustomNumFormatHybridCellODS();
+    void testTdf121040();
 
     void testPrintRangeODS();
     void testOutlineODS();
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
+    CPPUNIT_TEST(testTdf121040);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
@@ -2835,6 +2837,22 @@ void ScFiltersTest::testCustomNumFormatHybridCellODS()
     CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf121040()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf121040.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf121040.ods", xDocSh.is());
+
+    const SCTAB nTab = 0;
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // The first 9 rows should have the same height
+    const sal_uInt16 nHeight = rDoc.GetRowHeight(0, nTab, false);
+    for (SCTAB nRow=1; nRow<9; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(nHeight, rDoc.GetRowHeight(nRow, nTab, false));
+    }
 }
 
 void ScFiltersTest::testPrintRangeODS()
