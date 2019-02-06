@@ -17,13 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/alloca.h>
-
-#include <string.h>
 #include <osl/diagnose.h>
-#include <rtl/byteseq.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/uuid.h>
 #include <sal/log.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/implbase_ex.hxx>

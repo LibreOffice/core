@@ -20,14 +20,16 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <com/sun/star/lang/DisposedException.hpp>
+
 #include <algorithm>
-#include <utility>
+#include <vector>
 
 using namespace osl;
 using namespace com::sun::star::uno;

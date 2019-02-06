@@ -115,7 +115,6 @@ static wchar_t* platformSpecific()
 
 #else
 
-#include <unistd.h>
 #include <limits.h>
 
 /*

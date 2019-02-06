@@ -21,10 +21,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <rtl/instance.hxx>
-#include <rtl/string.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
