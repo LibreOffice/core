@@ -95,9 +95,6 @@ public:
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
-    // XFolderPicker stuff
-    virtual void SAL_CALL setDescription(const OUString& rDescription) override;
-
     /* TODO XFilePreview
 
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
