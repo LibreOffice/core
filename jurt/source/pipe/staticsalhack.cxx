@@ -36,6 +36,7 @@
 #include <sal/osl/unx/profile.cxx>
 #include <sal/osl/unx/readwrite_helper.cxx>
 #include <sal/osl/unx/security.cxx>
+#include <sal/osl/unx/socket.cxx>
 #include <sal/osl/unx/thread.cxx>
 #include <sal/osl/unx/uunxapi.cxx>
 #include <sal/rtl/alloc_arena.cxx>
