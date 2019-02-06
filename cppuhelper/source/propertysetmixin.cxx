@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <exception>
 #include <map>
 #include <set>
 #include <vector>
@@ -57,8 +56,6 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

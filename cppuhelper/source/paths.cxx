@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <config_folders.h>
 
 #include <sal/config.h>
@@ -25,10 +24,8 @@
 #include <cassert>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

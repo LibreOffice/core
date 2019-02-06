@@ -12,18 +12,12 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/container/ElementExistException.hpp>
-#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/InvalidTypeNameException.hpp>
-#include <com/sun/star/reflection/NoSuchTypeNameException.hpp>
 #include <com/sun/star/reflection/TypeDescriptionSearchDepth.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -31,10 +25,8 @@
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
-    namespace uno { class Any; }
     namespace reflection { class XTypeDescription; }
 } } }
-namespace rtl { class OUString; }
 namespace unoidl {
     class ConstantGroupEntity;
     class Entity;

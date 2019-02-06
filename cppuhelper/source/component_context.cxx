@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <uno/lbnames.h>
@@ -30,11 +29,9 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>

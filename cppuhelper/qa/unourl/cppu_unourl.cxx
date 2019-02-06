@@ -23,9 +23,6 @@
 
 #include <cppuhelper/unourl.hxx>
 #include <rtl/malformeduriexception.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/string.h>
-#include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
