@@ -19,7 +19,6 @@
 
 #include "KDE5FilePicker.hxx"
 
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/interfacecontainer.h>
@@ -677,17 +676,6 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 void SAL_CALL KDE5FilePicker::cancel()
 {
     // TODO
-}
-
-// XEventListener
-void KDE5FilePicker::disposing(const lang::EventObject& rEvent)
-{
-    uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
-
-    if (xFilePickerListener.is())
-    {
-        removeFilePickerListener(xFilePickerListener);
-    }
 }
 
 // XServiceInfo
