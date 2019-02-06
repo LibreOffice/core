@@ -40,6 +40,7 @@ interface XWordBasic
                                   [in] any SubType );
 
     long AppMaximize( [in] string WindowName, [in] any State );
+    long DocMaximize( [in] any State );
 };
 
 }; }; };
