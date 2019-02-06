@@ -1711,8 +1711,10 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText );
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
-                    // #i111387# #o11817313# disable automatic line breaks only for "General" number format
-                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    // #i111387# #o11817313# tdf#121040 disable automatic line breaks for all number formats
+                    // Must be synchronized with ScColumn::GetNeededSize()
+                    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                    if (bBreak && bCellIsValue && (pFormatter->GetType(aVars.GetResultValueFormat()) == SvNumFormatType::NUMBER))
                         bBreak = false;
 
                     bool bRepeat = aVars.IsRepeat() && !bBreak;
