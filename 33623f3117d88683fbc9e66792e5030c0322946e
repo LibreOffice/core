@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_ad3fe5d4",
+        "filename": "include/IwyuFilter_include.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-06T14:58:10Z",
+      "side": 1,
+      "message": "This addition puzzles me, given that this change does also remove\n\n  #include \u003ctools/solar.h\u003e\n\nfrom include/unotools/fontcvt.hxx.",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 247,
+        "endChar": 19
+      },
+      "revId": "33623f3117d88683fbc9e66792e5030c0322946e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
