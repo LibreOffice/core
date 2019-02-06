@@ -1077,6 +1077,35 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
+            case MetaActionType::Transparent:
+            {
+                const MetaTransparentAction* pMeta = static_cast<MetaTransparentAction*>(pAction);
+
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("transparence", pMeta->GetTransparence());
+
+                tools::PolyPolygon const& rPolyPolygon(pMeta->GetPolyPolygon());
+
+                for (sal_uInt16 j = 0; j < rPolyPolygon.Count(); ++j)
+                {
+                    rWriter.startElement("polygon");
+                    tools::Polygon const& rPolygon = rPolyPolygon[j];
+                    bool bFlags = rPolygon.HasFlags();
+                    for (sal_uInt16 i = 0; i < rPolygon.GetSize(); ++i)
+                    {
+                        rWriter.startElement("point");
+                        writePoint(rWriter, rPolygon[i]);
+                        if (bFlags)
+                            rWriter.attribute("flags", convertPolygonFlags(rPolygon.GetFlags(i)));
+                        rWriter.endElement();
+                    }
+                    rWriter.endElement();
+                }
+
+                rWriter.endElement();
+            }
+            break;
+
             default:
             {
                 rWriter.startElement(sCurrentElementTag);
