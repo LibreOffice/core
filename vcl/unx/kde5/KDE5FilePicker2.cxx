@@ -129,11 +129,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
             Qt::BlockingQueuedConnection);
-    // XFilePicker2
-    connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
-            &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getFilesSignal, this, &KDE5FilePicker::getFiles,
-            Qt::BlockingQueuedConnection);
 
     // used to set the custom controls
     qApp->installEventFilter(this);
@@ -168,41 +163,6 @@ OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
     }
 
     return implGetDirectory();
-}
-
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        //SolarMutexReleaser aReleaser;
-        return Q_EMIT getFilesSignal();
-    }
-
-    uno::Sequence<OUString> seq = getSelectedFiles();
-    if (seq.getLength() > 1)
-        seq.realloc(1);
-    return seq;
-}
-
-// XFilePicker2
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getSelectedFilesSignal();
-    }
-
-    QList<QUrl> aURLs = m_pFileDialog->selectedUrls();
-    uno::Sequence<OUString> seq(aURLs.size());
-
-    size_t i = 0;
-    for (auto& aURL : aURLs)
-    {
-        seq[i++] = toOUString(aURL.toString());
-    }
-
-    return seq;
 }
 
 // XFilterManager
