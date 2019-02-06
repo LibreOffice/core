@@ -4652,4 +4652,10 @@ size_t SvNumberFormatter::GetMaxDefaultColors() const
     return ImpSvNumberformatScan::GetMaxDefaultColors();
 }
 
+// #i111387# disable automatic line breaks only for "General" number format
+bool SvNumberFormatter::IsGeneralNumberFormat(sal_uInt32 nFormat)
+{
+    return (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) <= NF_NUMBER_END;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
