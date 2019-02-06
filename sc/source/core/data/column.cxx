@@ -2271,6 +2271,8 @@ class UpdateRefOnNonCopy
                 p->SetDirty();
             }
 
+            mbUpdated = true;
+
             // Move from clipboard is Cut&Paste, then do not copy the original
             // positions' formula cells to the Undo document.
             if (!mbClipboardSource || !bCellMoved)
