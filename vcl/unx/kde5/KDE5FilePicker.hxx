@@ -119,10 +119,6 @@ public:
     // XCancellable
     virtual void SAL_CALL cancel() override;
 
-    // XEventListener
-    virtual void disposing(const css::lang::EventObject& rEvent);
-    using cppu::WeakComponentImplHelperBase::disposing;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
