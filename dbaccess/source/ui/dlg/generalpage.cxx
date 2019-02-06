@@ -41,7 +41,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
-#include <svtools/miscopt.hxx>
 #include <sal/log.hxx>
 
 namespace dbaui
@@ -597,11 +596,7 @@ namespace dbaui
         // Sets the default selected database on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
         {
-            SvtMiscOptions aMiscOptions;
-            if( aMiscOptions.IsExperimentalMode() )
-                return m_pCollection->getTypeDisplayName( "sdbc:embedded:firebird" );
-            else
-                return m_pCollection->getTypeDisplayName( "jdbc:" );
+            return m_pCollection->getTypeDisplayName( "sdbc:firebird:" );
         }
 
         return OGeneralPage::getDatasourceName( _rSet );
