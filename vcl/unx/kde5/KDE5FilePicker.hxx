@@ -54,9 +54,6 @@ protected:
     QHash<sal_Int16, QWidget*> _customWidgets;
     QHash<sal_Int16, QWidget*> _customListboxes;
 
-    //widget to contain extra custom controls
-    QWidget* _extraControls;
-
     //layout for extra custom controls
     QGridLayout* _layout;
 
@@ -64,7 +61,6 @@ protected:
 
 public:
     explicit KDE5FilePicker(QFileDialog::FileMode);
-    virtual ~KDE5FilePicker() override;
 
     // XExecutableDialog functions
     virtual sal_Int16 SAL_CALL execute() override;
