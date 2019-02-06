@@ -2540,7 +2540,8 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
-                pObj->GetPageFrame()->RemoveDrawObjFromPage(
+                if (SwPageFrame *pPg = pObj->GetPageFrame())
+                    pPg->RemoveDrawObjFromPage(
                                 *static_cast<SwAnchoredDrawObject*>(pObj) );
             }
         }
@@ -2881,8 +2882,8 @@ static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
             if ( pPage != pObj->GetPageFrame() )
             {
                 // #i28701#
-                if ( pObj->GetPageFrame() )
-                    pObj->GetPageFrame()->RemoveDrawObjFromPage( *pObj );
+                if (SwPageFrame *pPg = pObj->GetPageFrame())
+                    pPg->RemoveDrawObjFromPage( *pObj );
                 pPage->AppendDrawObjToPage( *pObj );
             }
         }
