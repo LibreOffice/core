@@ -112,6 +112,7 @@ public:
     virtual sal_Int32 SAL_CALL AppMaximize( const OUString& WindowName, const css::uno::Any& State ) override;
     virtual sal_Int32 SAL_CALL DocMaximize( const css::uno::Any& State ) override;
     virtual void SAL_CALL AppShow(  const OUString& WindowName ) override;
+    virtual sal_Int32 SAL_CALL AppCount() override;
 };
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
@@ -668,6 +669,15 @@ SwWordBasic::AppShow( const OUString& WindowName )
     SAL_INFO("sw.vba", "WordBasic.AppShow(WindowName:=" << WindowName << ")");
 
     // FIXME: Implement if necessary
+}
+
+sal_Int32 SAL_CALL
+SwWordBasic::AppCount()
+{
+    SAL_INFO("sw.vba", "WordBasic.AppCount()");
+
+    // FIXME: Implement if necessary. Return a random number for now.
+    return 2;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
