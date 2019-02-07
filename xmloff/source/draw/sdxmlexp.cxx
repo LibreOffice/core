@@ -2650,7 +2650,18 @@ uno::Reference< uno::XInterface > classname##_createInstance(const uno::Referenc
     return static_cast<cppu::OWeakObject*>(new SdXMLExport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
 }
 
-SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SdXMLExport(
+        pCtx, "XMLImpressExportOasis", false,
+        SvXMLExportFlags::OASIS | SvXMLExportFlags::META | SvXMLExportFlags::STYLES
+            | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES
+            | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS | SvXMLExportFlags::SETTINGS
+            | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
+}
+
 SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS );
 SERVICE( XMLImpressContentExportOasis, "com.sun.star.comp.Impress.XMLOasisContentExporter", "XMLImpressContentExportOasis", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS );
 SERVICE( XMLImpressMetaExportOasis, "com.sun.star.comp.Impress.XMLOasisMetaExporter", "XMLImpressMetaExportOasis", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::META );
