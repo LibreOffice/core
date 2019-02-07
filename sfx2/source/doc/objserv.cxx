@@ -119,6 +119,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <svx/unoshape.hxx>
+#include <com/sun/star/util/Color.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -675,8 +676,83 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
+            {
+                uno::Reference< lang::XComponent > xComponent( GetCurrentComponent(), uno::UNO_QUERY );
+                if (!xComponent.is())
+                    return;
+
+                // Access the draw pages
+                uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+                uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+
+                sal_Int32 nPageCount = xDrawPages->getCount();
+                for (sal_Int32 i = 0; i < nPageCount; ++i)
+                {
+                    // Get the page
+                    uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+
+                    if (!xPage.is())
+                        continue;
+
+                    // Go through all shapes
+                    sal_Int32 nShapeCount = xPage->getCount();
+                    for (int j = 0; j < nShapeCount; ++j)
+                    {
+                        uno::Reference< drawing::XShape > xCurrShape(xPage->getByIndex(j), uno::UNO_QUERY);
+                        if (!xCurrShape.is())
+                            continue;
+
+                        uno::Reference< beans::XPropertySet > xPropSet(xCurrShape, uno::UNO_QUERY);
+                        if (!xPropSet.is())
+                            continue;
+
+                        uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+                        if (!xInfo.is())
+                            continue;
+
+                        // Rectangle redaction
+                        if (xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
+                        {
+                            uno::Any aAnyTransp = xPropSet->getPropertyValue("FillTransparence");
+                            uno::Any aAnyColor = xPropSet->getPropertyValue("FillColor");
+
+                            sal_Int16 nTransp = 0;
+                            Color aColor;
+
+                            aAnyTransp >>= nTransp;
+                            aAnyColor >>= aColor;
+
+                            if (nTransp == 50 && aColor == COL_GRAY7)
+                            {
+                                xPropSet->setPropertyValue("FillTransparence", css::uno::Any(0));
+                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
+                            }
+                        }
+                        // Freeform redaction
+                        if (xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
+                        {
+                            uno::Any aAnyTransp = xPropSet->getPropertyValue("LineTransparence");
+                            uno::Any aAnyColor = xPropSet->getPropertyValue("LineColor");
+
+                            sal_Int16 nTransp = 0;
+                            Color aColor;
+
+                            aAnyTransp >>= nTransp;
+                            aAnyColor >>= aColor;
+
+                            if (nTransp == 50 && aColor == COL_GRAY7)
+                            {
+                                xPropSet->setPropertyValue("LineTransparence", css::uno::Any(0));
+                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
+                            }
+                        }
+                    }
+                }
+
+            }
+            [[fallthrough]];
+        case SID_EXPORTDOCASPDF:
             bIsPDFExport = true;
             [[fallthrough]];
         case SID_EXPORTDOCASEPUB:
