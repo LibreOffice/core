@@ -836,8 +836,7 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
             }
             else
             {
-                if (aRelComponents.aPath.pBegin != aRelComponents.aPath.pEnd
-                    && *aRelComponents.aPath.pBegin == '/')
+                if (*aRelComponents.aPath.pBegin == '/')
                 {
                     appendPath(
                         aBuffer, aBuffer.getLength(), false,

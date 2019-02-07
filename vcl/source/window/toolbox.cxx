@@ -797,7 +797,7 @@ void ToolBox::ImplCalcFloatSizes()
                 nCalcSize += mnMaxItemWidth;
                 nTempLines = ImplCalcBreaks( nCalcSize, &nMaxLineWidth, true );
             }
-            while ( (nCalcSize < upperBoundWidth) && (nLines < nTempLines) && (nTempLines != 1) );
+            while ((nCalcSize < upperBoundWidth) && (nLines < nTempLines)); // implies nTempLines>1
             if ( nTempLines < nLines )
                 nLines = nTempLines;
         }

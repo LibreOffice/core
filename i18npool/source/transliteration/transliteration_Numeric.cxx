@@ -72,7 +72,8 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
         offset.realloc(nCount);
 
     for (sal_Int32 i = startPos; i < endPos; i++) {
-        if (i < endPos && isNumber(inStr[i])) {
+        if (isNumber(inStr[i]))
+        {
             if (number == -1) {
                 startPos = i;
                 number = (inStr[i] - NUMBER_ZERO);

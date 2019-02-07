@@ -1018,7 +1018,8 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
                 // TODO: should we expand the object container? This may be too expensive just for checking ....
             else
             {
-                if ((nullptr == pObjectEntry) && m_aDocumentDataSource.has(DataAccessDescriptorProperty::CommandType) && m_aDocumentDataSource.has(DataAccessDescriptorProperty::Command))
+                if (m_aDocumentDataSource.has(DataAccessDescriptorProperty::CommandType)
+                    && m_aDocumentDataSource.has(DataAccessDescriptorProperty::Command))
                 {   // maybe we have a command to be displayed ?
                     sal_Int32 nCommandType = CommandType::TABLE;
                     m_aDocumentDataSource[DataAccessDescriptorProperty::CommandType] >>= nCommandType;
@@ -1773,13 +1774,13 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             case ID_BROWSER_ROWHEIGHT:
             case ID_BROWSER_COLATTRSET:
             case ID_BROWSER_COLWIDTH:
-                aReturn.bEnabled = getBrowserView() && getBrowserView()->getVclControl() && isValid() && isValidCursor();
+                aReturn.bEnabled = getBrowserView()->getVclControl() && isValid() && isValidCursor();
                 //  aReturn.bEnabled &= getDefinition() && !getDefinition()->GetDatabase()->IsReadOnly();
                 break;
 
             case ID_BROWSER_COPY:
                 OSL_ENSURE( !m_pTreeView->HasChildPathFocus(), "SbaTableQueryBrowser::GetState( ID_BROWSER_COPY ): this should have been handled above!" );
-                if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
+                if (getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
                 {
                     SbaGridControl* pControl = getBrowserView()->getVclControl();
                     if ( pControl->GetSelectRowCount() )

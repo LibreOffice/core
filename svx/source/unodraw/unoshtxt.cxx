@@ -760,7 +760,7 @@ void SvxTextEditSourceImpl::UpdateData()
                     {
                         if( mpOutliner->GetParagraphCount() > 1 )
                         {
-                            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT )
+                            if (pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT)
                             {
                                 while( mpOutliner->GetParagraphCount() > 1 )
                                 {

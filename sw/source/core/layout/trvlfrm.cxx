@@ -843,7 +843,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             }
             if ( !bSame )
                 pCnt = nullptr;
-            else if ( pCnt && pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow() ) // i73332
+            else if (pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow()) // i73332
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTableSel );

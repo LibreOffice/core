@@ -245,7 +245,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     }
     else
     {
-        if(pEntry && pEntry->nWID)
+        if(pEntry->nWID)
             mpPropSet->setPropertyValue( pEntry, aValue );
     }
 }
@@ -294,7 +294,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     }
     else
     {
-        if(pEntry && pEntry->nWID)
+        if(pEntry->nWID)
             aAny = mpPropSet->getPropertyValue( pEntry );
     }
     return aAny;

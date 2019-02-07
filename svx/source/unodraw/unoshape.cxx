@@ -2746,14 +2746,11 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     {
         const SfxItemSet& rObjItemSet = GetSdrObject()->GetMergedItemSet();
 
-        const XFillBmpStretchItem* pStretchItem = &rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
-        const XFillBmpTileItem* pTileItem = &rObjItemSet.Get(XATTR_FILLBMP_TILE);
-
-        if( pTileItem && pTileItem->GetValue() )
+        if (rObjItemSet.Get(XATTR_FILLBMP_TILE).GetValue())
         {
             rValue <<= drawing::BitmapMode_REPEAT;
         }
-        else if( pStretchItem && pStretchItem->GetValue() )
+        else if (rObjItemSet.Get(XATTR_FILLBMP_STRETCH).GetValue())
         {
             rValue <<= drawing::BitmapMode_STRETCH;
         }
