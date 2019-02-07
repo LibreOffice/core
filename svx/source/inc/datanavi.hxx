@@ -444,15 +444,9 @@ namespace svxform
         void                InitText( DataItemType _eType );
     };
 
-
-    class AddConditionDialog : public ModalDialog
+    class AddConditionDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<VclMultiLineEdit>       m_pConditionED;
-        VclPtr<VclMultiLineEdit>       m_pResultWin;
-        VclPtr<PushButton>             m_pEditNamespacesBtn;
-        VclPtr<OKButton>               m_pOKBtn;
-
         Idle                           m_aResultIdle;
         OUString const                       m_sPropertyName;
 
@@ -461,22 +455,26 @@ namespace svxform
         css::uno::Reference< css::beans::XPropertySet >
                                        m_xBinding;
 
-        DECL_LINK(ModifyHdl, Edit&, void);
+        std::unique_ptr<weld::TextView> m_xConditionED;
+        std::unique_ptr<weld::TextView> m_xResultWin;
+        std::unique_ptr<weld::Button> m_xEditNamespacesBtn;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+
+        DECL_LINK(ModifyHdl, weld::TextView&, void);
         DECL_LINK(ResultHdl, Timer *, void);
-        DECL_LINK(EditHdl, Button*, void);
-        DECL_LINK(OKHdl, Button*, void);
+        DECL_LINK(EditHdl, weld::Button&, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
 
     public:
-        AddConditionDialog(vcl::Window* pParent,
+        AddConditionDialog(weld::Window* pParent,
             const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertySet >& _rBinding);
         virtual ~AddConditionDialog() override;
-        virtual void dispose() override;
 
         const css::uno::Reference< css::xforms::XFormsUIHelper1 >& GetUIHelper() const { return m_xUIHelper; }
-        OUString GetCondition() const { return m_pConditionED->GetText(); }
+        OUString GetCondition() const { return m_xConditionED->get_text(); }
         void SetCondition(const OUString& _rCondition)
         {
-            m_pConditionED->SetText(_rCondition);
+            m_xConditionED->set_text(_rCondition);
             m_aResultIdle.Start();
         }
     };
@@ -484,7 +482,7 @@ namespace svxform
     class NamespaceItemDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<AddConditionDialog> m_pConditionDlg;
+        AddConditionDialog* m_pConditionDlg;
         std::vector< OUString >    m_aRemovedList;
 
         css::uno::Reference< css::container::XNameContainer >&
@@ -510,7 +508,7 @@ namespace svxform
     class ManageNamespaceDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<AddConditionDialog> m_xConditionDlg;
+        AddConditionDialog* m_pConditionDlg;
 
         std::unique_ptr<weld::Entry> m_xPrefixED;
         std::unique_ptr<weld::Entry> m_xUrlED;

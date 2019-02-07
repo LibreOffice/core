@@ -1231,6 +1231,11 @@ class VCL_DLLPUBLIC TextView : virtual public Container
 private:
     OUString m_sSavedValue;
 
+protected:
+    Link<TextView&, void> m_aChangeHdl;
+
+    void signal_changed() { m_aChangeHdl.Call(*this); }
+
 public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
@@ -1246,6 +1251,8 @@ public:
 
     void save_value() { m_sSavedValue = get_text(); }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
+
+    void connect_changed(const Link<TextView&, void>& rLink) { m_aChangeHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container
