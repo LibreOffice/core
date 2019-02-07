@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_94831b05",
+        "filename": "svx/source/gallery2/GalleryControl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:37:01Z",
+      "side": 1,
+      "message": "Fixed filemode from 755 to 644",
+      "revId": "e3bc8b85fb7bbecdd6dc6e37e5e4a9a3f855ee41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_74889f1e",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:37:01Z",
+      "side": 1,
+      "message": "Fixed filemode from 755 to 644",
+      "revId": "e3bc8b85fb7bbecdd6dc6e37e5e4a9a3f855ee41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
