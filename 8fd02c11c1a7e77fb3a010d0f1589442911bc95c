@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_dba4170b",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-02-07T15:45:36Z",
+      "side": 1,
+      "message": "Not only confusing, but misleading.",
+      "parentUuid": "1f485f77_9b40df37",
+      "revId": "8fd02c11c1a7e77fb3a010d0f1589442911bc95c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_7b3d23ba",
         "filename": "sc/source/core/data/column2.cxx",
         "patchSetId": 3
