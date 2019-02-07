@@ -66,6 +66,7 @@ public:
     void testAccentProcess();
     void testContinuousBlockProcess();
     void testOrgChart();
+    void testCycleMatrix();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(testAccentProcess);
     CPPUNIT_TEST(testContinuousBlockProcess);
     CPPUNIT_TEST(testOrgChart);
+    CPPUNIT_TEST(testCycleMatrix);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -808,6 +810,27 @@ void SdImportTestSmartArt::testOrgChart()
     // Without the accompanying fix in place, this test would have failed: an
     // employee was exactly the third of the total height, without any spacing.
     CPPUNIT_ASSERT_LESS(xGroup->getSize().Height / 3, aEmployeeSize.Height);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testCycleMatrix()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-cycle-matrix.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<text::XText> xA1(getChildShape(getChildShape(xGroup, 1), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA1.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), xA1->getString());
+
+    // Without the accompanying fix in place, this test would have failed: the
+    // content of the "A2" shape was lost.
+    uno::Reference<text::XText> xA2(getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 1),
+                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("A2"), xA2->getString());
 
     xDocShRef->DoClose();
 }
