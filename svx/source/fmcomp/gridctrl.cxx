@@ -485,7 +485,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
 
-    nW -= GetSettings().GetStyleSettings().GetScrollBarSize();
+    nW = std::max(nW - GetSettings().GetStyleSettings().GetScrollBarSize(), 0L);
 
     if (nX > nW)
     {
