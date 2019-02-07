@@ -248,7 +248,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
 
     sal_Int32 nResult = 0;
 
-    // TODO/LATER: the filter configuration could be used to detect it later, or batter a special service
+    // TODO/LATER: the filter configuration could be used to detect it later, or better a special service
     if (
         aMediaType.equalsIgnoreAsciiCase(MIMETYPE_VND_SUN_XML_WRITER_ASCII       ) ||
         aMediaType.equalsIgnoreAsciiCase(MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII   ) ||
