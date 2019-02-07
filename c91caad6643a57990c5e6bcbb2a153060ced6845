@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_3bb56b32",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4658,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-02-07T15:58:36Z",
+      "side": 1,
+      "message": "This only catches predefined plain numeric number formats, not additional numeric formats defined in locale data nor user-defined. The comment is wrong anyway.",
+      "revId": "c91caad6643a57990c5e6bcbb2a153060ced6845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
