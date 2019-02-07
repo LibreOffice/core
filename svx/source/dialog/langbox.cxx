@@ -477,6 +477,11 @@ void LanguageBox::set_id(int pos, const LanguageType eLangType)
     m_xControl->set_id(pos, OUString::number(static_cast<sal_uInt16>(eLangType)));
 }
 
+LanguageType LanguageBox::get_id(int pos) const
+{
+    return LanguageType(m_xControl->get_id(pos).toInt32());
+}
+
 void LanguageBox::remove_id(const LanguageType eLangType)
 {
     m_xControl->remove_id(OUString::number(static_cast<sal_uInt16>(eLangType)));
