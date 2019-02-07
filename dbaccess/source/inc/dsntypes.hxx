@@ -160,7 +160,7 @@ public:
     /// checks if the given data source type embeds its data into the database document
     static bool isEmbeddedDatabase( const OUString& _sURL );
 
-    OUString getEmbeddedDatabase() const;
+    static OUString getEmbeddedDatabase();
 
     // returns true when the properties dialog can be shown, otherwise false.
     static bool isShowPropertiesEnabled( const OUString& _sURL );

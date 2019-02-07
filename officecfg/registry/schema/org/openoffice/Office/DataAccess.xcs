@@ -38,16 +38,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="EmbeddedDatabaseSetting">
-      <info>
-        <desc>Describes a setting for an embedded database.</desc>
-      </info>
-      <prop oor:name="Value" oor:type="oor:any">
-        <info>
-          <desc>Describes the value for an embedded database setting.</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="ReportEngineName">
       <info>
         <desc>Describes the report engine.</desc>
@@ -62,26 +52,6 @@
           <desc>Specifies the product name of the report engine.</desc>
         </info>
       </prop>
-    </group>
-    <group oor:name="EmbeddedDatabaseName">
-      <info>
-        <desc>Describes the URL schema for an embedded database. They must start with sdbc:embedded:.</desc>
-      </info>
-      <prop oor:name="URL" oor:type="xs:string">
-        <info>
-          <desc>Specifies the URL for the embedded database.</desc>
-        </info>
-      </prop>
-      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-        <info>
-          <desc>Specifies the name of the embedded database which will be displayed in the statusbar of the database application.</desc>
-        </info>
-      </prop>
-      <set oor:name="EmbeddedDatabaseSettings" oor:node-type="EmbeddedDatabaseSetting">
-        <info>
-          <desc>Specifies the settings of an embedded database.</desc>
-        </info>
-      </set>
     </group>
     <group oor:name="DataSource">
       <info>
@@ -237,21 +207,6 @@
       <set oor:name="ReportEngineNames" oor:node-type="ReportEngineName">
         <info>
           <desc>Specifies all report engine names which are registered.</desc>
-        </info>
-      </set>
-    </group>
-    <group oor:name="EmbeddedDatabases">
-      <info>
-        <desc>Specifies the default embedded database which should be used.</desc>
-      </info>
-      <prop oor:name="DefaultEmbeddedDatabase" oor:type="xs:string">
-        <info>
-          <desc>Specifies the name of the embedded database to use.</desc>
-        </info>
-      </prop>
-      <set oor:name="EmbeddedDatabaseNames" oor:node-type="EmbeddedDatabaseName">
-        <info>
-          <desc>Specifies all embedded database names which are registered.</desc>
         </info>
       </set>
     </group>
