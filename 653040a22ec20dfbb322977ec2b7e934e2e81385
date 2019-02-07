@@ -94,6 +94,23 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_d4a073a8",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:03Z",
+      "side": 1,
+      "message": "Fixed filemode from 755 to 644\nThe Windows Share entry now contains calculated value from nPos.",
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_546c8335",
         "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
         "patchSetId": 6
@@ -105,6 +122,30 @@
       "writtenOn": "2019-01-31T07:26:09Z",
       "side": 1,
       "message": "It would be helpful to mention here, where that 3 comes from:\n\n    // nPos is the position of first item pre-defined in svtools/uiconfig/ui/placeedit.ui,\n    // after other CMIS server types were inserted",
+      "range": {
+        "startLine": 228,
+        "startChar": 7,
+        "endLine": 228,
+        "endChar": 65
+      },
+      "revId": "653040a22ec20dfbb322977ec2b7e934e2e81385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_2d73fae9",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:03Z",
+      "side": 1,
+      "message": "It is the fourth item that is defined after CMIS types.",
+      "parentUuid": "1f485f77_546c8335",
       "range": {
         "startLine": 228,
         "startChar": 7,
