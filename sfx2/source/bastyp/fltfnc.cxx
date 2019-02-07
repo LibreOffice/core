@@ -1147,7 +1147,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
 
     if ( bUpdate )
     {
-        // global filter arry was modified, factory specific ones might need an
+        // global filter array was modified, factory specific ones might need an
         // update too
         for (auto& aImpl : aImplArr)
             aImpl->Update();
