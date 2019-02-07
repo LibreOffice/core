@@ -370,6 +370,14 @@ sal_Int32 ConditionAtom::getNodeCount() const
                 if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
                     nCount++;
         }
+        else
+        {
+            // No presentation child is a presentation of a model node: just
+            // count presentation children.
+            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+                if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPoint->msModelId)
+                    nCount++;
+        }
     }
     return nCount;
 }
@@ -483,12 +491,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             LayoutPropertyMap aProperties;
             LayoutProperty& rParent = aProperties[""];
-            rParent[XML_w] = rShape->getSize().Width;
-            rParent[XML_h] = rShape->getSize().Height;
-            rParent[XML_l] = 0;
-            rParent[XML_t] = 0;
-            rParent[XML_r] = rShape->getSize().Width;
-            rParent[XML_b] = rShape->getSize().Height;
+
+            sal_Int32 nParentXOffset = 0;
+            if (mfAspectRatio != 1.0)
+            {
+                rParent[XML_w] = rShape->getSize().Width;
+                rParent[XML_h] = rShape->getSize().Height;
+                rParent[XML_l] = 0;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width;
+                rParent[XML_b] = rShape->getSize().Height;
+            }
+            else
+            {
+                // Shrink width to be only as large as height.
+                rParent[XML_w] = std::min(rShape->getSize().Width, rShape->getSize().Height);
+                rParent[XML_h] = rShape->getSize().Height;
+                if (rParent[XML_w] < rShape->getSize().Width)
+                    nParentXOffset = (rShape->getSize().Width - rParent[XML_w]) / 2;
+                rParent[XML_l] = nParentXOffset;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width - rParent[XML_l];
+                rParent[XML_b] = rShape->getSize().Height;
+            }
 
             for (const auto & rConstr : rConstraints)
             {
@@ -527,25 +552,30 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     LayoutProperty::const_iterator it, it2;
 
                     if ( (it = rProp.find(XML_w)) != rProp.end() )
-                        aSize.Width = it->second;
+                        aSize.Width = std::min(it->second, rShape->getSize().Width);
                     if ( (it = rProp.find(XML_h)) != rProp.end() )
-                        aSize.Height = it->second;
+                        aSize.Height = std::min(it->second, rShape->getSize().Height);
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() )
                         aPos.X = it->second;
                     else if ( (it = rProp.find(XML_ctrX)) != rProp.end() )
                         aPos.X = it->second - aSize.Width/2;
+                    else if ((it = rProp.find(XML_r)) != rProp.end())
+                        aPos.X = it->second - aSize.Width;
 
                     if ( (it = rProp.find(XML_t)) != rProp.end())
                         aPos.Y = it->second;
                     else if ( (it = rProp.find(XML_ctrY)) != rProp.end() )
                         aPos.Y = it->second - aSize.Height/2;
+                    else if ((it = rProp.find(XML_b)) != rProp.end())
+                        aPos.Y = it->second - aSize.Height;
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end() )
                         aSize.Width = it2->second - it->second;
                     if ( (it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end() )
                         aSize.Height = it2->second - it->second;
 
+                    aPos.X += nParentXOffset;
                     aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
                     aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
                 }
@@ -1128,11 +1158,21 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
     {
         DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
         const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
+        // Calculate the depth of what is effectively the topmost element.
+        sal_Int32 nMinDepth = std::numeric_limits<sal_Int32>::max();
+        for (const auto& rPair : aNodeName->second)
+        {
+            if (rPair.second.mnDepth < nMinDepth)
+                nMinDepth = rPair.second.mnDepth;
+        }
+
         while( aVecIter != aVecEnd )
         {
+            const auto& rPair = *aVecIter;
+            const DiagramData::SourceIdAndDepth& rItem = rPair.second;
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             // pPresNode is the presentation node of the aDataNode2 data node.
-            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
+            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.msSourceId);
             if (aDataNode2 == rMap.end())
             {
                 //busted, skip it
@@ -1142,7 +1182,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
 
             rShape->setDataNodeType(aDataNode2->second->mnType);
 
-            if( aVecIter->second == 0 )
+            if( rItem.mnDepth == 0 )
             {
                 // grab shape attr from topmost element(s)
                 rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
@@ -1158,6 +1198,13 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                             ->getShapePresetType())
                         << " added for layout node named \"" << msName
                         << "\"");
+            }
+            else if (rItem.mnDepth == nMinDepth)
+            {
+                // If no real topmost element, then take properties from the one that's the closest
+                // to topmost.
+                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
+                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
             }
 
             // append text with right outline level
@@ -1184,8 +1231,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 for (const auto& pSourceParagraph : rSourceParagraphs)
                 {
                     TextParagraph& rPara = pTextBody->addParagraph();
-                    if (aVecIter->second != -1)
-                        rPara.getProperties().setLevel(aVecIter->second);
+                    if (rItem.mnDepth != -1)
+                        rPara.getProperties().setLevel(rItem.mnDepth);
 
                     for (const auto& pRun : pSourceParagraph->getRuns())
                         rPara.addRun(pRun);
