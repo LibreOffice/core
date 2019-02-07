@@ -2862,11 +2862,13 @@ class SalInstanceTextView : public SalInstanceContainer, public virtual weld::Te
 private:
     VclPtr<VclMultiLineEdit> m_xTextView;
 
+    DECL_LINK(ChangeHdl, Edit&, void);
 public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, bool bTakeOwnership)
         : SalInstanceContainer(pTextView, bTakeOwnership)
         , m_xTextView(pTextView)
     {
+        m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
     }
 
     virtual void set_text(const OUString& rText) override
@@ -2903,7 +2905,17 @@ public:
     {
         m_xTextView->SetReadOnly(!bEditable);
     }
+
+    virtual ~SalInstanceTextView() override
+    {
+        m_xTextView->SetModifyHdl(Link<Edit&, void>());
+    }
 };
+
+IMPL_LINK_NOARG(SalInstanceTextView, ChangeHdl, Edit&, void)
+{
+    signal_changed();
+}
 
 class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
 {
