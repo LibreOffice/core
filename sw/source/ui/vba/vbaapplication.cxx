@@ -111,7 +111,7 @@ public:
                                                   const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
     virtual sal_Int32 SAL_CALL AppMaximize( const OUString& WindowName, const css::uno::Any& State ) override;
     virtual sal_Int32 SAL_CALL DocMaximize( const css::uno::Any& State ) override;
-    virtual void SAL_CALL AppShow(  const OUString& WindowName ) override;
+    virtual void SAL_CALL AppShow(  const css::uno::Any& WindowName ) override;
     virtual sal_Int32 SAL_CALL AppCount() override;
 };
 
@@ -670,7 +670,7 @@ SwWordBasic::DocMaximize( const css::uno::Any& State )
 }
 
 void SAL_CALL
-SwWordBasic::AppShow( const OUString& WindowName )
+SwWordBasic::AppShow( const css::uno::Any& WindowName )
 {
     SAL_INFO("sw.vba", "WordBasic.AppShow(WindowName:=" << WindowName << ")");
 
