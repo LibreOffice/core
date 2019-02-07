@@ -106,27 +106,27 @@ XPatternListRef   ViewElementListProvider::GetPatternList() const
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
     SdrObjList* pSymbolList = nullptr;
-    uno::Reference< drawing::XShapes > xSymbols;//@todo this keeps the first drawinglayer alive ...
     try
     {
-        if(!pSymbolList || !pSymbolList->GetObjCount())
-        {
-            //@todo use mutex
+        //@todo use mutex
 
-            //get shape factory
-            uno::Reference< lang::XMultiServiceFactory > xShapeFactory( m_pDrawModelWrapper->getShapeFactory() );
+        //get shape factory
+        uno::Reference<lang::XMultiServiceFactory> xShapeFactory(
+            m_pDrawModelWrapper->getShapeFactory());
 
-            //get hidden draw page (target):
-            uno::Reference<drawing::XShapes> xTarget( m_pDrawModelWrapper->getHiddenDrawPage(), uno::UNO_QUERY );
+        //get hidden draw page (target):
+        uno::Reference<drawing::XShapes> xTarget(m_pDrawModelWrapper->getHiddenDrawPage(),
+                                                 uno::UNO_QUERY);
 
-            //create symbols via uno and convert to native sdr objects
-            drawing::Direction3D aSymbolSize(220,220,0); // should be 250, but 250 -> 280 ??
-            xSymbols =  DataPointSymbolSupplier::create2DSymbolList( xShapeFactory, xTarget, aSymbolSize );
+        //create symbols via uno and convert to native sdr objects
+        drawing::Direction3D aSymbolSize(220, 220, 0); // should be 250, but 250 -> 280 ??
+        uno::Reference<drawing::XShapes> xSymbols
+            = DataPointSymbolSupplier::create2DSymbolList(xShapeFactory, xTarget, aSymbolSize);
 
-            SdrObject* pSdrObject = DrawViewWrapper::getSdrObject( uno::Reference< drawing::XShape >( xSymbols, uno::UNO_QUERY ) );
-            if(pSdrObject)
-                pSymbolList = pSdrObject->GetSubList();
-        }
+        SdrObject* pSdrObject = DrawViewWrapper::getSdrObject(
+            uno::Reference<drawing::XShape>(xSymbols, uno::UNO_QUERY));
+        if (pSdrObject)
+            pSymbolList = pSdrObject->GetSubList();
     }
     catch( const uno::Exception& e )
     {
