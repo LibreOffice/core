@@ -16,6 +16,24 @@
       "revId": "dd38d60b398b68a5ca4e3bb569e7ae0b8226fb42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7ca2b49c",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_fc890426",
+      "revId": "dd38d60b398b68a5ca4e3bb569e7ae0b8226fb42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
