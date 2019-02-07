@@ -282,27 +282,9 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
     return _sURL.startsWith( "sdbc:embedded:" );
 }
 
-OUString ODsnTypeCollection::getEmbeddedDatabase() const
+OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
-    OUString sEmbeddedDatabaseURL;
-    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, "org.openoffice.Office.DataAccess", -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-    if ( aInstalled.isValid() )
-    {
-        if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
-        {
-            static const OUStringLiteral s_sValue = "EmbeddedDatabases/DefaultEmbeddedDatabase/Value";
-
-            aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
-            if ( !sEmbeddedDatabaseURL.isEmpty() )
-                aInstalled.getNodeValue(s_sValue + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
-        }
-    }
-    if ( sEmbeddedDatabaseURL.isEmpty() )
-    {
-        sEmbeddedDatabaseURL = "sdbc:embedded:firebird";
-    }
-
-    return sEmbeddedDatabaseURL;
+    return "sdbc:embedded:firebird";
 }
 
 

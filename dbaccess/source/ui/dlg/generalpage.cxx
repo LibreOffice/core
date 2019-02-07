@@ -251,7 +251,7 @@ namespace dbaui
 
         if (m_pCollection && bValid)
         {
-            implSetCurrentType( m_pCollection->getEmbeddedDatabase() );
+            implSetCurrentType( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
             sDisplayName = m_pCollection->getTypeDisplayName( m_eCurrentSelection );
         }
 
@@ -486,7 +486,7 @@ namespace dbaui
         get( m_pPB_OpenDatabase, "openDatabase" );
 
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
-        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
+        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
             nCreateNewDBIndex = m_pCollection->getIndexOf( "sdbc:dbase:" );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
