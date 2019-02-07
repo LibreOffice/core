@@ -917,7 +917,6 @@ void ObjectPage::DeleteCurrent()
     }
 }
 
-
 void ObjectPage::EndTabDialog()
 {
     DBG_ASSERT( pTabDlg, "TabDlg not set!" );
@@ -925,36 +924,25 @@ void ObjectPage::EndTabDialog()
         pTabDlg->EndDialog( 1 );
 }
 
-LibDialog::LibDialog( vcl::Window* pParent )
-    : ModalDialog(pParent, "ImportLibDialog", "modules/BasicIDE/ui/importlibdialog.ui")
+LibDialog::LibDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/importlibdialog.ui", "ImportLibDialog")
+    , m_xStorageFrame(m_xBuilder->weld_frame("storageframe"))
+    , m_xLibBox(m_xBuilder->weld_tree_view("entries"))
+    , m_xReferenceBox(m_xBuilder->weld_check_button("ref"))
+    , m_xReplaceBox(m_xBuilder->weld_check_button("replace"))
 {
-    get(m_pStorageFrame, "storageframe");
-    get(m_pReferenceBox, "ref");
-    get(m_pReplaceBox, "replace");
-    get(m_pLibBox, "entries");
-    m_pLibBox->set_height_request(m_pLibBox->GetTextHeight() * 8);
-    m_pLibBox->set_width_request(m_pLibBox->approximate_char_width() * 32);
+    m_xLibBox->set_size_request(m_xLibBox->get_approximate_digit_width() * 28,
+                                m_xLibBox->get_height_rows(8));
 }
 
 LibDialog::~LibDialog()
 {
-    disposeOnce();
 }
-
-void LibDialog::dispose()
-{
-    m_pStorageFrame.clear();
-    m_pLibBox.clear();
-    m_pReferenceBox.clear();
-    m_pReplaceBox.clear();
-    ModalDialog::dispose();
-}
-
 
 void LibDialog::SetStorageName( const OUString& rName )
 {
     OUString aName = IDEResId(RID_STR_FILENAME) + rName;
-    m_pStorageFrame->set_label(aName);
+    m_xStorageFrame->set_label(aName);
 }
 
 // Helper function
