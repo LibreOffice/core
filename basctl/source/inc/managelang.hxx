@@ -25,7 +25,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
-class SvxLanguageBox;
+class LanguageBox;
 
 namespace basctl
 {
@@ -74,24 +74,25 @@ public:
     virtual void dispose() override;
 };
 
-class SetDefaultLanguageDialog : public ModalDialog
+class SetDefaultLanguageDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText>          m_pLanguageFT;
-    VclPtr<SvxLanguageBox>     m_pLanguageLB;
-    VclPtr<FixedText>          m_pCheckLangFT;
-    VclPtr<SvxCheckListBox>    m_pCheckLangLB;
-    VclPtr<FixedText>          m_pDefinedFT;
-    VclPtr<FixedText>          m_pAddedFT;
-
     std::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     void                FillLanguageBox();
 
+    std::unique_ptr<weld::Label> m_xLanguageFT;
+    std::unique_ptr<weld::TreeView> m_xLanguageLB;
+    std::unique_ptr<weld::Label> m_xCheckLangFT;
+    std::unique_ptr<weld::TreeView> m_xCheckLangLB;
+    std::unique_ptr<weld::Label> m_xDefinedFT;
+    std::unique_ptr<weld::Label> m_xAddedFT;
+    std::unique_ptr<weld::Label> m_xAltTitle;
+    std::unique_ptr<::LanguageBox> m_xLanguageCB;
+
 public:
-    SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr);
+    SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr);
     virtual ~SetDefaultLanguageDialog() override;
-    virtual void dispose() override;
 
     css::uno::Sequence< css::lang::Locale >   GetLocales() const;
 };

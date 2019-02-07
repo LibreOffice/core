@@ -174,10 +174,13 @@ public:
     bool get_visible() const { return m_xControl->get_visible(); }
     LanguageType get_active_id() const;
     int find_id(const LanguageType eLangType) const;
+    LanguageType get_id(int nPos) const;
     void set_id(int nPos, const LanguageType eLangType);
     void remove_id(const LanguageType eLangType);
     void append(const LanguageType eLangType, const OUString& rStr);
     int find_text(const OUString& rStr) const { return m_xControl->find_text(rStr); }
+    OUString get_text(int nPos) const { return m_xControl->get_text(nPos); }
+    int get_count() const { return m_xControl->get_count(); }
     const weld::ComboBox* get_widget() const { return m_xControl.get(); }
 };
 
