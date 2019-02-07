@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_108f2e24",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-02-07T07:53:35Z",
+      "side": 0,
+      "message": "It looks like there are much more places using this construction. See https://opengrok.libreoffice.org/search?project\u003dcore\u0026q\u003d%22nFormat+%25+SV_COUNTRY_LANGUAGE_OFFSET%22\u0026defs\u003d\u0026refs\u003d\u0026path\u003d\u0026hist\u003d\u0026type\u003d\u0026si\u003dq\nShouln\u0027t they be checked and updated too?",
+      "range": {
+        "startLine": 153,
+        "startChar": 18,
+        "endLine": 153,
+        "endChar": 63
+      },
+      "revId": "e61a5b34468474bdd359f0aa61561657f601da0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
