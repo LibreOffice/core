@@ -22,6 +22,30 @@
       "revId": "e61a5b34468474bdd359f0aa61561657f601da0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_fb9fd3b1",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-02-07T15:45:36Z",
+      "side": 0,
+      "message": "Definitely not. The places check if THE General format is applied (i.e. no other format).",
+      "parentUuid": "1f485f77_108f2e24",
+      "range": {
+        "startLine": 153,
+        "startChar": 18,
+        "endLine": 153,
+        "endChar": 63
+      },
+      "revId": "e61a5b34468474bdd359f0aa61561657f601da0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
