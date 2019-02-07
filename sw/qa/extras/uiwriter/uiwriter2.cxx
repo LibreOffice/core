@@ -844,6 +844,22 @@ void SwUiWriterTest2::testTdf122942()
     // paragraph mark, not above it.
     const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
     CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
+
+    reload("writer8", "tdf122942.odt");
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pDoc = pWrtShell->GetDoc();
+    const SwFrameFormats& rFormats2 = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
+
+    SdrObject* pObject = rFormats2[1]->FindSdrObject();
+    CPPUNIT_ASSERT(pObject);
+
+    const tools::Rectangle& rOutRect = pObject->GetLastBoundRect();
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected greater than: 5000; Actual  : 2817', i.e. the shape moved up
+    // after a reload(), while it's expected to not change its position (5773).
+    CPPUNIT_ASSERT_GREATER(static_cast<SwTwips>(5000), rOutRect.Top());
 }
 
 void SwUiWriterTest2::testTdf52391()
