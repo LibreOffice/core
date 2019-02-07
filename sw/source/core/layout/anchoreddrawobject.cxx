@@ -374,12 +374,18 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
     // --> #i50356# - format anchor frame containing the anchor
     // position. E.g., for at-character anchored object this can be the follow
     // frame of the anchor frame, which contains the anchor character.
-    const bool bFormatAnchor =
-            !static_cast<const SwTextFrame*>( GetAnchorFrameContainingAnchPos() )->IsAnyJoinLocked() &&
-            !ConsiderObjWrapInfluenceOnObjPos() &&
-            !ConsiderObjWrapInfluenceOfOtherObjs();
+    bool bJoinLocked
+        = static_cast<const SwTextFrame*>(GetAnchorFrameContainingAnchPos())->IsAnyJoinLocked();
+    const bool bFormatAnchor = !bJoinLocked && !ConsiderObjWrapInfluenceOnObjPos()
+                               && !ConsiderObjWrapInfluenceOfOtherObjs();
 
-    if ( bFormatAnchor )
+    // Format of anchor is needed for (vertical) fly offsets, otherwise the
+    // lack of fly portions will result in an incorrect 0 offset.
+    bool bAddVerticalFlyOffsets = GetFrameFormat().getIDocumentSettingAccess().get(
+        DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
+    bool bFormatAnchorOnce = !bJoinLocked && bAddVerticalFlyOffsets;
+
+    if (bFormatAnchor || bFormatAnchorOnce)
     {
         // --> #i50356#
         GetAnchorFrameContainingAnchPos()->Calc(GetAnchorFrameContainingAnchPos()->getRootFrame()->GetCurrShell()->GetOut());
