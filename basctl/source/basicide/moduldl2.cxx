@@ -786,7 +786,7 @@ void LibPage::InsertLib()
     if ( !xModLibContImport.is() && !xDlgLibContImport.is() )
         return;
 
-    VclPtr<LibDialog> pLibDlg;
+    std::shared_ptr<LibDialog> xLibDlg;
 
     Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
     Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
@@ -796,11 +796,10 @@ void LibPage::InsertLib()
     for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
         // library import dialog
-        if ( !pLibDlg )
+        if (!xLibDlg)
         {
-            pLibDlg.reset(VclPtr<LibDialog>::Create( this ));
-            pLibDlg->SetStorageName( aURLObj.getName() );
-            pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
+            xLibDlg.reset(new LibDialog(GetFrameWeld()));
+            xLibDlg->SetStorageName( aURLObj.getName() );
         }
 
         // libbox entries
@@ -808,13 +807,16 @@ void LibPage::InsertLib()
         if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) && xModLibContImport->isLibraryLink( aLibName ) ) ||
                 ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
         {
-            SvTreeListEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
-            sal_uInt16 nPos = static_cast<sal_uInt16>(pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry ));
-            pLibDlg->GetLibBox().CheckEntryPos(nPos);
+            weld::TreeView& rView = xLibDlg->GetLibBox();
+            rView.insert(nullptr, -1, nullptr, nullptr, nullptr,
+                                      nullptr, nullptr, false);
+            const int nRow = rView.n_children() - 1;
+            rView.set_toggle(nRow, true, 0);
+            rView.set_text(nRow, aLibName, 1);
         }
     }
 
-    if ( !pLibDlg )
+    if (!xLibDlg)
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_NOLIBINSTORAGE)));
@@ -828,9 +830,9 @@ void LibPage::InsertLib()
 
     // disable reference checkbox for documents and sbls
     if ( aExtension != aLibExtension && aExtension != aContExtension )
-        pLibDlg->EnableReference(false);
+        xLibDlg->EnableReference(false);
 
-    pLibDlg->StartExecuteAsync([aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, pLibDlg, xDlgLibContImport, xModLibContImp, xModLibContImport, this](sal_Int32 nResult)
+    weld::DialogController::runAsync(xLibDlg, [aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImp, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
@@ -838,15 +840,14 @@ void LibPage::InsertLib()
             bool bChanges = false;
             sal_uLong nNewPos = m_pLibBox->GetEntryCount();
             bool bRemove = false;
-            bool bReplace = pLibDlg->IsReplace();
-            bool bReference = pLibDlg->IsReference();
-            for ( sal_uLong nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
+            bool bReplace = xLibDlg->IsReplace();
+            bool bReference = xLibDlg->IsReference();
+            weld::TreeView& rView = xLibDlg->GetLibBox();
+            for (int nLib = 0, nChildren = rView.n_children(); nLib < nChildren; ++nLib)
             {
-                if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
+                if (rView.get_toggle(nLib, 0))
                 {
-                    SvTreeListEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
-                    DBG_ASSERT( pEntry, "Entry?!" );
-                    OUString aLibName( SvTabListBox::GetEntryText( pEntry, 0 ) );
+                    OUString aLibName(rView.get_text(nLib, 1));
                     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
                     Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
 
