@@ -22,6 +22,47 @@
       "revId": "4a95cbaececde0d73698acb3460603c805545d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_cd622617",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f485f77_b4cbb71c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
+      "revId": "4a95cbaececde0d73698acb3460603c805545d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_14c96b77",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:22Z",
+      "side": 1,
+      "message": "Fixed file mode back from 755 to 644",
+      "revId": "4a95cbaececde0d73698acb3460603c805545d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
