@@ -76,13 +76,16 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 }
 
-Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle)
+Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle,
+                             bool bUseNativeDialog)
     : Qt5FilePicker_Base(m_aHelperMutex)
     , m_bShowFileExtensionInFilterTitle(bShowFileExtensionInFilterTitle)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
 {
-    m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
+    if (!bUseNativeDialog)
+        m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
+
     m_pFileDialog->setFileMode(eMode);
     m_pFileDialog->setWindowModality(Qt::ApplicationModal);
 
