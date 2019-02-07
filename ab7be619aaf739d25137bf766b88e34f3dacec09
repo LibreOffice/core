@@ -22,6 +22,30 @@
       "revId": "ab7be619aaf739d25137bf766b88e34f3dacec09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_e0e3bba3",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:03Z",
+      "side": 1,
+      "message": "I have tried to fix this now. I have tested it on my machine. Please review the new change (patch set 3).",
+      "parentUuid": "1f485f77_658ebd2f",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 28
+      },
+      "revId": "ab7be619aaf739d25137bf766b88e34f3dacec09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
