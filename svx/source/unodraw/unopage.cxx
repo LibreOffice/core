@@ -345,14 +345,17 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     SolarMutexGuard aGuard;
 
     if( (mpModel == nullptr) || (mpPage == nullptr) )
-        throw lang::DisposedException();
+        throw lang::DisposedException("Model or Page was already disposed!");
 
     if ( Index < 0 || static_cast<size_t>(Index) >= mpPage->GetObjCount() )
-        throw lang::IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException("Index (" + OUString::number(Index)
+                                              + ") needs to be a positive integer smaller than the shape count ("
+                                              + OUString::number(mpPage->GetObjCount()) + ")!");
 
     SdrObject* pObj = mpPage->GetObj( Index );
     if( pObj == nullptr )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Runtime exception thrown while getting a ref to the SdrObject at index: "
+                                    + OUString::number(Index));
 
 
     return makeAny(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
