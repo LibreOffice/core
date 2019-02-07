@@ -56,37 +56,27 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
     return bRet;
 }
 
-ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
-    : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
+ManageLanguageDialog::ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/managelanguages.ui", "ManageLanguagesDialog")
     , m_xLocalizationMgr(xLMgr)
     , m_sDefLangStr(IDEResId(RID_STR_DEF_LANG))
     , m_sCreateLangStr(IDEResId(RID_STR_CREATE_LANG))
+    , m_xLanguageLB(m_xBuilder->weld_tree_view("treeview"))
+    , m_xAddPB(m_xBuilder->weld_button("add"))
+    , m_xDeletePB(m_xBuilder->weld_button("delete"))
+    , m_xMakeDefPB(m_xBuilder->weld_button("default"))
 {
-    get(m_pLanguageLB, "treeview");
-    m_pLanguageLB->set_height_request(m_pLanguageLB->GetTextHeight() * 10);
-    m_pLanguageLB->set_width_request(m_pLanguageLB->approximate_char_width() * 50);
-    get(m_pAddPB, "add");
-    get(m_pDeletePB, "delete");
-    get(m_pMakeDefPB, "default");
+    m_xLanguageLB->set_size_request(m_xLanguageLB->get_approximate_digit_width() * 42,
+                                    m_xLanguageLB->get_height_rows(10));
 
     Init();
     FillLanguageBox();
-    SelectHdl( *m_pLanguageLB );
+    SelectHdl( *m_xLanguageLB );
 }
 
 ManageLanguageDialog::~ManageLanguageDialog()
 {
-    disposeOnce();
-}
-
-void ManageLanguageDialog::dispose()
-{
     ClearLanguageBox();
-    m_pLanguageLB.clear();
-    m_pAddPB.clear();
-    m_pDeletePB.clear();
-    m_pMakeDefPB.clear();
-    ModalDialog::dispose();
 }
 
 void ManageLanguageDialog::Init()
@@ -95,16 +85,16 @@ void ManageLanguageDialog::Init()
     Shell* pShell = GetShell();
     const OUString& sLibName = pShell->GetCurLibName();
     // set dialog title with library name
-    OUString sText = GetText();
+    OUString sText = m_xDialog->get_title();
     sText = sText.replaceAll("$1", sLibName);
-    SetText( sText );
+    m_xDialog->set_title(sText);
     // set handler
-    m_pAddPB->SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
-    m_pDeletePB->SetClickHdl( LINK( this, ManageLanguageDialog, DeleteHdl ) );
-    m_pMakeDefPB->SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
-    m_pLanguageLB->SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
+    m_xAddPB->connect_clicked( LINK( this, ManageLanguageDialog, AddHdl ) );
+    m_xDeletePB->connect_clicked( LINK( this, ManageLanguageDialog, DeleteHdl ) );
+    m_xMakeDefPB->connect_clicked( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
+    m_xLanguageLB->connect_changed( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
-    m_pLanguageLB->EnableMultiSelection( true );
+    m_xLanguageLB->set_selection_mode(SelectionMode::Multiple);
 }
 
 void ManageLanguageDialog::FillLanguageBox()
@@ -126,28 +116,28 @@ void ManageLanguageDialog::FillLanguageBox()
             {
                 sLanguage += " " + m_sDefLangStr;
             }
-            const sal_Int32 nPos = m_pLanguageLB->InsertEntry( sLanguage );
-            m_pLanguageLB->SetEntryData( nPos, new LanguageEntry( pLocale[i], bIsDefault ) );
+            LanguageEntry* pEntry = new LanguageEntry(pLocale[i], bIsDefault);
+            m_xLanguageLB->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), sLanguage);
         }
     }
     else
-        m_pLanguageLB->InsertEntry( m_sCreateLangStr );
+        m_xLanguageLB->append_text(m_sCreateLangStr);
 }
 
 void ManageLanguageDialog::ClearLanguageBox()
 {
-    const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = m_xLanguageLB->n_children();
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData(i));
+        LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xLanguageLB->get_id(i).toInt64());
         delete pEntry;
     }
-    m_pLanguageLB->Clear();
+    m_xLanguageLB->clear();
 }
 
-IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, weld::Button&, void)
 {
-    std::shared_ptr<SetDefaultLanguageDialog> xDlg(new SetDefaultLanguageDialog(GetFrameWeld(), m_xLocalizationMgr));
+    std::shared_ptr<SetDefaultLanguageDialog> xDlg(new SetDefaultLanguageDialog(m_xDialog.get(), m_xLocalizationMgr));
     weld::DialogController::runAsync(xDlg, [xDlg,this](sal_Int32 nResult)
         {
             if (!nResult )
@@ -164,20 +154,21 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
         });
 }
 
-IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/BasicIDE/ui/deletelangdialog.ui"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/BasicIDE/ui/deletelangdialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("DeleteLangDialog"));
     if (xQBox->run() == RET_OK)
     {
-        sal_Int32 nCount = m_pLanguageLB->GetSelectedEntryCount();
-        sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
+        std::vector<int> aSelection = m_xLanguageLB->get_selected_rows();
+        int nCount = aSelection.size();
+        int nPos = m_xLanguageLB->get_selected_index();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        for (int i = 0; i < nCount; ++i)
         {
-            const sal_Int32 nSelPos = m_pLanguageLB->GetSelectedEntryPos(i);
-            LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nSelPos ));
+            const sal_Int32 nSelPos = aSelection[i];
+            LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xLanguageLB->get_id(nSelPos).toInt64());
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
         }
@@ -186,19 +177,19 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
         ClearLanguageBox();
         FillLanguageBox();
         // reset selection
-        nCount = m_pLanguageLB->GetEntryCount();
-        if ( nCount <= nPos )
+        nCount = m_xLanguageLB->n_children();
+        if (nCount <= nPos)
             nPos = nCount - 1;
-        m_pLanguageLB->SelectEntryPos( nPos );
-        SelectHdl( *m_pLanguageLB );
+        m_xLanguageLB->select(nPos);
+        SelectHdl( *m_xLanguageLB );
     }
 }
 
-IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl, weld::Button&, void)
 {
-    const sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
-    LanguageEntry* pSelectEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nPos ));
-    if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
+    const sal_Int32 nPos = m_xLanguageLB->get_selected_index();
+    LanguageEntry* pSelectEntry = reinterpret_cast<LanguageEntry*>(m_xLanguageLB->get_id(nPos).toInt64());
+    if (pSelectEntry && !pSelectEntry->m_bIsDefault)
     {
         // set new default entry
         m_xLocalizationMgr->handleSetDefaultLocale( pSelectEntry->m_aLocale );
@@ -206,21 +197,21 @@ IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl, Button*, void)
         ClearLanguageBox();
         FillLanguageBox();
         // reset selection
-        m_pLanguageLB->SelectEntryPos( nPos );
-        SelectHdl( *m_pLanguageLB );
+        m_xLanguageLB->select(nPos);
+        SelectHdl( *m_xLanguageLB );
     }
 }
 
-IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, weld::TreeView&, void)
 {
-    const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
+    const sal_Int32 nCount = m_xLanguageLB->n_children();
     bool bEmpty = ( !nCount ||
-                    m_pLanguageLB->GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
-    bool bSelect = ( m_pLanguageLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+                    m_xLanguageLB->find_text(m_sCreateLangStr) != -1 );
+    bool bSelect = ( m_xLanguageLB->get_selected_index() != -1 );
     bool bEnable = !bEmpty && bSelect;
 
-    m_pDeletePB->Enable(bEnable);
-    m_pMakeDefPB->Enable(bEnable && nCount > 1 && m_pLanguageLB->GetSelectedEntryCount() == 1);
+    m_xDeletePB->set_sensitive(bEnable);
+    m_xMakeDefPB->set_sensitive(bEnable && nCount > 1 && m_xLanguageLB->count_selected_rows() == 1);
 }
 
 // class SetDefaultLanguageDialog -----------------------------------------------
