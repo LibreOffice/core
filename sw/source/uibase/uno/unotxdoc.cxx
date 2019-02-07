@@ -2635,6 +2635,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified();
 
+            // tdf#122607 Re-layout the doc. Calling CalcLayout here is not enough, as it depends
+            // on the currently visible area which is 0 when doing headless conversion.
+            pViewShell->Reformat();
             pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
 
             pViewShell->SetPDFExportOption( false );

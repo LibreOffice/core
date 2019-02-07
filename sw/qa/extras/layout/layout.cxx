@@ -32,6 +32,7 @@ public:
     void testTdf117188();
     void testTdf119875();
     void testTdf116989();
+    void testTdf122607();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf116989);
+    CPPUNIT_TEST(testTdf122607);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -302,6 +304,20 @@ void SwLayoutWriter::testTdf116989()
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);
     }
+}
+
+void SwLayoutWriter::testTdf122607()
+{
+    createDoc("tdf122607.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc,
+                "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
+                "fly/txt/Text[1]",
+                "nHeight", "253");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
+                "fly/txt/Text[1]",
+                "nWidth", "428");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);

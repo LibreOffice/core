@@ -152,7 +152,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     inline void ResetInvalidRect();
 
-    SAL_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
+
 
     SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
@@ -215,6 +215,9 @@ public:
     bool AddPaintRect( const SwRect &rRect );
 
     void InvalidateWindows( const SwRect &rRect );
+
+    /// Invalidates complete Layout (ApplyViewOption).
+    void Reformat();
 
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
