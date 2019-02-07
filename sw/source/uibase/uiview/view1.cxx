@@ -193,7 +193,7 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
     if(!m_pFormatClipboard)
         return;
 
-    bool bHasContent = m_pFormatClipboard && m_pFormatClipboard->HasContent();
+    const bool bHasContent = m_pFormatClipboard->HasContent();
     if( !bHasContent &&
         !SwFormatClipboard::CanCopyThisType( GetWrtShell().GetSelectionType())
       )

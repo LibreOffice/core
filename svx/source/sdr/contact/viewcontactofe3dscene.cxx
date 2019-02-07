@@ -119,7 +119,7 @@ void createSubPrimitive3DVector(
                         bVisible = rE3dObject.GetSelected();
                     }
 
-                    if(bVisible && o_pVisibleTarget)
+                    if (bVisible)
                     {
                         // add to visible target vector
                         o_pVisibleTarget->append(xPrimitive3DSeq);

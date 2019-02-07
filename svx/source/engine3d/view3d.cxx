@@ -823,12 +823,12 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
                     ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
 
                 // delete object in between
-                if(pNewObj2 != pObj && pNewObj2 != pNewObj1 && pNewObj2)
+                if (pNewObj2 != pObj && pNewObj2 != pNewObj1)
                     SdrObject::Free( pNewObj2 );
             }
 
             // delete object in between
-            if(pNewObj1 != pObj && pNewObj1)
+            if (pNewObj1 != pObj)
                 SdrObject::Free( pNewObj1 );
         }
     }

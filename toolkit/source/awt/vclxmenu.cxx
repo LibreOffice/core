@@ -303,7 +303,7 @@ void VCLXMenu::removeItem(
         return;
 
     sal_Int32 nItemCount = static_cast<sal_Int32>(mpMenu->GetItemCount());
-    if ( ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
+    if ((nCount > 0) && (nPos >= 0) && (nPos < nItemCount))
     {
         sal_Int16 nP = sal::static_int_cast< sal_Int16 >(
             std::min( static_cast<int>(nPos+nCount), static_cast<int>(nItemCount) ));
