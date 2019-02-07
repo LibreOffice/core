@@ -16,6 +16,24 @@
       "revId": "a7017f3a1c15fc0aa1bf64da76cbd43ff083aaa1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9c71f0e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:34Z",
+      "side": 1,
+      "message": "Using your comments, I have tried my best to simplify the commit message. I hope that the patch finally gets pushed to the master. Thank you very much for suggesting the improvements and feedback ! Great help for a beginner :-)",
+      "parentUuid": "5f4e5783_3c767c08",
+      "revId": "a7017f3a1c15fc0aa1bf64da76cbd43ff083aaa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
