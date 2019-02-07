@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_a1180581",
+        "filename": "svx/source/gallery2/GalleryControl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_c159c1fe",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_6170cd73",
         "filename": "svx/source/gallery2/GalleryControl.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_810d0940",
+        "filename": "svx/source/gallery2/GalleryControl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_6170cd73",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_e164bdbb",
         "filename": "svx/source/gallery2/galbrws1.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2019-01-07T01:36:15Z",
       "side": 1,
       "message": "If maNewTheme isn\u0027t enabled we should grab focus to next in tab order (mpThemes).",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c1130166",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_e164bdbb",
       "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
