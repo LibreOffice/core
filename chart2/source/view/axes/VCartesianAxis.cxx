@@ -1101,7 +1101,7 @@ B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, dou
         drawing::Position3D aScenePos = m_pPosHelper->transformLogicToScene( fLogicX, fLogicY, fLogicZ, true );
         if(m_nDimension==3)
         {
-            if( m_xLogicTarget.is() && m_pPosHelper && m_pShapeFactory )
+            if (m_xLogicTarget.is() && m_pShapeFactory)
             {
                 tPropertyNameMap aDummyPropertyNameMap;
                 Reference< drawing::XShape > xShape3DAnchor = m_pShapeFactory->createCube( m_xLogicTarget

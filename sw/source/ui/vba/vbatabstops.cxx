@@ -207,7 +207,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     style::TabStop* pOldTab = aOldTabs.getArray();
     style::TabStop* pNewTab = aNewTabs.getArray();
     pNewTab[0] = aTab;
-    for( sal_Int32 nIndex = 0; nIndex < nTabs && !bOverWriter; nIndex++ )
+    for (sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++)
     {
         if( pOldTab[nIndex].Position == nPosition )
         {
