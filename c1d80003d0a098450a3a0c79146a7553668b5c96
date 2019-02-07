@@ -22,6 +22,30 @@
       "revId": "c1d80003d0a098450a3a0c79146a7553668b5c96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_286648ef",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f485f77_682680ba",
+      "range": {
+        "startLine": 228,
+        "startChar": 7,
+        "endLine": 228,
+        "endChar": 142
+      },
+      "revId": "c1d80003d0a098450a3a0c79146a7553668b5c96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
