@@ -481,32 +481,30 @@ namespace svxform
         }
     };
 
-
-    class NamespaceItemDialog : public ModalDialog
+    class NamespaceItemDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<SvSimpleTable>      m_pNamespacesList;
-        VclPtr<PushButton>         m_pAddNamespaceBtn;
-        VclPtr<PushButton>         m_pEditNamespaceBtn;
-        VclPtr<PushButton>         m_pDeleteNamespaceBtn;
-        VclPtr<OKButton>           m_pOKBtn;
-
         VclPtr<AddConditionDialog> m_pConditionDlg;
         std::vector< OUString >    m_aRemovedList;
 
         css::uno::Reference< css::container::XNameContainer >&
                                    m_rNamespaces;
 
-        DECL_LINK(    SelectHdl, SvTreeListBox*, void );
-        DECL_LINK(    ClickHdl, Button*, void );
-        DECL_LINK(    OKHdl, Button*, void);
+        std::unique_ptr<weld::TreeView> m_xNamespacesList;
+        std::unique_ptr<weld::Button> m_xAddNamespaceBtn;
+        std::unique_ptr<weld::Button> m_xEditNamespaceBtn;
+        std::unique_ptr<weld::Button> m_xDeleteNamespaceBtn;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+
+        DECL_LINK(SelectHdl, weld::TreeView&, void);
+        DECL_LINK(ClickHdl, weld::Button&, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
 
         void                LoadNamespaces();
 
     public:
-        NamespaceItemDialog( AddConditionDialog* pParent, css::uno::Reference< css::container::XNameContainer >& _rContainer );
+        NamespaceItemDialog(AddConditionDialog* pParent, css::uno::Reference< css::container::XNameContainer >& _rContainer);
         virtual ~NamespaceItemDialog() override;
-        virtual void dispose() override;
     };
 
     class ManageNamespaceDialog : public weld::GenericDialogController

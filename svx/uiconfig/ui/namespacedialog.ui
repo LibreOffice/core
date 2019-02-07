@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="NamespaceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="namespacedialog|NamespaceDialog">Namespaces for Forms</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -150,59 +162,53 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="row_spacing">6</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkGrid" id="grid3">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="column_homogeneous">True</property>
-                            <child>
-                              <object class="GtkLabel" id="prefix">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="namespacedialog|prefix">Prefix</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="url">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="namespacedialog|url">URL</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svtlo-SvSimpleTableContainer" id="namespaces">
+                          <object class="GtkTreeView" id="namespaces">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="model">liststore1</property>
+                            <property name="search_column">0</property>
+                            <property name="headers_visible">True</property>
+                            <property name="show_expanders">False</property>
                             <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
+                              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="namespacedialog|prefix">Prefix</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer1"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="namespacedialog|url">URL</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer2"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
