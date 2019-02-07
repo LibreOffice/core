@@ -119,6 +119,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <svx/unoshape.hxx>
+#include <com/sun/star/util/Color.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -402,6 +403,23 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     return uno::Sequence< document::CmisVersion > ( );
 }
 
+namespace{
+
+/// Checks to see if the request has a parameter of IsRedactMode:bool=true
+bool isRedactMode(SfxRequest& rReq)
+{
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    if (pArgs)
+    {
+        const SfxBoolItem* pIsRedactMode = rReq.GetArg<SfxBoolItem>(SID_IS_REDACT_MODE);
+        if (pIsRedactMode && pIsRedactMode->GetValue())
+            return true;
+    }
+
+    return false;
+}
+
+}
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
@@ -675,8 +693,94 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
+        {
+            uno::Reference< lang::XComponent > xComponent( GetCurrentComponent(), uno::UNO_QUERY );
+            if (!xComponent.is())
+                return;
+
+            uno::Reference< lang::XServiceInfo > xServiceInfo( xComponent, uno::UNO_QUERY);
+
+            // Redaction finalization takes place in Draw
+            if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument")
+                 && isRedactMode(rReq) )
+            {
+                // Access the draw pages
+                uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+                uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+
+                sal_Int32 nPageCount = xDrawPages->getCount();
+                for (sal_Int32 nPageNum = 0; nPageNum < nPageCount; ++nPageNum)
+                {
+                    // Get the page
+                    uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( nPageNum ), uno::UNO_QUERY );
+
+                    if (!xPage.is())
+                        continue;
+
+                    // Go through all shapes
+                    sal_Int32 nShapeCount = xPage->getCount();
+                    for (sal_Int32 nShapeNum = 0; nShapeNum < nShapeCount; ++nShapeNum)
+                    {
+                        uno::Reference< drawing::XShape > xCurrShape(xPage->getByIndex(nShapeNum), uno::UNO_QUERY);
+                        if (!xCurrShape.is())
+                            continue;
+
+                        uno::Reference< beans::XPropertySet > xPropSet(xCurrShape, uno::UNO_QUERY);
+                        if (!xPropSet.is())
+                            continue;
+
+                        uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+                        if (!xInfo.is())
+                            continue;
+
+                        // Rectangle redaction
+                        if (xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
+                        {
+                            uno::Any aAnyTransp = xPropSet->getPropertyValue("FillTransparence");
+                            uno::Any aAnyColor = xPropSet->getPropertyValue("FillColor");
+
+                            sal_Int16 nTransp = 0;
+                            Color aColor;
+                            const OUString sRectangleName("RectangleRedactionShape");
+
+                            aAnyTransp >>= nTransp;
+                            aAnyColor >>= aColor;
+
+                            if (nTransp == 50 && aColor == COL_GRAY7)
+                            {
+                                xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
+                                xPropSet->setPropertyValue("Name", css::uno::makeAny(sRectangleName));
+                            }
+                        }
+                        //FIXME: Turn this into an else-if when we have the name-check
+                        // Freeform redaction
+                        if (xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
+                        {
+                            uno::Any aAnyTransp = xPropSet->getPropertyValue("LineTransparence");
+                            uno::Any aAnyColor = xPropSet->getPropertyValue("LineColor");
+
+                            sal_Int16 nTransp = 0;
+                            Color aColor;
+                            const OUString sFreeformName("FreeformRedactionShape");
+
+                            aAnyTransp >>= nTransp;
+                            aAnyColor >>= aColor;
+
+                            if (nTransp == 50 && aColor == COL_GRAY7)
+                            {
+                                xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
+                                xPropSet->setPropertyValue("Name", css::uno::makeAny(sFreeformName));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            [[fallthrough]];
+        case SID_EXPORTDOCASPDF:
             bIsPDFExport = true;
             [[fallthrough]];
         case SID_EXPORTDOCASEPUB:
@@ -869,6 +973,75 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
                 ErrorHandler::HandleError(lErr, pDialogParent);
+            }
+
+            if (nId == SID_DIRECTEXPORTDOCASPDF &&
+                    isRedactMode(rReq))
+            {
+                // Return the finalized redaction shapes back to normal (gray & transparent)
+                uno::Reference< lang::XComponent > xComponent( GetCurrentComponent(), uno::UNO_QUERY );
+                if (!xComponent.is())
+                    return;
+
+                uno::Reference< lang::XServiceInfo > xServiceInfo( xComponent, uno::UNO_QUERY);
+
+                // Redaction finalization takes place in Draw
+                if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
+                {
+                    // Access the draw pages
+                    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+                    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+
+                    sal_Int32 nPageCount = xDrawPages->getCount();
+                    for (sal_Int32 nPageNum = 0; nPageNum < nPageCount; ++nPageNum)
+                    {
+                        // Get the page
+                        uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( nPageNum ), uno::UNO_QUERY );
+
+                        if (!xPage.is())
+                            continue;
+
+                        // Go through all shapes
+                        sal_Int32 nShapeCount = xPage->getCount();
+                        for (sal_Int32 nShapeNum = 0; nShapeNum < nShapeCount; ++nShapeNum)
+                        {
+                            uno::Reference< drawing::XShape > xCurrShape(xPage->getByIndex(nShapeNum), uno::UNO_QUERY);
+                            if (!xCurrShape.is())
+                                continue;
+
+                            uno::Reference< beans::XPropertySet > xPropSet(xCurrShape, uno::UNO_QUERY);
+                            if (!xPropSet.is())
+                                continue;
+
+                            uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+                            if (!xInfo.is())
+                                continue;
+
+                            // Not a shape we converted?
+                            if (!xInfo->hasPropertyByName("Name"))
+                                continue;
+
+                            OUString sName;
+                            uno::Any aAnyName = xPropSet->getPropertyValue("Name");
+                            aAnyName >>= sName;
+
+                            // Rectangle redaction
+                            if (!sName.isEmpty() && sName == "RectangleRedactionShape")
+                            {
+                                xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_GRAY7));
+                            }
+                            // Freeform redaction
+                            else if (!sName.isEmpty() && sName == "FreeformRedactionShape")
+                            {
+                                xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_GRAY7));
+                            }
+                        }
+                    }
+
+
+                }
             }
 
             if ( nId == SID_EXPORTDOCASPDF )
