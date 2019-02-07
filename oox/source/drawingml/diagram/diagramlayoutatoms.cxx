@@ -370,6 +370,14 @@ sal_Int32 ConditionAtom::getNodeCount() const
                 if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
                     nCount++;
         }
+        else
+        {
+            // No presentation child is a presentation of a model node: just
+            // count presentation children.
+            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+                if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPoint->msModelId)
+                    nCount++;
+        }
     }
     return nCount;
 }
