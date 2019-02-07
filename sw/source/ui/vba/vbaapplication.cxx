@@ -109,7 +109,7 @@ public:
                                                   const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Connection,
                                                   const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
                                                   const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
-    virtual sal_Int32 SAL_CALL AppMaximize( const OUString& WindowName, const css::uno::Any& State ) override;
+    virtual sal_Int32 SAL_CALL AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& State ) override;
     virtual sal_Int32 SAL_CALL DocMaximize( const css::uno::Any& State ) override;
     virtual void SAL_CALL AppShow(  const css::uno::Any& WindowName ) override;
     virtual sal_Int32 SAL_CALL AppCount() override;
@@ -652,7 +652,7 @@ SwWordBasic::MailMergeOpenDataSource( const OUString& Name, const css::uno::Any&
 }
 
 sal_Int32 SAL_CALL
-SwWordBasic::AppMaximize( const OUString& WindowName, const css::uno::Any& State )
+SwWordBasic::AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& State )
 {
     SAL_INFO("sw.vba", "WordBasic.AppMaximize( WindowName:=" << WindowName << ", State:=" << State);
 
