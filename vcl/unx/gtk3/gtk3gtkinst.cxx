@@ -6217,10 +6217,22 @@ class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::Te
 {
 private:
     GtkTextView* m_pTextView;
+    GtkTextBuffer* m_pTextBuffer;
+    gulong m_nChangedSignalId;
+
+    static void signalChanged(GtkTextView*, gpointer widget)
+    {
+        GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_changed();
+    }
+
 public:
     GtkInstanceTextView(GtkTextView* pTextView, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTextView), bTakeOwnership)
         , m_pTextView(pTextView)
+        , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
+        , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
     {
     }
 
@@ -6286,6 +6298,23 @@ public:
     virtual void set_editable(bool bEditable) override
     {
         gtk_text_view_set_editable(m_pTextView, bEditable);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pTextBuffer, m_nChangedSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::enable_notify_events();
+        g_signal_handler_unblock(m_pTextBuffer, m_nChangedSignalId);
+    }
+
+    virtual ~GtkInstanceTextView() override
+    {
+        g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
     }
 };
 
