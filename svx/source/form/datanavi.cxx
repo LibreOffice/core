@@ -2812,8 +2812,8 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
         }
-        ScopedVclPtrInstance< NamespaceItemDialog > aDlg( this, xNameContnr );
-        aDlg->Execute();
+        NamespaceItemDialog aDlg(this, xNameContnr);
+        aDlg.run();
         try
         {
             m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, makeAny( xNameContnr ) );
@@ -2866,123 +2866,91 @@ namespace svxform
         m_pResultWin->SetText( sResult );
     }
 
-    NamespaceItemDialog::NamespaceItemDialog(
-        AddConditionDialog* _pCondDlg,
-            Reference< XNameContainer >& _rContainer )
-        : ModalDialog( _pCondDlg, "NamespaceDialog",
-            "svx/ui/namespacedialog.ui" )
-        , m_pConditionDlg(_pCondDlg)
-        , m_rNamespaces(_rContainer)
+    NamespaceItemDialog::NamespaceItemDialog(AddConditionDialog* pCondDlg, Reference<XNameContainer>& rContainer)
+        : GenericDialogController(pCondDlg->GetFrameWeld(), "svx/ui/namespacedialog.ui", "NamespaceDialog")
+        , m_pConditionDlg(pCondDlg)
+        , m_rNamespaces(rContainer)
+        , m_xNamespacesList(m_xBuilder->weld_tree_view("namespaces"))
+        , m_xAddNamespaceBtn(m_xBuilder->weld_button("add"))
+        , m_xEditNamespaceBtn(m_xBuilder->weld_button("edit"))
+        , m_xDeleteNamespaceBtn(m_xBuilder->weld_button("delete"))
+        , m_xOKBtn(m_xBuilder->weld_button("ok"))
     {
-        get(m_pAddNamespaceBtn, "add");
-        get(m_pEditNamespaceBtn, "edit");
-        get(m_pDeleteNamespaceBtn, "delete");
-        get(m_pOKBtn, "ok");
+        m_xNamespacesList->set_size_request(m_xNamespacesList->get_approximate_digit_width() * 80,
+                                            m_xNamespacesList->get_height_rows(8));
 
-        SvSimpleTableContainer* pNamespacesListContainer =
-            get<SvSimpleTableContainer>("namespaces");
-        Size aControlSize(175, 72);
-        aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-        pNamespacesListContainer->set_width_request(aControlSize.Width());
-        pNamespacesListContainer->set_height_request(aControlSize.Height());
-        m_pNamespacesList = VclPtr<SvSimpleTable>::Create(*pNamespacesListContainer, 0);
+        std::vector<int> aWidths;
+        aWidths.push_back(m_xNamespacesList->get_approximate_digit_width() * 20);
+        m_xNamespacesList->set_column_fixed_widths(aWidths);
 
-        static long aTabPositions[]= { 0, 35, 200 };
-        m_pNamespacesList->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
-        OUString sHeader = get<FixedText>("prefix")->GetText();
-        sHeader += "\t";
-        sHeader += get<FixedText>("url")->GetText();
-        m_pNamespacesList->InsertHeaderEntry(
-            sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT /*| HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED*/ );
-
-        m_pNamespacesList->SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
-        Link<Button*,void> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
-        m_pAddNamespaceBtn->SetClickHdl( aLink );
-        m_pEditNamespaceBtn->SetClickHdl( aLink );
-        m_pDeleteNamespaceBtn->SetClickHdl( aLink );
-        m_pOKBtn->SetClickHdl( LINK( this, NamespaceItemDialog, OKHdl ) );
+        m_xNamespacesList->connect_changed( LINK( this, NamespaceItemDialog, SelectHdl ) );
+        Link<weld::Button&,void> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
+        m_xAddNamespaceBtn->connect_clicked( aLink );
+        m_xEditNamespaceBtn->connect_clicked( aLink );
+        m_xDeleteNamespaceBtn->connect_clicked( aLink );
+        m_xOKBtn->connect_clicked( LINK( this, NamespaceItemDialog, OKHdl ) );
 
         LoadNamespaces();
-        SelectHdl( m_pNamespacesList );
+        SelectHdl(*m_xNamespacesList);
     }
-
 
     NamespaceItemDialog::~NamespaceItemDialog()
     {
-        disposeOnce();
     }
 
-    void NamespaceItemDialog::dispose()
+    IMPL_LINK_NOARG( NamespaceItemDialog, SelectHdl, weld::TreeView&, void)
     {
-        m_pNamespacesList.disposeAndClear();
-        m_pAddNamespaceBtn.clear();
-        m_pEditNamespaceBtn.clear();
-        m_pDeleteNamespaceBtn.clear();
-        m_pOKBtn.clear();
-        m_pConditionDlg.clear();
-        ModalDialog::dispose();
+        bool bEnable = m_xNamespacesList->get_selected_index() != -1;
+        m_xEditNamespaceBtn->set_sensitive( bEnable );
+        m_xDeleteNamespaceBtn->set_sensitive( bEnable );
     }
 
-
-    IMPL_LINK_NOARG( NamespaceItemDialog, SelectHdl, SvTreeListBox *, void)
+    IMPL_LINK( NamespaceItemDialog, ClickHdl, weld::Button&, rButton, void )
     {
-        bool bEnable = ( m_pNamespacesList->FirstSelected() != nullptr );
-        m_pEditNamespaceBtn->Enable( bEnable );
-        m_pDeleteNamespaceBtn->Enable( bEnable );
-    }
-
-
-    IMPL_LINK( NamespaceItemDialog, ClickHdl, Button *, pButton, void )
-    {
-        PushButton* pBtn = static_cast<PushButton*>(pButton);
-        if ( m_pAddNamespaceBtn == pBtn )
+        if (m_xAddNamespaceBtn.get() == &rButton)
         {
-            ManageNamespaceDialog aDlg(GetFrameWeld(), m_pConditionDlg, false);
+            ManageNamespaceDialog aDlg(m_xDialog.get(), m_pConditionDlg, false);
             if (aDlg.run() == RET_OK)
             {
-                OUString sEntry = aDlg.GetPrefix();
-                sEntry += "\t";
-                sEntry += aDlg.GetURL();
-                m_pNamespacesList->InsertEntry( sEntry );
+                m_xNamespacesList->append_text(aDlg.GetPrefix());
+                int nRow = m_xNamespacesList->n_children();
+                m_xNamespacesList->set_text(nRow - 1, aDlg.GetURL(), 1);
             }
         }
-        else if ( m_pEditNamespaceBtn == pBtn )
+        else if (m_xEditNamespaceBtn.get() == &rButton)
         {
-            ManageNamespaceDialog aDlg(GetFrameWeld(), m_pConditionDlg, true);
-            SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
-            DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
-            aDlg.SetNamespace(
-                sPrefix,
-                SvTabListBox::GetEntryText( pEntry, 1 ) );
+            ManageNamespaceDialog aDlg(m_xDialog.get(), m_pConditionDlg, true);
+            int nEntry = m_xNamespacesList->get_selected_index();
+            DBG_ASSERT( nEntry != -1, "NamespaceItemDialog::ClickHdl(): no entry" );
+            OUString sPrefix(m_xNamespacesList->get_text(nEntry, 0));
+            aDlg.SetNamespace(sPrefix, m_xNamespacesList->get_text(nEntry, 1));
             if (aDlg.run() == RET_OK)
             {
                 // if a prefix was changed, mark the old prefix as 'removed'
                 if( sPrefix != aDlg.GetPrefix() )
                     m_aRemovedList.push_back( sPrefix );
 
-                m_pNamespacesList->SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
-                m_pNamespacesList->SetEntryText( aDlg.GetURL(), pEntry, 1 );
+                m_xNamespacesList->set_text(nEntry, aDlg.GetPrefix(), 0);
+                m_xNamespacesList->set_text(nEntry, aDlg.GetURL(), 1);
             }
         }
-        else if ( m_pDeleteNamespaceBtn == pBtn )
+        else if (m_xDeleteNamespaceBtn.get() == &rButton)
         {
-            SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
-            DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
+            int nEntry = m_xNamespacesList->get_selected_index();
+            DBG_ASSERT( nEntry != -1, "NamespaceItemDialog::ClickHdl(): no entry" );
+            OUString sPrefix(m_xNamespacesList->get_text(nEntry, 0));
             m_aRemovedList.push_back( sPrefix );
-            m_pNamespacesList->GetModel()->Remove( pEntry );
+            m_xNamespacesList->remove(nEntry);
         }
         else
         {
             SAL_WARN( "svx.form", "NamespaceItemDialog::ClickHdl(): invalid button" );
         }
 
-        SelectHdl( m_pNamespacesList );
+        SelectHdl(*m_xNamespacesList);
     }
 
-
-    IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl, weld::Button&, void)
     {
         try
         {
@@ -2991,12 +2959,11 @@ namespace svxform
             for( i = 0; i < nRemovedCount; ++i )
                 m_rNamespaces->removeByName( m_aRemovedList[i] );
 
-            sal_Int32 nEntryCount = m_pNamespacesList->GetEntryCount();
+            sal_Int32 nEntryCount = m_xNamespacesList->n_children();
             for( i = 0; i < nEntryCount; ++i )
             {
-                SvTreeListEntry* pEntry = m_pNamespacesList->GetEntry(i);
-                OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
-                OUString sURL( SvTabListBox::GetEntryText( pEntry, 1 ) );
+                OUString sPrefix(m_xNamespacesList->get_text(i, 0));
+                OUString sURL(m_xNamespacesList->get_text(i, 1));
 
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                     m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
@@ -3009,14 +2976,14 @@ namespace svxform
             SAL_WARN( "svx.form", "NamespaceItemDialog::OKHdl(): exception caught" );
         }
         // and close the dialog
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
-
 
     void NamespaceItemDialog::LoadNamespaces()
     {
         try
         {
+            int nRow = 0;
             Sequence< OUString > aAllNames = m_rNamespaces->getElementNames();
             const OUString* pAllNames = aAllNames.getConstArray();
             const OUString* pAllNamesEnd = pAllNames + aAllNames.getLength();
@@ -3027,13 +2994,11 @@ namespace svxform
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                 {
                     Any aAny = m_rNamespaces->getByName( sPrefix );
-                    if ( aAny >>= sURL )
+                    if (aAny >>= sURL)
                     {
-                        OUString sEntry( sPrefix );
-                        sEntry += "\t";
-                        sEntry += sURL;
-
-                        m_pNamespacesList->InsertEntry( sEntry );
+                        m_xNamespacesList->append_text(sPrefix);
+                        m_xNamespacesList->set_text(nRow, sURL, 1);
+                        ++nRow;
                     }
                 }
             }
