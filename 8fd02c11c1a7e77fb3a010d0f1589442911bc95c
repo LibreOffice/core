@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9b40df37",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-07T15:22:31Z",
+      "side": 1,
+      "message": "The way this check is written seems to cover decimal and integer number formats i.e. (values of NfIndexTableOffset that start with NF_NUMBER_*), right? Maybe then having \u0027general\u0027 in the name of function is a bit confusing, there is only 1 General number format",
+      "revId": "8fd02c11c1a7e77fb3a010d0f1589442911bc95c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_7b3d23ba",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-07T15:22:31Z",
+      "side": 1,
+      "message": "The purpose of this is then to ... disable line breaks for integers and decimal numbers?",
+      "revId": "8fd02c11c1a7e77fb3a010d0f1589442911bc95c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
