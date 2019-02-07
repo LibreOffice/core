@@ -625,7 +625,7 @@ void PieChart::createShapes()
             double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
             if( ::rtl::math::isNan(fLogicYValue) )
                 continue;
-            if(fLogicYValue==0.0)//@todo: continue also if the resolution to small
+            if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
                 continue;
             double fLogicYPos = fLogicYForNextPoint;
             fLogicYForNextPoint += fLogicYValue;
