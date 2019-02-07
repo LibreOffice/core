@@ -1081,9 +1081,9 @@ void GalleryBrowser2::DispatchAdd(
     pInfo->Arguments = aArgs;
     pInfo->Dispatch = xDispatch;
 
-    if ( !Application::PostUserEvent(
+    if ( Application::PostUserEvent(
             LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo.get() ) )
-        pInfo.reset();
+        pInfo.release();
 }
 
 void GalleryBrowser2::Execute(const OString &rIdent)
