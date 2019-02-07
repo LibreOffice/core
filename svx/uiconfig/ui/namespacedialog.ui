@@ -17,6 +17,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="namespacedialog|NamespaceDialog">Namespaces for Forms</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>

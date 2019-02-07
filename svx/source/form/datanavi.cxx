@@ -2372,7 +2372,7 @@ namespace svxform
             sPropName = PN_READONLY_EXPR;
         else if (m_pCalculateBtn == pBtn)
             sPropName = PN_CALCULATE_EXPR;
-        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, sPropName, m_xTempBinding);
+        AddConditionDialog aDlg(GetFrameWeld(), sPropName, m_xTempBinding);
         bool bIsDefBtn = ( m_pDefaultBtn == pBtn );
         OUString sCondition;
         if ( bIsDefBtn )
@@ -2384,11 +2384,11 @@ namespace svxform
                 sTemp = TRUE_VALUE;
             sCondition = sTemp;
         }
-        aDlg->SetCondition( sCondition );
+        aDlg.SetCondition( sCondition );
 
-        if ( aDlg->Execute() == RET_OK )
+        if (aDlg.run() == RET_OK)
         {
-            OUString sNewCondition = aDlg->GetCondition();
+            OUString sNewCondition = aDlg.GetCondition();
             if ( bIsDefBtn )
                 m_pDefaultED->SetText( sNewCondition );
             else
@@ -2732,28 +2732,27 @@ namespace svxform
         m_pItemFrame->set_label(sText);
     }
 
-    AddConditionDialog::AddConditionDialog(vcl::Window* pParent,
+    AddConditionDialog::AddConditionDialog(weld::Window* pParent,
         const OUString& _rPropertyName,
         const Reference< XPropertySet >& _rPropSet)
-        : ModalDialog(pParent, "AddConditionDialog", "svx/ui/addconditiondialog.ui")
+        : GenericDialogController(pParent, "svx/ui/addconditiondialog.ui", "AddConditionDialog")
         , m_sPropertyName(_rPropertyName)
         , m_xBinding(_rPropSet)
-
+        , m_xConditionED(m_xBuilder->weld_text_view("condition"))
+        , m_xResultWin(m_xBuilder->weld_text_view("result"))
+        , m_xEditNamespacesBtn(m_xBuilder->weld_button("edit"))
+        , m_xOKBtn(m_xBuilder->weld_button("ok"))
     {
-        get(m_pConditionED, "condition");
-        get(m_pResultWin, "result");
-        get(m_pEditNamespacesBtn, "edit");
-        get(m_pOKBtn, "ok");
         DBG_ASSERT( m_xBinding.is(), "AddConditionDialog::Ctor(): no Binding" );
 
-        m_pConditionED->set_height_request(m_pConditionED->GetTextHeight() * 4);
-        m_pConditionED->set_width_request(m_pConditionED->approximate_char_width() * 62);
-        m_pResultWin->set_height_request(m_pResultWin->GetTextHeight() * 4);
-        m_pResultWin->set_width_request(m_pResultWin->approximate_char_width() * 62);
+        m_xConditionED->set_size_request(m_xConditionED->get_approximate_digit_width() * 52,
+                                         m_xConditionED->get_height_rows(4));
+        m_xResultWin->set_size_request(m_xResultWin->get_approximate_digit_width() * 52,
+                                       m_xResultWin->get_height_rows(4));
 
-        m_pConditionED->SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
-        m_pEditNamespacesBtn->SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
-        m_pOKBtn->SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
+        m_xConditionED->connect_changed( LINK( this, AddConditionDialog, ModifyHdl ) );
+        m_xEditNamespacesBtn->connect_clicked( LINK( this, AddConditionDialog, EditHdl ) );
+        m_xOKBtn->connect_clicked( LINK( this, AddConditionDialog, OKHdl ) );
         m_aResultIdle.SetPriority( TaskPriority::LOWEST );
         m_aResultIdle.SetInvokeHandler( LINK( this, AddConditionDialog, ResultHdl ) );
 
@@ -2765,12 +2764,12 @@ namespace svxform
                 if ( ( m_xBinding->getPropertyValue( m_sPropertyName ) >>= sTemp )
                     && !sTemp.isEmpty() )
                 {
-                    m_pConditionED->SetText( sTemp );
+                    m_xConditionED->set_text( sTemp );
                 }
                 else
                 {
 //!                 m_xBinding->setPropertyValue( m_sPropertyName, makeAny( TRUE_VALUE ) );
-                    m_pConditionED->SetText( TRUE_VALUE );
+                    m_xConditionED->set_text( TRUE_VALUE );
                 }
 
                 Reference< css::xforms::XModel > xModel;
@@ -2789,19 +2788,9 @@ namespace svxform
 
     AddConditionDialog::~AddConditionDialog()
     {
-        disposeOnce();
     }
 
-    void AddConditionDialog::dispose()
-    {
-        m_pConditionED.clear();
-        m_pResultWin.clear();
-        m_pEditNamespacesBtn.clear();
-        m_pOKBtn.clear();
-        ModalDialog::dispose();
-    }
-
-    IMPL_LINK_NOARG(AddConditionDialog, EditHdl, Button*, void)
+    IMPL_LINK_NOARG(AddConditionDialog, EditHdl, weld::Button&, void)
     {
         Reference< XNameContainer > xNameContnr;
         try
@@ -2824,8 +2813,7 @@ namespace svxform
         }
     }
 
-
-    IMPL_LINK_NOARG(AddConditionDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddConditionDialog, OKHdl, weld::Button&, void)
     {
 /*!!!
         try
@@ -2838,19 +2826,17 @@ namespace svxform
             SAL_WARN( "svx.form", "AddConditionDialog, OKHdl: caught an exception!" );
         }
 */
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 
-
-    IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl, weld::TextView&, void)
     {
         m_aResultIdle.Start();
     }
 
-
     IMPL_LINK_NOARG(AddConditionDialog, ResultHdl, Timer *, void)
     {
-        OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
+        OUString sCondition = comphelper::string::strip(m_xConditionED->get_text(), ' ');
         OUString sResult;
         if ( !sCondition.isEmpty() )
         {
@@ -2863,11 +2849,11 @@ namespace svxform
                 SAL_WARN( "svx.form", "AddConditionDialog::ResultHdl(): exception caught" );
             }
         }
-        m_pResultWin->SetText( sResult );
+        m_xResultWin->set_text(sResult);
     }
 
     NamespaceItemDialog::NamespaceItemDialog(AddConditionDialog* pCondDlg, Reference<XNameContainer>& rContainer)
-        : GenericDialogController(pCondDlg->GetFrameWeld(), "svx/ui/namespacedialog.ui", "NamespaceDialog")
+        : GenericDialogController(pCondDlg->getDialog(), "svx/ui/namespacedialog.ui", "NamespaceDialog")
         , m_pConditionDlg(pCondDlg)
         , m_rNamespaces(rContainer)
         , m_xNamespacesList(m_xBuilder->weld_tree_view("namespaces"))
@@ -3009,9 +2995,9 @@ namespace svxform
         }
     }
 
-    ManageNamespaceDialog::ManageNamespaceDialog(weld::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
+    ManageNamespaceDialog::ManageNamespaceDialog(weld::Window* pParent, AddConditionDialog* pCondDlg, bool bIsEdit)
         : GenericDialogController(pParent, "svx/ui/addnamespacedialog.ui", "AddNamespaceDialog")
-        , m_xConditionDlg(_pCondDlg)
+        , m_pConditionDlg(pCondDlg)
         , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
         , m_xUrlED(m_xBuilder->weld_entry("url"))
         , m_xOKBtn(m_xBuilder->weld_button("ok"))
@@ -3033,7 +3019,7 @@ namespace svxform
 
         try
         {
-            if (!m_xConditionDlg->GetUIHelper()->isValidPrefixName(sPrefix))
+            if (!m_pConditionDlg->GetUIHelper()->isValidPrefixName(sPrefix))
             {
                 std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
@@ -3096,15 +3082,13 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-
     IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl, Button*, void)
     {
-        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, PN_BINDING_EXPR, m_xTempBinding );
-        aDlg->SetCondition( m_pRefED->GetText() );
-        if ( aDlg->Execute() == RET_OK )
-            m_pRefED->SetText( aDlg->GetCondition() );
+        AddConditionDialog aDlg(GetFrameWeld(), PN_BINDING_EXPR, m_xTempBinding );
+        aDlg.SetCondition( m_pRefED->GetText() );
+        if ( aDlg.run() == RET_OK )
+            m_pRefED->SetText( aDlg.GetCondition() );
     }
-
 
     IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl, Button*, void)
     {
