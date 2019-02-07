@@ -56,11 +56,6 @@ css::uno::Reference<css::uno::XInterface> XMLImpressSettingsImportOasis_createIn
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress oasis export
-OUString XMLImpressExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLImpressExportOasis_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLImpressExportOasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString XMLImpressStylesExportOasis_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLImpressStylesExportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
