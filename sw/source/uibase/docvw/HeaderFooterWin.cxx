@@ -418,56 +418,7 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
     }
     else if (rIdent == "borderback")
     {
-        const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
-        const SwFrameFormat& rMaster = pDesc->GetMaster();
-        SwFrameFormat* pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetFooter().GetFooterFormat() );
-        if ( m_bIsHeader )
-            pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
 
-        SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
-        SfxItemSet aSet(
-            *pPool,
-            svl::Items<
-                RES_BACKGROUND, RES_SHADOW,
-                XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
-
-        aSet.Put( pHFFormat->GetAttrSet() );
-
-        aSet.Put( pHFFormat->makeBackgroundBrushItem() );
-
-        // Create a box info item... needed by the dialog
-        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-        const SfxPoolItem *pBoxInfo;
-        if ( SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
-                                                true, &pBoxInfo) )
-            aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
-
-        aBoxInfo.SetTable( false );
-        aBoxInfo.SetDist( true);
-        aBoxInfo.SetMinDist( false );
-        aBoxInfo.SetDefDist( MIN_BORDER_DIST );
-        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
-        aSet.Put( aBoxInfo );
-
-        if (svx::ShowBorderBackgroundDlg(GetFrameWeld(), &aSet))
-        {
-            const SfxPoolItem* pItem;
-            if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
-
-            if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
-
-            if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
-        }
     }
     else if (rIdent == "delete")
     {
