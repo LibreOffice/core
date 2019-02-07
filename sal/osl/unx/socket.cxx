@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "system.hxx"
 
 #include <osl/socket.h>
@@ -25,6 +29,7 @@
 
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <rtl/ustring.hxx>
 #include <assert.h>
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -268,9 +273,6 @@ static oslHostAddr osl_psz_createHostAddrByName (
 
 static const sal_Char* osl_psz_getHostnameOfHostAddr (
     const oslHostAddr Addr);
-
-static oslSocketResult osl_psz_getLocalHostname (
-    sal_Char *pBuffer, sal_uInt32 nBufLen);
 
 static oslSocketAddr osl_psz_resolveHostname (
     const sal_Char* pszHostname);
@@ -880,69 +882,53 @@ void SAL_CALL osl_destroyHostAddr (oslHostAddr pAddr)
 
 oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
 {
-    oslSocketResult Result;
-    sal_Char pszHostname[1024];
-
-    pszHostname[0] = '\0';
-
-    Result = osl_psz_getLocalHostname(pszHostname,sizeof(pszHostname));
-
-    rtl_uString_newFromAscii(ustrLocalHostname,pszHostname);
-
-    return Result;
-}
-
-oslSocketResult osl_psz_getLocalHostname (
-    sal_Char *pBuffer, sal_uInt32 nBufLen)
-{
-    static sal_Char LocalHostname[256] = "";
-
-    if (LocalHostname[0] == '\0')
-    {
+    static auto const init = []() -> std::pair<oslSocketResult, OUString> {
+            sal_Char LocalHostname[256] = "";
 
 #ifdef SYSV
-        struct utsname uts;
+            struct utsname uts;
 
-        if (uname(&uts) < 0)
-            return osl_Socket_Error;
+            if (uname(&uts) < 0)
+                return {osl_Socket_Error, OUString()};
 
-        if ((strlen(uts.nodename) + 1) > nBufLen)
-            return osl_Socket_Error;
+            if ((strlen(uts.nodename) + 1) > nBufLen)
+                return {osl_Socket_Error, OUString()};
 
-        strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
+            strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
 #else  /* BSD compatible */
-        if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
-            return osl_Socket_Error;
+            if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
+                return {osl_Socket_Error, OUString()};
 #endif /* SYSV */
-        LocalHostname[sizeof(LocalHostname)-1] = 0;
+            LocalHostname[sizeof(LocalHostname)-1] = 0;
 
-        /* check if we have an FQDN */
-        if (strchr(LocalHostname, '.') == nullptr)
-        {
-            oslHostAddr Addr;
-
-            /* no, determine it via dns */
-            Addr = osl_psz_createHostAddrByName(LocalHostname);
-
-            const sal_Char *pStr;
-            if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
+            /* check if we have an FQDN */
+            if (strchr(LocalHostname, '.') == nullptr)
             {
-                strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
-                LocalHostname[sizeof(LocalHostname)-1] = 0;
+                oslHostAddr Addr;
+
+                /* no, determine it via dns */
+                Addr = osl_psz_createHostAddrByName(LocalHostname);
+
+                const sal_Char *pStr;
+                if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
+                {
+                    strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
+                    LocalHostname[sizeof(LocalHostname)-1] = 0;
+                }
+                osl_destroyHostAddr(Addr);
             }
-            osl_destroyHostAddr(Addr);
-        }
-    }
 
-    if (LocalHostname[0] != '\0')
-    {
-        strncpy(pBuffer, LocalHostname, nBufLen);
-        pBuffer[nBufLen - 1] = '\0';
+            if (LocalHostname[0] != '\0')
+            {
+                return {osl_Socket_Ok, OUString::createFromAscii(LocalHostname)};
+            }
 
-        return osl_Socket_Ok;
-    }
+            return {osl_Socket_Error, OUString()};
+        }();
 
-    return osl_Socket_Error;
+    rtl_uString_assign(ustrLocalHostname,init.second.pData);
+
+    return init.first;
 }
 
 oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
