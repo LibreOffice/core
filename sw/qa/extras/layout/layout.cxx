@@ -66,6 +66,7 @@ public:
     void testTdf120287c();
     void testTdf122878();
     void testTdf115094();
+    void testTdf122607();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf120287c);
     CPPUNIT_TEST(testTdf122878);
     CPPUNIT_TEST(testTdf115094);
+    CPPUNIT_TEST(testTdf122607);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2765,6 +2767,24 @@ void SwLayoutWriter::testTdf115094()
                                           "top")
                                      .toInt32();
     CPPUNIT_ASSERT_LESS(nTopOfB2Anchored, nTopOfB2);
+}
+
+void SwLayoutWriter::testTdf122607()
+{
+    createDoc("tdf122607.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc,
+                "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
+                "fly/txt/Text[1]",
+                "nHeight", "253");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
+                "fly/txt/Text[1]",
+                "nWidth", "428");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
+                "fly/txt/Text[1]",
+                "Portion", "Fax:");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
