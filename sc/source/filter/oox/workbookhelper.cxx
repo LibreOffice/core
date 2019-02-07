@@ -20,6 +20,7 @@
 #include <workbookhelper.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
@@ -29,6 +30,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <osl/thread.h>
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -71,6 +73,7 @@
 #include <editutil.hxx>
 #include <editeng/editstat.hxx>
 #include <unotools/charclass.hxx>
+#include <ViewSettingsSequenceDefines.hxx>
 
 #include <memory>
 
@@ -84,6 +87,7 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
@@ -714,6 +718,38 @@ void WorkbookHelper::finalizeWorkbookImport()
     {
         aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
         getScDocument().SetCalcConfig(aCalcConfig);
+    }
+
+    // set selected sheet
+    Reference<XViewDataSupplier> xViewDataSupplier(getDocument(), UNO_QUERY);
+    if (xViewDataSupplier.is())
+    {
+        Reference<XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+        if (xIndexAccess.is() && xIndexAccess->getCount() > 0)
+        {
+            Sequence< PropertyValue > aSeq;
+            if (xIndexAccess->getByIndex(0) >>= aSeq)
+            {
+                sal_Int32 nCount (aSeq.getLength());
+                for (sal_Int32 i = 0; i < nCount; ++i)
+                {
+                    OUString sName(aSeq[i].Name);
+                    if (sName == SC_ACTIVETABLE)
+                    {
+                        OUString sTabName;
+                        if(aSeq[i].Value >>= sTabName)
+                        {
+                            SCTAB nTab(0);
+                            if (getScDocument().GetTable(sTabName, nTab))
+                            {
+                                getScDocument().SetVisibleTab(nTab);
+                                i = nCount;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
