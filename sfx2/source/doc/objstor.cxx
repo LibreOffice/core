@@ -1166,15 +1166,6 @@ bool SfxObjectShell::SaveTo_Impl
         }
     }
 
-    bool bCopyTo = false;
-    SfxItemSet *pMedSet = rMedium.GetItemSet();
-    if( pMedSet )
-    {
-        const SfxBoolItem* pSaveToItem = SfxItemSet::GetItem<SfxBoolItem>(pMedSet, SID_SAVETO, false);
-        bCopyTo =   GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
-                    (pSaveToItem && pSaveToItem->GetValue());
-    }
-
     // use UCB for case sensitive/insensitive file name comparison
     if ( !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
       && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream")
@@ -1185,99 +1176,91 @@ bool SfxObjectShell::SaveTo_Impl
         if ( pMedium->DocNeedsFileDateCheck() )
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
 
-        if ( bCopyTo && GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+        // before we overwrite the original file, we will make a backup if there is a demand for that
+        // if the backup is not created here it will be created internally and will be removed in case of successful saving
+        const bool bDoBackup = SvtSaveOptions().IsBackup();
+        if ( bDoBackup )
         {
-            // export to the same location is forbidden
-            SetError(ERRCODE_IO_CANTWRITE);
+            rMedium.DoBackup_Impl();
+            if ( rMedium.GetError() )
+            {
+                SetError(rMedium.GetErrorCode());
+                rMedium.ResetError();
+            }
         }
-        else
+
+        if ( bStorageBasedSource && bStorageBasedTarget )
         {
-            // before we overwrite the original file, we will make a backup if there is a demand for that
-            // if the backup is not created here it will be created internally and will be removed in case of successful saving
-            const bool bDoBackup = SvtSaveOptions().IsBackup();
-            if ( bDoBackup )
+            // The active storage must be switched. The simple saving is not enough.
+            // The problem is that the target medium contains target MediaDescriptor.
+
+                // In future the switch of the persistence could be done on stream level:
+                // a new wrapper service will be implemented that allows to exchange
+                // persistence on the fly. So the real persistence will be set
+                // to that stream only after successful commit of the storage.
+                // TODO/LATER:
+                // create wrapper stream based on the URL
+                // create a new storage based on this stream
+                // store to this new storage
+                // commit the new storage
+                // call saveCompleted based with this new storage ( get rid of old storage and "frees" URL )
+                // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
+                // if the last step is failed the stream should stay to be transacted and should be committed on any flush
+                // so we can forget the stream in any way and the next storage commit will flush it
+
+            bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
+                *pMedium, rMedium );
+            if ( bNeedsDisconnectionOnFail
+              || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
-                rMedium.DoBackup_Impl();
-                if ( rMedium.GetError() )
-                {
-                    SetError(rMedium.GetErrorCode());
-                    rMedium.ResetError();
-                }
+                pMedium->CloseAndRelease();
+
+                // TODO/LATER: for now the medium must be closed since it can already contain streams from old medium
+                //             in future those streams should not be copied in case a valid target url is provided,
+                //             if the url is not provided ( means the document is based on a stream ) this code is not
+                //             reachable.
+                rMedium.CloseAndRelease();
+                rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
+                rMedium.GetOutputStorage();
+                rMedium.SetHasEmbeddedObjects(false);
             }
+        }
+        else if ( !bStorageBasedSource && !bStorageBasedTarget )
+        {
+            // the source and the target formats are alien
+            // just disconnect the stream from the source format
+            // so that the target medium can use it
 
-            if ( bStorageBasedSource && bStorageBasedTarget )
+            pMedium->CloseAndRelease();
+            rMedium.CloseAndRelease();
+            rMedium.CreateTempFileNoCopy();
+            rMedium.GetOutStream();
+        }
+        else if ( !bStorageBasedSource && bStorageBasedTarget )
+        {
+            // the source format is an alien one but the target
+            // format is an own one so just disconnect the source
+            // medium
+
+            pMedium->CloseAndRelease();
+            rMedium.CloseAndRelease();
+            rMedium.GetOutputStorage();
+        }
+        else // means if ( bStorageBasedSource && !bStorageBasedTarget )
+        {
+            // the source format is an own one but the target is
+            // an alien format, just connect the source to temporary
+            // storage
+
+            bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
+                *pMedium, rMedium );
+            if ( bNeedsDisconnectionOnFail
+              || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
-                // The active storage must be switched. The simple saving is not enough.
-                // The problem is that the target medium contains target MediaDescriptor.
-
-                    // In future the switch of the persistence could be done on stream level:
-                    // a new wrapper service will be implemented that allows to exchange
-                    // persistence on the fly. So the real persistence will be set
-                    // to that stream only after successful commit of the storage.
-                    // TODO/LATER:
-                    // create wrapper stream based on the URL
-                    // create a new storage based on this stream
-                    // store to this new storage
-                    // commit the new storage
-                    // call saveCompleted based with this new storage ( get rid of old storage and "frees" URL )
-                    // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
-                    // if the last step is failed the stream should stay to be transacted and should be committed on any flush
-                    // so we can forget the stream in any way and the next storage commit will flush it
-
-                bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
-                    *pMedium, rMedium );
-                if ( bNeedsDisconnectionOnFail
-                  || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
-                {
-                    pMedium->CloseAndRelease();
-
-                    // TODO/LATER: for now the medium must be closed since it can already contain streams from old medium
-                    //             in future those streams should not be copied in case a valid target url is provided,
-                    //             if the url is not provided ( means the document is based on a stream ) this code is not
-                    //             reachable.
-                    rMedium.CloseAndRelease();
-                    rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
-                    rMedium.GetOutputStorage();
-                    rMedium.SetHasEmbeddedObjects(false);
-                }
-            }
-            else if ( !bStorageBasedSource && !bStorageBasedTarget )
-            {
-                // the source and the target formats are alien
-                // just disconnect the stream from the source format
-                // so that the target medium can use it
-
                 pMedium->CloseAndRelease();
                 rMedium.CloseAndRelease();
                 rMedium.CreateTempFileNoCopy();
                 rMedium.GetOutStream();
-            }
-            else if ( !bStorageBasedSource && bStorageBasedTarget )
-            {
-                // the source format is an alien one but the target
-                // format is an own one so just disconnect the source
-                // medium
-
-                pMedium->CloseAndRelease();
-                rMedium.CloseAndRelease();
-                rMedium.GetOutputStorage();
-            }
-            else // means if ( bStorageBasedSource && !bStorageBasedTarget )
-            {
-                // the source format is an own one but the target is
-                // an alien format, just connect the source to temporary
-                // storage
-
-                bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
-                    *pMedium, rMedium );
-                if ( bNeedsDisconnectionOnFail
-                  || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
-                {
-                    pMedium->CloseAndRelease();
-                    rMedium.CloseAndRelease();
-                    rMedium.CreateTempFileNoCopy();
-                    rMedium.GetOutStream();
-                }
             }
         }
     }
@@ -1346,6 +1329,15 @@ bool SfxObjectShell::SaveTo_Impl
 
     // lock user interface while saving the document
     LockUIGuard aLockUIGuard(this);
+
+    bool bCopyTo = false;
+    SfxItemSet *pMedSet = rMedium.GetItemSet();
+    if( pMedSet )
+    {
+        const SfxBoolItem* pSaveToItem = SfxItemSet::GetItem<SfxBoolItem>(pMedSet, SID_SAVETO, false);
+        bCopyTo =   GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
+                    (pSaveToItem && pSaveToItem->GetValue());
+    }
 
     bool bOk = false;
     // TODO/LATER: get rid of bOk
