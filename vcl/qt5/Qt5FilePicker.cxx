@@ -763,6 +763,12 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
             addCustomControl(LISTBOX_IMAGE_TEMPLATE);
             break;
 
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            addCustomControl(LISTBOX_IMAGE_ANCHOR);
+            break;
+
         case FILEOPEN_PLAY:
             addCustomControl(PUSHBUTTON_PLAY);
             break;
