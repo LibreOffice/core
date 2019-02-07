@@ -81,9 +81,6 @@ public:
     virtual sal_Bool SAL_CALL   getShowState(  );
     */
 
-    // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
@@ -91,7 +88,7 @@ public:
 
 private:
     //add a custom control widget to the file dialog
-    void addCustomControl(sal_Int16 controlId);
+    void addCustomControl(sal_Int16 controlId) override;
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
