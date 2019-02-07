@@ -49,6 +49,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/intitem.hxx>
+#include <comphelper/lok.hxx>
 
 static bool bLastRelative = false;
 
@@ -885,7 +886,16 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
     AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
     AddTabPage("graphics", RID_SVXPAGE_PICK_BMP );
-    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        RemoveTabPage("customize");
+    }
+    else
+    {
+        AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
+    }
+
     AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
 }
 
