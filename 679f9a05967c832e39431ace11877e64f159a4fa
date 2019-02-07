@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d098766b",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:18:14Z",
+      "side": 1,
+      "message": "For now I have removed the code that calls the old dialog which need to be replaced. But I\u0027m not sure how to call the new dialog (s\\svx\\source\\dialog\\hdft.cxx ) from here. Any advise/tip is appreciated.",
+      "revId": "679f9a05967c832e39431ace11877e64f159a4fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
