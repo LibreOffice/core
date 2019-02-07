@@ -65,7 +65,7 @@ namespace o3tl
     template<> struct typed_flags<PrintQueueFlags> : is_typed_flags<PrintQueueFlags, 0x01ffffff> {};
 }
 
-#define QUEUE_JOBS_DONTKNOW             (sal_uInt32(0xFFFFFFFF))
+constexpr inline sal_uInt32 QUEUE_JOBS_DONTKNOW = 0xFFFFFFFF;
 
 
 enum class PrinterCapType
