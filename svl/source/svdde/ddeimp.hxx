@@ -150,12 +150,12 @@ struct DdeInstData
     sal_uInt16          nRefCount;
     DdeConnections* pConnections;
     // Server
-    long            hCurConvSvr;
-    sal_uLong           hDdeInstSvr;
+    HCONV           hCurConvSvr;
+    DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;
     // Client
-    sal_uLong           hDdeInstCli;
+    DWORD           hDdeInstCli;
     short           nInstanceCli;
 };
 

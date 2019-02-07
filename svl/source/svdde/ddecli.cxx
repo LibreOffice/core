@@ -253,9 +253,9 @@ const String& DdeConnection::GetTopicName()
 
 // --- DdeConnection::GetConvId() ----------------------------------
 
-long DdeConnection::GetConvId()
+sal_uIntPtr DdeConnection::GetConvId()
 {
-    return (long)pImp->hConv;
+    return (sal_uIntPtr)pImp->hConv;
 }
 
 const DdeConnections& DdeConnection::GetConnections()

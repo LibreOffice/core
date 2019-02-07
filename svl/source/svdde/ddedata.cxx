@@ -200,7 +200,7 @@ sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
         {
             TCHAR szName[ 256 ];
 
-            if( GetClipboardFormatName( nFmt, szName, sizeof(szName) ) )
+            if( GetClipboardFormatName( (UINT)nFmt, szName, sizeof(szName) ) )
                 nFmt = SotExchange::RegisterFormatName( String(reinterpret_cast<const sal_Unicode*>(szName)) );
         }
 #endif

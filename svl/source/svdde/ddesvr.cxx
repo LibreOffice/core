@@ -253,7 +253,7 @@ found:
         pTopic->aItem.Erase();
 
     sal_Bool bRes = sal_False;
-    pInst->hCurConvSvr = (long)hConv;
+    pInst->hCurConvSvr = hConv;
     switch( nCode )
     {
         case XTYP_REQUEST:
@@ -767,11 +767,11 @@ sal_Bool __EXPORT DdeTopic::Execute( const String* r )
 
 // --- DdeTopic::GetConvId() ---------------------------------------
 
-long DdeTopic::GetConvId()
+sal_uIntPtr DdeTopic::GetConvId()
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    return pInst->hCurConvSvr;
+    return (sal_uIntPtr)pInst->hCurConvSvr;
 }
 
 // --- DdeTopic::StartAdviseLoop() ---------------------------------

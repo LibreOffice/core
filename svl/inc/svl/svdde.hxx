@@ -282,7 +282,7 @@ public:
                     ~DdeConnection();
 
     long            GetError();
-    long            GetConvId();
+    sal_uIntPtr     GetConvId();
 
     static const DdeConnections& GetConnections();
 
@@ -383,7 +383,7 @@ public:
     virtual        ~DdeTopic();
 
     const String&   GetName() const;
-    long            GetConvId();
+    sal_uIntPtr     GetConvId();
 
     void            SetConnectHdl( const Link& rLink ) { aConnectLink = rLink; }
     const Link&     GetConnectHdl() const { return aConnectLink;  }
