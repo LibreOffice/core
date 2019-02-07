@@ -22,6 +22,30 @@
       "revId": "9f31139be5d96850a2a200a9abce7a9e9c561dcc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f86c8b9d",
+        "filename": "svtools/source/dialogs/PlaceEditDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-02-07T11:36:03Z",
+      "side": 1,
+      "message": "Thanks Mike, I have another option to deal with that in my mind, that is to use remove_text(OUString str). However, I want to know if it is a good coding practice to use :\n\"m_xLBServerType-\u003eremove_text(\"Windows Share\");\"\ninstead of remove(nPos+15)?",
+      "parentUuid": "1f485f77_5bb15ee1",
+      "range": {
+        "startLine": 228,
+        "startChar": 28,
+        "endLine": 228,
+        "endChar": 30
+      },
+      "revId": "9f31139be5d96850a2a200a9abce7a9e9c561dcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
