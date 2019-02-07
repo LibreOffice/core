@@ -86,7 +86,10 @@ protected:
     bool m_bIsFolderPicker;
 
 public:
-    explicit Qt5FilePicker(QFileDialog::FileMode, bool bShowFileExtensionInFilterTitle = false);
+    // use non-native file dialog by default; there's no easy way to add custom widgets
+    // in a generic way in the native one
+    explicit Qt5FilePicker(QFileDialog::FileMode, bool bShowFileExtensionInFilterTitle = false,
+                           bool bUseNativeDialog = false);
     virtual ~Qt5FilePicker() override;
 
     // XFilePickerNotifier
