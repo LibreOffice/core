@@ -156,7 +156,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
             mpLbColumns->CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
 
-            if (i == 0 || (i > 0 && nCheckPos < nFirstChecked))
+            if (i == 0 || nCheckPos < nFirstChecked)
                 nFirstChecked = nCheckPos;
         }
         // Select the first checked field from the top.

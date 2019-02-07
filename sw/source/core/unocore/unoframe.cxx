@@ -2229,14 +2229,11 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
-                const XFillBmpStretchItem* pStretchItem = &rSet.Get(XATTR_FILLBMP_STRETCH);
-                const XFillBmpTileItem* pTileItem = &rSet.Get(XATTR_FILLBMP_TILE);
-
-                if( pTileItem && pTileItem->GetValue() )
+                if (rSet.Get(XATTR_FILLBMP_TILE).GetValue())
                 {
                     aAny <<= drawing::BitmapMode_REPEAT;
                 }
-                else if( pStretchItem && pStretchItem->GetValue() )
+                else if (rSet.Get(XATTR_FILLBMP_STRETCH).GetValue())
                 {
                     aAny <<= drawing::BitmapMode_STRETCH;
                 }
@@ -2270,7 +2267,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else
         throw uno::RuntimeException();
 
-    if(pEntry && pEntry->aType == ::cppu::UnoType<sal_Int16>::get() && pEntry->aType != aAny.getValueType())
+    if (pEntry->aType == ::cppu::UnoType<sal_Int16>::get() && pEntry->aType != aAny.getValueType())
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
         sal_Int32 nValue = 0;

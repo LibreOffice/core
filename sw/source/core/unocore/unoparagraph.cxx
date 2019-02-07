@@ -462,14 +462,11 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
         }
         case OWN_ATTR_FILLBMP_MODE:
         {
-            const XFillBmpStretchItem* pStretchItem = &rSet.Get(XATTR_FILLBMP_STRETCH);
-            const XFillBmpTileItem* pTileItem = &rSet.Get(XATTR_FILLBMP_TILE);
-
-            if( pTileItem && pTileItem->GetValue() )
+            if (rSet.Get(XATTR_FILLBMP_TILE).GetValue())
             {
                 rAny <<= drawing::BitmapMode_REPEAT;
             }
-            else if( pStretchItem && pStretchItem->GetValue() )
+            else if (rSet.Get(XATTR_FILLBMP_STRETCH).GetValue())
             {
                 rAny <<= drawing::BitmapMode_STRETCH;
             }

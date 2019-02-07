@@ -167,7 +167,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
 
             while ( nRedlineStart < nRedlineEnd && nRedlineStart < nEnd )
             {
-                if ( nRedlineStart >= nStt && nRedlineStart < nEnd )
+                if (nRedlineStart >= nStt)
                 {
                     rText[nRedlineStart] = cChar;
                     ++nNumOfMaskedRedlines;

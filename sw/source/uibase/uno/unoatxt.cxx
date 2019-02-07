@@ -274,7 +274,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     if(!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
-    sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
+    const sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
     if(USHRT_MAX == nIdx)
         throw lang::IllegalArgumentException();
     OUString aNewShort(aNewElementName);
@@ -282,9 +282,8 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     sal_uInt16 nOldLongIdx = pGlosGroup->GetLongIndex( aNewShort );
     sal_uInt16 nOldIdx = pGlosGroup->GetIndex( aNewName );
 
-    if( nIdx != USHRT_MAX &&
-            (nOldLongIdx == USHRT_MAX || nOldLongIdx == nIdx )&&
-                (nOldIdx == USHRT_MAX || nOldIdx == nIdx ))
+    if ((nOldLongIdx == USHRT_MAX || nOldLongIdx == nIdx)
+        && (nOldIdx == USHRT_MAX || nOldIdx == nIdx))
     {
         pGlosGroup->Rename( nIdx, &aNewShort, &aNewName );
         if(pGlosGroup->GetError() != ERRCODE_NONE)

@@ -610,7 +610,7 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    return mpDoc && mpDoc->isLocked();
+    return mpDoc->isLocked();
 }
 
 uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewData()
@@ -1466,7 +1466,7 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    if( mpDocShell && mpDoc )
+    if (mpDocShell)
     {
         uno::Reference< frame::XModel > xModel;
 
@@ -1502,7 +1502,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
             rxOptions[ nProperty].Value >>= bExportNotesPages;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;
-    if( mpDocShell && mpDoc )
+    if (mpDocShell)
     {
         awt::Size aPageSize;
         if ( bExportNotesPages )
@@ -1890,7 +1890,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    if( mpDocShell && mpDoc )
+    if (mpDocShell)
     {
         uno::Reference< awt::XDevice >  xRenderDevice;
         const sal_Int32                 nPageNumber = nRenderer + 1;

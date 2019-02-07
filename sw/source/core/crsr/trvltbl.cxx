@@ -819,8 +819,7 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     if( !pPos )
     {
         // get stored position
-        if( m_pBoxIdx && m_pBoxPtr &&
-            nullptr != ( pSttNd = m_pBoxIdx->GetNode().GetStartNode() ) &&
+        if (nullptr != (pSttNd = m_pBoxIdx->GetNode().GetStartNode()) &&
             SwTableBoxStartNode == pSttNd->GetStartNodeType() &&
             m_pBoxPtr == pSttNd->FindTableNode()->GetTable().
                         GetTableBox( m_pBoxIdx->GetIndex() ) )

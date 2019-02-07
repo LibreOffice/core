@@ -482,7 +482,7 @@ void SAL_CALL SdLayerManager::attachShapeToLayer( const uno::Reference< drawing:
     SvxShape* pShape = SvxShape::getImplementation( xShape );
     SdrObject* pSdrObject = pShape?pShape->GetSdrObject():nullptr;
 
-    if(pSdrObject && pSdrLayer )
+    if(pSdrObject)
         pSdrObject->SetLayer(pSdrLayer->GetID());
 
     mpModel->SetModified();

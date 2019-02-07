@@ -983,7 +983,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection const & _aReportSect
             xComponent->setPositionY(aRect.Top());
         }
     }
-    if ( !bOverlapping && _bInsert ) // now insert objects
+    if (_bInsert) // now insert objects
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(), SdrInsertFlags::ADDMARK);
 }
 

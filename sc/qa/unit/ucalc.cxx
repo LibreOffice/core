@@ -4717,7 +4717,7 @@ void Test::testAutoFill()
             {
                 ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0));
             }
-            else if (j == 1 || j== 2)
+            else // j == 1 || j == 2
             {
                 if(i == 0)
                     ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0));

@@ -1182,7 +1182,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         }
         m_pDocShell->GetDoc()->SetOutlineNumRule( aNumRule );
     }
-    else if(!m_pNumRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty() &&
+    else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty() &&
         nullptr != (pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
     {
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
@@ -1617,7 +1617,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         std::unique_ptr<SwFormatVertOrient> pSetVOrient;
         bool bCharStyleNameSet = false;
 
-        for(size_t i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aNumPropertyNames) && !bWrongArg; ++i)
         {
             PropertyValue const*const pProp(
                     lcl_FindProperty(aNumPropertyNames[i], aPropertyValues));
@@ -2028,7 +2028,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 break;
             }
         }
-        if(!bExcept && !bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
+        if(!bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
         {
             if(!pSetBrush && aFormat.GetBrush())
                 pSetBrush.reset(new SvxBrushItem(*aFormat.GetBrush()));

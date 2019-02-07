@@ -368,16 +368,11 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     {
         // determine default-distance
         SfxItemPool* pPool = m_rOutAttrs.GetPool();
-        const SdrMetricItem* pXDistItem = &pPool->GetDefaultItem(SDRATTR_SHADOWXDIST);
-        const SdrMetricItem* pYDistItem = &pPool->GetDefaultItem(SDRATTR_SHADOWYDIST);
-        if (pXDistItem && pYDistItem)
         {
-            sal_Int32 nX = pXDistItem->GetValue();
-            sal_Int32 nY = pYDistItem->GetValue();
-            if( nX != 0 )
-                SetMetricValue( *m_xMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
-            else
-                SetMetricValue( *m_xMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
+            sal_Int32 n = pPool->GetDefaultItem(SDRATTR_SHADOWXDIST).GetValue();
+            if (n == 0)
+                n = pPool->GetDefaultItem(SDRATTR_SHADOWYDIST).GetValue();
+            SetMetricValue(*m_xMtrDistance, std::abs(n), m_ePoolUnit);
         }
 
         // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
