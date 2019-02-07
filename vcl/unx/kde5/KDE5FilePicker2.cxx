@@ -82,7 +82,7 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // Native kde5 filepicker does not add file extension automatically
-    : Qt5FilePicker(eMode, true)
+    : Qt5FilePicker(eMode, true, true)
     , _layout(new QGridLayout(m_pExtraControls))
     , allowRemoteUrls(false)
 {
