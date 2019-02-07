@@ -373,9 +373,11 @@ ScVbaApplication::FileDialog( const uno::Any& DialogType )
     sal_Int32 nType = 0;
     DialogType >>= nType;
 
-    m_nDialogType = nType;
     if( !m_xFileDialog || nType != m_nDialogType )
+    {
+        m_nDialogType = nType;
         m_xFileDialog = uno::Reference<excel::XFileDialog> ( new ScVbaFileDialog( this, mxContext, nType ));
+    }
     return uno::Any( m_xFileDialog );
 }
 
