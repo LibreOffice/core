@@ -171,7 +171,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
-        m_aTable.GrabFocus();
+    m_aTable.GrabFocus();
 }
 
 // XServiceInfo ---------------------------------------------------------------
