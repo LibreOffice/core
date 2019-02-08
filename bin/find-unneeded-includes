@@ -114,6 +114,11 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
 
     fileName = os.path.relpath(absFileName, os.getcwd())
 
+    # Skip headers used only for compile test
+    if fileName == "cppu/qa/cppumaker/test_cppumaker.cxx":
+        if include.endswith(".hpp"):
+            return True
+
     # yaml rules
 
     if "blacklist" in moduleRules.keys():
