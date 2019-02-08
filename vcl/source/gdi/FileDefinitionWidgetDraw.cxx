@@ -18,6 +18,10 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#include <tools/stream.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapTools.hxx>
+
 namespace vcl
 {
 namespace
@@ -34,7 +38,8 @@ OUString lcl_getThemeDefinitionPath()
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
-    WidgetDefinitionReader aReader(lcl_getThemeDefinitionPath() + "definition.xml");
+    OUString sDefinitionBasePath = lcl_getThemeDefinitionPath();
+    WidgetDefinitionReader aReader(sDefinitionBasePath + "definition.xml", sDefinitionBasePath);
     aReader.read(m_aWidgetDefinition);
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -169,6 +174,19 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                                                           rLineDrawCommand.mnStrokeWidth),
                                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
                                        0.0f, false, nullptr);
+            }
+            break;
+            case DrawCommandType::IMAGE:
+            {
+                auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
+                SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+                BitmapEx aBitmap;
+                vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, 1.0);
+                long nImageWidth = aBitmap.GetSizePixel().Width();
+                long nImageHeight = aBitmap.GetSizePixel().Height();
+                SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth, nImageHeight);
+                rGraphics.DrawBitmap(aTR, *aBitmap.GetBitmap().ImplGetSalBitmap().get(),
+                                     *aBitmap.GetAlpha().ImplGetSalBitmap().get(), nullptr);
             }
             break;
         }

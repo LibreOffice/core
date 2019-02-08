@@ -138,6 +138,16 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     }
 }
 
+BitmapReadAccess* AlphaMask::AcquireReadAccess()
+{
+    return Bitmap::AcquireReadAccess();
+}
+
+BitmapWriteAccess* AlphaMask::AcquireWriteAccess()
+{
+    return Bitmap::AcquireWriteAccess();
+}
+
 void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
 {
     if( pAccess )
