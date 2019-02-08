@@ -1654,11 +1654,11 @@ void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-        bool bChanged =
+    bool bChanged =
             (m_pImpl->m_aVisualAreaSize.Width != _aSize.Width ||
              m_pImpl->m_aVisualAreaSize.Height != _aSize.Height);
-        m_pImpl->m_aVisualAreaSize = _aSize;
-        if( bChanged )
+    m_pImpl->m_aVisualAreaSize = _aSize;
+    if( bChanged )
             setModified( true );
     m_pImpl->m_nAspect = _nAspect;
 }
@@ -2227,7 +2227,7 @@ OUString SAL_CALL OReportDefinition::getShapeType(  )
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( m_aProps->m_xShape.is() )
         return m_aProps->m_xShape->getShapeType();
-   return OUString("com.sun.star.drawing.OLE2Shape");
+    return OUString("com.sun.star.drawing.OLE2Shape");
 }
 
 typedef ::cppu::WeakImplHelper< container::XNameContainer,
