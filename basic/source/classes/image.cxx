@@ -515,7 +515,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
                 }
             }
-        SbiCloseRecord( r, nPos );
+            SbiCloseRecord( r, nPos );
         }
     }
     // Set overall length
