@@ -22,9 +22,7 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <functional>
 #include <vector>
-#include <algorithm>
 
 class ImplB3DPolyPolygon
 {

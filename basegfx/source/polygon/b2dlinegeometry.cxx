@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdio>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/point/b2dpoint.hxx>

@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -34,7 +33,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
-#include <limits>
 
 // #i37443#
 #define ANGLE_BOUND_START_VALUE     (2.25)

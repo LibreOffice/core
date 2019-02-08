@@ -23,7 +23,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 
 namespace basegfx

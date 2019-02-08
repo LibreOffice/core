@@ -24,7 +24,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include <algorithm>
 #include <numeric>
