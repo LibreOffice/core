@@ -29,7 +29,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC AlphaMask : private Bitmap
+class VCL_DLLPUBLIC AlphaMask : public Bitmap
 {
 public:
 
@@ -51,24 +51,20 @@ public:
 
     void        SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
 
-    Size        GetSizePixel() const { return Bitmap::GetSizePixel(); }
-
-    BitmapChecksum   GetChecksum() const { return Bitmap::GetChecksum(); }
-
     Bitmap      GetBitmap() const;
 
     bool        Erase( sal_uInt8 cTransparency );
     bool        Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
     bool        Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency );
 
-    BitmapReadAccess*  AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
-    BitmapWriteAccess* AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
+    BitmapReadAccess*  AcquireAlphaReadAccess() { return Bitmap::AcquireReadAccess(); }
+    BitmapWriteAccess* AcquireAlphaWriteAccess() { return Bitmap::AcquireWriteAccess(); }
 
     void        ReleaseAccess( BitmapReadAccess* pAccess );
 
-    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
+    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireAlphaReadAccess >
         ScopedReadAccess;
-    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess >
+    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireAlphaWriteAccess >
         ScopedWriteAccess;
 
 private:

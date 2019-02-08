@@ -164,8 +164,10 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
 
 } // end anonymous namespace
 
-WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rFilePath)
-    : m_rFilePath(rFilePath)
+WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rDefinitionFile,
+                                               OUString const& rResourcePath)
+    : m_rDefinitionFile(rDefinitionFile)
+    , m_rResourcePath(rResourcePath)
 {
 }
 
@@ -260,7 +262,12 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
 
             rpState->addDrawLine(aStrokeColor, nStrokeWidth, fX1, fY1, fX2, fY2);
         }
-
+        else if (rWalker.name() == "image")
+        {
+            OString sSource = rWalker.attribute("source");
+            rpState->addDrawImage(m_rResourcePath
+                                  + OStringToOUString(sSource, RTL_TEXTENCODING_UTF8));
+        }
         rWalker.next();
     }
     rWalker.parent();
@@ -313,10 +320,10 @@ void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
 
 bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 {
-    if (!lcl_fileExists(m_rFilePath))
+    if (!lcl_fileExists(m_rDefinitionFile))
         return false;
 
-    SvFileStream aFileStream(m_rFilePath, StreamMode::READ);
+    SvFileStream aFileStream(m_rDefinitionFile, StreamMode::READ);
 
     std::unordered_map<OString, Color*> aStyleColorMap = {
         { "faceColor", &rWidgetDefinition.maFaceColor },

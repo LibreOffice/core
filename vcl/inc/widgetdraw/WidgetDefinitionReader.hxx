@@ -22,18 +22,19 @@ namespace vcl
 class VCL_DLLPUBLIC WidgetDefinitionReader
 {
 private:
-    OUString m_rFilePath;
+    OUString m_rDefinitionFile;
+    OUString m_rResourcePath;
 
-    static void readDefinition(tools::XmlWalker& rWalker, WidgetDefinition& rWidgetDefinition,
-                               ControlType eType);
+    void readDefinition(tools::XmlWalker& rWalker, WidgetDefinition& rWidgetDefinition,
+                        ControlType eType);
 
-    static void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinitionPart> rpPart);
+    void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinitionPart> rpPart);
 
-    static void readDrawingDefinition(tools::XmlWalker& rWalker,
-                                      std::shared_ptr<WidgetDefinitionState>& rStates);
+    void readDrawingDefinition(tools::XmlWalker& rWalker,
+                               std::shared_ptr<WidgetDefinitionState>& rStates);
 
 public:
-    WidgetDefinitionReader(OUString const& rFilePath);
+    WidgetDefinitionReader(OUString const& rDefinitionFile, OUString const& rResourcePath);
     bool read(WidgetDefinition& rWidgetDefinition);
 };
 
