@@ -844,7 +844,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                     "sfx.appl",
                     "LIBO_FLATPAK mode /.flatpak-info [Instance] app-path \"" << path
                         << "\" doesn't contain /app/org.libreoffice.LibreOffice/");
-                    throw Failure();
+                throw Failure();
             }
             auto const i2 = i1 + segments.size;
             auto i3 = path.indexOf('/', i2);
@@ -853,7 +853,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                     "sfx.appl",
                     "LIBO_FLATPAK mode /.flatpak-info [Instance] app-path \"" << path
                         << "\" doesn't contain branch segment");
-                    throw Failure();
+                throw Failure();
             }
             i3 = path.indexOf('/', i3 + 1);
             if (i3 == -1) {
@@ -861,7 +861,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                     "sfx.appl",
                     "LIBO_FLATPAK mode /.flatpak-info [Instance] app-path \"" << path
                         << "\" doesn't contain sha segment");
-                    throw Failure();
+                throw Failure();
             }
             ++i3;
             auto const i4 = path.indexOf('/', i3);
@@ -870,7 +870,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                     "sfx.appl",
                     "LIBO_FLATPAK mode /.flatpak-info [Instance] app-path \"" << path
                         << "\" doesn't contain files segment");
-                    throw Failure();
+                throw Failure();
             }
             path = path.copy(0, i1) + "/runtime/org.libreoffice.LibreOffice.Help/"
                 + path.copy(i2, i3 - i2) + sha + path.copy(i4);

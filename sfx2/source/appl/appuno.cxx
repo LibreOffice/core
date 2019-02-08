@@ -1223,11 +1223,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         continue;
                     if ( nId == SID_SAVEACOPYITEM )
                         continue;
-                     if ( nId == SID_MODIFYPASSWORDINFO )
+                    if ( nId == SID_MODIFYPASSWORDINFO )
                         continue;
-                     if ( nId == SID_SUGGESTEDSAVEASDIR )
+                    if ( nId == SID_SUGGESTEDSAVEASDIR )
                         continue;
-                     if ( nId == SID_SUGGESTEDSAVEASNAME )
+                    if ( nId == SID_SUGGESTEDSAVEASNAME )
                         continue;
                }
 

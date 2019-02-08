@@ -892,7 +892,7 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
 
 void SfxBaseController::BorderWidthsChanged_Impl()
 {
-       ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
                         cppu::UnoType<frame::XBorderResizeListener>::get());
     if ( !pContainer )
         return;

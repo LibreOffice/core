@@ -507,7 +507,7 @@ SfxApplication::ChooseScript()
 
     SAL_INFO( "sfx.appl", "done, now exec it");
 
-      sal_uInt16 nRet = pDlg->Execute();
+    sal_uInt16 nRet = pDlg->Execute();
 
     SAL_INFO( "sfx.appl", "has returned");
 

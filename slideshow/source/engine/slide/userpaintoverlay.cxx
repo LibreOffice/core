@@ -171,8 +171,8 @@ namespace slideshow
                     repaintWithoutPolygons();
                     maPolygons.clear();
                 }
-            mbIsEraseAllModeActivated=false;
-            return true;
+                mbIsEraseAllModeActivated=false;
+                return true;
             }
 
             bool eraseInkWidthChanged( sal_Int32 rEraseInkSize ) override

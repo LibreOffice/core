@@ -611,7 +611,7 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
 
 void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rContext)
 {
-     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
     // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
 
