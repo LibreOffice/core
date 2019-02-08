@@ -182,7 +182,11 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
-        if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
+        // Set the data label separator to "new line" if the value is shown as percentage with a category name,
+        // just like in MS-Office. In any other case the default separator will be a semicolon.
+        if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has() ) )
+            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
+        else if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
             rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
 
         // data label placement (do not overwrite series placement, if no explicit point placement is present)
