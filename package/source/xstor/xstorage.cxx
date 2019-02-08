@@ -1933,12 +1933,12 @@ void OStorage::BroadcastModifiedIfNecessary()
 
     SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-       ::cppu::OInterfaceContainerHelper* pContainer =
+    ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<util::XModifyListener>::get());
-       if ( pContainer )
+    if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )
@@ -1965,12 +1965,12 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
     SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-       ::cppu::OInterfaceContainerHelper* pContainer =
+    ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
-       if ( pContainer )
+    if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )

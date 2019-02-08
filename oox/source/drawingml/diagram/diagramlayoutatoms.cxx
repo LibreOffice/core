@@ -848,12 +848,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             double fAspectRatio = 0.32;
 
             awt::Size aChildSize = rShape->getSize();
-                aChildSize.Width /= nCount;
-                aChildSize.Height /= nCount;
+            aChildSize.Width /= nCount;
+            aChildSize.Height /= nCount;
 
             awt::Point aCurrPos(0, 0);
-                aCurrPos.X = fAspectRatio*aChildSize.Width*(nCount-1);
-                aCurrPos.Y = fAspectRatio*aChildSize.Height;
+            aCurrPos.X = fAspectRatio*aChildSize.Width*(nCount-1);
+            aCurrPos.Y = fAspectRatio*aChildSize.Height;
 
             for (auto & aCurrShape : rShape->getChildren())
             {

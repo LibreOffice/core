@@ -169,7 +169,7 @@ static void lcl_ConvertProgID(OUString const& rProgID,
     }
     else if (rProgID.startsWith("PowerPoint.Slide.12"))
     {
-        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
+       o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
        o_rFileExtension = "sldx";
     }

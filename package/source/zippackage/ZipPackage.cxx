@@ -618,7 +618,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                         m_aURL = aParamUrl.copy( 0, nParam );
                         OUString aParam = aParamUrl.copy( nParam + 1 );
 
-                          sal_Int32 nIndex = 0;
+                        sal_Int32 nIndex = 0;
                         do
                         {
                             OUString aCommand = aParam.getToken( 0, '&', nIndex );
@@ -1337,7 +1337,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         if( bUseTemp )
         {
             // no information loss appears, thus no special handling is required
-               uno::Any aCaught( ::cppu::getCaughtException() );
+            uno::Any aCaught( ::cppu::getCaughtException() );
 
             // it is allowed to throw WrappedTargetException
             WrappedTargetException aException;
@@ -1399,10 +1399,10 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             }
 
             OpenCommandArgument2 aArg;
-               aArg.Mode        = OpenMode::DOCUMENT;
-               aArg.Priority    = 0; // unused
-               aArg.Sink       = xSink;
-               aArg.Properties = uno::Sequence< Property >( 0 ); // unused
+            aArg.Mode        = OpenMode::DOCUMENT;
+            aArg.Priority    = 0; // unused
+            aArg.Sink       = xSink;
+            aArg.Properties = uno::Sequence< Property >( 0 ); // unused
 
             aOriginalContent.executeCommand("open", makeAny( aArg ) );
         }
@@ -1436,7 +1436,7 @@ void SAL_CALL ZipPackage::commitChanges()
     }
     catch (const ucb::ContentCreationException&)
     {
-       css::uno::Any anyEx = cppu::getCaughtException();
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(THROW_WHERE "Temporary file should be creatable!",
                     static_cast < OWeakObject * > ( this ), anyEx );
     }
