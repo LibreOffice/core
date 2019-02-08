@@ -1035,7 +1035,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
     {
         const SvNumberformat* pNumEntry = rEntry.second;
 
-        if (bCategoryMatch && pNumEntry->GetMaskedType() != eCategory)
+        if (bCategoryMatch && (pNumEntry->GetMaskedType() & eCategory) != eCategory)
             continue; // for; type does not match category if not ALL
 
         const bool bUserDefined = bool(pNumEntry->GetType() & SvNumFormatType::DEFINED);
