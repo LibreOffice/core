@@ -599,20 +599,20 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 padd( "draw:cx", sXML_CDATA,ascii(Int2Str(prop->center_x, "%d%%", buf)));
                 padd( "draw:cy", sXML_CDATA,ascii(Int2Str(prop->center_y, "%d%%", buf)));
 
-                     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
-                     int default_color = 0xffffff;
-                     if( hwpinfo.back_info.isset )
-                     {
+                HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
+                int default_color = 0xffffff;
+                if( hwpinfo.back_info.isset )
+                {
                              if( hwpinfo.back_info.color[0] > 0 || hwpinfo.back_info.color[1] > 0
                                      || hwpinfo.back_info.color[2] > 0 )
                                  default_color = hwpinfo.back_info.color[0] << 16 |
                                      hwpinfo.back_info.color[1] << 8 | hwpinfo.back_info.color[2];
-                     }
+                }
 
-                     if( prop->fromcolor > 0xffffff )
-                         prop->fromcolor = default_color;
-                     if( prop->tocolor > 0xffffff )
-                         prop->tocolor = default_color;
+                if( prop->fromcolor > 0xffffff )
+                    prop->fromcolor = default_color;
+                if( prop->tocolor > 0xffffff )
+                    prop->tocolor = default_color;
 
                 if( prop->gstyle  == 1)
                 {
@@ -1051,10 +1051,10 @@ void HwpReader::makeMasterStyles()
 
         if( aSet[i].bIsSet )                      /* If you've changed the current setting */
         {
-              if( !aSet[i].pagenumber ){
+            if( !aSet[i].pagenumber ){
                     if( pPrevSet && pPrevSet->pagenumber )
                          aSet[i].pagenumber = pPrevSet->pagenumber;
-              }
+            }
             if( aSet[i].pagenumber )
             {
                 if( aSet[i].pagenumber->where == 7 && aSet[i].header )
@@ -1490,8 +1490,8 @@ void HwpReader::makePStyle(ParaShape const * pshape)
         unsigned char tf = 0;
         rstartEl("style:tab-stops",mxList.get());
 
-          int tab_margin = pshape->left_margin + pshape->indent;
-          if( tab_margin < 0 )
+        int tab_margin = pshape->left_margin + pshape->indent;
+        if( tab_margin < 0 )
               tab_margin = 0;
         for( int i = 0 ; i < MAXTABS -1 ; i++)
         {
@@ -1806,11 +1806,11 @@ void HwpReader::makePageStyle()
 void HwpReader::makeColumns(ColumnDef const *coldef)
 {
     if( !coldef ) return;
-  padd("fo:column-count", sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
-  rstartEl("style:columns",mxList.get());
-  mxList->clear();
-  if( coldef->separator != 0 )
-  {
+    padd("fo:column-count", sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
+    rstartEl("style:columns",mxList.get());
+    mxList->clear();
+    if( coldef->separator != 0 )
+    {
         switch( coldef->separator )
         {
              case 1:                           /* thin line */
@@ -1832,10 +1832,10 @@ void HwpReader::makeColumns(ColumnDef const *coldef)
         rstartEl("style:column-sep",mxList.get());
         mxList->clear();
         rendEl("style:column-sep");
-  }
-  double spacing = WTI(coldef->spacing)/ 2. ;
-  for(int ii = 0 ; ii < coldef->ncols ; ii++)
-  {
+    }
+    double spacing = WTI(coldef->spacing)/ 2. ;
+    for(int ii = 0 ; ii < coldef->ncols ; ii++)
+    {
         if( ii == 0 )
              padd("fo:margin-left", sXML_CDATA, "0mm");
         else
@@ -1849,8 +1849,8 @@ void HwpReader::makeColumns(ColumnDef const *coldef)
         rstartEl("style:column",mxList.get());
         mxList->clear();
         rendEl("style:column");
-  }
-  rendEl("style:columns");
+    }
+    rendEl("style:columns");
 }
 
 void HwpReader::makeTStyle(CharShape const * cshape)
@@ -2079,19 +2079,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             {
                 padd("draw:marker-start", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_tstyle].name) );
-                     if( hdo->property.line_width > 100 )
+                if( hdo->property.line_width > 100 )
                          padd("draw:marker-start-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
-                     else if( hdo->property.line_width > 80 )
+                else if( hdo->property.line_width > 80 )
                          padd("draw:marker-start-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
-                     else if( hdo->property.line_width > 60 )
+                else if( hdo->property.line_width > 60 )
                          padd("draw:marker-start-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
-                     else if( hdo->property.line_width > 40 )
+                else if( hdo->property.line_width > 40 )
                          padd("draw:marker-start-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
-                     else
+                else
                          padd("draw:marker-start-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
             }
@@ -2100,19 +2100,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             {
                 padd("draw:marker-end", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_hstyle].name) );
-                     if( hdo->property.line_width > 100 )
+                if( hdo->property.line_width > 100 )
                          padd("draw:marker-end-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
-                     else if( hdo->property.line_width > 80 )
+                else if( hdo->property.line_width > 80 )
                          padd("draw:marker-end-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
-                     else if( hdo->property.line_width > 60 )
+                else if( hdo->property.line_width > 60 )
                          padd("draw:marker-end-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
-                     else if( hdo->property.line_width > 40 )
+                else if( hdo->property.line_width > 40 )
                          padd("draw:marker-end-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
-                     else
+                else
                          padd("draw:marker-end-width", sXML_CDATA,
                               Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
             }
@@ -2623,11 +2623,11 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             }
         }
 
-          if( cell->linetype[0] == 0 && cell->linetype[1] == 0 &&
+        if( cell->linetype[0] == 0 && cell->linetype[1] == 0 &&
                   cell->linetype[2] == 0 && cell->linetype[3] == 0 ){
               padd("fo:padding", sXML_CDATA,"0mm");
-          }
-          else{
+        }
+        else{
               padd("fo:padding-left", sXML_CDATA,
                       Double2Str(WTMM(fstyle->margin[1][0])) + "mm");
               padd("fo:padding-right", sXML_CDATA,
@@ -2636,7 +2636,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                       Double2Str(WTMM(fstyle->margin[1][2])) + "mm");
               padd("fo:padding-bottom", sXML_CDATA,
                       Double2Str(WTMM(fstyle->margin[1][3])) + "mm");
-          }
+        }
         if(cell->shade != 0)
             padd("fo:background-color", sXML_CDATA,
             ascii(hcolor2str(
@@ -2655,7 +2655,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     }
     else if( fstyle->boxtype == 'G' )
     {
-         if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
+        if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
              OUString clip = "rect(";
              clip += Double2Str(WTMM(-fstyle->margin[1][0]) ) + "mm ";
              clip += Double2Str(WTMM(-fstyle->margin[1][1]) ) + "mm ";
@@ -2663,7 +2663,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
              clip += Double2Str(WTMM(-fstyle->margin[1][3]) ) + "mm)";
              padd("style:mirror", sXML_CDATA, "none");
              padd("fo:clip", sXML_CDATA, clip);
-         }
+        }
         char *cell = static_cast<char *>(fstyle->cell);
         padd("draw:luminance", sXML_CDATA,
             ascii(Int2Str(cell[0], "%d%%", buf)));
@@ -2711,7 +2711,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     hchar_string str;
     int n;
     int res;
-     hchar dest[3];
+    hchar dest[3];
     unsigned char firstspace = 0;
     if( !bParaStart)
     {
@@ -2848,7 +2848,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         }
         else
         {
-              if( para->hhstr[n]->hh < CH_SPACE )
+            if( para->hhstr[n]->hh < CH_SPACE )
                   continue;
             if (para->hhstr[n]->hh == CH_SPACE)
                 firstspace = 0;
@@ -2871,7 +2871,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 {
     hchar_string str;
     int n, res;
-     hchar dest[3];
+    hchar dest[3];
     unsigned char firstspace = 0;
     bool pstart = bParaStart;
     bool tstart = false;
@@ -2957,23 +2957,23 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 if( !tstart ) {STARTT;}
                 makeChars(str);
                 firstspace = 1;
-                     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
-                     {
-                         field = hbox->str3.get();
-                     }
-                     else{
-                         makeFieldCode(str, hbox);
-                     }
+                if( hbox->type[0] == 4 && hbox->type[1] == 0 )
+                {
+                     field = hbox->str3.get();
+                }
+                else{
+                     makeFieldCode(str, hbox);
+                }
                 infield = true;
             }
             else
             {
                 firstspace = 1;
-                     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
-                     {
-                         makeFieldCode(str, hbox);
-                         field = nullptr;
-                     }
+                if( hbox->type[0] == 4 && hbox->type[1] == 0 )
+                {
+                     makeFieldCode(str, hbox);
+                     field = nullptr;
+                }
                 infield = false;
                 str.clear();
             }
@@ -3140,7 +3140,7 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
         padd("text:placeholder-type", sXML_CDATA, "text");
-          if( field )
+        if( field )
               padd("text:description", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(field)));
         rstartEl( "text:placeholder", mxList.get());
         mxList->clear();
@@ -3245,10 +3245,10 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
          if( hbox->m_pDate )
              padd("style:data-style-name", sXML_CDATA,
                      ascii(Int2Str(hbox->m_pDate->key, "N%d", buf)));
-            rstartEl( "text:creation-date", mxList.get() );
-            mxList->clear();
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
-            rendEl( "text:creation-date" );
+         rstartEl( "text:creation-date", mxList.get() );
+         mxList->clear();
+         rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
+         rendEl( "text:creation-date" );
      }
 }
 
@@ -3525,7 +3525,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
         padd("draw:name", sXML_CDATA,
             ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-         padd("draw:z-index", sXML_CDATA,
+        padd("draw:z-index", sXML_CDATA,
               ascii(Int2Str(hbox->zorder, "%d", buf)));
         switch (hbox->style.anchor_type)
         {
@@ -3674,7 +3674,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
     HWPPara* pPar;
 
     int n, c, res;
-     hchar dest[3];
+    hchar dest[3];
     size_t l = 0;
 
     pPar = hbox->plists[0].front().get();
@@ -3720,7 +3720,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
 void HwpReader::makeHyperText(TxtBox * hbox)
 {
     HyperText *hypert = hwpfile.GetHyperText();
-     if( !hypert ) return;
+    if( !hypert ) return;
 
     if (hypert->filename[0] != '\0') {
           ::std::string const tmp = hstr2ksstr(hypert->bookmark);
@@ -3779,7 +3779,7 @@ void HwpReader::makePicture(Picture * hbox)
                     ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
                 padd("draw:name", sXML_CDATA,
                     ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-                     padd("draw:z-index", sXML_CDATA,
+                padd("draw:z-index", sXML_CDATA,
                     ascii(Int2Str(hbox->zorder, "%d", buf)));
                 switch (hbox->style.anchor_type)
                 {
@@ -3845,7 +3845,7 @@ void HwpReader::makePicture(Picture * hbox)
 
             if( hbox->style.cap_len <= 0 )
             {
-                     padd("draw:z-index", sXML_CDATA,
+                padd("draw:z-index", sXML_CDATA,
                     ascii(Int2Str(hbox->zorder, "%d", buf)));
                 switch (hbox->style.anchor_type)
                 {
@@ -3895,24 +3895,24 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:actuate", sXML_CDATA, "onLoad");
             }
 
-                if( hbox->pictype == PICTYPE_OLE )
+            if( hbox->pictype == PICTYPE_OLE )
                     rstartEl("draw:object-ole", mxList.get());
-                else
+            else
                     rstartEl("draw:image", mxList.get());
             mxList->clear();
             if (hbox->pictype == PICTYPE_EMBED || hbox->pictype == PICTYPE_OLE)
             {
                 rstartEl("office:binary-data", mxList.get());
                 mxList->clear();
-                     if( hbox->pictype == PICTYPE_EMBED ){
+                if( hbox->pictype == PICTYPE_EMBED ){
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
                          {
                              std::shared_ptr<char> pStr(base64_encode_string( emp->data.get(), emp->size ), Free<char>());
                              rchars(ascii(pStr.get()));
                          }
-                     }
-                     else{
+                }
+                else{
                          if( hwpfile.oledata ){
 #ifdef _WIN32
                              LPSTORAGE srcsto;
@@ -3942,12 +3942,12 @@ void HwpReader::makePicture(Picture * hbox)
                              rchars("");
 #endif
                          }
-                     }
+                }
                 rendEl("office:binary-data");
             }
-                if( hbox->pictype == PICTYPE_OLE )
+            if( hbox->pictype == PICTYPE_OLE )
                     rendEl("draw:object-ole");
-                else
+            else
                     rendEl("draw:image");
             if( hbox->ishyper )
             {
@@ -4020,7 +4020,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
         }
         else
         {
-                bIsRotate = false;
+            bIsRotate = false;
             if( (drawobj->property.flag & HWPDO_FLAG_ROTATION) &&
                     (drawobj->property.parall.pt[0].y != drawobj->property.parall.pt[1].y) &&
                     //(drawobj->type == HWPDO_RECT || drawobj->type == HWPDO_ADVANCED_ELLIPSE || drawobj->type == HWPDO_ADVANCED_ARC )
@@ -4028,70 +4028,70 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     )
             {
 
-                     int i;
+                int i;
                 ZZParall *pal = &drawobj->property.parall;
 
-                     ZZPoint pt[3], r_pt[3];
-                     for(i = 0 ; i < 3 ; i++ ){
+                ZZPoint pt[3], r_pt[3];
+                for(i = 0 ; i < 3 ; i++ ){
                          pt[i].x = pal->pt[i].x - drawobj->property.rot_originx;
                          /* Convert to a physical coordinate */
                          pt[i].y = -(pal->pt[i].y - drawobj->property.rot_originy);
-                     }
+                }
 
                 double rotate, skewX ;
 
-                     /* 2 - rotation angle calculation */
-                     if( pt[1].x == pt[0].x ){
+                /* 2 - rotation angle calculation */
+                if( pt[1].x == pt[0].x ){
                          if( pt[1].y > pt[0].y )
                              rotate = PI/2;
                          else
                              rotate = -(PI/2);
-                     }
-                     else
-                         rotate = atan(static_cast<double>( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
-                     if( pt[1].x < pt[0].x )
-                         rotate += PI;
+                }
+                else
+                    rotate = atan(static_cast<double>( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
+                if( pt[1].x < pt[0].x )
+                    rotate += PI;
 
-                     for( i = 0 ; i < 3 ; i++){
+                for( i = 0 ; i < 3 ; i++){
                          r_pt[i].x = static_cast<int>(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
                          r_pt[i].y = static_cast<int>(pt[i].y * cos(-rotate) + pt[i].x * sin(-rotate));
-                     }
+                }
 
-                     /* 4 - Calculation of reflex angle */
-                     if( r_pt[2].y == r_pt[1].y )
+                /* 4 - Calculation of reflex angle */
+                if( r_pt[2].y == r_pt[1].y )
                          skewX = 0;
-                     else
+                else
                          skewX = atan(static_cast<double>(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
-                     if( skewX >= PI/2 )
+                if( skewX >= PI/2 )
                          skewX -= PI;
-                     if( skewX <= -PI/2 )
+                if( skewX <= -PI/2 )
                          skewX += PI;
 
-                     OUString trans;
-                     if( skewX != 0.0 && rotate != 0.0 ){
-                         trans = "skewX (" + Double2Str(skewX)
-                                  + ") rotate (" + Double2Str(rotate)
-                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
-                          bIsRotate = true;
-                     }
-                     else if( skewX != 0.0 ){
-                         trans = "skewX (" + Double2Str(skewX)
-                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
-                          bIsRotate = true;
-                     }
-                     else if( rotate != 0.0 ){
-                         trans = "rotate (" + Double2Str(rotate)
-                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
-                          bIsRotate = true;
-                     }
-                     if( bIsRotate ){
-                         drawobj->extent.w = static_cast<int>(sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y))));
-                         drawobj->extent.h = static_cast<int>(sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y))));
-                         padd("draw:transform", sXML_CDATA, trans);
-                     }
+                OUString trans;
+                if( skewX != 0.0 && rotate != 0.0 ){
+                    trans = "skewX (" + Double2Str(skewX)
+                             + ") rotate (" + Double2Str(rotate)
+                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    bIsRotate = true;
+                }
+                else if( skewX != 0.0 ){
+                    trans = "skewX (" + Double2Str(skewX)
+                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    bIsRotate = true;
+                }
+                else if( rotate != 0.0 ){
+                    trans = "rotate (" + Double2Str(rotate)
+                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    bIsRotate = true;
+                }
+                if( bIsRotate ){
+                    drawobj->extent.w = static_cast<int>(sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y))));
+                    drawobj->extent.h = static_cast<int>(sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y))));
+                    padd("draw:transform", sXML_CDATA, trans);
+                }
             }
             switch (drawobj->type)
             {
@@ -4182,11 +4182,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                            padd("svg:width", sXML_CDATA,
+                    padd("svg:width", sXML_CDATA,
                                  Double2Str (WTMM( drawobj->extent.w )) + "mm");
-                            padd("svg:height", sXML_CDATA,
+                    padd("svg:height", sXML_CDATA,
                                  Double2Str (WTMM( drawobj->extent.h )) + "mm");
-                            if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
+                    if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
                                 if( drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x
                                         || drawobj->u.arc.radial[0].y != drawobj->u.arc.radial[1].y ){
                                     int Cx,Cy;
@@ -4203,7 +4203,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                     padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle ));
                                     padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle));
                                 }
-                          }
+                    }
                     rstartEl("draw:ellipse", mxList.get());
                     mxList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
@@ -4225,7 +4225,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 case HWPDO_ADVANCED_ARC:
                 {
                     /*  If it is the arc, LibreOffice assumes the size as the entire ellipse size */
-                         uint flip = drawobj->u.line_arc.flip;
+                    uint flip = drawobj->u.line_arc.flip;
                     if( !bIsRotate )
                     {
                               if( ( flip == 0 || flip == 2 ) && drawobj->type == HWPDO_ARC)
@@ -4242,17 +4242,17 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                          Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                            padd("svg:width", sXML_CDATA,
+                    padd("svg:width", sXML_CDATA,
                                  Double2Str (WTMM( drawobj->extent.w * 2)) + "mm");
-                            padd("svg:height", sXML_CDATA,
+                    padd("svg:height", sXML_CDATA,
                                  Double2Str (WTMM( drawobj->extent.h * 2)) + "mm");
-                            if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
+                    if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
                                      drawobj->property.fill_color < 0xffffff )
                                 padd("draw:kind", sXML_CDATA, "section");
-                            else
+                    else
                                 padd("draw:kind", sXML_CDATA, "arc");
 
-                            if( drawobj->type == HWPDO_ADVANCED_ARC ){
+                    if( drawobj->type == HWPDO_ADVANCED_ARC ){
                                 double start_angle, end_angle;
                                 ZZParall *pal = &drawobj->property.parall;
 
@@ -4288,8 +4288,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                     start_angle = end_angle;
                                     end_angle = tmp_angle;
                                 }
-                                 padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle * 180. / PI));
-                                 padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle * 180. / PI));
+                                padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle * 180. / PI));
+                                padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle * 180. / PI));
 
                             }
                             else{
@@ -4438,9 +4438,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 {
                     bool bIsPolygon = false;
 
-                            padd("svg:x", sXML_CDATA,
+                    padd("svg:x", sXML_CDATA,
                                  Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
-                            padd("svg:y", sXML_CDATA,
+                    padd("svg:y", sXML_CDATA,
                                  Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
 
                     padd("svg:width", sXML_CDATA,
@@ -4581,7 +4581,7 @@ void HwpReader::makeHidden(Hidden * hbox)
 {
     hchar_string str;
     int res;
-     hchar dest[3];
+    hchar dest[3];
 
     padd("text:condition", sXML_CDATA, "");
     padd("text:string-value", sXML_CDATA, "");

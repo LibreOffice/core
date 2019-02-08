@@ -891,7 +891,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     unsigned char lo;
      //printf("hcharconv[%04x]\n",ch);
     if (ch < 128){
-         dest[0] = ch;
+        dest[0] = ch;
         return 1;
     }
     if (IsHangul(ch))
@@ -921,10 +921,10 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
          */
         if ((index = ch - 0x4000) >= 4888)
         {
-                if( codeType == UNICODE )
-                     dest[0]= 0x25A1;
-                else
-                     dest[0]= 0xA1E0;
+            if( codeType == UNICODE )
+                dest[0]= 0x25A1;
+            else
+                dest[0]= 0xA1E0;
             return 1;
         }
         if (codeType == KS)
@@ -951,12 +951,12 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
             ch = (hi << 8) | lo;
         }
           //printf("hcharconv Hanja[%04x]\n",ch);
-          dest[0] = ch;
+        dest[0] = ch;
         return 1;
     }
     if (LineCharDir(ch))
     {
-         dest[0] = lineCharConv(ch);
+        dest[0] = lineCharConv(ch);
         return 1;
     }
     else if (0x2f00 <= ch && ch <= 0x2f6f && (ch & 0x0f) < 9)
@@ -975,7 +975,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
             else ch = 0xa2b9;
 
             ch = (lo < 6) ? ch : ch + 1;
-                if( codeType == UNICODE)
+            if( codeType == UNICODE)
                      ch = ksc5601_sym_to_ucs2(ch);
         }
         else
@@ -990,7 +990,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
             ch = (lo < 6) ? ch : ch + 1;
         }
           //printf("hcharconv Bullet[%04x]\n",ch);
-          dest[0] = ch;
+        dest[0] = ch;
         return 1 ;
     }
 /*
@@ -1002,13 +1002,13 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
         if( codeType != KSSM )
         {
                //printf("code[0x%04x]\n",ch);
-                hchar ch2 = ch;
+            hchar ch2 = ch;
             ch = s_hh2ks(ch);
                 //printf("code ks[0x%04x]\n",ch);
-                if( codeType == UNICODE ){
+            if( codeType == UNICODE ){
                      if (ch < 128){
-                         dest[0] = ch;
-                          return 1;
+                        dest[0] = ch;
+                        return 1;
                      }
                      /* Hangul and Computer: 0x37c0 ~ 0x37c5 */
                      if( ch2 >= 0x37c0 && ch2 <= 0x37c5 ){
@@ -1037,7 +1037,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                           ch = ksc5601_sym_to_ucs2(ch);
                      }
                      //printf("code ucs2[0x%04x]\n",ch);
-                }
+            }
         }
         else{
             ch = s_hh2kssm(ch);
@@ -1051,7 +1051,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                 return 1;
           }
           //printf("hcharconv Special[%04x]\n",ch);
-          dest[0] = ch;
+        dest[0] = ch;
         return 1;
     }
 }
@@ -1067,7 +1067,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 
      //printf("kssm_hangul_to_ucs2 : [%d,%d,%d]\n", choseong,joongseong,jongseong);
 
-     if( joongseong < 2 ){ /* Not combined area, medial sound = 0,1 */
+    if( joongseong < 2 ){ /* Not combined area, medial sound = 0,1 */
          if( joongseong == 0 && ch < 0xa414 ){ /* consonants and vowels includes old characters */
              int index = choseong * 32 + jongseong;
              dest[0] = jamo_to_unicode[index];
@@ -1090,8 +1090,8 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
          return 1;
      }
      else if ( joongseong == 2 && jongseong == 1 ){  /* Consonant */
-         dest[0] = choseong_to_unicode[choseong];
-       return 1;
+        dest[0] = choseong_to_unicode[choseong];
+        return 1;
     }
      else if( choseong > 20 || choseong == 0 ||
              joongseong == 17 || joongseong == 24 ||
@@ -1130,7 +1130,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
     joongseong *= NUM_JONGSEONG;
     jongseong -= jongseong > 0x12 ?  2 : 1;
 
-     dest[0] = UNI_HANGUL_FIRST + choseong + joongseong + jongseong;
+    dest[0] = UNI_HANGUL_FIRST + choseong + joongseong + jongseong;
     return 1;
 }
 
@@ -1179,11 +1179,11 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 {
     ::std::string ret;
     int j;
-     hchar dest[3];
+    hchar dest[3];
     for( ; *hstr ; )
     {
         int res = hcharconv(*hstr++, dest, KS);
-          for( j = 0 ; j < res ; j++ ){
+        for( j = 0 ; j < res ; j++ ){
               int c = dest[j];
               if( c < 32 )
                   c = ' ';
@@ -1196,7 +1196,7 @@ hchar_string hstr2ucsstr(hchar const* hstr)
                   ret.push_back(sal::static_int_cast<char>((c >> 8 ) & 0xff));
                   ret.push_back(sal::static_int_cast<char>(c & 0xff));
               }
-          }
+        }
     }
     return ret;
 }
@@ -1334,16 +1334,16 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
                 ret.append("http://");
             }
         }
-     }
-     for (; i < strlen(src); i++)
-     {
+    }
+    for (; i < strlen(src); i++)
+    {
         if (src[i] == '\\') {
             ret.push_back('/');
         } else {
             ret.push_back(src[i]);
         }
-     }
-     return ret;
+    }
+    return ret;
 }
 
 #ifdef _WIN32

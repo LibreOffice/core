@@ -181,7 +181,7 @@ void OMarkableOutputStream::closeOutput()
 
     m_mapMarks.clear();
     m_nCurrentPos = m_pBuffer->getSize();
-      checkMarksAndFlush();
+    checkMarksAndFlush();
 
     m_output->closeOutput();
 
