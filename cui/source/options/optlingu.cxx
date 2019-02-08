@@ -1518,7 +1518,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                 if (xDic.is())
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
+                    ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog(GetFrameWeld(), xDic->getName()));
                     aDlg->Execute();
                 }
             }

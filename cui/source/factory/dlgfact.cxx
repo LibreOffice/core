@@ -1210,11 +1210,9 @@ VclPtr<AbstractSvxNewDictionaryDialog> AbstractDialogFactory_Impl::CreateSvxNewD
     return VclPtr<AbstractSvxNewDictionaryDialog_Impl>::Create(std::make_unique<SvxNewDictionaryDialog>(pParent));
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( vcl::Window* pParent,
-                                            const OUString& rName )
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName)
 {
-    VclPtrInstance<SvxEditDictionaryDialog> pDlg( pParent, rName );
-    return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxEditDictionaryDialog>(pParent, rName));
 }
 
 VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
