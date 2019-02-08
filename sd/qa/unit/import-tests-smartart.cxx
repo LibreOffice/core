@@ -832,6 +832,44 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT(xA2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("A2"), xA2->getString());
 
+    // Test that the layout of shapes is like this:
+    // A2 B2
+    // D2 C2
+
+    uno::Reference<drawing::XShape> xA2Shape(xA2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA2Shape.is());
+
+    uno::Reference<text::XText> xB2(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1),
+                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xB2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("B2"), xB2->getString());
+    uno::Reference<drawing::XShape> xB2Shape(xB2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xB2Shape.is());
+
+    uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1),
+                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xC2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("C2"), xC2->getString());
+    uno::Reference<drawing::XShape> xC2Shape(xC2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xC2Shape.is());
+
+    uno::Reference<text::XText> xD2(getChildShape(getChildShape(getChildShape(xGroup, 0), 3), 1),
+                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xD2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("D2"), xD2->getString());
+    uno::Reference<drawing::XShape> xD2Shape(xD2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xD2Shape.is());
+
+    // Without the accompanying fix in place, this test would have failed, i.e.
+    // the A2 and B2 shapes had the same horizontal position, while B2 should
+    // be on the right of A2.
+    CPPUNIT_ASSERT_GREATER(xA2Shape->getPosition().X, xB2Shape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xA2Shape->getPosition().Y, xB2Shape->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(xA2Shape->getPosition().X, xC2Shape->getPosition().X);
+    CPPUNIT_ASSERT_GREATER(xA2Shape->getPosition().Y, xC2Shape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xA2Shape->getPosition().X, xD2Shape->getPosition().X);
+    CPPUNIT_ASSERT_GREATER(xA2Shape->getPosition().Y, xD2Shape->getPosition().Y);
+
     xDocShRef->DoClose();
 }
 
