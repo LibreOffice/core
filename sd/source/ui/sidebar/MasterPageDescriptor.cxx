@@ -114,18 +114,18 @@ const Image& MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize 
     {
         mpPreviewProvider = rDescriptor.mpPreviewProvider;
         bPreviewChanged = true;
-     }
+    }
 
-     if (mnTemplateIndex<0 && rDescriptor.mnTemplateIndex>=0)
-     {
+    if (mnTemplateIndex<0 && rDescriptor.mnTemplateIndex>=0)
+    {
          mnTemplateIndex = rDescriptor.mnTemplateIndex;
          bIndexChanged = true;
-     }
+    }
 
      // Prepare the list of event types that will be returned.
-     ::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
-     if (bDataChanged || bIndexChanged || bPreviewChanged)
-     {
+    ::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
+    if (bDataChanged || bIndexChanged || bPreviewChanged)
+    {
          pResult.reset(new std::vector<MasterPageContainerChangeEvent::EventType>);
          if (bDataChanged)
              pResult->push_back(MasterPageContainerChangeEvent::EventType::DATA_CHANGED);
@@ -133,9 +133,9 @@ const Image& MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize 
              pResult->push_back(MasterPageContainerChangeEvent::EventType::INDEX_CHANGED);
          if (bPreviewChanged)
              pResult->push_back(MasterPageContainerChangeEvent::EventType::PREVIEW_CHANGED);
-     }
+    }
 
-     return pResult;
+    return pResult;
 }
 
 int MasterPageDescriptor::UpdatePageObject (

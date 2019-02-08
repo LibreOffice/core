@@ -604,7 +604,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
         maLbDocs->Clear();
 
         // delete list of DocInfos
-         maDocList.clear();
+        maDocList.clear();
 
         if( mbDocImported )
             maLbDocs->InsertEntry( aStr, 0 );

@@ -663,7 +663,7 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren()
       //By default, all children should be accessible. So here workaround is to make all children visible.
       // MT: THis was in UpdateVisibility, which has some similarity, and hg merge automatically has put it here. Correct?!
       // In the IA2 CWS, also setting mnFirst/LastVisibleChild was commented out!
-      mnLastVisibleChild = maPageObjects.size();
+    mnLastVisibleChild = maPageObjects.size();
 
     if (mbModelChangeLocked)
     {

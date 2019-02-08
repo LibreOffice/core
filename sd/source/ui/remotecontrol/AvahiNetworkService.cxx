@@ -180,26 +180,26 @@ void AvahiNetworkService::setup() {
     }
 #endif
 
-   int error = 0;
-   avahiService = this;
-   if (!(threaded_poll = avahi_threaded_poll_new())) {
+    int error = 0;
+    avahiService = this;
+    if (!(threaded_poll = avahi_threaded_poll_new())) {
        SAL_WARN("sdremote.wifi", "avahi_threaded_poll_new '" << avahiService->getName() << "' failed");
        return;
-   }
+    }
 
-   if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, nullptr, &error))) {
+    if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, nullptr, &error))) {
        SAL_WARN("sdremote.wifi", "avahi_client_new failed");
        return;
-   }
+    }
 
-   if(!create_services(client))
+    if(!create_services(client))
         return;
 
-   /* Finally, start the event loop thread */
-   if (avahi_threaded_poll_start(threaded_poll) < 0) {
+    /* Finally, start the event loop thread */
+    if (avahi_threaded_poll_start(threaded_poll) < 0) {
        SAL_WARN("sdremote.wifi", "avahi_threaded_poll_start failed");
        return;
-   }
+    }
 }
 
 void AvahiNetworkService::clear() {

@@ -948,10 +948,10 @@ OUString GetString( double f, bool bLeadingSign, sal_uInt16 nMaxDig )
     sal_Char        aBuff[ nBuff + 1 ];
     const char*     pFormStr = bLeadingSign? "%+.*g" : "%.*g";
     int             nLen = snprintf( aBuff, nBuff, pFormStr, int( nMaxDig ), f );
-                    // you never know which underlying implementation you get ...
-                    aBuff[nBuff] = 0;
-                    if ( nLen < 0 || nLen > nBuff )
-                        nLen = strlen( aBuff );
+    // you never know which underlying implementation you get ...
+    aBuff[nBuff] = 0;
+    if ( nLen < 0 || nLen > nBuff )
+        nLen = strlen( aBuff );
 
     OUString          aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
 

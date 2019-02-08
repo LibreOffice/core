@@ -189,7 +189,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
     if( it != m_aIdToStyle.end() )
     {
         const HashedStyle& rStyle = it->second.style;
-            PropertyMap aProps( rStyle.Properties );
+        PropertyMap aProps( rStyle.Properties );
         if( !rStyle.IsSubStyle )
             aProps[ "style:name" ] = getStyleName( nStyleId );
         if (rStyle.Name == "draw:stroke-dash")

@@ -1329,8 +1329,8 @@ void PPTWriter::ImplWriteAtomEnding()
     mpStrm->WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 );         // skip record header and first entry
 
     // write document persist
-        nPersistEntrys++;
-        mpStrm->WriteUInt32( 0 );
+    nPersistEntrys++;
+    mpStrm->WriteUInt32( 0 );
     // write MasterPages persists
     for ( i = 0; i < mnMasterPages; i++ )
     {

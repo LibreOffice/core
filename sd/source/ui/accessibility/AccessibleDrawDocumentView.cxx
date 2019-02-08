@@ -711,10 +711,10 @@ void AccessibleDrawDocumentView::Activated()
         }
         else
             ResetState (AccessibleStateType::FOCUSED);
-    mpChildrenManager->UpdateSelection();
-    // if the child gets focus in UpdateSelection(), needs to reset the focus on document.
-    if (mpChildrenManager->HasFocus() && bChange)
-        ResetState (AccessibleStateType::FOCUSED);
+        mpChildrenManager->UpdateSelection();
+        // if the child gets focus in UpdateSelection(), needs to reset the focus on document.
+        if (mpChildrenManager->HasFocus() && bChange)
+            ResetState (AccessibleStateType::FOCUSED);
     }
 }
 

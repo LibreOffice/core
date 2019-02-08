@@ -915,14 +915,14 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     else
     {
         const oox::ppt::preset_mapping* p = oox::ppt::preset_mapping::getList();
-    while( p->mpStrPresetId && ((p->mnPresetClass != static_cast<sal_Int32>(nAPIPresetClass)) || !rPreset.equalsAscii( p->mpStrPresetId )) )
-        p++;
+        while( p->mpStrPresetId && ((p->mnPresetClass != static_cast<sal_Int32>(nAPIPresetClass)) || !rPreset.equalsAscii( p->mpStrPresetId )) )
+            p++;
 
-    if( p->mpStrPresetId )
-    {
-        nPresetId = p->mnPresetId;
-        bPresetId = true;
-    }
+        if( p->mpStrPresetId )
+        {
+            nPresetId = p->mnPresetId;
+            bPresetId = true;
+        }
     }
 
     return nPresetId;
