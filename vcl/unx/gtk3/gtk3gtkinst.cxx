@@ -7842,17 +7842,6 @@ private:
             if (gtk_label_get_use_underline(pLabel))
                 m_aMnemonicLabels.push_back(pLabel);
         }
-        else if (GTK_IS_SCROLLED_WINDOW(pWidget))
-        {
-#if GTK_CHECK_VERSION(3, 22, 0)
-            // while the .ui version is 3.18, do this in code when possible
-            if (gtk_check_version(3, 22, 0) == nullptr)
-            {
-                gtk_scrolled_window_set_propagate_natural_width(GTK_SCROLLED_WINDOW(pWidget), true);
-                gtk_scrolled_window_set_propagate_natural_height(GTK_SCROLLED_WINDOW(pWidget), true);
-            }
-#endif
-        }
         else if (GTK_IS_WINDOW(pWidget))
         {
             if (m_pStringReplace != nullptr) {
