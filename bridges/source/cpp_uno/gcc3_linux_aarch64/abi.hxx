@@ -70,7 +70,7 @@ struct __cxa_eh_globals
 };
 
 void mapException(
-    __cxa_exception * exception, uno_Any * any, uno_Mapping * mapping);
+    __cxa_exception * exception, std::type_info const * type, uno_Any * any, uno_Mapping * mapping);
 
 void raiseException(uno_Any * any, uno_Mapping * mapping);
 

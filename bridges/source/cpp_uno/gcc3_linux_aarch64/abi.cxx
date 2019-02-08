@@ -224,10 +224,11 @@ StructKind getStructKind(typelib_CompoundTypeDescription const * type) {
 namespace abi_aarch64 {
 
 void mapException(
-    __cxa_exception * exception, uno_Any * any, uno_Mapping * mapping)
+    __cxa_exception * exception, std::type_info const * type, uno_Any * any, uno_Mapping * mapping)
 {
     assert(exception != 0);
-    OUString unoName(toUnoName(exception->exceptionType->name()));
+    assert(type != nullptr);
+    OUString unoName(toUnoName(type->name()));
     typelib_TypeDescription * td = 0;
     typelib_typedescription_getByName(&td, unoName.pData);
     if (td == 0) {
