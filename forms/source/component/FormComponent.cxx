@@ -1307,7 +1307,7 @@ void OBoundControlModel::suspendValueListening( )
     OSL_PRECOND( !m_sValuePropertyName.isEmpty(), "OBoundControlModel::suspendValueListening: don't have a value property!" );
     OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::suspendValueListening: I *am* not listening!" );
 
-if ( m_pAggPropMultiplexer )
+    if ( m_pAggPropMultiplexer )
         m_pAggPropMultiplexer->lock();
 }
 
