@@ -642,7 +642,6 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     else
     {
             TransferableDataHelper aDataHelper( rxTransferable );
-        {
             SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
             SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
             SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
@@ -707,7 +706,6 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
 
             PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
                 GetViewData().GetCurX(), GetViewData().GetCurY(), nullptr );
-        }
     }
 }
 

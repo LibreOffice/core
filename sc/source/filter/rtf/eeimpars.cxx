@@ -115,10 +115,10 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
     sal_uLong nProgress = 0;
 
     SCCOL nStartCol, nEndCol;
-        SCROW nStartRow, nEndRow;
-        SCTAB nTab;
-        SCROW nOverlapRowMax, nLastMergedRow;
-        SCCOL nMergeColAdd;
+    SCROW nStartRow, nEndRow;
+    SCTAB nTab;
+    SCROW nOverlapRowMax, nLastMergedRow;
+    SCCOL nMergeColAdd;
     nStartCol = maRange.aStart.Col();
     nStartRow = maRange.aStart.Row();
     nTab = maRange.aStart.Tab();

@@ -3571,8 +3571,8 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                 // "repeat" is handled with unformatted text (for performance reasons)
                 OUString aCellStr = rParam.mpEngine->GetText();
 
-               long nRepeatSize = 0;
-               SetEngineTextAndGetWidth( rParam, aCellStr, nRepeatSize, 0 );
+                long nRepeatSize = 0;
+                SetEngineTextAndGetWidth( rParam, aCellStr, nRepeatSize, 0 );
 
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;

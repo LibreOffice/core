@@ -234,8 +234,8 @@ std::size_t XclExpStream::Write( const void* pData, std::size_t nBytes )
                 else
                 {
                     nWriteRet = mrStrm.WriteBytes(pBuffer, nWriteLen);
-                bValid = (nWriteLen == nWriteRet);
-                OSL_ENSURE( bValid, "XclExpStream::Write - stream write error" );
+                    bValid = (nWriteLen == nWriteRet);
+                    OSL_ENSURE( bValid, "XclExpStream::Write - stream write error" );
                 }
                 pBuffer += nWriteRet;
                 nRet += nWriteRet;

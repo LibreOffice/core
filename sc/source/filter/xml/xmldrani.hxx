@@ -231,8 +231,10 @@ public:
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
     void AddSubTotalColumn(const css::sheet::SubTotalColumn& rSubTotalColumn)
-    { aSubTotalRule.aSubTotalColumns.realloc(aSubTotalRule.aSubTotalColumns.getLength() + 1);
-    aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn; }
+    {
+        aSubTotalRule.aSubTotalColumns.realloc(aSubTotalRule.aSubTotalColumns.getLength() + 1);
+        aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn;
+    }
 };
 
 class ScXMLSubTotalFieldContext : public ScXMLImportContext

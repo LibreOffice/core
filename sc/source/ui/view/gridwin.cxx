@@ -5238,7 +5238,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     long nStartX = aLogicEdit.Left();
 
-        long nTextWidth = pEngine->CalcTextWidth();
+    long nTextWidth = pEngine->CalcTextWidth();
     long nTextHeight = pEngine->GetTextHeight();
     if ( nTextWidth < nThisColLogic )
     {

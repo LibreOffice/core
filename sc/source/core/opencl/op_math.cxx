@@ -516,13 +516,13 @@ void OpCountIfs::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int loop;\n";
     GenTmpVariables(ss,vSubArguments);
 
-     ss<< "    int singleIndex =gid0;\n";
-     int m=0;
+    ss<< "    int singleIndex =gid0;\n";
+    int m=0;
 
-     std::stringstream tmpss;
+    std::stringstream tmpss;
 
-     for(size_t j=0;j<vSubArguments.size();j+=2,m++)
-     {
+    for(size_t j=0;j<vSubArguments.size();j+=2,m++)
+    {
         CheckSubArgumentIsNan(tmpss,vSubArguments,j);
         CheckSubArgumentIsNan(ss,vSubArguments,j+1);
         tmpss <<"    if(isequal(";
@@ -532,17 +532,17 @@ void OpCountIfs::GenSlidingWindowFunction(std::stringstream &ss,
         tmpss << "tmp";
         tmpss << j+1;
         tmpss << ")){\n";
-     }
+    }
     tmpss << "    tmp ++;\n";
     for(size_t j=0;j<vSubArguments.size();j+=2,m--)
-     {
-         for(int n = 0;n<m+1;n++)
+    {
+        for(int n = 0;n<m+1;n++)
         {
             tmpss << "    ";
         }
         tmpss<< "}\n";
-     }
-     UnrollDoubleVector(ss,tmpss,pCurDVR,nCurWindowSize);
+    }
+    UnrollDoubleVector(ss,tmpss,pCurDVR,nCurWindowSize);
 
     ss << "return tmp;\n";
     ss << "}";
@@ -856,11 +856,11 @@ void OpAverageIfs::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int count=0;\n";
     ss << "    int loop;";
     GenTmpVariables(ss,vSubArguments);
-     ss<< "    int singleIndex =gid0;\n";
-     int m=0;
-     std::stringstream tmpss;
-     for(size_t j=1;j<vSubArguments.size();j+=2,m++)
-     {
+    ss<< "    int singleIndex =gid0;\n";
+    int m=0;
+    std::stringstream tmpss;
+    for(size_t j=1;j<vSubArguments.size();j+=2,m++)
+    {
         CheckSubArgumentIsNan(tmpss,vSubArguments,j);
         CheckSubArgumentIsNan(ss,vSubArguments,j+1);
         tmpss <<"    if(isequal(";
@@ -870,13 +870,13 @@ void OpAverageIfs::GenSlidingWindowFunction(std::stringstream &ss,
         tmpss << "tmp";
         tmpss << j+1;
         tmpss << ")){\n";
-     }
-     CheckSubArgumentIsNan(tmpss,vSubArguments,0);
+    }
+    CheckSubArgumentIsNan(tmpss,vSubArguments,0);
     tmpss << "    tmp += tmp0;\n";
     tmpss << "    count++;\n";
     for(size_t j=1;j<vSubArguments.size();j+=2,m--)
      {
-         for(int n = 0;n<m+1;n++)
+        for(int n = 0;n<m+1;n++)
         {
             tmpss << "    ";
         }
@@ -885,10 +885,10 @@ void OpAverageIfs::GenSlidingWindowFunction(std::stringstream &ss,
 
     UnrollDoubleVector(ss,tmpss,pCurDVR,nCurWindowSize);
 
-     ss << "    if(count!=0)\n";
-     ss << "        tmp=tmp/count;\n";
-     ss << "    else\n";
-     ss << "        tmp= 0 ;\n";
+    ss << "    if(count!=0)\n";
+    ss << "        tmp=tmp/count;\n";
+    ss << "    else\n";
+    ss << "        tmp= 0 ;\n";
     ss << "return tmp;\n";
     ss << "}";
 }
@@ -1364,8 +1364,8 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-     ss << "    return 0.5 * log(1 + 2 * pown(arg0 - 1.0, -1));\n";
-     ss << "}";
+    ss << "    return 0.5 * log(1 + 2 * pown(arg0 - 1.0, -1));\n";
+    ss << "}";
 }
 void OpArcSin::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
@@ -2872,7 +2872,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
             const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
                 formula::DoubleVectorRefToken *>(tmpCur2);
             unsigned paraThreeWidth = pCurDVR2->GetArrays().size();
-             if(paraThreeWidth > 1)
+            if(paraThreeWidth > 1)
             {
                 throw Unhandled(__FILE__, __LINE__);
             }

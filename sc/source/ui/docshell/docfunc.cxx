@@ -1201,7 +1201,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideNote>( rDocShell, rPos, bShow ) );
 
-     rDoc.SetStreamValid(rPos.Tab(), false);
+    rDoc.SetStreamValid(rPos.Tab(), false);
 
     ScTabView::OnLOKNoteStateChanged(pNote);
 
@@ -2107,7 +2107,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             while( !qIncreaseRange.empty() )
             {
                 ScRange aRange = qIncreaseRange.back();
-                 ScCellMergeOption aMergeOption(
+                ScCellMergeOption aMergeOption(
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
                 MergeCells(aMergeOption, false, true, true);
