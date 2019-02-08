@@ -1196,10 +1196,10 @@ Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents(
     if ( m_xEventAttacher.is() )
     {
         aReturn = m_xEventAttacher->getScriptEvents( nIndex );
-            if ( lcl_hasVbaEvents( aReturn ) )
-            {
-                aReturn = lcl_stripVbaEvents( aReturn );
-            }
+        if ( lcl_hasVbaEvents( aReturn ) )
+        {
+            aReturn = lcl_stripVbaEvents( aReturn );
+        }
     }
     return aReturn;
 }
@@ -1287,7 +1287,7 @@ OFormComponents::~OFormComponents()
 void OFormComponents::disposing()
 {
     OInterfaceContainer::disposing();
-     ::cppu::OComponentHelper::disposing();
+    ::cppu::OComponentHelper::disposing();
     m_xParent = nullptr;
 }
 
