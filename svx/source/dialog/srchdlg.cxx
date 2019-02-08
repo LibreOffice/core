@@ -2125,7 +2125,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges.get() ));
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog(GetFrameWeld(), *pSearchList, pImpl->pRanges.get()));
     executeSubDialog(pDlg.get());
     PaintAttrText_Impl();
 }
