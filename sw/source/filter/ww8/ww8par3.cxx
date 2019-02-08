@@ -1742,18 +1742,11 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
                 rStyleInf.m_nLFOIndex  = nCurrentLFO;
                 rStyleInf.m_nListLevel = nCurrentLevel;
 
-                if (
-                    (USHRT_MAX > nCurrentLFO) &&
-                    (WW8ListManager::nMaxLevel > nCurrentLevel)
-                   )
-                {
-                    std::vector<sal_uInt8> aParaSprms;
-                    SwNumRule *pNmRule =
-                        m_xLstManager->GetNumRuleForActivation(nCurrentLFO,
-                            nCurrentLevel, aParaSprms);
-                    if (pNmRule)
-                        UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
-                }
+                std::vector<sal_uInt8> aParaSprms;
+                SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
+                    nCurrentLFO, nCurrentLevel, aParaSprms);
+                if (pNmRule)
+                    UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
             }
         }
     }
@@ -1942,11 +1935,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 
         if (WW8ListManager::nMaxLevel <= m_nListLevel )
             m_nListLevel = WW8ListManager::nMaxLevel;
-        else if
-           (
-             (USHRT_MAX > m_nLFOPosition) &&
-             (WW8ListManager::nMaxLevel > m_nListLevel)
-           )
+        else if (USHRT_MAX > m_nLFOPosition)
         {
             RegisterNumFormat(m_nLFOPosition, m_nListLevel);
             m_nLFOPosition = USHRT_MAX;

@@ -2426,9 +2426,8 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
     {
         SwTextNode& rAnchorTextNode =
             dynamic_cast<SwTextNode&>(_rFrameFormat.GetAnchor().GetContentAnchor()->nNode.GetNode());
-        const SvxFormatBreakItem* pBreak = &(ItemGet<SvxFormatBreakItem>(rAnchorTextNode, RES_BREAK));
-        if ( pBreak &&
-             pBreak->GetBreak() == SvxBreak::ColumnBefore )
+        const SvxFormatBreakItem& rBreak = ItemGet<SvxFormatBreakItem>(rAnchorTextNode, RES_BREAK);
+        if (rBreak.GetBreak() == SvxBreak::ColumnBefore)
         {
             bConvDueToAnchoredAtColBreakPara = true;
         }

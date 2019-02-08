@@ -211,7 +211,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             bool bSetModified = true;
 
-            if (pArgs && pArgs->Count() == 1)
+            if (pArgs->Count() == 1)
             {
                 bSetModified = static_cast<const SfxBoolItem&>(pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }

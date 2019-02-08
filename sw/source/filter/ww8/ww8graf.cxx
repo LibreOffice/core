@@ -639,8 +639,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                     break;
                 }
             }
-            else if ( aRes.nSprmId && (
-                (eFTN >  aRes.nSprmId) || (0x0800 <= aRes.nSprmId) ) )
+            else if ((eFTN > aRes.nSprmId) || (0x0800 <= aRes.nSprmId))
             {
                 // Here place them onto our usual stack and we will pop them
                 // off and convert them later
