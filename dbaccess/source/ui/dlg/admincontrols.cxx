@@ -28,101 +28,6 @@
 namespace dbaui
 {
 
-    // TextResetOperatorEventFilter
-    class TextResetOperatorEventFilter : public ::svt::IWindowEventFilter
-    {
-    public:
-        TextResetOperatorEventFilter()
-        {
-        }
-
-        // IWindowEventFilter
-        virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const override
-        {
-            return  ( _rEvent.GetId() == VclEventId::WindowEnabled )
-                ||  ( _rEvent.GetId() == VclEventId::WindowDisabled )
-                ||  ( _rEvent.GetId() == VclEventId::EditModify );
-        }
-    };
-
-    // TextResetOperator
-    class TextResetOperator :public ::svt::IWindowOperator
-    {
-    public:
-        explicit TextResetOperator( const OUString& _rDisabledText )
-            :m_sDisabledText( _rDisabledText )
-        {
-        }
-
-        // IWindowOperator
-        virtual void operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const override;
-
-    private:
-        const OUString    m_sDisabledText;
-              OUString    m_sUserText;
-    };
-
-    void TextResetOperator::operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const
-    {
-        OSL_ENSURE( _rTrigger.GetWindow() == &_rOperateOn, "TextResetOperator::operateOn: you're misusing this implementation!" );
-
-        switch ( _rTrigger.GetId() )
-        {
-        case VclEventId::NONE:
-            // initial call
-            const_cast< TextResetOperator* >( this )->m_sUserText = _rTrigger.GetWindow()->GetText();
-            break;
-
-        case VclEventId::EditModify:
-            if ( _rTrigger.GetWindow()->IsEnabled() )
-                const_cast< TextResetOperator* >( this )->m_sUserText = _rTrigger.GetWindow()->GetText();
-            break;
-
-        case VclEventId::WindowEnabled:
-            _rOperateOn.SetText( m_sUserText );
-            break;
-
-        case VclEventId::WindowDisabled:
-            _rOperateOn.SetText( m_sDisabledText );
-            break;
-
-        default:
-            OSL_FAIL( "TextResetOperator::operateOn: unexpected event ID!" );
-            // all those IDs should have been filtered out by payAttentionTo
-            break;
-        }
-    }
-
-    // TextResetOperatorController
-    class TextResetOperatorController_Base
-    {
-    protected:
-        explicit TextResetOperatorController_Base( const OUString& _rDisabledText )
-            :m_pEventFilter( new TextResetOperatorEventFilter )
-            ,m_pOperator( new TextResetOperator( _rDisabledText ) )
-        {
-        }
-
-        const ::svt::PWindowEventFilter& getEventFilter() const   { return m_pEventFilter; }
-        const ::svt::PWindowOperator&    getOperator() const      { return m_pOperator; }
-
-    private:
-        ::svt::PWindowEventFilter   m_pEventFilter;
-        ::svt::PWindowOperator      m_pOperator;
-    };
-
-    class TextResetOperatorController   :public TextResetOperatorController_Base
-                                ,public ::svt::DialogController
-    {
-    public:
-        TextResetOperatorController( vcl::Window& _rObservee, const OUString& _rDisabledText )
-            :TextResetOperatorController_Base( _rDisabledText )
-            ,::svt::DialogController( _rObservee, getEventFilter(), getOperator() )
-        {
-            addDependentWindow( _rObservee );
-        }
-    };
-
     // MySQLNativeSettings
     MySQLNativeSettings::MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink )
         :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" ),
@@ -142,6 +47,8 @@ namespace dbaui
         get(m_pSocket, "socket");
         get(m_pNamedPipe, "namedpipe");
 
+        m_pHostName->SetText("localhost");
+
         m_pDatabaseName->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
         m_pHostName->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
         m_pPort->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
@@ -149,14 +56,7 @@ namespace dbaui
         m_pNamedPipe->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
         m_pSocketRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
         m_pNamedPipeRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
-
-        m_aControlDependencies.enableOnRadioCheck( *m_pHostPortRadio, *m_pHostNameLabel, *m_pHostName, *m_pPortLabel, *m_pPort, *m_pDefaultPort );
-        m_aControlDependencies.enableOnRadioCheck( *m_pSocketRadio, *m_pSocket );
-        m_aControlDependencies.enableOnRadioCheck( *m_pNamedPipeRadio, *m_pNamedPipe );
-
-        m_aControlDependencies.addController( std::shared_ptr<svt::DialogController>(
-            new TextResetOperatorController( *m_pHostName, "localhost" )
-        ) );
+        m_pHostPortRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
 
         // sockets are available on Unix systems only, named pipes only on Windows
 #ifdef UNX
@@ -170,12 +70,36 @@ namespace dbaui
 
     IMPL_LINK(MySQLNativeSettings, RadioToggleHdl, RadioButton&, rRadioButton, void)
     {
-        m_aControlModificationLink.Call(&rRadioButton);
+        if (&rRadioButton == &*m_pSocketRadio || &rRadioButton == &*m_pNamedPipeRadio)
+            m_aControlModificationLink.Call(&rRadioButton);
+        bool bSelected = rRadioButton.IsChecked();
+        if (&rRadioButton == &*m_pHostPortRadio)
+        {
+            m_pHostNameLabel->Enable(bSelected);
+            m_pHostName->Enable(bSelected);
+            m_pPortLabel->Enable(bSelected);
+            m_pPort->Enable(bSelected);
+            m_pDefaultPort->Enable(bSelected);
+            if (bSelected)
+                m_pHostName->SetText(m_sHostNameUserText);
+            else
+                m_pHostName->SetText("localhost");
+        }
+        else if (&rRadioButton == &*m_pSocketRadio)
+            m_pSocket->Enable(bSelected);
+        else if (&rRadioButton == &*m_pNamedPipeRadio)
+            m_pNamedPipe->Enable(bSelected);
     }
 
     IMPL_LINK(MySQLNativeSettings, EditModifyHdl, Edit&, rEdit, void)
     {
         m_aControlModificationLink.Call(&rEdit);
+
+        if (&rEdit == m_pHostName.get())
+        {
+            if (m_pHostName->IsEnabled())
+                m_sHostNameUserText = m_pHostName->GetText();
+        }
     }
 
     MySQLNativeSettings::~MySQLNativeSettings()

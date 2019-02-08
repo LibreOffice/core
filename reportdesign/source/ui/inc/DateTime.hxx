@@ -24,8 +24,6 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <svtools/dialogcontrolling.hxx>
-
 namespace rptui
 {
 class OReportController;

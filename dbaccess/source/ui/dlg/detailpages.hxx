@@ -30,7 +30,6 @@
 #include "TextConnectionHelper.hxx"
 #include "admincontrols.hxx"
 
-#include <svtools/dialogcontrolling.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class OCommonBehaviourTabPageFlags {
