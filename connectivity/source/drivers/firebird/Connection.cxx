@@ -636,9 +636,9 @@ void Connection::runBackupService(const short nAction)
     }
 
     isc_svc_handle aServiceHandle;
-        aServiceHandle = attachServiceManager();
+    aServiceHandle = attachServiceManager();
 
-        if (isc_service_start(aStatusVector,
+    if (isc_service_start(aStatusVector,
                             &aServiceHandle,
                             nullptr,
                             aRequest.getLength(),

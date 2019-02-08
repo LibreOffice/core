@@ -212,7 +212,7 @@ OUString columnMetaData2SDBCX(
 //         pBase->setPropertyValue_NoBroadcast_public(
 //             st.HELP_TEXT, makeAny( xRow->getString( DESCRIPTION ) ) );
 //     else // for key columns, etc. ...
-        pBase->setPropertyValue_NoBroadcast_public(
+    pBase->setPropertyValue_NoBroadcast_public(
             st.DESCRIPTION, makeAny( xRow->getString( DESCRIPTION ) ) );
 
 

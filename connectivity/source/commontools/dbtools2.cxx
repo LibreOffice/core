@@ -939,7 +939,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
         );
     }
 
-   return nLen;
+    return nLen;
 }
 static OUString lcl_getReportEngines()
 {

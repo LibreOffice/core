@@ -126,8 +126,8 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
 
     OEvoabConnection* pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);
-        Reference< XConnection > xCon = pCon;
-        m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    Reference< XConnection > xCon = pCon;
+    m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
 }
