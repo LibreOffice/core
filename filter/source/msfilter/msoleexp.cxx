@@ -200,11 +200,11 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             aSeq[1].Name = "FilterName";
             aSeq[1].Value <<= pExpFilter->GetName();
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-        try
-        {
-            xStor->storeToURL( "private:stream", aSeq );
-        }
-        catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+            try
+            {
+                xStor->storeToURL( "private:stream", aSeq );
+            }
+            catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
             tools::SvRef<SotStorage> xOLEStor = new SotStorage( pStream, true );
             xOLEStor->CopyTo( &rDestStg );

@@ -341,7 +341,7 @@ class stlcomp_removeIfMatchFlags
             try
             {
                 const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
-                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32(0)));
+                sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32(0)));
 
                 bool bMatch = false;
                 if (m_bIFlags)
