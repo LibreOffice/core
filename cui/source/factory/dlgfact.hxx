@@ -773,7 +773,7 @@ public:
                                                                                   TransliterationFlags nInitialFlags) override;
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) override;
-    virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(vcl::Window* pParent, const OUString& rName) override;
+    virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName) override;
     virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
                                             const OUString& rName, const OUString& rDesc) override;
     // #i68101#

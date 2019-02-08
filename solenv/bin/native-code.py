@@ -514,7 +514,6 @@ custom_widgets = [
     'SvxCheckListBox',
     'SvxColorListBox',
     'SvxColorValueSet',
-    'SvxDictEdit',
     'SvxFillAttrBox',
     'SvxFillTypeBox',
     'SvxFontPrevWindow',
