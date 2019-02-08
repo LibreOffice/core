@@ -2826,16 +2826,15 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if ( !rNode.GetpSwAttrSet() ||
                  SfxItemState::SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
             {
-                const SvxFormatBreakItem* pBreakAtParaStyle =
-                    &(ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK));
-                if ( pBreakAtParaStyle &&
-                     pBreakAtParaStyle->GetBreak() == SvxBreak::PageAfter )
+                const SvxFormatBreakItem& rBreakAtParaStyle
+                    = ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK);
+                if (rBreakAtParaStyle.GetBreak() == SvxBreak::PageAfter)
                 {
                     if ( !pTmpSet )
                     {
                         pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
                     }
-                    pTmpSet->Put( *pBreakAtParaStyle );
+                    pTmpSet->Put(rBreakAtParaStyle);
                 }
                 else if( pTmpSet )
                 {   // Even a pagedesc item is set, the break item can be set 'NONE',

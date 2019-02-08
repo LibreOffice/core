@@ -227,8 +227,7 @@ ErrCode SwHTMLWriter::WriteStream()
     if (pPasteEnv)
     {
         OUString aPasteStr;
-        if (pPasteEnv
-            && osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pPasteEnv), aPasteStr)
+        if (osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pPasteEnv), aPasteStr)
                    == osl::FileBase::E_None)
         {
             pPasteStream.reset(new SvFileStream(aPasteStr, StreamMode::WRITE));

@@ -787,10 +787,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
             m_bNoLnNumYet = false;
         }
 
-        if (
-            (0 < rSection.maSep.lnnMin) ||
-            (bRestartLnNumPerSection && !m_bNoLnNumYet)
-           )
+        if ((0 < rSection.maSep.lnnMin) || bRestartLnNumPerSection)
         {
             SwFormatLineNumber aLN;
             if (const SwFormatLineNumber* pLN
@@ -802,7 +799,6 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
             NewAttr(aLN);
             m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LINENUMBER);
         }
-        m_bNoLnNumYet = false;
     }
 }
 

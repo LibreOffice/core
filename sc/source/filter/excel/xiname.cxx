@@ -175,7 +175,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, false, FT_RangeName );
 
         // --- auto or advanced filter ---
-        if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
+        if ((GetBiff() == EXC_BIFF8) && pTokArr)
         {
             ScRange aRange;
             if (pTokArr->IsReference(aRange, ScAddress()))

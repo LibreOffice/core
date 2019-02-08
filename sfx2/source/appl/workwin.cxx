@@ -1291,7 +1291,8 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                     if ( pCW->pCli )
                     {
                         // The window is a direct Child
-                        if ( bAllChildrenVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SfxChildAlignment::NOALIGNMENT ) )
+                        if ((IsDockingAllowed() && bInternalDockingAllowed)
+                            || pCW->pCli->eAlign == SfxChildAlignment::NOALIGNMENT)
                             pCW->pCli->nVisible |= SfxChildVisibility::NOT_HIDDEN;
                     }
                     else

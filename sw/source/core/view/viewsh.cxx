@@ -407,7 +407,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     }
                     if ( bPaint )
                     {
-                        if (GetWin() && GetWin()->SupportsDoubleBuffering())
+                        if (GetWin()->SupportsDoubleBuffering())
                             InvalidateWindows(aRect.SVRect());
                         else
                         {

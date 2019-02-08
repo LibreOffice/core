@@ -1581,10 +1581,10 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                     }
                 }
             }
-            else
+            else // pHdl != nullptr
             {
                 // move the handle
-                if ( pHdl && ( nX || nY ) )
+                if (nX || nY)
                 {
                     const Point aStartPoint( pHdl->GetPos() );
                     const Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );

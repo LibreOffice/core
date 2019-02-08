@@ -514,12 +514,11 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         if (pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy())
         {
             const ScChangeAction* p = pDelAction->GetNext();
-            bool bAll(false);
             sal_Int32 nSlavesCount (1);
-            while (!bAll && p)
+            while (p)
             {
-                if ( !p || p->GetType() != pDelAction->GetType() )
-                    bAll = true;
+                if (p->GetType() != pDelAction->GetType())
+                    break;
                 else
                 {
                     const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(p);
@@ -530,7 +529,7 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
                         p = p->GetNext();
                     }
                     else
-                        bAll = true;
+                        break;
                 }
             }
 

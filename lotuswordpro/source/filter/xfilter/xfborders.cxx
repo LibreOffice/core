@@ -80,7 +80,7 @@ void    XFBorder::SetWidth(double width)
         m_fWidthInner = width;
         m_bSameWidth = true;
     }
-    else if( m_bDouble && m_bSameWidth )
+    else if (m_bSameWidth)
     {
         m_fWidthInner = width;
         m_fWidthOuter = width;

@@ -2355,7 +2355,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     else
                         Read_HdFtText(nStart, nLen, pHdFtFormat);
                 }
-                else if (!bOk && pPrev)
+                else if (pPrev)
                     CopyPageDescHdFt(pPrev, pPD, nI);
 
                 m_bIsHeader = m_bIsFooter = false;
@@ -5165,7 +5165,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     }
     else // ordinary case
     {
-        if (m_bNewDoc && m_pStg && !pGloss) /*meaningless for a glossary */
+        if (m_bNewDoc && m_pStg) /*meaningless for a glossary */
         {
             m_pDocShell->SetIsTemplate( m_xWwFib->m_fDot ); // point at tgc record
             uno::Reference<document::XDocumentPropertiesSupplier> const
@@ -6434,7 +6434,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
                             if( nLen < nSL )
                                 break; // Not enough Bytes left
 
-                            if( 0x6A03 == nId && 0 < nLen )
+                            if (0x6A03 == nId)
                             {
                                 nPictureId = SVBT32ToUInt32(pSprm +
                                     aSprmParser.DistanceToData(nId));

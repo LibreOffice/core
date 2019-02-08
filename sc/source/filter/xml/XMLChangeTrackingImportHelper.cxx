@@ -524,7 +524,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         if (pChangeAction && pChangeAction->IsInsertType())
         {
             ScChangeActionIns* pInsAction = static_cast<ScChangeActionIns*>(pChangeAction);
-            if (pInsAction && pDelAct)
+            if (pDelAct)
                 pDelAct->SetCutOffInsert(pInsAction, static_cast<sal_Int16>(pAction->pInsCutOff->nPosition));
         }
         else
@@ -543,7 +543,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
             {
                 ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
-                if (pMoveAction && pDelAct)
+                if (pDelAct)
                     pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(rCutOff.nStartPosition),
                                         static_cast<sal_Int16>(rCutOff.nEndPosition));
             }
@@ -620,7 +620,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
                 if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && rDeleted.pCellInfo)
                 {
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
-                    if (pContentAct && rDeleted.pCellInfo)
+                    if (rDeleted.pCellInfo)
                     {
                         const ScCellValue& rCell = rDeleted.pCellInfo->CreateCell(pDoc);
                         if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
