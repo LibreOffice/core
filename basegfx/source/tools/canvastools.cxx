@@ -24,31 +24,21 @@
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
-#include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b3drange.hxx>
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/range/b2irectangle.hxx>
-#include <basegfx/range/b2ibox.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <limits>
 
 using namespace ::com::sun::star;
 

@@ -1,0 +1,27 @@
+---
+assumeFilename: basegfx/source/point/b2dpoint.cxx
+blacklist:
+    basegfx/source/color/bcolortools.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/color/bcolortools.hxx
+    basegfx/source/polygon/b2dlinegeometry.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/polygon/b2dlinegeometry.hxx
+    basegfx/source/polygon/b3dpolypolygontools.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/polygon/b3dpolypolygontools.hxx
+    basegfx/source/polygon/b2dpolypolygoncutter.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/polygon/b2dpolypolygoncutter.hxx
+    basegfx/source/polygon/b3dpolygontools.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/polygon/b3dpolygontools.hxx
+    basegfx/source/range/b2drangeclipper.cxx:
+    # Needed to avoid loplugin:unreffun error
+    - basegfx/range/b2drangeclipper.hxx
+    basegfx/source/tools/canvastools.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/utils/canvastools.hxx
+    basegfx/source/tools/numbertools.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - basegfx/utils/tools.hxx

@@ -19,7 +19,6 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace basegfx

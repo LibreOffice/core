@@ -21,8 +21,6 @@
 #include <basegfx/range/b2drange.hxx>
 
 #include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace basegfx
 {

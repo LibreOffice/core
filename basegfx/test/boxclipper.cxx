@@ -22,17 +22,12 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/curve/b2dcubicbezier.hxx>
-#include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <comphelper/random.hxx>
 
 #include "boxclipper.hxx"

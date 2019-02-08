@@ -24,9 +24,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/tuple/b3ituple.hxx>
 #include <numeric>
 

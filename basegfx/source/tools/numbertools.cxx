@@ -15,8 +15,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 
-#include <utility>
-
 namespace basegfx { namespace utils
 {
     B2DPolyPolygon number2PolyPolygon(double fValue, sal_Int32 nTotalDigits, sal_Int32 nDecPlaces, bool bLitSegments)
