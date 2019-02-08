@@ -665,7 +665,7 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindow::getTabProps( ::
             throw css::lang::IndexOutOfBoundsException();
 
         const OUString& aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
-                  nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
+        nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
 
         css::uno::Sequence< css::beans::NamedValue > aSeq
         {

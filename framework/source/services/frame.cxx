@@ -868,9 +868,10 @@ void SAL_CALL XFrameImpl::setCreator( const css::uno::Reference< css::frame::XFr
     checkDisposed();
 
     /* SAFE { */
+    {
         SolarMutexClearableGuard aWriteLock;
-            m_xParent = xCreator;
-        aWriteLock.clear();
+        m_xParent = xCreator;
+    }
     /* } SAFE */
 
     css::uno::Reference< css::frame::XDesktop > xIsDesktop( xCreator, css::uno::UNO_QUERY );
@@ -1172,8 +1173,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
                     xTarget = xParent;
                 else
                 {
-                    sal_Int32 nRightFlags  = nSearchFlags;
-                              nRightFlags &= ~css::frame::FrameSearchFlag::CHILDREN;
+                    sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CHILDREN;
                     xTarget = xParent->findFrame(sTargetFrameName, nRightFlags);
                 }
             }

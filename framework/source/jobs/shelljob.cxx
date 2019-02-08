@@ -124,9 +124,9 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
                             const css::uno::Sequence< OUString >& lArguments    ,
                                   bool                            bCheckExitCode)
 {
-          ::rtl_uString**  pArgs    = nullptr;
-    const ::sal_Int32      nArgs    = lArguments.getLength ();
-          oslProcess       hProcess(nullptr);
+    ::rtl_uString**   pArgs    = nullptr;
+    const ::sal_Int32 nArgs    = lArguments.getLength ();
+    oslProcess        hProcess(nullptr);
 
     if (nArgs > 0)
         pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< OUString* >(lArguments.getConstArray()));

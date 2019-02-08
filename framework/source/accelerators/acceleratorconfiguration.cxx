@@ -864,7 +864,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
-        return false;
+    return false;
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
@@ -918,8 +918,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
     css::util::ChangesEvent aReceivedEvents( aEvent );
     const sal_Int32 c = aReceivedEvents.Changes.getLength();
-          sal_Int32 i = 0;
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         const css::util::ElementChange& aChange  =   aReceivedEvents.Changes[i];
 

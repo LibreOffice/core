@@ -4075,7 +4075,7 @@ awt::Point ToolbarLayoutManager::getToolbarPos( const OUString& rResourceURL )
 
 void ToolbarLayoutManager::setToolbarSize( const OUString& rResourceURL, const awt::Size& aSize )
 {
-  uno::Reference< awt::XWindow2 > xWindow( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow2 > xWindow( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
     uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
     UIElement aUIElement = implts_findToolbar( rResourceURL );
 
