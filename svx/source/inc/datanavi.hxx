@@ -373,7 +373,6 @@ namespace svxform
                                                   const SfxPoolItem* pState ) override;
     };
 
-
     class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
     {
     public:
@@ -382,36 +381,9 @@ namespace svxform
         SFX_DECL_CHILDWINDOW( DataNavigatorManager );
     };
 
-
-    class AddDataItemDialog : public ModalDialog
+    class AddDataItemDialog : public weld::GenericDialogController
     {
     private:
-
-        VclPtr<VclFrame>    m_pItemFrame;
-        VclPtr<FixedText>   m_pNameFT;
-        VclPtr<Edit>        m_pNameED;
-        VclPtr<FixedText>   m_pDefaultFT;
-        VclPtr<Edit>        m_pDefaultED;
-        VclPtr<PushButton>  m_pDefaultBtn;
-
-        VclPtr<VclFrame>    m_pSettingsFrame;
-
-        VclPtr<FixedText>   m_pDataTypeFT;
-        VclPtr<ListBox>     m_pDataTypeLB;
-
-        VclPtr<CheckBox>    m_pRequiredCB;
-        VclPtr<PushButton>  m_pRequiredBtn;
-        VclPtr<CheckBox>    m_pRelevantCB;
-        VclPtr<PushButton>  m_pRelevantBtn;
-        VclPtr<CheckBox>    m_pConstraintCB;
-        VclPtr<PushButton>  m_pConstraintBtn;
-        VclPtr<CheckBox>    m_pReadonlyCB;
-        VclPtr<PushButton>  m_pReadonlyBtn;
-        VclPtr<CheckBox>    m_pCalculateCB;
-        VclPtr<PushButton>  m_pCalculateBtn;
-
-        VclPtr<OKButton>    m_pOKBtn;
-
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                             m_xUIHelper;
         css::uno::Reference< css::beans::XPropertySet >
@@ -426,9 +398,31 @@ namespace svxform
         OUString const            m_sFL_Binding;
         OUString const            m_sFT_BindingExp;
 
-        DECL_LINK(    CheckHdl, Button*, void );
-        DECL_LINK(    ConditionHdl, Button*, void );
-        DECL_LINK(    OKHdl, Button*, void);
+        std::unique_ptr<weld::Frame> m_xItemFrame;
+        std::unique_ptr<weld::Label> m_xNameFT;
+        std::unique_ptr<weld::Entry> m_xNameED;
+        std::unique_ptr<weld::Label> m_xDefaultFT;
+        std::unique_ptr<weld::Entry> m_xDefaultED;
+        std::unique_ptr<weld::Button> m_xDefaultBtn;
+        std::unique_ptr<weld::Widget> m_xSettingsFrame;
+        std::unique_ptr<weld::Label> m_xDataTypeFT;
+        std::unique_ptr<weld::ComboBox> m_xDataTypeLB;
+        std::unique_ptr<weld::CheckButton> m_xRequiredCB;
+        std::unique_ptr<weld::Button> m_xRequiredBtn;
+        std::unique_ptr<weld::CheckButton> m_xRelevantCB;
+        std::unique_ptr<weld::Button> m_xRelevantBtn;
+        std::unique_ptr<weld::CheckButton> m_xConstraintCB;
+        std::unique_ptr<weld::Button> m_xConstraintBtn;
+        std::unique_ptr<weld::CheckButton> m_xReadonlyCB;
+        std::unique_ptr<weld::Button> m_xReadonlyBtn;
+        std::unique_ptr<weld::CheckButton> m_xCalculateCB;
+        std::unique_ptr<weld::Button> m_xCalculateBtn;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+
+        void Check(weld::ToggleButton* pBox);
+        DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+        DECL_LINK(ConditionHdl, weld::Button&, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
 
         void                InitDialog();
         void                InitFromNode();
@@ -436,10 +430,9 @@ namespace svxform
 
     public:
         AddDataItemDialog(
-            vcl::Window* pParent, ItemNode* _pNode,
+            weld::Window* pParent, ItemNode* _pNode,
             const css::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
         virtual ~AddDataItemDialog() override;
-        virtual void dispose() override;
 
         void                InitText( DataItemType _eType );
     };
