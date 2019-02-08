@@ -2287,7 +2287,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         }
         else
             pS->WriteUChar( LINE|0x10 );
-    pS->WriteUChar( END ); //line
+        pS->WriteUChar( END ); //line
     }
 
     //After subscript mathtype will keep the size of
@@ -3259,7 +3259,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
                 pS->WriteUChar( 2 );
                 break;
             }
-        pS->Seek(nPos);
+            pS->Seek(nPos);
         }
     }
 }

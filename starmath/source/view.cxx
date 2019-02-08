@@ -700,11 +700,11 @@ SmViewShell * SmCmdBoxWindow::GetView()
 
 void SmCmdBoxWindow::Resize()
 {
-     tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
-     aRect.AdjustLeft(CMD_BOX_PADDING );
-     aRect.AdjustTop(CMD_BOX_PADDING_TOP );
-     aRect.AdjustRight( -(CMD_BOX_PADDING) );
-     aRect.AdjustBottom( -(CMD_BOX_PADDING) );
+    tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
+    aRect.AdjustLeft(CMD_BOX_PADDING );
+    aRect.AdjustTop(CMD_BOX_PADDING_TOP );
+    aRect.AdjustRight( -(CMD_BOX_PADDING) );
+    aRect.AdjustBottom( -(CMD_BOX_PADDING) );
 
     DecorationView aView(this);
     aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
