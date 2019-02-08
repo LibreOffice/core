@@ -978,9 +978,9 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
             BasicManager* pBasMgr = rDocument.getBasicManager();
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
-                if ( pBasic )
-                    pModule = pBasic->FindModule( aModName );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            if ( pBasic )
+                pModule = pBasic->FindModule( aModName );
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
@@ -1074,9 +1074,9 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
             BasicManager* pBasMgr = rDocument.getBasicManager();
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
-                if ( pBasic )
-                    pModule = pBasic->FindModule( aModName );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            if ( pBasic )
+                pModule = pBasic->FindModule( aModName );
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,

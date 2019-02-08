@@ -160,7 +160,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
                     m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
                 }
 
-                 osl_atomic_decrement( &m_refCount );
+                osl_atomic_decrement( &m_refCount );
             }
         }
     }
@@ -1202,7 +1202,7 @@ void SbModule::Run( SbMethod* pMeth )
     }
     if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !GetSbData()->pInst )
             bQuit = true;
-        if ( bQuit )
+    if ( bQuit )
     {
         Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ) );
     }
@@ -1932,7 +1932,7 @@ SbMethod::SbMethod( const SbMethod& r )
     nDebugFlags  = r.nDebugFlags;
     nLine1       = r.nLine1;
     nLine2       = r.nLine2;
-        refStatics = r.refStatics;
+    refStatics = r.refStatics;
     mCaller          = r.mCaller;
     SetFlag( SbxFlagBits::NoModify );
 }

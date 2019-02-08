@@ -1137,7 +1137,7 @@ namespace basegfx
 
             if(aSource.areControlPointsUsed())
             {
-            const double fPrecisionFactor = 0.25;
+                const double fPrecisionFactor = 0.25;
                 aSource = adaptiveSubdivideByDistance( aSource, fLineWidth * fPrecisionFactor );
             }
 
