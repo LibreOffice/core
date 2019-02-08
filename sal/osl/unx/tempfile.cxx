@@ -149,7 +149,7 @@ static oslFileError osl_setup_base_directory_impl_(
     rtl_uString**  ppustr_base_dir,
     bool*      b_delete_on_close)
  {
-     oslFileError osl_error;
+    oslFileError osl_error;
 
     OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
 

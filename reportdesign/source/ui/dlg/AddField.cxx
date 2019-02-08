@@ -367,7 +367,7 @@ void OAddFieldWindow::Update()
                     m_aActions->EnableItem(m_aActions->GetItemId(i));
                 }
             }
-                OnSelectHdl(nullptr);
+            OnSelectHdl(nullptr);
         }
     }
     catch( const Exception& )

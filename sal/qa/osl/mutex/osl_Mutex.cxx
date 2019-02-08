@@ -145,7 +145,7 @@ protected:
         sal_Int8 nPos = pChain->pos;
         oslThreadIdentifier oId = getIdentifier( );
         //write data
-                sal_Int8 i;
+        sal_Int8 i;
         for ( i = 0; i < 5; i++ )
         {
             pChain->buffer[ nPos + i ] = oId;
@@ -409,8 +409,8 @@ namespace osl_Mutex
             if (bRes2)
                 aMutex.release();
 
-        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", !bRes1);
-        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", bRes2);
+            CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", !bRes1);
+            CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", bRes2);
         }
 
         CPPUNIT_TEST_SUITE(tryToAcquire);

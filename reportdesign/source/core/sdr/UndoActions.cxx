@@ -271,7 +271,7 @@ void OUndoGroupSectionAction::implReInsert( )
 
 void OUndoGroupSectionAction::implReRemove( )
 {
-        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
