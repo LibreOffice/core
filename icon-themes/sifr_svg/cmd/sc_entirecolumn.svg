@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
- <path
+  <path
      style="fill:#555753"
-     d="M 4.96875 1 L 5 2 L 1 2 L 1 15 L 5 15 L 5 16 L 11.03125 16 L 11 15 L 15 15 L 15 2 L 11 2 L 11 1 L 4.96875 1 z M 6 2 L 10 2 L 10 5 L 6 5 L 6 2 z M 2 3 L 5 3 L 5 5 L 5 6 L 2 6 L 2 3 z M 11 3 L 14 3 L 14 6 L 11 6 L 11 5 L 11 3 z M 6 6 L 10 6 L 10 7 L 10 10 L 10 11 L 6 11 L 6 10 L 6 7 L 6 6 z M 2 7 L 5 7 L 5 10 L 2 10 L 2 7 z M 11 7 L 14 7 L 14 10 L 11 10 L 11 7 z M 2 11 L 5 11 L 5 12 L 5 14 L 2 14 L 2 11 z M 11 11 L 14 11 L 14 14 L 11 14 L 11 12 L 11 11 z M 6 12 L 10 12 L 10 15 L 6 15 L 6 12 z "
+     d="M 3.96875,1 4,2 H 1 v 13 h 3 v 1 h 8.03125 L 12,15 h 3 V 2 H 12 V 1 Z M 2,3 H 4 V 5 6 H 2 Z m 4,0 h 4 V 5 H 6 Z m 6,0 h 2 V 6 H 12 V 5 Z M 6,7 h 4 v 3 H 6 Z M 2,7 h 2 v 3 H 2 Z m 10,0 h 2 v 3 H 12 Z M 2,11 h 2 v 1 2 H 2 Z m 10,0 h 2 v 3 h -2 v -2 z m -6,1 h 4 v 2 H 6 Z"
      />
- <path
-     style="fill:#555753;opacity:0.35"
-     d="M 2 3 L 2 6 L 5 6 L 5 5 L 5 3 L 2 3 z M 11 3 L 11 6 L 14 6 L 14 3 L 11 3 z M 2 7 L 2 10 L 5 10 L 5 7 L 2 7 z M 11 7 L 11 10 L 14 10 L 14 7 L 11 7 z M 2 11 L 2 14 L 5 14 L 5 12 L 5 11 L 2 11 z M 11 11 L 11 12 L 11 14 L 14 14 L 14 11 L 11 11 z "
-     />
- <path
-     style="fill:#ffffff"
-     d="M 6 2 L 6 5 L 10 5 L 10 2 L 6 2 z M 6 6 L 6 11 L 10 11 L 10 6 L 6 6 z M 6 12 L 6 15 L 10 15 L 10 12 L 6 12 z "
-     />
- </svg>
+</svg>

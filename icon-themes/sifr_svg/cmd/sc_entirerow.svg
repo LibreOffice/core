@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
- <path
+  <path
      style="fill:#555753"
-     d="M 1,1 V 5 L 0,5.0625 V 11 h 1 v 4 h 13 v -4 l 1,-0.02734 V 5 H 14 V 1 Z M 2,2 H 5 V 5 H 4 2 Z M 6,2 H 9 V 5 H 6 Z m 4,0 h 3 V 5 H 11 10 Z M 1,6 h 3 v 4 H 1 Z m 4,0 h 5 v 4 H 5 Z m 6,0 h 3 v 4 h -3 z m -9,5 h 2 1 v 3 H 2 Z m 4,0 h 3 v 3 H 6 Z m 4,0 h 1 2 v 3 h -3 z"
+     d="M 1,1 V 4 H 0 v 8 h 1 v 3 h 13 v -3 l 1,-0.02734 V 4 H 14 V 1 Z M 2,2 H 5 V 4 H 2 Z M 6,2 H 9 V 4 H 6 Z m 4,0 h 3 V 4 H 10 Z M 2,6 h 2 v 4 H 2 Z m 4,0 h 3 v 4 H 6 Z m 5,0 h 2 v 4 h -2 z m -9,6 h 3 v 2 H 2 Z m 4,0 h 3 v 2 H 6 Z m 4,0 h 3 v 2 h -3 z"
      />
- <path
-     style="fill:#555753;opacity:0.35"
-     d="m 1,6 v 4 H 4 V 6 Z m 4,0 v 4 h 5 V 6 Z m 6,0 v 4 h 3 V 6 Z"
-     />
- <path
-     style="fill:#ffffff"
-     d="M 2,2 V 5 H 4 5 V 2 Z M 6,2 V 5 H 9 V 2 Z m 4,0 v 3 h 3 V 2 Z m -8,9 v 3 H 5 V 11 H 4 Z m 4,0 v 3 h 3 v -3 z m 4,0 v 3 h 3 v -3 z"
-     />
- </svg>
+</svg>
