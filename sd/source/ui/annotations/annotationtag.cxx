@@ -356,7 +356,7 @@ bool AnnotationTag::Command( const CommandEvent& rCEvt )
         if( pWindow )
         {
             ::tools::Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
-               mrManager.ExecuteAnnotationContextMenu( mxAnnotation, pWindow, aContextRect );
+            mrManager.ExecuteAnnotationContextMenu( mxAnnotation, pWindow, aContextRect );
             return true;
         }
     }

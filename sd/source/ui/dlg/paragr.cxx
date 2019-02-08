@@ -180,7 +180,7 @@ SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     else
         RemoveTabPage( "labelNUMBERING" );
 
-      AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+    AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
 void SdParagraphDlg::PageCreated(const OString& rId, SfxTabPage &rPage)

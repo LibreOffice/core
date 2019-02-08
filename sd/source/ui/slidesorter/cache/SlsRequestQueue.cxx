@@ -113,7 +113,7 @@ void RequestQueue::AddRequest (
 #if OSL_DEBUG_LEVEL >=2
     bool bRemoved =
 #endif
-        RemoveRequest(aKey);
+    RemoveRequest(aKey);
 
     // The priority of the request inside its priority class is defined by
     // the page number.  This ensures a strict top-to-bottom, left-to-right

@@ -269,14 +269,14 @@ void DocumentHelper::ProvideStyles (
     if( !aCreatedStyles.empty() )
     {
         SfxUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
-       if (pUndoManager != nullptr)
-       {
-           pUndoManager->AddUndoAction (
+        if (pUndoManager != nullptr)
+        {
+            pUndoManager->AddUndoAction (
                std::make_unique<SdMoveStyleSheetsUndoAction>(
                    &rTargetDocument,
                    aCreatedStyles,
                    true));
-       }
+        }
     }
 }
 

@@ -1407,7 +1407,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 aSeq.realloc( nSeqIndex );
                 aAny <<= aSeq;
-            break;
+                break;
             }
         case WID_MODEL_INTEROPGRABBAG:
             getGrabBagItem(aAny);
@@ -2191,10 +2191,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                         if( xShapes.is() && xShapes->getCount() )
                         {
-                        SdrPageView* pPV = nullptr;
+                            SdrPageView* pPV = nullptr;
 
-                        ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-                                            pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
+                            ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
+                                                pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
 
                             for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
                             {

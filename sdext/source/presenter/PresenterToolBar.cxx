@@ -1679,7 +1679,7 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
         if (mpFont->mxFont.is())
         {
             rendering::StringContext aContext (msText, 0, msText.getLength());
-                Reference<rendering::XTextLayout> xLayout (
+            Reference<rendering::XTextLayout> xLayout (
                 mpFont->mxFont->createTextLayout(
                     aContext,
                     rendering::TextDirection::WEAK_LEFT_TO_RIGHT,

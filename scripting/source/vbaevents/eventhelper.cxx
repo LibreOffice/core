@@ -577,7 +577,7 @@ public:
             }
         }
         OPropertyContainer::setFastPropertyValue( nHandle, rValue );
-    if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
+        if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
             setShellFromModel();
     }
 

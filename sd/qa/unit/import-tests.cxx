@@ -1780,7 +1780,7 @@ void SdImportTest::testTdf104445()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104445.pptx"), PPTX);
 
     // First shape should not have bullet
-   {
+    {
         uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef));
         uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
         CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());

@@ -706,7 +706,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
             // before we set the style sheet we need to preserve the bullet item
             // since all items will be deleted while setting a new style sheet
-             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( nPara ) );
+            SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( nPara ) );
 
             pOutliner->SetStyleSheet( nPara, pStyleSheet );
 
@@ -1227,7 +1227,7 @@ void OutlineView::SetActualPage( SdPage const * pActual )
  */
 SfxStyleSheet* OutlineView::GetStyleSheet() const
 {
-     ::sd::Window* pActWin = mrOutlineViewShell.GetActiveWindow();
+    ::sd::Window* pActWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView* pOlView = GetViewByWindow(pActWin);
     SfxStyleSheet* pResult = pOlView->GetStyleSheet();
     return pResult;
