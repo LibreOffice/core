@@ -86,8 +86,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
                     {
-                        OString tmp("'-nD', please check");
-                            tmp += " your input '" + OString(av[i]) + "'";
+                        OString tmp("'-nD', please check your input '" + OString(av[i]) + "'");
                         throw IllegalArgument(tmp);
                     }
 
@@ -189,8 +188,8 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
             if (av[i][0] == '@')
             {
                 FILE* cmdFile = fopen(av[i]+1, "r");
-                  if( cmdFile == nullptr )
-                  {
+                if( cmdFile == nullptr )
+                {
                     fprintf(stderr, "%s", prepareHelp().getStr());
                     ret = false;
                 } else
