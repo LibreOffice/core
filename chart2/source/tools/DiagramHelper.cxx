@@ -923,7 +923,7 @@ static void lcl_generateAutomaticCategoriesFromChartType(
     if(!xChartType.is())
         return;
     OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
-        Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
+    Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
     if( xSeriesCnt.is() )
     {
         Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
