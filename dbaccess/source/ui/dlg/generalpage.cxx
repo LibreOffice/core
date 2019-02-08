@@ -577,12 +577,6 @@ namespace dbaui
             m_pFT_DocListLabel->Enable( false );
             m_pLB_DocumentList->Enable( false );
         }
-        else
-        {
-            m_aControlDependencies.enableOnRadioCheck( *m_pRB_CreateDatabase, *m_pEmbeddedDBType, *m_pFT_EmbeddedDBLabel );
-            m_aControlDependencies.enableOnRadioCheck( *m_pRB_ConnectDatabase, *m_pDatasourceType );
-            m_aControlDependencies.enableOnRadioCheck( *m_pRB_OpenExistingDatabase, *m_pPB_OpenDatabase, *m_pFT_DocListLabel, *m_pLB_DocumentList );
-        }
 
         m_pLB_DocumentList->SetDropDownLineCount( 20 );
         if ( m_pLB_DocumentList->GetEntryCount() )
@@ -675,12 +669,34 @@ namespace dbaui
         m_aCreationModeHandler.Call( *this );
 
         OnEmbeddedDBTypeSelected( *m_pEmbeddedDBType );
+
+        bool bValid, bReadonly;
+        getFlags( GetItemSet(), bValid, bReadonly );
+        if ( bValid && !bReadonly )
+        {
+            m_pEmbeddedDBType->Enable(m_pRB_CreateDatabase->IsChecked());
+            m_pFT_EmbeddedDBLabel->Enable(m_pRB_CreateDatabase->IsChecked());
+        }
     }
 
-    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
+    IMPL_LINK( OGeneralPageWizard, OnSetupModeSelected, Button*, pButton, void )
     {
         m_aCreationModeHandler.Call( *this );
         OnDatasourceTypeSelected(*m_pDatasourceType);
+
+        bool bValid, bReadonly;
+        getFlags( GetItemSet(), bValid, bReadonly );
+        if ( bValid && !bReadonly )
+        {
+            if (pButton == m_pRB_ConnectDatabase.get())
+                m_pDatasourceType->Enable(m_pRB_ConnectDatabase->IsChecked());
+            else if (pButton == m_pRB_OpenExistingDatabase.get())
+            {
+                m_pPB_OpenDatabase->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+                m_pFT_DocListLabel->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+                m_pLB_DocumentList->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+            }
+        }
     }
 
     IMPL_LINK_NOARG( OGeneralPageWizard, OnDocumentSelected, ListBox&, void )

@@ -7031,7 +7031,6 @@ include/svtools/controldims.hxx
 include/svtools/ctrlbox.hxx
 include/svtools/ctrltool.hxx
 include/svtools/dialogclosedlistener.hxx
-include/svtools/dialogcontrolling.hxx
 include/svtools/editbrowsebox.hxx
 include/svtools/editimplementation.hxx
 include/svtools/editsyntaxhighlighter.hxx
@@ -13930,7 +13929,6 @@ svtools/source/misc/acceleratorexecute.cxx
 svtools/source/misc/bindablecontrolhelper.cxx
 svtools/source/misc/cliplistener.cxx
 svtools/source/misc/dialogclosedlistener.cxx
-svtools/source/misc/dialogcontrolling.cxx
 svtools/source/misc/ehdl.cxx
 svtools/source/misc/embedhlp.cxx
 svtools/source/misc/embedtransfer.cxx

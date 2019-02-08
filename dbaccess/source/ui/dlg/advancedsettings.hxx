@@ -23,8 +23,6 @@
 #include "adminpages.hxx"
 #include <dsmeta.hxx>
 
-#include <svtools/dialogcontrolling.hxx>
-
 #include <vcl/field.hxx>
 
 #include <vector>

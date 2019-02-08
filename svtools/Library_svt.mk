@@ -151,7 +151,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/bindablecontrolhelper \
     svtools/source/misc/cliplistener \
     svtools/source/misc/dialogclosedlistener \
-    svtools/source/misc/dialogcontrolling \
     svtools/source/misc/ehdl \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
