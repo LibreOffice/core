@@ -65,7 +65,11 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::MultilineEditbox:
             return true;
         case ControlType::Listbox:
+            return false;
         case ControlType::Spinbox:
+            if (ePart == ControlPart::AllButtons)
+                return false;
+            return true;
         case ControlType::SpinButtons:
         case ControlType::TabItem:
         case ControlType::TabPane:
@@ -301,7 +305,71 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Listbox:
+            break;
         case ControlType::Spinbox:
+        {
+            if (rValue.getType() == ControlType::SpinButtons)
+            {
+                const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue*>(&rValue);
+
+                ControlPart eUpButtonPart = pSpinVal->mnUpperPart;
+                ControlState eUpButtonState = pSpinVal->mnUpperState;
+
+                ControlPart eDownButtonPart = pSpinVal->mnLowerPart;
+                ControlState eDownButtonState = pSpinVal->mnLowerState;
+
+                {
+                    std::shared_ptr<WidgetDefinitionPart> pPart
+                        = m_aWidgetDefinition.getDefinition(eType, eUpButtonPart);
+                    if (pPart)
+                    {
+                        std::shared_ptr<WidgetDefinitionState> pState
+                            = pPart->getStates(eUpButtonState, ImplControlValue()).back();
+                        {
+                            munchDrawCommands(
+                                pState->mpDrawCommands, m_rGraphics, pSpinVal->maUpperRect.Left(),
+                                pSpinVal->maUpperRect.Top(), pSpinVal->maUpperRect.GetWidth() - 1,
+                                pSpinVal->maUpperRect.GetHeight() - 1);
+                            bOK = true;
+                        }
+                    }
+                }
+
+                if (bOK)
+                {
+                    std::shared_ptr<WidgetDefinitionPart> pPart
+                        = m_aWidgetDefinition.getDefinition(eType, eDownButtonPart);
+                    if (pPart)
+                    {
+                        std::shared_ptr<WidgetDefinitionState> pState
+                            = pPart->getStates(eDownButtonState, ImplControlValue()).back();
+                        {
+                            munchDrawCommands(
+                                pState->mpDrawCommands, m_rGraphics, pSpinVal->maLowerRect.Left(),
+                                pSpinVal->maLowerRect.Top(), pSpinVal->maLowerRect.GetWidth() - 1,
+                                pSpinVal->maLowerRect.GetHeight() - 1);
+                            bOK = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                std::shared_ptr<WidgetDefinitionPart> pPart
+                    = m_aWidgetDefinition.getDefinition(eType, ePart);
+                if (pPart)
+                {
+                    std::shared_ptr<WidgetDefinitionState> pState
+                        = pPart->getStates(eState, ImplControlValue()).back();
+                    {
+                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
+                                          nHeight);
+                        bOK = true;
+                    }
+                }
+            }
+        }
+        break;
         case ControlType::SpinButtons:
         case ControlType::TabItem:
         case ControlType::TabPane:
@@ -334,12 +402,53 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
 }
 
 bool FileDefinitionWidgetDraw::getNativeControlRegion(
-    ControlType eType, ControlPart /*ePart*/, const tools::Rectangle& /*rBoundingControlRegion*/,
+    ControlType eType, ControlPart ePart, const tools::Rectangle& rBoundingControlRegion,
     ControlState /*eState*/, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
-    tools::Rectangle& /*rNativeBoundingRegion*/, tools::Rectangle& rNativeContentRegion)
+    tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
     switch (eType)
     {
+        case ControlType::Spinbox:
+        {
+            Size aButtonSize(44, 26);
+            Point aLocation(rBoundingControlRegion.TopLeft());
+
+            if (ePart == ControlPart::ButtonUp)
+            {
+                rNativeContentRegion = tools::Rectangle(
+                    Point(aLocation.X() + rBoundingControlRegion.GetWidth() - aButtonSize.Width(),
+                          aLocation.Y()),
+                    aButtonSize);
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else if (ePart == ControlPart::ButtonDown)
+            {
+                rNativeContentRegion
+                    = tools::Rectangle(Point(aLocation.X() + rBoundingControlRegion.GetWidth()
+                                                 - (2 * aButtonSize.Width()),
+                                             aLocation.Y()),
+                                       aButtonSize);
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else if (ePart == ControlPart::SubEdit)
+            {
+                rNativeContentRegion = tools::Rectangle(
+                    aLocation, Size(rBoundingControlRegion.GetWidth() - (2 * aButtonSize.Width()),
+                                    aButtonSize.Height()));
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else if (ePart == ControlPart::Entire)
+            {
+                rNativeContentRegion = tools::Rectangle(
+                    aLocation, Size(rBoundingControlRegion.GetWidth(), aButtonSize.Height()));
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+        }
+        break;
         case ControlType::Checkbox:
             rNativeContentRegion = tools::Rectangle(Point(), Size(44, 26));
             return true;
