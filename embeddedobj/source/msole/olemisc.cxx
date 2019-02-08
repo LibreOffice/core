@@ -160,8 +160,8 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
 {
     if ( m_pInterfaceContainer )
     {
-           ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer(
+        ::cppu::OInterfaceContainerHelper* pContainer =
+        m_pInterfaceContainer->getContainer(
                                     cppu::UnoType<document::XEventListener>::get());
         if ( pContainer != nullptr )
         {
