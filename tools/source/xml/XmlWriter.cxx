@@ -136,6 +136,11 @@ void XmlWriter::attribute(const OString& name, const sal_Int32 aNumber)
     attribute(name, OUString::number(aNumber));
 }
 
+void XmlWriter::attributeDouble(const OString& name, const double aNumber)
+{
+    attribute(name, OUString::number(aNumber));
+}
+
 void XmlWriter::content(const OString& sValue)
 {
     xmlChar* xmlValue = xmlCharStrdup(sValue.getStr());

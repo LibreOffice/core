@@ -3983,6 +3983,7 @@ drawinglayer/source/tools/emfpregion.hxx
 drawinglayer/source/tools/emfpstringformat.cxx
 drawinglayer/source/tools/emfpstringformat.hxx
 drawinglayer/source/tools/wmfemfhelper.cxx
+drawinglayer/source/tools/primitive2dxmldump.cxx
 dtrans/source/cnttype/mcnttfactory.cxx
 dtrans/source/cnttype/mcnttfactory.hxx
 dtrans/source/cnttype/mcnttype.cxx
@@ -6279,6 +6280,7 @@ include/drawinglayer/processor3d/shadow3dextractor.hxx
 include/drawinglayer/processor3d/zbufferprocessor3d.hxx
 include/drawinglayer/texture/texture.hxx
 include/drawinglayer/texture/texture3d.hxx
+include/drawinglayer/tools/primitive2dxmldump.hxx
 include/editeng/AccessibleComponentBase.hxx
 include/editeng/AccessibleContextBase.hxx
 include/editeng/AccessibleEditableTextPara.hxx
@@ -7576,7 +7578,6 @@ include/test/container/xnamecontainer.hxx
 include/test/container/xnamed.hxx
 include/test/container/xnamereplace.hxx
 include/test/htmltesttools.hxx
-include/test/primitive2dxmldump.hxx
 include/test/screenshot_test.hxx
 include/test/setupvcl.hxx
 include/test/sheet/cellarealink.hxx
@@ -16558,7 +16559,6 @@ test/source/container/xnamereplace.cxx
 test/source/diff/diff.cxx
 test/source/htmltesttools.cxx
 test/source/isheadless.hxx
-test/source/primitive2dxmldump.cxx
 test/source/screenshot_test.cxx
 test/source/setupvcl.cxx
 test/source/sheet/cellarealink.cxx
