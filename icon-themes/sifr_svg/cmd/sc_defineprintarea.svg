@@ -1,14 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
   <path
      style="opacity:0.35;fill:#555753"
-     d="M 2,2 V 9 H 8 V 7 H 9 V 2 Z"
+     d="M 2 2 L 2 9 L 8 9 L 8 7 L 9 7 L 9 2 L 2 2 z "
      />
   <path
      style="fill:#555753"
-     d="M 1 1 L 1 14 L 6 14 L 6 6 L 9 6 L 9 7 L 10 7 L 10 6 L 13 6 L 13 7 L 14 7 L 14 1 L 1 1 z M 2 2 L 5 2 L 5 5 L 2 5 L 2 2 z M 6 2 L 9 2 L 9 5 L 6 5 L 6 2 z M 10 2 L 13 2 L 13 5 L 10 5 L 10 2 z M 2 6 L 5 6 L 5 9 L 2 9 L 2 6 z M 9 8 L 9 9 L 14 9 L 14 8 L 9 8 z M 2 10 L 5 10 L 5 13 L 2 13 L 2 10 z M 8 10 C 7.446 10 7 10.446 7 11 L 7 13 C 7 13.554 7.446 14 8 14 L 8 12 L 15 12 L 15 14 C 15.554 14 16 13.554 16 13 L 16 11 C 16 10.446 15.554 10 15 10 L 8 10 z M 9 13 L 9 16 L 14 16 L 14 13 L 9 13 z "
-     />
-  <path
-     style="fill:#ffffff"
-     d="M 10 2 L 10 5 L 13 5 L 13 2 L 10 2 z M 10 6 L 10 7 L 13 7 L 13 6 L 10 6 z M 2 10 L 2 13 L 5 13 L 5 10 L 2 10 z "
+     d="m 0,0 v 11 h 1 v 4 H 6 V 6 h 3 v 1 h 2 V 6 h 3 v 1 h 1 V 1 H 11 V 0 Z M 2,2 H 5 V 5 H 2 Z M 6,2 H 9 V 5 H 6 Z m 5,0 h 3 V 5 H 11 Z M 2,6 H 5 V 9 H 2 Z m 7,2 v 1 h 5 V 8 Z m -7,3 h 3 v 3 H 2 Z m 6,-1 c -0.554,0 -1,0.446 -1,1 v 2 c 0,0.554 0.446,1 1,1 v -2 h 7 v 2 c 0.554,0 1,-0.446 1,-1 v -2 c 0,-0.554 -0.446,-1 -1,-1 z m 1,3 v 3 h 5 v -3 z"
      />
 </svg>

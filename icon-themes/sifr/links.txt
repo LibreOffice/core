@@ -232,3 +232,18 @@ cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 # writer standard toolbar
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
+
+# Vertical Text Alignment
+cmd/lc_cellverttop.png cmd/lc_aligntop.png
+cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
+cmd/lc_cellvertbottom.png cmd/lc_alignbottom.png
+cmd/sc_cellverttop.png cmd/sc_aligntop.png
+cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
+cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
+
+cmd/sc_commonaligntop.png cmd/sc_aligntop.png
+cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
+cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/lc_commonaligntop.png cmd/lc_aligntop.png
+cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
+cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
