@@ -158,6 +158,11 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
         reType = ControlType::Combobox;
         bReturn = true;
     }
+    else if (rString == "spinbox")
+    {
+        reType = ControlType::Spinbox;
+        bReturn = true;
+    }
 
     return bReturn;
 }
