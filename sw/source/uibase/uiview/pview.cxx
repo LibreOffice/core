@@ -457,7 +457,7 @@ void SwPagePreviewWin::Command( const CommandEvent& rCEvt )
                 const CommandWheelData aDataNew(pData->GetDelta(),pData->GetNotchDelta(),COMMAND_WHEEL_PAGESCROLL,
                     pData->GetMode(),pData->GetModifier(),pData->IsHorz(), pData->IsDeltaPixel());
                 const CommandEvent aEvent( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),rCEvt.IsMouseEvent(),&aDataNew);
-                    bCallBase = !mrView.HandleWheelCommands( aEvent );
+                bCallBase = !mrView.HandleWheelCommands( aEvent );
             }
             else
                 bCallBase = !mrView.HandleWheelCommands( rCEvt );
@@ -1676,12 +1676,12 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags n
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0
         };
 #if OSL_DEBUG_LEVEL > 0
-    {
-        const sal_uInt16* pPtr = aInval + 1;
-        do {
-            OSL_ENSURE( *(pPtr - 1) < *pPtr, "wrong sorting!" );
-        } while( *++pPtr );
-    }
+        {
+            const sal_uInt16* pPtr = aInval + 1;
+            do {
+                OSL_ENSURE( *(pPtr - 1) < *pPtr, "wrong sorting!" );
+            } while( *++pPtr );
+        }
 #endif
 
         GetViewFrame()->GetBindings().Invalidate(aInval);

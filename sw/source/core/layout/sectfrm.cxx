@@ -962,7 +962,7 @@ static SwFootnoteFrame* lcl_FindEndnote( SwSectionFrame* &rpSect, bool &rbEmpty,
     SwSectionFrame* pSect = rbEmpty ? rpSect->GetFollow() : rpSect;
     while( pSect )
     {
-       OSL_ENSURE( (pSect->Lower() && pSect->Lower()->IsColumnFrame()) || pSect->GetUpper()->IsFootnoteFrame(),
+        OSL_ENSURE( (pSect->Lower() && pSect->Lower()->IsColumnFrame()) || pSect->GetUpper()->IsFootnoteFrame(),
                 "InsertEndnotes: Where's my column?" );
 
         // i73332: Columned section in endnote

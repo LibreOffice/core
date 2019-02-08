@@ -241,10 +241,10 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
     }
 
 #ifdef DBG_UTIL
-        if ( pRet )
-            ++m_nGetSuccess;
-        else
-            ++m_nGetFail;
+    if ( pRet )
+        ++m_nGetSuccess;
+    else
+        ++m_nGetFail;
 #endif
 
     return pRet;

@@ -188,7 +188,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                         uno::Reference< beans::XPropertySetInfo >  xInfo = xPropSet->getPropertySetInfo();
                         if(xInfo->hasPropertyByName( "ButtonType" ))
                         {
-                             form::FormButtonType eButtonType = form::FormButtonType_URL;
+                            form::FormButtonType eButtonType = form::FormButtonType_URL;
                             aTmp = xPropSet->getPropertyValue( "ButtonType" );
                             if( aTmp >>= eButtonType )
                             {

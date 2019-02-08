@@ -628,8 +628,10 @@ void SwFntObj::GuessLeading( const SwViewShell&
         pWin->SetMapMode( aOldMap );
     }
     else
-#endif
         m_nGuessedLeading = 0;
+#else
+    m_nGuessedLeading = 0;
+#endif
 }
 
 // Set the font at the given output device; for screens it may be

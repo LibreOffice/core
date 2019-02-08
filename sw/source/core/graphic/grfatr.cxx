@@ -51,14 +51,14 @@ static bool lcl_IsHoriOnEvenPages(MirrorGraph nEnum, bool bToggle)
 {
     bool bEnum = nEnum == MirrorGraph::Vertical ||
                    nEnum == MirrorGraph::Both;
-            return bEnum != bToggle;
+    return bEnum != bToggle;
 }
 
 static bool lcl_IsHoriOnOddPages(MirrorGraph nEnum)
 {
     bool bEnum = nEnum == MirrorGraph::Vertical ||
                    nEnum == MirrorGraph::Both;
-            return bEnum;
+    return bEnum;
 }
 
 bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const

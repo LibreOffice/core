@@ -215,7 +215,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
             OUString aTmpStr(aDelStr[n]);
             OUString const ins( pTextNd->InsertText(aTmpStr, rIdx) );
             assert(ins.getLength() == 1); // cannot fail
-        (void) ins;
+            (void) ins;
             rIdx -= 2;
             pTextNd->EraseText( rIdx, 1 );
             rIdx += 2;

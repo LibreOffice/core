@@ -350,7 +350,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
         {
             // Set the new entry in the list before we do that!
             aNew = GetAppCharClass().uppercase( aNew );
-             nErr = pImp->Rename( n, aNew, aLong );
+            nErr = pImp->Rename( n, aNew, aLong );
             if( !nErr )
             {
                 bool bOnlyText = pImp->m_aNames[ n ]->bIsOnlyText;

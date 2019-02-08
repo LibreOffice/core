@@ -135,7 +135,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
 {
     if( pOut && bIsScript )
     {
-            Color aOldLineColor( pOut->GetLineColor() );
+        Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( COL_GRAY );
         // to make it look nice, we subtract two pixels everywhere
         sal_uInt16 nPix = s_nPixelTwips * 2;
@@ -145,7 +145,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
         DrawRect( pOut, aRect, s_aScriptIndicatorColor );
-    pOut->SetLineColor( aOldLineColor );
+        pOut->SetLineColor( aOldLineColor );
     }
 }
 

@@ -72,7 +72,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
     {
         if ( bDeleteOld )
             mpPrt.disposeAndClear();
-         mpPrt = pP;
+        mpPrt = pP;
 
         // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
         // are situations where this isn't called. #i108712#

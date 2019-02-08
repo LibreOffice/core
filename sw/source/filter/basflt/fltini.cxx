@@ -540,7 +540,7 @@ rtl_TextEncoding CharSetFromName(const OUString& rChrSetStr)
 
     OSL_ENSURE(nRet != pStart->eCode, "TXT: That was an unknown language!");
 
-        return nRet;
+    return nRet;
 }
 
 /*

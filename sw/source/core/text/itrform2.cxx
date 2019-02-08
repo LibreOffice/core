@@ -1126,19 +1126,19 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         }
     }
 
-        // 10. Decimal tab portion at the beginning of each line in table cells
-        if ( !pPor && !m_pCurr->GetNextPortion() &&
+    // 10. Decimal tab portion at the beginning of each line in table cells
+    if ( !pPor && !m_pCurr->GetNextPortion() &&
              GetTextFrame()->IsInTab() &&
              GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT))
-        {
-            pPor = NewTabPortion( rInf, true );
-        }
+    {
+        pPor = NewTabPortion( rInf, true );
+    }
 
-        // 11. suffix of meta-field
-        if (!pPor)
-        {
-            pPor = TryNewNoLengthPortion(rInf);
-        }
+    // 11. suffix of meta-field
+    if (!pPor)
+    {
+        pPor = TryNewNoLengthPortion(rInf);
+    }
 
     return pPor;
 }

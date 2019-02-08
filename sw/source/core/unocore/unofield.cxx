@@ -1893,7 +1893,7 @@ void SAL_CALL SwXTextField::attach(
                 m_pImpl->m_pProps->sPar2,
                 nType,
                 m_pImpl->m_pProps->nFormat));
-           static_cast<SwTableField*>(xField.get())->ChgExpStr(m_pImpl->m_pProps->sPar1);
+            static_cast<SwTableField*>(xField.get())->ChgExpStr(m_pImpl->m_pProps->sPar1);
         }
         break;
         default: OSL_FAIL("What kind of type is that?");
@@ -2226,7 +2226,7 @@ SwXTextField::setPropertyValue(
         case FIELD_PROP_USHORT1:
         case FIELD_PROP_USHORT2:
             {
-                 sal_Int16 nVal = 0;
+                sal_Int16 nVal = 0;
                 rValue >>= nVal;
                 if( FIELD_PROP_USHORT1 == pEntry->nWID)
                     m_pImpl->m_pProps->nUSHORT1 = nVal;

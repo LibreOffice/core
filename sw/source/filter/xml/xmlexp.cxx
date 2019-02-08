@@ -319,7 +319,7 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
     Reference < XDrawPageSupplier > xDPS( GetModel(), UNO_QUERY );
     if( xDPS.is() )
     {
-         Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
+        Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
         pShapeExport->seekShapes( xShapes );
     }
 
@@ -353,7 +353,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
     bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MapUnit::MapTwip;
 
-   OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
+    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
     pValue[1].Name = "ViewAreaTop";
     pValue[1].Value <<= bTwip ? convertTwipToMm100 ( rRect.Top() ) : rRect.Top();

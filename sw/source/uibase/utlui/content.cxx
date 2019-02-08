@@ -3642,7 +3642,7 @@ void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
 
 void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)
 {
-  if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         FindActiveTypeAndRemoveUserData();

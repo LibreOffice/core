@@ -504,7 +504,7 @@ extern "C"
 
 IMPL_LINK_NOARG(SwView, AttrChangedNotify, SwCursorShell*, void)
 {
-     if ( GetEditWin().IsChainMode() )
+    if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
 
     //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.

@@ -739,7 +739,7 @@ SwTabFrame* SwTabFrame::FindMaster( bool bFirstMaster ) const
                     return pTab;
             }
 
-        pTab = aIter.Next();
+            pTab = aIter.Next();
     }
 
     OSL_FAIL( "Follow is lost in Space." );

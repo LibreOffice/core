@@ -409,7 +409,7 @@ bool SwTextFly::IsAnyFrame() const
 
 bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
 {
-   OSL_ENSURE( bOn, "SwTextFly::IsAnyObj: Who's knocking?" );
+    OSL_ENSURE( bOn, "SwTextFly::IsAnyObj: Who's knocking?" );
 
     SwRect aRect( rRect );
     if ( aRect.IsEmpty() )

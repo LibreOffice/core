@@ -1371,7 +1371,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     {
                         sal_Int32 nHeight = 0;
                         aValue >>= nHeight;
-                         Size aSz(aFrameSize.GetSize());
+                        Size aSz(aFrameSize.GetSize());
                         aSz.setHeight( convertMm100ToTwip(nHeight) );
                         aFrameSize.SetSize(aSz);
                     }

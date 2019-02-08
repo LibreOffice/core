@@ -247,7 +247,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_SUBTYPE:
         {
-             text::PageNumberType eType;
+            text::PageNumberType eType;
             eType = text::PageNumberType_CURRENT;
             if(m_nSubType == PG_PREV)
                 eType = text::PageNumberType_PREV;
@@ -914,7 +914,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
                 uno::Any aNew;
-                    aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                 aNew >>= sVal;
             }
             catch (uno::Exception&) {}

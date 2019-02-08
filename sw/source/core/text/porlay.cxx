@@ -1270,7 +1270,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                     if ( !isTransparentChar ( cCh) )
                         cPrevCh = cCh;
 
-                   ++nIdx;
+                    ++nIdx;
                 } // end of current word
 
                 if ( -1 != nKashidaPos )

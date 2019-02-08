@@ -470,24 +470,24 @@ SwField* SwFieldMgr::GetCurField()
 // provide group range
 const SwFieldGroupRgn& SwFieldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId)
 {
-static SwFieldGroupRgn const aRanges[] =
-{
-    { /* Document   */  GRP_DOC_BEGIN,  GRP_DOC_END },
-    { /* Functions  */  GRP_FKT_BEGIN,  GRP_FKT_END },
-    { /* Cross-Refs */  GRP_REF_BEGIN,  GRP_REF_END },
-    { /* DocInfos   */  GRP_REG_BEGIN,  GRP_REG_END },
-    { /* Database   */  GRP_DB_BEGIN,   GRP_DB_END  },
-    { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
-};
-static SwFieldGroupRgn const aWebRanges[] =
-{
-    { /* Document    */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
-    { /* Functions   */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
-    { /* Cross-Refs  */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
-    { /* DocInfos    */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
-    { /* Database    */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END  },
-    { /* User        */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
-};
+    static SwFieldGroupRgn const aRanges[] =
+    {
+        { /* Document   */  GRP_DOC_BEGIN,  GRP_DOC_END },
+        { /* Functions  */  GRP_FKT_BEGIN,  GRP_FKT_END },
+        { /* Cross-Refs */  GRP_REF_BEGIN,  GRP_REF_END },
+        { /* DocInfos   */  GRP_REG_BEGIN,  GRP_REG_END },
+        { /* Database   */  GRP_DB_BEGIN,   GRP_DB_END  },
+        { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
+    };
+    static SwFieldGroupRgn const aWebRanges[] =
+    {
+        { /* Document    */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
+        { /* Functions   */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
+        { /* Cross-Refs  */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
+        { /* DocInfos    */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
+        { /* Database    */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END  },
+        { /* User        */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
+    };
 
     if (bHtmlMode)
         return aWebRanges[nGrpId];

@@ -2247,8 +2247,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-            // set handle size to 9 pixels, always
-            pDView->SetMarkHdlSizePixel(9);
+        // set handle size to 9 pixels, always
+        pDView->SetMarkHdlSizePixel(9);
     }
 
     bool bOnlineSpellChgd = mpOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();

@@ -217,9 +217,8 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
 
             AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
-
-        break;
         }
+        break;
         default:
             OSL_ENSURE(false, "wrong family");
     }

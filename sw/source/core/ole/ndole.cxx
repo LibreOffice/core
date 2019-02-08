@@ -870,8 +870,8 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName ) )
         {
             OSL_FAIL( "InsertObject failed" );
-        if ( xChild.is() )
-            xChild->setParent( nullptr );
+            if ( xChild.is() )
+                xChild->setParent( nullptr );
         }
         else
             m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
@@ -971,11 +971,11 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > const & xO
         return false;
 
     bool bRet = true;
-       sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
-       bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
+    sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
+    bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
     sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
 
-       if( nState != embed::EmbedStates::LOADED && !pDoc->IsInDtor() && !bIsActive &&
+    if( nState != embed::EmbedStates::LOADED && !pDoc->IsInDtor() && !bIsActive &&
         embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
         embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) )
     {

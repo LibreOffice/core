@@ -353,7 +353,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( !GetFootnoteIdxs().empty() && pAttr )
     {
         sal_uInt16 nVal = pAttr->Get( RES_FTN_AT_TXTEND ).GetValue();
-           if( ( FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
+        if( ( FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ) ||
             ( FTNEND_ATTXTEND_OWNNUMSEQ == ( nVal = pAttr->Get( RES_END_AT_TXTEND ).GetValue() ) ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ))

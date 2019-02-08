@@ -99,7 +99,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
 void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 {
     SvxBrushItem aBrush( RES_BACKGROUND );
-     rSh.GetBoxBackground(aBrush);
+    rSh.GetBoxBackground(aBrush);
     rSet.Put( aBrush );
     if(rSh.GetRowBackground(aBrush))
     {

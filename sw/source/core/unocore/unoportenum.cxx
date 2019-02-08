@@ -1191,7 +1191,7 @@ static void lcl_ExportAnnotationStarts(
 
         SwXTextPortion* pPortion =
             new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
-         pPortion->SetTextField( pPtr->mxAnnotationField );
+        pPortion->SetTextField( pPtr->mxAnnotationField );
         rPortions.emplace_back(pPortion);
 
         aIter = rAnnotationStartArr.erase(aIter);
