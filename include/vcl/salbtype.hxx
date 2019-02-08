@@ -86,10 +86,10 @@ class VCL_DLLPUBLIC BitmapColor final
 {
 private:
 
-    sal_uInt8               mcBlueOrIndex;
-    sal_uInt8               mcGreen;
-    sal_uInt8               mcRed;
-    sal_uInt8               mcAlpha;
+    sal_uInt8 mcBlueOrIndex;
+    sal_uInt8 mcGreen;
+    sal_uInt8 mcRed;
+    sal_uInt8 mcAlpha;
 
 public:
 
@@ -133,8 +133,7 @@ public:
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const BitmapColor& rColor)
 {
-    return rStream << "mcBlueOrIndex: " << static_cast<int>(rColor.GetBlueOrIndex()) << ", mcGreen: "
-        << static_cast<int>(rColor.GetGreen()) << ", mcRed: " << static_cast<int>(rColor.GetRed()) << ", mcAlpha: " << static_cast<int>(rColor.GetAlpha());
+    return rStream << "#(" << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(rColor.GetRed()) << static_cast<int>(rColor.GetGreen()) << static_cast<int>(rColor.GetBlueOrIndex()) << static_cast<int>(rColor.GetAlpha()) << ")";
 }
 
 class VCL_DLLPUBLIC BitmapPalette
