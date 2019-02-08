@@ -543,11 +543,15 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                         aPos.X = it->second;
                     else if ( (it = rProp.find(XML_ctrX)) != rProp.end() )
                         aPos.X = it->second - aSize.Width/2;
+                    else if ((it = rProp.find(XML_r)) != rProp.end())
+                        aPos.X = it->second - aSize.Width;
 
                     if ( (it = rProp.find(XML_t)) != rProp.end())
                         aPos.Y = it->second;
                     else if ( (it = rProp.find(XML_ctrY)) != rProp.end() )
                         aPos.Y = it->second - aSize.Height/2;
+                    else if ((it = rProp.find(XML_b)) != rProp.end())
+                        aPos.Y = it->second - aSize.Height;
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end() )
                         aSize.Width = it2->second - it->second;
