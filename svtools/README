@@ -1,16 +1,1 @@
 Tools on top of VCL. Common dialogs, file and print dialogs, wizards, vcl filters, lots of helper code.
-
-
-== Image swapping ==
-
-LO has two kind of swapout mechanisms:
-
-1) Size based auto swapping: when the size of all graphic objects reaches a configurable limit (20 MB by default)
-then some of the graphics are saved to the local file system and freed in the memory.
-Configure: Tools -> Options -> Memory -> GraphicsCache -> Use for LibreOffice
-
-2) Time based auto swapping: after an image is swapped in / loaded a timer starts and when the timer (1 min by default)
-has a time out this image is swapped out ( sometimes this time out is ignored when the image is in use ).
-Configure: Tools -> Options -> Memory -> GraphicsCache -> Remove from memory after
-
-Both swapping are done by GraphicObject and GraphicManager.
