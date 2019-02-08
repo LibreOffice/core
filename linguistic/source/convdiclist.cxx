@@ -393,10 +393,10 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
                     mxNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
         uno::Reference< XConversionDictionary > xT2SDic(
                     mxNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
-            if (xS2TDic.is())
-                xS2TDic->setActive( true );
-            if (xT2SDic.is())
-                xT2SDic->setActive( true );
+        if (xS2TDic.is())
+            xS2TDic->setActive( true );
+        if (xT2SDic.is())
+            xT2SDic->setActive( true );
 
     }
     return *mxNameContainer;

@@ -311,11 +311,11 @@ public: // Internal methods
     CBenValueSegment(CBenValue * pValue, BenContainerPos Pos,
       size_t Size) : CUtListElmt(&pValue->GetValueSegments())
       { cImmediate = false; cPos = Pos;
-      cSize = Size; }
+        cSize = Size; }
     CBenValueSegment(CBenValue * pValue, const void  * pImmData,
       unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cImmediate = true;
-      std::memcpy(cImmData, pImmData, Size); cSize = Size; }
+        std::memcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }
     size_t GetSize() { return cSize; }
