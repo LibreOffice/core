@@ -183,7 +183,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
-            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
+            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
 
         // data label placement (do not overwrite series placement, if no explicit point placement is present)
         if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
