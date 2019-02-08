@@ -84,7 +84,6 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -1836,6 +1835,25 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         OUString aFilterOptions = getUString(pFilterOptions);
 
+        // Check if watermark for pdf is passed by filteroptions..
+        // It is not a real filter option so it must be filtered out.
+        OUString watermarkText;
+        int aIndex = -1;
+        if ((aIndex = aFilterOptions.indexOf(",Watermark=")) >= 0)
+        {
+            int bIndex = aFilterOptions.indexOf("WATERMARKEND");
+            watermarkText = aFilterOptions.copy(aIndex+11, bIndex-(aIndex+11));
+            if(aIndex > 0)
+            {
+                OUString temp = aFilterOptions.copy(0, aIndex);
+                aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
+            }
+            else
+            {
+                aFilterOptions.clear();
+            }
+        }
+
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
         // gets a new name).  When this is not provided, the meaning of
         // saveAs() is more like save-a-copy, which allows saving to any
@@ -1864,6 +1882,12 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         aSaveMediaDescriptor["Overwrite"] <<= true;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
+        if(!watermarkText.isEmpty()){
+            uno::Sequence< beans::PropertyValue > aFilterData( 1 );
+            aFilterData[ 0 ].Name = "TiledWatermark";
+            aFilterData[ 0 ].Value <<= watermarkText;
+            aSaveMediaDescriptor["FilterData"] <<= aFilterData;
+        }
 
         // add interaction handler too
         if (gImpl)
