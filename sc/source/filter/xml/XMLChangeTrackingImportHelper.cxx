@@ -577,17 +577,15 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
 
 void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent)
 {
-    if (!pAction->nPreviousAction)
+    if (!pActContent || !pAction->nPreviousAction)
         return;
 
     OSL_ENSURE(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
     ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
-    if (!pPrevAct)
+    if (!pPrevAct || pPrevAct->GetType() != SC_CAT_CONTENT)
         return;
 
     ScChangeActionContent* pPrevActContent = static_cast<ScChangeActionContent*>(pPrevAct);
-    if (!pPrevActContent || !pActContent)
-        return;
 
     pActContent->SetPrevContent(pPrevActContent);
     pPrevActContent->SetNextContent(pActContent);
