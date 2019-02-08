@@ -53,7 +53,7 @@ static OString getElement(OString const & docPath,
 {
     //Prepare the xml document and context
     OSL_ASSERT(!docPath.isEmpty());
-     jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
+    jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == nullptr)
         throw FrameworkException(
             JFW_E_ERROR,

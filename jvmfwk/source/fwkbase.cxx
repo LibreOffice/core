@@ -317,7 +317,7 @@ OUString BootParams::getVendorSettings()
                                  UNO_JAVA_JFW_VENDOR_SETTINGS);
             }
         }
-    SAL_INFO(
+        SAL_INFO(
         "jfw.level2",
         "Using bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS " = "
             << sVendor);

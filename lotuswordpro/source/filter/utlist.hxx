@@ -95,8 +95,10 @@ private: // Data
 class CUtList
 {
 public: // Methods
-    CUtList() { cDummyElmt.SetNext(&cDummyElmt);
-      cDummyElmt.SetPrev(&cDummyElmt); }
+    CUtList() {
+        cDummyElmt.SetNext(&cDummyElmt);
+        cDummyElmt.SetPrev(&cDummyElmt);
+    }
     virtual ~CUtList();
     CUtListElmt * GetFirst() { return cDummyElmt.GetNext(); }
     CUtListElmt * GetLast() { return cDummyElmt.GetPrev(); }

@@ -1310,7 +1310,7 @@ void LwpTableLayout::SplitConflictCells()
         iter1 = m_RowsMap.find(i);
         if (iter1 == m_RowsMap.end())//default rows
         {
-                i++;
+            i++;
             continue;
         }
         pRowLayout= iter1->second;
@@ -1326,9 +1326,9 @@ void LwpTableLayout::SplitConflictCells()
             for (sal_uInt16 j = i+1; j<nEffectRows; j++)
             {
                 iter2 = m_RowsMap.find(j);
-                    if (iter2 == m_RowsMap.end())
+                if (iter2 == m_RowsMap.end())
                         continue;
-                    pEffectRow = iter2->second;
+                pEffectRow = iter2->second;
                 if (!pEffectRow->GetMergeCellFlag())
                     continue;
                 else
