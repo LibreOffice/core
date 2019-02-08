@@ -94,6 +94,30 @@
       "revId": "33623f3117d88683fbc9e66792e5030c0322946e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_1b62af3f",
+        "filename": "include/IwyuFilter_include.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-02-08T09:34:00Z",
+      "side": 1,
+      "message": "The purpose of these filter entries is to filter out cases where IWYU is buggy and thinks something is not needed, but in fact it\u0027s needed. This is one such case. The include is obviously needed, but IWYU would say:\n\n ERROR: /home/vmiklos/git/libreoffice/master/include/unotools/fontcfg.hxx:23: tools/solar.h: remove not needed include / forward declaration\n\nLong-term it makes sense to hunt down each \u0026 every such case and fix the root cause in IWYU, but in general just blacklisting such cases is reasonable for easy-hackers, and I think the overall outcome is good (the benefit of cleaning up not needed includes is larger than the cost created by this iwyu filter noise.)",
+      "parentUuid": "1f485f77_db7d376f",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 247,
+        "endChar": 19
+      },
+      "revId": "33623f3117d88683fbc9e66792e5030c0322946e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
