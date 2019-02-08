@@ -1771,14 +1771,17 @@ namespace
         }
         return pixbuf;
     }
+}
 
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName)
-    {
-        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-        return load_icon_by_name(rIconName, sIconTheme, sUILang);
-    }
+GdkPixbuf* load_icon_by_name(const OUString& rIconName)
+{
+    OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+    return load_icon_by_name(rIconName, sIconTheme, sUILang);
+}
 
+namespace
+{
     GdkPixbuf* load_icon_from_surface(const VirtualDevice& rDevice)
     {
         Size aSize(rDevice.GetOutputSizePixel());
