@@ -66,6 +66,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 $(eval $(call gb_Library_use_externals,vcl,\
     libjpeg \
     libeot \
+    libpng \
     $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
@@ -407,6 +408,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmf \
     vcl/source/filter/wmf/wmfexternal \
     vcl/source/filter/wmf/wmfwr \
+    vcl/source/filter/png/PngImageReader \
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \
