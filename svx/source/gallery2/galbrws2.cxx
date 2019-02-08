@@ -794,7 +794,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                         mpCurTheme->GetGraphic( nPos, aGraphic );
 
                     mpPreview->SetGraphic( aGraphic );
-                     mpPreview->Show();
+                    mpPreview->Show();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SgaObjKind::Sound )
                         GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );

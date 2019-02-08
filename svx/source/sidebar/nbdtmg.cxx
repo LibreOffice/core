@@ -490,7 +490,7 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
 
     _pSet->pNumSetting->sPrefix = aFmt.GetPrefix();
     _pSet->pNumSetting->sSuffix = aFmt.GetSuffix();
-     _pSet->pNumSetting->nNumberType = eNumType;
+    _pSet->pNumSetting->nNumberType = eNumType;
     _pSet->bIsCustomized = true;
 
     SvxNumRule aTmpRule1(aNum);
@@ -643,8 +643,8 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             const SvxNumberFormat& aFmt(aNum.GetLevel(iLevel));
             const OUString& sPrefix = aFmt.GetPrefix();
             const OUString& sLclSuffix = aFmt.GetSuffix();
-                sal_Int16 eNumType = aFmt.GetNumberingType();
-                if( eNumType == SVX_NUM_CHAR_SPECIAL)
+            sal_Int16 eNumType = aFmt.GetNumberingType();
+            if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
                 sal_Unicode ccChar = _pSet->sBulletChar[0];
@@ -856,7 +856,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         {
             aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? aNum.GetLevelCount() : 0));
             aFmt.SetCharFormatName(GetNumCharFmtName());
-                if (isResetSize) aFmt.SetBulletRelSize(100);
+            if (isResetSize) aFmt.SetBulletRelSize(100);
         }
         if(pNumSettingsArr->size() > i) {
             aFmt.SetLabelFollowedBy(pLevelSettings->eLabelFollowedBy);

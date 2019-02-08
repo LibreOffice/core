@@ -85,7 +85,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::utils::createPolygonFromRect(aExpandedRange));
 
                     aExpandedUnitOutline.transform(getTransform());
-                aRetval.push_back(
+                    aRetval.push_back(
                         createPolygonLinePrimitive(
                             aExpandedUnitOutline,
                             getSdrLFSTAttribute().getLine(),
@@ -96,7 +96,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                     aTransformed.transform(getTransform());
-                aRetval.push_back(
+                    aRetval.push_back(
                         createPolygonLinePrimitive(
                             aTransformed,
                             getSdrLFSTAttribute().getLine(),

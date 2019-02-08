@@ -425,7 +425,7 @@ namespace
                                 const double fSin(sin(fShearValue));
                                 const double fCos(cos(fShearValue));
 
-                                   aNewTransformB.shearX(-fSin);
+                                aNewTransformB.shearX(-fSin);
 
                                 // Scale may lead to objects without height since fCos == 0.0 is possible.
                                 // Renderers need to handle that, it's not a forbidden value and does not
@@ -448,7 +448,7 @@ namespace
 
                                 // scale in X to make as tight as needed. As with XFT_SLANT_X, this may
                                 // lead to primitives without width which the renderers will handle
-                                   aNewTransformA.scale(fCos, 1.0);
+                                aNewTransformA.scale(fCos, 1.0);
 
                                 aNewTransformB.translate(aStartPos.getX(), aStartPos.getY());
 

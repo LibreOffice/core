@@ -209,7 +209,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
     if(mpExtractor && pPage)
     {
         // get displayed page's geometry
-           drawinglayer::primitive2d::Primitive2DContainer xPageContent;
+        drawinglayer::primitive2d::Primitive2DContainer xPageContent;
         const Size aPageSize(pPage->GetSize());
         const double fPageWidth(aPageSize.getWidth());
         const double fPageHeight(aPageSize.getHeight());

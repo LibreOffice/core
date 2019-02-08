@@ -1581,7 +1581,7 @@ namespace svxform
                 if (m_nFormsSelected > 0)
                 {   // ... only forms
                     // first of all collect PropertySet-Interfaces of the forms
-                   SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+                    SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                     for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
                         FmFormData* pFormData = static_cast<FmFormData*>((*it)->GetUserData());

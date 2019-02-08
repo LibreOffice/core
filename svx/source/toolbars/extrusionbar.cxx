@@ -586,7 +586,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
 
     if( nSID == SID_EXTRUSION_TOGGLE )
     {
-            static const sal_uInt16 SidArray[] = {
+        static const sal_uInt16 SidArray[] = {
                 SID_EXTRUSION_TILT_DOWN,
                 SID_EXTRUSION_TILT_UP,
                 SID_EXTRUSION_TILT_LEFT,

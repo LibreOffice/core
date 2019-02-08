@@ -726,7 +726,7 @@ namespace svxform
 
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent )
     {
-       if ( _rEvent.ScriptType == "VBAInterop" )
+        if ( _rEvent.ScriptType == "VBAInterop" )
            return; // not handled here
 
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
