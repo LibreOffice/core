@@ -11,7 +11,6 @@
 #include <widgetdraw/WidgetDefinition.hxx>
 
 #include <sal/config.h>
-#include <tools/stream.hxx>
 #include <unordered_map>
 
 namespace vcl
@@ -92,17 +91,16 @@ void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStro
                                              Color aFillColor, float fX1, float fY1, float fX2,
                                              float fY2, sal_Int32 nRx, sal_Int32 nRy)
 {
-    std::shared_ptr<DrawCommand> pCommand(std::make_shared<RectangleDrawCommand>());
+    auto pCommand(std::make_shared<RectangleDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
-    RectangleDrawCommand& rRectCommand = static_cast<RectangleDrawCommand&>(*pCommand);
-    rRectCommand.mnRx = nRx;
-    rRectCommand.mnRy = nRy;
-    rRectCommand.mfX1 = fX1;
-    rRectCommand.mfY1 = fY1;
-    rRectCommand.mfX2 = fX2;
-    rRectCommand.mfY2 = fY2;
+    pCommand->mnRx = nRx;
+    pCommand->mnRy = nRy;
+    pCommand->mfX1 = fX1;
+    pCommand->mfY1 = fY1;
+    pCommand->mfX2 = fX2;
+    pCommand->mfY2 = fY2;
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
@@ -110,29 +108,27 @@ void WidgetDefinitionState::addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeW
                                           Color aFillColor, float fX1, float fY1, float fX2,
                                           float fY2)
 {
-    std::shared_ptr<DrawCommand> pCommand(std::make_shared<CircleDrawCommand>());
+    auto pCommand(std::make_shared<CircleDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
-    CircleDrawCommand& rCircleCommand = static_cast<CircleDrawCommand&>(*pCommand);
-    rCircleCommand.mfX1 = fX1;
-    rCircleCommand.mfY1 = fY1;
-    rCircleCommand.mfX2 = fX2;
-    rCircleCommand.mfY2 = fY2;
+    pCommand->mfX1 = fX1;
+    pCommand->mfY1 = fY1;
+    pCommand->mfX2 = fX2;
+    pCommand->mfY2 = fY2;
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
 void WidgetDefinitionState::addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1,
                                         float fY1, float fX2, float fY2)
 {
-    std::shared_ptr<DrawCommand> pCommand(std::make_shared<LineDrawCommand>());
+    auto pCommand(std::make_shared<LineDrawCommand>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
-    LineDrawCommand& rLineCommand = static_cast<LineDrawCommand&>(*pCommand);
-    rLineCommand.mfX1 = fX1;
-    rLineCommand.mfY1 = fY1;
-    rLineCommand.mfX2 = fX2;
-    rLineCommand.mfY2 = fY2;
+    pCommand->mfX1 = fX1;
+    pCommand->mfY1 = fY1;
+    pCommand->mfX2 = fX2;
+    pCommand->mfY2 = fY2;
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
