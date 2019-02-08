@@ -132,6 +132,13 @@ void WidgetDefinitionState::addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWid
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
+void WidgetDefinitionState::addDrawImage(OUString sSource)
+{
+    auto pCommand(std::make_shared<ImageDrawCommand>());
+    pCommand->msSource = sSource;
+    mpDrawCommands.push_back(std::move(pCommand));
+}
+
 } // end vcl namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
