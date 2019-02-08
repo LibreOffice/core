@@ -401,7 +401,7 @@ const FontList* SvxCharNamePage::GetFontList() const
             {
                 DBG_ASSERT(nullptr != static_cast<const SvxFontListItem*>(pItem)->GetFontList(),
                            "Where is the font list?");
-                    m_pImpl->m_pFontList = static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
+                m_pImpl->m_pFontList = static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
             }
         }
         if(!m_pImpl->m_pFontList)

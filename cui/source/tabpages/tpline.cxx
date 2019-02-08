@@ -336,13 +336,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         }
 
             // ColorList
-            if( *m_pnColorListState != ChangeType::NONE )
-            {
+        if( *m_pnColorListState != ChangeType::NONE )
+        {
                 if( *m_pnColorListState & ChangeType::CHANGED )
                     m_pColorList = static_cast<SvxLineTabDialog*>(GetDialogController())->GetNewColorList();
 
                 ChangePreviewHdl_Impl( nullptr );
-            }
+        }
 
         m_nPageType = PageType::Area;
     }

@@ -107,8 +107,8 @@ namespace offapp
 
             // look if we (resp. the driver manager) know this driver
             // doing O(n) search here, which is expensive, but this doesn't matter in this small case ...
-             DriverPoolingSettings::iterator aLookup;
-             for    (   aLookup = aSettings.begin();
+            DriverPoolingSettings::iterator aLookup;
+            for    (   aLookup = aSettings.begin();
                     aLookup != aSettings.end();
                     ++aLookup
                 )

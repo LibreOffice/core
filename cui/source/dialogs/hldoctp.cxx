@@ -101,7 +101,7 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
     OUString aStrMark;
     if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
         aStrMark = rStrURL.copy( nPos+1 );
-     m_pEdTarget->SetText ( aStrMark );
+    m_pEdTarget->SetText ( aStrMark );
 
     ModifiedPathHdl_Impl ( *m_pCbbPath );
 }
