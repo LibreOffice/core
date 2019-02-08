@@ -574,7 +574,7 @@ namespace svt
                     // is it a folder?
                     if ( xRow->getBoolean( 4 ) && !xRow->wasNull() )
                     {   // yes -> step down
-                                                ConstFolderIterator aNextLevelRoot = _rxRoot->end();
+                        ConstFolderIterator aNextLevelRoot = _rxRoot->end();
                         --aNextLevelRoot;
                         implReadFolder( *aNextLevelRoot );
                     }

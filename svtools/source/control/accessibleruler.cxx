@@ -167,11 +167,11 @@ sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
                     return i;
             }
         }
-   }
+    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
-   return -1;
+    //   Return -1 to indicate that this object's parent does not know about the
+    //   object.
+    return -1;
 }
 
 sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
