@@ -373,6 +373,8 @@ public:
     }
 };
 
+GdkPixbuf* load_icon_by_name(const OUString& rIconName);
+
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

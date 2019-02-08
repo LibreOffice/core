@@ -28,6 +28,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <salhelper/thread.hxx>
 
 #include <tools/urlobj.hxx>
@@ -1817,6 +1818,75 @@ public:
     }
 };
 
+struct PointerData {
+    PointerStyle eStyle;
+    const char * name;
+};
+static const PointerData gvPointerData [] = {
+    { PointerStyle::Null, "Null" },
+    { PointerStyle::Magnify, "Magnify" },
+    { PointerStyle::Fill, "Fill" },
+    { PointerStyle::MoveData, "MoveData" },
+    { PointerStyle::CopyData, "CopyData" },
+    { PointerStyle::MoveFile, "MoveFile" },
+    { PointerStyle::CopyFile, "CopyFile" },
+    { PointerStyle::MoveFiles, "MoveFiles" },
+    { PointerStyle::CopyFiles, "CopyFiles" },
+    { PointerStyle::NotAllowed, "NotAllowed" },
+    { PointerStyle::Rotate, "Rotate" },
+    { PointerStyle::HShear, "HShear" },
+    { PointerStyle::VShear, "VShear" },
+    { PointerStyle::DrawLine, "DrawLine" },
+    { PointerStyle::DrawRect, "DrawRect" },
+    { PointerStyle::DrawPolygon, "DrawPolygon" },
+    { PointerStyle::DrawBezier, "DrawBezier" },
+    { PointerStyle::DrawArc, "DrawArc" },
+    { PointerStyle::DrawPie, "DrawPie" },
+    { PointerStyle::DrawCircleCut, "DrawCircleCut" },
+    { PointerStyle::DrawEllipse, "DrawEllipse" },
+    { PointerStyle::DrawConnect, "DrawConnect" },
+    { PointerStyle::DrawText, "DrawText" },
+    { PointerStyle::Mirror, "Mirror" },
+    { PointerStyle::Crook, "Crook" },
+    { PointerStyle::Crop, "Crop" },
+    { PointerStyle::MovePoint, "MovePoint" },
+    { PointerStyle::MoveBezierWeight, "MoveBezierWeight" },
+    { PointerStyle::DrawFreehand, "DrawFreehand" },
+    { PointerStyle::DrawCaption, "DrawCaption" },
+    { PointerStyle::LinkData, "LinkData" },
+    { PointerStyle::MoveDataLink, "MoveDataLink" },
+    { PointerStyle::CopyDataLink, "CopyDataLink" },
+    { PointerStyle::LinkFile, "LinkFile" },
+    { PointerStyle::MoveFileLink, "MoveFileLink" },
+    { PointerStyle::CopyFileLink, "CopyFileLink" },
+    { PointerStyle::Chart, "Chart" },
+    { PointerStyle::Detective, "Detective" },
+    { PointerStyle::PivotCol, "PivotCol" },
+    { PointerStyle::PivotRow, "PivotRow" },
+    { PointerStyle::PivotField, "PivotField" },
+    { PointerStyle::PivotDelete, "PivotDelete" },
+    { PointerStyle::Chain, "Chain" },
+    { PointerStyle::ChainNotAllowed, "ChainNotAllowed" },
+    { PointerStyle::AutoScrollN, "AutoScrollN" },
+    { PointerStyle::AutoScrollS, "AutoScrollS" },
+    { PointerStyle::AutoScrollW, "AutoScrollW" },
+    { PointerStyle::AutoScrollE, "AutoScrollE" },
+    { PointerStyle::AutoScrollNW, "AutoScrollNW" },
+    { PointerStyle::AutoScrollNE, "AutoScrollNE" },
+    { PointerStyle::AutoScrollSW, "AutoScrollSW" },
+    { PointerStyle::AutoScrollSE, "AutoScrollSE" },
+    { PointerStyle::AutoScrollNS, "AutoScrollNS" },
+    { PointerStyle::AutoScrollWE, "AutoScrollWE" },
+    { PointerStyle::AutoScrollNSWE, "AutoScrollNSWE" },
+    { PointerStyle::TextVertical, "TextVertical" },
+    { PointerStyle::TabSelectS, "TabSelectS" },
+    { PointerStyle::TabSelectE, "TabSelectE" },
+    { PointerStyle::TabSelectSE, "TabSelectSE" },
+    { PointerStyle::TabSelectW, "TabSelectW" },
+    { PointerStyle::TabSelectSW, "TabSelectSW" },
+    { PointerStyle::HideWhitespace, "HideWhitespace" },
+    { PointerStyle::ShowWhitespace, "ShowWhitespace" },
+};
 class DemoWidgets : public WorkWindow
 {
     VclPtr<MenuBar> mpBar;
@@ -1827,8 +1897,11 @@ class DemoWidgets : public WorkWindow
     VclPtr<CheckBox> mpGLCheck;
     VclPtr<ComboBox> mpGLCombo;
     VclPtr<PushButton> mpGLButton;
+    std::vector<VclPtr<VclHBox>> mvCursorBoxes;
+    std::vector<VclPtr<PushButton>> mvCursorButtons;
 
     DECL_LINK(GLTestClick, Button*, void);
+    DECL_LINK(CursorButtonClick, Button*, void);
 
 public:
     DemoWidgets() :
@@ -1872,6 +1945,25 @@ public:
         mpGLButton->Show();
         mpHBox->Show();
 
+        int i = 0;
+        VclHBox* pCurrentCursorHBox = nullptr;
+        constexpr int numButtonsPerRow = 9;
+        for (auto & rData : gvPointerData)
+        {
+            if (i % numButtonsPerRow == 0)
+            {
+                mvCursorBoxes.push_back(VclPtrInstance<VclHBox>(mpBox.get(), true, numButtonsPerRow));
+                pCurrentCursorHBox = mvCursorBoxes.back().get();
+                pCurrentCursorHBox->Show();
+            }
+            mvCursorButtons.emplace_back(VclPtrInstance<PushButton>(pCurrentCursorHBox));
+            PushButton& rButton = *mvCursorButtons.back();
+            rButton.SetText(OUString::createFromAscii(rData.name));
+            rButton.SetClickHdl(LINK(this,DemoWidgets,CursorButtonClick));
+            rButton.Show();
+            ++i;
+        }
+
         mpBar = VclPtr<MenuBar>::Create();
         mpBar->InsertItem(0,"File");
         VclPtrInstance<PopupMenu> pPopup;
@@ -1888,6 +1980,12 @@ public:
         mpGLCombo.disposeAndClear();
         mpGLCheck.disposeAndClear();
         mpHBox.disposeAndClear();
+        for (auto & p : mvCursorButtons)
+            p.disposeAndClear();
+        mvCursorButtons.clear();
+        for (auto & p : mvCursorBoxes)
+            p.disposeAndClear();
+        mvCursorBoxes.clear();
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
         mpBox.disposeAndClear();
@@ -1955,6 +2053,19 @@ IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 
     if (bEnterLeave)
         OpenGLZoneTest::leave();
+}
+
+IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
+{
+    for (size_t i=0; i<SAL_N_ELEMENTS(gvPointerData); ++i)
+    {
+        if (mvCursorButtons[i].get() == pButton)
+        {
+            mpBox->SetPointer( gvPointerData[i].eStyle );
+            return;
+        }
+    }
+    assert(false);
 }
 
 class DemoPopup : public FloatingWindow
@@ -2176,8 +2287,10 @@ class DemoApp : public Application
                 OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
         fprintf(stderr,"  --test <iterCount> - create benchmark data\n");
         fprintf(stderr,"  --widgets          - launch the widget test.\n");
+        fprintf(stderr,"  --popup            - launch the popup test.\n");
         fprintf(stderr,"  --threads          - render from multiple threads.\n");
         fprintf(stderr,"  --gltest           - run openGL regression tests.\n");
+        fprintf(stderr,"  --font <fontname>  - run the font render test.\n");
         fprintf(stderr, "\n");
         return 0;
     }
@@ -2302,6 +2415,11 @@ protected:
 
 void vclmain::createApplication()
 {
+#ifdef _WIN32
+    _putenv_s("LIBO_VCL_DEMO", "1");
+#else
+    setenv("LIBO_VCL_DEMO", "1", 0);
+#endif
     static DemoApp aApp;
 }
 
