@@ -262,10 +262,7 @@ OUString searchImplForLink(
 OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
                                         const OUString& linkName,
                                         const OUString& implName)
-    // throw ( InvalidRegistryException, RuntimeException )
 {
-//      try
-//      {
         Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );
 
         if (xKey.is())
@@ -289,12 +286,8 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
                 }
             }
         }
-//      }
-//      catch(InvalidRegistryException&)
-//      {
-//      }
 
-    return OUString();
+        return OUString();
 }
 
 

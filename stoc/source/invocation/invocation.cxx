@@ -883,7 +883,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
             if( _xIntrospectionAccess.is() && _xIntrospectionAccess->hasProperty
                  ( aExactName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
             {
-                 Property aProp = _xIntrospectionAccess->getProperty
+                Property aProp = _xIntrospectionAccess->getProperty
                     ( aExactName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
                 fillInfoForProperty( aRetInfo, aProp );
                 bFound = true;

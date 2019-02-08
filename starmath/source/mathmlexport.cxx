@@ -203,7 +203,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
         }
         if ( bRet )
         {
-           if (xStatusIndicator.is())
+            if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(

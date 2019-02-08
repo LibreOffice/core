@@ -400,8 +400,8 @@ SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
     pBasePool=pBase;
     nSearchFamily=eFam;
     bSearchUsed=false;
-        if( (( n & SfxStyleSearchBits::AllVisible ) != SfxStyleSearchBits::AllVisible )
-                && ((n & SfxStyleSearchBits::Used) == SfxStyleSearchBits::Used))
+    if( (( n & SfxStyleSearchBits::AllVisible ) != SfxStyleSearchBits::AllVisible )
+        && ((n & SfxStyleSearchBits::Used) == SfxStyleSearchBits::Used))
     {
         bSearchUsed = true;
         n &= ~SfxStyleSearchBits::Used;
