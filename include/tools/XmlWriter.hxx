@@ -50,6 +50,7 @@ public:
     void attribute(const OString& sTagName, const OString& aValue);
     void attribute(const OString& sTagName, const OUString& aValue);
     void attribute(const OString& sTagName, sal_Int32 aNumber);
+    void attributeDouble(const OString& sTagName, double aNumber);
     void attributeBase64(const OString& sTagName, std::vector<sal_uInt8> const& rValueInBytes);
     void attributeBase64(const OString& sTagName, std::vector<char> const& rValueInBytes);
 

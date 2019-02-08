@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/primitive2dxmldump.hxx>
-#include <test/xmltesttools.hxx>
-#include <tools/XmlWriter.hxx>
+#include <drawinglayer/tools/primitive2dxmldump.hxx>
 
 #include <vcl/metaact.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <tools/stream.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <memory>
 
@@ -37,6 +37,9 @@
 
 using namespace drawinglayer::primitive2d;
 
+namespace drawinglayer::tools
+{
+
 namespace
 {
 
@@ -48,28 +51,79 @@ OUString convertColorToString(const basegfx::BColor& rColor)
     return "#" + aRGBString;
 }
 
-} // anonymous namespace
+void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
+{
+    rWriter.startElement("polypolygon");
+    const basegfx::B2DRange aB2DRange(rB2DPolyPolygon.getB2DRange());
+    rWriter.attributeDouble("height", aB2DRange.getHeight());
+    rWriter.attributeDouble("width", aB2DRange.getWidth());
+    rWriter.attributeDouble("minx", aB2DRange.getMinX());
+    rWriter.attributeDouble("miny", aB2DRange.getMinY());
+    rWriter.attributeDouble("maxx", aB2DRange.getMaxX());
+    rWriter.attributeDouble("maxy", aB2DRange.getMaxY());
+    rWriter.attribute("path", basegfx::utils::exportToSvgD(rB2DPolyPolygon, true, true, false));
+
+    for (basegfx::B2DPolygon const & rPolygon : rB2DPolyPolygon)
+    {
+        rWriter.startElement("polygon");
+        for (sal_uInt32 i = 0; i <rPolygon.count(); ++i)
+        {
+            basegfx::B2DPoint const & rPoint = rPolygon.getB2DPoint(i);
+
+            rWriter.startElement("point");
+            rWriter.attribute("x", OUString::number(rPoint.getX()));
+            rWriter.attribute("y", OUString::number(rPoint.getY()));
+            rWriter.endElement();
+        }
+        rWriter.endElement();
+    }
+
+    rWriter.endElement();
+}
+
+} // end anonymous namespace
 
 Primitive2dXmlDump::Primitive2dXmlDump() :
     maFilter(constMaxActionType, false)
 {}
 
-Primitive2dXmlDump::~Primitive2dXmlDump()
-{}
+Primitive2dXmlDump::~Primitive2dXmlDump() = default;
 
-
-xmlDocPtr Primitive2dXmlDump::dumpAndParse(
+void Primitive2dXmlDump::dump(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
-    const OUString& rTempStreamName)
+    const OUString& rStreamName)
 {
     std::unique_ptr<SvStream> pStream;
 
-    if (rTempStreamName.isEmpty())
+    if (rStreamName.isEmpty())
         pStream.reset(new SvMemoryStream());
     else
-        pStream.reset(new SvFileStream(rTempStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
+        pStream.reset(new SvFileStream(rStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
 
-    tools::XmlWriter aWriter(pStream.get());
+    ::tools::XmlWriter aWriter(pStream.get());
+    aWriter.startDocument();
+    aWriter.startElement("primitive2D");
+
+    decomposeAndWrite(rPrimitive2DSequence, aWriter);
+
+    aWriter.endElement();
+    aWriter.endDocument();
+
+    pStream->Seek(STREAM_SEEK_TO_BEGIN);
+}
+
+xmlDocPtr Primitive2dXmlDump::dumpAndParse(
+    const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
+    const OUString& rStreamName)
+{
+    std::unique_ptr<SvStream> pStream;
+
+    if (rStreamName.isEmpty())
+        pStream.reset(new SvMemoryStream());
+    else
+        pStream.reset(new SvFileStream(rStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
+
+    ::tools::XmlWriter aWriter(pStream.get());
     aWriter.startDocument();
     aWriter.startElement("primitive2D");
 
@@ -80,14 +134,19 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
 
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream.get());
+    std::size_t nSize = pStream->remainingSize();
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
+    pStream->ReadBytes(pBuffer.get(), nSize);
+    pBuffer[nSize] = 0;
+
+    xmlDocPtr pDoc = xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
 
     return pDoc;
 }
 
 void Primitive2dXmlDump::decomposeAndWrite(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
-    tools::XmlWriter& rWriter)
+    ::tools::XmlWriter& rWriter)
 {
     for (size_t i = 0; i < rPrimitive2DSequence.size(); i++)
     {
@@ -116,6 +175,18 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const TransformPrimitive2D& rTransformPrimitive2D = dynamic_cast<const TransformPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("transform");
+
+                basegfx::B2DHomMatrix const & rMatrix = rTransformPrimitive2D.getTransformation();
+                rWriter.attributeDouble("xy11", rMatrix.get(0,0));
+                rWriter.attributeDouble("xy12", rMatrix.get(0,1));
+                rWriter.attributeDouble("xy13", rMatrix.get(0,2));
+                rWriter.attributeDouble("xy21", rMatrix.get(1,0));
+                rWriter.attributeDouble("xy22", rMatrix.get(1,1));
+                rWriter.attributeDouble("xy23", rMatrix.get(1,2));
+                rWriter.attributeDouble("xy31", rMatrix.get(2,0));
+                rWriter.attributeDouble("xy32", rMatrix.get(2,1));
+                rWriter.attributeDouble("xy33", rMatrix.get(2,2));
+
                 decomposeAndWrite(rTransformPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
@@ -127,17 +198,10 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.startElement("polypolygoncolor");
                 rWriter.attribute("color", convertColorToString(rPolyPolygonColorPrimitive2D.getBColor()));
+
                 const basegfx::B2DPolyPolygon& aB2DPolyPolygon(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());
-                const basegfx::B2DRange aB2DRange(aB2DPolyPolygon.getB2DRange());
-                rWriter.attribute("height", aB2DRange.getHeight());
-                rWriter.attribute("width", aB2DRange.getWidth());
-                rWriter.attribute("minx", aB2DRange.getMinX());
-                rWriter.attribute("miny", aB2DRange.getMinY());
-                rWriter.attribute("maxx", aB2DRange.getMaxX());
-                rWriter.attribute("maxy", aB2DRange.getMaxY());
-                rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::utils::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
-                rWriter.endElement();
+                writePolyPolygon(rWriter, aB2DPolyPolygon);
+
                 rWriter.endElement();
             }
             break;
@@ -157,9 +221,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 //getStrokeAttribute()
 
-                rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::utils::exportToSvgD(rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon(), true, true, false));
-                rWriter.endElement();
+                writePolyPolygon(rWriter, rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon());
 
                 rWriter.endElement();
             }
@@ -207,7 +269,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const MaskPrimitive2D& rMaskPrimitive2D = dynamic_cast<const MaskPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("mask");
-
+                writePolyPolygon(rWriter, rMaskPrimitive2D.getMask());
                 decomposeAndWrite(rMaskPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
@@ -270,5 +332,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
     }
 }
+
+} // end namespace drawinglayer::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <test/bootstrapfixture.hxx>
-#include <test/primitive2dxmldump.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <comphelper/seqstream.hxx>
@@ -21,6 +20,7 @@
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/tools/primitive2dxmldump.hxx>
 
 #include <memory>
 
@@ -75,7 +75,7 @@ Primitive2DSequence Test::parseEmf(const OUString& aSource)
 
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
-    Primitive2dXmlDump dumper;
+    drawinglayer::tools::Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
@@ -101,7 +101,7 @@ void Test::TestDrawString()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    Primitive2dXmlDump dumper;
+    drawinglayer::tools::Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
@@ -121,7 +121,7 @@ void Test::TestDrawStringTransparent()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    Primitive2dXmlDump dumper;
+    drawinglayer::tools::Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
@@ -143,7 +143,7 @@ void Test::TestDrawLine()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    Primitive2dXmlDump dumper;
+    drawinglayer::tools::Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
