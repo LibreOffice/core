@@ -2378,7 +2378,7 @@ void SAL_CALL OWriteStream::dispose()
     // for now the listener is just notified at the end of the method to workaround the problem
     // in future a more elegant way should be found
 
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
 }
 
@@ -3096,12 +3096,12 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
         throw lang::DisposedException();
     }
 
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-       ::cppu::OInterfaceContainerHelper* pContainer =
+    ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
-       if ( pContainer )
+    if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )

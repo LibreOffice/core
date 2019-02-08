@@ -183,7 +183,7 @@ void ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer )
     if (!m_aDeflater.finished())
     {
         m_aDeflater.setInputSegment(rBuffer);
-         while (!m_aDeflater.needsInput())
+        while (!m_aDeflater.needsInput())
             doDeflate();
         if (!m_bEncryptCurrentEntry)
             m_aCRC.updateSegment(rBuffer, rBuffer.getLength());

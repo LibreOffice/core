@@ -1881,8 +1881,8 @@ bool VbaDirStreamObject::implIsValid() const
 
 bool VbaDirStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
-     ornRecId = rBaseStrm.readuInt16();
-     ornRecSize = rBaseStrm.readInt32();
+    ornRecId = rBaseStrm.readuInt16();
+    ornRecSize = rBaseStrm.readInt32();
 
     // for no obvious reason, PROJECTVERSION record contains size field of 4, but is 6 bytes long
     if( ornRecId == 9 )
