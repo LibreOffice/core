@@ -574,9 +574,9 @@ bool ScTabViewShell::IsRefInputMode() const
     ScModule* pScMod = SC_MOD();
     if ( pScMod )
     {
-        if( pScMod->IsRefDialogOpen() )
-            return pScMod->IsFormulaMode();
-        if( pScMod->IsFormulaMode() )
+        if( IsRefDialogOpen() )
+            return IsFormulaMode();
+        if( IsFormulaMode() )
         {
             ScInputHandler* pHdl = pScMod->GetInputHdl();
             if ( pHdl )

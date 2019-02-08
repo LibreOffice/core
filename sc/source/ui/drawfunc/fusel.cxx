@@ -432,8 +432,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (pIPClient)
     {
-        ScModule* pScMod = SC_MOD();
-        bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+        bool bUnoRefDialog = rViewShell.IsRefDialogOpen() && rViewShell.GetCurRefDlgId() == WID_SIMPLE_REF;
 
         if ( pIPClient->IsObjectInPlaceActive() && !bUnoRefDialog )
             pIPClient->DeactivateObject();

@@ -159,8 +159,8 @@ void ScViewFunctionSet::BeginDrag()
         nPosY = pViewData->GetCurY();
     }
 
-    ScModule* pScMod = SC_MOD();
-    bool bRefMode = pScMod->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     if (!bRefMode)
     {
         pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp is swallowed
@@ -217,7 +217,8 @@ void ScViewFunctionSet::CreateAnchor()
 {
     if (bAnchor) return;
 
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     if (bRefMode)
         SetAnchor( pViewData->GetRefStartX(), pViewData->GetRefStartY() );
     else
@@ -226,7 +227,8 @@ void ScViewFunctionSet::CreateAnchor()
 
 void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 {
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -270,7 +272,8 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 
 void ScViewFunctionSet::DestroyAnchor()
 {
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     if (bRefMode)
         pViewData->GetView()->DoneRefMode( true );
     else
@@ -443,7 +446,6 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             return false;
     }
 
-    ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
 
@@ -467,7 +469,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     if (bRefMode)
     {
         // if no input is possible from this doc, don't move the reference cursor around
-        if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) )
+        if ( !pViewShell->IsModalMode(pViewData->GetSfxDocShell()) )
         {
             if (!bAnchor)
             {
@@ -719,7 +721,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
 
 bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     if (bRefMode)
         return false;
 
@@ -748,7 +751,8 @@ void ScViewFunctionSet::DeselectAll()
     if (pViewData->IsAnyFillMode())
         return;
 
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsFormulaMode();
     if (bRefMode)
     {
         pViewData->GetView()->DoneRefMode();

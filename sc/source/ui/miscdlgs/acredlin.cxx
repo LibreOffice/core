@@ -840,7 +840,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
 
     ScSimpleRefDlgWrapper::SetDefaultPosSize(GetPosPixel(),GetSizePixel());
 
-    SC_MOD()->SetRefDialog( nId, true );
+     pViewData->GetViewShell()->SetRefDialog( nId, true );
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));

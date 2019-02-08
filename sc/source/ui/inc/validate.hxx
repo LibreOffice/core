@@ -188,9 +188,9 @@ public:
         m_pHBox.clear();
         ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>::dispose();
     }
-    static ScValidationDlg * Find1AliveObject( vcl::Window *pAncestor )
+    static ScValidationDlg * Find1AliveObject( ScTabViewShell* pViewShell, vcl::Window *pAncestor )
     {
-        return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
+        return static_cast<ScValidationDlg *>( pViewShell->Find1RefWindow( SLOTID, pAncestor ) );
     }
     ScTabViewShell *GetTabViewShell()
     {

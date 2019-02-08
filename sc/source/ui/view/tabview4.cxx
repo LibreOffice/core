@@ -162,7 +162,7 @@ void ScTabView::DoneRefMode( bool bContinue )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
-        SC_MOD()->AddRefEntry();
+        aViewData.GetViewShell()->AddRefEntry();
 
     bool bWasRef = aViewData.IsRefMode();
     aViewData.SetRefMode( false, SC_REFTYPE_NONE );
@@ -194,9 +194,8 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         //  This will happen, when first at a reference dialog with Control in
         //  the table is clicked. Then append the new reference to the old content:
 
-        ScModule* pScMod = SC_MOD();
-        if (pScMod->IsFormulaMode())
-            pScMod->AddRefEntry();
+        if (aViewData.GetViewShell()->IsFormulaMode())
+            aViewData.GetViewShell()->AddRefEntry();
 
         InitRefMode( nCurX, nCurY, nCurZ, SC_REFTYPE_REF );
     }
@@ -231,7 +230,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             ScRange aRef(
                     aViewData.GetRefStartX(), aViewData.GetRefStartY(), aViewData.GetRefStartZ(),
                     aViewData.GetRefEndX(), aViewData.GetRefEndY(), aViewData.GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, pDoc, &rMark );
+            aViewData.GetViewShell()->SetReference( aRef, pDoc, &rMark );
             ShowRefTip();
         }
         else if ( eType == SC_REFTYPE_EMBED_LT || eType == SC_REFTYPE_EMBED_RB )
@@ -325,7 +324,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
 
             //  SetReference without Merge-Adjustment
             ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
-            SC_MOD()->SetReference( aRef, pDoc, &rMark );
+            aViewData.GetViewShell()->SetReference( aRef, pDoc, &rMark );
         }
     }
 }

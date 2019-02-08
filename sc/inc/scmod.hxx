@@ -99,14 +99,10 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     std::unique_ptr<SvtUserOptions>          m_pUserOptions;
     std::unique_ptr<SfxErrorHandler>  m_pErrorHdl;
     std::unique_ptr<ScFormEditData>   m_pFormEditData;
-    sal_uInt16          m_nCurRefDlgId;
     bool                m_bIsWaterCan:1;
-    bool                m_bIsInEditCommand:1;
     bool                m_bIsInExecuteDrop:1;
     bool                m_bIsInSharedDocLoading:1;
     bool                m_bIsInSharedDocSaving:1;
-
-    std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
 
     css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
 
@@ -152,8 +148,6 @@ public:
 
     void                SetWaterCan( bool bNew )    { m_bIsWaterCan = bNew; }
     bool                GetIsWaterCan() const       { return m_bIsWaterCan; }
-
-    void                SetInEditCommand( bool bNew )   { m_bIsInEditCommand = bNew; }
 
     void                SetInExecuteDrop( bool bNew )   { m_bIsInExecuteDrop = bNew; }
     bool                IsInExecuteDrop() const         { return m_bIsInExecuteDrop; }
@@ -220,18 +214,6 @@ public:
     void                ClearFormEditData();
     ScFormEditData*     GetFormEditData()       { return m_pFormEditData.get(); }
 
-    // input of reference:
-    SC_DLLPUBLIC void   SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = nullptr );
-    bool                IsModalMode(SfxObjectShell* pDocSh = nullptr);
-    bool                IsFormulaMode();
-    bool                IsRefDialogOpen();
-    bool                IsTableLocked();
-    void                SetReference( const ScRange& rRef, ScDocument* pDoc,
-                                        const ScMarkData* pMarkData = nullptr );
-    void                AddRefEntry();
-    void                EndReference();
-    sal_uInt16          GetCurRefDlgId() const                  { return m_nCurRefDlgId; }
-
     // virtual methods for the options dialog
     virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
@@ -242,10 +224,6 @@ public:
     bool                IsInSharedDocLoading() const        { return m_bIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { m_bIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return m_bIsInSharedDocSaving; }
-
-    SC_DLLPUBLIC void   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC void   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 
     SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);

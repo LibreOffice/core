@@ -372,8 +372,7 @@ void ScDrawView::MarkListHasChanged()
 
     // deactivate IP
 
-    ScModule* pScMod = SC_MOD();
-    bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+    bool bUnoRefDialog = pViewSh->IsRefDialogOpen() && pViewSh->GetCurRefDlgId() == WID_SIMPLE_REF;
 
     ScClient* pClient = static_cast<ScClient*>( pViewSh->GetIPClient() );
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )

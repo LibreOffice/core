@@ -192,9 +192,9 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        if(pScMod->IsRefDialogOpen())
+        if(IsRefDialogOpen())
         {
-            sal_uInt16 nModRefDlgId=pScMod->GetCurRefDlgId();
+            sal_uInt16 nModRefDlgId = GetCurRefDlgId();
             SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
@@ -1133,7 +1133,7 @@ void ScTabViewShell::StartSimpleRefDialog(
 
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    SC_MOD()->SetRefDialog( nId, true, pViewFrm );
+    SetRefDialog( nId, true );
 
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
     if (pWnd)
@@ -1566,7 +1566,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
                 if ( !pFirst )
                     pFirst = GetViewFrame();
 
-                if(SC_MOD()->GetCurRefDlgId()==0)
+                if(GetCurRefDlgId()==0)
                 {
                         pFirst->GetDispatcher()->Execute( SID_UPDATETABLINKS,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
@@ -1585,7 +1585,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             {
                 if ( !pFirst )
                     pFirst = GetViewFrame();
-                if(SC_MOD()->GetCurRefDlgId()==0)
+                if(GetCurRefDlgId()==0)
                 {
                     pFirst->GetDispatcher()->Execute( SID_REIMPORT_AFTER_LOAD,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
@@ -1633,8 +1633,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bForceFocusOnCurCell(false),
     bInPrepareClose(false),
     bInDispose(false),
-    nCurRefDlgId(0),
-    mbInSwitch(false)
+    mbInSwitch(false),
+    m_nCurRefDlgId( 0 ),
+    m_bIsInEditCommand( false )
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 

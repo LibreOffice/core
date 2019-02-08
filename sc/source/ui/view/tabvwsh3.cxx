@@ -208,7 +208,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 sal_uInt16          nId  = ScPrintAreasDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd == nullptr );
+                SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 
@@ -979,7 +979,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 sal_uInt16          nId  = ScHighlightChgDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd == nullptr );
+                SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 

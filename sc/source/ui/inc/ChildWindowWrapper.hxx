@@ -70,7 +70,6 @@ public:
         return WindowID;
     }
 
-private:
     static ScTabViewShell* getTabViewShell( const SfxBindings *pBindings )
     {
         if( !pBindings )

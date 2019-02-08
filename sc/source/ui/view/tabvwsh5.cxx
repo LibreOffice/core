@@ -221,7 +221,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case SfxHintId::ScRefModeChanged:
                 {
-                    bool bRefMode = SC_MOD()->IsFormulaMode();
+                    bool bRefMode = IsFormulaMode();
                     if (!bRefMode)
                         StopRefMode();
                     else

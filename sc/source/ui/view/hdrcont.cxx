@@ -658,7 +658,8 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     if ( ! rMEvt.IsLeft() )
         return;
-    if ( SC_MOD()->IsFormulaMode() )
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if ( pViewSh && pViewSh->IsFormulaMode() )
     {
         if( !pTabView )
             return;
@@ -741,9 +742,10 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( IsDisabled() )
         return;
 
-    if ( SC_MOD()->IsFormulaMode() )
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if ( pViewSh && pViewSh->IsFormulaMode() )
     {
-        SC_MOD()->EndReference();
+        pViewSh->EndReference();
         bInRefMode = false;
         return;
     }
@@ -801,7 +803,8 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    if ( bInRefMode && rMEvt.IsLeft() && SC_MOD()->IsFormulaMode() )
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if ( bInRefMode && rMEvt.IsLeft() && pViewSh && pViewSh->IsFormulaMode() )
     {
         if( !pTabView )
             return;

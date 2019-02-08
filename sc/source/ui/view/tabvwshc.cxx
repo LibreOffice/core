@@ -80,17 +80,10 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 
-void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
-{
-    //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
-    //  and in the view to identify the view that has opened the dialog
-    nCurRefDlgId = nNew;
-}
-
 //ugly hack to call Define Name from Manage Names
 void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 {
-   sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
+   sal_uInt16 nSlotId = GetCurRefDlgId();
    if (nSlotId == FID_DEFINE_NAME)
    {
         mbInSwitch = true;
@@ -100,7 +93,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
         SfxViewFrame* pViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        SetRefDialog( nId, pWnd == nullptr );
    }
    else if( nSlotId == FID_ADD_NAME )
    {
@@ -110,7 +103,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
         SfxViewFrame* pViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        SetRefDialog( nId, pWnd == nullptr );
    }
 }
 
@@ -122,10 +115,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
     // only open dialog when called through ScModule::SetRefDialog,
     // so that it does not re appear for instance after a crash (#42341#).
 
-    if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
-        return nullptr;
-
-    if ( nCurRefDlgId != nSlotId )
+    if ( m_nCurRefDlgId != nSlotId )
     {
         //  the dialog has been opened in a different view
         //  -> lock the dispatcher for this view (modal mode)

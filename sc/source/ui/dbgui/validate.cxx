@@ -850,7 +850,7 @@ bool ScValidationDlg::EnterRefStatus()
 
     if ( pWnd && pWnd->GetWindow()!= this ) pWnd = nullptr;
 
-    SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+    pTabViewShell->SetRefDialog( nId, pWnd == nullptr );
 
     return true;
 }

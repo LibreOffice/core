@@ -175,8 +175,7 @@ SCTAB ScTabControl::GetPrivatDropPos(const Point& rPos )
 
 void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    ScModule* pScMod = SC_MOD();
-    if ( !pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode() )
+    if ( !pViewData->GetViewShell()->IsModalMode() && !pViewData->GetViewShell()->IsFormulaMode() && !IsInEditMode() )
     {
         // activate View
         pViewData->GetViewShell()->SetActive();         // Appear and SetViewFrame
@@ -225,8 +224,7 @@ void ScTabControl::AddTabClick()
 
     // Insert a new sheet at the right end, with default name.
     ScDocument* pDoc = pViewData->GetDocument();
-    ScModule* pScMod = SC_MOD();
-    if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
+    if (!pDoc->IsDocEditable() || pViewData->GetViewShell()->IsTableLocked())
         return;
     OUString aName;
     pDoc->CreateValidTabName(aName);
@@ -248,7 +246,7 @@ void ScTabControl::Select()
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
 
-    if ( pScMod->IsTableLocked() )      // may not be switched now ?
+    if ( pViewData->GetViewShell()->IsTableLocked() )      // may not be switched now ?
     {
         // restore the old state of TabControls
 
@@ -269,7 +267,7 @@ void ScTabControl::Select()
 
     //  InputEnterHandler onlw when not reference input
 
-    bool bRefMode = pScMod->IsFormulaMode();
+    bool bRefMode = pViewData->GetViewShell()->IsFormulaMode();
     if (!bRefMode)
         pScMod->InputEnterHandler();
 
@@ -313,8 +311,8 @@ void ScTabControl::Select()
             ScRange aRange(
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                     pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
-            pScMod->SetReference( aRange, pDoc, &rMark );
-            pScMod->EndReference();                     // due to Auto-Hide
+            pViewData->GetViewShell()->SetReference( aRange, pDoc, &rMark );
+            pViewData->GetViewShell()->EndReference();                     // due to Auto-Hide
         }
 }
 
@@ -434,9 +432,8 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
 
 void ScTabControl::Command( const CommandEvent& rCEvt )
 {
-    ScModule*       pScMod   = SC_MOD();
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
-    bool            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    bool            bDisable = pViewSh->IsFormulaMode() || pViewSh->IsModalMode();
 
     // first activate ViewFrame (Bug 19493):
     pViewSh->SetActive();
@@ -460,8 +457,8 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 
 void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
-    ScModule* pScMod = SC_MOD();
-    bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    ScTabViewShell* pViewSh  = pViewData->GetViewShell();
+    bool bDisable = pViewSh->IsFormulaMode() || pViewSh->IsModalMode();
 
     if (!bDisable)
     {

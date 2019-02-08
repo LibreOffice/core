@@ -2631,22 +2631,19 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
 
 bool ScDocShell::PrepareClose( bool bUI )
 {
-    if(SC_MOD()->GetCurRefDlgId()>0)
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    if( pFrame )
     {
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-        if( pFrame )
+        SfxViewShell* p = pFrame->GetViewShell();
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
+        if(pViewSh && pViewSh->GetCurRefDlgId()>0)
         {
-            SfxViewShell* p = pFrame->GetViewShell();
-            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-            if(pViewSh!=nullptr)
-            {
-                vcl::Window *pWin=pViewSh->GetWindow();
-                if(pWin!=nullptr) pWin->GrabFocus();
-            }
+            vcl::Window *pWin=pViewSh->GetWindow();
+            if(pWin!=nullptr) pWin->GrabFocus();
         }
-
         return false;
     }
+
     if ( m_aDocument.IsInLinkUpdate() || m_aDocument.IsInInterpreter() )
     {
         ErrorMessage(STR_CLOSE_ERROR_LINK);

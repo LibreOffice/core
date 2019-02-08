@@ -31,6 +31,7 @@
 #include <scmod.hxx>
 #include <scres.hrc>
 #include <validate.hxx>
+#include <ChildWindowWrapper.hxx>
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDefDlgWrapper, FID_ADD_NAME )
@@ -166,7 +167,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
 
     if (!GetWindow())
     {
-        SC_MOD()->SetRefDialog( nId, false );
+        pViewShell->SetRefDialog( nId, false );
     }
 }
 
@@ -287,7 +288,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParent
                                              m_pSavedWndParent( nullptr )
 {
     SetWantsFocus( false );
-    VclPtr<ScValidationDlg> pDlg = ScValidationDlg::Find1AliveObject( pParentP );
+    VclPtr<ScValidationDlg> pDlg = ScValidationDlg::Find1AliveObject( ChildWindowWrapper<0>::getTabViewShell(p), pParentP );
     SetWindow(pDlg);
     ScTabViewShell* pViewShell;
     if (pDlg)

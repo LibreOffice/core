@@ -3632,7 +3632,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
         // Also take foreign reference input into account here (e.g. FunctionsAutoPilot),
         // FormEditData, if we're switching from Help to Calc:
-        if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
+        if ( !bFormulaMode && !pActiveViewSh->IsFormulaMode() && !pScMod->GetFormEditData() )
         {
             bool bIgnore = false;
             if ( bModified )
@@ -3757,7 +3757,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
         if ( pInputWin)
         {
             // Do not enable if RefDialog is open
-            if(!pScMod->IsFormulaMode()&& !pScMod->IsRefDialogOpen())
+            if(!pActiveViewSh->IsFormulaMode()&& !pActiveViewSh->IsRefDialogOpen())
             {
                 if ( !pInputWin->IsEnabled())
                 {
@@ -3765,7 +3765,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     pInputWin->Enable();
                 }
             }
-            else if(pScMod->IsRefDialogOpen())
+            else if(pActiveViewSh->IsRefDialogOpen())
             {   // Because every document has its own InputWin,
                 // we should start Timer again, because the input line may
                 // still be active
@@ -3803,7 +3803,7 @@ void ScInputHandler::ResetDelayTimer()
 
 IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
 {
-    if ( nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
+    if ( nullptr == pLastState || pActiveViewSh->IsFormulaMode() || pActiveViewSh->IsRefDialogOpen())
     {
         //! New method at ScModule to query if function autopilot is open
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();

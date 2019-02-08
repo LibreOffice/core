@@ -156,14 +156,14 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
     SCTAB nTab = aViewData.GetTabNo();
     pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = aViewData.GetViewShell()->IsFormulaMode();
 
     if ( bRefMode )
     {
         DoneRefMode();
 
         if (bControl)
-            SC_MOD()->AddRefEntry();
+            aViewData.GetViewShell()->AddRefEntry();
 
         InitRefMode( nPosX, nPosY, nTab, SC_REFTYPE_REF );
     }
@@ -598,7 +598,7 @@ void ScTabView::SelectionChanged()
 
 void ScTabView::CursorPosChanged()
 {
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = aViewData.GetViewShell()->IsFormulaMode();
     if ( !bRefMode ) // check that RefMode works when switching sheets
         aViewData.GetDocShell()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
@@ -1830,8 +1830,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         // so the handling of notes still has the sheet selected on which the notes are.
         DrawDeselectAll();
 
-        ScModule* pScMod = SC_MOD();
-        bool bRefMode = pScMod->IsFormulaMode();
+        bool bRefMode = aViewData.GetViewShell()->IsFormulaMode();
         if ( !bRefMode ) // query, so that RefMode works when switching sheet
         {
             DoneBlockMode();
@@ -1882,7 +1881,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             rBindings.Invalidate( FID_TAB_DESELECTALL );
         }
 
-        bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+        bool bUnoRefDialog = aViewData.GetViewShell()->IsRefDialogOpen() && aViewData.GetViewShell()->GetCurRefDlgId() == WID_SIMPLE_REF;
 
         // recalc zoom-dependent values (before TabChanged, before UpdateEditViewPos)
         RefreshZoom();
@@ -1984,9 +1983,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         rBindings.Invalidate( SID_STYLE_FAMILY4 );      // Designer
         rBindings.Invalidate( SID_TABLES_COUNT );
 
-        if (pScMod->IsRefDialogOpen())
+        if (aViewData.GetViewShell()->IsRefDialogOpen())
         {
-            sal_uInt16 nCurRefDlgId=pScMod->GetCurRefDlgId();
+            sal_uInt16 nCurRefDlgId = aViewData.GetViewShell()->GetCurRefDlgId();
             SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
             SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
             IAnyRefDialog* pRefDlg = pChildWnd ? dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()) : nullptr;
@@ -2733,8 +2732,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
 
     if (!bActivate)
     {
-        ScModule* pScMod = SC_MOD();
-        bool bRefMode = pScMod->IsFormulaMode();
+        bool bRefMode = aViewData.GetViewShell()->IsFormulaMode();
 
             // don't cancel reference input, to allow reference
             // to other document
@@ -2800,7 +2798,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
     {
         bInActivatePart = true;
 
-        bool bRefMode = SC_MOD()->IsFormulaMode();
+        bool bRefMode = aViewData.GetViewShell()->IsFormulaMode();
 
         //  the HasEditView call during SetCursor would fail otherwise
         if ( aViewData.HasEditView(eOld) && !bRefMode )

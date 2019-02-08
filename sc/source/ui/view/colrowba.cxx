@@ -176,8 +176,9 @@ void ScColBar::SelectWindow()
 
 bool ScColBar::IsDisabled() const
 {
-    ScModule* pScMod = SC_MOD();
-    return pScMod->IsModalMode();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
+    return pViewSh->IsModalMode();
 }
 
 bool ScColBar::ResizeAllowed() const
@@ -335,8 +336,9 @@ void ScRowBar::SelectWindow()
 
 bool ScRowBar::IsDisabled() const
 {
-    ScModule* pScMod = SC_MOD();
-    return pScMod->IsModalMode();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
+    return pViewSh->IsModalMode();
 }
 
 bool ScRowBar::ResizeAllowed() const

@@ -153,8 +153,6 @@ private:
     bool                    bInPrepareClose;
     bool                    bInDispose;
 
-    sal_uInt16              nCurRefDlgId;
-
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
 
     // ugly hack for Add button in ScNameDlg
@@ -162,6 +160,11 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
+    //  To find if a ref dialog is open, and
+    //  to identify the view that has opened the dialog.
+    sal_uInt16          m_nCurRefDlgId;
+    std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
+    bool                m_bIsInEditCommand:1;
 
 private:
     void    Construct( TriState nForceDesignMode );
@@ -357,8 +360,6 @@ public:
                                     bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
     void    StopSimpleRefDialog();
 
-    void    SetCurRefDlgId( sal_uInt16 nNew );
-
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
@@ -390,6 +391,24 @@ public:
     static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
+
+    // input of reference:
+    SC_DLLPUBLIC void   SetRefDialog( sal_uInt16 nId, bool bVis );
+    bool                IsModalMode(SfxObjectShell* pDocSh = nullptr) const;
+    bool                IsFormulaMode() const;
+    bool                IsRefDialogOpen() const;
+    bool                IsTableLocked() const;
+    void                SetReference( const ScRange& rRef, ScDocument* pDoc,
+                                      const ScMarkData* pMarkData = nullptr );
+    void                AddRefEntry();
+    void                EndReference();
+    sal_uInt16          GetCurRefDlgId() const { return m_nCurRefDlgId; }
+
+    void                SetInEditCommand( bool bNew )   { m_bIsInEditCommand = bNew; }
+
+    SC_DLLPUBLIC void   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC void   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 };
 
 #endif

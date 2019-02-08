@@ -37,12 +37,12 @@ vcl::Window* ScTabViewShell::GetDialogParent()
 {
     //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
-    if ( nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId() )
+    if ( m_nCurRefDlgId )
     {
         SfxViewFrame* pViewFrm = GetViewFrame();
-        if ( pViewFrm->HasChildWindow(nCurRefDlgId) )
+        if ( pViewFrm->HasChildWindow(m_nCurRefDlgId) )
         {
-            SfxChildWindow* pChild = pViewFrm->GetChildWindow(nCurRefDlgId);
+            SfxChildWindow* pChild = pViewFrm->GetChildWindow(m_nCurRefDlgId);
             if (pChild)
             {
                 vcl::Window* pWin = pChild->GetWindow();

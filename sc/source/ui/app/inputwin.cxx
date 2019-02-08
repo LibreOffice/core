@@ -1371,9 +1371,9 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         // already set in StartEditEngine when the EditEngine is created
 
         // Prevent that the EditView is lost when switching between Views
-        pScMod->SetInEditCommand( true );
+        pStartViewSh->SetInEditCommand( true );
         mpEditView->Command( rCEvt );
-        pScMod->SetInEditCommand( false );
+        pStartViewSh->SetInEditCommand( false );
 
         //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
         //  so don't trigger an InputChanged.
@@ -2163,7 +2163,7 @@ void ScPosWnd::DoEnter()
                     SfxViewFrame* pViewFrm = pViewSh->GetViewFrame();
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                    SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+                    pViewSh->SetRefDialog( nId, pWnd == nullptr );
                 }
                 else
                 {

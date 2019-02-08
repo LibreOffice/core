@@ -291,8 +291,7 @@ void ScTabViewShell::DeactivateOle()
 {
     // deactivate inplace editing if currently active
 
-    ScModule* pScMod = SC_MOD();
-    bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+    bool bUnoRefDialog = IsRefDialogOpen() && GetCurRefDlgId() == WID_SIMPLE_REF;
 
     ScClient* pClient = static_cast<ScClient*>(GetIPClient());
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )

@@ -154,11 +154,10 @@ void ScCornerButton::Resize()
 
 void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    ScModule* pScMod = SC_MOD();
-    bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    bool bDisable = pViewSh->IsFormulaMode() || pViewSh->IsModalMode();
     if (!bDisable)
     {
-        ScTabViewShell* pViewSh = pViewData->GetViewShell();
         pViewSh->SetActive();                                   // Appear and SetViewFrame
         pViewSh->ActiveGrabFocus();
 

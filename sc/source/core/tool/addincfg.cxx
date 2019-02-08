@@ -48,10 +48,7 @@ void ScAddInCfg::Notify( const uno::Sequence<OUString>& )
     // forget all add-in information, re-initialize when needed next time
     ScGlobal::GetAddInCollection()->Clear();
 
-    // function list must also be rebuilt, but can't be modified while function
-    // autopilot is open (function list for autopilot is then still old)
-    if ( SC_MOD()->GetCurRefDlgId() != SID_OPENDLG_FUNCTION )
-        ScGlobal::ResetFunctionList();
+    ScGlobal::ResetFunctionList();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

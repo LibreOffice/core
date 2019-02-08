@@ -470,7 +470,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             {
                 ScViewData& rViewData = mpViewShell->GetViewData();
 
-                m_bFormulaMode = rViewData.IsRefMode() || SC_MOD()->IsFormulaMode();
+                m_bFormulaMode = rViewData.IsRefMode() || mpViewShell->IsFormulaMode();
                 if ( m_bFormulaMode )
                 {
                     NotifyRefMode();
@@ -1643,7 +1643,7 @@ sal_Int32 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sa
 bool ScAccessibleSpreadsheet::IsFormulaMode()
 {
     ScViewData& rViewData = mpViewShell->GetViewData();
-    m_bFormulaMode = rViewData.IsRefMode() || SC_MOD()->IsFormulaMode();
+    m_bFormulaMode = rViewData.IsRefMode() || mpViewShell->IsFormulaMode();
     return m_bFormulaMode ;
 }
 

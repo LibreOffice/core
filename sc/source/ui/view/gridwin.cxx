@@ -1487,15 +1487,15 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bEEMouse = false;
 
     ScModule* pScMod = SC_MOD();
-    if (pScMod->IsModalMode(pViewData->GetSfxDocShell()))
-        return;
 
     pScActiveViewShell = pViewData->GetViewShell();         // if left is clicked
+    if (pViewData->GetViewShell()->IsModalMode(pViewData->GetSfxDocShell()))
+        return;
     nScClickMouseModifier = rMEvt.GetModifier();            // to always catch a control click
 
     bool bDetective = pViewData->GetViewShell()->IsAuditShell();
     bool bRefMode = pViewData->IsRefMode();                 // Start reference
-    bool bFormulaMode = pScMod->IsFormulaMode();            // next click -> reference
+    bool bFormulaMode = pViewData->GetViewShell()->IsFormulaMode(); // next click -> reference
     bool bEditMode = pViewData->HasEditView(eWhich);        // also in Mode==SC_INPUT_TYPE
     bool bDouble = (rMEvt.GetClicks() == 2);
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1854,7 +1854,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     ScModule* pScMod = SC_MOD();
-    if (pScMod->IsModalMode(pViewData->GetSfxDocShell()))
+    if (pViewData->GetViewShell()->IsModalMode(pViewData->GetSfxDocShell()))
         return;
 
     SfxBindings& rBindings = pViewData->GetBindings();
@@ -2004,7 +2004,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     bool bRefMode = pViewData->IsRefMode();
     if (bRefMode)
-        pScMod->EndReference();
+        pViewData->GetViewShell()->EndReference();
 
         // Format paintbrush mode (Switch)
 
@@ -2065,7 +2065,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if ((bDouble || bIsTiledRendering)
             && !bRefMode
             && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
-            && !pScMod->IsRefDialogOpen())
+            && !pViewData->GetViewShell()->IsRefDialogOpen())
     {
         //  data pilot table
         Point aPos = rMEvt.GetPosPixel();
@@ -2255,7 +2255,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pViewData->GetView()->SelectionChanged();
 
         SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
-        bool bFormulaMode = pScMod->IsFormulaMode();
+        bool bFormulaMode = pViewData->GetViewShell()->IsFormulaMode();
         OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
 
         //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
@@ -2319,8 +2319,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     if (rMEvt.IsLeaveWindow() && mpNoteMarker && !mpNoteMarker->IsByKeyboard())
         HideNoteMarker();
 
-    ScModule* pScMod = SC_MOD();
-    if (pScMod->IsModalMode(pViewData->GetSfxDocShell()))
+    if (pViewData->GetViewShell()->IsModalMode(pViewData->GetSfxDocShell()))
         return;
 
     // If the Drag&Drop is started in the edit mode then sadly nothing else is kept
@@ -2357,7 +2356,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    bool bFormulaMode = pScMod->IsFormulaMode();            // next click -> reference
+    bool bFormulaMode = pViewData->GetViewShell()->IsFormulaMode();            // next click -> reference
 
     if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
@@ -2605,7 +2604,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
     if ( rTEvt.IsTrackingCanceled() )           // Cancel everything...
     {
-        if (!pViewData->GetView()->IsInActivatePart() && !SC_MOD()->IsRefDialogOpen())
+        if (!pViewData->GetView()->IsInActivatePart() && !pViewData->GetViewShell()->IsRefDialogOpen())
         {
             if (bDPMouse)
                 bDPMouse = false;               // Paint for each bDragRect
@@ -2632,7 +2631,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
             bool bRefMode = pViewData->IsRefMode();
             if (bRefMode)
-                SC_MOD()->EndReference();       // Do not let the Dialog remain minimized
+                pViewData->GetViewShell()->EndReference();       // Do not let the Dialog remain minimized
         }
     }
     else if ( rTEvt.IsTrackingEnded() )
@@ -2665,7 +2664,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
         // don't remove the edit view while switching views
         ScModule* pScMod = SC_MOD();
-        pScMod->SetInEditCommand( true );
+        pViewData->GetViewShell()->SetInEditCommand( true );
 
         pEditView->Command( aDragEvent );
 
@@ -2673,7 +2672,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
         if (pHdl)
             pHdl->DataChanged();
 
-        pScMod->SetInEditCommand( false );
+        pViewData->GetViewShell()->SetInEditCommand( false );
         if (!pViewData->IsActive())             // dropped to different view?
         {
             ScInputHandler* pViewHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
@@ -2802,8 +2801,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
     // #i7560# FormulaMode check is below scrolling - scrolling is allowed during formula input
-    bool bDisable = pScMod->IsFormulaMode() ||
-                    pScMod->IsModalMode(pViewData->GetSfxDocShell());
+    bool bDisable = pViewData->GetViewShell()->IsFormulaMode() ||
+                    pViewData->GetViewShell()->IsModalMode(pViewData->GetSfxDocShell());
     if (bDisable)
         return;
 
@@ -3174,18 +3173,18 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
 #endif
 
-    if( SC_MOD()->IsRefDialogOpen() )
+    if( pViewData->GetViewShell()->IsRefDialogOpen() )
     {
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
-            SC_MOD()->EndReference();
+            pViewData->GetViewShell()->EndReference();
         }
         else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
             ScRange aRef(
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
+            pViewData->GetViewShell()->SetReference( aRef, pViewData->GetDocument() );
         }
         pViewData->GetViewShell()->SelectionChanged();
         return ;
@@ -4467,7 +4466,7 @@ void ScGridWindow::UpdateEditViewPos()
         //  hide EditView?
 
         bool bHide = ( nEndCol<pViewData->GetPosX(eHWhich) || nEndRow<pViewData->GetPosY(eVWhich) );
-        if ( SC_MOD()->IsFormulaMode() )
+        if ( pViewData->GetViewShell()->IsFormulaMode() )
             if ( pViewData->GetTabNo() != pViewData->GetRefTabNo() )
                 bHide = true;
 
@@ -4687,7 +4686,7 @@ void ScGridWindow::GetFocus()
     if (pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusGotHint(eWhich));
 
-    if ( !SC_MOD()->IsFormulaMode() )
+    if ( !pViewData->GetViewShell()->IsFormulaMode() )
     {
         pViewShell->UpdateInputHandler();
 //      StopMarking();      // If Dialog (error), because then no ButtonUp

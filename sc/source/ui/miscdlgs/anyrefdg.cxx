@@ -633,18 +633,19 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     }
 
     // find parent view frame to close dialog
-    SfxViewFrame* pMyViewFrm = nullptr;
+    ScTabViewShell* pScViewShell = nullptr;
     if ( m_pBindings )
     {
         SfxDispatcher* pMyDisp = m_pBindings->GetDispatcher();
         if (pMyDisp)
-            pMyViewFrm = pMyDisp->GetFrame();
+        {
+            pScViewShell = dynamic_cast< ScTabViewShell *>( pMyDisp->GetFrame()->GetViewShell() );
+            pScViewShell->SetRefDialog( nId, false );
+        }
     }
-    SC_MOD()->SetRefDialog( nId, false, pMyViewFrm );
 
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
-    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler(true);
 }

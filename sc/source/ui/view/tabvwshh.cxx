@@ -20,23 +20,29 @@
 #include <config_features.h>
 
 #include <basic/sberrors.hxx>
+#include <comphelper/lok.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
 
+#include <inputhdl.hxx>
 #include <tabvwsh.hxx>
 #include <client.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <sc.hrc>
+#include <scmod.hxx>
 #include <drwlayer.hxx>
 #include <retypepassdlg.hxx>
 #include <tabprotection.hxx>
+#include <IAnyRefDialog.hxx>
 
 using namespace com::sun::star;
 
@@ -258,4 +264,326 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
     return true;
 }
 
+/**
+ * Reference dialogs
+ */
+void ScTabViewShell::SetRefDialog( sal_uInt16 nId, bool bVis )
+{
+    if(m_nCurRefDlgId==0 || (nId==m_nCurRefDlgId && !bVis))
+    {
+        SfxViewFrame* pViewFrm = GetViewFrame();
+
+        // bindings update causes problems with update of stylist if
+        // current style family has changed
+        //if ( pViewFrm )
+        //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
+
+        m_nCurRefDlgId = bVis ? nId : 0 ;             // before SetChildWindow
+
+        if ( pViewFrm )
+        {
+            pViewFrm->SetChildWindow( nId, bVis );
+        }
+
+        SfxApplication* pSfxApp = SfxGetpApp();
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
+    }
+}
+
+static SfxChildWindow* lcl_GetChildWinFromCurrentView( sal_uInt16 nId )
+{
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+
+    // #i46999# current view frame can be null (for example, when closing help)
+    return pViewFrm ? pViewFrm->GetChildWindow( nId ) : nullptr;
+}
+
+bool ScTabViewShell::IsModalMode(SfxObjectShell* pDocSh) const
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+    bool bIsModal = false;
+
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        if ( pChildWnd )
+        {
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+            assert(pRefDlg);
+            bIsModal = pChildWnd->IsVisible() && pRefDlg &&
+                !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
+        }
+    }
+    else if (pDocSh)
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        if ( pHdl )
+            bIsModal = pHdl->IsModalMode(pDocSh);
+    }
+
+    return bIsModal;
+}
+
+static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
+{
+    // First, try the current view
+    SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( nId );
+    if ( pChildWnd )
+        return pChildWnd;           // found in the current view
+
+    //  if not found there, get the child window from any open view
+    //  it can be open only in one view because nCurRefDlgId is global
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();
+    while ( pViewFrm )
+    {
+        pChildWnd = pViewFrm->GetChildWindow( nId );
+        if ( pChildWnd )
+            return pChildWnd;       // found in any view
+
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm );
+    }
+
+    return nullptr;                    // none found
+}
+
+bool ScTabViewShell::IsTableLocked() const
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+    bool bLocked = false;
+
+    // Up until now just for ScAnyRefDlg
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+        if ( pChildWnd )
+        {
+            IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                bLocked = pRefDlg->IsTableLocked();
+            }
+        }
+        else
+            bLocked = true;     // for other views, see IsModalMode
+    }
+
+    return bLocked;
+}
+
+bool ScTabViewShell::IsRefDialogOpen() const
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+    bool bIsOpen = false;
+
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        if ( pChildWnd )
+            bIsOpen = pChildWnd->IsVisible();
+    }
+
+    return bIsOpen;
+}
+
+bool ScTabViewShell::IsFormulaMode() const
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+    bool bIsFormula = false;
+
+    // formula mode in online is not usable in collaborative mode,
+    // this is a workaround for disabling formula mode in online
+    // when there is more than a single view
+    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::GetActiveShells() > 1)
+            return false;
+
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        if ( pChildWnd )
+        {
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+            assert(pRefDlg);
+            bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
+        }
+    }
+    else
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        if ( pHdl )
+            bIsFormula = pHdl->IsFormulaMode();
+    }
+
+    if (m_bIsInEditCommand)
+        bIsFormula = true;
+
+    return bIsFormula;
+}
+
+static void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
+{
+    if (rMark.GetSelectCount() > 1)
+    {
+        rEndTab = rMark.GetLastSelected();
+        rStartTab = rMark.GetFirstSelected();
+    }
+}
+
+void ScTabViewShell::SetReference( const ScRange& rRef, ScDocument* pDoc,
+                                    const ScMarkData* pMarkData )
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+
+    // In RefDialogs we also trigger the ZoomIn, if the Ref's Start and End are different
+    ScRange aNew = rRef;
+    aNew.PutInOrder(); // Always in the right direction
+
+    if( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        if ( pChildWnd )
+        {
+            if ( m_nCurRefDlgId == SID_OPENDLG_CONSOLIDATE && pMarkData )
+            {
+                SCTAB nStartTab = aNew.aStart.Tab();
+                SCTAB nEndTab   = aNew.aEnd.Tab();
+                lcl_MarkedTabs( *pMarkData, nStartTab, nEndTab );
+                aNew.aStart.SetTab(nStartTab);
+                aNew.aEnd.SetTab(nEndTab);
+            }
+
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                // hide the (color) selection now instead of later from LoseFocus,
+                // don't abort the ref input that causes this call (bDoneRefMode = sal_False)
+                pRefDlg->HideReference( false );
+                pRefDlg->SetReference( aNew, pDoc );
+            }
+        }
+    }
+    else
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        if (pHdl)
+            pHdl->SetReference( aNew, pDoc );
+        else
+        {
+            OSL_FAIL("SetReference without receiver");
+        }
+    }
+}
+
+/**
+ * Multiple selection
+ */
+void ScTabViewShell::AddRefEntry()
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        if ( pChildWnd )
+        {
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                pRefDlg->AddRefEntry();
+            }
+        }
+    }
+    else
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        if (pHdl)
+            pHdl->AddRefEntry();
+    }
+}
+
+void ScTabViewShell::EndReference()
+{
+    //TODO: Move reference dialog handling to view
+    //      Just keep function autopilot here for references to other documents
+
+    // We also annul the ZoomIn again in RefDialogs
+
+    //FIXME: ShowRefFrame at InputHdl, if the Function AutoPilot is open?
+    if ( m_nCurRefDlgId )
+    {
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        if ( pChildWnd )
+        {
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                pRefDlg->SetActive();
+            }
+        }
+    }
+}
+
+void ScTabViewShell::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
+{
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = m_mapRefWindow[nSlotId];
+
+    if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
+    {
+        rlRefWindow.emplace_back(pWnd );
+    }
+
+}
+
+void  ScTabViewShell::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
+{
+    auto iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return;
+
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
+
+    auto i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+
+    if( i == rlRefWindow.end() )
+        return;
+
+    rlRefWindow.erase( i );
+
+    if( rlRefWindow.empty() )
+        m_mapRefWindow.erase( nSlotId );
+}
+
+vcl::Window *  ScTabViewShell::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor )
+{
+    if (!pWndAncestor)
+        return nullptr;
+
+    auto iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return nullptr;
+
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
+
+    while( vcl::Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+
+    for (auto const& refWindow : rlRefWindow)
+        if ( pWndAncestor->IsWindowOrChild( refWindow, refWindow->IsSystemWindow() ) )
+            return refWindow;
+
+    return nullptr;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
