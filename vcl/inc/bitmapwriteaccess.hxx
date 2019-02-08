@@ -19,7 +19,7 @@
 typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess>
     BitmapScopedWriteAccess;
 
-typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess>
+typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireAlphaWriteAccess>
     AlphaScopedWriteAccess;
 
 class VCL_DLLPUBLIC BitmapWriteAccess : public BitmapReadAccess
