@@ -146,6 +146,7 @@ class GtkSalDisplay : public SalDisplay
 
     GdkCursor* getFromXBM( const unsigned char *pBitmap, const unsigned char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
+    GdkCursor* getFromSvg( OUString const & name, int nXHot, int nYHot );
 
 public:
              GtkSalDisplay( GdkDisplay* pDisplay );
