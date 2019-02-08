@@ -89,7 +89,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         m_sTitle = xPackage->getDisplayName();
         m_sVersion = xPackage->getVersion();
         m_sDescription = xPackage->getDescription();
-    m_sLicenseText = xPackage->getLicenseText();
+        m_sLicenseText = xPackage->getLicenseText();
 
         beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
         m_sPublisher = aInfo.First;

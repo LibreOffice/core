@@ -80,7 +80,7 @@ namespace drawinglayer
             maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
 
             // prepare output directly to pixels
-               mpOutputDevice->Push(PushFlags::MAPMODE);
+            mpOutputDevice->Push(PushFlags::MAPMODE);
             mpOutputDevice->SetMapMode();
 
             // react on AntiAliasing settings

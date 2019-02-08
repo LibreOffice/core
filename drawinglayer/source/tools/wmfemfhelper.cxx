@@ -2209,7 +2209,7 @@ namespace wmfemfhelper
                     if(!aWallpaperRectangle.IsEmpty())
                     {
                         const Wallpaper& rWallpaper = pA->GetWallpaper();
-                           const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
+                        const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
                         basegfx::B2DRange aWallpaperRange(
                             aWallpaperRectangle.Left(), aWallpaperRectangle.Top(),
                             aWallpaperRectangle.Right(), aWallpaperRectangle.Bottom());
