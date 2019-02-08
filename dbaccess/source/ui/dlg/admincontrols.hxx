@@ -26,8 +26,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
-#include <svtools/dialogcontrolling.hxx>
-
 namespace dbaui
 {
 
@@ -48,8 +46,8 @@ namespace dbaui
         VclPtr<Edit>                m_pSocket;
         VclPtr<Edit>                m_pNamedPipe;
         Link<void*,void>            m_aControlModificationLink;
-        ::svt::ControlDependencyManager
-                                    m_aControlDependencies;
+        OUString                    m_sHostNameUserText;
+
         DECL_LINK(RadioToggleHdl, RadioButton&, void);
         DECL_LINK(EditModifyHdl, Edit&, void);
 
