@@ -154,8 +154,8 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
                 }
             }
         }
-   }
-   return nRet;
+    }
+    return nRet;
 }
 
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
@@ -178,7 +178,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     // BrowseBox does not have relations.
-       return new utl::AccessibleRelationSetHelper;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 Reference< css::accessibility::XAccessibleStateSet > SAL_CALL

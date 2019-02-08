@@ -238,9 +238,9 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
                     nFocusCount++;
                 }
             }
-        // both items changed?
-        if ( nFocusCount > 1 )
-            break;
+            // both items changed?
+            if ( nFocusCount > 1 )
+                break;
         }
     }
 }
@@ -535,7 +535,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             else if( pToolBox->GetItemPos(pToolBox->GetCurItemId()) != ToolBox::ITEM_NOTFOUND )
             {
                 UpdateChecked_Impl( pToolBox->GetItemPos(pToolBox->GetCurItemId()) );
-                        UpdateIndeterminate_Impl( pToolBox->GetItemPos(pToolBox->GetCurItemId()) );
+                UpdateIndeterminate_Impl( pToolBox->GetItemPos(pToolBox->GetCurItemId()) );
             }
             break;
         }
@@ -552,7 +552,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
                 UpdateChecked_Impl( ToolBox::ITEM_NOTFOUND );
                 UpdateIndeterminate_Impl( static_cast<ToolBox::ImplToolItems::size_type>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData())) );
             }
-        break;
+            break;
         }
 
         case VclEventId::ToolboxHighlight:

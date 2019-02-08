@@ -316,9 +316,9 @@ namespace accessibility
 
         if ( IsAlive_Impl() )
         {
-               pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-               pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-               pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+            pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
+            pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
+            pStateSetHelper->AddState( AccessibleStateType::ENABLED );
             pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
             if ( IsShowing_Impl() )
             {

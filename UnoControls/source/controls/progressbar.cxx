@@ -310,7 +310,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
 
     // This paint method is not buffered !!
     // Every request paint the completely control. ( but only, if peer exist )
-     if ( rGraphics.is () )
+    if ( rGraphics.is () )
     {
         MutexGuard  aGuard (m_aMutex);
 
