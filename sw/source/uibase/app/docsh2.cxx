@@ -1408,8 +1408,8 @@ void SwDocShell::SetModified( bool bSet )
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {
-         if (!m_xDoc->getIDocumentState().IsInCallModified())
-         {
+        if (!m_xDoc->getIDocumentState().IsInCallModified())
+        {
             EnableSetModified( false );
             if( bSet )
             {
@@ -1424,7 +1424,7 @@ void SwDocShell::SetModified( bool bSet )
                 m_xDoc->getIDocumentState().ResetModified();
 
             EnableSetModified();
-         }
+        }
 
         UpdateChildWindows();
         Broadcast(SfxHint(SfxHintId::DocChanged));

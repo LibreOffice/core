@@ -278,16 +278,16 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
         pDestShell->GetCursor()->DeleteMark();
     }
 #if OSL_DEBUG_LEVEL > 0
-// check if the indices are registered in the correct nodes
-{
-    for(SwPaM& rCmp : pDestShell->GetCursor()->GetRingContainer())
+    // check if the indices are registered in the correct nodes
     {
-        OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
-                    == rCmp.GetContentNode(), "Point in wrong Node" );
-        OSL_ENSURE( rCmp.GetMark()->nContent.GetIdxReg()
-                    == rCmp.GetContentNode(false), "Mark in wrong Node" );
+        for(SwPaM& rCmp : pDestShell->GetCursor()->GetRingContainer())
+        {
+            OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
+                        == rCmp.GetContentNode(), "Point in wrong Node" );
+            OSL_ENSURE( rCmp.GetMark()->nContent.GetIdxReg()
+                        == rCmp.GetContentNode(false), "Mark in wrong Node" );
+        }
     }
-}
 #endif
 
     // close Undo container here

@@ -49,7 +49,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     // We play it safe: Remove old font information whenever the printer
     // resolution or the zoom factor changes. For that, Init() and Reformat()
     // are the most secure places.
-     pFntCache->Flush( );
+    pFntCache->Flush( );
 
     // ViewOptions are created dynamically
 

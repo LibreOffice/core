@@ -541,7 +541,7 @@ SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
     , m_pMeta( i_pMeta )
     , m_pTextAttr( nullptr )
 {
-   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFormatMeta: invalid which id!");
     OSL_ENSURE(m_pMeta, "SwFormatMeta: no Meta ?");
     // DO NOT call m_pMeta->SetFormatMeta(this) here; only from SetTextAttr!

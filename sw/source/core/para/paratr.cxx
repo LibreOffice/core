@@ -118,7 +118,7 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_DROPCAP_DISTANCE : rVal <<= static_cast<sal_Int16>(convertTwipToMm100(m_nDistance)); break;
         case MID_DROPCAP_FORMAT:
         {
-             style::DropCapFormat aDrop;
+            style::DropCapFormat aDrop;
             aDrop.Lines = m_nLines   ;
             aDrop.Count = m_nChars   ;
             aDrop.Distance  = convertTwipToMm100(m_nDistance);

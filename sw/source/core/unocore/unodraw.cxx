@@ -2224,10 +2224,10 @@ awt::Point SAL_CALL SwXShape::getPosition()
             // #i53320# - relative position of group member and
             // top group object is always given in horizontal left-to-right layout.
             awt::Point aOffset( 0, 0 );
-                {
-                    aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
-                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
-                }
+            {
+                aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
+                aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+            }
             aOffset.X = convertTwipToMm100(aOffset.X);
             aOffset.Y = convertTwipToMm100(aOffset.Y);
             aPos.X += aOffset.X;

@@ -227,8 +227,8 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
 
                     nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
                     bAddSpaceChanged = true;
-               }
-               if( nKashidasDropped )
+                }
+                if( nKashidasDropped )
                    rSI.MarkKashidasInvalid( nKashidasDropped, nIdx, nNext - nIdx );
             }
             if ( bAddSpaceChanged )
@@ -642,9 +642,9 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
         }
         nLen = nLen + pPos->GetLen();
         pPos = pPos->GetNextPortion();
-     }
+    }
 
-     if( ! bTabCompat && ! bMultiTab && SvxAdjust::Right == GetAdjust() )
+    if( ! bTabCompat && ! bMultiTab && SvxAdjust::Right == GetAdjust() )
         // portions are moved to the right if possible
         pLeft->AdjustRight( pCurrent );
 }

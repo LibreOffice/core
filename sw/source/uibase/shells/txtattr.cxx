@@ -63,7 +63,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     const SfxItemSet  *pArgs   = rReq.GetArgs();
-          int          eState = STATE_TOGGLE;
+    int        eState = STATE_TOGGLE;
     sal_uInt16 nWhich = rReq.GetSlot();
 
     if(pArgs )

@@ -3340,9 +3340,10 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         if ( pFrame->IsRetouche() )
         {
             if ( pFrame->IsRetoucheFrame() && bWin && !pFrame->GetNext() )
-            {   if ( !pPage )
+            {
+                if ( !pPage )
                     pPage = FindPageFrame();
-               pFrame->Retouch( pPage, rRect );
+                pFrame->Retouch( pPage, rRect );
             }
             pFrame->ResetRetouche();
         }
@@ -6281,7 +6282,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                     //     background transparency have to be considered
                     //     Set missing 5th parameter to the default value GRFNUM_NO
                     //         - see declaration in /core/inc/frmtool.hxx.
-                            ::DrawGraphic(
+                        ::DrawGraphic(
                                 pItem,
                                 pOut,
                                 aOrigBackRect,
@@ -7387,7 +7388,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         ::SetOutDevAndWin( pSh, pOld, pWin, nZoom );
 
         // #i92711# end Pre/PostPaint encapsulation when pOut is back and content is painted
-           pSh->DLPostPaint2(true);
+        pSh->DLPostPaint2(true);
 
         aMet.Stop();
         aMet.Move( -pFly->getFrameArea().Left(), -pFly->getFrameArea().Top() );

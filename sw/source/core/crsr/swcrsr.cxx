@@ -1844,7 +1844,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 // Move cursor to non-covered cell:
                 const SwTableNode* pTableNd = pTableBoxStartNode->FindTableNode();
                 pTableBox = & pTableBox->FindStartOfRowSpan( pTableNd->GetTable() );
-                 SwNodeIndex& rPtIdx = GetPoint()->nNode;
+                SwNodeIndex& rPtIdx = GetPoint()->nNode;
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
 

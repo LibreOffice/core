@@ -2862,7 +2862,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
             std::make_unique<SwUndoAttrTable>( *rTab.GetTableNode(), true ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
-      ::ClearFEShellTabCols(*this, nullptr);
+    ::ClearFEShellTabCols(*this, nullptr);
     SwClearFntCacheTextGlyphs();
     getIDocumentState().SetModified();
 }

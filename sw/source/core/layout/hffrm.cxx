@@ -269,7 +269,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                             static_cast<SwTextFrame*>(pFrame)->IsJoinLocked(),
                             "<SwHeadFootFrame::FormatSize(..)> - text frame invalid and not locked." );
 
-                            if ( pFrame->IsTextFrame() && pFrame->isFrameAreaDefinitionValid() )
+                    if ( pFrame->IsTextFrame() && pFrame->isFrameAreaDefinitionValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrame( *pFrame,
                                                                   *(pFrame->FindPageFrame()) ) )

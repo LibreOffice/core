@@ -509,7 +509,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
         pNd = aSttRg.GetNode().EndOfSectionNode();
         if( pNd->GetIndex() >= aEndRg.GetIndex() )
             break;
-       --aSttRg;
+        --aSttRg;
     }
     ++aSttRg;
 

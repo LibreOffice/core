@@ -2717,7 +2717,7 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
             continue;
         }
 
-       assert(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
+        assert(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
                     && pHt->HasDummyChar() )
                 // next line: deleting exactly dummy char: DeleteAttributes
                 || ((nHintStart == nStartIdx) && (nHintStart + 1 == nEndIdx)));
@@ -3714,7 +3714,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
             SwTextAttr *const pHint = GetTextAttrForCharAt( nPos );
             if (pHint)
             {
-               assert(!( pHint->GetEnd() && pHint->HasDummyChar()
+                assert(!( pHint->GetEnd() && pHint->HasDummyChar()
                             && (pHint->GetStart() < nEndPos)
                             && (*pHint->GetEnd()   > nEndPos) ));
                     // "deleting left-overlapped attribute with CH_TXTATR"

@@ -1913,11 +1913,11 @@ bool SwContentAtPos::IsInRTLText()const
         SwTextFrame* pTmpFrame = aIter.First();
         while( pTmpFrame )
         {
-                if ( !pTmpFrame->IsFollow())
-                {
-                    bRet = pTmpFrame->IsRightToLeft();
-                    break;
-                }
+            if ( !pTmpFrame->IsFollow())
+            {
+                bRet = pTmpFrame->IsRightToLeft();
+                break;
+            }
             pTmpFrame = aIter.Next();
         }
     }

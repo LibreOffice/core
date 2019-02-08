@@ -2384,7 +2384,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         }
     }
 
-     m_rWW8Export.InsInt16( nTableOffset );
+    m_rWW8Export.InsInt16( nTableOffset );
 
     ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( const auto nCol : *pGridCols )
@@ -4001,7 +4001,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
         0,0,0,0,                            // /               /4
     };
-   sal_uInt32 slen = sizeof(sal_uInt32)
+    sal_uInt32 slen = sizeof(sal_uInt32)
         + sizeof(aFieldData)
         + sizeof( aFieldHeader.version ) + sizeof( aFieldHeader.bits ) + sizeof( aFieldHeader.cch ) + sizeof( aFieldHeader.hps )
         + 2*ffname.getLength() + 4

@@ -265,7 +265,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             rAnchorFrame.SwitchHorizontalToVertical( aAnchorPos );
 
         // #i44347# - keep last object rectangle at anchored object
-       OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( &GetAnchoredObj() ) !=  nullptr,
+        OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( &GetAnchoredObj() ) !=  nullptr,
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );

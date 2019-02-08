@@ -1006,13 +1006,13 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
         const ::SfxItemSet *pItemSet = &xStyle->GetItemSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     else
     {
         const ::SfxItemSet *pItemSet = &pDoc->getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     const ::uno::Any* pEdit;
@@ -1994,7 +1994,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
         uno::Sequence<text::TextContentAnchorType> aTypes(5);
-         text::TextContentAnchorType* pArray = aTypes.getArray();
+        text::TextContentAnchorType* pArray = aTypes.getArray();
         pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
         pArray[1] = text::TextContentAnchorType_AS_CHARACTER;
         pArray[2] = text::TextContentAnchorType_AT_PAGE;
@@ -2077,7 +2077,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             OUString sFltName;
             SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), nullptr, &sFltName );
-                aAny <<= sFltName;
+            aAny <<= sFltName;
         }
         else if( FN_UNO_GRAPHIC_URL == pEntry->nWID )
         {

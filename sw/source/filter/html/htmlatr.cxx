@@ -796,7 +796,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rInfo.bOutDiv = true;
         rHWrt.IncIndentLevel();
         rHWrt.m_bLFPossible = true;
-            rHWrt.OutNewLine();
+        rHWrt.OutNewLine();
     }
 
     // for BLOCKQUOTE, ADDRESS and DD we output another paragrah token, if

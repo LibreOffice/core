@@ -572,7 +572,8 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
     // If the predecessor is the master and/or the successor is the Follow,
     // then take their content and destroy them.
     if ( GetPrev() && GetPrev() == GetMaster() )
-    { OSL_ENSURE( SwFlowFrame::CastFlowFrame( GetPrev()->GetLower() ),
+    {
+        OSL_ENSURE( SwFlowFrame::CastFlowFrame( GetPrev()->GetLower() ),
                 "Footnote without content?" );
         SwFlowFrame::CastFlowFrame( GetPrev()->GetLower())->
             MoveSubTree( this, GetLower() );
@@ -581,7 +582,8 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
         SwFrame::DestroyFrame(pDel);
     }
     if ( GetNext() && GetNext() == GetFollow() )
-    { OSL_ENSURE( SwFlowFrame::CastFlowFrame( GetNext()->GetLower() ),
+    {
+        OSL_ENSURE( SwFlowFrame::CastFlowFrame( GetNext()->GetLower() ),
                 "Footnote without content?" );
         SwFlowFrame::CastFlowFrame( GetNext()->GetLower() )->MoveSubTree( this );
         SwFrame *pDel = GetNext();
@@ -1130,8 +1132,8 @@ void SwFootnoteBossFrame::ResetFootnote( const SwFootnoteFrame *pCheck )
     SwFrame* pFrame = aIter.First();
     while( pFrame )
     {
-            if( pFrame->getRootFrame() == pCheck->getRootFrame() )
-            {
+        if( pFrame->getRootFrame() == pCheck->getRootFrame() )
+        {
             SwFrame *pTmp = pFrame->GetUpper();
             while ( pTmp && !pTmp->IsFootnoteFrame() )
                 pTmp = pTmp->GetUpper();
@@ -1255,7 +1257,8 @@ void SwFootnoteBossFrame::InsertFootnote( SwFootnoteFrame* pNew )
             // index is after the index of the newly inserted, to place the new one correctly
             pSibling = static_cast<SwFootnoteFrame*>(pParent->Lower());
             if ( !pSibling )
-            { OSL_ENSURE( false, "Could not find space for footnote.");
+            {
+                OSL_ENSURE( false, "Could not find space for footnote.");
                 return;
             }
             nCmpPos  = ::lcl_FindFootnotePos( pDoc, pSibling->GetAttr() );
@@ -1832,7 +1835,8 @@ void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
             } while( !pNxtFootnote && pBoss );
         }
         else if( !pNxtFootnote->GetAttr()->GetFootnote().IsEndNote() )
-        { OSL_ENSURE( !pNxtFootnote->GetMaster(), "_CollectFootnote: Master expected" );
+        {
+            OSL_ENSURE( !pNxtFootnote->GetMaster(), "_CollectFootnote: Master expected" );
             while ( pNxtFootnote->GetMaster() )
                 pNxtFootnote = pNxtFootnote->GetMaster();
         }
@@ -2045,7 +2049,8 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
             }
         }
         else
-        { OSL_ENSURE( !pFootnote->GetMaster() && !pFootnote->GetFollow(),
+        {
+            OSL_ENSURE( !pFootnote->GetMaster() && !pFootnote->GetFollow(),
                     "DelFootnote and Master/Follow?" );
             SwFrame::DestroyFrame(pFootnote);
             // #i21478#

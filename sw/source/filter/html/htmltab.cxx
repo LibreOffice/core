@@ -818,7 +818,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     OSL_ENSURE(nCells < m_aCells.size(), "number of cells too large");
 
 #if OSL_DEBUG_LEVEL > 0
-     sal_uInt16 const nEnd = m_aCells.size();
+    sal_uInt16 const nEnd = m_aCells.size();
 #endif
     // The colspan of empty cells at the end has to be fixed to the new
     // number of cells.

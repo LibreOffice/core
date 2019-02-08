@@ -777,7 +777,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 
 wwSprmParser::wwSprmParser(const WW8Fib& rFib) : meVersion(rFib.GetFIBVersion())
 {
-   OSL_ENSURE((meVersion >= ww::eWW1 && meVersion <= ww::eWW8),
+    OSL_ENSURE((meVersion >= ww::eWW1 && meVersion <= ww::eWW8),
         "Impossible value for version");
 
     mnDelta = (ww::IsSevenMinus(meVersion)) ? 0 : 1;
@@ -6112,12 +6112,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         }
         else if (IsEightPlus(eVer))
         {
-          m_fMac              =   aVer8Bits1  & 0x01           ;
-          m_fEmptySpecial     = ( aVer8Bits1  & 0x02 ) >> 1;
-          m_fLoadOverridePage = ( aVer8Bits1  & 0x04 ) >> 2;
-          m_fFuturesavedUndo  = ( aVer8Bits1  & 0x08 ) >> 3;
-          m_fWord97Saved      = ( aVer8Bits1  & 0x10 ) >> 4;
-          m_fWord2000Saved    = ( aVer8Bits1  & 0x20 ) >> 5;
+            m_fMac              =   aVer8Bits1  & 0x01           ;
+            m_fEmptySpecial     = ( aVer8Bits1  & 0x02 ) >> 1;
+            m_fLoadOverridePage = ( aVer8Bits1  & 0x04 ) >> 2;
+            m_fFuturesavedUndo  = ( aVer8Bits1  & 0x08 ) >> 3;
+            m_fWord97Saved      = ( aVer8Bits1  & 0x10 ) >> 4;
+            m_fWord2000Saved    = ( aVer8Bits1  & 0x20 ) >> 5;
 
             /*
                 especially for WW8:
@@ -7969,24 +7969,24 @@ void WW8Dop::SetCompatibilityOptions2(sal_uInt32 a32Bit)
     fCompatibilityOptions_Unknown2_2                        = ( a32Bit &  0x00000002 ) >>  1 ;
     fDontUseHTMLAutoSpacing     = ( a32Bit &  0x00000004 ) >>  2 ;
     fCompatibilityOptions_Unknown2_4                    = ( a32Bit &  0x00000008 ) >>  3 ;
-       fCompatibilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
-       fCompatibilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
-       fCompatibilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
-       fCompatibilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
-       fCompatibilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
-       fCompatibilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
-       fCompatibilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
-       fCompatibilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
+    fCompatibilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
+    fCompatibilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
+    fCompatibilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
+    fCompatibilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
+    fCompatibilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
+    fCompatibilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
+    fCompatibilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
+    fCompatibilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
     fCompatibilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
     fCompatibilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
     fCompatibilityOptions_Unknown2_15                   = ( a32Bit &  0x00004000 ) >> 14 ;
     fCompatibilityOptions_Unknown2_16                   = ( a32Bit &  0x00008000 ) >> 15 ;
-       fCompatibilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
-       fCompatibilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
-       fCompatibilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
-       fCompatibilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
+    fCompatibilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
+    fCompatibilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
+    fCompatibilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
+    fCompatibilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
     fCompatibilityOptions_Unknown2_21                   = ( a32Bit &  0x00100000 ) >> 20 ;
-       fCompatibilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
+    fCompatibilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
     fCompatibilityOptions_Unknown2_23                   = ( a32Bit &  0x00400000 ) >> 22 ;
     fCompatibilityOptions_Unknown2_24                   = ( a32Bit &  0x00800800 ) >> 23 ;
     fCompatibilityOptions_Unknown2_25                   = ( a32Bit &  0x01000800 ) >> 24 ;
@@ -7996,7 +7996,7 @@ void WW8Dop::SetCompatibilityOptions2(sal_uInt32 a32Bit)
     fCompatibilityOptions_Unknown2_29                   = ( a32Bit &  0x10000800 ) >> 28 ;
     fCompatibilityOptions_Unknown2_30                   = ( a32Bit &  0x20000800 ) >> 29 ;
     fCompatibilityOptions_Unknown2_31                   = ( a32Bit &  0x40000800 ) >> 30 ;
-       fCompatibilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
+    fCompatibilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
 sal_uInt32 WW8Dop::GetCompatibilityOptions2() const

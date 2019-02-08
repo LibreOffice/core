@@ -494,7 +494,7 @@ OUString SwAuthorityField::ConditionalExpandAuthIdentifier(
     {
         sal_IntPtr & rnTempSequencePos(pLayout && pLayout->IsHideRedlines()
                 ? m_nTempSequencePosRLHidden : m_nTempSequencePos);
-       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
+        if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
             rnTempSequencePos = pAuthType->GetSequencePos(m_xAuthEntry.get(), pLayout);
         if (0 <= rnTempSequencePos)
             sRet += OUString::number(rnTempSequencePos);
@@ -520,7 +520,7 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField,
     {
         sal_IntPtr & rnTempSequencePos(pLayout && pLayout->IsHideRedlines()
                 ? m_nTempSequencePosRLHidden : m_nTempSequencePos);
-       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
+        if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
             rnTempSequencePos = pAuthType->GetSequencePos(m_xAuthEntry.get(), pLayout);
         if (0 <= rnTempSequencePos)
             sRet += OUString::number(rnTempSequencePos);

@@ -268,7 +268,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         if( pNoTextNode )
         {
             // Set size
-             Size aSize( pNoTextNode->GetTwipSize() );
+            Size aSize( pNoTextNode->GetTwipSize() );
             if( MINFLY > aSize.Width() )
                 aSize.setWidth( DEF_FLY_WIDTH );
             aFormatSize.SetWidth( aSize.Width() );
@@ -346,7 +346,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             pNewTextNd->SetAttr(*pItem);
         }
 
-         pFormat = MakeFlySection_( *pAnchorPos, *pNewTextNd,
+        pFormat = MakeFlySection_( *pAnchorPos, *pNewTextNd,
                                 eAnchorType, pFlySet, pFrameFormat );
     }
     return pFormat;
@@ -1091,7 +1091,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     pNewSet->Put( pOldFormat->GetAnchor() );
 
     // The new one should be variable in its height!
-     Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
+    Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFormatFrameSize aFrameSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrameSize );
 

@@ -578,14 +578,14 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case  SwServiceType::VbaProjectNameProvider :
 #if HAVE_FEATURE_SCRIPTING
         {
-                        uno::Reference< container::XNameContainer > xProjProv = rDoc.GetVBATemplateToProjectCache();
-                        if (!xProjProv.is() && rDoc.GetDocShell()
+                uno::Reference< container::XNameContainer > xProjProv = rDoc.GetVBATemplateToProjectCache();
+                if (!xProjProv.is() && rDoc.GetDocShell()
                             && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
-                        {
-                xProjProv = new SwVbaProjectNameProvider;
-                            rDoc.SetVBATemplateToProjectCache(xProjProv);
-                        }
-            xRet = xProjProv;
+                {
+                    xProjProv = new SwVbaProjectNameProvider;
+                    rDoc.SetVBATemplateToProjectCache(xProjProv);
+                }
+                xRet = xProjProv;
         }
 #endif
         break;

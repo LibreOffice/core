@@ -623,7 +623,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SvxTabStopItem aTabStops( static_cast<const SvxTabStopItem&>(pReqArgs->
                                                         Get( nWhich )));
             aTabStops.SetWhich(RES_PARATR_TABSTOP);
-             const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
+            const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
 
             // Default tab at pos 0
             SfxItemSet aSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
@@ -1474,7 +1474,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aLR.SetWhich(nWhich);
                 rSet.Put(aLR);
             }
-        break;
+            break;
         }
 
         case SID_ATTR_PARA_ULSPACE:

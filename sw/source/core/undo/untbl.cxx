@@ -1936,7 +1936,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTableBox *pBox, *pCpyBox = pTableNd->GetTable().GetTabSortBoxes()[0];
     SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
-CHECKTABLE(pTableNd->GetTable())
+    CHECKTABLE(pTableNd->GetTable())
 
     SwSelBoxes aSelBoxes;
     SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
@@ -1953,7 +1953,7 @@ CHECKTABLE(pTableNd->GetTable())
         aSelBoxes.insert( pBox );
     }
 
-CHECKTABLE(pTableNd->GetTable())
+    CHECKTABLE(pTableNd->GetTable())
 
     SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     // 2. deleted the inserted boxes
@@ -2035,7 +2035,7 @@ CHECKTABLE(pTableNd->GetTable())
             rDoc.getIDocumentContentOperations().DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
     }
-CHECKTABLE(pTableNd->GetTable())
+    CHECKTABLE(pTableNd->GetTable())
 
     pSaveTable->CreateNew( pTableNd->GetTable(), true, false );
 
@@ -2054,7 +2054,7 @@ CHECKTABLE(pTableNd->GetTable())
     pPam->SetMark();
     pPam->DeleteMark();
 
-CHECKTABLE(pTableNd->GetTable())
+    CHECKTABLE(pTableNd->GetTable())
     ClearFEShellTabCols(rDoc, nullptr);
 }
 
