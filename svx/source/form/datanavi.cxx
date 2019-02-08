@@ -616,10 +616,10 @@ namespace svxform
                     }
                 }
 
-                ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode.get(), m_xUIHelper );
-                aDlg->SetText( SvxResId( pResId ) );
-                aDlg->InitText( eType );
-                short nReturn = aDlg->Execute();
+                AddDataItemDialog aDlg(GetFrameWeld(), pNode.get(), m_xUIHelper);
+                aDlg.set_title(SvxResId(pResId));
+                aDlg.InitText( eType );
+                short nReturn = aDlg.run();
                 if (  DGTInstance == m_eGroup )
                 {
                     if ( RET_OK == nReturn )
@@ -687,7 +687,7 @@ namespace svxform
                             return bHandled;
                     }
 
-                    ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
+                    AddDataItemDialog aDlg(GetFrameWeld(), pNode, m_xUIHelper);
                     DataItemType eType = DITElement;
                     const char* pResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
@@ -711,9 +711,9 @@ namespace svxform
                         pResId = RID_STR_DATANAV_EDIT_BINDING;
                         eType = DITBinding;
                     }
-                    aDlg->SetText( SvxResId( pResId ) );
-                    aDlg->InitText( eType );
-                    if ( aDlg->Execute() == RET_OK )
+                    aDlg.set_title(SvxResId(pResId));
+                    aDlg.InitText( eType );
+                    if (aDlg.run() == RET_OK)
                     {
                         // Set the new name
                         OUString sNewName;
@@ -2229,9 +2229,9 @@ namespace svxform
         static_cast<SfxDockingWindow*>(GetWindow())->Initialize( _pInfo );
     }
 
-    AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,
+    AddDataItemDialog::AddDataItemDialog(weld::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
-        : ModalDialog(pParent, "AddDataItemDialog" , "svx/ui/adddataitemdialog.ui")
+        : GenericDialogController(pParent, "svx/ui/adddataitemdialog.ui", "AddDataItemDialog")
         , m_xUIHelper(_rUIHelper)
         , m_pItemNode(_pNode)
         , m_eItemType(DITNone)
@@ -2239,42 +2239,34 @@ namespace svxform
         , m_sFL_Attribute(SvxResId(RID_STR_ATTRIBUTE))
         , m_sFL_Binding(SvxResId(RID_STR_BINDING))
         , m_sFT_BindingExp(SvxResId(RID_STR_BINDING_EXPR))
+        , m_xItemFrame(m_xBuilder->weld_frame("itemframe"))
+        , m_xNameFT(m_xBuilder->weld_label("nameft"))
+        , m_xNameED(m_xBuilder->weld_entry("name"))
+        , m_xDefaultFT(m_xBuilder->weld_label("valueft"))
+        , m_xDefaultED(m_xBuilder->weld_entry("value"))
+        , m_xDefaultBtn(m_xBuilder->weld_button("browse"))
+        , m_xSettingsFrame(m_xBuilder->weld_widget("settingsframe"))
+        , m_xDataTypeFT(m_xBuilder->weld_label("datatypeft"))
+        , m_xDataTypeLB(m_xBuilder->weld_combo_box("datatype"))
+        , m_xRequiredCB(m_xBuilder->weld_check_button("required"))
+        , m_xRequiredBtn(m_xBuilder->weld_button("requiredcond"))
+        , m_xRelevantCB(m_xBuilder->weld_check_button("relevant"))
+        , m_xRelevantBtn(m_xBuilder->weld_button("relevantcond"))
+        , m_xConstraintCB(m_xBuilder->weld_check_button("constraint"))
+        , m_xConstraintBtn(m_xBuilder->weld_button("constraintcond"))
+        , m_xReadonlyCB(m_xBuilder->weld_check_button("readonly"))
+        , m_xReadonlyBtn(m_xBuilder->weld_button("readonlycond"))
+        , m_xCalculateCB(m_xBuilder->weld_check_button("calculate"))
+        , m_xCalculateBtn(m_xBuilder->weld_button("calculatecond"))
+        , m_xOKBtn(m_xBuilder->weld_button("ok"))
     {
-        get(m_pItemFrame, "itemframe");
-        get(m_pNameFT, "nameft");
-        get(m_pNameED, "name");
-        get(m_pDefaultFT, "valueft");
-        get(m_pDefaultED, "value");
-        get(m_pDefaultBtn, "browse");
-        get(m_pSettingsFrame, "settingsframe");
-        get(m_pDataTypeFT, "datatypeft");
-        get(m_pDataTypeLB, "datatype");
-        get(m_pRequiredCB, "required");
-        get(m_pRequiredBtn, "requiredcond");
-        get(m_pRelevantCB, "relevant");
-        get(m_pRelevantBtn, "relevantcond");
-        get(m_pConstraintCB, "constraint");
-        get(m_pConstraintBtn, "constraintcond");
-        get(m_pReadonlyCB, "readonly");
-        get(m_pReadonlyBtn, "readonlycond");
-        get(m_pCalculateCB, "calculate");
-        get(m_pCalculateBtn, "calculatecond");
-        get(m_pOKBtn, "ok");
-        m_pDataTypeLB->SetDropDownLineCount( 10 );
-
         InitDialog();
         InitFromNode();
         InitDataTypeBox();
-        CheckHdl( nullptr );
+        Check(nullptr);
     }
-
 
     AddDataItemDialog::~AddDataItemDialog()
-    {
-        disposeOnce();
-    }
-
-    void AddDataItemDialog::dispose()
     {
         if ( m_xTempBinding.is() )
         {
@@ -2298,54 +2290,36 @@ namespace svxform
             // remove binding, if it does not convey 'useful' information
             m_xUIHelper->removeBindingIfUseless( m_xBinding );
         }
-        m_pItemFrame.clear();
-        m_pNameFT.clear();
-        m_pNameED.clear();
-        m_pDefaultFT.clear();
-        m_pDefaultED.clear();
-        m_pDefaultBtn.clear();
-        m_pSettingsFrame.clear();
-        m_pDataTypeFT.clear();
-        m_pDataTypeLB.clear();
-        m_pRequiredCB.clear();
-        m_pRequiredBtn.clear();
-        m_pRelevantCB.clear();
-        m_pRelevantBtn.clear();
-        m_pConstraintCB.clear();
-        m_pConstraintBtn.clear();
-        m_pReadonlyCB.clear();
-        m_pReadonlyBtn.clear();
-        m_pCalculateCB.clear();
-        m_pCalculateBtn.clear();
-        m_pOKBtn.clear();
-        ModalDialog::dispose();
     }
 
-
-    IMPL_LINK( AddDataItemDialog, CheckHdl, Button *, pButton, void )
+    IMPL_LINK(AddDataItemDialog, CheckHdl, weld::ToggleButton&, rBox, void)
     {
-        CheckBox* pBox = static_cast<CheckBox*>(pButton);
+        Check(&rBox);
+    }
+
+    void AddDataItemDialog::Check(weld::ToggleButton* pBox)
+    {
         // Condition buttons are only enable if their check box is checked
-        m_pReadonlyBtn->Enable( m_pReadonlyCB->IsChecked() );
-        m_pRequiredBtn->Enable( m_pRequiredCB->IsChecked() );
-        m_pRelevantBtn->Enable( m_pRelevantCB->IsChecked() );
-        m_pConstraintBtn->Enable( m_pConstraintCB->IsChecked() );
-        m_pCalculateBtn->Enable( m_pCalculateCB->IsChecked() );
+        m_xReadonlyBtn->set_sensitive( m_xReadonlyCB->get_active() );
+        m_xRequiredBtn->set_sensitive( m_xRequiredCB->get_active() );
+        m_xRelevantBtn->set_sensitive( m_xRelevantCB->get_active() );
+        m_xConstraintBtn->set_sensitive( m_xConstraintCB->get_active() );
+        m_xCalculateBtn->set_sensitive( m_xCalculateCB->get_active() );
 
         if ( pBox && m_xTempBinding.is() )
         {
             OUString sTemp, sPropName;
-            if ( m_pRequiredCB == pBox )
+            if ( m_xRequiredCB.get() == pBox )
                 sPropName = PN_REQUIRED_EXPR;
-            else if ( m_pRelevantCB == pBox )
+            else if ( m_xRelevantCB.get() == pBox )
                 sPropName = PN_RELEVANT_EXPR;
-            else if ( m_pConstraintCB == pBox )
+            else if ( m_xConstraintCB.get() == pBox )
                 sPropName = PN_CONSTRAINT_EXPR;
-            else if ( m_pReadonlyCB == pBox )
+            else if ( m_xReadonlyCB.get() == pBox )
                 sPropName = PN_READONLY_EXPR;
-            else if ( m_pCalculateCB == pBox )
+            else if ( m_xCalculateCB.get() == pBox )
                 sPropName = PN_CALCULATE_EXPR;
-            bool bIsChecked = pBox->IsChecked();
+            bool bIsChecked = pBox->get_active();
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
             if ( bIsChecked && sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
@@ -2355,28 +2329,26 @@ namespace svxform
         }
     }
 
-
-    IMPL_LINK( AddDataItemDialog, ConditionHdl, Button *, pButton, void )
+    IMPL_LINK(AddDataItemDialog, ConditionHdl, weld::Button&, rBtn, void)
     {
-        PushButton* pBtn = static_cast<PushButton*>(pButton);
         OUString sTemp, sPropName;
-        if ( m_pDefaultBtn == pBtn )
+        if ( m_xDefaultBtn.get() == &rBtn )
             sPropName = PN_BINDING_EXPR;
-        else if ( m_pRequiredBtn == pBtn )
+        else if ( m_xRequiredBtn.get() == &rBtn )
             sPropName = PN_REQUIRED_EXPR;
-        else if ( m_pRelevantBtn == pBtn )
+        else if ( m_xRelevantBtn.get() == &rBtn )
             sPropName = PN_RELEVANT_EXPR;
-        else if ( m_pConstraintBtn == pBtn )
+        else if ( m_xConstraintBtn.get() == &rBtn )
             sPropName = PN_CONSTRAINT_EXPR;
-        else if (m_pReadonlyBtn == pBtn)
+        else if (m_xReadonlyBtn.get() == &rBtn)
             sPropName = PN_READONLY_EXPR;
-        else if (m_pCalculateBtn == pBtn)
+        else if (m_xCalculateBtn.get() == &rBtn)
             sPropName = PN_CALCULATE_EXPR;
-        AddConditionDialog aDlg(GetFrameWeld(), sPropName, m_xTempBinding);
-        bool bIsDefBtn = ( m_pDefaultBtn == pBtn );
+        AddConditionDialog aDlg(m_xDialog.get(), sPropName, m_xTempBinding);
+        bool bIsDefBtn = ( m_xDefaultBtn.get() == &rBtn );
         OUString sCondition;
         if ( bIsDefBtn )
-            sCondition = m_pDefaultED->GetText();
+            sCondition = m_xDefaultED->get_text();
         else
         {
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
@@ -2390,7 +2362,7 @@ namespace svxform
         {
             OUString sNewCondition = aDlg.GetCondition();
             if ( bIsDefBtn )
-                m_pDefaultED->SetText( sNewCondition );
+                m_xDefaultED->set_text(sNewCondition);
             else
             {
 
@@ -2434,18 +2406,17 @@ namespace svxform
         }
     }
 
-
-    IMPL_LINK_NOARG(AddDataItemDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddDataItemDialog, OKHdl, weld::Button&, void)
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
-        OUString sNewName( m_pNameED->GetText() );
+        OUString sNewName( m_xNameED->get_text() );
 
         if ( ( !bIsHandleBinding && !bIsHandleText && !m_xUIHelper->isValidXMLName( sNewName ) ) ||
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                      VclMessageType::Warning, VclButtonsType::Ok,
                                                                      SvxResId(RID_STR_INVALID_XMLNAME)));
             xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
@@ -2453,7 +2424,7 @@ namespace svxform
             return;
         }
 
-        OUString sDataType( m_pDataTypeLB->GetSelectedEntry() );
+        OUString sDataType( m_xDataTypeLB->get_active_text() );
         m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
 
         if ( bIsHandleBinding )
@@ -2462,9 +2433,9 @@ namespace svxform
             copyPropSet( m_xTempBinding, m_pItemNode->m_xPropSet );
             try
             {
-                OUString sValue = m_pNameED->GetText();
+                OUString sValue = m_xNameED->get_text();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, makeAny( sValue ) );
-                sValue = m_pDefaultED->GetText();
+                sValue = m_xDefaultED->get_text();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
             }
             catch ( Exception& )
@@ -2479,12 +2450,12 @@ namespace svxform
             try
             {
                 if ( bIsHandleText )
-                    m_xUIHelper->setNodeValue( m_pItemNode->m_xNode, m_pDefaultED->GetText() );
+                    m_xUIHelper->setNodeValue( m_pItemNode->m_xNode, m_xDefaultED->get_text() );
                 else
                 {
                     Reference< css::xml::dom::XNode > xNewNode =
-                        m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_pNameED->GetText() );
-                    m_xUIHelper->setNodeValue( xNewNode, m_pDefaultED->GetText() );
+                        m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_xNameED->get_text() );
+                    m_xUIHelper->setNodeValue( xNewNode, m_xDefaultED->get_text() );
                     m_pItemNode->m_xNode = xNewNode;
                 }
             }
@@ -2494,31 +2465,29 @@ namespace svxform
             }
         }
         // then close the dialog
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
-
 
     void AddDataItemDialog::InitDialog()
     {
         // set handler
-        Link<Button*,void> aLink = LINK( this, AddDataItemDialog, CheckHdl );
-        m_pRequiredCB->SetClickHdl( aLink );
-        m_pRelevantCB->SetClickHdl( aLink );
-        m_pConstraintCB->SetClickHdl( aLink );
-        m_pReadonlyCB->SetClickHdl( aLink );
-        m_pCalculateCB->SetClickHdl( aLink );
+        Link<weld::ToggleButton&,void> aLink = LINK( this, AddDataItemDialog, CheckHdl );
+        m_xRequiredCB->connect_toggled( aLink );
+        m_xRelevantCB->connect_toggled( aLink );
+        m_xConstraintCB->connect_toggled( aLink );
+        m_xReadonlyCB->connect_toggled( aLink );
+        m_xCalculateCB->connect_toggled( aLink );
 
-        aLink = LINK( this, AddDataItemDialog, ConditionHdl );
-        m_pDefaultBtn->SetClickHdl( aLink );
-        m_pRequiredBtn->SetClickHdl( aLink );
-        m_pRelevantBtn->SetClickHdl( aLink );
-        m_pConstraintBtn->SetClickHdl( aLink );
-        m_pReadonlyBtn->SetClickHdl( aLink );
-        m_pCalculateBtn->SetClickHdl( aLink );
+        Link<weld::Button&,void> aLink2 = LINK( this, AddDataItemDialog, ConditionHdl );
+        m_xDefaultBtn->connect_clicked( aLink2 );
+        m_xRequiredBtn->connect_clicked( aLink2 );
+        m_xRelevantBtn->connect_clicked( aLink2 );
+        m_xConstraintBtn->connect_clicked( aLink2 );
+        m_xReadonlyBtn->connect_clicked( aLink2 );
+        m_xCalculateBtn->connect_clicked( aLink2 );
 
-        m_pOKBtn->SetClickHdl( LINK( this, AddDataItemDialog, OKHdl ) );
+        m_xOKBtn->connect_clicked( LINK( this, AddDataItemDialog, OKHdl ) );
     }
-
 
     void AddDataItemDialog::InitFromNode()
     {
@@ -2569,9 +2538,9 @@ namespace svxform
                     if ( m_eItemType != DITText )
                     {
                         OUString sName( m_xUIHelper->getNodeName( m_pItemNode->m_xNode ) );
-                        m_pNameED->SetText( sName );
+                        m_xNameED->set_text( sName );
                     }
-                    m_pDefaultED->SetText( m_pItemNode->m_xNode->getNodeValue() );
+                    m_xDefaultED->set_text( m_pItemNode->m_xNode->getNodeValue() );
                 }
                 catch( Exception& )
                 {
@@ -2603,14 +2572,14 @@ namespace svxform
                     if ( xInfo->hasPropertyByName( PN_BINDING_ID ) )
                     {
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                        m_pNameED->SetText( sTemp );
+                        m_xNameED->set_text( sTemp );
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                        m_pDefaultED->SetText( sTemp );
+                        m_xDefaultED->set_text( sTemp );
                     }
                     else if ( xInfo->hasPropertyByName( PN_SUBMISSION_BIND ) )
                     {
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                        m_pNameED->SetText( sTemp );
+                        m_xNameED->set_text( sTemp );
                     }
                 }
                 catch( Exception& )
@@ -2618,13 +2587,7 @@ namespace svxform
                     SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
 
-                Size a3and1Sz = LogicToPixel( Size(3, 1), MapMode(MapUnit::MapAppFont));
-                Size aNewSz = m_pDefaultED->GetSizePixel();
-                Point aNewPnt = m_pDefaultED->GetPosPixel();
-                aNewPnt.AdjustY(a3and1Sz.Height() );
-                aNewSz.AdjustWidth( -( m_pDefaultBtn->GetSizePixel().Width() + a3and1Sz.Width() ) );
-                m_pDefaultED->SetPosSizePixel( aNewPnt, aNewSz );
-                m_pDefaultBtn->Show();
+                m_xDefaultBtn->show();
             }
 
             if ( m_xTempBinding.is() )
@@ -2634,19 +2597,19 @@ namespace svxform
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRequiredCB->Check();
+                        m_xRequiredCB->set_active(true);
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRelevantCB->Check();
+                        m_xRelevantCB->set_active(true);
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pConstraintCB->Check();
+                        m_xConstraintCB->set_active(true);
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pReadonlyCB->Check();
+                        m_xReadonlyCB->set_active(true);
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pCalculateCB->Check();
+                        m_xCalculateCB->set_active(true);
                 }
                 catch (const Exception&)
                 {
@@ -2657,12 +2620,11 @@ namespace svxform
 
         if ( DITText == m_eItemType )
         {
-            m_pSettingsFrame->Hide();
-            m_pNameFT->Disable();
-            m_pNameED->Disable();
+            m_xSettingsFrame->hide();
+            m_xNameFT->set_sensitive(false);
+            m_xNameED->set_sensitive(false);
         }
     }
-
 
     void AddDataItemDialog::InitDataTypeBox()
     {
@@ -2681,7 +2643,7 @@ namespace svxform
                         sal_Int32 i, nCount = aNameList.getLength();
                         OUString* pNames = aNameList.getArray();
                         for ( i = 0; i < nCount; ++i )
-                            m_pDataTypeLB->InsertEntry( pNames[i] );
+                            m_xDataTypeLB->append_text(pNames[i]);
                     }
 
                     if ( m_xTempBinding.is() )
@@ -2689,10 +2651,13 @@ namespace svxform
                         OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
-                            sal_Int32 nPos = m_pDataTypeLB->GetEntryPos( sTemp );
-                            if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                                nPos = m_pDataTypeLB->InsertEntry( sTemp );
-                            m_pDataTypeLB->SelectEntryPos( nPos );
+                            int nPos = m_xDataTypeLB->find_text(sTemp);
+                            if (nPos == -1)
+                            {
+                                m_xDataTypeLB->append_text(sTemp);
+                                nPos = m_xDataTypeLB->get_count() - 1;
+                            }
+                            m_xDataTypeLB->set_active(nPos);
                         }
                     }
                 }
@@ -2719,7 +2684,7 @@ namespace svxform
             case DITBinding :
             {
                 sText = m_sFL_Binding;
-                m_pDefaultFT->SetText( m_sFT_BindingExp );
+                m_xDefaultFT->set_label(m_sFT_BindingExp);
                 break;
             }
 
@@ -2729,7 +2694,7 @@ namespace svxform
             }
         }
 
-        m_pItemFrame->set_label(sText);
+        m_xItemFrame->set_label(sText);
     }
 
     AddConditionDialog::AddConditionDialog(weld::Window* pParent,
