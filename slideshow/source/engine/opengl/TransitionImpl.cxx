@@ -1467,12 +1467,12 @@ int permutation256 [256]= {
 void initPermTexture(GLuint *texID)
 {
     CHECK_GL_ERROR();
-  glGenTextures(1, texID);
-  glBindTexture(GL_TEXTURE_2D, *texID);
+    glGenTextures(1, texID);
+    glBindTexture(GL_TEXTURE_2D, *texID);
 
-  static bool initialized = false;
-  static unsigned char permutation2D[256*256*4];
-  if( !initialized ) {
+    static bool initialized = false;
+    static unsigned char permutation2D[256*256*4];
+    if( !initialized ) {
       int x, y;
 
       for( y=0; y < 256; y++ )
@@ -1480,11 +1480,11 @@ void initPermTexture(GLuint *texID)
               permutation2D[x*4 + y*1024] = permutation256[(y + permutation256[x]) & 0xff];
 
       initialized = true;
-  }
+    }
 
-  glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, permutation2D );
-  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, permutation2D );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     CHECK_GL_ERROR();
 }
 

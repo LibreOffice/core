@@ -306,7 +306,7 @@ namespace internal
                                                 //xAnimateNode->getAttributeName(),
                                                 "visibility",
                                                 uno::makeAny( bVisible ) ) ) );
-                    break;
+                        break;
                     }
                 }
             }
