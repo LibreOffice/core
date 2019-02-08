@@ -1596,7 +1596,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "DummySlide" );
         SvXMLElementExport aDummySlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
         {
-           SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+            SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
             {
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "dummy-slide" );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );

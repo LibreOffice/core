@@ -383,7 +383,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
             }
             catch( const uno::Exception& /*e*/) {}
 
-        sSearchList.push_back( sThisProject ); // First Lib to search
+            sSearchList.push_back( sThisProject ); // First Lib to search
 
 // service VBAProjectNameProvider not implemented
 #if 0
@@ -758,7 +758,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         MacroResolvedInfo aMacroInfo = resolveVBAMacro( pShell, aMacroName );
         if( !aMacroInfo.mbFound )
             throw uno::RuntimeException( "The procedure doesn't exist" );
-       MacroName = aMacroInfo.msResolvedMacro;
+        MacroName = aMacroInfo.msResolvedMacro;
     }
     uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);
     uno::Reference< ui::XUIConfigurationManager > xCfgMgr = xCfgSupplier->getUIConfigurationManager();
