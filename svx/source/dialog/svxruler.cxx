@@ -1345,7 +1345,7 @@ long SvxRuler::GetCorrectedDragPos( bool bLeft, bool bRight )
     const long lNullPix = Ruler::GetNullOffset();
     long lDragPos = GetDragPos() + lNullPix;
 ADD_DEBUG_TEXT("lDragPos: ", OUString::number(lDragPos))
-     bool bHoriRows = bHorz && mxRulerImpl->bIsTableRows;
+    bool bHoriRows = bHorz && mxRulerImpl->bIsTableRows;
     if((bLeft || bHoriRows) && lDragPos < nMaxLeft)
         lDragPos = nMaxLeft;
     else if((bRight||bHoriRows) && lDragPos > nMaxRight)

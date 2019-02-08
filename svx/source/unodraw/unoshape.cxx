@@ -696,7 +696,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
 
         if(nullptr != pSdrGrafObj)
         {
-           const Graphic& rGraphic(pSdrGrafObj->GetGraphic());
+            const Graphic& rGraphic(pSdrGrafObj->GetGraphic());
 
             if(GraphicType::Bitmap == rGraphic.GetType())
             {

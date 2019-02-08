@@ -2473,7 +2473,7 @@ struct SvxStyleToolBoxControl::Impl
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                    xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
+                xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
                     xParaStyles;
                 static const std::vector<OUString> aWriterStyles =
                 {
