@@ -489,12 +489,12 @@ namespace svxform
             DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
             if ( DGTSubmission == m_eGroup )
             {
-                ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, nullptr, m_xUIHelper );
-                if ( aDlg->Execute() == RET_OK && aDlg->GetNewSubmission().is() )
+                AddSubmissionDialog aDlg(GetFrameWeld(), nullptr, m_xUIHelper);
+                if ( aDlg.run() == RET_OK && aDlg.GetNewSubmission().is() )
                 {
                     try
                     {
-                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg->GetNewSubmission();
+                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
                         Reference< XSet > xSubmissions( xModel->getSubmissions(), UNO_QUERY );
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
@@ -752,9 +752,9 @@ namespace svxform
                 }
                 else
                 {
-                    ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, pNode, m_xUIHelper );
-                    aDlg->SetText( SvxResId( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                    if ( aDlg->Execute() == RET_OK )
+                    AddSubmissionDialog aDlg(GetFrameWeld(), pNode, m_xUIHelper);
+                    aDlg.set_title(SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                    if (aDlg.run() == RET_OK)
                     {
                         EditEntry( pNode->m_xPropSet );
                         bIsDocModified = true;
@@ -3039,63 +3039,47 @@ namespace svxform
     }
 
     AddSubmissionDialog::AddSubmissionDialog(
-        vcl::Window* pParent, ItemNode* _pNode,
+        weld::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
-        : ModalDialog(pParent, "AddSubmissionDialog",
-            "svx/ui/addsubmissiondialog.ui")
+        : GenericDialogController(pParent, "svx/ui/addsubmissiondialog.ui", "AddSubmissionDialog")
         , m_pItemNode(_pNode)
         , m_xUIHelper(_rUIHelper)
+        , m_xNameED(m_xBuilder->weld_entry("name"))
+        , m_xActionED(m_xBuilder->weld_entry("action"))
+        , m_xMethodLB(m_xBuilder->weld_combo_box("method"))
+        , m_xRefED(m_xBuilder->weld_entry("expression"))
+        , m_xRefBtn(m_xBuilder->weld_button("browse"))
+        , m_xBindLB(m_xBuilder->weld_combo_box("binding"))
+        , m_xReplaceLB(m_xBuilder->weld_combo_box("replace"))
+        , m_xOKBtn(m_xBuilder->weld_button("ok"))
     {
-        get(m_pNameED, "name");
-        get(m_pActionED, "action");
-        get(m_pMethodLB, "method");
-        get(m_pRefED, "expression");
-        get(m_pRefBtn, "browse");
-        get(m_pBindLB, "binding");
-        get(m_pReplaceLB, "replace");
-        get(m_pOKBtn, "ok");
         FillAllBoxes();
 
-        m_pRefBtn->SetClickHdl( LINK( this, AddSubmissionDialog, RefHdl ) );
-        m_pOKBtn->SetClickHdl( LINK( this, AddSubmissionDialog, OKHdl ) );
+        m_xRefBtn->connect_clicked( LINK( this, AddSubmissionDialog, RefHdl ) );
+        m_xOKBtn->connect_clicked( LINK( this, AddSubmissionDialog, OKHdl ) );
     }
-
 
     AddSubmissionDialog::~AddSubmissionDialog()
-    {
-        disposeOnce();
-    }
-
-    void AddSubmissionDialog::dispose()
     {
         // #i38991# if we have added a binding, we need to remove it as well.
         if( m_xCreatedBinding.is() && m_xUIHelper.is() )
             m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
-        m_pNameED.clear();
-        m_pActionED.clear();
-        m_pMethodLB.clear();
-        m_pRefED.clear();
-        m_pRefBtn.clear();
-        m_pBindLB.clear();
-        m_pReplaceLB.clear();
-        m_pOKBtn.clear();
-        ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl, Button*, void)
+    IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl, weld::Button&, void)
     {
-        AddConditionDialog aDlg(GetFrameWeld(), PN_BINDING_EXPR, m_xTempBinding );
-        aDlg.SetCondition( m_pRefED->GetText() );
+        AddConditionDialog aDlg(m_xDialog.get(), PN_BINDING_EXPR, m_xTempBinding );
+        aDlg.SetCondition( m_xRefED->get_text() );
         if ( aDlg.run() == RET_OK )
-            m_pRefED->SetText( aDlg.GetCondition() );
+            m_xRefED->set_text(aDlg.GetCondition());
     }
 
-    IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl, weld::Button&, void)
     {
-        OUString sName(m_pNameED->GetText());
+        OUString sName(m_xNameED->get_text());
         if(sName.isEmpty())
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                      VclMessageType::Warning, VclButtonsType::Ok,
                                                                      SvxResId(RID_STR_EMPTY_SUBMISSIONNAME)));
             xErrorBox->set_primary_text(Application::GetDisplayName());
@@ -3126,23 +3110,23 @@ namespace svxform
 
         if ( m_xSubmission.is() )
         {
-            OUString sTemp = m_pNameED->GetText();
+            OUString sTemp = m_xNameED->get_text();
             try
             {
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
-                sTemp = m_pActionED->GetText();
+                sTemp = m_xActionED->get_text();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
-                sTemp = m_aMethodString.toAPI( m_pMethodLB->GetSelectedEntry() );
+                sTemp = m_aMethodString.toAPI( m_xMethodLB->get_active_text() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
-                sTemp = m_pRefED->GetText();
+                sTemp = m_xRefED->get_text();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
-                OUString sEntry = m_pBindLB->GetSelectedEntry();
+                OUString sEntry = m_xBindLB->get_active_text();
                 sal_Int32 nColonIdx = sEntry.indexOf(':');
                 if (nColonIdx != -1)
                     sEntry = sEntry.copy(0, nColonIdx);
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
-                sTemp = m_aReplaceString.toAPI( m_pReplaceLB->GetSelectedEntry() );
+                sTemp = m_aReplaceString.toAPI( m_xReplaceLB->get_active_text() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
             }
             catch ( Exception& )
@@ -3151,17 +3135,16 @@ namespace svxform
             }
         }
 
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
-
 
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_POST   ) );
-        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_PUT ) );
-        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_GET ) );
-        m_pMethodLB->SelectEntryPos(0);
+        m_xMethodLB->append_text(SvxResId(RID_STR_METHOD_POST));
+        m_xMethodLB->append_text(SvxResId(RID_STR_METHOD_PUT));
+        m_xMethodLB->append_text(SvxResId(RID_STR_METHOD_GET));
+        m_xMethodLB->set_active(0);
 
         // binding box
         Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -3188,7 +3171,7 @@ namespace svxform
                                 sEntry += ": ";
                                 xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sEntry += sTemp;
-                                m_pBindLB->InsertEntry( sEntry );
+                                m_xBindLB->append_text(sEntry);
 
                                 if ( !m_xTempBinding.is() )
                                     m_xTempBinding = xPropSet;
@@ -3216,9 +3199,9 @@ namespace svxform
         }
 
         // replace box
-        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_NONE ) );
-        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_INST ) );
-        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_DOC ) );
+        m_xReplaceLB->append_text(SvxResId(RID_STR_REPLACE_NONE));
+        m_xReplaceLB->append_text(SvxResId(RID_STR_REPLACE_INST));
+        m_xReplaceLB->append_text(SvxResId(RID_STR_REPLACE_DOC));
 
 
         // init the controls with the values of the submission
@@ -3229,33 +3212,42 @@ namespace svxform
             try
             {
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                m_pNameED->SetText( sTemp );
+                m_xNameED->set_text( sTemp );
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                m_pActionED->SetText( sTemp );
+                m_xActionED->set_text( sTemp );
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                m_pRefED->SetText( sTemp );
+                m_xRefED->set_text(sTemp);
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sTemp = m_aMethodString.toUI( sTemp );
-                sal_Int32 nPos = m_pMethodLB->GetEntryPos( sTemp );
-                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_pMethodLB->InsertEntry( sTemp );
-                m_pMethodLB->SelectEntryPos( nPos );
+                sal_Int32 nPos = m_xMethodLB->find_text( sTemp );
+                if (nPos == -1)
+                {
+                    m_xMethodLB->append_text( sTemp );
+                    nPos = m_xMethodLB->get_count() - 1;
+                }
+                m_xMethodLB->set_active( nPos );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                nPos = m_pBindLB->GetEntryPos( sTemp );
-                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_pBindLB->InsertEntry( sTemp );
-                m_pBindLB->SelectEntryPos( nPos );
+                nPos = m_xBindLB->find_text(sTemp);
+                if (nPos == -1)
+                {
+                    m_xBindLB->append_text(sTemp);
+                    nPos = m_xBindLB->get_count() - 1;
+                }
+                m_xBindLB->set_active(nPos);
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sTemp = m_aReplaceString.toUI( sTemp );
                 if ( sTemp.isEmpty() )
-                    sTemp = m_pReplaceLB->GetEntry(0); // first entry == "none"
-                nPos = m_pReplaceLB->GetEntryPos( sTemp );
-                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_pReplaceLB->InsertEntry( sTemp );
-                m_pReplaceLB->SelectEntryPos( nPos );
+                    sTemp = m_xReplaceLB->get_text(0); // first entry == "none"
+                nPos = m_xReplaceLB->find_text(sTemp);
+                if (nPos == -1)
+                {
+                    m_xReplaceLB->append_text(sTemp);
+                    nPos = m_xReplaceLB->get_count() - 1;
+                }
+                m_xReplaceLB->set_active(nPos);
             }
             catch ( Exception& )
             {
@@ -3263,7 +3255,7 @@ namespace svxform
             }
         }
 
-        m_pRefBtn->Enable( m_xTempBinding.is() );
+        m_xRefBtn->set_sensitive(m_xTempBinding.is());
     }
 
     AddModelDialog::AddModelDialog(weld::Window* pParent, bool bIsEdit)

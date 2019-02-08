@@ -530,21 +530,11 @@ namespace svxform
         OUString GetURL() const { return m_xUrlED->get_text(); }
     };
 
-    class AddSubmissionDialog : public ModalDialog
+    class AddSubmissionDialog : public weld::GenericDialogController
     {
     private:
         MethodString const        m_aMethodString;
         ReplaceString const       m_aReplaceString;
-
-        VclPtr<Edit>        m_pNameED;
-        VclPtr<Edit>        m_pActionED;
-        VclPtr<ListBox>     m_pMethodLB;
-        VclPtr<Edit>        m_pRefED;
-        VclPtr<PushButton>  m_pRefBtn;
-        VclPtr<ListBox>     m_pBindLB;
-        VclPtr<ListBox>     m_pReplaceLB;
-
-        VclPtr<OKButton>    m_pOKBtn;
 
         ItemNode* const     m_pItemNode;
 
@@ -559,16 +549,24 @@ namespace svxform
         css::uno::Reference< css::beans::XPropertySet >
                             m_xCreatedBinding;
 
-        DECL_LINK(RefHdl, Button*, void);
-        DECL_LINK(OKHdl, Button*, void);
+        std::unique_ptr<weld::Entry> m_xNameED;
+        std::unique_ptr<weld::Entry> m_xActionED;
+        std::unique_ptr<weld::ComboBox> m_xMethodLB;
+        std::unique_ptr<weld::Entry> m_xRefED;
+        std::unique_ptr<weld::Button> m_xRefBtn;
+        std::unique_ptr<weld::ComboBox> m_xBindLB;
+        std::unique_ptr<weld::ComboBox> m_xReplaceLB;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+
+        DECL_LINK(RefHdl, weld::Button&, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
 
         void                FillAllBoxes();
 
     public:
-        AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
-            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
+        AddSubmissionDialog(weld::Window* pParent, ItemNode* pNode,
+            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& rUIHelper);
         virtual ~AddSubmissionDialog() override;
-        virtual void dispose() override;
 
         const css::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
     };

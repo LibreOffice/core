@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AddSubmissionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="addsubmissiondialog|AddSubmissionDialog">Add Submission</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -81,6 +87,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">46</property>
               </object>
               <packing>
@@ -93,10 +100,10 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|label2">_Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">name</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -107,10 +114,10 @@
               <object class="GtkLabel" id="urlft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|urlft">Binding e_xpression:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">expression</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -135,10 +142,10 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|label3">_Action:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">action</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -150,6 +157,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">46</property>
               </object>
               <packing>
@@ -162,10 +170,10 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|label4">_Method:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">method</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -189,6 +197,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">46</property>
               </object>
               <packing>
@@ -200,10 +209,10 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|label5">_Binding:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">binding</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -214,10 +223,10 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="addsubmissiondialog|label6">_Replace:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">replace</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
