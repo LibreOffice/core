@@ -228,8 +228,8 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard g;
 
-      sal_uInt32 nCount = m_pFrameContainer->getCount();
-      if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
+    sal_uInt32 nCount = m_pFrameContainer->getCount();
+    if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
           throw IndexOutOfBoundsException("OFrames::getByIndex - Index out of bounds",
                                            static_cast<OWeakObject *>(this) );
 

@@ -447,13 +447,13 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 
     // read content of level 3 (presets, targets)
-          css::uno::Reference< css::container::XNameAccess > xAccess;
-          css::uno::Sequence< OUString >              lNames;
-    const OUString*                                   pNames;
-          sal_Int32                                          c;
-          sal_Int32                                          i;
-          std::vector<OUString> lPresets;
-          std::vector<OUString> lTargets;
+    css::uno::Reference< css::container::XNameAccess > xAccess;
+    css::uno::Sequence< OUString > lNames;
+    const OUString*       pNames;
+    sal_Int32             c;
+    sal_Int32             i;
+    std::vector<OUString> lPresets;
+    std::vector<OUString> lTargets;
 
     // read preset names of share layer
     xAccess.set(xShare, css::uno::UNO_QUERY);
@@ -786,11 +786,11 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     if (!xAccess.is())
         return ::std::vector< OUString >();
 
-          ::std::vector< OUString >      lSubFolders;
+    ::std::vector< OUString >      lSubFolders;
     const css::uno::Sequence< OUString > lNames = xAccess->getElementNames();
     const OUString*                      pNames = lNames.getConstArray();
-          sal_Int32                             c      = lNames.getLength();
-          sal_Int32                             i      = 0;
+    sal_Int32                            c      = lNames.getLength();
+    sal_Int32                            i      = 0;
 
     for (i=0; i<c; ++i)
     {

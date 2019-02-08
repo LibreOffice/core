@@ -256,12 +256,12 @@ uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< fr
 {
     // Query for the model to get check the context information
     uno::Reference< frame::XModel > xModel;
-        if ( rFrame.is() )
-        {
+    if ( rFrame.is() )
+    {
         uno::Reference< frame::XController > xController( rFrame->getController(), uno::UNO_QUERY );
-            if ( xController.is() )
-                xModel = xController->getModel();
-        }
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
 
     return xModel;
 }

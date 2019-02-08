@@ -466,7 +466,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         // and we nor the job are the right ones ...
         // our user has set itself before. So we can fake this source address!
         css::frame::DispatchResultEvent aEvent        = aAnalyzedResult.getDispatchResult();
-                                        aEvent.Source = m_xResultSourceFake;
+        aEvent.Source = m_xResultSourceFake;
         m_xResultListener->dispatchFinished(aEvent);
     }
 }

@@ -224,23 +224,24 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
     {
         rtl::Reference<Job> pJob;
 
-        /* SAFE */ {
-        SolarMutexGuard g2;
+        /* SAFE */
+        {
+            SolarMutexGuard g2;
 
-        JobData aCfg(m_xContext);
-        aCfg.setEvent(sEvent, lJobs[j]);
-        aCfg.setEnvironment(JobData::E_EXECUTION);
+            JobData aCfg(m_xContext);
+            aCfg.setEvent(sEvent, lJobs[j]);
+            aCfg.setEnvironment(JobData::E_EXECUTION);
 
-        /*Attention!
-            Jobs implements interfaces and dies by ref count!
-            And freeing of such uno object is done by uno itself.
-            So we have to use dynamic memory everytimes.
-         */
-        pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
-        pJob->setJobData(aCfg);
+            /*Attention!
+                Jobs implements interfaces and dies by ref count!
+                And freeing of such uno object is done by uno itself.
+                So we have to use dynamic memory everytimes.
+             */
+            pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
+            pJob->setJobData(aCfg);
         } /* SAFE */
 
-       pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
     }
 }
 
