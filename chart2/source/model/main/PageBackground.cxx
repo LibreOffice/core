@@ -76,7 +76,7 @@ private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
         std::vector< css::beans::Property > aProperties;
-         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 

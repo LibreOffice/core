@@ -593,7 +593,7 @@ awt::Size ChartTest::getPageSize( const Reference< chart2::XChartDocument > & xC
     uno::Reference< com::sun::star::embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
     CPPUNIT_ASSERT( xVisualObject.is() );
     aSize = xVisualObject->getVisualAreaSize( com::sun::star::embed::Aspects::MSOLE_CONTENT );
-return aSize;
+    return aSize;
 }
 
 awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize)
