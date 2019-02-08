@@ -1559,7 +1559,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
                 else
                 {
                     SCROW nY = pTabViewShell->GetViewData().GetCurYForTab(nCurrentTabIndex);
-                    if (nY >= nStartRow || (nY == nStartRow && nOffset > 0))
+                    if (nY > nStartRow || (nY == nStartRow && nOffset > 0))
                     {
                         pTabViewShell->GetViewData().SetCurYForTab(nY + nOffset, nCurrentTabIndex);
                     }
