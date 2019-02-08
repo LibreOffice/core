@@ -291,7 +291,7 @@ namespace pcr
         sal_Int32 nLen = Requests.getLength();
         aReturn.realloc( nLen );
 
-                Reference< XDispatch >* pReturn     = aReturn.getArray();
+        Reference< XDispatch >* pReturn     = aReturn.getArray();
         const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
         const   DispatchDescriptor*     pDescripts  = Requests.getConstArray();
 

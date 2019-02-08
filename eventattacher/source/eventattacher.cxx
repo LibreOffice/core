@@ -95,7 +95,7 @@ static Reference< XInterface > createAllListenerAdapter
     Reference< XInterface > xAdapter;
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
-       Reference< XInvocation > xInvocationToAllListenerMapper =
+        Reference< XInvocation > xInvocationToAllListenerMapper =
             static_cast<XInvocation*>(new InvocationToAllListenerMapper( xListenerType, xListener, Helper ));
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName());
         Sequence<Type> arg2(1);

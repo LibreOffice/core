@@ -276,7 +276,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
 :   SvXMLExport( xContext, "", rFileName, xHandler, static_cast<frame::XModel*>(new SvxSimpleUnoModel()), FieldUnit::CM,
     SvXMLExportFlags::OASIS  |  SvXMLExportFlags::AUTOSTYLES  |  SvXMLExportFlags::CONTENT )
 {
-        SvxEditEngineSource aEditSource( pEditEngine );
+    SvxEditEngineSource aEditSource( pEditEngine );
 
     static const SfxItemPropertyMapEntry SvxXMLTextExportComponentPropertyMap[] =
     {

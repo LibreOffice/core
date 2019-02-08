@@ -1173,7 +1173,7 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIte
     {
         sal_Int32 nCount = 1;
         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-         aNewPaM.SetIndex(
+        aNewPaM.SetIndex(
              _xBI->previousCharacters(
                  aNewPaM.GetNode()->GetString(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount));
     }
@@ -3739,7 +3739,7 @@ sal_Int32 ImpEditEngine::GetChar(
         long nXRight = nXLeft + rPortion.GetSize().Width();
         if ( ( nXLeft <= nXPos ) && ( nXRight >= nXPos ) )
         {
-             nChar = nCurIndex;
+            nChar = nCurIndex;
 
             // Search within Portion...
 

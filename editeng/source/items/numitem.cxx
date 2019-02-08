@@ -323,26 +323,26 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     if (& rFormat == this) { return *this; }
 
     SvxNumberType::SetNumberingType(rFormat.GetNumberingType());
-        eNumAdjust          = rFormat.eNumAdjust ;
-        nInclUpperLevels    = rFormat.nInclUpperLevels ;
-        nStart              = rFormat.nStart ;
-        cBullet             = rFormat.cBullet ;
-        mePositionAndSpaceMode = rFormat.mePositionAndSpaceMode;
-        nFirstLineOffset    = rFormat.nFirstLineOffset;
-        nAbsLSpace          = rFormat.nAbsLSpace ;
-        nCharTextDistance   = rFormat.nCharTextDistance ;
-        meLabelFollowedBy = rFormat.meLabelFollowedBy;
-        mnListtabPos = rFormat.mnListtabPos;
-        mnFirstLineIndent = rFormat.mnFirstLineIndent;
-        mnIndentAt = rFormat.mnIndentAt;
-        eVertOrient         = rFormat.eVertOrient ;
-        sPrefix             = rFormat.sPrefix     ;
-        sSuffix             = rFormat.sSuffix     ;
-        aGraphicSize        = rFormat.aGraphicSize  ;
-        nBulletColor        = rFormat.nBulletColor   ;
-        nBulletRelSize      = rFormat.nBulletRelSize;
-        SetShowSymbol(rFormat.IsShowSymbol());
-        sCharStyleName      = rFormat.sCharStyleName;
+    eNumAdjust          = rFormat.eNumAdjust ;
+    nInclUpperLevels    = rFormat.nInclUpperLevels ;
+    nStart              = rFormat.nStart ;
+    cBullet             = rFormat.cBullet ;
+    mePositionAndSpaceMode = rFormat.mePositionAndSpaceMode;
+    nFirstLineOffset    = rFormat.nFirstLineOffset;
+    nAbsLSpace          = rFormat.nAbsLSpace ;
+    nCharTextDistance   = rFormat.nCharTextDistance ;
+    meLabelFollowedBy = rFormat.meLabelFollowedBy;
+    mnListtabPos = rFormat.mnListtabPos;
+    mnFirstLineIndent = rFormat.mnFirstLineIndent;
+    mnIndentAt = rFormat.mnIndentAt;
+    eVertOrient         = rFormat.eVertOrient ;
+    sPrefix             = rFormat.sPrefix     ;
+    sSuffix             = rFormat.sSuffix     ;
+    aGraphicSize        = rFormat.aGraphicSize  ;
+    nBulletColor        = rFormat.nBulletColor   ;
+    nBulletRelSize      = rFormat.nBulletRelSize;
+    SetShowSymbol(rFormat.IsShowSymbol());
+    sCharStyleName      = rFormat.sCharStyleName;
     pGraphicBrush.reset();
     if(rFormat.pGraphicBrush)
     {
@@ -777,7 +777,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(sal_uInt16 nLevel)const
     if(!pStdNumFmt)
     {
         pStdNumFmt = new SvxNumberFormat(SVX_NUM_ARABIC);
-         pStdOutlineNumFmt = new SvxNumberFormat(SVX_NUM_NUMBER_NONE);
+        pStdOutlineNumFmt = new SvxNumberFormat(SVX_NUM_NUMBER_NONE);
     }
 
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );

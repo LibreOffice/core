@@ -153,7 +153,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
     };
     static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 
-     assert(!rSel.HasRange());
+    assert(!rSel.HasRange());
     //get the initial para count before paste
     sal_uInt32 initialParaCount = rEditEngine.GetEditDoc().Count();
     //insert para breaks before inserting the copied text
