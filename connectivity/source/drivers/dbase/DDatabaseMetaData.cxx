@@ -258,7 +258,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-        Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
+    Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
     if(!xTables.is())
                 throw SQLException();
 

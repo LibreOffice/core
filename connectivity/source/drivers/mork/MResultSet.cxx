@@ -1440,13 +1440,13 @@ sal_Int32 OResultSet::compareBookmarks( const css::uno::Any& lhs, const css::uno
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
-        sal_Int32 nFirst=0;
-        sal_Int32 nSecond=0;
-        sal_Int32 nResult=0;
+    sal_Int32 nFirst=0;
+    sal_Int32 nSecond=0;
+    sal_Int32 nResult=0;
 
-        if ( !( lhs >>= nFirst ) || !( rhs >>= nSecond ) ) {
-            m_pStatement->getOwnConnection()->throwSQLException( STR_INVALID_BOOKMARK, *this );
-        }
+    if ( !( lhs >>= nFirst ) || !( rhs >>= nSecond ) ) {
+        m_pStatement->getOwnConnection()->throwSQLException( STR_INVALID_BOOKMARK, *this );
+    }
 
     if(nFirst < nSecond)
         nResult = CompareBookmark::LESS;

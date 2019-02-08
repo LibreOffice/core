@@ -154,7 +154,7 @@ jclass java_sql_Timestamp::st_getMyClass()
 java_sql_Timestamp::java_sql_Timestamp(const css::util::DateTime& _rOut)
                    :java_util_Date( nullptr, nullptr )
 {
-        SDBThreadAttach t;
+    SDBThreadAttach t;
     if( !t.pEnv )
         return;
     jvalue args[1];

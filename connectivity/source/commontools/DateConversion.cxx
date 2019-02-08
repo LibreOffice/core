@@ -116,16 +116,16 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                     if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
-                       _rVal >>= nValue;
-                       aDateTime = DBTypeConversion::toDateTime(nValue);
-                       bOk = true;
+                        _rVal >>= nValue;
+                        aDateTime = DBTypeConversion::toDateTime(nValue);
+                        bOk = true;
                     }
                     else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
-                       _rVal >>= sValue;
-                       aDateTime = DBTypeConversion::toDateTime(sValue);
-                       bOk = true;
+                        _rVal >>= sValue;
+                        aDateTime = DBTypeConversion::toDateTime(sValue);
+                        bOk = true;
                     }
                     else
                         bOk = _rVal >>= aDateTime;
@@ -148,16 +148,16 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                     if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
-                       _rVal >>= nValue;
-                       aDate = DBTypeConversion::toDate(nValue);
-                       bOk = true;
+                        _rVal >>= nValue;
+                        aDate = DBTypeConversion::toDate(nValue);
+                        bOk = true;
                     }
                     else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
-                       _rVal >>= sValue;
-                       aDate = DBTypeConversion::toDate(sValue);
-                       bOk = true;
+                        _rVal >>= sValue;
+                        aDate = DBTypeConversion::toDate(sValue);
+                        bOk = true;
                     }
                     else
                         bOk = _rVal >>= aDate;
@@ -173,16 +173,16 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                     if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
-                       _rVal >>= nValue;
-                       aTime = DBTypeConversion::toTime(nValue);
-                       bOk = true;
+                        _rVal >>= nValue;
+                        aTime = DBTypeConversion::toTime(nValue);
+                        bOk = true;
                     }
                     else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
-                       _rVal >>= sValue;
-                       aTime = DBTypeConversion::toTime(sValue);
-                       bOk = true;
+                        _rVal >>= sValue;
+                        aTime = DBTypeConversion::toTime(sValue);
+                        bOk = true;
                     }
                     else
                         bOk = _rVal >>= aTime;
@@ -487,7 +487,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                          // get a value which represents the given date, relative to the null date of the formatter
                          fValue -= toDays( rNullDate, aFormatterNullDate );
                          // format this value
-                        aString = xFormatter->convertNumberToString( nKey, fValue );
+                         aString = xFormatter->convertNumberToString( nKey, fValue );
                     }
                 }
                 break;

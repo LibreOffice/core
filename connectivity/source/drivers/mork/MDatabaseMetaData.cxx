@@ -930,9 +930,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
        if(match(tableNamePattern, table,'\0'))
            {
             // TABLE_NAME
-            aRow[2] = new ORowSetValueDecorator( table );
+                aRow[2] = new ORowSetValueDecorator( table );
 
-            SAL_INFO("connectivity.mork", "\tTableName = : " << table);
+                SAL_INFO("connectivity.mork", "\tTableName = : " << table);
 
                 aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
                 aRows.push_back(aRow);
