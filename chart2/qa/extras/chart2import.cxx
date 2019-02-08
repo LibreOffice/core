@@ -105,6 +105,7 @@ public:
     void testTdf109858(); // Pie chart label placement settings(XLSX)
 
     void testTdf111173();
+    void testTdf122226();
 
     void testInternalDataProvider();
 
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testTdf90510);
     CPPUNIT_TEST(testTdf109858);
     CPPUNIT_TEST(testTdf111173);
+    CPPUNIT_TEST(testTdf122226);
 
     CPPUNIT_TEST(testInternalDataProvider);
 
@@ -1445,6 +1447,24 @@ void Chart2ImportTest::testTdf111173()
 {
     load("/chart2/qa/extras/data/xlsx/", "tdf111173.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+}
+
+void Chart2ImportTest::testTdf122226()
+{
+    load( "/chart2/qa/extras/data/docx/", "testTdf122226.docx" );
+    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xChartDoc.is() );
+
+    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY_THROW);
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    uno::Any aAny = xPropertySet->getPropertyValue( "LabelSeparator" );
+    CPPUNIT_ASSERT( aAny.hasValue() );
+    OUString nLabelSeparator;
+    CPPUNIT_ASSERT( aAny >>= nLabelSeparator );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be separated into new lines", OUString("\n"), nLabelSeparator );
 }
 
 void Chart2ImportTest::testTdf115107()
