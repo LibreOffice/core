@@ -29,12 +29,15 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/file.hxx>
 #include <osl/diagnose.h>
+#include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 
@@ -443,6 +446,16 @@ void ImplImageTree::setStyle(OUString const & style)
     }
 }
 
+/**
+ * The vcldemo app doesn't set up all the config stuff that the main app does, so we need another
+ * way of finding the cursor images.
+ */
+static bool isVclDemo()
+{
+    static const bool bVclDemoOverride = std::getenv("LIBO_VCL_DEMO") != nullptr;
+    return bVclDemoOverride;
+}
+
 void ImplImageTree::createStyle()
 {
     if (maIconSets.find(maCurrentStyle) != maIconSets.end())
@@ -450,7 +463,18 @@ void ImplImageTree::createStyle()
 
     OUString sThemeUrl;
 
-    if (maCurrentStyle != "default")
+    if (isVclDemo())
+    {
+        static OUString s_workingDir;
+        if (!s_workingDir.getLength())
+            osl_getProcessWorkingDir( &s_workingDir.pData );
+
+        if (maCurrentStyle == "default")
+            sThemeUrl = s_workingDir + "/icon-themes/colibre-svg";
+        else
+            sThemeUrl = s_workingDir + "/icon-themes/" + maCurrentStyle;
+    }
+    else if (maCurrentStyle != "default")
     {
         OUString paths = vcl::IconThemeScanner::GetStandardIconThemePath();
         std::deque<OUString> aPaths;
@@ -614,6 +638,33 @@ OUString const & ImplImageTree::getRealImageName(OUString const & rIconName)
     return rIconName;
 }
 
+class FolderFileAccess : public ::cppu::WeakImplHelper<css::container::XNameAccess>
+{
+public:
+    uno::Reference< uno::XComponentContext > mxContext;
+    OUString maURL;
+    FolderFileAccess(uno::Reference< uno::XComponentContext > const & context, OUString const & url)
+        : mxContext(context), maURL(url) {}
+    // XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
+    virtual sal_Bool SAL_CALL hasElements() override { return true; }
+    // XNameAccess
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    {
+        uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(mxContext)->openFileRead( maURL + "/" + aName );
+        return css::uno::Any(xInputStream);
+    }
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
+    {
+        return {};
+    }
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    {
+        osl::File aBaseFile(maURL + "/" + aName);
+        return osl::File::E_None == aBaseFile.open(osl_File_OpenFlag_Read);
+    }
+};
+
 bool ImplImageTree::checkPathAccess()
 {
     IconSet& rIconSet = getCurrentIconSet();
@@ -623,7 +674,10 @@ bool ImplImageTree::checkPathAccess()
 
     try
     {
-        rNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rIconSet.maURL);
+        if (isVclDemo())
+            rNameAccess = new FolderFileAccess(comphelper::getProcessComponentContext(), rIconSet.maURL);
+        else
+            rNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rIconSet.maURL);
     }
     catch (const uno::RuntimeException &)
     {
