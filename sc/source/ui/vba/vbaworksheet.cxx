@@ -426,7 +426,7 @@ void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode )
 uno::Reference< excel::XRange >
 ScVbaWorksheet::getUsedRange()
 {
-     uno::Reference< sheet::XSheetCellRange > xSheetCellRange(getSheet(), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSheetCellRange > xSheetCellRange(getSheet(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor( getSheet()->createCursorByRange( xSheetCellRange ), uno::UNO_QUERY_THROW );
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
     xUsedCursor->gotoStartOfUsedArea( false );
@@ -453,9 +453,9 @@ ScVbaWorksheet::HPageBreaks( const uno::Any& aIndex )
 {
     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak(getSheet(),uno::UNO_QUERY_THROW);
     uno::Reference< excel::XHPageBreaks > xHPageBreaks( new ScVbaHPageBreaks( this, mxContext, xSheetPageBreak));
-   if ( aIndex.hasValue() )
-      return xHPageBreaks->Item( aIndex, uno::Any());
-   return uno::makeAny( xHPageBreaks );
+    if ( aIndex.hasValue() )
+        return xHPageBreaks->Item( aIndex, uno::Any());
+    return uno::makeAny( xHPageBreaks );
 }
 
 uno::Any
@@ -541,7 +541,7 @@ ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After )
     {
         uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
         uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
-            uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
+        uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
         // #FIXME needs worksheet as parent
         uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
         if (xRange.is())
@@ -805,10 +805,10 @@ ScVbaWorksheet::Shapes( const uno::Any& aIndex )
     uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xShapes, uno::UNO_QUERY_THROW );
 
-   uno::Reference< msforms::XShapes> xVbaShapes( new ScVbaShapes( this, mxContext, xIndexAccess, getModel() ) );
-   if ( aIndex.hasValue() )
-      return xVbaShapes->Item( aIndex, uno::Any() );
-   return uno::makeAny( xVbaShapes );
+    uno::Reference< msforms::XShapes> xVbaShapes( new ScVbaShapes( this, mxContext, xIndexAccess, getModel() ) );
+    if ( aIndex.hasValue() )
+        return xVbaShapes->Item( aIndex, uno::Any() );
+    return uno::makeAny( xVbaShapes );
 }
 
 uno::Any
@@ -946,7 +946,7 @@ ScVbaWorksheet::getFormControls()
         uno::Reference< sheet::XSpreadsheet > xSpreadsheet( getSheet(), uno::UNO_QUERY_THROW );
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xSpreadsheet, uno::UNO_QUERY_THROW );
         uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-            uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
@@ -1012,7 +1012,7 @@ void SAL_CALL
 ScVbaWorksheet::setEnableCalculation( sal_Bool bEnableCalculation )
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);
-        xCalculatable->enableAutomaticCalculation( bEnableCalculation);
+    xCalculatable->enableAutomaticCalculation( bEnableCalculation);
 }
 sal_Bool SAL_CALL
 ScVbaWorksheet::getEnableCalculation(  )

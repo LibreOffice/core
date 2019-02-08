@@ -638,9 +638,9 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             case FT_Snum:
                 if ( bWK123 )
                 {
-                         sal_uInt32   nValue;
+                     sal_uInt32   nValue;
 
-                         Read( nValue );
+                     Read( nValue );
                      double  fValue = Snum32ToDouble( nValue );
                      aStack << aPool.Store( fValue );
                 }

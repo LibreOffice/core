@@ -96,7 +96,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         SolarMutexGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -110,7 +110,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
 
 void SAL_CALL ScAccessiblePreviewCell::grabFocus()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {

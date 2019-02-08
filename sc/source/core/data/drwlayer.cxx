@@ -1094,7 +1094,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     {
         nStartX = 0;
         SCCOL nStartCol = rRange.aStart.Col();
-            SCCOL i;
+        SCCOL i;
         for (i=0; i<nStartCol; i++)
             nStartX +=pDoc->GetColWidth(i,nTab);
         nEndX = nStartX;

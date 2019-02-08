@@ -319,17 +319,17 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pLbConnect1->Hide();
     // Disable/Enable Logic:
 
-       (pLbField1->GetSelectedEntryPos() != 0)
+    (pLbField1->GetSelectedEntryPos() != 0)
     && (pLbField2->GetSelectedEntryPos() != 0)
         ? pLbConnect2->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(1).eConnect) )
         : pLbConnect2->SetNoSelection();
 
-       (pLbField2->GetSelectedEntryPos() != 0)
+    (pLbField2->GetSelectedEntryPos() != 0)
     && (pLbField3->GetSelectedEntryPos() != 0)
         ? pLbConnect3->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(2).eConnect) )
         : pLbConnect3->SetNoSelection();
 
-       (pLbField3->GetSelectedEntryPos() != 0)
+    (pLbField3->GetSelectedEntryPos() != 0)
     && (pLbField4->GetSelectedEntryPos() != 0)
         ? pLbConnect4->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(3).eConnect) )
         : pLbConnect4->SetNoSelection();

@@ -2919,7 +2919,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             if ( bInsertPreCorrectedString && aString != aPreAutoCorrectString )
             {
-               ScInputStatusItem aItem(FID_INPUTLINE_STATUS,
+                ScInputStatusItem aItem(FID_INPUTLINE_STATUS,
                                        aCursorPos, aCursorPos, aCursorPos,
                                        aPreAutoCorrectString, pObject.get());
                 aArgs[0] = &aItem;

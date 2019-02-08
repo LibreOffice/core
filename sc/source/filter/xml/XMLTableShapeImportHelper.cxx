@@ -204,7 +204,7 @@ void XMLTableShapeImportHelper::finishShape(
                 {
                     if ( ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( pSdrObj ) )
                     {
-                        if ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
+                       if ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
                             pAnchor->maStartOffset = aStartPoint;
                        if ( aStartPoint.getX() < pAnchor->maStartOffset.getX() )
                              pAnchor->maStartOffset.setX( aStartPoint.getX() );

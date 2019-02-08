@@ -138,7 +138,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is() && mpViewShell)
     {

@@ -3132,8 +3132,8 @@ sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
             }
         }
 
-       // we could not find a non-empty cell
-       return 0;
+        // we could not find a non-empty cell
+        return 0;
     }
 
     if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aDataArray.size()))

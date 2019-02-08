@@ -175,7 +175,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
 
 void SAL_CALL ScAccessiblePageHeader::grabFocus()
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {

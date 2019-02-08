@@ -316,7 +316,7 @@ ScVbaValidation::getFormula1()
 OUString SAL_CALL
 ScVbaValidation::getFormula2()
 {
-        uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
     return xCond->getFormula2();
 }
 

@@ -2523,7 +2523,7 @@ sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
     }
 
     // no positions set - compare names
-   return pSource->GetData()->Compare( pSource->GetSourceDim(nDim),mnDataId,rOther.GetItemDataId());
+    return pSource->GetData()->Compare( pSource->GetSourceDim(nDim),mnDataId,rOther.GetItemDataId());
 }
 
 ScDPItemData ScDPMember::FillItemData() const

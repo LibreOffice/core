@@ -241,10 +241,10 @@ bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
 {
     const ScDPDataMember* pDataMember1 = rDimension.GetMember(nIndex1);
     const ScDPDataMember* pDataMember2 = rDimension.GetMember(nIndex2);
-        bool bHide1 = pDataMember1 && !pDataMember1->IsVisible();
-        bool bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
-        if ( bHide1 || bHide2 )
-            return !bHide1;
+    bool bHide1 = pDataMember1 && !pDataMember1->IsVisible();
+    bool bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
+    if ( bHide1 || bHide2 )
+        return !bHide1;
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
 }
 
@@ -975,7 +975,7 @@ ScDPResultMember::~ScDPResultMember()
 
 OUString ScDPResultMember::GetName() const
 {
-  const ScDPMember* pMemberDesc = GetDPMember();
+    const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
         return pMemberDesc->GetNameStr( false );
     else
@@ -1056,10 +1056,10 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
         {
             if (  ppDim[nPos]->getIsDataLayoutDimension() )
             {
-                 if ( !pChildDimension )
-                        pChildDimension.reset( new ScDPResultDimension( pResultData ) );
-                    pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , false );
-                    return;
+                if ( !pChildDimension )
+                    pChildDimension.reset( new ScDPResultDimension( pResultData ) );
+                pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , false );
+                return;
             }
             else
             { //find next dim
@@ -1227,7 +1227,7 @@ long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const
     if ( pUserSubStart )
         *pUserSubStart = 0;     // default
 
-   const ScDPLevel* pParentLevel = GetParentLevel();
+    const ScDPLevel* pParentLevel = GetParentLevel();
 
     if ( bForceSubTotal )       // set if needed for root members
         return 1;               // grand total is always "automatic"
@@ -2775,7 +2775,7 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 
     MemberHash::const_iterator aRes = maMemberHash.find( iData );
     if( aRes != maMemberHash.end()) {
-           if ( aRes->second->IsNamedItem( iData ) )
+        if ( aRes->second->IsNamedItem( iData ) )
             return aRes->second;
         OSL_FAIL("problem!  hash result is not the same as IsNamedItem");
     }
@@ -3968,8 +3968,8 @@ size_t ScDPResultVisibilityData::MemberHash::operator() (const ScDPItemData& r) 
 }
 SCROW ScDPResultMember::GetDataId( ) const
 {
- const ScDPMember*   pMemberDesc = GetDPMember();
-  if (pMemberDesc)
+    const ScDPMember*   pMemberDesc = GetDPMember();
+    if (pMemberDesc)
         return  pMemberDesc->GetItemDataId();
     return -1;
 }

@@ -2370,7 +2370,7 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-         if (pDocShell->GetDocument().GetTableCount() <= nTab)
+        if (pDocShell->GetDocument().GetTableCount() <= nTab)
             throw lang::IndexOutOfBoundsException();
         if (pDocShell->GetDocument().GetAnonymousDBData(static_cast<SCTAB>(nTab)))
             return true;
