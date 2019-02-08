@@ -969,7 +969,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
          pShUndoMgr->GetRepeatActionCount() == 0 )
         rSet.DisableItem( SID_CLEARHISTORY );
 
-    if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
+    if (pShUndoMgr->GetUndoActionCount())
     {
         const SfxUndoAction* pAction = pShUndoMgr->GetUndoAction();
         SfxViewShell *pViewSh = GetViewShell();
@@ -985,7 +985,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     else
         rSet.DisableItem( SID_UNDO );
 
-    if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
+    if (pShUndoMgr->GetRedoActionCount())
     {
         const SfxUndoAction* pAction = pShUndoMgr->GetRedoAction();
         SfxViewShell *pViewSh = GetViewShell();
@@ -1002,7 +1002,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_REDO );
 
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
-    if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() && pShUndoMgr->CanRepeat(*pTarget) )
+    if (pTarget && pShUndoMgr->GetRepeatActionCount() && pShUndoMgr->CanRepeat(*pTarget))
         rSet.Put( SfxStringItem( SID_REPEAT, SvtResId(STR_REPEAT)+pShUndoMgr->GetRepeatActionComment(*pTarget) ) );
     else
         rSet.DisableItem( SID_REPEAT );
@@ -2208,10 +2208,9 @@ void SfxViewFrame::ExecView_Impl
         {
             const SfxInt16Item* pItem = rReq.GetArg<SfxInt16Item>(SID_OBJECT);
 
-            SfxViewShell *pViewShell = GetViewShell();
-            if ( pViewShell && pItem )
+            if (pItem)
             {
-                pViewShell->DoVerb( pItem->GetValue() );
+                GetViewShell()->DoVerb( pItem->GetValue() );
                 rReq.Done();
                 break;
             }
