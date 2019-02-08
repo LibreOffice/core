@@ -1552,7 +1552,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 
             case BASEPROPERTY_ACTIVATED:
             {
-                   bool b = false;
+                bool b = false;
                 Value >>= b;
                 pField->SetRoadmapInteractive( b);
             }
@@ -1560,7 +1560,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 
             case BASEPROPERTY_CURRENTITEMID:
             {
-                   sal_Int32 nId = 0;
+                sal_Int32 nId = 0;
                 Value >>= nId;
                 pField->SelectRoadmapItemByID( static_cast<RoadmapTypes::ItemId>(nId) );
             }
@@ -1568,7 +1568,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 
             case BASEPROPERTY_TEXT:
             {
-                   OUString aStr;
+                OUString aStr;
                 Value >>= aStr;
                 pField->SetText( aStr );
                 pField->Invalidate();
