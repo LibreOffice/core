@@ -712,8 +712,8 @@ void OTableEditorCtrl::CopyRows()
         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
 
     // Copy selected rows to the ClipboardList
-     std::shared_ptr<OTableRow>  pClipboardRow;
-     std::shared_ptr<OTableRow>  pRow;
+    std::shared_ptr<OTableRow>  pClipboardRow;
+    std::shared_ptr<OTableRow>  pRow;
     std::vector< std::shared_ptr<OTableRow> > vClipboardList;
     vClipboardList.reserve(GetSelectRowCount());
 
@@ -775,7 +775,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();
             long nInsertRow = nRow;
-             std::shared_ptr<OTableRow>  pRow;
+            std::shared_ptr<OTableRow>  pRow;
             sal_Int32 nSize = 0;
             (*aStreamRef).ReadInt32( nSize );
             vInsertedUndoRedoRows.reserve(nSize);
@@ -1068,7 +1068,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
         OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
         return nullptr;
     }
-     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
+    std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
     if( !pRow )
         return nullptr;
     return pRow->GetActFieldDescr();
@@ -1120,7 +1120,7 @@ bool OTableEditorCtrl::IsCopyAllowed()
             return false;
 
         // If one of the selected rows is empty, Copy is not possible
-         std::shared_ptr<OTableRow>  pRow;
+        std::shared_ptr<OTableRow>  pRow;
         long nIndex = FirstSelectedRow();
         while( nIndex != SFX_ENDOFSELECTION )
         {
@@ -1279,7 +1279,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     // - No Memo or Image entries
     // - DROP is not permitted (see above) and the column is not Required (not null flag is not set).
     long nIndex = FirstSelectedRow();
-     std::shared_ptr<OTableRow>  pRow;
+    std::shared_ptr<OTableRow>  pRow;
     while( nIndex != SFX_ENDOFSELECTION )
     {
         pRow = (*m_pRowList)[nIndex];
@@ -1518,7 +1518,7 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
         while( nIndex != SFX_ENDOFSELECTION )
         {
             // Set the key
-             std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nIndex];
+            std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nIndex];
             OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
             if(pFieldDescr)
                 AdjustFieldDescription(pFieldDescr,aInsertedPrimKeys,nIndex,false,true);
@@ -1567,7 +1567,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     if ( nRow < 0 || nRow > static_cast<long>(m_pRowList->size()) )
         return;
     // Show the new description
-     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];
+    std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];
     pRow->SetFieldType( _pType, true );
     if ( _pType.get() )
     {

@@ -230,7 +230,7 @@ using namespace ::com::sun::star;
             m_pETBaseDN->SetText(pBaseDN->GetValue());
             m_pNFPortNumber->SetValue(pPortNumber->GetValue());
         }
-           OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
+        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
         callModifiedHdl();
     }
 

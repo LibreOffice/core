@@ -208,12 +208,12 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
 
     // TODO: why the hell this whole class does not use any mutex?
 
-        Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
-        for (auto const& elem : m_aStatusMultiplexer)
-        {
-            if (elem.second.is() && elem.second->getLength())
-                xDisp->addStatusListener(elem.second.get(), elem.first);
-        }
+    Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
+    for (auto const& elem : m_aStatusMultiplexer)
+    {
+        if (elem.second.is() && elem.second->getLength())
+            xDisp->addStatusListener(elem.second.get(), elem.first);
+    }
 }
 
 void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs)

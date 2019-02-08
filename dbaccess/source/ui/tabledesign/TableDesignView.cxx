@@ -292,7 +292,7 @@ void OTableDesignView::setReadOnly(bool _bReadOnly)
 void OTableDesignView::reSync()
 {
     GetEditorCtrl()->DeactivateCell();
-     std::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
+    std::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
     OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : nullptr;
     if ( pFieldDescr )
         GetDescWin()->DisplayData(pFieldDescr);

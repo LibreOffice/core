@@ -995,12 +995,10 @@ namespace
         void (SAL_CALL XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
     {
         const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
-               {
         if ( m_xSource->wasNull() )
             m_xDest->setNull( m_rDestPos, m_rColTypes[ m_rSourcePos ] );
         else
             (m_xDest.get()->*_pSetter)( m_rDestPos, value );
-               }
     }
     private:
         const sal_Int32&                    m_rSourcePos;

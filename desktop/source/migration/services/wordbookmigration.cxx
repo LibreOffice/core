@@ -127,8 +127,8 @@ static bool IsUserWordbook( const OUString& rFile )
                 pStream->ReadUInt16( nLen );
                 if ( nLen < MAX_HEADER_LENGTH )
                 {
-                   pStream->ReadBytes(pMagicHeader, nLen);
-                   pMagicHeader[nLen] = '\0';
+                    pStream->ReadBytes(pMagicHeader, nLen);
+                    pMagicHeader[nLen] = '\0';
                     if ( !strcmp(pMagicHeader, "WBSWG2")
                      ||  !strcmp(pMagicHeader, "WBSWG5")
                      ||  !strcmp(pMagicHeader, "WBSWG6") )

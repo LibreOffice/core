@@ -457,7 +457,7 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     Reference< XStatusIndicator > xStatusIndicator;
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
-     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
     OUString sBaseURI = _rResource.getOrDefault("BaseURI", OUString());
     if (sBaseURI.isEmpty())
         sBaseURI = _rResource.getOrDefault("URL",OUString());

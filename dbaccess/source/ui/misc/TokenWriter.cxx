@@ -939,7 +939,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
 void OHTMLImportExport::FontOn()
 {
 #if OSL_DEBUG_LEVEL > 0
-        m_bCheckFont = true;
+    m_bCheckFont = true;
 #endif
 
     // <FONT FACE="xxx">
