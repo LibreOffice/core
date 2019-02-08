@@ -19,13 +19,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SRCHXTRA_HXX
 #define INCLUDED_CUI_SOURCE_INC_SRCHXTRA_HXX
 
-#include <vcl/field.hxx>
-#include <vcl/weld.hxx>
-#include <svtools/ctrltool.hxx>
 #include <sfx2/tabdlg.hxx>
-
-#include <svx/checklbx.hxx>
+#include <svtools/ctrltool.hxx>
 #include <svx/srchdlg.hxx>
+#include <vcl/weld.hxx>
 
 class SvxSearchFormatDialog : public SfxTabDialogController
 {
@@ -42,21 +39,20 @@ private:
 
 // class SvxSearchFormatDialog -------------------------------------------
 
-class SvxSearchAttributeDialog : public ModalDialog
+class SvxSearchAttributeDialog : public weld::GenericDialogController
 {
 public:
-    SvxSearchAttributeDialog( vcl::Window* pParent, SearchAttrItemList& rLst,
-                              const sal_uInt16* pWhRanges );
+    SvxSearchAttributeDialog(weld::Window* pParent, SearchAttrItemList& rLst,
+                             const sal_uInt16* pWhRanges);
     virtual ~SvxSearchAttributeDialog() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<SvxCheckListBox>    m_pAttrLB;
-    VclPtr<OKButton>           m_pOKBtn;
-
     SearchAttrItemList& rList;
 
-    DECL_LINK(OKHdl, Button*, void);
+    std::unique_ptr<weld::TreeView> m_xAttrLB;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+
+    DECL_LINK(OKHdl, weld::Button&, void);
 };
 
 // class SvxSearchSimilarityDialog ---------------------------------------

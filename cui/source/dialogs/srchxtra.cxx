@@ -102,20 +102,21 @@ void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
 }
 
-SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
+SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
     SearchAttrItemList& rLst, const sal_uInt16* pWhRanges)
-    : ModalDialog(pParent, "SearchAttrDialog", "cui/ui/searchattrdialog.ui")
+    : GenericDialogController(pParent, "cui/ui/searchattrdialog.ui", "SearchAttrDialog")
     , rList(rLst)
+    , m_xAttrLB(m_xBuilder->weld_tree_view("treeview"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOKBtn, "ok");
-    get(m_pAttrLB, "treeview");
-    m_pAttrLB->set_height_request(m_pAttrLB->GetTextHeight() * 12);
-    m_pAttrLB->set_width_request(m_pAttrLB->approximate_char_width() * 56);
+    m_xAttrLB->set_size_request(m_xAttrLB->get_approximate_digit_width() * 50,
+                                m_xAttrLB->get_height_rows(12));
 
-    m_pAttrLB->SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
-    m_pAttrLB->GetModel()->SetSortMode( SortAscending );
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xAttrLB->get_approximate_digit_width() * 3 + 6);
+    m_xAttrLB->set_column_fixed_widths(aWidths);
 
-    m_pOKBtn->SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
+    m_xOKBtn->connect_clicked(LINK( this, SvxSearchAttributeDialog, OKHdl));
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
@@ -143,47 +144,38 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
 
             // item resources are in svx
             sal_uInt32 nId  = SvxAttrNameTable::FindIndex(nSlot);
-            SvTreeListEntry* pEntry = nullptr;
-            if ( RESARRAY_INDEX_NOTFOUND != nId )
-                pEntry = m_pAttrLB->SvTreeListBox::InsertEntry(SvxAttrNameTable::GetString(nId));
+            if (RESARRAY_INDEX_NOTFOUND != nId)
+            {
+                m_xAttrLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
+                                  nullptr, nullptr, false);
+                const int nRow = m_xAttrLB->n_children() - 1;
+                m_xAttrLB->set_toggle(nRow, bChecked, 0);
+                m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 1);
+                m_xAttrLB->set_id(nRow, OUString::number(nSlot));
+            }
             else
                 SAL_WARN( "cui.dialogs", "no resource for slot id " << static_cast<sal_Int32>(nSlot) );
-
-            if ( pEntry )
-            {
-                m_pAttrLB->SetCheckButtonState( pEntry, bChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
-                pEntry->SetUserData( reinterpret_cast<void*>(nSlot) );
-            }
         }
         nWhich = aIter.NextWhich();
     }
 
-    m_pAttrLB->SetHighlightRange();
-    m_pAttrLB->SelectEntryPos( 0 );
+    m_xAttrLB->make_sorted();
+    m_xAttrLB->select(0);
 }
 
 SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
 {
-    disposeOnce();
 }
 
-void SvxSearchAttributeDialog::dispose()
-{
-    m_pAttrLB.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 {
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = INVALID_POOL_ITEM;
 
-    for ( sal_uLong i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
+    for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {
-        sal_uInt16 nSlot = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pAttrLB->GetEntryData(i)));
-        bool bChecked = m_pAttrLB->IsChecked(i);
+        sal_uInt16 nSlot = m_xAttrLB->get_id(i).toUInt32();
+        bool bChecked = m_xAttrLB->get_toggle(i, 0);
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
@@ -216,7 +208,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
         if ( !rList[ --n ].pItem )
             rList.Remove( n );
 
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 // class SvxSearchSimilarityDialog ---------------------------------------
