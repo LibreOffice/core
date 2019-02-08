@@ -11,6 +11,10 @@ $(eval $(call gb_Package_Package,vcl_theme_definitions,$(SRCDIR)/vcl/uiconfig/th
 
 $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/theme_definitions,\
 	definition.xml \
+	checkbox-on.svgx \
+	checkbox-off.svgx \
+	checkbox-on-pressed.svgx \
+	checkbox-off-pressed.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:

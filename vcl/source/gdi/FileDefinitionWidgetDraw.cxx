@@ -341,7 +341,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
     switch (eType)
     {
         case ControlType::Checkbox:
-            rNativeContentRegion = tools::Rectangle(Point(), Size(48, 32));
+            rNativeContentRegion = tools::Rectangle(Point(), Size(44, 26));
             return true;
         case ControlType::Radiobutton:
             rNativeContentRegion = tools::Rectangle(Point(), Size(32, 32));
