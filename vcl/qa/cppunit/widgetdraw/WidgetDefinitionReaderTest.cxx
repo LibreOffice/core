@@ -43,7 +43,7 @@ void WidgetDefinitionReaderTest::testRead()
     CPPUNIT_ASSERT_EQUAL(OUString("000000"), aDefinition.maCheckedColor.AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("000000"), aDefinition.maLightColor.AsRGBHexString());
 
-    vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"));
+    vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"), getFullUrl(""));
     aReader.read(aDefinition);
 
     CPPUNIT_ASSERT_EQUAL(OUString("123456"), aDefinition.maFaceColor.AsRGBHexString());
