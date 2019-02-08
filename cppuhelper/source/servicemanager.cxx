@@ -1103,7 +1103,8 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
                 throw css::lang::IllegalArgumentException(
                     "Bad argument " + args[i].Name,
                     static_cast< cppu::OWeakObject * >(this), 0);
-            }              OUString uri;
+            }
+            OUString uri;
             if (!(args[i].Value >>= uri)) {
                 throw css::lang::IllegalArgumentException(
                     "Bad uri argument",

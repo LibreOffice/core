@@ -371,7 +371,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     SvTreeListEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
         aUserData.release()); // XXX possible leak
-   return p;
+    return p;
 }
 
 void SFTreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
@@ -610,7 +610,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, void )
     Reference< browse::XBrowseNode > node;
     if ( userData )
     {
-              node = userData->GetNode();
+        node = userData->GetNode();
         CheckButtons( node );
     }
 }
@@ -1220,29 +1220,29 @@ OUString GetErrorMessage(
     OUString type = "";
     OUString message = eScriptError.Message;
 
-        if ( !eScriptError.language.isEmpty() )
-        {
-            language = eScriptError.language;
-        }
+    if ( !eScriptError.language.isEmpty() )
+    {
+        language = eScriptError.language;
+    }
 
-        if ( !eScriptError.scriptName.isEmpty() )
-        {
-            script = eScriptError.scriptName;
-        }
+    if ( !eScriptError.scriptName.isEmpty() )
+    {
+        script = eScriptError.scriptName;
+    }
 
-        if ( !eScriptError.Message.isEmpty() )
-        {
-            message = eScriptError.Message;
-        }
-        if ( eScriptError.lineNum != -1 )
-        {
-            line = OUString::number( eScriptError.lineNum );
-            unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
-        }
-        else
-        {
-            unformatted = CuiResId( RID_SVXSTR_ERROR_RUNNING );
-        }
+    if ( !eScriptError.Message.isEmpty() )
+    {
+        message = eScriptError.Message;
+    }
+    if ( eScriptError.lineNum != -1 )
+    {
+        line = OUString::number( eScriptError.lineNum );
+        unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
+    }
+    else
+    {
+        unformatted = CuiResId( RID_SVXSTR_ERROR_RUNNING );
+    }
 
     return FormatErrorString(
         unformatted, language, script, line, type, message );

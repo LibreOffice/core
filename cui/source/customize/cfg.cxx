@@ -3382,9 +3382,9 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
         uno::Any a = props->getPropertyValue("SizePixel");
 
-            xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
-            if ( xGraphic.is() )
-            {
+        xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
+        if ( xGraphic.is() )
+        {
                 bool bOK = true;
 
                 a >>= aSize;
@@ -3426,11 +3426,11 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 {
                     SAL_WARN("cui.customize", "could not create Image from XGraphic");
                 }
-            }
-            else
-            {
+        }
+        else
+        {
                 SAL_WARN("cui.customize", "could not get query XGraphic");
-            }
+        }
     }
     catch( uno::Exception& e )
     {

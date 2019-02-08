@@ -323,15 +323,15 @@ void SvxGeneralTabPage::InitCryptography()
             }
 
              //tdf#115015: wrap checkbox text and listboxes if necessary
-             Size aPrefSize(m_pEncryptToSelfCB->get_preferred_size());
-             Size aSize(m_pEncryptToSelfCB->CalcMinimumSize(40*approximate_char_width()));
-             if (aPrefSize.Width() > aSize.Width())
-             {
+            Size aPrefSize(m_pEncryptToSelfCB->get_preferred_size());
+            Size aSize(m_pEncryptToSelfCB->CalcMinimumSize(40*approximate_char_width()));
+            if (aPrefSize.Width() > aSize.Width())
+            {
                  m_pSigningKeyLB->set_width_request(aSize.Width());
                  m_pEncryptionKeyLB->set_width_request(aSize.Width());
                  m_pEncryptToSelfCB->set_width_request(aSize.Width());
                  m_pEncryptToSelfCB->set_height_request(aSize.Height());
-             }
+            }
 
         }
     }
