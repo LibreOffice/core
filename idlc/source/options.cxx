@@ -287,7 +287,8 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         {
           return badOption("invalid", option);
         }
-        OString param("-D"); param += OString((*first).c_str(), (*first).size());
+        OString param("-D");
+        param += OString((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
           OStringBuffer buffer(m_options["-D"]);

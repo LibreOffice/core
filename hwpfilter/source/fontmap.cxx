@@ -149,9 +149,9 @@ int getRepFamilyName(const char* orig, char *buf, double &ratio)
     for( int i = 0 ; i < int(SAL_N_ELEMENTS(FontMapTab)); i++)
     {
         if( !strcmp(orig, FontMapTab[i].familyname) ){
-                ratio = FontMapTab[i].ratio;
+            ratio = FontMapTab[i].ratio;
             return strlen( strcpy(buf,RepFontTab[FontMapTab[i].key]) );
-          }
+        }
     }
     ratio = FontMapTab[0].ratio;
     return strlen( strcpy(buf, RepFontTab[0] ) );

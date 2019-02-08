@@ -113,7 +113,7 @@ InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
                                             sal_Int16       inputCheckMode)
 {
     sal_Unicode currentChar = Text[nStartPos];
-  sal_uInt16  ch1 = getCharType(inputChar);
+    sal_uInt16  ch1 = getCharType(inputChar);
     sal_uInt16  ch2 = getCharType(currentChar);
 
     return (DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
