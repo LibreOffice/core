@@ -192,7 +192,8 @@ void call(
         abi_aarch64::mapException(
             reinterpret_cast<abi_aarch64::__cxa_eh_globals *>(
                 __cxxabiv1::__cxa_get_globals())->caughtExceptions,
-            *exception, proxy->getBridge()->getCpp2Uno());
+            __cxxabiv1::__cxa_current_exception_type(), *exception,
+            proxy->getBridge()->getCpp2Uno());
         for (sal_Int32 i = 0; i != count; ++i) {
             if (cppArgs[i] != 0) {
                 uno_destructData(
