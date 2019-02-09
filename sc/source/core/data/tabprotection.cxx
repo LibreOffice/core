@@ -435,11 +435,10 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, const ScDocume
         const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     bool bChanged = false;
-    for (::std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
-            it != maEnhancedProtection.end(); ++it)
+    for (auto& rEnhancedProtection : maEnhancedProtection)
     {
-        if ((*it).maRangeList.is())
-            bChanged |= (*it).maRangeList->UpdateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
+        if (rEnhancedProtection.maRangeList.is())
+            bChanged |= rEnhancedProtection.maRangeList->UpdateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
     }
     return bChanged;
 }
@@ -460,19 +459,13 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     // present we assume the permission to edit is not granted. Until we
     // actually can evaluate the descriptors..
 
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
-            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
-    {
-        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.is())
-        {
-            if ((*it).maRangeList->In( rRange))
-            {
-                // Range is editable if no password is assigned.
-                if (!(*it).hasPassword())
-                    return true;
-            }
-        }
-    }
+    auto lIsEditable = [rRange](const ScEnhancedProtection& rEnhancedProtection) {
+        return !rEnhancedProtection.hasSecurityDescriptor()
+            && rEnhancedProtection.maRangeList.is() && rEnhancedProtection.maRangeList->In( rRange)
+            && !rEnhancedProtection.hasPassword(); // Range is editable if no password is assigned.
+    };
+    if (std::any_of(maEnhancedProtection.begin(), maEnhancedProtection.end(), lIsEditable))
+        return true;
 
     // For a single address, a simple check with single ranges was sufficient.
     if (rRange.aStart == rRange.aEnd)
@@ -480,16 +473,15 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
 
     // Test also for cases where rRange is encompassed by a union of two or
     // more ranges of the list. The original ranges are not necessarily joined.
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
-            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
+    for (const auto& rEnhancedProtection : maEnhancedProtection)
     {
-        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.is())
+        if (!rEnhancedProtection.hasSecurityDescriptor() && rEnhancedProtection.maRangeList.is())
         {
-            ScRangeList aList( (*it).maRangeList->GetIntersectedRange( rRange));
+            ScRangeList aList( rEnhancedProtection.maRangeList->GetIntersectedRange( rRange));
             if (aList.size() == 1 && aList[0] == rRange)
             {
                 // Range is editable if no password is assigned.
-                if (!(*it).hasPassword())
+                if (!rEnhancedProtection.hasPassword())
                     return true;
             }
         }
@@ -501,15 +493,14 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     /* TODO: once we handle passwords, remember a successful unlock at
      * ScEnhancedProtection so we can use that here. */
     ScRangeList aRangeList;
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
-            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
+    for (const auto& rEnhancedProtection : maEnhancedProtection)
     {
-        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.is())
+        if (!rEnhancedProtection.hasSecurityDescriptor() && rEnhancedProtection.maRangeList.is())
         {
             // Ranges are editable if no password is assigned.
-            if (!(*it).hasPassword())
+            if (!rEnhancedProtection.hasPassword())
             {
-                const ScRangeList& rRanges = *(*it).maRangeList;
+                const ScRangeList& rRanges = *rEnhancedProtection.maRangeList;
                 size_t nRanges = rRanges.size();
                 for (size_t i=0; i < nRanges; ++i)
                 {

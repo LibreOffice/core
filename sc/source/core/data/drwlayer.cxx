@@ -1417,10 +1417,11 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
     rMark.GetMultiMarkArea( aMarkRange );
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+    for (const SCTAB nTab : rMark)
     {
-        SCTAB nTab = *itr;
+        if (nTab >= nTabCount)
+            break;
+
         SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
         if (pPage)
         {
@@ -1540,10 +1541,8 @@ static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector,
 {
     //  check if every range of rRangesVector is completely in rClipRange
 
-    ::std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
-    for( ;aIt!=rRangesVector.end(); ++aIt )
+    for( const ScRangeList& rRanges : rRangesVector )
     {
-        const ScRangeList& rRanges = *aIt;
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
             const ScRange & rRange = rRanges[ i ];
@@ -1562,10 +1561,8 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
     bool bChanged = false;
 
     ScRange aErrorRange( ScAddress::UNINITIALIZED );
-    ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
-    for( ;aIt!=rRangesVector.end(); ++aIt )
+    for( ScRangeList& rRanges : rRangesVector )
     {
-        ScRangeList& rRanges = *aIt;
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
             ScRange & rRange = rRanges[ i ];

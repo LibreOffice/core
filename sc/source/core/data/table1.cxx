@@ -1720,12 +1720,12 @@ void ScTable::UpdateReference(
         SCROW nERow = 0;
         bool bRecalcPages = false;
 
-        for ( ScRangeVec::iterator aIt = aPrintRanges.begin(), aEnd = aPrintRanges.end(); aIt != aEnd; ++aIt )
+        for ( auto& rPrintRange : aPrintRanges )
         {
-            nSCol = aIt->aStart.Col();
-            nSRow = aIt->aStart.Row();
-            nECol = aIt->aEnd.Col();
-            nERow = aIt->aEnd.Row();
+            nSCol = rPrintRange.aStart.Col();
+            nSRow = rPrintRange.aStart.Row();
+            nECol = rPrintRange.aEnd.Col();
+            nERow = rPrintRange.aEnd.Row();
 
             // do not try to modify sheet index of print range
             if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
@@ -1733,7 +1733,7 @@ void ScTable::UpdateReference(
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                *aIt = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
+                rPrintRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
                 bRecalcPages = true;
             }
         }

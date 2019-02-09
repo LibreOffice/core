@@ -586,15 +586,14 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
     bool bSameDoc = pDocument->GetStyleSheetPool() == pTable->pDocument->GetStyleSheetPool();
 
-    for(ScConditionalFormatList::const_iterator itr = pTable->mpCondFormatList->begin(),
-            itrEnd = pTable->mpCondFormatList->end(); itr != itrEnd; ++itr)
+    for(const auto& rxCondFormat : *pTable->mpCondFormatList)
     {
-        const ScRangeList& rCondFormatRange = (*itr)->GetRange();
+        const ScRangeList& rCondFormatRange = rxCondFormat->GetRange();
         if(!rCondFormatRange.Intersects( aOldRange ))
             continue;
 
         ScRangeList aIntersectedRange = rCondFormatRange.GetIntersectedRange(aOldRange);
-        std::unique_ptr<ScConditionalFormat> pNewFormat = (*itr)->Clone(pDocument);
+        std::unique_ptr<ScConditionalFormat> pNewFormat = rxCondFormat->Clone(pDocument);
 
         pNewFormat->SetRange(aIntersectedRange);
         sc::RefUpdateContext aRefCxt(*pDocument);
@@ -605,25 +604,24 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
-        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(pDocument, mpCondFormatList->GetFormat((*itr)->GetKey()), pNewFormat.get(), nTab))
+        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(pDocument, mpCondFormatList->GetFormat(rxCondFormat->GetKey()), pNewFormat.get(), nTab))
         {
             continue;
         }
         sal_uLong nMax = 0;
         bool bDuplicate = false;
-        for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
-                itrCond != mpCondFormatList->end(); ++itrCond)
+        for(const auto& rxCond : *mpCondFormatList)
         {
             // Check if there is the same format in the destination
             // If there is, then simply expand its range
-            if (CheckAndDeduplicateCondFormat(pDocument, (*itrCond).get(), pNewFormat.get(), nTab))
+            if (CheckAndDeduplicateCondFormat(pDocument, rxCond.get(), pNewFormat.get(), nTab))
             {
                 bDuplicate = true;
                 break;
             }
 
-            if ((*itrCond)->GetKey() > nMax)
-                nMax = (*itrCond)->GetKey();
+            if (rxCond->GetKey() > nMax)
+                nMax = rxCond->GetKey();
         }
         // Do not add duplicate entries
         if (bDuplicate)
@@ -1662,14 +1660,11 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
         {
             aCol[nCol].GetNotesInRange(nStartRow, nEndRow, rNotes);
 
-            for(std::vector<sc::NoteEntry>::const_iterator itr = rNotes.begin(),
-                         itrEnd = rNotes.end(); itr != itrEnd; ++itr)
-            {
-                if ( bIsFirstNoteShownState != itr->mpNote->IsCaptionShown())  // compare the first note caption with others
-                {
-                    return CommentCaptionState::MIXED;
-                }
-            }
+            bool bIsMixedState = std::any_of(rNotes.begin(), rNotes.end(), [bIsFirstNoteShownState](const sc::NoteEntry& rNote) {
+                // compare the first note caption with others
+                return bIsFirstNoteShownState != rNote.mpNote->IsCaptionShown(); });
+            if (bIsMixedState)
+                return CommentCaptionState::MIXED;
         }
     }
     return bIsFirstNoteShownState ? CommentCaptionState::ALLSHOWN : CommentCaptionState::ALLHIDDEN;
@@ -2173,10 +2168,9 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                     ScStyleSheetPool* pStylePool = pDocument->GetStyleSheetPool();
                     if (mpCondFormatList && pStylePool && !rCondFormatData.empty())
                     {
-                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatData.begin(), itrEnd = rCondFormatData.end();
-                                itr != itrEnd; ++itr)
+                        for(const auto& rItem : rCondFormatData)
                         {
-                            const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(*itr);
+                            const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(rItem);
                             if ( pFormat )
                             {
                                 size_t nEntryCount = pFormat->size();

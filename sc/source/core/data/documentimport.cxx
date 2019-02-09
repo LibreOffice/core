@@ -698,13 +698,12 @@ void ScDocumentImport::finalize()
 {
     // Populate the text width and script type arrays in all columns. Also
     // activate all formula cells.
-    ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
-    for (; itTab != itTabEnd; ++itTab)
+    for (auto& rxTab : mpImpl->mrDoc.maTabs)
     {
-        if (!*itTab)
+        if (!rxTab)
             continue;
 
-        ScTable& rTab = **itTab;
+        ScTable& rTab = *rxTab;
         SCCOL nNumCols = rTab.aCol.size();
         for (SCCOL nColIdx = 0; nColIdx < nNumCols; ++nColIdx)
             initColumn(rTab.aCol[nColIdx]);
@@ -755,13 +754,12 @@ void ScDocumentImport::broadcastRecalcAfterImport()
     sc::AutoCalcSwitch aACSwitch( mpImpl->mrDoc, false);
     ScBulkBroadcast aBulkBroadcast( mpImpl->mrDoc.GetBASM(), SfxHintId::ScDataChanged);
 
-    ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
-    for (; itTab != itTabEnd; ++itTab)
+    for (auto& rxTab : mpImpl->mrDoc.maTabs)
     {
-        if (!*itTab)
+        if (!rxTab)
             continue;
 
-        ScTable& rTab = **itTab;
+        ScTable& rTab = *rxTab;
         SCCOL nNumCols = rTab.aCol.size();
         for (SCCOL nColIdx = 0; nColIdx < nNumCols; ++nColIdx)
             broadcastRecalcAfterImportColumn(rTab.aCol[nColIdx]);

@@ -2598,14 +2598,10 @@ bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
     if (!pRefFields)
         return false;
 
-    vector<ScPivotField>::const_iterator itr = pRefFields->begin(), itrEnd = pRefFields->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (itr->nCol == nCol)
+    return std::any_of(pRefFields->begin(), pRefFields->end(),
+        [&nCol](const ScPivotField& rField) {
             // This array of fields contains the specified column.
-            return true;
-    }
-    return false;
+            return rField.nCol == nCol; });
 }
 
 class FindByOriginalDim
@@ -2907,10 +2903,8 @@ struct FindInvalidRange
 void setGroupItemsToCache( ScDPCache& rCache, const std::set<ScDPObject*>& rRefs )
 {
     // Go through all referencing pivot tables, and re-fill the group dimension info.
-    std::set<ScDPObject*>::const_iterator itRef = rRefs.begin(), itRefEnd = rRefs.end();
-    for (; itRef != itRefEnd; ++itRef)
+    for (const ScDPObject* pObj : rRefs)
     {
-        const ScDPObject* pObj = *itRef;
         const ScDPSaveData* pSave = pObj->GetSaveData();
         if (!pSave)
             continue;
@@ -3037,10 +3031,8 @@ void ScDPCollection::SheetCaches::updateReference(
         // No caches.
         return;
 
-    RangeIndexType::iterator it = maRanges.begin(), itEnd = maRanges.end();
-    for (; it != itEnd; ++it)
+    for (ScRange& rKeyRange : maRanges)
     {
-        const ScRange& rKeyRange = *it;
         SCCOL nCol1 = rKeyRange.aStart.Col();
         SCROW nRow1 = rKeyRange.aStart.Row();
         SCTAB nTab1 = rKeyRange.aStart.Tab();
@@ -3058,7 +3050,7 @@ void ScDPCollection::SheetCaches::updateReference(
         {
             // range updated.
             ScRange aNew(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            *it = aNew;
+            rKeyRange = aNew;
         }
     }
 }
@@ -3096,16 +3088,14 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
 
 bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
-    for (; it != itEnd; ++it)
+    CachesType::iterator it = std::find_if(m_Caches.begin(), m_Caches.end(),
+        [&p](const CachesType::value_type& rEntry) { return rEntry.second.get() == p; });
+    if (it != m_Caches.end())
     {
-        if (it->second.get() == p)
-        {
-            size_t idx = it->first;
-            m_Caches.erase(it);
-            maRanges[idx].SetInvalid();
-            return true;
-        }
+        size_t idx = it->first;
+        m_Caches.erase(it);
+        maRanges[idx].SetInvalid();
+        return true;
     }
     return false;
 }
@@ -3174,14 +3164,12 @@ void ScDPCollection::NameCaches::updateCache(
 
 bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
-    for (; it != itEnd; ++it)
+    CachesType::iterator it = std::find_if(m_Caches.begin(), m_Caches.end(),
+        [&p](const CachesType::value_type& rEntry) { return rEntry.second.get() == p; });
+    if (it != m_Caches.end())
     {
-        if (it->second.get() == p)
-        {
-            m_Caches.erase(it);
-            return true;
-        }
+        m_Caches.erase(it);
+        return true;
     }
     return false;
 }
@@ -3346,14 +3334,12 @@ void ScDPCollection::DBCaches::updateCache(
 
 bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
-    for (; it != itEnd; ++it)
+    CachesType::iterator it = std::find_if(m_Caches.begin(), m_Caches.end(),
+        [&p](const CachesType::value_type& rEntry) { return rEntry.second.get() == p; });
+    if (it != m_Caches.end())
     {
-        if (it->second.get() == p)
-        {
-            m_Caches.erase(it);
-            return true;
-        }
+        m_Caches.erase(it);
+        return true;
     }
     return false;
 }
@@ -3623,9 +3609,8 @@ void ScDPCollection::DeleteOnTab( SCTAB nTab )
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
-    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr)
-        (*itr)->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
+    for (auto& rxTable : maTables)
+        rxTable->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
 
     // Update the source ranges of the caches.
     maSheetCaches.updateReference(eUpdateRefMode, r, nDx, nDy, nDz);
@@ -3634,10 +3619,9 @@ void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
 void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
 {
     TablesType aAdded;
-    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTable : maTables)
     {
-        const ScDPObject& rObj = **it;
+        const ScDPObject& rObj = *rxTable;
         ScRange aOutRange = rObj.GetOutRange();
         if (aOutRange.aStart.Tab() != nOld)
             continue;
@@ -3657,15 +3641,8 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
 
 bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
 {
-    if (maTables.size() != r.maTables.size())
-        return false;
-
-    TablesType::const_iterator itr = maTables.begin(), itr2 = r.maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr, ++itr2)
-        if (!(*itr)->RefsEqual(**itr2))
-            return false;
-
-    return true;
+    return std::equal(maTables.begin(), maTables.end(), r.maTables.begin(), r.maTables.end(),
+        [](const TablesType::value_type& a, const TablesType::value_type& b) { return a->RefsEqual(*b); });
 }
 
 void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
@@ -3673,10 +3650,12 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
     if ( maTables.size() == r.maTables.size() )
     {
         //TODO: assert equal names?
-        TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         TablesType::iterator itr2 = r.maTables.begin();
-        for (; itr != itrEnd; ++itr, ++itr2)
-            (*itr)->WriteRefsTo(**itr2);
+        for (const auto& rxTable : maTables)
+        {
+            rxTable->WriteRefsTo(**itr2);
+            ++itr2;
+        }
     }
     else
     {
@@ -3743,17 +3722,8 @@ OUString ScDPCollection::CreateNewName() const
     for (size_t nAdd = 0; nAdd <= n; ++nAdd)   //  nCount+1 tries
     {
         OUString aNewName = "DataPilot" + OUString::number(1 + nAdd);
-        bool bFound = false;
-        TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            if ((*itr)->GetName() == aNewName)
-            {
-                bFound = true;
-                break;
-            }
-        }
-        if (!bFound)
+        if (std::none_of(maTables.begin(), maTables.end(),
+                         [&aNewName](const TablesType::value_type& rxObj) { return rxObj->GetName() == aNewName; }))
             return aNewName;            // found unused Name
     }
     return OUString();                    // should not happen
@@ -3893,10 +3863,9 @@ void ScDPCollection::RemoveCache(const ScDPCache* pCache)
 void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const
 {
     std::set<ScDPObject*> aRefs;
-    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTable : maTables)
     {
-        const ScDPObject& rObj = **it;
+        const ScDPObject& rObj = *rxTable;
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3922,10 +3891,9 @@ void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*
 void ScDPCollection::GetAllTables(const OUString& rSrcName, std::set<ScDPObject*>& rRefs) const
 {
     std::set<ScDPObject*> aRefs;
-    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTable : maTables)
     {
-        const ScDPObject& rObj = **it;
+        const ScDPObject& rObj = *rxTable;
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3953,10 +3921,9 @@ void ScDPCollection::GetAllTables(
     std::set<ScDPObject*>& rRefs) const
 {
     std::set<ScDPObject*> aRefs;
-    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTable : maTables)
     {
-        const ScDPObject& rObj = **it;
+        const ScDPObject& rObj = *rxTable;
         if (!rObj.IsImportData())
             // Source data is not a database.
             continue;
