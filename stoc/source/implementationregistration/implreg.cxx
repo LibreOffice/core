@@ -1362,8 +1362,7 @@ void ImplementationRegistration::prepareRegister(
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        sal_Int32 nIndex = 0;
-        activatorName = implementationLoaderUrl.getToken(0, ':', nIndex );
+        activatorName = implementationLoaderUrl.getToken(0, ':');
     } else
     {
         // check locationUrl to find out what kind of loader is needed
@@ -1494,8 +1493,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        sal_Int32 nIndex = 0;
-        activatorName = implementationLoaderUrl.getToken(0, ':', nIndex );
+        activatorName = implementationLoaderUrl.getToken(0, ':');
     } else
     {
         // check locationUrl to find out what kind of loader is needed
