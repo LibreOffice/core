@@ -359,10 +359,9 @@ public:
         RowsType aRows2;
         aRows2.reserve(rRows.size());
 
-        std::vector<SCCOLROW>::const_iterator it = rIndices.begin(), itEnd = rIndices.end();
-        for (; it != itEnd; ++it)
+        for (const auto& rIndex : rIndices)
         {
-            size_t nPos = *it - nStart; // switch to an offset to top row.
+            size_t nPos = rIndex - nStart; // switch to an offset to top row.
             aRows2.push_back(rRows[nPos]);
             aOrderIndices2.push_back(maOrderIndices[nPos]);
         }
@@ -958,11 +957,10 @@ void ScTable::SortReorderByColumn(
         std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
                 aMoveRange, sc::OneColumnInsideArea);
         {
-            std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-            for (; it != itEnd; ++it)
+            for (auto& rAreaListener : aAreaListeners)
             {
-                pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
-                aListeners.push_back( it->mpListener);
+                pDocument->EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+                aListeners.push_back( rAreaListener.mpListener);
             }
         }
 
@@ -976,17 +974,16 @@ void ScTable::SortReorderByColumn(
 
         // Re-start area listeners on the reordered columns.
         {
-            std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-            for (; it != itEnd; ++it)
+            for (auto& rAreaListener : aAreaListeners)
             {
-                ScRange aNewRange = it->maArea;
+                ScRange aNewRange = rAreaListener.maArea;
                 sc::ColRowReorderMapType::const_iterator itCol = aColMap.find( aNewRange.aStart.Col());
                 if (itCol != aColMap.end())
                 {
                     aNewRange.aStart.SetCol( itCol->second);
                     aNewRange.aEnd.SetCol( itCol->second);
                 }
-                pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
+                pDocument->StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
             }
         }
     }
@@ -1103,17 +1100,16 @@ void ScTable::SortReorderByRow(
                 sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
                     aSortedCols[i].get()->maPatterns);
 
-            std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
-            for (; it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
-                assert(it->mpPattern); // should never be NULL.
-                pDocument->GetPool()->Put(*it->mpPattern);
+                assert(rSpan.mpPattern); // should never be NULL.
+                pDocument->GetPool()->Put(*rSpan.mpPattern);
             }
 
-            for (it = aSpans.begin(); it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
-                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern);
-                pDocument->GetPool()->Remove(*it->mpPattern);
+                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
+                pDocument->GetPool()->Remove(*rSpan.mpPattern);
             }
         }
 
@@ -1132,16 +1128,13 @@ void ScTable::SortReorderByRow(
         std::vector<sc::RowSpan> aSpans =
             sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsHidden, nRow1);
 
-        std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-            SetRowHidden(it->mnRow1, it->mnRow2, true);
+        for (const auto& rSpan : aSpans)
+            SetRowHidden(rSpan.mnRow1, rSpan.mnRow2, true);
 
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
-        it = aSpans.begin();
-        itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-            SetRowFiltered(it->mnRow1, it->mnRow2, true);
+        for (const auto& rSpan : aSpans)
+            SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
     }
 
     // Notify the cells' listeners to (re-)start listening.
@@ -1185,13 +1178,12 @@ void ScTable::SortReorderByRowRefUpdate(
                 aMoveRange, sc::AreaInsideOrOverlap, sc::ListenerGroupType::Group);
 
         {
-            std::vector<sc::AreaListener>::iterator it = aGrpListeners.begin(), itEnd = aGrpListeners.end();
-            for (; it != itEnd; ++it)
+            for (auto& rGrpListener : aGrpListeners)
             {
-                assert(it->mbGroupListening);
-                SvtListener* pGrpLis = it->mpListener;
+                assert(rGrpListener.mbGroupListening);
+                SvtListener* pGrpLis = rGrpListener.mpListener;
                 pGrpLis->Query(aQuery);
-                pDocument->EndListeningArea(it->maArea, it->mbGroupListening, pGrpLis);
+                pDocument->EndListeningArea(rGrpListener.maArea, rGrpListener.mbGroupListening, pGrpLis);
             }
         }
 
@@ -1305,17 +1297,16 @@ void ScTable::SortReorderByRowRefUpdate(
                 sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
                     aSortedCols[i].get()->maPatterns);
 
-            std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
-            for (; it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
-                assert(it->mpPattern); // should never be NULL.
-                pDocument->GetPool()->Put(*it->mpPattern);
+                assert(rSpan.mpPattern); // should never be NULL.
+                pDocument->GetPool()->Put(*rSpan.mpPattern);
             }
 
-            for (it = aSpans.begin(); it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
-                aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern);
-                pDocument->GetPool()->Remove(*it->mpPattern);
+                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
+                pDocument->GetPool()->Remove(*rSpan.mpPattern);
             }
         }
 
@@ -1334,16 +1325,13 @@ void ScTable::SortReorderByRowRefUpdate(
         std::vector<sc::RowSpan> aSpans =
             sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsHidden, nRow1);
 
-        std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-            SetRowHidden(it->mnRow1, it->mnRow2, true);
+        for (const auto& rSpan : aSpans)
+            SetRowHidden(rSpan.mnRow1, rSpan.mnRow2, true);
 
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
-        it = aSpans.begin();
-        itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-            SetRowFiltered(it->mnRow1, it->mnRow2, true);
+        for (const auto& rSpan : aSpans)
+            SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
     }
 
     // Set up row reorder map (for later broadcasting of reference updates).
@@ -1368,11 +1356,10 @@ void ScTable::SortReorderByRowRefUpdate(
     std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
             aMoveRange, sc::OneRowInsideArea);
     {
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
+        for (auto& rAreaListener : aAreaListeners)
         {
-            pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
-            aListeners.push_back( it->mpListener);
+            pDocument->EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+            aListeners.push_back( rAreaListener.mpListener);
         }
     }
 
@@ -1398,16 +1385,12 @@ void ScTable::SortReorderByRowRefUpdate(
 
     std::for_each(aListeners.begin(), aListeners.end(), FormulaGroupPosCollector(aFormulaGroupPos));
     const sc::RefQueryFormulaGroup::TabsType& rGroupTabs = aFormulaGroupPos.getAllPositions();
-    sc::RefQueryFormulaGroup::TabsType::const_iterator itGroupTab = rGroupTabs.begin(), itGroupTabEnd = rGroupTabs.end();
-    for (; itGroupTab != itGroupTabEnd; ++itGroupTab)
+    for (const auto& [rTab, rCols] : rGroupTabs)
     {
-        const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
-        sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
-        for (; itCol != itColEnd; ++itCol)
+        for (const auto& [nCol, rCol] : rCols)
         {
-            const sc::RefQueryFormulaGroup::ColType& rCol = itCol->second;
             std::vector<SCROW> aBounds(rCol);
-            pDocument->UnshareFormulaCells(itGroupTab->first, itCol->first, aBounds);
+            pDocument->UnshareFormulaCells(rTab, nCol, aBounds);
         }
     }
 
@@ -1416,28 +1399,23 @@ void ScTable::SortReorderByRowRefUpdate(
     std::for_each(aListeners.begin(), aListeners.end(), aFunc);
 
     // Re-group formulas in affected columns.
-    for (itGroupTab = rGroupTabs.begin(); itGroupTab != itGroupTabEnd; ++itGroupTab)
+    for (const auto& [rTab, rCols] : rGroupTabs)
     {
-        const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
-        sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
-        for (; itCol != itColEnd; ++itCol)
-            pDocument->RegroupFormulaCells(itGroupTab->first, itCol->first);
+        for (const auto& rEntry : rCols)
+            pDocument->RegroupFormulaCells(rTab, rEntry.first);
     }
 
     // Re-start area listeners on the reordered rows.
+    for (const auto& rAreaListener : aAreaListeners)
     {
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
+        ScRange aNewRange = rAreaListener.maArea;
+        sc::ColRowReorderMapType::const_iterator itRow = aRowMap.find( aNewRange.aStart.Row());
+        if (itRow != aRowMap.end())
         {
-            ScRange aNewRange = it->maArea;
-            sc::ColRowReorderMapType::const_iterator itRow = aRowMap.find( aNewRange.aStart.Row());
-            if (itRow != aRowMap.end())
-            {
-                aNewRange.aStart.SetRow( itRow->second);
-                aNewRange.aEnd.SetRow( itRow->second);
-            }
-            pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
+            aNewRange.aStart.SetRow( itRow->second);
+            aNewRange.aEnd.SetRow( itRow->second);
         }
+        pDocument->StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
     }
 
     // Re-group columns in the sorted range too.
@@ -1893,13 +1871,10 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 
     auto& aRows = aFunc.aRemoved;
 
-    auto it = aRows.rbegin(), itEnd = aRows.rend();
-    for (; it != itEnd; ++it)
-    {
-        SCROW nRow = *it;
-        RemoveRowBreak(nRow+1, false, true);
-        pDocument->DeleteRow(0, nTab, MAXCOL, nTab, nRow, 1);
-    }
+    std::for_each(aRows.rbegin(), aRows.rend(), [this](const SCROW nRow) {
+            RemoveRowBreak(nRow+1, false, true);
+            pDocument->DeleteRow(0, nTab, MAXCOL, nTab, nRow, 1);
+        });
 
     rParam.nRow2 -= aRows.size();
 }
@@ -2051,16 +2026,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     if ( bChanged && bTestPrevSub )
                     {
                         // No group change on rows that will contain subtotal formulas
-                        for ( ::std::vector< RowEntry >::const_iterator
-                                iEntry( aRowVector.begin());
-                                iEntry != aRowVector.end(); ++iEntry)
-                        {
-                            if ( iEntry->nDestRow == nRow )
-                            {
-                                bChanged = false;
-                                break;
-                            }
-                        }
+                        bChanged = std::none_of(aRowVector.begin(), aRowVector.end(),
+                            [&nRow](const RowEntry& rEntry) { return rEntry.nDestRow == nRow; });
                     }
                 }
                 if ( bChanged )
@@ -2078,18 +2045,16 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
                     if (bSpaceLeft)
                     {
-                        for ( ::std::vector< RowEntry >::iterator iMove(
-                                    aRowVector.begin() );
-                                iMove != aRowVector.end(); ++iMove)
+                        for ( auto& rRowEntry : aRowVector)
                         {
-                            if ( aRowEntry.nDestRow <= iMove->nSubStartRow )
-                                ++iMove->nSubStartRow;
-                            if ( aRowEntry.nDestRow <= iMove->nDestRow )
-                                ++iMove->nDestRow;
-                            if ( aRowEntry.nDestRow <= iMove->nFuncStart )
-                                ++iMove->nFuncStart;
-                            if ( aRowEntry.nDestRow <= iMove->nFuncEnd )
-                                ++iMove->nFuncEnd;
+                            if ( aRowEntry.nDestRow <= rRowEntry.nSubStartRow )
+                                ++rRowEntry.nSubStartRow;
+                            if ( aRowEntry.nDestRow <= rRowEntry.nDestRow )
+                                ++rRowEntry.nDestRow;
+                            if ( aRowEntry.nDestRow <= rRowEntry.nFuncStart )
+                                ++rRowEntry.nFuncStart;
+                            if ( aRowEntry.nDestRow <= rRowEntry.nFuncEnd )
+                                ++rRowEntry.nFuncEnd;
                         }
                         // collect formula positions
                         aRowVector.push_back( aRowEntry );
@@ -2130,11 +2095,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         SCROW nGlobalStartFunc = aRowVector[0].nFuncStart;
         SCROW nGlobalEndRow = 0;
         SCROW nGlobalEndFunc = 0;
-        for (::std::vector< RowEntry >::const_iterator iEntry(aRowVector.begin());
-             iEntry != aRowVector.end(); ++iEntry)
+        for (const auto& rRowEntry : aRowVector)
         {
-            nGlobalEndRow = (nGlobalEndRow < iEntry->nDestRow) ? iEntry->nDestRow : nGlobalEndRow;
-            nGlobalEndFunc = (nGlobalEndFunc < iEntry->nFuncEnd) ? iEntry->nFuncEnd : nGlobalEndRow;
+            nGlobalEndRow = (nGlobalEndRow < rRowEntry.nDestRow) ? rRowEntry.nDestRow : nGlobalEndRow;
+            nGlobalEndFunc = (nGlobalEndFunc < rRowEntry.nFuncEnd) ? rRowEntry.nFuncEnd : nGlobalEndRow;
         }
 
         for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
@@ -2184,18 +2148,17 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     aRef.InitFlags();
     aRef.Ref1.SetAbsTab(nTab);
     aRef.Ref2.SetAbsTab(nTab);
-    for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
-            iEntry != aRowVector.end(); ++iEntry)
+    for (const auto& rRowEntry : aRowVector)
     {
-        SCCOL nResCount         = rParam.nSubTotals[iEntry->nGroupNo];
-        SCCOL* nResCols         = rParam.pSubTotals[iEntry->nGroupNo];
-        ScSubTotalFunc* pResFunc = rParam.pFunctions[iEntry->nGroupNo];
+        SCCOL nResCount         = rParam.nSubTotals[rRowEntry.nGroupNo];
+        SCCOL* nResCols         = rParam.pSubTotals[rRowEntry.nGroupNo];
+        ScSubTotalFunc* pResFunc = rParam.pFunctions[rRowEntry.nGroupNo];
         for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
             aRef.Ref1.SetAbsCol(nResCols[nResult]);
-            aRef.Ref1.SetAbsRow(iEntry->nFuncStart);
+            aRef.Ref1.SetAbsRow(rRowEntry.nFuncStart);
             aRef.Ref2.SetAbsCol(nResCols[nResult]);
-            aRef.Ref2.SetAbsRow(iEntry->nFuncEnd);
+            aRef.Ref2.SetAbsRow(rRowEntry.nFuncEnd);
 
             ScTokenArray aArr;
             aArr.AddOpCode( ocSubTotal );
@@ -2206,16 +2169,16 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
-                pDocument, ScAddress(nResCols[nResult], iEntry->nDestRow, nTab), aArr);
+                pDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
             if ( rParam.bIncludePattern )
                 pCell->SetNeedNumberFormat(true);
 
-            SetFormulaCell(nResCols[nResult], iEntry->nDestRow, pCell);
-            if ( nResCols[nResult] != nGroupCol[iEntry->nGroupNo] )
+            SetFormulaCell(nResCols[nResult], rRowEntry.nDestRow, pCell);
+            if ( nResCols[nResult] != nGroupCol[rRowEntry.nGroupNo] )
             {
-                ApplyStyle( nResCols[nResult], iEntry->nDestRow, pStyle );
+                ApplyStyle( nResCols[nResult], rRowEntry.nDestRow, pStyle );
 
-                lcl_RemoveNumberFormat( this, nResCols[nResult], iEntry->nDestRow );
+                lcl_RemoveNumberFormat( this, nResCols[nResult], rRowEntry.nDestRow );
             }
         }
 
@@ -2808,28 +2771,26 @@ bool ScTable::ValidQuery(
         }
         else
         {
-            ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
-
-            for (; itr != itrEnd; ++itr)
+            for (const auto& rItem : rItems)
             {
-                if (aEval.isQueryByValue(*itr, nCol, nRow, aCell))
+                if (aEval.isQueryByValue(rItem, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByValue(aCell, nCol, nRow, rEntry, *itr, pContext);
+                        aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
-                else if (aEval.isQueryByString(rEntry, *itr, nCol, nRow, aCell))
+                else if (aEval.isQueryByString(rEntry, rItem, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByString(aCell, nRow, rEntry, *itr, pContext);
+                        aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
                 else if (rParam.mbRangeLookup)
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByRangeLookup(aCell, nCol, nRow, rEntry, *itr);
+                        aEval.compareByRangeLookup(aCell, nCol, nRow, rEntry, rItem);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }

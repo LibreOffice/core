@@ -287,10 +287,9 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const std::
 {
     bool bFound = false;
     bool bAnyCondition = false;
-    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
-            itr != rCondFormats.end() && !bFound; ++itr)
+    for(const auto& rCondFormat : rCondFormats)
     {
-        ScConditionalFormat* pCondForm = rCondFormList.GetFormat(*itr);
+        ScConditionalFormat* pCondForm = rCondFormList.GetFormat(rCondFormat);
         if(!pCondForm)
             continue;
 
@@ -340,6 +339,9 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const std::
             pInfo->pIconSet = std::move(aData.pIconSet);
             bFound = true;
         }
+
+        if (bFound)
+            break;
     }
 
     return bAnyCondition;

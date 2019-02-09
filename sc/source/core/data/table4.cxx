@@ -648,10 +648,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         else
                             aCol[nCol].ApplyPatternArea( nY1, nY2, *pSrcPattern );
 
-                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
-                                                        itr != itrEnd; ++itr)
+                        for(const auto& rIndex : rCondFormatIndex)
                         {
-                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(rIndex);
                             if (pCondFormat)
                             {
                                 ScRangeList aRange = pCondFormat->GetRange();
@@ -681,10 +680,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     else
                         aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pSrcPattern );
 
-                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
-                            itr != itrEnd; ++itr)
+                    for(const auto& rIndex : rCondFormatIndex)
                     {
-                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(rIndex);
                         if (pCondFormat)
                         {
                             ScRangeList aRange = pCondFormat->GetRange();
@@ -1251,9 +1249,8 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].EndListeningFormulaCells(aEndCxt, nStartRow, nEndRow, &nStartRow, &nEndRow);
     aCol[nCol].StartListeningFormulaCells(aStartCxt, aEndCxt, nStartRow, nEndRow);
 
-    std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-    for (; it != itEnd; ++it)
-        aCol[nCol].SetDirty(it->mnRow1, it->mnRow2, ScColumn::BROADCAST_NONE);
+    for (const auto& rSpan : aSpans)
+        aCol[nCol].SetDirty(rSpan.mnRow1, rSpan.mnRow2, ScColumn::BROADCAST_NONE);
 
     rProgress += nRow2 - nRow1 + 1;
     if (pProgress)
@@ -1660,10 +1657,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
                             static_cast<SCROW>(nIMax), *pSrcPattern );
 
-                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
-                            itr != itrEnd; ++itr)
+                    for(const auto& rIndex : rCondFormatIndex)
                     {
-                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(rIndex);
                         if (pCondFormat)
                         {
                             ScRangeList aRange = pCondFormat->GetRange();
@@ -1680,10 +1676,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         {
                             aCol[nCol].SetPatternArea( nAtRow,
                                     nAtRow, *pSrcPattern);
-                            for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
-                                    itr != itrEnd; ++itr)
+                            for(const auto& rIndex : rCondFormatIndex)
                             {
-                                ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                                ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(rIndex);
                                 if (pCondFormat)
                                 {
                                     ScRangeList aRange = pCondFormat->GetRange();
@@ -1701,10 +1696,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if(!ColHidden(nAtCol))
                     {
                         aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern);
-                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
-                                itr != itrEnd; ++itr)
+                        for(const auto& rIndex : rCondFormatIndex)
                         {
-                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(rIndex);
                             if (pCondFormat)
                             {
                                 ScRangeList aRange = pCondFormat->GetRange();

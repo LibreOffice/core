@@ -410,11 +410,10 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
 {
     CaseInsensitiveNamePredicate aPredicate(rName, eFam);
     std::vector<unsigned> aFoundPositions = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
-    std::vector<unsigned>::const_iterator it = aFoundPositions.begin();
 
-    for (/**/;it != aFoundPositions.end(); ++it)
+    for (const auto& rPos : aFoundPositions)
     {
-        SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(*it);
+        SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(rPos);
         // we do not know what kind of sheets we have.
         if (pFound->isScStyleSheet())
             return static_cast<ScStyleSheet*>(pFound);

@@ -468,16 +468,16 @@ Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
     set<SCROW> aRowBreaks = maRowPageBreaks;
     copy(maRowManualBreaks.begin(), maRowManualBreaks.end(), inserter(aRowBreaks, aRowBreaks.begin()));
 
-    set<SCROW>::const_iterator itr = aRowBreaks.begin(), itrEnd = aRowBreaks.end();
+    sal_Int32 i = 0;
     Sequence<TablePageBreakData> aSeq(aRowBreaks.size());
 
-    for (sal_Int32 i = 0; itr != itrEnd; ++itr, ++i)
+    for (const SCROW nRow : aRowBreaks)
     {
-        SCROW nRow = *itr;
         TablePageBreakData aData;
         aData.Position = nRow;
         aData.ManualBreak = HasRowManualBreak(nRow);
         aSeq[i] = aData;
+        ++i;
     }
 
     return aSeq;
@@ -1012,13 +1012,11 @@ void ScTable::SyncColRowFlags()
     pRowFlags->AndValue(0, MAXROW, nManualBreakComplement);
     mpColFlags->AndValue(0, MAXCOL+1, nManualBreakComplement);
 
-    for (set<SCROW>::const_iterator itr = maRowManualBreaks.begin(), itrEnd = maRowManualBreaks.end();
-          itr != itrEnd; ++itr)
-        pRowFlags->OrValue(*itr, CRFlags::ManualBreak);
+    for (const auto& rBreakPos : maRowManualBreaks)
+        pRowFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
 
-    for (set<SCCOL>::const_iterator itr = maColManualBreaks.begin(), itrEnd = maColManualBreaks.end();
-          itr != itrEnd; ++itr)
-        mpColFlags->OrValue(*itr, CRFlags::ManualBreak);
+    for (const auto& rBreakPos : maColManualBreaks)
+        mpColFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
 
     // Hidden flags.
     lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);

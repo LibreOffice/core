@@ -424,13 +424,12 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
     ScRangeList aOldList(*pList);
     pList->RemoveAll();                 //TODO: or skip the existing below
 
-    std::set<SCTAB>::const_iterator it = maTabMarked.begin();
-    for (; it != maTabMarked.end(); ++it)
+    for (const auto& rTab : maTabMarked)
         for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
         {
             ScRange aRange = aOldList[ i ];
-            aRange.aStart.SetTab(*it);
-            aRange.aEnd.SetTab(*it);
+            aRange.aStart.SetTab(rTab);
+            aRange.aEnd.SetTab(rTab);
             pList->push_back( aRange );
         }
 }
@@ -598,13 +597,12 @@ bool ScMarkData::HasAnyMultiMarks() const
 void ScMarkData::InsertTab( SCTAB nTab )
 {
     std::set<SCTAB> tabMarked;
-    for (auto itr = maTabMarked.begin(), itrEnd = maTabMarked.end();
-            itr != itrEnd; ++itr)
+    for (const auto& rTab : maTabMarked)
     {
-        if (*itr < nTab)
-            tabMarked.insert(*itr);
+        if (rTab < nTab)
+            tabMarked.insert(rTab);
         else
-            tabMarked.insert(*itr + 1);
+            tabMarked.insert(rTab + 1);
     }
     maTabMarked.swap(tabMarked);
 }
@@ -612,13 +610,12 @@ void ScMarkData::InsertTab( SCTAB nTab )
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
     std::set<SCTAB> tabMarked;
-    for (auto itr = maTabMarked.begin(), itrEnd = maTabMarked.end();
-            itr != itrEnd; ++itr)
+    for (const auto& rTab : maTabMarked)
     {
-        if (*itr < nTab)
-            tabMarked.insert(*itr);
-        else if (*itr > nTab)
-            tabMarked.insert(*itr - 1);
+        if (rTab < nTab)
+            tabMarked.insert(rTab);
+        else if (rTab > nTab)
+            tabMarked.insert(rTab - 1);
     }
     maTabMarked.swap(tabMarked);
 }

@@ -583,10 +583,9 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    AreaListenersType::iterator it = mpImpl->m_AreaListeners.begin(), itEnd = mpImpl->m_AreaListeners.end();
-    for (; it != itEnd; ++it)
+    for (auto& rEntry : mpImpl->m_AreaListeners)
     {
-        sc::FormulaGroupAreaListener *const pListener = it->second.get();
+        sc::FormulaGroupAreaListener *const pListener = rEntry.second.get();
         ScRange aListenRange = pListener->getListeningRange();
         // This "always listen" special range is never grouped.
         bool bGroupListening = (aListenRange != BCA_LISTEN_ALWAYS);

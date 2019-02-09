@@ -372,18 +372,17 @@ bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& 
                                     const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
 {
     sal_Int32 nColSize = getColSize();
-    vector<Criterion>::const_iterator itrEnd = rCriteria.end();
-    for (vector<Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
+    for (const auto& rCriterion : rCriteria)
     {
-        if (itr->mnFieldIndex >= nColSize)
+        if (rCriterion.mnFieldIndex >= nColSize)
             // specified field is outside the source data columns.  Don't
             // use this criterion.
             continue;
 
         // Check if the 'repeat if empty' flag is set for this field.
-        bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(itr->mnFieldIndex) > 0;
-        const ScDPItemData* pCellData = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
-        if (!itr->mpFilter->match(*pCellData))
+        bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(rCriterion.mnFieldIndex) > 0;
+        const ScDPItemData* pCellData = getCell(static_cast<SCCOL>(rCriterion.mnFieldIndex), nRow, bRepeatIfEmpty);
+        if (!rCriterion.mpFilter->match(*pCellData))
             return false;
     }
     return true;

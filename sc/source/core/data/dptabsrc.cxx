@@ -603,10 +603,9 @@ static long lcl_GetIndexFromName( const OUString& rName, const uno::Sequence<OUS
 void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &rHasAutoShow)
 {
     const std::vector<long>& rDims = bIsRow ? maRowDims : maColDims;
-    std::vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rDimIndex : rDims)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
         long nHierarchy = ScDPDimension::getUsedHierarchy();
         if ( nHierarchy >= ScDPHierarchies::getCount() )
             nHierarchy = 0;
@@ -631,13 +630,13 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
 
             if (bIsRow)
             {
-                rInfo.aRowLevelDims.push_back(*it);
+                rInfo.aRowLevelDims.push_back(rDimIndex);
                 rInfo.aRowDims.push_back(pDim);
                 rInfo.aRowLevels.push_back(pLevel);
             }
             else
             {
-                rInfo.aColLevelDims.push_back(*it);
+                rInfo.aColLevelDims.push_back(rDimIndex);
                 rInfo.aColDims.push_back(pDim);
                 rInfo.aColLevels.push_back(pLevel);
             }
@@ -698,10 +697,9 @@ void ScDPSource::FilterCacheByPageDimensions()
 
     // filter table by page dimensions.
     vector<ScDPFilteredCache::Criterion> aCriteria;
-    vector<long>::const_iterator it = maPageDims.begin(), itEnd = maPageDims.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rDimIndex : maPageDims)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
         long nField = pDim->GetDimension();
 
         ScDPMembers* pMems = pDim->GetHierarchiesObject()->getByIndex(0)->
@@ -775,11 +773,9 @@ void ScDPSource::CreateRes_Impl()
     // Go through all data dimensions (i.e. fields) and build their meta data
     // so that they can be passed on to ScDPResultData instance later.
     // TODO: aggregate all of data dimension info into a structure.
-    vector<long>::const_iterator it = maDataDims.begin(), itEnd = maDataDims.end();
-    for (; it != itEnd; ++it)
+    for (const long nDimIndex : maDataDims)
     {
         // Get function for each data field.
-        long nDimIndex = *it;
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
         ScGeneralFunction eUser = pDim->getFunction();
         if (eUser == ScGeneralFunction::AUTO)
@@ -845,11 +841,11 @@ void ScDPSource::CreateRes_Impl()
     // (both in column and row fields). aInitState is filled with the page
     // field selections, they are kept across the data iterator loop.
 
-    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
+    for (const auto& rDimIndex : maPageDims)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
         if ( pDim->HasSelectedPage() )
-            aInitState.AddMember(*it, GetCache()->GetIdByItemData(*it, pDim->GetSelectedData()));
+            aInitState.AddMember(rDimIndex, GetCache()->GetIdByItemData(rDimIndex, pDim->GetSelectedData()));
     }
 
     // Show grand total columns only when the option is set *and* there is at
@@ -881,9 +877,9 @@ void ScDPSource::CreateRes_Impl()
     pRowResRoot->SetHasElements();
 
     // initialize members object also for all page dimensions (needed for numeric groups)
-    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
+    for (const auto& rDimIndex : maPageDims)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
         long nHierarchy = ScDPDimension::getUsedHierarchy();
         if ( nHierarchy >= ScDPHierarchies::getCount() )
             nHierarchy = 0;
@@ -911,10 +907,7 @@ void ScDPSource::CreateRes_Impl()
 
     FilterCacheByPageDimensions();
 
-    aInfo.aPageDims.reserve(maPageDims.size());
-    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
-        aInfo.aPageDims.push_back(*it);
-
+    aInfo.aPageDims  = maPageDims;
     aInfo.pInitState = &aInitState;
     aInfo.pColRoot   = pColResRoot.get();
     aInfo.pRowRoot   = pRowResRoot.get();
@@ -994,10 +987,9 @@ void ScDPSource::FillLevelList( sheet::DataPilotFieldOrientation nOrientation, s
     }
 
     ScDPDimensions* pDims = GetDimensionsObject();
-    std::vector<long>::const_iterator it = pDimIndex->begin(), itEnd = pDimIndex->end();
-    for (; it != itEnd; ++it)
+    for (const auto& rIndex : *pDimIndex)
     {
-        ScDPDimension* pDim = pDims->getByIndex(*it);
+        ScDPDimension* pDim = pDims->getByIndex(rIndex);
         OSL_ENSURE( pDim->getOrientation() == nOrientation, "orientations are wrong" );
 
         ScDPHierarchies* pHiers = pDim->GetHierarchiesObject();
@@ -2354,14 +2346,9 @@ long ScDPMembers::getMinMembers() const
     long nVisCount = 0;
     if (!maMembers.empty())
     {
-        MembersType::const_iterator it = maMembers.begin(), itEnd = maMembers.end();
-        for (; it != itEnd; ++it)
-        {
+        nVisCount = std::count_if(maMembers.begin(), maMembers.end(), [](const rtl::Reference<ScDPMember>& pMbr) {
             //  count only visible with details (default is true for both)
-            const rtl::Reference<ScDPMember>& pMbr = *it;
-            if (!pMbr || (pMbr->isVisible() && pMbr->getShowDetails()))
-                ++nVisCount;
-        }
+            return !pMbr || (pMbr->isVisible() && pMbr->getShowDetails()); });
     }
     else
         nVisCount = nMbrCount;      // default for all
