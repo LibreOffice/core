@@ -560,9 +560,12 @@ void SfxDocTplService_Impl::getDirList()
         aURL.SetURL( aDirs.getToken( 0, C_DELIM, nIdx ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-        sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
-        if ( nIndex != -1 && xExpander.is() )
+        if ( xExpander.is() )
         {
+            const sal_Int32 nIndex{ maTemplateDirs[i].indexOf( aPrefix ) };
+            if (nIndex<0)
+                continue;
+
             maTemplateDirs[i] = maTemplateDirs[i].replaceAt(nIndex,
                                                             aPrefix.getLength(),
                                                             OUString());
