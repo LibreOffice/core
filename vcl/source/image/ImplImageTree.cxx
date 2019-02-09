@@ -44,13 +44,13 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/pngread.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/IconThemeScanner.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pngwrite.hxx>
 
 #include <BitmapLightenFilter.hxx>
 
@@ -158,9 +158,8 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
 
     if (rPath.endsWith(".png"))
     {
-        vcl::PNGReader aPNGReader(*xStream);
-        aPNGReader.SetIgnoreGammaChunk(true);
-        rParameters.mrBitmap = aPNGReader.Read();
+        vcl::PngImageReader aPNGReader(*xStream);
+        aPNGReader.read(rParameters.mrBitmap);
     }
     else if (rPath.endsWith(".svg"))
     {
@@ -362,9 +361,8 @@ bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rP
     if (!urlExists(sUrl))
         return false;
     SvFileStream aFileStream(sUrl, StreamMode::READ);
-    vcl::PNGReader aPNGReader(aFileStream);
-    aPNGReader.SetIgnoreGammaChunk(true);
-    rParameters.mrBitmap = aPNGReader.Read();
+    vcl::PngImageReader aPNGReader(aFileStream);
+    aPNGReader.read(rParameters.mrBitmap);
     return true;
 }
 
