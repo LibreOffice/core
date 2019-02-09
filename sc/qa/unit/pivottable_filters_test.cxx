@@ -296,11 +296,9 @@ namespace
 bool checkVisiblePageFieldMember(const ScDPSaveDimension::MemberList& rMembers,
                                  const OUString& rVisibleMember)
 {
-    ScDPSaveDimension::MemberList::const_iterator it = rMembers.begin(), itEnd = rMembers.end();
     bool bFound = false;
-    for (; it != itEnd; ++it)
+    for (const ScDPSaveMember* pMem : rMembers)
     {
-        const ScDPSaveMember* pMem = *it;
         if (pMem->GetName() == rVisibleMember)
         {
             bFound = true;

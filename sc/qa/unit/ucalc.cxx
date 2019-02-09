@@ -4596,10 +4596,8 @@ namespace {
 
 bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, const ScAddress& rPos)
 {
-    std::vector<ScTokenRef>::const_iterator it = rRefTokens.begin(), itEnd = rRefTokens.end();
-    for (; it != itEnd; ++it)
+    for (const ScTokenRef& p : rRefTokens)
     {
-        const ScTokenRef& p = *it;
         if (!ScRefTokenHelper::isRef(p) || ScRefTokenHelper::isExternalRef(p))
             continue;
 

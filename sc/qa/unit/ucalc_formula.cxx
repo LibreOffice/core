@@ -54,17 +54,13 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 
     vector<SCROW> aRows;
     pCacheTab->getAllRows(aRows);
-    vector<SCROW>::const_iterator itrRow = aRows.begin(), itrRowEnd = aRows.end();
     bool bFirst = true;
-    for (; itrRow != itrRowEnd; ++itrRow)
+    for (const SCROW nRow : aRows)
     {
-        SCROW nRow = *itrRow;
         vector<SCCOL> aCols;
         pCacheTab->getAllCols(nRow, aCols);
-        vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end();
-        for (; itrCol != itrColEnd; ++itrCol)
+        for (const SCCOL nCol : aCols)
         {
-            SCCOL nCol = *itrCol;
             if (bFirst)
             {
                 aRange.aStart = ScAddress(nCol, nRow, 0);
