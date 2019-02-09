@@ -4835,11 +4835,10 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // Id == -1: Display implemented interfaces according the ClassProvider
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
-                        OUStringBuffer aRet;
-                        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
-                        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+                        OUString aRet = ID_DBG_SUPPORTEDINTERFACES ;
+                                      + " not available.\n(TypeClass is not TypeClass_INTERFACE)\n";
 
-                        pVar->PutString( aRet.makeStringAndClear() );
+                        pVar->PutString( aRet );
                     }
                     // Id == -2: output properties
                     else if( nId == -2 )        // Property ID_DBG_PROPERTIES
@@ -4854,11 +4853,12 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // by now all properties must be established
                         implCreateAll();
-                        OUStringBuffer aRet;
-                        aRet.append("Methods of object ");
-                        aRet.append( getDbgObjectName() );
-                        aRet.append( "\nNo methods found\n" );
-                        pVar->PutString( aRet.makeStringAndClear() );
+                        OUStringBuffer aRet
+
+                       "Methods of object ";
+                        +getDbgObjectName() ;
+                        + "\nNo methods found\n";
+                        pVar->PutString( aRet );
                     }
                     return;
                 }
