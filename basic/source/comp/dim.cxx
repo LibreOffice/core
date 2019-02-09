@@ -41,6 +41,7 @@ using namespace ::com::sun::star::uno;
 SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst )
 {
     bool bWithEvents = false;
+    bool bIsArray = false;
     if( Peek() == WITHEVENTS )
     {
         Next();
@@ -56,13 +57,14 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
         pDim = SbiExprList::ParseDimList( this );
         if( !pDim->GetDims() )
             pDef->SetWithBrackets();
+        bIsArray = true;
     }
     pDef->SetType( t );
     if( bStatic )
         pDef->SetStatic();
     if( bWithEvents )
         pDef->SetWithEvents();
-    TypeDecl( *pDef );
+    TypeDecl( *pDef , false , bIsArray );
     if( !ppDim && pDim )
     {
         if(pDim->GetDims() )
@@ -76,7 +78,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
 // Resolving of a AS-Type-Declaration
 // The data type were inserted into the handed over variable
 
-void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
+void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed, bool bIsArray )
 {
     SbxDataType eType = rDef.GetType();
     if( bAsNewAlreadyParsed || Peek() == AS )
@@ -186,7 +188,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
             else if( eType == SbxSTRING && rDef.GetLen() != nSize )
                 Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
         }
-        rDef.SetType( eType );
+        rDef.SetType( static_cast<SbxDataType>(eType | (bIsArray ? SbxARRAY : SbxEMPTY)) );
         rDef.SetLen( nSize );
     }
 }

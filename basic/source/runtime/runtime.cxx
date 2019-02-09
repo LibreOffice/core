@@ -684,7 +684,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             {
                 if( bTargetTypeIsArray )
                 {
-                    t = SbxOBJECT;
+                    t = static_cast<SbxDataType>( t | SbxOBJECT);
                 }
                 SbxVariable* v2 = new SbxVariable( t );
                 v2->SetFlag( SbxFlagBits::ReadWrite );
@@ -1687,9 +1687,23 @@ void SbiRuntime::StepPUT()
                 refVal = pDflt;
         }
     }
+    SbxValues values;
+    values.eType = refVar->GetType();
 
-    if ( !checkUnoStructCopy( bVBAEnabled, refVal, refVar ) )
-        *refVar = *refVal;
+    // the order of the last two conditions must not be changed.
+    // because SbxValue::Get calls SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
+    if (!checkUnoStructCopy( bVBAEnabled, refVal, refVar )){
+        if(!refVar->IsFixed()
+            || (refVar->GetType() == refVal->GetType())
+            || (refVal->GetType() == static_cast<SbxDataType>(SbxBYTE | SbxARRAY) && refVar->GetType() == SbxSTRING)
+            || (refVar->GetType() == static_cast<SbxDataType>(SbxBYTE | SbxARRAY) && refVal->GetType() == SbxSTRING)
+            || refVal->Get(values)){
+            *refVar = *refVal;
+        }else{
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
+        }
+    }
+
 
     if( bFlagsChanged )
         refVar->SetFlags( n );
