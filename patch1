@@ -1,0 +1,137 @@
+https://cgit.freedesktop.org/libreoffice/core/tree/desktop/source/deployment/registry/component/dp_component.cxx
+{
+//    OUStringBuffer buf;
+    buf.append( "vnd.sun.star.zip://" );
+    buf.append(
+        ::rtl::Uri::encode(
+            url, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
+            RTL_TEXTENCODING_UTF8 ) );
+    buf.append( "/META-INF/MANIFEST.MF" );
+//    ::ucbhelper::Content manifestContent;
+//    OUString line;
+//   return
+//        create_ucb_content(
+//            &manifestContent, buf.makeStringAndClear(), xCmdEnv,
+            false /* no throw */ )
+        && readLine( &line, name, manifestContent, RTL_TEXTENCODING_ASCII_US );
+}
+
+to
+
+{
+   OUString sMsg = "vnd.sun.star.zip://"
+   
+                 + "/META-INF/MANIFEST.MF"
+
+***BURDA EKSİK VAR***
+
+---------------------------------------------------------------------
+     OStringBuffer buf;
+
+    buf.append("ORIGIN=");
+    OUString sOrigin = dp_misc::makeRcTerm(m_cachePath);        
+    OString osOrigin = OUStringToOString(sOrigin, RTL_TEXTENCODING_UTF8);
+    buf.append(osOrigin);
+    buf.append(LF);
+
+to 
+    OUString sMsg = "ORIGIN=";  
+    OUString sOrigin = dp_misc::makeRcTerm(m_cachePath);
+    OUString buf = OUStringToOString(sOrigin,*this);
+    OUString::number(osOrigin) + OUString::number(LF);
+
+--------------------------------------------------------------------
+    if (! m_jar_typelibs.empty())
+    {
+        auto iPos( m_jar_typelibs.cbegin() );
+        auto const iEnd( m_jar_typelibs.cend() );
+        buf.append( "UNO_JAVA_CLASSPATH=" );
+        while (iPos != iEnd) {
+            // encoded ASCII file-urls:
+            const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append(LF);
+    }
+
+to
+
+    {   auto iPos( m_jar_typelibs.cbegin() );
+        auto const iEnd( m_jar_typelibs.cend() );
+        OUString sMsg "UNO_JAVA_CLASSPATH= ;
+       while (iPos != iEnd) {
+            // encoded ASCII file-urls:
+                const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+                OUString::number(item);
+              ++iPos;
+              if(iPos != iEnd)
+               + "' '";    }
+                OUString::number(LF);   }
+----------------------------------------------------------------------------------------------------
+ 
+  if (! m_rdb_typelibs.empty())
+    {
+        auto iPos( m_rdb_typelibs.cbegin() );
+        auto const iEnd( m_rdb_typelibs.cend() );
+        buf.append( "UNO_TYPES=" );
+        while (iPos != iEnd) {
+            buf.append( '?' );
+            // encoded ASCII file-urls:
+            const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append(LF);
+    }
+to
+     if (! m_rdb_typelibs.empty())
+   { 
+        auto iPos( m_rdb_typelibs.cbegin() );
+        auto const iEnd( m_rdb_typelibs.cend() );
+        OUString sMsg "UNO_TYPES";
+          while (iPos != iEnd) {     
+          OUString sMsg "'?'"; 
+         // encoded ASCII file-urls:
+           const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            OUString::number(item);
+          ++iPos;
+           if (iPos != iEnd)
+           OUString sMsg = "' '";   }
+            OUString::name(LF); }
+------------------------------------------------------------------------
+if (!sCommonRDB.isEmpty() || !sNativeRDB.isEmpty() ||
+        !m_components.empty())
+    {
+        buf.append( "UNO_SERVICES=" );
+        bool space = false;
+        if (!sCommonRDB.isEmpty())
+        {
+            buf.append( "?$ORIGIN/" );
+            buf.append( OUStringToOString(
+                            sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
+            space = true;
+        }
+
+to 
+          
+          if (!sCommonRDB.isEmpty() || !sNativeRDB.isEmpty() || !m_components.empty())
+          { 
+            OUString sMsg = "UNO_SERVICES=";
+            bool space = false;   
+            if (!sCommonRDB.isEmpty())
+           {
+             OUString sMsg = "?$ORIGIN/"
+           + OUString::number(OUStringToOString(sCommonRDB,*this));
+           space = true ;     }  
+------------------------------------------------------------------------------------------------------------
+   
+     
