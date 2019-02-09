@@ -2079,11 +2079,8 @@ SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
 {
     size_t nNextRow = MAXROW+1;
 
-    for (std::vector<ColParam>::iterator it = maColPositions.begin();
-         it != maColPositions.end(); ++it)
+    for (const ColParam& r : maColPositions)
     {
-        ColParam& r = *it;
-
         assert(static_cast<size_t>(mnRow) <= r.maPos->position);
         nNextRow = std::min (nNextRow, static_cast<size_t>(r.maPos->position));
     }
@@ -2533,15 +2530,14 @@ void ScDocRowHeightUpdater::update()
     }
 
     sal_uLong nCellCount = 0;
-    vector<TabRanges>::const_iterator itr = mpTabRangesArray->begin(), itrEnd = mpTabRangesArray->end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rTabRanges : *mpTabRangesArray)
     {
-        const SCTAB nTab = itr->mnTab;
+        const SCTAB nTab = rTabRanges.mnTab;
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
         ScFlatBoolRowSegments::RangeData aData;
-        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*rTabRanges.mpRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
         {
             if (!aData.mbValue)
@@ -2554,17 +2550,16 @@ void ScDocRowHeightUpdater::update()
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
-    itr = mpTabRangesArray->begin();
     sal_uLong nProgressStart = 0;
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rTabRanges : *mpTabRangesArray)
     {
-        const SCTAB nTab = itr->mnTab;
+        const SCTAB nTab = rTabRanges.mnTab;
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
         sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
         ScFlatBoolRowSegments::RangeData aData;
-        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*rTabRanges.mpRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
         {
             if (!aData.mbValue)

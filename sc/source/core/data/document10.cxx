@@ -269,10 +269,9 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
         if (!pNewRangeNames)
             continue;
 
-        for (ScRangeName::iterator it( pOldRangeNames->begin()), itEnd( pOldRangeNames->end());
-                it != itEnd; ++it)
+        for (const auto& rEntry : *pOldRangeNames)
         {
-            ScRangeData* pOldData = it->second.get();
+            ScRangeData* pOldData = rEntry.second.get();
             if (!pOldData)
                 continue;
 
@@ -285,10 +284,9 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
     sc::EndListeningContext aEndListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
 
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTab : maTabs)
     {
-        ScTable* p = it->get();
+        ScTable* p = rxTab.get();
         p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -298,10 +296,9 @@ void ScDocument::PreprocessRangeNameUpdate()
     sc::EndListeningContext aEndListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
 
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTab : maTabs)
     {
-        ScTable* p = it->get();
+        ScTable* p = rxTab.get();
         p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -311,10 +308,9 @@ void ScDocument::PreprocessDBDataUpdate()
     sc::EndListeningContext aEndListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
 
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTab : maTabs)
     {
-        ScTable* p = it->get();
+        ScTable* p = rxTab.get();
         p->PreprocessDBDataUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -323,10 +319,9 @@ void ScDocument::CompileHybridFormula()
 {
     sc::StartListeningContext aStartListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rxTab : maTabs)
     {
-        ScTable* p = it->get();
+        ScTable* p = rxTab.get();
         p->CompileHybridFormula(aStartListenCxt, aCompileCxt);
     }
 }
@@ -409,9 +404,8 @@ void ScDocument::CollectAllAreaListeners(
         return;
 
     std::vector<sc::AreaListener> aAL = pBASM->GetAllListeners(rRange, eType);
-    std::vector<sc::AreaListener>::iterator it = aAL.begin(), itEnd = aAL.end();
-    for (; it != itEnd; ++it)
-        rListener.push_back(it->mpListener);
+    for (const auto& rItem : aAL)
+        rListener.push_back(rItem.mpListener);
 }
 
 bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
@@ -460,10 +454,8 @@ void ScDocument::EndListeningIntersectedGroups(
 void ScDocument::EndListeningGroups( const std::vector<ScAddress>& rPosArray )
 {
     sc::EndListeningContext aCxt(*this);
-    std::vector<ScAddress>::const_iterator it = rPosArray.begin(), itEnd = rPosArray.end();
-    for (; it != itEnd; ++it)
+    for (const ScAddress& rPos : rPosArray)
     {
-        const ScAddress& rPos = *it;
         ScTable* pTab = FetchTable(rPos.Tab());
         if (!pTab)
             return;
@@ -476,10 +468,8 @@ void ScDocument::EndListeningGroups( const std::vector<ScAddress>& rPosArray )
 
 void ScDocument::SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray )
 {
-    std::vector<ScAddress>::const_iterator it = rPosArray.begin(), itEnd = rPosArray.end();
-    for (; it != itEnd; ++it)
+    for (const ScAddress& rPos : rPosArray)
     {
-        const ScAddress& rPos = *it;
         ScTable* pTab = FetchTable(rPos.Tab());
         if (!pTab)
             return;
@@ -543,10 +533,9 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
 
 void ScDocument::finalizeOutlineImport()
 {
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (auto& rxTab : maTabs)
     {
-        ScTable* p = it->get();
+        ScTable* p = rxTab.get();
         p->finalizeOutlineImport();
     }
 }
@@ -925,14 +914,8 @@ bool ScDocument::IsEditActionAllowed(
 bool ScDocument::IsEditActionAllowed(
     sc::ColRowEditAction eAction, const ScMarkData& rMark, SCCOLROW nStart, SCCOLROW nEnd ) const
 {
-    ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end();
-    for (; it != itEnd; ++it)
-    {
-        if (!IsEditActionAllowed(eAction, *it, nStart, nEnd))
-            return false;
-    }
-
-    return true;
+    return std::all_of(rMark.begin(), rMark.end(),
+        [this, &eAction, &nStart, &nEnd](const SCTAB& rTab) { return IsEditActionAllowed(eAction, rTab, nStart, nEnd); });
 }
 
 std::unique_ptr<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const

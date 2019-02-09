@@ -43,6 +43,7 @@
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>
+#include <numeric>
 
 using namespace formula;
 
@@ -859,14 +860,13 @@ bool ScConditionEntry::IsBottomNElement( double nArg ) const
         return true;
 
     size_t nCells = 0;
-    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
-            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    for(const auto& [rVal, rCount] : mpCache->maValues)
     {
         if(nCells >= nVal1)
             return false;
-        if(itr->first >= nArg)
+        if(rVal >= nArg)
             return true;
-        nCells += itr->second;
+        nCells += rCount;
     }
 
     return true;
@@ -897,14 +897,13 @@ bool ScConditionEntry::IsBottomNPercent( double nArg ) const
 
     size_t nCells = 0;
     size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
-    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
-            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    for(const auto& [rVal, rCount] : mpCache->maValues)
     {
         if(nCells >= nLimitCells)
             return false;
-        if(itr->first >= nArg)
+        if(rVal >= nArg)
             return true;
-        nCells += itr->second;
+        nCells += rCount;
     }
 
     return true;
@@ -914,12 +913,9 @@ bool ScConditionEntry::IsBelowAverage( double nArg, bool bEqual ) const
 {
     FillCache();
 
-    double nSum = 0;
-    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
-            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
-    {
-        nSum += itr->first * itr->second;
-    }
+    double nSum = std::accumulate(mpCache->maValues.begin(), mpCache->maValues.end(), double(0),
+        [](const double& rSum, const ScConditionEntryCache::ValueCacheType::value_type& rEntry) {
+            return rSum + rEntry.first * rEntry.second; });
 
     if(bEqual)
         return (nArg <= nSum/mpCache->nValueItems);
@@ -931,12 +927,9 @@ bool ScConditionEntry::IsAboveAverage( double nArg, bool bEqual ) const
 {
     FillCache();
 
-    double nSum = 0;
-    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
-            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
-    {
-        nSum += itr->first * itr->second;
-    }
+    double nSum = std::accumulate(mpCache->maValues.begin(), mpCache->maValues.end(), double(0),
+        [](const double& rSum, const ScConditionEntryCache::ValueCacheType::value_type& rEntry) {
+            return rSum + rEntry.first * rEntry.second; });
 
     if(bEqual)
         return (nArg >= nSum/mpCache->nValueItems);
@@ -1711,9 +1704,9 @@ std::unique_ptr<ScConditionalFormat> ScConditionalFormat::Clone(ScDocument* pNew
     std::unique_ptr<ScConditionalFormat> pNew(new ScConditionalFormat(nKey, pNewDoc));
     pNew->SetRange( maRanges );     // prerequisite for listeners
 
-    for (auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for (const auto& rxEntry : maEntries)
     {
-        ScFormatEntry* pNewEntry = (*itr)->Clone(pNewDoc);
+        ScFormatEntry* pNewEntry = rxEntry->Clone(pNewDoc);
         pNew->maEntries.push_back( std::unique_ptr<ScFormatEntry>(pNewEntry) );
         pNewEntry->SetParent(pNew.get());
     }
@@ -1790,17 +1783,17 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
 
 const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
-    for (auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for (const auto& rxEntry : maEntries)
     {
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
         {
-            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(**itr);
+            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*rxEntry);
             if (rEntry.IsCellValid(rCell, rPos))
                 return rEntry.GetStyle();
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Date)
+        else if(rxEntry->GetType() == ScFormatEntry::Type::Date)
         {
-            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(**itr);
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*rxEntry);
             if (rEntry.IsValid( rPos ))
                 return rEntry.GetStyleName();
         }
@@ -1812,32 +1805,32 @@ const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const 
 ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     ScCondFormatData aData;
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for(const auto& rxEntry : maEntries)
     {
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition && aData.aStyleName.isEmpty())
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition && aData.aStyleName.isEmpty())
         {
-            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(**itr);
+            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*rxEntry);
             if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Colorscale && !aData.mxColorScale)
+        else if(rxEntry->GetType() == ScFormatEntry::Type::Colorscale && !aData.mxColorScale)
         {
-            const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(**itr);
+            const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(*rxEntry);
             aData.mxColorScale = rEntry.GetColor(rPos);
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Databar && !aData.pDataBar)
+        else if(rxEntry->GetType() == ScFormatEntry::Type::Databar && !aData.pDataBar)
         {
-            const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(**itr);
+            const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(*rxEntry);
             aData.pDataBar = rEntry.GetDataBarInfo(rPos);
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Iconset && !aData.pIconSet)
+        else if(rxEntry->GetType() == ScFormatEntry::Type::Iconset && !aData.pIconSet)
         {
-            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(**itr);
+            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*rxEntry);
             aData.pIconSet = rEntry.GetIconSetInfo(rPos);
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Date && aData.aStyleName.isEmpty())
+        else if(rxEntry->GetType() == ScFormatEntry::Type::Date && aData.aStyleName.isEmpty())
         {
-            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(**itr);
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*rxEntry);
             if ( rEntry.IsValid( rPos ) )
                 aData.aStyleName = rEntry.GetStyleName();
         }
@@ -1853,22 +1846,22 @@ void ScConditionalFormat::DoRepaint()
 
 void ScConditionalFormat::CompileAll()
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
-            static_cast<ScCondFormatEntry&>(**itr).CompileAll();
+    for(auto& rxEntry : maEntries)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+            static_cast<ScCondFormatEntry&>(*rxEntry).CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
-            static_cast<ScCondFormatEntry&>(**itr).CompileXML();
+    for(auto& rxEntry : maEntries)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+            static_cast<ScCondFormatEntry&>(*rxEntry).CompileXML();
 }
 
 void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCopyAsMove )
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        (*itr)->UpdateReference(rCxt);
+    for(auto& rxEntry : maEntries)
+        rxEntry->UpdateReference(rCxt);
 
     if (rCxt.meMode == URM_COPY && bCopyAsMove)
         maRanges.UpdateReference(URM_MOVE, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
@@ -1902,8 +1895,8 @@ void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         rRange.aEnd.IncTab(rCxt.mnSheets);
     }
 
-    for (auto it = maEntries.cbegin(); it != maEntries.cend(); ++it)
-        (*it)->UpdateInsertTab(rCxt);
+    for (auto& rxEntry : maEntries)
+        rxEntry->UpdateInsertTab(rCxt);
 }
 
 void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
@@ -1931,8 +1924,8 @@ void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         rRange.aEnd.IncTab(-1*rCxt.mnSheets);
     }
 
-    for (auto it = maEntries.cbegin(); it != maEntries.cend(); ++it)
-        (*it)->UpdateDeleteTab(rCxt);
+    for (auto& rxEntry : maEntries)
+        rxEntry->UpdateDeleteTab(rCxt);
 }
 
 void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
@@ -1968,8 +1961,8 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
         }
     }
 
-    for (auto it = maEntries.cbegin(); it != maEntries.cend(); ++it)
-        (*it)->UpdateMoveTab(rCxt);
+    for (auto& rxEntry : maEntries)
+        rxEntry->UpdateMoveTab(rCxt);
 }
 
 void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
@@ -1983,10 +1976,10 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
 void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& rNew)
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
+    for(const auto& rxEntry : maEntries)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
         {
-            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(**itr);
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*rxEntry);
             if(rFormat.GetStyle() == rOld)
                 rFormat.UpdateStyleName( rNew );
         }
@@ -1995,11 +1988,13 @@ void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& 
 bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend() && !bAllMarked; ++itr)
-        if((*itr)->GetType() == ScFormatEntry::Type::Condition)
+    for(const auto& rxEntry : maEntries)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
         {
-            const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(**itr);
+            const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*rxEntry);
             bAllMarked = rFormat.MarkUsedExternalReferences();
+            if (bAllMarked)
+                break;
         }
 
     return bAllMarked;
@@ -2007,27 +2002,27 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 
 void ScConditionalFormat::startRendering()
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for(auto& rxEntry : maEntries)
     {
-        (*itr)->startRendering();
+        rxEntry->startRendering();
     }
 }
 
 void ScConditionalFormat::endRendering()
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for(auto& rxEntry : maEntries)
     {
-        (*itr)->endRendering();
+        rxEntry->endRendering();
     }
 }
 
 void ScConditionalFormat::CalcAll()
 {
-    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    for(const auto& rxEntry : maEntries)
     {
-        if ((*itr)->GetType() == ScFormatEntry::Type::Condition)
+        if (rxEntry->GetType() == ScFormatEntry::Type::Condition)
         {
-            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(**itr);
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*rxEntry);
             rFormat.CalcAll();
         }
     }
@@ -2035,14 +2030,14 @@ void ScConditionalFormat::CalcAll()
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {
-    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-        InsertNew( (*itr)->Clone() );
+    for(const auto& rxFormat : rList)
+        InsertNew( rxFormat->Clone() );
 }
 
 ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList)
 {
-    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-        InsertNew( (*itr)->Clone(pDoc) );
+    for(const auto& rxFormat : rList)
+        InsertNew( rxFormat->Clone(pDoc) );
 }
 
 void ScConditionalFormatList::InsertNew( std::unique_ptr<ScConditionalFormat> pNew )
@@ -2053,9 +2048,10 @@ void ScConditionalFormatList::InsertNew( std::unique_ptr<ScConditionalFormat> pN
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //FIXME: Binary search
-    for( iterator itr = begin(); itr != end(); ++itr)
-        if ((*itr)->GetKey() == nKey)
-            return itr->get();
+    iterator itr = std::find_if(begin(), end(),
+        [&nKey](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nKey; });
+    if (itr != end())
+        return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
     return nullptr;
@@ -2064,9 +2060,10 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey ) const
 {
     //FIXME: Binary search
-    for ( const_iterator itr = begin(); itr != end(); ++itr)
-        if ((*itr)->GetKey() == nKey)
-            return itr->get();
+    const_iterator itr = std::find_if(begin(), end(),
+        [&nKey](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nKey; });
+    if (itr != end())
+        return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
     return nullptr;
@@ -2174,8 +2171,8 @@ bool ScConditionalFormatList::CheckAllEntries(const Link<ScConditionalFormat*,vo
 
 void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+    for (auto& rxFormat : m_ConditionalFormats)
+        rxFormat->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
 
     CheckAllEntries();
 }
@@ -2248,14 +2245,10 @@ bool ScConditionalFormatList::empty() const
 
 void ScConditionalFormatList::erase( sal_uLong nIndex )
 {
-    for( iterator itr = begin(); itr != end(); ++itr )
-    {
-        if( (*itr)->GetKey() == nIndex )
-        {
-            m_ConditionalFormats.erase(itr);
-            break;
-        }
-    }
+    iterator itr = std::find_if(begin(), end(),
+        [&nIndex](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nIndex; });
+    if (itr != end())
+        m_ConditionalFormats.erase(itr);
 }
 
 void ScConditionalFormatList::startRendering()

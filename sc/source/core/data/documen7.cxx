@@ -215,11 +215,10 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
     // Get all area listeners that listens on the old range, and end their listening.
     std::vector<sc::AreaListener> aAreaListeners = pBASM->GetAllListeners(rSrcRange, sc::AreaInside);
     {
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
+        for (auto& rAreaListener : aAreaListeners)
         {
-            pBASM->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
-            it->mpListener->Notify(rHint); // Adjust the references.
+            pBASM->EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+            rAreaListener.mpListener->Notify(rHint); // Adjust the references.
         }
     }
 
@@ -265,15 +264,14 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
     // Re-start area listeners on the new range.
     {
         ScRange aErrorRange( ScAddress::UNINITIALIZED );
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
+        for (auto& rAreaListener : aAreaListeners)
         {
-            ScRange aNewRange = it->maArea;
+            ScRange aNewRange = rAreaListener.maArea;
             if (!aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab(), aErrorRange))
             {
                 assert(!"can't move AreaListener");
             }
-            pBASM->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
+            pBASM->StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
         }
     }
 }
@@ -340,9 +338,8 @@ void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )
         return;
 
     sc::EndListeningContext aCxt(*this);
-    std::vector<ScFormulaCell*>::iterator it = rCells.begin(), itEnd = rCells.end();
-    for (; it != itEnd; ++it)
-        (*it)->EndListeningTo(aCxt);
+    for (auto& pCell : rCells)
+        pCell->EndListeningTo(aCxt);
 
     aCxt.purgeEmptyBroadcasters();
 }
@@ -457,10 +454,9 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             }
             pCell = pCell->GetNext();
         }
-        for (::std::vector<ScFormulaCell*>::iterator it( vAlwaysDirty.begin()), itEnd( vAlwaysDirty.end());
-                it != itEnd; ++it)
+        for (auto& rpCell : vAlwaysDirty)
         {
-            pCell = *it;
+            pCell = rpCell;
             if (!pCell->GetDirty())
                 pCell->SetDirty();
         }

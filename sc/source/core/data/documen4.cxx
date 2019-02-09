@@ -283,24 +283,26 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, ScMatrixMode::Formula );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    for (; itr != itrEnd && *itr < nMax; ++itr)
+    for (const auto& rTab : rMark)
     {
-        if (!maTabs[*itr])
+        if (rTab >= nMax)
+            break;
+
+        if (!maTabs[rTab])
             continue;
 
-        if (*itr == nTab1)
+        if (rTab == nTab1)
         {
-            pCell = maTabs[*itr]->SetFormulaCell(nCol1, nRow1, pCell);
+            pCell = maTabs[rTab]->SetFormulaCell(nCol1, nRow1, pCell);
             if (!pCell) //NULL if nCol1/nRow1 is invalid, which it can't be here
                 break;
         }
         else
-            maTabs[*itr]->SetFormulaCell(
+            maTabs[rTab]->SetFormulaCell(
                 nCol1, nRow1,
                 new ScFormulaCell(
-                    *pCell, *this, ScAddress(nCol1, nRow1, *itr), ScCloneFlags::StartListening));
+                    *pCell, *this, ScAddress(nCol1, nRow1, rTab), ScCloneFlags::StartListening));
     }
 
     ScAddress aBasePos(nCol1, nRow1, nTab1);
@@ -314,10 +316,11 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScTokenArray aArr; // consists only of one single reference token.
     formula::FormulaToken* t = aArr.AddMatrixSingleReference( aRefData);
 
-    itr = rMark.begin();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
+    for (const SCTAB& nTab : rMark)
     {
-        SCTAB nTab = *itr;
+        if (nTab >= nMax)
+            break;
+
         ScTable* pTab = FetchTable(nTab);
         if (!pTab)
             continue;
@@ -362,12 +365,14 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     i = 0;
     bool bStop = false;
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
+    for (const auto& rTab : rMark)
     {
-        if (maTabs[*itr])
+        if (rTab >= nMax)
+            break;
+
+        if (maTabs[rTab])
         {
-            i = *itr;
+            i = rTab;
             bStop = true;
             break;
         }
@@ -435,11 +440,14 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
             {
-                itr = rMark.begin();
-                for (; itr != itrEnd && *itr < nMax; ++itr)
-                if( maTabs[*itr] )
-                    maTabs[*itr]->SetFormulaCell(
-                        j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, *itr), ScCloneFlags::StartListening));
+                for (const auto& rTab : rMark)
+                {
+                    if (rTab >= nMax)
+                        break;
+                    if( maTabs[rTab] )
+                        maTabs[rTab]->SetFormulaCell(
+                            j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, rTab), ScCloneFlags::StartListening));
+                }
             }
 }
 
@@ -546,33 +554,32 @@ void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 void ScDocument::CompileDBFormula()
 {
     sc::CompileFormulaContext aCxt(this);
-    TableContainer::iterator it = maTabs.begin();
-    for (;it != maTabs.end(); ++it)
+    for (auto& rxTab : maTabs)
     {
-        if (*it)
-            (*it)->CompileDBFormula(aCxt);
+        if (rxTab)
+            rxTab->CompileDBFormula(aCxt);
     }
 }
 
 void ScDocument::CompileColRowNameFormula()
 {
     sc::CompileFormulaContext aCxt(this);
-    TableContainer::iterator it = maTabs.begin();
-    for (;it != maTabs.end(); ++it)
+    for (auto& rxTab : maTabs)
     {
-        if (*it)
-            (*it)->CompileColRowNameFormula(aCxt);
+        if (rxTab)
+            rxTab->CompileColRowNameFormula(aCxt);
     }
 }
 
 void ScDocument::InvalidateTableArea()
 {
-    TableContainer::iterator it = maTabs.begin();
-    for (;it != maTabs.end() && *it; ++it)
+    for (auto& rxTab : maTabs)
     {
-        (*it)->InvalidateTableArea();
-        if ( (*it)->IsScenario() )
-            (*it)->InvalidateScenarioRanges();
+        if (!rxTab)
+            break;
+        rxTab->InvalidateTableArea();
+        if ( rxTab->IsScenario() )
+            rxTab->InvalidateScenarioRanges();
     }
 }
 
@@ -715,9 +722,9 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     }
 
     sal_uLong nMax = 0;
-    for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
+    for( const auto& rxData : *pValidationList )
     {
-        const ScValidationData* pData = it->get();
+        const ScValidationData* pData = rxData.get();
         sal_uLong nKey = pData->GetKey();
         if ( pData->EqualEntries( rNew ) )
             return nKey;
@@ -749,10 +756,9 @@ const SfxPoolItem* ScDocument::GetEffItem(
             ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
             if (!rIndex.empty() && pCondFormList)
             {
-                for(std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
-                        itr != itrEnd; ++itr)
+                for(const auto& rItem : rIndex)
                 {
-                    const ScConditionalFormat* pForm = pCondFormList->GetFormat( *itr );
+                    const ScConditionalFormat* pForm = pCondFormList->GetFormat( rItem );
                     if ( pForm )
                     {
                         ScAddress aPos(nCol, nRow, nTab);
@@ -795,10 +801,9 @@ const SfxItemSet* ScDocument::GetCondResult(
     ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
     const std::vector<sal_uInt32>& rIndex ) const
 {
-    std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rItem : rIndex)
     {
-        const ScConditionalFormat* pForm = rList.GetFormat(*itr);
+        const ScConditionalFormat* pForm = rList.GetFormat(rItem);
         if (!pForm)
             continue;
 

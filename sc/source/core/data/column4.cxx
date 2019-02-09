@@ -33,6 +33,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
 
+#include <numeric>
 #include <vector>
 #include <cassert>
 
@@ -118,10 +119,8 @@ void ScColumn::DeleteBeforeCopyFromClip(
     bool bContinue = true;
     while (bContinue)
     {
-        sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-        for (; it != itEnd && bContinue; ++it)
+        for (const sc::RowSpan& r : aSpans)
         {
-            const sc::RowSpan& r = *it;
             SCROW nDestRow1 = r.mnRow1 + nDestOffset;
             SCROW nDestRow2 = r.mnRow2 + nDestOffset;
 
@@ -129,7 +128,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
             {
                 // We're done.
                 bContinue = false;
-                continue;
+                break;
             }
 
             if (nDestRow2 > aRange.mnRow2)
@@ -140,6 +139,9 @@ void ScColumn::DeleteBeforeCopyFromClip(
             }
 
             aDestSpans.emplace_back(nDestRow1, nDestRow2);
+
+            if (!bContinue)
+                break;
         }
 
         nDestOffset += nClipRowLen;
@@ -149,11 +151,10 @@ void ScColumn::DeleteBeforeCopyFromClip(
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
 
-    std::vector<sc::RowSpan>::const_iterator it = aDestSpans.begin(), itEnd = aDestSpans.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rDestSpan : aDestSpans)
     {
-        SCROW nRow1 = it->mnRow1;
-        SCROW nRow2 = it->mnRow2;
+        SCROW nRow1 = rDestSpan.mnRow1;
+        SCROW nRow2 = rDestSpan.mnRow2;
 
         if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
@@ -501,12 +502,11 @@ void ScColumn::SwapNonEmpty(
 
     // Detach formula cells within the spans (if any).
     EndListeningHandler aEndLisFunc(rEndCxt);
-    std::vector<sc::CellValueSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
     sc::CellStoreType::iterator itPos = maCells.begin();
-    for (; it != itEnd; ++it)
+    for (const auto& rSpan : aSpans)
     {
-        SCROW nRow1 = it->mnRow1;
-        SCROW nRow2 = it->mnRow2;
+        SCROW nRow1 = rSpan.mnRow1;
+        SCROW nRow2 = rSpan.mnRow2;
         itPos = sc::ProcessFormula(itPos, maCells, nRow1, nRow2, aEndLisFunc);
     }
 
@@ -515,12 +515,11 @@ void ScColumn::SwapNonEmpty(
 
     // Attach formula cells within the spans (if any).
     StartListeningHandler aStartLisFunc(rStartCxt);
-    it = aSpans.begin();
     itPos = maCells.begin();
-    for (; it != itEnd; ++it)
+    for (const auto& rSpan : aSpans)
     {
-        SCROW nRow1 = it->mnRow1;
-        SCROW nRow2 = it->mnRow2;
+        SCROW nRow1 = rSpan.mnRow1;
+        SCROW nRow2 = rSpan.mnRow2;
         itPos = sc::ProcessFormula(itPos, maCells, nRow1, nRow2, aStartLisFunc);
     }
 
@@ -529,9 +528,8 @@ void ScColumn::SwapNonEmpty(
 
 void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag )
 {
-    std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
-    for (; itSpan != itSpanEnd; ++itSpan)
-        DeleteArea(itSpan->mnRow1, itSpan->mnRow2, nDelFlag, false/*bBroadcast*/);
+    for (const auto& rSpan : rRanges)
+        DeleteArea(rSpan.mnRow1, rSpan.mnRow2, nDelFlag, false/*bBroadcast*/);
 }
 
 void ScColumn::CloneFormulaCell(
@@ -553,10 +551,9 @@ void ScColumn::CloneFormulaCell(
 
     ScDocument* pDocument = GetDoc();
     std::vector<ScFormulaCell*> aFormulas;
-    std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
-    for (; itSpan != itSpanEnd; ++itSpan)
+    for (const auto& rSpan : rRanges)
     {
-        SCROW nRow1 = itSpan->mnRow1, nRow2 = itSpan->mnRow2;
+        SCROW nRow1 = rSpan.mnRow1, nRow2 = rSpan.mnRow2;
         size_t nLen = nRow2 - nRow1 + 1;
         assert(nLen > 0);
         aFormulas.clear();
@@ -623,17 +620,12 @@ std::unique_ptr<ScPostIt> ScColumn::ReleaseNote( SCROW nRow )
 
 size_t ScColumn::GetNoteCount() const
 {
-    size_t nCount = 0;
-    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-    for (; it != itEnd; ++it)
-    {
-        if (it->type != sc::element_type_cellnote)
-            continue;
-
-        nCount += it->size;
-    }
-
-    return nCount;
+    return std::accumulate(maCellNotes.begin(), maCellNotes.end(), size_t(0),
+        [](const size_t& rCount, const auto& rCellNote) {
+            if (rCellNote.type != sc::element_type_cellnote)
+                return rCount;
+            return rCount + rCellNote.size;
+        });
 }
 
 namespace {
@@ -688,23 +680,21 @@ SCROW ScColumn::GetNotePosition( size_t nIndex ) const
 {
     // Return the row position of the nth note in the column.
 
-    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-
     size_t nCount = 0; // Number of notes encountered so far.
-    for (; it != itEnd; ++it)
+    for (const auto& rCellNote : maCellNotes)
     {
-        if (it->type != sc::element_type_cellnote)
+        if (rCellNote.type != sc::element_type_cellnote)
             // Skip the empty blocks.
             continue;
 
-        if (nIndex < nCount + it->size)
+        if (nIndex < nCount + rCellNote.size)
         {
             // Index falls within this block.
             size_t nOffset = nIndex - nCount;
-            return it->position + nOffset;
+            return rCellNote.position + nOffset;
         }
 
-        nCount += it->size;
+        nCount += rCellNote.size;
     }
 
     return -1;
@@ -1972,9 +1962,9 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
             {
                 // nDataSize double values
                 std::vector<double> aValues(nDataSize);
-                for (SCROW nRow = 0; nRow < static_cast<SCROW>(nDataSize); ++nRow)
+                for (auto& rValue : aValues)
                 {
-                    rStrm.ReadDouble(aValues[nRow]);
+                    rStrm.ReadDouble(rValue);
                 }
                 maCells.set(nStartRow, aValues.begin(), aValues.end());
             }
@@ -1983,7 +1973,7 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
             {
                 std::vector<svl::SharedString> aStrings(nDataSize);
                 svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
-                for (SCROW nRow = 0; nRow < static_cast<SCROW>(nDataSize); ++nRow)
+                for (auto& rString : aStrings)
                 {
                     sal_Int32 nStrLength = 0;
                     rStrm.ReadInt32(nStrLength);
@@ -1991,7 +1981,7 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
                     rStrm.ReadBytes(pStr.get(), nStrLength);
                     OString aOStr(pStr.get(), nStrLength);
                     OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
-                    aStrings[nRow] = rPool.intern(aStr);
+                    rString = rPool.intern(aStr);
                 }
                 maCells.set(nStartRow, aStrings.begin(), aStrings.end());
 

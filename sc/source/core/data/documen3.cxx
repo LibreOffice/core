@@ -120,21 +120,20 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 
 void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
 {
-    auto itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
-    for (; itr!=itrEnd; ++itr)
+    for (const auto& [rName, rxRangeName] : rRangeMap)
     {
-        if (itr->first == STR_GLOBAL_RANGE_NAME)
+        if (rName == STR_GLOBAL_RANGE_NAME)
         {
             pRangeName.reset();
-            const ScRangeName *const pName = itr->second.get();
+            const ScRangeName *const pName = rxRangeName.get();
             if (!pName->empty())
                 pRangeName.reset( new ScRangeName( *pName ) );
         }
         else
         {
-            const ScRangeName *const pName = itr->second.get();
+            const ScRangeName *const pName = rxRangeName.get();
             SCTAB nTab;
-            bool bFound = GetTable(itr->first, nTab);
+            bool bFound = GetTable(rName, nTab);
             assert(bFound); (void)bFound;   // fouled up?
             if (pName->empty())
                 SetRangeName( nTab, nullptr );
@@ -205,11 +204,9 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& r
     else
         pRangeNames= GetRangeName(rAddress.Tab());
 
-    ScRangeName::iterator itrBegin = pRangeNames->begin(), itrEnd = pRangeNames->end();
-
-    for (ScRangeName::iterator itr = itrBegin; itr != itrEnd; ++itr)
+    for (auto& rEntry : *pRangeNames)
     {
-        if (itr->second->IsValidReference(aNameRange))
+        if (rEntry.second->IsValidReference(aNameRange))
         {
             if (aNameRange.In(rAddress))
                 return true;
@@ -265,10 +262,9 @@ void ScDocument::SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollecti
         //  start position is also compared, so bRemoveAutoFilter must not be set from ref-undo!
 
         ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
-        ScDBCollection::NamedDBs::const_iterator itr = rNamedDBs.begin(), itrEnd = rNamedDBs.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rxNamedDB : rNamedDBs)
         {
-            const ScDBData& rOldData = **itr;
+            const ScDBData& rOldData = *rxNamedDB;
             if (!rOldData.HasAutoFilter())
                 continue;
 
@@ -1143,12 +1139,15 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     SCTAB nMax = maTabs.size();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-        if (maTabs[*itr])
-            maTabs[*itr]->Fill(nCol1, nRow1, nCol2, nRow2,
+    for (const auto& rTab : rMark)
+    {
+        if (rTab >= nMax)
+            break;
+        if (maTabs[rTab])
+            maTabs[rTab]->Fill(nCol1, nRow1, nCol2, nRow2,
                             nFillCount, eFillDir, eFillCmd, eFillDateCmd,
                             nStepValue, nMaxValue, pProgress);
+    }
 }
 
 OUString ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
@@ -1166,10 +1165,13 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
     SCTAB nMax = maTabs.size();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-        if (maTabs[*itr])
-            maTabs[*itr]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
+    for (const auto& rTab : rMark)
+    {
+        if (rTab >= nMax)
+            break;
+        if (maTabs[rTab])
+            maTabs[rTab]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
+    }
 }
 
 void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -1291,15 +1293,18 @@ bool ScDocument::SearchAndReplace(
              nCommand == SvxSearchCmd::REPLACE_ALL )
         {
             SCTAB nMax = maTabs.size();
-            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr])
+            for (const auto& rMarkedTab : rMark)
+            {
+                if (rMarkedTab >= nMax)
+                    break;
+                if (maTabs[rMarkedTab])
                 {
                     nCol = 0;
                     nRow = 0;
-                    bFound |= maTabs[*itr]->SearchAndReplace(
+                    bFound |= maTabs[rMarkedTab]->SearchAndReplace(
                         rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
                 }
+            }
 
             // Mark is set completely inside already
         }
@@ -1621,18 +1626,16 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     // Range name
     if ( pRangeName )
     {
-        ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-        for (; itr != itrEnd; ++itr)
-            rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
+        for (const auto& rEntry : *pRangeName)
+            rStrings.insert(ScTypedStrData(rEntry.second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
     // Database collection
     if ( pDBCollection )
     {
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
-        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-        for (; itr != itrEnd; ++itr)
-            rStrings.insert(ScTypedStrData((*itr)->GetName(), 0.0, ScTypedStrData::DbName));
+        for (const auto& rxDB : rDBs)
+            rStrings.insert(ScTypedStrData(rxDB->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
     // Content of name ranges

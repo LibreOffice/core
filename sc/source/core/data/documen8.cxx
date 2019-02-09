@@ -1233,11 +1233,13 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
     std::unique_ptr<ScEditEngineDefaulter> pEngine;        // not using mpEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
-    ScMarkData::const_iterator itr = rMultiMark.begin(), itrEnd = rMultiMark.end();
-    for (; itr != itrEnd && *itr < nCount; ++itr)
-        if ( maTabs[*itr] )
+    for (const SCTAB& nTab : rMultiMark)
+    {
+        if (nTab >= nCount)
+            break;
+
+        if ( maTabs[nTab] )
         {
-            SCTAB nTab = *itr;
             SCCOL nCol = 0;
             SCROW nRow = 0;
 
@@ -1337,6 +1339,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }
         }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

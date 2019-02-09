@@ -1753,9 +1753,8 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 
     CopyToClipHandler aFunc(*this, rDestCol, nullptr);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
-    sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
-    for (; it != itEnd; ++it)
-        itPos = sc::ParseBlock(itPos, maCells, aFunc, it->mnRow1, it->mnRow2);
+    for (const auto& rRange : aRanges)
+        itPos = sc::ParseBlock(itPos, maCells, aFunc, rRange.mnRow1, rRange.mnRow2);
 
     rDestCol.CellStorageModified();
 }
@@ -1856,14 +1855,13 @@ namespace {
 
 void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
 {
-    sc::CellStoreType::iterator it = rCells.begin(), itEnd = rCells.end();
-    for (; it != itEnd; ++it)
+    for (auto& rCellItem : rCells)
     {
-        if (it->type != sc::element_type_formula)
+        if (rCellItem.type != sc::element_type_formula)
             continue;
 
-        sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
-        sc::formula_block::iterator itCellEnd = sc::formula_block::end(*it->data);
+        sc::formula_block::iterator itCell = sc::formula_block::begin(*rCellItem.data);
+        sc::formula_block::iterator itCellEnd = sc::formula_block::end(*rCellItem.data);
         for (; itCell != itCellEnd; ++itCell)
         {
             ScFormulaCell& rCell = **itCell;
@@ -2011,10 +2009,9 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     ScDocument* pDocument = GetDoc();
     ScHint aHint(SfxHintId::ScDataChanged, ScAddress(nCol, 0, nTab));
     ScAddress& rPos = aHint.GetAddress();
-    sc::SingleColumnSpanSet::SpansType::const_iterator itRange = aRanges.begin(), itRangeEnd = aRanges.end();
-    for (; itRange != itRangeEnd; ++itRange)
+    for (const auto& rRange : aRanges)
     {
-        for (SCROW nRow = itRange->mnRow1; nRow <= itRange->mnRow2; ++nRow)
+        for (SCROW nRow = rRange.mnRow1; nRow <= rRange.mnRow2; ++nRow)
         {
             rPos.SetRow(nRow);
             pDocument->AreaBroadcast(aHint);
@@ -2814,9 +2811,8 @@ public:
         sc::SingleColumnSpanSet::SpansType aSpans;
         maValueRanges.getSpans(aSpans);
 
-        sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-            rBroadcastSpans.set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+        for (const auto& rSpan : aSpans)
+            rBroadcastSpans.set(nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
     }
 };
 
@@ -3434,11 +3430,8 @@ void ScColumn::TransferListeners(
 
     // Re-register listeners with their destination broadcasters.
     sc::BroadcasterStoreType::iterator itDestPos = rDestCol.maBroadcasters.begin();
-    TransferListenersHandler::ListenerListType::iterator it = aListenerList.begin(), itEnd = aListenerList.end();
-    for (; it != itEnd; ++it)
+    for (TransferListenersHandler::Entry& rEntry : aListenerList)
     {
-        TransferListenersHandler::Entry& rEntry = *it;
-
         SCROW nDestRow = rEntry.mnRow + nRowDelta;
 
         sc::BroadcasterStoreType::position_type aPos =
@@ -3460,10 +3453,8 @@ void ScColumn::TransferListeners(
         }
 
         // Transfer all listeners from the source to the destination.
-        SvtBroadcaster::ListenersType::iterator it2 = rEntry.maListeners.begin(), it2End = rEntry.maListeners.end();
-        for (; it2 != it2End; ++it2)
+        for (SvtListener* pLis : rEntry.maListeners)
         {
-            SvtListener* pLis = *it2;
             pLis->StartListening(*pDestBrd);
         }
     }
