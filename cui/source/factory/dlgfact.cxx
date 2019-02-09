@@ -217,7 +217,11 @@ short AbstractSvxPathSelectDialog_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
+
+short AbstractFmSearchDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractGraphicFilterDialog_Impl::Execute()
 {
@@ -792,18 +796,19 @@ bool AbstractSvxHpLinkDlg_Impl::QueryClose()
     return pDlg->QueryClose();
 }
 
-
 void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk)
 {
-    pDlg->SetFoundHandler(lnk);
+    m_xDlg->SetFoundHandler(lnk);
 }
+
 void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk)
 {
-    pDlg->SetCanceledNotFoundHdl(lnk);
+    m_xDlg->SetCanceledNotFoundHdl(lnk);
 }
+
 void AbstractFmSearchDialog_Impl::SetActiveField(const OUString& strField)
 {
-    pDlg->SetActiveField(strField);
+    m_xDlg->SetActiveField(strField);
 }
 
 Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY)
@@ -1247,15 +1252,15 @@ VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl
     return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::Window* pParent,
+VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
 {
-    VclPtrInstance<FmSearchDialog> pDlg( pParent, strInitialText, _rContexts,
-                                         nInitialContext, lnkContextSupplier );
-    return VclPtr<AbstractFmSearchDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractFmSearchDialog_Impl>::Create(std::make_unique<FmSearchDialog>(pParent,
+                                                         strInitialText, _rContexts, nInitialContext, lnkContextSupplier));
+
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterEmboss(weld::Window* pParent,
