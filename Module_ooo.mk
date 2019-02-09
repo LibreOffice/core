@@ -88,6 +88,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sd \
     sfx2 \
     slideshow \
+    solenv \
     sot \
     starmath \
     store \
