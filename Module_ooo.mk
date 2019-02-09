@@ -109,6 +109,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unodevtools \
     unotools \
     unoxml \
+    ure \
     uui \
     vbahelper \
     vcl \
