@@ -143,6 +143,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     odbcbase \
     oox \
     package2 \
+    pyuno \
+    pyuno_loader \
     qstart_gtk \
     rpt \
     rptui \
@@ -269,6 +271,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     lnth \
     nullcanvas \
     passwordcontainer \
+    pythonloader \
     simplecanvas \
     slideshow \
     spell \

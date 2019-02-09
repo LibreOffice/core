@@ -1,4 +1,4 @@
-# *************************************************************
+#**************************************************************
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,30 +17,44 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-# *************************************************************
-# when you want to change the python version, you must update the d.lst
-# in the python project accordingly !!!
-PYMAJOR=2
-PYMINOR=7
-PYMICRO=15
-PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
+#**************************************************************
+
+
+
+$(eval $(call gb_Module_Module,pyuno))
+
+$(eval $(call gb_Module_add_targets,pyuno,\
+	Library_pyuno \
+	Library_pythonloader \
+	Package_py \
+	Package_pyuno_ini \
+))
 
 ifeq ($(GUI),UNX)
-ifeq ($(OS),MACOSX)
-PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dylib
-else
-PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).so.1.0
+$(eval $(call gb_Module_add_targets,pyuno,\
+	Library_pyuno_loader \
+))
 endif
-PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)
-else ifeq ($(GUI),OS2)
-PY_FULL_DLL_NAME=python$(PYMAJOR)$(PYMINOR).dll
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
-else
-ifeq ($(COM),GCC)
-PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dll
-PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)
-else
-PY_FULL_DLL_NAME=python$(PYMAJOR)$(PYMINOR).dll
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
+
+ifneq ($(SYSTEM_PYTHON),YES)
+ifneq ($(GUI),OS2)
+
+$(eval $(call gb_Module_add_targets,pyuno,\
+	Package_zipcore \
+))
+
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Module_add_targets,pyuno,\
+	Executable_pyuno_python_exe \
+))
+else ifeq ($(GUI),UNX)
+$(eval $(call gb_Module_add_targets,pyuno,\
+	Package_python_bin \
+	Package_pyuno_python_sh \
+))
+endif
+
 endif
 endif
+
+# vim: set noet sw=4 ts=4:

@@ -68,11 +68,7 @@
    to do the necessary conversions.
 */
 
-#ifdef WIN32
-#define PY_DLLEXPORT __declspec(dllexport)
-#else
-#define PY_DLLEXPORT
-#endif
+#define PY_DLLEXPORT SAL_DLLPUBLIC_EXPORT
 
 /** function called by the python runtime to initialize the
     pyuno module.

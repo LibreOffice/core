@@ -22,7 +22,7 @@ PRJNAME=pyuno
 PRJ=..
 
 .INCLUDE : settings.mk
-.INCLUDE : pyversion.mk
+.INCLUDE : pyversion_dmake.mk
 
 ROOT=$(MISC)$/pyuno-doc
 

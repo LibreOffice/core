@@ -75,6 +75,7 @@ mkdir: %_DEST%\lib%_EXT%\python\python2.7\config
 ..\%__SRC%\misc\build\Python-2.7.15\Makefile %_DEST%\lib%_EXT%\python\python2.7\config\Makefile
 ..\%__SRC%\misc\build\python-inst\lib\python2.7\_sysconfigdata.py %_DEST%\lib%_EXT%\python\_sysconfigdata.py
 ..\pyversion.mk %_DEST%\inc%_EXT%\pyversion.mk
+..\pyversion_dmake.mk %_DEST%\inc%_EXT%\pyversion_dmake.mk
 
 ..\%__SRC%\misc\build\Python-2.7.15\Include\* %_DEST%\inc%_EXT%\python\*
 

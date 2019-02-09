@@ -29,7 +29,7 @@ LIBTARGET=NO
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
-my_components = pythonloader
+my_components = component/pyuno/source/loader/pythonloader
 
 # --- Settings -----------------------------------------------------
 

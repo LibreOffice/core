@@ -21,39 +21,38 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Library_Library,pyuno))
 
-PRJPCH=
+$(eval $(call gb_Library_set_include,pyuno,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/pyuno/inc \
+))
 
-PRJNAME=scp2
-TARGET=python
-TARGETTYPE=CUI
+$(eval $(call gb_Library_add_api,pyuno, \
+	udkapi \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,pyuno,\
+	cppu \
+	cppuhelper \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
 
-.INCLUDE :	settings.mk
+$(call gb_Library_use_external,pyuno,python)
 
-.IF "$(SYSTEM_PYTHON)" == "YES"
-SCPDEFS+=-DSYSTEM_PYTHON
-.ELSE
-.INCLUDE :      pyversion_dmake.mk
-.ENDIF
+$(eval $(call gb_Library_add_exception_objects,pyuno,\
+	pyuno/source/module/pyuno_runtime \
+	pyuno/source/module/pyuno \
+	pyuno/source/module/pyuno_callable \
+	pyuno/source/module/pyuno_module \
+	pyuno/source/module/pyuno_type \
+	pyuno/source/module/pyuno_util \
+	pyuno/source/module/pyuno_except \
+	pyuno/source/module/pyuno_adapter \
+	pyuno/source/module/pyuno_gc \
+))
 
-SCPDEFS+=\
-    -DPYVERSION=$(PYVERSION) -DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
-    -DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME)
+# vim: set noet sw=4 ts=4:
 
-SCP_PRODUCT_TYPE=osl
-
-PARFILES=\
-        module_python.par              \
-        module_python_mailmerge.par    \
-        profileitem_python.par         \
-        file_python.par
-
-ULFFILES= \
-        module_python.ulf              \
-        module_python_mailmerge.ulf
-
-# --- File ---------------------------------------------------------
-.INCLUDE :  target.mk

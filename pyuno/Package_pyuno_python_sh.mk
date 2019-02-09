@@ -19,41 +19,15 @@
 #  
 #**************************************************************
 
+include $(SRCDIR)/python/pyversion.mk
+
+$(eval $(call gb_Package_Package,pyuno_python_sh,$(WORKDIR)/CustomTarget/pyuno/zipcore))
+
+$(eval $(call gb_Package_add_file,pyuno_python_sh,bin/pyuno/python,python.sh))
+
+$(WORKDIR)/CustomTarget/pyuno/zipcore/python.sh : $(SRCDIR)/pyuno/zipcore/python.sh
+	mkdir -p $(dir $@) && \
+	sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $< > $@ && \
+	chmod +x $@
 
 
-PRJ=..$/..
-
-PRJPCH=
-
-PRJNAME=scp2
-TARGET=python
-TARGETTYPE=CUI
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-.IF "$(SYSTEM_PYTHON)" == "YES"
-SCPDEFS+=-DSYSTEM_PYTHON
-.ELSE
-.INCLUDE :      pyversion_dmake.mk
-.ENDIF
-
-SCPDEFS+=\
-    -DPYVERSION=$(PYVERSION) -DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
-    -DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME)
-
-SCP_PRODUCT_TYPE=osl
-
-PARFILES=\
-        module_python.par              \
-        module_python_mailmerge.par    \
-        profileitem_python.par         \
-        file_python.par
-
-ULFFILES= \
-        module_python.ulf              \
-        module_python_mailmerge.ulf
-
-# --- File ---------------------------------------------------------
-.INCLUDE :  target.mk

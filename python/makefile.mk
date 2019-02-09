@@ -29,7 +29,7 @@ TARGET=so_python
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-.INCLUDE :      pyversion.mk
+.INCLUDE :      pyversion_dmake.mk
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 all:
@@ -137,6 +137,7 @@ BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|x6
 .ENDIF
 .ENDIF
 
+PYVERSIONFILE_DMAKE=$(MISC)$/pyversion_dmake.mk
 PYVERSIONFILE=$(MISC)$/pyversion.mk
 
 # --- Targets ------------------------------------------------------
@@ -160,9 +161,13 @@ $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
 .ENDIF
 .ENDIF
 
-ALLTAR : $(PYVERSIONFILE)
+ALLTAR : $(PYVERSIONFILE_DMAKE) $(PYVERSIONFILE)
 .ENDIF          # "$(L10N_framework)"==""
 
+
+$(PYVERSIONFILE_DMAKE) : pyversion_dmake.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    -rm -f $@
+    cat $? > $@
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@

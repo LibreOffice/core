@@ -21,39 +21,24 @@
 
 
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJPCH=
+.INCLUDE : settings.mk
 
-PRJNAME=scp2
-TARGET=python
-TARGETTYPE=CUI
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-.IF "$(SYSTEM_PYTHON)" == "YES"
-SCPDEFS+=-DSYSTEM_PYTHON
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
 .ELSE
-.INCLUDE :      pyversion_dmake.mk
+VERBOSEFLAG := -s
 .ENDIF
 
-SCPDEFS+=\
-    -DPYVERSION=$(PYVERSION) -DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
-    -DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME)
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-SCP_PRODUCT_TYPE=osl
-
-PARFILES=\
-        module_python.par              \
-        module_python_mailmerge.par    \
-        profileitem_python.par         \
-        file_python.par
-
-ULFFILES= \
-        module_python.ulf              \
-        module_python_mailmerge.ulf
-
-# --- File ---------------------------------------------------------
-.INCLUDE :  target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

@@ -33,7 +33,7 @@
 #endif
 #include <dlfcn.h>
 
-void initpyuno ()
+SAL_DLLPUBLIC_EXPORT void initpyuno ()
 {
     Dl_info dl_info;
     void (*func)(void);

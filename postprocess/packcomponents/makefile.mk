@@ -96,6 +96,7 @@ my_components = \
     component/oox/util/oox \
     component/package/source/xstor/xstor \
     component/package/util/package2 \
+    component/pyuno/source/loader/pythonloader \
     component/reportdesign/util/rptxml \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
@@ -175,7 +176,6 @@ my_components = \
     placeware \
     preload \
     protocolhandler \
-    pythonloader \
     pythonscript \
     res \
     scn \

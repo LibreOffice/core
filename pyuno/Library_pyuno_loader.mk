@@ -20,40 +20,20 @@
 #**************************************************************
 
 
+# Name is changd to pyuno.so on all *nix systems in main/RepositoryFixes.mk
+# python expects modules without the lib prefix 
 
-PRJ=..$/..
+$(eval $(call gb_Library_Library,pyuno_loader))
 
-PRJPCH=
+$(eval $(call gb_Library_set_include,pyuno_loader,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/pyuno/inc \
+))
 
-PRJNAME=scp2
-TARGET=python
-TARGETTYPE=CUI
+$(eval $(call gb_Library_add_cobjects,pyuno_loader,\
+	pyuno/source/module/pyuno_dlopenwrapper \
+))
 
-# --- Settings -----------------------------------------------------
 
-.INCLUDE :	settings.mk
+# vim: set noet sw=4 ts=4:
 
-.IF "$(SYSTEM_PYTHON)" == "YES"
-SCPDEFS+=-DSYSTEM_PYTHON
-.ELSE
-.INCLUDE :      pyversion_dmake.mk
-.ENDIF
-
-SCPDEFS+=\
-    -DPYVERSION=$(PYVERSION) -DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
-    -DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME)
-
-SCP_PRODUCT_TYPE=osl
-
-PARFILES=\
-        module_python.par              \
-        module_python_mailmerge.par    \
-        profileitem_python.par         \
-        file_python.par
-
-ULFFILES= \
-        module_python.ulf              \
-        module_python_mailmerge.ulf
-
-# --- File ---------------------------------------------------------
-.INCLUDE :  target.mk

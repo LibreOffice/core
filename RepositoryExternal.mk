@@ -702,4 +702,35 @@ endef
 
 endif # SYSTEM_HUNSPELL
 
+
+
+ifeq ($(SYSTEM_PYTHON),YES)
+
+define gb_LinkTarget__use_python
+$(call gb_LinkTarget_set_include,$(1),\
+        $$(INCLUDE) \
+        $(filter -I%,$(PYTHON_CFLAGS)) \
+)
+$(call gb_LinkTarget_add_defs,$(1),\
+        $(filter-out -I%,$(PYTHON_CFLAGS)) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+        $(PYTHON_LIBS) \
+)
+endef
+
+else # !SYSTEM_PYTHON
+
+include $(SRCDIR)/python/pyversion.mk
+
+define gb_LinkTarget__use_python
+$(call gb_LinkTarget_set_include,$(1),\
+        $$(INCLUDE) \
+        -I$(OUTDIR)/inc/python \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(PYTHONLIB))
+endef
+
+endif # SYSTEM_PYTHON
+
 # vim: set noet sw=4 ts=4:
