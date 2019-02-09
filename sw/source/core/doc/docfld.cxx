@@ -567,8 +567,9 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
 #endif
 
     SwDBData aData;
-    aData.sDataSource = rDBName.getToken(0, DB_DELIM);
-    aData.sCommand = rDBName.getToken(1, DB_DELIM);
+    sal_Int32 nIdx{ 0 };
+    aData.sDataSource = rDBName.getToken(0, DB_DELIM, nIdx);
+    aData.sCommand = rDBName.getToken(0, DB_DELIM, nIdx);
     aData.nCommandType = -1;
     GetDBManager()->CreateDSData(aData);
     rDBNameList.push_back(rDBName);
@@ -583,9 +584,10 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
     (void) rNewName;
 #else
     SwDBData aNewDBData;
-    aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM);
-    aNewDBData.sCommand = rNewName.getToken(1, DB_DELIM);
-    aNewDBData.nCommandType = static_cast<short>(rNewName.getToken(2, DB_DELIM).toInt32());
+    sal_Int32 nIdx{ 0 };
+    aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM, nIdx);
+    aNewDBData.sCommand = rNewName.getToken(0, DB_DELIM, nIdx);
+    aNewDBData.nCommandType = static_cast<short>(rNewName.getToken(0, DB_DELIM, nIdx).toInt32());
 
     SwSectionFormats& rArr = GetSections();
     for (auto n = rArr.size(); n; )
