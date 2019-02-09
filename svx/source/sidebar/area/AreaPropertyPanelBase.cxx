@@ -37,6 +37,7 @@
 #include <sfx2/opengrf.hxx>
 #include <o3tl/make_unique.hxx>
 #include <bitmaps.hlst>
+#include <sfx2/sidebar/Panel.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -897,6 +898,9 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
             mpLbFillGradTo->SetNoSelection();
         }
     }
+        sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
+        if(pPanel)
+            pPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
