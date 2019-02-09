@@ -106,6 +106,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     get(mpLbFillGradTo, "fillgrad2");
     get(mpGradientStyle, "gradientstyle");
     get(mpBmpImport, "bmpimport");
+    mpPanel = dynamic_cast<sfx2::sidebar::Panel*>(pParent);
 
     Initialize();
 }
@@ -132,6 +133,7 @@ void AreaPropertyPanelBase::dispose()
     mpLbFillGradTo.clear();
     mpGradientStyle.clear();
     mpBmpImport.clear();
+    mpPanel.clear();
 
     PanelLayout::dispose();
 }
@@ -443,6 +445,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
     {
         mpLbFillType->Selected();
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillColorHdl, SvxColorListBox&, void)
@@ -605,6 +609,8 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
@@ -860,6 +866,8 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
     mpToolBoxColor->Hide();
     meLastXFS = static_cast<sal_uInt16>(-1);
     mpStyleItem.reset();
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -899,6 +907,8 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
             mpLbFillGradTo->SetNoSelection();
         }
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -930,6 +940,8 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, 
             mpLbFillAttr->SetNoSelection();
         }
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -947,6 +959,8 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolIte
         mpLbFillType->SelectEntryPos(SOLID);
         Update();
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -980,6 +994,8 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
             mpLbFillAttr->SetNoSelection();
         }
     }
+    if(mpPanel)
+        mpPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::NotifyItemUpdate(
@@ -1247,6 +1263,8 @@ void AreaPropertyPanelBase::Update()
                 OSL_ENSURE(false, "Non supported FillType (!)");
             break;
         }
+        if(mpPanel)
+            mpPanel->TriggerDeckLayouting();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)

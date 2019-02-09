@@ -44,6 +44,7 @@
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <svx/svxdllapi.h>
+#include <sfx2/sidebar/Panel.hxx>
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;
@@ -155,6 +156,7 @@ protected:
     Image                                               maImgLinear;
 
     VclPtr<AreaTransparencyGradientPopup>           mxTrGrPopup;
+    VclPtr<sfx2::sidebar::Panel>                    mpPanel;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;
