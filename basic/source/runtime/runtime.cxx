@@ -1687,9 +1687,19 @@ void SbiRuntime::StepPUT()
                 refVal = pDflt;
         }
     }
+    SbxValues values;
+    values.eType = refVar->GetType();
 
-    if ( !checkUnoStructCopy( bVBAEnabled, refVal, refVar ) )
-        *refVar = *refVal;
+    // the order of the last two conditions must not be changed.
+    // because SbxValue::Get calls SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
+    if (!checkUnoStructCopy( bVBAEnabled, refVal, refVar ){
+        if((refVar->GetType() == refVal->GetType()) || refVal->Get(values)){
+            *refVar = *refVal;
+        }else{
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
+        }
+    }
+
 
     if( bFlagsChanged )
         refVar->SetFlags( n );
