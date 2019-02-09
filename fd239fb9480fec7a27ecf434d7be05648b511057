@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b64a927d",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4856,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-02-09T13:57:04Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be OUString?",
+      "range": {
+        "startLine": 4856,
+        "startChar": 24,
+        "endLine": 4856,
+        "endChar": 38
+      },
+      "revId": "fd239fb9480fec7a27ecf434d7be05648b511057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
