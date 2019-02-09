@@ -79,12 +79,12 @@ $(WORKDIR)/CustomTarget/i18npool/source/localedata/data/localedata_%.cxx : $(SRC
 		$(call gb_Helper_convert_native,$(OUTDIR)/bin/types.rdb) \
 		-env:OOO_INBUILD_SHAREDLIB_DIR=$(URL_PROTOCOL)$(call gb_Helper_convert_native,$(gb_InBuild_Library_Path))
 
-MY_COMPONENT := sax/source/expatwrap/expwrap
+MY_COMPONENTS := component/sax/source/expatwrap/expwrap
 
 $(WORKDIR)/CustomTarget/i18npool/source/localedata/data/saxparser.rdb : \
 			$(WORKDIR)/CustomTarget/i18npool/source/localedata/data/saxparser.input \
 			$(SOLARENV)/bin/packcomponents.xslt \
-			$(call gb_ComponentTarget_get_outdir_inbuild_target,$(MY_COMPONENT))
+			$(foreach component,$(MY_COMPONENTS),$(OUTDIR)/xml/$(component).inbuild.component)
 	$(gb_XSLTPROC) \
 		--nonet \
 		--stringparam prefix $(call gb_Helper_convert_native,$(OUTDIR)/xml/) \
@@ -94,7 +94,7 @@ $(WORKDIR)/CustomTarget/i18npool/source/localedata/data/saxparser.rdb : \
 
 $(WORKDIR)/CustomTarget/i18npool/source/localedata/data/saxparser.input :
 	mkdir -p $(dir $@) \
-	&& echo "<list><filename>component/$(MY_COMPONENT).inbuild.component</filename></list>" > $@
+	&& echo "<list>$(foreach component,$(MY_COMPONENTS),<filename>$(component).inbuild.component</filename>)</list>" > $@
 
 # vim: set noet sw=4 ts=4:
 
