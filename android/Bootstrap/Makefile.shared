@@ -21,7 +21,7 @@ OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 # Helpful rules ...
 #
 
-local.properties:
+local.properties: $(BUILDDIR)/config_host.mk
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 
 #
