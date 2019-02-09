@@ -394,7 +394,7 @@ public:
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxHpLinkDlg>  CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings)=0;
-    virtual VclPtr<AbstractFmSearchDialog> CreateFmSearchDialog(vcl::Window* pParent,
+    virtual VclPtr<AbstractFmSearchDialog> CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,

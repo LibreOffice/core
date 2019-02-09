@@ -41,41 +41,12 @@ struct FmSearchProgress;
 class FmSearchEngine;
 
 /// Dialog for searching in Forms/Tables
-class FmSearchDialog final : public ModalDialog
+class FmSearchDialog final : public weld::GenericDialogController
 {
     friend class FmSearchEngine;
 
-    // my all Controls
-    VclPtr<RadioButton>     m_prbSearchForText;
-    VclPtr<RadioButton>     m_prbSearchForNull;
-    VclPtr<RadioButton>     m_prbSearchForNotNull;
-    VclPtr<ComboBox>        m_pcmbSearchText;
-    VclPtr<FixedText>       m_pftForm;
-    VclPtr<ListBox>         m_plbForm;
-    VclPtr<RadioButton>     m_prbAllFields;
-    VclPtr<RadioButton>     m_prbSingleField;
-    VclPtr<ListBox>         m_plbField;
-    VclPtr<FixedText>       m_pftPosition;
-    VclPtr<ListBox>         m_plbPosition;
-    VclPtr<CheckBox>        m_pcbUseFormat;
-    VclPtr<CheckBox>        m_pcbCase;
-    VclPtr<CheckBox>        m_pcbBackwards;
-    VclPtr<CheckBox>        m_pcbStartOver;
-    VclPtr<CheckBox>        m_pcbWildCard;
-    VclPtr<CheckBox>        m_pcbRegular;
-    VclPtr<CheckBox>        m_pcbApprox;
-    VclPtr<PushButton>      m_ppbApproxSettings;
-    VclPtr<CheckBox>        m_pHalfFullFormsCJK;
-    VclPtr<CheckBox>        m_pSoundsLikeCJK;
-    VclPtr<PushButton>      m_pSoundsLikeCJKSettings;
-    VclPtr<FixedText>       m_pftRecord;
-    VclPtr<FixedText>       m_pftHint;
-    VclPtr<PushButton>      m_pbSearchAgain;
-    VclPtr<CancelButton>    m_pbClose;
     OUString        m_sSearch;
     OUString        m_sCancel;
-
-    VclPtr<vcl::Window>         m_pPreSearchFocus;
 
     Link<FmFoundRecordInformation&,void>  m_lnkFoundHandler;          ///< Handler for "found"
     Link<FmFoundRecordInformation&,void>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
@@ -87,10 +58,37 @@ class FmSearchDialog final : public ModalDialog
 
     std::unique_ptr<FmSearchEngine> m_pSearchEngine;
 
-    Timer           m_aDelayedPaint;
     // see EnableSearchUI
-
     std::unique_ptr<::svxform::FmSearchConfigItem>      m_pConfig;
+
+    // my all Controls
+    std::unique_ptr<weld::RadioButton> m_prbSearchForText;
+    std::unique_ptr<weld::RadioButton> m_prbSearchForNull;
+    std::unique_ptr<weld::RadioButton> m_prbSearchForNotNull;
+    std::unique_ptr<weld::ComboBox> m_pcmbSearchText;
+    std::unique_ptr<weld::Label> m_pftForm;
+    std::unique_ptr<weld::ComboBox> m_plbForm;
+    std::unique_ptr<weld::RadioButton> m_prbAllFields;
+    std::unique_ptr<weld::RadioButton> m_prbSingleField;
+    std::unique_ptr<weld::ComboBox> m_plbField;
+    std::unique_ptr<weld::Label> m_pftPosition;
+    std::unique_ptr<weld::ComboBox> m_plbPosition;
+    std::unique_ptr<weld::CheckButton> m_pcbUseFormat;
+    std::unique_ptr<weld::CheckButton> m_pcbCase;
+    std::unique_ptr<weld::CheckButton> m_pcbBackwards;
+    std::unique_ptr<weld::CheckButton> m_pcbStartOver;
+    std::unique_ptr<weld::CheckButton> m_pcbWildCard;
+    std::unique_ptr<weld::CheckButton> m_pcbRegular;
+    std::unique_ptr<weld::CheckButton> m_pcbApprox;
+    std::unique_ptr<weld::Button> m_ppbApproxSettings;
+    std::unique_ptr<weld::CheckButton> m_pHalfFullFormsCJK;
+    std::unique_ptr<weld::CheckButton> m_pSoundsLikeCJK;
+    std::unique_ptr<weld::Button> m_pSoundsLikeCJKSettings;
+    std::unique_ptr<weld::Label> m_pftRecord;
+    std::unique_ptr<weld::Label> m_pftHint;
+    std::unique_ptr<weld::Button> m_pbSearchAgain;
+    std::unique_ptr<weld::Button> m_pbClose;
+
 public:
     /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (separated
         by ';'), the user can choose one of them.
@@ -106,11 +104,12 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
+    FmSearchDialog(weld::Window* pParent, const OUString& strInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
 
+    virtual short run() override;
+
     virtual ~FmSearchDialog() override;
-    virtual void dispose() override;
 
     /** The found-handler gets in the 'found'-case a pointer on a FmFoundRecordInformation-structure
         (which is only valid in the handler; so if one needs to memorize the data, don't copy the pointer but
@@ -131,23 +130,14 @@ public:
     inline void SetActiveField(const OUString& strField);
 
 private:
-    virtual bool Close() override;
-
     void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
     void OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos);
-    /** When searching in an own thread I naturally want to disable the UI for starting the search and for setting search
-        parameters. If bEnable == sal_False, for all affected controls painting is turned off and shortly after turned on
-        again using m_aDelayedPaint. If there is a demand with bEnable == sal_True inbetween, the timer is stopped and
-        painting is turned on immediately. As a consequence for this intricateness there is no flickering when turning
-        off and on quickly.
-    */
+
     void EnableSearchUI(bool bEnable);
 
     void EnableSearchForDependees(bool bEnable);
-
-    void EnableControlPaint(bool bEnable);
 
     void InitContext(sal_Int16 nContext);
 
@@ -155,34 +145,32 @@ private:
     void SaveParams() const;
 
     // Handler for the Controls
-    DECL_LINK( OnClickedFieldRadios, Button*, void );
-    DECL_LINK(OnClickedSearchAgain, Button *, void);
-    DECL_LINK( OnClickedSpecialSettings, Button*, void );
+    DECL_LINK( OnClickedFieldRadios, weld::Button&, void );
+    DECL_LINK( OnClickedSearchAgain, weld::Button&, void );
+    DECL_LINK( OnClickedSpecialSettings, weld::Button&, void );
 
-    DECL_LINK(OnSearchTextModified, Edit&, void);
+    DECL_LINK( OnSearchTextModified, weld::ComboBox&, void );
 
-    DECL_LINK( OnPositionSelected, ListBox&, void );
-    DECL_LINK( OnFieldSelected, ListBox&, void );
+    DECL_LINK( OnPositionSelected, weld::ComboBox&, void );
+    DECL_LINK( OnFieldSelected, weld::ComboBox&, void );
 
-    DECL_LINK( OnFocusGrabbed, Control&, void );
-    DECL_LINK( OnCheckBoxToggled, CheckBox&, void );
+    DECL_LINK( OnFocusGrabbed, weld::Widget&, void );
+    DECL_LINK( OnCheckBoxToggled, weld::ToggleButton&, void );
 
-    DECL_LINK( OnContextSelection, ListBox&, void );
+    DECL_LINK( OnContextSelection, weld::ComboBox&, void );
 
     DECL_LINK( OnSearchProgress, const FmSearchProgress*, void );
-
-    DECL_LINK( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
 
     void initCommon( const css::uno::Reference< css::sdbc::XResultSet >& _rxCursor );
 };
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)
 {
-    sal_Int32 nInitialField = m_plbField->GetEntryPos(strField);
-    if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
+    int nInitialField = m_plbField->find_text(strField);
+    if (nInitialField == -1)
         nInitialField = 0;
-    m_plbField->SelectEntryPos(nInitialField);
-    LINK(this, FmSearchDialog, OnFieldSelected).Call(*m_plbField);
+    m_plbField->set_active(nInitialField);
+    OnFieldSelected(*m_plbField);
 }
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX
