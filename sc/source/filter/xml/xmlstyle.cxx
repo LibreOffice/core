@@ -1042,12 +1042,12 @@ bool XmlScPropHdl_CellProtection::exportXML(
             rStrExpValue = GetXMLToken(XML_HIDDEN_AND_PROTECTED);
             bRetval = true;
         }
-        else if (aCellProtection.IsLocked && !(aCellProtection.IsFormulaHidden || aCellProtection.IsHidden))
+        else if (aCellProtection.IsLocked && !aCellProtection.IsFormulaHidden)
         {
             rStrExpValue = GetXMLToken(XML_PROTECTED);
             bRetval = true;
         }
-        else if (aCellProtection.IsFormulaHidden && !(aCellProtection.IsLocked || aCellProtection.IsHidden))
+        else if (aCellProtection.IsFormulaHidden && !aCellProtection.IsLocked)
         {
             rStrExpValue = GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = true;

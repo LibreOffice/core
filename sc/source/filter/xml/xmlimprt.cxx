@@ -1272,7 +1272,6 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
         // and description within there and ScXMLImport::SetCurrencySymbol().
         if ((nCellType != nCurrentCellType) &&
                 (nCellType != util::NumberFormat::NUMBER) &&
-                (nCellType != util::NumberFormat::TEXT) &&
                 (bIsStandard || (nCellType == util::NumberFormat::CURRENCY)))
         {
             if (!xNumberFormats.is())

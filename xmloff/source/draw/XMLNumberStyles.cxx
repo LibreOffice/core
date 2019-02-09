@@ -395,7 +395,7 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
         if( nDateStyle > 1 )
             nDateStyle -= 2;
 
-        SAL_WARN_IF( (nDateStyle < 0) || (nDateStyle >= SdXMLDateFormatCount), "xmloff", "unknown date style!" );
+        SAL_WARN_IF(nDateStyle >= SdXMLDateFormatCount, "xmloff", "unknown date style!");
 
         int nTimeStyle = (nStyle >> 4) & 0x0f;
         bool bHasTime = nTimeStyle != 0;
@@ -403,9 +403,9 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
         if( nTimeStyle > 1 )
             nTimeStyle -= 2;
 
-        SAL_WARN_IF( (nTimeStyle < 0) || (nTimeStyle >= SdXMLTimeFormatCount), "xmloff", "Unknown time style!" );
+        SAL_WARN_IF(nTimeStyle >= SdXMLTimeFormatCount, "xmloff", "Unknown time style!");
 
-        if( (nDateStyle >= 0) && (nDateStyle < SdXMLDateFormatCount) && (nTimeStyle >= 0) && (nTimeStyle < SdXMLTimeFormatCount) )
+        if ((nDateStyle < SdXMLDateFormatCount) && (nTimeStyle < SdXMLTimeFormatCount))
         {
             if( bHasDate )
             {

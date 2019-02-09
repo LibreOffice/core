@@ -805,7 +805,7 @@ void XMLFilterSettingsDialog::onDelete()
                         PropertyValue* pValues = aValues.getArray();
                         sal_Int32 nValue;
 
-                        for( nValue = 0; (nValue < nValueCount) && !bTypeStillUsed; nValue++, pValues++ )
+                        for (nValue = 0; nValue < nValueCount; nValue++, pValues++)
                         {
                             if ( pValues->Name == "Type" )
                             {
