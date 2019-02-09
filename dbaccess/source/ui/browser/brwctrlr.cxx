@@ -1833,7 +1833,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     VclPtr<AbstractFmSearchDialog> pDialog;
     std::vector< OUString > aContextNames;
     aContextNames.emplace_back("Standard" );
-    pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
+    pDialog = pFact->CreateFmSearchDialog(getFrameWeld(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
     pDialog->SetActiveField( sActiveField );
     pDialog->SetFoundHandler( LINK( this, SbaXDataBrowserController, OnFoundData ) );
     pDialog->SetCanceledNotFoundHdl( LINK( this, SbaXDataBrowserController, OnCanceledNotFound ) );
