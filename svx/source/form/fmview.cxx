@@ -400,10 +400,11 @@ SdrObjectUniquePtr FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rD
 
 SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
-    OUString sDataSource     = rFieldDesc.getToken(0,u'\x000B');
-    OUString sObjectName     = rFieldDesc.getToken(1,u'\x000B');
-    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(rFieldDesc.getToken(2,u'\x000B').toInt32());
-    OUString sFieldName      = rFieldDesc.getToken(3,u'\x000B');
+    sal_Int32 nIdx{ 0 };
+    OUString sDataSource     = rFieldDesc.getToken(0, u'\x000B', nIdx);
+    OUString sObjectName     = rFieldDesc.getToken(0, u'\x000B', nIdx);
+    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(rFieldDesc.getToken(0, u'\x000B', nIdx).toInt32());
+    OUString sFieldName      = rFieldDesc.getToken(0, u'\x000B', nIdx);
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
         return nullptr;

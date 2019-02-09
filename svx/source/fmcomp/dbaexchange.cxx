@@ -331,10 +331,11 @@ namespace svx
         (void)const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
 
         const sal_Unicode cSeparator = u'\x000B';
-        _rDatasource    = sFieldDescription.getToken(0, cSeparator);
-        _rCommand       = sFieldDescription.getToken(1, cSeparator);
-        _nCommandType   = sFieldDescription.getToken(2, cSeparator).toInt32();
-        _rFieldName     = sFieldDescription.getToken(3, cSeparator);
+        sal_Int32 nIdx{ 0 };
+        _rDatasource    = sFieldDescription.getToken(0, cSeparator, nIdx);
+        _rCommand       = sFieldDescription.getToken(0, cSeparator, nIdx);
+        _nCommandType   = sFieldDescription.getToken(0, cSeparator, nIdx).toInt32();
+        _rFieldName     = sFieldDescription.getToken(0, cSeparator, nIdx);
 
         return true;
     }
