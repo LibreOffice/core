@@ -2029,8 +2029,9 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 bool valid = false;
                 if (comphelper::string::getTokenCount(aContent, ';') == 2)
                 {
-                    Date aDate(aContent.getToken(0, ';').toInt32());
-                    auto nTime = aContent.getToken(1, ';').toInt64();
+                    sal_Int32 nIdx{ 0 };
+                    Date aDate(aContent.getToken(0, ';', nIdx).toInt32());
+                    auto nTime = aContent.getToken(0, ';', nIdx).toInt64();
                     if (nTime < 0)
                         nTime = o3tl::saturating_toggle_sign(nTime);
                     tools::Time aTime(nTime);
