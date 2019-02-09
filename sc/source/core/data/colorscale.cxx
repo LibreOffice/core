@@ -374,9 +374,9 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
 ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
     ScColorFormat(pDoc)
 {
-    for(ScColorScaleEntries::const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
+    for(const auto& rxEntry : rFormat)
     {
-        maColorScales.push_back(std::make_unique<ScColorScaleEntry>(pDoc, **itr));
+        maColorScales.push_back(std::make_unique<ScColorScaleEntry>(pDoc, *rxEntry));
     }
 }
 

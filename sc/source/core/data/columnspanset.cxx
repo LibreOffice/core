@@ -114,9 +114,8 @@ void ColumnSpanSet::set( SCTAB nTab, SCCOL nCol, const SingleColumnSpanSet& rSin
 {
     SingleColumnSpanSet::SpansType aSpans;
     rSingleSet.getSpans(aSpans);
-    SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-    for (; it != itEnd; ++it)
-        set(nTab, nCol, it->mnRow1, it->mnRow2, bVal);
+    for (const auto& rSpan : aSpans)
+        set(nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, bVal);
 }
 
 void ColumnSpanSet::scan(
@@ -243,12 +242,11 @@ SingleColumnSpanSet::SingleColumnSpanSet() : maSpans(0, MAXROWCOUNT, false) {}
 void SingleColumnSpanSet::scan(const ScColumn& rColumn)
 {
     const CellStoreType& rCells = rColumn.maCells;
-    sc::CellStoreType::const_iterator it = rCells.begin(), itEnd = rCells.end();
     SCROW nCurRow = 0;
-    for (;it != itEnd; ++it)
+    for (const auto& rCell : rCells)
     {
-        SCROW nEndRow = nCurRow + it->size; // Last row of current block plus 1.
-        if (it->type != sc::element_type_empty)
+        SCROW nEndRow = nCurRow + rCell.size; // Last row of current block plus 1.
+        if (rCell.type != sc::element_type_empty)
             maSpans.insert_back(nCurRow, nEndRow, true);
 
         nCurRow = nEndRow;
@@ -307,10 +305,9 @@ void SingleColumnSpanSet::getRows(std::vector<SCROW> &rRows) const
 
     SpansType aRanges;
     getSpans(aRanges);
-    SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rRange : aRanges)
     {
-        for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
+        for (SCROW nRow = rRange.mnRow1; nRow <= rRange.mnRow2; ++nRow)
             aRows.push_back(nRow);
     }
 

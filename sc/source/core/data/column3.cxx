@@ -77,10 +77,9 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
     // Broadcast the changes.
     ScDocument* pDocument = GetDoc();
     ScHint aHint(nHint, ScAddress(nCol, 0, nTab));
-    std::vector<SCROW>::const_iterator itRow = rRows.begin(), itRowEnd = rRows.end();
-    for (; itRow != itRowEnd; ++itRow)
+    for (const auto& rRow : rRows)
     {
-        aHint.GetAddress().SetRow(*itRow);
+        aHint.GetAddress().SetRow(rRow);
         pDocument->Broadcast(aHint);
     }
 }
@@ -746,9 +745,8 @@ void ScColumn::DeleteArea(
         {
             sc::SingleColumnSpanSet::SpansType aSpans;
             aDeletedRows.getSpans(aSpans);
-            sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-            for (; it != itEnd; ++it)
-                pBroadcastSpans->set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+            for (const auto& rSpan : aSpans)
+                pBroadcastSpans->set(nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
         }
     }
 
@@ -1523,39 +1521,38 @@ public:
         sc::CellStoreType::iterator& itDestPos = mrBlockPos.miCellPos;
         sc::CellTextAttrStoreType::iterator& itDestAttrPos = mrBlockPos.miCellTextAttrPos;
 
-        sc::CellStoreType::iterator it = maNewCells.begin(), itEnd = maNewCells.end();
-        for (; it != itEnd; ++it)
+        for (const auto& rNewCell : maNewCells)
         {
             bool bHasContent = true;
-            size_t nDestRow = mnRowOffset + it->position;
+            size_t nDestRow = mnRowOffset + rNewCell.position;
 
-            switch (it->type)
+            switch (rNewCell.type)
             {
                 case sc::element_type_numeric:
                 {
-                    sc::numeric_block::iterator itData = sc::numeric_block::begin(*it->data);
-                    sc::numeric_block::iterator itDataEnd = sc::numeric_block::end(*it->data);
+                    sc::numeric_block::iterator itData = sc::numeric_block::begin(*rNewCell.data);
+                    sc::numeric_block::iterator itDataEnd = sc::numeric_block::end(*rNewCell.data);
                     itDestPos = mrDestColumn.GetCellStore().set(itDestPos, nDestRow, itData, itDataEnd);
                 }
                 break;
                 case sc::element_type_string:
                 {
-                    sc::string_block::iterator itData = sc::string_block::begin(*it->data);
-                    sc::string_block::iterator itDataEnd = sc::string_block::end(*it->data);
+                    sc::string_block::iterator itData = sc::string_block::begin(*rNewCell.data);
+                    sc::string_block::iterator itDataEnd = sc::string_block::end(*rNewCell.data);
                     itDestPos = rDestCells.set(itDestPos, nDestRow, itData, itDataEnd);
                 }
                 break;
                 case sc::element_type_edittext:
                 {
-                    sc::edittext_block::iterator itData = sc::edittext_block::begin(*it->data);
-                    sc::edittext_block::iterator itDataEnd = sc::edittext_block::end(*it->data);
+                    sc::edittext_block::iterator itData = sc::edittext_block::begin(*rNewCell.data);
+                    sc::edittext_block::iterator itDataEnd = sc::edittext_block::end(*rNewCell.data);
                     itDestPos = rDestCells.set(itDestPos, nDestRow, itData, itDataEnd);
                 }
                 break;
                 case sc::element_type_formula:
                 {
-                    sc::formula_block::iterator itData = sc::formula_block::begin(*it->data);
-                    sc::formula_block::iterator itDataEnd = sc::formula_block::end(*it->data);
+                    sc::formula_block::iterator itData = sc::formula_block::begin(*rNewCell.data);
+                    sc::formula_block::iterator itDataEnd = sc::formula_block::end(*rNewCell.data);
 
                     // Group new formula cells before inserting them.
                     sc::SharedFormulaUtil::groupFormulaCells(itData, itDataEnd);
@@ -1568,7 +1565,7 @@ public:
                     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
                     // Merge with the next formula group (if any).
-                    size_t nNextRow = nDestRow + it->size;
+                    size_t nNextRow = nDestRow + rNewCell.size;
                     if (ValidRow(nNextRow))
                     {
                         aPos = rDestCells.position(aPos.first, nNextRow);
@@ -1578,7 +1575,7 @@ public:
                 break;
                 case sc::element_type_empty:
                 {
-                    itDestPos = rDestCells.set_empty(itDestPos, nDestRow, nDestRow+it->size-1);
+                    itDestPos = rDestCells.set_empty(itDestPos, nDestRow, nDestRow+rNewCell.size-1);
                     bHasContent = false;
                 }
                 break;
@@ -1589,11 +1586,11 @@ public:
             sc::CellTextAttrStoreType& rDestAttrs = mrDestColumn.GetCellAttrStore();
             if (bHasContent)
             {
-                std::vector<sc::CellTextAttr> aAttrs(it->size, sc::CellTextAttr());
+                std::vector<sc::CellTextAttr> aAttrs(rNewCell.size, sc::CellTextAttr());
                 itDestAttrPos = rDestAttrs.set(itDestAttrPos, nDestRow, aAttrs.begin(), aAttrs.end());
             }
             else
-                itDestAttrPos = rDestAttrs.set_empty(itDestAttrPos, nDestRow, nDestRow+it->size-1);
+                itDestAttrPos = rDestAttrs.set_empty(itDestAttrPos, nDestRow, nDestRow+rNewCell.size-1);
         }
 
         maNewCells.release();
@@ -2412,10 +2409,8 @@ public:
         sc::ColumnBlockPosition aBlockPos;
         rColumn.InitBlockPosition(aBlockPos);
 
-        EntriesType::iterator it = maEntries.begin(), itEnd = maEntries.end();
-        for (; it != itEnd; ++it)
+        for (const Entry& r : maEntries)
         {
-            Entry& r = *it;
             switch (r.maValue.meType)
             {
                 case CELLTYPE_VALUE:

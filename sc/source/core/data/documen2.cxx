@@ -703,14 +703,12 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             ScTableUniquePtr pSaveTab = std::move(maTabs[nOldPos]);
             maTabs.erase(maTabs.begin()+nOldPos);
             maTabs.insert(maTabs.begin()+nNewPos, std::move(pSaveTab));
-            TableContainer::iterator it = maTabs.begin();
             for (SCTAB i = 0; i < nTabCount; i++)
                 if (maTabs[i])
                     maTabs[i]->UpdateMoveTab(aCxt, i, pProgress);
-            it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->UpdateCompile();
+            for (auto& rxTab : maTabs)
+                if (rxTab)
+                    rxTab->UpdateCompile();
             SetNoListening( false );
             StartAllListeners();
 

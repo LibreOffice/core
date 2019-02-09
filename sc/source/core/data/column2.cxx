@@ -61,6 +61,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <numeric>
 
 #include <math.h>
 
@@ -667,9 +668,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
             // Go though all non-empty cells within selection.
             MaxStrLenFinder aFunc(*pDocument, nFormat);
             sc::CellStoreType::const_iterator itPos = maCells.begin();
-            sc::SingleColumnSpanSet::SpansType::const_iterator it = aMarkedSpans.begin(), itEnd = aMarkedSpans.end();
-            for (; it != itEnd; ++it)
-                itPos = sc::ParseAllNonEmpty(itPos, maCells, it->mnRow1, it->mnRow2, aFunc);
+            for (const auto& rMarkedSpan : aMarkedSpans)
+                itPos = sc::ParseAllNonEmpty(itPos, maCells, rMarkedSpan.mnRow1, rMarkedSpan.mnRow2, aFunc);
 
             aLongStr = aFunc.getMaxLenStr();
         }
@@ -688,10 +688,9 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
         // Go though all non-empty cells within selection.
         sc::CellStoreType::const_iterator itPos = maCells.begin();
-        sc::SingleColumnSpanSet::SpansType::const_iterator it = aMarkedSpans.begin(), itEnd = aMarkedSpans.end();
-        for (; it != itEnd; ++it)
+        for (const auto& rMarkedSpan : aMarkedSpans)
         {
-            SCROW nRow1 = it->mnRow1, nRow2 = it->mnRow2;
+            SCROW nRow1 = rMarkedSpan.mnRow1, nRow2 = rMarkedSpan.mnRow2;
             SCROW nRow = nRow1;
             while (nRow <= nRow2)
             {
@@ -879,11 +878,10 @@ void ScColumn::GetOptimalHeight(
                     //  if cells are not handled individually below,
                     //  check for cells with different script type
                     sc::CellTextAttrStoreType::iterator itAttr = maCellTextAttrs.begin();
-                    sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
                     sc::CellStoreType::iterator itCells = maCells.begin();
-                    for (; it != itEnd; ++it)
+                    for (const auto& rSpan : aSpans)
                     {
-                        for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
+                        for (SCROW nRow = rSpan.mnRow1; nRow <= rSpan.mnRow2; ++nRow)
                         {
                             SvtScriptType nScript = GetRangeScriptType(itAttr, nRow, nRow, itCells);
                             if (nScript == nDefScript)
@@ -919,10 +917,9 @@ void ScColumn::GetOptimalHeight(
             {
                 ScNeededSizeOptions aOptions;
 
-                sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-                for (; it != itEnd; ++it)
+                for (const auto& rSpan : aSpans)
                 {
-                    for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
+                    for (SCROW nRow = rSpan.mnRow1; nRow <= rSpan.mnRow2; ++nRow)
                     {
                         //  only calculate the cell height when it's used later (#37928#)
 
@@ -1038,9 +1035,8 @@ public:
     {
         svl::SharedStringPool& rPool = mpDoc->GetSharedStringPool();
         sc::CellStoreType::iterator it = mrCells.begin();
-        std::vector<StrEntry>::iterator itStr = maStrEntries.begin(), itStrEnd = maStrEntries.end();
-        for (; itStr != itStrEnd; ++itStr)
-            it = mrCells.set(it, itStr->mnRow, rPool.intern(itStr->maStr));
+        for (const auto& rStrEntry : maStrEntries)
+            it = mrCells.set(it, rStrEntry.mnRow, rPool.intern(rStrEntry.maStr));
     }
 };
 
@@ -1569,15 +1565,10 @@ void ScColumn::CellStorageModified()
     }
 
     // Make sure that these two containers are synchronized wrt empty segments.
-    sc::CellStoreType::const_iterator itCell = maCells.begin();
-    sc::CellTextAttrStoreType::const_iterator itAttr = maCellTextAttrs.begin();
-
+    auto lIsEmptyType = [](const auto& rElement) { return rElement.type == sc::element_type_empty; };
     // Move to the first empty blocks.
-    while (itCell != maCells.end() && itCell->type != sc::element_type_empty)
-        ++itCell;
-
-    while (itAttr != maCellTextAttrs.end() && itAttr->type != sc::element_type_empty)
-        ++itAttr;
+    auto itCell = std::find_if(maCells.begin(), maCells.end(), lIsEmptyType);
+    auto itAttr = std::find_if(maCellTextAttrs.begin(), maCellTextAttrs.end(), lIsEmptyType);
 
     while (itCell != maCells.end())
     {
@@ -1594,12 +1585,10 @@ void ScColumn::CellStorageModified()
 
         // Move to the next empty blocks.
         ++itCell;
-        while (itCell != maCells.end() && itCell->type != sc::element_type_empty)
-            ++itCell;
+        itCell = std::find_if(itCell, maCells.end(), lIsEmptyType);
 
         ++itAttr;
-        while (itAttr != maCellTextAttrs.end() && itAttr->type != sc::element_type_empty)
-            ++itAttr;
+        itAttr = std::find_if(itAttr, maCellTextAttrs.end(), lIsEmptyType);
     }
 #endif
 }
@@ -1736,22 +1725,16 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     sc::CellTextAttrStoreType::const_iterator itBlk = maCellTextAttrs.begin(), itBlkEnd = maCellTextAttrs.end();
 
     // Locate the top row position.
-    size_t nOffsetInBlock = 0;
-    size_t nBlockStart = 0, nBlockEnd = 0, nRowPos = static_cast<size_t>(nRow1);
-    for (; itBlk != itBlkEnd; ++itBlk)
-    {
-        nBlockEnd = nBlockStart + itBlk->size;
-        if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
-        {
-            // Found.
-            nOffsetInBlock = nRowPos - nBlockStart;
-            break;
-        }
-    }
+    size_t nBlockStart = 0, nRowPos = static_cast<size_t>(nRow1);
+    itBlk = std::find_if(itBlk, itBlkEnd, [&nRowPos, &nBlockStart](const auto& rAttr) {
+        return nBlockStart <= nRowPos && nRowPos < nBlockStart + rAttr.size; });
 
     if (itBlk == itBlkEnd)
         // Specified range not found. Bail out.
         return;
+
+    size_t nBlockEnd = nBlockStart + itBlk->size;
+    size_t nOffsetInBlock = nRowPos - nBlockStart;
 
     nRowPos = static_cast<size_t>(nRow2); // End row position.
 
@@ -1878,13 +1861,12 @@ void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRo
 
 void ScColumn::PrepareBroadcastersForDestruction()
 {
-    sc::BroadcasterStoreType::iterator itPos = maBroadcasters.begin(), itPosEnd = maBroadcasters.end();
-    for (; itPos != itPosEnd; ++itPos)
+    for (auto& rBroadcaster : maBroadcasters)
     {
-        if (itPos->type == sc::element_type_broadcaster)
+        if (rBroadcaster.type == sc::element_type_broadcaster)
         {
-            sc::broadcaster_block::iterator it = sc::broadcaster_block::begin(*itPos->data);
-            sc::broadcaster_block::iterator itEnd = sc::broadcaster_block::end(*itPos->data);
+            sc::broadcaster_block::iterator it = sc::broadcaster_block::begin(*rBroadcaster.data);
+            sc::broadcaster_block::iterator itEnd = sc::broadcaster_block::end(*rBroadcaster.data);
             for (; it != itEnd; ++it)
                 (*it)->PrepareForDestruction();
         }
@@ -1962,25 +1944,20 @@ void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1,
 
 bool ScColumn::HasCellNotes() const
 {
-    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-    for (; it != itEnd; ++it)
-    {
-        if (it->type == sc::element_type_cellnote)
+    return std::any_of(maCellNotes.begin(), maCellNotes.end(),
+        [](const auto& rCellNote) {
             // Having a cellnote block automatically means there is at least one cell note.
-            return true;
-    }
-    return false;
+            return rCellNote.type == sc::element_type_cellnote; });
 }
 
 SCROW ScColumn::GetCellNotesMaxRow() const
 {
     // hypothesis : the column has cell notes (should be checked before)
     SCROW maxRow = 0;
-    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rCellNote : maCellNotes)
     {
-        if (it->type == sc::element_type_cellnote)
-            maxRow = it->position + it->size -1;
+        if (rCellNote.type == sc::element_type_cellnote)
+            maxRow = rCellNote.position + rCellNote.size -1;
     }
     return maxRow;
 }
@@ -1988,16 +1965,10 @@ SCROW ScColumn::GetCellNotesMinRow() const
 {
     // hypothesis : the column has cell notes (should be checked before)
     SCROW minRow = 0;
-    bool bFound = false;
-    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-    for (; it != itEnd && !bFound; ++it)
-    {
-        if (it->type == sc::element_type_cellnote)
-        {
-            bFound = true;
-            minRow = it->position;
-        }
-    }
+    sc::CellNoteStoreType::const_iterator it = std::find_if(maCellNotes.begin(), maCellNotes.end(),
+        [](const auto& rCellNote) { return rCellNote.type == sc::element_type_cellnote; });
+    if (it != maCellNotes.end())
+        minRow = it->position;
     return minRow;
 }
 
@@ -3400,15 +3371,13 @@ void ScColumn::UpdateSelectionFunction(
     sc::SingleColumnSpanSet::SpansType aSpans;
     aSpanSet.getSpans(aSpans);
 
-    sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-
     switch (rData.getFunc())
     {
         case SUBTOTAL_FUNC_SELECTION_COUNT:
         {
             // Simply count selected rows regardless of cell contents.
-            for (; it != itEnd; ++it)
-                rData.update( it->mnRow2 - it->mnRow1 + 1);
+            for (const auto& rSpan : aSpans)
+                rData.update( rSpan.mnRow2 - rSpan.mnRow1 + 1);
         }
         break;
         case SUBTOTAL_FUNC_CNT2:
@@ -3416,10 +3385,10 @@ void ScColumn::UpdateSelectionFunction(
             // We need to parse all non-empty cells.
             sc::CellStoreType::const_iterator itCellPos = maCells.begin();
             UpdateSubTotalHandler aFunc(rData);
-            for (; it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
                 itCellPos = sc::ParseAllNonEmpty(
-                    itCellPos, maCells, it->mnRow1, it->mnRow2, aFunc);
+                    itCellPos, maCells, rSpan.mnRow1, rSpan.mnRow2, aFunc);
             }
         }
         break;
@@ -3428,10 +3397,10 @@ void ScColumn::UpdateSelectionFunction(
             // We need to parse only numeric values.
             sc::CellStoreType::const_iterator itCellPos = maCells.begin();
             UpdateSubTotalHandler aFunc(rData);
-            for (; it != itEnd; ++it)
+            for (const auto& rSpan : aSpans)
             {
                 itCellPos = sc::ParseFormulaNumeric(
-                    itCellPos, maCells, it->mnRow1, it->mnRow2, aFunc);
+                    itCellPos, maCells, rSpan.mnRow1, rSpan.mnRow2, aFunc);
             }
         }
     }
@@ -3460,17 +3429,9 @@ public:
             break;
             case sc::element_type_formula:
             {
-                size_t nCount = 0;
                 // Each formula cell is worth its code length plus 5.
-                sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
-                sc::formula_block::const_iterator itEnd = sc::formula_block::end(*node.data);
-                for (; it != itEnd; ++it)
-                {
-                    const ScFormulaCell* p = *it;
-                    nCount += 5 + p->GetCode()->GetCodeLen();
-                }
-
-                return nCount;
+                return std::accumulate(sc::formula_block::begin(*node.data), sc::formula_block::end(*node.data), size_t(0),
+                    [](const size_t& rCount, const ScFormulaCell* p) { return rCount + 5 + p->GetCode()->GetCodeLen(); });
             }
             break;
             case sc::element_type_edittext:
