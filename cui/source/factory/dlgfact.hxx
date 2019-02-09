@@ -506,7 +506,14 @@ class FmSearchDialog;
 struct FmFoundRecordInformation;
 class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog)
+protected:
+    std::unique_ptr<FmSearchDialog> m_xDlg;
+public:
+    explicit AbstractFmSearchDialog_Impl(std::unique_ptr<FmSearchDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) override ;
     virtual void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk) override;
     virtual void SetActiveField(const OUString& strField) override;
@@ -783,7 +790,7 @@ public:
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings) override;
-    virtual VclPtr<AbstractFmSearchDialog>         CreateFmSearchDialog(vcl::Window* pParent,
+    virtual VclPtr<AbstractFmSearchDialog>         CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
