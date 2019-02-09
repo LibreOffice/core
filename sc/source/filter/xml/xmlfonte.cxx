@@ -49,8 +49,9 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
     {
         const SfxPoolItem* pItem;
         sal_uInt16 nWhichId(pWhichIds[i]);
-        if (bExportDefaults && (nullptr != (pItem = &pItemPool->GetDefaultItem(nWhichId))))
+        if (bExportDefaults)
         {
+            pItem = &pItemPool->GetDefaultItem(nWhichId);
             const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
                     pFont->GetFamily(), pFont->GetPitch(),

@@ -1674,69 +1674,63 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
             throw io::IOException( THROW_WHERE );
 
-        if ( m_nRelInfoStatus == RELINFO_CHANGED
-          || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
-          || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+        if (m_nRelInfoStatus == RELINFO_CHANGED)
         {
-            if ( m_nRelInfoStatus == RELINFO_CHANGED )
-            {
-                if ( m_aRelInfo.getLength() )
-                {
-                    CreateRelStorage();
-
-                    uno::Reference< io::XStream > xRelsStream =
-                        m_xRelStorage->openStreamElement( ".rels" ,
-                                                            embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
-
-                    uno::Reference< io::XOutputStream > xOutStream = xRelsStream->getOutputStream();
-                    if ( !xOutStream.is() )
-                        throw uno::RuntimeException( THROW_WHERE );
-
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, m_xContext );
-
-                    // set the mediatype
-                    uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                    xPropSet->setPropertyValue(
-                        "MediaType",
-                        uno::makeAny( OUString( "application/vnd.openxmlformats-package.relationships+xml" ) ) );
-
-                    m_nRelInfoStatus = RELINFO_READ;
-                }
-                else if ( m_xRelStorage.is() )
-                    RemoveStreamRelInfo( OUString() ); // remove own rel info
-            }
-            else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
-                      || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+            if (m_aRelInfo.getLength())
             {
                 CreateRelStorage();
 
-                uno::Reference< io::XStream > xRelsStream =
-                    m_xRelStorage->openStreamElement( ".rels",
-                                                        embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
+                uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
+                    ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
 
-                uno::Reference< io::XOutputStream > xOutputStream = xRelsStream->getOutputStream();
-                if ( !xOutputStream.is() )
-                    throw uno::RuntimeException( THROW_WHERE );
+                uno::Reference<io::XOutputStream> xOutStream = xRelsStream->getOutputStream();
+                if (!xOutStream.is())
+                    throw uno::RuntimeException(THROW_WHERE);
 
-                uno::Reference< io::XSeekable > xSeek( m_xNewRelInfoStream, uno::UNO_QUERY_THROW );
-                xSeek->seek( 0 );
-                ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
+                ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence(xOutStream, m_aRelInfo,
+                                                                        m_xContext);
 
                 // set the mediatype
-                uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
+                uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
                 xPropSet->setPropertyValue(
-                    "MediaType",
-                    uno::makeAny( OUString( "application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                    "MediaType", uno::makeAny(OUString(
+                                     "application/vnd.openxmlformats-package.relationships+xml")));
 
-                m_xNewRelInfoStream.clear();
-                if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
-                {
-                    m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-                    m_nRelInfoStatus = RELINFO_NO_INIT;
-                }
-                else
-                    m_nRelInfoStatus = RELINFO_READ;
+                m_nRelInfoStatus = RELINFO_READ;
             }
+            else if (m_xRelStorage.is())
+                RemoveStreamRelInfo(OUString()); // remove own rel info
+        }
+        else if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
+                 || m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
+        {
+            CreateRelStorage();
+
+            uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
+                ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
+
+            uno::Reference<io::XOutputStream> xOutputStream = xRelsStream->getOutputStream();
+            if (!xOutputStream.is())
+                throw uno::RuntimeException(THROW_WHERE);
+
+            uno::Reference<io::XSeekable> xSeek(m_xNewRelInfoStream, uno::UNO_QUERY_THROW);
+            xSeek->seek(0);
+            ::comphelper::OStorageHelper::CopyInputToOutput(m_xNewRelInfoStream, xOutputStream);
+
+            // set the mediatype
+            uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
+            xPropSet->setPropertyValue(
+                "MediaType",
+                uno::makeAny(OUString("application/vnd.openxmlformats-package.relationships+xml")));
+
+            m_xNewRelInfoStream.clear();
+            if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
+            {
+                m_aRelInfo = uno::Sequence<uno::Sequence<beans::StringPair>>();
+                m_nRelInfoStatus = RELINFO_NO_INIT;
+            }
+            else
+                m_nRelInfoStatus = RELINFO_READ;
         }
 
         if ( m_xRelStorage.is() )

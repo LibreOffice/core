@@ -998,7 +998,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     break;
                 }
                 // anything not recognized will stop the scan
-                if ( eState != SsStop && !bDontStop )
+                if (!bDontStop)
                 {
                     eState = SsStop;
                     nPos--;
