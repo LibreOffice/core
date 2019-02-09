@@ -553,10 +553,11 @@ void SfxDocTplService_Impl::getDirList()
     const OUString aPrefix(
         "vnd.sun.star.expand:"  );
 
+    sal_Int32 nIdx{ 0 };
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         aURL.SetSmartProtocol( INetProtocol::File );
-        aURL.SetURL( aDirs.getToken( i, C_DELIM ) );
+        aURL.SetURL( aDirs.getToken( 0, C_DELIM, nIdx ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
