@@ -1432,8 +1432,9 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     const OUString& aValue = rKV.GetValue();
     if( rKV.GetKey().equalsIgnoreAsciiCase("refresh") && !rKV.GetValue().isEmpty() )
     {
-        sal_uInt32 nTime = aValue.getToken(  0, ';' ).toInt32() ;
-        const OUString aURL = comphelper::string::strip(aValue.getToken( 1, ';' ), ' ');
+        sal_Int32 nIdx{ 0 };
+        const sal_Int32 nTime{ aValue.getToken( 0, ';', nIdx ).toInt32() };
+        const OUString aURL{ comphelper::string::strip(aValue.getToken( 0, ';', nIdx ), ' ') };
         uno::Reference<document::XDocumentProperties> xDocProps(
             pDoc->getDocProperties());
         if( aURL.startsWithIgnoreAsciiCase( "url=" ) )
