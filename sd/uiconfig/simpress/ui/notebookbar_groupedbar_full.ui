@@ -6106,7 +6106,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="svtlo-ManagedMenuButton" id="reviewp:MenuReview">
-                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewb">_Review</property>
+                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewp">_Review</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
