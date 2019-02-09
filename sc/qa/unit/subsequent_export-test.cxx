@@ -1375,139 +1375,62 @@ void ScExportTest::testRichTextExportODS()
     {
         static bool isBold(const editeng::Section& rAttr)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_WEIGHT)
-                    continue;
-
-                return static_cast<const SvxWeightItem*>(p)->GetWeight() == WEIGHT_BOLD;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_WEIGHT &&
+                    static_cast<const SvxWeightItem*>(p)->GetWeight() == WEIGHT_BOLD; });
         }
 
         static bool isItalic(const editeng::Section& rAttr)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_ITALIC)
-                    continue;
-
-                return static_cast<const SvxPostureItem*>(p)->GetPosture() == ITALIC_NORMAL;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_ITALIC &&
+                    static_cast<const SvxPostureItem*>(p)->GetPosture() == ITALIC_NORMAL; });
         }
 
         static bool isStrikeOut(const editeng::Section& rAttr)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_STRIKEOUT)
-                    continue;
-
-                return static_cast<const SvxCrossedOutItem*>(p)->GetStrikeout() == STRIKEOUT_SINGLE;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_STRIKEOUT &&
+                    static_cast<const SvxCrossedOutItem*>(p)->GetStrikeout() == STRIKEOUT_SINGLE; });
         }
 
         static bool isOverline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_OVERLINE)
-                    continue;
-
-                return static_cast<const SvxOverlineItem*>(p)->GetLineStyle() == eStyle;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [&eStyle](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_OVERLINE &&
+                    static_cast<const SvxOverlineItem*>(p)->GetLineStyle() == eStyle; });
         }
 
         static bool isUnderline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_UNDERLINE)
-                    continue;
-
-                return static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() == eStyle;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [&eStyle](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_UNDERLINE &&
+                    static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() == eStyle; });
         }
 
         static bool isFont(const editeng::Section& rAttr, const OUString& rFontName)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_FONTINFO)
-                    continue;
-
-                return static_cast<const SvxFontItem*>(p)->GetFamilyName() == rFontName;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [&rFontName](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_FONTINFO &&
+                    static_cast<const SvxFontItem*>(p)->GetFamilyName() == rFontName; });
         }
 
         static bool isEscapement(const editeng::Section& rAttr, short nEsc, sal_uInt8 nRelSize)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_ESCAPEMENT)
-                    continue;
-
-                const SvxEscapementItem* pItem = static_cast<const SvxEscapementItem*>(p);
-                return ((pItem->GetEsc() == nEsc) && (pItem->GetProportionalHeight() == nRelSize));
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(),
+                [&nEsc, &nRelSize](const SfxPoolItem* p) {
+                    if (p->Which() != EE_CHAR_ESCAPEMENT)
+                        return false;
+                    const SvxEscapementItem* pItem = static_cast<const SvxEscapementItem*>(p);
+                    return ((pItem->GetEsc() == nEsc) && (pItem->GetProportionalHeight() == nRelSize));
+                });
         }
 
         static bool isColor(const editeng::Section& rAttr, Color nColor)
         {
-            if (rAttr.maAttributes.empty())
-                return false;
-
-            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
-            for (; it != itEnd; ++it)
-            {
-                const SfxPoolItem* p = *it;
-                if (p->Which() != EE_CHAR_COLOR)
-                    continue;
-
-                return static_cast<const SvxColorItem*>(p)->GetValue() == nColor;
-            }
-            return false;
+            return std::any_of(rAttr.maAttributes.begin(), rAttr.maAttributes.end(), [&nColor](const SfxPoolItem* p) {
+                return p->Which() == EE_CHAR_COLOR &&
+                    static_cast<const SvxColorItem*>(p)->GetValue() == nColor; });
         }
 
         bool checkB2(const EditTextObject* pText) const
