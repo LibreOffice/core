@@ -109,12 +109,12 @@ namespace dbaui
         sal_Int32 GetFunctionType() const { return m_eFunctionType; }
         sal_uInt16 GetColumnId() const { return m_nColumnId;}
 
-        bool isAggreateFunction() const { return (m_eFunctionType & FKT_AGGREGATE) == FKT_AGGREGATE; }
+        bool isAggregateFunction() const { return (m_eFunctionType & FKT_AGGREGATE) == FKT_AGGREGATE; }
         bool isOtherFunction() const { return (m_eFunctionType & FKT_OTHER) == FKT_OTHER; }
         bool isNumeric() const { return (m_eFunctionType & FKT_NUMERIC) == FKT_NUMERIC; }
         bool isNoneFunction() const { return m_eFunctionType == FKT_NONE; }
         bool isCondition() const { return (m_eFunctionType & FKT_CONDITION) == FKT_CONDITION;  }
-        bool isNumericOrAggreateFunction() const { return isNumeric() || isAggreateFunction(); }
+        bool isNumericOrAggregateFunction() const { return isNumeric() || isAggregateFunction(); }
 
         bool HasCriteria() const
         {

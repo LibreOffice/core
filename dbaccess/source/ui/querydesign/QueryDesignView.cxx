@@ -659,7 +659,7 @@ namespace
                     else
                         aTmpStr.append(rFieldName);
 
-                    if  ( field->isAggreateFunction() )
+                    if  ( field->isAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
                         OUStringBuffer aTmpStr2( field->GetFunction());
@@ -671,7 +671,7 @@ namespace
 
                     if (!rFieldAlias.isEmpty()                         &&
                         (rFieldName.toChar() != '*'                     ||
-                        field->isNumericOrAggreateFunction()      ||
+                        field->isNumericOrAggregateFunction()      ||
                         field->isOtherFunction()))
                     {
                         aTmpStr.append(" AS ");
@@ -750,14 +750,14 @@ namespace
                         else
                             aWork += ::dbtools::quoteName(aQuote, aFieldName);
 
-                        if ( field->isAggreateFunction() || field->IsGroupBy() )
+                        if ( field->isAggregateFunction() || field->IsGroupBy() )
                         {
                             if (aHavingStr.isEmpty())            // no more criteria
                                 aHavingStr += "(";               // bracket
                             else
                                 aHavingStr += C_AND;
 
-                            if ( field->isAggreateFunction() )
+                            if ( field->isAggregateFunction() )
                             {
                                 OSL_ENSURE(!field->GetFunction().isEmpty(),"No function name for aggregate given!");
                                 aHavingStr += field->GetFunction() + "(" + aWork + ")";       // bracket
@@ -904,7 +904,7 @@ namespace
                     {
                         aWorkStr += ::dbtools::quoteName(aQuote, field->GetFieldAlias());
                     }
-                    else if ( field->isNumericOrAggreateFunction() )
+                    else if ( field->isNumericOrAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name cannot be empty! ;-(");
                         aWorkStr += field->GetFunction() + "("
@@ -2916,14 +2916,14 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
     {
         // we have a function here so we have to distinguish the type of return vOUalue
         OUString sFunction;
-        if ( pEntry->isNumericOrAggreateFunction() )
+        if ( pEntry->isNumericOrAggregateFunction() )
             sFunction = pEntry->GetFunction().getToken(0, '(');
 
         if ( sFunction.isEmpty() )
             sFunction = pEntry->GetField().getToken(0, '(');
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&rParser.getContext());
-        if ( nType == DataType::OTHER || (sFunction.isEmpty() && pEntry->isNumericOrAggreateFunction()) )
+        if ( nType == DataType::OTHER || (sFunction.isEmpty() && pEntry->isNumericOrAggregateFunction()) )
         {
             // first try the international version
             OUString sSql;
