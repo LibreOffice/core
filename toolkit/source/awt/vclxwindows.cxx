@@ -2039,7 +2039,7 @@ namespace
 {
      Image lcl_getImageFromURL( const OUString& i_rImageURL )
      {
-         if ( i_rImageURL.isEmpty() )
+        if ( i_rImageURL.isEmpty() )
              return Image();
 
         try
@@ -2050,12 +2050,12 @@ namespace
              aMediaProperties.put( "URL", i_rImageURL );
              Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
              return Image( xGraphic );
-         }
-         catch( const uno::Exception& )
-         {
+        }
+        catch( const uno::Exception& )
+        {
              DBG_UNHANDLED_EXCEPTION("toolkit");
-         }
-         return Image();
+        }
+        return Image();
      }
 }
 void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent )
@@ -6433,7 +6433,7 @@ void VCLXPatternField::setProperty( const OUString& PropertyName, const css::uno
                         aEditMask = aString;
                     else
                         aLiteralMask = aString;
-                     setMasks( aEditMask, aLiteralMask );
+                    setMasks( aEditMask, aLiteralMask );
                 }
             }
             break;

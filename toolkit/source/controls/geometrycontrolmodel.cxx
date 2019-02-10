@@ -476,7 +476,7 @@
             throw IllegalArgumentException();
         }
 
-            HashMapString2Int &rMap = ServiceSpecifierMap::get();
+        HashMapString2Int &rMap = ServiceSpecifierMap::get();
         HashMapString2Int::iterator aPropMapIdPos = rMap.find( m_sServiceSpecifier );
         if ( rMap.end() == aPropMapIdPos )
         {

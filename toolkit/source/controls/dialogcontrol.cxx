@@ -338,7 +338,7 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
 {
         // #Can we move all the Resource stuff to the ControlContainerBase ?
     SolarMutexGuard aGuard;
-        bool bRet = ControlContainerBase::setModel( rxModel );
+    bool bRet = ControlContainerBase::setModel( rxModel );
     ImplStartListingForResourceEvents();
     return bRet;
 }
@@ -767,8 +767,8 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
     uno::Reference< awt::XSimpleTabController > xTabCntrl( getPeer(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
 
-   VCLXTabPage* pXPage = dynamic_cast< VCLXTabPage* >( xPage.get() );
-   TabPage* pPage = pXPage ? pXPage->getTabPage() : nullptr;
+    VCLXTabPage* pXPage = dynamic_cast< VCLXTabPage* >( xPage.get() );
+    TabPage* pPage = pXPage ? pXPage->getTabPage() : nullptr;
     if ( xTabCntrl.is() && pPage )
     {
         VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );

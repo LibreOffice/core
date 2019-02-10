@@ -60,7 +60,7 @@ VCLXMenu::~VCLXMenu()
     if ( mpMenu )
     {
         mpMenu->RemoveEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
-         mpMenu.disposeAndClear();
+        mpMenu.disposeAndClear();
     }
 }
 

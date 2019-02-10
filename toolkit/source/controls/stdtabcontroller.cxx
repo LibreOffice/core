@@ -309,7 +309,7 @@ void StdTabController::activateTabOrder(  )
     Reference< XVclContainerPeer >  xVclContainerPeer;
     if ( xC.is() )
         xVclContainerPeer.set(xC->getPeer(), css::uno::UNO_QUERY);
-     if ( !xC.is() || !xVclContainerPeer.is() )
+    if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
     // This may return a TabController, which returns desired list of controls faster
