@@ -234,7 +234,7 @@ namespace ucb { namespace ucp { namespace ext
         else if ( aCommand.Name == "open" )
         {
             OpenCommandArgument2 aOpenCommand;
-              if ( !( aCommand.Argument >>= aOpenCommand ) )
+            if ( !( aCommand.Argument >>= aOpenCommand ) )
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),

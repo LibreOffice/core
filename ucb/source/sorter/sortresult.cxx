@@ -952,8 +952,8 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
                 nTmp = static_cast<sal_Int32>(aTwo.Year) - static_cast<sal_Int32>(aOne.Year);
                 if ( !nTmp ) {
                     nTmp = static_cast<sal_Int32>(aTwo.Month) - static_cast<sal_Int32>(aOne.Month);
-                if ( !nTmp )
-                    nTmp = static_cast<sal_Int32>(aTwo.Day) - static_cast<sal_Int32>(aOne.Day);
+                    if ( !nTmp )
+                        nTmp = static_cast<sal_Int32>(aTwo.Day) - static_cast<sal_Int32>(aOne.Day);
                 }
 
                 if ( nTmp < 0 )
@@ -976,14 +976,13 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
                     aTwo = xRowTwo->getTime( nColumn );
 
                 nTmp = static_cast<sal_Int32>(aTwo.Hours) - static_cast<sal_Int32>(aOne.Hours);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Minutes) - static_cast<sal_Int32>(aOne.Minutes);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Seconds) - static_cast<sal_Int32>(aOne.Seconds);
                 if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.NanoSeconds)
                                     - static_cast<sal_Int32>(aOne.NanoSeconds);
-                }}
 
                 if ( nTmp < 0 )
                     nCompare = -1;
@@ -1005,20 +1004,19 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
                     aTwo = xRowTwo->getTimestamp( nColumn );
 
                 nTmp = static_cast<sal_Int32>(aTwo.Year) - static_cast<sal_Int32>(aOne.Year);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Month) - static_cast<sal_Int32>(aOne.Month);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Day) - static_cast<sal_Int32>(aOne.Day);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Hours) - static_cast<sal_Int32>(aOne.Hours);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Minutes) - static_cast<sal_Int32>(aOne.Minutes);
-                if ( !nTmp ) {
+                if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.Seconds) - static_cast<sal_Int32>(aOne.Seconds);
                 if ( !nTmp )
                     nTmp = static_cast<sal_Int32>(aTwo.NanoSeconds)
                                     - static_cast<sal_Int32>(aOne.NanoSeconds);
-                }}}}}
 
                 if ( nTmp < 0 )
                     nCompare = -1;
