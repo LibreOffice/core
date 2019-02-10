@@ -2902,21 +2902,23 @@ void ScViewData::ReadUserData(const OUString& rData)
             maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
             maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
 
+            sal_Int32 nTmp{ aTabOpt.getToken(0, cTabSep, nIdx).toInt32() };
             if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
+                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(nTmp));
                 UpdateFixX(nPos);
             }
             else
-                maTabData[nPos]->nHSplitPos = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
+                maTabData[nPos]->nHSplitPos = nTmp;
 
+            nTmp = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
             if ( maTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+                maTabData[nPos]->nFixPosY = SanitizeRow(nTmp);
                 UpdateFixY(nPos);
             }
             else
-                maTabData[nPos]->nVSplitPos = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
+                maTabData[nPos]->nVSplitPos = nTmp;
 
             maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
             maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
