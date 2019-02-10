@@ -132,8 +132,9 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
         if ( nCount != 2 )
             return false;
 
-        rSize.setWidth( aStr.getToken(0, ';' ).toInt32() );
-        rSize.setHeight( aStr.getToken(1, ';' ).toInt32() );
+        sal_Int32 nIdx{ 0 };
+        rSize.setWidth( aStr.getToken(0, ';', nIdx ).toInt32() );
+        rSize.setHeight( aStr.getToken(0, ';', nIdx ).toInt32() );
 
         // negative sizes are invalid
         return !(rSize.Width() < 0 || rSize.Height() < 0);
