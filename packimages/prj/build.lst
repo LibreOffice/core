@@ -1,3 +1,2 @@
 pim	packimages	::	postprocess NULL
-pim	packimages						usr1	-	all	pim_mkout NULL
-pim	packimages\pack				nmake	-	all	pim_pack NULL
+pim	packimages\prj				nmake	-	all	pim_prj NULL

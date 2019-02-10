@@ -72,6 +72,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oovbaapi \
     oox \
     package \
+    packimages \
     padmin \
     psprint_config \
     pyuno \
