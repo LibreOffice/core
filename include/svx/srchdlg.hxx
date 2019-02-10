@@ -200,6 +200,7 @@ private:
     VclPtr<RadioButton>    m_pColumnsBtn;
     VclPtr<CheckBox>       m_pAllSheetsCB;
 
+
     SfxBindings&    rBindings;
     bool            bWriter;
     bool            bSearch;
@@ -214,6 +215,7 @@ private:
     OUString        aLayoutWriterStr;
     OUString        aLayoutCalcStr;
     OUString        aCalcStr;
+    sal_uInt16      nRememberSize;
 
     std::vector<OUString> aSearchStrings;
     std::vector<OUString> aReplaceStrings;

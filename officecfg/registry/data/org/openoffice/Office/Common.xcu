@@ -492,6 +492,9 @@
         <it>--------------------</it>
       </value>
     </prop>
+    <prop oor:name="FindReplaceRememberedSearches">
+     <value>10</value>
+    </prop>
   </node>
   <node oor:name="Save">
     <node oor:name="Document">

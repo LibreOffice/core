@@ -5641,6 +5641,11 @@
           <desc>Contains the Personas installed through extensions</desc>
         </info>
       </set>
+      <prop oor:name="FindReplaceRememberedSearches" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Number of saved searches in the Find and Replace dialog.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>
