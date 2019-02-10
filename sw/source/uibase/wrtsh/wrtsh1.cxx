@@ -41,6 +41,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/soerr.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <editeng/rsiditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
@@ -185,6 +186,10 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
+    SfxItemSet aCharAttrSet(
+        GetAttrPool(),
+        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
             // Only here parenthesizing, because the normal
@@ -204,6 +209,13 @@ void SwWrtShell::Insert( const OUString &rStr )
             aRewriter.AddRule(UndoArg3, aTmpStr);
         }
 
+        // tdf#79717 Save character formatting of the start of the selection
+        const SwPosition *pStart = GetCursor()->Start();
+        SwPaM aPaM(pStart->nNode.GetNode(), pStart->nContent.GetIndex(),
+                   pStart->nNode.GetNode(), pStart->nContent.GetIndex() + 1);
+        aCharAttrSet.ClearItem(RES_CHRATR_RSID);
+        GetPaMAttr(&aPaM, aCharAttrSet);
+
         StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
         bDeleted = DelRight();
@@ -211,6 +223,22 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
+
+    if( bDeleted )
+    {
+        // tdf#79717 Restore formatting of the deleted selection
+        SwPosition* pEnd = GetCursor()->Start();
+        SwPaM aPaM(pEnd->nNode.GetNode(), pEnd->nContent.GetIndex() - rStr.getLength(),
+                   pEnd->nNode.GetNode(), pEnd->nContent.GetIndex());
+
+        std::set<sal_uInt16> aAttribs;
+        for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; ++i)
+            if (i != sal_uInt16(RES_CHRATR_RSID))
+                aAttribs.insert(aAttribs.end(), i);
+        ResetAttr(aAttribs, &aPaM);
+
+        SetAttrSet(aCharAttrSet, SetAttrMode::DEFAULT, &aPaM);
+    }
 
     if( bStarted )
     {
