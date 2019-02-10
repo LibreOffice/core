@@ -659,7 +659,7 @@ namespace DOM
         if (result != nullptr)
             return result;
         result = lcl_search_element_by_id(cur->next, id);
-            return result;
+        return result;
     }
 
     // Returns the Element whose ID is given by elementId.

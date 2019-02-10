@@ -358,8 +358,8 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
         if (xUserData.is())
         {
             const css::beans::NamedValue* pData = lData.getConstArray();
-                  sal_Int32               c     = lData.getLength();
-                  sal_Int32               i     = 0;
+            sal_Int32               c     = lData.getLength();
+            sal_Int32               i     = 0;
             for (i=0; i<c; ++i)
             {
                 if (xUserData->hasByName(pData[i].Name))
