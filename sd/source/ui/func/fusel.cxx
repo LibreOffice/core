@@ -1418,8 +1418,9 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         // aMacro has got following format:
                         // "Macroname.Modulname.Libname.Documentname" or
                         // "Macroname.Modulname.Libname.Applicationname"
-                        OUString aMacroName = aMacro.getToken(0, '.');
-                        OUString aModulName = aMacro.getToken(1, '.');
+                        sal_Int32 nIdx{ 0 };
+                        const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
+                        const OUString aModulName = aMacro.getToken(0, '.', nIdx);
 
                         // In this moment the Call-method only
                         // resolves modulename+macroname
