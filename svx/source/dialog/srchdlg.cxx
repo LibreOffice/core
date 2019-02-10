@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sal/macros.h>
 #include <vcl/wrkwin.hxx>
@@ -80,9 +82,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace comphelper;
-
-
-#define REMEMBER_SIZE       10
 
 enum class ModifyFlags {
     NONE         = 0x000000,
@@ -335,6 +334,9 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
 
     // m_pSimilarityBtn->set_height_request(m_pSimilarityBox->get_preferred_size().Height());
     // m_pJapOptionsBtn->set_height_request(m_pJapOptionsCB->get_preferred_size().Height());
+
+    //tdf#122322
+    nRememberSize = officecfg::Office::Common::Misc::FindReplaceRememberedSearches::get().toInt32();
 
     long nTermWidth = approximate_char_width() * 32;
     m_pSearchLB->set_width_request(nTermWidth);
@@ -1633,11 +1635,11 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
         return;
 
     // delete oldest entry at maximum occupancy (ListBox and Array)
-    if(REMEMBER_SIZE < pArr->size())
+    if(nRememberSize < pArr->size())
     {
-        pListBox->RemoveEntryAt(static_cast<sal_uInt16>(REMEMBER_SIZE - 1));
-        (*pArr)[REMEMBER_SIZE - 1] = rStr;
-        pArr->erase(pArr->begin() + REMEMBER_SIZE - 1);
+        pListBox->RemoveEntryAt(static_cast<sal_uInt16>(nRememberSize - 1));
+        (*pArr)[nRememberSize - 1] = rStr;
+        pArr->erase(pArr->begin() + nRememberSize - 1);
     }
 
     pArr->insert(pArr->begin(), rStr);
