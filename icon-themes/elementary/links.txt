@@ -927,6 +927,16 @@ cmd/32/linespacing.png cmd/32/spacepara15.png
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 
+# calc toolbar previewbar
+# ==============================================
+cmd/32/margins.png cmd/32/pagemargin.png
+cmd/lc_margins.png cmd/lc_pagemargin.png
+cmd/sc_margins.png cmd/sc_pagemargin.png
+
+cmd/32/exportasgraphic.png cmd/32/graphic.png
+cmd/lc_exportasgraphic.png cmd/lc_graphic.png
+cmd/sc_exportasgraphic.png cmd/sc_graphic.png
+
 # calc toolbar draw
 # ===============================================
 cmd/32/editshapehyperlink.png cmd/32/inserthyperlink.png
@@ -2065,6 +2075,6 @@ cmd/32/renametable.png cmd/32/name.png
 cmd/lc_renametable.png cmd/lc_name.png
 cmd/sc_renametable.png cmd/sc_name.png
 
-cmd/32/exportasgraphic.png cmd/32/graphic.png
-cmd/lc_exportasgraphic.png cmd/lc_graphic.png
-cmd/sc_exportasgraphic.png cmd/sc_graphic.png
+cmd/32/textattributes.png cmd/32/fontdialog.png
+cmd/lc_textattributes.png cmdlc_fontdialog.png
+cmd/sc_textattributes.png cmd/sc_fontdialog.png
