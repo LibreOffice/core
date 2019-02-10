@@ -828,7 +828,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
         *pBegin = nNumber > aMinPaM.GetPara() ? 0 : aMinPaM.GetIndex();
             // XXX numeric overflow
         *pEnd = nNumber < aMaxPaM.GetPara()
-            ? m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).getLength()
+            ? m_rEngine.GetText(static_cast< ::sal_uInt32 >(nNumber)).getLength()
             : aMaxPaM.GetIndex();
             // XXX  numeric overflow (3x)
 
@@ -859,7 +859,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+    ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
     sal_Int32 nLength = m_rEngine.GetText(nNumber).getLength();
         // XXX  numeric overflow
     if (nIndex < 0 || nIndex > nLength)
@@ -905,7 +905,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+    ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
     ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< long >(rPoint.X),
                                             static_cast< long >(rPoint.Y))));
@@ -1013,7 +1013,7 @@ Document::retrieveCharacterAttributes(
     i++;
 
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+    ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
         // nIndex can be equal to getLength();
     if (nIndex < 0 || nIndex > m_rEngine.GetText(nNumber).getLength())
@@ -1058,7 +1058,7 @@ void Document::retrieveRunAttributesImpl(
     const css::uno::Sequence< OUString >& RequestedAttributes,
     tPropValMap& rRunAttrSeq)
 {
-    ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
+    ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
     ::TextPaM aPaM( nNumber, Index );
         // XXX  numeric overflow
     ::TextAttribFontColor const * pColor
@@ -1112,7 +1112,7 @@ Document::retrieveRunAttributes(
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard( GetMutex() );
-    ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
+    ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         // XXX  numeric overflow
     if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).getLength() )
         throw css::lang::IndexOutOfBoundsException(
@@ -1131,7 +1131,7 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         changeParagraphText(nNumber, 0, m_rEngine.GetTextLen(nNumber), false,
                             false, rText);
@@ -1146,7 +1146,7 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
@@ -1166,7 +1166,7 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
@@ -1189,7 +1189,7 @@ void Document::changeParagraphAttributes(
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
@@ -1221,7 +1221,7 @@ void Document::changeParagraphSelection(Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).getLength())
@@ -1247,7 +1247,7 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).getLength() )
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
@@ -1285,7 +1285,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
     SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
-        ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
+        ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nLineNo >= m_rEngine.GetLineCount( nNumber ) )
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
@@ -1611,11 +1611,11 @@ void Document::init()
 {
     if (m_xParagraphs == nullptr)
     {
-        const sal_uInt32 nCount = m_rEngine.GetParagraphCount();
+        const ::sal_uInt32 nCount = m_rEngine.GetParagraphCount();
         m_xParagraphs.reset(new Paragraphs);
         m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
             // numeric overflow is harmless here
-        for (sal_uInt32 i = 0; i < nCount; ++i)
+        for (::sal_uInt32 i = 0; i < nCount; ++i)
             m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
                                            m_rEngine.GetTextHeight(i))));
                 // XXX  numeric overflow
@@ -1726,7 +1726,7 @@ void Document::notifyVisibleRangeChanges(
 }
 
 void
-Document::changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
+Document::changeParagraphText(::sal_uInt32 nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
                               bool bCut, bool bPaste,
                               OUString const & rText)
 {
@@ -1752,7 +1752,7 @@ void Document::handleParagraphNotifications()
         {
         case SfxHintId::TextParaInserted:
             {
-                ::sal_uLong n = aHint.GetValue();
+                ::sal_uInt32 n = static_cast< ::sal_uInt32 >( aHint.GetValue() );
                 assert(n <= m_xParagraphs->size() && "bad SfxHintId::TextParaInserted event");
 
                 // Save the values of old iterators (the iterators themselves
@@ -1803,7 +1803,7 @@ void Document::handleParagraphNotifications()
             }
         case SfxHintId::TextParaRemoved:
             {
-                ::sal_uLong n = aHint.GetValue();
+                ::sal_uInt32 n = static_cast< ::sal_uInt32 >( aHint.GetValue() );
                 if (n == TEXT_PARA_ALL)
                 {
                     for (Paragraphs::iterator aIt(m_aVisibleBegin);
@@ -1917,7 +1917,7 @@ void Document::handleParagraphNotifications()
             }
         case SfxHintId::TextFormatPara:
             {
-                ::sal_uLong n = aHint.GetValue();
+                ::sal_uInt32 n = static_cast< ::sal_uInt32 >( aHint.GetValue() );
                 assert(n < m_xParagraphs->size() && "Bad SfxHintId::TextFormatPara event");
 
                 (*m_xParagraphs)[static_cast< Paragraphs::size_type >(n)].
