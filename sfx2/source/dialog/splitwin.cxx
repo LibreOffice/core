@@ -234,24 +234,24 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             aWinData = aTemp;
         if ( aWinData.startsWith("V") )
         {
-            pEmptyWin->nState = static_cast<sal_uInt16>(aWinData.getToken( 1, ',' ).toInt32());
+            sal_Int32 nIdx{ 0 };
+            pEmptyWin->nState = static_cast<sal_uInt16>(aWinData.getToken( 1, ',', nIdx ).toInt32());
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = true;
             bPinned = true; // always assume pinned - floating mode not used anymore
 
-            sal_uInt16 i=2;
-            sal_uInt16 nCount = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
+            sal_uInt16 nCount = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 std::unique_ptr<SfxDock_Impl> pDock(new SfxDock_Impl);
                 pDock->pWin = nullptr;
                 pDock->bNewLine = false;
                 pDock->bHide = true;
-                pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
+                pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
                 if ( !pDock->nType )
                 {
                     // could mean NewLine
-                    pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
+                    pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
                     if ( !pDock->nType )
                     {
                         // Read error
