@@ -1472,9 +1472,8 @@ void SfxHelpIndexWindow_Impl::Initialize()
     for (const OUString & rRow : aFactories)
     {
         sal_Int32 nIdx = 0;
-        OUString aTitle = rRow.getToken( 0, '\t', nIdx );
-        nIdx = 0;
-        OUString aURL = rRow.getToken( 2, '\t', nIdx );
+        OUString aTitle = rRow.getToken( 0, '\t', nIdx ); // token 0
+        OUString aURL = rRow.getToken( 1, '\t', nIdx ); // token 2
         OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
         const sal_Int32 nPos = m_pActiveLB->InsertEntry( aTitle );
         m_pActiveLB->SetEntryData( nPos, pFactory );
@@ -2794,8 +2793,9 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
         OUString aAnchor = OUString('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
-            aId = aEntry.getToken( 0, '#' );
-            aAnchor += aEntry.getToken( 1, '#' );
+            sal_Int32 nIdx{ 0 };
+            aId = aEntry.getToken( 0, '#', nIdx );
+            aAnchor += aEntry.getToken( 0, '#', nIdx );
         }
         else
             aId = aEntry;
