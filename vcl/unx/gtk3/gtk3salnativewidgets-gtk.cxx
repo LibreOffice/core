@@ -2929,8 +2929,7 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
                   OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
 
-    int nPointHeight = 0;
-        nPointHeight = nPangoHeight/PANGO_SCALE;
+    int nPointHeight = nPangoHeight/PANGO_SCALE;
 
     vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )

@@ -293,14 +293,14 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     long    nEndRed     = aEndCol.GetRed();
     long    nEndGreen   = aEndCol.GetGreen();
     long    nEndBlue    = aEndCol.GetBlue();
-            nFactor     = rGradient.GetStartIntensity();
-            nStartRed   = (nStartRed   * nFactor) / 100;
-            nStartGreen = (nStartGreen * nFactor) / 100;
-            nStartBlue  = (nStartBlue  * nFactor) / 100;
-            nFactor     = rGradient.GetEndIntensity();
-            nEndRed     = (nEndRed   * nFactor) / 100;
-            nEndGreen   = (nEndGreen * nFactor) / 100;
-            nEndBlue    = (nEndBlue  * nFactor) / 100;
+    nFactor     = rGradient.GetStartIntensity();
+    nStartRed   = (nStartRed   * nFactor) / 100;
+    nStartGreen = (nStartGreen * nFactor) / 100;
+    nStartBlue  = (nStartBlue  * nFactor) / 100;
+    nFactor     = rGradient.GetEndIntensity();
+    nEndRed     = (nEndRed   * nFactor) / 100;
+    nEndGreen   = (nEndGreen * nFactor) / 100;
+    nEndBlue    = (nEndBlue  * nFactor) / 100;
 
     // gradient style axial has exchanged start and end colors
     if ( !bLinear)
@@ -651,14 +651,14 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     long    nEndRed     = aEndCol.GetRed();
     long    nEndGreen   = aEndCol.GetGreen();
     long    nEndBlue    = aEndCol.GetBlue();
-            nFactor     = rGradient.GetStartIntensity();
-            nStartRed   = (nStartRed   * nFactor) / 100;
-            nStartGreen = (nStartGreen * nFactor) / 100;
-            nStartBlue  = (nStartBlue  * nFactor) / 100;
-            nFactor     = rGradient.GetEndIntensity();
-            nEndRed     = (nEndRed   * nFactor) / 100;
-            nEndGreen   = (nEndGreen * nFactor) / 100;
-            nEndBlue    = (nEndBlue  * nFactor) / 100;
+    nFactor     = rGradient.GetStartIntensity();
+    nStartRed   = (nStartRed   * nFactor) / 100;
+    nStartGreen = (nStartGreen * nFactor) / 100;
+    nStartBlue  = (nStartBlue  * nFactor) / 100;
+    nFactor     = rGradient.GetEndIntensity();
+    nEndRed     = (nEndRed   * nFactor) / 100;
+    nEndGreen   = (nEndGreen * nFactor) / 100;
+    nEndBlue    = (nEndBlue  * nFactor) / 100;
 
     // gradient style axial has exchanged start and end colors
     if ( !bLinear)

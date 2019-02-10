@@ -281,7 +281,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     {
         long w = IsVirtual() ? mnOutWidth : mpGraphics->GetGraphicsWidth();
         long x = rSalLayout.DrawBase().X();
-           rSalLayout.DrawBase().setX( w - 1 - x );
+        rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = this;

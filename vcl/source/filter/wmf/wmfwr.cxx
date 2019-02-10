@@ -1612,16 +1612,16 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 default:
                     // TODO: Implement more cases as necessary. Let's not bother with a warning.
                 break;
-          }
+            }
 
-          nWrittenActions++;
-          MayCallback();
+            nWrittenActions++;
+            MayCallback();
 
-          if (pWMF->GetError())
-            bStatus=false;
+            if (pWMF->GetError())
+                bStatus=false;
 
-          if(!bStatus)
-            break;
+            if(!bStatus)
+                break;
         }
     }
 }

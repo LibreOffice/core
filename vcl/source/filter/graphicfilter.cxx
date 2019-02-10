@@ -831,10 +831,10 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 aMap.SetScaleY( aFrac );
 
                 Size aOldSize = aBitmap.GetSizePixel();
-               aGraphic = rGraphic;
-               aGraphic.SetPrefMapMode( aMap );
-               aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
-                                           aOldSize.Height() * 100 ) );
+                aGraphic = rGraphic;
+                aGraphic.SetPrefMapMode( aMap );
+                aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
+                                            aOldSize.Height() * 100 ) );
             }
             // Size is set
             else if( nMode == 2 )

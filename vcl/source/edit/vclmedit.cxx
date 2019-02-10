@@ -125,7 +125,7 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     const bool bHaveHScroll = (nullptr != mpHScrollBar);
     const bool bHaveScrollBox = (nullptr != mpScrollBox);
 
-          bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
     const bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
 
     const bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;

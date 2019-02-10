@@ -5401,8 +5401,8 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
             aLine.append( "\n" );
         }
 
-         aLine.append( "/CreationDate" );
-         appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
+        aLine.append( "/CreationDate" );
+        appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
         aLine.append( ">>\nendobj\n\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             nObject = 0;
