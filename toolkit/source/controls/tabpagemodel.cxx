@@ -115,7 +115,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
     sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
     {
-         if ( !( rArguments[ 0 ] >>= nPageId ))
+        if ( !( rArguments[ 0 ] >>= nPageId ))
              throw lang::IllegalArgumentException();
         m_nTabPageId = nPageId;
     }

@@ -538,7 +538,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     if ( xM.is() )
     {
         Reference< beans::XPropertySet > xProps( xM, UNO_QUERY );
-            if ( xProps.is() )
+        if ( xProps.is() )
             {
 
                 Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();

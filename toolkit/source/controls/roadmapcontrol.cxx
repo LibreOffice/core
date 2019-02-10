@@ -152,7 +152,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
             aRet = UnoControlRoadmapModel_IBase::queryInterface( rType );
-         return aRet;
+        return aRet;
     }
 
 
@@ -220,7 +220,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 // As long as only vectors with up to 10 elements are
 // involved it should be sufficient
        sal_Int32 UnoControlRoadmapModel::GetUniqueID()
-      {
+       {
           Any aAny;
           bool bIncrement = true;
           sal_Int32 CurID = 0;
@@ -241,10 +241,10 @@ static void lcl_throwIndexOutOfBoundsException( )
                     CurID++;
                     break;
                 }
-            }
-        }
-        return CurID;
-    }
+              }
+          }
+          return CurID;
+       }
 
 
     ContainerEvent UnoControlRoadmapModel::GetContainerEvent(sal_Int32 Index, const Reference< XInterface >& xRoadmapItem)
@@ -369,9 +369,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoCon
 
 sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
     {
-
-
-           Reference< XContainer > xC( getModel(), UNO_QUERY );
+        Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )
             xC->removeContainerListener( this );
 
