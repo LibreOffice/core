@@ -9220,7 +9220,7 @@ fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
 dnl ===================================================================
-dnl Enable LDAP support in Base
+dnl Enable LDAP support
 dnl ===================================================================
 
 if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
