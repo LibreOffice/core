@@ -62,7 +62,7 @@ bool XMLPercentOrMeasurePropertyHandler::exportXML(
     const Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-      OUStringBuffer aOut;
+    OUStringBuffer aOut;
 
     sal_Int32 nValue = 0;
     if( !(rValue >>= nValue ) )

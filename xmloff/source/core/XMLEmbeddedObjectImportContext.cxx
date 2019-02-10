@@ -272,15 +272,15 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
 
-    try
-    {
-        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
-        xModifiable2->enableSetModified();
-        xModifiable2->setModified( true ); // trigger new replacement image generation
-    }
-    catch( Exception& )
-    {
-    }
+        try
+        {
+            Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
+            xModifiable2->enableSetModified();
+            xModifiable2->setModified( true ); // trigger new replacement image generation
+        }
+        catch( Exception& )
+        {
+        }
     }
 }
 
