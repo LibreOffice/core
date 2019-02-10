@@ -114,7 +114,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
-    vcl::Window *pMDI = &GetView().GetViewFrame()->GetWindow();
     bool bMore = false;
     bool bIsText = true;
     sal_uInt16 nInsertType = 0;
@@ -137,7 +136,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         if(rLink.IsVisible())
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
+                            ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetView().GetFrameWeld(), &rSh.GetLinkManager(), false, &rLink));
                             pDlg->Execute();
                         }
                         break;
