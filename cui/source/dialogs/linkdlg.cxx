@@ -1,6 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
+ * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -159,7 +160,7 @@ void SvBaseLinksDlg::dispose()
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void )
 {
-    const sal_uLong nSelectionCount = pSvTabListBox ?
+    const sal_uInt64 nSelectionCount = pSvTabListBox ?
         pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
@@ -174,7 +175,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
         }
         else
         {
-            for( sal_uLong i = 0; i < nSelectionCount; i++)
+            for( sal_uInt64 i = 0; i < nSelectionCount; i++)
             {
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
@@ -199,7 +200,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
     }
     else
     {
-        sal_uLong nPos;
+        sal_uInt64 nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if( !pLink )
             return;
@@ -249,7 +250,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, LinksDoubleClickHdl, SvTreeListBox *, bool )
 
 IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
 {
-    sal_uLong nPos;
+    sal_uInt64 nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
@@ -258,7 +259,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
 
 IMPL_LINK_NOARG( SvBaseLinksDlg, ManualClickHdl, Button*, void )
 {
-    sal_uLong nPos;
+    sal_uInt64 nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
@@ -360,7 +361,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
             {
                 OUString aPath = xFolderPicker->getDirectory();
 
-                for( sal_uLong i = 0; i < nSelectionCount; i++)
+                for( sal_uInt64 i = 0; i < nSelectionCount; i++)
                 {
                     pEntry = i==0 ?
                         m_pTbLinks->FirstSelected() :
@@ -396,7 +397,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
     }
     else
     {
-        sal_uLong nPos;
+        sal_uInt64 nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if ( pLink && !pLink->GetLinkSourceName().isEmpty() )
             pLink->Edit( GetFrameWeld(), LINK( this, SvBaseLinksDlg, EndEditHdl ) );
@@ -408,7 +409,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     bool bModified = false;
     if(m_pTbLinks->GetSelectionCount() <= 1)
     {
-        sal_uLong nPos;
+        sal_uInt64 nPos;
         tools::SvRef<SvBaseLink> xLink = GetSelEntry( &nPos );
         if( !xLink.is() )
             return;
@@ -465,7 +466,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
                 pEntry = m_pTbLinks->NextSelected(pEntry);
             }
             m_pTbLinks->RemoveSelection();
-            for( sal_uLong i = 0; i < aLinkList.size(); i++ )
+            for( sal_uInt64 i = 0; i < aLinkList.size(); i++ )
             {
                 tools::SvRef<SvBaseLink> xLink = aLinkList[i];
                 // tell the link that it will be resolved!
@@ -499,7 +500,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
 IMPL_LINK_NOARG( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, void )
 {
     m_pTbLinks->SetUpdateMode(false);
-    for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
+    for( sal_uInt64 nPos = m_pTbLinks->GetEntryCount(); nPos; )
     {
         SvTreeListEntry* pBox = m_pTbLinks->GetEntry( --nPos );
         tools::SvRef<SvBaseLink> xLink( static_cast<SvBaseLink*>(pBox->GetUserData()) );
@@ -516,7 +517,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, void )
 
 IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink&, _rLink, void )
 {
-    sal_uLong nPos;
+    sal_uInt64 nPos;
     GetSelEntry( &nPos );
 
     if( _rLink.WasLastEditOK() )
@@ -680,7 +681,7 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink const * pLink )
     if( pLinkMgr )
     {
         const SvBaseLinks& rLnks = pLinkMgr->GetLinks();
-        sal_uLong nSelect = 0;
+        sal_uInt64 nSelect = 0;
         for(const auto & rLinkRef : rLnks)
         {
             // #109573# only visible links have been inserted into the TreeListBox,
