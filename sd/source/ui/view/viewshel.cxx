@@ -541,7 +541,7 @@ OString ViewShell::GetTextSelection(const OString& _aMimeType, OString& rUsedMim
 
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
-    if (aMimeType == "text/plain;charset=utf-16")
+    if (bConvert || aMimeType == "text/plain;charset=utf-16")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
