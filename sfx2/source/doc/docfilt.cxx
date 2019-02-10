@@ -67,17 +67,24 @@ SfxFilter::SfxFilter( const OUString &rName,
     lFormat(lFmt),
     mbEnabled(bEnabled)
 {
-    OUString aExts = GetWildcard().getGlob();
-    OUStringBuffer glob;
-    OUString aRet;
-    sal_uInt16 nPos = 0;
-    while (!(aRet = aExts.getToken(nPos++, ';')).isEmpty() )
+    const OUString aExts = GetWildcard().getGlob();
+    sal_Int32 nLen{ aExts.getLength() };
+    if (nLen>0)
     {
-        if (!glob.isEmpty())
-            glob.append(";");
-        glob.append(aRet);
+        // truncate to first empty extension
+        if (aExts[0]==';')
+        {
+            aWildCard.setGlob("");
+            return;
+        }
+        const sal_Int32 nIdx{ aExts.indexOf(";;") };
+        if (nIdx>0)
+            nLen = nIdx;
+        else if (aExts[nLen-1]==';')
+            --nLen;
+        if (nLen<aExts.getLength())
+            aWildCard.setGlob(aExts.copy(0, nLen));
     }
-    aWildCard.setGlob(glob.makeStringAndClear());
 }
 
 SfxFilter::~SfxFilter()
