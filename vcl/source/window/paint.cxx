@@ -1386,9 +1386,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         if (!IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & ParentClipMode::NoClip))
             Erase(*pDevice);
 
+        pDevice->SetMapMode(GetMapMode());
+
         Paint(*pDevice, tools::Rectangle(Point(), GetOutputSizePixel()));
 
-        i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), aSize, *pDevice);
+        i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), pDevice->PixelToLogic(aSize), *pDevice);
 
         // get rid of virtual device now so they don't pile up during recursive calls
         pDevice.disposeAndClear();
