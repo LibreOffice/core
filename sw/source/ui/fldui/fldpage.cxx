@@ -144,14 +144,15 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
                     bRecordDB ?  FN_INSERT_DBFIELD : FN_INSERT_FIELD );
             if(bRecordDB)
             {
+                sal_Int32 nIdx{ 0 };
                 aReq.AppendItem(SfxStringItem
-                        (FN_INSERT_DBFIELD,rPar1.getToken(0, DB_DELIM)));
+                        (FN_INSERT_DBFIELD,rPar1.getToken(0, DB_DELIM, nIdx)));
                 aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_1,rPar1.getToken(1, DB_DELIM)));
+                        (FN_PARAM_1,rPar1.getToken(0, DB_DELIM, nIdx)));
                 aReq.AppendItem(SfxInt32Item
-                        (FN_PARAM_3,rPar1.getToken(2, DB_DELIM).toInt32()));
+                        (FN_PARAM_3,rPar1.getToken(0, DB_DELIM, nIdx).toInt32()));
                 aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_2,rPar1.getToken(3, DB_DELIM)));
+                        (FN_PARAM_2,rPar1.getToken(0, DB_DELIM, nIdx)));
             }
             else
             {
@@ -201,10 +202,11 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         case TYP_DBFLD:
             {
                 SwDBData aData;
-                aData.sDataSource = rPar1.getToken(0, DB_DELIM);
-                aData.sCommand = rPar1.getToken(1, DB_DELIM);
-                aData.nCommandType = rPar1.getToken(2, DB_DELIM).toInt32();
-                OUString sColumn = rPar1.getToken(3, DB_DELIM);
+                sal_Int32 nIdx{ 0 };
+                aData.sDataSource = rPar1.getToken(0, DB_DELIM, nIdx);
+                aData.sCommand = rPar1.getToken(0, DB_DELIM, nIdx);
+                aData.nCommandType = rPar1.getToken(0, DB_DELIM, nIdx).toInt32();
+                OUString sColumn = rPar1.getToken(0, DB_DELIM, nIdx);
 
                 SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pTmpField->GetTyp());
                 SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pSh->InsertFieldType(
