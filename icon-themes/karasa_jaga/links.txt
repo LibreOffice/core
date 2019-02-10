@@ -299,6 +299,7 @@ cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
 cmd/32/templatemenu.png cmd/32/templatemanager.png
 cmd/32/textalign.png cmd/32/alignblock.png
+cmd/32/textattributes.png cmd/32/fontdialog.png
 cmd/32/texttoolbox.png cmd/32/text.png
 cmd/32/thesaurusdialog.png cmd/32/thesaurus.png
 cmd/32/toggleformula.png cmd/32/insertformula.png
@@ -628,6 +629,7 @@ cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
 cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
+cmd/lc_textattributes.png cmd/lc_fontdialog.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/lc_toggleformula.png cmd/lc_insertformula.png
@@ -922,6 +924,7 @@ cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
 cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
+cmd/sc_textattributes.png cmd/sc_fontdialog.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 cmd/sc_toggleformula.png cmd/sc_insertformula.png
