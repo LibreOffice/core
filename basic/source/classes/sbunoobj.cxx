@@ -4836,11 +4836,10 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // by now all properties must be established
                         implCreateAll();
-                        OUStringBuffer aRet;
-                        aRet.append("Methods of object ");
-                        aRet.append( getDbgObjectName() );
-                        aRet.append( "\nNo methods found\n" );
-                        pVar->PutString( aRet.makeStringAndClear() );
+                        OUString aRet = "Methods of object "
+                                      + getDbgObjectName()
+                                      + "\nNo methods found\n";
+                        pVar->PutString( aRet );
                     }
                     return;
                 }
