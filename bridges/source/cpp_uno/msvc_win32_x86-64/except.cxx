@@ -879,15 +879,12 @@ int mscx_filterCppException(
                     &pExcTD, aUNOname.pData );
                 if (pExcTD == nullptr)
                 {
-                    OUStringBuffer buf;
-                    buf.append(
-                            "[mscx_uno bridge error] UNO type of "
-                            "C++ exception unknown: \"" );
-                    buf.append( aUNOname );
-                    buf.append( "\", RTTI-name=\"" );
-                    buf.append( aRTTIname );
-                    buf.append( "\"!" );
-                    RuntimeException exc( buf.makeStringAndClear() );
+                    OUString sMsg = "[mscx_uno bridge error] UNO type of "
+                                  + "C++ exception unknown: \""
+                                  + aUNOname + "\", RTTI-name=\""
+                                  + aRTTIname + "\"!";
+                    RuntimeException exc( sMsg );
+
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
                         cppu::UnoType<decltype(exc)>::get().getTypeLibType(), pCpp2Uno );
