@@ -863,35 +863,34 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
             case presentation::ClickAction_BOOKMARK:
             {
                 // jump to object/page
-                aHelpText = SdResId(STR_CLICK_ACTION_BOOKMARK);
-                aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
+                aHelpText = SdResId(STR_CLICK_ACTION_BOOKMARK)
+                    + ": "
+                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
             case presentation::ClickAction_DOCUMENT:
             {
                 // jump to document (object/page)
-                aHelpText = SdResId(STR_CLICK_ACTION_DOCUMENT);
-                aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
+                aHelpText = SdResId(STR_CLICK_ACTION_DOCUMENT)
+                    + ": "
+                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
             case presentation::ClickAction_PROGRAM:
             {
                 // execute program
-                aHelpText = SdResId(STR_CLICK_ACTION_PROGRAM);
-                aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
+                aHelpText = SdResId(STR_CLICK_ACTION_PROGRAM)
+                    + ": "
+                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
             case presentation::ClickAction_MACRO:
             {
                 // execute program
-                aHelpText = SdResId(STR_CLICK_ACTION_MACRO);
-                aHelpText += ": ";
+                aHelpText = SdResId(STR_CLICK_ACTION_MACRO) + ": ";
 
                 if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
                 {
@@ -904,11 +903,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                     const OUString s0{ sBookmark.getToken( 0, '.', nIdx ) };
                     const OUString s1{ sBookmark.getToken( 0, '.', nIdx ) };
                     const OUString s2{ sBookmark.getToken( 0, '.', nIdx ) };
-                    aHelpText += s2;
-                    aHelpText += ".";
-                    aHelpText += s1;
-                    aHelpText += ".";
-                    aHelpText += s0;
+                    aHelpText += s2 + "." + s1 + "." + s0;
                 }
             }
             break;
