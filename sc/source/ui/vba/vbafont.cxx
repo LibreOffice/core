@@ -140,21 +140,21 @@ ScVbaFont::setFontStyle( const uno::Any& aValue )
     OUString aStyles;
     aValue >>= aStyles;
 
-    std::vector< OUString > aTokens;
-    sal_Int32 nIndex = 0;
-    do
+    for (sal_Int32 nIdx{ 0 }; nIdx>=0; )
     {
-        OUString aToken = aStyles.getToken( 0, ' ', nIndex );
-        aTokens.push_back( aToken );
-    }while( nIndex >= 0 );
-
-    for( const auto& rToken : aTokens )
-    {
-        if( rToken.equalsIgnoreAsciiCase("Bold") )
+        const OUString aToken{ aStyles.getToken( 0, ' ', nIdx ) };
+        if (aToken.equalsIgnoreAsciiCase("Bold"))
+        {
             bBold = true;
-
-        if( rToken.equalsIgnoreAsciiCase("Italic") )
+            if (bItalic)
+                break;
+        }
+        else if (aToken.equalsIgnoreAsciiCase("Italic"))
+        {
             bItalic = true;
+            if (bBold)
+                break;
+        }
     }
 
     setBold( uno::makeAny( bBold ) );
