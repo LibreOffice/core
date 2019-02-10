@@ -343,9 +343,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             if (!(nInserted & 15))
                             {
                                 OUString aPict = ScResId( STR_PROGRESS_IMPORT );
-                                OUString aText = aPict.getToken(0,'#');
-                                aText += OUString::number( nInserted );
-                                aText += aPict.getToken(1,'#');
+                                OUString aText = aPict.getToken(0, '#')
+                                    + OUString::number( nInserted )
+                                    + aPict.getToken(1, '#');
 
                                 aProgress.SetStateText( 0, aText );
                             }
