@@ -90,12 +90,9 @@ namespace connectivity { namespace hsqldb
 
         // create a statement which can be used to re-create the original view, in case
         // dropping it succeeds, but creating it with a new statement fails
-        OUStringBuffer aRestoreCommand;
-        aRestoreCommand.append( "CREATE VIEW " );
-        aRestoreCommand.append     ( sQualifiedName );
-        aRestoreCommand.append( " AS " );
-        aRestoreCommand.append     ( impl_getCommand_throwSQLException() );
-        OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
+        OUString aRestoreCommand = "CREATE VIEW " + sQualifiedName + " AS " ;
+        impl_getCommand_throwSQLException() ;
+        OUString sRestoreCommand( aRestoreCommand );
 
         bool bDropSucceeded( false );
         try
