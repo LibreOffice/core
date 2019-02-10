@@ -784,9 +784,9 @@ ooo_atk_util_get_type()
         } ;
 
         type = g_type_register_static (parent_type, "OOoUtil", &typeInfo, GTypeFlags(0)) ;
-  }
+    }
 
-  return type;
+    return type;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

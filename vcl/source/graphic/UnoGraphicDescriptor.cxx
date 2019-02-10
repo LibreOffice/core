@@ -319,7 +319,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 else
                     aMimeType = maMimeType;
 
-                 *pValues <<= aMimeType;
+                *pValues <<= aMimeType;
             }
             break;
 

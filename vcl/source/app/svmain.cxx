@@ -221,7 +221,7 @@ int ImplSVMain()
             SolarMutexReleaser aReleaser;
             pSVData->mxAccessBridge->dispose();
         }
-      pSVData->mxAccessBridge.clear();
+        pSVData->mxAccessBridge.clear();
     }
 
 #if HAVE_FEATURE_OPENGL

@@ -1362,11 +1362,11 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
                             pGC,
                             aXRect.x, aXRect.y, aXRect.width, aXRect.height );
         }
-   }
+    }
 
-   if( mnPenColor != SALCOLOR_NONE )
-       for( sal_uInt32 i = 0; i < nPoly; i++ )
-           drawPolyLine( pPoints[i], pPtAry[i], true );
+    if( mnPenColor != SALCOLOR_NONE )
+        for( sal_uInt32 i = 0; i < nPoly; i++ )
+            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const SalPoint*, const PolyFlags* )

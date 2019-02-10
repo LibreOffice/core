@@ -155,7 +155,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
             pColormap = new SalColormap( pDisplay_, pXRenderFormat->colormap, m_nXScreen );
         else
             pColormap = new SalColormap( nBitCount );
-         bDeleteColormap = true;
+        bDeleteColormap = true;
     }
     else if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
     {
