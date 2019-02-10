@@ -371,14 +371,14 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
         sal_Int32 nParmIndex = 0;
         OUString aParamType;
         OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
-        OUString aValue     = (nParmIndex!=-1) ? aToken.getToken( 0, '=', nParmIndex ) : OUString();
+        OUString aValue     = aToken.getToken( 0, '=', nParmIndex );
 
         if ( !aParamName.isEmpty() )
         {
             nParmIndex = 0;
             aToken = aParamName;
             aParamName = aToken.getToken( 0, ':', nParmIndex );
-            aParamType = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : OUString();
+            aParamType = aToken.getToken( 0, ':', nParmIndex );
         }
 
         sal_Int32 nLen = rArgs.getLength();
