@@ -98,8 +98,6 @@ SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     SetHighlightRange();    // select full width
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvTabListBox, WB_TABSTOP)
-
 SvTabListBox::~SvTabListBox()
 {
     disposeOnce();
