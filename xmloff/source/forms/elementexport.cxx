@@ -985,8 +985,8 @@ namespace xmloff
                         ( *pAttributeId == SCAFlags::FocusOnClick ) ? BoolAttrFlags::DefaultTrue : BoolAttrFlags::DefaultFalse
                     );
             #if OSL_DEBUG_LEVEL > 0
-                //  reset the bit for later checking
-                m_nIncludeSpecial = m_nIncludeSpecial & ~*pAttributeId;
+                    //  reset the bit for later checking
+                    m_nIncludeSpecial = m_nIncludeSpecial & ~*pAttributeId;
             #endif
                 }
             }
@@ -1026,8 +1026,8 @@ namespace xmloff
                         nIntegerPropertyAttrDefaults[i]
                     );
             #if OSL_DEBUG_LEVEL > 0
-                //  reset the bit for later checking
-                m_nIncludeSpecial = m_nIncludeSpecial & ~nIntegerPropertyAttributeIds[i];
+                    //  reset the bit for later checking
+                    m_nIncludeSpecial = m_nIncludeSpecial & ~nIntegerPropertyAttributeIds[i];
             #endif
                 }
 
@@ -1169,8 +1169,8 @@ namespace xmloff
                         pStringPropertyNames[i]
                     );
             #if OSL_DEBUG_LEVEL > 0
-                //  reset the bit for later checking
-                m_nIncludeSpecial = m_nIncludeSpecial & ~nStringPropertyAttributeIds[i];
+                    //  reset the bit for later checking
+                    m_nIncludeSpecial = m_nIncludeSpecial & ~nStringPropertyAttributeIds[i];
             #endif
                 }
         }

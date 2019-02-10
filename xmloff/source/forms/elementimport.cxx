@@ -363,7 +363,7 @@ namespace xmloff
                     Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
 
                     const Any*       pXMLValue = aXMLValueList.getConstArray();
-                          sal_Int16* pPropValue = aPropertyValueList.getArray();
+                    sal_Int16* pPropValue = aPropertyValueList.getArray();
 
                     for ( sal_Int32 i=0; i<aXMLValueList.getLength(); ++i, ++pXMLValue, ++pPropValue )
                     {

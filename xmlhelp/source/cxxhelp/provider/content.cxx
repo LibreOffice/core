@@ -73,7 +73,7 @@ Content::~Content()
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 {
     uno::Any aRet;
-     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
+    return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
 // XTypeProvider methods.

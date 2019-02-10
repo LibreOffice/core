@@ -2282,7 +2282,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_aAnchoredStack.top().bToRemove = true;
             m_aTextAppendStack.pop();
-               appendTextContent(m_xEmbedded, uno::Sequence<beans::PropertyValue>());
+            appendTextContent(m_xEmbedded, uno::Sequence<beans::PropertyValue>());
         }
         else
         {
@@ -3833,10 +3833,10 @@ void DomainMapper_Impl::handleToc
         bNewLine = true ;
     }
 //                  \z Hides page numbers within the table of contents when shown in Web Layout View
-                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
-                    {
-                        bHideTabLeaderPageNumbers = true ;
-                    }
+    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
+    {
+        bHideTabLeaderPageNumbers = true ;
+    }
 
                     //if there's no option then it should be created from outline
     if( !bFromOutline && !bFromEntries && sTemplate.isEmpty()  )
@@ -4762,7 +4762,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         xFieldInterface = m_xTextFactory->createInstance(
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
-                                  uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
+                        uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
                                   uno::UNO_QUERY_THROW);
                         OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText inclusing the index e.g. CITATION Kra06 \l 1033
                         if( !sCmd.isEmpty()){

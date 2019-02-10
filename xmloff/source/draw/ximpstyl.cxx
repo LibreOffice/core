@@ -637,7 +637,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         mnTypeId = AUTOLAYOUT_4CLIPART;
                     }
-                     break;
+                    break;
 
                 }
                 case 7:

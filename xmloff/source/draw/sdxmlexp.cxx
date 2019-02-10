@@ -420,7 +420,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
 
     // add family name
-      GetAutoStylePool()->AddFamily(
+    GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
         OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
           GetPropertySetMapper(),

@@ -91,7 +91,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
         {
             xPropSet->getPropertyValue( gsPageDescName ) >>= sName;
             // fix for #i5551#  if( sName.getLength() > 0 )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,
                                           GetExport().EncodeStyleName( sName ) );
         }
@@ -99,7 +99,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
     if( bProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
-            pProgress->SetValue( pProgress->GetValue()+2 );
+        pProgress->SetValue( pProgress->GetValue()+2 );
     }
 }
 
