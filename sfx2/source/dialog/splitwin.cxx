@@ -240,8 +240,8 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
                 pEmptyWin->bFadeIn = true;
             bPinned = true; // always assume pinned - floating mode not used anymore
 
-            sal_uInt16 nCount = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
-            for ( sal_uInt16 n=0; n<nCount; n++ )
+            const sal_Int32 nCount{ aWinData.getToken(0, ',', nIdx).toInt32() };
+            for ( sal_Int32 n=0; n<nCount; ++n )
             {
                 std::unique_ptr<SfxDock_Impl> pDock(new SfxDock_Impl);
                 pDock->pWin = nullptr;
