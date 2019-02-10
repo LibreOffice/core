@@ -220,17 +220,10 @@ void FullScreenPane::ExtractArguments (
     while (nIndex >= 0)
     {
         const OUString aToken = aURL.Arguments.getToken(0, '&', nIndex);
-        if (!aToken.isEmpty())
+        OUString sValue;
+        if (aToken.startsWith("ScreenNumber=", &sValue))
         {
-            // Split at the first '='.
-            const sal_Int32 nAssign = aToken.indexOf('=');
-            const OUString sKey = aToken.copy(0, nAssign);
-            const OUString sValue = aToken.copy(nAssign+1);
-
-            if (sKey == "ScreenNumber")
-            {
-                rnScreenNumberReturnValue = sValue.toInt32();
-            }
+            rnScreenNumberReturnValue = sValue.toInt32();
         }
     }
 }
