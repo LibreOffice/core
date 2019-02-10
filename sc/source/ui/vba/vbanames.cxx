@@ -105,13 +105,9 @@ ScVbaNames::Add( const css::uno::Any& Name ,
     {
         if ( ScRangeData::IsNameValid( sName , getScDocument() )  != ScRangeData::NAME_VALID )
         {
-            sal_Int32 nIndex = 0;
-            OUString sResult = sName.getToken( 0 , '!' , nIndex );
-            if ( -1 == nIndex )
-                sResult = sName;
-            else
-                sResult = sName.copy( nIndex );
-            sName = sResult ;
+            const sal_Int32 nIndex{ sName.indexOf('!') };
+            if (nIndex>=0)
+                sName = sName.copy(nIndex+1);
             if ( ScRangeData::IsNameValid( sName , getScDocument() ) != ScRangeData::NAME_VALID )
                 throw uno::RuntimeException( "This Name is not valid ." );
         }
