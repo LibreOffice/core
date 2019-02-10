@@ -394,7 +394,7 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
     // #TODO  #FIXME Shape parent should always be the sheet the shapes belong
     // to
     uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< XHelperInterface >(), mxContext, xShape, getShapes(), m_xModel, ScVbaShape::getType( xShape ) ) );
-        return uno::makeAny( xVbShape );
+    return uno::makeAny( xVbShape );
 }
 
 OUString

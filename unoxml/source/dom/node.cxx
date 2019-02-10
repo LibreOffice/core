@@ -783,7 +783,7 @@ namespace DOM
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMNodeRemoved"), UNO_QUERY);
-            event->initMutationEvent("DOMNodeRemoved",
+        event->initMutationEvent("DOMNodeRemoved",
             true,
             false,
             this,

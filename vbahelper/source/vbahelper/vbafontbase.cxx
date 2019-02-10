@@ -100,7 +100,7 @@ VbaFontBase::setSubscript( const uno::Any& aValue )
         nValue2 = SUBSCRIPTHEIGHT;
     }
 
-     mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
+    mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
     mxFont->setPropertyValue( "CharEscapement" , uno::Any(nValue) );
 
 }
