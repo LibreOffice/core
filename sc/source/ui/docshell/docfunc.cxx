@@ -5117,10 +5117,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                     else
                     {
                         OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
-
-                        OUString aMessage = aTemplate.getToken( 0, '#' );
-                        aMessage += aName;
-                        aMessage += aTemplate.getToken( 1, '#' );
+                        OUString aMessage = aTemplate.getToken( 0, '#' ) + aName + aTemplate.getToken( 1, '#' );
 
                         vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
