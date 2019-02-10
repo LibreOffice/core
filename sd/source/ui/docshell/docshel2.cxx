@@ -318,7 +318,8 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     if (rInOutPageName.startsWith(aStrPage) &&
         rInOutPageName.getLength() > aStrPage.getLength())
     {
-        OUString sRemainder = rInOutPageName.getToken(1, ' ');
+        sal_Int32 nIdx{ aStrPage.getLength() };
+        OUString sRemainder = rInOutPageName.getToken(0, ' ', nIdx);
         if (sRemainder[0] >= '0' && sRemainder[0] <= '9')
         {
             // check for arabic numbering
