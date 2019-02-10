@@ -262,9 +262,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (!bIsNewArea)
                 {
                     OUString aTemplate = ScResId( STR_IMPORT_REPLACE );
-                    OUString aMessage = aTemplate.getToken( 0, '#' );
-                    aMessage += sTarget;
-                    aMessage += aTemplate.getToken( 1, '#' );
+                    OUString aMessage = aTemplate.getToken( 0, '#' )
+                        + sTarget
+                        + aTemplate.getToken( 1, '#' );
 
                     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
