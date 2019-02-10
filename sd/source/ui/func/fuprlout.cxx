@@ -211,7 +211,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     if (bLoad)
     {
-        OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN);
+        sal_Int32 nIdx{ 0 };
+        OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN, nIdx);
         SdDrawDocument* pTempDoc = mpDoc->OpenBookmarkDoc( aFileName );
 
         // #69581: If I chose the standard-template I got no filename and so I get no
@@ -219,7 +220,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         //         a NULL-pointer as a Standard-template ( look at SdDrawDocument::SetMasterPage )
         OUString aLayoutName;
         if( pTempDoc )
-            aLayoutName = aFile.getToken(1, DOCUMENT_TOKEN);
+            aLayoutName = aFile.getToken(0, DOCUMENT_TOKEN, nIdx);
         for (auto nSelectedPage : aSelectedPageNums)
             mpDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
         mpDoc->CloseBookmarkDoc();
