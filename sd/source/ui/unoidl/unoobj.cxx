@@ -1354,9 +1354,10 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             }
             else
             {
-                OUString aLibName   = aStrMacro.getToken(0, '.');
-                OUString aModulName = aStrMacro.getToken(1, '.');
-                OUString aMacroName = aStrMacro.getToken(2, '.');
+                sal_Int32 nIdx{ 0 };
+                const OUString aLibName   = aStrMacro.getToken(0, '.', nIdx);
+                const OUString aModulName = aStrMacro.getToken(0, '.', nIdx);
+                const OUString aMacroName = aStrMacro.getToken(0, '.', nIdx);
 
                 OUStringBuffer sBuffer;
                 sBuffer.append( aMacroName );
@@ -1468,9 +1469,10 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             // aMacro has got following format:
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
-            OUString aMacroName = aMacro.getToken(0, '.');
-            OUString aModulName = aMacro.getToken(1, '.');
-            OUString aLibName   = aMacro.getToken(2, '.');
+            sal_Int32 nIdx{ 0 };
+            const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
+            const OUString aModulName = aMacro.getToken(0, '.', nIdx);
+            const OUString aLibName   = aMacro.getToken(0, '.', nIdx);
 
             OUStringBuffer sBuffer;
             sBuffer.append( aLibName );
