@@ -196,21 +196,7 @@ static bool getFromCommandLineArgs(
         return tmp;
     }();
 
-    bool found = false;
-
-    for(NameValueVector::iterator ii = nameValueVector.begin();
-        ii != nameValueVector.end();
-        ++ii)
-    {
-        if ((*ii).sName == key)
-        {
-            *value = (*ii).sValue;
-            found = true;
-            break;
-        }
-    }
-
-    return found;
+    return find(nameValueVector, key, value);
 }
 
 static void getExecutableDirectory_Impl(rtl_uString ** ppDirURL)
