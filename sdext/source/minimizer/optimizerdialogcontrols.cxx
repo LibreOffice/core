@@ -467,6 +467,19 @@ void OptimizerDialog::InitPage1()
     UpdateControlStatesPage1();
 }
 
+namespace
+{
+
+bool lcl_getResolutionText(OUString& rResolutionText, const OUString& rImageResolution, sal_Int32 nTargetRes)
+{
+    sal_Int32 nIdx{ 0 };
+    if (rImageResolution.getToken(0, ';', nIdx).toInt32()!=nTargetRes)
+        return false;
+    rResolutionText = rImageResolution.getToken(0, ';', nIdx);
+    return true;
+}
+
+}
 
 void OptimizerDialog::UpdateControlStatesPage2()
 {
@@ -477,23 +490,12 @@ void OptimizerDialog::UpdateControlStatesPage2()
 
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, sal_Int32(0) ) );
 
-    sal_Int32 nI0, nI1, nI2, nI3;
-    nI0 = nI1 = nI2 = nI3 = 0;
     OUString aResolutionText;
-    Sequence< OUString > aResolutionItemList( 4 );
-    aResolutionItemList[ 0 ] = getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 );
-    aResolutionItemList[ 1 ] = getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 );
-    aResolutionItemList[ 2 ] = getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 );
-    aResolutionItemList[ 3 ] = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 );
-    nI0 = nI1 = nI2 = nI3 = 0;
-    if ( getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI0 ).toInt32() == nImageResolution )
-        aResolutionText = aResolutionItemList[ 0 ];
-    else if ( getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI1 ).toInt32() == nImageResolution )
-        aResolutionText = aResolutionItemList[ 1 ];
-    else if ( getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI2 ).toInt32() == nImageResolution )
-        aResolutionText = aResolutionItemList[ 2 ];
-    else if ( getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI3 ).toInt32() == nImageResolution )
-        aResolutionText = aResolutionItemList[ 3 ];
+    for (int nIR{ STR_IMAGE_RESOLUTION_0 }; nIR<=STR_IMAGE_RESOLUTION_3; ++nIR)
+    {
+        if (lcl_getResolutionText(aResolutionText, getString(static_cast<PPPOptimizerTokenEnum>(nIR)), nImageResolution))
+            break;
+    }
     if ( aResolutionText.isEmpty() )
         aResolutionText = OUString::number( nImageResolution );
 
