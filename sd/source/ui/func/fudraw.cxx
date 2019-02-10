@@ -900,11 +900,15 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 else
                 {
                     OUString sBookmark( pInfo->GetBookmark() );
-                    aHelpText += sBookmark.getToken( 2, '.' );
+                    sal_Int32 nIdx{ 0 };
+                    const OUString s0{ sBookmark.getToken( 0, '.', nIdx ) };
+                    const OUString s1{ sBookmark.getToken( 0, '.', nIdx ) };
+                    const OUString s2{ sBookmark.getToken( 0, '.', nIdx ) };
+                    aHelpText += s2;
                     aHelpText += ".";
-                    aHelpText += sBookmark.getToken( 1, '.' );
+                    aHelpText += s1;
                     aHelpText += ".";
-                    aHelpText += sBookmark.getToken( 0, '.' );
+                    aHelpText += s0;
                 }
             }
             break;
