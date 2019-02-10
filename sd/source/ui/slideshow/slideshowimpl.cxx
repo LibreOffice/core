@@ -1538,8 +1538,9 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
             // aMacro has the following syntax:
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
-            OUString aMacroName = aMacro.getToken(0, '.');
-            OUString aModulName = aMacro.getToken(1, '.');
+            sal_Int32 nIdx{ 0 };
+            const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
+            const OUString aModulName = aMacro.getToken(0, '.', nIdx);
 
             // todo: is the limitation still given that only
             // Modulname+Macroname can be used here?
