@@ -20,15 +20,9 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/fixedhyper.hxx>
-
-#include <svtools/svmedit.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 
 /********************** SvUpdateLinksDialog ******************************
 *************************************************************************/
@@ -40,19 +34,8 @@ namespace sfx2
 
 enum class SfxLinkUpdateMode;
 
-class SvBaseLinksDlg : public ModalDialog
+class SvBaseLinksDlg : public weld::GenericDialogController
 {
-    using Window::SetType;
-
-    VclPtr<SvTabListBox> m_pTbLinks;
-    VclPtr<FixedHyperlink> m_pFtFullFileName;
-    VclPtr<FixedText> m_pFtFullSourceName;
-    VclPtr<FixedText> m_pFtFullTypeName;
-    VclPtr<RadioButton> m_pRbAutomatic;
-    VclPtr<RadioButton> m_pRbManual;
-    VclPtr<PushButton> m_pPbUpdateNow;
-    VclPtr<PushButton> m_pPbChangeSource;
-    VclPtr<PushButton> m_pPbBreakLink;
     OUString aStrAutolink;
     OUString aStrManuallink;
     OUString aStrBrokenlink;
@@ -62,26 +45,38 @@ class SvBaseLinksDlg : public ModalDialog
     sfx2::LinkManager*  pLinkMgr;
     Idle aUpdateIdle;
 
-    DECL_LINK( LinksSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( LinksDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( AutomaticClickHdl, Button *, void );
-    DECL_LINK( ManualClickHdl, Button *, void );
-    DECL_LINK( UpdateNowClickHdl, Button *, void);
-    DECL_LINK( ChangeSourceClickHdl, Button *, void );
-    DECL_LINK( BreakLinkClickHdl, Button *, void );
+    std::unique_ptr<weld::TreeView> m_xTbLinks;
+    std::unique_ptr<weld::LinkButton> m_xFtFullFileName;
+    std::unique_ptr<weld::Label> m_xFtFullSourceName;
+    std::unique_ptr<weld::Label> m_xFtFullTypeName;
+    std::unique_ptr<weld::RadioButton> m_xRbAutomatic;
+    std::unique_ptr<weld::RadioButton> m_xRbManual;
+    std::unique_ptr<weld::Button> m_xPbUpdateNow;
+    std::unique_ptr<weld::Button> m_xPbChangeSource;
+    std::unique_ptr<weld::Button> m_xPbBreakLink;
+
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
+
+    DECL_LINK( LinksSelectHdl, weld::TreeView&, void );
+    DECL_LINK( LinksDoubleClickHdl, weld::TreeView&, void );
+    DECL_LINK( AutomaticClickHdl, weld::Button&, void );
+    DECL_LINK( ManualClickHdl, weld::Button&, void );
+    DECL_LINK( UpdateNowClickHdl, weld::Button&, void);
+    DECL_LINK( ChangeSourceClickHdl, weld::Button&, void );
+    DECL_LINK( BreakLinkClickHdl, weld::Button&, void );
     DECL_LINK( UpdateWaitingHdl, Timer *, void );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink&, void );
-    sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
+    void LinksSelectHdl(weld::TreeView* pTreeView);
+    sfx2::SvBaseLink* GetSelEntry(int* pPos);
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
-    void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, SfxLinkUpdateMode nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
+    void SetType(sfx2::SvBaseLink& rLink, int nPos, SfxLinkUpdateMode nType);
+    void InsertEntry(const sfx2::SvBaseLink& rLink, int nPos = -1, bool bSelect = false);
 
     void SetManager( sfx2::LinkManager* );
 
 public:
-    SvBaseLinksDlg( vcl::Window * pParent, sfx2::LinkManager*, bool bHtml );
+    SvBaseLinksDlg(weld::Window * pParent, sfx2::LinkManager*, bool bHtml);
     virtual ~SvBaseLinksDlg() override;
-    virtual void dispose() override;
     void SetActLink( sfx2::SvBaseLink const * pLink );
 };
 

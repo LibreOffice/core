@@ -58,7 +58,7 @@ void FuLink::DoExecute( SfxRequest& )
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
+    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(mpViewShell->GetFrameWeld(), pLinkManager));
     pDlg->Execute();
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
 }

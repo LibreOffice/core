@@ -158,6 +158,9 @@ public:
     virtual bool has_grab() const = 0;
     virtual void grab_remove() = 0;
 
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual vcl::Font get_font() = 0;
+
     //true for rtl, false otherwise
     virtual bool get_direction() const = 0;
     virtual void set_direction(bool bRTL) = 0;
@@ -608,6 +611,7 @@ public:
     virtual int get_height_rows(int nRows) const = 0;
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
+    virtual int get_column_width(int nCol) const = 0;
     virtual OUString get_column_title(int nColumn) const = 0;
     virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
 
@@ -731,6 +735,24 @@ class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
 {
 };
 
+class VCL_DLLPUBLIC LinkButton : virtual public Container
+{
+protected:
+    Link<LinkButton&, void> m_aClickHdl;
+
+    void signal_clicked() { m_aClickHdl.Call(*this); }
+
+public:
+    virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
+    virtual void set_uri(const OUString& rUri) = 0;
+    virtual OUString get_uri() const = 0;
+
+    void clicked() { signal_clicked(); }
+
+    void connect_clicked(const Link<LinkButton&, void>& rLink) { m_aClickHdl = rLink; }
+};
+
 class VCL_DLLPUBLIC Scale : virtual public Widget
 {
 protected:
@@ -782,7 +804,7 @@ public:
     virtual bool get_editable() const = 0;
     virtual void set_error(bool bShowError) = 0;
 
-    virtual vcl::Font get_font() = 0;
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
@@ -1404,6 +1426,9 @@ public:
         = 0;
     virtual std::unique_ptr<CheckButton> weld_check_button(const OString& id,
                                                            bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<LinkButton> weld_link_button(const OString& id,
+                                                         bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<SpinButton> weld_spin_button(const OString& id,
                                                          bool bTakeOwnership = false)
