@@ -224,8 +224,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         //  Read Configuration
-        OUString aWindowId("SplitWindow");
-        aWindowId += OUString::number( static_cast<sal_Int32>(eTbxAlign) );
+        const OUString aWindowId{ "SplitWindow" + OUString::number(static_cast<sal_Int32>(eTbxAlign)) };
         SvtViewOptions aWinOpt( EViewType::Window, aWindowId );
         OUString aWinData;
         Any aUserItem = aWinOpt.GetUserItem( USERITEM_NAME );
@@ -241,7 +240,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             bPinned = true; // always assume pinned - floating mode not used anymore
 
             const sal_Int32 nCount{ aWinData.getToken(0, ',', nIdx).toInt32() };
-            for ( sal_Int32 n=0; n<nCount; ++n )
+            for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 std::unique_ptr<SfxDock_Impl> pDock(new SfxDock_Impl);
                 pDock->pWin = nullptr;
@@ -325,8 +324,7 @@ void SfxSplitWindow::SaveConfig_Impl()
         aWinData.append(static_cast<sal_Int32>(rDock->nType));
     }
 
-    OUString aWindowId("SplitWindow");
-    aWindowId += OUString::number( static_cast<sal_Int32>(GetAlign()) );
+    const OUString aWindowId{ "SplitWindow" + OUString::number(static_cast<sal_Int32>(GetAlign())) };
     SvtViewOptions aWinOpt( EViewType::Window, aWindowId );
     aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );
 }
