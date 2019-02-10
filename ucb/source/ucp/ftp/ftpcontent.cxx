@@ -649,7 +649,7 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
     sal_Int32 m = 0;
 
     if(m_xInputStream.is()) {
-            Sequence<sal_Int8> seq(nBytesRequested);
+        Sequence<sal_Int8> seq(nBytesRequested);
         m = m_xInputStream->readBytes(seq,nBytesRequested);
         memcpy(dest,seq.getConstArray(),m);
     }

@@ -1025,10 +1025,10 @@ void NeonSession::PROPFIND( const OUString & inPath,
 #if defined SAL_LOG_INFO
     { //debug
         SAL_INFO( "ucb.ucp.webdav", "PROPFIND - relative URL: <" << inPath << "> Depth: " << inDepth );
-         for(const auto& rPropName : inPropNames)
-         {
+        for(const auto& rPropName : inPropNames)
+        {
             SAL_INFO( "ucb.ucp.webdav", "PROPFIND - property requested: " << rPropName );
-         }
+        }
     } //debug
 #endif
 
@@ -1726,22 +1726,22 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
     if ( ne_unlock( m_pHttpSession, pLock ) == NE_OK )
     {
 #if defined SAL_LOG_INFO
-    {
-        char * p = ne_uri_unparse( &(pLock->uri) );
-        SAL_INFO( "ucb.ucp.webdav", "UNLOCK (from store) - relative URL: <" << p << "> token: <" << pLock->token << "> succeeded." );
-        ne_free( p );
-    }
+        {
+            char * p = ne_uri_unparse( &(pLock->uri) );
+            SAL_INFO( "ucb.ucp.webdav", "UNLOCK (from store) - relative URL: <" << p << "> token: <" << pLock->token << "> succeeded." );
+            ne_free( p );
+        }
 #endif
         return true;
     }
     else
     {
 #if defined SAL_LOG_INFO
-    {
-        char * p = ne_uri_unparse( &(pLock->uri) );
-        SAL_INFO( "ucb.ucp.webdav", "UNLOCK (from store) - relative URL: <" << p << "> token: <" << pLock->token << "> failed!" );
-        ne_free( p );
-    }
+        {
+            char * p = ne_uri_unparse( &(pLock->uri) );
+            SAL_INFO( "ucb.ucp.webdav", "UNLOCK (from store) - relative URL: <" << p << "> token: <" << pLock->token << "> failed!" );
+            ne_free( p );
+        }
 #endif
         return false;
     }

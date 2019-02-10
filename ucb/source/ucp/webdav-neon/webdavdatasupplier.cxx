@@ -474,7 +474,7 @@ bool DataSupplier::getData()
             }
         }
 
-          m_pImpl->m_bCountFinal = true;
+        m_pImpl->m_bCountFinal = true;
 
         // Callback possible, because listeners may be informed!
         aGuard.clear();

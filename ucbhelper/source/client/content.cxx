@@ -1008,7 +1008,7 @@ bool Content::isFolder()
         >>= bFolder )
         return bFolder;
 
-     ucbhelper::cancelCommandExecution(
+    ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsFolder'!",
                     get() ) ),
@@ -1031,7 +1031,7 @@ bool Content::isDocument()
         >>= bDoc )
         return bDoc;
 
-     ucbhelper::cancelCommandExecution(
+    ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsDocument'!",
                     get() ) ),
