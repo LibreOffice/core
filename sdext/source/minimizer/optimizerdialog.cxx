@@ -711,6 +711,18 @@ void TextListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /*
 {
 }
 
+namespace
+{
+
+bool lcl_mapResolution(OUString& rResolution, const OUString& rImageResolution)
+{
+    if (rImageResolution.getToken(1, ';')!=rResolution)
+        return false;
+    rResolution = rImageResolution.getToken(0, ';');
+    return true;
+}
+
+}
 
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
 {
@@ -719,17 +731,11 @@ void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
     if ( !(aAny >>= aString) )
         return;
 
-    sal_Int32 nI0, nI1, nI2, nI3, nI4;
-    nI0 = nI1 = nI2 = nI3 = nI4 = 0;
-
-    if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
-        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
-    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
-        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
-    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
-        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
-    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
-        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
+    for (int nIR{ STR_IMAGE_RESOLUTION_0 }; nIR <= STR_IMAGE_RESOLUTION_3; ++nIR)
+    {
+        if (lcl_mapResolution(aString, mrOptimizerDialog.getString(static_cast<PPPOptimizerTokenEnum>(nIR))))
+            break;
+    }
 
     mrOptimizerDialog.SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
 }
