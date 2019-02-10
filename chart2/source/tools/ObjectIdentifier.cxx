@@ -580,13 +580,10 @@ OUString ObjectIdentifier::createParticleForGrid(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
 {
-    OUStringBuffer aRet("Axis=");
-    aRet.append( OUString::number( nDimensionIndex ) );
-    aRet.append(",");
-    aRet.append( OUString::number( nAxisIndex ) );
-    aRet.append( ":Grid=0" );
+    OUString aRet = "Axis=" + OUString::number( nDimensionIndex )
+                  + "," + OUString::number( nAxisIndex ) + ":Grid=0";
 
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
