@@ -248,7 +248,11 @@ short AbstractInsertObjectDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
+short AbstractLinksDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 
 short AbstractSvxPostItDialog_Impl::Execute()
@@ -1580,12 +1584,12 @@ VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(wel
     return VclPtr<AbstractPasteDialog_Impl>::Create(std::make_unique<SvPasteObjectDialog>(pParent));
 }
 
-VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)
+VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)
 {
-    VclPtrInstance<SvBaseLinksDlg> pLinkDlg( pParent, pMgr, bHTML );
-    if ( p )
-        pLinkDlg->SetActLink(p);
-    return VclPtr<AbstractLinksDialog_Impl>::Create( pLinkDlg );
+    auto xLinkDlg(std::make_unique<SvBaseLinksDlg>(pParent, pMgr, bHTML));
+    if (p)
+        xLinkDlg->SetActLink(p);
+    return VclPtr<AbstractLinksDialog_Impl>::Create(std::move(xLinkDlg));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel, const SdrObject* /*pObj*/)
