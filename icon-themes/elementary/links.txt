@@ -2076,5 +2076,5 @@ cmd/lc_renametable.png cmd/lc_name.png
 cmd/sc_renametable.png cmd/sc_name.png
 
 cmd/32/textattributes.png cmd/32/fontdialog.png
-cmd/lc_textattributes.png cmdlc_fontdialog.png
+cmd/lc_textattributes.png cmd/lc_fontdialog.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png
