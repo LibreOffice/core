@@ -79,13 +79,13 @@
 [ language==nl || language==ru ]
     e2eab80772ab1aa09716954219351a80 https://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "dict-en_us.oxt"
 
-# Estonian dictionary
-[ language==et ]
-    142568797ae1490a4477f4ab5fdc200a https://sourceforge.net/projects/aoo-extensions/files/1328/0/dict-et.oxt/download "dict-et.oxt"
-
 # Spanish dictionary
 [ language=es || language=ca || language=ca_XV ]
     1b999fcef948148e269161a08e7acf20 https://sourceforge.net/projects/aoo-extensions/files/1657/4/es_es.oxt/download "dict-es_es.oxt"
+
+# Estonian dictionary
+[ language=et ]
+    142568797ae1490a4477f4ab5fdc200a https://sourceforge.net/projects/aoo-extensions/files/1328/0/dict-et.oxt/download "dict-et.oxt"
 
 # Basque dictionary
 [ language=eu ]
@@ -155,4 +155,8 @@
 # Swedish dictionary
 [ language=sv ]
     32ab4edf1496a7cf5469ee1643eb0128 https://sourceforge.net/projects/aoo-extensions/files/5959/1/dict-sv.oxt/download "dict-sv.oxt"
+
+# Ukrainian dictionary
+[ language=uk ]
+    17cff8975a5b5f32c8ae529a973dd12c https://sourceforge.net/projects/aoo-extensions/files/975/11/dict-uk_ua-4.2.5.oxt/download "dict-uk.oxt"
 
