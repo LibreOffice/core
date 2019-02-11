@@ -129,8 +129,7 @@ static uno::Reference< uno::XInterface >
 UcbCommandEnvironment_CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory> & /*rSMgr*/ )
 {
-    lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new UcbCommandEnvironment );
+    lang::XServiceInfo* pX = new UcbCommandEnvironment;
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
