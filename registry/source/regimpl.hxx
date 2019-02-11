@@ -20,10 +20,10 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 #define INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 
-#include <set>
 #include <unordered_map>
 
 #include <regapi.hxx>
+#include <registry/regtype.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <store/store.hxx>

@@ -24,7 +24,6 @@
 #include <new>
 #include <vector>
 
-#include <string.h>
 #include <sal/types.h>
 #include <osl/endian.h>
 #include <osl/diagnose.h>

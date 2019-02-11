@@ -18,10 +18,7 @@
  */
 
 
-#include <regapi.hxx>
 #include <registry/registry.hxx>
-
-#include <osl/process.h>
 
 #include "keyimpl.hxx"
 #include "regimpl.hxx"
@@ -29,12 +26,6 @@
 
 #if defined(_WIN32)
 #include <io.h>
-#endif
-
-#include <string.h>
-#if defined(UNX)
-#include <stdlib.h>
-#include <unistd.h>
 #endif
 
 extern "C" {

@@ -20,7 +20,6 @@
 #include "fileurl.hxx"
 
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>

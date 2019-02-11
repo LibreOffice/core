@@ -20,9 +20,10 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_REFLWRIT_HXX
 #define INCLUDED_REGISTRY_SOURCE_REFLWRIT_HXX
 
-#include <registry/refltype.hxx>
-#include <registry/regtype.h>
+#include <registry/types.hxx>
 #include <rtl/ustring.hxx>
+
+class RTConstValue;
 
 /// Implememetation handle
 typedef void* TypeWriterImpl;

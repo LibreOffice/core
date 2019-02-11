@@ -22,13 +22,12 @@
 #include <memory>
 #include <algorithm>
 #include <sal/types.h>
-#include <sal/macros.h>
 #include <osl/endian.h>
-#include <rtl/alloc.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
 #include "reflwrit.hxx"
+#include <registry/refltype.hxx>
 #include <registry/version.h>
 #include <registry/writer.h>
 

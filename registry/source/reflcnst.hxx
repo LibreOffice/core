@@ -20,8 +20,7 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_REFLCNST_HXX
 #define INCLUDED_REGISTRY_SOURCE_REFLCNST_HXX
 
-#include <registry/refltype.hxx>
-#include <sal/macros.h>
+#include <registry/types.hxx>
 
 #include <string.h>
 
