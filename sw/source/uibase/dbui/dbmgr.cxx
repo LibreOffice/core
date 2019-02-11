@@ -429,7 +429,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
 // import data
 bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 {
-    assert( !bInMerge && !pImpl->pMergeData && "merge already activated!" );
+    assert( !m_bInMerge && !m_pImpl->pMergeData && "merge already activated!" );
 
     SfxObjectShellLock  xWorkObjSh;
     SwWrtShell         *pWorkShell            = nullptr;
@@ -482,10 +482,10 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         return false;
     }
 
-    pImpl->pMergeData.reset(new SwDSParam(aData, xResSet, aSelection));
+    m_pImpl->pMergeData.reset(new SwDSParam(aData, xResSet, aSelection));
     SwDSParam*  pTemp = FindDSData(aData, false);
     if(pTemp)
-        *pTemp = *pImpl->pMergeData;
+        *pTemp = *m_pImpl->pMergeData;
     else
     {
         // calls from the calculator may have added a connection with an invalid commandtype
@@ -495,33 +495,33 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         aData.nCommandType = -1;
         pTemp = FindDSData(aData, false);
         if(pTemp)
-            *pTemp = *pImpl->pMergeData;
+            *pTemp = *m_pImpl->pMergeData;
         else
         {
-            m_DataSourceParams.push_back(std::make_unique<SwDSParam>(*pImpl->pMergeData));
+            m_DataSourceParams.push_back(std::make_unique<SwDSParam>(*m_pImpl->pMergeData));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
                 if(xComponent.is())
-                    xComponent->addEventListener(pImpl->m_xDisposeListener.get());
+                    xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
             }
             catch(const uno::Exception&)
             {
             }
         }
     }
-    if(!pImpl->pMergeData->xConnection.is())
-        pImpl->pMergeData->xConnection = xConnection;
+    if(!m_pImpl->pMergeData->xConnection.is())
+        m_pImpl->pMergeData->xConnection = xConnection;
     // add an XEventListener
 
-    lcl_ToNextRecord(pImpl->pMergeData.get(), SwDBNextRecord::FIRST);
+    lcl_ToNextRecord(m_pImpl->pMergeData.get(), SwDBNextRecord::FIRST);
 
     uno::Reference<sdbc::XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,aData.sDataSource);
 
-    lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
+    lcl_InitNumberFormatter(*m_pImpl->pMergeData, xSource);
 
     pWorkShell->ChgDBData(aData);
-    bInMerge = true;
+    m_bInMerge = true;
 
     if (IsInitDBFields())
     {
@@ -562,7 +562,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
             break;
     }
 
-    pImpl->pMergeData.reset();
+    m_pImpl->pMergeData.reset();
 
     if( xWorkObjSh.Is() )
     {
@@ -570,14 +570,14 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         xWorkObjSh->DoClose();
     }
 
-    bInMerge = false;
+    m_bInMerge = false;
 
     return bRet;
 }
 
 void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 {
-    if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
+    if(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB)
     {
         pSh->StartAllAction();
         pSh->StartUndo();
@@ -639,9 +639,9 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
 
 void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 {
-    if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
+    if(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB)
     {
-        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
+        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
         OUString sFormatStr;
         sal_uInt16 nFormatLen = sFormatStr.getLength();
@@ -824,11 +824,11 @@ void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
 
 SwDBManager::SwDBManager(SwDoc* pDoc)
     : m_aMergeStatus( MergeStatus::Ok )
-    , bInitDBFields(false)
-    , bInMerge(false)
-    , bMergeSilent(false)
-    , pImpl(new SwDBManager_Impl(*this))
-    , pMergeEvtSrc(nullptr)
+    , m_bInitDBFields(false)
+    , m_bInMerge(false)
+    , m_bMergeSilent(false)
+    , m_pImpl(new SwDBManager_Impl(*this))
+    , m_pMergeEvtSrc(nullptr)
     , m_pDoc(pDoc)
 {
 }
@@ -1117,17 +1117,17 @@ public:
     virtual void mailDelivered( ::rtl::Reference<MailDispatcher>,
                  uno::Reference< mail::XMailMessage> xMessage ) override
     {
-        osl::MutexGuard aGuard( m_rDBManager.pImpl->m_aAllEmailSendMutex );
-        if ( m_rDBManager.pImpl->m_xLastMessage == xMessage )
-            m_rDBManager.pImpl->m_xLastMessage.clear();
+        osl::MutexGuard aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
+        if ( m_rDBManager.m_pImpl->m_xLastMessage == xMessage )
+            m_rDBManager.m_pImpl->m_xLastMessage.clear();
     }
 
     virtual void mailDeliveryError( ::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage>, const OUString& ) override
     {
-        osl::MutexGuard aGuard( m_rDBManager.pImpl->m_aAllEmailSendMutex );
+        osl::MutexGuard aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
         m_rDBManager.m_aMergeStatus = MergeStatus::Error;
-        m_rDBManager.pImpl->m_xLastMessage.clear();
+        m_rDBManager.m_pImpl->m_xLastMessage.clear();
         xMailDispatcher->stop();
     }
 };
@@ -1194,20 +1194,20 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
     else
     {
-        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
+        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
         if( !xCols->hasByName( rMergeDescriptor.sDBcolumn ) )
             return false;
         uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
         aCol >>= xColumnProp;
 
-        aColumnDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
-        aColumnDBFormat.aNullDate  = pImpl->pMergeData->aNullDate;
+        aColumnDBFormat.xFormatter = m_pImpl->pMergeData->xFormatter;
+        aColumnDBFormat.aNullDate  = m_pImpl->pMergeData->aNullDate;
 
         if( bMT_EMAIL )
         {
             // Reset internal mail accounting data
-            pImpl->m_xLastMessage.clear();
+            m_pImpl->m_xLastMessage.clear();
 
             xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer) );
             xMailListener = new MailDispatcherListener_Impl( *this );
@@ -1341,7 +1341,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( !bIsMergeSilent && !bMT_PRINTER )
         {
             sal_Int32 nRecordCount = 1;
-            lcl_getCountFromResultSet( nRecordCount, pImpl->pMergeData.get() );
+            lcl_getCountFromResultSet( nRecordCount, m_pImpl->pMergeData.get() );
 
             // Synchronized docs don't auto-advance the record set, but there is a
             // "security" check, which will always advance the record set, if there
@@ -1374,7 +1374,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
         do
         {
-            nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+            nStartRow = m_pImpl->pMergeData ? m_pImpl->pMergeData->xResultSet->getRow() : 0;
 
             OUString sColumnData;
 
@@ -1567,8 +1567,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 sMailEncoding, pStoreToFilter->GetMimeType() );
                             if( xMessage.is() )
                             {
-                                osl::MutexGuard aGuard( pImpl->m_aAllEmailSendMutex );
-                                pImpl->m_xLastMessage.set( xMessage );
+                                osl::MutexGuard aGuard( m_pImpl->m_aAllEmailSendMutex );
+                                m_pImpl->m_xLastMessage.set( xMessage );
                                 xMailDispatcher->enqueueMailMessage( xMessage );
                                 if( !xMailDispatcher->isStarted() )
                                     xMailDispatcher->start();
@@ -1586,7 +1586,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             bWorkDocInitialized = true;
             nDocNo++;
-            nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+            nEndRow = m_pImpl->pMergeData ? m_pImpl->pMergeData->xResultSet->getRow() : 0;
 
             // Freeze the layouts of the target document after the first inserted
             // sub-document, to get the correct PageDesc.
@@ -1702,7 +1702,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     "sw::SwDBManager aEmailDispatcherPollTimer" );
                 aEmailDispatcherPollTimer.SetTimeout( 500 );
                 aEmailDispatcherPollTimer.Start();
-                while( IsMergeOk() && pImpl->m_xLastMessage.is() )
+                while( IsMergeOk() && m_pImpl->m_xLastMessage.is() )
                     Application::Yield();
                 aEmailDispatcherPollTimer.Stop();
             }
@@ -1749,14 +1749,14 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
         bool bUseMergeData = false;
         uno::Reference< sdbcx::XColumnsSupplier> xColsSupp;
         bool bDisposeConnection = false;
-        if(pImpl->pMergeData &&
-            ((pImpl->pMergeData->sDataSource == rDBName && pImpl->pMergeData->sCommand == rTableName) ||
+        if(m_pImpl->pMergeData &&
+            ((m_pImpl->pMergeData->sDataSource == rDBName && m_pImpl->pMergeData->sCommand == rTableName) ||
             (rDBName.isEmpty() && rTableName.isEmpty())))
         {
-            xConnection = pImpl->pMergeData->xConnection;
+            xConnection = m_pImpl->pMergeData->xConnection;
             xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = true;
-            xColsSupp.set(pImpl->pMergeData->xResultSet, css::uno::UNO_QUERY);
+            xColsSupp.set(m_pImpl->pMergeData->xResultSet, css::uno::UNO_QUERY);
         }
         if(!xConnection.is())
         {
@@ -1776,7 +1776,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
                 bDisposeConnection = true;
             }
             if(bUseMergeData)
-                pImpl->pMergeData->xConnection = xConnection;
+                m_pImpl->pMergeData->xConnection = xConnection;
         }
         bool bDispose = !xColsSupp.is();
         if(bDispose)
@@ -2089,12 +2089,12 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
 bool    SwDBManager::IsDataSourceOpen(const OUString& rDataSource,
                                   const OUString& rTableOrQuery, bool bMergeShell)
 {
-    if(pImpl->pMergeData)
+    if(m_pImpl->pMergeData)
     {
-        return ((rDataSource == pImpl->pMergeData->sDataSource
-                 && rTableOrQuery == pImpl->pMergeData->sCommand)
+        return ((rDataSource == m_pImpl->pMergeData->sDataSource
+                 && rTableOrQuery == m_pImpl->pMergeData->sCommand)
                 || (rDataSource.isEmpty() && rTableOrQuery.isEmpty()))
-               && pImpl->pMergeData->xResultSet.is();
+               && m_pImpl->pMergeData->xResultSet.is();
     }
     else if(!bMergeShell)
     {
@@ -2117,11 +2117,11 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
     bool bRet = false;
     SwDSParam* pFound = nullptr;
     //check if it's the merge data source
-    if(pImpl->pMergeData &&
-        rSourceName == pImpl->pMergeData->sDataSource &&
-        rTableName == pImpl->pMergeData->sCommand)
+    if(m_pImpl->pMergeData &&
+        rSourceName == m_pImpl->pMergeData->sDataSource &&
+        rTableName == m_pImpl->pMergeData->sCommand)
     {
-        pFound = pImpl->pMergeData.get();
+        pFound = m_pImpl->pMergeData.get();
     }
     else
     {
@@ -2182,14 +2182,14 @@ bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, LanguageType
         return false;
     }
 
-    bool bRet = lcl_GetColumnCnt(pImpl->pMergeData.get(), rColumnName, nLanguage, rResult, pNumber);
+    bool bRet = lcl_GetColumnCnt(m_pImpl->pMergeData.get(), rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
 
 bool SwDBManager::ToNextMergeRecord()
 {
-    assert( pImpl->pMergeData && pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
-    return lcl_ToNextRecord( pImpl->pMergeData.get() );
+    assert( m_pImpl->pMergeData && m_pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
+    return lcl_ToNextRecord( m_pImpl->pMergeData.get() );
 }
 
 bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
@@ -2198,7 +2198,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
     if( !IsValidMergeRecord() )
         return false;
 
-    uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
+    uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
     if( !xColsSupp.is() )
         return false;
 
@@ -2223,10 +2223,10 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             aType >>= nColumnType;
             double aNumber = DBL_MAX;
 
-            lcl_GetColumnCnt( pImpl->pMergeData.get(), xColumnProps, nLanguage, aString, &aNumber );
+            lcl_GetColumnCnt( m_pImpl->pMergeData.get(), xColumnProps, nLanguage, aString, &aNumber );
 
-            sal_uInt32 nFormat = GetColumnFormat( pImpl->pMergeData->sDataSource,
-                                            pImpl->pMergeData->sCommand,
+            sal_uInt32 nFormat = GetColumnFormat( m_pImpl->pMergeData->sDataSource,
+                                            m_pImpl->pMergeData->sCommand,
                                             pColNames[nCol], pDocFormatter, nLanguage );
             // aNumber is overwritten by SwDBField::FormatValue, so store initial status
             bool colIsNumber = aNumber != DBL_MAX;
@@ -2261,11 +2261,11 @@ void SwDBManager::ToNextRecord(
     const OUString& rDataSource, const OUString& rCommand)
 {
     SwDSParam* pFound = nullptr;
-    if(pImpl->pMergeData &&
-        rDataSource == pImpl->pMergeData->sDataSource &&
-        rCommand == pImpl->pMergeData->sCommand)
+    if(m_pImpl->pMergeData &&
+        rDataSource == m_pImpl->pMergeData->sDataSource &&
+        rCommand == m_pImpl->pMergeData->sCommand)
     {
-        pFound = pImpl->pMergeData.get();
+        pFound = m_pImpl->pMergeData.get();
     }
     else
     {
@@ -2343,19 +2343,19 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
 // the cursor position must be validated
 bool SwDBManager::IsValidMergeRecord() const
 {
-    return( pImpl->pMergeData && pImpl->pMergeData->HasValidRecord() );
+    return( m_pImpl->pMergeData && m_pImpl->pMergeData->HasValidRecord() );
 }
 
 sal_uInt32  SwDBManager::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
-    assert( pImpl->pMergeData &&
-            pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
-    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
+    assert( m_pImpl->pMergeData &&
+            m_pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
+    if(!m_pImpl->pMergeData || !m_pImpl->pMergeData->xResultSet.is())
         return 0;
     try
     {
-        nRet = pImpl->pMergeData->xResultSet->getRow();
+        nRet = m_pImpl->pMergeData->xResultSet->getRow();
     }
     catch(const uno::Exception&)
     {
@@ -2365,15 +2365,15 @@ sal_uInt32  SwDBManager::GetSelectedRecordId()
 
 bool SwDBManager::ToRecordId(sal_Int32 nSet)
 {
-    assert( pImpl->pMergeData &&
-            pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
-    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
+    assert( m_pImpl->pMergeData &&
+            m_pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
+    if(!m_pImpl->pMergeData || !m_pImpl->pMergeData->xResultSet.is()|| nSet < 0)
         return false;
     bool bRet = false;
     sal_Int32 nAbsPos = nSet;
     assert(nAbsPos >= 0);
-    bRet = lcl_MoveAbsolute(pImpl->pMergeData.get(), nAbsPos);
-    pImpl->pMergeData->bEndOfDB = !bRet;
+    bRet = lcl_MoveAbsolute(m_pImpl->pMergeData.get(), nAbsPos);
+    m_pImpl->pMergeData->bEndOfDB = !bRet;
     return bRet;
 }
 
@@ -2440,7 +2440,7 @@ uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUStr
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
         }
         catch(const uno::Exception&)
         {
@@ -2454,12 +2454,12 @@ sal_uInt32      SwDBManager::GetSelectedRecordId(
 {
     sal_uInt32 nRet = 0xffffffff;
     //check for merge data source first
-    if(pImpl->pMergeData &&
-        ((rDataSource == pImpl->pMergeData->sDataSource &&
-        rTableOrQuery == pImpl->pMergeData->sCommand) ||
+    if(m_pImpl->pMergeData &&
+        ((rDataSource == m_pImpl->pMergeData->sDataSource &&
+        rTableOrQuery == m_pImpl->pMergeData->sCommand) ||
         (rDataSource.isEmpty() && rTableOrQuery.isEmpty())) &&
-        (nCommandType == -1 || nCommandType == pImpl->pMergeData->nCommandType) &&
-        pImpl->pMergeData->xResultSet.is())
+        (nCommandType == -1 || nCommandType == m_pImpl->pMergeData->nCommandType) &&
+        m_pImpl->pMergeData->xResultSet.is())
     {
         nRet = GetSelectedRecordId();
     }
@@ -2500,13 +2500,13 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
     //all connections stay open
     for (auto & pParam : m_DataSourceParams)
     {
-        if (bIncludingMerge || pParam.get() != pImpl->pMergeData.get())
+        if (bIncludingMerge || pParam.get() != m_pImpl->pMergeData.get())
         {
             pParam->nSelectionIndex = 0;
             pParam->bEndOfDB = false;
             try
             {
-                if(!bInMerge && pParam->xResultSet.is())
+                if(!m_bInMerge && pParam->xResultSet.is())
                     pParam->xResultSet->first();
             }
             catch(const uno::Exception&)
@@ -2518,14 +2518,14 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
 SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
 {
     //prefer merge data if available
-    if(pImpl->pMergeData &&
-        ((rData.sDataSource == pImpl->pMergeData->sDataSource &&
-        rData.sCommand == pImpl->pMergeData->sCommand) ||
+    if(m_pImpl->pMergeData &&
+        ((rData.sDataSource == m_pImpl->pMergeData->sDataSource &&
+        rData.sCommand == m_pImpl->pMergeData->sCommand) ||
         (rData.sDataSource.isEmpty() && rData.sCommand.isEmpty())) &&
-        (rData.nCommandType == -1 || rData.nCommandType == pImpl->pMergeData->nCommandType ||
-        (bCreate && pImpl->pMergeData->nCommandType == -1)))
+        (rData.nCommandType == -1 || rData.nCommandType == m_pImpl->pMergeData->nCommandType ||
+        (bCreate && m_pImpl->pMergeData->nCommandType == -1)))
     {
-        return pImpl->pMergeData.get();
+        return m_pImpl->pMergeData.get();
     }
 
     SwDSParam* pFound = nullptr;
@@ -2554,7 +2554,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
         }
         catch(const uno::Exception&)
         {
@@ -2566,10 +2566,10 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
 SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCreate)
 {
     //prefer merge data if available
-    if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
+    if(m_pImpl->pMergeData && rDataSource == m_pImpl->pMergeData->sDataSource )
     {
         SetAsUsed(rDataSource);
-        return pImpl->pMergeData.get();
+        return m_pImpl->pMergeData.get();
     }
     SwDSParam* pFound = nullptr;
     for (auto & pParam : m_DataSourceParams)
@@ -2592,7 +2592,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
         }
         catch(const uno::Exception&)
         {
@@ -3020,7 +3020,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                         const uno::Sequence<beans::PropertyValue>& rProperties)
 {
     //prevent second call
-    if(pImpl->pMergeDialog)
+    if(m_pImpl->pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
     uno::Sequence<uno::Any> aSelection;
@@ -3052,16 +3052,16 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg( &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                      sDataSource,
                                                      sDataTableOrQuery,
                                                      nCmdType,
                                                      xConnection);
-    if(pImpl->pMergeDialog->Execute() == RET_OK)
+    if(m_pImpl->pMergeDialog->Execute() == RET_OK)
     {
-        aDescriptor[svx::DataAccessDescriptorProperty::Selection] <<= pImpl->pMergeDialog->GetSelection();
+        aDescriptor[svx::DataAccessDescriptorProperty::Selection] <<= m_pImpl->pMergeDialog->GetSelection();
 
-        uno::Reference<sdbc::XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
+        uno::Reference<sdbc::XResultSet> xResSet = m_pImpl->pMergeDialog->GetResultSet();
         if(xResSet.is())
             aDescriptor[svx::DataAccessDescriptorProperty::Cursor] <<= xResSet;
 
@@ -3071,14 +3071,14 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         lcl_emitEvent(SfxEventHintId::SwMailMerge, STR_SW_EVENT_MAIL_MERGE, xDocShell.get());
 
         // prepare mail merge descriptor
-        SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
-        aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
-        aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
+        SwMergeDescriptor aMergeDesc( m_pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
+        aMergeDesc.sSaveToFilter = m_pImpl->pMergeDialog->GetSaveFilter();
+        aMergeDesc.bCreateSingleFile = m_pImpl->pMergeDialog->IsSaveSingleDoc();
         aMergeDesc.bPrefixIsFilename = aMergeDesc.bCreateSingleFile;
-        aMergeDesc.sPrefix = pImpl->pMergeDialog->GetTargetURL();
-        if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
+        aMergeDesc.sPrefix = m_pImpl->pMergeDialog->GetTargetURL();
+        if( !aMergeDesc.bCreateSingleFile && m_pImpl->pMergeDialog->IsGenerateFromDataBase() )
         {
-            aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
+            aMergeDesc.sDBcolumn = m_pImpl->pMergeDialog->GetColumnName();
         }
 
         Merge( aMergeDesc );
@@ -3111,7 +3111,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             //this has been done by the SwConnectionDisposedListener_Impl already
         }
     }
-    pImpl->pMergeDialog.disposeAndClear();
+    m_pImpl->pMergeDialog.disposeAndClear();
 }
 
 void SwDBManager::InsertText(SwWrtShell& rSh,
@@ -3253,7 +3253,7 @@ void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDo
 
     if (bRegisterListener)
         // Register a remove listener, so we know when the embedded data source is removed.
-        pImpl->m_xDataSourceRemovedListener = new SwDataSourceRemovedListener(*this);
+        m_pImpl->m_xDataSourceRemovedListener = new SwDataSourceRemovedListener(*this);
 }
 
 const OUString& SwDBManager::getEmbeddedName() const
@@ -3268,10 +3268,10 @@ SwDoc* SwDBManager::getDoc() const
 
 void SwDBManager::releaseRevokeListener()
 {
-    if (pImpl->m_xDataSourceRemovedListener.is())
+    if (m_pImpl->m_xDataSourceRemovedListener.is())
     {
-        pImpl->m_xDataSourceRemovedListener->Dispose();
-        pImpl->m_xDataSourceRemovedListener.clear();
+        m_pImpl->m_xDataSourceRemovedListener->Dispose();
+        m_pImpl->m_xDataSourceRemovedListener.clear();
     }
 }
 

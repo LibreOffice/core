@@ -244,12 +244,12 @@ class SW_DLLPUBLIC SwDBManager
     };
 
     MergeStatus     m_aMergeStatus;     ///< current / last merge status
-    bool            bInitDBFields : 1;
-    bool            bInMerge    : 1;    ///< merge process active
-    bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
+    bool            m_bInitDBFields : 1;
+    bool            m_bInMerge    : 1;    ///< merge process active
+    bool            m_bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     SwDSParams_t    m_DataSourceParams;
-    std::unique_ptr<SwDBManager_Impl>  pImpl;
-    const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
+    std::unique_ptr<SwDBManager_Impl>  m_pImpl;
+    const SwXMailMerge* m_pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
     /// Name of the embedded database that's included in the current document.
     OUString     m_sEmbeddedName;
 
@@ -289,11 +289,11 @@ public:
     ~SwDBManager() COVERITY_NOEXCEPT_FALSE;
 
     /// MailMergeEvent source
-    const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
-    void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
+    const SwXMailMerge *    GetMailMergeEvtSrc() const  { return m_pMergeEvtSrc; }
+    void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { m_pMergeEvtSrc = pSrc; }
 
-    bool     IsMergeSilent() const           { return bMergeSilent; }
-    void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
+    bool     IsMergeSilent() const           { return m_bMergeSilent; }
+    void     SetMergeSilent( bool bVal )     { m_bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
     bool            Merge( const SwMergeDescriptor& rMergeDesc );
@@ -305,8 +305,8 @@ public:
     static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView const * pView);
 
     /// Initialize data fields that lack name of database.
-    bool     IsInitDBFields() const  { return bInitDBFields; }
-    void     SetInitDBFields(bool b) { bInitDBFields = b;    }
+    bool     IsInitDBFields() const  { return m_bInitDBFields; }
+    void     SetInitDBFields(bool b) { m_bInitDBFields = b;    }
 
     /// Fill listbox with all table names of a database.
     bool            GetTableNames(weld::ComboBox& rBox, const OUString& rDBName);
@@ -338,7 +338,7 @@ public:
                           const OUString& rTableName,
                           const OUString& rColNm );
 
-    bool     IsInMerge() const   { return bInMerge; }
+    bool     IsInMerge() const   { return m_bInMerge; }
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
