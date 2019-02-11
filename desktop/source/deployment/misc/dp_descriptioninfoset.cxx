@@ -171,9 +171,7 @@ ExtensionDescription::ExtensionDescription(
         //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
         //and filter the respective exception out.
         OUString sDescriptionUri(installDir + "/description.xml");
-        Reference<css::ucb::XCommandEnvironment> xFilter =
-            static_cast<css::ucb::XCommandEnvironment*>(
-                new FileDoesNotExistFilter(xCmdEnv));
+        Reference<css::ucb::XCommandEnvironment> xFilter = new FileDoesNotExistFilter(xCmdEnv);
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
         //throws an css::uno::Exception if the file is not available

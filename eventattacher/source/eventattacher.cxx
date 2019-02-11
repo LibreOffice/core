@@ -95,8 +95,8 @@ static Reference< XInterface > createAllListenerAdapter
     Reference< XInterface > xAdapter;
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
-       Reference< XInvocation > xInvocationToAllListenerMapper =
-            static_cast<XInvocation*>(new InvocationToAllListenerMapper( xListenerType, xListener, Helper ));
+        Reference< XInvocation > xInvocationToAllListenerMapper =
+            new InvocationToAllListenerMapper(xListenerType, xListener, Helper);
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName());
         Sequence<Type> arg2(1);
         arg2[0] = aListenerType;
@@ -278,7 +278,7 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 /// @throws Exception
 static Reference< XInterface > EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
-    XEventAttacher *pEventAttacher = static_cast<XEventAttacher*>(new EventAttacherImpl( comphelper::getComponentContext(rSMgr) ));
+    XEventAttacher* pEventAttacher = new EventAttacherImpl(comphelper::getComponentContext(rSMgr));
 
     Reference< XInterface > xRet(pEventAttacher, UNO_QUERY);
 
@@ -730,8 +730,8 @@ Reference< XEventListener > EventAttacherImpl::attachSingleEventListener
 )
 {
     // Subscribe FilterListener
-    Reference< XAllListener > aFilterListener = static_cast<XAllListener*>(
-        new FilterAllListenerImpl( this, EventMethod, AllListener ));
+    Reference<XAllListener> aFilterListener
+        = new FilterAllListenerImpl(this, EventMethod, AllListener);
     return attachListener( xObject, aFilterListener, Helper, ListenerType, AddListenerParam);
 }
 
@@ -846,8 +846,8 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
     Sequence< Reference<XAllListener> > aFilterListeners(nCount);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aFilterListeners[i] = static_cast<XAllListener*>(
-            new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener));
+        aFilterListeners[i]
+            = new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener);
     }
 
     return attachListeners(xObject, aFilterListeners, aListeners);

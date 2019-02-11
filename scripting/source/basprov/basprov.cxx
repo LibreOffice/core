@@ -448,8 +448,9 @@ namespace basprov
                 }
                 if ( bCreate )
                 {
-                    pChildNodes[childrenFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl(
-                        m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i], m_bIsAppScriptCtx ) );
+                    pChildNodes[childrenFound++]
+                        = new BasicLibraryNodeImpl(m_xContext, m_sScriptingContext, pBasicManager,
+                                                   xLibContainer, pLibNames[i], m_bIsAppScriptCtx);
                 }
             }
 
