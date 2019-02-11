@@ -28,43 +28,32 @@
 #include <ViewShell.hxx>
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
-    vcl::Window* pWindow, const SdDrawDocument* pInDoc,
+    weld::Window* pWindow, const SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
-    : ModalDialog(pWindow, "InsertSlidesDialog",
-        "modules/sdraw/ui/insertslidesdialog.ui")
-    , pMedium(pSfxMedium)
-    , mpDoc(pInDoc)
-    , rName(rFileName)
+    : GenericDialogController(pWindow, "modules/sdraw/ui/insertslidesdialog.ui", "InsertSlidesDialog")
+    , m_pMedium(pSfxMedium)
+    , m_pDoc(pInDoc)
+    , m_rName(rFileName)
+    , m_xLbTree(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
+    , m_xCbxLink(m_xBuilder->weld_check_button("links"))
+    , m_xCbxMasters(m_xBuilder->weld_check_button("backgrounds"))
 {
-    get(m_pLbTree, "tree");
-    get(m_pCbxMasters, "backgrounds");
-    get(m_pCbxLink, "links");
+    m_xLbTree->set_size_request(m_xLbTree->get_approximate_digit_width() * 48,
+                                m_xLbTree->get_height_rows(12));
 
-    m_pLbTree->set_width_request(m_pLbTree->approximate_char_width() * 50);
-    m_pLbTree->set_height_request(m_pLbTree->GetTextHeight() * 12);
+    m_xLbTree->SetViewFrame( pInDoc->GetDocSh()->GetViewShell()->GetViewFrame() );
 
-    m_pLbTree->SetViewFrame( pInDoc->GetDocSh()->GetViewShell()->GetViewFrame() );
-
-    m_pLbTree->SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
+    m_xLbTree->connect_changed(LINK(this, SdInsertPagesObjsDlg, SelectObjectHdl));
 
     // insert text
-    if( !pMedium )
-        SetText( SdResId( STR_INSERT_TEXT ) );
+    if (!m_pMedium)
+        m_xDialog->set_title(SdResId(STR_INSERT_TEXT));
 
     Reset();
 }
 
 SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 {
-    disposeOnce();
-}
-
-void SdInsertPagesObjsDlg::dispose()
-{
-    m_pLbTree.clear();
-    m_pCbxLink.clear();
-    m_pCbxMasters.clear();
-    ModalDialog::dispose();
 }
 
 /**
@@ -73,39 +62,39 @@ void SdInsertPagesObjsDlg::dispose()
  */
 void SdInsertPagesObjsDlg::Reset()
 {
-    if( pMedium )
+    if( m_pMedium )
     {
-        m_pLbTree->SetSelectionMode( SelectionMode::Multiple );
+        m_xLbTree->set_selection_mode(SelectionMode::Multiple);
 
         // transfer ownership of Medium
-        m_pLbTree->Fill( mpDoc, pMedium, rName );
+        m_xLbTree->Fill( m_pDoc, m_pMedium, m_rName );
     }
     else
     {
-        Image aImgText(StockImage::Yes, BMP_DOC_TEXT);
-        m_pLbTree->InsertEntry( rName, aImgText, aImgText );
+        OUString sImgText(BMP_DOC_TEXT);
+        m_xLbTree->InsertEntry(m_rName, sImgText);
     }
 
-    m_pCbxMasters->Check();
+    m_xCbxMasters->set_active(true);
 }
 
 std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
 {
     // With Draw documents, we have to return NULL on selection of the document
-    if( pMedium )
+    if( m_pMedium )
     {
         // to ensure that bookmarks are opened
         // (when the whole document is selected)
-        m_pLbTree->GetBookmarkDoc();
+        m_xLbTree->GetBookmarkDoc();
 
         // If the document is selected (too) or nothing is selected,
         // the whole document is inserted (but not more!)
-        if( m_pLbTree->GetSelectionCount() == 0 ||
-            ( m_pLbTree->IsSelected( m_pLbTree->First() ) ) )
+        std::unique_ptr<weld::TreeIter> xIter(m_xLbTree->make_iterator());
+        if (!m_xLbTree->get_iter_first(*xIter) || m_xLbTree->is_selected(*xIter))
             return std::vector<OUString>();
     }
 
-    return m_pLbTree->GetSelectEntryList( nType );
+    return m_xLbTree->GetSelectEntryList( nType );
 }
 
 /**
@@ -113,7 +102,7 @@ std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
  */
 bool SdInsertPagesObjsDlg::IsLink()
 {
-    return m_pCbxLink->IsChecked();
+    return m_xCbxLink->get_active();
 }
 
 /**
@@ -121,18 +110,15 @@ bool SdInsertPagesObjsDlg::IsLink()
  */
 bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
-    return m_pCbxMasters->IsChecked();
+    return m_xCbxMasters->get_active();
 }
 
 /**
  * Enabled and selects end-color-LB
  */
-IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl, weld::TreeView&, void)
 {
-    if( m_pLbTree->IsLinkableSelected() )
-        m_pCbxLink->Enable();
-    else
-        m_pCbxLink->Disable();
+    m_xCbxLink->set_sensitive(m_xLbTree->IsLinkableSelected());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1423,4 +1423,262 @@ SdPageObjsTLB::IconProvider::IconProvider()
 {
 }
 
+SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+    , m_xAccel(::svt::AcceleratorExecute::createAcceleratorHelper())
+    , m_pDoc(nullptr)
+    , m_pBookmarkDoc(nullptr)
+    , m_pMedium(nullptr)
+    , m_pOwnMedium(nullptr)
+    , m_bLinkableSelected(false)
+    , m_bShowAllShapes(false)
+{
+    m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
+}
+
+OUString SdPageObjsTLV::GetObjectName(
+    const SdrObject* pObject,
+    const bool bCreate) const
+{
+    OUString aRet;
+
+    if ( pObject )
+    {
+        aRet = pObject->GetName();
+
+        if (aRet.isEmpty() && dynamic_cast<const SdrOle2Obj* >(pObject) !=  nullptr)
+            aRet = static_cast< const SdrOle2Obj* >( pObject )->GetPersistName();
+    }
+
+    if (bCreate
+        && m_bShowAllShapes
+        && aRet.isEmpty()
+        && pObject!=nullptr)
+    {
+        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
+        aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
+    }
+
+    return aRet;
+}
+
+std::vector<OUString> SdPageObjsTLV::GetSelectEntryList(const int nDepth) const
+{
+    std::vector<OUString> aEntries;
+
+    m_xTreeView->selected_foreach([this, nDepth, &aEntries](weld::TreeIter& rEntry){
+        int nListDepth = m_xTreeView->get_iter_depth(rEntry);
+        if (nListDepth == nDepth)
+            aEntries.push_back(m_xTreeView->get_text(rEntry));
+    });
+
+    return aEntries;
+}
+
+/**
+ * Checks if it is a draw file and opens the BookmarkDoc depending of
+ * the provided Docs
+ */
+SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc(SfxMedium* pMed)
+{
+    if (
+       !m_pBookmarkDoc ||
+         (pMed && (!m_pOwnMedium || m_pOwnMedium->GetName() != pMed->GetName()))
+      )
+    {
+        // create a new BookmarkDoc if now one exists or if a new Medium is provided
+        if (m_pOwnMedium != pMed)
+        {
+            CloseBookmarkDoc();
+        }
+
+        if (pMed)
+        {
+            // it looks that it is undefined if a Medium was set by Fill() already
+            DBG_ASSERT( !m_pMedium, "SfxMedium confusion!" );
+            delete m_pMedium;
+            m_pMedium = nullptr;
+
+            // take over this Medium (currently used only be Navigator)
+            m_pOwnMedium = pMed;
+        }
+
+        DBG_ASSERT( m_pMedium || pMed, "No SfxMedium provided!" );
+
+        if( pMed )
+        {
+            // in this mode the document is also owned and controlled by this instance
+            m_xBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
+            if (m_xBookmarkDocShRef->DoLoad(pMed))
+                m_pBookmarkDoc = m_xBookmarkDocShRef->GetDoc();
+            else
+                m_pBookmarkDoc = nullptr;
+        }
+        else if ( m_pMedium )
+            // in this mode the document is owned and controlled by the SdDrawDocument
+            // it can be released by calling the corresponding CloseBookmarkDoc method
+            // successful creation of a document makes this the owner of the medium
+            m_pBookmarkDoc = const_cast<SdDrawDocument*>(m_pDoc)->OpenBookmarkDoc(m_pMedium);
+
+        if ( !m_pBookmarkDoc )
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xTreeView.get(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
+            xErrorBox->run();
+            m_pMedium = nullptr; //On failure the SfxMedium is invalid
+        }
+    }
+
+    return m_pBookmarkDoc;
+}
+
+/**
+ * Entries are inserted only by request (double click)
+ */
+IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, weld::TreeIter&, rFileEntry, bool)
+{
+    if (!m_xTreeView->iter_has_child(rFileEntry))
+    {
+        if (GetBookmarkDoc())
+        {
+            SdrObject*   pObj = nullptr;
+
+            OUString sImgPage(BMP_PAGE);
+            OUString sImgPageObjs(BMP_PAGEOBJS);
+            OUString sImgObjects(BMP_OBJECTS);
+            OUString sImgOle(BMP_OLE);
+            OUString sImgGraphic(BMP_GRAPHIC);
+
+            // document name already inserted
+
+            // only insert all "normal" ? slides with objects
+            sal_uInt16 nPage = 0;
+            const sal_uInt16 nMaxPages = m_pBookmarkDoc->GetPageCount();
+
+            std::unique_ptr<weld::TreeIter> xPageEntry;
+            while (nPage < nMaxPages)
+            {
+                SdPage* pPage = static_cast<SdPage*>(m_pBookmarkDoc->GetPage(nPage));
+                if (pPage->GetPageKind() == PageKind::Standard)
+                {
+                    OUString sId(OUString::number(1));
+                    m_xTreeView->insert(&rFileEntry, -1, &pPage->GetName(), &sId,
+                                        nullptr, nullptr, &sImgPage, false);
+
+                    if (!xPageEntry)
+                    {
+                        xPageEntry = m_xTreeView->make_iterator(&rFileEntry);
+                        m_xTreeView->iter_children(*xPageEntry);
+                    }
+                    else
+                        m_xTreeView->iter_next_sibling(*xPageEntry);
+
+                    SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
+
+                    while( aIter.IsMore() )
+                    {
+                        pObj = aIter.Next();
+                        OUString aStr( GetObjectName( pObj ) );
+                        if( !aStr.isEmpty() )
+                        {
+                            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                            {
+                                m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
+                                                    nullptr, nullptr, &sImgOle, false);
+                            }
+                            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
+                            {
+                                m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
+                                                    nullptr, nullptr, &sImgGraphic, false);
+                            }
+                            else
+                            {
+                                m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
+                                                    nullptr, nullptr, &sImgObjects, false);
+                            }
+                        }
+                    }
+                    if (m_xTreeView->iter_has_child(*xPageEntry))
+                    {
+                        m_xTreeView->set_expander_image(*xPageEntry, sImgPageObjs);
+                    }
+                }
+                nPage++;
+            }
+        }
+    }
+    return true;
+}
+
+void SdPageObjsTLV::SetViewFrame(const SfxViewFrame* pViewFrame)
+{
+    sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
+    const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+    m_xAccel->init(::comphelper::getProcessComponentContext(), xFrame);
+}
+
+/**
+ * Close and delete bookmark document
+ */
+void SdPageObjsTLV::CloseBookmarkDoc()
+{
+    if (m_xBookmarkDocShRef.is())
+    {
+        m_xBookmarkDocShRef->DoClose();
+        m_xBookmarkDocShRef.clear();
+
+        // Medium is owned by document, so it's destroyed already
+        m_pOwnMedium = nullptr;
+    }
+    else if (m_pBookmarkDoc)
+    {
+        DBG_ASSERT(!m_pOwnMedium, "SfxMedium confusion!");
+        if (m_pDoc)
+        {
+            // The document owns the Medium, so the Medium will be invalid after closing the document
+            const_cast<SdDrawDocument*>(m_pDoc)->CloseBookmarkDoc();
+            m_pMedium = nullptr;
+        }
+    }
+    else
+    {
+        // perhaps mpOwnMedium provided, but no successful creation of BookmarkDoc
+        delete m_pOwnMedium;
+        m_pOwnMedium = nullptr;
+    }
+
+    m_pBookmarkDoc = nullptr;
+}
+
+/**
+ * We insert only the first entry. Children are created on demand.
+ */
+void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
+                          const OUString& rDocName )
+{
+    m_pDoc = pInDoc;
+
+    // this object now owns the Medium
+    m_pMedium = pInMedium;
+    m_aDocName = rDocName;
+
+    OUString sImgDoc(BMP_DOC_OPEN);
+
+    OUString sId(OUString::number(1));
+    // insert document name
+    m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, &sImgDoc, true);
+}
+
+SdPageObjsTLV::~SdPageObjsTLV()
+{
+    if (m_pBookmarkDoc)
+        CloseBookmarkDoc();
+    else
+    {
+        // no document was created from mpMedium, so this object is still the owner of it
+        delete m_pMedium;
+    }
+    m_xAccel.reset();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
