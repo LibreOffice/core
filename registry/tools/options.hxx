@@ -23,8 +23,6 @@
 #include <string>
 #include <vector>
 
-#include <sal/types.h>
-
 namespace registry
 {
 namespace tools

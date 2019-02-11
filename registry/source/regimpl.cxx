@@ -21,6 +21,7 @@
 #include "regimpl.hxx"
 
 #include <memory>
+#include <set>
 #include <vector>
 #include <string.h>
 #include <stdio.h>
@@ -36,13 +37,11 @@
 #include <registry/reader.hxx>
 #include <registry/refltype.hxx>
 #include <registry/types.hxx>
-#include <registry/version.h>
 
 #include "reflcnst.hxx"
 #include "keyimpl.hxx"
 
 #include <osl/thread.h>
-#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_REGISTRY_SOURCE_REFLREAD_HXX
 
 #include <registry/refltype.hxx>
-#include <registry/regtype.h>
 #include <rtl/ustring.hxx>
 
 /// Implememetation handle

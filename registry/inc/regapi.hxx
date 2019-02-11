@@ -20,7 +20,6 @@
 #ifndef INCLUDED_REGISTRY_INC_REGAPI_HXX
 #define INCLUDED_REGISTRY_INC_REGAPI_HXX
 
-#include <stddef.h>
 #include <rtl/ustring.h>
 #include <registry/regtype.h>
 #include <registry/regdllapi.h>

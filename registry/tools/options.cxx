@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 
 #include <stdio.h>
-#include <string.h>
 
 namespace registry
 {

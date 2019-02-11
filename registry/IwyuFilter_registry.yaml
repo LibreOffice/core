@@ -1,0 +1,16 @@
+---
+assumeFilename: registry/source/registry.cxx
+blacklist:
+    registry/source/regimpl.hxx:
+    # Needed for correct linker visibility
+    - regapi.hxx
+    registry/source/reflwrit.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    # Needed for correct linker visibility
+    - registry/writer.h
+    registry/source/reflread.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    # Needed for correct linker visibility
+    - registry/typereg_reader.hxx

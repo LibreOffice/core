@@ -20,7 +20,6 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 #define INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 
-#include <regapi.hxx>
 #include "regimpl.hxx"
 #include <rtl/ustring.hxx>
 
