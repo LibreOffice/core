@@ -2047,10 +2047,8 @@ void ScConditionalFormatList::InsertNew( std::unique_ptr<ScConditionalFormat> pN
 
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
-    //FIXME: Binary search
-    iterator itr = std::find_if(begin(), end(),
-        [&nKey](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nKey; });
-    if (itr != end())
+    auto itr = m_ConditionalFormats.find(nKey);
+    if (itr != m_ConditionalFormats.end())
         return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
@@ -2059,10 +2057,8 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 
 const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey ) const
 {
-    //FIXME: Binary search
-    const_iterator itr = std::find_if(begin(), end(),
-        [&nKey](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nKey; });
-    if (itr != end())
+    auto itr = m_ConditionalFormats.find(nKey);
+    if (itr != m_ConditionalFormats.end())
         return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
@@ -2152,8 +2148,8 @@ bool ScConditionalFormatList::CheckAllEntries(const Link<ScConditionalFormat*,vo
     bool bValid = true;
 
     // need to check which must be deleted
-    iterator itr = begin();
-    while(itr != end())
+    iterator itr = m_ConditionalFormats.begin();
+    while(itr != m_ConditionalFormats.end())
     {
         if ((*itr)->GetRange().empty())
         {
@@ -2245,8 +2241,7 @@ bool ScConditionalFormatList::empty() const
 
 void ScConditionalFormatList::erase( sal_uLong nIndex )
 {
-    iterator itr = std::find_if(begin(), end(),
-        [&nIndex](const std::unique_ptr<ScConditionalFormat>& rxFormat) { return rxFormat->GetKey() == nIndex; });
+    auto itr = m_ConditionalFormats.find(nIndex);
     if (itr != end())
         m_ConditionalFormats.erase(itr);
 }
@@ -2274,14 +2269,9 @@ void ScConditionalFormatList::clear()
 
 sal_uInt32 ScConditionalFormatList::getMaxKey() const
 {
-    sal_uInt32 nMax = 0;
-    for (const auto& aEntry : m_ConditionalFormats)
-    {
-        if (aEntry->GetKey() > nMax)
-            nMax = aEntry->GetKey();
-    }
-
-    return nMax;
+    if (m_ConditionalFormats.empty())
+        return 0;
+    return (*m_ConditionalFormats.rbegin())->GetKey();
 }
 
 void ScConditionalFormatList::CalcAll()
