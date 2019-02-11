@@ -148,8 +148,6 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrEndWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbCenterEnd;
     std::unique_ptr<weld::CheckButton> m_xCbxSynchronize;
-    std::unique_ptr<weld::Menu> m_xGalleryMenu;
-    std::unique_ptr<weld::Menu> m_xSymbolsMenu;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
 
     std::unique_ptr<weld::Widget> m_xFLEdgeStyle;
@@ -162,6 +160,8 @@ private:
     std::unique_ptr<weld::Widget> m_xFlSymbol;
     std::unique_ptr<weld::Widget> m_xGridIconSize;
     std::unique_ptr<weld::MenuButton> m_xSymbolMB;
+    std::unique_ptr<weld::Menu> m_xSymbolsMenu;
+    std::unique_ptr<weld::Menu> m_xGalleryMenu;
     std::unique_ptr<weld::MetricSpinButton> m_xSymbolWidthMF;
     std::unique_ptr<weld::MetricSpinButton> m_xSymbolHeightMF;
     std::unique_ptr<weld::CheckButton> m_xSymbolRatioCB;
