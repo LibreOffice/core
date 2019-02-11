@@ -20,33 +20,29 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_INSPAGOB_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_INSPAGOB_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include "sdtreelb.hxx"
 
 class SdDrawDocument;
 
-class SdInsertPagesObjsDlg : public ModalDialog
+class SdInsertPagesObjsDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<SdPageObjsTLB>          m_pLbTree;
-    VclPtr<CheckBox>               m_pCbxLink;
-    VclPtr<CheckBox>               m_pCbxMasters;
+    SfxMedium* const        m_pMedium;
+    const SdDrawDocument*   m_pDoc;
+    const OUString&         m_rName;
 
-    SfxMedium* const        pMedium;
-    const SdDrawDocument*   mpDoc;
-    const OUString&         rName;
+    std::unique_ptr<SdPageObjsTLV> m_xLbTree;
+    std::unique_ptr<weld::CheckButton> m_xCbxLink;
+    std::unique_ptr<weld::CheckButton> m_xCbxMasters;
 
     void                    Reset();
-    DECL_LINK( SelectObjectHdl, SvTreeListBox*, void );
+    DECL_LINK(SelectObjectHdl, weld::TreeView&, void);
 
 public:
-                SdInsertPagesObjsDlg( vcl::Window* pParent,
-                                const SdDrawDocument* pDoc,
-                                SfxMedium* pSfxMedium,
-                                const OUString& rFileName );
-                virtual ~SdInsertPagesObjsDlg() override;
-    virtual void dispose() override;
+    SdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc,
+                         SfxMedium* pSfxMedium, const OUString& rFileName);
+    virtual ~SdInsertPagesObjsDlg() override;
 
     /** returns the list
           nType == 0 -> pages

@@ -89,7 +89,10 @@ short AbstractSdInsertLayerDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
+short AbstractSdInsertPagesObjsDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractMorphDlg_Impl::Execute()
 {
@@ -294,17 +297,17 @@ void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
 
 std::vector<OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
 {
-    return pDlg->GetList(nType);
+    return m_xDlg->GetList(nType);
 }
 
 bool AbstractSdInsertPagesObjsDlg_Impl::IsLink()
 {
-    return pDlg->IsLink();
+    return m_xDlg->IsLink();
 }
 
 bool AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnessesaryMasterPages() const
 {
-    return pDlg->IsRemoveUnnessesaryMasterPages();
+    return m_xDlg->IsRemoveUnnessesaryMasterPages();
 }
 
 void AbstractMorphDlg_Impl::SaveSettings() const
@@ -406,9 +409,9 @@ VclPtr<AbstractSdInsertLayerDlg> SdAbstractDialogFactory_Impl::CreateSdInsertLay
     return VclPtr<AbstractSdInsertLayerDlg_Impl>::Create(std::make_unique<SdInsertLayerDlg>(pParent, rInAttrs, bDeletable, aStr));
 }
 
-VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName )
+VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName)
 {
-    return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create( VclPtr<SdInsertPagesObjsDlg>::Create( pParent, pDoc, pSfxMedium, rFileName ) );
+    return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create(std::make_unique<SdInsertPagesObjsDlg>(pParent, pDoc, pSfxMedium, rFileName));
 }
 
 VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2)
