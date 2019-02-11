@@ -5515,6 +5515,27 @@ public:
         return aRows;
     }
 
+    virtual void selected_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    {
+        GtkInstanceTreeIter aGtkIter(nullptr);
+
+        GtkTreeModel* pModel;
+        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
+        for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+        {
+            GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+            gtk_tree_model_get_iter(pModel, &aGtkIter.iter, path);
+            func(aGtkIter);
+        }
+        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+    }
+
+    virtual bool is_selected(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
+    }
+
     virtual OUString get_text(int pos, int col) const override
     {
         if (col == -1)

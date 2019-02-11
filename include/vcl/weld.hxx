@@ -596,6 +596,9 @@ public:
     virtual OUString get_text(const TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
+    virtual bool is_selected(const TreeIter& rIter) const = 0;
+
+    virtual void selected_foreach(const std::function<void(TreeIter&)>& func) = 0;
 
     void connect_expanding(const Link<TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 

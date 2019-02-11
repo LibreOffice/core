@@ -383,7 +383,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             const OUString aFileName("foo");
             pRetval = getSdAbstractDialogFactory()->CreateSdInsertPagesObjsDlg(
-                getViewShell()->GetActiveWindow(),
+                getViewShell()->GetFrameWeld(),
                 pDrawDoc,
                 nullptr,
                 aFileName);
