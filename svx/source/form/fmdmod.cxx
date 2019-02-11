@@ -42,7 +42,7 @@ using namespace ::svxform;
     {
         SdrModel& rTargetModel(getSdrModelFromUnoModel());
         SdrObject* pObj = new FmFormObj(rTargetModel);
-        xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
+        xRet = static_cast<cppu::OWeakObject*>(new SvxShapeControl(pObj));
     }
 
     if (!xRet.is())

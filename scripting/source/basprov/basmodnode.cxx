@@ -97,7 +97,8 @@ namespace basprov
                 {
                     SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< sal_uInt16 >( i ) ) );
                     if ( pMethod && !pMethod->IsHidden() )
-                        pChildNodes[iTarget++] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
+                        pChildNodes[iTarget++] = new BasicMethodNodeImpl(
+                            m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript);
                 }
             }
         }

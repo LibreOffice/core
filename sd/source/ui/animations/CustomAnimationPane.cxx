@@ -2207,7 +2207,7 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
                 if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
                     sal_Int32 nPos = mpLBAnimation->InsertEntry( pDescriptor->getLabel() );
-                    mpLBAnimation->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
+                    mpLBAnimation->SetEntryData(nPos, new CustomAnimationPresetPtr(pDescriptor));
 
                     if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
                         nFirstEffect = nPos;
