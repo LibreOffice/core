@@ -699,16 +699,12 @@ OUString ObjectIdentifier::createPieSegmentDragParameterString(
         , const awt::Point& rMinimumPosition
         , const awt::Point& rMaximumPosition )
 {
-    OUStringBuffer aRet( OUString::number( nOffsetPercent ) );
-    aRet.append( ',');
-    aRet.append( OUString::number( rMinimumPosition.X ) );
-    aRet.append( ',');
-    aRet.append( OUString::number( rMinimumPosition.Y ) );
-    aRet.append( ',');
-    aRet.append( OUString::number( rMaximumPosition.X ) );
-    aRet.append( ',');
-    aRet.append( OUString::number( rMaximumPosition.Y ) );
-    return aRet.makeStringAndClear();
+    OUString aRet = OUString::number( nOffsetPercent )
+                  + "," + OUString::number( rMinimumPosition.X )
+                  + "," + OUString::number( rMinimumPosition.Y )
+                  + "," + OUString::number( rMaximumPosition.X )
+                  + "," + OUString::number( rMaximumPosition.Y );
+    return aRet;
 }
 
 bool ObjectIdentifier::parsePieSegmentDragParameterString(
