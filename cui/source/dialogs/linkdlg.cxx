@@ -648,10 +648,10 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
         m_pTbLinks->Select(pE);
 }
 
-SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
+SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt64* pPos )
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
-    sal_uLong nPos;
+    sal_uInt64 nPos;
     if( pE && TREELIST_ENTRY_NOTFOUND !=
         ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {

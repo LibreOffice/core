@@ -71,7 +71,7 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( BreakLinkClickHdl, Button *, void );
     DECL_LINK( UpdateWaitingHdl, Timer *, void );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink&, void );
-    sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
+    sfx2::SvBaseLink* GetSelEntry( sal_uInt64* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, SfxLinkUpdateMode nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
