@@ -29,7 +29,7 @@ void top1(int x) {
     /*xxx*/ foo();
 
 
-// disable this for now, ends up touching some very large switch statemnts in sw/ and sc/
+// disable this for now, ends up touching some very large switch statements in sw/ and sc/
     switch (x)
     {
         case 1: foo(); break; // 1expected-note {{measured against this one [loplugin:indentation]}}
