@@ -554,9 +554,14 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     m_xTemplateBox->insert_text(0, SwResId(SW_STR_NONE));
 
     // Reset format
-    m_xTemplateBox->set_active(0);
+    int nSelect = 0;
     if (aFormatDrop.GetCharFormat())
-        m_xTemplateBox->set_active_text(aFormatDrop.GetCharFormat()->GetName());
+    {
+        int nPos = m_xTemplateBox->find_text(aFormatDrop.GetCharFormat()->GetName());
+        if (nPos != -1)
+            nSelect = nPos;
+    }
+    m_xTemplateBox->set_active(nSelect);
 
     // Enable controls
     m_xDropCapsBox->set_active(aFormatDrop.GetLines() > 1);
