@@ -600,12 +600,11 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
     else if ( pBtn == m_pBtnOpt )
     {
         //! move options dialog to UI lib?
-        ScopedVclPtr<ScSolverOptionsDialog> pOptDlg(
-            VclPtr<ScSolverOptionsDialog>::Create( this, maImplNames, maDescriptions, maEngine, maProperties ));
-        if ( pOptDlg->Execute() == RET_OK )
+        ScSolverOptionsDialog aOptDlg(GetFrameWeld(), maImplNames, maDescriptions, maEngine, maProperties);
+        if (aOptDlg.run() == RET_OK)
         {
-            maEngine = pOptDlg->GetEngine();
-            maProperties = pOptDlg->GetProperties();
+            maEngine = aOptDlg.GetEngine();
+            maProperties = aOptDlg.GetProperties();
         }
     }
 }
