@@ -219,9 +219,9 @@ void GalleryThemePopup::Execute(
         pInfo->Arguments = rArguments;
         pInfo->Dispatch = rCmdInfo.Dispatch;
 
-        if ( !Application::PostUserEvent(
+        if ( Application::PostUserEvent(
                 LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo.get() ) )
-            pInfo.reset();
+            pInfo.release();
     }
 }
 
