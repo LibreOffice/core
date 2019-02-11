@@ -637,7 +637,7 @@ void WW8AttributeOutput::StartStyles()
 {
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
-    sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
+    sal_uInt64 nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // start on even
     {
         m_rWW8Export.pTableStrm->WriteChar( char(0) );        // Address
@@ -1480,7 +1480,7 @@ void WW8AttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdju
 void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode )
 {
-    sal_uLong nCpPos = Fc2Cp( Strm().Tell() );
+    sal_uInt64 nCpPos = Fc2Cp( Strm().Tell() );
 
     IncrementHdFtIndex();
     if ( !(nHeadFootFlags & WW8_HEADER_EVEN) && pDop->fFacingPages )
@@ -1768,7 +1768,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
 bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
 {
-    sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+    sal_uInt64 nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
     OSL_ENSURE( !pTextPos, "who set the pointer?" );
     pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
@@ -1796,7 +1796,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     if ( pTextPos->Count() )
     {
         // HdFt available?
-        sal_uLong nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        sal_uInt64 nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         pTextPos->Append( nCpEnd );  // End of last Header/Footer for PlcfHdd
 
         if ( nCpEnd > nCpStart )
@@ -1838,7 +1838,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
         , "WritePlcSed(): arrays out of sync!");
     OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
 
     for( decltype(aSects)::size_type i = 0; i <= aSects.size(); i++ )
     {
@@ -1894,8 +1894,8 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
     {
         SwNodeIndex aIdx( *pSttIdx, 1 ),
         aEnd( *pSttIdx->GetNode().EndOfSectionNode() );
-        sal_uLong nStart = aIdx.GetIndex();
-        sal_uLong nEnd = aEnd.GetIndex();
+        sal_uInt64 nStart = aIdx.GetIndex();
+        sal_uInt64 nEnd = aEnd.GetIndex();
 
         // range, i.e. valid node
         if ( nStart < nEnd )
@@ -2008,7 +2008,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
     if ( !nLen )
         return false;
 
-    sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+    sal_uInt64 nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
     sal_uInt16 i;
 
@@ -2150,7 +2150,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_FC& rTextStart, sal_Int32& rTextCount, WW8_FC& rRefStart, sal_Int32& rRefCount ) const
 {
 
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 nLen = aCps.size();
     if ( !nLen )
         return;
