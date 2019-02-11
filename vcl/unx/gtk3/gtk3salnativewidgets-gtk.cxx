@@ -17,15 +17,13 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <unx/gtk/gtkbackend.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <unx/fontmanager.hxx>
 #include <headless/CustomWidgetDraw.hxx>
 
 #include "cairo_gtk3_cairo.hxx"
-#if defined(GDK_WINDOWING_WAYLAND)
-#   include <gdk/gdkwayland.h>
-#endif
 #include <boost/optional.hpp>
 
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
@@ -3460,7 +3458,7 @@ void GtkSalData::initNWF()
     //gnome#768128 for the car crash that is wayland
     //and floating dockable toolbars
     GdkDisplay *pDisplay = gdk_display_get_default();
-    if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
         pSVData->maNWFData.mbCanDetermineWindowPosition = false;
 #endif
 }
