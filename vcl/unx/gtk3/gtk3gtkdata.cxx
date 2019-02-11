@@ -30,6 +30,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #endif
+#include <unx/gtk/gtkbackend.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
@@ -84,7 +85,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericUnixSalData()->ErrorTrapPush(); // and leak the trap
 
-    m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
+    m_bX11Display = DLSYM_GDK_IS_X11_DISPLAY( m_pGdkDisplay );
 
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }
@@ -424,7 +425,7 @@ GtkSalData::~GtkSalData()
         m_pUserEvent = nullptr;
     }
 #if defined(GDK_WINDOWING_X11)
-    if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+    if (DLSYM_GDK_IS_X11_DISPLAY(gdk_display_get_default()))
         XSetIOErrorHandler(aOrigXIOErrorHandler);
 #endif
 }
@@ -572,7 +573,7 @@ void GtkSalData::Init()
     }
 
 #if defined(GDK_WINDOWING_X11)
-    if (GDK_IS_X11_DISPLAY(pGdkDisp))
+    if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
         aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 #endif
 

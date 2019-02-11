@@ -51,12 +51,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#if defined(GDK_WINDOWING_X11)
-#   include <gdk/gdkx.h>
-#endif
-#if defined(GDK_WINDOWING_WAYLAND)
-#   include <gdk/gdkwayland.h>
-#endif
+#include <unx/gtk/gtkbackend.hxx>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
@@ -98,11 +93,6 @@
 
 #define IS_WIDGET_REALIZED gtk_widget_get_realized
 #define IS_WIDGET_MAPPED   gtk_widget_get_mapped
-
-#ifndef GDK_IS_X11_DISPLAY
-#define GDK_IS_X11_DISPLAY(foo) (true)
-#endif
-
 
 using namespace com::sun::star;
 
@@ -631,7 +621,7 @@ static gboolean ensure_dbus_setup( gpointer data )
         // fdo#70885 we don't want app menu under Unity
         const bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
 #if defined(GDK_WINDOWING_X11)
-        if (GDK_IS_X11_DISPLAY(pDisplay))
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         {
             gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
             if (!bDesktopIsUnity)
@@ -643,7 +633,7 @@ static gboolean ensure_dbus_setup( gpointer data )
         }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
-        if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
         {
             gdk_wayland_window_set_dbus_properties_libgtk_only(gdkWindow, "org.libreoffice",
                                                                "/org/libreoffice/menus/appmenu",
@@ -1017,7 +1007,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
     /*non-X11 displays won't show anything at all without double-buffering
       enabled*/
-    if (GDK_IS_X11_DISPLAY(getGdkDisplay()))
+    if (DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
         gtk_widget_set_double_buffered(GTK_WIDGET(m_pFixedContainer), false);
     gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
 
@@ -1121,7 +1111,7 @@ void GtkSalFrame::InitCommon()
 
 #if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = getGdkDisplay();
-    if (GDK_IS_X11_DISPLAY(pDisplay))
+    if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
         m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
@@ -1260,7 +1250,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         //built-in close button of the titlebar follows the overridden direction rather than continue in the same
         //direction as every other titlebar on the user's desktop. So if they don't match set an explicit
         //header bar with the desired 'outside' direction
-        if ((eType == GDK_WINDOW_TYPE_HINT_NORMAL || eType == GDK_WINDOW_TYPE_HINT_DIALOG) && GDK_IS_WAYLAND_DISPLAY(GtkSalFrame::getGdkDisplay()))
+        if ((eType == GDK_WINDOW_TYPE_HINT_NORMAL || eType == GDK_WINDOW_TYPE_HINT_DIALOG) && DLSYM_GDK_IS_WAYLAND_DISPLAY(GtkSalFrame::getGdkDisplay()))
         {
             const bool bDesktopIsRTL = MsLangId::isRightToLeft(MsLangId::getSystemUILanguage());
             const bool bAppIsRTL = gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL;
@@ -1469,7 +1459,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             //startcenter when initially shown to at least get
             //the default LibreOffice icon and not the broken
             //app icon
-            if (GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+            if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
             {
                 OString sOrigName(g_get_prgname());
                 g_set_prgname("libreoffice-startcenter");
@@ -4321,13 +4311,13 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
     GdkWindow *pWindow = gtk_widget_get_window(pWidget);
 
 #if defined(GDK_WINDOWING_X11)
-    if (GDK_IS_X11_DISPLAY(pDisplay))
+    if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
         return GDK_WINDOW_XID(pWindow);
     }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
-    if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
     {
         return reinterpret_cast<sal_uIntPtr>(gdk_wayland_window_get_wl_surface(pWindow));
     }
