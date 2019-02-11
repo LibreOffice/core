@@ -1172,6 +1172,23 @@ OpenGLContext* GtkInstance::CreateOpenGLContext()
     return new GtkOpenGLContext;
 }
 
+// tdf#123800 avoid requiring wayland at runtime just because it existed at buildtime
+bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay)
+{
+    auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_wayland_display_get_type"));
+    if (!get_type)
+        return false;
+    return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+}
+
+bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay)
+{
+    auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_x11_display_get_type"));
+    if (!get_type)
+        return false;
+    return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+}
+
 class GtkInstanceBuilder;
 
 namespace
@@ -2153,7 +2170,7 @@ public:
 #if defined(GDK_WINDOWING_WAYLAND)
         // drop x/y when under wayland
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        bPositioningAllowed = !GDK_IS_WAYLAND_DISPLAY(pDisplay);
+        bPositioningAllowed = !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
 #endif
 
         WindowStateData aData;
@@ -4202,7 +4219,7 @@ public:
             //under wayland a Popover will work to "escape" the parent dialog, not
             //so under X, so come up with this hack to use a raw GtkWindow
             GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-            if (GDK_IS_X11_DISPLAY(pDisplay))
+            if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
             {
                 m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
                 gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
@@ -7281,7 +7298,7 @@ public:
             return;
 #if defined(GDK_WINDOWING_WAYLAND)
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
         {
             gtk_combo_box_set_wrap_width(m_pComboBox, get_count() > 30 ? 1 : 0);
         }

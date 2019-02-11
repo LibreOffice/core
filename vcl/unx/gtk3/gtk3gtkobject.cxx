@@ -60,7 +60,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
 
 #if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
-    if (GDK_IS_X11_DISPLAY(pDisplay))
+    if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
         m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
