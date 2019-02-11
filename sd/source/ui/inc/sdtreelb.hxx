@@ -23,6 +23,7 @@
 #include <pres.hxx>
 #include <sddllapi.h>
 #include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
@@ -294,6 +295,111 @@ private:
     void AddShapeToTransferable (
         SdTransferable& rTransferable,
         SdrObject& rObject) const;
+};
+
+class SD_DLLPUBLIC SdPageObjsTLV
+{
+private:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<::svt::AcceleratorExecute> m_xAccel;
+    const SdDrawDocument* m_pDoc;
+    SdDrawDocument* m_pBookmarkDoc;
+    SfxMedium* m_pMedium;
+    SfxMedium* m_pOwnMedium;
+    bool m_bLinkableSelected;
+    bool m_bShowAllShapes;
+    OUString m_aDocName;
+    ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
+
+    /** Return the name of the object.  When the object has no user supplied
+        name and the bCreate flag is <TRUE/> then a name is created
+        automatically.  Additionally the mbShowAllShapes flag is taken into
+        account when there is no user supplied name.  When this flag is
+        <FALSE/> then no name is created.
+        @param pObject
+            When this is NULL then an empty string is returned, regardless
+            of the value of bCreate.
+        @param bCreate
+            This flag controls for objects without user supplied name
+            whether a name is created.  When a name is created then this
+            name is not stored in the object.
+    */
+    OUString GetObjectName (
+        const SdrObject* pObject,
+        const bool bCreate = true) const;
+
+    void CloseBookmarkDoc();
+
+    DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+
+public:
+
+    SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeview);
+    ~SdPageObjsTLV();
+
+    void set_size_request(int nWidth, int nHeight)
+    {
+        m_xTreeView->set_size_request(nWidth, nHeight);
+    }
+
+    float get_approximate_digit_width() const
+    {
+        return m_xTreeView->get_approximate_digit_width();
+    }
+
+    int get_height_rows(int nRows) const
+    {
+        return m_xTreeView->get_height_rows(nRows);
+    }
+
+    void set_selection_mode(SelectionMode eMode)
+    {
+        m_xTreeView->set_selection_mode(eMode);
+    }
+
+    std::vector<int> get_selected_rows() const
+    {
+        return m_xTreeView->get_selected_rows();
+    }
+
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_changed(rLink);
+    }
+
+    bool is_selected(const weld::TreeIter& rIter) const
+    {
+        return m_xTreeView->is_selected(rIter);
+    }
+
+    bool get_iter_first(weld::TreeIter& rIter) const
+    {
+        return m_xTreeView->get_iter_first(rIter);
+    }
+
+    std::unique_ptr<weld::TreeIter> make_iterator()
+    {
+        return m_xTreeView->make_iterator();
+    }
+
+    void SetViewFrame(const SfxViewFrame* pViewFrame);
+
+    void Fill(const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
+
+    /** return selected entries
+          nDepth == 0 -> pages
+          nDepth == 1 -> objects  */
+
+    std::vector<OUString> GetSelectEntryList(const int nDepth) const;
+
+    SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = nullptr);
+
+    bool IsLinkableSelected() const { return m_bLinkableSelected; }
+
+    void InsertEntry(const OUString &rName, const OUString &rExpander)
+    {
+        m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false);
+    }
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX

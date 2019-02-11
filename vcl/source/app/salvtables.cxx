@@ -2541,6 +2541,23 @@ public:
         m_xTreeView->SetSelectionMode(eMode);
     }
 
+    virtual void selected_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    {
+        SalInstanceTreeIter aVclIter(nullptr);
+        aVclIter.iter = m_xTreeView->FirstSelected();
+        while (aVclIter.iter)
+        {
+            func(aVclIter);
+            aVclIter.iter = m_xTreeView->NextSelected(aVclIter.iter);
+        }
+    }
+
+    virtual bool is_selected(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return m_xTreeView->IsSelected(rVclIter.iter);
+    }
+
     virtual int count_selected_rows() const override
     {
         return m_xTreeView->GetSelectionCount();
