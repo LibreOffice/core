@@ -17,14 +17,18 @@
         },
         {
             "name": "gvfs",
-            "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
-            "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
-                             "--disable-avahi", "--disable-documentation", "--disable-admin" ],
+            "buildsystem": "meson",
+            "config-opts": [ "-Dsystemduserunitdir=no", "-Dtmpfilesdir=no", "-Dinstalled_tests=true",
+            "-Ddbus_service_dir=/usr/share/dbus-1/services", "-Dadmin=false", "-Dafc=false", "-Dafp=false",
+            "-Darchive=false", "-Dcdda=false", "-Ddnssd=false", "-Dgoa=false", "-Dgoogle=false",
+            "-Dgphoto2=false", "-Dhttp=false", "-Dmtp=false", "-Dnfs=false", "-Dsftp=false", "-Dsmb=false",
+            "-Dudisks2=false", "-Dbluray=false", "-Dfuse=false", "-Dgcr=false", "-Dgcrypt=false",
+            "-Dgudev=false", "-Dkeyring=false", "-Dlogind=false", "-Dlibusb=false" ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.36/gvfs-1.36.1.tar.xz",
-                    "sha256": "3840dff386c2c8a445337bea4ade0eb71339efaff8602767659fa2896792f026"
+                    "url": "https://download.gnome.org/sources/gvfs/1.38/gvfs-1.38.1.tar.xz",
+                    "sha256": "ed136a842c996d25c835da405c4775c77106b46470e75bdc242bdd59ec0d61a0"
                 }
             ]
         },
@@ -50,8 +54,8 @@
                 },
                 {
                     "type": "archive",
-                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.2-bin.tar.xz",
-                    "sha256": "361c8ad2ed8341416e323e7c28af10a8297170a80fdffba294a5c2031527bb6c",
+                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.tar.xz",
+                    "sha256": "cebb705dbbe26a41d359b8be08ec066caba4e8686670070ce44bbf2b57ae113f",
                     "dest": "ant"
                 },
                 {
