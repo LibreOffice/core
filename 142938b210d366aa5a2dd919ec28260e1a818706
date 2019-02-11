@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d0a511b7",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-02-11T11:26:35Z",
+      "side": 1,
+      "message": "It seems, this is unnecessary.",
+      "range": {
+        "startLine": 1465,
+        "startChar": 28,
+        "endLine": 1465,
+        "endChar": 33
+      },
+      "revId": "142938b210d366aa5a2dd919ec28260e1a818706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
