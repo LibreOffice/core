@@ -7823,7 +7823,10 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             break;
         case SvxAdjust::BlockLine:
         case SvxAdjust::Block:
-            pAdjustString = "both";
+            if (rAdjust.GetLastBlock() == SvxAdjust::Block)
+                pAdjustString = "distribute";
+            else
+                pAdjustString = "both";
             break;
         case SvxAdjust::Center:
             pAdjustString = "center";

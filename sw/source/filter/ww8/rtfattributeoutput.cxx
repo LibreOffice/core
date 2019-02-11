@@ -2754,7 +2754,10 @@ void RtfAttributeOutput::ParaAdjust(const SvxAdjustItem& rAdjust)
             break;
         case SvxAdjust::BlockLine:
         case SvxAdjust::Block:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QJ);
+            if (rAdjust.GetLastBlock() == SvxAdjust::Block)
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QD);
+            else
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QJ);
             break;
         case SvxAdjust::Center:
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QC);
