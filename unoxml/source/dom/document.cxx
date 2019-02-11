@@ -187,66 +187,54 @@ namespace DOM
         {
             case XML_ELEMENT_NODE:
                 // m_aNodeType = NodeType::ELEMENT_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CElement(*this, m_Mutex, pNode));
+                pCNode = new CElement(*this, m_Mutex, pNode);
             break;
             case XML_TEXT_NODE:
                 // m_aNodeType = NodeType::TEXT_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CText(*this, m_Mutex, pNode));
+                pCNode = new CText(*this, m_Mutex, pNode);
             break;
             case XML_CDATA_SECTION_NODE:
                 // m_aNodeType = NodeType::CDATA_SECTION_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CCDATASection(*this, m_Mutex, pNode));
+                pCNode = new CCDATASection(*this, m_Mutex, pNode);
             break;
             case XML_ENTITY_REF_NODE:
                 // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CEntityReference(*this, m_Mutex, pNode));
+                pCNode = new CEntityReference(*this, m_Mutex, pNode);
             break;
             case XML_ENTITY_NODE:
                 // m_aNodeType = NodeType::ENTITY_NODE;
-                pCNode = static_cast< CNode* >(new CEntity(*this, m_Mutex,
-                            reinterpret_cast<xmlEntityPtr>(pNode)));
+                pCNode = new CEntity(*this, m_Mutex, reinterpret_cast<xmlEntityPtr>(pNode));
             break;
             case XML_PI_NODE:
                 // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CProcessingInstruction(*this, m_Mutex, pNode));
+                pCNode = new CProcessingInstruction(*this, m_Mutex, pNode);
             break;
             case XML_COMMENT_NODE:
                 // m_aNodeType = NodeType::COMMENT_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CComment(*this, m_Mutex, pNode));
+                pCNode = new CComment(*this, m_Mutex, pNode);
             break;
             case XML_DOCUMENT_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_NODE;
                 OSL_ENSURE(false, "CDocument::GetCNode is not supposed to"
                         " create a CDocument!!!");
-                pCNode = static_cast< CNode* >(new CDocument(
-                            reinterpret_cast<xmlDocPtr>(pNode)));
+                pCNode = new CDocument(reinterpret_cast<xmlDocPtr>(pNode));
             break;
             case XML_DOCUMENT_TYPE_NODE:
             case XML_DTD_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
-                pCNode = static_cast< CNode* >(new CDocumentType(*this, m_Mutex,
-                            reinterpret_cast<xmlDtdPtr>(pNode)));
+                pCNode = new CDocumentType(*this, m_Mutex, reinterpret_cast<xmlDtdPtr>(pNode));
             break;
             case XML_DOCUMENT_FRAG_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
-                pCNode = static_cast< CNode* >(
-                        new CDocumentFragment(*this, m_Mutex, pNode));
+                pCNode = new CDocumentFragment(*this, m_Mutex, pNode);
             break;
             case XML_NOTATION_NODE:
                 // m_aNodeType = NodeType::NOTATION_NODE;
-                pCNode = static_cast< CNode* >(new CNotation(*this, m_Mutex,
-                            reinterpret_cast<xmlNotationPtr>(pNode)));
+                pCNode = new CNotation(*this, m_Mutex, reinterpret_cast<xmlNotationPtr>(pNode));
             break;
             case XML_ATTRIBUTE_NODE:
                 // m_aNodeType = NodeType::ATTRIBUTE_NODE;
-                pCNode = static_cast< CNode* >(new CAttr(*this, m_Mutex,
-                            reinterpret_cast<xmlAttrPtr>(pNode)));
+                pCNode = new CAttr(*this, m_Mutex, reinterpret_cast<xmlAttrPtr>(pNode));
             break;
             // unsupported node types
             case XML_HTML_DOCUMENT_NODE:

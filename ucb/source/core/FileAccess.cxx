@@ -492,7 +492,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
-    Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink);
+    Reference<XActiveDataSink> xSink = new OActiveDataSink;
 
     try
     {
@@ -519,7 +519,7 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 {
-    Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer);
+    Reference<XActiveDataStreamer> xSink = new OActiveDataStreamer;
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
