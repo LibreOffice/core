@@ -66,12 +66,6 @@ if [ -n "`head -n 1 $1 | grep '^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.*<.*@.*>'`" ] ;
     abort "$1" "The commit message looks like ChangeLog, please use the git form."
 fi
 
-# Check for whitespace in front of *'s
-
-if [ -n "`sed '/^#/,$d' $1 | grep '^[[:space:]]\+\*.*:'`" -a -z "`grep '^\*' $1`" ] ; then
-    abort "$1" "Please don't use whitespace in front of '* file: Description.' entries."
-fi
-
 # Check that lines do not start with '#<something>' (possibly accidental commit,
 # such as starting the message with '#ifdef', git commits start with '#<whitespace>'.
 
