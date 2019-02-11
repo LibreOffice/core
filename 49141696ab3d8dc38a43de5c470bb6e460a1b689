@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d003d10c",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4844,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-02-11T08:39:08Z",
+      "side": 1,
+      "message": "Extra space here.",
+      "range": {
+        "startLine": 4844,
+        "startChar": 40,
+        "endLine": 4844,
+        "endChar": 41
+      },
+      "revId": "49141696ab3d8dc38a43de5c470bb6e460a1b689",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
