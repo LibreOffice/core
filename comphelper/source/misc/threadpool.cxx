@@ -116,7 +116,7 @@ sal_Int32 ThreadPool::getPreferredConcurrency()
         const char *pEnv = getenv("MAX_CONCURRENCY");
         if (pEnv != nullptr)
         {
-            // Override with user/admin preferrence.
+            // Override with user/admin preference.
             nThreads = rtl_str_toInt32(pEnv, 10);
         }
 
