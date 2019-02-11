@@ -202,10 +202,8 @@ void OXMLReport::EndElement()
 {
     Reference< XFunctions > xFunctions = m_xReportDefinition->getFunctions();
     const ORptFilter::TGroupFunctionMap& aFunctions = m_rImport.getFunctions();
-    ORptFilter::TGroupFunctionMap::const_iterator aIter = aFunctions.begin();
-    const ORptFilter::TGroupFunctionMap::const_iterator aEnd = aFunctions.end();
-    for (; aIter != aEnd; ++aIter)
-        xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(aIter->second));
+    for (const auto& rEntry : aFunctions)
+        xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(rEntry.second));
 
     if ( !m_aMasterFields.empty() )
         m_xReportDefinition->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));

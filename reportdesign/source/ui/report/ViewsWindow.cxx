@@ -185,8 +185,8 @@ OViewsWindow::~OViewsWindow()
 void OViewsWindow::dispose()
 {
     m_aColorConfig.RemoveListener(this);
-    for (auto i = m_aSections.begin(); i != m_aSections.end(); ++i)
-        i->disposeAndClear();
+    for (auto& rxSection : m_aSections)
+        rxSection.disposeAndClear();
     m_aSections.clear();
     m_pParent.clear();
     vcl::Window::dispose();
@@ -323,14 +323,8 @@ void OViewsWindow::toggleGrid(bool _bVisible)
 
 sal_Int32 OViewsWindow::getTotalHeight() const
 {
-    sal_Int32 nHeight = 0;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
-    {
-        nHeight += (*aIter)->GetSizePixel().Height();
-    }
-    return nHeight;
+    return std::accumulate(m_aSections.begin(), m_aSections.end(), sal_Int32(0),
+        [](const sal_Int32 nHeight, const VclPtr<OSectionWindow>& rxSection) { return nHeight + rxSection->GetSizePixel().Height(); });
 }
 
 sal_uInt16 OViewsWindow::getSectionCount() const
@@ -340,10 +334,8 @@ sal_uInt16 OViewsWindow::getSectionCount() const
 
 void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
-        (*aIter)->getReportSection().getSectionView().SetCurrentObj( eObj, SdrInventor::ReportDesign );
+    for (const auto& rxSection : m_aSections)
+        rxSection->getReportSection().getSectionView().SetCurrentObj( eObj, SdrInventor::ReportDesign );
 
     m_sShapeType = _sShapeType;
 }
@@ -359,11 +351,8 @@ void OViewsWindow::SetMode( DlgEdMode eNewMode )
 
 bool OViewsWindow::HasSelection() const
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd && !(*aIter)->getReportSection().getSectionView().AreObjectsMarked(); ++aIter)
-        ;
-    return aIter != aEnd;
+    return std::any_of(m_aSections.begin(), m_aSections.end(),
+        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().AreObjectsMarked(); });
 }
 
 void OViewsWindow::Delete()
@@ -507,14 +496,12 @@ void OViewsWindow::unmarkAllObjects(OSectionView const * _pSectionView)
     if ( !m_bInUnmark )
     {
         m_bInUnmark = true;
-        TSectionsMap::const_iterator aIter = m_aSections.begin();
-        TSectionsMap::const_iterator aEnd = m_aSections.end();
-        for (; aIter != aEnd ; ++aIter)
+        for (const auto& rxSection : m_aSections)
         {
-            if ( &(*aIter)->getReportSection().getSectionView() != _pSectionView )
+            if ( &rxSection->getReportSection().getSectionView() != _pSectionView )
             {
-                (*aIter)->getReportSection().deactivateOle();
-                (*aIter)->getReportSection().getSectionView().UnmarkAllObj();
+                rxSection->getReportSection().deactivateOle();
+                rxSection->getReportSection().getSectionView().UnmarkAllObj();
             }
         }
         m_bInUnmark = false;
@@ -554,21 +541,17 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        TSectionsMap::const_iterator aIter = m_aSections.begin();
-        TSectionsMap::const_iterator aEnd = m_aSections.end();
-        for (;aIter != aEnd ; ++aIter)
+        auto aIter = std::find_if(m_aSections.begin(), m_aSections.end(),
+            [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().AreObjectsMarked(); });
+        if (aIter != m_aSections.end())
         {
-            if ( (*aIter)->getReportSection().getSectionView().AreObjectsMarked() )
-            {
-                (*aIter)->getReportSection().MouseButtonUp(rMEvt);
-                break;
-            }
+            (*aIter)->getReportSection().MouseButtonUp(rMEvt);
         }
 
         // remove special insert mode
-        for (aIter = m_aSections.begin();aIter != aEnd ; ++aIter)
+        for (const auto& rxSection : m_aSections)
         {
-            (*aIter)->getReportSection().getPage()->resetSpecialMode();
+            rxSection->getReportSection().getPage()->resetSpecialMode();
         }
     }
 }
@@ -576,13 +559,11 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 bool OViewsWindow::handleKeyEvent(const KeyEvent& _rEvent)
 {
     bool bRet = false;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        if ( (*aIter)->getStartMarker().isMarked() )
+        if ( rxSection->getStartMarker().isMarked() )
         {
-            bRet = (*aIter)->getReportSection().handleKeyEvent(_rEvent);
+            bRet = rxSection->getReportSection().handleKeyEvent(_rEvent);
         }
     }
     return bRet;
@@ -605,17 +586,15 @@ void OViewsWindow::setMarked(OSectionView const * _pSectionView, bool _bMark)
 
 void OViewsWindow::setMarked(const uno::Reference< report::XSection>& _xSection, bool _bMark)
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        if ( (*aIter)->getReportSection().getSection() != _xSection )
+        if ( rxSection->getReportSection().getSection() != _xSection )
         {
-            (*aIter)->setMarked(false);
+            rxSection->setMarked(false);
         }
-        else if ( (*aIter)->getStartMarker().isMarked() != _bMark )
+        else if ( rxSection->getStartMarker().isMarked() != _bMark )
         {
-            (*aIter)->setMarked(_bMark);
+            rxSection->setMarked(_bMark);
         }
     }
 }
@@ -650,11 +629,9 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
 
 void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (aIter = m_aSections.begin();aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OSectionView& rView = (*aIter)->getReportSection().getSectionView();
+        OSectionView& rView = rxSection->getReportSection().getSectionView();
         if ( rView.AreObjectsMarked() )
         {
             rView.SortMarkedObjects();
@@ -673,11 +650,8 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
 void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles, ControlModification _nControlModification,bool _bAlignAtSection, tools::Rectangle& _rBound, tools::Rectangle& _rResize)
 {
     bool bOnlyOnce = false;
-    TRectangleMap::const_iterator aRectIter = _rSortRectangles.begin();
-    TRectangleMap::const_iterator aRectEnd = _rSortRectangles.end();
-    for (;aRectIter != aRectEnd ; ++aRectIter)
+    for (const auto& [aObjRect, rObjViewPair] : _rSortRectangles)
     {
-        tools::Rectangle aObjRect = aRectIter->first;
         if ( _rResize.IsEmpty() )
             _rResize = aObjRect;
         switch(_nControlModification)
@@ -702,7 +676,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
         }
 
         SdrObjTransformInfoRec aInfo;
-        const SdrObject* pObj =  aRectIter->second.first;
+        const SdrObject* pObj = rObjViewPair.first;
         pObj->TakeObjInfo(aInfo);
         bool bHasFixed = !aInfo.bMoveAllowed || pObj->IsMoveProtect();
         if ( bHasFixed )
@@ -714,7 +688,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
                 if ( ! bOnlyOnce )
                 {
                     bOnlyOnce = true;
-                    OReportSection* pReportSection = aRectIter->second.second->getReportSection();
+                    OReportSection* pReportSection = rObjViewPair.second->getReportSection();
                     const uno::Reference< report::XSection>& xSection = pReportSection->getSection();
                     try
                     {
@@ -728,7 +702,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
             }
             else
             {
-                _rBound.Union(aRectIter->second.second->GetMarkedObjRect());
+                _rBound.Union(rObjViewPair.second->GetMarkedObjRect());
             }
         }
     }
@@ -901,37 +875,24 @@ void OViewsWindow::createDefault()
 
 void OViewsWindow::setGridSnap(bool bOn)
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
-        (*aIter)->getReportSection().Invalidate();
+        rxSection->getReportSection().getSectionView().SetGridSnap(bOn);
+        rxSection->getReportSection().Invalidate();
     }
 }
 
 void OViewsWindow::setDragStripes(bool bOn)
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd ; ++aIter)
-        (*aIter)->getReportSection().getSectionView().SetDragStripes(bOn);
+    for (const auto& rxSection : m_aSections)
+        rxSection->getReportSection().getSectionView().SetDragStripes(bOn);
 }
 
 sal_uInt16 OViewsWindow::getPosition(const OSectionWindow* _pSectionWindow) const
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    sal_uInt16 nPosition = 0;
-    for (; aIter != aEnd ; ++aIter)
-    {
-        if ( _pSectionWindow == (*aIter).get() )
-        {
-            break;
-        }
-        ++nPosition;
-    }
-    return nPosition;
+    auto aIter = std::find_if(m_aSections.begin(), m_aSections.end(),
+        [&_pSectionWindow](const VclPtr<OSectionWindow>& rxSection) { return _pSectionWindow == rxSection.get(); });
+    return static_cast<sal_uInt16>(std::distance(m_aSections.begin(), aIter));
 }
 
 OSectionWindow* OViewsWindow::getSectionWindow(const sal_uInt16 _nPos) const
@@ -1003,13 +964,11 @@ void OViewsWindow::BrkAction()
 
 void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Rectangle& _aRect, const OSectionView& _rSection)
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
     Point aNewPos(0,0);
 
-    for (; aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         rReportSection.getPage()->setSpecialMode();
         OSectionView& rView = rReportSection.getSectionView();
 
@@ -1042,11 +1001,9 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
     // Calculate the absolute clickpoint in the views
     Point aAbsolutePnt = _aPnt;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         OSectionView* pView = &rReportSection.getSectionView();
         if (pView == _pSection)
             break;
@@ -1066,9 +1023,9 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
     int nViewCount = 0;
     Point aNewObjPos(0,0);
     Point aLeftTop = Point(SAL_MAX_INT32, SAL_MAX_INT32);
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
 
         OSectionView& rView = rReportSection.getSectionView();
 
@@ -1114,9 +1071,9 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
     const short nDrgLog = static_cast<short>(PixelToLogic(Size(3,0)).Width());
     nViewCount = 0;
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
 
         SdrHdl* pHdl = _pHdl;
         if ( pHdl )
@@ -1149,12 +1106,10 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
     bool bAdd = true;
     Point aNewPos = _aPnt;
 
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
     long nLastSectionHeight = 0;
-    for (; aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         if ( &rReportSection.getSectionView() == _pSection )
         {
             bAdd = false;
@@ -1177,15 +1132,11 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
 OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt)
 {
     OSectionView* pSection = nullptr;
-    sal_Int32 nCount = 0;
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     const TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd ; ++aIter,++nCount)
-    {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
-        if ( &rReportSection.getSectionView() == _pSection)
-            break;
-    }
+    aIter = std::find_if(aIter, aEnd, [&_pSection](const VclPtr<OSectionWindow>& rxSection) {
+        return &rxSection->getReportSection().getSectionView() == _pSection; });
+    sal_Int32 nCount = static_cast<sal_Int32>(std::distance(m_aSections.cbegin(), aIter));
     OSL_ENSURE(aIter != aEnd,"This can never happen!");
     if ( _rPnt.Y() < 0 )
     {
@@ -1225,12 +1176,9 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
 
 void OViewsWindow::EndDragObj_removeInvisibleObjects()
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-
-    for (; aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         rReportSection.getPage()->resetSpecialMode();
     }
 }
@@ -1252,11 +1200,9 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
         aNewPos -= m_aDragDelta;
 
         uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
-        TSectionsMap::const_iterator aIter = m_aSections.begin();
-        const TSectionsMap::const_iterator aEnd = m_aSections.end();
-        for (; aIter != aEnd; ++aIter)
+        for (const auto& rxSection : m_aSections)
         {
-            OReportSection& rReportSection = (*aIter)->getReportSection();
+            OReportSection& rReportSection = rxSection->getReportSection();
             if ( pInSection != &rReportSection.getSectionView() )
             {
                 rReportSection.getSectionView().BrkAction();
@@ -1358,26 +1304,23 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
         aHdlPos = pHdl->GetPos();
     }
 
-    TSectionsMap::const_iterator aIter;
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         if ( &rReportSection.getSectionView() == _pSection )
             break;
-        const long nSectionHeight = (*aIter)->PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const long nSectionHeight = rxSection->PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aCurrentSectionPos.AdjustY(nSectionHeight );
     }
     aRealMousePos += aCurrentSectionPos;
 
     // If control key is pressed the work area is limited to the section with the current selection.
     Point aPosForWorkArea(0,0);
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         OSectionView& rView = rReportSection.getSectionView();
-        const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
+        const long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
 
         if (_bControlKeySet)
         {
@@ -1396,46 +1339,35 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
     }
 
 
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         SdrHdl* pCurrentHdl = rReportSection.getSectionView().GetDragHdl();
         if ( pCurrentHdl && aRealMousePos.Y() > 0 )
             aRealMousePos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
         rReportSection.getSectionView().MovAction ( aRealMousePos );
-        const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
+        const long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
         aRealMousePos.AdjustY( -nSectionHeight );
     }
 }
 
 bool OViewsWindow::IsAction() const
 {
-    bool bAction = false;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; !bAction && aIter != aEnd; ++aIter)
-        bAction = (*aIter)->getReportSection().getSectionView().IsAction();
-    return bAction;
+    return std::any_of(m_aSections.begin(), m_aSections.end(),
+        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().IsAction(); });
 }
 
 bool OViewsWindow::IsDragObj() const
 {
-    bool bAction = false;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; !bAction && aIter != aEnd; ++aIter)
-        bAction = (*aIter)->getReportSection().getSectionView().IsAction();
-    return bAction;
+    return std::any_of(m_aSections.begin(), m_aSections.end(),
+        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().IsAction(); });
 }
 
 sal_uInt32 OViewsWindow::getMarkedObjectCount() const
 {
-    sal_uInt32 nCount = 0;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd; ++aIter)
-        nCount += static_cast<sal_uInt32>((*aIter)->getReportSection().getSectionView().GetMarkedObjectCount());
-    return nCount;
+    return std::accumulate(m_aSections.begin(), m_aSections.end(), sal_uInt32(0),
+        [](const sal_uInt32 nCount, const VclPtr<OSectionWindow>& rxSection) {
+            return nCount + static_cast<sal_uInt32>(rxSection->getReportSection().getSectionView().GetMarkedObjectCount()); });
 }
 
 void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
@@ -1450,11 +1382,10 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
             rScrollBar.DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? ScrollType::LineUp : ScrollType::LineDown );
         return;
     }
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd; ++aIter)
+
+    for (const auto& rxSection : m_aSections)
     {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
+        OReportSection& rReportSection = rxSection->getReportSection();
         long nX = 0;
         long nY = 0;
 
@@ -1665,12 +1596,12 @@ void OViewsWindow::stopScrollTimer()
 
 void OViewsWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (sal_uInt16 i = 0;aIter != aEnd ; ++aIter,++i)
+    sal_uInt16 i = 0;
+    for (const auto& rxSection : m_aSections)
     {
-        if ( (*aIter)->getStartMarker().isCollapsed() )
+        if ( rxSection->getStartMarker().isCollapsed() )
             _rCollapsedPositions.push_back(i);
+        ++i;
     }
 }
 
@@ -1700,11 +1631,9 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
 
     setZoomFactor(_aZoom,*this);
 
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        (*aIter)->zoom(_aZoom);
+        rxSection->zoom(_aZoom);
     }
 
     Resize();
@@ -1732,21 +1661,17 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
         Scroll(0, -( aOld.Y() + aPosY.Y()),ScrollFlags::Children);
     }
 
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        (*aIter)->scrollChildren(aPos.X());
+        rxSection->scrollChildren(aPos.X());
     }
 }
 
 void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for(;aIter != aEnd; ++aIter)
+    for (const auto& rxSection : m_aSections)
     {
-        (*aIter)->getReportSection().fillControlModelSelection(_rSelection);
+        rxSection->getReportSection().fillControlModelSelection(_rSelection);
     }
 }
 

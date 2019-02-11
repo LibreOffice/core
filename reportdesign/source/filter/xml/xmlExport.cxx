@@ -177,29 +177,26 @@ namespace rptxml
 
 static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 {
-    ORptExport::TSectionsGrid::iterator aSectionIter = _rGrid.begin();
-    ORptExport::TSectionsGrid::const_iterator aSectionEnd = _rGrid.end();
-    for (;aSectionIter != aSectionEnd ; ++aSectionIter)
+    for (auto& rEntry : _rGrid)
     {
-        ORptExport::TGrid::iterator aRowIter = aSectionIter->second.begin();
-        ORptExport::TGrid::const_iterator aRowEnd = aSectionIter->second.end();
+        ORptExport::TGrid::iterator aRowIter = rEntry.second.begin();
+        ORptExport::TGrid::const_iterator aRowEnd = rEntry.second.end();
         for (; aRowIter != aRowEnd; ++aRowIter)
         {
             if ( aRowIter->first )
             {
-                ::std::vector< ORptExport::TCell >::const_iterator aColIter = aRowIter->second.begin();
-                ::std::vector< ORptExport::TCell >::const_iterator aColEnd = aRowIter->second.end();
-                for (; aColIter != aColEnd; ++aColIter)
+                sal_Int32 nColIndex = 0;
+                for (const auto& rCell : aRowIter->second)
                 {
-                    if ( aColIter->nRowSpan > 1 )
+                    if ( rCell.nRowSpan > 1 )
                     {
-                        sal_Int32 nColSpan = aColIter->nColSpan;
-                        sal_Int32 nColIndex = aColIter - aRowIter->second.begin();
-                        for (sal_Int32 i = 1; i < aColIter->nRowSpan; ++i)
+                        sal_Int32 nColSpan = rCell.nColSpan;
+                        for (sal_Int32 i = 1; i < rCell.nRowSpan; ++i)
                         {
                             (aRowIter+i)->second[nColIndex].nColSpan = nColSpan;
                         }
                     }
+                    ++nColIndex;
                 }
             }
         }

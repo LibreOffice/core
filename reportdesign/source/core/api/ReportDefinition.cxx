@@ -1079,15 +1079,13 @@ void SAL_CALL OReportDefinition::close(sal_Bool bDeliverOwnership)
 
 
     ::std::vector< uno::Reference< frame::XController> > aCopy = m_pImpl->m_aControllers;
-    ::std::vector< uno::Reference< frame::XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = aCopy.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (auto& rxController : aCopy)
     {
-        if ( aIter->is() )
+        if ( rxController.is() )
         {
             try
             {
-                uno::Reference< util::XCloseable> xFrame( (*aIter)->getFrame(), uno::UNO_QUERY );
+                uno::Reference< util::XCloseable> xFrame( rxController->getFrame(), uno::UNO_QUERY );
                 if ( xFrame.is() )
                     xFrame->close( bDeliverOwnership );
             }
@@ -1844,15 +1842,13 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     {
         m_pImpl->m_xViewData.set( document::IndexedPropertyValues::create(m_aProps->m_xContext), uno::UNO_QUERY);
         uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
-        ::std::vector< uno::Reference< frame::XController> >::const_iterator aIter = m_pImpl->m_aControllers.begin();
-        ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = m_pImpl->m_aControllers.end();
-        for (;aIter != aEnd ; ++aIter)
+        for (const auto& rxController : m_pImpl->m_aControllers)
         {
-            if ( aIter->is() )
+            if ( rxController.is() )
             {
                 try
                 {
-                    xContainer->insertByIndex(xContainer->getCount(),(*aIter)->getViewData());
+                    xContainer->insertByIndex(xContainer->getCount(), rxController->getViewData());
                 }
                 catch (const uno::Exception&)
                 {
@@ -2314,9 +2310,11 @@ uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  )
     uno::Sequence< OUString > aNameList(m_aElementsPos.size());
 
     OUString* pStringArray = aNameList.getArray();
-    ::std::vector<TStyleElements::iterator>::const_iterator aEnd = m_aElementsPos.end();
-    for(::std::vector<TStyleElements::iterator>::const_iterator aIter = m_aElementsPos.begin();         aIter != aEnd;++aIter,++pStringArray)
-        *pStringArray = (*aIter)->first;
+    for(const auto& rIter : m_aElementsPos)
+    {
+        *pStringArray = rIter->first;
+        ++pStringArray;
+    }
 
     return aNameList;
 }

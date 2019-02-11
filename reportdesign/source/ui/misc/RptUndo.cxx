@@ -94,13 +94,11 @@ namespace
     {
         if ( _xSection.is() )
         {
-            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aIter = _aValues.begin();
-            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aEnd = _aValues.end();
-            for (; aIter != aEnd; ++aIter)
+            for (const auto& [rPropName, rValue] : _aValues)
             {
                 try
                 {
-                    _xSection->setPropertyValue(aIter->first,aIter->second);
+                    _xSection->setPropertyValue(rPropName, rValue);
                 }
                 catch(const uno::Exception&)
                 {
@@ -128,10 +126,8 @@ OSectionUndo::~OSectionUndo()
     if ( !m_bInserted )
     {
         OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-        ::std::vector< uno::Reference< drawing::XShape> >::const_iterator aEnd = m_aControls.end();
-        for (::std::vector< uno::Reference< drawing::XShape> >::const_iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
+        for (uno::Reference<drawing::XShape>& xShape : m_aControls)
         {
-            uno::Reference< drawing::XShape> xShape = *aIter;
             rEnv.RemoveElement(xShape);
 
 #if OSL_DEBUG_LEVEL > 0

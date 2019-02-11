@@ -236,8 +236,8 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  )
 {
     Sequence< Attribute > aSeq( maUnknownAttributes.size() );
     Attribute* pAttr = aSeq.getArray();
-    for( UnknownAttributeList::iterator attrIter = maUnknownAttributes.begin(); attrIter != maUnknownAttributes.end(); ++attrIter )
-        (*attrIter).FillAttribute( pAttr++ );
+    for( auto& rAttr : maUnknownAttributes )
+        rAttr.FillAttribute( pAttr++ );
     return aSeq;
 }
 Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )

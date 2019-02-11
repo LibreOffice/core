@@ -216,13 +216,13 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  )
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFormattedField> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FORMATTEDFIELD),uno::UNO_QUERY_THROW);
 
-    ::std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aIter = m_aProps.m_aFormatConditions.begin();
-    ::std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aEnd  = m_aProps.m_aFormatConditions.end();
-    for (sal_Int32 i = 0; aIter != aEnd; ++aIter,++i)
+    sal_Int32 i = 0;
+    for (const auto& rxFormatCondition : m_aProps.m_aFormatConditions)
     {
         uno::Reference< report::XFormatCondition > xCond = xSet->createFormatCondition();
-        ::comphelper::copyProperties(aIter->get(),xCond.get());
+        ::comphelper::copyProperties(rxFormatCondition.get(), xCond.get());
         xSet->insertByIndex(i,uno::makeAny(xCond));
+        ++i;
     }
     return xSet.get();
 }

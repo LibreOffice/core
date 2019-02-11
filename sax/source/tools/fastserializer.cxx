@@ -751,14 +751,12 @@ namespace sax_fastparser {
 #if OSL_DEBUG_LEVEL > 0
     void FastSaxSerializer::ForSort::print( )
     {
-        std::map< sal_Int32, Int8Sequence >::iterator iter = maData.begin();
-        while ( iter != maData.end( ) )
+        for ( const auto& [rElement, rData] : maData )
         {
-            std::cerr << "pair: " << iter->first;
-            for ( sal_Int32 i=0, len=iter->second.getLength(); i < len; ++i )
-                std::cerr << iter->second[i];
+            std::cerr << "pair: " << rElement;
+            for ( sal_Int32 i=0, len=rData.getLength(); i < len; ++i )
+                std::cerr << rData[i];
             std::cerr << "\n";
-            ++iter;
         }
 
         sort( );

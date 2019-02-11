@@ -627,11 +627,12 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
         pSectionWindow->getReportSection().fillControlModelSelection(aSelection);
         if ( !aSelection.empty() )
         {
-            ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
             uno::Sequence< uno::Reference< report::XReportComponent > > aSeq(aSelection.size());
-            for(sal_Int32 i = 0; i < aSeq.getLength(); ++i,++aIter)
+            sal_Int32 i = 0;
+            for(const auto& rxInterface : aSelection)
             {
-                aSeq[i].set(*aIter,uno::UNO_QUERY);
+                aSeq[i].set(rxInterface,uno::UNO_QUERY);
+                ++i;
             }
             aRet <<= aSeq;
         }

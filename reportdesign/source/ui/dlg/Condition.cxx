@@ -338,15 +338,12 @@ void Condition::impl_setCondition( const OUString& _rConditionFormula )
         const OUString sUnprefixedFieldContent( aFieldContentFormula.getBracketedFieldOrExpression() );
 
         // check whether one of the Field Value Expression Factories recognizes the expression
-        for (   ConditionalExpressions::const_iterator exp = m_aConditionalExpressions.begin();
-                exp != m_aConditionalExpressions.end();
-                ++exp
-            )
+        for (const auto& [rOperation, rxConditionalExpression] : m_aConditionalExpressions)
         {
-            if ( exp->second->matchExpression( sExpression, sUnprefixedFieldContent, sLHS, sRHS ) )
+            if ( rxConditionalExpression->matchExpression( sExpression, sUnprefixedFieldContent, sLHS, sRHS ) )
             {
                 eType = eFieldValueComparison;
-                eOperation = exp->first;
+                eOperation = rOperation;
                 break;
             }
         }

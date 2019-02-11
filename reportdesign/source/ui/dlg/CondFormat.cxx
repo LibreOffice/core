@@ -133,9 +133,9 @@ namespace rptui
     void ConditionalFormattingDialog::dispose()
     {
 
-        for (auto i = m_aConditions.begin(); i != m_aConditions.end(); ++i)
+        for (auto& rxCondition : m_aConditions)
         {
-            i->disposeAndClear();
+            rxCondition.disposeAndClear();
         }
 
         m_aConditions.clear();
@@ -148,12 +148,10 @@ namespace rptui
     void ConditionalFormattingDialog::impl_updateConditionIndicies()
     {
         sal_Int32 nIndex = 0;
-        for (   Conditions::const_iterator cond = m_aConditions.begin();
-                cond != m_aConditions.end();
-                ++cond, ++nIndex
-            )
+        for (const auto& rxCondition : m_aConditions)
         {
-            (*cond)->setConditionIndex( nIndex, impl_getConditionCount() );
+            rxCondition->setConditionIndex( nIndex, impl_getConditionCount() );
+            ++nIndex;
         }
     }
 
@@ -549,15 +547,10 @@ namespace rptui
 
     size_t ConditionalFormattingDialog::impl_getFocusedConditionIndex( sal_Int32 _nFallBackIfNone ) const
     {
-        size_t nIndex( 0 );
-        for (   Conditions::const_iterator cond = m_aConditions.begin();
-                cond != m_aConditions.end();
-                ++cond, ++nIndex
-            )
-        {
-            if ( (*cond)->HasChildPathFocus() )
-                return nIndex;
-        }
+        auto cond = std::find_if(m_aConditions.begin(), m_aConditions.end(),
+            [](const VclPtr<Condition>& rxCondition) { return rxCondition->HasChildPathFocus(); });
+        if (cond != m_aConditions.end())
+            return static_cast<size_t>(std::distance(m_aConditions.begin(), cond));
         return _nFallBackIfNone;
     }
 

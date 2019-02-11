@@ -39,23 +39,21 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
     if ( nFamily == XML_STYLE_FAMILY_TABLE_CELL )
     {
         rtl::Reference< XMLPropertySetMapper > aPropMapper = rORptExport.GetCellStylePropertyMapper();
-        ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
-        ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
-        for (; i != aEnd ; ++i)
+        for (const auto& rProp : rProperties)
         {
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId(rProp.mnIndex);
             switch (nContextID)
             {
                 case CTF_RPT_NUMBERFORMAT :
                 {
                     OUString sAttrValue;
-                    if ( i->maValue >>= sAttrValue )
+                    if ( rProp.maValue >>= sAttrValue )
                     {
                         if ( !sAttrValue.isEmpty() )
                         {
                             rORptExport.AddAttribute(
-                                aPropMapper->GetEntryNameSpace(i->mnIndex),
-                                aPropMapper->GetEntryXMLName(i->mnIndex),
+                                aPropMapper->GetEntryNameSpace(rProp.mnIndex),
+                                aPropMapper->GetEntryXMLName(rProp.mnIndex),
                                 sAttrValue );
                         }
                     }
