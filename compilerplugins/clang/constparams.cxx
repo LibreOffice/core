@@ -27,10 +27,6 @@
 namespace
 {
 
-static bool startswith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 class ConstParams:
     public loplugin::FunctionAddress<ConstParams>
 {
@@ -40,29 +36,29 @@ public:
     virtual void run() override {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        if (startswith(fn, SRCDIR "/sal/")
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/")
             || fn == SRCDIR "/jurt/source/pipe/staticsalhack.cxx"
-            || startswith(fn, SRCDIR "/bridges/")
-            || startswith(fn, SRCDIR "/binaryurp/")
-            || startswith(fn, SRCDIR "/stoc/")
-            || startswith(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/bridges/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/binaryurp/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/stoc/")
+            || loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
             // some weird calling through a function pointer
-            || startswith(fn, SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
-            || startswith(fn, SRCDIR "/sdext/source/pdfimport/test/pdfunzip.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sdext/source/pdfimport/test/pdfunzip.cxx")
             // windows only
-            || startswith(fn, SRCDIR "/basic/source/sbx/sbxdec.cxx")
-            || startswith(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/source/sbx/sbxdec.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
             // ignore this for now
-            || startswith(fn, SRCDIR "/libreofficekit")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit")
             // I end up with a
             //    CXXMemberCallExpr
             // to a
             //    BuiltinType '<bound member function type>'
             // and the AST gives me no further useful information.
-            || startswith(fn, SRCDIR "/sw/source/core/doc/docfly.cxx")
-            || startswith(fn, SRCDIR "/sw/source/core/doc/DocumentContentOperationsManager.cxx")
-            || startswith(fn, SRCDIR "/sw/source/core/fields/cellfml.cxx")
-            || startswith(fn, SRCDIR "/sw/source/filter/ww8/ww8par6.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/docfly.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/DocumentContentOperationsManager.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/fields/cellfml.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ww8/ww8par6.cxx")
             )
             return;
 

@@ -156,10 +156,6 @@ private:
     std::string fn;
 };
 
-static bool startswith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 bool UseUniquePtr::VisitFunctionDecl(const FunctionDecl* functionDecl)
 {
     if (ignoreLocation(functionDecl))
@@ -326,23 +322,23 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
         }
     }
 
-    if (startswith(fn, SRCDIR "/sal/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/comphelper/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/comphelper/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/cppuhelper/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/libreofficekit/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/vcl/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/sc/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/sfx2/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/smoketest/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/smoketest/"))
         return;
-    if (startswith(fn, WORKDIR))
+    if (loplugin::hasPathnamePrefix(fn, WORKDIR))
         return;
     // linked lists
     if (fn == SRCDIR "/vcl/source/gdi/regband.cxx")
@@ -442,13 +438,13 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // alloc/free routines for the hand constructed virtual function table
     if (fn == SRCDIR "/sal/textenc/convertisciidevangari.cxx")
         return;
-    if (startswith(fn, SRCDIR "/bridges/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/bridges/"))
         return;
     // bootstrap_map
     if (fn == SRCDIR "/sal/rtl/bootstrap.cxx")
         return;
     // too complicated for my small brain
-    if (startswith(fn, SRCDIR "/cppu/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/"))
         return;
     // linked list
     if (fn == SRCDIR "/vcl/source/gdi/octree.cxx")
@@ -475,10 +471,10 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (fn == SRCDIR "/lotuswordpro/source/filter/lwpfribptr.cxx")
         return;
     // complicated
-    if (startswith(fn, SRCDIR "/connectivity/source/drivers/file/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/connectivity/source/drivers/file/"))
         return;
     // complicated
-    if (startswith(fn, SRCDIR "/unodevtools/source/skeletonmaker/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/unodevtools/source/skeletonmaker/"))
         return;
 
     llvm::StringRef parentName;
@@ -730,7 +726,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         if (varDecl->hasInit() && isa<ExplicitCastExpr>(varDecl->getInit()->IgnoreImpCasts()))
             return;
 
-        if (startswith(fn, SRCDIR "/vcl/qa/"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qa/"))
             return;
         // linked list
         if (fn == SRCDIR "/registry/source/reflwrit.cxx")
@@ -939,7 +935,7 @@ void UseUniquePtr::CheckMemberDeleteExpr(const FunctionDecl* functionDecl, const
     if (ignoreLocation(fieldDecl))
         return;
     // to ignore things like the CPPUNIT macros
-    if (startswith(fn, WORKDIR "/"))
+    if (loplugin::hasPathnamePrefix(fn, WORKDIR "/"))
         return;
     // passes and stores pointers to member fields
     if (fn == SRCDIR "/sot/source/sdstor/stgdir.hxx")
@@ -960,14 +956,14 @@ void UseUniquePtr::CheckMemberDeleteExpr(const FunctionDecl* functionDecl, const
     if (fn == SRCDIR "/sc/inc/formulacell.hxx")
         return;
     // some weird stuff going on here around struct Entity
-    if (startswith(fn, SRCDIR "/sax/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sax/"))
         return;
-    if (startswith(fn, SRCDIR "/include/sax/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/sax/"))
         return;
     // manipulation of tree structures ie. StgAvlNode, don't lend themselves to std::unique_ptr
-    if (startswith(fn, SRCDIR "/sot/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sot/"))
         return;
-    if (startswith(fn, SRCDIR "/include/sot/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/sot/"))
         return;
     // the std::vector is being passed to another class
     if (fn == SRCDIR "/sfx2/source/explorer/nochaos.cxx")

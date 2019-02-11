@@ -56,22 +56,17 @@ UnusedVariableMore::UnusedVariableMore(const InstantiationData& data)
 {
 }
 
-static bool startswith(const std::string& rStr, const char* pSubStr)
-{
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 void UnusedVariableMore::run()
 {
     std::string fn(handler.getMainFileName());
     loplugin::normalizeDotDotInFilePath(fn);
 
     // ignore QA folders
-    if (startswith(fn, SRCDIR "/sal/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/i18npool/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/i18npool/qa/"))
         return;
-    if (startswith(fn, SRCDIR "/sc/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/qa/"))
         return;
 
     // vector of shared_ptr used to delay destruction

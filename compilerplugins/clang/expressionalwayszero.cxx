@@ -23,10 +23,6 @@
 
 namespace {
 
-static bool startswith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 class ExpressionAlwaysZero:
     public loplugin::FilteringPlugin<ExpressionAlwaysZero>
 {
@@ -40,23 +36,23 @@ public:
 
         loplugin::normalizeDotDotInFilePath(fn);
         // encoding of constant value for binary file format
-        if (startswith(fn, SRCDIR "/package/source/zipapi/ZipFile.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/package/source/zipapi/ZipFile.cxx"))
             return;
         // some auto-generated static data
-        if (startswith(fn, SRCDIR "/sal/textenc/tables.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/textenc/tables.cxx"))
             return;
         // nested conditional defines that are not worth cleaning up
-        if (startswith(fn, SRCDIR "/opencl/source/openclwrapper.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/opencl/source/openclwrapper.cxx"))
             return;
         // some kind of matrix calculation, the compiler will optimise it out anyway
-        if (startswith(fn, SRCDIR "/vcl/source/gdi/bitmap4.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/bitmap4.cxx"))
             return;
         // code follows a pattern
-        if (startswith(fn, SRCDIR "/svx/source/svdraw/svdhdl.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/svdhdl.cxx"))
             return;
         // looks like some kind of TODO marker
-        if (startswith(fn, SRCDIR "/chart2/source/view/main/PropertyMapper.cxx")
-            || startswith(fn, SRCDIR "/sc/source/core/data/formulacell.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/chart2/source/view/main/PropertyMapper.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/data/formulacell.cxx"))
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }

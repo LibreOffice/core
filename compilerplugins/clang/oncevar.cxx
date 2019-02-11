@@ -25,10 +25,6 @@
 namespace
 {
 
-bool startsWith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 Expr const * lookThroughInitListExpr(Expr const * expr) {
     if (auto const ile = dyn_cast<InitListExpr>(expr->IgnoreParenImpCasts())) {
         if (ile->getNumInits() == 1) {
@@ -94,9 +90,9 @@ public:
             || fn == SRCDIR "/embeddedobj/source/msole/oleembed.cxx")
              return;
         // some of this is necessary
-        if (startsWith( fn, SRCDIR "/sal/qa/"))
+        if (loplugin::hasPathnamePrefix( fn, SRCDIR "/sal/qa/"))
              return;
-        if (startsWith( fn, SRCDIR "/comphelper/qa/"))
+        if (loplugin::hasPathnamePrefix( fn, SRCDIR "/comphelper/qa/"))
              return;
         // TODO need to check calls via function pointer
         if (fn == SRCDIR "/i18npool/source/textconversion/textconversion_zh.cxx"
