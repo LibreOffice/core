@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f0780df9",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-11T13:26:50Z",
+      "side": 1,
+      "message": "The problem must be this `+` (absent in the original, and should be absent in the patch)",
+      "range": {
+        "startLine": 883,
+        "startChar": 34,
+        "endLine": 883,
+        "endChar": 35
+      },
+      "revId": "867384792244667a33cad79a7348b34b6008822b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
