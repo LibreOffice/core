@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f0e80d17",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5644,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-11T09:49:16Z",
+      "side": 1,
+      "message": "should this rather be of type xs:int?",
+      "revId": "33ba46bccbc0473bda1ab81fb0de2cbc3426b3a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
