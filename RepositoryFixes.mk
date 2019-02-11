@@ -168,6 +168,7 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst hyphen_uno:hyphen_uno.uno%,hyphen_uno:hyphen.uno%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst pyuno:%,pyuno:pyuno.pyd,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif # ifneq ($(USE_MINGW),)
