@@ -160,6 +160,8 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_xNF_Degree->set_value( 2 );
     }
 
+    m_xNF_Degree->save_value();
+
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nPeriod = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
@@ -169,6 +171,8 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     {
         m_xNF_Period->set_value( 2 );
     }
+
+    m_xNF_Period->save_value();
 
     double nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, true, &pPoolItem ) == SfxItemState::SET )
@@ -338,7 +342,7 @@ IMPL_LINK(TrendlineResources, ChangeSpinValue, weld::SpinButton&, rNumericField,
 {
     if (&rNumericField == m_xNF_Degree.get())
     {
-        if (!m_xRB_Polynomial->get_active())
+        if (!m_xRB_Polynomial->get_active() && m_xNF_Degree->get_value_changed_from_saved())
         {
             m_xRB_Polynomial->set_active(true);
             SelectTrendLine(*m_xRB_Polynomial);
@@ -346,7 +350,7 @@ IMPL_LINK(TrendlineResources, ChangeSpinValue, weld::SpinButton&, rNumericField,
     }
     else if (&rNumericField == m_xNF_Period.get())
     {
-        if (!m_xRB_MovingAverage->get_active())
+        if (!m_xRB_MovingAverage->get_active() && m_xNF_Period->get_value_changed_from_saved())
         {
             m_xRB_MovingAverage->set_active(true);
             SelectTrendLine(*m_xRB_MovingAverage);
