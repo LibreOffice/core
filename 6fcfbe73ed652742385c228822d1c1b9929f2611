@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9c5fb540",
+        "filename": "connectivity/source/drivers/hsqldb/HView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-02-11T08:07:03Z",
+      "side": 1,
+      "message": "We don\u0027t put space before ;",
+      "range": {
+        "startLine": 93,
+        "startChar": 75,
+        "endLine": 93,
+        "endChar": 77
+      },
+      "revId": "6fcfbe73ed652742385c228822d1c1b9929f2611",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_dc452d72",
+        "filename": "connectivity/source/drivers/hsqldb/HView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-02-11T08:07:03Z",
+      "side": 1,
+      "message": "This needs to be added to the OUString above.",
+      "range": {
+        "startLine": 94,
+        "startChar": 7,
+        "endLine": 94,
+        "endChar": 45
+      },
+      "revId": "6fcfbe73ed652742385c228822d1c1b9929f2611",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_1c4ce59c",
+        "filename": "connectivity/source/drivers/hsqldb/HView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-02-11T08:07:03Z",
+      "side": 1,
+      "message": "This redundant. You are creating a new OUString from your existing OUString. You may instead, just use the first one.",
+      "range": {
+        "startLine": 95,
+        "startChar": 8,
+        "endLine": 95,
+        "endChar": 52
+      },
+      "revId": "6fcfbe73ed652742385c228822d1c1b9929f2611",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
