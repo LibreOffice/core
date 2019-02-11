@@ -918,7 +918,7 @@ void WW8_WrPlcField::Write( WW8Export& rWrt )
 
     if( pfc && plc )
     {
-        sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+        sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
         WW8_WrPlc1::Write( *rWrt.pTableStrm );
         *pfc = nFcStart;
         *plc = rWrt.pTableStrm->Tell() - nFcStart;
@@ -967,7 +967,7 @@ void SwWW8Writer::FillCount( SvStream& rStrm, sal_uLong nCount )
 
 sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 {
-    sal_uLong nCurPos = rStrm.Tell();
+    sal_uInt64 nCurPos = rStrm.Tell();
     if( !nEndPos )                          // nEndPos == 0 -> next Page
         nEndPos = (nCurPos + 0x1ff) & ~0x1ffUL;
 
@@ -1072,7 +1072,7 @@ void WW8_WrPlcPn::WriteFkps()
 
 void WW8_WrPlcPn::WritePlc()
 {
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
     decltype(m_Fkps)::size_type i;
 
     for (i = 0; i < m_Fkps.size(); ++i)
@@ -1382,7 +1382,7 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc)
 
 void WW8_WrPct::WritePc( WW8Export& rWrt )
 {
-    sal_uLong nPctStart;
+    sal_uInt64 nPctStart;
     sal_uLong nOldPos, nEndPos;
 
     nPctStart = rWrt.pTableStrm->Tell();                    // Start piece table
@@ -1713,7 +1713,7 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
 // FilePos. Used to insert lengths after the fact.
 void SwWW8Writer::WriteShort( SvStream& rStrm, sal_uLong nPos, sal_Int16 nVal )
 {
-    sal_uLong nOldPos = rStrm.Tell();       // remember Pos
+    sal_uInt64 nOldPos = rStrm.Tell();       // remember Pos
     rStrm.Seek( nPos );
     SwWW8Writer::WriteShort( rStrm, nVal );
     rStrm.Seek( nOldPos );
@@ -1721,7 +1721,7 @@ void SwWW8Writer::WriteShort( SvStream& rStrm, sal_uLong nPos, sal_Int16 nVal )
 
 void SwWW8Writer::WriteLong( SvStream& rStrm, sal_uLong nPos, sal_Int32 nVal )
 {
-    sal_uLong nOldPos = rStrm.Tell();       // remember Pos
+    sal_uInt64 nOldPos = rStrm.Tell();       // remember Pos
     rStrm.Seek( nPos );
     SwWW8Writer::WriteLong( rStrm, nVal );
     rStrm.Seek( nOldPos );
@@ -1814,7 +1814,7 @@ void WW8Export::WriteStringAsPara( const OUString& rText )
         aArr.push_back( 1 );
     }
 
-    sal_uLong nPos = Strm().Tell();
+    sal_uInt64 nPos = Strm().Tell();
     m_pPapPlc->AppendFkpEntry( nPos, aArr.size(), aArr.data() );
     m_pChpPlc->AppendFkpEntry( nPos );
 }
@@ -3847,7 +3847,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffname = aName.copy(0, nLen);
     }
 
-    sal_uLong nDataStt = pDataStrm->Tell();
+    sal_uInt64 nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry(Strm().Tell());
 
     WriteChar(0x01);
