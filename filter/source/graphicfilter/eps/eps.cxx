@@ -99,7 +99,7 @@ class PSWriter
 {
 private:
     bool                mbStatus;
-    sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
+    bool                mbLevelWarning;     // if there any embedded eps file which was not exported
     sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
     long                mnLevel;            // dialog options
@@ -236,7 +236,7 @@ public:
 
 PSWriter::PSWriter()
     : mbStatus(false)
-    , mnLevelWarning(0)
+    , mbLevelWarning(false)
     , mnLatestPush(0)
     , mnLevel(0)
     , mbGrayScale(false)
@@ -286,7 +286,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
     mbStatus = true;
     mnPreview = 0;
-    mnLevelWarning = 0;
+    mbLevelWarning = false;
     mnLatestPush = 0xEFFFFFFE;
 
     if ( pFilterConfigItem )
@@ -437,7 +437,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     else
         mbStatus = false;
 
-    if ( mbStatus && mnLevelWarning && pFilterConfigItem )
+    if ( mbStatus && mbLevelWarning && pFilterConfigItem )
     {
         std::locale loc = Translate::Create("flt");
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
@@ -1125,7 +1125,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 if ( k != '1' )
                                 {
                                     bLevelConflict = true;
-                                    mnLevelWarning++;
+                                    mbLevelWarning = true;
                                 }
                                 break;
                             }
