@@ -1523,8 +1523,16 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
             const SCROW nRowAdd = (bUp ? -1 : 1);
             sal_uInt16 nWrap = 0;
 
-            for (SCCOL i = 0; i < nColCount; ++i)
-                pNextRows[i] = (i + nStartCol < nCol) ? (nRow + nRowAdd) : nRow;
+            if (bUp)
+            {
+                for (SCCOL i = 0; i < nColCount; ++i)
+                    pNextRows[i] = (i + nStartCol > nCol) ? (nRow + nRowAdd) : nRow;
+            }
+            else
+            {
+                for (SCCOL i = 0; i < nColCount; ++i)
+                    pNextRows[i] = (i + nStartCol < nCol) ? (nRow + nRowAdd) : nRow;
+            }
             do
             {
                 SCROW nNextRow = pNextRows[nCol - nStartCol] + nRowAdd;
