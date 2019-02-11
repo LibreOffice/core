@@ -25,11 +25,6 @@ TODO else should line up with if
 
 namespace
 {
-static bool startswith(const std::string& rStr, const char* pSubStr)
-{
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 class Indentation : public loplugin::FilteringPlugin<Indentation>
 {
 public:
@@ -55,7 +50,7 @@ public:
         if (fn == SRCDIR "/binaryurp/source/bridge.cxx")
             return;
         // the QEMIT macros
-        if (startswith(fn, SRCDIR "/vcl/qt5/"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qt5/"))
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
@@ -169,7 +164,6 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                    compat::getBeginLoc(firstStmt));
             //getParentStmt(compoundStmt)->dump();
             //stmt->dump();
-            compoundStmt->dump();
         }
     }
     return true;
