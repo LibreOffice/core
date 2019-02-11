@@ -96,7 +96,8 @@ namespace basprov
                 {
                     SbModule* pModule = pBasic->FindModule( pNames[i] );
                     if ( pModule )
-                        aChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicModuleNodeImpl( m_xContext, m_sScriptingContext, pModule, m_bIsAppScript ) );
+                        aChildNodes[i] = new BasicModuleNodeImpl(m_xContext, m_sScriptingContext,
+                                                                 pModule, m_bIsAppScript);
                 }
             }
         }

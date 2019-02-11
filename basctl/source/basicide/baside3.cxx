@@ -1243,7 +1243,7 @@ void DialogWindow::InitSettings()
 
 css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAccessible()
 {
-    return static_cast<css::accessibility::XAccessible*>(new AccessibleDialogWindow( this ));
+    return new AccessibleDialogWindow(this);
 }
 
 char const* DialogWindow::GetHid () const

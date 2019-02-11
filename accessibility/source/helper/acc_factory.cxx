@@ -309,12 +309,12 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 
         else if ( nType == WindowType::STATUSBAR )
         {
-            xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleStatusBar( _pXWindow ));
+            xContext = new VCLXAccessibleStatusBar(_pXWindow);
         }
 
         else if ( nType == WindowType::TABCONTROL )
         {
-            xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleTabControl( _pXWindow ));
+            xContext = new VCLXAccessibleTabControl(_pXWindow);
         }
 
         else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
@@ -346,11 +346,11 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 
         else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
         {
-           xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleFixedText( _pXWindow ));
+            xContext = new VCLXAccessibleFixedText(_pXWindow);
         }
         else
         {
-           xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleComponent( _pXWindow ));
+            xContext = new VCLXAccessibleComponent(_pXWindow);
         }
     }
     return xContext;
