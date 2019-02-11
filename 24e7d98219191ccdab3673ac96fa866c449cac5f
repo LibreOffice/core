@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b083b504",
+        "filename": "svx/source/form/fmdmod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-11T12:01:46Z",
+      "side": 0,
+      "message": "This one looks suspicious.",
+      "range": {
+        "startLine": 45,
+        "startChar": 47,
+        "endLine": 45,
+        "endChar": 84
+      },
+      "revId": "24e7d98219191ccdab3673ac96fa866c449cac5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
