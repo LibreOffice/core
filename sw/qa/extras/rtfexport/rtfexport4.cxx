@@ -31,6 +31,7 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 /**
   Split these tests into their own file because they are really really slow
@@ -97,6 +98,26 @@ DECLARE_RTFEXPORT_TEST(testCjklist31, "cjklist31.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_RTFEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was
+    // left, not block.
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_BLOCK,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_BLOCK,
+                         static_cast<style::ParagraphAdjust>(
+                             getProperty<sal_Int16>(getParagraph(1), "ParaLastLineAdjust")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_BLOCK,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(2), "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+                         static_cast<style::ParagraphAdjust>(
+                             getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")

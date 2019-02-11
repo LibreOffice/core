@@ -303,6 +303,7 @@
 #define OOO_STRING_SVTOOLS_RTF_PVPARA "\\pvpara"
 #define OOO_STRING_SVTOOLS_RTF_PVPG "\\pvpg"
 #define OOO_STRING_SVTOOLS_RTF_QC "\\qc"
+#define OOO_STRING_SVTOOLS_RTF_QD "\\qd"
 #define OOO_STRING_SVTOOLS_RTF_QJ "\\qj"
 #define OOO_STRING_SVTOOLS_RTF_QL "\\ql"
 #define OOO_STRING_SVTOOLS_RTF_QR "\\qr"

@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -95,6 +96,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 3; Actual  : 0', i.e. page width zoom was lost on export.
     CPPUNIT_ASSERT_EQUAL(SvxZoomType::PAGEWIDTH, pEditShell->GetViewOptions()->GetZoomType());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was
+    // left, not block.
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_BLOCK,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_BLOCK,
+                         static_cast<style::ParagraphAdjust>(
+                             getProperty<sal_Int16>(getParagraph(1), "ParaLastLineAdjust")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_BLOCK,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(2), "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+                         static_cast<style::ParagraphAdjust>(
+                             getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")

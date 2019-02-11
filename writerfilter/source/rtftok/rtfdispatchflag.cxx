@@ -73,7 +73,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             nParam = NS_ooxml::LN_Value_ST_Jc_right;
             break;
         case RTF_QD:
-            nParam = NS_ooxml::LN_Value_ST_Jc_both;
+            nParam = NS_ooxml::LN_Value_ST_Jc_distribute;
             break;
         default:
             break;
