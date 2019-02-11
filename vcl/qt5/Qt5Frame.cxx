@@ -280,6 +280,14 @@ bool Qt5Frame::isMaximized() const
         return m_pQWidget->isMaximized();
 }
 
+void Qt5Frame::SetWindowStateImpl(Qt::WindowStates eState)
+{
+    if (m_pTopLevel)
+        m_pTopLevel->setWindowState(eState);
+    else
+        m_pQWidget->setWindowState(eState);
+}
+
 void Qt5Frame::SetTitle(const OUString& rTitle)
 {
     m_pQWidget->window()->setWindowTitle(toQString(rTitle));
@@ -497,7 +505,19 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
 
     if ((pState->mnMask & WindowStateMask::State) && (pState->mnState & WindowStateState::Maximized)
         && !isMaximized() && (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask)
-        m_pQWidget->showMaximized();
+    {
+        if (m_pTopLevel)
+        {
+            m_pTopLevel->resize(pState->mnWidth, pState->mnHeight);
+            m_pTopLevel->move(pState->mnX, pState->mnY);
+        }
+        else
+        {
+            m_pQWidget->resize(pState->mnWidth, pState->mnHeight);
+            m_pQWidget->move(pState->mnX, pState->mnY);
+        }
+        SetWindowStateImpl(Qt::WindowMaximized);
+    }
     else if (pState->mnMask
              & (WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
                 | WindowStateMask::Height))
@@ -525,16 +545,12 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     }
     else if (pState->mnMask & WindowStateMask::State && !isChild())
     {
-        if (pState->mnState & WindowStateState::Maximized && m_pTopLevel)
-        {
-            m_pTopLevel->showMaximized();
-            return;
-        }
-
-        if ((pState->mnState & WindowStateState::Minimized) && isWindow())
-            m_pQWidget->showMinimized();
+        if (pState->mnState & WindowStateState::Maximized)
+            SetWindowStateImpl(Qt::WindowMaximized);
+        else if ((pState->mnState & WindowStateState::Minimized))
+            SetWindowStateImpl(Qt::WindowMinimized);
         else
-            m_pQWidget->showNormal();
+            SetWindowStateImpl(Qt::WindowNoState);
     }
 }
 
