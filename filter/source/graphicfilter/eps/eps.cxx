@@ -99,7 +99,7 @@ class PSWriter
 {
 private:
     bool                mbStatus;
-    sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
+    sal_uInt64          mnLevelWarning;     // number of embedded eps files which was not exported
     sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
     long                mnLevel;            // dialog options
