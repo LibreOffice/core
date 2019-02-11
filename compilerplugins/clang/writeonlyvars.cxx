@@ -198,7 +198,7 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/svtools/source/config/itemholder2.cxx"))
             return;
-        // doiing a "keep objects alive" thing
+        // doing a "keep objects alive" thing
         if (loplugin::isSamePathname(fn, SRCDIR "/jvmfwk/source/framework.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/jvmfwk/plugins/sunmajor/pluginlib/util.cxx"))
