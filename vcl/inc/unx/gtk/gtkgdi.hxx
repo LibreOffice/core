@@ -23,12 +23,7 @@
 #include <config_cairo_canvas.h>
 
 #include <gtk/gtk.h>
-#if defined(GDK_WINDOWING_X11)
-#   include <gdk/gdkx.h>
-#endif
-#if defined(GDK_WINDOWING_WAYLAND)
-#   include <gdk/gdkwayland.h>
-#endif
+#include "gtkbackend.hxx"
 #include <gdk/gdkkeysyms.h>
 
 #include <unx/gtk/gtkframe.hxx>
