@@ -464,7 +464,7 @@ if test -n "$with_android_ndk"; then
     # linker is required if you compile large parts of the code with -g. A 32-bit linker just won't
     # manage to link the (app-specific) single huge .so that is built for the app in
     # android/source/ if there is debug information in a significant part of the object files.
-    # (A 64-bit ld.gold grows to much over 10 gigabytes of virtual space when linking such a .so if
+    # (A 64-bit ld.gold grows too much over 10 gigabytes of virtual space when linking such a .so if
     # all objects have been built with debug information.)
     case $build_os in
     linux-gnu*)
