@@ -53,85 +53,33 @@ struct ScSolverOptionsEntry
     }
 };
 
-class ScSolverOptionsString : public SvLBoxString
-{
-    bool        mbIsDouble;
-    double      mfDoubleValue;
-    sal_Int32   mnIntValue;
-
-public:
-    explicit ScSolverOptionsString(const OUString& rStr)
-        : SvLBoxString(rStr)
-        , mbIsDouble(false)
-        , mfDoubleValue(0.0)
-        , mnIntValue(0)
-    {
-    }
-
-    bool      IsDouble() const        { return mbIsDouble; }
-    double    GetDoubleValue() const  { return mfDoubleValue; }
-    sal_Int32 GetIntValue() const     { return mnIntValue; }
-
-    void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
-    void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
-
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-};
-
-void ScSolverOptionsString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                                  const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
-{
-    //! move position? (SvxLinguTabPage: aPos.X() += 20)
-    OUString aNormalStr(GetText());
-    aNormalStr += ":";
-    rRenderContext.DrawText(rPos, aNormalStr);
-
-    Point aNewPos(rPos);
-    aNewPos.AdjustX(rRenderContext.GetTextWidth(aNormalStr) );
-    vcl::Font aOldFont(rRenderContext.GetFont());
-    vcl::Font aFont(aOldFont);
-    aFont.SetWeight(WEIGHT_BOLD);
-
-    OUString sTxt(' ');
-    if (mbIsDouble)
-        sTxt += rtl::math::doubleToUString(mfDoubleValue,
-            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
-    else
-        sTxt += OUString::number(mnIntValue);
-    rRenderContext.SetFont(aFont);
-    rRenderContext.DrawText(aNewPos, sTxt);
-
-    rRenderContext.SetFont(aOldFont);
-}
-
-ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
+ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
                         const uno::Sequence<OUString>& rDescriptions,
                         const OUString& rEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
-    : ModalDialog(pParent, "SolverOptionsDialog",
-        "modules/scalc/ui/solveroptionsdialog.ui")
+    : GenericDialogController(pParent, "modules/scalc/ui/solveroptionsdialog.ui", "SolverOptionsDialog")
     , maImplNames(rImplNames)
     , maDescriptions(rDescriptions)
     , maEngine(rEngine)
     , maProperties(rProperties)
+    , m_xLbEngine(m_xBuilder->weld_combo_box("engine"))
+    , m_xLbSettings(m_xBuilder->weld_tree_view("settings"))
+    , m_xBtnEdit(m_xBuilder->weld_button("edit"))
 {
-    get(m_pLbEngine, "engine");
-    get(m_pLbSettings, "settings");
-    get(m_pBtnEdit, "edit");
+    m_xLbSettings->set_size_request(m_xLbSettings->get_approximate_digit_width() * 32,
+                                    m_xLbSettings->get_height_rows(6));
 
-    m_pLbEngine->SetSelectHdl( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xLbSettings->get_approximate_digit_width() * 3 + 6);
+    m_xLbSettings->set_column_fixed_widths(aWidths);
 
-    m_pBtnEdit->SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
+    m_xLbEngine->connect_changed( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
 
-    m_pLbSettings->SetStyle( m_pLbSettings->GetStyle()|WB_CLIPCHILDREN );
-    m_pLbSettings->SetForceMakeVisible(true);
-    m_pLbSettings->SetHighlightRange();
+    m_xBtnEdit->connect_clicked( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    m_pLbSettings->SetSelectHdl( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );
-    m_pLbSettings->SetDoubleClickHdl( LINK( this, ScSolverOptionsDialog, SettingsDoubleClickHdl ) );
+    m_xLbSettings->connect_changed( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );
+    m_xLbSettings->connect_row_activated( LINK( this, ScSolverOptionsDialog, SettingsDoubleClickHdl ) );
 
     sal_Int32 nSelect = -1;
     sal_Int32 nImplCount = maImplNames.getLength();
@@ -139,7 +87,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
     {
         OUString aImplName( maImplNames[nImpl] );
         OUString aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
-        m_pLbEngine->InsertEntry( aDescription );
+        m_xLbEngine->append_text(aDescription);
         if ( aImplName == maEngine )
             nSelect = nImpl;
     }
@@ -155,7 +103,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box
-        m_pLbEngine->SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
+        m_xLbEngine->set_active(nSelect);
 
     if ( !maProperties.getLength() )
         ReadFromComponent();            // fill maProperties from component (using maEngine)
@@ -164,16 +112,6 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
 {
-    disposeOnce();
-}
-
-void ScSolverOptionsDialog::dispose()
-{
-    m_xCheckButtonData.reset();
-    m_pLbEngine.clear();
-    m_pLbSettings.clear();
-    m_pBtnEdit.clear();
-    ModalDialog::dispose();
 }
 
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
@@ -181,31 +119,20 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     // update maProperties from list box content
     // order of entries in list box and maProperties is the same
     sal_Int32 nEntryCount = maProperties.getLength();
-    SvTreeList* pModel = m_pLbSettings->GetModel();
-    if ( nEntryCount == static_cast<sal_Int32>(pModel->GetEntryCount()) )
+    if (nEntryCount == m_xLbSettings->n_children())
     {
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
         {
             uno::Any& rValue = maProperties[nEntryPos].Value;
-            SvTreeListEntry* pEntry = pModel->GetEntry(nEntryPos);
-
-            bool bHasData = false;
-            sal_uInt16 nItemCount = pEntry->ItemCount();
-            for (sal_uInt16 nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
+            if (ScSolverOptionsString* pStringItem = reinterpret_cast<ScSolverOptionsString*>(m_xLbSettings->get_id(nEntryPos).toInt64()))
             {
-                SvLBoxItem& rItem = pEntry->GetItem( nItemPos );
-                ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(&rItem);
-                if ( pStringItem )
-                {
-                    if ( pStringItem->IsDouble() )
-                        rValue <<= pStringItem->GetDoubleValue();
-                    else
-                        rValue <<= pStringItem->GetIntValue();
-                    bHasData = true;
-                }
+                if (pStringItem->IsDouble())
+                    rValue <<= pStringItem->GetDoubleValue();
+                else
+                    rValue <<= pStringItem->GetIntValue();
             }
-            if ( !bHasData )
-                rValue <<= ( m_pLbSettings->GetCheckButtonState( pEntry ) == SvButtonState::Checked );
+            else
+                rValue <<= m_xLbSettings->get_toggle(nEntryPos, 0);
         }
     }
     else
@@ -246,14 +173,8 @@ void ScSolverOptionsDialog::FillListBox()
 
     // fill the list box
 
-    m_pLbSettings->SetUpdateMode(false);
-    m_pLbSettings->Clear();
-
-    if (!m_xCheckButtonData)
-        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pLbSettings));
-
-    SvTreeList* pModel = m_pLbSettings->GetModel();
-    SvTreeListEntry* pEntry = nullptr;
+    m_xLbSettings->freeze();
+    m_xLbSettings->clear();
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
@@ -261,46 +182,52 @@ void ScSolverOptionsDialog::FillListBox()
 
         uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();
+
+        m_xLbSettings->insert(nullptr, -1, nullptr, nullptr,
+                              nullptr, nullptr, nullptr, false);
+
         if ( eClass == uno::TypeClass_BOOLEAN )
         {
             // check box entry
-            pEntry = new SvTreeListEntry;
-            std::unique_ptr<SvLBoxButton> xButton(new SvLBoxButton(
-                SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
-            if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
-                xButton->SetStateChecked();
-            else
-                xButton->SetStateUnchecked();
-            pEntry->AddItem(std::move(xButton));
-            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-            pEntry->AddItem(std::make_unique<SvLBoxString>(aVisName));
+            m_xLbSettings->set_toggle(nPos, ScUnoHelpFunctions::GetBoolFromAny(aValue), 0);
+            m_xLbSettings->set_text(nPos, aVisName, 1);
         }
         else
         {
             // value entry
-            pEntry = new SvTreeListEntry;
-            pEntry->AddItem(std::make_unique<SvLBoxString>("")); // empty column
-            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-            std::unique_ptr<ScSolverOptionsString> pItem(
-                new ScSolverOptionsString(aVisName));
-            if ( eClass == uno::TypeClass_DOUBLE )
+            m_xLbSettings->set_text(nPos, aVisName, 1);
+            m_aOptions.emplace_back(new ScSolverOptionsString(aVisName));
+            if (eClass == uno::TypeClass_DOUBLE)
             {
                 double fDoubleValue = 0.0;
-                if ( aValue >>= fDoubleValue )
-                    pItem->SetDoubleValue( fDoubleValue );
+                if (aValue >>= fDoubleValue)
+                    m_aOptions.back()->SetDoubleValue(fDoubleValue);
+
+                OUString sTxt(aVisName);
+                sTxt += ": ";
+                sTxt += rtl::math::doubleToUString(fDoubleValue,
+                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                    ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
+
+                m_xLbSettings->set_text(nPos, sTxt, 1);
             }
             else
             {
                 sal_Int32 nIntValue = 0;
-                if ( aValue >>= nIntValue )
-                    pItem->SetIntValue( nIntValue );
+                if (aValue >>= nIntValue)
+                    m_aOptions.back()->SetIntValue(nIntValue);
+
+                OUString sTxt(aVisName);
+                sTxt += ": ";
+                sTxt += OUString::number(nIntValue);
+
+                m_xLbSettings->set_text(nPos, sTxt, 1);
             }
-            pEntry->AddItem(std::move(pItem));
+            m_xLbSettings->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(m_aOptions.back().get())));
         }
-        pModel->Insert( pEntry );
     }
 
-    m_pLbSettings->SetUpdateMode(true);
+    m_xLbSettings->thaw();
 }
 
 void ScSolverOptionsDialog::ReadFromComponent()
@@ -310,58 +237,63 @@ void ScSolverOptionsDialog::ReadFromComponent()
 
 void ScSolverOptionsDialog::EditOption()
 {
-    SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
-    if (pEntry)
+    int nEntry = m_xLbSettings->get_selected_index();
+    if (nEntry == -1)
+        return;
+    ScSolverOptionsString* pStringItem = reinterpret_cast<ScSolverOptionsString*>(m_xLbSettings->get_id(nEntry).toInt64());
+    if (!pStringItem)
+        return;
+
+    if (pStringItem->IsDouble())
     {
-        sal_uInt16 nItemCount = pEntry->ItemCount();
-        for (sal_uInt16 nPos=0; nPos<nItemCount; ++nPos)
+        ScSolverValueDialog aValDialog(m_xDialog.get());
+        aValDialog.SetOptionName( pStringItem->GetText() );
+        aValDialog.SetValue( pStringItem->GetDoubleValue() );
+        if (aValDialog.run() == RET_OK)
         {
-            SvLBoxItem& rItem = pEntry->GetItem( nPos );
-            ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(&rItem);
-            if ( pStringItem )
-            {
-                if ( pStringItem->IsDouble() )
-                {
-                    ScSolverValueDialog aValDialog(GetFrameWeld());
-                    aValDialog.SetOptionName( pStringItem->GetText() );
-                    aValDialog.SetValue( pStringItem->GetDoubleValue() );
-                    if (aValDialog.run() == RET_OK)
-                    {
-                        pStringItem->SetDoubleValue( aValDialog.GetValue() );
-                        m_pLbSettings->InvalidateEntry( pEntry );
-                    }
-                }
-                else
-                {
-                    ScSolverIntegerDialog aIntDialog(GetFrameWeld());
-                    aIntDialog.SetOptionName( pStringItem->GetText() );
-                    aIntDialog.SetValue( pStringItem->GetIntValue() );
-                    if (aIntDialog.run() == RET_OK)
-                    {
-                        pStringItem->SetIntValue(aIntDialog.GetValue());
-                        m_pLbSettings->InvalidateEntry( pEntry );
-                    }
-                }
-            }
+            pStringItem->SetDoubleValue( aValDialog.GetValue() );
+
+            OUString sTxt(pStringItem->GetText());
+            sTxt += ": ";
+            sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
+                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
+
+            m_xLbSettings->set_text(nEntry, sTxt, 1);
+        }
+    }
+    else
+    {
+        ScSolverIntegerDialog aIntDialog(m_xDialog.get());
+        aIntDialog.SetOptionName( pStringItem->GetText() );
+        aIntDialog.SetValue( pStringItem->GetIntValue() );
+        if (aIntDialog.run() == RET_OK)
+        {
+            pStringItem->SetIntValue(aIntDialog.GetValue());
+
+            OUString sTxt(pStringItem->GetText());
+            sTxt += ": ";
+            sTxt += OUString::number(pStringItem->GetIntValue());
+
+            m_xLbSettings->set_text(nEntry, sTxt, 1);
         }
     }
 }
 
-IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, weld::Button&, rBtn, void )
 {
-    if (pBtn == m_pBtnEdit)
+    if (&rBtn == m_xBtnEdit.get())
         EditOption();
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl, weld::TreeView&, void)
 {
     EditOption();
-    return false;
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl, weld::ComboBox&, void)
 {
-    const sal_Int32 nSelectPos = m_pLbEngine->GetSelectedEntryPos();
+    const sal_Int32 nSelectPos = m_xLbEngine->get_active();
     if ( nSelectPos < maImplNames.getLength() )
     {
         OUString aNewEngine( maImplNames[nSelectPos] );
@@ -374,19 +306,19 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl, weld::TreeView&, void)
 {
     bool bCheckbox = false;
 
-    SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
-    if (pEntry)
+    int nEntry = m_xLbSettings->get_selected_index();
+    if (nEntry != -1)
     {
-        SvLBoxItem* pItem = pEntry->GetFirstItem(SvLBoxItemType::Button);
-        if (pItem && pItem->GetType() == SvLBoxItemType::Button)
+        ScSolverOptionsString* pStringItem = reinterpret_cast<ScSolverOptionsString*>(m_xLbSettings->get_id(nEntry).toInt64());
+        if (!pStringItem)
             bCheckbox = true;
     }
 
-    m_pBtnEdit->Enable( !bCheckbox );
+    m_xBtnEdit->set_sensitive(!bCheckbox);
 }
 
 ScSolverIntegerDialog::ScSolverIntegerDialog(weld::Window * pParent)

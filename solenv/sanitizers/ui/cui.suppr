@@ -28,7 +28,6 @@ cui/uiconfig/ui/applyautofmtpage.ui://svtlo-SvSimpleTableContainer[@id='list'] n
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='m'] orphan-label
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='t'] orphan-label
 cui/uiconfig/ui/applylocalizedpage.ui://svtlo-SvSimpleTableContainer[@id='list:border'] no-labelled-by
-cui/uiconfig/ui/applylocalizedpage.ui://svxcorelo-SvxCheckListBox[@id='checklist:border'] no-labelled-by
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='singlestartex'] orphan-label
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='singleendex'] orphan-label
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='doublestartex'] orphan-label

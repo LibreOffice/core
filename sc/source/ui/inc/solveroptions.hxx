@@ -20,46 +20,67 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVEROPTIONS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SOLVEROPTIONS_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
-#include <svx/checklbx.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-class ScSolverOptionsDialog : public ModalDialog
+class ScSolverOptionsString
 {
-    VclPtr<ListBox> m_pLbEngine;
-    VclPtr<SvxCheckListBox> m_pLbSettings;
-    VclPtr<PushButton> m_pBtnEdit;
+    bool        mbIsDouble;
+    double      mfDoubleValue;
+    sal_Int32   mnIntValue;
+    OUString    msStr;
 
-    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
+public:
+    explicit ScSolverOptionsString(const OUString& rStr)
+        : mbIsDouble(false)
+        , mfDoubleValue(0.0)
+        , mnIntValue(0)
+        , msStr(rStr)
+    {
+    }
+
+    bool      IsDouble() const        { return mbIsDouble; }
+    double    GetDoubleValue() const  { return mfDoubleValue; }
+    sal_Int32 GetIntValue() const     { return mnIntValue; }
+    const OUString& GetText() const   { return msStr; }
+
+    void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
+    void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
+};
+
+class ScSolverOptionsDialog : public weld::GenericDialogController
+{
     css::uno::Sequence<OUString> maImplNames;
     css::uno::Sequence<OUString> maDescriptions;
-    OUString        maEngine;
+    OUString maEngine;
     css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
-    DECL_LINK( EngineSelectHdl, ListBox&, void );
-    DECL_LINK( SettingsSelHdl, SvTreeListBox*, void );
-    DECL_LINK( SettingsDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( ButtonHdl, Button*, void );
+    std::vector<std::unique_ptr<ScSolverOptionsString>> m_aOptions;
+
+    std::unique_ptr<weld::ComboBox> m_xLbEngine;
+    std::unique_ptr<weld::TreeView> m_xLbSettings;
+    std::unique_ptr<weld::Button> m_xBtnEdit;
+
+    DECL_LINK( EngineSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( SettingsSelHdl, weld::TreeView&, void );
+    DECL_LINK( SettingsDoubleClickHdl, weld::TreeView&, void );
+    DECL_LINK( ButtonHdl, weld::Button&, void );
 
     void    ReadFromComponent();
     void    FillListBox();
     void    EditOption();
 
 public:
-    ScSolverOptionsDialog( vcl::Window* pParent,
+    ScSolverOptionsDialog( weld::Window* pParent,
                            const css::uno::Sequence<OUString>& rImplNames,
                            const css::uno::Sequence<OUString>& rDescriptions,
                            const OUString& rEngine,
                            const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog() override;
-    virtual void dispose() override;
 
     // already updated in selection handler
     const OUString& GetEngine() const { return maEngine; }
