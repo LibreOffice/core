@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_90eb19af",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-11T12:36:19Z",
+      "side": 1,
+      "message": "I do not understand that comment, or the necessity to change the original code (though the change in itself is OK in that it directly initializes the vars, which is always a good thing)",
+      "revId": "ea3045b28943e78673a669e9e1a310d374951675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
