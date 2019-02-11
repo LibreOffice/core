@@ -588,47 +588,44 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
         std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
-            std::vector< OUString >::const_iterator aIter = aObjList.begin();
-            std::vector< OUString >::const_iterator aEnd = aObjList.end();
-            for (sal_uInt32 i=0 ; aIter != aEnd; ++aIter,++i)
+            auto aIter = std::find_if(aObjList.begin(), aObjList.end(),
+                [&_sType](const OUString& rObj) { return rObj.equalsIgnoreAsciiCase(_sType); });
+            if (aIter != aObjList.end())
             {
-                if ( aIter->equalsIgnoreAsciiCase( _sType ) )
+                auto i = static_cast<sal_uInt32>(std::distance(aObjList.begin(), aIter));
+                OReportModel aReportModel(nullptr);
+                SfxItemPool& rPool = aReportModel.GetItemPool();
+                rPool.FreezeIdRanges();
+                if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aReportModel ) )
                 {
-                    OReportModel aReportModel(nullptr);
-                    SfxItemPool& rPool = aReportModel.GetItemPool();
-                    rPool.FreezeIdRanges();
-                    if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aReportModel ) )
+                    const SdrObject* pSourceObj = aReportModel.GetPage( 0 )->GetObj( 0 );
+                    if( pSourceObj )
                     {
-                        const SdrObject* pSourceObj = aReportModel.GetPage( 0 )->GetObj( 0 );
-                        if( pSourceObj )
-                        {
-                            const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest(
-                                _pObj->getSdrModelFromSdrObject().GetItemPool(),
-                                svl::Items<
-                                    // Ranges from SdrAttrObj:
-                                    SDRATTR_START, SDRATTR_SHADOW_LAST,
-                                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                        const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
+                        SfxItemSet aDest(
+                            _pObj->getSdrModelFromSdrObject().GetItemPool(),
+                            svl::Items<
+                                // Ranges from SdrAttrObj:
+                                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                                SDRATTR_TEXTDIRECTION,
                                     SDRATTR_TEXTDIRECTION,
-                                        SDRATTR_TEXTDIRECTION,
-                                    // Graphic attributes, 3D properties,
-                                    // CustomShape properties:
-                                    SDRATTR_GRAF_FIRST,
-                                        SDRATTR_CUSTOMSHAPE_LAST,
-                                    // Range from SdrTextObj:
-                                    EE_ITEMS_START, EE_ITEMS_END>{});
-                            aDest.Set( rSource );
-                            _pObj->SetMergedItemSet( aDest );
-                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                            if ( nAngle )
-                            {
-                                double a = nAngle * F_PI18000;
-                                _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
-                            }
-                            bAttributesAppliedFromGallery = true;
+                                // Graphic attributes, 3D properties,
+                                // CustomShape properties:
+                                SDRATTR_GRAF_FIRST,
+                                    SDRATTR_CUSTOMSHAPE_LAST,
+                                // Range from SdrTextObj:
+                                EE_ITEMS_START, EE_ITEMS_END>{});
+                        aDest.Set( rSource );
+                        _pObj->SetMergedItemSet( aDest );
+                        sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+                        if ( nAngle )
+                        {
+                            double a = nAngle * F_PI18000;
+                            _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                         }
+                        bAttributesAppliedFromGallery = true;
                     }
-                    break;
                 }
             }
         }

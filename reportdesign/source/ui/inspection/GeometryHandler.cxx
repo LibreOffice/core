@@ -1885,27 +1885,26 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
         i18nutil::SearchOptions2 aSearchOptions;
         aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
         aSearchOptions.searchFlag = 0x00000100;
-        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
-        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
-        for (; aIter != aDeEnd; ++aIter)
+        auto aIter = std::find_if(m_aDefaultFunctions.begin(), m_aDefaultFunctions.end(),
+            [&aSearchOptions, &sFormula](const DefaultFunction& rDefaultFunction) {
+                aSearchOptions.searchString = rDefaultFunction.m_sSearchString;
+                utl::TextSearch aTextSearch( aSearchOptions);
+                sal_Int32 start = 0;
+                sal_Int32 end = sFormula.getLength();
+                return aTextSearch.SearchForward(sFormula, &start, &end) && start == 0 && end == sFormula.getLength();
+            });
+        if (aIter != m_aDefaultFunctions.end()) // default function found
         {
-            aSearchOptions.searchString = aIter->m_sSearchString;
-            utl::TextSearch aTextSearch( aSearchOptions);
             sal_Int32 start = 0;
             sal_Int32 end = sFormula.getLength();
-            if (aTextSearch.SearchForward(sFormula, &start, &end) && start == 0 && end == sFormula.getLength()) // default function found
-            {
-                aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
-                utl::TextSearch aDataSearch( aSearchOptions);
-                (void)aDataSearch.SearchForward(sFormula, &start, &end);
-                ++start;
-                _rDataField = sFormula.copy(start,end-start-1);
-                _rsDefaultFunctionName = aIter->m_sName;
-                break;
-            }
+            aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
+            utl::TextSearch aDataSearch( aSearchOptions);
+            (void)aDataSearch.SearchForward(sFormula, &start, &end);
+            ++start;
+            _rDataField = sFormula.copy(start,end-start-1);
+            _rsDefaultFunctionName = aIter->m_sName;
+            bDefaultFunction = true;
         }
-
-        bDefaultFunction = aIter != aDeEnd;
     }
     catch(uno::Exception&)
     {
@@ -1959,41 +1958,37 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
         OUString sNamePostfix;
         const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
 
-        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
-        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
-        for (; aIter != aDeEnd; ++aIter)
+        auto aIter = std::find_if(m_aDefaultFunctions.begin(), m_aDefaultFunctions.end(),
+            [&_sFunction](const DefaultFunction& rDefaultFunction) { return rDefaultFunction.m_sName == _sFunction; });
+        if (aIter != m_aDefaultFunctions.end())
         {
-            if ( aIter->m_sName == _sFunction )
+            const OUString sFunctionName( _sFunction + _sDataField + sNamePostfix);
+            const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(sFunctionName));
+
+            beans::PropertyChangeEvent aEvent;
+            aEvent.PropertyName = PROPERTY_SCOPE;
+            aEvent.OldValue <<= m_sScope;
+
+            ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+            while ( aFind.first != aFind.second )
             {
-                const OUString sFunctionName( _sFunction + _sDataField + sNamePostfix);
-                const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(sFunctionName));
-
-                beans::PropertyChangeEvent aEvent;
-                aEvent.PropertyName = PROPERTY_SCOPE;
-                aEvent.OldValue <<= m_sScope;
-
-                ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
-                while ( aFind.first != aFind.second )
+                if ( xFunctionsSupplier == aFind.first->second.second )
                 {
-                    if ( xFunctionsSupplier == aFind.first->second.second )
-                    {
-                        m_xFunction = aFind.first->second.first;
-                        OUString sTemp;
-                        isDefaultFunction(sQuotedFunctionName,sTemp,uno::Reference< report::XFunctionsSupplier>(),true); // implicitly sets the m_sScope
-                        break;
-                    }
-                    ++(aFind.first);
+                    m_xFunction = aFind.first->second.first;
+                    OUString sTemp;
+                    isDefaultFunction(sQuotedFunctionName,sTemp,uno::Reference< report::XFunctionsSupplier>(),true); // implicitly sets the m_sScope
+                    break;
                 }
-                if ( aFind.first == aFind.second )
-                    impl_createFunction(sFunctionName,_sDataField,*aIter);
-
-                OBlocker aBlocker(m_bIn);
-                m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny( impl_convertToFormula( uno::makeAny(sQuotedFunctionName) )));
-                aEvent.NewValue <<= m_sScope;
-                _aGuard.clear();
-                m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
-                break;
+                ++(aFind.first);
             }
+            if ( aFind.first == aFind.second )
+                impl_createFunction(sFunctionName,_sDataField,*aIter);
+
+            OBlocker aBlocker(m_bIn);
+            m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny( impl_convertToFormula( uno::makeAny(sQuotedFunctionName) )));
+            aEvent.NewValue <<= m_sScope;
+            _aGuard.clear();
+            m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
         }
     }
     catch(uno::Exception&)

@@ -53,26 +53,22 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             if ( _bReverse )
             {
                 ::comphelper::copyProperties(m_xDest,m_xSource);
-                TPropertyNamePair::const_iterator aIter = m_aNameMap.begin();
-                TPropertyNamePair::const_iterator aEnd = m_aNameMap.end();
-                for (; aIter != aEnd; ++aIter)
+                for (const auto& [rName, rPropConv] : m_aNameMap)
                 {
-                    Property aProp = m_xSourceInfo->getPropertyByName(aIter->first);
+                    Property aProp = m_xSourceInfo->getPropertyByName(rName);
                     if (0 == (aProp.Attributes & PropertyAttribute::READONLY))
                     {
-                        Any aValue = _xDest->getPropertyValue(aIter->second.first);
+                        Any aValue = _xDest->getPropertyValue(rPropConv.first);
                         if ( 0 != (aProp.Attributes & PropertyAttribute::MAYBEVOID) || aValue.hasValue() )
-                            _xSource->setPropertyValue(aIter->first,aIter->second.second->operator()(aIter->second.first,aValue));
+                            _xSource->setPropertyValue(rName, rPropConv.second->operator()(rPropConv.first, aValue));
                     }
                 }
             }
             else
             {
                 ::comphelper::copyProperties(m_xSource,m_xDest);
-                TPropertyNamePair::const_iterator aIter = m_aNameMap.begin();
-                TPropertyNamePair::const_iterator aEnd = m_aNameMap.end();
-                for (; aIter != aEnd; ++aIter)
-                    _xDest->setPropertyValue(aIter->second.first,aIter->second.second->operator()(aIter->second.first,_xSource->getPropertyValue(aIter->first)));
+                for (const auto& [rName, rPropConv] : m_aNameMap)
+                    _xDest->setPropertyValue(rPropConv.first, rPropConv.second->operator()(rPropConv.first, _xSource->getPropertyValue(rName)));
             }
             startListening();
         }

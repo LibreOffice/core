@@ -94,11 +94,8 @@ public:
 
                     // send all Section Objects a 'tingle'
                     // maybe they need a change in format, color, etc
-                    ::std::vector< uno::Reference< container::XChild > >::const_iterator aIter = m_pImpl->m_aSections.begin();
-                    ::std::vector< uno::Reference< container::XChild > >::const_iterator aEnd = m_pImpl->m_aSections.end();
-                    for (;aIter != aEnd; ++aIter)
+                    for (const uno::Reference<container::XChild>& xChild : m_pImpl->m_aSections)
                     {
-                        const uno::Reference<container::XChild> xChild (*aIter);
                         if (xChild.is())
                         {
                             uno::Reference<report::XSection> xSection(xChild, uno::UNO_QUERY);

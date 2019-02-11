@@ -503,15 +503,10 @@ OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ 
             uno::Reference< report::XGroup> xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
             OUString sExpression = xGroup->getExpression();
 
-            for(::std::vector<ColumnInfo>::const_iterator aIter = m_aColumnInfo.begin(); aIter != m_aColumnInfo.end();++aIter)
-            {
-                if ( aIter->sColumnName == sExpression )
-                {
-                    if ( !aIter->sLabel.isEmpty() )
-                        sExpression = aIter->sLabel;
-                    break;
-                }
-            }
+            auto aIter = std::find_if(m_aColumnInfo.begin(), m_aColumnInfo.end(),
+                [&sExpression](const ColumnInfo& rColumnInfo) { return rColumnInfo.sColumnName == sExpression; });
+            if (aIter != m_aColumnInfo.end() && !aIter->sLabel.isEmpty())
+                sExpression = aIter->sLabel;
             sText = sExpression;
         }
         catch (const uno::Exception&)

@@ -839,14 +839,13 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
                 if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
                 {
                     aGuard.clear();
-                    for (auto aEventIt = xEventList->maEvents.begin();
-                        aEventIt != xEventList->maEvents.end(); ++aEventIt)
+                    for (auto& rEvent : xEventList->maEvents)
                     {
-                        if (aEventIt->mxAttributes.is())
+                        if (rEvent.mxAttributes.is())
                         {
-                            aEventIt->mxAttributes->clear();
+                            rEvent.mxAttributes->clear();
                             if( rEntity.mxNamespaceHandler.is() )
-                                aEventIt->mxDeclAttributes->clear();
+                                rEvent.mxDeclAttributes->clear();
                         }
                         xEventList->mbIsAttributesEmpty = true;
                     }
@@ -980,23 +979,22 @@ bool FastSaxParserImpl::consume(EventList& rEventList)
 {
     Entity& rEntity = getEntity();
     rEventList.mbIsAttributesEmpty = false;
-    for (auto aEventIt = rEventList.maEvents.begin();
-         aEventIt != rEventList.maEvents.end(); ++aEventIt)
+    for (auto& rEvent : rEventList.maEvents)
     {
-        switch ((*aEventIt).maType)
+        switch (rEvent.maType)
         {
             case CallbackType::START_ELEMENT:
-                rEntity.startElement( &(*aEventIt) );
+                rEntity.startElement( &rEvent );
                 break;
             case CallbackType::END_ELEMENT:
                 rEntity.endElement();
                 break;
             case CallbackType::CHARACTERS:
-                rEntity.characters( (*aEventIt).msChars );
+                rEntity.characters( rEvent.msChars );
                 break;
             case CallbackType::PROCESSING_INSTRUCTION:
                 rEntity.processingInstruction(
-                    (*aEventIt).msNamespace, (*aEventIt).msElementName ); // ( target, data )
+                    rEvent.msNamespace, rEvent.msElementName ); // ( target, data )
                 break;
             case CallbackType::DONE:
                 return false;

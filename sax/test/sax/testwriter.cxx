@@ -236,29 +236,19 @@ OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw  (RuntimeExceptio
 
 OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw  (RuntimeException)
 {
-    vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
-    {
-        if( (*ii).sName == sName )
-        {
-            return (*ii).sType;
-        }
-    }
+    auto ii = std::find_if(m_pImpl->vecAttribute.begin(), m_pImpl->vecAttribute.end(),
+        [&sName](const struct TagAttribute& rAttr) { return rAttr.sName == sName; });
+    if (ii != m_pImpl->vecAttribute.end())
+        return (*ii).sType;
     return OUString();
 }
 
 OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (RuntimeException)
 {
-    vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for(; ii != m_pImpl->vecAttribute.end(); ++ii)
-    {
-        if( (*ii).sName == sName )
-        {
-            return (*ii).sValue;
-        }
-    }
+    auto ii = std::find_if(m_pImpl->vecAttribute.begin(), m_pImpl->vecAttribute.end(),
+        [&sName](const struct TagAttribute& rAttr) { return rAttr.sName == sName; });
+    if (ii != m_pImpl->vecAttribute.end())
+        return (*ii).sValue;
     return OUString();
 }
 

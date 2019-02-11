@@ -133,13 +133,12 @@ static bool find(
     OUString * value)
 {
     OSL_ASSERT(value);
-    for (NameValueVector::const_iterator i(vector.begin()); i != vector.end(); ++i)
+    auto i = std::find_if(vector.begin(), vector.end(),
+        [&key](const rtl_bootstrap_NameValue& rNameValue) { return rNameValue.sName == key; });
+    if (i != vector.end())
     {
-        if (i->sName == key)
-        {
-            *value = i->sValue;
-            return true;
-        }
+        *value = i->sValue;
+        return true;
     }
     return false;
 }
