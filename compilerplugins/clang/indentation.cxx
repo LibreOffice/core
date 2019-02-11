@@ -213,7 +213,7 @@ bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)
         }
         else if (column != tmpColumn)
         {
-            // disable this for now, ends up touching some very large switch statemnts in sw/ and sc/
+            // disable this for now, ends up touching some very large switch statements in sw/ and sc/
             (void)firstStmt;
             //            report(DiagnosticsEngine::Warning, "statement mis-aligned compared to neighbours",
             //                   stmtLoc);
