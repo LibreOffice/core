@@ -15,7 +15,7 @@
 
 /*
   Find overridden methods that :
-  (a) declare default params in different palces to their super-method(s)
+  (a) declare default params in different places to their super-method(s)
 
   Still TODO
   (b) Find places where the values of the default parameters are different
