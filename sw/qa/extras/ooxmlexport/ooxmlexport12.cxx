@@ -947,6 +947,43 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122563, "tdf122563.docx")
                 "width:255.75pt;height:63.75pt");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
+{
+    // test import/export of ActiveTable (visible sheet) of embedded XLSX OLE objects
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent,
+                                                                                uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xEmbeddedObjectsSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+
+    uno::Reference<beans::XPropertySet> xSheets;
+    xObjects->getByIndex(0) >>= xSheets;
+
+    uno::Reference<frame::XModel> xModel;
+    xSheets->getPropertyValue("Model") >>= xModel;
+    uno::Reference<document::XViewDataSupplier> xViewDataSupplier(xModel, uno::UNO_QUERY);
+
+    uno::Reference<container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xIndexAccess->getCount());
+
+    uno::Sequence<beans::PropertyValue> aSeq;
+    if (xIndexAccess->getByIndex(0) >>= aSeq)
+    {
+        sal_Int32 nCount(aSeq.getLength());
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            OUString sName(aSeq[i].Name);
+            if (sName == "ActiveTable")
+            {
+                OUString sTabName;
+                if (aSeq[i].Value >>= sTabName)
+                    // Sheet2, not Sheet1
+                    CPPUNIT_ASSERT_EQUAL(OUString("Munka2"), sTabName);
+            }
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
