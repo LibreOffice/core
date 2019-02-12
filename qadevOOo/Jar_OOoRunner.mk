@@ -966,7 +966,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScDatabaseRangeObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotFieldGroupItemObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotFieldGroupObj \
-    qadevOOo/tests/java/mod/_sc/ScDataPilotFieldGroupsObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotFieldObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotItemObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotItemsObj \
