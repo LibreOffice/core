@@ -462,6 +462,7 @@ protected:
     Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
     // if handler returns false, the expansion of the row is refused
     Link<TreeIter&, bool> m_aExpandingHdl;
+    Link<TreeView&, void> m_aVisibleRangeChangedHdl;
 
     std::vector<int> m_aRadioIndexes;
 
@@ -472,6 +473,8 @@ protected:
     {
         return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
     }
+    void signal_visible_range_changed() { m_aVisibleRangeChangedHdl.Call(*this); }
+
     // arg is pair<row,col>
     void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
 
@@ -593,14 +596,22 @@ public:
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
     virtual void expand_row(TreeIter& rIter) = 0;
     virtual void collapse_row(TreeIter& rIter) = 0;
-    virtual OUString get_text(const TreeIter& rIter) const = 0;
+    virtual void set_text(TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
+    virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
     virtual void selected_foreach(const std::function<void(TreeIter&)>& func) = 0;
+    virtual void visible_foreach(const std::function<void(TreeIter&)>& func) = 0;
 
     void connect_expanding(const Link<TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
+
+    virtual void connect_visible_range_changed(const Link<TreeView&, void>& rLink)
+    {
+        assert(!m_aVisibleRangeChangedHdl.IsSet() || !rLink.IsSet());
+        m_aVisibleRangeChangedHdl = rLink;
+    }
 
     //all of them
     void select_all() { unselect(-1); }

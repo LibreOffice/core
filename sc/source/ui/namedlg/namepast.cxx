@@ -25,13 +25,12 @@
 #include <viewdata.hxx>
 #include <scui_def.hxx>
 
-ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
-    : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
+ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
+    : GenericDialogController(pParent, "modules/scalc/ui/insertname.ui", "InsertNameDialog")
+    , m_xBtnPasteAll(m_xBuilder->weld_button("pasteall"))
+    , m_xBtnPaste(m_xBuilder->weld_button("paste"))
+    , m_xBtnClose(m_xBuilder->weld_button("close"))
 {
-    get(m_pBtnPasteAll, "pasteall");
-    get(m_pBtnPaste, "paste");
-    get(m_pBtnClose, "close");
-
     ScDocument& rDoc = pShell->GetDocument();
     std::map<OUString, ScRangeName*> aCopyMap;
     rDoc.GetRangeNameMap(aCopyMap);
@@ -42,56 +41,45 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("ctrl");
-    Size aControlSize(210, 0);
-    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-    pContainer->set_width_request(aControlSize.Width());
-    pContainer->set_height_request(10 * GetTextHeight());
-    mpTable = VclPtr<ScRangeManagerTable>::Create(*pContainer, m_RangeMap, aPos);
 
-    m_pBtnPaste->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
-    m_pBtnPasteAll->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
-    m_pBtnClose->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
+    std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("ctrl"));
+    xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
+                                xTreeView->get_height_rows(10));
+    m_xTable.reset(new RangeManagerTable(std::move(xTreeView), m_RangeMap, aPos));
 
-    if (!mpTable->GetEntryCount())
+    m_xBtnPaste->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl) );
+    m_xBtnPasteAll->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl));
+    m_xBtnClose->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl));
+
+    if (!m_xTable->n_children())
     {
-        m_pBtnPaste->Disable();
-        m_pBtnPasteAll->Disable();
+        m_xBtnPaste->set_sensitive(false);
+        m_xBtnPasteAll->set_sensitive(false);
     }
 }
 
 ScNamePasteDlg::~ScNamePasteDlg()
 {
-    disposeOnce();
 }
 
-void ScNamePasteDlg::dispose()
+IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
 {
-    mpTable.disposeAndClear();
-    m_pBtnPasteAll.clear();
-    m_pBtnPaste.clear();
-    m_pBtnClose.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
-{
-    if( pButton == m_pBtnPasteAll )
+    if (&rButton == m_xBtnPasteAll.get())
     {
-        EndDialog( BTN_PASTE_LIST );
+        m_xDialog->response(BTN_PASTE_LIST);
     }
-    else if( pButton == m_pBtnPaste )
+    else if (&rButton == m_xBtnPaste.get())
     {
-        std::vector<ScRangeNameLine> aSelectedLines = mpTable->GetSelectedEntries();
+        std::vector<ScRangeNameLine> aSelectedLines = m_xTable->GetSelectedEntries();
         for (const auto& rLine : aSelectedLines)
         {
             maSelectedNames.push_back(rLine.aName);
         }
-        EndDialog( BTN_PASTE_NAME );
+        m_xDialog->response(BTN_PASTE_NAME);
     }
-    else if( pButton == m_pBtnClose )
+    else if (&rButton == m_xBtnClose.get())
     {
-        EndDialog( BTN_PASTE_CLOSE );
+        m_xDialog->response(BTN_PASTE_CLOSE);
     }
 }
 

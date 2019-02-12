@@ -374,7 +374,13 @@ public:
 
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg )
+    std::unique_ptr<ScNamePasteDlg> m_xDlg;
+public:
+    explicit AbstractScNamePasteDlg_Impl(std::unique_ptr<ScNamePasteDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short           Execute() override;
     virtual std::vector<OUString>          GetSelectedNames() const override;
 };
 
@@ -627,7 +633,7 @@ public:
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(weld::Window * pParent,
         CreateNameFlags nFlags) override;
 
-    virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell ) override;
+    virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell) override;
 
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(vcl::Window* pParent,
         const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) override;

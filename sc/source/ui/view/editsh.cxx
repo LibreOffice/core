@@ -462,7 +462,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell() ));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pViewData->GetFrameWeld(), pViewData->GetDocShell()));
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
