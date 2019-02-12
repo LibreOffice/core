@@ -928,7 +928,7 @@
 #define FLD_EU_POS                              NC_("FLD_EU_POS", "Position")
 #define FLD_EU_TELPRIV                          NC_("FLD_EU_TELPRIV", "Tel. (Home)")
 #define FLD_EU_TELFIRMA                         NC_("FLD_EU_TELFIRMA", "Tel. (Work)")
-#define FLD_EU_FAX                              NC_("FLD_EU_FAX", "FAX")
+#define FLD_EU_FAX                              NC_("FLD_EU_FAX", "Fax")
 #define FLD_EU_EMAIL                            NC_("FLD_EU_EMAIL", "Email")
 #define FLD_EU_STATE                            NC_("FLD_EU_STATE", "State")
 #define FLD_PAGEREF_OFF                         NC_("FLD_PAGEREF_OFF", "off")

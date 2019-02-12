@@ -383,7 +383,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="fax-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="fax-atkobject">FAX number</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="fax-atkobject">Fax number</property>
                           </object>
                         </child>
                       </object>

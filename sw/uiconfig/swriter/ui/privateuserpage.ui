@@ -262,7 +262,7 @@
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="url-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|url-atkobject">FAX number</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|url-atkobject">Fax number</property>
                       </object>
                     </child>
                   </object>
