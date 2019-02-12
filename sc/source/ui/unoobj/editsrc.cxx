@@ -135,7 +135,7 @@ std::unique_ptr<SvxEditSource> ScAnnotationEditSource::Clone() const
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
     ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos);
-    return pNote ? pNote->GetOrCreateCaption( aCellPos ).get() : nullptr;
+    return pNote ? pNote->GetOrCreateCaption( aCellPos ) : nullptr;
 }
 
 SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()

@@ -34,51 +34,6 @@ class ScDocShell;
 class ScPatternAttr;
 class ScRangeName;
 
-class ScUndoSdrCaptionObj: public SdrUndoAction
-{
-protected:
-    SdrObjList* m_pObjList;
-    sal_uInt32 const  m_nOrdNum;
-    std::shared_ptr< SdrCaptionObj > m_pCaptionObj;
-
-    void UnmarkObject();
-    void BroadcastSwitchToPage();
-    OUString GetDescriptionString( const char* pStrCacheID, bool bRepeat = false ) const;
-
-public:
-    ScUndoSdrCaptionObj(const std::shared_ptr< SdrCaptionObj >&);
-    virtual ~ScUndoSdrCaptionObj() override;
-};
-
-class ScUndoDelSdrCaptionObj: public ScUndoSdrCaptionObj
-{
-public:
-    ScUndoDelSdrCaptionObj(const std::shared_ptr< SdrCaptionObj >& pCaptionObj);
-    virtual ~ScUndoDelSdrCaptionObj() override;
-
-    virtual void    Undo() override;
-    virtual void    Redo() override;
-
-    virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
-
-    virtual void SdrRepeat(SdrView& rView) override;
-    virtual bool CanSdrRepeat(SdrView& rView) const override;
-};
-
-
-class ScUndoNewSdrCaptionObj: public ScUndoSdrCaptionObj
-{
-public:
-    ScUndoNewSdrCaptionObj(const std::shared_ptr< SdrCaptionObj >& pCaptionObj);
-    virtual ~ScUndoNewSdrCaptionObj() override;
-
-    virtual void    Undo() override;
-    virtual void    Redo() override;
-
-    virtual OUString GetComment() const override;
-};
-
 class ScUndoCursorAttr: public ScSimpleUndo
 {
 public:
