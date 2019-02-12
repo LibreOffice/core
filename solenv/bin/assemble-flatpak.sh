@@ -15,20 +15,31 @@ set -e
 
 cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
 
-## libreoffice-*.desktop -> org.libreoffice.LibreOffice-*.desktop:
+## libreoffice-*.desktop -> org.libreoffice.LibreOffice.*.desktop:
 mkdir -p /app/share/applications
 for i in "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop
 do
  sed -e 's,^Exec=libreoffice,Exec=/app/libreoffice/program/soffice,' \
-  -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice-/' "$i" \
-  >/app/share/applications/org.libreoffice.LibreOffice-"${i#"${PREFIXDIR?}"/share/applications/libreoffice-}"
+  -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice./' "$i" \
+  >/app/share/applications/org.libreoffice.LibreOffice."${i#"${PREFIXDIR?}"/share/applications/libreoffice-}"
 done
-mv /app/share/applications/org.libreoffice.LibreOffice-startcenter.desktop \
+mv /app/share/applications/org.libreoffice.LibreOffice.startcenter.desktop \
  /app/share/applications/org.libreoffice.LibreOffice.desktop
 
 # Flatpak .desktop exports take precedence over system ones due to
 # the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
-sed -i "s/text\/plain;//" /app/share/applications/org.libreoffice.LibreOffice-writer.desktop
+sed -i "s/text\/plain;//" /app/share/applications/org.libreoffice.LibreOffice.writer.desktop
+
+desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
+ --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
+ /app/share/applications/org.libreoffice.LibreOffice.desktop
+for i in base calc draw impress math writer xsltfilter
+do
+ desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-"$i" \
+  --set-key=X-Flatpak-RenamedFrom \
+  --set-value="libreoffice-$i.desktop;org.libreoffice.LibreOffice-$i.desktop;" \
+  /app/share/applications/org.libreoffice.LibreOffice."$i".desktop
+done
 
 ## icons/hicolor/*/apps/libreoffice-* ->
 ## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
@@ -40,7 +51,7 @@ do
  cp -a "$i" \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
  cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice-"${i##*/apps/libreoffice-}"
+  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice."${i##*/apps/libreoffice-}"
 done
 
 mkdir -p /app/share/runtime/locale
@@ -142,7 +153,7 @@ EOF
 # append the appdata for the different components
 for i in "${PREFIXDIR?}"/share/appdata/libreoffice-*.appdata.xml
 do
-  sed "1 d; s/<id>libreoffice/<id>org.libreoffice.LibreOffice/" "$i" \
+  sed "1 d; s/<id>libreoffice-/<id>org.libreoffice.LibreOffice./" "$i" \
     >>/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
 done
 
