@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
@@ -16,6 +17,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
@@ -42,6 +44,7 @@ namespace sc_apitest
 const auto nMaxFieldIndex = 6;
 
 class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest,
+                                     public apitest::XElementAccess,
                                      public apitest::XIndexAccess,
                                      public apitest::XNameAccess
 {
@@ -53,6 +56,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupItemObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -71,6 +78,7 @@ private:
 
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<container::XNameAccess>::get())
     , XIndexAccess(1)
     , XNameAccess("Group1")
 {
