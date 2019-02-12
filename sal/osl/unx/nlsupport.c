@@ -876,22 +876,24 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
      * This is a hack. We know that we are setting some envvars here
      * and due to https://bz.apache.org/ooo/show_bug.cgi?id=127965
      * we need to update PATH on macOS. Doing it here ensures
-     * that it's done but it's not the right location to be doing
+     * that it's done but it's not the perfect location to be doing
      * this.
      */
     opath = getenv ( "PATH" );
-    slen = strlen( "/usr/local/bin" ) + 1;
-    if ( opath != NULL )
-        slen += strlen( ":" ) + strlen( opath );
-    npath = malloc( slen );
-    *npath = '\0';
-    if ( opath != NULL ) {
-        strcat( npath, opath );
-        strcat( npath, ":" );
+    if (!strstr ( opath, "/usr/local/bin" )) {
+        slen = strlen( "/usr/local/bin" ) + 1;
+        if ( opath != NULL )
+            slen += strlen( ":" ) + strlen( opath );
+        npath = malloc( slen );
+        *npath = '\0';
+        if ( opath != NULL ) {
+            strcat( npath, opath );
+            strcat( npath, ":" );
+        }
+        strcat( npath, "/usr/local/bin" ); /* We are adding at the end */
+        setenv("PATH", npath, 1 );
+        free(npath);
     }
-    strcat( npath, "/usr/local/bin" ); /* We are adding at the end */
-    setenv("PATH", npath, 1 );
-    free(npath);
 
 #ifdef DEBUG
     fprintf( stderr, "nlsupport.c:  _imp_getProcessLocale() returning %s as current locale.\n", locale );
