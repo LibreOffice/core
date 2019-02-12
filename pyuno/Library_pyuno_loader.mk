@@ -30,6 +30,14 @@ $(eval $(call gb_Library_set_include,pyuno_loader,\
 	-I$(SRCDIR)/pyuno/inc \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
+else ifeq ($(OS),SOLARIS))
+$(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
+else ifeq ($(OS),MACOSX))
+$(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
+endif
+
 $(eval $(call gb_Library_add_cobjects,pyuno_loader,\
 	pyuno/source/module/pyuno_dlopenwrapper \
 ))
