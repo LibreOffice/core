@@ -160,7 +160,11 @@ short AbstractScNameCreateDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl);
+short AbstractScNamePasteDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
@@ -580,7 +584,7 @@ CreateNameFlags AbstractScNameCreateDlg_Impl::GetFlags() const
 
 std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 {
-    return pDlg->GetSelectedNames();
+    return m_xDlg->GetSelectedNames();
 }
 
 const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()
@@ -879,10 +883,9 @@ VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreate
     return VclPtr<AbstractScNameCreateDlg_Impl>::Create(std::make_unique<ScNameCreateDlg>(pParent, nFlags));
 }
 
-VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell )
+VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
 {
-    VclPtr<ScNamePasteDlg> pDlg = VclPtr<ScNamePasteDlg>::Create( pParent, pShell );
-    return VclPtr<AbstractScNamePasteDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScNamePasteDlg_Impl>::Create(std::make_unique<ScNamePasteDlg>(pParent, pShell));
 }
 
 VclPtr<AbstractScPivotFilterDlg> ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg(vcl::Window* pParent,

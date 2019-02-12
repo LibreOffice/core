@@ -1994,6 +1994,7 @@ private:
     DECL_LINK(EndDragHdl, HeaderBar*, void);
     DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
+    DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
@@ -2259,9 +2260,8 @@ public:
         return static_cast<SvLBoxString&>(rItem).GetText();
     }
 
-    virtual void set_text(int pos, const OUString& rText, int col) override
+    void set_text(SvTreeListEntry* pEntry, const OUString& rText, int col)
     {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         if (col == -1)
         {
             m_xTreeView->SetEntryText(pEntry, rText);
@@ -2288,6 +2288,12 @@ public:
             static_cast<SvLBoxString&>(rItem).SetText(rText);
         }
         m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    }
+
+    virtual void set_text(int pos, const OUString& rText, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        set_text(pEntry, rText, col);
     }
 
     virtual bool get_toggle(int pos, int col) const override
@@ -2513,10 +2519,20 @@ public:
             m_xTreeView->Collapse(rVclIter.iter);
     }
 
-    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    virtual OUString get_text(const weld::TreeIter& rIter, int col) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return SvTabListBox::GetEntryText(rVclIter.iter, 0);
+
+        if (col == -1)
+            col = 0xffff;
+
+        return SvTabListBox::GetEntryText(rVclIter.iter, col);
+    }
+
+    virtual void set_text(weld::TreeIter& rIter, const OUString& rText, int col) override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        set_text(rVclIter.iter, rText, col);
     }
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override
@@ -2550,6 +2566,23 @@ public:
             func(aVclIter);
             aVclIter.iter = m_xTreeView->NextSelected(aVclIter.iter);
         }
+    }
+
+    virtual void visible_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    {
+        SalInstanceTreeIter aVclIter(nullptr);
+        aVclIter.iter = m_xTreeView->GetFirstEntryInView();
+        while (aVclIter.iter)
+        {
+            func(aVclIter);
+            aVclIter.iter = m_xTreeView->GetNextEntryInView(aVclIter.iter);
+        }
+    }
+
+    virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override
+    {
+        weld::TreeView::connect_visible_range_changed(rLink);
+        m_xTreeView->SetScrolledHdl(LINK(this, SalInstanceTreeView, VisibleRangeChangedHdl));
     }
 
     virtual bool is_selected(const weld::TreeIter& rIter) const override
@@ -2619,8 +2652,14 @@ public:
         m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
+        m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
     }
 };
+
+IMPL_LINK_NOARG(SalInstanceTreeView, VisibleRangeChangedHdl, SvTreeListBox*, void)
+{
+    signal_visible_range_changed();
+}
 
 IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
 {
