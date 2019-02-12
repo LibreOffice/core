@@ -504,7 +504,6 @@ custom_widgets = [
     'SuggestionDisplay',
     'SuggestionEdit',
     'SvSimpleTableContainer',
-    'SvTabListBox',
     'SvTreeListBox',
     'SvtFileView',
     'SvtIconChoiceCtrl',
