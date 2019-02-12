@@ -1983,7 +1983,8 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         //prepare a unicode string, encrypt it
         enableStringEncryption( nInObjectNumber );
         sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
-        sal_Int32 nChars = 2;
+        sal_Int32 nChars = 2 + (nLen * 2);
+        m_vEncryptionBuffer.resize(nChars);
         *pCopy++ = 0xFE;
         *pCopy++ = 0xFF;
         // we need to prepare a byte stream from the unicode string buffer
@@ -1992,10 +1993,8 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             sal_Unicode aUnChar = pStr[i];
             *pCopy++ = static_cast<sal_uInt8>( aUnChar >> 8 );
             *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
-            nChars += 2;
         }
         //encrypt in place
-        m_vEncryptionBuffer.resize(nChars);
         rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars );
         //now append, hexadecimal (appendHex), the encrypted result
         for(int i = 0; i < nChars; i++)
