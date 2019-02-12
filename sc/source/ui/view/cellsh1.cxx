@@ -2156,7 +2156,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), GetViewData()->GetDocShell()));
                 switch( pDlg->Execute() )
                 {
                     case BTN_PASTE_LIST:

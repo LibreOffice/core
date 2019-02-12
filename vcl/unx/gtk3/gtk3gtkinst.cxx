@@ -5066,6 +5066,7 @@ private:
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
+    gulong m_nVAdjustmentChangedSignalId;
     GtkSortType m_eSortType;
 
     DECL_LINK(async_signal_changed, void*, void);
@@ -5131,18 +5132,23 @@ private:
         }
     }
 
+    OUString get(const GtkTreeIter& iter, int col) const
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gchar* pStr;
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &pStr, -1);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
+    }
+
     OUString get(int pos, int col) const
     {
         OUString sRet;
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-        {
-            gchar* pStr;
-            gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
-            sRet = OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-            g_free(pStr);
-        }
+            sRet = get(iter, col);
         return sRet;
     }
 
@@ -5158,14 +5164,19 @@ private:
         return bRet;
     }
 
+    void set(GtkTreeIter& iter, int col, const OUString& rText)
+    {
+        OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        gtk_tree_store_set(m_pTreeStore, &iter, col, aStr.getStr(), -1);
+    }
+
     void set(int pos, int col, const OUString& rText)
     {
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
         {
-            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-            gtk_tree_store_set(m_pTreeStore, &iter, col, aStr.getStr(), -1);
+            set(iter, col, rText);
         }
     }
 
@@ -5197,7 +5208,7 @@ private:
         if (gtk_tree_model_iter_children(pModel, &tmp, &iter))
         {
             aIter.iter = tmp;
-            if (get_text(aIter) == "<dummy>")
+            if (get_text(aIter, -1) == "<dummy>")
             {
                 gtk_tree_store_remove(m_pTreeStore, &tmp);
                 bPlaceHolder = true;
@@ -5265,6 +5276,12 @@ private:
         pThis->signal_column_clicked(pColumn);
     }
 
+    static void signalVAdjustmentChanged(GtkAdjustment*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->signal_visible_range_changed();
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), bTakeOwnership)
@@ -5278,6 +5295,7 @@ public:
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
+        , m_nVAdjustmentChangedSignalId(0)
         , m_eSortType(GTK_SORT_ASCENDING)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
@@ -5547,6 +5565,41 @@ public:
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
     }
 
+    virtual void visible_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    {
+        GtkTreePath* start_path;
+        GtkTreePath* end_path;
+
+        if (gtk_tree_view_get_visible_range(m_pTreeView, &start_path, &end_path))
+        {
+            GtkInstanceTreeIter aGtkIter(nullptr);
+            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+            gtk_tree_model_get_iter(pModel, &aGtkIter.iter, start_path);
+
+            do
+            {
+                func(aGtkIter);
+                GtkTreePath* path = gtk_tree_model_get_path(pModel, &aGtkIter.iter);
+                bool bContinue = gtk_tree_path_compare(path, end_path) != 0;
+                gtk_tree_path_free(path);
+                if (!bContinue)
+                    break;
+                if (!iter_next(aGtkIter))
+                    break;
+            } while(true);
+
+            gtk_tree_path_free(start_path);
+            gtk_tree_path_free(end_path);
+        }
+    }
+
+    virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override
+    {
+        weld::TreeView::connect_visible_range_changed(rLink);
+        GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
+        m_nVAdjustmentChangedSignalId = g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustmentChanged), this);
+    }
+
     virtual bool is_selected(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -5563,7 +5616,7 @@ public:
     virtual void set_text(int pos, const OUString& rText, int col) override
     {
         if (col == -1)
-            return set(pos, m_nTextCol, rText);
+            col = m_nTextCol;
         return set(pos, col, rText);
     }
 
@@ -5701,7 +5754,7 @@ public:
         if (ret)
         {
             //on-demand dummy entry doesn't count
-            return get_text(rGtkIter) != "<dummy>";
+            return get_text(rGtkIter, -1) != "<dummy>";
         }
         return ret;
     }
@@ -5804,15 +5857,20 @@ public:
         gtk_tree_path_free(path);
     }
 
-    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    virtual OUString get_text(const weld::TreeIter& rIter, int col) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        gchar* pStr;
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nTextCol, &pStr, -1);
-        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-        g_free(pStr);
-        return sRet;
+        if (col == -1)
+            col = m_nTextCol;
+        return get(rGtkIter.iter, col);
+    }
+
+    virtual void set_text(weld::TreeIter& rIter, const OUString& rText, int col) override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        if (col == -1)
+            col = m_nTextCol;
+        set(rGtkIter.iter, col, rText);
     }
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override
@@ -5900,6 +5958,19 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
+    virtual Size get_size_request() const override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            return Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
+                        gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
+        }
+        int nWidth, nHeight;
+        gtk_widget_get_size_request(m_pWidget, &nWidth, &nHeight);
+        return Size(nWidth, nHeight);
+    }
+
     virtual Size get_preferred_size() const override
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
@@ -5970,6 +6041,12 @@ public:
 
     virtual ~GtkInstanceTreeView() override
     {
+        if (m_nVAdjustmentChangedSignalId)
+        {
+            GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
+            g_signal_handler_disconnect(pVAdjustment, m_nVAdjustmentChangedSignalId);
+        }
+
         g_signal_handler_disconnect(m_pTreeView, m_nTestExpandRowSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
