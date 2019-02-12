@@ -16,6 +16,24 @@
       "revId": "26030ca6e760827cfa2191dd219c868497a0c948",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_50912152",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1002060
+      },
+      "writtenOn": "2019-02-12T10:26:13Z",
+      "side": 1,
+      "message": "Somehow didn\u0027t thought about it, will work on that too",
+      "parentUuid": "1f485f77_50f5a1ca",
+      "revId": "26030ca6e760827cfa2191dd219c868497a0c948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
