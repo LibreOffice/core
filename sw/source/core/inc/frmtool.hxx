@@ -111,12 +111,13 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
  * @param[in]   rFont            font object of actual text, which specify the border
  * @param[in]   rPaintArea       rectangle area in which line portion takes place
  * @param[in]   bVerticalLayout  corresponding text frame verticality
+ * @param[in]   bVerticalLayoutLRBT corresponding text frame verticality (LRBT subset)
  * @param[in]   bJoinWithPrev    leave border with which actual border joins to the previous portion
  * @param[in]   bJoinWithNext    leave border with which actual border joins to the next portion
 **/
-void PaintCharacterBorder(
-    const SwFont& rFont, const SwRect& rPaintArea, const bool bVerticalLayout,
-    const bool bJoinWithPrev, const bool bJoinWithNext );
+void PaintCharacterBorder(const SwFont& rFont, const SwRect& rPaintArea, const bool bVerticalLayout,
+                          const bool bVerticalLayoutLRBT, const bool bJoinWithPrev,
+                          const bool bJoinWithNext);
 
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
