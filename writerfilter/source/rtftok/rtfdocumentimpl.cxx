@@ -1620,11 +1620,11 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         {
             TableRowBuffer& rRowBuffer(*std::get<2>(aTuple));
 
-            replayRowBuffer(rRowBuffer.buffer, rRowBuffer.cellsSprms, rRowBuffer.cellsAttributes,
-                            rRowBuffer.nCells);
+            replayRowBuffer(rRowBuffer.GetBuffer(), rRowBuffer.GetCellsSprms(),
+                            rRowBuffer.GetCellsAttributes(), rRowBuffer.GetCells());
 
-            sendProperties(rRowBuffer.pParaProperties, rRowBuffer.pFrameProperties,
-                           rRowBuffer.pRowProperties);
+            sendProperties(rRowBuffer.GetParaProperties(), rRowBuffer.GetFrameProperties(),
+                           rRowBuffer.GetRowProperties());
         }
         else if (std::get<0>(aTuple) == BUFFER_CELLEND)
         {

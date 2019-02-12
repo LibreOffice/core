@@ -61,7 +61,7 @@ class RTFParserState;
 class RTFDocumentImpl;
 class RTFTokenizer;
 class RTFSdrImport;
-struct TableRowBuffer;
+class TableRowBuffer;
 
 enum class RTFBorderState
 {
@@ -122,24 +122,39 @@ using Buf_t = std::tuple<RTFBufferTypes, RTFValue::Pointer_t, tools::SvRef<Table
 using RTFBuffer_t = std::deque<Buf_t>;
 
 /// holds one nested table row
-struct TableRowBuffer : public virtual SvRefBase
+class TableRowBuffer : public virtual SvRefBase
 {
-    RTFBuffer_t buffer;
-    ::std::deque<RTFSprms> cellsSprms;
-    ::std::deque<RTFSprms> cellsAttributes;
-    int const nCells;
-    writerfilter::Reference<Properties>::Pointer_t pParaProperties;
-    writerfilter::Reference<Properties>::Pointer_t pFrameProperties;
-    writerfilter::Reference<Properties>::Pointer_t pRowProperties;
+    RTFBuffer_t m_aBuffer;
+    ::std::deque<RTFSprms> m_aCellsSprms;
+    ::std::deque<RTFSprms> m_aCellsAttributes;
+    int const m_nCells;
+    writerfilter::Reference<Properties>::Pointer_t m_pParaProperties;
+    writerfilter::Reference<Properties>::Pointer_t m_pFrameProperties;
+    writerfilter::Reference<Properties>::Pointer_t m_pRowProperties;
 
+public:
     TableRowBuffer(RTFBuffer_t aBuffer, std::deque<RTFSprms> aSprms,
-                   std::deque<RTFSprms> aAttributes, int const i_nCells)
-        : buffer(std::move(aBuffer))
-        , cellsSprms(std::move(aSprms))
-        , cellsAttributes(std::move(aAttributes))
-        , nCells(i_nCells)
+                   std::deque<RTFSprms> aAttributes, int const nCells)
+        : m_aBuffer(std::move(aBuffer))
+        , m_aCellsSprms(std::move(aSprms))
+        , m_aCellsAttributes(std::move(aAttributes))
+        , m_nCells(nCells)
     {
     }
+
+    RTFBuffer_t& GetBuffer() { return m_aBuffer; }
+    std::deque<RTFSprms>& GetCellsSprms() { return m_aCellsSprms; }
+    std::deque<RTFSprms>& GetCellsAttributes() { return m_aCellsAttributes; }
+    int GetCells() const { return m_nCells; }
+    writerfilter::Reference<Properties>::Pointer_t& GetParaProperties()
+    {
+        return m_pParaProperties;
+    }
+    writerfilter::Reference<Properties>::Pointer_t& GetFrameProperties()
+    {
+        return m_pFrameProperties;
+    }
+    writerfilter::Reference<Properties>::Pointer_t& GetRowProperties() { return m_pRowProperties; }
 };
 
 /// An entry in the color table.
