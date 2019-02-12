@@ -146,6 +146,8 @@ public:
     void                SetDragJump(
         ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText );
 
+    static ScDocument*  GetClipDoc();       // called from document - should be removed later
+
     //  X selection:
     ScSelectionTransferObj* GetSelectionTransfer() const    { return m_pSelTransfer; }
     void                SetSelectionTransfer( ScSelectionTransferObj* pNew );
