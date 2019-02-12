@@ -740,8 +740,8 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         if ( xCert.is() )
         {
             uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
-            ScopedVclPtrInstance<CertificateViewer> aViewer(this, xSecEnv, xCert, false);
-            aViewer->Execute();
+            CertificateViewer aViewer(GetFrameWeld(), xSecEnv, xCert, false, nullptr);
+            aViewer.run();
         }
         else
         {
