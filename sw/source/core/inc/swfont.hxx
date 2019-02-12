@@ -46,7 +46,7 @@ const sal_Unicode CH_TAB   = '\t';  // \t
 const sal_Unicode CH_PAR    = 0xB6;     // paragraph
 const sal_Unicode CH_BULLET = 0xB7;     // centered dot
 
-sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat );
+sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat, const bool bVertFormatLRBT );
 
 class SwSubFont : public SvxFont
 {
@@ -282,7 +282,8 @@ public:
     FontWeight GetWeight() const { return m_aSub[m_nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return m_aSub[m_nActual].GetEmphasisMark(); }
-    sal_uInt16 GetOrientation( const bool bVertLayout = false ) const;
+    sal_uInt16 GetOrientation(const bool bVertLayout = false,
+                              const bool bVertFormatLRBT = false) const;
 
     const OUString& GetName( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetFamilyName(); }
@@ -339,10 +340,14 @@ public:
     const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
 
     // Get absolute border correspond to the layout verticality and orientation.
-    const boost::optional<editeng::SvxBorderLine>& GetAbsTopBorder( const bool bVertLayout ) const;
-    const boost::optional<editeng::SvxBorderLine>& GetAbsBottomBorder( const bool bVertLayout ) const;
-    const boost::optional<editeng::SvxBorderLine>& GetAbsRightBorder( const bool bVertLayout ) const;
-    const boost::optional<editeng::SvxBorderLine>& GetAbsLeftBorder( const bool bVertLayout ) const;
+    const boost::optional<editeng::SvxBorderLine>&
+    GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
+    const boost::optional<editeng::SvxBorderLine>&
+    GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
+    const boost::optional<editeng::SvxBorderLine>&
+    GetAbsRightBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
+    const boost::optional<editeng::SvxBorderLine>&
+    GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
 
     void SetTopBorderDist( const sal_uInt16 nTopDist );
     void SetBottomBorderDist( const sal_uInt16 nBottomDist );
@@ -376,9 +381,12 @@ public:
      *
      * @param[in]   bVertLayout true, if the container layout is vertical
      *                          false, otherwise
+     * @param[in]   bVertLayoutLRBT true if the container layout is vertical
+     *                          (bottom to top, left to right), false otherwise
      * @return      absolute location
     **/
-    SvxShadowLocation GetAbsShadowLocation( const bool bVertLayout ) const;
+    SvxShadowLocation GetAbsShadowLocation(const bool bVertLayout,
+                                           const bool bVertLayoutLRBT) const;
 
     /**
      * Calculate the shadow space on the specified side dependent from
@@ -388,12 +396,14 @@ public:
      * @param[in]   nShadow     specify the side
      * @param[in]   bVertLayout true, if the container layout is vertical
      *                          false, otherwise
+     * @param[in]   bVertLayoutLRBT true if the container layout is vertical
+     *                          (bottom to top, left to right), false otherwise
      * @param[in]   bSkipLeft   relative left shadow space is skipped
      * @param[in]   bSkipRight  relative right shadow space is skipped
      * @return      the shadow space
     **/
     sal_uInt16 CalcShadowSpace(
-        const SvxShadowItemSide nShadow, const bool bVertLayout,
+        const SvxShadowItemSide nShadow, const bool bVertLayout, const bool bVertLayoutLRBT,
         const bool bSkipLeft, const bool bSkipRight ) const;
 
     void dumpAsXml( xmlTextWriterPtr writer ) const;

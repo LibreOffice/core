@@ -126,9 +126,9 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
 }
 
 const boost::optional<editeng::SvxBorderLine>&
-SwFont::GetAbsTopBorder( const bool bVertLayout ) const
+SwFont::GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
-    switch( GetOrientation( bVertLayout ) )
+    switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
     {
         case 0 :
             return m_aTopBorder;
@@ -150,9 +150,9 @@ SwFont::GetAbsTopBorder( const bool bVertLayout ) const
 }
 
 const boost::optional<editeng::SvxBorderLine>&
-SwFont::GetAbsBottomBorder( const bool bVertLayout ) const
+SwFont::GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
-    switch( GetOrientation( bVertLayout ) )
+    switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
     {
         case 0 :
             return m_aBottomBorder;
@@ -174,9 +174,9 @@ SwFont::GetAbsBottomBorder( const bool bVertLayout ) const
 }
 
 const boost::optional<editeng::SvxBorderLine>&
-SwFont::GetAbsLeftBorder( const bool bVertLayout ) const
+SwFont::GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
-    switch( GetOrientation( bVertLayout ) )
+    switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
     {
         case 0 :
             return m_aLeftBorder;
@@ -198,9 +198,9 @@ SwFont::GetAbsLeftBorder( const bool bVertLayout ) const
 }
 
 const boost::optional<editeng::SvxBorderLine>&
-SwFont::GetAbsRightBorder( const bool bVertLayout ) const
+SwFont::GetAbsRightBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
-    switch( GetOrientation( bVertLayout ) )
+    switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
     {
         case 0 :
             return m_aRightBorder;
@@ -221,10 +221,11 @@ SwFont::GetAbsRightBorder( const bool bVertLayout ) const
     }
 }
 
-SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
+SvxShadowLocation SwFont::GetAbsShadowLocation(const bool bVertLayout,
+                                               const bool bVertLayoutLRBT) const
 {
     SvxShadowLocation aLocation = SvxShadowLocation::NONE;
-    switch( GetOrientation( bVertLayout ) )
+    switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
     {
         case 0:
             aLocation = m_aShadowLocation;
@@ -303,13 +304,13 @@ SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
     return aLocation;
 }
 
-sal_uInt16 SwFont::CalcShadowSpace(
-        const SvxShadowItemSide nShadow, const bool bVertLayout,
-        const bool bSkipLeft, const bool bSkipRight ) const
+sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool bVertLayout,
+                                   const bool bVertLayoutLRBT, const bool bSkipLeft,
+                                   const bool bSkipRight) const
 {
     sal_uInt16 nSpace = 0;
-    const sal_uInt16 nOrient = GetOrientation( bVertLayout );
-    const SvxShadowLocation aLoc = GetAbsShadowLocation( bVertLayout );
+    const sal_uInt16 nOrient = GetOrientation(bVertLayout, bVertLayoutLRBT);
+    const SvxShadowLocation aLoc = GetAbsShadowLocation(bVertLayout, bVertLayoutLRBT);
     switch( nShadow )
     {
         case SvxShadowItemSide::TOP:
@@ -394,8 +395,22 @@ static sal_uInt16 MapDirection(sal_uInt16 nDir, const bool bVertFormat, const bo
 
 // maps the absolute direction set at the font to its logical counterpart
 // in the rotated environment
-sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat )
+sal_uInt16 UnMapDirection(sal_uInt16 nDir, const bool bVertFormat, const bool bVertFormatLRBT)
 {
+    if (bVertFormatLRBT)
+    {
+        switch (nDir)
+        {
+            case 900:
+                nDir = 0;
+                break;
+            default:
+                SAL_WARN("sw.core", "unsupported direction for VertLRBT");
+                break;
+        }
+        return nDir;
+    }
+
     if ( bVertFormat )
     {
         switch ( nDir )
@@ -419,9 +434,9 @@ sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat )
     return nDir;
 }
 
-sal_uInt16 SwFont::GetOrientation( const bool bVertFormat ) const
+sal_uInt16 SwFont::GetOrientation(const bool bVertFormat, const bool bVertFormatLRBT) const
 {
-    return UnMapDirection( m_aSub[m_nActual].GetOrientation(), bVertFormat );
+    return UnMapDirection(m_aSub[m_nActual].GetOrientation(), bVertFormat, bVertFormatLRBT);
 }
 
 void SwFont::SetVertical(sal_uInt16 nDir, const bool bVertFormat, const bool bVertLayoutLRBT)
@@ -1383,8 +1398,14 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
 {
     long nOfst;
 
-    const sal_uInt16 nDir = UnMapDirection(
-                GetOrientation(), rInf.GetFrame() && rInf.GetFrame()->IsVertical() );
+    bool bVert = false;
+    bool bVertLRBT = false;
+    if (rInf.GetFrame())
+    {
+        bVert = rInf.GetFrame()->IsVertical();
+        bVertLRBT = rInf.GetFrame()->IsVertLRBT();
+    }
+    const sal_uInt16 nDir = UnMapDirection(GetOrientation(), bVert, bVertLRBT);
 
     switch ( GetEscapement() )
     {
@@ -1454,9 +1475,14 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     const bool bBidiPor = ( GetFrame() && GetFrame()->IsRightToLeft() ) !=
                           ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & GetpOut()->GetLayoutMode() ) );
 
-    nDir = bBidiPor ?
-            1800 :
-            UnMapDirection( nDir, GetFrame() && GetFrame()->IsVertical() );
+    bool bVert = false;
+    bool bVertLRBT = false;
+    if (GetFrame())
+    {
+        bVert = GetFrame()->IsVertical();
+        bVertLRBT = GetFrame()->IsVertLRBT();
+    }
+    nDir = bBidiPor ? 1800 : UnMapDirection(nDir, bVert, bVertLRBT);
 
     switch ( nDir )
     {

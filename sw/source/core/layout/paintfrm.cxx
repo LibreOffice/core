@@ -4696,6 +4696,7 @@ void PaintCharacterBorder(
     const SwFont& rFont,
     const SwRect& rPaintArea,
     const bool bVerticalLayout,
+    const bool bVerticalLayoutLRBT,
     const bool bJoinWithPrev,
     const bool bJoinWithNext )
 {
@@ -4707,7 +4708,7 @@ void PaintCharacterBorder(
     bool bLeft = true;
     bool bRight = true;
 
-    switch( rFont.GetOrientation(bVerticalLayout) )
+    switch (rFont.GetOrientation(bVerticalLayout, bVerticalLayoutLRBT))
     {
         case 0 :
             bLeft = !bJoinWithPrev;
@@ -4731,7 +4732,7 @@ void PaintCharacterBorder(
     {
         const SvxShadowItem aShadow(
             0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
-            rFont.GetAbsShadowLocation(bVerticalLayout));
+            rFont.GetAbsShadowLocation(bVerticalLayout, bVerticalLayoutLRBT));
 
         if( aShadow.GetLocation() != SvxShadowLocation::NONE )
         {
@@ -4744,10 +4745,19 @@ void PaintCharacterBorder(
         basegfx::utils::createScaleTranslateB2DHomMatrix(
             aAlignedRect.Width(), aAlignedRect.Height(),
             aAlignedRect.Left(), aAlignedRect.Top()));
-    const svx::frame::Style aStyleTop(bTop ? rFont.GetAbsTopBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
-    const svx::frame::Style aStyleRight(bRight ? rFont.GetAbsRightBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
-    const svx::frame::Style aStyleBottom(bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
-    const svx::frame::Style aStyleLeft(bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout).get_ptr() : nullptr, 1.0);
+    const svx::frame::Style aStyleTop(
+        bTop ? rFont.GetAbsTopBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        1.0);
+    const svx::frame::Style aStyleRight(
+        bRight ? rFont.GetAbsRightBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        1.0);
+    const svx::frame::Style aStyleBottom(
+        bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr()
+                : nullptr,
+        1.0);
+    const svx::frame::Style aStyleLeft(
+        bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        1.0);
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
     aBorderLineTarget.append(
