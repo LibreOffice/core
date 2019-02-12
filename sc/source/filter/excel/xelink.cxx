@@ -727,6 +727,10 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     SCTAB nDisplScTab = rDocOpt.GetDocSettings().mnDisplTab;
 
+    // missing viewdata at embedded XLSX OLE objects
+    if (nDisplScTab == -1 )
+        nDisplScTab = rDoc.GetVisibleTab();
+
     // find first visible exported sheet
     if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
     {
