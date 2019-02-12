@@ -28,6 +28,7 @@
 #include <svx/fmglob.hxx>
 
 #include <svx/dialogs.hrc>
+#include <vcl/ptrstyle.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -117,7 +118,7 @@ void FuConstructUnoControl::Activate()
 {
     mpView->SetCurrentObj( nIdentifier, nInventor );
 
-    aNewPointer = Pointer(PointerStyle::DrawRect);
+    aNewPointer = PointerStyle::DrawRect;
     aOldPointer = mpWindow->GetPointer();
     mpWindow->SetPointer( aNewPointer );
 

@@ -130,7 +130,7 @@ public:
     // if an URL is attached to a graphic than this is a macro object
     virtual bool       HasMacro() const override;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const override;
-    virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const override;
+    virtual PointerStyle GetMacroPointer     (const SdrObjMacroHitRec& rRec) const override;
 
     // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation.
     virtual bool HasLimitedRotation() const override;

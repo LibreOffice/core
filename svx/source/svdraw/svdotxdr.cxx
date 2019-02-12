@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 sal_uInt32 SdrTextObj::GetHdlCount() const
@@ -239,10 +240,10 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     return aRetval;
 }
 
-Pointer SdrTextObj::GetCreatePointer() const
+PointerStyle SdrTextObj::GetCreatePointer() const
 {
-    if (IsTextFrame()) return Pointer(PointerStyle::DrawText);
-    return Pointer(PointerStyle::Cross);
+    if (IsTextFrame()) return PointerStyle::DrawText;
+    return PointerStyle::Cross;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

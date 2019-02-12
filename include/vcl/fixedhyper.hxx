@@ -27,7 +27,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     {
     private:
         long                m_nTextLen;
-        Pointer             m_aOldPointer;
+        PointerStyle        m_aOldPointer;
         Link<FixedHyperlink&,void> m_aClickHdl;
         OUString            m_sURL;
 

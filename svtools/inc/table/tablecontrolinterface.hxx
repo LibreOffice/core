@@ -27,8 +27,6 @@
 #include <svtools/table/tabletypes.hxx>
 #include <svtools/table/tablemodel.hxx>
 
-class Pointer;
-
 
 namespace svt { namespace table
 {
@@ -207,7 +205,7 @@ namespace svt { namespace table
         virtual ::Size  getTableSizePixel() const = 0;
 
         /// sets a new mouse pointer for the table window
-        virtual void    setPointer( Pointer const & i_pointer ) = 0;
+        virtual void    setPointer( PointerStyle i_pointer ) = 0;
 
         /// captures the mouse to the table window
         virtual void    captureMouse() = 0;

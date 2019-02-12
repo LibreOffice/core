@@ -30,6 +30,7 @@
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <vcl/vclenum.hxx>
 
@@ -1849,9 +1850,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     else if ( mnSplitTest & SPLIT_VERT )
         eStyle = PointerStyle::VSplit;
 
-    Pointer aPtr( eStyle );
-    SetPointer( aPtr );
-
+    SetPointer( eStyle );
 }
 
 void SplitWindow::StartSplit()
@@ -1946,9 +1945,7 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    Pointer aPtr( eStyle );
-    SetPointer( aPtr );
-
+    SetPointer( eStyle );
 }
 
 void SplitWindow::Tracking( const TrackingEvent& rTEvt )

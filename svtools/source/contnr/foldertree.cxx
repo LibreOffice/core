@@ -14,6 +14,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
 #include <bitmaps.hlst>

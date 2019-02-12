@@ -44,6 +44,7 @@
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -231,7 +232,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     SetBackground(Wallpaper(rModulWindow.GetLayout().GetBackgroundColor()));
-    SetPointer( Pointer( PointerStyle::Text ) );
+    SetPointer( PointerStyle::Text );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
     listener_ = new ChangesListener(*this);

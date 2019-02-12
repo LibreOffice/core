@@ -200,7 +200,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt)=0;
     virtual bool EndSdrDrag(bool bCopy)=0;
     virtual void CancelSdrDrag();
-    virtual Pointer GetSdrDragPointer() const=0;
+    virtual PointerStyle GetSdrDragPointer() const=0;
 
     virtual void CreateOverlayGeometry(
         sdr::overlay::OverlayManager& rOverlayManager,
@@ -246,7 +246,7 @@ public:
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
@@ -268,7 +268,7 @@ public:
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
@@ -297,7 +297,7 @@ public:
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 };
 
 #endif // INCLUDED_SVX_SVDDRGMT_HXX

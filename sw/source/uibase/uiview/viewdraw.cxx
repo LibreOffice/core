@@ -47,6 +47,7 @@
 #include <svx/fmglob.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoutl.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -423,7 +424,7 @@ void SwView::ExitDraw()
 
                 GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             }
-            GetEditWin().SetPointer(Pointer(PointerStyle::Text));
+            GetEditWin().SetPointer(PointerStyle::Text);
         }
     }
 }

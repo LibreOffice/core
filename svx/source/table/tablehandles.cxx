@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -78,7 +79,7 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
 }
 
-Pointer TableEdgeHdl::GetPointer() const
+PointerStyle TableEdgeHdl::GetPointer() const
 {
     if( mbHorizontal )
         return PointerStyle::VSplit;
@@ -251,7 +252,7 @@ TableBorderHdl::TableBorderHdl(
 {
 }
 
-Pointer TableBorderHdl::GetPointer() const
+PointerStyle TableBorderHdl::GetPointer() const
 {
     return PointerStyle::Move;
 }

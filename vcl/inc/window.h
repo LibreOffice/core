@@ -248,7 +248,7 @@ public:
     css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     vcl::Cursor*        mpCursor;
-    Pointer             maPointer;
+    PointerStyle        maPointer;
     Fraction            maZoom;
     OUString            maText;
     std::unique_ptr<vcl::Font>

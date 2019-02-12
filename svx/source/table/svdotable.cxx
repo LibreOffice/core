@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <o3tl/make_unique.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -2346,9 +2347,9 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeCreatePoly(const SdrDragStat& rDrag) co
 }
 
 
-Pointer SdrTableObj::GetCreatePointer() const
+PointerStyle SdrTableObj::GetCreatePointer() const
 {
-    return Pointer(PointerStyle::Cross);
+    return PointerStyle::Cross;
 }
 
 

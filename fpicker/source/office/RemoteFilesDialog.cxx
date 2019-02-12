@@ -18,6 +18,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/treelistentry.hxx>
 #include <bitmaps.hlst>
+#include <vcl/ptrstyle.hxx>
 
 class FileViewContainer : public vcl::Window
 {

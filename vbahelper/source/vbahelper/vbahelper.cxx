@@ -685,7 +685,7 @@ PointerStyle getPointerStyle( const uno::Reference< frame::XModel >& xModel )
         // why the heck isn't there an XWindowPeer::getPointer, but a setPointer only?
         const vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
-            nPointerStyle = pWindow->GetSystemWindow()->GetPointer().GetStyle();
+            nPointerStyle = pWindow->GetSystemWindow()->GetPointer();
     }
     catch (const uno::Exception&)
     {
@@ -697,7 +697,7 @@ PointerStyle getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 // #FIXME this method looks wrong, shouldn't it just affect calc *or* writer
 // document/frame/window(s) but not both ( and depending on what api called
 // this )
-void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Pointer& rPointer, bool bOverWrite )
+void setCursorHelper( const uno::Reference< frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite )
 {
     ::std::vector< uno::Reference< frame::XController > > aControllers;
 
@@ -730,7 +730,7 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
         if ( !pWindow )
             continue;
 
-        pWindow->GetSystemWindow()->SetPointer( rPointer );
+        pWindow->GetSystemWindow()->SetPointer( nPointer );
         pWindow->GetSystemWindow()->EnableChildPointerOverwrite( bOverWrite );
     }
 }

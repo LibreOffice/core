@@ -27,6 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <vcl/ptrstyle.hxx>
 
 using namespace css;
 

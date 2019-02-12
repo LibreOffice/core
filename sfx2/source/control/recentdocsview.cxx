@@ -28,6 +28,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

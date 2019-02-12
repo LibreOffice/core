@@ -43,6 +43,7 @@
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
@@ -467,10 +468,10 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     return aRetval;
 }
 
-Pointer SdrRectObj::GetCreatePointer() const
+PointerStyle SdrRectObj::GetCreatePointer() const
 {
-    if (IsTextFrame()) return Pointer(PointerStyle::DrawText);
-    return Pointer(PointerStyle::DrawRect);
+    if (IsTextFrame()) return PointerStyle::DrawText;
+    return PointerStyle::DrawRect;
 }
 
 void SdrRectObj::NbcMove(const Size& rSiz)

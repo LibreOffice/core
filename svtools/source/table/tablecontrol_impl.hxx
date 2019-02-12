@@ -253,7 +253,7 @@ namespace svt { namespace table
         virtual RowPos              getCurrentRow() const override;
         virtual void                activateCell( ColPos const i_col, RowPos const i_row ) override;
         virtual ::Size              getTableSizePixel() const override;
-        virtual void                setPointer( Pointer const & i_pointer ) override;
+        virtual void                setPointer( PointerStyle i_pointer ) override;
         virtual void                captureMouse() override;
         virtual void                releaseMouse() override;
         virtual void                invalidate( TableArea const i_what ) override;

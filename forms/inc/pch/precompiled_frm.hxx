@@ -75,7 +75,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
