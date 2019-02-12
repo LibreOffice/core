@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_1374d334",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-02-12T07:07:24Z",
+      "side": 1,
+      "message": "Feel free to create a bug report for this (and then replace the NOTE with the bug #).",
+      "revId": "38d1288fe6bd924cf29b3ccafc120886e99a7fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
