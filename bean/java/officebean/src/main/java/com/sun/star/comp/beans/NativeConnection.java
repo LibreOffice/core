@@ -25,7 +25,7 @@ package com.sun.star.comp.beans;
 
 import com.sun.star.connection.XConnection;
 
-/* Connection to a locally running OOo instance.
+/* Connection to a locally running AOO instance.
  *
  * @deprecated.
  */
