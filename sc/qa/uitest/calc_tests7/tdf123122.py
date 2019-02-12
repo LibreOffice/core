@@ -63,7 +63,7 @@ class tdf123122(UITestCase):
         xformatted = xDialog.getChild("formatted")
 
 
-        #self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "User-defined")
+        self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "Date")
         self.assertEqual(get_state_as_dict(xformatted)["Text"], "NN MMM DD YYYY HH:MM")
         xOk = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOk)
