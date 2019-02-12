@@ -58,6 +58,7 @@ public:
     }
     SvxFrameDirectionItem(SvxFrameDirectionItem const &) = default;
         // SfxPoolItem copy function dichotomy
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif // INCLUDED_EDITENG_FRMDIRITEM_HXX
