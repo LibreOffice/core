@@ -189,7 +189,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(TabPageParent pParent, const SfxI
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
 {
     std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
     m_xCheckLB->set_column_fixed_widths(aWidths);
     m_xCheckLB->set_size_request(-1, m_xCheckLB->get_height_rows(10));
 }
@@ -1584,7 +1584,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     else
     {
         std::vector<int> aWidths;
-        aWidths.push_back(m_xSwCheckLB->get_approximate_digit_width() * 3 + 6);
+        aWidths.push_back(m_xSwCheckLB->get_checkbox_column_width());
         m_xCheckLB->set_column_fixed_widths(aWidths);
         m_xSwCheckLB->hide();
     }
@@ -2131,7 +2131,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(TabPageParent pParent,
                                          m_xSmartTagTypesLB->get_height_rows(6));
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xSmartTagTypesLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xSmartTagTypesLB->get_checkbox_column_width());
     m_xSmartTagTypesLB->set_column_fixed_widths(aWidths);
 
     // set the handlers:

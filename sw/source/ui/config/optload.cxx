@@ -490,7 +490,7 @@ SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet
     m_xCategoryBox->connect_entry_insert_text(LINK(this, SwCaptionOptPage, TextFilterHdl));
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
     m_xCheckLB->set_column_fixed_widths(aWidths);
 
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);

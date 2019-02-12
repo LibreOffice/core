@@ -199,7 +199,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
                                  m_xRadioLB->get_text_height() * 10);
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xRadioLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xRadioLB->get_checkbox_column_width());
     m_xRadioLB->set_column_fixed_widths(aWidths);
 
     std::vector<int> aRadioColumns;

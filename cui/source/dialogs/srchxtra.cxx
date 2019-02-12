@@ -113,7 +113,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
                                 m_xAttrLB->get_height_rows(12));
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xAttrLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xAttrLB->get_checkbox_column_width());
     m_xAttrLB->set_column_fixed_widths(aWidths);
 
     m_xOKBtn->connect_clicked(LINK( this, SvxSearchAttributeDialog, OKHdl));

@@ -231,7 +231,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::s
     m_xLanguageLB->set_size_request(-1, m_xLanguageLB->get_height_rows(10));
     m_xCheckLangLB->set_size_request(-1, m_xCheckLangLB->get_height_rows(10));
     std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLangLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xCheckLangLB->get_checkbox_column_width());
     m_xCheckLangLB->set_column_fixed_widths(aWidths);
 
     if (m_xLocalizationMgr->isLibraryLocalized())

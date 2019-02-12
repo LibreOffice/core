@@ -781,7 +781,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& 
     sAddStyleContent = m_xAddStylesCB->get_label();
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xFromObjCLB->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xFromObjCLB->get_checkbox_column_width());
     m_xFromObjCLB->set_column_fixed_widths(aWidths);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); ++i)
