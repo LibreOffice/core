@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f37817f9",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "okay",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_131e13ba",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "here sal_uInt64 is wrong, see the definition of WW8_CP\n\n... actually best to just use WW8_CP here as the type.",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d37d1be8",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "same",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b3829fc7",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "same",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9387a3d8",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "okay",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_736c2736",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "no, that\u0027s very obviously a sal_Int32",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_53692b23",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "another one of those",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_3376af08",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2153,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T09:55:01Z",
+      "side": 1,
+      "message": "okay",
+      "revId": "da8d58a68a1c2fc45dd0b5260ebc4c17053b37f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
