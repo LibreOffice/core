@@ -50,7 +50,8 @@ public:
         if (fn == SRCDIR "/binaryurp/source/bridge.cxx")
             return;
         // the QEMIT macros
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qt5/"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qt5/")
+            || loplugin::isSamePathname(fn, SRCDIR "/vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx"))
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
