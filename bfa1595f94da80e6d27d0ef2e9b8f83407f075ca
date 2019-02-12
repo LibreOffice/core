@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_732427c7",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-12T12:02:09Z",
+      "side": 0,
+      "message": "This \"-1\" made it so that buttons area\u0027 top border coincided with listbox bottom border, creating an impression of a combined control.\n\nNow the two borders (bottom one of button area, and top of listbox) are separate, which looks like double-width border, separating the areas visually.\n\nThe buttons area top border now is exactly in the position where listbox top border was - so that\u0027s fine; but listbox bottom border is one pixel lower than previously bottom border of buttons was - which means we need to bump listbox position 1 up - e.g. by adding \"-1\" to lines 1005 and 1011 - see the comment there",
+      "range": {
+        "startLine": 954,
+        "startChar": 130,
+        "endLine": 954,
+        "endChar": 134
+      },
+      "revId": "bfa1595f94da80e6d27d0ef2e9b8f83407f075ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

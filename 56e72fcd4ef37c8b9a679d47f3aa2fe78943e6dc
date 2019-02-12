@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_332eafa5",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-12T12:02:09Z",
+      "side": 1,
+      "message": "nSingleBtnAreaY + nSingleItemBtnAreaHeight - 1",
+      "range": {
+        "startLine": 1005,
+        "startChar": 41,
+        "endLine": 1005,
+        "endChar": 83
+      },
+      "revId": "56e72fcd4ef37c8b9a679d47f3aa2fe78943e6dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_132bb394",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-12T12:02:09Z",
+      "side": 1,
+      "message": "nSingleBtnAreaY + nSingleItemBtnAreaHeight - 1",
+      "range": {
+        "startLine": 1011,
+        "startChar": 41,
+        "endLine": 1011,
+        "endChar": 83
+      },
+      "revId": "56e72fcd4ef37c8b9a679d47f3aa2fe78943e6dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
