@@ -23,7 +23,6 @@
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #define STR_CERTIFICATE_NOT_VALIDATED               NC_("STR_CERTIFICATE_NOT_VALIDATED", "The certificate could not be validated.")
-#define STR_HEADERBAR                               NC_("STR_HEADERBAR", "Field\tValue")
 #define STR_VERSION                                 NC_("STR_VERSION", "Version")
 #define STR_SERIALNUM                               NC_("STR_SERIALNUM", "Serial Number")
 #define STR_ISSUER                                  NC_("STR_ISSUER", "Issuer")
