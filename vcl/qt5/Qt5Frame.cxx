@@ -609,7 +609,6 @@ void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
         pWidget->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
     else
         pWidget->setWindowFlags(flags & ~(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint));
-    pWidget->show();
 }
 
 void Qt5Frame::ToTop(SalFrameToTop nFlags)
