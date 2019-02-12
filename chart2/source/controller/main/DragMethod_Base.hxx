@@ -40,7 +40,7 @@ public:
     OUString getUndoDescription() const;
 
     virtual void TakeSdrDragComment(OUString& rStr) const override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 
 protected:
     css::uno::Reference< css::frame::XModel > getChartModel() const;

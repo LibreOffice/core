@@ -21,14 +21,15 @@
 #define INCLUDED_SC_SOURCE_UI_INC_FUDRAW_HXX
 
 #include "fupoor.hxx"
-#include <vcl/pointr.hxx>
+
+enum class PointerStyle;
 
 /** Base class for all Drawmodule specific functions */
 class FuDraw : public FuPoor
 {
  protected:
-    Pointer aNewPointer;
-    Pointer aOldPointer;
+    PointerStyle aNewPointer;
+    PointerStyle aOldPointer;
 
  public:
     FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,

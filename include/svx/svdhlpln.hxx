@@ -23,14 +23,13 @@
 #include <sal/types.h>
 #include <tools/gen.hxx>
 
-#include <vcl/pointr.hxx>
 #include <svx/svxdllapi.h>
 
 #include <vector>
 #include <memory>
 
 class OutputDevice;
-
+enum class PointerStyle;
 
 enum class SdrHelpLineKind { Point, Vertical, Horizontal };
 
@@ -51,7 +50,7 @@ public:
     void            SetPos(const Point& rPnt)         { aPos=rPnt; }
     const Point&    GetPos() const                    { return aPos; }
 
-    Pointer         GetPointer() const;
+    PointerStyle    GetPointer() const;
     bool            IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
     // OutputDevice is required because capture points have a fixed pixel size
     tools::Rectangle       GetBoundRect(const OutputDevice& rOut) const;

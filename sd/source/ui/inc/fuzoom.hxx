@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUZOOM_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUZOOM_HXX
 
-#include <vcl/pointr.hxx>
 #include "fupoor.hxx"
 
 namespace sd {
@@ -51,7 +50,7 @@ private:
     ::tools::Rectangle   aZoomRect;
     bool        bVisible;
     bool        bStartDrag;
-    Pointer     aPtr;
+    PointerStyle aPtr;
 
     FuZoom (
         ViewShell* pViewSh,

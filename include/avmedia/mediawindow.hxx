@@ -38,9 +38,9 @@ class KeyEvent;
 class MouseEvent;
 class CommandEvent;
 class PopupMenu;
-class Pointer;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
+enum class PointerStyle;
 
 
 namespace avmedia
@@ -67,7 +67,7 @@ namespace avmedia
 
         void                setPosSize( const tools::Rectangle& rNewRect );
 
-        void                setPointer( const Pointer& rPointer );
+        void                setPointer( PointerStyle aPointer );
 
         bool                start();
 

@@ -26,6 +26,7 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <tools/multisel.hxx>
 #include <tools/fract.hxx>
@@ -1324,7 +1325,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
                 bResizing = true;
                 nResizeCol = nCol;
                 nDragX = nResizeX = rEvtPos.X();
-                SetPointer( Pointer( PointerStyle::HSplit ) );
+                SetPointer( PointerStyle::HSplit );
                 CaptureMouse();
                 pDataWin->DrawLine( Point( nDragX, 0 ),
                     Point( nDragX, pDataWin->GetSizePixel().Height() ) );
@@ -1354,7 +1355,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
     SAL_INFO("svtools", "BrowseBox::MouseMove( MouseEvent )" );
 
-    Pointer aNewPointer;
+    PointerStyle aNewPointer = PointerStyle::Arrow;
 
     sal_uInt16 nX = 0;
     for ( size_t nCol = 0;
@@ -1372,7 +1373,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
             if ( bResizing || ( pCol->GetId() &&
                  std::abs( static_cast<long>(nR) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
             {
-                aNewPointer = Pointer( PointerStyle::HSplit );
+                aNewPointer = PointerStyle::HSplit;
                 if ( bResizing )
                 {
                     // delete old auxiliary line
@@ -1422,7 +1423,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         }
 
         // end action
-        SetPointer( Pointer() );
+        SetPointer( PointerStyle::Arrow );
         ReleaseMouse();
         bResizing = false;
     }

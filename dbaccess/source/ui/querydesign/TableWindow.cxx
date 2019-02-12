@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -397,21 +398,21 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
 
     Point   aPos = rEvt.GetPosPixel();
     setSizingFlag(aPos);
-    Pointer aPointer;
+    PointerStyle aPointer = PointerStyle::Arrow;
 
     // Set the mouse cursor when it is in the sizing area
     if ( m_nSizingFlags == SizingFlags::Top ||
          m_nSizingFlags == SizingFlags::Bottom )
-        aPointer = Pointer( PointerStyle::SSize );
+        aPointer = PointerStyle::SSize;
     else if ( m_nSizingFlags == SizingFlags::Left ||
               m_nSizingFlags ==SizingFlags::Right )
-        aPointer = Pointer( PointerStyle::ESize );
+        aPointer = PointerStyle::ESize;
     else if ( m_nSizingFlags == (SizingFlags::Left | SizingFlags::Top) ||
               m_nSizingFlags == (SizingFlags::Right | SizingFlags::Bottom) )
-        aPointer = Pointer( PointerStyle::SESize );
+        aPointer = PointerStyle::SESize;
     else if ( m_nSizingFlags == (SizingFlags::Right | SizingFlags::Top) ||
               m_nSizingFlags == (SizingFlags::Left | SizingFlags::Bottom) )
-        aPointer = Pointer( PointerStyle::NESize );
+        aPointer = PointerStyle::NESize;
 
     SetPointer( aPointer );
 }

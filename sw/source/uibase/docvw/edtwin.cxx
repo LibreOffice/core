@@ -35,6 +35,7 @@
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
@@ -3536,7 +3537,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // don't start a selection when an
                                 // URL field or a graphic is clicked
                                 bool bSttSelect = rSh.HasSelection() ||
-                                                Pointer(PointerStyle::RefHand) != GetPointer();
+                                                PointerStyle::RefHand != GetPointer();
 
                                 if( !bSttSelect )
                                 {

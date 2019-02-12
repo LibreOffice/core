@@ -137,7 +137,7 @@ public:
 
     virtual bool HasMacro() const override;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const override;
-    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const override;
+    virtual PointerStyle GetMacroPointer (const SdrObjMacroHitRec& rRec) const override;
     virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const override;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
 

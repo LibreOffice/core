@@ -40,6 +40,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <svdata.hxx>
 #include <salwtype.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUDRAW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUDRAW_HXX
 
-#include <vcl/pointr.hxx>
 #include "fupoor.hxx"
 
 struct SdrViewEvent;
@@ -70,8 +69,8 @@ protected:
 
     virtual ~FuDraw() override;
 
-    Pointer aNewPointer;
-    Pointer aOldPointer;
+    PointerStyle aNewPointer;
+    PointerStyle aOldPointer;
     bool    bMBDown;
     bool    bDragHelpLine;
     sal_uInt16  nHelpLine;

@@ -30,6 +30,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <sdmod.hxx>
 
@@ -152,7 +153,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         if ( mpView->IsTextEdit() )
         {
             bReturn = FuText::MouseMove( rMEvt );
-            mpWindow->SetPointer(Pointer(PointerStyle::Fill));
+            mpWindow->SetPointer(PointerStyle::Fill);
         }
         else
         {
@@ -160,9 +161,9 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
             SdrPageView* pPV=nullptr;
             SdrObject* pObj = mpView->PickObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPV, SdrSearchOptions::PICKMARKABLE);
             if (pObj && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
-                mpWindow->SetPointer(Pointer(PointerStyle::Fill));
+                mpWindow->SetPointer(PointerStyle::Fill);
             else
-                mpWindow->SetPointer(Pointer(PointerStyle::Arrow));
+                mpWindow->SetPointer(PointerStyle::Arrow);
         }
     }
     return bReturn;

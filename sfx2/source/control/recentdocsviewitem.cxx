@@ -22,6 +22,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <bitmaps.hlst>
 
@@ -177,7 +178,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 void RecentDocsViewItem::OpenDocument()
 {
     // show busy mouse pointer
-    mrParent.SetPointer(Pointer(PointerStyle::Wait));
+    mrParent.SetPointer(PointerStyle::Wait);
 
     Reference<frame::XDispatch> xDispatch;
     Reference<frame::XDispatchProvider> xDispatchProvider;

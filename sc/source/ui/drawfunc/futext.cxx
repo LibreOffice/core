@@ -517,7 +517,7 @@ void FuText::Activate()
         pView->SetCreateMode();
     }
 
-    aNewPointer = Pointer(PointerStyle::Text);
+    aNewPointer = PointerStyle::Text;
 
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );

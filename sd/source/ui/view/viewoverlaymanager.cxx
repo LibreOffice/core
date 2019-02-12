@@ -27,6 +27,7 @@
 
 #include <vcl/help.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -141,7 +142,7 @@ public:
     virtual ~ImageButtonHdl() override;
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
     virtual bool isMarkable() const override;
 
     virtual void onMouseEnter(const MouseEvent& rMEvt) override;
@@ -298,9 +299,9 @@ bool ImageButtonHdl::isMarkable() const
     return false;
 }
 
-Pointer ImageButtonHdl::GetPointer() const
+PointerStyle ImageButtonHdl::GetPointer() const
 {
-    return Pointer( PointerStyle::Arrow );
+    return PointerStyle::Arrow;
 }
 
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )

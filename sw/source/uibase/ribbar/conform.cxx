@@ -20,6 +20,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdview.hxx>
 #include <svx/fmshell.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -64,7 +65,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
         g_bNoInterrupt = true;
         m_pWin->CaptureMouse();
 
-        m_pWin->SetPointer(Pointer(PointerStyle::DrawRect));
+        m_pWin->SetPointer(PointerStyle::DrawRect);
 
         m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
         bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), SdrInventor::FmForm, m_aStartPos);
@@ -84,7 +85,7 @@ void ConstFormControl::Activate(const sal_uInt16 nSlotId)
     SwDrawBase::Activate(nSlotId);
     m_pSh->GetDrawView()->SetCurrentObj(nSlotId);
 
-    m_pWin->SetPointer(Pointer(PointerStyle::DrawRect));
+    m_pWin->SetPointer(PointerStyle::DrawRect);
 }
 
 void ConstFormControl::CreateDefaultObject()

@@ -51,6 +51,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>

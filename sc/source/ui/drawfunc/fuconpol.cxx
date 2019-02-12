@@ -156,7 +156,7 @@ void FuConstPolygon::Activate()
 
     FuConstruct::Activate();
 
-    aNewPointer = Pointer( PointerStyle::DrawPolygon );
+    aNewPointer = PointerStyle::DrawPolygon;
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );
 }

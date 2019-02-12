@@ -7993,7 +7993,6 @@ include/vcl/pdfextoutdevdata.hxx
 include/vcl/pdfwriter.hxx
 include/vcl/pngread.hxx
 include/vcl/pngwrite.hxx
-include/vcl/pointr.hxx
 include/vcl/popupmenuwindow.hxx
 include/vcl/ppdparser.hxx
 include/vcl/prgsbar.hxx

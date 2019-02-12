@@ -45,7 +45,7 @@ protected:
     // compile the apps all the time
     std::unique_ptr<ImpSdrCreateViewExtraData> mpCreateViewExtraData;
 
-    Pointer                     aCurrentCreatePointer;
+    PointerStyle                aCurrentCreatePointer;
 
     sal_Int32                   nAutoCloseDistPix;
     sal_Int32                   nFreeHandMinDistPix;
