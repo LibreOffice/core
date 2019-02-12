@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_13e1739b",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 7175,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T10:13:17Z",
+      "side": 0,
+      "message": "looks like this is the only use of HAVE_JAVA9, so could remove that too",
+      "revId": "369bbc407b283c3df919c7f9ec7525491422e71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
