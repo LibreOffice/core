@@ -584,7 +584,7 @@ const SwRect SwFrame::GetPaintArea() const
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrame() ? GetUpper()->getFrameArea() : getFrameArea();
     const bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrame* pTmp = this;
@@ -675,7 +675,7 @@ const SwRect SwFrame::GetPaintArea() const
 const SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
     bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
     long nLeft = (getFrameArea().*fnRect->fnGetLeft)();
     long nWidth = (getFrameArea().*fnRect->fnGetWidth)();
     long nPrtLeft = (getFramePrintArea().*fnRect->fnGetLeft)();

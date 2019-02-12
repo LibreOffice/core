@@ -300,6 +300,7 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
     mbDerivedVert(false),
     mbVertical(false),
     mbVertLR(false),
+    mbVertLRBT(false),
     mbValidLineNum(false),
     mbFixSize(false),
     mbCompletePaint(true),
@@ -357,6 +358,11 @@ void SwFrame::CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool
                 mbVertLR = false;
             else if(SvxFrameDirection::Vertical_LR_TB==nDir)
                 mbVertLR = true;
+            else if (nDir == SvxFrameDirection::Vertical_LR_BT)
+            {
+                mbVertLR = true;
+                mbVertLRBT = true;
+            }
         }
     }
     else
@@ -712,7 +718,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
     if ( GetUpper() )
     {
         bool bNeighb = IsNeighbourFrame();
-        SwRectFn fnRect = IsVertical() == bNeighb ? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
+        SwRectFn fnRect = IsVertical() == bNeighb ? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
         SwRect aNew( Point(0,0), aNewSize );
 
         {
@@ -1319,9 +1325,9 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
     if ( IsHeaderFrame() || IsFooterFrame() )
         fnRect = fnRectHori;
     else if ( IsCellFrame() || IsColumnFrame() )
-        fnRect = GetUpper()->IsVertical() ? fnRectHori : ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert );
+        fnRect = GetUpper()->IsVertical() ? fnRectHori : ( GetUpper()->IsVertLR() ? (GetUpper()->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
     else
-        fnRect = GetUpper()->IsVertical() ? ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+        fnRect = GetUpper()->IsVertical() ? ( GetUpper()->IsVertLR() ? (GetUpper()->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
     if( (getFrameArea().*fnRect->fnGetWidth)() != (pParent->getFramePrintArea().*fnRect->fnGetWidth)())
         InvalidateSize_();
@@ -3364,7 +3370,7 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
     const sal_uInt16 nLower = bHideWhitespace ? 0 : pAttrs->CalcBottom();
 
     const bool bVert = IsVertical() && !IsPageFrame();
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
     if ( !isFramePrintAreaValid() )
     {
         setFramePrintAreaValid(true);
