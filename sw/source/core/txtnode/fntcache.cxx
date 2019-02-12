@@ -252,18 +252,20 @@ struct CalcLinePosData
     vcl::Font& rFont;
     TextFrameIndex const nCnt;
     const bool bSwitchH2V;
+    const bool bSwitchH2VLRBT;
     const bool bSwitchL2R;
     long const nHalfSpace;
     long* const pKernArray;
     const bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, vcl::Font& _rFont,
-          TextFrameIndex const _nCnt, const bool _bSwitchH2V, const bool _bSwitchL2R,
+          TextFrameIndex const _nCnt, const bool _bSwitchH2V, const bool _bSwitchH2VLRBT, const bool _bSwitchL2R,
                       long _nHalfSpace, long* _pKernArray, const bool _bBidiPor) :
         rInf( _rInf ),
         rFont( _rFont ),
         nCnt( _nCnt ),
         bSwitchH2V( _bSwitchH2V ),
+        bSwitchH2VLRBT( _bSwitchH2VLRBT ),
         bSwitchL2R( _bSwitchL2R ),
         nHalfSpace( _nHalfSpace ),
         pKernArray( _pKernArray ),
@@ -294,8 +296,9 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
     sal_Int32 nKernStart = nStart ? rData.pKernArray[sal_Int32(nStart) - 1] : 0;
     sal_Int32 nKernEnd = rData.pKernArray[sal_Int32(nEnd) - 1];
 
-    const sal_uInt16 nDir = rData.bBidiPor ? 1800 :
-        UnMapDirection( rData.rFont.GetOrientation(), rData.bSwitchH2V );
+    const sal_uInt16 nDir = rData.bBidiPor ? 1800
+                                           : UnMapDirection(rData.rFont.GetOrientation(),
+                                                            rData.bSwitchH2V, rData.bSwitchH2VLRBT);
 
     switch ( nDir )
     {
@@ -934,6 +937,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // line of the ExtendedAttributeSets will appear in the font color first
 
     const bool bSwitchH2V = rInf.GetFrame() && rInf.GetFrame()->IsVertical();
+    const bool bSwitchH2VLRBT = rInf.GetFrame() && rInf.GetFrame()->IsVertLRBT();
     const bool bSwitchL2R = rInf.GetFrame() && rInf.GetFrame()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrameRTL();
     const ComplexTextLayoutFlags nMode = rInf.GetOut().GetLayoutMode();
@@ -1724,11 +1728,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         Point aEnd;
                         long nKernVal = pKernArray[sal_Int32(rInf.GetLen()) - 1];
 
-                        const sal_uInt16 nDir = bBidiPor ?
-                                        1800 :
-                                        UnMapDirection(
-                                            GetFont().GetOrientation(),
-                                            bSwitchH2V );
+                        const sal_uInt16 nDir = bBidiPor
+                                                    ? 1800
+                                                    : UnMapDirection(GetFont().GetOrientation(),
+                                                                     bSwitchH2V, bSwitchH2VLRBT);
 
                         switch ( nDir )
                         {
@@ -1778,9 +1781,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // anything to do?
                 if (rInf.GetWrong() || rInf.GetGrammarCheck() || rInf.GetSmartTags())
                 {
-                    CalcLinePosData aCalcLinePosData(rInf, GetFont(),
-                            nCnt, bSwitchH2V, bSwitchL2R,
-                            nHalfSpace, pKernArray.get(), bBidiPor);
+                    CalcLinePosData aCalcLinePosData(rInf, GetFont(), nCnt, bSwitchH2V,
+                                                     bSwitchH2VLRBT, bSwitchL2R, nHalfSpace,
+                                                     pKernArray.get(), bBidiPor);
 
                     SwForbidden aForbidden;
                     // draw line for smart tag data
