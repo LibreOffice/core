@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
 #include <comphelper/types.hxx>
@@ -40,7 +41,9 @@ namespace sc_apitest
 {
 const auto nMaxFieldIndex = 6;
 
-class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest,
+                                     public apitest::XIndexAccess,
+                                     public apitest::XNameAccess
 {
 public:
     ScDataPilotFieldGroupItemObj();
@@ -50,6 +53,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupItemObj);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -64,7 +71,8 @@ private:
 
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
-    , apitest::XNameAccess("Group1")
+    , XIndexAccess(1)
+    , XNameAccess("Group1")
 {
 }
 

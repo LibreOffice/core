@@ -1,5 +1,3 @@
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDataPilotFieldGroupsObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScDataPilotFieldGroupsObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScDataPilotFieldGroupsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
