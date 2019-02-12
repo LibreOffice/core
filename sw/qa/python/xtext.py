@@ -61,7 +61,7 @@ class TestXText(unittest.TestCase):
         # Remove _already removed_ ones again
         # TODO: unexpected behaviour, it should throw an exception,
         # but let's nail down current behaviour
-        # NOTE: Should this be reported?
+        # NOTE: reported as tdf#123404
         x_text.removeTextContent(x_annotation_2)
         x_text.removeTextContent(x_annotation)
 
