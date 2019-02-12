@@ -951,7 +951,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
     const long nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
         nMenuListMargin - nSearchBoxHeight - nSearchBoxMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
 
-    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin - 1;
+    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin;
 
     switch (eType)
     {
@@ -965,23 +965,6 @@ void ScCheckListMenuWindow::getSectionPosSize(
         {
             rPos = Point(nSearchBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
             rSize = Size(maWndSize.Width() - 2*nSearchBoxMargin, nSearchBoxHeight);
-        }
-        break;
-        case LISTBOX_AREA_OUTER:
-        {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin);
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-        }
-        break;
-        case LISTBOX_AREA_INNER:
-        {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin);
-            rPos.AdjustX(nListBoxInnerPadding );
-            rPos.AdjustY(nListBoxInnerPadding );
-
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-            rSize.AdjustWidth( -(nListBoxInnerPadding*2) );
-            rSize.AdjustHeight( -(nListBoxInnerPadding*2) );
         }
         break;
         case SINGLE_BTN_AREA:
@@ -1015,6 +998,23 @@ void ScCheckListMenuWindow::getSectionPosSize(
             rPos.AdjustX(nListBoxWidth - h - 10 );
             rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
             rSize = Size(h, h);
+        }
+        break;
+        case LISTBOX_AREA_OUTER:
+        {
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY + nSingleItemBtnAreaHeight-1);
+            rSize = Size(nListBoxWidth, nListBoxHeight);
+        }
+        break;
+        case LISTBOX_AREA_INNER:
+        {
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY + nSingleItemBtnAreaHeight-1);
+            rPos.AdjustX(nListBoxInnerPadding );
+            rPos.AdjustY(nListBoxInnerPadding );
+
+            rSize = Size(nListBoxWidth, nListBoxHeight);
+            rSize.AdjustWidth( -(nListBoxInnerPadding*2) );
+            rSize.AdjustHeight( -(nListBoxInnerPadding*2) );
         }
         break;
         case BTN_OK:
