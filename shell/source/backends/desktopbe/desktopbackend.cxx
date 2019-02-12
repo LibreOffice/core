@@ -129,6 +129,7 @@ void Default::setPropertyValue(OUString const &, css::uno::Any const &)
 
 OUString xdg_user_dir_lookup (const char *type)
 {
+    size_t nLenType = strlen(type);
     char *config_home;
     char *p;
     bool bError = false;
@@ -161,11 +162,10 @@ OUString xdg_user_dir_lookup (const char *type)
         rtl::ByteSequence seq;
         while (osl_File_E_None == osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)))
         {
-            /* Remove newline at end */
             int relative = 0;
             int len = seq.getLength();
-            if(len>0 && seq[len-1] == '\n')
-                seq[len-1] = 0;
+            seq.realloc(len + 1);
+            seq[len] = 0;
 
             p = reinterpret_cast<char *>(seq.getArray());
             while (*p == ' ' || *p == '\t')
@@ -173,9 +173,9 @@ OUString xdg_user_dir_lookup (const char *type)
             if (strncmp (p, "XDG_", 4) != 0)
                 continue;
             p += 4;
-            if (strncmp (p, type, strlen (type)) != 0)
+            if (strncmp (p, OString(type, nLenType).toAsciiUpperCase().getStr(), nLenType) != 0)
                 continue;
-            p += strlen (type);
+            p += nLenType;
             if (strncmp (p, "_DIR", 4) != 0)
                 continue;
             p += 4;
