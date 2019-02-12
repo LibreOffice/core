@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_46ababd5",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-12T13:56:16Z",
+      "side": 1,
+      "message": "This is good, but please decrease indentation and align with } above",
+      "revId": "33b1f46fb411877d7b41ff4b2dc2b72bbcf1153a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
