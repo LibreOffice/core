@@ -125,6 +125,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	$(if $(filter-out $(OS),iOS), \
 		CppunitTest_sc_databaserangeobj) \
 	CppunitTest_sc_databaserangesobj \
+	CppunitTest_sc_datapilotfieldgroupsobj \
 	CppunitTest_sc_datapilotfieldobj \
 	CppunitTest_sc_datapilotfieldsobj \
 	CppunitTest_sc_datapilotitemobj \
