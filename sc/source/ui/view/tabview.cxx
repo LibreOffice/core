@@ -914,11 +914,11 @@ ScGridWindow* ScTabView::GetActiveWin()
     return pGridWin[ePos];
 }
 
-void ScTabView::SetActivePointer( const Pointer& rPointer )
+void ScTabView::SetActivePointer( PointerStyle nPointer )
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if (pWin)
-            pWin->SetPointer( rPointer );
+            pWin->SetPointer( nPointer );
 }
 
 void ScTabView::ActiveGrabFocus()

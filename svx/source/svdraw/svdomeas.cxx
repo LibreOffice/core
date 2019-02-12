@@ -69,6 +69,7 @@
 #include <svx/xpoly.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
@@ -999,9 +1000,9 @@ basegfx::B2DPolyPolygon SdrMeasureObj::TakeCreatePoly(const SdrDragStat& /*rDrag
     return ImpCalcXPoly(aMPol);
 }
 
-Pointer SdrMeasureObj::GetCreatePointer() const
+PointerStyle SdrMeasureObj::GetCreatePointer() const
 {
-    return Pointer(PointerStyle::Cross);
+    return PointerStyle::Cross;
 }
 
 void SdrMeasureObj::NbcMove(const Size& rSiz)

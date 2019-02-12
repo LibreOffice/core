@@ -51,6 +51,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <memory>
 #include <sal/log.hxx>
 
@@ -516,7 +517,7 @@ public:
     bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     bool BckCreate(SdrDragStat const & rStat);
     void BrkCreate(SdrDragStat& rStat);
-    Pointer GetCreatePointer() const;
+    PointerStyle GetCreatePointer() const;
 
     // helping stuff
     static bool IsClosed(SdrObjKind eKind) { return eKind==OBJ_POLY || eKind==OBJ_PATHPOLY || eKind==OBJ_PATHFILL || eKind==OBJ_FREEFILL || eKind==OBJ_SPLNFILL; }
@@ -1585,23 +1586,23 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDr
     return aRetval;
 }
 
-Pointer ImpPathForDragAndCreate::GetCreatePointer() const
+PointerStyle ImpPathForDragAndCreate::GetCreatePointer() const
 {
     switch (meObjectKind) {
-        case OBJ_LINE    : return Pointer(PointerStyle::DrawLine);
-        case OBJ_POLY    : return Pointer(PointerStyle::DrawPolygon);
-        case OBJ_PLIN    : return Pointer(PointerStyle::DrawPolygon);
-        case OBJ_PATHLINE: return Pointer(PointerStyle::DrawBezier);
-        case OBJ_PATHFILL: return Pointer(PointerStyle::DrawBezier);
-        case OBJ_FREELINE: return Pointer(PointerStyle::DrawFreehand);
-        case OBJ_FREEFILL: return Pointer(PointerStyle::DrawFreehand);
-        case OBJ_SPLNLINE: return Pointer(PointerStyle::DrawFreehand);
-        case OBJ_SPLNFILL: return Pointer(PointerStyle::DrawFreehand);
-        case OBJ_PATHPOLY: return Pointer(PointerStyle::DrawPolygon);
-        case OBJ_PATHPLIN: return Pointer(PointerStyle::DrawPolygon);
+        case OBJ_LINE    : return PointerStyle::DrawLine;
+        case OBJ_POLY    : return PointerStyle::DrawPolygon;
+        case OBJ_PLIN    : return PointerStyle::DrawPolygon;
+        case OBJ_PATHLINE: return PointerStyle::DrawBezier;
+        case OBJ_PATHFILL: return PointerStyle::DrawBezier;
+        case OBJ_FREELINE: return PointerStyle::DrawFreehand;
+        case OBJ_FREEFILL: return PointerStyle::DrawFreehand;
+        case OBJ_SPLNLINE: return PointerStyle::DrawFreehand;
+        case OBJ_SPLNFILL: return PointerStyle::DrawFreehand;
+        case OBJ_PATHPOLY: return PointerStyle::DrawPolygon;
+        case OBJ_PATHPLIN: return PointerStyle::DrawPolygon;
         default: break;
     } // switch
-    return Pointer(PointerStyle::Cross);
+    return PointerStyle::Cross;
 }
 
 SdrPathObjGeoData::SdrPathObjGeoData()
@@ -2243,7 +2244,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getDragPolyPolygon(const SdrDragStat& rDrag)
     return aRetval;
 }
 
-Pointer SdrPathObj::GetCreatePointer() const
+PointerStyle SdrPathObj::GetCreatePointer() const
 {
     return impGetDAC().GetCreatePointer();
 }

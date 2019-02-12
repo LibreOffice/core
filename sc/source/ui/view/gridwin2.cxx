@@ -645,7 +645,7 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
     ReleaseMouse();
 
     DPTestMouse( rMEvt, false );
-    SetPointer( Pointer( PointerStyle::Arrow ) );
+    SetPointer( PointerStyle::Arrow );
 }
 
 void ScGridWindow::UpdateDragRect( bool bShowRange, const tools::Rectangle& rPosRect )

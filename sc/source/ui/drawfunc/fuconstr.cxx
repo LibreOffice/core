@@ -118,7 +118,7 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
         }
         else if ( pView->IsMarkedHit(aPnt) )
         {
-            rViewShell.SetActivePointer(Pointer(PointerStyle::Move));
+            rViewShell.SetActivePointer(PointerStyle::Move);
         }
         else
         {

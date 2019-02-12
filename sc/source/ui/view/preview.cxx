@@ -1052,7 +1052,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
         if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSizeBar )
         {
-            SetPointer( Pointer( PointerStyle::Arrow ) );
+            SetPointer( PointerStyle::Arrow );
 
             ScDocument& rDoc = pDocShell->GetDocument();
             OUString aOldName = rDoc.GetPageStyle( nTab );
@@ -1408,7 +1408,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         {
             if( bOnColRulerChange || bColRulerMove )
             {
-                SetPointer( Pointer( PointerStyle::HSplit ) );
+                SetPointer( PointerStyle::HSplit );
                 if( bColRulerMove )
                 {
                     if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
@@ -1419,7 +1419,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             {
                 if( bLeftRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
                 {
-                    SetPointer( Pointer( PointerStyle::HSizeBar ) );
+                    SetPointer( PointerStyle::HSizeBar );
                     if( bLeftRulerMove )
                     {
                        if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
@@ -1428,7 +1428,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 }
                 else if( bRightRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
                 {
-                    SetPointer( Pointer( PointerStyle::HSizeBar ) );
+                    SetPointer( PointerStyle::HSizeBar );
                     if( bRightRulerMove )
                     {
                        if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
@@ -1447,7 +1447,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             {
                 if( bTopRulerChange )
                 {
-                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
+                    SetPointer( PointerStyle::VSizeBar );
                     if( bTopRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
@@ -1456,7 +1456,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 }
                 else if( bBottomRulerChange )
                 {
-                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
+                    SetPointer( PointerStyle::VSizeBar );
                     if( bBottomRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
@@ -1465,7 +1465,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 }
                 else if( bHeaderRulerChange )
                 {
-                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
+                    SetPointer( PointerStyle::VSizeBar );
                     if( bHeaderRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
@@ -1474,7 +1474,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 }
                 else if( bFooterRulerChange )
                 {
-                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
+                    SetPointer( PointerStyle::VSizeBar );
                     if( bFooterRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
@@ -1483,7 +1483,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 }
             }
             else
-                SetPointer( Pointer( PointerStyle::Arrow ) );
+                SetPointer( PointerStyle::Arrow );
         }
     }
 }

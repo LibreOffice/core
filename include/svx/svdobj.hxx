@@ -42,7 +42,6 @@
 #include <functional>
 
 class SfxBroadcaster;
-class Pointer;
 class AutoTimer;
 class OutlinerParaObject;
 class Outliner;
@@ -75,6 +74,7 @@ class SdrGluePoint;
 class SdrGluePointList;
 class SdrLayerIDSet;
 class Fraction;
+enum class PointerStyle;
 
 namespace basegfx
 {
@@ -569,7 +569,7 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
 
     /// get the cursor/pointer that signals creating this object
-    virtual Pointer GetCreatePointer() const;
+    virtual PointerStyle GetCreatePointer() const;
 
     /// Polygon dragged by the user when creating the object
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
@@ -686,7 +686,7 @@ public:
     // macro abilities, e.g. a rectangle as PushButton.
     virtual bool HasMacro() const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
-    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
+    virtual PointerStyle GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;

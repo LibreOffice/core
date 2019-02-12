@@ -27,6 +27,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <miscuno.hxx>
 
 using namespace com::sun::star::uno;
@@ -648,7 +649,7 @@ void ScCsvRuler::ImplInvertCursor( sal_Int32 nPos )
 
 void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 {
-    SetPointer( Pointer( HasSplit( nPos ) ? PointerStyle::HSplit : PointerStyle::Arrow ) );
+    SetPointer( HasSplit( nPos ) ? PointerStyle::HSplit : PointerStyle::Arrow );
 }
 
 // accessibility ==============================================================

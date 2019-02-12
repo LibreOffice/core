@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <rtl/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
@@ -452,7 +453,7 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
     PointerStyle ePointerStyle = PointerStyle::Arrow;
     if ( ImplRowDividerHitTest( aBrowserEvent ) )
         ePointerStyle = PointerStyle::VSizeBar;
-    SetPointer( Pointer( ePointerStyle ) );
+    SetPointer( ePointerStyle );
 
     // dragging out of the visible area?
     if ( rEvt.IsLeft() &&

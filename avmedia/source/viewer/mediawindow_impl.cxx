@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -480,18 +481,18 @@ void MediaWindowImpl::setPosSize(const tools::Rectangle& rRect)
     SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
 }
 
-void MediaWindowImpl::setPointer(const Pointer& rPointer)
+void MediaWindowImpl::setPointer(PointerStyle aPointer)
 {
-    SetPointer(rPointer);
+    SetPointer(aPointer);
 
     if (mpChildWindow)
-        mpChildWindow->SetPointer(rPointer);
+        mpChildWindow->SetPointer(aPointer);
 
     if (mxPlayerWindow.is())
     {
         long nPointer;
 
-        switch (rPointer.GetStyle())
+        switch (aPointer)
         {
             case PointerStyle::Cross:
                 nPointer = awt::SystemPointer::CROSS;

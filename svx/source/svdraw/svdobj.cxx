@@ -53,6 +53,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vector>
 
 #include <svx/shapepropertynotifier.hxx>
@@ -1376,9 +1377,9 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
     return aRetval;
 }
 
-Pointer SdrObject::GetCreatePointer() const
+PointerStyle SdrObject::GetCreatePointer() const
 {
-    return Pointer(PointerStyle::Cross);
+    return PointerStyle::Cross;
 }
 
 // transformations
@@ -1775,9 +1776,9 @@ SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
     return nullptr;
 }
 
-Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec&) const
+PointerStyle SdrObject::GetMacroPointer(const SdrObjMacroHitRec&) const
 {
-    return Pointer(PointerStyle::RefHand);
+    return PointerStyle::RefHand;
 }
 
 void SdrObject::PaintMacro(OutputDevice& rOut, const tools::Rectangle& , const SdrObjMacroHitRec& ) const

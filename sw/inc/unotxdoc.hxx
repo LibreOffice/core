@@ -434,7 +434,7 @@ public:
     /// @see vcl::ITiledRenderable::setClientZoom.
     virtual void setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_) override;
     /// @see vcl::ITiledRenderable::getPointer().
-    virtual Pointer getPointer() override;
+    virtual PointerStyle getPointer() override;
     /// @see vcl::ITiledRenderable::getTrackedChanges().
     OUString getTrackedChanges() override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().

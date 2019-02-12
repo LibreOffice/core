@@ -24,6 +24,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 namespace svt { namespace table
@@ -40,11 +41,11 @@ namespace svt { namespace table
         if ( m_nResizingColumn == COL_INVALID )
         {
             // if we hit a column divider, change the mouse pointer accordingly
-            Pointer aNewPointer( PointerStyle::Arrow );
+            PointerStyle aNewPointer( PointerStyle::Arrow );
             TableCell const tableCell = i_tableControl.hitTest( aPoint );
             if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.eArea == ColumnDivider ) )
             {
-                aNewPointer = Pointer( PointerStyle::HSplit );
+                aNewPointer = PointerStyle::HSplit;
             }
             i_tableControl.setPointer( aNewPointer );
 
@@ -54,17 +55,17 @@ namespace svt { namespace table
         ::Size const tableSize = i_tableControl.getTableSizePixel();
 
         // set proper pointer
-        Pointer aNewPointer( PointerStyle::Arrow );
+        PointerStyle aNewPointer( PointerStyle::Arrow );
         ColumnMetrics const & columnMetrics( i_tableControl.getColumnMetrics( m_nResizingColumn ) );
         if  (   ( aPoint.X() > tableSize.Width() )
             ||  ( aPoint.X() < columnMetrics.nStartPixel )
             )
         {
-            aNewPointer = Pointer( PointerStyle::NotAllowed );
+            aNewPointer = PointerStyle::NotAllowed;
         }
         else
         {
-            aNewPointer = Pointer( PointerStyle::HSplit );
+            aNewPointer = PointerStyle::HSplit;
         }
         i_tableControl.setPointer( aNewPointer );
 
@@ -151,7 +152,7 @@ namespace svt { namespace table
             i_tableControl.invalidate( TableArea::All );
         }
 
-        i_tableControl.setPointer( Pointer() );
+        i_tableControl.setPointer( PointerStyle::Arrow );
         i_tableControl.releaseMouse();
 
         m_nResizingColumn = COL_INVALID;

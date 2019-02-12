@@ -76,7 +76,7 @@ void FuConstUnoControl::Activate()
 {
     pView->SetCurrentObj( nIdentifier, nInventor );
 
-    aNewPointer = Pointer( PointerStyle::DrawRect );
+    aNewPointer = PointerStyle::DrawRect;
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );
 

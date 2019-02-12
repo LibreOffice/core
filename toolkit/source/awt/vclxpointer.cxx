@@ -37,14 +37,14 @@ void VCLXPointer::setType( sal_Int32 nType )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    maPointer = Pointer( static_cast<PointerStyle>(nType) );
+    maPointer = static_cast<PointerStyle>(nType);
 }
 
 sal_Int32 VCLXPointer::getType()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return static_cast<sal_Int32>(maPointer.GetStyle());
+    return static_cast<sal_Int32>(maPointer);
 }
 
 OUString VCLXPointer::getImplementationName()

@@ -58,6 +58,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 enum EscDir {LKS,RTS,OBN,UNT};
@@ -586,9 +587,9 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
     return aRetval;
 }
 
-Pointer SdrCaptionObj::GetCreatePointer() const
+PointerStyle SdrCaptionObj::GetCreatePointer() const
 {
-    return Pointer(PointerStyle::DrawCaption);
+    return PointerStyle::DrawCaption;
 }
 
 void SdrCaptionObj::NbcMove(const Size& rSiz)

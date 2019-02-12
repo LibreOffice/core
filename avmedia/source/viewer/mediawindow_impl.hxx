@@ -99,7 +99,7 @@ public:
 
     void setPosSize( const tools::Rectangle& rRect );
 
-    void setPointer( const Pointer& rPointer );
+    void setPointer( PointerStyle nPointer );
 
 private:
 

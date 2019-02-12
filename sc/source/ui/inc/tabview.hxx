@@ -381,7 +381,7 @@ public:
 
     ScSplitPos      FindWindow( const vcl::Window* pWindow ) const;
 
-    void            SetActivePointer( const Pointer& rPointer );
+    void            SetActivePointer( PointerStyle nPointer );
 
     void            ActiveGrabFocus();
 

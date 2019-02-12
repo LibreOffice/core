@@ -61,6 +61,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/ptrstyle.hxx>
 #include <boost/optional.hpp>
 #include <sdmod.hxx>
 
@@ -254,7 +255,7 @@ protected:
 private:
     SelectionMode meSelectionMode;
     Point maSecondCorner;
-    Pointer const maSavedPointer;
+    PointerStyle const maSavedPointer;
     bool mbAutoScrollInstalled;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
@@ -1253,8 +1254,7 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
 void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 {
 #endif
-    const Pointer aSelectionPointer (PointerStyle::Text);
-    mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
+    mrSlideSorter.GetContentWindow()->SetPointer(PointerStyle::Text);
     SetSelectionModeFromModifier(nEventCode);
 }
 

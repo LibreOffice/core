@@ -472,14 +472,14 @@ static long lcl_loPointerToMsoPointer( PointerStyle eType )
     return nRet;
 }
 
-static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
+static PointerStyle lcl_msoPointerToLOPointer( long msoPointerStyle )
 {
-    Pointer aPointer( PointerStyle::Arrow );
+    PointerStyle aPointer( PointerStyle::Arrow );
     for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
     {
         if ( styles[ i ].msoPointerStyle == msoPointerStyle )
         {
-            aPointer = Pointer( styles[ i ].loPointStyle );
+            aPointer = styles[ i ].loPointStyle;
             break;
          }
     }
@@ -493,7 +493,7 @@ ScVbaControl::getMousePointer()
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
-        eType = pWindow->GetPointer().GetStyle();
+        eType = pWindow->GetPointer();
     }
     return lcl_loPointerToMsoPointer( eType );
 }
@@ -504,8 +504,7 @@ ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer )
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
-        Pointer aPointer( PointerStyle::Arrow );
-        aPointer = lcl_msoPointerToLOPointer( _mousepointer );
+        PointerStyle aPointer = lcl_msoPointerToLOPointer( _mousepointer );
         pWindow->SetPointer( aPointer );
     }
 }

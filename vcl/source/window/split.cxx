@@ -27,6 +27,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <rtl/instance.hxx>
 
@@ -69,7 +70,7 @@ void Splitter::ImplInitHorVer(bool bNew)
         SetSizePixel( Size( rSettings.GetScrollBarSize(), StyleSettings::GetSplitSize() ) );
     }
 
-    SetPointer( Pointer( ePointerStyle ) );
+    SetPointer( ePointerStyle );
 }
 
 void Splitter::ImplInit( vcl::Window* pParent, WinBits nWinStyle )

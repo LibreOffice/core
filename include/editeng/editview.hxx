@@ -45,7 +45,6 @@ class OutlinerViewShell;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
-class Pointer;
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -60,6 +59,7 @@ namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
 enum class TransliterationFlags;
+enum class PointerStyle;
 
 namespace com {
 namespace sun {
@@ -182,7 +182,7 @@ public:
     void                SetVisArea( const tools::Rectangle& rRect );
     const tools::Rectangle&    GetVisArea() const;
 
-    const Pointer&  GetPointer() const;
+    PointerStyle    GetPointer() const;
 
     vcl::Cursor*    GetCursor() const;
 
