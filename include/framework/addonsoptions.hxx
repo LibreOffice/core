@@ -20,14 +20,13 @@
 #define INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <vcl/image.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <framework/fwedllapi.h>
 #include <memory>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
     @descr          The method GetAddonsMenu() returns a list of property values.

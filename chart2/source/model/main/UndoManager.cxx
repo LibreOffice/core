@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <framework/undomanagerhelper.hxx>
+#include <framework/imutex.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/undo.hxx>
 

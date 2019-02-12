@@ -20,21 +20,14 @@
 #ifndef INCLUDED_FRAMEWORK_INTERACTION_HXX
 #define INCLUDED_FRAMEWORK_INTERACTION_HXX
 
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/task/XInteractionContinuation.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
-#include <com/sun/star/task/XInteractionApprove.hpp>
-#include <com/sun/star/task/XInteractionDisapprove.hpp>
-#include <com/sun/star/task/XInteractionRetry.hpp>
-#include <com/sun/star/document/XInteractionFilterSelect.hpp>
-#include <com/sun/star/document/NoSuchFilterRequest.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>
+
+namespace com::sun::star::task { class XInteractionContinuation; }
+namespace com::sun::star::task { class XInteractionRequest; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 namespace framework{
 

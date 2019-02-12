@@ -21,12 +21,15 @@
 #define INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
 #include <framework/fwedllapi.h>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <rtl/ustring.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/status.hxx>
-#include <svtools/toolboxcontroller.hxx>
-#include <svtools/statusbarcontroller.hxx>
+
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace svt { class StatusbarController; }
+namespace svt { class ToolboxController; }
+
+class StatusBar;
+class ToolBox;
 
 typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,

@@ -20,6 +20,7 @@
 #include <framework/configimporter.hxx>
 #include <framework/toolboxconfiguration.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 
 #include <rtl/ustrbuf.hxx>
 

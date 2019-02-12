@@ -539,3 +539,16 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    include/framework/dispatchhelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatchHelper.hpp
+    - com/sun/star/frame/XDispatchResultListener.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/framework/titlehelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTitle.hpp
+    - com/sun/star/frame/XTitleChangeBroadcaster.hpp
+    - com/sun/star/frame/XFrameActionListener.hpp
+    - com/sun/star/document/XDocumentEventListener.hpp
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx

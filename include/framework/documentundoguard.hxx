@@ -22,9 +22,11 @@
 
 #include <framework/fwedllapi.h>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
+
+namespace com::sun::star::uno { class XInterface; }
 
 namespace framework
 {

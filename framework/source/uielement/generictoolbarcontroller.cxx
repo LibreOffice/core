@@ -33,6 +33,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/toolbox.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>

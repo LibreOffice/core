@@ -57,6 +57,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/syslocale.hxx>
 
 //  Defines
 

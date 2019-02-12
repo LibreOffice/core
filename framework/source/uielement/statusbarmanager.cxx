@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
+#include <svtools/toolboxcontroller.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/commandevent.hxx>

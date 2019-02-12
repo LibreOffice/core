@@ -19,6 +19,8 @@
 
 #include <stdio.h>
 #include <sal/macros.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <xml/menudocumenthandler.hxx>
 #include <framework/menuconfiguration.hxx>
