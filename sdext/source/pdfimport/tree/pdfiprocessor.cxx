@@ -598,26 +598,26 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
 void PDFIProcessor::startIndicator( const OUString& rText  )
 {
     sal_Int32 nElements = m_nPages;
-    if( m_xStatusIndicator.is() )
+    if( !m_xStatusIndicator.is() )
+        return;
+
+    sal_Int32 nLength = rText.getLength();
+    OUStringBuffer aStr( nLength*2 );
+    const sal_Unicode* pText = rText.getStr();
+    for( int i = 0; i < nLength; i++ )
     {
-        sal_Int32 nLength = rText.getLength();
-        OUStringBuffer aStr( nLength*2 );
-        const sal_Unicode* pText = rText.getStr();
-        for( int i = 0; i < nLength; i++ )
+        if( nLength-i > 1&&
+            pText[i]   == '%' &&
+            pText[i+1] == 'd'
+        )
         {
-            if( nLength-i > 1&&
-                pText[i]   == '%' &&
-                pText[i+1] == 'd'
-            )
-            {
-                aStr.append( nElements );
-                i++;
-            }
-            else
-                aStr.append( pText[i] );
+            aStr.append( nElements );
+            i++;
         }
-        m_xStatusIndicator->start( aStr.makeStringAndClear(), nElements );
+        else
+            aStr.append( pText[i] );
     }
+    m_xStatusIndicator->start( aStr.makeStringAndClear(), nElements );
 }
 
 void PDFIProcessor::endIndicator()

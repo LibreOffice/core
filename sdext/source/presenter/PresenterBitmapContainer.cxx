@@ -79,20 +79,20 @@ PresenterBitmapContainer::PresenterBitmapContainer (
 void PresenterBitmapContainer::Initialize (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext)
 {
-    if ( ! mxPresenterHelper.is())
-    {
-        // Create an object that is able to load the bitmaps in a format that is
-        // supported by the canvas.
-        Reference<lang::XMultiComponentFactory> xFactory (
-            rxComponentContext->getServiceManager(), UNO_QUERY);
-        if ( ! xFactory.is())
-            return;
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                "com.sun.star.drawing.PresenterHelper",
-                rxComponentContext),
-            UNO_QUERY_THROW);
-    }
+    if (  mxPresenterHelper.is())
+        return;
+
+    // Create an object that is able to load the bitmaps in a format that is
+    // supported by the canvas.
+    Reference<lang::XMultiComponentFactory> xFactory (
+        rxComponentContext->getServiceManager(), UNO_QUERY);
+    if ( ! xFactory.is())
+        return;
+    mxPresenterHelper.set(
+        xFactory->createInstanceWithContext(
+            "com.sun.star.drawing.PresenterHelper",
+            rxComponentContext),
+        UNO_QUERY_THROW);
 }
 
 PresenterBitmapContainer::~PresenterBitmapContainer()
@@ -317,23 +317,23 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
       mxDisabledBitmap(),
       mxMaskBitmap()
 {
-    if (rpDefault != nullptr)
-    {
-        mnWidth = rpDefault->mnWidth;
-        mnHeight = rpDefault->mnHeight;
-        mnXOffset = rpDefault->mnXOffset;
-        mnYOffset = rpDefault->mnYOffset;
-        mnXHotSpot = rpDefault->mnXHotSpot;
-        mnYHotSpot = rpDefault->mnYHotSpot;
-        maReplacementColor = rpDefault->maReplacementColor;
-        meHorizontalTexturingMode = rpDefault->meHorizontalTexturingMode;
-        meVerticalTexturingMode = rpDefault->meVerticalTexturingMode;
-        mxNormalBitmap = rpDefault->mxNormalBitmap;
-        mxMouseOverBitmap = rpDefault->mxMouseOverBitmap;
-        mxButtonDownBitmap = rpDefault->mxButtonDownBitmap;
-        mxDisabledBitmap = rpDefault->mxDisabledBitmap;
-        mxMaskBitmap = rpDefault->mxMaskBitmap;
-    }
+    if (rpDefault == nullptr)
+        return;
+
+    mnWidth = rpDefault->mnWidth;
+    mnHeight = rpDefault->mnHeight;
+    mnXOffset = rpDefault->mnXOffset;
+    mnYOffset = rpDefault->mnYOffset;
+    mnXHotSpot = rpDefault->mnXHotSpot;
+    mnYHotSpot = rpDefault->mnYHotSpot;
+    maReplacementColor = rpDefault->maReplacementColor;
+    meHorizontalTexturingMode = rpDefault->meHorizontalTexturingMode;
+    meVerticalTexturingMode = rpDefault->meVerticalTexturingMode;
+    mxNormalBitmap = rpDefault->mxNormalBitmap;
+    mxMouseOverBitmap = rpDefault->mxMouseOverBitmap;
+    mxButtonDownBitmap = rpDefault->mxButtonDownBitmap;
+    mxDisabledBitmap = rpDefault->mxDisabledBitmap;
+    mxMaskBitmap = rpDefault->mxMaskBitmap;
 }
 
 const css::uno::Reference<css::rendering::XBitmap>&

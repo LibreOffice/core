@@ -177,21 +177,21 @@ void OptimizerDialog::UpdateConfiguration()
     }
 
     aAny = getControlProperty( "CheckBox3Pg3", "State" );
-    if ( (aAny >>= nInt16) && nInt16 )
+    if ( !((aAny >>= nInt16) && nInt16) )
+        return;
+
+    aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
+    if ( !(aAny >>= aSelectedItems) )
+        return;
+
+    if ( aSelectedItems.getLength() )
     {
-        aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
-        if ( aAny >>= aSelectedItems )
+        sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
+        aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );
+        if ( aAny >>= aStringItemList )
         {
-            if ( aSelectedItems.getLength() )
-            {
-                sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
-                aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );
-                if ( aAny >>= aStringItemList )
-                {
-                    if ( aStringItemList.getLength() > nSelectedItem )
-                        SetConfigProperty( TK_CustomShowName, Any( aStringItemList[ nSelectedItem ] ) );
-                }
-            }
+            if ( aStringItemList.getLength() > nSelectedItem )
+                SetConfigProperty( TK_CustomShowName, Any( aStringItemList[ nSelectedItem ] ) );
         }
     }
 }
@@ -251,27 +251,27 @@ void OptimizerDialog::execute()
 
 void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
 {
-    if ( ( nNewStep != mnCurrentStep ) && ( nNewStep <= MAX_STEP ) && ( nNewStep >= 0 ) )
-    {
-        sal_Int16 nOldStep = mnCurrentStep;
-        if ( nNewStep == 0 )
-            disableControl( "btnNavBack" );
-        else if ( nOldStep == 0 )
-            enableControl( "btnNavBack" );
+    if ( !(( nNewStep != mnCurrentStep ) && ( nNewStep <= MAX_STEP ) && ( nNewStep >= 0 )) )
+        return;
 
-        if ( nNewStep == MAX_STEP )
-            disableControl( "btnNavNext" );
-        else if ( nOldStep == MAX_STEP )
-            enableControl( "btnNavNext" );
+    sal_Int16 nOldStep = mnCurrentStep;
+    if ( nNewStep == 0 )
+        disableControl( "btnNavBack" );
+    else if ( nOldStep == 0 )
+        enableControl( "btnNavBack" );
 
-        setControlProperty( "rdmNavi", "CurrentItemID", Any( nNewStep ) );
+    if ( nNewStep == MAX_STEP )
+        disableControl( "btnNavNext" );
+    else if ( nOldStep == MAX_STEP )
+        enableControl( "btnNavNext" );
 
-        DeactivatePage( nOldStep );
-        UpdateControlStates( nNewStep );
+    setControlProperty( "rdmNavi", "CurrentItemID", Any( nNewStep ) );
 
-        ActivatePage( nNewStep );
-        mnCurrentStep = nNewStep;
-    }
+    DeactivatePage( nOldStep );
+    UpdateControlStates( nNewStep );
+
+    ActivatePage( nNewStep );
+    mnCurrentStep = nNewStep;
 }
 
 void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
@@ -317,32 +317,32 @@ OUString OptimizerDialog::GetSelectedString( OUString const & token )
 
 void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus )
 {
-    if ( mxReschedule.is() )
-    {
-        maStats.InitializeStatusValues( rStatus );
-        const Any* pVal( maStats.GetStatusValue( TK_Status ) );
-        if ( pVal )
-        {
-            OUString sStatus;
-            if ( *pVal >>= sStatus )
-            {
-                setControlProperty( "FixedText1Pg4", "Enabled", Any( true ) );
-                setControlProperty( "FixedText1Pg4", "Label", Any( getString( TKGet( sStatus ) ) ) );
-            }
-        }
-        pVal = maStats.GetStatusValue( TK_Progress );
-        if ( pVal )
-        {
-            sal_Int32 nProgress = 0;
-            if ( *pVal >>= nProgress )
-                setControlProperty( "Progress", "ProgressValue", Any( nProgress ) );
-        }
-        pVal = maStats.GetStatusValue( TK_OpenNewDocument );
-        if ( pVal )
-            SetConfigProperty( TK_OpenNewDocument, *pVal );
+    if ( !mxReschedule.is() )
+        return;
 
-        mxReschedule->reschedule();
+    maStats.InitializeStatusValues( rStatus );
+    const Any* pVal( maStats.GetStatusValue( TK_Status ) );
+    if ( pVal )
+    {
+        OUString sStatus;
+        if ( *pVal >>= sStatus )
+        {
+            setControlProperty( "FixedText1Pg4", "Enabled", Any( true ) );
+            setControlProperty( "FixedText1Pg4", "Label", Any( getString( TKGet( sStatus ) ) ) );
+        }
     }
+    pVal = maStats.GetStatusValue( TK_Progress );
+    if ( pVal )
+    {
+        sal_Int32 nProgress = 0;
+        if ( *pVal >>= nProgress )
+            setControlProperty( "Progress", "ProgressValue", Any( nProgress ) );
+    }
+    pVal = maStats.GetStatusValue( TK_OpenNewDocument );
+    if ( pVal )
+        SetConfigProperty( TK_OpenNewDocument, *pVal );
+
+    mxReschedule->reschedule();
 }
 
 
@@ -716,22 +716,22 @@ void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
 {
     OUString aString;
     Any aAny = mrOptimizerDialog.getControlProperty( "ComboBox0Pg1", "Text" );
-    if ( aAny >>= aString )
-    {
-        sal_Int32 nI0, nI1, nI2, nI3, nI4;
-        nI0 = nI1 = nI2 = nI3 = nI4 = 0;
+    if ( !(aAny >>= aString) )
+        return;
 
-        if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
-            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
-        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
-            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
-        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
-            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
-        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
-            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
+    sal_Int32 nI0, nI1, nI2, nI3, nI4;
+    nI0 = nI1 = nI2 = nI3 = nI4 = 0;
 
-        mrOptimizerDialog.SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
-    }
+    if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
+        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
+    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
+        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
+    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
+        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
+    else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
+        aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
+
+    mrOptimizerDialog.SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
 }
 void TextListenerComboBox0Pg1::disposing( const css::lang::EventObject& /* Source */ )
 {

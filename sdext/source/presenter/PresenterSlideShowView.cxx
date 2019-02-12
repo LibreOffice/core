@@ -323,25 +323,25 @@ void SAL_CALL PresenterSlideShowView::clear()
     mbIsForcedPaintPending = false;
     mbIsPaintPending = false;
 
-    if (mxViewCanvas.is() && mxViewWindow.is())
-    {
-        // Create a polygon for the window outline.
-        awt::Rectangle aViewWindowBox (mxViewWindow->getPosSize());
-        Reference<rendering::XPolyPolygon2D> xPolygon (PresenterGeometryHelper::CreatePolygon(
-            awt::Rectangle(0,0, aViewWindowBox.Width,aViewWindowBox.Height),
-            mxViewCanvas->getDevice()));
+    if (!(mxViewCanvas.is() && mxViewWindow.is()))
+        return;
 
-        rendering::ViewState aViewState (
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            nullptr);
-        double const aColor[4] = {0,0,0,0};
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            nullptr,
-            Sequence<double>(aColor,4),
-            rendering::CompositeOperation::SOURCE);
-        mxViewCanvas->fillPolyPolygon(xPolygon, aViewState, aRenderState);
-    }
+    // Create a polygon for the window outline.
+    awt::Rectangle aViewWindowBox (mxViewWindow->getPosSize());
+    Reference<rendering::XPolyPolygon2D> xPolygon (PresenterGeometryHelper::CreatePolygon(
+        awt::Rectangle(0,0, aViewWindowBox.Width,aViewWindowBox.Height),
+        mxViewCanvas->getDevice()));
+
+    rendering::ViewState aViewState (
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        nullptr);
+    double const aColor[4] = {0,0,0,0};
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        nullptr,
+        Sequence<double>(aColor,4),
+        rendering::CompositeOperation::SOURCE);
+    mxViewCanvas->fillPolyPolygon(xPolygon, aViewState, aRenderState);
 }
 
 geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation()

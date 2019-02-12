@@ -466,21 +466,21 @@ void PresenterHelpView::ProvideCanvas()
 
 void PresenterHelpView::Resize()
 {
-    if (mpCloseButton.get() != nullptr && mxWindow.is())
-    {
-        const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-        mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;
+    if (!(mpCloseButton.get() != nullptr && mxWindow.is()))
+        return;
 
-        // Place vertical separator.
-        mnSeparatorY = aWindowBox.Height
-            - mpCloseButton->GetSize().Height - gnVerticalButtonPadding;
+    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;
 
-        mpCloseButton->SetCenter(geometry::RealPoint2D(
-            aWindowBox.Width/2.0,
-            aWindowBox.Height - mpCloseButton->GetSize().Height/2.0));
+    // Place vertical separator.
+    mnSeparatorY = aWindowBox.Height
+        - mpCloseButton->GetSize().Height - gnVerticalButtonPadding;
 
-        CheckFontSize();
-    }
+    mpCloseButton->SetCenter(geometry::RealPoint2D(
+        aWindowBox.Width/2.0,
+        aWindowBox.Height - mpCloseButton->GetSize().Height/2.0));
+
+    CheckFontSize();
 }
 
 void PresenterHelpView::ThrowIfDisposed()

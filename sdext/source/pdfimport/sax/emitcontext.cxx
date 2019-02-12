@@ -107,27 +107,27 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     {
     }
 #if OSL_DEBUG_LEVEL > 0
-    if( pStream )
-    {
-        sal_uInt64 nWritten = 0;
-        for( int i = 0; i < nIndent; i++ )
-            pStream->write( "    ", 4, nWritten );
+    if( !pStream )
+        return;
 
-        OStringBuffer aBuf( 1024 );
-        aBuf.append( '<' );
-        aBuf.append( pTag );
-        for( const auto& rProperty : rProperties )
-        {
-            aBuf.append( ' ' );
-            aBuf.append( OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) );
-            aBuf.append( "=\"" );
-            aBuf.append( OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) );
-            aBuf.append( "\"" );
-        }
-        aBuf.append( ">\n" );
-        pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
-        nIndent++;
+    sal_uInt64 nWritten = 0;
+    for( int i = 0; i < nIndent; i++ )
+        pStream->write( "    ", 4, nWritten );
+
+    OStringBuffer aBuf( 1024 );
+    aBuf.append( '<' );
+    aBuf.append( pTag );
+    for( const auto& rProperty : rProperties )
+    {
+        aBuf.append( ' ' );
+        aBuf.append( OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) );
+        aBuf.append( "=\"" );
+        aBuf.append( OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) );
+        aBuf.append( "\"" );
     }
+    aBuf.append( ">\n" );
+    pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
+    nIndent++;
 #endif
 }
 
@@ -161,19 +161,19 @@ void SaxEmitter::endTag( const char* pTag )
     {
     }
 #if OSL_DEBUG_LEVEL > 0
-    if( pStream )
-    {
-        sal_uInt64 nWritten = 0;
-        for( int i = 0; i < nIndent; i++ )
-            pStream->write( "    ", 4, nWritten );
+    if( !pStream )
+        return;
 
-        OStringBuffer aBuf( 1024 );
-        aBuf.append( "</" );
-        aBuf.append( pTag );
-        aBuf.append( ">\n" );
-        pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
-        nIndent--;
-    }
+    sal_uInt64 nWritten = 0;
+    for( int i = 0; i < nIndent; i++ )
+        pStream->write( "    ", 4, nWritten );
+
+    OStringBuffer aBuf( 1024 );
+    aBuf.append( "</" );
+    aBuf.append( pTag );
+    aBuf.append( ">\n" );
+    pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
+    nIndent--;
 #endif
 }
 

@@ -264,20 +264,20 @@ void SAL_CALL PresenterProtocolHandler::disposing()
 void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArguments)
 {
     ThrowIfDisposed();
-    if (aArguments.getLength() > 0)
+    if (aArguments.getLength() <= 0)
+        return;
+
+    try
     {
-        try
+        Reference<frame::XFrame> xFrame;
+        if (aArguments[0] >>= xFrame)
         {
-            Reference<frame::XFrame> xFrame;
-            if (aArguments[0] >>= xFrame)
-            {
-                mpPresenterController = PresenterController::Instance(xFrame);
-            }
+            mpPresenterController = PresenterController::Instance(xFrame);
         }
-        catch (RuntimeException&)
-        {
-            OSL_ASSERT(false);
-        }
+    }
+    catch (RuntimeException&)
+    {
+        OSL_ASSERT(false);
     }
 }
 

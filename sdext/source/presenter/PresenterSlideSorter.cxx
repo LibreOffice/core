@@ -506,22 +506,22 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
     const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
     const sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
 
-    if (nSlideIndex == mnSlideIndexMousePressed && mnSlideIndexMousePressed >= 0)
-    {
-        switch (rEvent.ClickCount)
-        {
-            case 1:
-            default:
-                GotoSlide(nSlideIndex);
-                break;
+    if (!(nSlideIndex == mnSlideIndexMousePressed && mnSlideIndexMousePressed >= 0))
+        return;
 
-            case 2:
-                OSL_ASSERT(mpPresenterController.get()!=nullptr);
-                OSL_ASSERT(mpPresenterController->GetWindowManager().get()!=nullptr);
-                mpPresenterController->GetWindowManager()->SetSlideSorterState(false);
-                GotoSlide(nSlideIndex);
-                break;
-        }
+    switch (rEvent.ClickCount)
+    {
+        case 1:
+        default:
+            GotoSlide(nSlideIndex);
+            break;
+
+        case 2:
+            OSL_ASSERT(mpPresenterController.get()!=nullptr);
+            OSL_ASSERT(mpPresenterController->GetWindowManager().get()!=nullptr);
+            mpPresenterController->GetWindowManager()->SetSlideSorterState(false);
+            GotoSlide(nSlideIndex);
+            break;
     }
 }
 
@@ -538,30 +538,30 @@ void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent&)
 
 void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEvent)
 {
-    if (mpMouseOverManager != nullptr)
+    if (mpMouseOverManager == nullptr)
+        return;
+
+    css::awt::MouseEvent rTemp =rEvent;
+    /// check whether RTL interface or not
+    if(AllSettings::GetLayoutRTL()){
+        awt::Rectangle aBox = mxWindow->getPosSize();
+        rTemp.X=aBox.Width-rEvent.X;
+    }
+    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
+
+    if (nSlideIndex < 0)
+        mnSlideIndexMousePressed = -1;
+
+    if (nSlideIndex < 0)
     {
-        css::awt::MouseEvent rTemp =rEvent;
-        /// check whether RTL interface or not
-        if(AllSettings::GetLayoutRTL()){
-            awt::Rectangle aBox = mxWindow->getPosSize();
-            rTemp.X=aBox.Width-rEvent.X;
-        }
-        const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
-        sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
-
-        if (nSlideIndex < 0)
-            mnSlideIndexMousePressed = -1;
-
-        if (nSlideIndex < 0)
-        {
-            mpMouseOverManager->SetSlide(nSlideIndex, awt::Rectangle(0,0,0,0));
-        }
-        else
-        {
-            mpMouseOverManager->SetSlide(
-                nSlideIndex,
-                mpLayout->GetBoundingBox(nSlideIndex));
-        }
+        mpMouseOverManager->SetSlide(nSlideIndex, awt::Rectangle(0,0,0,0));
+    }
+    else
+    {
+        mpMouseOverManager->SetSlide(
+            nSlideIndex,
+            mpLayout->GetBoundingBox(nSlideIndex));
     }
 }
 
@@ -604,28 +604,28 @@ void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDr
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
-    if (mxSlideShowController.is())
-    {
-        const sal_Int32 nNewCurrentSlideIndex (mxSlideShowController->getCurrentSlideIndex());
-        if (nNewCurrentSlideIndex != mnCurrentSlideIndex)
-        {
-            mnCurrentSlideIndex = nNewCurrentSlideIndex;
+    if (!mxSlideShowController.is())
+        return;
 
-            // Request a repaint of the previous current slide to hide its
-            // current slide indicator.
-            mpPresenterController->GetPaintManager()->Invalidate(
-                mxWindow,
-                maCurrentSlideFrameBoundingBox);
+    const sal_Int32 nNewCurrentSlideIndex (mxSlideShowController->getCurrentSlideIndex());
+    if (nNewCurrentSlideIndex == mnCurrentSlideIndex)
+        return;
 
-            // Request a repaint of the new current slide to show its
-            // current slide indicator.
-            maCurrentSlideFrameBoundingBox = mpCurrentSlideFrameRenderer->GetBoundingBox(
-                mpLayout->GetBoundingBox(mnCurrentSlideIndex));
-            mpPresenterController->GetPaintManager()->Invalidate(
-                mxWindow,
-                maCurrentSlideFrameBoundingBox);
-        }
-    }
+    mnCurrentSlideIndex = nNewCurrentSlideIndex;
+
+    // Request a repaint of the previous current slide to hide its
+    // current slide indicator.
+    mpPresenterController->GetPaintManager()->Invalidate(
+        mxWindow,
+        maCurrentSlideFrameBoundingBox);
+
+    // Request a repaint of the new current slide to show its
+    // current slide indicator.
+    maCurrentSlideFrameBoundingBox = mpCurrentSlideFrameRenderer->GetBoundingBox(
+        mpLayout->GetBoundingBox(mnCurrentSlideIndex));
+    mpPresenterController->GetPaintManager()->Invalidate(
+        mxWindow,
+        maCurrentSlideFrameBoundingBox);
 }
 
 Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
@@ -1467,29 +1467,29 @@ void PresenterSlideSorter::MouseOverManager::Paint (
 
     if (mxCanvas != rxCanvas)
         SetCanvas(rxCanvas);
-    if (rxCanvas != nullptr)
-    {
-        if ( ! mxBitmap.is())
-            mxBitmap = CreateBitmap(msText, maSlideBoundingBox.Width);
-        if (mxBitmap.is())
-        {
-            geometry::IntegerSize2D aSize (mxBitmap->getSize());
-            const double nXOffset (maSlideBoundingBox.X
-                + (maSlideBoundingBox.Width - aSize.Width) / 2.0);
-            const double nYOffset (maSlideBoundingBox.Y
-                + (maSlideBoundingBox.Height - aSize.Height) / 2.0);
-            rxCanvas->drawBitmap(
-                mxBitmap,
-                rendering::ViewState(
-                    geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                    rxClip),
-                rendering::RenderState(
-                    geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
-                    nullptr,
-                    Sequence<double>(4),
-                    rendering::CompositeOperation::SOURCE));
-        }
-    }
+    if (rxCanvas == nullptr)
+        return;
+
+    if ( ! mxBitmap.is())
+        mxBitmap = CreateBitmap(msText, maSlideBoundingBox.Width);
+    if (!mxBitmap.is())
+        return;
+
+    geometry::IntegerSize2D aSize (mxBitmap->getSize());
+    const double nXOffset (maSlideBoundingBox.X
+        + (maSlideBoundingBox.Width - aSize.Width) / 2.0);
+    const double nYOffset (maSlideBoundingBox.Y
+        + (maSlideBoundingBox.Height - aSize.Height) / 2.0);
+    rxCanvas->drawBitmap(
+        mxBitmap,
+        rendering::ViewState(
+            geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            rxClip),
+        rendering::RenderState(
+            geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
+            nullptr,
+            Sequence<double>(4),
+            rendering::CompositeOperation::SOURCE));
 }
 
 void PresenterSlideSorter::MouseOverManager::SetCanvas (

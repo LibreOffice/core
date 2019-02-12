@@ -202,19 +202,19 @@ void PresenterButton::SetCanvas (
             xComponent->dispose();
     }
 
-    if (mxPresenterHelper.is() && rxParentCanvas.is() && rxParentWindow.is())
+    if (!(mxPresenterHelper.is() && rxParentCanvas.is() && rxParentWindow.is()))
+        return;
+
+    mxCanvas = mxPresenterHelper->createSharedCanvas (
+        Reference<rendering::XSpriteCanvas>(rxParentCanvas, UNO_QUERY),
+        rxParentWindow,
+        rxParentCanvas,
+        rxParentWindow,
+        mxWindow);
+    if (mxCanvas.is())
     {
-        mxCanvas = mxPresenterHelper->createSharedCanvas (
-            Reference<rendering::XSpriteCanvas>(rxParentCanvas, UNO_QUERY),
-            rxParentWindow,
-            rxParentCanvas,
-            rxParentWindow,
-            mxWindow);
-        if (mxCanvas.is())
-        {
-            SetupButtonBitmaps();
-            SetCenter(maCenter);
-        }
+        SetupButtonBitmaps();
+        SetCenter(maCenter);
     }
 }
 
@@ -252,31 +252,31 @@ void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject&)
 void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 {
     ThrowIfDisposed();
-    if (mxWindow.is() && mxCanvas.is())
-    {
-        Reference<rendering::XBitmap> xBitmap;
-        if (meState == PresenterBitmapDescriptor::MouseOver)
-            xBitmap = mxMouseOverBitmap;
-        else
-            xBitmap = mxNormalBitmap;
-        if ( ! xBitmap.is())
-            return;
+    if (!(mxWindow.is() && mxCanvas.is()))
+        return;
 
-        rendering::ViewState aViewState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            nullptr);
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()),
-            Sequence<double>(4),
-            rendering::CompositeOperation::SOURCE);
+    Reference<rendering::XBitmap> xBitmap;
+    if (meState == PresenterBitmapDescriptor::MouseOver)
+        xBitmap = mxMouseOverBitmap;
+    else
+        xBitmap = mxNormalBitmap;
+    if ( ! xBitmap.is())
+        return;
 
-        mxCanvas->drawBitmap(xBitmap, aViewState, aRenderState);
+    rendering::ViewState aViewState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        nullptr);
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()),
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
 
-        Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
-        if (xSpriteCanvas.is())
-            xSpriteCanvas->updateScreen(false);
-    }
+    mxCanvas->drawBitmap(xBitmap, aViewState, aRenderState);
+
+    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+    if (xSpriteCanvas.is())
+        xSpriteCanvas->updateScreen(false);
 }
 
 //----- XMouseListener --------------------------------------------------------
