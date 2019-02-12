@@ -404,6 +404,7 @@ protected:
     bool mbVertical    : 1;
 
     bool mbVertLR      : 1;
+    bool mbVertLRBT    : 1;
 
     bool mbValidLineNum  : 1;
     bool mbFixSize       : 1;
@@ -602,6 +603,7 @@ public:
 
     inline bool IsVertical() const;
     inline bool IsVertLR() const;
+    inline bool IsVertLRBT() const;
 
     void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
     void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
@@ -954,6 +956,10 @@ bool SwFrame::IsVertical() const
 inline bool SwFrame::IsVertLR() const
 {
     return mbVertLR;
+}
+inline bool SwFrame::IsVertLRBT() const
+{
+    return mbVertLRBT;
 }
 inline bool SwFrame::IsRightToLeft() const
 {
@@ -1312,21 +1318,23 @@ struct SwRectFnCollection
 typedef SwRectFnCollection* SwRectFn;
 
 // This class allows to use proper methods regardless of orientation (LTR/RTL, horizontal or vertical)
-extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R;
+extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
 class SwRectFnSet {
 public:
     explicit SwRectFnSet(const SwFrame *pFrame)
         : m_bVert(pFrame->IsVertical())
         , m_bVertL2R(pFrame->IsVertLR())
+        , m_bVertL2RB2T(pFrame->IsVertLRBT())
     {
-        m_fnRect = m_bVert ? (m_bVertL2R ? fnRectVertL2R : fnRectVert) : fnRectHori;
+        m_fnRect = m_bVert ? (m_bVertL2R ? (m_bVertL2RB2T ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert) : fnRectHori;
     }
 
     void Refresh(const SwFrame *pFrame)
     {
         m_bVert = pFrame->IsVertical();
         m_bVertL2R = pFrame->IsVertLR();
-        m_fnRect = m_bVert ? (m_bVertL2R ? fnRectVertL2R : fnRectVert) : fnRectHori;
+        m_bVertL2RB2T = pFrame->IsVertLRBT();
+        m_fnRect = m_bVert ? (m_bVertL2R ? (m_bVertL2RB2T ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert) : fnRectHori;
     }
 
     bool IsVert() const    { return m_bVert; }
@@ -1395,6 +1403,7 @@ public:
 private:
     bool m_bVert;
     bool m_bVertL2R;
+    bool m_bVertL2RB2T;
     SwRectFn m_fnRect;
 };
 

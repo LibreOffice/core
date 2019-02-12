@@ -215,7 +215,8 @@ public:
     void SetOverColor( const Color &rColor ) { m_aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const bool bOutline );
-           void SetVertical( sal_uInt16 nDir, const bool bVertLayout = false );
+    void SetVertical(sal_uInt16 nDir, const bool bVertLayout = false,
+                     const bool bVertLayoutLRBT = false);
     inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( FontKerning nAutoKern );
     inline void SetTransparent( const bool bTrans );
