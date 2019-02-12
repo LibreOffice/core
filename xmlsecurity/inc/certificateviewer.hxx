@@ -37,111 +37,131 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
-class CertificateViewer : public TabDialog
+class CertificateViewerGeneralTP;
+class CertificateViewerDetailsTP;
+class CertificateViewerCertPathTP;
+
+class CertificateViewer : public weld::GenericDialogController
 {
 private:
     friend class CertificateViewerGeneralTP;
     friend class CertificateViewerDetailsTP;
     friend class CertificateViewerCertPathTP;
 
-    VclPtr<TabControl>         mpTabCtrl;
-    sal_uInt16          mnGeneralId;
-    sal_uInt16          mnDetailsId;
-    sal_uInt16          mnPathId;
-
     bool const          mbCheckForPrivateKey;
 
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Reference< css::security::XCertificate > mxCert;
+
+    VclPtr<CertificateChooser> mpParentChooser;
+
+    std::unique_ptr<weld::Notebook> mxTabCtrl;
+
+    std::unique_ptr<CertificateViewerGeneralTP> mxGeneralPage;
+    std::unique_ptr<CertificateViewerDetailsTP> mxDetailsPage;
+    std::unique_ptr<CertificateViewerCertPathTP> mxPathId;
+
+    DECL_LINK(ActivatePageHdl, const OString&, void);
+
 public:
-    CertificateViewer( vcl::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
-    virtual             ~CertificateViewer() override;
-    virtual void        dispose() override;
+    CertificateViewer(weld::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey, CertificateChooser* pParentChooser);
+    CertificateChooser* GetParentChooser() { return mpParentChooser; }
 };
 
-
-class CertificateViewerTP : public TabPage
+class CertificateViewerTP
 {
 protected:
-    VclPtr<CertificateViewer>  mpDlg;
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Container> mxContainer;
+    CertificateViewer* mpDlg;
+
 public:
-    CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
-        const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
-    virtual ~CertificateViewerTP() override;
-    virtual void dispose() override;
+    CertificateViewerTP(weld::Container* pParent, const OUString& rUIXMLDescription,
+                        const OString& rID, CertificateViewer* pDlg);
 };
 
 class CertificateViewerGeneralTP : public CertificateViewerTP
 {
 private:
-    VclPtr<FixedImage>         m_pCertImg;
-    VclPtr<FixedText>          m_pHintNotTrustedFT;
-    VclPtr<FixedText>          m_pIssuedToLabelFT;
-    VclPtr<FixedText>          m_pIssuedToFT;
-    VclPtr<FixedText>          m_pIssuedByLabelFT;
-    VclPtr<FixedText>          m_pIssuedByFT;
-    VclPtr<FixedText>          m_pValidFromDateFT;
-    VclPtr<FixedText>          m_pValidToDateFT;
-    VclPtr<FixedImage>         m_pKeyImg;
-    VclPtr<FixedText>          m_pHintCorrespPrivKeyFT;
-public:
-                        CertificateViewerGeneralTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerGeneralTP() override;
-    virtual void        dispose() override;
+    std::unique_ptr<weld::Image> m_xCertImg;
+    std::unique_ptr<weld::Label> m_xHintNotTrustedFT;
+    std::unique_ptr<weld::Label> m_xIssuedToLabelFT;
+    std::unique_ptr<weld::Label> m_xIssuedToFT;
+    std::unique_ptr<weld::Label> m_xIssuedByLabelFT;
+    std::unique_ptr<weld::Label> m_xIssuedByFT;
+    std::unique_ptr<weld::Label> m_xValidFromDateFT;
+    std::unique_ptr<weld::Label> m_xValidToDateFT;
+    std::unique_ptr<weld::Image> m_xKeyImg;
+    std::unique_ptr<weld::Label> m_xHintCorrespPrivKeyFT;
 
-    virtual void        ActivatePage() override;
+public:
+    CertificateViewerGeneralTP(weld::Container* pParent, CertificateViewer* pDlg);
 };
 
+struct Details_UserDatat
+{
+    OUString const  maTxt;
+    bool const      mbFixedWidthFont;
+
+    Details_UserDatat(const OUString& rTxt, bool bFixedWidthFont)
+        : maTxt(rTxt)
+        , mbFixedWidthFont(bFixedWidthFont)
+    {
+    }
+};
 
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    VclPtr<SvSimpleTableContainer> m_pElementsLBContainer;
-    VclPtr<SvSimpleTable>          m_pElementsLB;
-    VclPtr<VclMultiLineEdit>       m_pValueDetails;
-    vcl::Font                      m_aStdFont;
-    vcl::Font                      m_aFixedWidthFont;
+    std::vector<std::unique_ptr<Details_UserDatat>> m_aUserData;
 
-    DECL_LINK(    ElementSelectHdl, SvTreeListBox*, void );
+    std::unique_ptr<weld::TreeView> m_xElementsLB;
+    std::unique_ptr<weld::TextView> m_xValueDetails;
+
+    DECL_LINK(ElementSelectHdl, weld::TreeView&, void);
     void                Clear();
-    void                InsertElement( const OUString& _rField, const OUString& _rValue,
-                                       const OUString& _rDetails, bool _bFixedWidthFont = false );
+    void                InsertElement(const OUString& rField, const OUString& rValue,
+                                      const OUString& rDetails, bool bFixedWidthFont = false);
 public:
-                        CertificateViewerDetailsTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerDetailsTP() override;
-    virtual void        dispose() override;
-
-    virtual void        ActivatePage() override;
+    CertificateViewerDetailsTP(weld::Container* pParent, CertificateViewer* pDlg);
 };
 
+struct CertPath_UserData
+{
+    css::uno::Reference< css::security::XCertificate > mxCert;
+    bool const mbValid;
+
+    CertPath_UserData(css::uno::Reference<css::security::XCertificate> const & xCert, bool bValid)
+        : mxCert(xCert)
+        , mbValid(bValid)
+    {
+    }
+};
 
 class CertificateViewerCertPathTP : public CertificateViewerTP
 {
 private:
-    VclPtr<SvTreeListBox>      mpCertPathLB;
-    VclPtr<PushButton>         mpViewCertPB;
-    VclPtr<VclMultiLineEdit>   mpCertStatusML;
-
-    VclPtr<CertificateViewer>  mpParent;
+    CertificateViewer*  mpParent;
     bool                mbFirstActivateDone;
-    Image               maCertImage;
-    Image               maCertNotValidatedImage;
-    OUString            msCertOK;
-    OUString            msCertNotValidated;
 
-    DECL_LINK(    ViewCertHdl, Button*, void );
-    DECL_LINK(    CertSelectHdl, SvTreeListBox*, void );
+    std::vector<std::unique_ptr<CertPath_UserData>> maUserData;
+
+    std::unique_ptr<weld::TreeView> mxCertPathLB;
+    std::unique_ptr<weld::Button> mxViewCertPB;
+    std::unique_ptr<weld::TextView> mxCertStatusML;
+    std::unique_ptr<weld::Label> mxCertOK;
+    std::unique_ptr<weld::Label> mxCertNotValidated;
+
+    DECL_LINK(ViewCertHdl, weld::Button&, void);
+    DECL_LINK(CertSelectHdl, weld::TreeView&, void);
     void                Clear();
-    SvTreeListEntry*    InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
-                                    const css::uno::Reference< css::security::XCertificate >& rxCert,
-                                    bool bValid);
+    void                InsertCert(weld::TreeIter* pParent, const OUString& _rName,
+                                   const css::uno::Reference< css::security::XCertificate >& rxCert,
+                                   bool bValid);
 
 public:
-                        CertificateViewerCertPathTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerCertPathTP() override;
-    virtual void        dispose() override;
-
-    virtual void        ActivatePage() override;
+    CertificateViewerCertPathTP(weld::Container* pParent, CertificateViewer* pDlg);
+    void ActivatePage();
 };
 
 
