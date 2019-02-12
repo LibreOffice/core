@@ -547,7 +547,7 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     {
         if (pState->mnState & WindowStateState::Maximized)
             SetWindowStateImpl(Qt::WindowMaximized);
-        else if ((pState->mnState & WindowStateState::Minimized))
+        else if (pState->mnState & WindowStateState::Minimized)
             SetWindowStateImpl(Qt::WindowMinimized);
         else
             SetWindowStateImpl(Qt::WindowNoState);
