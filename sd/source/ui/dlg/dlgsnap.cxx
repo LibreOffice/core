@@ -71,26 +71,17 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
 
     // determine max and min values depending on
     // WorkArea, PoolUnit and FieldUnit:
-    SetMetricValue(*m_xMtrFldX, aLeftTop.X(), ePoolUnit );
-
-    int nValue = m_xMtrFldX->get_value(FieldUnit::NONE);
-    nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldX->set_min(nValue, FieldUnit::NONE);
-
-    SetMetricValue(*m_xMtrFldX, aRightBottom.X(), ePoolUnit);
-    nValue = m_xMtrFldX->get_value(FieldUnit::NONE);
-    nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldX->set_max(nValue, FieldUnit::NONE);
-
-    SetMetricValue(*m_xMtrFldY, aLeftTop.Y(), ePoolUnit);
-    nValue = m_xMtrFldY->get_value(FieldUnit::NONE);
-    nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldY->set_min(nValue, FieldUnit::NONE);
-
-    SetMetricValue(*m_xMtrFldY, aRightBottom.Y(), ePoolUnit);
-    nValue = m_xMtrFldY->get_value(FieldUnit::NONE);
-    nValue = sal_Int32(nValue / aUIScale);
-    m_xMtrFldY->set_max(nValue, FieldUnit::NONE);
+    auto const map = [ePoolUnit](std::unique_ptr<weld::MetricSpinButton> const & msb, long value) {
+            auto const n1 = OutputDevice::LogicToLogic(value, ePoolUnit, MapUnit::Map100thMM);
+            auto const n2 = msb->normalize(n1);
+            auto const n3 = msb->convert_value_from(n2, FieldUnit::MM_100TH);
+            auto const n4 = msb->convert_value_to(n3, FieldUnit::NONE);
+            return n4;
+        };
+    m_xMtrFldX->set_min(map(m_xMtrFldX, aLeftTop.X()), FieldUnit::NONE);
+    m_xMtrFldX->set_max(map(m_xMtrFldX, aRightBottom.X()), FieldUnit::NONE);
+    m_xMtrFldY->set_min(map(m_xMtrFldY, aLeftTop.Y()), FieldUnit::NONE);
+    m_xMtrFldY->set_max(map(m_xMtrFldY, aRightBottom.Y()), FieldUnit::NONE);
 
     // set values
     nXValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
