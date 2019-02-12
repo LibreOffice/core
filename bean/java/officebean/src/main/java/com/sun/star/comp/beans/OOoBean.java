@@ -28,7 +28,7 @@ import com.sun.star.uno.UnoRuntime;
 // @requirement FUNC.PERF.LRN/0.6
 // @requirement FUNC.PERF.LOC/0.6
 // @requirement FUNC.PERF.FIX/0.6
-/** This is the basic JavaBean for all OOo application modules.
+/** This is the basic JavaBean for all AOO application modules.
 
     @requirement FUNC.RES.OTH/0.2
         No other resources are needed yet.
@@ -44,18 +44,18 @@ public class OOoBean
         // @requirement FUNC.PER/0.2
         java.io.Externalizable
 {
-    // timeout values (milli secs)
+    // timeout values (milliseconds)
     int nOOoStartTimeOut = 60000;
     int nOOoCallTimeOut =   3000;
     int nOOoCheckCycle =    1000;
 
-    // This member contains the connection to an OOo instance if established.
+    // This member contains the connection to an AOO instance if established.
     private transient OfficeConnection      iConnection;
     private transient EventListener         xConnectionListener;
 
     // @requirement FUNC.BEAN.VIEW/0.4
     // @requirement FUNC.BEAN.EDIT/0.4
-    // This member contains the OOo window
+    // This member contains the AOO window
     // if a connection is established.
     // It is a child of the OOoBean canvas.
     private OfficeWindow xFrameWindow;
@@ -79,7 +79,6 @@ public class OOoBean
     private boolean bStandardBarVisible = true;
     private boolean bToolBarVisible = true;
     private boolean bStatusBarVisible = true;
-
 
     // debugging method
     private void dbgPrint( String aMessage )
@@ -133,34 +132,34 @@ public class OOoBean
         { /* impossible here */ }
     }
 
-    /** Sets the timeout for methods which launch OOo in milli seconds.
+    /** Sets the timeout for methods which launch AOO in milliseconds.
 
-        This method does not need a connection to an OOo instance.
+        This method does not need a connection to an AOO instance.
      */
     public void setOOoStartTimeOut( int nMilliSecs )
     {
         nOOoStartTimeOut = nMilliSecs;
     }
 
-    /** Sets the timeout for normal OOO methods calls in milli seconds.
+    /** Sets the timeout for normal AOO methods calls in milliseconds.
 
-        This method does not need a connection to an OOo instance.
+        This method does not need a connection to an AOO instance.
      */
     public void setOOoCallTimeOut( int nMilliSecs )
     {
         nOOoCallTimeOut = nMilliSecs;
     }
 
-    /** Sets the period length in milli seconds to check the OOo connection.
+    /** Sets the period length in milliseconds to check the AOO connection.
 
-        This method does not need a connection to an OOo instance.
+        This method does not need a connection to an AOO instance.
      */
     public void setOOoCheckCycle( int nMilliSecs )
     {
         nOOoCheckCycle = nMilliSecs;
     }
 
-    /** Sets the a connection to an OOo instance.
+    /** Sets the a connection to an AOO instance.
 
         @internal
      */
@@ -189,7 +188,7 @@ public class OOoBean
     }
 
     // @requirement FUNC.CON.STRT/0.4
-    /** Starts a connection to an OOo instance which is lauched if not running.
+    /** Starts a connection to an AOO instance which is launched if not running.
 
         @throws HasConnectionException
             if a connection was already established.
@@ -209,7 +208,7 @@ public class OOoBean
     }
 
     // @requirement FUNC.CON.CHK/0.7
-    /** Returns true if this OOoBean is connected to an OOo instance,
+    /** Returns true if this OOoBean is connected to an AOO instance,
         false otherwise.
 
         @deprecated This method is not useful in a multithreaded environment. Then
@@ -223,7 +222,7 @@ public class OOoBean
     }
 
     // @requirement FUNC.CON.STOP/0.4
-    /** Disconnects from the connected OOo instance.
+    /** Disconnects from the connected AOO instance.
 
         If there was no connection yet or anymore, this method can be called
         anyway.
@@ -233,7 +232,7 @@ public class OOoBean
      */
     public synchronized void stopOOoConnection()
     {
-        // clear OOo document, frame etc.
+        // clear AOO document, frame etc.
         clear();
 
         // cut the connection
@@ -252,7 +251,7 @@ public class OOoBean
 
     // @requirement FUNC.CON.STOP/0.4 (via XComponent.dispose())
     // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
-    /** Returns the a connection to an OOo instance.
+    /** Returns the a connection to an AOO instance.
 
         If no connection exists, a default connection will be created. An OfficeConnection
         can be used to register listeners of type com.sun.star.lang.EventListener,
@@ -316,7 +315,7 @@ public class OOoBean
         return xServiceFactory;
     }
 
-    /** Returns the XDesktop interface of the OOo instance used by this OOoBean.
+    /** Returns the XDesktop interface of the AOO instance used by this OOoBean.
 
         @throws NoConnectionException
             if no connection is established and no default connection can be established.
@@ -341,13 +340,13 @@ public class OOoBean
 
     /** Resets this bean to an empty document.
 
-       If a document is loaded and the content modified,
-       the changes are dismissed.  Otherwise nothing happens.
+        If a document is loaded and the content modified,
+        the changes are dismissed. Otherwise nothing happens.
 
-       This method is intended to be overridden in derived classes.
-       This implementation simply calls clear.
+        This method is intended to be overridden in derived classes.
+        This implementation simply calls clear.
 
-       @param bClearStateToo
+        @param bClearStateToo
         Not only the document content but also the state of the bean,
         like visibility of child components is cleared.
 
@@ -372,7 +371,7 @@ public class OOoBean
 
         Any loaded document is unloaded, no matter whether it is modified or not.
         After calling this method, the OOoBean has no office document and no frame
-        anymore.  The connection will stay, though.
+        anymore. The connection will stay, though.
 
         This method works with or without an established connection.
      */
@@ -384,8 +383,8 @@ public class OOoBean
         {
             CallWatchThread aCallWatchThread =
                 new CallWatchThread( nOOoCallTimeOut, "clear" );
-            //By closing the frame we avoid that dialogs are displayed, for example when
-            //the document is modified.
+            // By closing the frame we avoid that dialogs are displayed, for example when
+            // the document is modified.
             com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
                 UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
             if ( xCloseable != null )
@@ -486,14 +485,14 @@ public class OOoBean
         system window may be released by it's parent AWT/Swing component.
 
         This is the case when java.awt.Component.isDisplayable() returns
-        true.  This is definitely the case when the OOoBean is removed
+        true. This is definitely the case when the OOoBean is removed
         from it's parent container.
 
         @throws SystemWindowException
-            if system window is not acquired.
+        if system window is not acquired.
 
         @throws NoConnectionException
-            if the connection is not established.
+        if the connection is not established.
 
         @deprecated When Component.removeNotify of the parent window of the actual
         office window is called, then the actions are performed for which this method
@@ -527,7 +526,7 @@ public class OOoBean
             if either of the arguments is out of the specified range.
 
         @throws java.io.IOException
-            if an IO error occurs reading the ressource specified by the URL.
+            if an IO error occurs reading the resource specified by the URL.
 
         @throws com.sun.star.lang.NoConnectionException
             if no connection can be established.
@@ -553,13 +552,13 @@ public class OOoBean
             boolean bLoaded = false;
             while ( !bLoaded )
             {
-                // watch loading in a thread with a timeout (if OOo hangs)
+                // watch loading in a thread with a timeout (if AOO hangs)
                 CallWatchThread aCallWatchThread =
                     new CallWatchThread( nOOoStartTimeOut, "loadFromURL" );
 
                 try
                 {
-                    // get window from OOo on demand
+                    // get window from AOO on demand
                     if ( xFrameWindow == null )
                     {
                         // Establish the connection by request of the ServiceFactory.
@@ -604,7 +603,7 @@ public class OOoBean
                                         }
                                         catch (Exception e)
                                         {
-                                            /*ignore!*/
+                                            /* ignore! */
                                         }
 
                     // get XComponentLoader from frame
@@ -623,8 +622,8 @@ public class OOoBean
                         try {
                             aDocument.setModified(false);
                         } catch (com.sun.star.beans.PropertyVetoException ep) {
-                            //it dosn't make sense to throw the exception here. The interface does not
-                            //offer a way to add/remove respective listeners.
+                            // it doesn't make sense to throw the exception here. The interface does not
+                            // offer a way to add/remove respective listeners.
                         } catch (com.sun.star.lang.DisposedException ed) {
                             // can be disposed if user closed document via UI
                         }
@@ -639,7 +638,7 @@ public class OOoBean
                             if ( aFrame != null && xOldController != null )
                                 if (xOldController.suspend(true) == false)
                                     throw new com.sun.star.util.CloseVetoException(
-                                            "Dokument is still being used and cannot be closed.", this);
+                                            "Document is still being used and cannot be closed.", this);
 
                         }
                         catch (java.lang.IllegalStateException exp)
@@ -726,24 +725,24 @@ public class OOoBean
             com.sun.star.util.CloseVetoException
     {
         // wrap Java stream into UNO stream
-                /*
+                 /*
         com.sun.star.io.XInputStream xStream =
                 new com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter(
                     iInStream );
                  */
-                 // copy stream....
+                 // copy stream...
 
-                 int s = 4096;
-                 int r=0 ,n = 0;
-                 byte[] buffer = new byte[s];
-                 byte[] newBuffer = null;
-                 while ((r = iInStream.read(buffer, n, buffer.length-n))>0) {
-                     n += r;
-                     if (iInStream.available() > buffer.length - n) {
-                         newBuffer = new byte[buffer.length*2];
-                         System.arraycopy(buffer, 0, newBuffer, 0, n);
-                         buffer = newBuffer;
-                     }
+                int s = 4096;
+                int r=0 ,n = 0;
+                byte[] buffer = new byte[s];
+                byte[] newBuffer = null;
+                while ((r = iInStream.read(buffer, n, buffer.length-n))>0) {
+                    n += r;
+                    if (iInStream.available() > buffer.length - n) {
+                        newBuffer = new byte[buffer.length*2];
+                        System.arraycopy(buffer, 0, newBuffer, 0, n);
+                        buffer = newBuffer;
+                    }
                 }
                 if (buffer.length != n) {
                     newBuffer = new byte[n];
@@ -776,7 +775,7 @@ public class OOoBean
             com.sun.star.lang.IllegalArgumentException,
             com.sun.star.util.CloseVetoException
     {
-        // wrap byte arrray into UNO stream
+        // wrap byte array into UNO stream
         com.sun.star.io.XInputStream xStream =
                 new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(
                     aInBuffer );
@@ -798,7 +797,7 @@ public class OOoBean
         {@link #storeToStream storeToStream}. The workaround
         is to start the office with the option -norestore, which disables the automatic
         backup and recovery mechanism. OOoBean offers currently no supported way of providing
-        startup options for OOo. But it is possible to set a Java property when starting
+        startup options for AOO. But it is possible to set a Java property when starting
         Java, which is examined by OOoBean:
         <pre>
             java -Dcom.sun.star.officebean.Options=-norestore  ...
@@ -811,7 +810,7 @@ public class OOoBean
             if either of the arguments is out of the specified range.
 
         @throws java.io.IOException
-            if an IO error occurs reading the ressource specified by the URL.
+            if an IO error occurs reading the resource specified by the URL.
 
         @throws com.sun.star.lang.NoConnectionException
             if no connection is established.
@@ -906,7 +905,7 @@ public class OOoBean
             java.io.IOException,
             com.sun.star.lang.IllegalArgumentException
     {
-        // wrap byte arrray into UNO stream
+        // wrap byte array into UNO stream
         com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream =
                 new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
                     aOutBuffer );
@@ -939,7 +938,7 @@ public class OOoBean
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Frame</a> implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -965,7 +964,7 @@ public class OOoBean
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Controller</a> implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -994,7 +993,7 @@ public class OOoBean
         <type scope="com::sun::star::document">OfficeDocument</a>
         implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -1011,16 +1010,16 @@ public class OOoBean
 
     /** Sets visibility of all tool bars known by this OOoBean version.
 
-        Initially all tool bars are visible.  By hiding all tool bars
+        Initially all tool bars are visible. By hiding all tool bars
         utilizing this method, it is possible to turn just a subset of
         tool bars on afterwards, no matter whether all available tool
         bars are known or not.
         <p>
-        If an older OOoBean instance is used with a newer OOo instance,
+        If an older OOoBean instance is used with a newer AOO instance,
         some tool bars might not be affected by this method.
         <p>
         If no connection is established or no document is loaded,
-        the setting is memorized until a document is loaded.  Same
+        the setting is memorized until a document is loaded. Same
         is valid when the connection dies within this function call.
 
         @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
@@ -1047,7 +1046,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     }
 
     //--------------------------------------------------------------------------
-    /** Applies all tool visiblities to the real thing.
+    /** Applies all tool visibilities to the real thing.
 
         @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
         which can be obtained from a frame, to control toolbars. See also
@@ -1065,7 +1064,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         bIgnoreVisibility = false;
     }
 
-    /** Helper method to set tool bar visibilty.
+    /** Helper method to set tool bar visibility.
 
         @param bnewValue
             If false, the tool bar is disabled,
@@ -1104,18 +1103,18 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                     else
                         xLayoutManager.hideElement( aResourceURL );
                 }
-                catch (  com.sun.star.beans.UnknownPropertyException aExc )
+                catch ( com.sun.star.beans.UnknownPropertyException aExc )
                 {
                     throw new RuntimeException( "not layout manager found" );
                 }
-                catch (  com.sun.star.lang.WrappedTargetException aExc )
+                catch ( com.sun.star.lang.WrappedTargetException aExc )
                 {
                     throw new RuntimeException( "not layout manager found" );
                 }
 
                 // notify change
                 firePropertyChange( aProperty, bOldValue, bNewValue );
-           }
+            }
         }
 
         // end runtime timeout
@@ -1156,7 +1155,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Returns the visibility of the menu bar.
 
-        This method works independently from a connetion or loaded document.
+        This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1173,7 +1172,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bMenuBarVisible;
     }
 
-    /** Sets the main function bar visibilty.
+    /** Sets the main function bar visibility.
 
         Initially the standard bar is visible.
 
@@ -1204,7 +1203,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Returns the visibility of the main function bar.
 
-        This method works independently from a connetion or loaded document.
+        This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1221,7 +1220,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bStandardBarVisible;
     }
 
-    /** Sets the tool function bar visibilty.
+    /** Sets the tool function bar visibility.
 
         Initially the tool bar is visible.
 
@@ -1252,7 +1251,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Returns the visibility of the tool function bar.
 
-        This method works independently from a connetion or loaded document.
+        This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1269,7 +1268,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bToolBarVisible;
     }
 
-    /** Sets the status function bar visibilty.
+    /** Sets the status function bar visibility.
 
         Initially the status bar is visible.
 
@@ -1300,7 +1299,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Returns the visibility of the status function bar.
 
-        This method works independently from a connetion or loaded document.
+        This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1321,7 +1320,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     // Helper Methods / Internal Methods
     //---------------------------------------------------------------------------
 
-    // general instance intializer
+    // general instance initializer
     {
         setLayout(new java.awt.BorderLayout());
     }
@@ -1404,7 +1403,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             // listen on a dying connection
             iConnection.addEventListener( this );
 
-            // listen on a terminating OOo
+            // listen on a terminating AOO
             getOOoDesktop().addTerminateListener( this );
 
             // start this thread as a daemon
@@ -1420,7 +1419,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             }
             catch ( Throwable aExc ) {};
 
-            // do not listen on a terminating OOo anymore
+            // do not listen on a terminating AOO anymore
             try {
                 getOOoDesktop().removeTerminateListener( this );
             }
@@ -1430,29 +1429,29 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             this.interrupt();
         }
 
-        /// gets called when the connection dies
+        // gets called when the connection dies
         public void disposing( /*IN*/ com.sun.star.lang.EventObject Source )
         {
             // empty the OOoBean and cut the connection
             stopOOoConnection();
         }
 
-        /// gets called when the user wants to terminate OOo
+        // gets called when the user wants to terminate AOO
         public void queryTermination( /*IN*/ com.sun.star.lang.EventObject Event )
             throws com.sun.star.frame.TerminationVetoException
         {
-            // disallow termination of OOo while a OOoBean exists
+            // disallow termination of AOO while a OOoBean exists
             throw new com.sun.star.frame.TerminationVetoException();
         }
 
-        /// gets called when OOo terminates
+        // gets called when AOO terminates
         public void notifyTermination( /*IN*/ com.sun.star.lang.EventObject Event )
         {
             // empty the OOoBean and cut the connection
             stopOOoConnection();
         }
 
-        /// watching the connection
+        // watching the connection
         public void run()
         {
             dbgPrint( "EventListener(" + aTag + ").run()" );
@@ -1461,7 +1460,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             CallWatchThread aCallWatchThread =
                 new CallWatchThread( nOOoCallTimeOut, "EventListener(" + aTag + ")" );
 
-            // continue to trying to connect the OOo instance
+            // continue to trying to connect the AOO instance
             long n = 0;
             while ( isInterrupted() == false
                     && iConnection != null
@@ -1473,7 +1472,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 com.sun.star.lang.XMultiComponentFactory xServiceManager = null;
                 try
                 {
-                    // an arbitrary (but cheap) call into OOo
+                    // an arbitrary (but cheap) call into AOO
                     xServiceManager = iConnection.getComponentContext().getServiceManager();
 
                     // call successfully performed, restart watch for next loop
@@ -1501,14 +1500,10 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 catch ( java.lang.InterruptedException aExc )
                 {
                     dbgPrint("EventListener(" + aTag + ") interupted.");
-                    //thread can be ended by EvendListener.end();
+                    // thread can be ended by EventListener.end();
                     break;
                 }
             }
         }
     }
-
 }
-
-
-
