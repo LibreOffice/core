@@ -16,6 +16,24 @@
       "revId": "38d1288fe6bd924cf29b3ccafc120886e99a7fd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_53212bb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001959
+      },
+      "writtenOn": "2019-02-12T12:11:53Z",
+      "side": 1,
+      "message": "Thanks. Bug reported at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d123404\n\nNB: Attempted to add to this patch set, but it created a new one at https://gerrit.libreoffice.org/#/c/67722/. How do I fix this?",
+      "parentUuid": "1f485f77_1374d334",
+      "revId": "38d1288fe6bd924cf29b3ccafc120886e99a7fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
