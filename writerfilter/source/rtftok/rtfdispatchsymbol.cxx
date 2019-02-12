@@ -209,9 +209,9 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             tools::SvRef<TableRowBuffer> const pBuffer(
                 new TableRowBuffer(m_aTableBufferStack.back(), m_aNestedTableCellsSprms,
                                    m_aNestedTableCellsAttributes, m_nNestedCells));
-            prepareProperties(m_aStates.top(), pBuffer->pParaProperties, pBuffer->pFrameProperties,
-                              pBuffer->pRowProperties, m_nNestedCells,
-                              m_nNestedCurrentCellX - m_nNestedTRLeft);
+            prepareProperties(m_aStates.top(), pBuffer->GetParaProperties(),
+                              pBuffer->GetFrameProperties(), pBuffer->GetRowProperties(),
+                              m_nNestedCells, m_nNestedCurrentCellX - m_nNestedTRLeft);
 
             if (m_aTableBufferStack.size() == 1 || !m_aStates.top().pCurrentBuffer)
             {
