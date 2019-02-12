@@ -3016,6 +3016,19 @@ public:
         m_xTextView->SetReadOnly(!bEditable);
     }
 
+    virtual void set_monospace(bool bMonospace) override
+    {
+        vcl::Font aOrigFont = m_xTextView->GetControlFont();
+        vcl::Font aFont;
+        if (bMonospace)
+            aFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, GetDefaultFontFlags::OnlyOne, m_xTextView);
+        else
+            aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
+        aFont.SetFontHeight(aOrigFont.GetFontHeight());
+        m_xTextView->SetFont(aFont);
+        m_xTextView->SetControlFont(aFont);
+    }
+
     virtual ~SalInstanceTextView() override
     {
         m_xTextView->SetModifyHdl(Link<Edit&, void>());

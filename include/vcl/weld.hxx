@@ -1281,6 +1281,7 @@ public:
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;
     virtual void set_editable(bool bEditable) = 0;
+    virtual void set_monospace(bool bMonospace) = 0;
     int get_height_rows(int nRows) const
     {
         //can improve this if needed

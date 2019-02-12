@@ -2,6 +2,7 @@ xmlsecurity/uiconfig/ui/certpage.ui://GtkLabel[@id='certok'] orphan-label
 xmlsecurity/uiconfig/ui/certpage.ui://GtkLabel[@id='certnotok'] orphan-label
 xmlsecurity/uiconfig/ui/certpage.ui://GtkImage[@id='imgok'] no-labelled-by
 xmlsecurity/uiconfig/ui/certpage.ui://GtkImage[@id='imgnotok'] no-labelled-by
+xmlsecurity/uiconfig/ui/certpage.ui://GtkTreeViewColumn[@id='treeviewcolumn3'] no-labelled-by
 xmlsecurity/uiconfig/ui/certgeneral.ui://GtkImage[@id='certimage'] no-labelled-by
 xmlsecurity/uiconfig/ui/certgeneral.ui://GtkLabel[@id='label1'] orphan-label
 xmlsecurity/uiconfig/ui/certgeneral.ui://GtkLabel[@id='hintnotrust'] orphan-label

@@ -347,8 +347,8 @@ void CertificateChooser::ImplShowCertificateDetails()
     if (!userData->xSecurityEnvironment.is() || !userData->xCertificate.is())
         return;
 
-    ScopedVclPtrInstance< CertificateViewer > aViewer( this, userData->xSecurityEnvironment, userData->xCertificate, true );
-    aViewer->Execute();
+    CertificateViewer aViewer(GetFrameWeld(), userData->xSecurityEnvironment, userData->xCertificate, true, this);
+    aViewer.run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

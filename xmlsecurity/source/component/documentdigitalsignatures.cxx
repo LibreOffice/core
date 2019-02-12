@@ -599,10 +599,9 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        ScopedVclPtrInstance<CertificateViewer> aViewer(nullptr, aSignatureManager.getSecurityEnvironment(), Certificate, false);
-        aViewer->Execute();
+        CertificateViewer aViewer(nullptr, aSignatureManager.getSecurityEnvironment(), Certificate, false, nullptr);
+        aViewer.run();
     }
-
 }
 
 sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
