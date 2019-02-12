@@ -76,6 +76,13 @@ published constants WritingMode2
     /** obtain actual writing mode from the context of the object.
     */
     const short CONTEXT = 4;
+
+    /** text within a line is written bottom-to-top. Lines and blocks are
+        placed left-to-right.
+
+        @since LibreOffice 6.3
+     */
+    const short BT_LR = 5;
 };
 
 
