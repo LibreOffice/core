@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_53d7ebc0",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T10:10:41Z",
+      "side": 1,
+      "message": "if you look at the way the variable is used, the only values that matter are 0 and not-0, so it can be simply a \"bool\" that starts as \"false\" and is set to \"true\" where it is incremented.\n\n(should be renamed to \"mbLevelWarning\" while at it)",
+      "revId": "c3466d110e6b97169a2c71c507704477561583d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
