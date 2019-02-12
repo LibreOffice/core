@@ -53,6 +53,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

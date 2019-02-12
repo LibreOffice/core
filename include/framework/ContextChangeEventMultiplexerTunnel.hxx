@@ -8,8 +8,12 @@
  */
 
 #include <framework/fwedllapi.h>
-#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <functional>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::ui { class XContextChangeEventListener; }
+namespace com::sun::star::uno { class XInterface; }
 
 namespace framework {
 

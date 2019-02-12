@@ -20,9 +20,11 @@
 #ifndef INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
 #define INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
 
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::container { class XIndexContainer; }
+class Menu;
 
 
 namespace framework

@@ -20,13 +20,13 @@
 #define INCLUDED_FRAMEWORK_STATUSBARCONFIGURATION_HXX
 
 #include <framework/fwedllapi.h>
-#include <vcl/status.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::container { class XIndexContainer; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace framework
 {

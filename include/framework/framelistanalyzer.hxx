@@ -20,11 +20,14 @@
 #ifndef INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 #define INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <framework/fwedllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
+
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XFramesSupplier; }
 
 /** These enums can be combined as flags to enable/disable
     special search algorithm during analyze phase.

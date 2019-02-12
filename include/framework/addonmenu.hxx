@@ -19,14 +19,18 @@
 #ifndef INCLUDED_FRAMEWORK_ADDONMENU_HXX
 #define INCLUDED_FRAMEWORK_ADDONMENU_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ustring.hxx>
+#include <vcl/vclptr.hxx>
 
-#include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+
+class MenuBar;
+class PopupMenu;
 
 #define ADDONMENU_ITEMID_START       2000
 #define ADDONMENU_ITEMID_END         3000

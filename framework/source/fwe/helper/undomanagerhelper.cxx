@@ -18,13 +18,16 @@
  */
 
 #include <framework/undomanagerhelper.hxx>
+#include <framework/imutex.hxx>
 
 #include <com/sun/star/document/EmptyUndoStackException.hpp>
 #include <com/sun/star/document/UndoContextNotClosedException.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/NotLockedException.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>

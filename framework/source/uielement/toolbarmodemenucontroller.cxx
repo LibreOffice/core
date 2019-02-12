@@ -35,6 +35,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/EnumContext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/types.hxx>

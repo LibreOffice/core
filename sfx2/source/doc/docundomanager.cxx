@@ -28,6 +28,7 @@
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 #include <framework/undomanagerhelper.hxx>
+#include <framework/imutex.hxx>
 
 #include <stack>
 

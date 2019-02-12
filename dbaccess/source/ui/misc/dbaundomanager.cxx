@@ -24,6 +24,7 @@
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/undomanagerhelper.hxx>
+#include <framework/imutex.hxx>
 
 namespace dbaui
 {

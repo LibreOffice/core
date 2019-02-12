@@ -21,12 +21,16 @@
 #define INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
 #include <framework/fwedllapi.h>
-#include <framework/imutex.hxx>
-
-#include <com/sun/star/document/XUndoManager.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
+
+namespace com::sun::star::document { class XUndoAction; }
+namespace com::sun::star::document { class XUndoManager; }
+namespace com::sun::star::document { class XUndoManagerListener; }
+namespace com::sun::star::util { class XModifyListener; }
+namespace framework { class IMutex; }
 
 class SfxUndoManager;
 

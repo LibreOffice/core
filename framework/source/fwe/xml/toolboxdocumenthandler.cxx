@@ -27,6 +27,8 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 
 #include <sal/config.h>
 #include <sal/macros.h>

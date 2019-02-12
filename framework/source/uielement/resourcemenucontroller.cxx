@@ -11,6 +11,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
+#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/embed/VerbAttributes.hpp>

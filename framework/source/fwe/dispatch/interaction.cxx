@@ -20,6 +20,8 @@
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <general.h>
+#include <com/sun/star/document/XInteractionFilterSelect.hpp>
+#include <com/sun/star/document/NoSuchFilterRequest.hpp>
 
 using namespace ::com::sun::star;
 

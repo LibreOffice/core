@@ -20,21 +20,15 @@
 #ifndef INCLUDED_FRAMEWORK_MENUCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_MENUCONFIGURATION_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <framework/fwedllapi.h>
 
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/toolbox.hxx>
+
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
 const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
