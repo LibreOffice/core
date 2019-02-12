@@ -6506,6 +6506,11 @@ public:
         gtk_text_view_set_editable(m_pTextView, bEditable);
     }
 
+    virtual void set_monospace(bool bMonospace) override
+    {
+        gtk_text_view_set_monospace(m_pTextView, bMonospace);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pTextBuffer, m_nChangedSignalId);
