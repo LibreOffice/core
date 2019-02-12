@@ -3867,6 +3867,9 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
             case text::WritingMode2::TB_LR:
                 SetValue( SvxFrameDirection::Vertical_LR_TB );
                 break;
+            case text::WritingMode2::BT_LR:
+                SetValue( SvxFrameDirection::Vertical_LR_BT );
+                break;
             case text::WritingMode2::PAGE:
                 SetValue( SvxFrameDirection::Environment );
                 break;
@@ -3899,6 +3902,9 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
             break;
         case SvxFrameDirection::Vertical_LR_TB:
             nVal = text::WritingMode2::TB_LR;
+            break;
+        case SvxFrameDirection::Vertical_LR_BT:
+            nVal = text::WritingMode2::BT_LR;
             break;
         case SvxFrameDirection::Environment:
             nVal = text::WritingMode2::PAGE;
