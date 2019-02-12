@@ -38,7 +38,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
                                       m_xCertPathList->get_height_rows(6));
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xCertPathList->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xCertPathList->get_checkbox_column_width());
     aWidths.push_back(m_xCertPathList->get_approximate_digit_width() * 20);
     m_xCertPathList->set_column_fixed_widths(aWidths);
 

@@ -71,7 +71,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                                     m_xLbSettings->get_height_rows(6));
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xLbSettings->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xLbSettings->get_checkbox_column_width());
     m_xLbSettings->set_column_fixed_widths(aWidths);
 
     m_xLbEngine->connect_changed( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );

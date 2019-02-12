@@ -62,7 +62,7 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     m_aDeleteRows = m_xDeleteRows->get_label();
 
     std::vector<int> aWidths;
-    aWidths.push_back(m_xOptionsListBox->get_approximate_digit_width() * 3 + 6);
+    aWidths.push_back(m_xOptionsListBox->get_checkbox_column_width());
     m_xOptionsListBox->set_column_fixed_widths(aWidths);
 
     Init();
