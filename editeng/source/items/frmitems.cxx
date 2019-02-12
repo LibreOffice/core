@@ -3917,4 +3917,15 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
     return bRet;
 }
 
+void SvxFrameDirectionItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFrameDirectionItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nWhich"),
+                                BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("m_nValue"),
+        BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
