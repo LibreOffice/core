@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f3c6d716",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T10:07:00Z",
+      "side": 1,
+      "message": "the first one is a sal_uLong, the nSttCP is a WW8_CP",
+      "revId": "7b87510a8e501d1f62ef522d78e5b63d0828f6eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b3d05fcb",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T10:07:00Z",
+      "side": 1,
+      "message": "another WW8_CP",
+      "revId": "7b87510a8e501d1f62ef522d78e5b63d0828f6eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_93d563bc",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-12T10:07:00Z",
+      "side": 1,
+      "message": "same",
+      "revId": "7b87510a8e501d1f62ef522d78e5b63d0828f6eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
