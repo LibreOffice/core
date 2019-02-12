@@ -512,6 +512,21 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
  */
 void SwTextFrame::SwitchHorizontalToVertical( Point& rPoint ) const
 {
+    if (IsVertLRBT())
+    {
+        // The horizontal origo is the top left corner, the LRBT origo is the
+        // bottom left corner. Finally x and y has to be swapped.
+        SAL_WARN_IF(!mbIsSwapped, "sw.core",
+                    "SwTextFrame::SwitchHorizontalToVertical, IsVertLRBT, not swapped");
+        Point aPoint(rPoint);
+        rPoint.setX(getFrameArea().Left() + (aPoint.Y() - getFrameArea().Top()));
+        // This would be bottom - x delta, but bottom is top + height, finally
+        // width (and not height), as it's swapped.
+        rPoint.setY(getFrameArea().Top() + getFrameArea().Width()
+                    - (aPoint.X() - getFrameArea().Left()));
+        return;
+    }
+
     // calc offset inside frame
     const long nOfstX = rPoint.X() - getFrameArea().Left();
     const long nOfstY = rPoint.Y() - getFrameArea().Top();

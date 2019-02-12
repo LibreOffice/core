@@ -224,9 +224,70 @@ static SwRectFnCollection aVerticalLeftToRight = {
     /*.fnSetTopAndHeight =*/&SwRect::SetLeftAndWidth
 };
 
+/**
+ * This is the same as horizontal, but rotated counter-clockwise by 90 degrees.
+ * This means logical top is physical right, bottom is left, left is top,
+ * finally right is bottom.
+ */
+static SwRectFnCollection aVerticalLeftToRightBottomToTop = {
+    /*.fnGetTop =*/&SwRect::Right_,
+    /*.fnGetBottom =*/&SwRect::Left_,
+    /*.fnGetLeft =*/&SwRect::Top_,
+    /*.fnGetRight =*/&SwRect::Bottom_,
+    /*.fnGetWidth =*/&SwRect::Height_,
+    /*.fnGetHeight =*/&SwRect::Width_,
+    /*.fnGetPos =*/&SwRect::TopRight,
+    /*.fnGetSize =*/&SwRect::SwappedSize,
+
+    /*.fnSetTop =*/&SwRect::Right_,
+    /*.fnSetBottom =*/&SwRect::Left_,
+    /*.fnSetLeft =*/&SwRect::Top_,
+    /*.fnSetRight =*/&SwRect::Bottom_,
+    /*.fnSetWidth =*/&SwRect::Height_,
+    /*.fnSetHeight =*/&SwRect::Width_,
+
+    /*.fnSubTop =*/&SwRect::AddRight,
+    /*.fnAddBottom =*/&SwRect::SubLeft,
+    /*.fnSubLeft =*/&SwRect::SubTop,
+    /*.fnAddRight =*/&SwRect::AddBottom,
+    /*.fnAddWidth =*/&SwRect::AddHeight,
+    /*.fnAddHeight =*/&SwRect::AddWidth,
+
+    /*.fnSetPosX =*/&SwRect::SetPosY,
+    /*.fnSetPosY =*/&SwRect::SetPosX,
+
+    /*.fnGetTopMargin =*/&SwFrame::GetRightMargin,
+    /*.fnGetBottomMargin =*/&SwFrame::GetLeftMargin,
+    /*.fnGetLeftMargin =*/&SwFrame::GetTopMargin,
+    /*.fnGetRightMargin =*/&SwFrame::GetBottomMargin,
+    /*.fnSetXMargins =*/&SwFrame::SetTopBottomMargins,
+    /*.fnSetYMargins =*/&SwFrame::SetLeftRightMargins,
+    /*.fnGetPrtTop =*/&SwFrame::GetPrtRight,
+    /*.fnGetPrtBottom =*/&SwFrame::GetPrtLeft,
+    /*.fnGetPrtLeft =*/&SwFrame::GetPrtTop,
+    /*.fnGetPrtRight =*/&SwFrame::GetPrtBottom,
+    /*.fnTopDist =*/&SwRect::GetRightDistance,
+    /*.fnBottomDist =*/&SwRect::GetLeftDistance,
+    /*.fnLeftDist =*/&SwRect::GetTopDistance,
+    /*.fnRightDist =*/&SwRect::GetBottomDistance,
+    /*.fnSetLimit =*/&SwFrame::SetMinLeft,
+    /*.fnOverStep =*/&SwRect::OverStepLeft,
+
+    /*.fnSetPos =*/&SwRect::SetUpperRightCorner,
+    /*.fnMakePos =*/&SwFrame::MakeLeftPos,
+    /*.fnXDiff =*/&FirstMinusSecond,
+    /*.fnYDiff =*/&FirstMinusSecond,
+    /*.fnXInc =*/&SwIncrement,
+    /*.fnYInc =*/&SwIncrement,
+
+    /*.fnSetLeftAndWidth =*/&SwRect::SetTopAndHeight,
+    /*.fnSetTopAndHeight =*/&SwRect::SetRightAndWidth
+};
+
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
+SwRectFn fnRectVertL2RB2T = &aVerticalLeftToRightBottomToTop;
 
 // #i65250#
 sal_uInt32 SwFrameAreaDefinition::mnLastFrameId=0;

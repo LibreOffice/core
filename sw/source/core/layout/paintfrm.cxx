@@ -1255,7 +1255,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         rRect = pFrame->getFramePrintArea();
         rRect.Pos() += pFrame->getFrameArea().Pos();
 
-        SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+        SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? (pFrame->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
@@ -5218,7 +5218,7 @@ void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rForm
     if ( !pCol || !pCol->IsColumnFrame() )
         return;
 
-    SwRectFn fnRect = pCol->IsVertical() ? ( pCol->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    SwRectFn fnRect = pCol->IsVertical() ? ( pCol->IsVertLR() ? (pCol->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
     SwRect aLineRect = getFramePrintArea();
     aLineRect += getFrameArea().Pos();

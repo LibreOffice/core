@@ -363,14 +363,17 @@ sal_uInt16 SwFont::CalcShadowSpace(
 }
 
 // maps directions for vertical layout
-static sal_uInt16 MapDirection( sal_uInt16 nDir, const bool bVertFormat )
+static sal_uInt16 MapDirection(sal_uInt16 nDir, const bool bVertFormat, const bool bVertFormatLRBT)
 {
     if ( bVertFormat )
     {
         switch ( nDir )
         {
         case 0 :
-            nDir = 2700;
+            if (bVertFormatLRBT)
+                nDir = 900;
+            else
+                nDir = 2700;
             break;
         case 900 :
             nDir = 0;
@@ -420,10 +423,10 @@ sal_uInt16 SwFont::GetOrientation( const bool bVertFormat ) const
     return UnMapDirection( m_aSub[m_nActual].GetOrientation(), bVertFormat );
 }
 
-void SwFont::SetVertical( sal_uInt16 nDir, const bool bVertFormat )
+void SwFont::SetVertical(sal_uInt16 nDir, const bool bVertFormat, const bool bVertLayoutLRBT)
 {
     // map direction if frame has vertical layout
-    nDir = MapDirection( nDir, bVertFormat );
+    nDir = MapDirection(nDir, bVertFormat, bVertLayoutLRBT);
 
     if( nDir != m_aSub[SwFontScript::Latin].GetOrientation() )
     {

@@ -307,7 +307,8 @@ void SwAttrIter::InitFontAndAttrHandler(
         SwTextNode const& rPropsNode,
         SwTextNode const& rTextNode,
         OUString const& rText,
-        bool const*const pbVertLayout)
+        bool const*const pbVertLayout,
+        bool const*const pbVertLayoutLRBT)
 {
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rPropsNode.GetAnyFormatColl(), m_pViewShell );
@@ -328,7 +329,10 @@ void SwAttrIter::InitFontAndAttrHandler(
     // if it's a re-init, the vert flag never changes
     if (pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout())
     {
-        m_pFont->SetVertical( m_pFont->GetOrientation(), true );
+        bool bVertLayoutLRBT = false;
+        if (pbVertLayoutLRBT)
+            bVertLayoutLRBT = *pbVertLayoutLRBT;
+        m_pFont->SetVertical(m_pFont->GetOrientation(), true, bVertLayoutLRBT);
     }
 
     // Initialize the default attribute of the attribute handler
@@ -385,12 +389,17 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
+    bool bVertLayoutLRBT = false;
     bool bRTL = false;
     if ( pFrame )
     {
         if ( pFrame->IsVertical() )
         {
             bVertLayout = true;
+        }
+        if (pFrame->IsVertLRBT())
+        {
+            bVertLayoutLRBT = true;
         }
         bRTL = pFrame->IsRightToLeft();
         m_pMergedPara = pFrame->GetMergedPara();
@@ -405,7 +414,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             m_pMergedPara ? *m_pMergedPara->pParaPropsNode : rTextNode,
             rTextNode,
             m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
-            & bVertLayout);
+            & bVertLayout,
+            & bVertLayoutLRBT);
 
     m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
     m_nPropFont = 0;

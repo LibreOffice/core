@@ -67,7 +67,8 @@ private:
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
     void InitFontAndAttrHandler(
         SwTextNode const& rPropsNode, SwTextNode const& rTextNode,
-        OUString const& rText, bool const* pbVertLayout);
+        OUString const& rText, bool const* pbVertLayout,
+        bool const* pbVertLayoutLRBT);
 
 protected:
     void Chg( SwTextAttr const *pHt );
