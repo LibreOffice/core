@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <tools/gen.hxx>
 #include <address.hxx>
+#include <postit.hxx>
 
 namespace vcl { class Window; }
 
@@ -50,7 +51,7 @@ private:
 
     tools::Rectangle       m_aRect;
     std::unique_ptr<SdrModel>           m_pModel;
-    std::shared_ptr< SdrCaptionObj >    m_xObject;
+    ScCaptionPtr    m_xObject;
     bool            m_bVisible;
     DECL_LINK( TimeHdl, Timer*, void );
 

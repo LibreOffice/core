@@ -372,8 +372,6 @@ public:
 
     ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
 
-    ScDocument*   GetClipDoc();
-
     void            SetDocumentModifiedPending( bool bVal )
                         { m_bDocumentModifiedPending = bVal; }
     bool            IsDocumentModifiedPending() const

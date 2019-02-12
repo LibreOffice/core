@@ -216,7 +216,7 @@ uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape(
     SolarMutexGuard aGuard;
     uno::Reference < drawing::XShape > xShape;
     if( const ScPostIt* pNote = ImplGetNote() )
-        if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ).get() )
+        if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ) )
             xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
     return xShape;
 }

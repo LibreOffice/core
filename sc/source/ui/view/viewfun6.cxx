@@ -496,7 +496,7 @@ void ScViewFunc::EditNote()
         /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
             in ScPostIt::ShowCaptionTemp(), so ScPostIt::GetCaption() should
             return a caption object. */
-        if( SdrCaptionObj* pCaption = pNote->GetCaption().get() )
+        if( SdrCaptionObj* pCaption = pNote->GetCaption() )
         {
             if ( ScDrawView* pScDrawView = GetScDrawView() )
                pScDrawView->SyncForGrid( pCaption );
