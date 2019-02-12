@@ -31,6 +31,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclstatuslistener.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
@@ -3374,8 +3375,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     if ( meLastStyle != eStyle )
     {
         meLastStyle = eStyle;
-        Pointer aPtr( eStyle );
-        SetPointer( aPtr );
+        SetPointer( eStyle );
     }
 
     DockingWindow::MouseMove( rMEvt );

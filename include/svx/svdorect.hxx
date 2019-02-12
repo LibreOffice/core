@@ -108,7 +108,7 @@ public:
     virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
-    virtual Pointer GetCreatePointer() const override;
+    virtual PointerStyle GetCreatePointer() const override;
 
     virtual void NbcMove(const Size& rSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;

@@ -529,7 +529,7 @@ SdrObject* SdrVirtObj::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
     return rRefObj.CheckMacroHit(rRec); // TODO: positioning offset
 }
 
-Pointer SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
+PointerStyle SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
 {
     return rRefObj.GetMacroPointer(rRec); // TODO: positioning offset
 }

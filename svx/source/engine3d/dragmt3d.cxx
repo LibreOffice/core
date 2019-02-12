@@ -33,6 +33,7 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 E3dDragMethod::E3dDragMethod (
@@ -437,9 +438,9 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
     }
 }
 
-Pointer E3dDragRotate::GetSdrDragPointer() const
+PointerStyle E3dDragRotate::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Rotate);
+    return PointerStyle::Rotate;
 }
 
 // E3dDragMove. This drag method is only required for translations inside
@@ -717,9 +718,9 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
     }
 }
 
-Pointer E3dDragMove::GetSdrDragPointer() const
+PointerStyle E3dDragMove::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Move);
+    return PointerStyle::Move;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

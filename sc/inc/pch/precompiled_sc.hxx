@@ -157,7 +157,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>

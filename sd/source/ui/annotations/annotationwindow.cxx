@@ -66,6 +66,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <tools/helpers.hxx>
 
@@ -296,7 +297,7 @@ void AnnotationWindow::InitControls()
 {
     // actual window which holds the user text
     mpTextWindow = VclPtr<AnnotationTextWindow>::Create(this, WB_NODIALOGCONTROL);
-    mpTextWindow->SetPointer(Pointer(PointerStyle::Text));
+    mpTextWindow->SetPointer(PointerStyle::Text);
 
     // window control for author and date
     mpMeta = VclPtr<MultiLineEdit>::Create(this,0);

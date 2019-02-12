@@ -67,7 +67,6 @@ class SvxFieldItem;
 namespace vcl { class Window; }
 class KeyEvent;
 class MouseEvent;
-class Pointer;
 class CommandEvent;
 class MapMode;
 class OutputDevice;
@@ -89,6 +88,7 @@ enum class CharCompressType;
 enum class TransliterationFlags;
 class SvxFieldData;
 class SfxUndoManager;
+enum class PointerStyle;
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
@@ -287,7 +287,7 @@ public:
     void            SetAnchorMode( EEAnchorMode eMode );
     EEAnchorMode    GetAnchorMode() const;
 
-    Pointer     GetPointer( const Point& rPosPixel );
+    PointerStyle    GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );
 
     void            StartSpeller();

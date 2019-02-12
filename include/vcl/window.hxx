@@ -23,7 +23,6 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
 #include <tools/link.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/vclenum.hxx>
@@ -64,6 +63,7 @@ class AllSettings;
 class InputContext;
 enum class ImplPaintFlags;
 enum class VclEventId;
+enum class PointerStyle;
 
 namespace com { namespace sun { namespace star {
 namespace accessibility {
@@ -1097,8 +1097,8 @@ public:
     void                                ReleaseMouse();
     bool                                IsMouseCaptured() const;
 
-    void                                SetPointer( const Pointer& rPointer );
-    const Pointer&                      GetPointer() const;
+    void                                SetPointer( PointerStyle );
+    PointerStyle                        GetPointer() const;
     void                                EnableChildPointerOverwrite( bool bOverwrite );
     void                                SetPointerPosPixel( const Point& rPos );
     Point                               GetPointerPosPixel();

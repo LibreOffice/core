@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <sal/log.hxx>
 
 #include <svtools/accessibleruler.hxx>
@@ -2027,7 +2028,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         mbFormat = true;
     }
 
-    SetPointer( Pointer(ePtrStyle) );
+    SetPointer( ePtrStyle );
 
     if (mbFormat)
     {
@@ -2262,21 +2263,21 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         {
             if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
             {
-                Pointer aPtr;
+                PointerStyle aPtr = PointerStyle::Arrow;
 
                 if ( aHitTest.bSize )
                 {
                     if ( mnWinStyle & WB_HORZ )
-                        aPtr = Pointer( PointerStyle::ESize );
+                        aPtr = PointerStyle::ESize;
                     else
-                        aPtr = Pointer( PointerStyle::SSize );
+                        aPtr = PointerStyle::SSize;
                 }
                 else if ( aHitTest.bSizeBar )
                 {
                     if ( mnWinStyle & WB_HORZ )
-                        aPtr = Pointer( PointerStyle::HSizeBar );
+                        aPtr = PointerStyle::HSizeBar;
                     else
-                        aPtr = Pointer( PointerStyle::VSizeBar );
+                        aPtr = PointerStyle::VSizeBar;
                 }
                 SetPointer( aPtr );
                 return ImplStartDrag( &aHitTest, nMouseModifier );

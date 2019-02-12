@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <TableWindowData.hxx>
 #include <JAccess.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -612,7 +613,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
         return;
 
     m_pDragWin = pTabWin;
-    SetPointer(Pointer(PointerStyle::Move));
+    SetPointer(PointerStyle::Move);
     Point aMousePos = ScreenToOutputPixel( rMousePos );
     m_aDragOffset = aMousePos - pTabWin->GetPosPixel();
     m_pDragWin->SetZOrder(nullptr, ZOrderFlags::First);
@@ -625,13 +626,13 @@ void OJoinTableView::NotifyTitleClicked( OTableWindow* pTabWin, const Point& rMo
     BeginChildMove(pTabWin, rMousePos);
 }
 
-void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPointer )
+void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, PointerStyle nPointer )
 {
 
     if (m_pView->getController().isReadOnly())
         return;
 
-    SetPointer( rPointer );
+    SetPointer( nPointer );
     m_pSizingWin = pTabWin;
     StartTracking();
 }
@@ -757,12 +758,12 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
                 m_pDragWin->GrabFocus();
             }
             m_pDragWin = nullptr;
-            SetPointer(Pointer(PointerStyle::Arrow));
+            SetPointer(PointerStyle::Arrow);
         }
         // else we handle the resizing
         else if( m_pSizingWin )
         {
-            SetPointer( Pointer() );
+            SetPointer( PointerStyle::Arrow );
             EndTracking();
 
             // old physical coordinates

@@ -200,28 +200,24 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
         {
             case word::WdCursorType::wdCursorNorthwestArrow:
             {
-                const Pointer& rPointer( PointerStyle::Arrow );
-                setCursorHelper( getCurrentWordDoc(mxContext), rPointer, false );
+                setCursorHelper( getCurrentWordDoc(mxContext), PointerStyle::Arrow, false );
                 break;
             }
             case word::WdCursorType::wdCursorWait:
             {
-                const Pointer& rPointer( PointerStyle::Wait );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
-                setCursorHelper( getCurrentWordDoc(mxContext), rPointer, true );
+                setCursorHelper( getCurrentWordDoc(mxContext), PointerStyle::Wait, true );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
-                const Pointer& rPointer( PointerStyle::Text );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
-                setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, true );
+                setCursorHelper( getCurrentWordDoc( mxContext ), PointerStyle::Text, true );
                 break;
             }
             case word::WdCursorType::wdCursorNormal:
             {
-                const Pointer& rPointer( PointerStyle::Null );
-                setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, false );
+                setCursorHelper( getCurrentWordDoc( mxContext ), PointerStyle::Null, false );
                 break;
             }
             default:

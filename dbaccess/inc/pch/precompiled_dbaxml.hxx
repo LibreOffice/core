@@ -48,7 +48,6 @@
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>

@@ -200,7 +200,7 @@ public:
     // incomplete implementation:
     // OutputDevice is necessary to determine HandleSize.
     // If NULL the first signed on Win is used.
-    Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, bool bLeftDown=false) const;
+    PointerStyle GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, bool bLeftDown=false) const;
     SdrHitKind PickAnything(const MouseEvent& rMEvt, SdrMouseEventKind nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
     bool DoMouseEvent(const SdrViewEvent& rVEvt);

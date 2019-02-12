@@ -47,7 +47,7 @@ public:
 
     sal_Int32 GetValidDragOffset( const SdrDragStat& rDrag ) const;
 
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
 
     void SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, TableEdgeState nState );
 
@@ -73,7 +73,7 @@ public:
         const tools::Rectangle& rRect,
         bool bAnimate);
 
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
     bool getAnimate() const { return mbAnimate; }
 
 protected:

@@ -3295,13 +3295,13 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
     }
 }
 
-Pointer SwXTextDocument::getPointer()
+PointerStyle SwXTextDocument::getPointer()
 {
     SolarMutexGuard aGuard;
 
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     if (!pWrtShell)
-        return Pointer();
+        return PointerStyle::Arrow;
 
     return pWrtShell->GetView().GetEditWin().GetPointer();
 }

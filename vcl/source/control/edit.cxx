@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -323,7 +324,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
 
     SetCursor( new vcl::Cursor );
 
-    SetPointer( Pointer( PointerStyle::Text ) );
+    SetPointer( PointerStyle::Text );
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();

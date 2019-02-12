@@ -399,7 +399,7 @@ const tools::Rectangle& EditView::GetOutputArea() const
     return pImpEditView->GetOutputArea();
 }
 
-const Pointer& EditView::GetPointer() const
+PointerStyle EditView::GetPointer() const
 {
     return pImpEditView->GetPointer();
 }

@@ -66,7 +66,7 @@ public:
 class VCLXHatchWindow;
 class SvResizeWindow : public vcl::Window
 {
-    Pointer         m_aOldPointer;
+    PointerStyle    m_aOldPointer;
     short           m_nMoveGrab;  // last pointer type
     SvResizeHelper  m_aResizer;
     bool        m_bActive;

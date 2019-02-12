@@ -42,6 +42,7 @@
 #include <editeng/numitem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
@@ -292,7 +293,7 @@ bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
     if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
         return false;
 
-    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
     pEditView->GetWindow()->SetPointer( aPointer );
     return pEditView->MouseMove( rMEvt );
 }
@@ -307,7 +308,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
         return false;
 
-    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
     pEditView->GetWindow()->SetPointer( aPointer );
 
     MouseTarget eTarget;
@@ -355,7 +356,7 @@ bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
         return false;
 
-    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
     pEditView->GetWindow()->SetPointer( aPointer );
 
     return pEditView->MouseButtonUp( rMEvt );
@@ -729,7 +730,7 @@ SfxStyleSheet* OutlinerView::GetStyleSheet()
     return pEditView->GetStyleSheet();
 }
 
-Pointer OutlinerView::GetPointer( const Point& rPosPixel )
+PointerStyle OutlinerView::GetPointer( const Point& rPosPixel )
 {
     MouseTarget eTarget;
     ImpCheckMousePos( rPosPixel, eTarget );
@@ -748,7 +749,7 @@ Pointer OutlinerView::GetPointer( const Point& rPosPixel )
         ePointerStyle = PointerStyle::Move;
     }
 
-    return Pointer( ePointerStyle );
+    return ePointerStyle;
 }
 
 

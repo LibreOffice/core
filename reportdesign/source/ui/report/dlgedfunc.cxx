@@ -19,6 +19,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/seleng.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -611,13 +612,13 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 {
     bool bIsSetPoint = isRectangleHit(rMEvt);
     if ( bIsSetPoint )
-        m_pParent->SetPointer( Pointer(PointerStyle::NotAllowed));
+        m_pParent->SetPointer( PointerStyle::NotAllowed );
     else
     {
         bool bCtrlKey = rMEvt.IsMod1();
         if (bCtrlKey)
         {
-            m_pParent->SetPointer( Pointer(PointerStyle::MoveDataLink ));
+            m_pParent->SetPointer( PointerStyle::MoveDataLink );
             bIsSetPoint = true;
         }
     }

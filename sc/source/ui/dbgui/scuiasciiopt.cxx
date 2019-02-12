@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <global.hxx>
 #include <scresid.hxx>
@@ -738,12 +739,12 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
 
     if( (pButton == pRbFixed) || (pButton == pRbSeparated) )
     {
-        SetPointer( Pointer( PointerStyle::Wait ) );
+        SetPointer( PointerStyle::Wait );
         if( pRbFixed->IsChecked() )
             mpTableBox->SetFixedWidthMode();
         else
             mpTableBox->SetSeparatorsMode();
-        SetPointer( Pointer( PointerStyle::Arrow ) );
+        SetPointer( PointerStyle::Arrow );
 
         SetupSeparatorCtrls();
     }
@@ -790,7 +791,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
     SvxTextEncodingBox* pCharSetBox = static_cast<SvxTextEncodingBox*>(&rListBox);
     if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectedEntryCount() == 1) )
     {
-        SetPointer( Pointer( PointerStyle::Wait ) );
+        SetPointer( PointerStyle::Wait );
         rtl_TextEncoding eOldCharSet = meCharSet;
         SetSelectedCharSet();
         // switching char-set invalidates 8bit -> String conversions
@@ -798,7 +799,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
             UpdateVertical();
 
         mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
-        SetPointer( Pointer( PointerStyle::Arrow ) );
+        SetPointer( PointerStyle::Arrow );
     }
 }
 

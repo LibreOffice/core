@@ -99,7 +99,7 @@ void FuConstCustomShape::Activate()
 {
     pView->SetCurrentObj( OBJ_CUSTOMSHAPE );
 
-    aNewPointer = Pointer( PointerStyle::DrawRect );
+    aNewPointer = PointerStyle::DrawRect;
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );
 

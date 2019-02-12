@@ -165,33 +165,33 @@ void FuConstRectangle::Activate()
         case SID_LINE_CIRCLE_ARROW:
         case SID_LINE_SQUARE_ARROW:
         case SID_LINE_ARROWS:
-            aNewPointer = Pointer( PointerStyle::DrawLine );
+            aNewPointer = PointerStyle::DrawLine;
             aObjKind = OBJ_LINE;
             break;
 
         case SID_DRAW_MEASURELINE:
-            aNewPointer = Pointer( PointerStyle::DrawLine );
+            aNewPointer = PointerStyle::DrawLine;
             aObjKind = OBJ_MEASURE;
             break;
 
         case SID_DRAW_RECT:
-            aNewPointer = Pointer( PointerStyle::DrawRect );
+            aNewPointer = PointerStyle::DrawRect;
             aObjKind = OBJ_RECT;
             break;
 
         case SID_DRAW_ELLIPSE:
-            aNewPointer = Pointer( PointerStyle::DrawEllipse );
+            aNewPointer = PointerStyle::DrawEllipse;
             aObjKind = OBJ_CIRC;
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            aNewPointer = Pointer( PointerStyle::DrawCaption );
+            aNewPointer = PointerStyle::DrawCaption;
             aObjKind = OBJ_CAPTION;
             break;
 
         default:
-            aNewPointer = Pointer( PointerStyle::Cross );
+            aNewPointer = PointerStyle::Cross;
             aObjKind = OBJ_RECT;
             break;
     }

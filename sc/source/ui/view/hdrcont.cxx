@@ -685,7 +685,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         if ( nClicks && nClicks%2==0 )
         {
             SetEntrySize( nDragNo, HDR_SIZE_OPTIMUM );
-            SetPointer( Pointer( PointerStyle::Arrow ) );
+            SetPointer( PointerStyle::Arrow );
         }
         else
         {
@@ -797,7 +797,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
 {
     if ( IsDisabled() )
     {
-        SetPointer( Pointer( PointerStyle::Arrow ) );
+        SetPointer( PointerStyle::Arrow );
         return;
     }
 
@@ -836,9 +836,9 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         (void)GetMousePos( rMEvt, bIsBorder );
 
         if ( bIsBorder && rMEvt.GetButtons()==0 && ResizeAllowed() )
-            SetPointer( Pointer( bVertical ? PointerStyle::VSizeBar : PointerStyle::HSizeBar ) );
+            SetPointer( bVertical ? PointerStyle::VSizeBar : PointerStyle::HSizeBar );
         else
-            SetPointer( Pointer( PointerStyle::Arrow ) );
+            SetPointer( PointerStyle::Arrow );
 
         if (!bIgnoreMove)
             pSelEngine->SelMouseMove( rMEvt );

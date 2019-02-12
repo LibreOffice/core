@@ -24,14 +24,15 @@
 #include <vcl/window.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
-Pointer SdrHelpLine::GetPointer() const
+PointerStyle SdrHelpLine::GetPointer() const
 {
     switch (eKind) {
-        case SdrHelpLineKind::Vertical  : return Pointer(PointerStyle::ESize);
-        case SdrHelpLineKind::Horizontal: return Pointer(PointerStyle::SSize);
-        default                    : return Pointer(PointerStyle::Move);
+        case SdrHelpLineKind::Vertical  : return PointerStyle::ESize;
+        case SdrHelpLineKind::Horizontal: return PointerStyle::SSize;
+        default                    : return PointerStyle::Move;
     } // switch
 }
 

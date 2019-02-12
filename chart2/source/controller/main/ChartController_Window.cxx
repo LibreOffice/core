@@ -75,6 +75,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -1864,7 +1865,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     SdrObject* pObject = m_pDrawViewWrapper->getHitObject(aMousePos);
     if (pObject && pObject->GetName().startsWith("FieldButton"))
     {
-        pChartWindow->SetPointer(Pointer(PointerStyle::Arrow));
+        pChartWindow->SetPointer(PointerStyle::Arrow);
         return;
     }
 
@@ -1888,13 +1889,13 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 
     if( pHitSelectionHdl )
     {
-        Pointer aPointer = m_pDrawViewWrapper->GetPreferredPointer(
+        PointerStyle aPointer = m_pDrawViewWrapper->GetPreferredPointer(
             aMousePos, pChartWindow, nModifier, bLeftDown );
         bool bForceArrowPointer = false;
 
         ObjectIdentifier aOID( m_aSelection.getSelectedOID() );
 
-        switch( aPointer.GetStyle())
+        switch( aPointer)
         {
             case PointerStyle::NSize:
             case PointerStyle::SSize:
@@ -1922,7 +1923,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         }
 
         if( bForceArrowPointer )
-            pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
+            pChartWindow->SetPointer( PointerStyle::Arrow );
         else
             pChartWindow->SetPointer( aPointer );
 
@@ -1974,7 +1975,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 }
                 break;
         }
-        pChartWindow->SetPointer( Pointer( ePointerStyle ) );
+        pChartWindow->SetPointer( ePointerStyle );
         return;
     }
 
@@ -1986,7 +1987,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     {
         if( aHitObjectCID == m_aSelection.getSelectedCID() )
         {
-            pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
+            pChartWindow->SetPointer( PointerStyle::Arrow );
             return;
         }
     }
@@ -2001,7 +2002,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         if( (m_eDragMode == SdrDragMode::Rotate)
             && SelectionHelper::isRotateableObject( aHitObjectCID
                 , getModel() ) )
-            pChartWindow->SetPointer( Pointer( PointerStyle::Rotate ) );
+            pChartWindow->SetPointer( PointerStyle::Rotate );
         else
         {
             ObjectType eHitObjectType = ObjectIdentifier::getObjectType( aHitObjectCID );
@@ -2010,7 +2011,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 if( !ObjectIdentifier::areSiblings(aHitObjectCID,m_aSelection.getSelectedCID())
                     && !ObjectIdentifier::areIdenticalObjects(aHitObjectCID,m_aSelection.getSelectedCID()) )
                 {
-                    pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
+                    pChartWindow->SetPointer( PointerStyle::Arrow );
                     return;
                 }
             }
@@ -2018,7 +2019,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         }
     }
     else
-        pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
+        pChartWindow->SetPointer( PointerStyle::Arrow );
 }
 
 css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView()

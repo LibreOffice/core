@@ -24,6 +24,7 @@
 #include <o3tl/numeric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
@@ -1155,7 +1156,7 @@ void SdrDragMovHdl::CancelSdrDrag()
         pHM->Touch();
 }
 
-Pointer SdrDragMovHdl::GetSdrDragPointer() const
+PointerStyle SdrDragMovHdl::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl = GetDragHdl();
 
@@ -1164,7 +1165,7 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
         return pHdl->GetPointer();
     }
 
-    return Pointer(PointerStyle::RefHand);
+    return PointerStyle::RefHand;
 }
 
 
@@ -1446,7 +1447,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
     return bRet;
 }
 
-Pointer SdrDragObjOwn::GetSdrDragPointer() const
+PointerStyle SdrDragObjOwn::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl=GetDragHdl();
 
@@ -1455,7 +1456,7 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
         return pHdl->GetPointer();
     }
 
-    return Pointer(PointerStyle::Move);
+    return PointerStyle::Move;
 }
 
 
@@ -1714,15 +1715,15 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
     return true;
 }
 
-Pointer SdrDragMove::GetSdrDragPointer() const
+PointerStyle SdrDragMove::GetSdrDragPointer() const
 {
     if (IsDraggingPoints() || IsDraggingGluePoints())
     {
-        return Pointer(PointerStyle::MovePoint);
+        return PointerStyle::MovePoint;
     }
     else
     {
-        return Pointer(PointerStyle::Move);
+        return PointerStyle::Move;
     }
 }
 
@@ -2042,7 +2043,7 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
     return true;
 }
 
-Pointer SdrDragResize::GetSdrDragPointer() const
+PointerStyle SdrDragResize::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl=GetDragHdl();
 
@@ -2051,7 +2052,7 @@ Pointer SdrDragResize::GetSdrDragPointer() const
         return pHdl->GetPointer();
     }
 
-    return Pointer(PointerStyle::Move);
+    return PointerStyle::Move;
 }
 
 
@@ -2191,9 +2192,9 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
     return true;
 }
 
-Pointer SdrDragRotate::GetSdrDragPointer() const
+PointerStyle SdrDragRotate::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Rotate);
+    return PointerStyle::Rotate;
 }
 
 
@@ -2464,12 +2465,12 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
     return false;
 }
 
-Pointer SdrDragShear::GetSdrDragPointer() const
+PointerStyle SdrDragShear::GetSdrDragPointer() const
 {
     if (bVertical)
-        return Pointer(PointerStyle::VShear);
+        return PointerStyle::VShear;
     else
-        return Pointer(PointerStyle::HShear);
+        return PointerStyle::HShear;
 }
 
 
@@ -2595,9 +2596,9 @@ bool SdrDragMirror::EndSdrDrag(bool bCopy)
     return true;
 }
 
-Pointer SdrDragMirror::GetSdrDragPointer() const
+PointerStyle SdrDragMirror::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Mirror);
+    return PointerStyle::Mirror;
 }
 
 
@@ -2753,9 +2754,9 @@ void SdrDragGradient::CancelSdrDrag()
     pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, false);
 }
 
-Pointer SdrDragGradient::GetSdrDragPointer() const
+PointerStyle SdrDragGradient::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::RefHand);
+    return PointerStyle::RefHand;
 }
 
 
@@ -3385,9 +3386,9 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
     return false;
 }
 
-Pointer SdrDragCrook::GetSdrDragPointer() const
+PointerStyle SdrDragCrook::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Crook);
+    return PointerStyle::Crook;
 }
 
 
@@ -3515,9 +3516,9 @@ bool SdrDragDistort::EndSdrDrag(bool bCopy)
     return false;
 }
 
-Pointer SdrDragDistort::GetSdrDragPointer() const
+PointerStyle SdrDragDistort::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::RefHand);
+    return PointerStyle::RefHand;
 }
 
 void SdrDragDistort::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
@@ -3865,9 +3866,9 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     return true;
 }
 
-Pointer SdrDragCrop::GetSdrDragPointer() const
+PointerStyle SdrDragCrop::GetSdrDragPointer() const
 {
-    return Pointer(PointerStyle::Crop);
+    return PointerStyle::Crop;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

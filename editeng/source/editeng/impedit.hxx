@@ -39,6 +39,7 @@
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <vcl/dndhelp.hxx>
 #include <svl/ondemand.hxx>
@@ -60,6 +61,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <boost/optional.hpp>
 #include <memory>
 #include <vector>
 
@@ -236,7 +238,7 @@ private:
     EditEngine*               pEditEngine;
     VclPtr<vcl::Window>       pOutWin;
     EditView::OutWindowSet    aOutWindowSet;
-    std::unique_ptr<Pointer>  pPointer;
+    boost::optional<PointerStyle>  mxPointer;
     std::unique_ptr<DragAndDropInfo>  pDragAndDropInfo;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
@@ -350,7 +352,7 @@ public:
 
     void            SetSelectionMode( EESelectionMode eMode );
 
-    inline const Pointer&   GetPointer();
+    inline PointerStyle GetPointer();
 
     inline vcl::Cursor*     GetCursor();
 
@@ -1196,24 +1198,24 @@ inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
     return static_cast<sal_uInt16>(static_cast<long>(nYValue)*nStretchY/100);
 }
 
-inline const Pointer& ImpEditView::GetPointer()
+inline PointerStyle ImpEditView::GetPointer()
 {
-    if ( !pPointer )
+    if ( !mxPointer )
     {
-        pPointer.reset( new Pointer( IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text ) );
-        return *pPointer;
+        mxPointer = IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text;
+        return *mxPointer;
     }
 
-    if(PointerStyle::Text == pPointer->GetStyle() && IsVertical())
+    if(PointerStyle::Text == *mxPointer && IsVertical())
     {
-        pPointer.reset( new Pointer(PointerStyle::TextVertical) );
+        mxPointer = PointerStyle::TextVertical;
     }
-    else if(PointerStyle::TextVertical == pPointer->GetStyle() && !IsVertical())
+    else if(PointerStyle::TextVertical == *mxPointer && !IsVertical())
     {
-        pPointer.reset( new Pointer(PointerStyle::Text) );
+        mxPointer = PointerStyle::Text;
     }
 
-    return *pPointer;
+    return *mxPointer;
 }
 
 inline vcl::Cursor* ImpEditView::GetCursor()

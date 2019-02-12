@@ -49,6 +49,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
+#include <vcl/ptrstyle.hxx>
 
 using namespace com::sun::star;
 
@@ -791,16 +792,16 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     }
 }
 
-Pointer SdrCircObj::GetCreatePointer() const
+PointerStyle SdrCircObj::GetCreatePointer() const
 {
     switch (meCircleKind) {
-        case OBJ_CIRC: return Pointer(PointerStyle::DrawEllipse);
-        case OBJ_SECT: return Pointer(PointerStyle::DrawPie);
-        case OBJ_CARC: return Pointer(PointerStyle::DrawArc);
-        case OBJ_CCUT: return Pointer(PointerStyle::DrawCircleCut);
+        case OBJ_CIRC: return PointerStyle::DrawEllipse;
+        case OBJ_SECT: return PointerStyle::DrawPie;
+        case OBJ_CARC: return PointerStyle::DrawArc;
+        case OBJ_CCUT: return PointerStyle::DrawCircleCut;
         default: break;
     } // switch
-    return Pointer(PointerStyle::Cross);
+    return PointerStyle::Cross;
 }
 
 void SdrCircObj::NbcMove(const Size& aSiz)

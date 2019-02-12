@@ -47,6 +47,7 @@
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
+#include <vcl/ptrstyle.hxx>
 
 void SdrObjConnection::ResetVars()
 {
@@ -2129,9 +2130,9 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeCreatePoly(const SdrDragStat& /*rStatDra
     return aRetval;
 }
 
-Pointer SdrEdgeObj::GetCreatePointer() const
+PointerStyle SdrEdgeObj::GetCreatePointer() const
 {
-    return Pointer(PointerStyle::DrawConnect);
+    return PointerStyle::DrawConnect;
 }
 
 bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)

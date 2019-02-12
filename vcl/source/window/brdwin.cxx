@@ -37,6 +37,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/ptrstyle.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -283,7 +284,7 @@ void ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     else if ( nHitTest & BorderWindowHitTest::Title &&
               pData->mnTitleType == BorderWindowTitleType::Tearoff && !rMEvt.IsLeaveWindow() )
         ePtrStyle = PointerStyle::Move;
-    pData->mpBorderWindow->SetPointer( Pointer( ePtrStyle ) );
+    pData->mpBorderWindow->SetPointer( ePtrStyle );
 
     if( pData->mnCloseState != oldCloseState )
         pData->mpBorderWindow->Invalidate( pData->maCloseRect );
@@ -1124,7 +1125,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
             if ( maFrameData.mnHitTest & BorderWindowHitTest::Title )
             {
-                maFrameData.mpBorderWindow->SetPointer( Pointer( PointerStyle::Move ) );
+                maFrameData.mpBorderWindow->SetPointer( PointerStyle::Move );
 
                 Point aPos = pBorderWindow->GetPosPixel();
                 aPos.AdjustX(aMousePos.X() );

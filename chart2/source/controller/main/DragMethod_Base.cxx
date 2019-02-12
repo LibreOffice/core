@@ -25,6 +25,7 @@
 
 #include <svx/ActionDescriptionProvider.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <vcl/ptrstyle.hxx>
 
 namespace chart
 {
@@ -64,12 +65,12 @@ void DragMethod_Base::TakeSdrDragComment(OUString& rStr) const
 {
     rStr = getUndoDescription();
 }
-Pointer DragMethod_Base::GetSdrDragPointer() const
+PointerStyle DragMethod_Base::GetSdrDragPointer() const
 {
     if( IsDraggingPoints() || IsDraggingGluePoints() )
-        return Pointer(PointerStyle::MovePoint);
+        return PointerStyle::MovePoint;
     else
-        return Pointer(PointerStyle::Move);
+        return PointerStyle::Move;
 }
 } //namespace chart
 
