@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <oox/ppt/soundactioncontext.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -56,6 +58,7 @@ namespace oox { namespace ppt {
             if( mbHasStartSound )
             {
                 OUString url;
+#if HAVE_FEATURE_AVMEDIA
                 if ( !msSndName.isEmpty() )
                 {
                     Reference<css::io::XInputStream>
@@ -66,6 +69,7 @@ namespace oox { namespace ppt {
                         xInputStream->closeInput();
                     }
                 }
+#endif
                 if ( !url.isEmpty() )
                 {
                     maSlideProperties.setProperty( PROP_Sound, url);

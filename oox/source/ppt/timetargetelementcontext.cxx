@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "timetargetelementcontext.hxx"
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -125,8 +127,10 @@ namespace oox { namespace ppt {
             return this;
         case PPT_TOKEN( sndTgt ):
         {
-            OUString srcFile = drawingml::getEmbeddedWAVAudioFile(getRelations(), rAttribs);
             mpTarget->mnType = XML_sndTgt;
+
+#if HAVE_FEATURE_AVMEDIA
+            OUString srcFile = drawingml::getEmbeddedWAVAudioFile(getRelations(), rAttribs);
             Reference<css::io::XInputStream>
                 xInputStream = getFilter().openInputStream(srcFile);
 
@@ -135,6 +139,7 @@ namespace oox { namespace ppt {
                 ::avmedia::EmbedMedia(getFilter().getModel(), srcFile, mpTarget->msValue, xInputStream);
                 xInputStream->closeInput();
             }
+#endif
             break;
         }
         case PPT_TOKEN( spTgt ):
