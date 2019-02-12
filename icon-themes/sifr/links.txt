@@ -184,19 +184,11 @@ cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
 
 # Slide command aliases
-cmd/lc_insertslide.png cmd/lc_insertpage.png
-cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
-cmd/lc_deleteslide.png cmd/lc_deletepage.png
 cmd/lc_firstslide.png cmd/lc_firstpage.png
 cmd/lc_lastslide.png cmd/lc_lastpage.png
-cmd/lc_slidesetup.png cmd/lc_pagesetup.png
 
-cmd/sc_insertslide.png cmd/sc_insertpage.png
-cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
-cmd/sc_deleteslide.png cmd/sc_deletepage.png
 cmd/sc_firstslide.png cmd/sc_firstpage.png
 cmd/sc_lastslide.png cmd/sc_lastpage.png
-cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
