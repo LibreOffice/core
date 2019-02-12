@@ -108,7 +108,6 @@
 #include <optsolver.hxx>
 #include <sheetdata.hxx>
 #include <tabprotection.hxx>
-#include <transobj.hxx>
 #include <docparam.hxx>
 #include "docshimp.hxx"
 #include <sizedev.hxx>
@@ -1042,7 +1041,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             // document's drawing layer pages and what not, which otherwise when
             // pasting to another document after this document was destructed would
             // attempt to access non-existing data. Preserve the text data though.
-            ScDocument* pClipDoc = GetClipDoc();
+            ScDocument* pClipDoc = ScModule::GetClipDoc();
             if (pClipDoc)
                 pClipDoc->ClosingClipboardSource();
         }
@@ -2719,23 +2718,6 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
 std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
 {
     return std::make_unique<ScDocFuncDirect>( *this );
-}
-
-ScDocument* ScDocShell::GetClipDoc()
-{
-    vcl::Window* pWin = nullptr;
-    if (ScTabViewShell* pViewShell = GetBestViewShell())
-        pWin = pViewShell->GetViewData().GetActiveWin();
-
-    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
-    if (pObj)
-    {
-        ScDocument* pDoc = pObj->GetDocument();
-        assert((!pDoc || pDoc->IsClipboard()) && "Document is not clipboard, how can that be?");
-        return pDoc;
-    }
-
-    return nullptr;
 }
 
 ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :

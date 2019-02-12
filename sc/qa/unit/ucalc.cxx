@@ -5352,7 +5352,7 @@ void Test::testNoteLifeCycle()
 
     // Re-insert the note back to the same place.
     m_pDoc->SetNote(aPos, std::move(pNote2));
-    SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos).get();
+    SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to create a caption object.", pCaption);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This caption should belong to the drawing layer of the document.",
                            m_pDoc->GetDrawLayer(), static_cast<ScDrawLayer*>(&pCaption->getSdrModelFromSdrObject()));
@@ -5368,7 +5368,7 @@ void Test::testNoteLifeCycle()
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Note on the clipboard should share the same caption object from the original.",
-                           pCaption, pClipNote->GetCaption().get());
+                           pCaption, pClipNote->GetCaption());
 
 
     // Move B2 to B3 with note, which creates an ScUndoDragDrop, and Undo.
@@ -5376,7 +5376,7 @@ void Test::testNoteLifeCycle()
     ScAddress aOrigPos(aPos);
     ScAddress aMovePos(1,2,0);
     ScPostIt* pOrigNote = m_pDoc->GetNote(aOrigPos);
-    const SdrCaptionObj* pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos).get();
+    const SdrCaptionObj* pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
     bool const bCut = true;       // like Drag&Drop
     bool bRecord = true;    // record Undo
     bool const bPaint = false;    // don't care about
@@ -5394,7 +5394,7 @@ void Test::testNoteLifeCycle()
     // The caption object should not be identical, it was newly created upon
     // Drop from clipboard.
     // pOrigCaption is a dangling pointer.
-    const SdrCaptionObj* pMoveCaption = pMoveNote->GetOrCreateCaption(aMovePos).get();
+    const SdrCaptionObj* pMoveCaption = pMoveNote->GetOrCreateCaption(aMovePos);
     CPPUNIT_ASSERT_MESSAGE("Captions identical after move.", pOrigCaption != pMoveCaption);
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -5409,7 +5409,7 @@ void Test::testNoteLifeCycle()
 
     // The caption object still should not be identical.
     // pMoveCaption is a dangling pointer.
-    pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos).get();
+    pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
     CPPUNIT_ASSERT_MESSAGE("Captions identical after move undo.", pOrigCaption != pMoveCaption);
 
 
@@ -5418,7 +5418,7 @@ void Test::testNoteLifeCycle()
     ScAddress aPosB4(1,3,0);
     ScPostIt* pNoteB4 = m_pDoc->GetOrCreateNote(aPosB4);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert cell comment at B4.", pNoteB4);
-    const SdrCaptionObj* pCaptionB4 = pNoteB4->GetOrCreateCaption(aPosB4).get();
+    const SdrCaptionObj* pCaptionB4 = pNoteB4->GetOrCreateCaption(aPosB4);
     ScCellMergeOption aCellMergeOption(1,3,2,3);
     rDocFunc.MergeCells( aCellMergeOption, true /*bContents*/, bRecord, bApi, false /*bEmptyMergedCells*/ );
 
@@ -5430,7 +5430,7 @@ void Test::testNoteLifeCycle()
     // at B4 after the merge and not cloned nor recreated during Undo.
     ScPostIt* pUndoNoteB4 = m_pDoc->GetNote(aPosB4);
     CPPUNIT_ASSERT_MESSAGE("No cell comment at B4 after Undo.", pUndoNoteB4);
-    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption().get();
+    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4, pUndoCaptionB4);
 
 
@@ -5446,7 +5446,7 @@ void Test::testNoteLifeCycle()
         ScAddress aPosB5(1,4,0);
         ScPostIt* pOtherNoteB5 = pDoc2->GetOrCreateNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to insert cell comment at B5.", pOtherNoteB5);
-        const SdrCaptionObj* pOtherCaptionB5 = pOtherNoteB5->GetOrCreateCaption(aPosB5).get();
+        const SdrCaptionObj* pOtherCaptionB5 = pOtherNoteB5->GetOrCreateCaption(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("No caption at B5.", pOtherCaptionB5);
 
         ScDocument aClipDoc2(SCDOCMODE_CLIP);
@@ -5464,7 +5464,7 @@ void Test::testNoteLifeCycle()
         pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
-        const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5).get();
+        const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("No caption at pasted B5.", pCaptionB5);
         // Do not test if  pCaptionB5 != pOtherCaptionB5  because since pDoc2
         // has been closed and the caption been deleted objects *may* be

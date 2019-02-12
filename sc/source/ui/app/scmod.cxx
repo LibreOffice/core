@@ -618,6 +618,34 @@ void ScModule::SetDragJump(
     m_pDragData->aJumpText = rText;
 }
 
+ScDocument* ScModule::GetClipDoc()
+{
+    // called from document
+    SfxViewFrame* pViewFrame = nullptr;
+    ScTabViewShell* pViewShell = nullptr;
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+
+    if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current())))
+        xTransferable.set(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
+    else if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::GetFirst())))
+        xTransferable.set(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
+    else if ((pViewFrame = SfxViewFrame::GetFirst()))
+    {
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+            pViewFrame->GetWindow().GetClipboard();
+        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
+    }
+
+    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(xTransferable);
+    if (pObj)
+    {
+        ScDocument* pDoc = pObj->GetDocument();
+        assert((!pDoc || pDoc->IsClipboard()) && "Document is not clipboard, how can that be?");
+        return pDoc;
+    }
+
+    return nullptr;
+}
 
 void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
 {

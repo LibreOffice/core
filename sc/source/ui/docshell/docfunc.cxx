@@ -1202,7 +1202,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if (ScViewData* pViewData = ScDocShell::GetViewData())
     {
         if (ScDrawView* pDrawView = pViewData->GetScDrawView())
-            pDrawView->SyncForGrid( pNote->GetCaption().get() );
+            pDrawView->SyncForGrid( pNote->GetCaption());
     }
 
     rDocShell.SetDocumentModified();
@@ -1279,7 +1279,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         }
 
         // create the undo action
-        if( pUndoMgr && (aOldData.m_pCaption || aNewData.m_pCaption) )
+        if( pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption) )
             pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
 
         // repaint cell (to make note marker visible)

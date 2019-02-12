@@ -2357,7 +2357,7 @@ void ScXMLExport::collectAutoStyles()
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
-                        const std::shared_ptr< SdrCaptionObj >& pDrawObj = pNote->GetOrCreateCaption( aPos );
+                        SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         // all uno shapes are created anyway in CollectSharedData
                         uno::Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShapeProperties.is())
@@ -2398,7 +2398,7 @@ void ScXMLExport::collectAutoStyles()
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
-                        const std::shared_ptr< SdrCaptionObj >& pDrawObj = pNote->GetOrCreateCaption( aPos );
+                        SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         uno::Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySet> xParaProp(
                             lcl_GetEnumerated( xCellText, rNoteParaEntry.maSelection.nStartPara ), uno::UNO_QUERY );
@@ -2429,7 +2429,7 @@ void ScXMLExport::collectAutoStyles()
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
-                        const std::shared_ptr< SdrCaptionObj >& pDrawObj = pNote->GetOrCreateCaption( aPos );
+                        SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         uno::Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
                         ScDrawTextCursor* pCursor = ScDrawTextCursor::getImplementation( xCursorProp );
@@ -3572,7 +3572,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
         // TODO : notes
         //is it still useful, as this call back is only called from ScXMLExport::WriteAnnotation
         // and should be in sync with pCurrentCell
-        const std::shared_ptr< SdrCaptionObj >& pNoteCaption = pNote->GetOrCreateCaption(pCurrentCell->maCellAddress);
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(pCurrentCell->maCellAddress);
         uno::Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
         if (xCurrentShape.get()!=xShape.get())
             return;
@@ -3629,7 +3629,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 
         pCurrentCell = &rMyCell;
 
-        const std::shared_ptr< SdrCaptionObj >& pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
         if (pNoteCaption)
         {
             uno::Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );

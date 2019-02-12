@@ -871,7 +871,7 @@ void ScDrawView::DeleteMarked()
         {
             // rescue note data for undo (with pointer to caption object)
             ScNoteData aNoteData = pNote->GetNoteData();
-            OSL_ENSURE( aNoteData.m_pCaption.get() == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
+            OSL_ENSURE( aNoteData.mxCaption.get() == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
             // collect the drawing undo action created while deleting the note
             if( bUndo )
                 pDrawLayer->BeginCalcUndo(false);

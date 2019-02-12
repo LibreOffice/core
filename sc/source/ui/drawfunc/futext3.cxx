@@ -58,7 +58,7 @@ void FuText::StopEditMode()
     {
         aNotePos = pCaptData->maStart;
         pNote = rDoc.GetNote( aNotePos );
-        OSL_ENSURE( pNote && (pNote->GetCaption().get() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
+        OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
@@ -78,7 +78,7 @@ void FuText::StopEditMode()
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the
                 undo if editing a new note has been cancelled. */
-            bNewNote = (pCalcUndo->GetActionCount() > 0) && dynamic_cast< ScUndoNewSdrCaptionObj* >(pCalcUndo->GetAction( 0 ));
+            bNewNote = (pCalcUndo->GetActionCount() > 0) && dynamic_cast< SdrUndoNewObj* >(pCalcUndo->GetAction( 0 ));
 
             // create a "insert note" undo action if needed
             if( bNewNote )

@@ -65,7 +65,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
 ScNoteMarker::~ScNoteMarker()
 {
     if (m_pModel)
-        m_xObject.reset();     // deleting pModel also deletes the SdrCaptionObj
+        m_xObject.release();     // deleting pModel also deletes the SdrCaptionObj
 
     InvalidateWin();
 
