@@ -32,9 +32,9 @@ $(eval $(call gb_Library_set_include,pyuno_loader,\
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
-else ifeq ($(OS),SOLARIS))
+else ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
-else ifeq ($(OS),MACOSX))
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_libs,pyuno_loader,-ldl))
 endif
 
