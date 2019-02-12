@@ -25,6 +25,7 @@
 #include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
@@ -1229,10 +1230,10 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 
 // Macro
 
-Pointer  SwVirtFlyDrawObj::GetMacroPointer(
+PointerStyle  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
 {
-    return Pointer( PointerStyle::RefHand );
+    return PointerStyle::RefHand;
 }
 
 bool SwVirtFlyDrawObj::HasMacro() const

@@ -197,7 +197,7 @@ public:
     bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
     // interactive insertion of a new auxiliary line
     void BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
-    Pointer GetDraggedHelpLinePointer() const;
+    PointerStyle GetDraggedHelpLinePointer() const;
 
     // change the type of auxiliary line while dragging
     // void SetDraggedHelpLineKind(SdrHelpLineKind eNewKind);

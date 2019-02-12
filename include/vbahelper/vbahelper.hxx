@@ -31,7 +31,6 @@
 #include <sal/types.h>
 #include <tools/color.hxx>
 #include <vbahelper/vbadllapi.h>
-#include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/errcode.hxx>
 
@@ -131,7 +130,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC sal_Int32 PointsToHmm( double fPoints );
         VBAHELPER_DLLPUBLIC double HmmToPoints( sal_Int32 nHmm );
         VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
-        VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, const Pointer& rPointer, bool bOverWrite );
+        VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  );
         VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );

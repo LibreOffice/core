@@ -2667,16 +2667,16 @@ bool SdXImpressDocument::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
-Pointer SdXImpressDocument::getPointer()
+PointerStyle SdXImpressDocument::getPointer()
 {
     SolarMutexGuard aGuard;
     DrawViewShell* pViewShell = GetViewShell();
     if (!pViewShell)
-        return Pointer();
+        return PointerStyle::Arrow;
 
     Window* pWindow = pViewShell->GetActiveWindow();
     if (!pWindow)
-        return Pointer();
+        return PointerStyle::Arrow;
 
     return pWindow->GetPointer();
 }

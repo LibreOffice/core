@@ -40,6 +40,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/ptrstyle.hxx>
 
 using namespace com::sun::star;
 
@@ -185,7 +186,7 @@ void SdrCreateView::ImpClearVars()
     pCurrentCreate=nullptr;
     pCreatePV=nullptr;
     b1stPointAsCenter=false;
-    aCurrentCreatePointer=Pointer(PointerStyle::Cross);
+    aCurrentCreatePointer=PointerStyle::Cross;
     bUseIncompatiblePathCreateInterface=false;
     nAutoCloseDistPix=5;
     nFreeHandMinDistPix=10;
@@ -367,7 +368,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
         }
         else
         {
-            aCurrentCreatePointer = Pointer(PointerStyle::Cross);
+            aCurrentCreatePointer = PointerStyle::Cross;
         }
     }
 

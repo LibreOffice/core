@@ -23,6 +23,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include "ipwin.hxx"
 #include <hatchwindow.hxx>
@@ -483,10 +484,10 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
         if( m_nMoveGrab == -1 ) // the first time
         {
             m_aOldPointer = GetPointer();
-            SetPointer( Pointer( aStyle ) );
+            SetPointer( aStyle );
         }
         else
-            SetPointer( Pointer( aStyle ) );
+            SetPointer( aStyle );
     }
     m_nMoveGrab = nGrab;
 }

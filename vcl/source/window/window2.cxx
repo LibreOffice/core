@@ -1220,7 +1220,7 @@ void Window::SetCreatedWithToolkit( bool b )
     mpWindowImpl->mbCreatedWithToolkit = b;
 }
 
-const Pointer& Window::GetPointer() const
+PointerStyle Window::GetPointer() const
 {
     return mpWindowImpl->maPointer;
 }

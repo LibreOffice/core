@@ -31,6 +31,7 @@
 #include <vcl/textview.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
@@ -493,7 +494,7 @@ void SwSrcEditWindow::CreateTextEngine()
     const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
     m_pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
     m_pOutWin->SetBackground(Wallpaper(rCol));
-    m_pOutWin->SetPointer(Pointer(PointerStyle::Text));
+    m_pOutWin->SetPointer(PointerStyle::Text);
     m_pOutWin->Show();
 
     // create Scrollbars

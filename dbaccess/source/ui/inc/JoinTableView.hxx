@@ -130,7 +130,7 @@ namespace dbaui
         void InvalidateConnections();
 
         void BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos );
-        void BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPointer );
+        void BeginChildSizing( OTableWindow* pTabWin, PointerStyle nPointer );
 
         void NotifyTitleClicked( OTableWindow* pTabWin, const Point& rMousePos );
 

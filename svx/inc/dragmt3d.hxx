@@ -95,7 +95,7 @@ public:
         bool bFull);
 
     virtual void MoveSdrDrag(const Point& rPnt) override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 };
 
 // Derivative of SdrDragMethod for moving 3D sub-objects
@@ -113,7 +113,7 @@ public:
         bool bFull);
 
     virtual void MoveSdrDrag(const Point& rPnt) override;
-    virtual Pointer GetSdrDragPointer() const override;
+    virtual PointerStyle GetSdrDragPointer() const override;
 };
 
 

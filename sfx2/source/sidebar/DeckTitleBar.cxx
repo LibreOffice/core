@@ -24,6 +24,7 @@
 #include <sfx2/strings.hrc>
 
 #include <vcl/image.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #ifdef DEBUG
 #include <sfx2/sidebar/Tools.hxx>
@@ -134,8 +135,7 @@ void DeckTitleBar::MouseMove (const MouseEvent& rMouseEvent)
     if ( aGrip.IsInside( rMouseEvent.GetPosPixel() ) )
         eStyle = PointerStyle::Move;
 
-    Pointer aPtr( eStyle );
-    SetPointer( aPtr );
+    SetPointer( eStyle );
 
     Window::MouseMove( rMouseEvent );
 }

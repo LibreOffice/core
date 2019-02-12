@@ -22,8 +22,6 @@
 
 #include <tools/gen.hxx>
 
-#include <vcl/pointr.hxx>
-
 #include <svl/solar.hrc>
 
 #include <svx/xpoly.hxx>
@@ -231,7 +229,7 @@ public:
     void SetSourceHdlNum(sal_uInt32 nNum) { nSourceHdlNum=nNum; }
     sal_uInt32 GetSourceHdlNum() const { return nSourceHdlNum; }
 
-    virtual Pointer GetPointer() const;
+    virtual PointerStyle GetPointer() const;
     bool IsHdlHit(const Point& rPnt) const;
 
     virtual bool IsFocusHdl() const;
@@ -353,7 +351,7 @@ public:
     SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
     virtual ~SdrHdlLine() override;
 
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
 };
 
 // a SdrHdlBezWgt knows about its "base handle". Its draw method
@@ -400,7 +398,7 @@ public:
     void SetLineCode(SdrEdgeLineCode eCode);
     SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
     bool IsHorzDrag() const;
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
 };
 
 
@@ -413,7 +411,7 @@ public:
     ImpMeasureHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind) {}
     virtual ~ImpMeasureHdl() override;
 
-    virtual Pointer GetPointer() const override;
+    virtual PointerStyle GetPointer() const override;
 };
 
 

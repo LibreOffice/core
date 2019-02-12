@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-#include <vcl/pointr.hxx>
+#include <vcl/ptrstyle.hxx>
 
 
 //  class VCLXPointer
@@ -37,7 +37,7 @@ class VCLXPointer final : public cppu::WeakImplHelper<
     css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
 {
     ::osl::Mutex    maMutex;
-    Pointer         maPointer;
+    PointerStyle    maPointer;
 
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
@@ -45,7 +45,7 @@ public:
     VCLXPointer();
     virtual ~VCLXPointer() override;
 
-    const Pointer&      GetPointer() const { return maPointer; }
+    PointerStyle GetPointer() const { return maPointer; }
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

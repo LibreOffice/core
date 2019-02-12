@@ -669,9 +669,9 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
 
     if (bInResize || IsPointerAtResizePos())
-        SetPointer(Pointer(PointerStyle::WindowSSize));
+        SetPointer(PointerStyle::WindowSSize);
     else
-        SetPointer(Pointer(PointerStyle::Arrow));
+        SetPointer(PointerStyle::Arrow);
 
     if (bInResize)
     {

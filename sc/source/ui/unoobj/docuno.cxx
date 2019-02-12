@@ -1027,17 +1027,17 @@ OString ScModelObj::getCellCursor( int nOutputWidth, int nOutputHeight,
     return "{ \"commandName\": \".uno:CellCursor\", \"commandValues\": \"" + pGridWindow->getCellCursor( nOutputWidth, nOutputHeight, nTileWidth, nTileHeight ) + "\" }";
 }
 
-Pointer ScModelObj::getPointer()
+PointerStyle ScModelObj::getPointer()
 {
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return Pointer();
+        return PointerStyle::Arrow;
 
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
     if (!pGridWindow)
-        return Pointer();
+        return PointerStyle::Arrow;
 
     return pGridWindow->GetPointer();
 }

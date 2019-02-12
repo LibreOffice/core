@@ -97,7 +97,7 @@ PointerStyle Window::ImplGetMousePointer() const
     bool            bWait = false;
 
     if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
-        ePointerStyle = GetPointer().GetStyle();
+        ePointerStyle = GetPointer();
     else
         ePointerStyle = PointerStyle::Arrow;
 
@@ -119,7 +119,7 @@ PointerStyle Window::ImplGetMousePointer() const
             else
             {
                 if ( pWindow->mpWindowImpl->mbChildPtrOverwrite )
-                    ePointerStyle = pWindow->GetPointer().GetStyle();
+                    ePointerStyle = pWindow->GetPointer();
             }
         }
 
@@ -472,12 +472,12 @@ bool Window::IsMouseCaptured() const
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
 }
 
-void Window::SetPointer( const Pointer& rPointer )
+void Window::SetPointer( PointerStyle nPointer )
 {
-    if ( mpWindowImpl->maPointer == rPointer )
+    if ( mpWindowImpl->maPointer == nPointer )
         return;
 
-    mpWindowImpl->maPointer   = rPointer;
+    mpWindowImpl->maPointer   = nPointer;
 
     // possibly immediately move pointer
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
@@ -485,10 +485,10 @@ void Window::SetPointer( const Pointer& rPointer )
 
     if (VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier())
     {
-        Pointer aPointer = GetPointer();
+        PointerStyle aPointer = GetPointer();
         // We don't map all possible pointers hence we need a default
         OString aPointerString = "default";
-        auto aIt = vcl::gaLOKPointerMap.find(aPointer.GetStyle());
+        auto aIt = vcl::gaLOKPointerMap.find(aPointer);
         if (aIt != vcl::gaLOKPointerMap.end())
         {
             aPointerString = aIt->second;

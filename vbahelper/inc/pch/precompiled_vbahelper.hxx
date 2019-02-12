@@ -60,7 +60,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/factory.hxx>

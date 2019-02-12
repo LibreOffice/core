@@ -15,7 +15,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <map>
 
@@ -285,7 +284,7 @@ public:
         return OString();
     }
 
-    virtual Pointer getPointer() = 0;
+    virtual PointerStyle getPointer() = 0;
 
     /// Sets the clipboard of the component.
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;

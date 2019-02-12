@@ -165,7 +165,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
-#include <vcl/pointr.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>

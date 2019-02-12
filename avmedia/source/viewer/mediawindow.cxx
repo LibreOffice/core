@@ -130,9 +130,9 @@ void MediaWindow::setPosSize( const tools::Rectangle& rNewRect )
 }
 
 
-void MediaWindow::setPointer( const Pointer& rPointer )
+void MediaWindow::setPointer( PointerStyle nPointer )
 {
-    mpImpl->setPointer( rPointer );
+    mpImpl->setPointer( nPointer );
 }
 
 

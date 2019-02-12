@@ -374,7 +374,7 @@ public:
                                    long nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getPointer().
-    virtual Pointer getPointer() override;
+    virtual PointerStyle getPointer() override;
 
     /// @see vcl::ITiledRenderable::getTrackedChanges().
     OUString getTrackedChanges() override;
