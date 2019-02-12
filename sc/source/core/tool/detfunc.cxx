@@ -1425,7 +1425,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
                 {
                     ScPostIt* pNote = rDoc.GetNote( pData->maStart );
                     // caption should exist, we iterate over drawing objects...
-                    OSL_ENSURE( pNote && (pNote->GetCaption().get() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
+                    OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
                     if( pNote )
                     {
                         ScCommentData aData( rDoc, pModel );
