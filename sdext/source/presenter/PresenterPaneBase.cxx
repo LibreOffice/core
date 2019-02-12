@@ -267,22 +267,21 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
 void PresenterPaneBase::CreateWindows (
     const bool bIsWindowVisibleOnCreation)
 {
-    if (mxPresenterHelper.is() && mxParentWindow.is())
-    {
+    if (!(mxPresenterHelper.is() && mxParentWindow.is()))
+        return;
 
-        mxBorderWindow = mxPresenterHelper->createWindow(
-            mxParentWindow,
-            false,
-            bIsWindowVisibleOnCreation,
-            false,
-            false);
-        mxContentWindow = mxPresenterHelper->createWindow(
-            mxBorderWindow,
-            false,
-            bIsWindowVisibleOnCreation,
-            false,
-            false);
-    }
+    mxBorderWindow = mxPresenterHelper->createWindow(
+        mxParentWindow,
+        false,
+        bIsWindowVisibleOnCreation,
+        false,
+        false);
+    mxContentWindow = mxPresenterHelper->createWindow(
+        mxBorderWindow,
+        false,
+        bIsWindowVisibleOnCreation,
+        false,
+        false);
 }
 
 const Reference<awt::XWindow>& PresenterPaneBase::GetBorderWindow() const
@@ -305,20 +304,20 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 {
     OSL_ASSERT(mxPaneId.is());
 
-    if (mxBorderPainter.is() && mxBorderWindow.is() && mxBorderCanvas.is())
-    {
-        awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
-        awt::Rectangle aLocalBorderBox (0,0, aBorderBox.Width, aBorderBox.Height);
+    if (!(mxBorderPainter.is() && mxBorderWindow.is() && mxBorderCanvas.is()))
+        return;
 
-        //TODO: paint border background?
+    awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
+    awt::Rectangle aLocalBorderBox (0,0, aBorderBox.Width, aBorderBox.Height);
 
-        mxBorderPainter->paintBorder(
-                mxPaneId->getResourceURL(),
-                mxBorderCanvas,
-                aLocalBorderBox,
-                rUpdateBox,
-                msTitle);
-    }
+    //TODO: paint border background?
+
+    mxBorderPainter->paintBorder(
+            mxPaneId->getResourceURL(),
+            mxBorderCanvas,
+            aLocalBorderBox,
+            rUpdateBox,
+            msTitle);
 }
 
 void PresenterPaneBase::LayoutContextWindow()
@@ -326,20 +325,20 @@ void PresenterPaneBase::LayoutContextWindow()
     OSL_ASSERT(mxPaneId.is());
     OSL_ASSERT(mxBorderWindow.is());
     OSL_ASSERT(mxContentWindow.is());
-    if (mxBorderPainter.is() && mxPaneId.is() && mxBorderWindow.is() && mxContentWindow.is())
-    {
-        const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
-        const awt::Rectangle aInnerBox (mxBorderPainter->removeBorder(
-            mxPaneId->getResourceURL(),
-            aBorderBox,
-            drawing::framework::BorderType_TOTAL_BORDER));
-        mxContentWindow->setPosSize(
-            aInnerBox.X - aBorderBox.X,
-            aInnerBox.Y - aBorderBox.Y,
-            aInnerBox.Width,
-            aInnerBox.Height,
-            awt::PosSize::POSSIZE);
-    }
+    if (!(mxBorderPainter.is() && mxPaneId.is() && mxBorderWindow.is() && mxContentWindow.is()))
+        return;
+
+    const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
+    const awt::Rectangle aInnerBox (mxBorderPainter->removeBorder(
+        mxPaneId->getResourceURL(),
+        aBorderBox,
+        drawing::framework::BorderType_TOTAL_BORDER));
+    mxContentWindow->setPosSize(
+        aInnerBox.X - aBorderBox.X,
+        aInnerBox.Y - aBorderBox.Y,
+        aInnerBox.Width,
+        aInnerBox.Height,
+        awt::PosSize::POSSIZE);
 }
 
 bool PresenterPaneBase::IsVisible() const

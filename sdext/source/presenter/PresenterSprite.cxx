@@ -122,30 +122,30 @@ void PresenterSprite::Update()
 
 void PresenterSprite::ProvideSprite()
 {
-    if ( ! mxSprite.is()
+    if ( !(! mxSprite.is()
         && mxSpriteFactory.is()
         && maSize.Width>0
-        && maSize.Height>0)
-    {
-        mxSprite = mxSpriteFactory->createCustomSprite(maSize);
-        if (mxSprite.is())
-        {
-            mxSprite->move(maLocation,
-                rendering::ViewState(
-                geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                nullptr),
-            rendering::RenderState(
-                geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                nullptr,
-                uno::Sequence<double>(4),
-                rendering::CompositeOperation::SOURCE)
-                );
-            mxSprite->setAlpha(1.0);
-            mxSprite->setPriority(0);
-            if (mbIsVisible)
-                mxSprite->show();
-        }
-    }
+        && maSize.Height>0))
+        return;
+
+    mxSprite = mxSpriteFactory->createCustomSprite(maSize);
+    if (!mxSprite.is())
+        return;
+
+    mxSprite->move(maLocation,
+        rendering::ViewState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        nullptr),
+    rendering::RenderState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        nullptr,
+        uno::Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE)
+        );
+    mxSprite->setAlpha(1.0);
+    mxSprite->setPriority(0);
+    if (mbIsVisible)
+        mxSprite->show();
 }
 
 void PresenterSprite::DisposeSprite()

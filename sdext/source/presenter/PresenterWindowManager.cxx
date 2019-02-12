@@ -253,19 +253,19 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
     if ( ! mxParentCanvas.is())
         return;
 
-    if (mpTheme != nullptr)
+    if (mpTheme == nullptr)
+        return;
+
+    try
     {
-        try
-        {
-            if (mbIsLayoutPending)
-                Layout();
-            PaintBackground(rEvent.UpdateRect);
-            PaintChildren(rEvent);
-        }
-        catch (RuntimeException&)
-        {
-            OSL_FAIL("paint failed!");
-        }
+        if (mbIsLayoutPending)
+            Layout();
+        PaintBackground(rEvent.UpdateRect);
+        PaintChildren(rEvent);
+    }
+    catch (RuntimeException&)
+    {
+        OSL_FAIL("paint failed!");
     }
 }
 
@@ -370,57 +370,57 @@ void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
     OSL_ASSERT(mpPresenterController.get() != nullptr);
 
-    if (meLayoutMode != eMode
-        || mbIsSlideSorterActive
-        || mbIsHelpViewActive)
-    {
-        meLayoutMode = eMode;
-        mbIsSlideSorterActive = false;
-        mbIsHelpViewActive = false;
+    if (meLayoutMode == eMode
+        && !mbIsSlideSorterActive
+        && !mbIsHelpViewActive)
+        return;
 
-        mpPresenterController->RequestViews(
-            mbIsSlideSorterActive,
-            meLayoutMode==LM_Notes,
-            mbIsHelpViewActive);
-        Layout();
-        NotifyLayoutModeChange();
-    }
+    meLayoutMode = eMode;
+    mbIsSlideSorterActive = false;
+    mbIsHelpViewActive = false;
+
+    mpPresenterController->RequestViews(
+        mbIsSlideSorterActive,
+        meLayoutMode==LM_Notes,
+        mbIsHelpViewActive);
+    Layout();
+    NotifyLayoutModeChange();
 }
 
 void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
 {
-    if (mbIsSlideSorterActive != bIsActive)
-    {
-        mbIsSlideSorterActive = bIsActive;
-        if (mbIsSlideSorterActive)
-            mbIsHelpViewActive = false;
-        StoreViewMode(GetViewMode());
+    if (mbIsSlideSorterActive == bIsActive)
+        return;
 
-        mpPresenterController->RequestViews(
-            mbIsSlideSorterActive,
-            meLayoutMode==LM_Notes,
-            mbIsHelpViewActive);
-        Layout();
-        NotifyLayoutModeChange();
-    }
+    mbIsSlideSorterActive = bIsActive;
+    if (mbIsSlideSorterActive)
+        mbIsHelpViewActive = false;
+    StoreViewMode(GetViewMode());
+
+    mpPresenterController->RequestViews(
+        mbIsSlideSorterActive,
+        meLayoutMode==LM_Notes,
+        mbIsHelpViewActive);
+    Layout();
+    NotifyLayoutModeChange();
 }
 
 void PresenterWindowManager::SetHelpViewState (bool bIsActive)
 {
-    if (mbIsHelpViewActive != bIsActive)
-    {
-        mbIsHelpViewActive = bIsActive;
-        if (mbIsHelpViewActive)
-            mbIsSlideSorterActive = false;
-        StoreViewMode(GetViewMode());
+    if (mbIsHelpViewActive == bIsActive)
+        return;
 
-        mpPresenterController->RequestViews(
-            mbIsSlideSorterActive,
-            meLayoutMode==LM_Notes,
-            mbIsHelpViewActive);
-        Layout();
-        NotifyLayoutModeChange();
-    }
+    mbIsHelpViewActive = bIsActive;
+    if (mbIsHelpViewActive)
+        mbIsSlideSorterActive = false;
+    StoreViewMode(GetViewMode());
+
+    mpPresenterController->RequestViews(
+        mbIsSlideSorterActive,
+        meLayoutMode==LM_Notes,
+        mbIsHelpViewActive);
+    Layout();
+    NotifyLayoutModeChange();
 }
 
 void PresenterWindowManager::SetViewMode (const ViewMode eMode)
@@ -541,40 +541,40 @@ void PresenterWindowManager::RemoveLayoutListener (
 
 void PresenterWindowManager::Layout()
 {
-    if (mxParentWindow.is() && ! mbIsLayouting)
+    if (!mxParentWindow.is() || mbIsLayouting)
+        return;
+
+    mbIsLayoutPending = false;
+    mbIsLayouting = true;
+    mxScaledBackgroundBitmap = nullptr;
+    mxClipPolygon = nullptr;
+
+    try
     {
-        mbIsLayoutPending = false;
-        mbIsLayouting = true;
-        mxScaledBackgroundBitmap = nullptr;
-        mxClipPolygon = nullptr;
+        if (mbIsSlideSorterActive)
+            LayoutSlideSorterMode();
+        else if (mbIsHelpViewActive)
+            LayoutHelpMode();
+        else
+            switch (meLayoutMode)
+            {
+                case LM_Standard:
+                default:
+                    LayoutStandardMode();
+                    break;
 
-        try
-        {
-            if (mbIsSlideSorterActive)
-                LayoutSlideSorterMode();
-            else if (mbIsHelpViewActive)
-                LayoutHelpMode();
-            else
-                switch (meLayoutMode)
-                {
-                    case LM_Standard:
-                    default:
-                        LayoutStandardMode();
-                        break;
-
-                    case LM_Notes:
-                        LayoutNotesMode();
-                        break;
-                }
-        }
-        catch (Exception&)
-        {
-            OSL_ASSERT(false);
-            throw;
-        }
-
-        mbIsLayouting = false;
+                case LM_Notes:
+                    LayoutNotesMode();
+                    break;
+            }
     }
+    catch (Exception&)
+    {
+        OSL_ASSERT(false);
+        throw;
+    }
+
+    mbIsLayouting = false;
 }
 
 void PresenterWindowManager::LayoutStandardMode()
@@ -698,22 +698,22 @@ void PresenterWindowManager::LayoutNotesMode()
     // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
-    if (pPane.get() != nullptr)
-    {
-        const awt::Size aNextSlideOuterBox (CalculatePaneSize(
-            nTertiaryWidth,
-            PresenterPaneFactory::msNextSlidePreviewPaneURL));
-        /// check whether RTL interface or not
-        double Temp=nGap;
-        if(AllSettings::GetLayoutRTL())
-            Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
-        SetPanePosSizeAbsolute (
-            PresenterPaneFactory::msNextSlidePreviewPaneURL,
-            Temp,
-            nNotesViewBottom - aNextSlideOuterBox.Height,
-            aNextSlideOuterBox.Width,
-            aNextSlideOuterBox.Height);
-    }
+    if (pPane.get() == nullptr)
+        return;
+
+    const awt::Size aNextSlideOuterBox (CalculatePaneSize(
+        nTertiaryWidth,
+        PresenterPaneFactory::msNextSlidePreviewPaneURL));
+    /// check whether RTL interface or not
+    double Temp=nGap;
+    if(AllSettings::GetLayoutRTL())
+        Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
+    SetPanePosSizeAbsolute (
+        PresenterPaneFactory::msNextSlidePreviewPaneURL,
+        Temp,
+        nNotesViewBottom - aNextSlideOuterBox.Height,
+        aNextSlideOuterBox.Width,
+        aNextSlideOuterBox.Height);
 
 
 }
@@ -918,77 +918,77 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
         rendering::CompositeOperation::SOURCE);
 
     // Paint the background.
-    if (mpBackgroundBitmap.get() != nullptr)
+    if (mpBackgroundBitmap.get() == nullptr)
+        return;
+
+    ProvideBackgroundBitmap();
+
+    if (mxScaledBackgroundBitmap.is())
     {
-        ProvideBackgroundBitmap();
+        Sequence<rendering::Texture> aTextures (1);
+        const geometry::IntegerSize2D aBitmapSize(mxScaledBackgroundBitmap->getSize());
+        aTextures[0] = rendering::Texture (
+            geometry::AffineMatrix2D(
+                aBitmapSize.Width,0,0,
+                0,aBitmapSize.Height,0),
+            1,
+            0,
+            mxScaledBackgroundBitmap,
+            nullptr,
+            nullptr,
+            rendering::StrokeAttributes(),
+            rendering::TexturingMode::REPEAT,
+            rendering::TexturingMode::REPEAT);
 
-        if (mxScaledBackgroundBitmap.is())
-        {
-            Sequence<rendering::Texture> aTextures (1);
-            const geometry::IntegerSize2D aBitmapSize(mxScaledBackgroundBitmap->getSize());
-            aTextures[0] = rendering::Texture (
-                geometry::AffineMatrix2D(
-                    aBitmapSize.Width,0,0,
-                    0,aBitmapSize.Height,0),
-                1,
-                0,
-                mxScaledBackgroundBitmap,
-                nullptr,
-                nullptr,
-                rendering::StrokeAttributes(),
-                rendering::TexturingMode::REPEAT,
-                rendering::TexturingMode::REPEAT);
-
-            mxParentCanvas->fillTexturedPolyPolygon(
-                xBackgroundPolygon,
-                aViewState,
-                aRenderState,
-                aTextures);
-        }
-        else
-        {
-            const util::Color aBackgroundColor (mpBackgroundBitmap->maReplacementColor);
-            aRenderState.DeviceColor[0] = ((aBackgroundColor >> 16) & 0x0ff) / 255.0;
-            aRenderState.DeviceColor[1] = ((aBackgroundColor >> 8) & 0x0ff) / 255.0;
-            aRenderState.DeviceColor[2] = ((aBackgroundColor >> 0) & 0x0ff) / 255.0;
-            aRenderState.DeviceColor[3] = ((aBackgroundColor >> 24) & 0x0ff) / 255.0;
-            mxParentCanvas->fillPolyPolygon(
-                xBackgroundPolygon,
-                aViewState,
-                aRenderState);
-        }
+        mxParentCanvas->fillTexturedPolyPolygon(
+            xBackgroundPolygon,
+            aViewState,
+            aRenderState,
+            aTextures);
+    }
+    else
+    {
+        const util::Color aBackgroundColor (mpBackgroundBitmap->maReplacementColor);
+        aRenderState.DeviceColor[0] = ((aBackgroundColor >> 16) & 0x0ff) / 255.0;
+        aRenderState.DeviceColor[1] = ((aBackgroundColor >> 8) & 0x0ff) / 255.0;
+        aRenderState.DeviceColor[2] = ((aBackgroundColor >> 0) & 0x0ff) / 255.0;
+        aRenderState.DeviceColor[3] = ((aBackgroundColor >> 24) & 0x0ff) / 255.0;
+        mxParentCanvas->fillPolyPolygon(
+            xBackgroundPolygon,
+            aViewState,
+            aRenderState);
     }
 }
 
 void PresenterWindowManager::ProvideBackgroundBitmap()
 {
-    if ( ! mxScaledBackgroundBitmap.is())
+    if (  mxScaledBackgroundBitmap.is())
+        return;
+
+    Reference<rendering::XBitmap> xBitmap (mpBackgroundBitmap->GetNormalBitmap());
+    if (!xBitmap.is())
+        return;
+
+    const bool bStretchVertical (mpBackgroundBitmap->meVerticalTexturingMode
+        == PresenterBitmapDescriptor::Stretch);
+    const bool bStretchHorizontal (mpBackgroundBitmap->meHorizontalTexturingMode
+        == PresenterBitmapDescriptor::Stretch);
+    if (bStretchHorizontal || bStretchVertical)
     {
-        Reference<rendering::XBitmap> xBitmap (mpBackgroundBitmap->GetNormalBitmap());
-        if (xBitmap.is())
-        {
-            const bool bStretchVertical (mpBackgroundBitmap->meVerticalTexturingMode
-                == PresenterBitmapDescriptor::Stretch);
-            const bool bStretchHorizontal (mpBackgroundBitmap->meHorizontalTexturingMode
-                == PresenterBitmapDescriptor::Stretch);
-            if (bStretchHorizontal || bStretchVertical)
-            {
-                geometry::RealSize2D aSize;
-                if (bStretchVertical)
-                    aSize.Height = mxParentWindow->getPosSize().Height;
-                else
-                    aSize.Height = xBitmap->getSize().Height;
-                if (bStretchHorizontal)
-                    aSize.Width = mxParentWindow->getPosSize().Width;
-                else
-                    aSize.Width = xBitmap->getSize().Width;
-                mxScaledBackgroundBitmap = xBitmap->getScaledBitmap(aSize, false);
-            }
-            else
-            {
-                mxScaledBackgroundBitmap.set(xBitmap, UNO_QUERY);
-            }
-        }
+        geometry::RealSize2D aSize;
+        if (bStretchVertical)
+            aSize.Height = mxParentWindow->getPosSize().Height;
+        else
+            aSize.Height = xBitmap->getSize().Height;
+        if (bStretchHorizontal)
+            aSize.Width = mxParentWindow->getPosSize().Width;
+        else
+            aSize.Width = xBitmap->getSize().Width;
+        mxScaledBackgroundBitmap = xBitmap->getScaledBitmap(aSize, false);
+    }
+    else
+    {
+        mxScaledBackgroundBitmap.set(xBitmap, UNO_QUERY);
     }
 }
 

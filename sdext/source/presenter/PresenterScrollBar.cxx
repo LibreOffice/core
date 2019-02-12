@@ -185,23 +185,23 @@ void PresenterScrollBar::SetThumbPosition (
 {
     nPosition = ValidateThumbPosition(nPosition);
 
-    if (nPosition != mnThumbPosition && ! mbIsNotificationActive)
+    if (!(nPosition != mnThumbPosition && ! mbIsNotificationActive))
+        return;
+
+    mnThumbPosition = nPosition;
+
+    UpdateBorders();
+    Repaint(GetRectangle(Total), bAsynchronousUpdate);
+
+    mbIsNotificationActive = true;
+    try
     {
-        mnThumbPosition = nPosition;
-
-        UpdateBorders();
-        Repaint(GetRectangle(Total), bAsynchronousUpdate);
-
-        mbIsNotificationActive = true;
-        try
-        {
-            maThumbMotionListener(mnThumbPosition);
-        }
-        catch (Exception&)
-        {
-        }
-        mbIsNotificationActive = false;
+        maThumbMotionListener(mnThumbPosition);
     }
+    catch (Exception&)
+    {
+    }
+    mbIsNotificationActive = false;
 }
 
 
@@ -235,38 +235,38 @@ void PresenterScrollBar::SetLineHeight (const double nLineHeight)
 
 void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rxCanvas)
 {
-    if (mxCanvas != rxCanvas)
-    {
-        mxCanvas = rxCanvas;
-        if (mxCanvas.is())
-        {
-            if (mpBitmaps == nullptr)
-            {
-                if (mpSharedBitmaps.expired())
-                {
-                    try
-                    {
-                        mpBitmaps.reset(new PresenterBitmapContainer(
-                            OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
-                            std::shared_ptr<PresenterBitmapContainer>(),
-                            mxComponentContext,
-                            mxCanvas));
-                        mpSharedBitmaps = mpBitmaps;
-                    }
-                    catch(Exception&)
-                    {
-                        OSL_ASSERT(false);
-                    }
-                }
-                else
-                    mpBitmaps = std::shared_ptr<PresenterBitmapContainer>(mpSharedBitmaps);
-                UpdateBitmaps();
-                UpdateBorders();
-            }
+    if (mxCanvas == rxCanvas)
+        return;
 
-            Repaint(GetRectangle(Total), false);
+    mxCanvas = rxCanvas;
+    if (!mxCanvas.is())
+        return;
+
+    if (mpBitmaps == nullptr)
+    {
+        if (mpSharedBitmaps.expired())
+        {
+            try
+            {
+                mpBitmaps.reset(new PresenterBitmapContainer(
+                    OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
+                    std::shared_ptr<PresenterBitmapContainer>(),
+                    mxComponentContext,
+                    mxCanvas));
+                mpSharedBitmaps = mpBitmaps;
+            }
+            catch(Exception&)
+            {
+                OSL_ASSERT(false);
+            }
         }
+        else
+            mpBitmaps = std::shared_ptr<PresenterBitmapContainer>(mpSharedBitmaps);
+        UpdateBitmaps();
+        UpdateBorders();
     }
+
+    Repaint(GetRectangle(Total), false);
 }
 
 void PresenterScrollBar::SetBackground (const SharedBitmapDescriptor& rpBackgroundBitmap)
@@ -471,32 +471,32 @@ void PresenterScrollBar::PaintBitmap(
 
     Reference<rendering::XBitmap> xBitmap (GetBitmap(eArea,rpBitmaps));
 
-    if (xBitmap.is())
-    {
-        Reference<rendering::XPolyPolygon2D> xClipPolygon (
-            PresenterGeometryHelper::CreatePolygon(
-                PresenterGeometryHelper::Intersection(rUpdateBox,
-                    PresenterGeometryHelper::ConvertRectangle(aBox)),
-                mxCanvas->getDevice()));
+    if (!xBitmap.is())
+        return;
 
-        const rendering::ViewState aViewState (
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            xClipPolygon);
+    Reference<rendering::XPolyPolygon2D> xClipPolygon (
+        PresenterGeometryHelper::CreatePolygon(
+            PresenterGeometryHelper::Intersection(rUpdateBox,
+                PresenterGeometryHelper::ConvertRectangle(aBox)),
+            mxCanvas->getDevice()));
 
-        const geometry::IntegerSize2D aBitmapSize (xBitmap->getSize());
-        rendering::RenderState aRenderState (
-            geometry::AffineMatrix2D(
-                1,0,aBox.X1 + (aBox.X2-aBox.X1 - aBitmapSize.Width)/2,
-                0,1,aBox.Y1 + (aBox.Y2-aBox.Y1 - aBitmapSize.Height)/2),
-            nullptr,
-            Sequence<double>(4),
-            rendering::CompositeOperation::SOURCE);
+    const rendering::ViewState aViewState (
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        xClipPolygon);
 
-        mxCanvas->drawBitmap(
-            xBitmap,
-            aViewState,
-            aRenderState);
-    }
+    const geometry::IntegerSize2D aBitmapSize (xBitmap->getSize());
+    rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(
+            1,0,aBox.X1 + (aBox.X2-aBox.X1 - aBitmapSize.Width)/2,
+            0,1,aBox.Y1 + (aBox.Y2-aBox.Y1 - aBitmapSize.Height)/2),
+        nullptr,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
+
+    mxCanvas->drawBitmap(
+        xBitmap,
+        aViewState,
+        aRenderState);
 }
 
 PresenterScrollBar::Area PresenterScrollBar::GetArea (const double nX, const double nY) const
@@ -687,29 +687,29 @@ void PresenterVerticalScrollBar::UpdateBorders()
 
 void PresenterVerticalScrollBar::UpdateBitmaps()
 {
-    if (mpBitmaps != nullptr)
-    {
-        mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
-        mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");
-        mpPagerStartDescriptor = mpBitmaps->GetBitmap("PagerTop");
-        mpPagerCenterDescriptor = mpBitmaps->GetBitmap("PagerVertical");
-        mpPagerEndDescriptor = mpBitmaps->GetBitmap("PagerBottom");
-        mpThumbStartDescriptor = mpBitmaps->GetBitmap("ThumbTop");
-        mpThumbCenterDescriptor = mpBitmaps->GetBitmap("ThumbVertical");
-        mpThumbEndDescriptor = mpBitmaps->GetBitmap("ThumbBottom");
+    if (mpBitmaps == nullptr)
+        return;
 
-        mnScrollBarWidth = 0;
-        UpdateWidthOrHeight(mnScrollBarWidth, mpPrevButtonDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpNextButtonDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpPagerStartDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpPagerCenterDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpPagerEndDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpThumbStartDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpThumbCenterDescriptor);
-        UpdateWidthOrHeight(mnScrollBarWidth, mpThumbEndDescriptor);
-        if (mnScrollBarWidth == 0)
-            mnScrollBarWidth = 20;
-    }
+    mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
+    mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");
+    mpPagerStartDescriptor = mpBitmaps->GetBitmap("PagerTop");
+    mpPagerCenterDescriptor = mpBitmaps->GetBitmap("PagerVertical");
+    mpPagerEndDescriptor = mpBitmaps->GetBitmap("PagerBottom");
+    mpThumbStartDescriptor = mpBitmaps->GetBitmap("ThumbTop");
+    mpThumbCenterDescriptor = mpBitmaps->GetBitmap("ThumbVertical");
+    mpThumbEndDescriptor = mpBitmaps->GetBitmap("ThumbBottom");
+
+    mnScrollBarWidth = 0;
+    UpdateWidthOrHeight(mnScrollBarWidth, mpPrevButtonDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpNextButtonDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpPagerStartDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpPagerCenterDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpPagerEndDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpThumbStartDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpThumbCenterDescriptor);
+    UpdateWidthOrHeight(mnScrollBarWidth, mpThumbEndDescriptor);
+    if (mnScrollBarWidth == 0)
+        mnScrollBarWidth = 20;
 }
 
 void PresenterVerticalScrollBar::PaintComposite(

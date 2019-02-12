@@ -425,7 +425,7 @@ void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
     const GraphicsContext& rThisGC =
                    m_rProcessor.getGraphicsContext( elem.GCId );
 
-    if( rThisGC.BlendMode      == rNextGC.BlendMode &&
+    if( !(rThisGC.BlendMode      == rNextGC.BlendMode &&
          rThisGC.Flatness       == rNextGC.Flatness &&
          rThisGC.Transformation == rNextGC.Transformation &&
          rThisGC.Clip           == rNextGC.Clip &&
@@ -434,22 +434,22 @@ void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
          rThisGC.FillColor.Blue == rNextGC.FillColor.Blue &&
          rThisGC.FillColor.Alpha== rNextGC.FillColor.Alpha &&
          pNext->Action          == PATH_STROKE &&
-         (elem.Action == PATH_FILL || elem.Action == PATH_EOFILL) )
-    {
-        GraphicsContext aGC = rThisGC;
-        aGC.LineJoin  = rNextGC.LineJoin;
-        aGC.LineCap   = rNextGC.LineCap;
-        aGC.LineWidth = rNextGC.LineWidth;
-        aGC.MiterLimit= rNextGC.MiterLimit;
-        aGC.DashArray = rNextGC.DashArray;
-        aGC.LineColor = rNextGC.LineColor;
-        elem.GCId = m_rProcessor.getGCId( aGC );
+         (elem.Action == PATH_FILL || elem.Action == PATH_EOFILL)) )
+        return;
 
-        elem.Action |= pNext->Action;
+    GraphicsContext aGC = rThisGC;
+    aGC.LineJoin  = rNextGC.LineJoin;
+    aGC.LineCap   = rNextGC.LineCap;
+    aGC.LineWidth = rNextGC.LineWidth;
+    aGC.MiterLimit= rNextGC.MiterLimit;
+    aGC.DashArray = rNextGC.DashArray;
+    aGC.LineColor = rNextGC.LineColor;
+    elem.GCId = m_rProcessor.getGCId( aGC );
 
-        elem.Children.splice( elem.Children.end(), pNext->Children );
-        elem.Parent->Children.erase(next_it);
-    }
+    elem.Action |= pNext->Action;
+
+    elem.Children.splice( elem.Children.end(), pNext->Children );
+    elem.Parent->Children.erase(next_it);
 }
 
 void DrawXmlOptimizer::visit( ParagraphElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )

@@ -186,24 +186,24 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     const OUString sPaneURL (rxResource->getResourceId()->getResourceURL());
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         pPaneContainer->FindPaneURL(sPaneURL));
-    if (pDescriptor.get() != nullptr)
-    {
-        pDescriptor->SetActivationState(false);
-        if (pDescriptor->mxBorderWindow.is())
-            pDescriptor->mxBorderWindow->setVisible(false);
+    if (pDescriptor.get() == nullptr)
+        return;
 
-        if (mpResourceCache != nullptr)
-        {
-            // Store the pane in the cache.
-            (*mpResourceCache)[sPaneURL] = rxResource;
-        }
-        else
-        {
-            // Dispose the pane.
-            Reference<lang::XComponent> xPaneComponent (rxResource, UNO_QUERY);
-            if (xPaneComponent.is())
-                xPaneComponent->dispose();
-        }
+    pDescriptor->SetActivationState(false);
+    if (pDescriptor->mxBorderWindow.is())
+        pDescriptor->mxBorderWindow->setVisible(false);
+
+    if (mpResourceCache != nullptr)
+    {
+        // Store the pane in the cache.
+        (*mpResourceCache)[sPaneURL] = rxResource;
+    }
+    else
+    {
+        // Dispose the pane.
+        Reference<lang::XComponent> xPaneComponent (rxResource, UNO_QUERY);
+        if (xPaneComponent.is())
+            xPaneComponent->dispose();
     }
 }
 

@@ -391,27 +391,27 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uni
     const GraphicsContext& rThisGC =
                   m_rProcessor.getGraphicsContext( elem.GCId );
 
-    if( rThisGC.BlendMode      == rNextGC.BlendMode &&
+    if( !(rThisGC.BlendMode      == rNextGC.BlendMode &&
         rThisGC.Flatness       == rNextGC.Flatness &&
         rThisGC.Transformation == rNextGC.Transformation &&
         rThisGC.Clip           == rNextGC.Clip &&
         pNext->Action          == PATH_STROKE &&
-        (elem.Action == PATH_FILL || elem.Action == PATH_EOFILL) )
-    {
-        GraphicsContext aGC = rThisGC;
-        aGC.LineJoin  = rNextGC.LineJoin;
-        aGC.LineCap   = rNextGC.LineCap;
-        aGC.LineWidth = rNextGC.LineWidth;
-        aGC.MiterLimit= rNextGC.MiterLimit;
-        aGC.DashArray = rNextGC.DashArray;
-        aGC.LineColor = rNextGC.LineColor;
-        elem.GCId = m_rProcessor.getGCId( aGC );
+        (elem.Action == PATH_FILL || elem.Action == PATH_EOFILL)) )
+        return;
 
-        elem.Action |= pNext->Action;
+    GraphicsContext aGC = rThisGC;
+    aGC.LineJoin  = rNextGC.LineJoin;
+    aGC.LineCap   = rNextGC.LineCap;
+    aGC.LineWidth = rNextGC.LineWidth;
+    aGC.MiterLimit= rNextGC.MiterLimit;
+    aGC.DashArray = rNextGC.DashArray;
+    aGC.LineColor = rNextGC.LineColor;
+    elem.GCId = m_rProcessor.getGCId( aGC );
 
-        elem.Children.splice( elem.Children.end(), pNext->Children );
-        elem.Parent->Children.erase(next_it);
-    }
+    elem.Action |= pNext->Action;
+
+    elem.Children.splice( elem.Children.end(), pNext->Children );
+    elem.Parent->Children.erase(next_it);
 }
 
 void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt)
@@ -420,53 +420,53 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< std::un
 
     elem.applyToChildren(*this);
 
-    if( elem.Parent && rParentIt != elem.Parent->Children.end() )
+    if( !(elem.Parent && rParentIt != elem.Parent->Children.end()) )
+        return;
+
+    // find if there is a previous paragraph that might be a heading for this one
+    auto prev = rParentIt;
+    ParagraphElement* pPrevPara = nullptr;
+    while( prev != elem.Parent->Children.begin() )
     {
-        // find if there is a previous paragraph that might be a heading for this one
-        auto prev = rParentIt;
-        ParagraphElement* pPrevPara = nullptr;
-        while( prev != elem.Parent->Children.begin() )
+        --prev;
+        pPrevPara = dynamic_cast< ParagraphElement* >(prev->get());
+        if( pPrevPara )
         {
-            --prev;
-            pPrevPara = dynamic_cast< ParagraphElement* >(prev->get());
-            if( pPrevPara )
+            /* What constitutes a heading ? current hints are:
+             * - one line only
+             * - not too far away from this paragraph (two heading height max ?)
+             * - font larger or bold
+             * this is of course incomplete
+             * FIXME: improve hints for heading
+             */
+            // check for single line
+            if( pPrevPara->isSingleLined( m_rProcessor ) )
             {
-                /* What constitutes a heading ? current hints are:
-                 * - one line only
-                 * - not too far away from this paragraph (two heading height max ?)
-                 * - font larger or bold
-                 * this is of course incomplete
-                 * FIXME: improve hints for heading
-                 */
-                // check for single line
-                if( pPrevPara->isSingleLined( m_rProcessor ) )
+                double head_line_height = pPrevPara->getLineHeight( m_rProcessor );
+                if( pPrevPara->y + pPrevPara->h + 2*head_line_height > elem.y )
                 {
-                    double head_line_height = pPrevPara->getLineHeight( m_rProcessor );
-                    if( pPrevPara->y + pPrevPara->h + 2*head_line_height > elem.y )
+                    // check for larger font
+                    if( head_line_height > elem.getLineHeight( m_rProcessor ) )
                     {
-                        // check for larger font
-                        if( head_line_height > elem.getLineHeight( m_rProcessor ) )
+                        pPrevPara->Type = ParagraphElement::Headline;
+                    }
+                    else
+                    {
+                        // check whether text of pPrevPara is bold (at least first text element)
+                        // and this para is not bold (dito)
+                        TextElement* pPrevText = pPrevPara->getFirstTextChild();
+                        TextElement* pThisText = elem.getFirstTextChild();
+                        if( pPrevText && pThisText )
                         {
-                            pPrevPara->Type = ParagraphElement::Headline;
-                        }
-                        else
-                        {
-                            // check whether text of pPrevPara is bold (at least first text element)
-                            // and this para is not bold (dito)
-                            TextElement* pPrevText = pPrevPara->getFirstTextChild();
-                            TextElement* pThisText = elem.getFirstTextChild();
-                            if( pPrevText && pThisText )
-                            {
-                                const FontAttributes& rPrevFont = m_rProcessor.getFont( pPrevText->FontId );
-                                const FontAttributes& rThisFont = m_rProcessor.getFont( pThisText->FontId );
-                                if( rPrevFont.isBold && ! rThisFont.isBold )
-                                    pPrevPara->Type = ParagraphElement::Headline;
-                            }
+                            const FontAttributes& rPrevFont = m_rProcessor.getFont( pPrevText->FontId );
+                            const FontAttributes& rThisFont = m_rProcessor.getFont( pThisText->FontId );
+                            if( rPrevFont.isBold && ! rThisFont.isBold )
+                                pPrevPara->Type = ParagraphElement::Headline;
                         }
                     }
                 }
-                break;
             }
+            break;
         }
     }
 }
@@ -690,24 +690,24 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
 
     // detect footer
     auto rit = std::find_if(rElem.Children.rbegin(), rElem.Children.rend(), isParagraphElement);
-    if (rit != rElem.Children.rend())
+    if (rit == rElem.Children.rend())
+        return;
+
+    ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(rit->get());
+    if( !(pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor )) )
+        return;
+
+    std::list< std::unique_ptr<Element> >::reverse_iterator next_it = rit;
+    ParagraphElement* pNextPara = nullptr;
+    while( ++next_it != rElem.Children.rend() && pNextPara == nullptr )
     {
-        ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(rit->get());
-        if( pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor ) )
-        {
-            std::list< std::unique_ptr<Element> >::reverse_iterator next_it = rit;
-            ParagraphElement* pNextPara = nullptr;
-            while( ++next_it != rElem.Children.rend() && pNextPara == nullptr )
-            {
-                pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
-            }
-            if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
-            {
-                rElem.FooterElement = std::move(*rit);
-                pPara->Parent = nullptr;
-                rElem.Children.erase( std::next(rit).base() );
-            }
-        }
+        pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
+    }
+    if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
+    {
+        rElem.FooterElement = std::move(*rit);
+        pPara->Parent = nullptr;
+        rElem.Children.erase( std::next(rit).base() );
     }
 }
 

@@ -574,150 +574,150 @@ static void DispatchURL( const Reference< XComponentContext >& xContext, const O
 
 void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 {
-    if ( mxModel.is() )
-    {
-        sal_Int64 nEstimatedFileSize = 0;
-        SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 0 ) ) );
-        DispatchStatus();
+    if ( !mxModel.is() )
+        return;
 
-        int i, nICount;
-        for ( i = 0, nICount = rArguments.getLength(); i < nICount; i++ )
+    sal_Int64 nEstimatedFileSize = 0;
+    SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 0 ) ) );
+    DispatchStatus();
+
+    int i, nICount;
+    for ( i = 0, nICount = rArguments.getLength(); i < nICount; i++ )
+    {
+        switch( TKGet( rArguments[ i ].Name ) )
         {
-            switch( TKGet( rArguments[ i ].Name ) )
+            case TK_StatusDispatcher : rArguments[ i ].Value >>= mxStatusDispatcher; break;
+            case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
+            case TK_Settings :
             {
-                case TK_StatusDispatcher : rArguments[ i ].Value >>= mxStatusDispatcher; break;
-                case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
-                case TK_Settings :
+                css::uno::Sequence< css::beans::PropertyValue > aSettings;
+                int j, nJCount;
+                rArguments[ i ].Value >>= aSettings;
+                for ( j = 0, nJCount = aSettings.getLength(); j < nJCount; j++ )
                 {
-                    css::uno::Sequence< css::beans::PropertyValue > aSettings;
-                    int j, nJCount;
-                    rArguments[ i ].Value >>= aSettings;
-                    for ( j = 0, nJCount = aSettings.getLength(); j < nJCount; j++ )
+                    switch( TKGet( aSettings[ j ].Name ) )
                     {
-                        switch( TKGet( aSettings[ j ].Name ) )
-                        {
-                            case TK_JPEGCompression         : aSettings[ j ].Value >>= mbJPEGCompression; break;
-                            case TK_JPEGQuality             : aSettings[ j ].Value >>= mnJPEGQuality; break;
-                            case TK_RemoveCropArea          : aSettings[ j ].Value >>= mbRemoveCropArea; break;
-                            case TK_ImageResolution         : aSettings[ j ].Value >>= mnImageResolution; break;
-                            case TK_EmbedLinkedGraphics     : aSettings[ j ].Value >>= mbEmbedLinkedGraphics; break;
-                            case TK_OLEOptimization         : aSettings[ j ].Value >>= mbOLEOptimization; break;
-                            case TK_OLEOptimizationType     : aSettings[ j ].Value >>= mnOLEOptimizationType; break;
-                            case TK_CustomShowName          : aSettings[ j ].Value >>= maCustomShowName; break;
-                            case TK_DeleteUnusedMasterPages : aSettings[ j ].Value >>= mbDeleteUnusedMasterPages; break;
-                            case TK_DeleteHiddenSlides      : aSettings[ j ].Value >>= mbDeleteHiddenSlides; break;
-                            case TK_DeleteNotesPages        : aSettings[ j ].Value >>= mbDeleteNotesPages; break;
-                            case TK_SaveAsURL               : aSettings[ j ].Value >>= maSaveAsURL; break;
-                            case TK_FilterName              : aSettings[ j ].Value >>= maFilterName; break;
-                            case TK_OpenNewDocument         : aSettings[ j ].Value >>= mbOpenNewDocument; break;
-                            case TK_EstimatedFileSize       : aSettings[ j ].Value >>= nEstimatedFileSize; break;
-                            default: break;
-                        }
+                        case TK_JPEGCompression         : aSettings[ j ].Value >>= mbJPEGCompression; break;
+                        case TK_JPEGQuality             : aSettings[ j ].Value >>= mnJPEGQuality; break;
+                        case TK_RemoveCropArea          : aSettings[ j ].Value >>= mbRemoveCropArea; break;
+                        case TK_ImageResolution         : aSettings[ j ].Value >>= mnImageResolution; break;
+                        case TK_EmbedLinkedGraphics     : aSettings[ j ].Value >>= mbEmbedLinkedGraphics; break;
+                        case TK_OLEOptimization         : aSettings[ j ].Value >>= mbOLEOptimization; break;
+                        case TK_OLEOptimizationType     : aSettings[ j ].Value >>= mnOLEOptimizationType; break;
+                        case TK_CustomShowName          : aSettings[ j ].Value >>= maCustomShowName; break;
+                        case TK_DeleteUnusedMasterPages : aSettings[ j ].Value >>= mbDeleteUnusedMasterPages; break;
+                        case TK_DeleteHiddenSlides      : aSettings[ j ].Value >>= mbDeleteHiddenSlides; break;
+                        case TK_DeleteNotesPages        : aSettings[ j ].Value >>= mbDeleteNotesPages; break;
+                        case TK_SaveAsURL               : aSettings[ j ].Value >>= maSaveAsURL; break;
+                        case TK_FilterName              : aSettings[ j ].Value >>= maFilterName; break;
+                        case TK_OpenNewDocument         : aSettings[ j ].Value >>= mbOpenNewDocument; break;
+                        case TK_EstimatedFileSize       : aSettings[ j ].Value >>= nEstimatedFileSize; break;
+                        default: break;
                     }
                 }
-                break;
-                default: break;
             }
+            break;
+            default: break;
         }
+    }
 
-        sal_Int64 nSourceSize = 0;
-        sal_Int64 nDestSize = 0;
+    sal_Int64 nSourceSize = 0;
+    sal_Int64 nDestSize = 0;
 
-        Reference< XFrame > xSelf;
-        if ( !maSaveAsURL.isEmpty() )
+    Reference< XFrame > xSelf;
+    if ( !maSaveAsURL.isEmpty() )
+    {
+
+        SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
+        DispatchStatus();
+
+        Reference< XStorable >xStorable( mxModel, UNO_QUERY );
+        if ( xStorable.is() )
         {
+            if ( xStorable->hasLocation() )
+                nSourceSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
 
-            SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
+            Sequence< PropertyValue > aArguments;
+            if ( !maFilterName.isEmpty() )
+            {
+                int nLength = aArguments.getLength();
+                aArguments.realloc( nLength + 1 );
+                aArguments[ nLength ].Name = "FilterName";
+                aArguments[ nLength ].Value <<= maFilterName;
+            }
+            xStorable->storeToURL( maSaveAsURL, aArguments );
+            if ( !nSourceSize )
+                nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
+
+            SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
             SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
             DispatchStatus();
 
-            Reference< XStorable >xStorable( mxModel, UNO_QUERY );
-            if ( xStorable.is() )
-            {
-                if ( xStorable->hasLocation() )
-                    nSourceSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
+            Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
+            xSelf = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
+            Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
-                Sequence< PropertyValue > aArguments;
-                if ( !maFilterName.isEmpty() )
-                {
-                    int nLength = aArguments.getLength();
-                    aArguments.realloc( nLength + 1 );
-                    aArguments[ nLength ].Name = "FilterName";
-                    aArguments[ nLength ].Value <<= maFilterName;
-                }
-                xStorable->storeToURL( maSaveAsURL, aArguments );
-                if ( !nSourceSize )
-                    nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
-
-                SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
-                SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
-                DispatchStatus();
-
-                Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
-                xSelf = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
-                Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
-
-                Sequence< PropertyValue > aLoadProps( 1 );
-                aLoadProps[ 0 ].Name = "Hidden";
-                aLoadProps[ 0 ].Value <<= true;
-                mxModel.set( xComponentLoader->loadComponentFromURL(
-                    maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
-            }
+            Sequence< PropertyValue > aLoadProps( 1 );
+            aLoadProps[ 0 ].Name = "Hidden";
+            aLoadProps[ 0 ].Value <<= true;
+            mxModel.set( xComponentLoader->loadComponentFromURL(
+                maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
         }
+    }
 
-        // check if the document is ReadOnly -> error
-        Reference< XStorable > xStorable( mxModel, UNO_QUERY );
-        if ( xStorable.is() && !xStorable->isReadonly() )
+    // check if the document is ReadOnly -> error
+    Reference< XStorable > xStorable( mxModel, UNO_QUERY );
+    if ( xStorable.is() && !xStorable->isReadonly() )
+    {
+        mxModel->lockControllers();
+        Optimize();
+        mxModel->unlockControllers();
+
+        // clearing undo stack:
+        Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
+        if ( xFrame.is() )
         {
-            mxModel->lockControllers();
-            Optimize();
-            mxModel->unlockControllers();
+            const OUString sSlot( "slot:27115"  );
+            DispatchURL( mxContext, sSlot, xFrame );
+        }
+    }
 
-            // clearing undo stack:
-            Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
-            if ( xFrame.is() )
-            {
-                const OUString sSlot( "slot:27115"  );
-                DispatchURL( mxContext, sSlot, xFrame );
-            }
+    if ( !maSaveAsURL.isEmpty() )
+    {
+        if ( xStorable.is() )
+        {
+            xStorable->store();
+            nDestSize = PPPOptimizer::GetFileSize( maSaveAsURL );
         }
+    }
 
-        if ( !maSaveAsURL.isEmpty() )
-        {
-            if ( xStorable.is() )
-            {
-                xStorable->store();
-                nDestSize = PPPOptimizer::GetFileSize( maSaveAsURL );
-            }
-        }
+    if ( mxInformationDialog.is() )
+    {
+        InformationDialog aInformationDialog( mxContext, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
+        aInformationDialog.execute();
+        SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
+        DispatchStatus();
+    }
 
-        if ( mxInformationDialog.is() )
+    if ( !maSaveAsURL.isEmpty() )
+    {
+        if ( mbOpenNewDocument && xSelf.is() )
         {
-            InformationDialog aInformationDialog( mxContext, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
-            aInformationDialog.execute();
-            SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
-            DispatchStatus();
+            Reference< awt::XWindow > xContainerWindow( xSelf->getContainerWindow() );
+            xContainerWindow->setVisible( true );
         }
-
-        if ( !maSaveAsURL.isEmpty() )
+        else
         {
-            if ( mbOpenNewDocument && xSelf.is() )
-            {
-                Reference< awt::XWindow > xContainerWindow( xSelf->getContainerWindow() );
-                xContainerWindow->setVisible( true );
-            }
-            else
-            {
-                Reference< XComponent > xComponent( mxModel, UNO_QUERY );
-                xComponent->dispose();
-            }
+            Reference< XComponent > xComponent( mxModel, UNO_QUERY );
+            xComponent->dispose();
         }
-        if ( nSourceSize && nDestSize )
-        {
-            SetStatusValue( TK_FileSizeSource, Any( nSourceSize ) );
-            SetStatusValue( TK_FileSizeDestination, Any( nDestSize ) );
-            DispatchStatus();
-        }
+    }
+    if ( nSourceSize && nDestSize )
+    {
+        SetStatusValue( TK_FileSizeSource, Any( nSourceSize ) );
+        SetStatusValue( TK_FileSizeDestination, Any( nDestSize ) );
+        DispatchStatus();
     }
 }
 

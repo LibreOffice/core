@@ -780,21 +780,21 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
 
 void PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedFile ) const
 {
-    if( m_pStream )
+    if( !m_pStream )
+        return;
+
+    std::unique_ptr<char[]> pStream;
+    unsigned int nBytes = 0;
+    if( getDeflatedStream( pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
     {
-        std::unique_ptr<char[]> pStream;
-        unsigned int nBytes = 0;
-        if( getDeflatedStream( pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
-        {
-            sal_uInt8* pOutBytes = nullptr;
-            sal_uInt32 nOutBytes = 0;
-            unzipToBuffer( pStream.get(), nBytes, &pOutBytes, &nOutBytes );
-            rWriteContext.write( pOutBytes, nOutBytes );
-            std::free( pOutBytes );
-        }
-        else if( pStream && nBytes )
-            rWriteContext.write( pStream.get(), nBytes );
+        sal_uInt8* pOutBytes = nullptr;
+        sal_uInt32 nOutBytes = 0;
+        unzipToBuffer( pStream.get(), nBytes, &pOutBytes, &nOutBytes );
+        rWriteContext.write( pOutBytes, nOutBytes );
+        std::free( pOutBytes );
     }
+    else if( pStream && nBytes )
+        rWriteContext.write( pStream.get(), nBytes );
 }
 
 bool PDFObject::emit( EmitContext& rWriteContext ) const

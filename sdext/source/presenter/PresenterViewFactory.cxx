@@ -178,23 +178,23 @@ void SAL_CALL PresenterViewFactory::disposing()
         mxConfigurationController->removeResourceFactoryForReference(this);
     mxConfigurationController = nullptr;
 
-    if (mpResourceCache != nullptr)
+    if (mpResourceCache == nullptr)
+        return;
+
+    // Dispose all views in the cache.
+    for (const auto& rView : *mpResourceCache)
     {
-        // Dispose all views in the cache.
-        for (const auto& rView : *mpResourceCache)
+        try
         {
-            try
-            {
-                Reference<lang::XComponent> xComponent (rView.second.first, UNO_QUERY);
-                if (xComponent.is())
-                    xComponent->dispose();
-            }
-            catch (lang::DisposedException&)
-            {
-            }
+            Reference<lang::XComponent> xComponent (rView.second.first, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
         }
-        mpResourceCache.reset();
+        catch (lang::DisposedException&)
+        {
+        }
     }
+    mpResourceCache.reset();
 }
 
 //----- XViewFactory ----------------------------------------------------------

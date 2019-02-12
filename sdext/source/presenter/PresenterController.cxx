@@ -493,19 +493,19 @@ void PresenterController::ShowView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() != nullptr)
-    {
-        pDescriptor->mbIsActive = true;
-        mxConfigurationController->requestResourceActivation(
-            pDescriptor->mxPaneId,
-            ResourceActivationMode_ADD);
-        mxConfigurationController->requestResourceActivation(
-            ResourceId::createWithAnchor(
-                mxComponentContext,
-                rsViewURL,
-                pDescriptor->mxPaneId),
-            ResourceActivationMode_REPLACE);
-    }
+    if (pDescriptor.get() == nullptr)
+        return;
+
+    pDescriptor->mbIsActive = true;
+    mxConfigurationController->requestResourceActivation(
+        pDescriptor->mxPaneId,
+        ResourceActivationMode_ADD);
+    mxConfigurationController->requestResourceActivation(
+        ResourceId::createWithAnchor(
+            mxComponentContext,
+            rsViewURL,
+            pDescriptor->mxPaneId),
+        ResourceActivationMode_REPLACE);
 }
 
 void PresenterController::HideView (const OUString& rsViewURL)
@@ -642,25 +642,25 @@ void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
 
 void PresenterController::HandleMouseClick (const awt::MouseEvent& rEvent)
 {
-    if (mxSlideShowController.is())
+    if (!mxSlideShowController.is())
+        return;
+
+    switch (rEvent.Buttons)
     {
-        switch (rEvent.Buttons)
-        {
-            case awt::MouseButton::LEFT:
-                if (rEvent.Modifiers == awt::KeyModifier::MOD2)
-                    mxSlideShowController->gotoNextSlide();
-                else
-                    mxSlideShowController->gotoNextEffect();
-                break;
+        case awt::MouseButton::LEFT:
+            if (rEvent.Modifiers == awt::KeyModifier::MOD2)
+                mxSlideShowController->gotoNextSlide();
+            else
+                mxSlideShowController->gotoNextEffect();
+            break;
 
-            case awt::MouseButton::RIGHT:
-                mxSlideShowController->gotoPreviousSlide();
-                break;
+        case awt::MouseButton::RIGHT:
+            mxSlideShowController->gotoPreviousSlide();
+            break;
 
-            default:
-                // Other or multiple buttons.
-                break;
-        }
+        default:
+            // Other or multiple buttons.
+            break;
     }
 }
 

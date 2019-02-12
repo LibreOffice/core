@@ -794,25 +794,25 @@ void PresenterScreen::SetupView(
     const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization)
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
-    if (xCC.is())
-    {
-        Reference<XResourceId> xPaneId (ResourceId::createWithAnchor(rxContext,rsPaneURL,rxAnchorId));
-        // Look up the view descriptor.
-        ViewDescriptor aViewDescriptor;
-        ViewDescriptorContainer::const_iterator iDescriptor (maViewDescriptors.find(rsViewURL));
-        if (iDescriptor != maViewDescriptors.end())
-            aViewDescriptor = iDescriptor->second;
+    if (!xCC.is())
+        return;
 
-        // Prepare the pane.
-        OSL_ASSERT(mpPaneContainer.get() != nullptr);
-        mpPaneContainer->PreparePane(
-            xPaneId,
-            rsViewURL,
-            aViewDescriptor.msTitle,
-            aViewDescriptor.msAccessibleTitle,
-            aViewDescriptor.mbIsOpaque,
-            rViewInitialization);
-    }
+    Reference<XResourceId> xPaneId (ResourceId::createWithAnchor(rxContext,rsPaneURL,rxAnchorId));
+    // Look up the view descriptor.
+    ViewDescriptor aViewDescriptor;
+    ViewDescriptorContainer::const_iterator iDescriptor (maViewDescriptors.find(rsViewURL));
+    if (iDescriptor != maViewDescriptors.end())
+        aViewDescriptor = iDescriptor->second;
+
+    // Prepare the pane.
+    OSL_ASSERT(mpPaneContainer.get() != nullptr);
+    mpPaneContainer->PreparePane(
+        xPaneId,
+        rsViewURL,
+        aViewDescriptor.msTitle,
+        aViewDescriptor.msAccessibleTitle,
+        aViewDescriptor.mbIsOpaque,
+        rViewInitialization);
 }
 
 } } // end of namespace ::sdext::presenter

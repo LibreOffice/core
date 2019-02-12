@@ -60,25 +60,25 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
 
 static void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
-    if ( rGraphicSettings.mbEmbedLinkedGraphics )
+    if ( !rGraphicSettings.mbEmbedLinkedGraphics )
+        return;
+
+    auto aIter = std::find_if(rGraphicEntities.begin(), rGraphicEntities.end(),
+        [&rUser](const GraphicCollector::GraphicEntity& rGraphicEntity) {
+            return rGraphicEntity.maUser[ 0 ].mxGraphic == rUser.mxGraphic;
+        });
+    if ( aIter == rGraphicEntities.end() )
     {
-        auto aIter = std::find_if(rGraphicEntities.begin(), rGraphicEntities.end(),
-            [&rUser](const GraphicCollector::GraphicEntity& rGraphicEntity) {
-                return rGraphicEntity.maUser[ 0 ].mxGraphic == rUser.mxGraphic;
-            });
-        if ( aIter == rGraphicEntities.end() )
-        {
-            GraphicCollector::GraphicEntity aEntity( rUser );
-            rGraphicEntities.push_back( aEntity );
-        }
-        else
-        {
-            if ( rUser.maLogicalSize.Width > aIter->maLogicalSize.Width )
-                aIter->maLogicalSize.Width = rUser.maLogicalSize.Width;
-            if ( rUser.maLogicalSize.Height > aIter->maLogicalSize.Height )
-                aIter->maLogicalSize.Height = rUser.maLogicalSize.Height;
-            aIter->maUser.push_back( rUser );
-        }
+        GraphicCollector::GraphicEntity aEntity( rUser );
+        rGraphicEntities.push_back( aEntity );
+    }
+    else
+    {
+        if ( rUser.maLogicalSize.Width > aIter->maLogicalSize.Width )
+            aIter->maLogicalSize.Width = rUser.maLogicalSize.Width;
+        if ( rUser.maLogicalSize.Height > aIter->maLogicalSize.Height )
+            aIter->maLogicalSize.Height = rUser.maLogicalSize.Height;
+        aIter->maUser.push_back( rUser );
     }
 }
 
@@ -86,37 +86,37 @@ static void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Re
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
-    if ( xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic )
+    if ( !(xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic) )
+        return;
+
+    text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
+
+    GraphicCollector::GraphicUser aUser;
+    aUser.mxShape = rxShape;
+    aUser.mbFillBitmap = false;
+    aUser.mxGraphic = xGraphic;
+    xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
+    awt::Size aLogicalSize( rxShape->getSize() );
+
+    // calculating the logical size, as if there were no cropping
+    if ( aGraphicCropLogic.Left || aGraphicCropLogic.Right || aGraphicCropLogic.Top || aGraphicCropLogic.Bottom )
     {
-        text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
-
-        GraphicCollector::GraphicUser aUser;
-        aUser.mxShape = rxShape;
-        aUser.mbFillBitmap = false;
-        aUser.mxGraphic = xGraphic;
-        xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
-        awt::Size aLogicalSize( rxShape->getSize() );
-
-        // calculating the logical size, as if there were no cropping
-        if ( aGraphicCropLogic.Left || aGraphicCropLogic.Right || aGraphicCropLogic.Top || aGraphicCropLogic.Bottom )
+        awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
+        if ( aSize100thMM.Width && aSize100thMM.Height )
         {
-            awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
-            if ( aSize100thMM.Width && aSize100thMM.Height )
+            awt::Size aCropSize( aSize100thMM.Width - ( aGraphicCropLogic.Left + aGraphicCropLogic.Right ),
+                                 aSize100thMM.Height - ( aGraphicCropLogic.Top + aGraphicCropLogic.Bottom ));
+            if ( aCropSize.Width && aCropSize.Height )
             {
-                awt::Size aCropSize( aSize100thMM.Width - ( aGraphicCropLogic.Left + aGraphicCropLogic.Right ),
-                                     aSize100thMM.Height - ( aGraphicCropLogic.Top + aGraphicCropLogic.Bottom ));
-                if ( aCropSize.Width && aCropSize.Height )
-                {
-                    awt::Size aNewLogSize( static_cast< sal_Int32 >( static_cast< double >( aSize100thMM.Width * aLogicalSize.Width ) / aCropSize.Width ),
-                        static_cast< sal_Int32 >( static_cast< double >( aSize100thMM.Height * aLogicalSize.Height ) / aCropSize.Height ) );
-                    aLogicalSize = aNewLogSize;
-                }
+                awt::Size aNewLogSize( static_cast< sal_Int32 >( static_cast< double >( aSize100thMM.Width * aLogicalSize.Width ) / aCropSize.Width ),
+                    static_cast< sal_Int32 >( static_cast< double >( aSize100thMM.Height * aLogicalSize.Height ) / aCropSize.Height ) );
+                aLogicalSize = aNewLogSize;
             }
         }
-        aUser.maGraphicCropLogic = aGraphicCropLogic;
-        aUser.maLogicalSize = aLogicalSize;
-        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
     }
+    aUser.maGraphicCropLogic = aGraphicCropLogic;
+    aUser.maLogicalSize = aLogicalSize;
+    ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
 }
 
 static void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const Reference< XPropertySet >& rxPropertySet, const awt::Size& rLogicalSize,

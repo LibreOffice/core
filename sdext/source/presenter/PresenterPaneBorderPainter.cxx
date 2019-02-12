@@ -208,19 +208,19 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer != nullptr)
-    {
-        mpRenderer->SetCanvas(rxCanvas);
-        mpRenderer->SetupClipping(
-            rRepaintArea,
-            rOuterBorderRectangle,
-            rsPaneBorderStyleName);
-        mpRenderer->PaintBorder(
-            rsTitle,
-            rOuterBorderRectangle,
-            rRepaintArea,
-            rsPaneBorderStyleName);
-    }
+    if (mpRenderer == nullptr)
+        return;
+
+    mpRenderer->SetCanvas(rxCanvas);
+    mpRenderer->SetupClipping(
+        rRepaintArea,
+        rOuterBorderRectangle,
+        rsPaneBorderStyleName);
+    mpRenderer->PaintBorder(
+        rsTitle,
+        rOuterBorderRectangle,
+        rRepaintArea,
+        rsPaneBorderStyleName);
 }
 
 void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
@@ -243,20 +243,20 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer != nullptr)
-    {
-        mpRenderer->SetCanvas(rxCanvas);
-        mpRenderer->SetupClipping(
-            rRepaintArea,
-            rOuterBorderRectangle,
-            rsPaneBorderStyleName);
-        mpRenderer->SetCalloutAnchor(rCalloutAnchor);
-        mpRenderer->PaintBorder(
-            rsTitle,
-            rOuterBorderRectangle,
-            rRepaintArea,
-            rsPaneBorderStyleName);
-    }
+    if (mpRenderer == nullptr)
+        return;
+
+    mpRenderer->SetCanvas(rxCanvas);
+    mpRenderer->SetupClipping(
+        rRepaintArea,
+        rOuterBorderRectangle,
+        rsPaneBorderStyleName);
+    mpRenderer->SetCalloutAnchor(rCalloutAnchor);
+    mpRenderer->PaintBorder(
+        rsTitle,
+        rOuterBorderRectangle,
+        rRepaintArea,
+        rsPaneBorderStyleName);
 }
 
 awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
@@ -763,60 +763,60 @@ RendererPaneStyle::RendererPaneStyle (
       maOuterBorderSize(),
       maTotalBorderSize()
 {
-    if (rpTheme != nullptr)
+    if (rpTheme == nullptr)
+        return;
+
+    mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
+    mpTop = GetBitmap(rpTheme, rsStyleName, "Top");
+    mpTopRight = GetBitmap(rpTheme, rsStyleName, "TopRight");
+    mpLeft = GetBitmap(rpTheme, rsStyleName,"Left");
+    mpRight = GetBitmap(rpTheme, rsStyleName, "Right");
+    mpBottomLeft = GetBitmap(rpTheme, rsStyleName, "BottomLeft");
+    mpBottom = GetBitmap(rpTheme, rsStyleName, "Bottom");
+    mpBottomRight = GetBitmap(rpTheme, rsStyleName, "BottomRight");
+    mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
+
+    // Get font description.
+    mpFont = rpTheme->GetFont(rsStyleName);
+
+    OUString sAnchor ("Left");
+    if (mpFont.get() != nullptr)
     {
-        mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
-        mpTop = GetBitmap(rpTheme, rsStyleName, "Top");
-        mpTopRight = GetBitmap(rpTheme, rsStyleName, "TopRight");
-        mpLeft = GetBitmap(rpTheme, rsStyleName,"Left");
-        mpRight = GetBitmap(rpTheme, rsStyleName, "Right");
-        mpBottomLeft = GetBitmap(rpTheme, rsStyleName, "BottomLeft");
-        mpBottom = GetBitmap(rpTheme, rsStyleName, "Bottom");
-        mpBottomRight = GetBitmap(rpTheme, rsStyleName, "BottomRight");
-        mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
-
-        // Get font description.
-        mpFont = rpTheme->GetFont(rsStyleName);
-
-        OUString sAnchor ("Left");
-        if (mpFont.get() != nullptr)
-        {
-            sAnchor = mpFont->msAnchor;
-            mnFontXOffset = mpFont->mnXOffset;
-            mnFontYOffset = mpFont->mnYOffset;
-        }
-
-        if ( sAnchor == "Left" )
-            meFontAnchor = Anchor::Left;
-        else if ( sAnchor == "Right" )
-            meFontAnchor = Anchor::Right;
-        else
-            meFontAnchor = Anchor::Center;
-
-        // Get border sizes.
-        try
-        {
-            ::std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
-            OSL_ASSERT(aInnerBorder.size()==4);
-            maInnerBorderSize.mnLeft = aInnerBorder[0];
-            maInnerBorderSize.mnTop = aInnerBorder[1];
-            maInnerBorderSize.mnRight = aInnerBorder[2];
-            maInnerBorderSize.mnBottom = aInnerBorder[3];
-
-            ::std::vector<sal_Int32> aOuterBorder (rpTheme->GetBorderSize(rsStyleName, true));
-            OSL_ASSERT(aOuterBorder.size()==4);
-            maOuterBorderSize.mnLeft = aOuterBorder[0];
-            maOuterBorderSize.mnTop = aOuterBorder[1];
-            maOuterBorderSize.mnRight = aOuterBorder[2];
-            maOuterBorderSize.mnBottom = aOuterBorder[3];
-        }
-        catch(beans::UnknownPropertyException&)
-        {
-            OSL_ASSERT(false);
-        }
-
-        UpdateBorderSizes();
+        sAnchor = mpFont->msAnchor;
+        mnFontXOffset = mpFont->mnXOffset;
+        mnFontYOffset = mpFont->mnYOffset;
     }
+
+    if ( sAnchor == "Left" )
+        meFontAnchor = Anchor::Left;
+    else if ( sAnchor == "Right" )
+        meFontAnchor = Anchor::Right;
+    else
+        meFontAnchor = Anchor::Center;
+
+    // Get border sizes.
+    try
+    {
+        ::std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
+        OSL_ASSERT(aInnerBorder.size()==4);
+        maInnerBorderSize.mnLeft = aInnerBorder[0];
+        maInnerBorderSize.mnTop = aInnerBorder[1];
+        maInnerBorderSize.mnRight = aInnerBorder[2];
+        maInnerBorderSize.mnBottom = aInnerBorder[3];
+
+        ::std::vector<sal_Int32> aOuterBorder (rpTheme->GetBorderSize(rsStyleName, true));
+        OSL_ASSERT(aOuterBorder.size()==4);
+        maOuterBorderSize.mnLeft = aOuterBorder[0];
+        maOuterBorderSize.mnTop = aOuterBorder[1];
+        maOuterBorderSize.mnRight = aOuterBorder[2];
+        maOuterBorderSize.mnBottom = aOuterBorder[3];
+    }
+    catch(beans::UnknownPropertyException&)
+    {
+        OSL_ASSERT(false);
+    }
+
+    UpdateBorderSizes();
 }
 
 awt::Rectangle RendererPaneStyle::AddBorder (

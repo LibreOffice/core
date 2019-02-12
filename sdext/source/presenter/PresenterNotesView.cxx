@@ -226,49 +226,49 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
         "com.sun.star.drawing.TextShape");
 
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
-    if (xIndexAccess.is())
-    {
-        // Iterate over all shapes and find the one that holds the text.
-        sal_Int32 nCount (xIndexAccess->getCount());
-        for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-        {
+    if (!xIndexAccess.is())
+        return;
 
-            Reference<lang::XServiceName> xServiceName (
+    // Iterate over all shapes and find the one that holds the text.
+    sal_Int32 nCount (xIndexAccess->getCount());
+    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+
+        Reference<lang::XServiceName> xServiceName (
+            xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+        if (xServiceName.is()
+            && xServiceName->getServiceName() == sNotesShapeName)
+        {
+        }
+        else
+        {
+            Reference<drawing::XShapeDescriptor> xShapeDescriptor (
                 xIndexAccess->getByIndex(nIndex), UNO_QUERY);
-            if (xServiceName.is()
-                && xServiceName->getServiceName() == sNotesShapeName)
+            if (xShapeDescriptor.is())
             {
-            }
-            else
-            {
-                Reference<drawing::XShapeDescriptor> xShapeDescriptor (
-                    xIndexAccess->getByIndex(nIndex), UNO_QUERY);
-                if (xShapeDescriptor.is())
+                OUString sType (xShapeDescriptor->getShapeType());
+                if (sType == sNotesShapeName || sType == sTextShapeName)
                 {
-                    OUString sType (xShapeDescriptor->getShapeType());
-                    if (sType == sNotesShapeName || sType == sTextShapeName)
+                    Reference<text::XTextRange> xText (
+                        xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                    if (xText.is())
                     {
-                        Reference<text::XTextRange> xText (
-                            xIndexAccess->getByIndex(nIndex), UNO_QUERY);
-                        if (xText.is())
-                        {
-                            mpTextView->SetText(Reference<text::XText>(xText, UNO_QUERY));
-                        }
+                        mpTextView->SetText(Reference<text::XText>(xText, UNO_QUERY));
                     }
                 }
             }
         }
-
-        Layout();
-
-        if (mpScrollBar.get() != nullptr)
-        {
-            mpScrollBar->SetThumbPosition(0, false);
-            UpdateScrollBar();
-        }
-
-        Invalidate();
     }
+
+    Layout();
+
+    if (mpScrollBar.get() != nullptr)
+    {
+        mpScrollBar->SetThumbPosition(0, false);
+        UpdateScrollBar();
+    }
+
+    Invalidate();
 }
 
 //-----  lang::XEventListener -------------------------------------------------
@@ -611,35 +611,35 @@ void PresenterNotesView::SetTop (const double nTop)
 void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
 {
     const sal_Int32 nNewSize (mpFont->mnSize + nSizeChange);
-    if (nNewSize > 5)
+    if (nNewSize <= 5)
+        return;
+
+    mpFont->mnSize = nNewSize;
+    mpFont->mxFont = nullptr;
+    mpTextView->SetFont(mpFont);
+
+    Layout();
+    UpdateScrollBar();
+    Invalidate();
+
+    // Write the new font size to the configuration to make it persistent.
+    try
     {
-        mpFont->mnSize = nNewSize;
-        mpFont->mxFont = nullptr;
-        mpTextView->SetFont(mpFont);
+        const OUString sStyleName (mpPresenterController->GetTheme()->GetStyleName(
+            mxViewId->getResourceURL()));
+        std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
+            mpPresenterController->GetTheme()->GetNodeForViewStyle(
+                sStyleName));
+        if (pConfiguration == nullptr || !pConfiguration->IsValid())
+            return;
 
-        Layout();
-        UpdateScrollBar();
-        Invalidate();
-
-        // Write the new font size to the configuration to make it persistent.
-        try
-        {
-            const OUString sStyleName (mpPresenterController->GetTheme()->GetStyleName(
-                mxViewId->getResourceURL()));
-            std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
-                mpPresenterController->GetTheme()->GetNodeForViewStyle(
-                    sStyleName));
-            if (pConfiguration == nullptr || !pConfiguration->IsValid())
-                return;
-
-            pConfiguration->GoToChild(OUString("Font"));
-            pConfiguration->SetProperty("Size", Any(static_cast<sal_Int32>(nNewSize+0.5)));
-            pConfiguration->CommitChanges();
-        }
-        catch (Exception&)
-        {
-            OSL_ASSERT(false);
-        }
+        pConfiguration->GoToChild(OUString("Font"));
+        pConfiguration->SetProperty("Size", Any(static_cast<sal_Int32>(nNewSize+0.5)));
+        pConfiguration->CommitChanges();
+    }
+    catch (Exception&)
+    {
+        OSL_ASSERT(false);
     }
 }
 
@@ -650,23 +650,23 @@ const std::shared_ptr<PresenterTextView>& PresenterNotesView::GetTextView() cons
 
 void PresenterNotesView::UpdateScrollBar()
 {
-    if (mpScrollBar.get() != nullptr)
+    if (mpScrollBar.get() == nullptr)
+        return;
+
+    try
     {
-        try
-        {
-            mpScrollBar->SetTotalSize(mpTextView->GetTotalTextHeight());
-        }
-        catch(beans::UnknownPropertyException&)
-        {
-            OSL_ASSERT(false);
-        }
-
-        mpScrollBar->SetLineHeight(mpFont->mnSize*1.2);
-        mpScrollBar->SetThumbPosition(mnTop, false);
-
-        mpScrollBar->SetThumbSize(maTextBoundingBox.Y2 - maTextBoundingBox.Y1);
-        mpScrollBar->CheckValues();
+        mpScrollBar->SetTotalSize(mpTextView->GetTotalTextHeight());
     }
+    catch(beans::UnknownPropertyException&)
+    {
+        OSL_ASSERT(false);
+    }
+
+    mpScrollBar->SetLineHeight(mpFont->mnSize*1.2);
+    mpScrollBar->SetThumbPosition(mnTop, false);
+
+    mpScrollBar->SetThumbSize(maTextBoundingBox.Y2 - maTextBoundingBox.Y1);
+    mpScrollBar->CheckValues();
 }
 
 } } // end of namespace ::sdext::presenter

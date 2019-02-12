@@ -598,25 +598,25 @@ void PresenterToolBar::CreateControls (
     Reference<container::XHierarchicalNameAccess> xToolBarNode (
         aConfiguration.GetConfigurationNode(rsConfigurationPath),
         UNO_QUERY);
-    if (xToolBarNode.is())
+    if (!xToolBarNode.is())
+        return;
+
+    Reference<container::XNameAccess> xEntries (
+        PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, "Entries"),
+        UNO_QUERY);
+    Context aContext;
+    aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
+    aContext.mxCanvas = mxCanvas;
+    if (xEntries.is()
+        && aContext.mxPresenterHelper.is()
+        && aContext.mxCanvas.is())
     {
-        Reference<container::XNameAccess> xEntries (
-            PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, "Entries"),
-            UNO_QUERY);
-        Context aContext;
-        aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
-        aContext.mxCanvas = mxCanvas;
-        if (xEntries.is()
-            && aContext.mxPresenterHelper.is()
-            && aContext.mxCanvas.is())
-        {
-            PresenterConfigurationAccess::ForAll(
-                xEntries,
-                [this, &aContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
-                {
-                    return this->ProcessEntry(xProps, aContext);
-                });
-        }
+        PresenterConfigurationAccess::ForAll(
+            xEntries,
+            [this, &aContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
+            {
+                return this->ProcessEntry(xProps, aContext);
+            });
     }
 }
 
@@ -1483,33 +1483,33 @@ void Button::PaintIcon (
         return;
 
     Reference<rendering::XBitmap> xBitmap (mpMode->mpIcon->GetBitmap(GetMode()));
-    if (xBitmap.is())
-    {
-        /// check whether RTL interface or not
-        if(!AllSettings::GetLayoutRTL()){
-            const sal_Int32 nX (maLocation.X
-                + (maSize.Width-xBitmap->getSize().Width) / 2);
-            const sal_Int32 nY (maLocation.Y
-                + (maSize.Height - nTextHeight - xBitmap->getSize().Height) / 2);
-            const rendering::RenderState aRenderState(
-                geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-                nullptr,
-                Sequence<double>(4),
-                rendering::CompositeOperation::OVER);
-            rxCanvas->drawBitmap(xBitmap, rViewState, aRenderState);
-        }
-        else {
-            const sal_Int32 nX (maLocation.X
-                + (maSize.Width+xBitmap->getSize().Width) / 2);
-            const sal_Int32 nY (maLocation.Y
-                + (maSize.Height - nTextHeight - xBitmap->getSize().Height) / 2);
-            const rendering::RenderState aRenderState(
-                geometry::AffineMatrix2D(-1,0,nX, 0,1,nY),
-                nullptr,
-                Sequence<double>(4),
-                rendering::CompositeOperation::OVER);
-            rxCanvas->drawBitmap(xBitmap, rViewState, aRenderState);
-        }
+    if (!xBitmap.is())
+        return;
+
+    /// check whether RTL interface or not
+    if(!AllSettings::GetLayoutRTL()){
+        const sal_Int32 nX (maLocation.X
+            + (maSize.Width-xBitmap->getSize().Width) / 2);
+        const sal_Int32 nY (maLocation.Y
+            + (maSize.Height - nTextHeight - xBitmap->getSize().Height) / 2);
+        const rendering::RenderState aRenderState(
+            geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
+            nullptr,
+            Sequence<double>(4),
+            rendering::CompositeOperation::OVER);
+        rxCanvas->drawBitmap(xBitmap, rViewState, aRenderState);
+    }
+    else {
+        const sal_Int32 nX (maLocation.X
+            + (maSize.Width+xBitmap->getSize().Width) / 2);
+        const sal_Int32 nY (maLocation.Y
+            + (maSize.Height - nTextHeight - xBitmap->getSize().Height) / 2);
+        const rendering::RenderState aRenderState(
+            geometry::AffineMatrix2D(-1,0,nX, 0,1,nY),
+            nullptr,
+            Sequence<double>(4),
+            rendering::CompositeOperation::OVER);
+        rxCanvas->drawBitmap(xBitmap, rViewState, aRenderState);
     }
 }
 
@@ -1805,29 +1805,29 @@ void PresentationTimeLabel::restart()
 void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 {
     TimeValue aCurrentTimeValue;
-    if (osl_getTimeValueFromDateTime(&rCurrentTime, &aCurrentTimeValue))
+    if (!osl_getTimeValueFromDateTime(&rCurrentTime, &aCurrentTimeValue))
+        return;
+
+    if (maStartTimeValue.Seconds==0 && maStartTimeValue.Nanosec==0)
     {
-        if (maStartTimeValue.Seconds==0 && maStartTimeValue.Nanosec==0)
-        {
-            // This method is called for the first time.  Initialize the
-            // start time.  The start time is rounded to nearest second to
-            // keep the time updates synchronized with the current time label.
-            maStartTimeValue = aCurrentTimeValue;
-            if (maStartTimeValue.Nanosec >= 500000000)
-                maStartTimeValue.Seconds += 1;
-            maStartTimeValue.Nanosec = 0;
-        }
+        // This method is called for the first time.  Initialize the
+        // start time.  The start time is rounded to nearest second to
+        // keep the time updates synchronized with the current time label.
+        maStartTimeValue = aCurrentTimeValue;
+        if (maStartTimeValue.Nanosec >= 500000000)
+            maStartTimeValue.Seconds += 1;
+        maStartTimeValue.Nanosec = 0;
+    }
 
-        TimeValue aElapsedTimeValue;
-        aElapsedTimeValue.Seconds = aCurrentTimeValue.Seconds - maStartTimeValue.Seconds;
-        aElapsedTimeValue.Nanosec = aCurrentTimeValue.Nanosec - maStartTimeValue.Nanosec;
+    TimeValue aElapsedTimeValue;
+    aElapsedTimeValue.Seconds = aCurrentTimeValue.Seconds - maStartTimeValue.Seconds;
+    aElapsedTimeValue.Nanosec = aCurrentTimeValue.Nanosec - maStartTimeValue.Nanosec;
 
-        oslDateTime aElapsedDateTime;
-        if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime))
-        {
-            SetText(TimeFormatter::FormatTime(aElapsedDateTime));
-            Invalidate(false);
-        }
+    oslDateTime aElapsedDateTime;
+    if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime))
+    {
+        SetText(TimeFormatter::FormatTime(aElapsedDateTime));
+        Invalidate(false);
     }
 }
 

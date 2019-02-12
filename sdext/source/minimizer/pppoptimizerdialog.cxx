@@ -94,47 +94,47 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                                             const Sequence< PropertyValue >& rArguments )
 {
 
-    if ( mxController.is() && rURL.Protocol.equalsIgnoreAsciiCase( "vnd.com.sun.star.comp.PresentationMinimizer:" ) )
+    if ( !(mxController.is() && rURL.Protocol.equalsIgnoreAsciiCase( "vnd.com.sun.star.comp.PresentationMinimizer:" )) )
+        return;
+
+    if ( rURL.Path == "execute" )
     {
-        if ( rURL.Path == "execute" )
+        try
         {
-            try
+            sal_Int64 nFileSizeSource = 0;
+            sal_Int64 nFileSizeDest = 0;
+            mpOptimizerDialog = new OptimizerDialog( mxContext, mxFrame, this );
+            mpOptimizerDialog->execute();
+
+            const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
+            if ( pVal )
+                *pVal >>= nFileSizeSource;
+            pVal = mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeDestination );
+            if ( pVal )
+                *pVal >>= nFileSizeDest;
+
+            if ( nFileSizeSource && nFileSizeDest )
             {
-                sal_Int64 nFileSizeSource = 0;
-                sal_Int64 nFileSizeDest = 0;
-                mpOptimizerDialog = new OptimizerDialog( mxContext, mxFrame, this );
-                mpOptimizerDialog->execute();
-
-                const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
-                if ( pVal )
-                    *pVal >>= nFileSizeSource;
-                pVal = mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeDestination );
-                if ( pVal )
-                    *pVal >>= nFileSizeDest;
-
-                if ( nFileSizeSource && nFileSizeDest )
-                {
-                    OUStringBuffer sBuf( "Your Presentation has been minimized from:" );
-                    sBuf.append( OUString::number( nFileSizeSource >> 10 ) );
-                    sBuf.append( "KB to " );
-                    sBuf.append( OUString::number( nFileSizeDest >> 10 ) );
-                    sBuf.append( "KB." );
-                    OUString sResult( sBuf.makeStringAndClear() );
-                    SAL_INFO("sdext.minimizer", sResult );
-                }
-                delete mpOptimizerDialog;
-                mpOptimizerDialog = nullptr;
+                OUStringBuffer sBuf( "Your Presentation has been minimized from:" );
+                sBuf.append( OUString::number( nFileSizeSource >> 10 ) );
+                sBuf.append( "KB to " );
+                sBuf.append( OUString::number( nFileSizeDest >> 10 ) );
+                sBuf.append( "KB." );
+                OUString sResult( sBuf.makeStringAndClear() );
+                SAL_INFO("sdext.minimizer", sResult );
             }
-            catch( ... )
-            {
-
-            }
+            delete mpOptimizerDialog;
+            mpOptimizerDialog = nullptr;
         }
-        else if ( rURL.Path == "statusupdate" )
+        catch( ... )
         {
-            if ( mpOptimizerDialog )
-                mpOptimizerDialog->UpdateStatus( rArguments );
+
         }
+    }
+    else if ( rURL.Path == "statusupdate" )
+    {
+        if ( mpOptimizerDialog )
+            mpOptimizerDialog->UpdateStatus( rArguments );
     }
 }
 

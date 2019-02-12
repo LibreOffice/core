@@ -186,25 +186,25 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
                                      ElementTreeVisitor& rContainedElemVisitor )
 {
     std::unordered_map< sal_Int32, RefCountedHashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
-    if( it != m_aIdToStyle.end() )
-    {
-        const HashedStyle& rStyle = it->second.style;
-        PropertyMap aProps( rStyle.Properties );
-        if( !rStyle.IsSubStyle )
-            aProps[ "style:name" ] = getStyleName( nStyleId );
-        if (rStyle.Name == "draw:stroke-dash")
-            aProps[ "draw:name" ] = aProps[ "style:name" ];
-        rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
+    if( it == m_aIdToStyle.end() )
+        return;
 
-        for(sal_Int32 nSubStyle : rStyle.SubStyles)
-            impl_emitStyle( nSubStyle, rContext, rContainedElemVisitor );
-        if( !rStyle.Contents.isEmpty() )
-            rContext.rEmitter.write( rStyle.Contents );
-        if( rStyle.ContainedElement )
-            rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
-                                                std::list<std::unique_ptr<Element>>::iterator() );
-        rContext.rEmitter.endTag( rStyle.Name.getStr() );
-    }
+    const HashedStyle& rStyle = it->second.style;
+    PropertyMap aProps( rStyle.Properties );
+    if( !rStyle.IsSubStyle )
+        aProps[ "style:name" ] = getStyleName( nStyleId );
+    if (rStyle.Name == "draw:stroke-dash")
+        aProps[ "draw:name" ] = aProps[ "style:name" ];
+    rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
+
+    for(sal_Int32 nSubStyle : rStyle.SubStyles)
+        impl_emitStyle( nSubStyle, rContext, rContainedElemVisitor );
+    if( !rStyle.Contents.isEmpty() )
+        rContext.rEmitter.write( rStyle.Contents );
+    if( rStyle.ContainedElement )
+        rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
+                                            std::list<std::unique_ptr<Element>>::iterator() );
+    rContext.rEmitter.endTag( rStyle.Name.getStr() );
 }
 
 void StyleContainer::emit( EmitContext&        rContext,

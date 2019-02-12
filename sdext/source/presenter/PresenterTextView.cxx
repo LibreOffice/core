@@ -457,20 +457,20 @@ PresenterTextParagraph::PresenterTextParagraph (
       mnCharacterOffset(0),
       maCells()
 {
-    if (rxTextRange.is())
-    {
-        Reference<beans::XPropertySet> xProperties (rxTextRange, UNO_QUERY);
-        try
-        {
-            xProperties->getPropertyValue("WritingMode") >>= mnWritingMode;
-        }
-        catch(beans::UnknownPropertyException&)
-        {
-            // Ignore the exception.  Use the default value.
-        }
+    if (!rxTextRange.is())
+        return;
 
-        msParagraphText = rxTextRange->getString();
+    Reference<beans::XPropertySet> xProperties (rxTextRange, UNO_QUERY);
+    try
+    {
+        xProperties->getPropertyValue("WritingMode") >>= mnWritingMode;
     }
+    catch(beans::UnknownPropertyException&)
+    {
+        // Ignore the exception.  Use the default value.
+    }
+
+    msParagraphText = rxTextRange->getString();
 }
 
 void PresenterTextParagraph::Paint (
@@ -1096,33 +1096,32 @@ void PresenterTextCaret::SetPosition (
     const sal_Int32 nParagraphIndex,
     const sal_Int32 nCharacterIndex)
 {
-    if (mnParagraphIndex != nParagraphIndex
-        || mnCharacterIndex != nCharacterIndex)
-    {
-        if (mnParagraphIndex >= 0)
-            maInvalidator(maCaretBounds);
+    if (!(mnParagraphIndex != nParagraphIndex
+        || mnCharacterIndex != nCharacterIndex))
+        return;
 
-        const sal_Int32 nOldParagraphIndex (mnParagraphIndex);
-        const sal_Int32 nOldCharacterIndex (mnCharacterIndex);
-        mnParagraphIndex = nParagraphIndex;
-        mnCharacterIndex = nCharacterIndex;
-        maCaretBounds = maCharacterBoundsAccess(mnParagraphIndex, mnCharacterIndex);
-        if (mnParagraphIndex >= 0)
-            ShowCaret();
-        else
-            HideCaret();
+    if (mnParagraphIndex >= 0)
+        maInvalidator(maCaretBounds);
 
-        if (mnParagraphIndex >= 0)
-            maInvalidator(maCaretBounds);
+    const sal_Int32 nOldParagraphIndex (mnParagraphIndex);
+    const sal_Int32 nOldCharacterIndex (mnCharacterIndex);
+    mnParagraphIndex = nParagraphIndex;
+    mnCharacterIndex = nCharacterIndex;
+    maCaretBounds = maCharacterBoundsAccess(mnParagraphIndex, mnCharacterIndex);
+    if (mnParagraphIndex >= 0)
+        ShowCaret();
+    else
+        HideCaret();
 
-        if (maBroadcaster)
-            maBroadcaster(
-                nOldParagraphIndex,
-                nOldCharacterIndex,
-                mnParagraphIndex,
-                mnCharacterIndex);
+    if (mnParagraphIndex >= 0)
+        maInvalidator(maCaretBounds);
 
-    }
+    if (maBroadcaster)
+        maBroadcaster(
+            nOldParagraphIndex,
+            nOldCharacterIndex,
+            mnParagraphIndex,
+            mnCharacterIndex);
 }
 
 
