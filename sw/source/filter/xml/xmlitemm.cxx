@@ -282,6 +282,7 @@ SvXMLItemMapEntry const aXMLTableCellItemMap[] =
 
     // RES_FRAMEDIR
     MAP_ENTRY( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
+    MAP_ENTRY( LO_EXT, WRITING_MODE, RES_FRAMEDIR, 0 ),
 
     M_END
 };

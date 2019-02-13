@@ -42,6 +42,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/frmdir.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -53,6 +54,7 @@
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -906,18 +908,29 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRAMEDIR:
         {
-            const XMLPropertyHandler* pWritingModeHandler =
-                XMLPropertyHandlerFactory::CreatePropertyHandler(
-                    XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
-            if( pWritingModeHandler != nullptr )
+            if (IsXMLToken(rValue, XML_BT_LR))
             {
+                // Read bt-lr from the extension namespace, handle other values
+                // below.
                 Any aAny;
-                bOk = pWritingModeHandler->importXML( rValue, aAny,
-                                                      rUnitConverter );
-                if( bOk )
-                    bOk = rItem.PutValue( aAny, 0 );
+                aAny <<= static_cast<sal_uInt16>(SvxFrameDirection::Vertical_LR_BT);
+                bOk = rItem.PutValue(aAny, 0);
+            }
+            else
+            {
+                const XMLPropertyHandler* pWritingModeHandler =
+                    XMLPropertyHandlerFactory::CreatePropertyHandler(
+                        XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
+                if( pWritingModeHandler != nullptr )
+                {
+                    Any aAny;
+                    bOk = pWritingModeHandler->importXML( rValue, aAny,
+                                                          rUnitConverter );
+                    if( bOk )
+                        bOk = rItem.PutValue( aAny, 0 );
 
-                delete pWritingModeHandler;
+                    delete pWritingModeHandler;
+                }
             }
         }
         break;

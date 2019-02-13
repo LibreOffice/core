@@ -32,6 +32,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
@@ -1389,6 +1390,25 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
     CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+}
+
+DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
+{
+    // Without the accompanying fix in place, this test would have failed, as
+    // the btlr text direction in the A1 cell was lost on ODF import and
+    // export.
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xA1(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, getProperty<sal_Int16>(xA1, "WritingMode"));
+
+    uno::Reference<beans::XPropertySet> xB1(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int16>(xB1, "WritingMode");
+    CPPUNIT_ASSERT(nActual == text::WritingMode2::LR_TB || nActual == text::WritingMode2::CONTEXT);
+
+    uno::Reference<beans::XPropertySet> xC1(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
