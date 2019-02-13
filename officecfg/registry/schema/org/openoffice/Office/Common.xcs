@@ -5403,6 +5403,15 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="WriteLayerStateAsConfigItem" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>If 'true', the config items VisibleLayers, PrintableLayers and
+          LockedLayers are written to 'office:settings' element, otherwise not.
+          Since LO 6.2 the ODF attributes of 'draw:layer' element are used on
+          file open, if these config items do not exist.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ExperimentalMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if various experimental, and potentially unstable

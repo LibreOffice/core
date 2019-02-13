@@ -42,6 +42,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -395,16 +396,19 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle()) ) );
     aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( IsEliminatePolyPoints() ) );
 
-    SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrView().GetLayerAdmin();
-    Any aAny;
-    rLayerAdmin.QueryValue(GetVisibleLayers(), aAny);
-    aUserData.addValue( sUNO_View_VisibleLayers, aAny );
+    if ( officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::get() )
+    {
+        SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrView().GetLayerAdmin();
+        Any aAny;
+        rLayerAdmin.QueryValue(GetVisibleLayers(), aAny);
+        aUserData.addValue( sUNO_View_VisibleLayers, aAny );
 
-    rLayerAdmin.QueryValue(GetPrintableLayers(), aAny);
-    aUserData.addValue( sUNO_View_PrintableLayers, aAny );
+        rLayerAdmin.QueryValue(GetPrintableLayers(), aAny);
+        aUserData.addValue( sUNO_View_PrintableLayers, aAny );
 
-    rLayerAdmin.QueryValue(GetLockedLayers(), aAny);
-    aUserData.addValue( sUNO_View_LockedLayers, aAny );
+        rLayerAdmin.QueryValue(GetLockedLayers(), aAny);
+        aUserData.addValue( sUNO_View_LockedLayers, aAny );
+    }
 
     aUserData.addValue( sUNO_View_NoAttribs, makeAny( IsNoAttribs() ) );
     aUserData.addValue( sUNO_View_NoColors, makeAny( IsNoColors() ) );
