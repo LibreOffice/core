@@ -20,13 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_MACROSECURITY_HXX
 #define INCLUDED_XMLSECURITY_INC_MACROSECURITY_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/securityoptions.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -40,103 +34,99 @@ namespace xml { namespace crypto {
 
 class MacroSecurityTP;
 
-class MacroSecurity : public TabDialog
+class MacroSecurity : public weld::GenericDialogController
 {
 private:
     friend class MacroSecurityLevelTP;
     friend class MacroSecurityTrustedSourcesTP;
 
-    VclPtr<TabControl>         m_pTabCtrl;
-    VclPtr<OKButton>           m_pOkBtn;
-    VclPtr<PushButton>         m_pResetBtn;
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> m_xSecurityEnvironment;
+    SvtSecurityOptions m_aSecOptions;
 
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
-    SvtSecurityOptions                                          maSecOptions;
+    std::unique_ptr<weld::Notebook> m_xTabCtrl;
+    std::unique_ptr<weld::Button> m_xOkBtn;
+    std::unique_ptr<weld::Button> m_xResetBtn;
 
-    sal_uInt16 m_nSecLevelId;
-    sal_uInt16 m_nSecTrustId;
+    std::unique_ptr<MacroSecurityTP> m_xLevelTP;
+    std::unique_ptr<MacroSecurityTP> m_xTrustSrcTP;
 
-    VclPtr<MacroSecurityTP>    mpLevelTP;
-    VclPtr<MacroSecurityTP>    mpTrustSrcTP;
-
-    DECL_LINK(          OkBtnHdl, Button*, void );
+    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(OkBtnHdl, weld::Button&, void);
 public:
-    MacroSecurity(vcl::Window* pParent,
-        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
-    virtual ~MacroSecurity() override;
-    virtual void dispose() override;
+    MacroSecurity(weld::Window* pParent,
+        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rxSecurityEnvironment);
 
-    void EnableReset(bool _bEnable = true)
+    void EnableReset(bool bEnable = true)
     {
-        m_pResetBtn->Enable ( _bEnable );
+        m_xResetBtn->set_sensitive(bEnable);
     }
 };
 
-class MacroSecurityTP : public TabPage
+class MacroSecurityTP
 {
 protected:
-    VclPtr<MacroSecurity>      mpDlg;
-public:
-    MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
-        const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
-    virtual ~MacroSecurityTP() override;
-    virtual void dispose() override;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
 
-    virtual void        ClosePage() = 0;
+    MacroSecurity* m_pDlg;
+public:
+    MacroSecurityTP(weld::Container* pParent, const OUString& rUIXMLDescription,
+                    const OString& rID, MacroSecurity* pDlg);
+    virtual ~MacroSecurityTP();
+
+    virtual void ActivatePage();
+    virtual void ClosePage() = 0;
 };
 
 class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
-    VclPtr<RadioButton> m_pVeryHighRB;
-    VclPtr<RadioButton> m_pHighRB;
-    VclPtr<RadioButton> m_pMediumRB;
-    VclPtr<RadioButton> m_pLowRB;
-
     sal_uInt16   mnCurLevel;
 
-    DECL_LINK(RadioButtonHdl, Button*, void);
+    std::unique_ptr<weld::RadioButton> m_xVeryHighRB;
+    std::unique_ptr<weld::RadioButton> m_xHighRB;
+    std::unique_ptr<weld::RadioButton> m_xMediumRB;
+    std::unique_ptr<weld::RadioButton> m_xLowRB;
+    std::unique_ptr<weld::Widget> m_xVHighImg;
+    std::unique_ptr<weld::Widget> m_xHighImg;
+    std::unique_ptr<weld::Widget> m_xMedImg;
+    std::unique_ptr<weld::Widget> m_xLowImg;
 
+    DECL_LINK(RadioButtonHdl, weld::ToggleButton&, void);
 public:
-                        MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
-    virtual             ~MacroSecurityLevelTP() override;
-    virtual void        dispose() override;
-
-    virtual void        ClosePage() override;
+    MacroSecurityLevelTP(weld::Container* pParent, MacroSecurity* pDlg);
+    virtual void ClosePage() override;
 };
-
 
 class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
-    VclPtr<FixedImage>         m_pTrustCertROFI;
-    VclPtr<SvSimpleTable>     m_pTrustCertLB;
-    VclPtr<PushButton>         m_pViewCertPB;
-    VclPtr<PushButton>         m_pRemoveCertPB;
-    VclPtr<FixedImage>         m_pTrustFileROFI;
-    VclPtr<ListBox>            m_pTrustFileLocLB;
-    VclPtr<PushButton>         m_pAddLocPB;
-    VclPtr<PushButton>         m_pRemoveLocPB;
-
-    css::uno::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
+    css::uno::Sequence< SvtSecurityOptions::Certificate > m_aTrustedAuthors;
 
     bool          mbAuthorsReadonly;
     bool          mbURLsReadonly;
 
-    DECL_LINK(    ViewCertPBHdl, Button*, void );
-    DECL_LINK(    RemoveCertPBHdl, Button*, void );
-    DECL_LINK(    AddLocPBHdl, Button*, void );
-    DECL_LINK(    RemoveLocPBHdl, Button*, void );
-    DECL_LINK(    TrustCertLBSelectHdl, SvTreeListBox*, void );
-    DECL_LINK(    TrustFileLocLBSelectHdl, ListBox&, void );
+    std::unique_ptr<weld::Image> m_xTrustCertROFI;
+    std::unique_ptr<weld::TreeView> m_xTrustCertLB;
+    std::unique_ptr<weld::Button> m_xViewCertPB;
+    std::unique_ptr<weld::Button> m_xRemoveCertPB;
+    std::unique_ptr<weld::Image> m_xTrustFileROFI;
+    std::unique_ptr<weld::TreeView>  m_xTrustFileLocLB;
+    std::unique_ptr<weld::Button> m_xAddLocPB;
+    std::unique_ptr<weld::Button> m_xRemoveLocPB;
 
-    void                FillCertLB();
-    void                ImplCheckButtons();
+    DECL_LINK(ViewCertPBHdl, weld::Button&, void);
+    DECL_LINK(RemoveCertPBHdl, weld::Button&, void);
+    DECL_LINK(AddLocPBHdl, weld::Button&, void);
+    DECL_LINK(RemoveLocPBHdl, weld::Button&, void);
+    DECL_LINK(TrustCertLBSelectHdl, weld::TreeView&, void);
+    DECL_LINK(TrustFileLocLBSelectHdl, weld::TreeView&, void);
+
+    void FillCertLB();
+    void ImplCheckButtons();
 
 public:
-    MacroSecurityTrustedSourcesTP(vcl::Window* pParent, MacroSecurity* _pDlg);
-    virtual ~MacroSecurityTrustedSourcesTP() override;
-    virtual void        dispose() override;
+    MacroSecurityTrustedSourcesTP(weld::Container* pParent, MacroSecurity* pDlg);
 
     virtual void        ActivatePage() override;
     virtual void        ClosePage() override;
