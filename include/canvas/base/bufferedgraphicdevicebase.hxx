@@ -21,11 +21,11 @@
 #define INCLUDED_CANVAS_BASE_BUFFEREDGRAPHICDEVICEBASE_HXX
 
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/base/graphicdevicebase.hxx>
+
+namespace com::sun::star::awt { class XTopWindow; }
 
 
 /* Definition of BufferedGraphicDeviceBase class */
