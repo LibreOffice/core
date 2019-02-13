@@ -39,20 +39,51 @@ class BitmapProcessorTest : public CppUnit::TestFixture
 
 void BitmapProcessorTest::testDisabledImage()
 {
-    Bitmap aBitmap(Size(3, 3), 24);
     {
-        BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(Color(0x00, 0x11, 0x22, 0x33));
+        Bitmap aBitmap(Size(3, 3), 24);
+        {
+            BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            pWriteAccess->Erase(Color(0x00, 0x00, 0xFF, 0x00));
+        }
+        BitmapEx aBitmapEx(aBitmap);
+        BitmapDisabledImageFilter aDisabledImageFilter;
+        BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
+        Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
+        {
+            Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
+            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
+        }
     }
-    BitmapEx aBitmapEx(aBitmap);
-    BitmapDisabledImageFilter aDisabledImageFilter;
-    BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
-    Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
 
     {
-        Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
-        Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0x001E1E1E), aColor);
+        Bitmap aBitmap(Size(3, 3), 24);
+        {
+            BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            pWriteAccess->Erase(Color(0x00, 0x00, 0xFF, 0x00));
+        }
+        AlphaMask aMask(Size(3, 3));
+        {
+            AlphaScopedWriteAccess pWriteAccess(aMask);
+            pWriteAccess->Erase(Color(0x00, 0xAA, 0xAA, 0xAA));
+        }
+
+        BitmapEx aBitmapEx(aBitmap, aMask);
+        BitmapDisabledImageFilter aDisabledImageFilter;
+        BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
+
+        Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
+        {
+            Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
+            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
+        }
+        AlphaMask aDisabledAlphaMask(aDisabledBitmapEx.GetAlpha());
+        {
+            AlphaMask::ScopedReadAccess pReadAccess(aDisabledAlphaMask);
+            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            CPPUNIT_ASSERT_EQUAL(Color(0x0000AA), aColor);
+        }
     }
 }
 

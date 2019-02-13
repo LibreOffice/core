@@ -24,82 +24,38 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     sal_uInt16 nBitCount = rBitmapEx.GetBitCount();
     if (nBitCount < 8)
         nBitCount = 8;
+
     const BitmapPalette* pPal = nBitCount == 8 ? &Bitmap::GetGreyPalette(256) : nullptr;
     Bitmap aGrey(aSize, nBitCount, pPal);
-
-    AlphaMask aGreyAlpha(aSize);
-
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
-    Bitmap::ScopedReadAccess pRead(aBitmap);
-
     BitmapScopedWriteAccess pGrey(aGrey);
-    AlphaScopedWriteAccess pGreyAlpha(aGreyAlpha);
 
     BitmapEx aReturnBitmap;
+    Bitmap aReadBitmap(rBitmapEx.GetBitmap());
+    Bitmap::ScopedReadAccess pRead(aReadBitmap);
+    if (pRead && pGrey)
+    {
+        for (long nY = 0; nY < aSize.Height(); ++nY)
+        {
+            Scanline pGreyScan = pGrey->GetScanline(nY);
+            Scanline pReadScan = pRead->GetScanline(nY);
+
+            for (long nX = 0; nX < aSize.Width(); ++nX)
+            {
+                // Get the luminance from RGB color and remap the value from 0-255 to 160-224
+                const BitmapColor aColor = pRead->GetPixelFromData(pReadScan, nX);
+                sal_uInt8 nLum(aColor.GetLuminance() / 4 + 160);
+                BitmapColor aGreyValue(nLum, nLum, nLum);
+                pGrey->SetPixelOnData(pGreyScan, nX, aGreyValue);
+            }
+        }
+    }
 
     if (rBitmapEx.IsTransparent())
     {
-        AlphaMask aBitmapAlpha(rBitmapEx.GetAlpha());
-        AlphaMask::ScopedReadAccess pReadAlpha(aBitmapAlpha);
-
-        if (pRead && pReadAlpha && pGrey && pGreyAlpha)
-        {
-            BitmapColor aGreyAlphaValue(0);
-
-            for (long nY = 0; nY < aSize.Height(); ++nY)
-            {
-                Scanline pScanAlpha = pGreyAlpha->GetScanline(nY);
-                Scanline pScanline = pGrey->GetScanline(nY);
-                Scanline pScanReadAlpha = pReadAlpha->GetScanline(nY);
-
-                for (long nX = 0; nX < aSize.Width(); ++nX)
-                {
-                    const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
-                    BitmapColor aGreyValue(nLum, nLum, nLum);
-                    pGrey->SetPixelOnData(pScanline, nX, aGreyValue);
-
-                    const BitmapColor aBitmapAlphaValue(
-                        pReadAlpha->GetPixelFromData(pScanReadAlpha, nX));
-
-                    aGreyAlphaValue.SetIndex(
-                        sal_uInt8(std::min(aBitmapAlphaValue.GetIndex() + 178ul, 255ul)));
-                    pGreyAlpha->SetPixelOnData(pScanAlpha, nX, aGreyAlphaValue);
-                }
-            }
-        }
-
-        pReadAlpha.reset();
-        aReturnBitmap = BitmapEx(aGrey, aGreyAlpha);
+        aReturnBitmap = BitmapEx(aGrey, rBitmapEx.GetAlpha());
     }
     else
-    {
-        if (pRead && pGrey && pGreyAlpha)
-        {
-            BitmapColor aGreyAlphaValue(0);
-
-            for (long nY = 0; nY < aSize.Height(); ++nY)
-            {
-                Scanline pScanAlpha = pGreyAlpha->GetScanline(nY);
-                Scanline pScanline = pGrey->GetScanline(nY);
-
-                for (long nX = 0; nX < aSize.Width(); ++nX)
-                {
-                    const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
-                    BitmapColor aGreyValue(nLum, nLum, nLum);
-                    pGrey->SetPixelOnData(pScanline, nX, aGreyValue);
-
-                    aGreyAlphaValue.SetIndex(128);
-                    pGreyAlpha->SetPixelOnData(pScanAlpha, nX, aGreyAlphaValue);
-                }
-            }
-        }
-
         aReturnBitmap = BitmapEx(aGrey);
-    }
-
-    pRead.reset();
-    pGrey.reset();
-    pGreyAlpha.reset();
 
     return aReturnBitmap;
 }
