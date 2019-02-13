@@ -224,7 +224,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
     CertificateChooser* pChooser = mpDlg->GetParentChooser();
     if (pChooser)
     {
-        aLBEntry = pChooser->UsageInClearText( mpDlg->mxCert->getCertificateUsage() );
+        aLBEntry = CertificateChooser::UsageInClearText( mpDlg->mxCert->getCertificateUsage() );
         InsertElement( XsResId( STR_USE ), aLBEntry, aLBEntry );
     }
 
