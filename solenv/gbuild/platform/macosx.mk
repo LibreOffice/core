@@ -319,7 +319,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		`cat $${DYLIB_FILE}` && \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
-		ln -shf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
+		$(if $(filter %.dylib,$(1)),ln -shf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&)) \
 	rm -f $${DYLIB_FILE})
 endef
 
