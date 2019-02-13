@@ -53,7 +53,7 @@ private:
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Reference< css::security::XCertificate > mxCert;
 
-    VclPtr<CertificateChooser> mpParentChooser;
+    CertificateChooser* mpParentChooser;
 
     std::unique_ptr<weld::Notebook> mxTabCtrl;
 

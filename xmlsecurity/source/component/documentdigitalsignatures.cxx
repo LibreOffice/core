@@ -649,17 +649,17 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
             xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts, eAction);
+    CertificateChooser aChooser(Application::GetFrameWeld(mxParentWindow), mxCtx, xSecContexts, eAction);
 
     uno::Sequence< Reference< css::security::XCertificate > > xCerts(1);
     xCerts[0] = Reference< css::security::XCertificate >(nullptr);
 
-    if (aChooser->Execute() != RET_OK)
+    if (aChooser.run() != RET_OK)
         return xCerts;
 
-    xCerts = aChooser->GetSelectedCertificates();
-    rProperties["Description"] = aChooser->GetDescription();
-    rProperties["Usage"] = aChooser->GetUsageText();
+    xCerts = aChooser.GetSelectedCertificates();
+    rProperties["Description"] = aChooser.GetDescription();
+    rProperties["Usage"] = aChooser.GetUsageText();
 
     return xCerts;
 }
