@@ -3119,6 +3119,13 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         if ((32 > nUCode) || (0xa0 == nUCode))
         {
             m_pStrm->SeekRel( m_bIsUnicode ? -2 : -1 );
+            // tdf#86879: buggy doc
+            // let's consider that the read is ok if we encounter
+            // a special character at first place.
+            // Indeed, without it, the caller of this method
+            // will loop forever
+            if (!nL2)
+                rPos+=nRequestedStrLen;
             break; // Special character < 32, == 0xa0 found
         }
 
@@ -3168,6 +3175,11 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         rPos += nL2;
         if (!m_aApos.back()) // a para end in apo doesn't count
             m_bWasParaEnd = false; // No CR
+    }
+    else
+    {
+        rPos+=nRequestedStrLen;
+        nL2 = nStrLen;
     }
 
     if (hConverter)
