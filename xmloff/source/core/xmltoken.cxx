@@ -2187,6 +2187,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "rl-tb",                           XML_RL_TB ),
         TOKEN( "tb-lr",                           XML_TB_LR ),
+        TOKEN( "bt-lr",                           XML_BT_LR ),
         TOKEN( "lr",                              XML_LR ),
         TOKEN( "rl",                              XML_RL ),
         TOKEN( "tb",                              XML_TB ),

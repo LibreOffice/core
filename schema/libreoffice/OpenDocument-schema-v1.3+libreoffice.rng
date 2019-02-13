@@ -2323,6 +2323,17 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="common-writing-mode-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:writing-mode">
+        <rng:choice>
+          <rng:value>bt-lr</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- just a test-case for user-defined attributes, move along, nothing to see here... -->
   <rng:define name="style-table-cell-properties-attlist" combine="interleave">
     <rng:optional>

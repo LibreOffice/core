@@ -2183,6 +2183,7 @@ namespace xmloff { namespace token {
 
         XML_RL_TB,
         XML_TB_LR,
+        XML_BT_LR,
         XML_LR,
         XML_RL,
         XML_TB,
