@@ -138,7 +138,7 @@ private:
     DECL_LINK(MasterPasswordHdl, Button*, void);
     DECL_LINK(MasterPasswordCBHdl, Button*, void);
     DECL_LINK(ShowPasswordsHdl, Button*, void);
-    DECL_STATIC_LINK(SvxSecurityTabPage, MacroSecPBHdl, Button*, void );
+    DECL_LINK(MacroSecPBHdl, Button*, void );
     DECL_LINK(CertPathPBHdl, Button*, void );
     DECL_LINK(TSAURLsPBHdl, Button*, void );
 
