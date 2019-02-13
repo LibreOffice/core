@@ -254,7 +254,7 @@ void sequence_output_bytes( std::basic_ostream<charT, traits> &os, const value_t
    @since LibreOffice 6.1
 */
 template< typename value_t, typename charT, typename traits >
-inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence < value_t > &v)
+inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence<value_t> const& v)
 {
     const value_t *pAry = v.getConstArray();
     sal_Int32 nLen = v.getLength();
