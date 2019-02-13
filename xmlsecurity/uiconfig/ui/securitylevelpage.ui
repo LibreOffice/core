@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="SecurityLevelPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
+    <property name="orientation">vertical</property>
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <property name="row_homogeneous">True</property>
     <child>
-      <object class="GtkRadioButton" id="low:wrap">
+      <object class="GtkRadioButton" id="low">
         <property name="label" translatable="yes" context="securitylevelpage|low">_Low (not recommended).
 All macros will be executed without confirmation.
 Use this setting only if you are certain that all documents that will be opened are safe.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="hexpand">True</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="group">vhigh:wrap</property>
+        <property name="group">high</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -28,16 +32,17 @@ Use this setting only if you are certain that all documents that will be opened 
       </packing>
     </child>
     <child>
-      <object class="GtkRadioButton" id="med:wrap">
+      <object class="GtkRadioButton" id="med">
         <property name="label" translatable="yes" context="securitylevelpage|med">_Medium.
 Confirmation required before executing macros from untrusted sources.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="hexpand">True</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="group">low:wrap</property>
+        <property name="group">high</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -45,18 +50,18 @@ Confirmation required before executing macros from untrusted sources.</property>
       </packing>
     </child>
     <child>
-      <object class="GtkRadioButton" id="high:wrap">
+      <object class="GtkRadioButton" id="high">
         <property name="label" translatable="yes" context="securitylevelpage|high">H_igh.
 Only signed macros from trusted sources are allowed to run.
 Unsigned macros are disabled.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="hexpand">True</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
-        <property name="group">med:wrap</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -64,17 +69,18 @@ Unsigned macros are disabled.</property>
       </packing>
     </child>
     <child>
-      <object class="GtkRadioButton" id="vhigh:wrap">
+      <object class="GtkRadioButton" id="vhigh">
         <property name="label" translatable="yes" context="securitylevelpage|vhigh">_Very high.
 Only macros from trusted file locations are allowed to run.
 All other macros, regardless whether signed or not, are disabled.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="hexpand">True</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="group">high:wrap</property>
+        <property name="group">high</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -87,7 +93,7 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="no_show_all">True</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <property name="pixbuf">res/lock.png</property>
+        <property name="icon_name">res/lock.png</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -100,7 +106,7 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="no_show_all">True</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <property name="pixbuf">res/lock.png</property>
+        <property name="icon_name">res/lock.png</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -113,7 +119,7 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="no_show_all">True</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <property name="pixbuf">res/lock.png</property>
+        <property name="icon_name">res/lock.png</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -126,7 +132,7 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="no_show_all">True</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <property name="pixbuf">res/lock.png</property>
+        <property name="icon_name">res/lock.png</property>
       </object>
       <packing>
         <property name="left_attach">0</property>

@@ -120,7 +120,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>

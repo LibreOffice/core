@@ -591,8 +591,8 @@ void DocumentDigitalSignatures::manageTrustedSources(  )
     if (aSignatureManager.init())
         xSecEnv = aSignatureManager.getSecurityEnvironment();
 
-    ScopedVclPtrInstance< MacroSecurity > aDlg( nullptr, xSecEnv );
-    aDlg->Execute();
+    MacroSecurity aDlg(Application::GetFrameWeld(mxParentWindow), xSecEnv);
+    aDlg.run();
 }
 
 void DocumentDigitalSignatures::showCertificate(

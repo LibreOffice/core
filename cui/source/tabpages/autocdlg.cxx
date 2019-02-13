@@ -1885,7 +1885,6 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(TabPageParent pParent,
     {
         m_xCBRemoveList->set_label_line_wrap(true);
         m_xCBRemoveList->set_size_request(nMaxWidth, -1);
-        aPrefSize = m_xCBRemoveList->get_preferred_size();
     }
 
     m_xLBEntries->set_size_request(m_xLBEntries->get_approximate_digit_width() * 30,
