@@ -404,12 +404,12 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts, UserAction::Sign );
-        if ( aChooser->Execute() == RET_OK )
+        CertificateChooser aChooser(GetFrameWeld(), mxCtx, xSecContexts, UserAction::Sign);
+        if (aChooser.run() == RET_OK)
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
-                                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
+            if (!maSignatureManager.add(aChooser.GetSelectedCertificates()[0], aChooser.GetSelectedSecurityContext(),
+                                        aChooser.GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 
