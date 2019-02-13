@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CANVAS_PROPERTYSETHELPER_HXX
 #define INCLUDED_CANVAS_PROPERTYSETHELPER_HXX
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <canvas/canvastools.hxx>
 
 #include <functional>
@@ -29,6 +27,10 @@
 #include <memory>
 
 #include <canvas/canvastoolsdllapi.h>
+
+namespace com::sun::star::beans { class XPropertyChangeListener; }
+namespace com::sun::star::beans { class XPropertySetInfo; }
+namespace com::sun::star::beans { class XVetoableChangeListener; }
 
 namespace canvas
 {

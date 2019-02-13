@@ -20,14 +20,14 @@
 #ifndef INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
 #define INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
 
-#include <canvas/rendering/irendermodule.hxx>
-#include <canvas/rendering/icolorbuffer.hxx>
 #include <canvas/canvastoolsdllapi.h>
 #include <memory>
 
 namespace canvas
 {
     struct ISurfaceProxy;
+    struct IColorBuffer;
+    struct IRenderModule;
 
     /** Manager interface, which handles surface proxy objects.
 

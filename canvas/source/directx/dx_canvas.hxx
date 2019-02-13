@@ -37,6 +37,7 @@
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/graphicdevicebase.hxx>
+#include <canvas/base/canvasbase.hxx>
 
 #include "dx_bitmapprovider.hxx"
 #include "dx_canvashelper.hxx"
