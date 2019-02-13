@@ -20,14 +20,13 @@
 #ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
 #define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XCustomSprite.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/sprite.hxx>
+#include <canvas/base/bitmapcanvasbase.hxx>
+
+namespace com::sun::star::rendering { class XPolyPolygon2D; }
 
 namespace canvas
 {

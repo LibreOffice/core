@@ -552,3 +552,11 @@ blacklist:
     - com/sun/star/document/XDocumentEventListener.hpp
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
+    include/canvas/base/cachedprimitivebase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/rendering/XCachedPrimitive.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/canvas/parametricpolypolygon.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/rendering/XParametricPolyPolygon2D.hpp

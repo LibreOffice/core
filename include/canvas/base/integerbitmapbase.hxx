@@ -20,8 +20,9 @@
 #ifndef INCLUDED_CANVAS_BASE_INTEGERBITMAPBASE_HXX
 #define INCLUDED_CANVAS_BASE_INTEGERBITMAPBASE_HXX
 
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <canvas/base/bitmapcanvasbase.hxx>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <canvas/verifyinput.hxx>
+#include <osl/diagnose.h>
 
 
 namespace canvas

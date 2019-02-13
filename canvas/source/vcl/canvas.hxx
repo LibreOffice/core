@@ -37,6 +37,7 @@
 #include <cppu/unotype.hxx>
 
 #include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/bitmapcanvasbase.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/graphicdevicebase.hxx>
 

@@ -20,9 +20,6 @@
 #ifndef INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
 #define INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
 
-#include <canvas/rendering/irendermodule.hxx>
-#include <memory>
-
 namespace basegfx
 {
     class B2DRange;

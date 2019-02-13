@@ -21,16 +21,14 @@
 #define INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 
 #include <canvas/parametricpolypolygon.hxx>
 #include <canvas/propertysethelper.hxx>
 #include <canvas/verifyinput.hxx>
+
+namespace com::sun::star::beans { class XPropertySetInfo; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::rendering { class XColorSpace; }
 
 
 /* Definition of GraphicDeviceBase class */

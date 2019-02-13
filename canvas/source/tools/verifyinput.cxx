@@ -35,6 +35,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FloatingPointBitmapFormat.hpp>

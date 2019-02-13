@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CANVAS_ELAPSEDTIME_HXX
 #define INCLUDED_CANVAS_ELAPSEDTIME_HXX
 
-#include <sal/types.h>
 #include <canvas/canvastoolsdllapi.h>
 #include <memory>
 

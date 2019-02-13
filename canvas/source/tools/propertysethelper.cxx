@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <canvas/propertysethelper.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 

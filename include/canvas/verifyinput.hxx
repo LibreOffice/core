@@ -21,12 +21,7 @@
 #define INCLUDED_CANVAS_VERIFYINPUT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-
-#include <algorithm>
 
 #include <canvas/canvastoolsdllapi.h>
 
@@ -51,10 +46,9 @@ namespace com { namespace sun { namespace star { namespace rendering
     struct ViewState;
     struct IntegerBitmapLayout;
     struct FontRequest;
-    struct FontInfo;
-    class  XCanvas;
 } } } }
 
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 namespace canvas
 {
