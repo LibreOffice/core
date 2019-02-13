@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <basegfx/utils/canvastools.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
