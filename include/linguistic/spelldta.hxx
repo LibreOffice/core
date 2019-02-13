@@ -23,16 +23,11 @@
 #include <vector>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSetSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
 #include <i18nlangtag/lang.h>
 
-namespace com { namespace sun { namespace star {
-    namespace linguistic2 {
-        class XDictionaryList;
-    }
-} } }
+namespace com::sun::star::linguistic2 { class XSearchableDictionaryList; }
 
 
 namespace linguistic

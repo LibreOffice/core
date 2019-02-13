@@ -27,13 +27,13 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"
 #include <linguistic/misc.hxx>
 #include "defs.hxx"
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;

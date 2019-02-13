@@ -27,6 +27,7 @@
 
 #include <strings.hrc>
 #include <hintids.hxx>
+#include <unotools/linguprops.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/svxacorr.hxx>
