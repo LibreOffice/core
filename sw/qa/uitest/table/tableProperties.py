@@ -121,10 +121,10 @@ class tableProperties(UITestCase):
         keep.executeAction("CLICK", tuple())
         headline = xDialog.getChild("headline")
         headline.executeAction("CLICK", tuple())
-#        textdirection = xDialog.getChild("textdirection")  #the name of the ui item is not unique
-#        props = {"TEXT": "Vertical"}
-#        actionProps = mkPropertyValues(props)
-#        textdirection.executeAction("SELECT", actionProps)
+        textdirection = xDialog.getChild("textorientation")
+        props = {"TEXT": "Vertical (bottom to top)"}
+        actionProps = mkPropertyValues(props)
+        textdirection.executeAction("SELECT", actionProps)
         vertorient = xDialog.getChild("vertorient")
         props2 = {"TEXT": "Bottom"}
         actionProps2 = mkPropertyValues(props2)
@@ -147,8 +147,8 @@ class tableProperties(UITestCase):
         self.assertEqual(get_state_as_dict(keep)["Selected"], "true")
         headline = xDialog.getChild("headline")
         self.assertEqual(get_state_as_dict(headline)["Selected"], "true")
-#        textdirection = xDialog.getChild("textdirection")
-#        self.assertEqual(get_state_as_dict(textdirection)["SelectEntryText"], "Vertical")
+        textdirection = xDialog.getChild("textorientation")
+        self.assertEqual(get_state_as_dict(textdirection)["SelectEntryText"], "Vertical (bottom to top)")
         vertorient = xDialog.getChild("vertorient")
         self.assertEqual(get_state_as_dict(vertorient)["SelectEntryText"], "Bottom")
         xOKBtn = xDialog.getChild("ok")
