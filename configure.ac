@@ -2008,8 +2008,7 @@ AC_ARG_WITH(symbol-config,
 
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--without-export-validation],
-        [Disable validating OOXML and ODF files as exported from in-tree tests.
-         Use this option e.g. if your system only provides Java 5.]),
+        [Disable validating OOXML and ODF files as exported from in-tree tests.]),
 ,with_export_validation=auto)
 
 AC_ARG_WITH(bffvalidator,
