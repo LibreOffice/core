@@ -24,13 +24,11 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <canvas/base/spritesurface.hxx>
 
 #include <vector>
 #include <algorithm>
 
+#include <canvas/base/sprite.hxx>
 #include <canvas/canvastoolsdllapi.h>
 
 /* Definition of SpriteRedrawManager class */

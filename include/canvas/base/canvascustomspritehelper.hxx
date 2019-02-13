@@ -27,8 +27,15 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/canvastoolsdllapi.h>
-#include <com/sun/star/rendering/XCustomSprite.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+
+namespace com::sun::star::geometry { struct AffineMatrix2D; }
+namespace com::sun::star::geometry { struct RealPoint2D; }
+namespace com::sun::star::geometry { struct RealSize2D; }
+namespace com::sun::star::rendering { class XBitmap; }
+namespace com::sun::star::rendering { class XPolyPolygon2D; }
+namespace com::sun::star::rendering { struct RenderState; }
+namespace com::sun::star::rendering { struct ViewState; }
+
 
 namespace canvas
 {
