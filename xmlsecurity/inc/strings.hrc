@@ -51,6 +51,17 @@
 
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE             NC_("RID_XMLSECWB_NO_MOZILLA_PROFILE", "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation.")
 
+#define STR_DIGITAL_SIGNATURE                       NC_("selectcertificatedialog|STR_DIGITAL_SIGNATURE", "Digital signature")
+#define STR_NON_REPUDIATION                         NC_("selectcertificatedialog|STR_NON_REPUDIATION", "Non-repudiation")
+#define STR_KEY_ENCIPHERMENT                        NC_("selectcertificatedialog|STR_KEY_ENCIPHERMENT", "Key encipherment")
+#define STR_DATA_ENCIPHERMENT                       NC_("selectcertificatedialog|STR_DATA_ENCIPHERMENT", "Data encipherment")
+#define STR_KEY_AGREEMENT                           NC_("selectcertificatedialog|STR_KEY_AGREEMENT", "Key Agreement")
+#define STR_KEY_CERT_SIGN                           NC_("selectcertificatedialog|STR_KEY_CERT_SIGN", "Certificate signature verification")
+#define STR_CRL_SIGN                                NC_("selectcertificatedialog|STR_CRL_SIGN", "CRL signature verification")
+#define STR_ENCIPHER_ONLY                           NC_("selectcertificatedialog|STR_ENCIPHER_ONLY", "Only for encipherment")
+#define STR_SIGN                                    NC_("selectcertificatedialog|str_sign", "Sign")
+#define STR_SELECTSIGN                              NC_("selectcertificatedialog|str_selectsign", "Select")
+#define STR_ENCRYPT                                 NC_("selectcertificatedialog|str_encrypt", "Encrypt")
 
 #endif
 

@@ -2,12 +2,28 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name text3 -->
+      <column type="gchararray"/>
+      <!-- column-name text4 -->
+      <column type="gchararray"/>
+      <!-- column-name text5 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="SelectCertificateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="selectcertificatedialog|SelectCertificateDialog">Select Certificate</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -80,132 +96,6 @@
             <property name="row_spacing">12</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkGrid" id="grid2">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="issuedto">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|issuedto">Issued to</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="issuedby">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|issuedby">Issued by</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="usage">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|usage">Certificate usage</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="expiration">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|expiration">Expiration date</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="type">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|type">Type</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">4</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <!-- Just for localisation -->
-                <child>
-                  <object class="GtkLabel" id="STR_DIGITAL_SIGNATURE">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_DIGITAL_SIGNATURE">Digital signature</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_NON_REPUDIATION">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_NON_REPUDIATION">Non-repudiation</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_KEY_ENCIPHERMENT">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_ENCIPHERMENT">Key encipherment</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_DATA_ENCIPHERMENT">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_DATA_ENCIPHERMENT">Data encipherment</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_KEY_AGREEMENT">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_AGREEMENT">Key Agreement</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_KEY_CERT_SIGN">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_CERT_SIGN">Certificate signature verification</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_CRL_SIGN">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_CRL_SIGN">CRL signature verification</property>
-                  </object>
-                  <object class="GtkLabel" id="STR_ENCIPHER_ONLY">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_ENCIPHER_ONLY">Only for encipherment</property>
-                  </object>
-                  <!-- different prefix, STR_ is (mis)used in the code to map certificate usage flags to strings -->
-                  <object class="GtkLabel" id="str_sign">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|str_sign">Sign</property>
-                  </object>
-                  <object class="GtkLabel" id="str_selectsign">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|str_selectsign">Select</property>
-                  </object>
-                  <object class="GtkLabel" id="str_encrypt">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|str_encrypt">Encrypt</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="sign">
                 <property name="visible">False</property>
                 <property name="can_focus">False</property>
@@ -232,13 +122,91 @@
               </packing>
             </child>
             <child>
-              <object class="svtlo-SvSimpleTableContainer" id="signatures">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="signatures">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore3</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|issuedto">Issued to</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|issuedby">Issued by</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer2"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|type">Type</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer3"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn6">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|expiration">Expiration date</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer4"/>
+                          <attributes>
+                            <attribute name="text">3</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|usage">Certificate usage</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer5"/>
+                          <attributes>
+                            <attribute name="text">4</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
