@@ -60,6 +60,7 @@ public:
     void testTdf122901();
     void testTdf122942();
     void testTdf52391();
+    void testTableWidth();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testTdf122901);
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testTdf52391);
+    CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -876,6 +878,21 @@ void SwUiWriterTest2::testTdf52391()
     // accepted for "Reject All". Now rejection clears formatting of the text
     // in format-only changes, concatenating the text portions in the first paragraph.
     CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
+}
+
+void SwUiWriterTest2::testTableWidth()
+{
+    load(DATA_DIRECTORY, "frame_size_export.docx");
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // after exporting: table width was overwritten in the doc model
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

@@ -330,10 +330,14 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
 
-    // unset parent frame, otherwise exporter thinks we are still in a frame
+    // set a floatingTableFrame AND unset parent frame,
+    // otherwise exporter thinks we are still in a frame
+    m_rExport.SetFloatingTableFrame(pParentFrame);
     m_rExport.m_pParentFrame = nullptr;
 
     GetExport().WriteText();
+
+    m_rExport.SetFloatingTableFrame(nullptr);
 }
 
 static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
@@ -383,15 +387,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         if (aTableGrabBag.find("TablePosition") == aTableGrabBag.end())
             continue;
 
-        // overwrite the table size from the surrounding frame format
-        // TODO remove this de-const HACK
-        const SwFormatFrameSize& aFramesize = pFrameFormat->GetFrameSize();
-        SwFormatFrameSize* pFormatFrameSize = const_cast<SwFormatFrameSize*>(&pTableFormat->GetFrameSize());
-        if(pFormatFrameSize)
-        {
-            *pFormatFrameSize = aFramesize;
-        }
-
+        // write table to docx
         ww8::Frame aFrame(*pFrameFormat,*pPosition);
         rDocxAttributeOutput.WriteFloatingTable(&aFrame);
     }
@@ -3702,6 +3698,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     SwFrameFormat *pTableFormat = pTable->GetFrameFormat( );
     const SwFormatFrameSize &rSize = pTableFormat->GetFrameSize();
     int nWidthPercent = rSize.GetWidthPercent();
+    // If we export a floating table: we use the widthPercent of the surrounding frame
+    const ww8::Frame* pFloatingTableFrame = m_rExport.GetFloatingTableFrame();
+    if (pFloatingTableFrame)
+    {
+        const SwFormatFrameSize &rFrameSize = pFloatingTableFrame->GetFrameFormat().GetFrameSize();
+        nWidthPercent = rFrameSize.GetWidthPercent();
+    }
     uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(*pTable->GetFrameFormat( )),uno::UNO_QUERY);
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;

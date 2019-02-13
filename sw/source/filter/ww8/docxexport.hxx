@@ -113,10 +113,15 @@ class DocxExport : public MSWordExportBase
 
     DocxSettingsData m_aSettings;
 
+    /// Pointer to the Frame of a floating table it is nested in
+    const ww8::Frame *m_pFloatingTableFrame = nullptr;
+
 public:
 
     DocxExportFilter& GetFilter() { return *m_pFilter; };
     const DocxExportFilter& GetFilter() const { return *m_pFilter; };
+
+    const ww8::Frame* GetFloatingTableFrame() { return m_pFloatingTableFrame; }
 
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const override;
@@ -286,6 +291,8 @@ public:
     const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
 
     void SetFS(::sax_fastparser::FSHelperPtr const & mpFS);
+
+    void SetFloatingTableFrame(const ww8::Frame* pF) { m_pFloatingTableFrame = pF; }
 
 private:
     DocxExport( const DocxExport& ) = delete;
