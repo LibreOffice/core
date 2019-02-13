@@ -654,7 +654,7 @@ function getJavaHome()
     var bSkip = false;
     while(true)
     {
-        stdout.Write("\n Enter JAVA SDK (1.4.1_01 or higher) installation directory (optional) [" + sSuggestedHome + "]:");
+        stdout.Write("\n Enter JAVA SDK (1.6 or higher) installation directory (optional) [" + sSuggestedHome + "]:");
         var sHome = stdin.ReadLine();
         if (sHome.length == 0)
         {
