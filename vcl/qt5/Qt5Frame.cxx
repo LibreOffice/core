@@ -93,6 +93,11 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
             aWinFlags |= Qt::SplashScreen;
+        // floating toolbars are frameless tool windows
+        // + they must be able to receive keyboard focus
+        else if ((nStyle & SalFrameStyleFlags::FLOAT)
+                 && (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
+            aWinFlags |= Qt::Tool | Qt::FramelessWindowHint;
         else if (nStyle & (SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLTIP))
             aWinFlags |= Qt::ToolTip;
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
@@ -102,8 +107,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Dialog;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags |= Qt::Tool;
-        else if (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
-            aWinFlags |= Qt::Window | Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus;
         else
             aWinFlags |= Qt::Window;
     }
