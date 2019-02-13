@@ -361,7 +361,8 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
                     {
                         for(long x(0); x < pReadAccess->Width(); x++)
                         {
-                            sal_uInt16 nLuminance(static_cast<sal_uInt16>(pReadAccess->GetLuminance(y, x)) + 1);
+                            const BitmapColor aColor = pReadAccess->GetColor(y, x);
+                            sal_uInt16 nLuminance(static_cast<sal_uInt16>(aColor.GetLuminance()) + 1);
                             const Color aDestColor(
                                 static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
                                 static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
