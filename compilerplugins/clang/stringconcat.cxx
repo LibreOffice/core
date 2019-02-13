@@ -13,32 +13,36 @@
 namespace {
 
 Expr const * stripCtor(Expr const * expr) {
-    auto e0 = expr;
-    auto const e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
-    if (e1 != nullptr) {
-        e0 = e1->getSubExpr()->IgnoreParenImpCasts();
+    auto e1 = expr;
+    if (auto const e = dyn_cast<CXXFunctionalCastExpr>(e1)) {
+        e1 = e->getSubExpr()->IgnoreParenImpCasts();
     }
-    auto const e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
+    if (auto const e = dyn_cast<CXXBindTemporaryExpr>(e1)) {
+        e1 = e->getSubExpr()->IgnoreParenImpCasts();
+    }
+    auto const e2 = dyn_cast<CXXConstructExpr>(e1);
     if (e2 == nullptr) {
         return expr;
     }
-    auto const e3 = dyn_cast<CXXConstructExpr>(
-        e2->getSubExpr()->IgnoreParenImpCasts());
-    if (e3 == nullptr) {
+    auto qt = loplugin::DeclCheck(e2->getConstructor());
+    if (qt.MemberFunction().Struct("OStringLiteral").Namespace("rtl").GlobalNamespace()) {
+        if (e2->getNumArgs() == 1) {
+            return e2->getArg(0)->IgnoreParenImpCasts();
+        }
         return expr;
     }
-    auto qt = loplugin::DeclCheck(e3->getConstructor());
     if (!((qt.MemberFunction().Class("OString").Namespace("rtl")
            .GlobalNamespace())
           || (qt.MemberFunction().Class("OUString").Namespace("rtl")
-              .GlobalNamespace())))
+              .GlobalNamespace())
+          || qt.MemberFunction().Struct("OUStringLiteral").Namespace("rtl").GlobalNamespace()))
     {
         return expr;
     }
-    if (e3->getNumArgs() != 2) {
+    if (e2->getNumArgs() != 2) {
         return expr;
     }
-    return e3->getArg(0)->IgnoreParenImpCasts();
+    return e2->getArg(0)->IgnoreParenImpCasts();
 }
 
 class StringConcat:
@@ -100,6 +104,8 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };
     if (loplugin::isSamePathname(
+            name, SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_assign.cxx")
+        || loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
         || loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx"))
