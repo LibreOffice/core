@@ -75,7 +75,7 @@ $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
 $main::OO_SDK_JAVA_HOME = "";
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
-$main::javaVersion = "1.5.0_01";
+$main::javaVersion = "1.6";
 
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
@@ -393,7 +393,7 @@ while ( (!$main::correctVersion) &&
         ((! -d "$main::OO_SDK_JAVA_HOME" ) ||
          ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac"))) )
 {
-    print " Enter Java SDK (1.5, recommendation is 1.6 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
+    print " Enter Java SDK (1.6 or higher) installation directory (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
     $main::OO_SDK_JAVA_HOME = readStdIn();
     chop($main::OO_SDK_JAVA_HOME);
     if ( $main::OO_SDK_JAVA_HOME eq "" )
