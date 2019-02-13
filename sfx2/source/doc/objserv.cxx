@@ -1740,7 +1740,7 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent)
     if (CheckIsReadonly(false))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(false, HasValidSignatures());
+    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures());
 
     AfterSigning(bSignSuccess, false);
 }
@@ -1836,7 +1836,7 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
     if (CheckIsReadonly(false))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(
+    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent,
         false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
 
     AfterSigning(bSignSuccess, false);
@@ -1861,7 +1861,7 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
     if (CheckIsReadonly(true))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(true, HasValidSignatures());
+    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures());
 
     AfterSigning(bSignSuccess, true);
 }

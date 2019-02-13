@@ -58,6 +58,11 @@ class SfxFrame;
 class Timer;
 class DateTime;
 
+namespace weld
+{
+    class Window;
+}
+
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     std::unique_ptr< SfxMedium_Impl > pImpl;
@@ -263,7 +268,8 @@ public:
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
     SAL_DLLPRIVATE bool
-    SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocumentSignature,
+    SignContents_Impl(weld::Window* pDialogParent,
+                      bool bSignScriptingContent, bool bHasValidDocumentSignature,
                       const OUString& aSignatureLineId = OUString(),
                       const css::uno::Reference<css::security::XCertificate>& xCert
                       = css::uno::Reference<css::security::XCertificate>(),
