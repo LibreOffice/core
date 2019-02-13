@@ -13,6 +13,7 @@
 #include <functional>
 #include <epoxy/gl.h>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

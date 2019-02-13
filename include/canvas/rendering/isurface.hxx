@@ -20,14 +20,10 @@
 #ifndef INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
 #define INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
 
-#include <sal/types.h>
-#include <memory>
-
 namespace basegfx
 {
     class B2IRange;
     class B2IPoint;
-    class B2IVector;
 }
 
 namespace canvas

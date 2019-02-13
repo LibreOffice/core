@@ -22,13 +22,14 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
+
+namespace com::sun::star::rendering { class XCanvas; }
 
 /* Definition of CachedPrimitiveBase class */
 
