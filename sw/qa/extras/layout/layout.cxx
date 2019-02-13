@@ -67,6 +67,7 @@ public:
     void testTdf122878();
     void testTdf115094();
     void testTdf122607();
+    void testBtlrCell();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testTdf122878);
     CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST(testTdf122607);
+    CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2785,6 +2787,23 @@ void SwLayoutWriter::testTdf122607()
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/Text[1]",
                 "Portion", "Fax:");
+}
+
+void SwLayoutWriter::testBtlrCell()
+{
+    SwDoc* pDoc = createDoc("btlr-cell.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed, as
+    // the orientation was 0 (layout did not take btlr direction request from
+    // doc model).
+    assertXPath(pXmlDoc, "//font[1]", "orientation", "900");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
