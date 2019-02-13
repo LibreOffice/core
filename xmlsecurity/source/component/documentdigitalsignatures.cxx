@@ -398,19 +398,19 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     DocumentSignatureMode eMode, bool bReadOnly )
 {
     bool bChanges = false;
-    ScopedVclPtrInstance<DigitalSignaturesDialog> aSignaturesDialog(
-        nullptr, mxCtx, eMode, bReadOnly, m_sODFVersion,
+    DigitalSignaturesDialog aSignaturesDialog(
+        Application::GetFrameWeld(mxParentWindow), mxCtx, eMode, bReadOnly, m_sODFVersion,
         m_bHasDocumentSignature);
-    bool bInit = aSignaturesDialog->Init();
+    bool bInit = aSignaturesDialog.Init();
     SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
     if ( bInit )
     {
-        aSignaturesDialog->SetStorage(rxStorage);
+        aSignaturesDialog.SetStorage(rxStorage);
 
-        aSignaturesDialog->SetSignatureStream( xSignStream );
-        if ( aSignaturesDialog->Execute() )
+        aSignaturesDialog.SetSignatureStream( xSignStream );
+        if (aSignaturesDialog.run() == RET_OK)
         {
-            if ( aSignaturesDialog->SignaturesChanged() )
+            if (aSignaturesDialog.SignaturesChanged())
             {
                 bChanges = true;
                 // If we have a storage and no stream, we are responsible for commit

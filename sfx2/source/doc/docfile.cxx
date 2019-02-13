@@ -129,6 +129,7 @@
 #include <openflag.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -3888,7 +3889,9 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
     return bChanges;
 }
 
-bool SfxMedium::SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocumentSignature,
+bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
+                                  bool bSignScriptingContent,
+                                  bool bHasValidDocumentSignature,
                                   const OUString& aSignatureLineId,
                                   const Reference<XCertificate>& xCert,
                                   const Reference<XGraphic>& xValidGraphic,
@@ -3909,6 +3912,8 @@ bool SfxMedium::SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocu
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
             comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
+    if (pDialogParent)
+        xSigner->setParentWindow(pDialogParent->GetXWindow());
 
     uno::Reference< embed::XStorage > xWriteableZipStor;
 
