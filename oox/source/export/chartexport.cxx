@@ -3134,6 +3134,17 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, ToPsz10(aLabel.ShowCategoryName), FSEND);
     pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(false), FSEND);
     pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, ToPsz10(aLabel.ShowNumberInPercent), FSEND);
+
+    // Export the text "separator" if exists
+    uno::Any aAny = xPropSet->getPropertyValue("LabelSeparator");
+    if( aAny.hasValue() )
+    {
+        OUString nLabelSeparator;
+        aAny >>= nLabelSeparator;
+        pFS->startElement( FSNS( XML_c, XML_separator ), FSEND );
+        pFS->writeEscaped( nLabelSeparator );
+        pFS->endElement( FSNS( XML_c, XML_separator ) );
+    }
 }
 
 }
