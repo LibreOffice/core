@@ -21,8 +21,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>
 #include <linguistic/lngprops.hxx>

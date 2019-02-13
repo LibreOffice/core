@@ -25,8 +25,10 @@
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
+#include <unotools/linguprops.hxx>
 
 #include <linguistic/misc.hxx>
 #include <linguistic/lngprops.hxx>
