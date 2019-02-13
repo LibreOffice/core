@@ -822,7 +822,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
     {
         Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
-        xD->setParentWindow(VCLUnoHelper::GetInterface(GetTabDialog()));
+        xD->setParentWindow(VCLUnoHelper::GetInterface(GetParentDialog()));
         xD->manageTrustedSources();
     }
     catch (const Exception& e)
