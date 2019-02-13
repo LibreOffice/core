@@ -28,7 +28,6 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
-#include <vcl/treelistentry.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/useroptions.hxx>
 
