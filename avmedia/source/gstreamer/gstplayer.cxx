@@ -735,7 +735,7 @@ double SAL_CALL Player::getDuration()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // slideshow checks for non-zero duration, so cheat here
-    double duration = 0.01;
+    double duration = 0.3;
 
     if( mpPlaybin && mnDuration > 0 ) {
         duration = mnDuration / GST_SECOND;
