@@ -68,6 +68,7 @@ public:
     void testTdf115094();
     void testTdf118719();
     void testTdf123651();
+    void testBtlrCell();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST(testTdf118719);
     CPPUNIT_TEST(testTdf123651);
+    CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2737,6 +2739,23 @@ void SwLayoutWriter::testTdf123651()
     // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
     // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
+}
+
+void SwLayoutWriter::testBtlrCell()
+{
+    SwDoc* pDoc = createDoc("btlr-cell.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed, as
+    // the orientation was 0 (layout did not take btlr direction request from
+    // doc model).
+    assertXPath(pXmlDoc, "//font[1]", "orientation", "900");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
