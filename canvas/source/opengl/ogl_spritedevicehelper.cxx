@@ -12,6 +12,7 @@
 
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>

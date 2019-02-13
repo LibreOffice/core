@@ -21,10 +21,15 @@
 #define INCLUDED_CANVAS_BASE_SPRITECANVASBASE_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <canvas/base/integerbitmapbase.hxx>
+#include <canvas/base/bitmapcanvasbase.hxx>
 #include <canvas/spriteredrawmanager.hxx>
+
+namespace com::sun::star::rendering { class XAnimation; }
+namespace com::sun::star::rendering { class XAnimatedSprite; }
+namespace com::sun::star::rendering { class XCustomSprite; }
+namespace com::sun::star::rendering { class XSprite; }
 
 
 namespace canvas
