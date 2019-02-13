@@ -31,7 +31,6 @@
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 #include <comphelper/xmlsechelper.hxx>
-#include <svtools/controldims.hxx>
 #include <tools/datetime.hxx>
 #include <bitmaps.hlst>
 

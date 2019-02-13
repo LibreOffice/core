@@ -20,13 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_CERTIFICATEVIEWER_HXX
 #define INCLUDED_XMLSECURITY_INC_CERTIFICATEVIEWER_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <svtools/simptabl.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/weld.hxx>
 
 namespace com {
 namespace sun {
