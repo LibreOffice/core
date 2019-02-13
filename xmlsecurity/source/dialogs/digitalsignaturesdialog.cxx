@@ -50,6 +50,7 @@
 #include <unotools/datetime.hxx>
 #include <vcl/treelistentry.hxx>
 
+#include <bitmaps.hlst>
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 #include <comphelper/xmlsechelper.hxx>
@@ -106,115 +107,87 @@ namespace
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
-    vcl::Window* pParent,
+    weld::Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
-    : ModalDialog(pParent, "DigitalSignaturesDialog", "xmlsec/ui/digitalsignaturesdialog.ui")
+    : GenericDialogController(pParent, "xmlsec/ui/digitalsignaturesdialog.ui", "DigitalSignaturesDialog")
     , mxCtx(rxCtx)
     , maSignatureManager(rxCtx, eMode)
     , m_sODFVersion (sODFVersion)
     , m_bHasDocumentSignature(bHasDocumentSignature)
     , m_bWarningShowSignMacro(false)
+    , m_xHintDocFT(m_xBuilder->weld_label("dochint"))
+    , m_xHintBasicFT(m_xBuilder->weld_label("macrohint"))
+    , m_xHintPackageFT(m_xBuilder->weld_label("packagehint"))
+    , m_xSignaturesLB(m_xBuilder->weld_tree_view("signatures"))
+    , m_xSigsValidImg(m_xBuilder->weld_image("validimg"))
+    , m_xSigsValidFI(m_xBuilder->weld_label("validft"))
+    , m_xSigsInvalidImg(m_xBuilder->weld_image("invalidimg"))
+    , m_xSigsInvalidFI(m_xBuilder->weld_label("invalidft"))
+    , m_xSigsNotvalidatedImg(m_xBuilder->weld_image("notvalidatedimg"))
+    , m_xSigsNotvalidatedFI(m_xBuilder->weld_label("notvalidatedft"))
+    , m_xSigsOldSignatureImg(m_xBuilder->weld_image("oldsignatureimg"))
+    , m_xSigsOldSignatureFI(m_xBuilder->weld_label("oldsignatureft"))
+    , m_xAdESCompliantCB(m_xBuilder->weld_check_button("adescompliant"))
+    , m_xViewBtn(m_xBuilder->weld_button("view"))
+    , m_xAddBtn(m_xBuilder->weld_button("sign"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("remove"))
+    , m_xStartCertMgrBtn(m_xBuilder->weld_button("start_certmanager"))
+    , m_xCloseBtn(m_xBuilder->weld_button("close"))
 {
-    get(m_pHintDocFT, "dochint");
-    get(m_pHintBasicFT, "macrohint");
-    get(m_pHintPackageFT, "packagehint");
-    get(m_pAdESCompliantCB, "adescompliant");
-    get(m_pViewBtn, "view");
-    get(m_pAddBtn, "sign");
-    get(m_pRemoveBtn, "remove");
-    get(m_pCloseBtn, "close");
-    get(m_pStartCertMgrBtn, "start_certmanager");
-    get(m_pSigsValidImg, "validimg");
-    get(m_pSigsValidFI, "validft");
-    get(m_pSigsInvalidImg, "invalidimg");
-    get(m_pSigsInvalidFI, "invalidft");
-    get(m_pSigsNotvalidatedImg, "notvalidatedimg");
-    get(m_pSigsNotvalidatedFI, "notvalidatedft");
-    get(m_pSigsOldSignatureImg, "oldsignatureimg");
-    get(m_pSigsOldSignatureFI, "oldsignatureft");
-
     m_bAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
-    Size aControlSize(375, 109);
-    const long nControlWidth = aControlSize.Width();
-    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-    SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
-    pSignatures->set_width_request(aControlSize.Width());
-    pSignatures->set_height_request(aControlSize.Height());
+    auto nControlWidth = m_xSignaturesLB->get_approximate_digit_width() * 105;
+    m_xSignaturesLB->set_size_request(nControlWidth, m_xSignaturesLB->get_height_rows(10));
 
-    m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     // Give the first column 6 percent, try to distribute the rest equally.
-    static long aTabs[] = { 0, 6*nControlWidth/100, 25*nControlWidth/100, 44*nControlWidth/100, 62*nControlWidth/100, 81*nControlWidth/100 };
-    m_pSignaturesLB->SetTabs(SAL_N_ELEMENTS(aTabs), aTabs);
-
-    m_pSignaturesLB->InsertHeaderEntry("\t" + get<FixedText>("signed")->GetText() + "\t"
-               + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText() + "\t"
-               + get<FixedText>("description")->GetText() + "\t" + get<FixedText>("type")->GetText());
+    std::vector<int> aWidths;
+    aWidths.push_back(6*nControlWidth/100);
+    auto nColWidth = (nControlWidth - aWidths[0]) / 4;
+    aWidths.push_back(nColWidth);
+    aWidths.push_back(nColWidth);
+    aWidths.push_back(nColWidth);
+    m_xSignaturesLB->set_column_fixed_widths(aWidths);
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
 
-    m_pSignaturesLB->SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
-    m_pSignaturesLB->SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
+    m_xSignaturesLB->connect_changed( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
+    m_xSignaturesLB->connect_row_activated( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
 
-    m_pAdESCompliantCB->SetToggleHdl( LINK( this, DigitalSignaturesDialog, AdESCompliantCheckBoxHdl ) );
-    m_pAdESCompliantCB->Check(m_bAdESCompliant);
+    m_xAdESCompliantCB->connect_toggled( LINK( this, DigitalSignaturesDialog, AdESCompliantCheckBoxHdl ) );
+    m_xAdESCompliantCB->set_active(m_bAdESCompliant);
 
-    m_pViewBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
-    m_pViewBtn->Disable();
+    m_xViewBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
+    m_xViewBtn->set_sensitive(false);
 
-    m_pAddBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
+    m_xAddBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
     if ( bReadOnly  )
-        m_pAddBtn->Disable();
+        m_xAddBtn->set_sensitive(false);
 
-    m_pRemoveBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
-    m_pRemoveBtn->Disable();
+    m_xRemoveBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
+    m_xRemoveBtn->set_sensitive(false);
 
-    m_pStartCertMgrBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, CertMgrButtonHdl ) );
+    m_xStartCertMgrBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, CertMgrButtonHdl ) );
 
-    m_pCloseBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
+    m_xCloseBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
 
     switch( maSignatureManager.meSignatureMode )
     {
         case DocumentSignatureMode::Content:
-            m_pHintDocFT->Show();
+            m_xHintDocFT->show();
             break;
         case DocumentSignatureMode::Macros:
-            m_pHintBasicFT->Show();
+            m_xHintBasicFT->show();
             break;
         case DocumentSignatureMode::Package:
-            m_pHintPackageFT->Show();
+            m_xHintPackageFT->show();
             break;
     }
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
-    disposeOnce();
-}
-
-void DigitalSignaturesDialog::dispose()
-{
-    m_pSignaturesLB.disposeAndClear();
-    m_pHintDocFT.clear();
-    m_pHintBasicFT.clear();
-    m_pHintPackageFT.clear();
-    m_pSigsValidImg.clear();
-    m_pSigsValidFI.clear();
-    m_pSigsInvalidImg.clear();
-    m_pSigsInvalidFI.clear();
-    m_pSigsNotvalidatedImg.clear();
-    m_pSigsNotvalidatedFI.clear();
-    m_pSigsOldSignatureImg.clear();
-    m_pSigsOldSignatureFI.clear();
-    m_pAdESCompliantCB.clear();
-    m_pViewBtn.clear();
-    m_pAddBtn.clear();
-    m_pRemoveBtn.clear();
-    m_pCloseBtn.clear();
-    m_pStartCertMgrBtn.clear();
-    ModalDialog::dispose();
 }
 
 bool DigitalSignaturesDialog::Init()
@@ -237,7 +210,7 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
     {
         // PDF supports AdES.
         m_bAdESCompliant = true;
-        m_pAdESCompliantCB->Check(m_bAdESCompliant);
+        m_xAdESCompliantCB->set_active(m_bAdESCompliant);
         return;
     }
 
@@ -277,7 +250,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   XsResId(STR_XMLSECDLG_OLD_ODF_FORMAT)));
         xBox->run();
@@ -297,7 +270,7 @@ bool DigitalSignaturesDialog::canAddRemove()
             //It the user presses 'Add' or 'Remove' several times then, then the warning
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Question, VclButtonsType::YesNo,
                                                       XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)));
             if (xBox->run() == RET_NO)
@@ -321,7 +294,7 @@ bool DigitalSignaturesDialog::canRemove()
 
     if ( maSignatureManager.meSignatureMode == DocumentSignatureMode::Content )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Question, VclButtonsType::YesNo,
                                                   XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE)));
         short nDlgRet = xBox->run();
@@ -331,7 +304,7 @@ bool DigitalSignaturesDialog::canRemove()
     return (bRet && canAddRemove());
 }
 
-short DigitalSignaturesDialog::Execute()
+short DigitalSignaturesDialog::run()
 {
     // Verify Signatures and add certificates to ListBox...
     mbVerifySignatures = true;
@@ -357,42 +330,41 @@ short DigitalSignaturesDialog::Execute()
     // But for refreshing signature information, StartVerifySignatureHdl will be called after each add/remove
     mbVerifySignatures = false;
 
-    return Dialog::Execute();
+    return GenericDialogController::run();
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl, weld::TreeView&, void)
 {
-    bool bSel = m_pSignaturesLB->FirstSelected();
-    m_pViewBtn->Enable( bSel );
-    if ( m_pAddBtn->IsEnabled() ) // not read only
-        m_pRemoveBtn->Enable( bSel );
+    bool bSel = m_xSignaturesLB->get_selected_index() != -1;
+    m_xViewBtn->set_sensitive( bSel );
+    if ( m_xAddBtn->get_sensitive() ) // not read only
+        m_xRemoveBtn->set_sensitive( bSel );
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl, weld::Button&, void)
 {
     if (mbSignaturesChanged)
         maSignatureManager.write(m_bAdESCompliant);
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, bool)
-{
-    ImplShowSignaturesDetails();
-    return false;
-}
-
-IMPL_LINK_NOARG(DigitalSignaturesDialog, AdESCompliantCheckBoxHdl, CheckBox&, void)
-{
-    m_bAdESCompliant = m_pAdESCompliantCB->IsChecked();
-}
-
-IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, weld::TreeView&, void)
 {
     ImplShowSignaturesDetails();
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, AdESCompliantCheckBoxHdl, weld::ToggleButton&, void)
+{
+    m_bAdESCompliant = m_xAdESCompliantCB->get_active();
+}
+
+IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, weld::Button&, void)
+{
+    ImplShowSignaturesDetails();
+}
+
+IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
 {
     if( ! canAdd())
         return;
@@ -404,7 +376,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        CertificateChooser aChooser(GetFrameWeld(), mxCtx, xSecContexts, UserAction::Sign);
+        CertificateChooser aChooser(m_xDialog.get(), mxCtx, xSecContexts, UserAction::Sign);
         if (aChooser.run() == RET_OK)
         {
             sal_Int32 nSecurityId;
@@ -436,7 +408,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     catch ( uno::Exception& )
     {
         OSL_FAIL( "Exception while adding a signature!" );
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Error, VclButtonsType::Ok,
                                                   XsResId(STR_XMLSECDLG_SIGNING_FAILED)));
         xBox->run();
@@ -446,15 +418,16 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
 {
     if (!canRemove())
         return;
-    if( m_pSignaturesLB->FirstSelected() )
+    int nEntry = m_xSignaturesLB->get_selected_index();
+    if (nEntry != -1)
     {
         try
         {
-            sal_uInt16 nSelected = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() ));
+            sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
             maSignatureManager.remove(nSelected);
 
             mbSignaturesChanged = true;
@@ -471,7 +444,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
     }
 }
 
-IMPL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, pButton, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 {
 #ifdef _WIN32
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
@@ -515,7 +488,7 @@ IMPL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, pButton, vo
     }
     else
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       XsResId(STR_XMLSECDLG_NO_CERT_MANAGER)));
         xInfoBox->run();
@@ -529,7 +502,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*
 
 void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
-    m_pSignaturesLB->Clear();
+    m_xSignaturesLB->clear();
 
     size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
     size_t nValidSigs = 0, nValidCerts = 0;
@@ -615,14 +588,14 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     nValidSigs++;
             }
 
-            Image aImage;
+            OUString sImage;
             if (!bSigValid)
             {
-                aImage = m_pSigsInvalidImg->GetImage();
+                sImage = BMP_SIG_INVALID;
             }
             else if (!bCertValid)
             {
-                aImage = m_pSigsNotvalidatedImg->GetImage();
+                sImage = BMP_SIG_NOT_VALIDATED;
             }
             //Check if the signature is a "old" document signature, that is, which was created
             //by an version of OOo previous to 3.2
@@ -632,27 +605,28 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n])))
             {
-                aImage = m_pSigsNotvalidatedImg->GetImage();
+                sImage = BMP_SIG_NOT_VALIDATED;
                 bAllNewSignatures = false;
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
                 && DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n]))
             {
-                aImage = m_pSigsValidImg->GetImage();
+                sImage = BMP_SIG_VALID;
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros)
             {
-                aImage = m_pSigsValidImg->GetImage();
+                sImage = BMP_SIG_VALID;
             }
 
-            SvTreeListEntry* pEntry = m_pSignaturesLB->InsertEntry( OUString(), aImage, aImage );
-            m_pSignaturesLB->SetEntryText( aSubject, pEntry, 1 );
-            m_pSignaturesLB->SetEntryText( aIssuer, pEntry, 2 );
-            m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
-            m_pSignaturesLB->SetEntryText(aDescription, pEntry, 4);
-            m_pSignaturesLB->SetEntryText(aType, pEntry, 5);
-            pEntry->SetUserData( reinterpret_cast<void*>(n) );     // misuse user data as index
+            m_xSignaturesLB->insert(nullptr, n, nullptr, nullptr,
+                                    &sImage, nullptr, nullptr, false);
+            m_xSignaturesLB->set_text(n, aSubject, 1);
+            m_xSignaturesLB->set_text(n, aIssuer, 2);
+            m_xSignaturesLB->set_text(n, aDateTimeStr, 3);
+            m_xSignaturesLB->set_text(n, aDescription, 4);
+            m_xSignaturesLB->set_text(n, aType, 5);
+            m_xSignaturesLB->set_id(n, OUString::number(n)); // misuse user data as index
         }
     }
 
@@ -660,25 +634,25 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     bool bAllCertsValid = (nValidCerts == nInfos);
     bool bShowValidState = nInfos && (bAllSigsValid && bAllCertsValid && bAllNewSignatures);
 
-    m_pSigsValidImg->Show( bShowValidState);
-    m_pSigsValidFI->Show( bShowValidState );
+    m_xSigsValidImg->show( bShowValidState);
+    m_xSigsValidFI->show( bShowValidState );
 
     bool bShowInvalidState = nInfos && !bAllSigsValid;
 
-    m_pSigsInvalidImg->Show( bShowInvalidState );
-    m_pSigsInvalidFI->Show( bShowInvalidState );
+    m_xSigsInvalidImg->show( bShowInvalidState );
+    m_xSigsInvalidFI->show( bShowInvalidState );
 
     bool bShowNotValidatedState = nInfos && bAllSigsValid && !bAllCertsValid;
 
-    m_pSigsNotvalidatedImg->Show(bShowNotValidatedState);
-    m_pSigsNotvalidatedFI->Show(bShowNotValidatedState);
+    m_xSigsNotvalidatedImg->show(bShowNotValidatedState);
+    m_xSigsNotvalidatedFI->show(bShowNotValidatedState);
 
     //bAllNewSignatures is always true if we are not in document mode
     bool bShowOldSignature = nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures;
-    m_pSigsOldSignatureImg->Show(bShowOldSignature);
-    m_pSigsOldSignatureFI->Show(bShowOldSignature);
+    m_xSigsOldSignatureImg->show(bShowOldSignature);
+    m_xSigsOldSignatureFI->show(bShowOldSignature);
 
-    SignatureHighlightHdl( nullptr );
+    SignatureHighlightHdl(*m_xSignaturesLB);
 }
 
 uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(const SignatureInformation& rInfo)
@@ -731,21 +705,22 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream, 
 
 void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
-    if( m_pSignaturesLB->FirstSelected() )
+    int nEntry = m_xSignaturesLB->get_selected_index();
+    if (nEntry != -1)
     {
-        sal_uInt16 nSelected = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() ));
+        sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
         uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
 
         if ( xCert.is() )
         {
             uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
-            CertificateViewer aViewer(GetFrameWeld(), xSecEnv, xCert, false, nullptr);
+            CertificateViewer aViewer(m_xDialog.get(), xSecEnv, xCert, false, nullptr);
             aViewer.run();
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           XsResId(STR_XMLSECDLG_NO_CERT_FOUND)));
             xInfoBox->run();
