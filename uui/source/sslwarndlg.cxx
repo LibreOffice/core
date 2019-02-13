@@ -31,8 +31,8 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, weld::Button&, void)
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = css::security::DocumentDigitalSignatures::createDefault( m_xContext );
-
-    xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
+    xDocumentDigitalSignatures->setParentWindow(m_xDialog->GetXWindow());
+    xDocumentDigitalSignatures->showCertificate(m_rXCert);
 }
 
 SSLWarnDialog::SSLWarnDialog(weld::Window* pParent,
