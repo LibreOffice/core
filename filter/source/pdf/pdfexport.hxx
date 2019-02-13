@@ -68,6 +68,7 @@ private:
     bool                mbIsRedactMode;
 
     OUString            msWatermark;
+    OUString            msTiledWatermark;
 
     // these variable are here only to have a location in filter/pdf to set the default
     // to be used by the macro (when the FilterData are set by the macro itself)
@@ -108,6 +109,8 @@ private:
     OUString            msSignTSA;
 
     void                ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
+    void                ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
+
 
 public:
 
