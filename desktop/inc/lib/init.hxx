@@ -90,7 +90,19 @@ namespace desktop {
         void addViewStates(int viewId);
         void removeViewStates(int viewId);
 
-        typedef std::vector<std::pair<int, std::string>> queue_type;
+        struct CallbackData
+        {
+            CallbackData(int type, const std::string& payload)
+                : Type(type)
+                , PayloadString(payload)
+            {
+            }
+
+            int Type;
+            std::string PayloadString;
+        };
+
+        typedef std::vector<CallbackData> queue_type;
 
     private:
         void removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
