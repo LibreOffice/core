@@ -1226,7 +1226,7 @@ SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xHeadLineCB(m_xBuilder->weld_check_button("headline"))
     , m_xRepeatHeaderCombo(m_xBuilder->weld_widget("repeatheader"))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadernf"))
-    , m_xTextDirectionLB(m_xBuilder->weld_combo_box("textdirection"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box("textorientation"))
     , m_xVertOrientLB(m_xBuilder->weld_combo_box("vertorient"))
 {
     m_xPgBrkCB->connect_toggled(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));

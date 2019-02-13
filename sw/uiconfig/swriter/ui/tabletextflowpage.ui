@@ -283,7 +283,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="tabletextflowpage|label40">Text _orientation</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">textdirection</property>
+                        <property name="mnemonic_widget">textorientation</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -291,13 +291,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="textdirection">
+                      <object class="GtkComboBoxText" id="textorientation">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
                           <item id="0" translatable="yes" context="tabletextflowpage|liststore1">Horizontal</item>
-                          <item id="2" translatable="yes" context="tabletextflowpage|liststore1">Vertical</item>
+                          <item id="2" translatable="yes" context="tabletextflowpage|liststore1">Vertical (top to bottom)</item>
                           <item id="4" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</item>
+                          <item id="5" translatable="yes" context="tabletextflowpage|liststore1">Vertical (bottom to top)</item>
                         </items>
                       </object>
                       <packing>
