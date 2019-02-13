@@ -843,6 +843,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
     try
     {
         xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
+        xD->setParentWindow(VCLUnoHelper::GetInterface(GetTabDialog()));
     }
     catch ( const css::uno::DeploymentException& )
     {

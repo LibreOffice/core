@@ -43,8 +43,8 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, weld::Button&, void)
 {
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures(
         css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
-
-    xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
+    xDocumentDigitalSignatures->setParentWindow(m_xDialog->GetXWindow());
+    xDocumentDigitalSignatures->showCertificate(m_rXCert);
 }
 
 UnknownAuthDialog::UnknownAuthDialog(weld::Window* pParent,

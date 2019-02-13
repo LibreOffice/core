@@ -67,6 +67,8 @@ class DocumentDigitalSignatures
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
+    css::uno::Reference<css::awt::XWindow> mxParentWindow;
+
     /// will be set by XInitialization. If not we assume true. false means an earlier version (whatever that means,
     /// this is a string, not a boolean).
     /// Note that the code talks about "ODF version" even if this class is also used to sign OOXML.
@@ -176,6 +178,11 @@ public:
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
+
+    void SAL_CALL setParentWindow(const css::uno::Reference<css::awt::XWindow>& rParentwindow) override
+    {
+        mxParentWindow = rParentwindow;
+    }
 };
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
@@ -417,7 +424,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(Application::GetFrameWeld(mxParentWindow),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   XsResId(RID_XMLSECWB_NO_MOZILLA_PROFILE)));
         xBox->run();
@@ -599,7 +606,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        CertificateViewer aViewer(nullptr, aSignatureManager.getSecurityEnvironment(), Certificate, false, nullptr);
+        CertificateViewer aViewer(Application::GetFrameWeld(mxParentWindow), aSignatureManager.getSecurityEnvironment(), Certificate, false, nullptr);
         aViewer.run();
     }
 }

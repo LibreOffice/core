@@ -20,6 +20,7 @@
 #ifndef __com_sun_star_security_XDocumentDigitalSignatures_idl_
 #define __com_sun_star_security_XDocumentDigitalSignatures_idl_
 
+#include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/io/XStream.idl>
@@ -199,6 +200,11 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
                                         [in] ::com::sun::star::embed::XStorage xStorage,
                                         [in] ::com::sun::star::io::XStream xStream);
 
+    /** Set parent window to use when showing dialogs
+
+        @since LibreOffice 6.3
+    */
+    void setParentWindow([in] ::com::sun::star::awt::XWindow xParentWindow);
 };
 
 } ; } ; } ; } ;
