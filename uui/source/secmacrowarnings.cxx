@@ -96,6 +96,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
         security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
     if( xD.is() )
     {
+        xD->setParentWindow(m_xDialog->GetXWindow());
         if( mxCert.is() )
             xD->showCertificate( mxCert );
         else if( mxStore.is() )
@@ -109,6 +110,7 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
     {   // insert path into trusted path list
         uno::Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
+        xD->setParentWindow(m_xDialog->GetXWindow());
         if( mxCert.is() )
             xD->addAuthorToTrustedSources( mxCert );
         else if( mxStore.is() )
