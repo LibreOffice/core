@@ -21,6 +21,7 @@
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <osl/mutex.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <algorithm>
 #include <vector>
