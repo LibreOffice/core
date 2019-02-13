@@ -1121,10 +1121,10 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 
 void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
-    vcl::Font aFont( OUString( "Helvetica" ), Size( 0, 40 ) );
+    vcl::Font aFont( OUString( "Liberation Sans" ), Size( 0, 40 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
-    aFont.SetWeight( WEIGHT_BOLD );
+    aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetFontHeight(40);
 
