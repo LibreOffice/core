@@ -522,6 +522,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbAddStream;
                 else if ( rFilterData[ nData ].Name == "Watermark" )
                     rFilterData[ nData ].Value >>= msWatermark;
+                else if ( rFilterData[ nData ].Name == "TiledWatermark" )
+                    rFilterData[ nData ].Value >>= msTiledWatermark;
                 // now all the security related properties...
                 else if ( rFilterData[ nData ].Name == "EncryptFile" )
                     rFilterData[ nData ].Value >>= mbEncrypt;
@@ -1067,7 +1069,13 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     rPDFExtOutDevData.ResetSyncData();
 
     if (!msWatermark.isEmpty())
+    {
         ImplWriteWatermark( rWriter, Size(aRangePDF.getWidth(), aRangePDF.getHeight()) );
+    }
+    else if (!msTiledWatermark.isEmpty())
+    {
+        ImplWriteTiledWatermark( rWriter, Size(aRangePDF.getWidth(), aRangePDF.getHeight()) );
+    }
 }
 
 
@@ -1135,6 +1143,72 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.BeginTransparencyGroup();
     rWriter.DrawText( aTextPoint, msWatermark );
     rWriter.EndTransparencyGroup( aTextRect, 50 );
+    rWriter.Pop();
+}
+
+void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
+{
+    vcl::Font aFont( OUString( "Liberation Sans" ), Size( 0, 40 ) );
+    aFont.SetItalic( ITALIC_NONE );
+    aFont.SetWidthType( WIDTH_NORMAL );
+    aFont.SetWeight( WEIGHT_NORMAL );
+    aFont.SetAlignment( ALIGN_BOTTOM );
+    aFont.SetFontHeight(40);
+
+    OutputDevice* pDev = rWriter.GetReferenceDevice();
+    pDev->SetFont(aFont);
+    pDev->Push();
+    pDev->SetFont(aFont);
+    pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
+    int w = 0;
+    long nTextWidth = (rPageSize.Width()-60) / 4;
+    while((w = pDev->GetTextWidth(msTiledWatermark)) > nTextWidth)
+    {
+        if(w==0)
+            break;
+
+        long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
+        aFont.SetFontHeight(nNewHeight);
+        pDev->SetFont( aFont );
+    }
+    pDev->Pop();
+
+    rWriter.Push();
+    rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
+    rWriter.SetFont(aFont);
+    rWriter.SetTextColor( Color(19,20,22) );
+    Point aTextPoint;
+    tools::Rectangle aTextRect;
+    aTextPoint = Point(70,80);
+
+    for( int i = 0; i < 3; i ++)
+    {
+        while(aTextPoint.getY()+pDev->GetTextHeight() <= rPageSize.Height()-40)
+        {
+            aTextRect = tools::Rectangle(Point(aTextPoint.getX(), aTextPoint.getY()-pDev->GetTextHeight()), Size(pDev->GetTextWidth(msTiledWatermark),pDev->GetTextHeight()));
+
+            pDev->Push();
+            rWriter.SetClipRegion();
+            rWriter.BeginTransparencyGroup();
+            rWriter.SetTextColor( Color(19,20,22) );
+            rWriter.DrawText(aTextPoint, msTiledWatermark);
+            rWriter.EndTransparencyGroup( aTextRect, 50 );
+            pDev->Pop();
+
+            pDev->Push();
+            rWriter.SetClipRegion();
+            rWriter.BeginTransparencyGroup();
+            rWriter.SetTextColor( Color(236,235,233) );
+            rWriter.DrawText(aTextPoint, msTiledWatermark);
+            rWriter.EndTransparencyGroup( aTextRect, 50 );
+            pDev->Pop();
+
+            aTextPoint.Move(0,(rPageSize.Height()-40)/4);
+        }
+        aTextPoint=Point( aTextPoint.getX(), 80 );
+        aTextPoint.Move( (rPageSize.Width()-120)/3, 0 );
+    }
+
     rWriter.Pop();
 }
 
