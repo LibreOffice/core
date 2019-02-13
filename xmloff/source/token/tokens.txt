@@ -2089,6 +2089,7 @@ stock-gain-marker
 stock-range-line
 rl-tb
 tb-lr
+bt-lr
 lr
 rl
 tb
