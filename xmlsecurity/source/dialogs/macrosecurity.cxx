@@ -25,9 +25,6 @@
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <vcl/help.hxx>
-#include <vcl/layout.hxx>
-
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
@@ -40,7 +37,8 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <unotools/datetime.hxx>
-#include <vcl/treelistentry.hxx>
+
+#include <vcl/svapp.hxx>
 
 #include <strings.hrc>
 

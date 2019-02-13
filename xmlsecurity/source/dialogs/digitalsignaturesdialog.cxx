@@ -48,7 +48,6 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <unotools/datetime.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <bitmaps.hlst>
 #include <strings.hrc>
