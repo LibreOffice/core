@@ -120,7 +120,7 @@
       <style:text-properties fo:font-size="12pt"/>
     </style:style>
     <style:style style:name="default" style:family="table-cell">
-      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ccccff" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:padding-top="0.13cm" fo:padding-bottom="0.13cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm"/>
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ccccff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" fo:padding-top="0.13cm" fo:padding-bottom="0.13cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm" fo:border="0.03pt solid #ffffff"/>
       <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" style:letter-kerning="true"/>
     </style:style>
@@ -235,7 +235,7 @@
       <style:text-properties fo:font-size="15pt"/>
     </style:style>
     <style:style style:name="Classy_5f_Red-subtitle" style:display-name="Classy_Red-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top">
         <text:list-style style:name="Classy_5f_Red-subtitle" style:display-name="Classy_Red-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
