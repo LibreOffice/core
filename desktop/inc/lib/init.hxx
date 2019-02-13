@@ -22,12 +22,51 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <tools/gen.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <desktop/dllapi.h>
 
 class LOKInteractionHandler;
 
 namespace desktop {
+
+    /// Represents an invalidated rectangle inside a given document part.
+    struct RectangleAndPart
+    {
+        tools::Rectangle m_aRectangle;
+        int m_nPart;
+
+        RectangleAndPart()
+            : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
+        {
+        }
+
+        OString toString() const
+        {
+            std::stringstream ss;
+            ss << m_aRectangle.toString();
+            if (m_nPart >= -1)
+                ss << ", " << m_nPart;
+            return ss.str().c_str();
+        }
+
+        /// Infinite Rectangle is both sides are
+        /// equal or longer than SfxLokHelper::MaxTwips.
+        bool isInfinite() const
+        {
+            return m_aRectangle.GetWidth() >= SfxLokHelper::MaxTwips &&
+                   m_aRectangle.GetHeight() >= SfxLokHelper::MaxTwips;
+        }
+
+        /// Empty Rectangle is when it has zero dimensions.
+        bool isEmpty() const
+        {
+            return m_aRectangle.IsEmpty();
+        }
+
+        static RectangleAndPart Create(const std::string& rPayload);
+    };
 
     class DESKTOP_DLLPUBLIC CallbackFlushHandler : public Idle
     {
