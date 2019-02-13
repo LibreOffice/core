@@ -88,8 +88,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
     Bitmap aBitmap(Size(width, height), 24);
     AlphaMask aBitmapAlpha(Size(width, height), nullptr);
 
-    png_set_bgr(pPng);
-
     if (colorType == PNG_COLOR_TYPE_PALETTE)
         png_set_palette_to_rgb(pPng);
 
@@ -138,6 +136,9 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            ScanlineFormat eFromat = pWriteAccess->GetScanlineFormat();
+            if (eFromat == ScanlineFormat::N24BitTcBgr)
+                png_set_bgr(pPng);
 
             std::vector<png_byte> aRow(aRowSizeBytes, 0);
 
@@ -164,6 +165,10 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
 
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
             AlphaScopedWriteAccess pWriteAccessAlpha(aBitmapAlpha);
+
+            ScanlineFormat eFromat = pWriteAccess->GetScanlineFormat();
+            if (eFromat == ScanlineFormat::N24BitTcBgr)
+                png_set_bgr(pPng);
 
             std::vector<png_byte> aRow(aRowSizeBytes, 0);
 
