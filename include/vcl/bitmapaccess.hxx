@@ -215,11 +215,6 @@ public:
         return GetPixel(nY, nX).GetBlueOrIndex();
     }
 
-    sal_uInt8 GetLuminance(long nY, long nX) const
-    {
-        return GetColor(nY, nX).GetLuminance();
-    }
-
     /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
     BitmapColor GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
 
