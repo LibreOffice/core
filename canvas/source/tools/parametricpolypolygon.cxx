@@ -31,6 +31,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
+
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
 

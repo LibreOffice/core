@@ -37,6 +37,7 @@
 #include <comphelper/types.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
+#include <canvas/base/spritesurface.hxx>
 #include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/bufferedgraphicdevicebase.hxx>
 

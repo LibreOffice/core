@@ -21,7 +21,9 @@
 #define INCLUDED_CANVAS_BASE_BITMAPCANVASBASE_HXX
 
 #include <canvas/base/canvasbase.hxx>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+
+namespace com::sun::star::rendering { class XBitmapCanvas; }
 
 namespace canvas
 {

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
 
+#include <com/sun/star/rendering/RenderState.hpp>
 #include <canvas/base/cachedprimitivebase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <memory>

@@ -20,15 +20,11 @@
 #ifndef INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 #define INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
-#include <sal/types.h>
 #include <memory>
 
 namespace basegfx
 {
-    class B2DRange;
-    class B2IRange;
     class B2IVector;
-    class B2IPoint;
 }
 
 namespace canvas

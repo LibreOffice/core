@@ -22,13 +22,10 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 
 namespace basegfx
 {
-    class B2DPoint;
     class B2DVector;
     class B2DRange;
 }
