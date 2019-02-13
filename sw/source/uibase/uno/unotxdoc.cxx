@@ -2630,8 +2630,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 bStateChanged = true;
             }
 
-            // #122919# Force field update before PDF export
-            pViewShell->SwViewShell::UpdateFields(true);
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified();
 
