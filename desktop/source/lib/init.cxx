@@ -94,7 +94,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -408,94 +407,62 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
     return aTree;
 }
 
-namespace {
+namespace desktop {
 
-/// Represents an invalidated rectangle inside a given document part.
-struct RectangleAndPart
+RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
 {
-    tools::Rectangle m_aRectangle;
-    int m_nPart;
-
-    RectangleAndPart()
-        : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
+    RectangleAndPart aRet;
+    if (rPayload.compare(0, 5, "EMPTY") == 0) // payload starts with "EMPTY"
     {
-    }
-
-    OString toString() const
-    {
-        std::stringstream ss;
-        ss << m_aRectangle.toString();
-        if (m_nPart >= -1)
-            ss << ", " << m_nPart;
-        return ss.str().c_str();
-    }
-
-    /// Infinite Rectangle is both sides are
-    /// equal or longer than SfxLokHelper::MaxTwips.
-    bool isInfinite() const
-    {
-        return m_aRectangle.GetWidth() >= SfxLokHelper::MaxTwips &&
-               m_aRectangle.GetHeight() >= SfxLokHelper::MaxTwips;
-    }
-
-    /// Empty Rectangle is when it has zero dimensions.
-    bool isEmpty() const
-    {
-        return m_aRectangle.IsEmpty();
-    }
-
-    static RectangleAndPart Create(const std::string& rPayload)
-    {
-        RectangleAndPart aRet;
-        if (rPayload.compare(0, 5, "EMPTY") == 0) // payload starts with "EMPTY"
-        {
-            aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
-            if (comphelper::LibreOfficeKit::isPartInInvalidation())
-                aRet.m_nPart = std::stol(rPayload.substr(6));
-
-            return aRet;
-        }
-
-        std::istringstream aStream(rPayload);
-        long nLeft, nTop, nWidth, nHeight;
-        long nPart = INT_MIN;
-        char nComma;
+        aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
         if (comphelper::LibreOfficeKit::isPartInInvalidation())
+            aRet.m_nPart = std::stol(rPayload.substr(6));
+
+        return aRet;
+    }
+
+    std::istringstream aStream(rPayload);
+    long nLeft, nTop, nWidth, nHeight;
+    long nPart = INT_MIN;
+    char nComma;
+    if (comphelper::LibreOfficeKit::isPartInInvalidation())
+    {
+        aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight >> nComma >> nPart;
+    }
+    else
+    {
+        aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+    }
+
+    if (nWidth > 0 && nHeight > 0)
+    {
+        // The top-left corner starts at (0, 0).
+        // Anything negative is invalid.
+        if (nLeft < 0)
         {
-            aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight >> nComma >> nPart;
+            nWidth += nLeft;
+            nLeft = 0;
         }
-        else
+
+        if (nTop < 0)
         {
-            aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+            nHeight += nTop;
+            nTop = 0;
         }
 
         if (nWidth > 0 && nHeight > 0)
         {
-            // The top-left corner starts at (0, 0).
-            // Anything negative is invalid.
-            if (nLeft < 0)
-            {
-                nWidth += nLeft;
-                nLeft = 0;
-            }
-
-            if (nTop < 0)
-            {
-                nHeight += nTop;
-                nTop = 0;
-            }
-
-            if (nWidth > 0 && nHeight > 0)
-            {
-                aRet.m_aRectangle = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
-            }
+            aRet.m_aRectangle = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
         }
-        // else leave empty rect.
-
-        aRet.m_nPart = nPart;
-        return aRet;
     }
-};
+    // else leave empty rect.
+
+    aRet.m_nPart = nPart;
+    return aRet;
+}
+}
+
+namespace {
 
 bool lcl_isViewCallbackType(const int type)
 {
@@ -1067,7 +1034,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_INVALIDATE_TILES); });
                 if (pos != m_queue.rend())
                 {
-                    RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
+                    const RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
                     if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
                     {
                         SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
