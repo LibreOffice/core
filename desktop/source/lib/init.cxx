@@ -472,6 +472,7 @@ RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const 
 
 const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
 {
+    assert(PayloadObject.which() == 1);
     return boost::get<RectangleAndPart>(PayloadObject);
 }
 
@@ -499,7 +500,36 @@ void CallbackFlushHandler::CallbackData::setJson(const boost::property_tree::ptr
 
 const boost::property_tree::ptree& CallbackFlushHandler::CallbackData::getJson() const
 {
+    assert(PayloadObject.which() == 2);
     return boost::get<boost::property_tree::ptree>(PayloadObject);
+}
+
+bool CallbackFlushHandler::CallbackData::validate() const
+{
+    switch (PayloadObject.which())
+    {
+        // Not cached.
+        case 0:
+            return true;
+
+        // RectangleAndPart.
+        case 1:
+            return getRectangleAndPart().toString().getStr() == PayloadString;
+
+        // Json.
+        case 2:
+        {
+            std::stringstream aJSONStream;
+            boost::property_tree::write_json(aJSONStream, getJson(), false);
+            const std::string aExpected = boost::trim_copy(aJSONStream.str());
+            return aExpected == PayloadString;
+        }
+
+        default:
+            assert(!"Unknown variant type; please add an entry to validate.");
+    }
+
+    return false;
 }
 
 }
@@ -908,6 +938,20 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     std::string& payload = aCallbackData.PayloadString;
     SAL_INFO("lok", "Queue: " << type << " : " << payload);
 
+#ifdef DBG_UTIL
+    {
+        // Dump the queue state and validate cached data.
+        int i = 1;
+        std::ostringstream oss;
+        oss << '\n';
+        for (const CallbackData& c : m_queue)
+            oss << i++ << ": [" << c.Type << "] [" << c.PayloadString << "].\n";
+        const std::string aQueued = oss.str();
+        SAL_INFO("lok", "Current Queue: " << (aQueued.empty() ? "Empty" : aQueued));
+        for (const CallbackData& c : m_queue)
+            assert(c.validate());
+    }
+#endif
 
     if (m_bPartTilePainting)
     {
@@ -1316,6 +1360,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
                         aTree.put("rectangle", aNewRect.toString().getStr());
                         aCallbackData.setJson(aTree);
+                        assert(aCallbackData.validate() && "Validation after setJson failed!");
                     }
                 }
             }
@@ -1323,6 +1368,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         }
     }
 
+    // Validate that the cached data and the payload string are identical.
+    assert(aCallbackData.validate() && "Cached callback payload object and string mismatch!");
     m_queue.emplace_back(aCallbackData);
     SAL_INFO("lok", "Queued #" << (m_queue.size() - 1) <<
              " [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");

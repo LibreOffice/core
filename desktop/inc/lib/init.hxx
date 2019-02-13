@@ -111,8 +111,14 @@ namespace desktop {
             /// Return the parsed JSON instance.
             const boost::property_tree::ptree& getJson() const;
 
+            /// Validate that the payload and parsed object match.
+            bool validate() const;
+
             int Type;
             std::string PayloadString;
+
+        private:
+            /// The parsed payload cache. Update validate() when changing this.
             boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
         };
 
