@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>

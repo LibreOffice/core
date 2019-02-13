@@ -56,6 +56,7 @@
 #include <svtools/langtab.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

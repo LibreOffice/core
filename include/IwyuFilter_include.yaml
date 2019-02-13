@@ -560,3 +560,18 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XParametricPolyPolygon2D.hpp
+    include/linguistic/hyphdta.hxx:
+    # base class has to be a complete type
+    - com/sun/star/linguistic2/XHyphenatedWord.hpp
+    - com/sun/star/linguistic2/XPossibleHyphens.hpp
+    include/linguistic/lngprophelp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp
+    include/linguistic/spelldta.hxx:
+    # base class has to be a complete type
+    - com/sun/star/linguistic2/XSetSpellAlternatives.hpp
+    - com/sun/star/linguistic2/XSpellAlternatives.hpp
+    include/linguistic/misc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener.hpp

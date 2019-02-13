@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -29,6 +30,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 #include <lingutil.hxx>

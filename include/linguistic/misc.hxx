@@ -25,30 +25,30 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <unotools/pathoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <unotools/charclass.hxx>
-#include <osl/thread.h>
-#include <osl/mutex.hxx>
 #include <linguistic/lngdllapi.h>
+
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
-    class XFastPropertySet;
 }}}}
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDesktop2;
 }}}}
 
+namespace com::sun::star::linguistic2 { class XDictionary; }
+namespace com::sun::star::linguistic2 { class XDictionaryEntry; }
+namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
+namespace com::sun::star::linguistic2 { class XLinguProperties; }
+namespace com::sun::star::linguistic2 { class XSearchableDictionaryList; }
+namespace osl { class Mutex; }
+
+class CharClass;
 class LocaleDataWrapper;
 
 

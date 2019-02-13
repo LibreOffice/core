@@ -20,8 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_LNGPROPS_HXX
 #define INCLUDED_LINGUISTIC_LNGPROPS_HXX
 
-#include <unotools/linguprops.hxx>
-
 // maximal number of suggestions to be returned in spelling  context-menu
 // (may not include results added by looking up user dictionaries)
 #define UPN_MAX_NUMBER_OF_SUGGESTIONS       "MaxNumberOfSuggestions"

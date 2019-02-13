@@ -18,6 +18,7 @@
  */
 
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 
