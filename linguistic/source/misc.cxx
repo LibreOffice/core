@@ -37,6 +37,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
+#include <unotools/charclass.hxx>
+#include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svtools/strings.hrc>
