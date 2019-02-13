@@ -20,20 +20,17 @@
 #ifndef INCLUDED_CANVAS_CANVASTOOLS_HXX
 #define INCLUDED_CANVAS_CANVASTOOLS_HXX
 
-#include <rtl/math.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
+#include <math.h>
 #include <string.h>
 #include <vector>
 #include <limits>
-#include <algorithm>
 
 #include <canvas/canvastoolsdllapi.h>
 
@@ -62,7 +59,6 @@ namespace com { namespace sun { namespace star { namespace rendering
     class  XCanvas;
     struct Texture;
     class  XIntegerBitmapColorSpace;
-    class  XPolyPolygon2D;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace awt

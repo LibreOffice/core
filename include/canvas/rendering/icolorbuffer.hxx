@@ -21,7 +21,6 @@
 #define INCLUDED_CANVAS_RENDERING_ICOLORBUFFER_HXX
 
 #include <sal/types.h>
-#include <memory>
 
 namespace canvas
 {

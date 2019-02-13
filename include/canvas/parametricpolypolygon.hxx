@@ -21,7 +21,6 @@
 #define INCLUDED_CANVAS_PARAMETRICPOLYPOLYGON_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -29,11 +28,7 @@
 
 #include <canvas/canvastoolsdllapi.h>
 
-namespace basegfx
-{
-    class B2DPolygon;
-    class B2DHomMatrix;
-}
+namespace com::sun::star::rendering { class XGraphicDevice; }
 
 
 /* Definition of ParametricPolyPolygon class */
