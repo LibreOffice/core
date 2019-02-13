@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 
 #include <vcl/svapp.hxx>
@@ -58,7 +59,6 @@
 #include <vcl/keycodes.hxx>
 
 
-
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
@@ -72,8 +72,10 @@ public:
     void testFillGradient();
     void testTdf44774();
     void testTdf38225();
-    void testTdf101242_ODF();
-    void testTdf101242_settings();
+    void testTdf101242_ODF_no_settings();
+    void testTdf101242_ODF_add_settings();
+    void testTdf101242_settings_keep();
+    void testTdf101242_settings_remove();
     void testTdf119392();
     void testTdf67248();
     void testTdf119956();
@@ -87,8 +89,10 @@ public:
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST(testTdf38225);
-    CPPUNIT_TEST(testTdf101242_ODF);
-    CPPUNIT_TEST(testTdf101242_settings);
+    CPPUNIT_TEST(testTdf101242_ODF_no_settings);
+    CPPUNIT_TEST(testTdf101242_ODF_add_settings);
+    CPPUNIT_TEST(testTdf101242_settings_keep);
+    CPPUNIT_TEST(testTdf101242_settings_remove);
     CPPUNIT_TEST(testTdf119392);
     CPPUNIT_TEST(testTdf67248);
     CPPUNIT_TEST(testTdf119956);
@@ -471,17 +475,28 @@ void SdMiscTest::testTdf120527()
 
 /// Draw miscellaneous tests.
 
-void SdMiscTest::testTdf101242_ODF()
+// Since LO 6.2 the visible/printable/locked information for layers is always
+// written as ODF attributes draw:display and draw:protected. It is only read from
+// there, if the config items VisibleLayers, PrintableLayers and LockedLayers do
+// not exist. The user option WriteLayerStateAsConfigItem can be set to 'true' to
+// write these config items in addition to the ODF attributes for to produce
+// documents for older LO versions or Apache OpenOffice. With value 'false' no
+// config items are written. The 'testTdf101242_xyz' tests combinate source
+// files with and without config items with option values 'true' and 'false'.
+
+void SdMiscTest::testTdf101242_ODF_add_settings()
 {
     // Loads a document, which has the visible/printable/locked information for layers
-    // only in the ODF attributes draw:display and draw:protected.
-    // The resaved document should still have the ODF attributes and in addition (at least in a
-    // transition period) the Visible, Printable and Locked items in settings.xml.
-
-    // loading and saving document
+    // only in the ODF attributes draw:display and draw:protected. The resaved document
+    // should still have the ODF attributes and in addition the config items in settings.xml.
     // "Load" is needed for to handle layers, simple "loadURL" does not work.
     sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+
+    // Saving including items in settings.xml
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
+    pBatch->commit();
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
@@ -520,16 +535,60 @@ void SdMiscTest::testTdf101242_ODF()
     xDocShRef->DoClose();
 }
 
-void SdMiscTest::testTdf101242_settings()
+void SdMiscTest::testTdf101242_ODF_no_settings()
 {
     // Loads a document, which has the visible/printable/locked information for layers
-    // only in the items in settings.xml That is the case for all old documents.
-    // The resaved document should still have these items in settings.xml (at least in a
-    // transition period) and in addition the ODF attributes draw:display and draw:protected.
+    // only in the ODF attributes draw:display and draw:protected. The resave document
+    // should have only the ODF attributes and no config items in settings.xml.
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
-    // loading and saving document
+    // Saving without items in settings.xml
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
+    pBatch->commit();
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+
+    // Verify, that the saved document still has the ODF attributes
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
+
+    // Verify, that the saved document has no layer items in settings.xml
+    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
+    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf101242_settings_keep()
+{
+    // Loads a document, which has the visible/printable/locked information for layers
+    // only in the config items in settings.xml. That is the case for all old documents.
+    // The resaved document should have the ODF attributes draw:display and draw:protected
+    // and should still have these config items in settings.xml.
     sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+
+    // Saving including items in settings.xml
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
+    pBatch->commit();
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
@@ -568,10 +627,56 @@ void SdMiscTest::testTdf101242_settings()
     xDocShRef->DoClose();
 }
 
+void SdMiscTest::testTdf101242_settings_remove()
+{
+    // Loads a document, which has the visible/printable/locked information for layers
+    // only in the config items in settings.xml. That is the case for all old documents.
+    // The resaved document should have only the ODF attributes draw:display and draw:protected
+    // and should have no config items in settings.xml.
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+
+    // Saving without config items in settings.xml
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
+    pBatch->commit();
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+
+    // Verify, that the saved document has the ODF attributes
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
+
+    // Verify, that the saved document has no layer items in settings.xml
+    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
+    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
+    xmlXPathFreeObject(pXmlObj);
+
+    xDocShRef->DoClose();
+}
+
 void SdMiscTest::testTdf119392()
 {
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
-    // Checks, that the bitfields in the saved file have the bits in the correct order.
+    // Checks, that the bitfields in the saved file have the bits in the correct order, in case
+    // option WriteLayerAsConfigItem is true and the config items are written.
+    std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
+    batch->commit();
 
     sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
@@ -586,7 +691,7 @@ void SdMiscTest::testTdf119392()
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
-    // Verify correct bit order in bitfield in the items in settings.xml
+    // Verify correct bit order in bitfield in the config items in settings.xml
     xmlDocPtr pXmlDoc = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
     const OString sPathStart("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");

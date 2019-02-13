@@ -118,6 +118,10 @@ $(eval $(call gb_CppunitTest_use_components,sd_misc_tests,\
     xmlsecurity/util/xmlsecurity \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sd_misc_tests,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sd_misc_tests))
 
 # vim: set noet sw=4 ts=4:
