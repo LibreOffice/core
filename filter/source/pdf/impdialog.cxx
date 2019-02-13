@@ -1473,6 +1473,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
     Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
+    xSigner->setParentWindow(GetDialogFrameWeld()->GetXWindow());
 
     // The use may provide a description while choosing a certificate.
     OUString aDescription;

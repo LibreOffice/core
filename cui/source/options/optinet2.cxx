@@ -816,12 +816,13 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
     aTSAURLsDlg.run();
 }
 
-IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
 {
     try
     {
         Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
+        xD->setParentWindow(VCLUnoHelper::GetInterface(GetTabDialog()));
         xD->manageTrustedSources();
     }
     catch (const Exception& e)
