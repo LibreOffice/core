@@ -15,7 +15,7 @@ set -e
 
 cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
 
-## libreoffice-*.desktop -> org.libreoffice.LibreOffice-*.desktop:
+## libreoffice-*.desktop -> org.libreoffice.LibreOffice.*.desktop:
 mkdir -p /app/share/applications
 for i in "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop
 do
@@ -29,6 +29,17 @@ mv /app/share/applications/org.libreoffice.LibreOffice.startcenter.desktop \
 # Flatpak .desktop exports take precedence over system ones due to
 # the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
 sed -i "s/text\/plain;//" /app/share/applications/org.libreoffice.LibreOffice.writer.desktop
+
+desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
+ --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
+ /app/share/applications/org.libreoffice.LibreOffice.desktop
+for i in base calc draw impress math writer xsltfilter
+do
+ desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-"$i" \
+  --set-key=X-Flatpak-RenamedFrom \
+  --set-value="libreoffice-$i.desktop;org.libreoffice.LibreOffice-$i.desktop;" \
+  /app/share/applications/org.libreoffice.LibreOffice."$i".desktop
+done
 
 ## icons/hicolor/*/apps/libreoffice-* ->
 ## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:

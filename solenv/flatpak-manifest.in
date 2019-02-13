@@ -574,9 +574,7 @@
                 "./autogen.sh --prefix=/run/build/libreoffice/inst --with-distro=LibreOfficeFlatpak",
                 "make $(if test \"$FLATPAK_ARCH\" = i386; then printf build-nocheck; fi)",
                 "make distro-pack-install",
-                "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh'",
-                "desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' /app/share/applications/org.libreoffice.LibreOffice.desktop",
-                "for i in base calc draw impress math writer xsltfilter; do desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-$i --set-key=X-Flatpak-RenamedFrom --set-value=\"libreoffice-$i.desktop;org.libreoffice.LibreOffice-$i.desktop;\" /app/share/applications/org.libreoffice.LibreOffice.$i.desktop; done"
+                "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh'"
             ]
         }
     ],
