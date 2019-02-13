@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_662467c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-13T07:36:39Z",
+      "side": 1,
+      "message": "Actually I\u0027d move the short *solution* summary to the message header: the top line should be as informative *about the change* as possible. E.g., in\n\n    Resolves tdf#122998 - Position of all/none checkboxes in Autofilter\n\nthe word \"Resolves\" has no useful meaning; and the \"Position of all/none checkboxes in Autofilter\" tells about what was addressed, but omits *how*. Using this instead:\n\n    tdf#122998: move all/none checkboxes above listbox in Autofilter\n\nbrings every interesting piece of information right to the header, and allows even to limit the commit message to a single header line without body, and without loosing value.",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "5ffe307232b062c8775da560cd104311248b2207",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
