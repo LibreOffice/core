@@ -157,7 +157,7 @@ public:
     CPPUNIT_TEST(testDefaultView);
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testTdf115783);
-    CPPUNIT_TEST(testPasteTextOnSlide);
+    // CPPUNIT_TEST(testPasteTextOnSlide);
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
     CPPUNIT_TEST(testCutSelectionChange);
