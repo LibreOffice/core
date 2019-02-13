@@ -20,10 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_DIGITALSIGNATURESDIALOG_HXX
 #define INCLUDED_XMLSECURITY_INC_DIGITALSIGNATURESDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "documentsignaturehelper.hxx"
@@ -48,7 +45,7 @@ namespace xml { namespace dom {
 
 class HeaderBar;
 
-class DigitalSignaturesDialog : public ModalDialog
+class DigitalSignaturesDialog : public weld::GenericDialogController
 {
 private:
     css::uno::Reference< css::uno::XComponentContext >& mxCtx;
@@ -56,28 +53,6 @@ private:
     DocumentSignatureManager maSignatureManager;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
-
-    VclPtr<FixedText>          m_pHintDocFT;
-    VclPtr<FixedText>          m_pHintBasicFT;
-    VclPtr<FixedText>          m_pHintPackageFT;
-    VclPtr<SvSimpleTable>      m_pSignaturesLB;
-    VclPtr<FixedImage>         m_pSigsValidImg;
-    VclPtr<FixedText>          m_pSigsValidFI;
-    VclPtr<FixedImage>         m_pSigsInvalidImg;
-    VclPtr<FixedText>          m_pSigsInvalidFI;
-    VclPtr<FixedImage>         m_pSigsNotvalidatedImg;
-    VclPtr<FixedText>          m_pSigsNotvalidatedFI;
-    VclPtr<FixedImage>         m_pSigsOldSignatureImg;
-    VclPtr<FixedText>          m_pSigsOldSignatureFI;
-
-    VclPtr<CheckBox>           m_pAdESCompliantCB;
-
-    VclPtr<PushButton>         m_pViewBtn;
-    VclPtr<PushButton>         m_pAddBtn;
-    VclPtr<PushButton>         m_pRemoveBtn;
-    VclPtr<PushButton>         m_pStartCertMgrBtn;
-
-    VclPtr<CloseButton>        m_pCloseBtn;
 
     OUString const m_sODFVersion;
     //Signals if the document contains already a document signature. This is only
@@ -87,15 +62,34 @@ private:
 
     bool m_bAdESCompliant;
 
-    DECL_LINK(AdESCompliantCheckBoxHdl, CheckBox&, void);
-    DECL_LINK(ViewButtonHdl, Button*, void);
-    DECL_LINK(AddButtonHdl, Button*, void);
-    DECL_LINK(RemoveButtonHdl, Button*, void);
-    DECL_LINK(SignatureHighlightHdl, SvTreeListBox*, void );
-    DECL_LINK(SignatureSelectHdl, SvTreeListBox*, bool );
-    DECL_LINK(StartVerifySignatureHdl, LinkParamNone*, bool );
-    DECL_LINK(OKButtonHdl, Button*, void );
-    DECL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void );
+    std::unique_ptr<weld::Label>       m_xHintDocFT;
+    std::unique_ptr<weld::Label>       m_xHintBasicFT;
+    std::unique_ptr<weld::Label>       m_xHintPackageFT;
+    std::unique_ptr<weld::TreeView>    m_xSignaturesLB;
+    std::unique_ptr<weld::Image>       m_xSigsValidImg;
+    std::unique_ptr<weld::Label>       m_xSigsValidFI;
+    std::unique_ptr<weld::Image>       m_xSigsInvalidImg;
+    std::unique_ptr<weld::Label>       m_xSigsInvalidFI;
+    std::unique_ptr<weld::Image>       m_xSigsNotvalidatedImg;
+    std::unique_ptr<weld::Label>       m_xSigsNotvalidatedFI;
+    std::unique_ptr<weld::Image>       m_xSigsOldSignatureImg;
+    std::unique_ptr<weld::Label>       m_xSigsOldSignatureFI;
+    std::unique_ptr<weld::CheckButton> m_xAdESCompliantCB;
+    std::unique_ptr<weld::Button>      m_xViewBtn;
+    std::unique_ptr<weld::Button>      m_xAddBtn;
+    std::unique_ptr<weld::Button>      m_xRemoveBtn;
+    std::unique_ptr<weld::Button>      m_xStartCertMgrBtn;
+    std::unique_ptr<weld::Button>      m_xCloseBtn;
+
+    DECL_LINK(AdESCompliantCheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(ViewButtonHdl, weld::Button&, void);
+    DECL_LINK(AddButtonHdl, weld::Button&, void);
+    DECL_LINK(RemoveButtonHdl, weld::Button&, void);
+    DECL_LINK(SignatureHighlightHdl, weld::TreeView&, void);
+    DECL_LINK(SignatureSelectHdl, weld::TreeView&, void);
+    DECL_LINK(StartVerifySignatureHdl, LinkParamNone*, bool);
+    DECL_LINK(OKButtonHdl, weld::Button&, void);
+    DECL_LINK(CertMgrButtonHdl, weld::Button&, void);
 
     void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature);
     void                ImplFillSignaturesBox();
@@ -114,11 +108,10 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog( vcl::Window* pParent, css::uno::Reference<
+    DigitalSignaturesDialog(weld::Window* pParent, css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog() override;
-    virtual void dispose() override;
 
     // Initialize the dialog and the security environment, returns TRUE on success
     bool    Init();
@@ -127,8 +120,8 @@ public:
     void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore );
     void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
 
-                // Execute the dialog...
-    short       Execute() override;
+    // Execute the dialog...
+    short   run() override;
 
                 // Did signatures change?
     bool    SignaturesChanged() const { return mbSignaturesChanged; }
