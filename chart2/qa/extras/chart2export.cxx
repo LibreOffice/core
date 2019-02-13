@@ -117,6 +117,7 @@ public:
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
     void testNumberFormatExportPPTX();
+    void testLabelSeparatorExportDOCX();
     void testChartTitlePropertiesColorFillPPTX();
     void testChartTitlePropertiesGradientFillPPTX();
     void testChartTitlePropertiesBitmapFillPPTX();
@@ -206,6 +207,7 @@ public:
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testNumberFormatExportPPTX);
+    CPPUNIT_TEST(testLabelSeparatorExportDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
@@ -1907,6 +1909,24 @@ void Chart2ExportTest::testNumberFormatExportPPTX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "formatCode", "#,##0.00,\\K");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
+}
+
+void Chart2ExportTest::testLabelSeparatorExportDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testLabelSeparator.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The text separator should be a new line
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:separator", "\n");
+    // The text separator should be a comma
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:separator", ", ");
+    // The text separator should be a semicolon
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:separator", "; ");
 }
 
 void Chart2ExportTest::testChartTitlePropertiesColorFillPPTX()
