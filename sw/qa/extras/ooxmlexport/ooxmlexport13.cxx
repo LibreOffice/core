@@ -117,6 +117,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(24188), frameRect.Width);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "frame_size_export.docx")
+{
+    // table relative width had changed from 100 to 44
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

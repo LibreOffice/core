@@ -387,13 +387,23 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         // TODO remove this de-const HACK
         const SwFormatFrameSize& aFramesize = pFrameFormat->GetFrameSize();
         SwFormatFrameSize* pFormatFrameSize = const_cast<SwFormatFrameSize*>(&pTableFormat->GetFrameSize());
+        // save copy for later restoring
+        SwFormatFrameSize aCopy;
         if(pFormatFrameSize)
         {
+            aCopy = *pFormatFrameSize;
             *pFormatFrameSize = aFramesize;
         }
 
+        // write table to docx
         ww8::Frame aFrame(*pFrameFormat,*pPosition);
         rDocxAttributeOutput.WriteFloatingTable(&aFrame);
+
+        // restore table size
+        if(pFormatFrameSize)
+        {
+            *pFormatFrameSize = aCopy;
+        }
     }
 }
 
