@@ -24,7 +24,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <linguistic/lngdllapi.h>
 #include <rtl/ref.hxx>
@@ -36,6 +35,8 @@ namespace com { namespace sun { namespace star { namespace beans {
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     struct  LinguServiceEvent;
 }}}}
+
+namespace com::sun::star::linguistic2 { class XLinguProperties; }
 
 
 namespace linguistic

@@ -26,8 +26,8 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <osl/mutex.hxx>
 #include <linguistic/lngprops.hxx>
+#include <unotools/linguprops.hxx>
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
