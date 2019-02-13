@@ -83,8 +83,6 @@ void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
     OUString aAbbreviatedPath;
     osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
-    fprintf(stderr, "in %s, out %s\n", OUStringToOString(rDocURL, RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(aAbbreviatedPath, RTL_TEXTENCODING_UTF8).getStr());
     m_xDialog->set_primary_text(aAbbreviatedPath);
 }
 
