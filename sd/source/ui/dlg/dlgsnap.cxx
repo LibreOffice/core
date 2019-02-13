@@ -78,10 +78,10 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
             auto const n4 = msb->convert_value_to(n3, FieldUnit::NONE);
             return n4;
         };
-    m_xMtrFldX->set_min(map(m_xMtrFldX, aLeftTop.X()), FieldUnit::NONE);
-    m_xMtrFldX->set_max(map(m_xMtrFldX, aRightBottom.X()), FieldUnit::NONE);
-    m_xMtrFldY->set_min(map(m_xMtrFldY, aLeftTop.Y()), FieldUnit::NONE);
-    m_xMtrFldY->set_max(map(m_xMtrFldY, aRightBottom.Y()), FieldUnit::NONE);
+    m_xMtrFldX->set_range(map(m_xMtrFldX, aLeftTop.X()), map(m_xMtrFldX, aRightBottom.X()),
+                          FieldUnit::NONE);
+    m_xMtrFldY->set_range(map(m_xMtrFldY, aLeftTop.Y()), map(m_xMtrFldY, aRightBottom.Y()),
+                          FieldUnit::NONE);
 
     // set values
     nXValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
