@@ -75,7 +75,7 @@ $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
 $main::OO_SDK_JAVA_HOME = "";
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
-$main::javaVersion = "1.5.0_01";
+$main::javaVersion = "1.6.0_01";
 
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
