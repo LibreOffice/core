@@ -22,7 +22,6 @@
 #include "nthesdta.hxx"
 #include <linguistic/misc.hxx>
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;

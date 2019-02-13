@@ -23,9 +23,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 
 #include <hyphen.h>
 #include "hyphenimp.hxx"
