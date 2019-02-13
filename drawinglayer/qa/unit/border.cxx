@@ -32,17 +32,9 @@ namespace
 
 class DrawinglayerBorderTest : public test::BootstrapFixture
 {
-public:
-    void testDoubleDecompositionSolid();
-    void testDoublePixelProcessing();
-
-    CPPUNIT_TEST_SUITE(DrawinglayerBorderTest);
-    CPPUNIT_TEST(testDoubleDecompositionSolid);
-    CPPUNIT_TEST(testDoublePixelProcessing);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void DrawinglayerBorderTest::testDoubleDecompositionSolid()
+CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
 {
     // Create a border line primitive that's similar to the one from the bugdoc:
     // 1.47 pixels is 0.03cm at 130% zoom and 96 DPI.
@@ -110,7 +102,7 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(fLeftWidth, fLineWidthFromDecompose, basegfx::fTools::getSmallValue());
 }
 
-void DrawinglayerBorderTest::testDoublePixelProcessing()
+CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
 {
     // Create a pixel processor.
     ScopedVclPtrInstance<VirtualDevice> pDev;
@@ -211,8 +203,6 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
 
     CPPUNIT_ASSERT_EQUAL(nExpectedNumPolyLineActions, nPolyLineActionCount);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(DrawinglayerBorderTest);
 
 }
 
