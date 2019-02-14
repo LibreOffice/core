@@ -8,14 +8,13 @@
  *
  */
 
-#include <vcl/graph.hxx>
 #include <vcl/dllapi.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_PNG_PNGIMAGEREADER_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_PNG_PNGIMAGEREADER_HXX
+#ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
+#define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
 
 namespace vcl
 {
