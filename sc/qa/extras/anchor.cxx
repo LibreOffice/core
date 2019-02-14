@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <sfx2/dispatch.hxx>
+#include <test/calc_unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -18,19 +18,19 @@
 #include <com/sun/star/text/XText.hpp>
 #include <unonames.hxx>
 
-#include <tabvwsh.hxx>
-#include <docsh.hxx>
-#include <svx/svdocirc.hxx>
-#include <scitems.hxx>
-#include <drwlayer.hxx>
 #include <cliputil.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <scitems.hxx>
+#include <svx/svdocirc.hxx>
+#include <tabvwsh.hxx>
 
 #include <sc.hrc>
 
 using namespace css;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScAnchorTest : public CalcUnoApiTest
 {
 public:
@@ -51,9 +51,9 @@ public:
     CPPUNIT_TEST(testCopyColumnWithImages);
     CPPUNIT_TEST(testCutWithImages);
     CPPUNIT_TEST_SUITE_END();
-private:
 
-    uno::Reference< lang::XComponent > mxComponent;
+private:
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScAnchorTest::ScAnchorTest()
@@ -61,13 +61,12 @@ ScAnchorTest::ScAnchorTest()
 {
 }
 
-
 void ScAnchorTest::testUndoAnchor()
 {
     OUString aFileURL;
     createFileURL("document_with_linked_graphic.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
     // Get the document model
@@ -82,7 +81,7 @@ void ScAnchorTest::testUndoAnchor()
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
-    const SdrPage *pPage = pDrawLayer->GetPage(0);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT(pPage);
 
     SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
@@ -103,7 +102,7 @@ void ScAnchorTest::testUndoAnchor()
 
     // Select graphic object
     pDrawView->MarkNextObj();
-    CPPUNIT_ASSERT(pDrawView->AreObjectsMarked() );
+    CPPUNIT_ASSERT(pDrawView->AreObjectsMarked());
 
     // Set Cell Anchor
     ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0, false);
@@ -164,12 +163,12 @@ void ScAnchorTest::testUndoAnchor()
 
 void ScAnchorTest::testTdf76183()
 {
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop("private:factory/scalc");
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    SdrPage *pPage = pDrawLayer->GetPage(0);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
 
     // Add a circle somewhere below first row.
     const tools::Rectangle aOrigRect = tools::Rectangle(1000, 1000, 1200, 1200);
@@ -199,7 +198,7 @@ void ScAnchorTest::testODFAnchorTypes()
     OUString aFileURL;
     createFileURL("3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
     // Get the document model
@@ -214,7 +213,7 @@ void ScAnchorTest::testODFAnchorTypes()
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
-    const SdrPage *pPage = pDrawLayer->GetPage(0);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT(pPage);
 
     // Check 1st object: Page anchored
@@ -229,7 +228,7 @@ void ScAnchorTest::testODFAnchorTypes()
     anchorType = ScDrawLayer::GetAnchorType(*pObject);
     CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
 
-     // Check 3rd object: Cell anchored
+    // Check 3rd object: Cell anchored
     pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
     CPPUNIT_ASSERT(pObject);
     anchorType = ScDrawLayer::GetAnchorType(*pObject);
@@ -381,7 +380,6 @@ void ScAnchorTest::tearDown()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnchorTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

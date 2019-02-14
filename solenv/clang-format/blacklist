@@ -10118,7 +10118,6 @@ sc/inc/waitoff.hxx
 sc/inc/warnpassword.hxx
 sc/inc/xmlwrap.hxx
 sc/inc/zforauto.hxx
-sc/qa/extras/anchor.cxx
 sc/qa/extras/check_data_pilot_field.cxx
 sc/qa/extras/check_data_pilot_table.cxx
 sc/qa/extras/check_xcell_ranges_query.cxx
