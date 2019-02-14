@@ -1031,6 +1031,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         if not os.path.exists(folder):
             os.makedirs(folder)
         project_guid = str(uuid.uuid4()).upper()
+        cxxflags = ' '.join(target.cxxflags)
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
         proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
@@ -1100,6 +1101,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             include_path_node.text = include_path_node_text
+            additional_options_node = ET.SubElement(conf_node, '{%s}AdditionalOptions' % ns)
+            additional_options_node.text = cxxflags
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
