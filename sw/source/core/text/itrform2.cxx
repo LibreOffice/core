@@ -859,7 +859,9 @@ namespace sw { namespace mark {
             if (nCurrentIdx < vListEntries.getLength())
                 return vListEntries[nCurrentIdx];
         }
-        return OUString();
+
+        sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+        return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
     }
 } }
 
