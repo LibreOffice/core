@@ -912,6 +912,17 @@ IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl, FloatingWindow*, void)
 
 void SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 {
+    // Don't show popup if there is no list item
+    auto pListEntries = fieldBM->GetParameters()->find( ODF_FORMDROPDOWN_LISTENTRY );
+    Sequence< OUString > vListEntries;
+    if(pListEntries != fieldBM->GetParameters()->end())
+    {
+        pListEntries->second >>= vListEntries;
+    }
+
+    if(vListEntries.getLength() == 0)
+        return;
+
     const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
     m_pFieldPopup = VclPtr<SwFieldDialog>::Create( m_pEditWin, fieldBM );
