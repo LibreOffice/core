@@ -648,12 +648,6 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     return css::uno::Sequence< sal_Int8 >();
 }
 
-static sal_uInt8 lcl_GetColor(BitmapColor const& rColor)
-{
-    return rColor.GetBlueOrIndex();
-}
-
-
 static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
 {
     bool bIsAlpha = false;
@@ -682,7 +676,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const lo
                 BitmapColor const& rColor(
                     pAlphaReadAcc->GetPaletteColor(*pReadScan));
                 pReadScan++;
-                nAlpha = data[ nOff ] = 255 - lcl_GetColor(rColor);
+                nAlpha = data[ nOff ] = 255 - rColor.GetBlueOrIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
