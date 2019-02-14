@@ -1116,7 +1116,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         const Date& rNullDate( GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
                         ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
-                            pTabViewShell->GetDialogParent(),
+                            pTabViewShell->GetFrameWeld(),
                             aNumInfo, nParts, rNullDate ) );
                         if( pDlg->Execute() == RET_OK )
                         {
