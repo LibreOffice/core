@@ -159,8 +159,6 @@
 #define STR_SVT_INDEXENTRY_PHONETIC_LS          NC_("STR_SVT_INDEXENTRY_PHONETIC_LS", "Phonetic (alphanumeric last, grouped by syllables)")
 #define STR_SVT_INDEXENTRY_PHONETIC_LC          NC_("STR_SVT_INDEXENTRY_PHONETIC_LC", "Phonetic (alphanumeric last, grouped by consonants)")
 
-#define STR_SVT_CALENDAR_DAY                    NC_("STR_SVT_CALENDAR_DAY", "Day")
-#define STR_SVT_CALENDAR_WEEK                   NC_("STR_SVT_CALENDAR_WEEK", "Week")
 #define STR_SVT_CALENDAR_TODAY                  NC_("STR_SVT_CALENDAR_TODAY", "Today")
 #define STR_SVT_CALENDAR_NONE                   NC_("STR_SVT_CALENDAR_NONE", "None")
 

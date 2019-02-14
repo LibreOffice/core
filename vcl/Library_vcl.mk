@@ -176,6 +176,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wrkwin \
     vcl/source/window/EnumContext \
     vcl/source/control/button \
+    vcl/source/control/calendar \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
     vcl/source/control/edit \
