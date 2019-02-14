@@ -82,44 +82,44 @@ FormShellManager::~FormShellManager()
 
 void FormShellManager::SetFormShell (FmFormShell* pFormShell)
 {
-    if (mpFormShell != pFormShell)
+    if (mpFormShell == pFormShell)
+        return;
+
+    // Disconnect from the old form shell.
+    if (mpFormShell != nullptr)
     {
-        // Disconnect from the old form shell.
-        if (mpFormShell != nullptr)
-        {
-            mpFormShell->SetControlActivationHandler(Link<LinkParamNone*,void>());
-            EndListening(*mpFormShell);
-            mpFormShell->SetView(nullptr);
-        }
-
-        mpFormShell = pFormShell;
-
-        // Connect to the new form shell.
-        if (mpFormShell != nullptr)
-        {
-            mpFormShell->SetControlActivationHandler(
-                LINK(
-                    this,
-                    FormShellManager,
-                    FormControlActivated));
-            StartListening(*mpFormShell);
-
-            ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-            if (pMainViewShell != nullptr)
-            {
-                // Prevent setting the view twice at the FmFormShell.
-                FmFormView* pFormView = static_cast<FmFormView*>(pMainViewShell->GetView());
-                if (mpFormShell->GetFormView() != pFormView)
-                    mpFormShell->SetView(pFormView);
-            }
-        }
-
-        // Tell the ViewShellManager where on the stack to place the form shell.
-        mrBase.GetViewShellManager()->SetFormShell(
-            mrBase.GetMainViewShell().get(),
-            mpFormShell,
-            mbFormShellAboveViewShell);
+        mpFormShell->SetControlActivationHandler(Link<LinkParamNone*,void>());
+        EndListening(*mpFormShell);
+        mpFormShell->SetView(nullptr);
     }
+
+    mpFormShell = pFormShell;
+
+    // Connect to the new form shell.
+    if (mpFormShell != nullptr)
+    {
+        mpFormShell->SetControlActivationHandler(
+            LINK(
+                this,
+                FormShellManager,
+                FormControlActivated));
+        StartListening(*mpFormShell);
+
+        ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+        if (pMainViewShell != nullptr)
+        {
+            // Prevent setting the view twice at the FmFormShell.
+            FmFormView* pFormView = static_cast<FmFormView*>(pMainViewShell->GetView());
+            if (mpFormShell->GetFormView() != pFormView)
+                mpFormShell->SetView(pFormView);
+        }
+    }
+
+    // Tell the ViewShellManager where on the stack to place the form shell.
+    mrBase.GetViewShellManager()->SetFormShell(
+        mrBase.GetMainViewShell().get(),
+        mpFormShell,
+        mbFormShellAboveViewShell);
 }
 
 void FormShellManager::RegisterAtCenterPane()
@@ -259,20 +259,20 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
 
 void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId()==SfxHintId::Dying)
+    if (rHint.GetId()!=SfxHintId::Dying)
+        return;
+
+    // If all goes well this listener is called after the
+    // FormShellManager was notified about the dying form shell by the
+    // FormShellManagerFactory.
+    OSL_ASSERT(mpFormShell==nullptr);
+    if (mpFormShell != nullptr)
     {
-        // If all goes well this listener is called after the
-        // FormShellManager was notified about the dying form shell by the
-        // FormShellManagerFactory.
-        OSL_ASSERT(mpFormShell==nullptr);
-        if (mpFormShell != nullptr)
-        {
-            mpFormShell = nullptr;
-            mrBase.GetViewShellManager()->SetFormShell(
-                mrBase.GetMainViewShell().get(),
-                nullptr,
-                false);
-        }
+        mpFormShell = nullptr;
+        mrBase.GetViewShellManager()->SetFormShell(
+            mrBase.GetMainViewShell().get(),
+            nullptr,
+            false);
     }
 }
 

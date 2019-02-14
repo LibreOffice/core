@@ -1046,24 +1046,24 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
         Size(FuPoor::HITPIX,0)).Width());
     sal_uInt16  nHelpLine;
 
-    if ( mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
-    {
-        const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+    if ( !mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+        return;
 
-        if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
-        {
-            rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
-                                SdResId( STR_POPUP_EDIT_SNAPPOINT)) );
-            rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
-                                SdResId( STR_POPUP_DELETE_SNAPPOINT)) );
-        }
-        else
-        {
-            rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
-                                SdResId( STR_POPUP_EDIT_SNAPLINE)) );
-            rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
-                                SdResId( STR_POPUP_DELETE_SNAPLINE)) );
-        }
+    const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+
+    if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
+    {
+        rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
+                            SdResId( STR_POPUP_EDIT_SNAPPOINT)) );
+        rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
+                            SdResId( STR_POPUP_DELETE_SNAPPOINT)) );
+    }
+    else
+    {
+        rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
+                            SdResId( STR_POPUP_EDIT_SNAPLINE)) );
+        rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
+                            SdResId( STR_POPUP_DELETE_SNAPLINE)) );
     }
 }
 

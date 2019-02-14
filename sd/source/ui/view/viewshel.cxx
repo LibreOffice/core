@@ -485,22 +485,22 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if( GetView() )
         bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
 
-    if( !bConsumed )
+    if( bConsumed )
+        return;
+
+    rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+    if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
     {
-        rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
-        if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
+        if(HasCurrentFunction())
+            GetCurrentFunction()->MouseButtonDown(rMEvt);
+    }
+    else
+    {
+        if (HasCurrentFunction())
         {
-            if(HasCurrentFunction())
-                GetCurrentFunction()->MouseButtonDown(rMEvt);
-        }
-        else
-        {
-            if (HasCurrentFunction())
-            {
-                FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
-                if (pTextFunction != nullptr)
-                    pTextFunction->InvalidateBindings();
-            }
+            FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+            if (pTextFunction != nullptr)
+                pTextFunction->InvalidateBindings();
         }
     }
 }
@@ -671,23 +671,23 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
     bool bDone = HandleScrollCommand (rCEvt, pWin);
 
-    if( !bDone )
-    {
-        if( rCEvt.GetCommand() == CommandEventId::InputLanguageChange )
-        {
-            //#i42732# update state of fontname if input language changes
-            GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
-            GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
-        }
-        else
-        {
-            bool bConsumed = false;
-            if( GetView() )
-                bConsumed = GetView()->getSmartTags().Command(rCEvt);
+    if( bDone )
+        return;
 
-            if( !bConsumed && HasCurrentFunction())
-                GetCurrentFunction()->Command(rCEvt);
-        }
+    if( rCEvt.GetCommand() == CommandEventId::InputLanguageChange )
+    {
+        //#i42732# update state of fontname if input language changes
+        GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
+        GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+    }
+    else
+    {
+        bool bConsumed = false;
+        if( GetView() )
+            bConsumed = GetView()->getSmartTags().Command(rCEvt);
+
+        if( !bConsumed && HasCurrentFunction())
+            GetCurrentFunction()->Command(rCEvt);
     }
 }
 
@@ -810,29 +810,29 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
 void ViewShell::SetupRulers()
 {
-    if(mbHasRulers && (mpContentWindow.get() != nullptr) && !SlideShow::IsRunning(GetViewShellBase()))
-    {
-        long nHRulerOfs = 0;
+    if(!(mbHasRulers && (mpContentWindow.get() != nullptr) && !SlideShow::IsRunning(GetViewShellBase())))
+        return;
 
-        if ( mpVerticalRuler.get() == nullptr )
+    long nHRulerOfs = 0;
+
+    if ( mpVerticalRuler.get() == nullptr )
+    {
+        mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
+        if ( mpVerticalRuler.get() != nullptr )
         {
-            mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
-            if ( mpVerticalRuler.get() != nullptr )
-            {
-                nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
-                mpVerticalRuler->SetActive();
-                mpVerticalRuler->Show();
-            }
+            nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
+            mpVerticalRuler->SetActive();
+            mpVerticalRuler->Show();
         }
-        if ( mpHorizontalRuler.get() == nullptr )
+    }
+    if ( mpHorizontalRuler.get() == nullptr )
+    {
+        mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow()));
+        if ( mpHorizontalRuler.get() != nullptr )
         {
-            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow()));
-            if ( mpHorizontalRuler.get() != nullptr )
-            {
-                mpHorizontalRuler->SetWinPos(nHRulerOfs);
-                mpHorizontalRuler->SetActive();
-                mpHorizontalRuler->Show();
-            }
+            mpHorizontalRuler->SetWinPos(nHRulerOfs);
+            mpHorizontalRuler->SetActive();
+            mpHorizontalRuler->Show();
         }
     }
 }
@@ -1154,52 +1154,52 @@ SfxUndoManager* ViewShell::ImpGetUndoManager() const
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
-    if(pUndoManager)
-    {
-        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
-        if(nCount)
-        {
-            // prepare list
-            std::vector<OUString> aStringList;
-            aStringList.reserve(nCount);
-            for (sal_uInt16 a = 0; a < nCount; ++a)
-            {
-                // generate one String in list per undo step
-                aStringList.push_back( pUndoManager->GetUndoActionComment(a) );
-            }
+    if(!pUndoManager)
+        return;
 
-            // set item
-            rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
-        }
-        else
+    sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+    if(nCount)
+    {
+        // prepare list
+        std::vector<OUString> aStringList;
+        aStringList.reserve(nCount);
+        for (sal_uInt16 a = 0; a < nCount; ++a)
         {
-            rSet.DisableItem(SID_GETUNDOSTRINGS);
+            // generate one String in list per undo step
+            aStringList.push_back( pUndoManager->GetUndoActionComment(a) );
         }
+
+        // set item
+        rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
+    }
+    else
+    {
+        rSet.DisableItem(SID_GETUNDOSTRINGS);
     }
 }
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
-    if(pUndoManager)
-    {
-        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
-        if(nCount)
-        {
-            // prepare list
-            ::std::vector< OUString > aStringList;
-            aStringList.reserve(nCount);
-            for(sal_uInt16 a = 0; a < nCount; a++)
-                // generate one String in list per undo step
-                aStringList.push_back( pUndoManager->GetRedoActionComment(a) );
+    if(!pUndoManager)
+        return;
 
-            // set item
-            rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
-        }
-        else
-        {
-            rSet.DisableItem(SID_GETREDOSTRINGS);
-        }
+    sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+    if(nCount)
+    {
+        // prepare list
+        ::std::vector< OUString > aStringList;
+        aStringList.reserve(nCount);
+        for(sal_uInt16 a = 0; a < nCount; a++)
+            // generate one String in list per undo step
+            aStringList.push_back( pUndoManager->GetRedoActionComment(a) );
+
+        // set item
+        rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
+    }
+    else
+    {
+        rSet.DisableItem(SID_GETREDOSTRINGS);
     }
 }
 

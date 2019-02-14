@@ -160,62 +160,62 @@ void DrawViewShell::ModifyLayer (
         return;
     }
 
-    if( pLayer )
+    if( !pLayer )
+        return;
+
+    const sal_uInt16 nPageCount = GetLayerTabControl()->GetPageCount();
+    sal_uInt16 nCurPage = 0;
+    sal_uInt16 nPos;
+    for( nPos = 0; nPos < nPageCount; nPos++ )
     {
-        const sal_uInt16 nPageCount = GetLayerTabControl()->GetPageCount();
-        sal_uInt16 nCurPage = 0;
-        sal_uInt16 nPos;
-        for( nPos = 0; nPos < nPageCount; nPos++ )
+        sal_uInt16 nId = GetLayerTabControl()->GetPageId( nPos );
+        if (GetLayerTabControl()->GetLayerName(nId) == pLayer->GetName())
         {
-            sal_uInt16 nId = GetLayerTabControl()->GetPageId( nPos );
-            if (GetLayerTabControl()->GetLayerName(nId) == pLayer->GetName())
-            {
-                nCurPage = nId;
-                break;
-            }
+            nCurPage = nId;
+            break;
         }
-
-        pLayer->SetName( rLayerName );
-        pLayer->SetTitle( rLayerTitle );
-        pLayer->SetDescription( rLayerDesc );
-        mpDrawView->SetLayerVisible( rLayerName, bIsVisible );
-        mpDrawView->SetLayerLocked( rLayerName, bIsLocked);
-        mpDrawView->SetLayerPrintable(rLayerName, bIsPrintable);
-
-        GetDoc()->SetChanged();
-
-        GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
-
-        // Set page bits for modified tab name display
-
-        TabBarPageBits nBits = TabBarPageBits::NONE;
-
-        if (!bIsVisible)
-        {
-            nBits = TabBarPageBits::Blue;
-        }
-        if (bIsLocked)
-        {
-            nBits |= TabBarPageBits::Italic;
-        }
-        if (!bIsPrintable)
-        {
-            nBits |= TabBarPageBits::Underline;
-        }
-
-        // Save the bits
-
-        GetLayerTabControl()->SetPageBits(nCurPage, nBits);
-
-        GetViewFrame()->GetDispatcher()->Execute(
-            SID_SWITCHLAYER,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-
-        // Call Invalidate at the form shell.
-        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-        if (pFormShell != nullptr)
-            pFormShell->Invalidate();
     }
+
+    pLayer->SetName( rLayerName );
+    pLayer->SetTitle( rLayerTitle );
+    pLayer->SetDescription( rLayerDesc );
+    mpDrawView->SetLayerVisible( rLayerName, bIsVisible );
+    mpDrawView->SetLayerLocked( rLayerName, bIsLocked);
+    mpDrawView->SetLayerPrintable(rLayerName, bIsPrintable);
+
+    GetDoc()->SetChanged();
+
+    GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
+
+    // Set page bits for modified tab name display
+
+    TabBarPageBits nBits = TabBarPageBits::NONE;
+
+    if (!bIsVisible)
+    {
+        nBits = TabBarPageBits::Blue;
+    }
+    if (bIsLocked)
+    {
+        nBits |= TabBarPageBits::Italic;
+    }
+    if (!bIsPrintable)
+    {
+        nBits |= TabBarPageBits::Underline;
+    }
+
+    // Save the bits
+
+    GetLayerTabControl()->SetPageBits(nCurPage, nBits);
+
+    GetViewFrame()->GetDispatcher()->Execute(
+        SID_SWITCHLAYER,
+        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+
+    // Call Invalidate at the form shell.
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
+    if (pFormShell != nullptr)
+        pFormShell->Invalidate();
 }
 
 } // end of namespace sd

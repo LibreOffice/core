@@ -113,29 +113,29 @@ static void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::V
     // evtl. feed characters to activated textedit
     const SfxItemSet* pSet = rReq.GetArgs();
 
-    if(pSet)
+    if(!pSet)
+        return;
+
+    OUString aInputString;
+
+    if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_CHAR))
+        aInputString = static_cast<const SfxStringItem&>(pSet->Get(SID_ATTR_CHAR)).GetValue();
+
+    if(aInputString.isEmpty())
+        return;
+
+    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+    if(pOLV)
     {
-        OUString aInputString;
-
-        if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_CHAR))
-            aInputString = static_cast<const SfxStringItem&>(pSet->Get(SID_ATTR_CHAR)).GetValue();
-
-        if(!aInputString.isEmpty())
+        for(sal_Int32 a(0); a < aInputString.getLength(); a++)
         {
-            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+            sal_Char aChar = static_cast<sal_Char>(aInputString[a]);
+            vcl::KeyCode aKeyCode;
+            KeyEvent aKeyEvent(aChar, aKeyCode);
 
-            if(pOLV)
-            {
-                for(sal_Int32 a(0); a < aInputString.getLength(); a++)
-                {
-                    sal_Char aChar = static_cast<sal_Char>(aInputString[a]);
-                    vcl::KeyCode aKeyCode;
-                    KeyEvent aKeyEvent(aChar, aKeyCode);
-
-                    // add actual character
-                    pOLV->PostKeyEvent(aKeyEvent);
-                }
-            }
+            // add actual character
+            pOLV->PostKeyEvent(aKeyEvent);
         }
     }
 }
@@ -604,56 +604,56 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 
     // with qualifier construct directly
-    if(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly))
+    if(!(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly)))
+        return;
+
+    // get SdOptions
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
+    sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
+    sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+
+    // calc position and size
+    ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        // get SdOptions
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
-        sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
-        sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+        // aVisArea is nonsensical in the LOK case, use the slide size
+        aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
+    }
 
-        // calc position and size
-        ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
-        if (comphelper::LibreOfficeKit::isActive())
+    Point aPagePos = aVisArea.Center();
+    aPagePos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
+    aPagePos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
+    ::tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    // create the default object
+    SdrObjectUniquePtr pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
+
+    if(!pObj)
+        return;
+
+    auto pObjTmp = pObj.get();
+    // insert into page
+    GetView()->InsertObjectAtView(pObj.release(), *pPageView);
+
+    // Now that pFuActual has done what it was created for we
+    // can switch on the edit mode for callout objects.
+    switch (nSId)
+    {
+        case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
         {
-            // aVisArea is nonsensical in the LOK case, use the slide size
-            aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
-        }
-
-        Point aPagePos = aVisArea.Center();
-        aPagePos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
-        aPagePos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
-        ::tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
-        SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-
-        if(pPageView)
-        {
-            // create the default object
-            SdrObjectUniquePtr pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
-
-            if(pObj)
-            {
-                auto pObjTmp = pObj.get();
-                // insert into page
-                GetView()->InsertObjectAtView(pObj.release(), *pPageView);
-
-                // Now that pFuActual has done what it was created for we
-                // can switch on the edit mode for callout objects.
-                switch (nSId)
-                {
-                    case SID_DRAW_CAPTION:
-                    case SID_DRAW_CAPTION_VERTICAL:
-                    {
-                        // Make FuText the current function.
-                        SfxUInt16Item aItem (SID_TEXTEDIT, 1);
-                        GetViewFrame()->GetDispatcher()->
-                            ExecuteList(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
-                                SfxCallMode::RECORD, { &aItem });
-                        // Put text object into edit mode.
-                        GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObjTmp), pPageView);
-                        break;
-                    }
-                }
-            }
+            // Make FuText the current function.
+            SfxUInt16Item aItem (SID_TEXTEDIT, 1);
+            GetViewFrame()->GetDispatcher()->
+                ExecuteList(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
+                    SfxCallMode::RECORD, { &aItem });
+            // Put text object into edit mode.
+            GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObjTmp), pPageView);
+            break;
         }
     }
 }
@@ -706,19 +706,19 @@ void DrawViewShell::FuDeleteSelectedObjects()
         bConsumed = true;
     }
 
+    if (bConsumed)
+        return;
+
+    vcl::KeyCode aKCode(KEY_DELETE);
+    KeyEvent aKEvt( 0, aKCode);
+
+    bConsumed = mpDrawView->getSmartTags().KeyInput( aKEvt );
+
+    if (!bConsumed && HasCurrentFunction())
+        bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
+
     if (!bConsumed)
-    {
-        vcl::KeyCode aKCode(KEY_DELETE);
-        KeyEvent aKEvt( 0, aKCode);
-
-        bConsumed = mpDrawView->getSmartTags().KeyInput( aKEvt );
-
-        if (!bConsumed && HasCurrentFunction())
-            bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
-
-        if (!bConsumed)
-            mpDrawView->DeleteMarked();
-    }
+        mpDrawView->DeleteMarked();
 }
 
 void DrawViewShell::FuSupport(SfxRequest& rReq)
@@ -1434,20 +1434,20 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
 void DrawViewShell::FuSupportRotate(SfxRequest const &rReq)
 {
-    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
-    {
-        ::sd::View* pView = GetView();
+    if( rReq.GetSlot() != SID_TRANSLITERATE_ROTATE_CASE )
+        return;
 
-        if (!pView)
-            return;
+    ::sd::View* pView = GetView();
 
-        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+    if (!pView)
+        return;
 
-        if (!pOLV)
-            return;
+    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
-        pOLV->TransliterateText( m_aRotateCase.getNextMode() );
-    }
+    if (!pOLV)
+        return;
+
+    pOLV->TransliterateText( m_aRotateCase.getNextMode() );
 }
 
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
@@ -1554,7 +1554,10 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         }
     }
 
-    if (bNewObj) try
+    if (!bNewObj)
+        return;
+
+    try
     {
         SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >(
             SdrObjFactory::MakeNewObject(
@@ -1622,40 +1625,40 @@ namespace slideshowhelp
     void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc)
     {
         Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
-        if( xPresentation.is() )
+        if( !xPresentation.is() )
+            return;
+
+        sfx2::SfxNotebookBar::LockNotebookBar();
+        if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
+            xPresentation->rehearseTimings();
+        else if (rDoc.getPresentationSettings().mbCustomShow)
         {
-            sfx2::SfxNotebookBar::LockNotebookBar();
-            if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
-                xPresentation->rehearseTimings();
-            else if (rDoc.getPresentationSettings().mbCustomShow)
-            {
-                //fdo#69975 if a custom show has been set, then
-                //use it whether or not we've been asked to
-                //start from the current or first slide
-                xPresentation->start();
-            }
-            else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
-            {
-                //If there is no custom show set, start will automatically
-                //start at the current page
-                xPresentation->start();
-            }
-            else
-            {
-                //Start at page 0, this would blow away any custom
-                //show settings if any were set
-                Sequence< PropertyValue > aArguments(1);
-                PropertyValue aPage;
-
-                aPage.Name = "FirstPage";
-                aPage.Value <<= OUString("0");
-
-                aArguments[0] = aPage;
-
-                xPresentation->startWithArguments( aArguments );
-            }
-            sfx2::SfxNotebookBar::UnlockNotebookBar();
+            //fdo#69975 if a custom show has been set, then
+            //use it whether or not we've been asked to
+            //start from the current or first slide
+            xPresentation->start();
         }
+        else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
+        {
+            //If there is no custom show set, start will automatically
+            //start at the current page
+            xPresentation->start();
+        }
+        else
+        {
+            //Start at page 0, this would blow away any custom
+            //show settings if any were set
+            Sequence< PropertyValue > aArguments(1);
+            PropertyValue aPage;
+
+            aPage.Name = "FirstPage";
+            aPage.Value <<= OUString("0");
+
+            aArguments[0] = aPage;
+
+            xPresentation->startWithArguments( aArguments );
+        }
+        sfx2::SfxNotebookBar::UnlockNotebookBar();
     }
 }
 

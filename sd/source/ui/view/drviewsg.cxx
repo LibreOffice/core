@@ -47,28 +47,28 @@ void DrawViewShell::ExecIMap( SfxRequest const & rReq )
     if(HasCurrentFunction(SID_PRESENTATION) )
         return;
 
-    if ( rReq.GetSlot() == SID_IMAP_EXEC )
+    if ( rReq.GetSlot() != SID_IMAP_EXEC )
+        return;
+
+    SdrMark* pMark = mpDrawView->GetMarkedObjectList().GetMark(0);
+
+    if ( !pMark )
+        return;
+
+    SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
+    SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
+
+    if ( pDlg->GetEditingObject() == static_cast<void*>(pSdrObj) )
     {
-        SdrMark* pMark = mpDrawView->GetMarkedObjectList().GetMark(0);
+        const ImageMap& rImageMap = pDlg->GetImageMap();
+        SdIMapInfo*     pIMapInfo = SdDrawDocument::GetIMapInfo( pSdrObj );
 
-        if ( pMark )
-        {
-            SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
-            SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
+        if ( !pIMapInfo )
+            pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( rImageMap )) );
+        else
+            pIMapInfo->SetImageMap( rImageMap );
 
-            if ( pDlg->GetEditingObject() == static_cast<void*>(pSdrObj) )
-            {
-                const ImageMap& rImageMap = pDlg->GetImageMap();
-                SdIMapInfo*     pIMapInfo = SdDrawDocument::GetIMapInfo( pSdrObj );
-
-                if ( !pIMapInfo )
-                    pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( rImageMap )) );
-                else
-                    pIMapInfo->SetImageMap( rImageMap );
-
-                GetDoc()->SetChanged();
-            }
-        }
+        GetDoc()->SetChanged();
     }
 }
 
@@ -193,20 +193,20 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
     }
 
-    if( !bDefault )
-    {
-        pOptions->StoreConfig();
+    if( bDefault )
+        return;
 
-        // Saves the configuration IMMEDIATELY
-        // SfxGetpApp()->SaveConfiguration();
-        WriteFrameViewData();
+    pOptions->StoreConfig();
 
-        mpFrameView->Update( pOptions );
-        ReadFrameViewData( mpFrameView );
+    // Saves the configuration IMMEDIATELY
+    // SfxGetpApp()->SaveConfiguration();
+    WriteFrameViewData();
 
-        Invalidate( nSlot );
-        rReq.Done();
-    }
+    mpFrameView->Update( pOptions );
+    ReadFrameViewData( mpFrameView );
+
+    Invalidate( nSlot );
+    rReq.Done();
 
 }
 

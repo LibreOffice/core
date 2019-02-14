@@ -701,43 +701,43 @@ void ViewShellBase::ReadUserDataSequence (
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != nullptr)
+    if (pShell == nullptr)
+        return;
+
+    pShell->ReadUserDataSequence (rSequence);
+
+    // For certain shell types ReadUserDataSequence may have changed the
+    // type to another one.  Make sure that the center pane shows the
+    // right view shell.
+    switch (pShell->GetShellType())
     {
-        pShell->ReadUserDataSequence (rSequence);
-
-        // For certain shell types ReadUserDataSequence may have changed the
-        // type to another one.  Make sure that the center pane shows the
-        // right view shell.
-        switch (pShell->GetShellType())
+        case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_NOTES:
+        case ViewShell::ST_HANDOUT:
         {
-            case ViewShell::ST_IMPRESS:
-            case ViewShell::ST_NOTES:
-            case ViewShell::ST_HANDOUT:
+            OUString sViewURL;
+            switch (dynamic_cast<DrawViewShell&>(*pShell).GetPageKind())
             {
-                OUString sViewURL;
-                switch (dynamic_cast<DrawViewShell&>(*pShell).GetPageKind())
-                {
-                    default:
-                    case PageKind::Standard:
-                        sViewURL = framework::FrameworkHelper::msImpressViewURL;
-                        break;
-                    case PageKind::Notes:
-                        sViewURL = framework::FrameworkHelper::msNotesViewURL;
-                        break;
-                    case PageKind::Handout:
-                        sViewURL = framework::FrameworkHelper::msHandoutViewURL;
-                        break;
-                }
-                if (!sViewURL.isEmpty())
-                    framework::FrameworkHelper::Instance(*this)->RequestView(
-                        sViewURL,
-                        framework::FrameworkHelper::msCenterPaneURL);
+                default:
+                case PageKind::Standard:
+                    sViewURL = framework::FrameworkHelper::msImpressViewURL;
+                    break;
+                case PageKind::Notes:
+                    sViewURL = framework::FrameworkHelper::msNotesViewURL;
+                    break;
+                case PageKind::Handout:
+                    sViewURL = framework::FrameworkHelper::msHandoutViewURL;
+                    break;
             }
-            break;
-
-            default:
-                break;
+            if (!sViewURL.isEmpty())
+                framework::FrameworkHelper::Instance(*this)->RequestView(
+                    sViewURL,
+                    framework::FrameworkHelper::msCenterPaneURL);
         }
+        break;
+
+        default:
+            break;
     }
 }
 
@@ -829,18 +829,18 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // We have to check the existence of the window, too.
     // The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
-    if (pMainViewShell != nullptr && GetWindow()!=nullptr)
-    {
-        SvBorder aCurrentBorder (GetBorderPixel());
-        bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
-        SvBorder aBorder (GetBorder(bOuterResize));
-        aBorder += pMainViewShell->GetBorder();
+    if (!(pMainViewShell != nullptr && GetWindow()!=nullptr))
+        return;
 
-        if (bForce || (aBorder != aCurrentBorder))
-        {
-            SetBorderPixel (aBorder);
-            InvalidateBorder();
-        }
+    SvBorder aCurrentBorder (GetBorderPixel());
+    bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
+    SvBorder aBorder (GetBorder(bOuterResize));
+    aBorder += pMainViewShell->GetBorder();
+
+    if (bForce || (aBorder != aCurrentBorder))
+    {
+        SetBorderPixel (aBorder);
+        InvalidateBorder();
     }
 }
 
@@ -1065,26 +1065,26 @@ void ViewShellBase::Implementation::LateInit()
 void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-    if (pViewShell != nullptr)
-    {
-        FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != nullptr)
-        {
-            // Set view shell, edit mode, and page kind.
-            // pFrameView->SetViewShEditMode(
-            //     pFrameView->GetViewShEditModeOnLoad(),
-            //     pFrameView->GetPageKindOnLoad());
-            pFrameView->SetViewShEditMode(
-                pFrameView->GetViewShEditModeOnLoad() );
-            pFrameView->SetPageKind(
-                pFrameView->GetPageKindOnLoad());
-            std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
-            pHelper->RequestView(
-                FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
-                FrameworkHelper::msCenterPaneURL);
-            pHelper->RunOnConfigurationEvent("ConfigurationUpdateEnd", CurrentPageSetter(mrBase));
-        }
-    }
+    if (pViewShell == nullptr)
+        return;
+
+    FrameView* pFrameView = pViewShell->GetFrameView();
+    if (pFrameView == nullptr)
+        return;
+
+    // Set view shell, edit mode, and page kind.
+    // pFrameView->SetViewShEditMode(
+    //     pFrameView->GetViewShEditModeOnLoad(),
+    //     pFrameView->GetPageKindOnLoad());
+    pFrameView->SetViewShEditMode(
+        pFrameView->GetViewShEditModeOnLoad() );
+    pFrameView->SetPageKind(
+        pFrameView->GetPageKindOnLoad());
+    std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
+    pHelper->RequestView(
+        FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
+        FrameworkHelper::msCenterPaneURL);
+    pHelper->RunOnConfigurationEvent("ConfigurationUpdateEnd", CurrentPageSetter(mrBase));
 }
 
 void ViewShellBase::Implementation::SetUserWantsTabBar(bool inValue)
@@ -1369,44 +1369,44 @@ void CurrentPageSetter::operator() (bool)
         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
     }
 
-    if (pFrameView!=nullptr)
+    if (pFrameView==nullptr)
+        return;
+
+    try
     {
-        try
+        // Get the current page either from the DrawPagesSupplier or the
+        // MasterPagesSupplier.
+        Any aPage;
+        if (pFrameView->GetViewShEditModeOnLoad() == EditMode::Page)
         {
-            // Get the current page either from the DrawPagesSupplier or the
-            // MasterPagesSupplier.
-            Any aPage;
-            if (pFrameView->GetViewShEditModeOnLoad() == EditMode::Page)
-            {
-                Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
-                    mrBase.GetController()->getModel(), UNO_QUERY_THROW);
-                Reference<container::XIndexAccess> xPages (
-                    xPagesSupplier->getDrawPages(), UNO_QUERY_THROW);
-                aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
-            }
-            else
-            {
-                Reference<drawing::XMasterPagesSupplier> xPagesSupplier (
-                    mrBase.GetController()->getModel(), UNO_QUERY_THROW);
-                Reference<container::XIndexAccess> xPages (
-                    xPagesSupplier->getMasterPages(), UNO_QUERY_THROW);
-                aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
-            }
-            // Switch to the page last edited by setting the CurrentPage
-            // property.
-            Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-            xSet->setPropertyValue ("CurrentPage", aPage);
+            Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
+                mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+            Reference<container::XIndexAccess> xPages (
+                xPagesSupplier->getDrawPages(), UNO_QUERY_THROW);
+            aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
         }
-        catch (const RuntimeException&)
+        else
         {
-            // We have not been able to set the current page at the main view.
-            // This is sad but still leaves us in a valid state.  Therefore,
-            // this exception is silently ignored.
+            Reference<drawing::XMasterPagesSupplier> xPagesSupplier (
+                mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+            Reference<container::XIndexAccess> xPages (
+                xPagesSupplier->getMasterPages(), UNO_QUERY_THROW);
+            aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
         }
-        catch (const beans::UnknownPropertyException&)
-        {
-            SAL_WARN("sd.view", "CurrentPage property unknown");
-        }
+        // Switch to the page last edited by setting the CurrentPage
+        // property.
+        Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
+        xSet->setPropertyValue ("CurrentPage", aPage);
+    }
+    catch (const RuntimeException&)
+    {
+        // We have not been able to set the current page at the main view.
+        // This is sad but still leaves us in a valid state.  Therefore,
+        // this exception is silently ignored.
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+        SAL_WARN("sd.view", "CurrentPage property unknown");
     }
 }
 

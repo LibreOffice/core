@@ -785,19 +785,19 @@ void DocumentIteratorImpl::GotoNextText()
             bViewChanged = true;
         }
 
-    if (bViewChanged)
-    {
-        // Get new page count;
-        sal_Int32 nPageCount;
-        if (maPosition.meEditMode == EditMode::Page)
-            nPageCount = mpDocument->GetSdPageCount (maPosition.mePageKind);
-        else
-            nPageCount = mpDocument->GetMasterSdPageCount(maPosition.mePageKind);
+    if (!bViewChanged)
+        return;
 
-        // Now that we know the number of pages we can set the current page index.
-        if (bSetToOnePastLastPage)
-            SetPage (nPageCount);
-    }
+    // Get new page count;
+    sal_Int32 nPageCount;
+    if (maPosition.meEditMode == EditMode::Page)
+        nPageCount = mpDocument->GetSdPageCount (maPosition.mePageKind);
+    else
+        nPageCount = mpDocument->GetMasterSdPageCount(maPosition.mePageKind);
+
+    // Now that we know the number of pages we can set the current page index.
+    if (bSetToOnePastLastPage)
+        SetPage (nPageCount);
 }
 
 } } // end of namespace ::sd::outliner

@@ -291,20 +291,20 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     if ( bIsOleActive && PopupMenu::IsInExecute() )
         return;
 
-    if ( !IsInputLocked() )
-    {
-        ViewShell::MouseButtonDown(rMEvt, pWin);
+    if ( IsInputLocked() )
+        return;
 
-        //If object is marked , the corresponding entry is set true ,
-        //else the corresponding entry is set false .
-        FreshNavigatrTree();
-        if (mbPipette)
-        {
-            SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
-            SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
-            if (pBmpMask)
-                pBmpMask->PipetteClicked();
-        }
+    ViewShell::MouseButtonDown(rMEvt, pWin);
+
+    //If object is marked , the corresponding entry is set true ,
+    //else the corresponding entry is set false .
+    FreshNavigatrTree();
+    if (mbPipette)
+    {
+        SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+        SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
+        if (pBmpMask)
+            pBmpMask->PipetteClicked();
     }
 }
 
@@ -313,111 +313,111 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if ( IsMouseButtonDown() )
         mbMouseSelecting = true;
 
-    if ( !IsInputLocked() )
+    if ( IsInputLocked() )
+        return;
+
+    if ( mpDrawView->IsAction() )
     {
-        if ( mpDrawView->IsAction() )
-        {
-            ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
+        ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
-            if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
+        if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
+        {
+            bool bInsideOtherWindow = false;
+
+            if (mpContentWindow.get() != nullptr)
             {
-                bool bInsideOtherWindow = false;
+                aOutputArea = ::tools::Rectangle(Point(0,0),
+                    mpContentWindow->GetOutputSizePixel());
 
-                if (mpContentWindow.get() != nullptr)
-                {
-                    aOutputArea = ::tools::Rectangle(Point(0,0),
-                        mpContentWindow->GetOutputSizePixel());
-
-                    Point aPos = mpContentWindow->GetPointerPosPixel();
-                    if ( aOutputArea.IsInside(aPos) )
-                        bInsideOtherWindow = true;
-                }
-
-                if (! GetActiveWindow()->HasFocus ())
-                {
-                    GetActiveWindow()->ReleaseMouse ();
-                    mpDrawView->BrkAction ();
-                    return;
-                }
-                else if ( bInsideOtherWindow )
-                {
-                    GetActiveWindow()->ReleaseMouse();
-                    pWin->CaptureMouse ();
-                }
-            }
-            else if ( pWin != GetActiveWindow() )
-                 pWin->CaptureMouse();
-        }
-
-        // Since the next MouseMove may execute a IsSolidDraggingNow() in
-        // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
-        // is needed it is necessary to set it here.
-        if (GetDoc())
-        {
-            ConfigureAppBackgroundColor();
-            mpDrawView->SetApplicationBackgroundColor( mnAppBackgroundColor );
-        }
-
-        ViewShell::MouseMove(rMEvt, pWin);
-
-        if( !mbMousePosFreezed )
-            maMousePos = rMEvt.GetPosPixel();
-
-        ::tools::Rectangle aRect;
-
-        if ( mbIsRulerDrag )
-        {
-            Point aLogPos = GetActiveWindow()->PixelToLogic(maMousePos);
-            mpDrawView->MovAction(aLogPos);
-        }
-
-        if ( mpDrawView->IsAction() )
-        {
-            mpDrawView->TakeActionRect(aRect);
-            aRect = GetActiveWindow()->LogicToPixel(aRect);
-        }
-        else
-        {
-            aRect = ::tools::Rectangle(maMousePos, maMousePos);
-        }
-
-        ShowMousePosInfo(aRect, pWin);
-
-        SvxBmpMask* pBmpMask = nullptr;
-        if (mbPipette && GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
-        {
-            SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
-            pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
-        }
-
-        if (pBmpMask)
-        {
-            const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
-            const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
-            const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
-            const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
-            long            nRed = 0;
-            long            nGreen = 0;
-            long            nBlue = 0;
-            const double    fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
-
-            for ( long nY = nStartY; nY <= nEndY; nY++ )
-            {
-                for( long nX = nStartX; nX <= nEndX; nX++ )
-                {
-                    const Color aCol( pWin->GetPixel( pWin->PixelToLogic( Point( nX, nY ) ) ) );
-
-                    nRed += aCol.GetRed();
-                    nGreen += aCol.GetGreen();
-                    nBlue += aCol.GetBlue();
-                }
+                Point aPos = mpContentWindow->GetPointerPosPixel();
+                if ( aOutputArea.IsInside(aPos) )
+                    bInsideOtherWindow = true;
             }
 
-            pBmpMask->SetColor( Color( static_cast<sal_uInt8>( nRed / fDiv + .5 ),
-                                 static_cast<sal_uInt8>( nGreen / fDiv + .5 ),
-                                 static_cast<sal_uInt8>( nBlue / fDiv + .5 ) ) );
+            if (! GetActiveWindow()->HasFocus ())
+            {
+                GetActiveWindow()->ReleaseMouse ();
+                mpDrawView->BrkAction ();
+                return;
+            }
+            else if ( bInsideOtherWindow )
+            {
+                GetActiveWindow()->ReleaseMouse();
+                pWin->CaptureMouse ();
+            }
+        }
+        else if ( pWin != GetActiveWindow() )
+             pWin->CaptureMouse();
+    }
+
+    // Since the next MouseMove may execute a IsSolidDraggingNow() in
+    // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
+    // is needed it is necessary to set it here.
+    if (GetDoc())
+    {
+        ConfigureAppBackgroundColor();
+        mpDrawView->SetApplicationBackgroundColor( mnAppBackgroundColor );
+    }
+
+    ViewShell::MouseMove(rMEvt, pWin);
+
+    if( !mbMousePosFreezed )
+        maMousePos = rMEvt.GetPosPixel();
+
+    ::tools::Rectangle aRect;
+
+    if ( mbIsRulerDrag )
+    {
+        Point aLogPos = GetActiveWindow()->PixelToLogic(maMousePos);
+        mpDrawView->MovAction(aLogPos);
+    }
+
+    if ( mpDrawView->IsAction() )
+    {
+        mpDrawView->TakeActionRect(aRect);
+        aRect = GetActiveWindow()->LogicToPixel(aRect);
+    }
+    else
+    {
+        aRect = ::tools::Rectangle(maMousePos, maMousePos);
+    }
+
+    ShowMousePosInfo(aRect, pWin);
+
+    SvxBmpMask* pBmpMask = nullptr;
+    if (mbPipette && GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
+    {
+        SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+        pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
+    }
+
+    if (!pBmpMask)
+        return;
+
+    const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
+    const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
+    const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
+    const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
+    long            nRed = 0;
+    long            nGreen = 0;
+    long            nBlue = 0;
+    const double    fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
+
+    for ( long nY = nStartY; nY <= nEndY; nY++ )
+    {
+        for( long nX = nStartX; nX <= nEndX; nX++ )
+        {
+            const Color aCol( pWin->GetPixel( pWin->PixelToLogic( Point( nX, nY ) ) ) );
+
+            nRed += aCol.GetRed();
+            nGreen += aCol.GetGreen();
+            nBlue += aCol.GetBlue();
         }
     }
+
+    pBmpMask->SetColor( Color( static_cast<sal_uInt8>( nRed / fDiv + .5 ),
+                         static_cast<sal_uInt8>( nGreen / fDiv + .5 ),
+                         static_cast<sal_uInt8>( nBlue / fDiv + .5 ) ) );
 }
 
 void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
@@ -480,317 +480,317 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         return;
     }
 
-    if ( !IsInputLocked() )
+    if ( IsInputLocked() )
+        return;
+
+    if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
+        return;
+
+    const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
+
+    if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
     {
-        if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
-            return;
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( GetActiveWindow() ) );
 
-        const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
-
-        if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
+        if( aDataHelper.GetTransferable().is() )
         {
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( GetActiveWindow() ) );
+            Point       aPos;
+            sal_Int8    nDnDAction = DND_ACTION_COPY;
 
-            if( aDataHelper.GetTransferable().is() )
+            if( GetActiveWindow() )
+                aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
+
+            if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
             {
-                Point       aPos;
-                sal_Int8    nDnDAction = DND_ACTION_COPY;
+                INetBookmark    aINetBookmark( "", "" );
 
-                if( GetActiveWindow() )
-                    aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
-
-                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
+                if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
-                    INetBookmark    aINetBookmark( "", "" );
-
-                    if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
-                          aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
-                          aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
-                          aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-                    {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
-                    }
+                    InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
                 }
             }
         }
-        else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
-                 pWin != nullptr && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
+    }
+    else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
+             pWin != nullptr && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
+    {
+        OUString aPopupId; // Resource name for popup menu
+
+        // is there a snap object under the cursor?
+        SdrPageView* pPV;
+        Point   aMPos = pWin->PixelToLogic( maMousePos );
+        sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic(
+            Size(FuPoor::HITPIX, 0 ) ).Width());
+        sal_uInt16  nHelpLine;
+        // for glue points
+        SdrObject*  pObj = nullptr;
+        sal_uInt16      nPickId = 0;
+        // for field command
+        OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+        const SvxFieldItem* pFldItem = nullptr;
+        if( pOLV )
+            pFldItem = pOLV->GetFieldAtSelection();
+
+        // helper line
+        if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
         {
-            OUString aPopupId; // Resource name for popup menu
+            ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
+            return;
+        }
+        // is glue point under cursor marked?
+        else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
+                 mpDrawView->IsGluePointMarked( pObj, nPickId ) )
+        {
+            aPopupId = "gluepoint";
+        }
+        // field command?
+        else if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                             nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ||
+                             nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                             nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ) )
+        {
+            LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-            // is there a snap object under the cursor?
-            SdrPageView* pPV;
-            Point   aMPos = pWin->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic(
-                Size(FuPoor::HITPIX, 0 ) ).Width());
-            sal_uInt16  nHelpLine;
-            // for glue points
-            SdrObject*  pObj = nullptr;
-            sal_uInt16      nPickId = 0;
-            // for field command
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-            const SvxFieldItem* pFldItem = nullptr;
-            if( pOLV )
-                pFldItem = pOLV->GetFieldAtSelection();
-
-            // helper line
-            if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+            // Format popup with outliner language, if possible
+            if( pOLV->GetOutliner() )
             {
-                ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
-                return;
+                ESelection aSelection( pOLV->GetSelection() );
+                eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.nStartPara, aSelection.nStartPos );
             }
-            // is glue point under cursor marked?
-            else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
-                     mpDrawView->IsGluePointMarked( pObj, nPickId ) )
-            {
-                aPopupId = "gluepoint";
-            }
-            // field command?
-            else if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ) )
-            {
-                LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-                // Format popup with outliner language, if possible
-                if( pOLV->GetOutliner() )
-                {
-                    ESelection aSelection( pOLV->GetSelection() );
-                    eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.nStartPara, aSelection.nStartPos );
-                }
+            //fdo#44998 if the outliner has captured the mouse events release the lock
+            //so the SdFieldPopup can get them
+            pOLV->ReleaseMouse();
+            ScopedVclPtrInstance<SdFieldPopup> aFieldPopup( pFldItem->GetField(), eLanguage );
 
-                //fdo#44998 if the outliner has captured the mouse events release the lock
-                //so the SdFieldPopup can get them
-                pOLV->ReleaseMouse();
-                ScopedVclPtrInstance<SdFieldPopup> aFieldPopup( pFldItem->GetField(), eLanguage );
-
-                if ( rCEvt.IsMouseEvent() )
-                    aMPos = rCEvt.GetMousePosPixel();
-                else
-                    aMPos = Point( 20, 20 );
-                aFieldPopup->Execute( pWin, aMPos );
-
-                std::unique_ptr<SvxFieldData> pField(aFieldPopup->GetField());
-                if( pField )
-                {
-                    SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                    // select field, so that it will be deleted on insert
-                    ESelection aSel = pOLV->GetSelection();
-                    bool bSel = true;
-                    if( aSel.nStartPos == aSel.nEndPos )
-                    {
-                        bSel = false;
-                        aSel.nEndPos++;
-                    }
-                    pOLV->SetSelection( aSel );
-
-                    pOLV->InsertField( aFieldItem );
-
-                    // reset selection back to original state
-                    if( !bSel )
-                        aSel.nEndPos--;
-                    pOLV->SetSelection( aSel );
-                }
-            }
+            if ( rCEvt.IsMouseEvent() )
+                aMPos = rCEvt.GetMousePosPixel();
             else
+                aMPos = Point( 20, 20 );
+            aFieldPopup->Execute( pWin, aMPos );
+
+            std::unique_ptr<SvxFieldData> pField(aFieldPopup->GetField());
+            if( pField )
             {
-                // is something selected?
-                if (mpDrawView->AreObjectsMarked() &&
-                    mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
+                SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
+                // select field, so that it will be deleted on insert
+                ESelection aSel = pOLV->GetSelection();
+                bool bSel = true;
+                if( aSel.nStartPos == aSel.nEndPos )
                 {
-                    pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                    if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != nullptr ) )
-                    {
-                        aPopupId = "bezier";
-                    }
-                    else
-                    {
-                        if( mpDrawView->GetTextEditObject() )
-                        {
-                            OutlinerView* pOutlinerView = mpDrawView->GetTextEditOutlinerView();
-                            Point aPos(rCEvt.GetMousePosPixel());
-
-                            if ( pOutlinerView )
-                            {
-                                if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
-                                    ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
-                                {
-                                    // Popup for Online-Spelling now handled by DrawDocShell
-                                    Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
-
-                                    if( !rCEvt.IsMouseEvent() )
-                                    {
-                                        aPos = GetActiveWindow()->LogicToPixel( pOutlinerView->GetEditView().GetCursor()->GetPos() );
-                                    }
-                                    // While showing the spell context menu
-                                    // we lock the input so that another
-                                    // context menu can not be opened during
-                                    // that time (crash #i43235#).  In order
-                                    // to not lock the UI completely we
-                                    // first release the mouse.
-                                    GetActiveWindow()->ReleaseMouse();
-                                    LockInput();
-                                    pOutlinerView->ExecuteSpellPopup(aPos, &aLink);
-                                    pOutlinerView->GetEditView().Invalidate();
-                                    UnlockInput();
-                                }
-                                else
-                                {
-                                    if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
-                                    {
-                                        aPopupId = "tabletext";
-                                    }
-                                    else
-                                    {
-                                        aPopupId = "drawtext";
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            SdrInventor nInv = pObj->GetObjInventor();
-                            sal_uInt16  nId  = pObj->GetObjIdentifier();
-
-                            if (nInv == SdrInventor::Default)
-                            {
-                                switch ( nId )
-                                {
-                                    case OBJ_OUTLINETEXT:
-                                    case OBJ_CAPTION:
-                                    case OBJ_TITLETEXT:
-                                    case OBJ_TEXT:
-                                        aPopupId = "textbox";
-                                        break;
-
-                                    case OBJ_PATHLINE:
-                                    case OBJ_PLIN:
-                                        aPopupId = "curve";
-                                        break;
-
-                                    case OBJ_FREELINE:
-                                    case OBJ_EDGE:
-                                        aPopupId = "connector";
-                                        break;
-
-                                    case OBJ_LINE:
-                                        aPopupId = "line";
-                                        break;
-
-                                    case OBJ_MEASURE:
-                                        aPopupId = "measure";
-                                        break;
-
-                                    case OBJ_RECT:
-                                    case OBJ_CIRC:
-                                    case OBJ_FREEFILL:
-                                    case OBJ_PATHFILL:
-                                    case OBJ_POLY:
-                                    case OBJ_SECT:
-                                    case OBJ_CARC:
-                                    case OBJ_CCUT:
-                                    case OBJ_CUSTOMSHAPE:
-                                        aPopupId = "draw";
-                                        break;
-
-                                    case OBJ_GRUP:
-                                        aPopupId = "group";
-                                        break;
-
-                                    case OBJ_GRAF:
-                                        aPopupId = "graphic";
-                                        break;
-
-                                    case OBJ_OLE2:
-                                        aPopupId = "oleobject";
-                                        break;
-                                    case OBJ_MEDIA:
-                                        aPopupId = "media";
-                                        break;
-                                    case OBJ_TABLE:
-                                        aPopupId = "table";
-                                        break;
-                                }
-                            }
-                            else if( nInv == SdrInventor::E3d )
-                            {
-                                if( nId == E3D_SCENE_ID )
-                                {
-                                    if( !mpDrawView->IsGroupEntered() )
-                                        aPopupId = "3dscene";
-                                    else
-                                        aPopupId = "3dscene2";
-                                }
-                                else
-                                    aPopupId = "3dobject";
-                            }
-                            else if( nInv == SdrInventor::FmForm )
-                            {
-                                aPopupId = "form";
-                            }
-                        }
-                    }
+                    bSel = false;
+                    aSel.nEndPos++;
                 }
+                pOLV->SetSelection( aSel );
 
-                // multiple selection
-                else if (mpDrawView->AreObjectsMarked() &&
-                    mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
-                {
-                    aPopupId = "multiselect";
-                }
+                pOLV->InsertField( aFieldItem );
 
-                // nothing selected
-                else
-                {
-                    aPopupId = "page";
-                }
-            }
-            // show Popup-Menu
-            if (!aPopupId.isEmpty())
-            {
-                GetActiveWindow()->ReleaseMouse();
-
-                if(rCEvt.IsMouseEvent())
-                    GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId );
-                else
-                {
-                    //don't open contextmenu at mouse position if not opened via mouse
-
-                    //middle of the window if nothing is marked
-                    Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
-                            ,GetActiveWindow()->GetSizePixel().Height()/2);
-
-                    //middle of the bounding rect if something is marked
-                    if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
-                    {
-                        ::tools::Rectangle aMarkRect;
-                        mpDrawView->GetMarkedObjectList().TakeBoundRect(nullptr,aMarkRect);
-                        aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
-
-                        //move the point into the visible window area
-                        if( aMenuPos.X() < 0 )
-                            aMenuPos.setX( 0 );
-                        if( aMenuPos.Y() < 0 )
-                            aMenuPos.setY( 0 );
-                        if( aMenuPos.X() > GetActiveWindow()->GetSizePixel().Width() )
-                            aMenuPos.setX( GetActiveWindow()->GetSizePixel().Width() );
-                        if( aMenuPos.Y() > GetActiveWindow()->GetSizePixel().Height() )
-                            aMenuPos.setY( GetActiveWindow()->GetSizePixel().Height() );
-                    }
-
-                    //open context menu at that point
-                    GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId, GetActiveWindow(), &aMenuPos );
-                }
-                mbMousePosFreezed = false;
+                // reset selection back to original state
+                if( !bSel )
+                    aSel.nEndPos--;
+                pOLV->SetSelection( aSel );
             }
         }
         else
         {
-            ViewShell::Command(rCEvt, pWin);
+            // is something selected?
+            if (mpDrawView->AreObjectsMarked() &&
+                mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
+            {
+                pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != nullptr ) )
+                {
+                    aPopupId = "bezier";
+                }
+                else
+                {
+                    if( mpDrawView->GetTextEditObject() )
+                    {
+                        OutlinerView* pOutlinerView = mpDrawView->GetTextEditOutlinerView();
+                        Point aPos(rCEvt.GetMousePosPixel());
+
+                        if ( pOutlinerView )
+                        {
+                            if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
+                                ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
+                            {
+                                // Popup for Online-Spelling now handled by DrawDocShell
+                                Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
+
+                                if( !rCEvt.IsMouseEvent() )
+                                {
+                                    aPos = GetActiveWindow()->LogicToPixel( pOutlinerView->GetEditView().GetCursor()->GetPos() );
+                                }
+                                // While showing the spell context menu
+                                // we lock the input so that another
+                                // context menu can not be opened during
+                                // that time (crash #i43235#).  In order
+                                // to not lock the UI completely we
+                                // first release the mouse.
+                                GetActiveWindow()->ReleaseMouse();
+                                LockInput();
+                                pOutlinerView->ExecuteSpellPopup(aPos, &aLink);
+                                pOutlinerView->GetEditView().Invalidate();
+                                UnlockInput();
+                            }
+                            else
+                            {
+                                if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                {
+                                    aPopupId = "tabletext";
+                                }
+                                else
+                                {
+                                    aPopupId = "drawtext";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SdrInventor nInv = pObj->GetObjInventor();
+                        sal_uInt16  nId  = pObj->GetObjIdentifier();
+
+                        if (nInv == SdrInventor::Default)
+                        {
+                            switch ( nId )
+                            {
+                                case OBJ_OUTLINETEXT:
+                                case OBJ_CAPTION:
+                                case OBJ_TITLETEXT:
+                                case OBJ_TEXT:
+                                    aPopupId = "textbox";
+                                    break;
+
+                                case OBJ_PATHLINE:
+                                case OBJ_PLIN:
+                                    aPopupId = "curve";
+                                    break;
+
+                                case OBJ_FREELINE:
+                                case OBJ_EDGE:
+                                    aPopupId = "connector";
+                                    break;
+
+                                case OBJ_LINE:
+                                    aPopupId = "line";
+                                    break;
+
+                                case OBJ_MEASURE:
+                                    aPopupId = "measure";
+                                    break;
+
+                                case OBJ_RECT:
+                                case OBJ_CIRC:
+                                case OBJ_FREEFILL:
+                                case OBJ_PATHFILL:
+                                case OBJ_POLY:
+                                case OBJ_SECT:
+                                case OBJ_CARC:
+                                case OBJ_CCUT:
+                                case OBJ_CUSTOMSHAPE:
+                                    aPopupId = "draw";
+                                    break;
+
+                                case OBJ_GRUP:
+                                    aPopupId = "group";
+                                    break;
+
+                                case OBJ_GRAF:
+                                    aPopupId = "graphic";
+                                    break;
+
+                                case OBJ_OLE2:
+                                    aPopupId = "oleobject";
+                                    break;
+                                case OBJ_MEDIA:
+                                    aPopupId = "media";
+                                    break;
+                                case OBJ_TABLE:
+                                    aPopupId = "table";
+                                    break;
+                            }
+                        }
+                        else if( nInv == SdrInventor::E3d )
+                        {
+                            if( nId == E3D_SCENE_ID )
+                            {
+                                if( !mpDrawView->IsGroupEntered() )
+                                    aPopupId = "3dscene";
+                                else
+                                    aPopupId = "3dscene2";
+                            }
+                            else
+                                aPopupId = "3dobject";
+                        }
+                        else if( nInv == SdrInventor::FmForm )
+                        {
+                            aPopupId = "form";
+                        }
+                    }
+                }
+            }
+
+            // multiple selection
+            else if (mpDrawView->AreObjectsMarked() &&
+                mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
+            {
+                aPopupId = "multiselect";
+            }
+
+            // nothing selected
+            else
+            {
+                aPopupId = "page";
+            }
         }
+        // show Popup-Menu
+        if (!aPopupId.isEmpty())
+        {
+            GetActiveWindow()->ReleaseMouse();
+
+            if(rCEvt.IsMouseEvent())
+                GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId );
+            else
+            {
+                //don't open contextmenu at mouse position if not opened via mouse
+
+                //middle of the window if nothing is marked
+                Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
+                        ,GetActiveWindow()->GetSizePixel().Height()/2);
+
+                //middle of the bounding rect if something is marked
+                if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
+                {
+                    ::tools::Rectangle aMarkRect;
+                    mpDrawView->GetMarkedObjectList().TakeBoundRect(nullptr,aMarkRect);
+                    aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
+
+                    //move the point into the visible window area
+                    if( aMenuPos.X() < 0 )
+                        aMenuPos.setX( 0 );
+                    if( aMenuPos.Y() < 0 )
+                        aMenuPos.setY( 0 );
+                    if( aMenuPos.X() > GetActiveWindow()->GetSizePixel().Width() )
+                        aMenuPos.setX( GetActiveWindow()->GetSizePixel().Width() );
+                    if( aMenuPos.Y() > GetActiveWindow()->GetSizePixel().Height() )
+                        aMenuPos.setY( GetActiveWindow()->GetSizePixel().Height() );
+                }
+
+                //open context menu at that point
+                GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId, GetActiveWindow(), &aMenuPos );
+            }
+            mbMousePosFreezed = false;
+        }
+    }
+    else
+    {
+        ViewShell::Command(rCEvt, pWin);
     }
 }
 
@@ -842,24 +842,24 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
 
     // display with coordinates in StatusBar
     OSL_ASSERT (GetViewShell()!=nullptr);
-    if ( !GetViewShell()->GetUIActiveClient() )
-    {
-        SfxItemSet aSet(
-            GetPool(),
-            svl::Items<
-                SID_CONTEXT, SID_CONTEXT,
-                SID_ATTR_POSITION, SID_ATTR_SIZE>{});
+    if ( GetViewShell()->GetUIActiveClient() )
+        return;
 
-        GetStatusBarState(aSet);
+    SfxItemSet aSet(
+        GetPool(),
+        svl::Items<
+            SID_CONTEXT, SID_CONTEXT,
+            SID_ATTR_POSITION, SID_ATTR_SIZE>{});
 
-        aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
+    GetStatusBarState(aSet);
 
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
-        rBindings.SetState(aSet);
-        rBindings.Invalidate(SID_CONTEXT);
-        rBindings.Invalidate(SID_ATTR_POSITION);
-        rBindings.Invalidate(SID_ATTR_SIZE);
-    }
+    aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
+
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.SetState(aSet);
+    rBindings.Invalidate(SID_CONTEXT);
+    rBindings.Invalidate(SID_ATTR_POSITION);
+    rBindings.Invalidate(SID_ATTR_SIZE);
 }
 
 void DrawViewShell::LockInput()

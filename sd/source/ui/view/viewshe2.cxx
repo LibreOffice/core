@@ -146,43 +146,42 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long nDelta = pHScroll->GetDelta();
 
-    if (nDelta != 0)
+    if (nDelta == 0)
+        return;
+
+    double fX = static_cast<double>(pHScroll->GetThumbPos()) / pHScroll->GetRange().Len();
+
+    // scroll all windows of the column
+    ::sd::View* pView = GetView();
+    OutlinerView* pOLV = nullptr;
+
+    if (pView)
+        pOLV = pView->GetTextEditOutlinerView();
+
+    if (pOLV)
+        pOLV->HideCursor();
+
+    mpContentWindow->SetVisibleXY(fX, -1);
+
+    ::tools::Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+    Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
+    aVisArea.SetPos(aVisAreaPos);
+    GetDocSh()->SetVisArea(aVisArea);
+
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
+    VisAreaChanged(aVisAreaWin);
+
+    if (pView)
     {
-        double fX = static_cast<double>(pHScroll->GetThumbPos()) / pHScroll->GetRange().Len();
-
-        // scroll all windows of the column
-        ::sd::View* pView = GetView();
-        OutlinerView* pOLV = nullptr;
-
-        if (pView)
-            pOLV = pView->GetTextEditOutlinerView();
-
-        if (pOLV)
-            pOLV->HideCursor();
-
-        mpContentWindow->SetVisibleXY(fX, -1);
-
-        ::tools::Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
-        Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
-        aVisArea.SetPos(aVisAreaPos);
-        GetDocSh()->SetVisArea(aVisArea);
-
-        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
-        VisAreaChanged(aVisAreaWin);
-
-        if (pView)
-        {
-            pView->VisAreaChanged(GetActiveWindow());
-        }
-
-        if (pOLV)
-            pOLV->ShowCursor();
-
-        if (mbHasRulers)
-            UpdateHRuler();
-
+        pView->VisAreaChanged(GetActiveWindow());
     }
+
+    if (pOLV)
+        pOLV->ShowCursor();
+
+    if (mbHasRulers)
+        UpdateHRuler();
 }
 
 /**

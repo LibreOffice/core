@@ -95,118 +95,118 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
         rWin.Pop();
     Size aVisAreaSize(aVisArea.GetSize());
 
-    if ( !aVisArea.IsInside(rRect) )
+    if ( aVisArea.IsInside(rRect) )
+        return;
+
+    // object is not entirely in visible area
+    sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
+    sal_Int32 nFreeSpaceY(aVisAreaSize.Height() - aLogicSize.Height());
+
+    // allow a mode for move-only visibility without zooming.
+    const sal_Int32 nPercentBorder(30);
+    const ::tools::Rectangle aInnerRectangle(
+        aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
+        aVisArea.Top() + ((aVisAreaSize.Height() * nPercentBorder) / 200),
+        aVisArea.Right() - ((aVisAreaSize.Width() * nPercentBorder) / 200),
+        aVisArea.Bottom() - ((aVisAreaSize.Height() * nPercentBorder) / 200)
+        );
+    Point aNewPos(aVisArea.TopLeft());
+
+    if(nFreeSpaceX < 0)
     {
-        // object is not entirely in visible area
-        sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
-        sal_Int32 nFreeSpaceY(aVisAreaSize.Height() - aLogicSize.Height());
-
-        // allow a mode for move-only visibility without zooming.
-        const sal_Int32 nPercentBorder(30);
-        const ::tools::Rectangle aInnerRectangle(
-            aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
-            aVisArea.Top() + ((aVisAreaSize.Height() * nPercentBorder) / 200),
-            aVisArea.Right() - ((aVisAreaSize.Width() * nPercentBorder) / 200),
-            aVisArea.Bottom() - ((aVisAreaSize.Height() * nPercentBorder) / 200)
-            );
-        Point aNewPos(aVisArea.TopLeft());
-
-        if(nFreeSpaceX < 0)
+        if(aInnerRectangle.Left() > rRect.Right())
         {
-            if(aInnerRectangle.Left() > rRect.Right())
-            {
-                // object moves out to the left
-                aNewPos.AdjustX( -(aVisAreaSize.Width() / 2) );
-            }
+            // object moves out to the left
+            aNewPos.AdjustX( -(aVisAreaSize.Width() / 2) );
+        }
 
-            if(aInnerRectangle.Right() < rRect.Left())
-            {
-                // object moves out to the right
-                aNewPos.AdjustX(aVisAreaSize.Width() / 2 );
-            }
+        if(aInnerRectangle.Right() < rRect.Left())
+        {
+            // object moves out to the right
+            aNewPos.AdjustX(aVisAreaSize.Width() / 2 );
+        }
+    }
+    else
+    {
+        if(nFreeSpaceX > rRect.GetWidth())
+        {
+            nFreeSpaceX = rRect.GetWidth();
+        }
+
+        if(nFreeSpaceX <= 0)
+        {
+            SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
         }
         else
         {
-            if(nFreeSpaceX > rRect.GetWidth())
+            const long distRight(rRect.Right() - aNewPos.X() - aVisAreaSize.Width());
+
+            if(distRight > 0)
             {
-                nFreeSpaceX = rRect.GetWidth();
+                long mult = (distRight / nFreeSpaceX) + 1;
+                aNewPos.AdjustX(mult * nFreeSpaceX );
             }
 
-            if(nFreeSpaceX <= 0)
+            const long distLeft(aNewPos.X() - rRect.Left());
+
+            if(distLeft > 0)
             {
-                SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
-            }
-            else
-            {
-                const long distRight(rRect.Right() - aNewPos.X() - aVisAreaSize.Width());
-
-                if(distRight > 0)
-                {
-                    long mult = (distRight / nFreeSpaceX) + 1;
-                    aNewPos.AdjustX(mult * nFreeSpaceX );
-                }
-
-                const long distLeft(aNewPos.X() - rRect.Left());
-
-                if(distLeft > 0)
-                {
-                    long mult = (distLeft / nFreeSpaceX) + 1;
-                    aNewPos.AdjustX( -(mult * nFreeSpaceX) );
-                }
+                long mult = (distLeft / nFreeSpaceX) + 1;
+                aNewPos.AdjustX( -(mult * nFreeSpaceX) );
             }
         }
+    }
 
-        if(nFreeSpaceY < 0)
+    if(nFreeSpaceY < 0)
+    {
+        if(aInnerRectangle.Top() > rRect.Bottom())
         {
-            if(aInnerRectangle.Top() > rRect.Bottom())
-            {
-                // object moves out to the top
-                aNewPos.AdjustY( -(aVisAreaSize.Height() / 2) );
-            }
+            // object moves out to the top
+            aNewPos.AdjustY( -(aVisAreaSize.Height() / 2) );
+        }
 
-            if(aInnerRectangle.Bottom() < rRect.Top())
-            {
-                // object moves out to the right
-                aNewPos.AdjustY(aVisAreaSize.Height() / 2 );
-            }
+        if(aInnerRectangle.Bottom() < rRect.Top())
+        {
+            // object moves out to the right
+            aNewPos.AdjustY(aVisAreaSize.Height() / 2 );
+        }
+    }
+    else
+    {
+        if(nFreeSpaceY > rRect.GetHeight())
+        {
+            nFreeSpaceY = rRect.GetHeight();
+        }
+
+        if(nFreeSpaceY <= 0)
+        {
+            SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
         }
         else
         {
-            if(nFreeSpaceY > rRect.GetHeight())
+            const long distBottom(rRect.Bottom() - aNewPos.Y() - aVisAreaSize.Height());
+
+            if(distBottom > 0)
             {
-                nFreeSpaceY = rRect.GetHeight();
+                long mult = (distBottom / nFreeSpaceY) + 1;
+                aNewPos.AdjustY(mult * nFreeSpaceY );
             }
 
-            if(nFreeSpaceY <= 0)
+            const long distTop(aNewPos.Y() - rRect.Top());
+
+            if(distTop > 0)
             {
-                SAL_WARN("sd", "The given Rectangle contains values that lead to numerical overflows (!)");
-            }
-            else
-            {
-                const long distBottom(rRect.Bottom() - aNewPos.Y() - aVisAreaSize.Height());
-
-                if(distBottom > 0)
-                {
-                    long mult = (distBottom / nFreeSpaceY) + 1;
-                    aNewPos.AdjustY(mult * nFreeSpaceY );
-                }
-
-                const long distTop(aNewPos.Y() - rRect.Top());
-
-                if(distTop > 0)
-                {
-                    long mult = (distTop / nFreeSpaceY) + 1;
-                    aNewPos.AdjustY( -(mult * nFreeSpaceY) );
-                }
+                long mult = (distTop / nFreeSpaceY) + 1;
+                aNewPos.AdjustY( -(mult * nFreeSpaceY) );
             }
         }
+    }
 
-        // did position change? Does it need to be set?
-        if(aNewPos != aVisArea.TopLeft())
-        {
-            aVisArea.SetPos(aNewPos);
-            SetZoomRect(aVisArea);
-        }
+    // did position change? Does it need to be set?
+    if(aNewPos != aVisArea.TopLeft())
+    {
+        aVisArea.SetPos(aNewPos);
+        SetZoomRect(aVisArea);
     }
 }
 

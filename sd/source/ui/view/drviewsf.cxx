@@ -679,61 +679,61 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     rSet.Put( aAllSet, false );
 
     // there were changes at area and/or line attributes
-    if( bAttr && pSet )
+    if( !(bAttr && pSet) )
+        return;
+
+    // if the view owns selected objects, corresponding items have to be
+    // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
+    if( mpDrawView->AreObjectsMarked() )
     {
-        // if the view owns selected objects, corresponding items have to be
-        // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
-        if( mpDrawView->AreObjectsMarked() )
+        SfxWhichIter aNewIter( *pSet );
+        nWhich = aNewIter.FirstWhich();
+        while( nWhich )
         {
-            SfxWhichIter aNewIter( *pSet );
-            nWhich = aNewIter.FirstWhich();
-            while( nWhich )
+            if (nWhich >= XATTR_LINE_FIRST && nWhich <= XATTR_LINE_LAST
+                && SfxItemState::DEFAULT == pSet->GetItemState(nWhich) )
             {
-                if (nWhich >= XATTR_LINE_FIRST && nWhich <= XATTR_LINE_LAST
-                    && SfxItemState::DEFAULT == pSet->GetItemState(nWhich) )
-                {
-                    rSet.ClearItem( nWhich );
-                    rSet.DisableItem( nWhich );
-                }
-                nWhich = aNewIter.NextWhich();
+                rSet.ClearItem( nWhich );
+                rSet.DisableItem( nWhich );
             }
+            nWhich = aNewIter.NextWhich();
         }
+    }
 
-        SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
-        if ( eState == SfxItemState::DONTCARE )
-        {
-            rSet.InvalidateItem(EE_PARA_LRSPACE);
-            rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
-        }
-        eState = pSet->GetItemState( EE_PARA_SBL );
-        if ( eState == SfxItemState::DONTCARE )
-        {
-            rSet.InvalidateItem(EE_PARA_SBL);
-            rSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
-        }
-        eState = pSet->GetItemState( EE_PARA_ULSPACE );
-        if ( eState == SfxItemState::DONTCARE )
-        {
-            rSet.InvalidateItem(EE_PARA_ULSPACE);
-            rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
-        }
+    SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
+    if ( eState == SfxItemState::DONTCARE )
+    {
+        rSet.InvalidateItem(EE_PARA_LRSPACE);
+        rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
+    }
+    eState = pSet->GetItemState( EE_PARA_SBL );
+    if ( eState == SfxItemState::DONTCARE )
+    {
+        rSet.InvalidateItem(EE_PARA_SBL);
+        rSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
+    }
+    eState = pSet->GetItemState( EE_PARA_ULSPACE );
+    if ( eState == SfxItemState::DONTCARE )
+    {
+        rSet.InvalidateItem(EE_PARA_ULSPACE);
+        rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
+    }
 
-        SvxEscapement eEsc = static_cast<SvxEscapement>(pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
-        if( eEsc == SvxEscapement::Superscript )
-        {
-            rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-        }
-        else if( eEsc == SvxEscapement::Subscript )
-        {
-            rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
-        }
+    SvxEscapement eEsc = static_cast<SvxEscapement>(pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
+    if( eEsc == SvxEscapement::Superscript )
+    {
+        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
+    }
+    else if( eEsc == SvxEscapement::Subscript )
+    {
+        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
+    }
 
-        eState = pSet->GetItemState( EE_CHAR_KERNING );
-        if ( eState == SfxItemState::DONTCARE )
-        {
-            rSet.InvalidateItem(EE_CHAR_KERNING);
-            rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);
-        }
+    eState = pSet->GetItemState( EE_CHAR_KERNING );
+    if ( eState == SfxItemState::DONTCARE )
+    {
+        rSet.InvalidateItem(EE_CHAR_KERNING);
+        rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);
     }
 }
 

@@ -85,33 +85,33 @@ void WindowUpdater::Update (
 
 void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 {
-    if (pDevice != nullptr)
+    if (pDevice == nullptr)
+        return;
+
+    SvtCTLOptions::TextNumerals aNumeralMode (maCTLOptions.GetCTLTextNumerals());
+
+    LanguageType aLanguage;
+    // Now this is a bit confusing.  The numerals in arabic languages
+    // are Hindi numerals and what the western world generally uses are
+    // arabic numerals.  The digits used in the Hindi language are not
+    // used at all.
+    switch (aNumeralMode)
     {
-        SvtCTLOptions::TextNumerals aNumeralMode (maCTLOptions.GetCTLTextNumerals());
+        case SvtCTLOptions::NUMERALS_HINDI:
+            aLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
+            break;
 
-        LanguageType aLanguage;
-        // Now this is a bit confusing.  The numerals in arabic languages
-        // are Hindi numerals and what the western world generally uses are
-        // arabic numerals.  The digits used in the Hindi language are not
-        // used at all.
-        switch (aNumeralMode)
-        {
-            case SvtCTLOptions::NUMERALS_HINDI:
-                aLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
-                break;
+        case SvtCTLOptions::NUMERALS_SYSTEM:
+            aLanguage = LANGUAGE_SYSTEM;
+            break;
 
-            case SvtCTLOptions::NUMERALS_SYSTEM:
-                aLanguage = LANGUAGE_SYSTEM;
-                break;
-
-            case SvtCTLOptions::NUMERALS_ARABIC:
-            default:
-                aLanguage = LANGUAGE_ENGLISH;
-                break;
-        }
-
-        pDevice->SetDigitLanguage (aLanguage);
+        case SvtCTLOptions::NUMERALS_ARABIC:
+        default:
+            aLanguage = LANGUAGE_ENGLISH;
+            break;
     }
+
+    pDevice->SetDigitLanguage (aLanguage);
 }
 
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )

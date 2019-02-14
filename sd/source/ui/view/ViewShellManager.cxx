@@ -439,26 +439,26 @@ void ViewShellManager::Implementation::DeactivateViewShell (const ViewShell& rSh
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rShell)));
-    if (iShell != maActiveViewShells.end())
+    if (iShell == maActiveViewShells.end())
+        return;
+
+    UpdateLock aLocker (*this);
+
+    ShellDescriptor aDescriptor(*iShell);
+    mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
+    maActiveViewShells.erase(iShell);
+    TakeShellsFromStack(aDescriptor.mpShell);
+
+    // Deactivate sub shells.
+    SubShellList::iterator iList (maActiveSubShells.find(&rShell));
+    if (iList != maActiveSubShells.end())
     {
-        UpdateLock aLocker (*this);
-
-        ShellDescriptor aDescriptor(*iShell);
-        mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
-        maActiveViewShells.erase(iShell);
-        TakeShellsFromStack(aDescriptor.mpShell);
-
-        // Deactivate sub shells.
-        SubShellList::iterator iList (maActiveSubShells.find(&rShell));
-        if (iList != maActiveSubShells.end())
-        {
-            SubShellSubList& rList (iList->second);
-            while ( ! rList.empty())
-                DeactivateSubShell(rShell, rList.front().mnId);
-        }
-
-        DestroyViewShell(aDescriptor);
+        SubShellSubList& rList (iList->second);
+        while ( ! rList.empty())
+            DeactivateSubShell(rShell, rList.front().mnId);
     }
+
+    DestroyViewShell(aDescriptor);
 }
 
 void ViewShellManager::Implementation::ActivateShell (SfxShell& rShell)
@@ -489,26 +489,26 @@ void ViewShellManager::Implementation::DeactivateShell (const SfxShell& rShell)
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rShell)));
-    if (iShell != maActiveViewShells.end())
+    if (iShell == maActiveViewShells.end())
+        return;
+
+    UpdateLock aLocker (*this);
+
+    ShellDescriptor aDescriptor(*iShell);
+    mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
+    maActiveViewShells.erase(iShell);
+    TakeShellsFromStack(aDescriptor.mpShell);
+
+    // Deactivate sub shells.
+    SubShellList::iterator iList (maActiveSubShells.find(&rShell));
+    if (iList != maActiveSubShells.end())
     {
-        UpdateLock aLocker (*this);
-
-        ShellDescriptor aDescriptor(*iShell);
-        mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
-        maActiveViewShells.erase(iShell);
-        TakeShellsFromStack(aDescriptor.mpShell);
-
-        // Deactivate sub shells.
-        SubShellList::iterator iList (maActiveSubShells.find(&rShell));
-        if (iList != maActiveSubShells.end())
-        {
-            SubShellSubList& rList (iList->second);
-            while ( ! rList.empty())
-                DeactivateSubShell(rShell, rList.front().mnId);
-        }
-
-        DestroyViewShell(aDescriptor);
+        SubShellSubList& rList (iList->second);
+        while ( ! rList.empty())
+            DeactivateSubShell(rShell, rList.front().mnId);
     }
+
+    DestroyViewShell(aDescriptor);
 }
 
 void ViewShellManager::Implementation::ActivateSubShell (
@@ -817,38 +817,38 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
             break;
     }
 
-    if (pShell != nullptr)
+    if (pShell == nullptr)
+        return;
+
+    // 1. Deactivate our shells on the stack before they are removed so
+    // that during the Deactivation() calls the stack is still intact.
+    for (sal_uInt16 nIndex=0; true; nIndex++)
     {
-        // 1. Deactivate our shells on the stack before they are removed so
-        // that during the Deactivation() calls the stack is still intact.
-        for (sal_uInt16 nIndex=0; true; nIndex++)
-        {
-            SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
-            Deactivate(pShellOnStack);
-            if (pShellOnStack == pShell)
-                break;
-        }
-
-        // 2. Remove the shells from the stack.
-        while (true)
-        {
-            SfxShell* pShellOnStack = mrBase.GetSubShell(0);
-            SAL_INFO("sd.view", OSL_THIS_FUNC << "removing shell " << pShellOnStack << " from stack");
-            mrBase.RemoveSubShell(pShellOnStack);
-            if (pShellOnStack == pShell)
-                break;
-        }
-
-        // 3. Update the stack.
-        if (mrBase.GetDispatcher() != nullptr)
-            mrBase.GetDispatcher()->Flush();
-
-        // Update the pointer to the top-most shell and set its undo manager
-        // to the one of the previous top-most shell.
-        mpTopShell = mrBase.GetSubShell(0);
-        if (mpTopShell!=nullptr && pUndoManager!=nullptr && mpTopShell->GetUndoManager()==nullptr)
-            mpTopShell->SetUndoManager(pUndoManager);
+        SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
+        Deactivate(pShellOnStack);
+        if (pShellOnStack == pShell)
+            break;
     }
+
+    // 2. Remove the shells from the stack.
+    while (true)
+    {
+        SfxShell* pShellOnStack = mrBase.GetSubShell(0);
+        SAL_INFO("sd.view", OSL_THIS_FUNC << "removing shell " << pShellOnStack << " from stack");
+        mrBase.RemoveSubShell(pShellOnStack);
+        if (pShellOnStack == pShell)
+            break;
+    }
+
+    // 3. Update the stack.
+    if (mrBase.GetDispatcher() != nullptr)
+        mrBase.GetDispatcher()->Flush();
+
+    // Update the pointer to the top-most shell and set its undo manager
+    // to the one of the previous top-most shell.
+    mpTopShell = mrBase.GetSubShell(0);
+    if (mpTopShell!=nullptr && pUndoManager!=nullptr && mpTopShell->GetUndoManager()==nullptr)
+        mpTopShell->SetUndoManager(pUndoManager);
 
 #if OSL_DEBUG_LEVEL >= 2
     SAL_INFO("sd.view", OSL_THIS_FUNC << "Sfx shell stack is:");

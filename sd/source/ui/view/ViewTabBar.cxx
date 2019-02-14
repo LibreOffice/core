@@ -497,17 +497,17 @@ void ViewTabBar::UpdateActiveButton()
     if (mpViewShellBase != nullptr)
         xView = FrameworkHelper::Instance(*mpViewShellBase)->GetView(
             mxViewTabBarId->getAnchor());
-    if (xView.is())
+    if (!xView.is())
+        return;
+
+    Reference<XResourceId> xViewId (xView->getResourceId());
+    for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
-        Reference<XResourceId> xViewId (xView->getResourceId());
-        for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
         {
-            if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
-            {
-                mpTabControl->SetCurPageId(nIndex+1);
-                mpTabControl->::TabControl::ActivatePage();
-                break;
-            }
+            mpTabControl->SetCurPageId(nIndex+1);
+            mpTabControl->::TabControl::ActivatePage();
+            break;
         }
     }
 }
