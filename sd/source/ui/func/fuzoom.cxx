@@ -50,7 +50,8 @@ FuZoom::FuZoom(
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       bVisible(false),
-      bStartDrag(false)
+      bStartDrag(false),
+      aPtr(PointerStyle::Arrow)
 {
 }
 

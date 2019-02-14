@@ -22,7 +22,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-VCLXPointer::VCLXPointer()
+VCLXPointer::VCLXPointer() : maPointer(PointerStyle::Arrow)
 {
 }
 

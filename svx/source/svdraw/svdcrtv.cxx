@@ -198,7 +198,8 @@ SdrCreateView::SdrCreateView(
     SdrModel& rSdrModel,
     OutputDevice* pOut)
 :   SdrDragView(rSdrModel, pOut),
-    mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
+    mpCreateViewExtraData(new ImpSdrCreateViewExtraData()),
+    aCurrentCreatePointer(PointerStyle::Arrow)
 {
     ImpClearVars();
 }
