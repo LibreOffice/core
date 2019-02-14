@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/envelp/labprt \
     sw/source/ui/envelp/mailmrge \
     sw/source/ui/fldui/DropDownFieldDialog \
+    sw/source/ui/fldui/DropDownFormFieldDialog \
     sw/source/ui/fldui/FldRefTreeListBox \
     sw/source/ui/fldui/changedb \
     sw/source/ui/fldui/flddb \
