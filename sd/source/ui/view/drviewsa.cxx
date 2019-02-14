@@ -723,24 +723,24 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId()==SfxHintId::ModeChanged)
+    if (rHint.GetId()!=SfxHintId::ModeChanged)
+        return;
+
+    // Change to selection when turning on read-only mode.
+    if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )
     {
-        // Change to selection when turning on read-only mode.
-        if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )
-        {
-            SfxRequest aReq(SID_OBJECT_SELECT, SfxCallMode::SLOT, GetDoc()->GetItemPool());
-            FuPermanent(aReq);
-        }
+        SfxRequest aReq(SID_OBJECT_SELECT, SfxCallMode::SLOT, GetDoc()->GetItemPool());
+        FuPermanent(aReq);
+    }
 
-        // Turn on design mode when document is not read-only.
-        if (GetDocSh()->IsReadOnly() != mbReadOnly )
-        {
-            mbReadOnly = GetDocSh()->IsReadOnly();
+    // Turn on design mode when document is not read-only.
+    if (GetDocSh()->IsReadOnly() != mbReadOnly )
+    {
+        mbReadOnly = GetDocSh()->IsReadOnly();
 
-            SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
-            GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
-        }
+        SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
+        GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
     }
 
 }

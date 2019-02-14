@@ -111,68 +111,68 @@ void DrawViewShell::AssignFrom3DWindow()
 {
     sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWin = GetViewFrame()->GetChildWindow( nId );
-    if( pWin )
+    if( !pWin )
+        return;
+
+    Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWin->GetWindow() );
+    if( !(p3DWin && GetView()) )
+        return;
+
+    if(!GetView()->IsPresObjSelected())
     {
-        Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWin->GetWindow() );
-        if( p3DWin && GetView() )
+        SfxItemSet aSet( GetDoc()->GetPool(),
+            svl::Items<SDRATTR_START,  SDRATTR_END>{});
+        p3DWin->GetAttr( aSet );
+
+        // own UNDO-compounding also around transformation in 3D
+        GetView()->BegUndo(SdResId(STR_UNDO_APPLY_3D_FAVOURITE));
+
+        if(GetView()->IsConvertTo3DObjPossible())
         {
-            if(!GetView()->IsPresObjSelected())
-            {
-                SfxItemSet aSet( GetDoc()->GetPool(),
-                    svl::Items<SDRATTR_START,  SDRATTR_END>{});
-                p3DWin->GetAttr( aSet );
+            // assign only text-attribute
+            SfxItemSet aTextSet( GetDoc()->GetPool(),
+                svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+            aTextSet.Put( aSet, false );
+            GetView()->SetAttributes( aTextSet );
 
-                // own UNDO-compounding also around transformation in 3D
-                GetView()->BegUndo(SdResId(STR_UNDO_APPLY_3D_FAVOURITE));
+            // transform text into 3D
+            sal_uInt16 nSId = SID_CONVERT_TO_3D;
+            SfxBoolItem aItem( nSId, true );
+            GetViewFrame()->GetDispatcher()->ExecuteList(
+                nSId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                { &aItem });
 
-                if(GetView()->IsConvertTo3DObjPossible())
-                {
-                    // assign only text-attribute
-                    SfxItemSet aTextSet( GetDoc()->GetPool(),
-                        svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
-                    aTextSet.Put( aSet, false );
-                    GetView()->SetAttributes( aTextSet );
+            // Determine if a FILL attribute is set.
+            // If not, hard set a fill attribute
+            drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
+            if(eFillStyle == drawing::FillStyle_NONE)
+                aSet.Put(XFillStyleItem (drawing::FillStyle_SOLID));
 
-                    // transform text into 3D
-                    sal_uInt16 nSId = SID_CONVERT_TO_3D;
-                    SfxBoolItem aItem( nSId, true );
-                    GetViewFrame()->GetDispatcher()->ExecuteList(
-                        nSId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                        { &aItem });
-
-                    // Determine if a FILL attribute is set.
-                    // If not, hard set a fill attribute
-                    drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
-                    if(eFillStyle == drawing::FillStyle_NONE)
-                        aSet.Put(XFillStyleItem (drawing::FillStyle_SOLID));
-
-                    // remove some 3DSCENE attributes since these were
-                    // created by convert to 3D and may not be changed
-                    // to the defaults again.
-                    aSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
-                    aSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
-                    aSet.ClearItem(SDRATTR_3DOBJ_DEPTH);
-                }
-
-                // assign attribute
-                GetView()->Set3DAttributes( aSet );
-
-                // end UNDO
-                GetView()->EndUndo();
-            }
-            else
-            {
-                vcl::Window* pWindow = GetActiveWindow();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
-                                                              VclMessageType::Info, VclButtonsType::Ok,
-                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
-                xInfoBox->run();
-            }
-
-            // get focus back
-            GetActiveWindow()->GrabFocus();
+            // remove some 3DSCENE attributes since these were
+            // created by convert to 3D and may not be changed
+            // to the defaults again.
+            aSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
+            aSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
+            aSet.ClearItem(SDRATTR_3DOBJ_DEPTH);
         }
+
+        // assign attribute
+        GetView()->Set3DAttributes( aSet );
+
+        // end UNDO
+        GetView()->EndUndo();
     }
+    else
+    {
+        vcl::Window* pWindow = GetActiveWindow();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SdResId(STR_ACTION_NOTPOSSIBLE)));
+        xInfoBox->run();
+    }
+
+    // get focus back
+    GetActiveWindow()->GrabFocus();
 }
 
 }

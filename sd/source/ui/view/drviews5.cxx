@@ -594,20 +594,20 @@ int DrawViewShell::GetActiveTabLayerIndex() const
 void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 {
     LayerTabBar* pBar = GetLayerTabControl ();
-    if (pBar != nullptr)
+    if (pBar == nullptr)
+        return;
+
+    // Ignore invalid indices silently.
+    if (nIndex>=0 && nIndex<pBar->GetPageCount())
     {
-        // Ignore invalid indices silently.
-        if (nIndex>=0 && nIndex<pBar->GetPageCount())
-        {
-            // Tell the draw view and the tab control of the new active layer.
-            mpDrawView->SetActiveLayer (pBar->GetLayerName (pBar->GetPageId (static_cast<sal_uInt16>(nIndex))));
-            pBar->SetCurPageId (pBar->GetPageId (static_cast<sal_uInt16>(nIndex)));
-            rtl::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
-                *this,
-                *GetView()));
-            css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
-            GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
-        }
+        // Tell the draw view and the tab control of the new active layer.
+        mpDrawView->SetActiveLayer (pBar->GetLayerName (pBar->GetPageId (static_cast<sal_uInt16>(nIndex))));
+        pBar->SetCurPageId (pBar->GetPageId (static_cast<sal_uInt16>(nIndex)));
+        rtl::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
+            *this,
+            *GetView()));
+        css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
+        GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
     }
 }
 

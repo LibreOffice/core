@@ -458,35 +458,35 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
     // execute ??
-    if (mnLockRedrawSmph == 0)
+    if (mnLockRedrawSmph != 0)
+        return;
+
+    SdrPageView* pPgView = GetSdrPageView();
+
+    if (pPgView)
     {
-        SdrPageView* pPgView = GetSdrPageView();
-
-        if (pPgView)
+        SdPage* pPage = static_cast<SdPage*>( pPgView->GetPage() );
+        if( pPage )
         {
-            SdPage* pPage = static_cast<SdPage*>( pPgView->GetPage() );
-            if( pPage )
-            {
-                SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
-                bool bScreenDisplay(true);
+            SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
+            bool bScreenDisplay(true);
 
-                // #i75566# printing; suppress AutoColor BackgroundColor generation
-                // for visibility reasons by giving GetPageBackgroundColor()
-                // the needed hint
-                // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
-                if (pOutDev && ((OUTDEV_PRINTER == pOutDev->GetOutDevType())
-                        || (OUTDEV_PDF == pOutDev->GetOutDevType())))
-                    bScreenDisplay = false;
+            // #i75566# printing; suppress AutoColor BackgroundColor generation
+            // for visibility reasons by giving GetPageBackgroundColor()
+            // the needed hint
+            // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
+            if (pOutDev && ((OUTDEV_PRINTER == pOutDev->GetOutDevType())
+                    || (OUTDEV_PDF == pOutDev->GetOutDevType())))
+                bScreenDisplay = false;
 
-                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
-                // hint value if screen display. Only then the AutoColor mechanisms shall be applied
-                rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
-            }
+            // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+            // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+            rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
         }
-
-        ViewRedirector aViewRedirector;
-        FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
     }
+
+    ViewRedirector aViewRedirector;
+    FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
 }
 
 void View::MarkListHasChanged()
@@ -911,37 +911,37 @@ void View::SetMarkedOriginalSize()
  */
 void View::DoConnect(SdrOle2Obj* pObj)
 {
-    if (mpViewSh)
+    if (!mpViewSh)
+        return;
+
+    uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
+    if( !xObj.is() )
+        return;
+
+    ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
+    SfxInPlaceClient* pSdClient = mpViewSh-> GetViewShellBase().FindIPClient( xObj, pWindow );
+    if ( pSdClient )
+        return;
+
+    pSdClient = new Client(pObj, mpViewSh, pWindow);
+    ::tools::Rectangle aRect = pObj->GetLogicRect();
     {
-        uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
-        if( xObj.is() )
-        {
-            ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
-            SfxInPlaceClient* pSdClient = mpViewSh-> GetViewShellBase().FindIPClient( xObj, pWindow );
-            if ( !pSdClient )
-            {
-                pSdClient = new Client(pObj, mpViewSh, pWindow);
-                ::tools::Rectangle aRect = pObj->GetLogicRect();
-                {
-                    // TODO/LEAN: working with visual area can switch object to running state
-                    Size aDrawSize = aRect.GetSize();
+        // TODO/LEAN: working with visual area can switch object to running state
+        Size aDrawSize = aRect.GetSize();
 
-                    MapMode aMapMode( mrDoc.GetScaleUnit() );
-                    Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
+        MapMode aMapMode( mrDoc.GetScaleUnit() );
+        Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
-                    Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-                    Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
-                    aScaleHeight.ReduceInaccurate(10);
-                    pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
+        Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+        Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+        aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
+        aScaleHeight.ReduceInaccurate(10);
+        pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
-                    // visible area is only changed in-place!
-                    // the object area must be set after the scaling, since it triggers resize
-                    aRect.SetSize(aObjAreaSize);
-                    pSdClient->SetObjArea(aRect);
-                }
-            }
-        }
+        // visible area is only changed in-place!
+        // the object area must be set after the scaling, since it triggers resize
+        aRect.SetSize(aObjAreaSize);
+        pSdClient->SetObjArea(aRect);
     }
 }
 
@@ -1014,44 +1014,44 @@ bool View::IsVectorizeAllowed() const
 
 void View::onAccessibilityOptionsChanged()
 {
-    if( mpViewSh )
+    if( !mpViewSh )
+        return;
+
+    ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
+    if( !pWindow )
+        return;
+
+    const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+
+    sal_uInt16 nOutputSlot, nPreviewSlot;
+
+    SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
+
+    if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
     {
-        ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
-        if( pWindow )
+        if( rStyleSettings.GetHighContrastMode() )
         {
-            const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
-
-            sal_uInt16 nOutputSlot, nPreviewSlot;
-
-            SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
-
-            if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
-            {
-                if( rStyleSettings.GetHighContrastMode() )
-                {
-                    nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
-                }
-                else
-                {
-                    nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
-                }
-
-                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
-                {
-                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-                }
-                else
-                {
-                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-                }
-
-                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SfxCallMode::ASYNCHRON );
-                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SfxCallMode::ASYNCHRON );
-            }
-
-            mpViewSh->Invalidate();
+            nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
         }
+        else
+        {
+            nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
+        }
+
+        if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+        {
+            nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+        }
+        else
+        {
+            nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+        }
+
+        mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SfxCallMode::ASYNCHRON );
+        mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SfxCallMode::ASYNCHRON );
     }
+
+    mpViewSh->Invalidate();
 }
 
 IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, aParam, void )

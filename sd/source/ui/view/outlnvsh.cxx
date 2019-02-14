@@ -255,31 +255,31 @@ void OutlineViewShell::ArrangeGUIElements ()
     ViewShell::ArrangeGUIElements ();
 
     ::sd::Window* pWindow = mpContentWindow.get();
-    if (pWindow != nullptr)
+    if (pWindow == nullptr)
+        return;
+
+    pWindow->SetMinZoomAutoCalc(false);
+
+    // change OutputArea of the OutlinerView
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+
+    ::tools::Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
+
+    aWin = pWindow->PixelToLogic(aWin);
+    pOutlinerView->SetOutputArea(aWin);
+
+    ::tools::Rectangle aVis = pOutlinerView->GetVisArea();
+
+    ::tools::Rectangle aText = ::tools::Rectangle(Point(0,0),
+        Size(pOlView->GetPaperWidth(),
+            pOlView->GetOutliner().GetTextHeight()));
+    if (aWin.GetHeight() > aText.Bottom())
+        aText.SetBottom( aWin.GetHeight() );
+
+    if (!aWin.IsEmpty())            // not when opening
     {
-        pWindow->SetMinZoomAutoCalc(false);
-
-        // change OutputArea of the OutlinerView
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
-
-        ::tools::Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-
-        aWin = pWindow->PixelToLogic(aWin);
-        pOutlinerView->SetOutputArea(aWin);
-
-        ::tools::Rectangle aVis = pOutlinerView->GetVisArea();
-
-        ::tools::Rectangle aText = ::tools::Rectangle(Point(0,0),
-            Size(pOlView->GetPaperWidth(),
-                pOlView->GetOutliner().GetTextHeight()));
-        if (aWin.GetHeight() > aText.Bottom())
-            aText.SetBottom( aWin.GetHeight() );
-
-        if (!aWin.IsEmpty())            // not when opening
-        {
-            InitWindows(Point(0,0), aText.GetSize(), aVis.TopLeft());
-            UpdateScrollBars();
-        }
+        InitWindows(Point(0,0), aText.GetSize(), aVis.TopLeft());
+        UpdateScrollBars();
     }
 }
 
@@ -380,30 +380,30 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
 
-    if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
+    if ( !(SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
          SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
          SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HIRAGANA) ||
-         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA) )
+         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA)) )
+        return;
+
+    SvtCJKOptions aCJKOptions;
+    if( !aCJKOptions.IsChangeCaseMapEnabled() )
     {
-        SvtCJKOptions aCJKOptions;
-        if( !aCJKOptions.IsChangeCaseMapEnabled() )
-        {
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, false );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, false );
-            rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
-            rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
-            rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
-            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
-        }
-        else
-        {
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, true );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, true );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, true );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, true );
-        }
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, false );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, false );
+        rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
+        rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
+        rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
+        rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+    }
+    else
+    {
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, true );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, true );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, true );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, true );
     }
 }
 

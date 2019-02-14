@@ -117,32 +117,32 @@ static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone>& aConnectorCo
 // restrict movement to WorkArea
 static void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle& rWorkArea)
 {
-    if(!rWorkArea.IsEmpty())
+    if(rWorkArea.IsEmpty())
+        return;
+
+    ::tools::Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
+
+    if(aMarkRect.IsInside(rWorkArea))
+        return;
+
+    if(aMarkRect.Left() < rWorkArea.Left())
     {
-        ::tools::Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
+        rPos.AdjustX(rWorkArea.Left() - aMarkRect.Left() );
+    }
 
-        if(!aMarkRect.IsInside(rWorkArea))
-        {
-            if(aMarkRect.Left() < rWorkArea.Left())
-            {
-                rPos.AdjustX(rWorkArea.Left() - aMarkRect.Left() );
-            }
+    if(aMarkRect.Right() > rWorkArea.Right())
+    {
+        rPos.AdjustX( -(aMarkRect.Right() - rWorkArea.Right()) );
+    }
 
-            if(aMarkRect.Right() > rWorkArea.Right())
-            {
-                rPos.AdjustX( -(aMarkRect.Right() - rWorkArea.Right()) );
-            }
+    if(aMarkRect.Top() < rWorkArea.Top())
+    {
+        rPos.AdjustY(rWorkArea.Top() - aMarkRect.Top() );
+    }
 
-            if(aMarkRect.Top() < rWorkArea.Top())
-            {
-                rPos.AdjustY(rWorkArea.Top() - aMarkRect.Top() );
-            }
-
-            if(aMarkRect.Bottom() > rWorkArea.Bottom())
-            {
-                rPos.AdjustY( -(aMarkRect.Bottom() - rWorkArea.Bottom()) );
-            }
-        }
+    if(aMarkRect.Bottom() > rWorkArea.Bottom())
+    {
+        rPos.AdjustY( -(aMarkRect.Bottom() - rWorkArea.Bottom()) );
     }
 }
 

@@ -1682,60 +1682,60 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 {
     SdPage *pPage = getCurrentPage();
 
-    if (pPage != nullptr && GetDoc() != nullptr)
+    if (pPage == nullptr || GetDoc() == nullptr)
+        return;
+
+    SvxPageItem aPageItem(SID_ATTR_PAGE);
+    aPageItem.SetLandscape( pPage->GetOrientation() == Orientation::Landscape );
+
+    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
+    rSet.Put(aPageItem);
+
+    const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
+    drawing::FillStyle eXFS = rPageAttr.GetItem( XATTR_FILLSTYLE )->GetValue();
+    XFillStyleItem aFillStyleItem( eXFS );
+    aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
+    rSet.Put(aFillStyleItem);
+
+    switch (eXFS)
     {
-        SvxPageItem aPageItem(SID_ATTR_PAGE);
-        aPageItem.SetLandscape( pPage->GetOrientation() == Orientation::Landscape );
-
-        rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
-        rSet.Put(aPageItem);
-
-        const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
-        drawing::FillStyle eXFS = rPageAttr.GetItem( XATTR_FILLSTYLE )->GetValue();
-        XFillStyleItem aFillStyleItem( eXFS );
-        aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
-        rSet.Put(aFillStyleItem);
-
-        switch (eXFS)
+        case drawing::FillStyle_SOLID:
         {
-            case drawing::FillStyle_SOLID:
-            {
-                Color aColor =  rPageAttr.GetItem( XATTR_FILLCOLOR )->GetColorValue();
-                XFillColorItem aFillColorItem( OUString(), aColor );
-                aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
-                rSet.Put( aFillColorItem );
-            }
-            break;
-
-            case drawing::FillStyle_GRADIENT:
-            {
-                const XFillGradientItem *pGradient =  rPageAttr.GetItem( XATTR_FILLGRADIENT );
-                XFillGradientItem aFillGradientItem( pGradient->GetName(), pGradient->GetGradientValue(), SID_ATTR_PAGE_GRADIENT );
-                rSet.Put( aFillGradientItem );
-            }
-            break;
-
-            case drawing::FillStyle_HATCH:
-            {
-                const XFillHatchItem *pFillHatchItem( rPageAttr.GetItem( XATTR_FILLHATCH ) );
-                XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
-                aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
-                rSet.Put( aFillHatchItem );
-            }
-            break;
-
-            case drawing::FillStyle_BITMAP:
-            {
-                const XFillBitmapItem *pFillBitmapItem = rPageAttr.GetItem( XATTR_FILLBITMAP );
-                XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
-                aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
-                rSet.Put( aFillBitmapItem );
-            }
-            break;
-
-            default:
-            break;
+            Color aColor =  rPageAttr.GetItem( XATTR_FILLCOLOR )->GetColorValue();
+            XFillColorItem aFillColorItem( OUString(), aColor );
+            aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
+            rSet.Put( aFillColorItem );
         }
+        break;
+
+        case drawing::FillStyle_GRADIENT:
+        {
+            const XFillGradientItem *pGradient =  rPageAttr.GetItem( XATTR_FILLGRADIENT );
+            XFillGradientItem aFillGradientItem( pGradient->GetName(), pGradient->GetGradientValue(), SID_ATTR_PAGE_GRADIENT );
+            rSet.Put( aFillGradientItem );
+        }
+        break;
+
+        case drawing::FillStyle_HATCH:
+        {
+            const XFillHatchItem *pFillHatchItem( rPageAttr.GetItem( XATTR_FILLHATCH ) );
+            XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
+            aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
+            rSet.Put( aFillHatchItem );
+        }
+        break;
+
+        case drawing::FillStyle_BITMAP:
+        {
+            const XFillBitmapItem *pFillBitmapItem = rPageAttr.GetItem( XATTR_FILLBITMAP );
+            XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
+            aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
+            rSet.Put( aFillBitmapItem );
+        }
+        break;
+
+        default:
+        break;
     }
 }
 

@@ -51,28 +51,29 @@ namespace sd {
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
-    if( ( dynamic_cast< SdrGrafObj *>( pObj )  != nullptr || dynamic_cast< SdrOle2Obj *>( pObj ) !=  nullptr ) && !mpDrawView->IsTextEdit() &&
-         GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
+    if( ( dynamic_cast< SdrGrafObj *>( pObj ) == nullptr && dynamic_cast< SdrOle2Obj *>( pObj ) == nullptr )
+        || mpDrawView->IsTextEdit()
+        || !GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
+        return;
+
+    Graphic     aGraphic;
+    ImageMap*   pIMap = nullptr;
+    std::unique_ptr<TargetList> pTargetList;
+    SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo( pObj );
+
+    // get graphic from shape
+    SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );
+    if( pGrafObj )
+        aGraphic = pGrafObj->GetGraphic();
+
+    if ( pIMapInfo )
     {
-        Graphic     aGraphic;
-        ImageMap*   pIMap = nullptr;
-        std::unique_ptr<TargetList> pTargetList;
-        SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo( pObj );
-
-        // get graphic from shape
-        SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );
-        if( pGrafObj )
-            aGraphic = pGrafObj->GetGraphic();
-
-        if ( pIMapInfo )
-        {
-            pIMap = const_cast<ImageMap*>(&pIMapInfo->GetImageMap());
-            pTargetList.reset(new TargetList);
-            SfxViewFrame::GetTargetList( *pTargetList );
-        }
-
-        SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList.get(), pObj );
+        pIMap = const_cast<ImageMap*>(&pIMapInfo->GetImageMap());
+        pTargetList.reset(new TargetList);
+        SfxViewFrame::GetTargetList( *pTargetList );
     }
+
+    SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList.get(), pObj );
 }
 
 IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )

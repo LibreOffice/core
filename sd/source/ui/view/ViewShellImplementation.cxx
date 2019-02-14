@@ -246,35 +246,35 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, Page
     if( pPage == nullptr )
         pPage = mrViewShell.getCurrentPage();
 
-    if( pPage )
-    {
-        AutoLayout eLayout = pPage->GetAutoLayout();
+    if( !pPage )
+        return;
 
-        if( pWhatLayout )
-            eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
+    AutoLayout eLayout = pPage->GetAutoLayout();
 
-        // Transform the given request into the four argument form that is
-        // understood by ProcessModifyPageSlot().
-        SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-        SdrLayerID aBackground (rLayerAdmin.GetLayerID(sUNO_LayerName_background));
-        SdrLayerID aBackgroundObject (rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects));
+    if( pWhatLayout )
+        eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
 
-        SdrLayerIDSet aVisibleLayers;
+    // Transform the given request into the four argument form that is
+    // understood by ProcessModifyPageSlot().
+    SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
+    SdrLayerID aBackground (rLayerAdmin.GetLayerID(sUNO_LayerName_background));
+    SdrLayerID aBackgroundObject (rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects));
 
-        if( pPage->GetPageKind() == PageKind::Handout )
-            aVisibleLayers.SetAll();
-        else
-            aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+    SdrLayerIDSet aVisibleLayers;
 
-        SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
-        aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
-        aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
-        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
-        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+    if( pPage->GetPageKind() == PageKind::Handout )
+        aVisibleLayers.SetAll();
+    else
+        aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
 
-        // Forward the call with the new arguments.
-        ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
-    }
+    SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
+    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+    aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
+    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
+    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+
+    // Forward the call with the new arguments.
+    ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
 }
 
 SfxInterfaceId ViewShell::Implementation::GetViewId()

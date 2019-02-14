@@ -139,34 +139,34 @@ ViewShell* Window::GetViewShell()
 void Window::CalcMinZoom()
 {
     // Are we entitled to change the minimal zoom factor?
-    if ( mbMinZoomAutoCalc )
-    {
-        // Get current zoom factor.
-        long nZoom = GetZoom();
+    if ( !mbMinZoomAutoCalc )
+        return;
 
-        // Get the rectangle of the output area in logical coordinates
-        // and calculate the scaling factors that would lead to the view
-        // area (also called application area) to completely fill the
-        // window.
-        Size aWinSize = PixelToLogic(GetOutputSizePixel());
-        sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
-            * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
-        sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
-            * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
+    // Get current zoom factor.
+    long nZoom = GetZoom();
 
-        // Decide whether to take the larger or the smaller factor.
-        sal_uLong nFact = std::min(nX, nY);
+    // Get the rectangle of the output area in logical coordinates
+    // and calculate the scaling factors that would lead to the view
+    // area (also called application area) to completely fill the
+    // window.
+    Size aWinSize = PixelToLogic(GetOutputSizePixel());
+    sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+        * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
+    sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+        * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
 
-        // The factor is transformed according to the current zoom factor.
-        nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-        mnMinZoom = std::max(sal_uInt16(MIN_ZOOM), static_cast<sal_uInt16>(nFact));
+    // Decide whether to take the larger or the smaller factor.
+    sal_uLong nFact = std::min(nX, nY);
 
-        // If the current zoom factor is smaller than the calculated minimal
-        // zoom factor then set the new minimal factor as the current zoom
-        // factor.
-        if ( nZoom < static_cast<long>(mnMinZoom) )
-            SetZoomFactor(mnMinZoom);
-    }
+    // The factor is transformed according to the current zoom factor.
+    nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
+    mnMinZoom = std::max(sal_uInt16(MIN_ZOOM), static_cast<sal_uInt16>(nFact));
+
+    // If the current zoom factor is smaller than the calculated minimal
+    // zoom factor then set the new minimal factor as the current zoom
+    // factor.
+    if ( nZoom < static_cast<long>(mnMinZoom) )
+        SetZoomFactor(mnMinZoom);
 }
 
 void Window::SetMinZoom (long int nMin)
@@ -747,123 +747,123 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
        Omit FONTS and FONTSUBSTITUTION if no text output is available or if the
        document does not allow text.  */
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
+    if ( !((rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
          (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))) )
+        return;
+
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
+    {
+        /* Rearrange or initiate Resize for scroll bars since the size of
+           the scroll bars my have changed. Within this, inside the resize-
+           handler, the size of the scroll bars will be asked from the
+           Settings. */
+        Resize();
+
+        /* Re-set data, which are from system control or from Settings. May
+           have to re-set more data since the resolution may also has
+           changed. */
+        if( mpViewShell )
+        {
+            const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+            SvtAccessibilityOptions aAccOptions;
+            DrawModeFlags           nOutputMode;
+            sal_uInt16              nPreviewSlot;
+
+            if( rStyleSettings.GetHighContrastMode() )
+                nOutputMode = sd::OUTPUT_DRAWMODE_CONTRAST;
+            else
+                nOutputMode = sd::OUTPUT_DRAWMODE_COLOR;
+
+            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+                nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+            else
+                nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+
+            if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
+            {
+                SetDrawMode( nOutputMode );
+                mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
+                Invalidate();
+            }
+
+            // Overwrite window color for OutlineView
+            if( dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr )
+            {
+                svtools::ColorConfig aColorConfig;
+                const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+                SetBackground( Wallpaper( aDocColor ) );
+            }
+
+            SfxRequest aReq( nPreviewSlot, SfxCallMode::SLOT, mpViewShell->GetDocSh()->GetDoc()->GetItemPool() );
+            mpViewShell->ExecReq( aReq );
+            mpViewShell->Invalidate();
+            mpViewShell->ArrangeGUIElements();
+
+            // re-create handles to show new outfit
+            if(dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+            {
+                mpViewShell->GetView()->AdjustMarkHdl();
+            }
+        }
+    }
+
+    if ( (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        {
-            /* Rearrange or initiate Resize for scroll bars since the size of
-               the scroll bars my have changed. Within this, inside the resize-
-               handler, the size of the scroll bars will be asked from the
-               Settings. */
-            Resize();
-
-            /* Re-set data, which are from system control or from Settings. May
-               have to re-set more data since the resolution may also has
-               changed. */
-            if( mpViewShell )
-            {
-                const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-                SvtAccessibilityOptions aAccOptions;
-                DrawModeFlags           nOutputMode;
-                sal_uInt16              nPreviewSlot;
-
-                if( rStyleSettings.GetHighContrastMode() )
-                    nOutputMode = sd::OUTPUT_DRAWMODE_CONTRAST;
-                else
-                    nOutputMode = sd::OUTPUT_DRAWMODE_COLOR;
-
-                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
-                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-                else
-                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-
-                if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
-                {
-                    SetDrawMode( nOutputMode );
-                    mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
-                    Invalidate();
-                }
-
-                // Overwrite window color for OutlineView
-                if( dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr )
-                {
-                    svtools::ColorConfig aColorConfig;
-                    const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
-                    SetBackground( Wallpaper( aDocColor ) );
-                }
-
-                SfxRequest aReq( nPreviewSlot, SfxCallMode::SLOT, mpViewShell->GetDocSh()->GetDoc()->GetItemPool() );
-                mpViewShell->ExecReq( aReq );
-                mpViewShell->Invalidate();
-                mpViewShell->ArrangeGUIElements();
-
-                // re-create handles to show new outfit
-                if(dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
-                {
-                    mpViewShell->GetView()->AdjustMarkHdl();
-                }
-            }
-        }
-
-        if ( (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-             ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-              (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-        {
-            /* Virtual devices, which also depends on the resolution or the
-               system control, should be updated. Otherwise, we should update
-               the virtual devices at least at DataChangedEventType::DISPLAY since some
-               systems allow to change the resolution and color depth during
-               runtime. Or the virtual devices have to be updated when the color
-               palette has changed since a different color matching can be used
-               when outputting. */
-        }
-
-        if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
-        {
-            /* If the document provides font choose boxes, we have to update
-               them. I don't know how this looks like (also not really me, I
-               only translated the comment ;). We may can handle it global. We
-               have to discuss it with PB, but he is ill at the moment.
-               Before we handle it here, discuss it with PB and me. */
-        }
-
-        if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-             (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) )
-        {
-            /* Do reformatting since the fonts of the document may no longer
-               exist, or exist now, or are replaced with others. */
-            if( mpViewShell )
-            {
-                DrawDocShell* pDocSh = mpViewShell->GetDocSh();
-                if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
-            }
-        }
-
-        if ( rDCEvt.GetType() == DataChangedEventType::PRINTER )
-        {
-            /* I don't know how the handling should look like. Maybe we delete a
-               printer and look what we have to do. Maybe I have to add
-               something to the VCL, in case the used printer is deleted.
-               Otherwise I may recalculate the formatting here if the current
-               printer is destroyed. */
-            if( mpViewShell )
-            {
-                DrawDocShell* pDocSh = mpViewShell->GetDocSh();
-                if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
-            }
-        }
-
-        // Update everything
-        Invalidate();
+        /* Virtual devices, which also depends on the resolution or the
+           system control, should be updated. Otherwise, we should update
+           the virtual devices at least at DataChangedEventType::DISPLAY since some
+           systems allow to change the resolution and color depth during
+           runtime. Or the virtual devices have to be updated when the color
+           palette has changed since a different color matching can be used
+           when outputting. */
     }
+
+    if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
+    {
+        /* If the document provides font choose boxes, we have to update
+           them. I don't know how this looks like (also not really me, I
+           only translated the comment ;). We may can handle it global. We
+           have to discuss it with PB, but he is ill at the moment.
+           Before we handle it here, discuss it with PB and me. */
+    }
+
+    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+         (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) )
+    {
+        /* Do reformatting since the fonts of the document may no longer
+           exist, or exist now, or are replaced with others. */
+        if( mpViewShell )
+        {
+            DrawDocShell* pDocSh = mpViewShell->GetDocSh();
+            if( pDocSh )
+                pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
+        }
+    }
+
+    if ( rDCEvt.GetType() == DataChangedEventType::PRINTER )
+    {
+        /* I don't know how the handling should look like. Maybe we delete a
+           printer and look what we have to do. Maybe I have to add
+           something to the VCL, in case the used printer is deleted.
+           Otherwise I may recalculate the formatting here if the current
+           printer is destroyed. */
+        if( mpViewShell )
+        {
+            DrawDocShell* pDocSh = mpViewShell->GetDocSh();
+            if( pDocSh )
+                pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
+        }
+    }
+
+    // Update everything
+    Invalidate();
 }
 
 sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )

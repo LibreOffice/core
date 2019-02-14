@@ -210,29 +210,29 @@ void ImageButtonHdl::onHelpRequest(const HelpEvent& /*rHEvt*/)
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
-    if( pHdlList && pHdlList->GetView())
+    if( !(pHdlList && pHdlList->GetView()))
+        return;
+
+    int nHighlightId = 0;
+    OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
+    if( pDev == nullptr )
+        pDev = Application::GetDefaultDevice();
+
+    Point aMDPos( rMEvt.GetPosPixel() );
+    aMDPos -= pDev->LogicToPixel( GetPos() );
+
+    nHighlightId += aMDPos.X() > maImageSize.Width() ? 1 : 0;
+    nHighlightId += aMDPos.Y() > maImageSize.Height() ? 2 : 0;
+
+    if( mnHighlightId != nHighlightId )
     {
-        int nHighlightId = 0;
-        OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
-        if( pDev == nullptr )
-            pDev = Application::GetDefaultDevice();
+        HideTip();
 
-        Point aMDPos( rMEvt.GetPosPixel() );
-        aMDPos -= pDev->LogicToPixel( GetPos() );
+        mnHighlightId = nHighlightId;
 
-        nHighlightId += aMDPos.X() > maImageSize.Width() ? 1 : 0;
-        nHighlightId += aMDPos.Y() > maImageSize.Height() ? 2 : 0;
+        ShowTip();
 
-        if( mnHighlightId != nHighlightId )
-        {
-            HideTip();
-
-            mnHighlightId = nHighlightId;
-
-            ShowTip();
-
-            Touch();
-        }
+        Touch();
     }
 }
 
@@ -256,35 +256,35 @@ void ImageButtonHdl::CreateB2dIAObject()
     maImageSize.setWidth( maImageSize.Width() >> 1 );
     maImageSize.setHeight( maImageSize.Height() >> 1 );
 
-    if(pHdlList)
+    if(!pHdlList)
+        return;
+
+    SdrMarkView* pView = pHdlList->GetView();
+
+    if(!(pView && !pView->areMarkHandlesHidden()))
+        return;
+
+    SdrPageView* pPageView = pView->GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
     {
-        SdrMarkView* pView = pHdlList->GetView();
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-        if(pView && !pView->areMarkHandlesHidden())
+        SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
+        const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
+        if(rPaintWindow.OutputToWindow() && xManager.is() )
         {
-            SdrPageView* pPageView = pView->GetSdrPageView();
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
+                new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
 
-            if(pPageView)
-            {
-                for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
-                {
-                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
-
-                    SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                    const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
-                    if(rPaintWindow.OutputToWindow() && xManager.is() )
-                    {
-                        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
-                            new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
-
-                        // OVERLAYMANAGER
-                        insertNewlyCreatedOverlayObjectForSdrHdl(
-                            std::move(pOverlayObject),
-                            rPageWindow.GetObjectContact(),
-                            *xManager);
-                    }
-                }
-            }
+            // OVERLAYMANAGER
+            insertNewlyCreatedOverlayObjectForSdrHdl(
+                std::move(pOverlayObject),
+                rPageWindow.GetObjectContact(),
+                *xManager);
         }
     }
 }
@@ -390,44 +390,44 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
 void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    if( mxPlaceholderObj.is() )
-    {
-        SdrObject* pPlaceholder = mxPlaceholderObj.get();
-        SmartTagReference xThis( this );
-        const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
-        const Point aPoint;
+    if( !mxPlaceholderObj.is() )
+        return;
 
-        OutputDevice* pDev = mrView.GetFirstOutputDevice();
-        if( pDev == nullptr )
-            pDev = Application::GetDefaultDevice();
+    SdrObject* pPlaceholder = mxPlaceholderObj.get();
+    SmartTagReference xThis( this );
+    const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
+    const Point aPoint;
 
-        Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
-        long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
-        if( 50 > nShapeSizePix )
-            return;
+    OutputDevice* pDev = mrView.GetFirstOutputDevice();
+    if( pDev == nullptr )
+        pDev = Application::GetDefaultDevice();
 
-        bool bLarge = nShapeSizePix > 250;
+    Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
+    long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
+    if( 50 > nShapeSizePix )
+        return;
 
-        Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
+    bool bLarge = nShapeSizePix > 250;
 
-        const int nColumns = 2;
-        const int nRows = 2;
+    Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
 
-        long all_width = nColumns * aButtonSize.Width();
-        long all_height = nRows * aButtonSize.Height();
+    const int nColumns = 2;
+    const int nRows = 2;
 
-        Point aPos( rSnapRect.Center() );
-        aPos.AdjustX( -(all_width >> 1) );
-        aPos.AdjustY( -(all_height >> 1) );
+    long all_width = nColumns * aButtonSize.Width();
+    long all_height = nRows * aButtonSize.Height();
 
-        std::unique_ptr<ImageButtonHdl> pHdl(new ImageButtonHdl( xThis, aPoint ));
-        pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-        pHdl->SetPageView( mrView.GetSdrPageView() );
+    Point aPos( rSnapRect.Center() );
+    aPos.AdjustX( -(all_width >> 1) );
+    aPos.AdjustY( -(all_height >> 1) );
 
-        pHdl->SetPos( aPos );
+    std::unique_ptr<ImageButtonHdl> pHdl(new ImageButtonHdl( xThis, aPoint ));
+    pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
+    pHdl->SetPageView( mrView.GetSdrPageView() );
 
-        rHandlerList.AddHdl( std::move(pHdl) );
-    }
+    pHdl->SetPos( aPos );
+
+    rHandlerList.AddHdl( std::move(pHdl) );
 }
 
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
