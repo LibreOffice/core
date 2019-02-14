@@ -7899,6 +7899,7 @@ include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/button.hxx
 include/vcl/cairo.hxx
+include/vcl/calendar.hxx
 include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
 include/vcl/combobox.hxx
@@ -17935,6 +17936,7 @@ vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
 vcl/source/control/button.cxx
+vcl/source/control/calendar.cxx
 vcl/source/control/combobox.cxx
 vcl/source/control/ctrl.cxx
 vcl/source/control/edit.cxx

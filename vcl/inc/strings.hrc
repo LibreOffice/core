@@ -144,6 +144,10 @@
 #define STR_SVT_ACC_DESC_TABLISTBOX                  NC_("STR_SVT_ACC_DESC_TABLISTBOX", "Row: %1, Column: %2")
 #define STR_SVT_ACC_EMPTY_FIELD                      NC_("STR_SVT_ACC_EMPTY_FIELD", "Empty Field")
 
+#define STR_SVT_CALENDAR_DAY                         NC_("STR_SVT_CALENDAR_DAY", "Day")
+#define STR_SVT_CALENDAR_WEEK                        NC_("STR_SVT_CALENDAR_WEEK", "Week")
+#define STR_SVT_CALENDAR_TODAY                       NC_("STR_SVT_CALENDAR_TODAY", "Today")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

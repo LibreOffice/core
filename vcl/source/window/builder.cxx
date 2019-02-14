@@ -23,6 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
+#include <vcl/calendar.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
@@ -2168,6 +2169,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         WinBits nBits = extractDeferredBits(rMap);
         xWindow = VclPtr<ListControl>::Create(pParent, nBits);
+    }
+    else if (name == "GtkCalendar")
+    {
+        WinBits nBits = extractDeferredBits(rMap);
+        xWindow = VclPtr<Calendar>::Create(pParent, nBits);
     }
     else
     {
