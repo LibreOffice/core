@@ -44,6 +44,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/IDialogRenderable.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
@@ -612,6 +613,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnEventListenersIteratingCount = 0;
     mnChildEventListenersIteratingCount = 0;
     mpCursor                            = nullptr;                      // cursor
+    maPointer                           = PointerStyle::Arrow;
     mpVCLXWindow                        = nullptr;
     mpAccessibleInfos                   = nullptr;
     maControlForeground                 = COL_TRANSPARENT;  // no foreground set

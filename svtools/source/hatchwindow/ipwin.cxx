@@ -434,6 +434,7 @@ SvResizeWindow::SvResizeWindow
     VCLXHatchWindow* pWrapper
 )
     : Window( pParent, WB_CLIPCHILDREN )
+    , m_aOldPointer(PointerStyle::Arrow)
     , m_nMoveGrab( -1 )
     , m_bActive( false )
     , m_pWrapper( pWrapper )
