@@ -174,7 +174,10 @@ short AbstractScDPNumGroupDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
+short AbstractScDPDateGroupDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDPShowDetailDlg_Impl::Execute()
 {
@@ -624,12 +627,12 @@ ScDPNumGroupInfo AbstractScDPNumGroupDlg_Impl::GetGroupInfo() const
 
 ScDPNumGroupInfo AbstractScDPDateGroupDlg_Impl::GetGroupInfo() const
 {
-    return pDlg->GetGroupInfo();
+    return m_xDlg->GetGroupInfo();
 }
 
 sal_Int32 AbstractScDPDateGroupDlg_Impl::GetDatePart() const
 {
-    return pDlg->GetDatePart();
+    return m_xDlg->GetDatePart();
 }
 
 OUString AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
@@ -925,10 +928,9 @@ VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroup
 }
 
 VclPtr<AbstractScDPDateGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
-        vcl::Window* pParent,
-        const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate )
+        weld::Window* pParent, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate)
 {
-    return VclPtr<AbstractScDPDateGroupDlg_Impl>::Create( VclPtr<ScDPDateGroupDlg>::Create( pParent, rInfo, nDatePart, rNullDate ) );
+    return VclPtr<AbstractScDPDateGroupDlg_Impl>::Create(new ScDPDateGroupDlg(pParent, rInfo, nDatePart, rNullDate));
 }
 
 VclPtr<AbstractScDPShowDetailDlg> ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (

@@ -300,6 +300,15 @@ protected:
 public:
     virtual                 ~DateFormatter() override;
 
+    static OUString         FormatDate(const Date& rDate, ExtDateFieldFormat eDateOrder,
+                                       const LocaleDataWrapper& rLocaleData,
+                                       CalendarWrapper& rCalendarWrapper);
+    static bool             TextToDate(const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateOrder,
+                                       const LocaleDataWrapper& rLocaleDataWrapper,
+                                       const CalendarWrapper& rCalendarWrapper);
+    static int              GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor,
+                                        const LocaleDataWrapper& rLocaleDataWrapper);
+
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
 

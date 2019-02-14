@@ -12,6 +12,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -44,6 +45,8 @@ class XWindow;
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
+class CalendarWrapper;
+class DateFormatter;
 class SvNumberFormatter;
 class KeyEvent;
 class MouseEvent;
@@ -1256,6 +1259,56 @@ public:
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
+class VCL_DLLPUBLIC DateSpinButton
+{
+protected:
+    ExtDateFieldFormat const m_eFormat;
+    std::unique_ptr<weld::SpinButton> m_xSpinButton;
+    std::unique_ptr<CalendarWrapper> m_xCalendarWrapper;
+    std::unique_ptr<DateFormatter> m_xDateFormatter;
+    Link<DateSpinButton&, void> m_aValueChangedHdl;
+
+    DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
+    DECL_LINK(spin_button_output, weld::SpinButton&, void);
+    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_LINK(spin_button_cursor_position, weld::Entry&, void);
+
+    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
+
+    static Date ConvertValue(int nValue);
+    static int ConvertValue(const Date& rDate);
+    OUString format_number(int nValue) const;
+    void update_width_chars();
+
+public:
+    DateSpinButton(std::unique_ptr<SpinButton> pSpinButton, ExtDateFieldFormat eFormat);
+
+    void set_value(const Date& rDate) { m_xSpinButton->set_value(ConvertValue(rDate)); }
+
+    Date get_value() const { return ConvertValue(m_xSpinButton->get_value()); }
+
+    void connect_value_changed(const Link<DateSpinButton&, void>& rLink)
+    {
+        m_aValueChangedHdl = rLink;
+    }
+
+    void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
+    bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
+    bool get_visible() const { return m_xSpinButton->get_visible(); }
+    void grab_focus() { m_xSpinButton->grab_focus(); }
+    bool has_focus() const { return m_xSpinButton->has_focus(); }
+    void show(bool bShow = true) { m_xSpinButton->show(bShow); }
+    void hide() { m_xSpinButton->hide(); }
+    void save_value() { m_xSpinButton->save_value(); }
+    bool get_value_changed_from_saved() const
+    {
+        return m_xSpinButton->get_value_changed_from_saved();
+    }
+    void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    weld::SpinButton& get_widget() { return *m_xSpinButton; }
+    ~DateSpinButton();
+};
+
 class VCL_DLLPUBLIC Label : virtual public Widget
 {
 public:
@@ -1456,6 +1509,10 @@ public:
     weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<TimeSpinButton>
     weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<DateSpinButton> weld_date_spin_button(const OString& id,
+                                                                  ExtDateFieldFormat eFormat,
+                                                                  bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<ComboBox> weld_combo_box(const OString& id, bool bTakeOwnership = false)
         = 0;

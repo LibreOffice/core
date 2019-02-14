@@ -3894,6 +3894,14 @@ public:
         return pRet;
     }
 
+    virtual std::unique_ptr<weld::DateSpinButton> weld_date_spin_button(const OString& id, ExtDateFieldFormat eFormat, bool bTakeOwnership) override
+    {
+        std::unique_ptr<weld::DateSpinButton> pRet(new weld::DateSpinButton(weld_spin_button(id, bTakeOwnership), eFormat));
+        SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
+        rButton.DisableRemainderFactor(); //so with dd::mm::yyyy, incrementing mm will not reset yyyy
+        return pRet;
+    }
+
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership) override
     {
         vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);

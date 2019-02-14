@@ -8364,6 +8364,11 @@ public:
         return std::make_unique<weld::TimeSpinButton>(weld_spin_button(id, bTakeOwnership), eFormat);
     }
 
+    virtual std::unique_ptr<weld::DateSpinButton> weld_date_spin_button(const OString& id, ExtDateFieldFormat eFormat, bool bTakeOwnership) override
+    {
+        return std::make_unique<weld::DateSpinButton>(weld_spin_button(id, bTakeOwnership), eFormat);
+    }
+
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership) override
     {
         GtkComboBox* pComboBox = GTK_COMBO_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));

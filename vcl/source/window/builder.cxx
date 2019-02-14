@@ -13,11 +13,13 @@
 #include <unordered_map>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <comphelper/processfactory.hxx>
 
 #include <i18nutil/unicode.hxx>
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
@@ -322,9 +324,6 @@ namespace weld
 
     IMPL_LINK(TimeSpinButton, spin_button_input, int*, result, bool)
     {
-        int nStartPos, nEndPos;
-        m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
-
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
         tools::Time aResult(0);
         bool bRet = TimeFormatter::TextToTime(m_xSpinButton->get_text(), aResult, m_eFormat, true, rLocaleData);
@@ -359,6 +358,107 @@ namespace weld
     {
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
         return TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
+    }
+
+    class SimpleDateFormatter : public DateFormatter
+    {
+    public:
+        SimpleDateFormatter()
+            : DateFormatter(nullptr)
+        {
+        }
+    };
+
+    DateSpinButton::DateSpinButton(std::unique_ptr<SpinButton> pSpinButton, ExtDateFieldFormat eFormat)
+        : m_eFormat(eFormat)
+        , m_xSpinButton(std::move(pSpinButton))
+        , m_xCalendarWrapper(new CalendarWrapper(comphelper::getProcessComponentContext()))
+        , m_xDateFormatter(new SimpleDateFormatter)
+    {
+        auto aLocale = Application::GetSettings().GetLanguageTag().getLocale();
+        m_xCalendarWrapper->loadDefaultCalendar(aLocale);
+
+        update_width_chars();
+        m_xSpinButton->connect_output(LINK(this, DateSpinButton, spin_button_output));
+        m_xSpinButton->connect_input(LINK(this, DateSpinButton, spin_button_input));
+        m_xSpinButton->connect_value_changed(LINK(this, DateSpinButton, spin_button_value_changed));
+        m_xSpinButton->connect_cursor_position(
+            LINK(this, DateSpinButton, spin_button_cursor_position));
+        spin_button_output(*m_xSpinButton);
+    }
+
+    IMPL_LINK_NOARG(DateSpinButton, spin_button_cursor_position, Entry&, void)
+    {
+        int nStartPos, nEndPos;
+        m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
+
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+        const int nDateArea = DateFormatter::GetDateArea(m_eFormat, m_xSpinButton->get_text(), nEndPos,
+                                                         rLocaleData);
+
+        int nIncrements = 1;
+
+        if (nDateArea == 1)
+            nIncrements = 1000 * 60 * 60;
+        else if (nDateArea == 2)
+            nIncrements = 1000 * 60;
+        else if (nDateArea == 3)
+            nIncrements = 1000;
+
+        m_xSpinButton->set_increments(nIncrements, nIncrements * 10);
+    }
+
+    IMPL_LINK_NOARG(DateSpinButton, spin_button_value_changed, SpinButton&, void)
+    {
+        signal_value_changed();
+    }
+
+    IMPL_LINK(DateSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
+    {
+        int nStartPos, nEndPos;
+        rSpinButton.get_selection_bounds(nStartPos, nEndPos);
+        rSpinButton.set_text(format_number(rSpinButton.get_value()));
+        rSpinButton.set_position(nEndPos);
+    }
+
+    IMPL_LINK(DateSpinButton, spin_button_input, int*, result, bool)
+    {
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+        Date aResult(0);
+        bool bRet = DateFormatter::TextToDate(m_xSpinButton->get_text(), aResult, m_eFormat, rLocaleData, *m_xCalendarWrapper);
+        if (bRet)
+            *result = ConvertValue(aResult);
+        return bRet;
+    }
+
+    void DateSpinButton::update_width_chars()
+    {
+        int min, max;
+        m_xSpinButton->get_range(min, max);
+        auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
+                              m_xSpinButton->get_pixel_size(format_number(max)).Width());
+        int chars = ceil(width / m_xSpinButton->get_approximate_digit_width());
+        m_xSpinButton->set_width_chars(chars);
+    }
+
+    Date DateSpinButton::ConvertValue(int nValue)
+    {
+        return Date(nValue);
+    }
+
+    int DateSpinButton::ConvertValue(const Date& rDate)
+    {
+        return rDate.GetDate();
+    }
+
+    OUString DateSpinButton::format_number(int nValue) const
+    {
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+        return DateFormatter::FormatDate(ConvertValue(nValue), ExtDateFieldFormat::SystemShort, rLocaleData, *m_xCalendarWrapper);
+    }
+
+    DateSpinButton::~DateSpinButton()
+    {
     }
 
     EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)

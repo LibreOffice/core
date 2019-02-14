@@ -1007,8 +1007,9 @@ static bool ImplDateProcessKeyInput( const KeyEvent& rKEvt, ExtDateFieldFormat e
              (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]));
 }
 
-static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateOrder,
-                              const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper )
+bool DateFormatter::TextToDate(const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateOrder,
+                               const LocaleDataWrapper& rLocaleDataWrapper,
+                               const CalendarWrapper& rCalendarWrapper)
 {
     sal_uInt16 nDay = 0;
     sal_uInt16 nMonth = 0;
@@ -1119,7 +1120,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
 void DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
 {
     Date aDate( Date::EMPTY );
-    if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
+    if ( !TextToDate( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
         return;
 
     Date aTempDate = aDate;
@@ -1131,10 +1132,35 @@ void DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
     rOutStr = ImplGetDateAsText( aTempDate );
 }
 
-OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
+namespace
+{
+    ExtDateFieldFormat ResolveSystemFormat(ExtDateFieldFormat eDateFormat, const LocaleDataWrapper& rLocaleData)
+    {
+        if (eDateFormat <= ExtDateFieldFormat::SystemShortYYYY)
+        {
+            bool bShowCentury = (eDateFormat == ExtDateFieldFormat::SystemShortYYYY);
+            switch (rLocaleData.getDateOrder())
+            {
+                case DateOrder::DMY:
+                    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
+                    break;
+                case DateOrder::MDY:
+                    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
+                    break;
+                default:
+                    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
+            }
+        }
+        return eDateFormat;
+    }
+}
+
+OUString DateFormatter::FormatDate(const Date& rDate, ExtDateFieldFormat eDateOrder,
+                                   const LocaleDataWrapper& rLocaleData,
+                                   CalendarWrapper& rCalendar)
 {
     bool bShowCentury = false;
-    switch ( GetExtDateFormat() )
+    switch (eDateOrder)
     {
         case ExtDateFieldFormat::SystemShortYYYY:
         case ExtDateFieldFormat::SystemLong:
@@ -1166,7 +1192,9 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
 
-    OUString aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), GetExtDateFormat( true ) );
+    eDateOrder = ResolveSystemFormat(eDateOrder, rLocaleData);
+
+    OUString aDateSep = ImplGetDateSep(rLocaleData, eDateOrder);
     sal_uInt16 nDay = rDate.GetDay();
     sal_uInt16 nMonth = rDate.GetMonth();
     sal_Int16 nYear = rDate.GetYear();
@@ -1175,11 +1203,11 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
     if ( !bShowCentury )
         nYear %= 100;
 
-    switch ( GetExtDateFormat( true ) )
+    switch (eDateOrder)
     {
         case ExtDateFieldFormat::SystemLong:
         {
-            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), !bShowCentury );
+            return rLocaleData.getLongDate( rDate, rCalendar, !bShowCentury );
         }
         case ExtDateFieldFormat::ShortDDMMYY:
         case ExtDateFieldFormat::ShortDDMMYYYY:
@@ -1220,6 +1248,11 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
     }
 
     return OUString(aBuf, pBuf-aBuf);
+}
+
+OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
+{
+    return FormatDate(rDate, GetExtDateFormat(), ImplGetLocaleDataWrapper(), GetCalendarWrapper());
 }
 
 static void ImplDateIncrementDay( Date& rDate, bool bUp )
@@ -1313,6 +1346,36 @@ bool DateFormatter::ImplAllowMalformedInput() const
     return !IsEnforceValidValue();
 }
 
+int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor,
+                               const LocaleDataWrapper& rLocaleDataWrapper)
+{
+    int nDateArea = 0;
+
+    eFormat = ResolveSystemFormat(eFormat, rLocaleDataWrapper);
+
+    if (eFormat == ExtDateFieldFormat::SystemLong)
+        nDateArea = 1;
+    else
+    {
+        // search area
+        sal_Int32 nPos = 0;
+        OUString aDateSep = ImplGetDateSep(rLocaleDataWrapper, eFormat);
+        for (sal_Int8 i = 1; i <= 3; i++)
+        {
+            nPos = rText.indexOf( aDateSep, nPos );
+            if (nPos < 0 || nPos >= nCursor)
+            {
+                nDateArea = i;
+                break;
+            }
+            else
+                nPos++;
+        }
+    }
+
+    return nDateArea;
+}
+
 void DateField::ImplDateSpinArea( bool bUp )
 {
     // increment days if all is selected
@@ -1352,11 +1415,11 @@ void DateField::ImplDateSpinArea( bool bUp )
                 }
             }
 
-            switch( eFormat )
+            switch (eFormat)
             {
                 case ExtDateFieldFormat::ShortMMDDYY:
                 case ExtDateFieldFormat::ShortMMDDYYYY:
-                switch( nDateArea )
+                switch (nDateArea)
                 {
                     case 1: ImplDateIncrementMonth( aDate, bUp );
                             break;
@@ -1444,25 +1507,9 @@ void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )
 
 ExtDateFieldFormat DateFormatter::GetExtDateFormat( bool bResolveSystemFormat ) const
 {
-    ExtDateFieldFormat eDateFormat = mnExtDateFormat;
-
-    if ( bResolveSystemFormat && ( eDateFormat <= ExtDateFieldFormat::SystemShortYYYY ) )
-    {
-        bool bShowCentury = (eDateFormat == ExtDateFieldFormat::SystemShortYYYY);
-        switch ( ImplGetLocaleDataWrapper().getDateOrder() )
-        {
-            case DateOrder::DMY:
-                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
-                break;
-            case DateOrder::MDY:
-                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
-                break;
-            default:
-                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
-        }
-    }
-
-    return eDateFormat;
+    if (bResolveSystemFormat)
+        return ResolveSystemFormat(mnExtDateFormat, ImplGetLocaleDataWrapper());
+    return mnExtDateFormat;
 }
 
 void DateFormatter::ReformatAll()
@@ -1604,7 +1651,7 @@ Date DateFormatter::GetDate() const
 
     if ( GetField() )
     {
-        if ( ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
+        if ( TextToDate( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
         {
             if ( aDate > maMax )
                 aDate = maMax;
@@ -1649,7 +1696,7 @@ bool DateFormatter::IsEmptyDate() const
         else if ( !maLastDate.GetDate() )
         {
             Date aDate( Date::EMPTY );
-            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() );
+            bEmpty = !TextToDate( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() );
         }
     }
     return bEmpty;
@@ -1669,7 +1716,7 @@ void DateFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        (void)ImplDateGetValue(aStr, maLastDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper());
+        (void)TextToDate(aStr, maLastDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper());
     }
     else
     {
@@ -1751,7 +1798,7 @@ bool DateField::EventNotify( NotifyEvent& rNEvt )
                 else
                 {
                     Date aDate( 0, 0, 0 );
-                    if ( ImplDateGetValue( GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
+                    if ( TextToDate( GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
                         // even with strict text analysis, our text is a valid date -> do a complete
                         // reformat
                         Reformat();
