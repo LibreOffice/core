@@ -70,23 +70,23 @@ AccessibleOutlineView::AccessibleOutlineView (
 
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for making the edit engine accessible.
-    if (pSdWindow)
+    if (!pSdWindow)
+        return;
+
+    ::sd::View* pView = pViewShell->GetView();
+
+    if (dynamic_cast<const ::sd::OutlineView* >( pView ) ==  nullptr)
+        return;
+
+    OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
+        pView)->GetViewByWindow( pSdWindow );
+    SdrOutliner& rOutliner =
+        static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
+
+    if( pOutlineView )
     {
-        ::sd::View* pView = pViewShell->GetView();
-
-        if (dynamic_cast<const ::sd::OutlineView* >( pView ) !=  nullptr)
-        {
-            OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
-                pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner& rOutliner =
-                static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
-
-            if( pOutlineView )
-            {
-                maTextHelper.SetEditSource( ::std::unique_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                  rOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
-            }
-        }
+        maTextHelper.SetEditSource( ::std::unique_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
+                                                                          rOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
     }
 }
 

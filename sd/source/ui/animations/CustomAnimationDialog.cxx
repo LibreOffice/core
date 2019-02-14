@@ -129,34 +129,34 @@ IMPL_LINK_NOARG(PresetPropertyBox, OnSelect, ListBox&, void)
 
 void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 {
-    if( mpControl )
+    if( !mpControl )
+        return;
+
+    mpControl->Clear();
+
+    const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
+    CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
+    if( pDescriptor.get() )
     {
-        mpControl->Clear();
 
-        const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-        CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
-        if( pDescriptor.get() )
+        OUString aPropertyValue;
+        rValue >>= aPropertyValue;
+
+        std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
+
+        mpControl->Enable( !aSubTypes.empty() );
+
+        for( auto& aSubType : aSubTypes )
         {
-
-            OUString aPropertyValue;
-            rValue >>= aPropertyValue;
-
-            std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
-
-            mpControl->Enable( !aSubTypes.empty() );
-
-            for( auto& aSubType : aSubTypes )
-            {
-                sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( aSubType ) );
-                if( aSubType == aPropertyValue )
-                    mpControl->SelectEntryPos( nPos );
-                maPropertyValues[nPos] = aSubType;
-            }
+            sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( aSubType ) );
+            if( aSubType == aPropertyValue )
+                mpControl->SelectEntryPos( nPos );
+            maPropertyValues[nPos] = aSubType;
         }
-        else
-        {
-            mpControl->Enable( false );
-        }
+    }
+    else
+    {
+        mpControl->Enable( false );
     }
 }
 
@@ -214,40 +214,40 @@ IMPL_LINK_NOARG(SdPresetPropertyBox, OnSelect, weld::ComboBox&, void)
 
 void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 {
-    if (mxControl)
+    if (!mxControl)
+        return;
+
+    mxControl->freeze();
+    mxControl->clear();
+    int nPos = -1;
+
+    const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
+    CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
+    if( pDescriptor.get() )
     {
-        mxControl->freeze();
-        mxControl->clear();
-        int nPos = -1;
 
-        const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-        CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
-        if( pDescriptor.get() )
+        OUString aPropertyValue;
+        rValue >>= aPropertyValue;
+
+        std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
+
+        mxControl->set_sensitive(!aSubTypes.empty());
+
+        for( auto& aSubType : aSubTypes )
         {
-
-            OUString aPropertyValue;
-            rValue >>= aPropertyValue;
-
-            std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
-
-            mxControl->set_sensitive(!aSubTypes.empty());
-
-            for( auto& aSubType : aSubTypes )
-            {
-                mxControl->append_text(rPresets.getUINameForProperty(aSubType));
-                maPropertyValues.push_back(aSubType);
-                if (aSubType == aPropertyValue)
-                    nPos = maPropertyValues.size() - 1;
-            }
+            mxControl->append_text(rPresets.getUINameForProperty(aSubType));
+            maPropertyValues.push_back(aSubType);
+            if (aSubType == aPropertyValue)
+                nPos = maPropertyValues.size() - 1;
         }
-        else
-        {
-            mxControl->set_sensitive(false);
-        }
-        mxControl->thaw();
-        if (nPos != -1)
-            mxControl->set_active(nPos);
     }
+    else
+    {
+        mxControl->set_sensitive(false);
+    }
+    mxControl->thaw();
+    if (nPos != -1)
+        mxControl->set_active(nPos);
 }
 
 Any SdPresetPropertyBox::getValue()
@@ -1266,41 +1266,41 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric.get() )
-    {
-        ValuePair aValues;
-        rValue >>= aValues;
+    if( !mpMetric.get() )
+        return;
 
-        double fValue1 = 0.0;
-        double fValue2 = 0.0;
+    ValuePair aValues;
+    rValue >>= aValues;
 
-        aValues.First >>= fValue1;
-        aValues.Second >>= fValue2;
+    double fValue1 = 0.0;
+    double fValue2 = 0.0;
 
-        if( fValue2 == 0.0 )
-            mnDirection = 1;
-        else if( fValue1 == 0.0 )
-            mnDirection = 2;
-        else
-            mnDirection = 3;
+    aValues.First >>= fValue1;
+    aValues.Second >>= fValue2;
 
-        // Shrink animation is represented by negative value
-        // Shrink factor is calculated as (1 + $fValue)
-        // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
-        // 0.25 = -0.75 + 1
-        if ( fValue1 < 0.0 )
-            fValue1 += 1;
-        if ( fValue2 < 0.0 )
-            fValue2 += 1;
+    if( fValue2 == 0.0 )
+        mnDirection = 1;
+    else if( fValue1 == 0.0 )
+        mnDirection = 2;
+    else
+        mnDirection = 3;
 
-        long nValue;
-        if( fValue1 )
-            nValue = static_cast<long>(fValue1 * 100.0);
-        else
-            nValue = static_cast<long>(fValue2 * 100.0);
-        mpMetric->SetValue( nValue );
-        updateMenu();
-    }
+    // Shrink animation is represented by negative value
+    // Shrink factor is calculated as (1 + $fValue)
+    // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
+    // 0.25 = -0.75 + 1
+    if ( fValue1 < 0.0 )
+        fValue1 += 1;
+    if ( fValue2 < 0.0 )
+        fValue2 += 1;
+
+    long nValue;
+    if( fValue1 )
+        nValue = static_cast<long>(fValue1 * 100.0);
+    else
+        nValue = static_cast<long>(fValue2 * 100.0);
+    mpMetric->SetValue( nValue );
+    updateMenu();
 }
 
 Any ScalePropertyBox::getValue()
@@ -1430,41 +1430,41 @@ IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 
 void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
 {
-    if (mxMetric)
-    {
-        ValuePair aValues;
-        rValue >>= aValues;
+    if (!mxMetric)
+        return;
 
-        double fValue1 = 0.0;
-        double fValue2 = 0.0;
+    ValuePair aValues;
+    rValue >>= aValues;
 
-        aValues.First >>= fValue1;
-        aValues.Second >>= fValue2;
+    double fValue1 = 0.0;
+    double fValue2 = 0.0;
 
-        if( fValue2 == 0.0 )
-            mnDirection = 1;
-        else if( fValue1 == 0.0 )
-            mnDirection = 2;
-        else
-            mnDirection = 3;
+    aValues.First >>= fValue1;
+    aValues.Second >>= fValue2;
 
-        // Shrink animation is represented by negative value
-        // Shrink factor is calculated as (1 + $fValue)
-        // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
-        // 0.25 = -0.75 + 1
-        if ( fValue1 < 0.0 )
-            fValue1 += 1;
-        if ( fValue2 < 0.0 )
-            fValue2 += 1;
+    if( fValue2 == 0.0 )
+        mnDirection = 1;
+    else if( fValue1 == 0.0 )
+        mnDirection = 2;
+    else
+        mnDirection = 3;
 
-        long nValue;
-        if( fValue1 )
-            nValue = static_cast<long>(fValue1 * 100.0);
-        else
-            nValue = static_cast<long>(fValue2 * 100.0);
-        mxMetric->set_value(nValue, FieldUnit::PERCENT);
-        updateMenu();
-    }
+    // Shrink animation is represented by negative value
+    // Shrink factor is calculated as (1 + $fValue)
+    // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
+    // 0.25 = -0.75 + 1
+    if ( fValue1 < 0.0 )
+        fValue1 += 1;
+    if ( fValue2 < 0.0 )
+        fValue2 += 1;
+
+    long nValue;
+    if( fValue1 )
+        nValue = static_cast<long>(fValue1 * 100.0);
+    else
+        nValue = static_cast<long>(fValue2 * 100.0);
+    mxMetric->set_value(nValue, FieldUnit::PERCENT);
+    updateMenu();
 }
 
 Any SdScalePropertyBox::getValue()
@@ -2126,31 +2126,31 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     }
 
     nPos = mxLBSound->get_active();
-    if (nPos != -1)
+    if (nPos == -1)
+        return;
+
+    Any aNewSoundURL, aOldSoundURL( makeAny( sal_Int32(0) ) );
+
+    if( nPos == 0 )
     {
-        Any aNewSoundURL, aOldSoundURL( makeAny( sal_Int32(0) ) );
-
-        if( nPos == 0 )
-        {
-            // 0 means no sound, so leave any empty
-        }
-        else if( nPos == 1 )
-        {
-            // this means stop sound
-            aNewSoundURL <<= true;
-        }
-        else
-        {
-            OUString aSoundURL( maSoundList[ nPos-2 ] );
-            aNewSoundURL <<= aSoundURL;
-        }
-
-        if( mpSet->getPropertyState( nHandleSoundURL ) != STLPropertyState::Ambiguous )
-            aOldSoundURL = mpSet->getPropertyValue( nHandleSoundURL  );
-
-        if( aNewSoundURL != aOldSoundURL )
-            pSet->setPropertyValue( nHandleSoundURL, aNewSoundURL );
+        // 0 means no sound, so leave any empty
     }
+    else if( nPos == 1 )
+    {
+        // this means stop sound
+        aNewSoundURL <<= true;
+    }
+    else
+    {
+        OUString aSoundURL( maSoundList[ nPos-2 ] );
+        aNewSoundURL <<= aSoundURL;
+    }
+
+    if( mpSet->getPropertyState( nHandleSoundURL ) != STLPropertyState::Ambiguous )
+        aOldSoundURL = mpSet->getPropertyValue( nHandleSoundURL  );
+
+    if( aNewSoundURL != aOldSoundURL )
+        pSet->setPropertyValue( nHandleSoundURL, aNewSoundURL );
 }
 
 void CustomAnimationEffectTabPage::fillSoundListBox()
@@ -2416,33 +2416,33 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
 
     Reference< XDrawPage > xCurrentPage;
     pSet->getPropertyValue( nHandleCurrentPage ) >>= xCurrentPage;
-    if( xCurrentPage.is() )
+    if( !xCurrentPage.is() )
+        return;
+
+    const OUString aStrIsEmptyPresObj( "IsEmptyPresentationObject" );
+
+    sal_Int32 nShape, nCount = xCurrentPage->getCount();
+    for( nShape = 0; nShape < nCount; nShape++ )
     {
-        const OUString aStrIsEmptyPresObj( "IsEmptyPresentationObject" );
+        Reference< XShape > xShape( xCurrentPage->getByIndex( nShape ), UNO_QUERY );
 
-        sal_Int32 nShape, nCount = xCurrentPage->getCount();
-        for( nShape = 0; nShape < nCount; nShape++ )
+        if( !xShape.is() )
+            continue;
+
+        Reference< XPropertySet > xSet( xShape, UNO_QUERY );
+        if( xSet.is() && xSet->getPropertySetInfo()->hasPropertyByName( aStrIsEmptyPresObj ) )
         {
-            Reference< XShape > xShape( xCurrentPage->getByIndex( nShape ), UNO_QUERY );
-
-            if( !xShape.is() )
+            bool bIsEmpty = false;
+            xSet->getPropertyValue( aStrIsEmptyPresObj ) >>= bIsEmpty;
+            if( bIsEmpty )
                 continue;
-
-            Reference< XPropertySet > xSet( xShape, UNO_QUERY );
-            if( xSet.is() && xSet->getPropertySetInfo()->hasPropertyByName( aStrIsEmptyPresObj ) )
-            {
-                bool bIsEmpty = false;
-                xSet->getPropertyValue( aStrIsEmptyPresObj ) >>= bIsEmpty;
-                if( bIsEmpty )
-                    continue;
-            }
-
-            OUString aDescription( getShapeDescription( xShape, true ) );
-            mxLBTrigger->append(OUString::number(nShape), aDescription);
-            auto nPos = mxLBTrigger->get_count() - 1;
-            if (xShape == xTrigger)
-                mxLBTrigger->set_active(nPos);
         }
+
+        OUString aDescription( getShapeDescription( xShape, true ) );
+        mxLBTrigger->append(OUString::number(nShape), aDescription);
+        auto nPos = mxLBTrigger->get_count() - 1;
+        if (xShape == xTrigger)
+            mxLBTrigger->set_active(nPos);
     }
 }
 

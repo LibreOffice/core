@@ -505,41 +505,41 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
 
 void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation )
 {
-    if( (xAnnotation != mxAnnotation) && xAnnotation.is() )
+    if( (xAnnotation == mxAnnotation) || !xAnnotation.is() )
+        return;
+
+    mxAnnotation = xAnnotation;
+
+    SetColor();
+
+    SvtUserOptions aUserOptions;
+    mbProtected = aUserOptions.GetFullName() != xAnnotation->getAuthor();
+
+    Engine()->Clear();
+    TextApiObject* pTextApi = getTextApiObject( mxAnnotation );
+
+    if( pTextApi )
     {
-        mxAnnotation = xAnnotation;
-
-        SetColor();
-
-        SvtUserOptions aUserOptions;
-        mbProtected = aUserOptions.GetFullName() != xAnnotation->getAuthor();
-
-        Engine()->Clear();
-        TextApiObject* pTextApi = getTextApiObject( mxAnnotation );
-
-        if( pTextApi )
-        {
-            std::unique_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
-            Engine()->SetText(*pOPO);
-        }
-
-        Engine()->ClearModifyFlag();
-        Engine()->GetUndoManager().Clear();
-
-        Invalidate();
-
-        OUString sMeta( xAnnotation->getAuthor() );
-        OUString sDateTime( getAnnotationDateTimeString(xAnnotation) );
-
-        if( !sDateTime.isEmpty() )
-        {
-            if( !sMeta.isEmpty() )
-                sMeta += "\n";
-
-            sMeta += sDateTime;
-        }
-        mpMeta->SetText(sMeta);
+        std::unique_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
+        Engine()->SetText(*pOPO);
     }
+
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+
+    Invalidate();
+
+    OUString sMeta( xAnnotation->getAuthor() );
+    OUString sDateTime( getAnnotationDateTimeString(xAnnotation) );
+
+    if( !sDateTime.isEmpty() )
+    {
+        if( !sMeta.isEmpty() )
+            sMeta += "\n";
+
+        sMeta += sDateTime;
+    }
+    mpMeta->SetText(sMeta);
 }
 
 void AnnotationWindow::SetColor()
@@ -635,67 +635,67 @@ void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 {
     FloatingWindow::Paint(rRenderContext, rRect);
 
-    if(mpMeta->IsVisible() && !mbReadonly)
+    if(!(mpMeta->IsVisible() && !mbReadonly))
+        return;
+
+    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    //draw left over space
+    if ( bHighContrast )
+        SetFillColor(COL_BLACK);
+    else
+        SetFillColor(maColor);
+    SetLineColor();
+    DrawRect(PixelToLogic(::tools::Rectangle(Point(mpMeta->GetPosPixel().X()+mpMeta->GetSizePixel().Width(),mpMeta->GetPosPixel().Y()),Size(METABUTTON_AREA_WIDTH,mpMeta->GetSizePixel().Height()))));
+
+    if ( bHighContrast )
     {
-        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        //draw left over space
-        if ( bHighContrast )
-            SetFillColor(COL_BLACK);
-        else
-            SetFillColor(maColor);
-        SetLineColor();
-        DrawRect(PixelToLogic(::tools::Rectangle(Point(mpMeta->GetPosPixel().X()+mpMeta->GetSizePixel().Width(),mpMeta->GetPosPixel().Y()),Size(METABUTTON_AREA_WIDTH,mpMeta->GetSizePixel().Height()))));
-
-        if ( bHighContrast )
-        {
-            //draw rect around button
-            SetFillColor(COL_BLACK);
-            SetLineColor(COL_WHITE);
-        }
-        else
-        {
-            //draw button
-            Gradient aGradient;
-            if (mbMouseOverButton)
-                aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
-            else
-                aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
-            DrawGradient(maRectMetaButton,aGradient);
-            //draw rect around button
-            SetFillColor();
-            SetLineColor(ColorFromAlphaColor(90,maColorDark,maColor));
-        }
-        DrawRect(maRectMetaButton);
-
-        //draw arrow
-        if( bHighContrast )
-            SetFillColor(COL_WHITE);
-        else
-            SetFillColor(COL_BLACK);
-        SetLineColor();
-        DrawPolygon( ::tools::Polygon(maPopupTriangle));
+        //draw rect around button
+        SetFillColor(COL_BLACK);
+        SetLineColor(COL_WHITE);
     }
+    else
+    {
+        //draw button
+        Gradient aGradient;
+        if (mbMouseOverButton)
+            aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
+        else
+            aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
+        DrawGradient(maRectMetaButton,aGradient);
+        //draw rect around button
+        SetFillColor();
+        SetLineColor(ColorFromAlphaColor(90,maColorDark,maColor));
+    }
+    DrawRect(maRectMetaButton);
+
+    //draw arrow
+    if( bHighContrast )
+        SetFillColor(COL_WHITE);
+    else
+        SetFillColor(COL_BLACK);
+    SetLineColor();
+    DrawPolygon( ::tools::Polygon(maPopupTriangle));
 }
 
 void AnnotationWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if( !mbReadonly )
+    if( mbReadonly )
+        return;
+
+    if (maRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())))
     {
-        if (maRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())))
+        if (!mbMouseOverButton)
         {
-            if (!mbMouseOverButton)
-            {
-                Invalidate(maRectMetaButton);
-                mbMouseOverButton = true;
-            }
+            Invalidate(maRectMetaButton);
+            mbMouseOverButton = true;
         }
-        else
+    }
+    else
+    {
+        if (mbMouseOverButton)
         {
-            if (mbMouseOverButton)
-            {
-                Invalidate(maRectMetaButton);
-                mbMouseOverButton = false;
-            }
+            Invalidate(maRectMetaButton);
+            mbMouseOverButton = false;
         }
     }
 }

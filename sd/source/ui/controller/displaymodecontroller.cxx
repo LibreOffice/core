@@ -246,18 +246,19 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
 {
     sal_uInt16 nId;
     ToolBox* pToolBox = nullptr;
-    if (getToolboxId( nId, &pToolBox )) {
-        BitmapEx aBmp(rImage);
-        int targetSize = (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large) ? 32 : 16;
-        double scale = 1.0f;
-        Size size = aBmp.GetSizePixel();
-        if (size.Width() > targetSize)
-            scale = static_cast<double>(targetSize) / static_cast<double>(size.Width());
-        if (size.Height() > targetSize)
-            scale = ::std::min( scale, static_cast<double>(targetSize) / static_cast<double>(size.Height()) );
-        aBmp.Scale( scale, scale );
-        pToolBox->SetItemImage( nId, Image( aBmp ) );
-    }
+    if (!getToolboxId( nId, &pToolBox ))
+        return;
+
+    BitmapEx aBmp(rImage);
+    int targetSize = (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large) ? 32 : 16;
+    double scale = 1.0f;
+    Size size = aBmp.GetSizePixel();
+    if (size.Width() > targetSize)
+        scale = static_cast<double>(targetSize) / static_cast<double>(size.Width());
+    if (size.Height() > targetSize)
+        scale = ::std::min( scale, static_cast<double>(targetSize) / static_cast<double>(size.Height()) );
+    aBmp.Scale( scale, scale );
+    pToolBox->SetItemImage( nId, Image( aBmp ) );
 }
 
 // XServiceInfo

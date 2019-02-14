@@ -93,41 +93,41 @@ void SdTemplateControl::Paint( const UserDrawEvent&  )
 
 void SdTemplateControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && !GetStatusBar().GetItemText( GetId() ).isEmpty() )
+    if ( !(rCEvt.GetCommand() == CommandEventId::ContextMenu && !GetStatusBar().GetItemText( GetId() ).isEmpty()) )
+        return;
+
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+
+    sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( pViewFrame );
+    if( !pViewShellBase )
+        return;
+
+    SdDrawDocument* pDoc = pViewShellBase->GetDocument();
+    if( !pDoc )
+        return;
+
+    ScopedVclPtrInstance<SdTemplatePopup_Impl> aPop;
     {
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
 
-        sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( pViewFrame );
-        if( !pViewShellBase )
-            return;
-
-        SdDrawDocument* pDoc = pViewShellBase->GetDocument();
-        if( !pDoc )
-            return;
-
-        ScopedVclPtrInstance<SdTemplatePopup_Impl> aPop;
+        sal_uInt16 nCount = 0;
+        for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
         {
-            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+            SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
+            if( pMaster )
+                aPop->InsertItem( ++nCount, pMaster->GetName() );
+        }
+        aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
-            sal_uInt16 nCount = 0;
-            for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
-            {
-                SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
-                if( pMaster )
-                    aPop->InsertItem( ++nCount, pMaster->GetName() );
-            }
-            aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-
-            sal_uInt16 nCurrId = aPop->GetCurId()-1;
-            if( nCurrId < nMasterCount )
-            {
-                SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
-                SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
-                pViewFrame->GetDispatcher()->ExecuteList(
-                    SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
-                pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
-                pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
-            }
+        sal_uInt16 nCurrId = aPop->GetCurId()-1;
+        if( nCurrId < nMasterCount )
+        {
+            SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
+            SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
+            pViewFrame->GetDispatcher()->ExecuteList(
+                SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
+            pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
+            pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
         }
     }
 }

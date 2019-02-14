@@ -233,21 +233,21 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
 void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
 {
-    if (rxListener.is())
-    {
-        const osl::MutexGuard aGuard(maMutex);
+    if (!rxListener.is())
+        return;
 
-        if (IsDisposed())
-        {
-            uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-            rxListener->disposing (lang::EventObject (x));
-        }
-        else
-        {
-            if (mnClientId == 0)
-                mnClientId = comphelper::AccessibleEventNotifier::registerClient();
-            comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
-        }
+    const osl::MutexGuard aGuard(maMutex);
+
+    if (IsDisposed())
+    {
+        uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
+        rxListener->disposing (lang::EventObject (x));
+    }
+    else
+    {
+        if (mnClientId == 0)
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient();
+        comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
     }
 }
 
@@ -255,20 +255,20 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
 {
     ThrowIfDisposed();
-    if (rxListener.is() && mnClientId)
-    {
-        const osl::MutexGuard aGuard(maMutex);
+    if (!(rxListener.is() && mnClientId))
+        return;
 
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
-        }
+    const osl::MutexGuard aGuard(maMutex);
+
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
+    if ( !nListenerCount )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+        mnClientId = 0;
     }
 }
 

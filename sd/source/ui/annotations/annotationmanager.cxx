@@ -238,25 +238,25 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
 // XEventListener
 void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent )
 {
-    if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
-    {
-        // AnnotationInsertion and modification is not handled here because when
-        // a new annotation is inserted, it consists of OnAnnotationInserted
-        // followed by a chain of OnAnnotationChanged (called for setting each
-        // of the annotation attributes - author, text etc.). This is not what a
-        // LOK client wants. So only handle removal here as annotation removal
-        // consists of only one event - 'OnAnnotationRemoved'
-        if ( aEvent.EventName == "OnAnnotationRemoved" )
-        {
-            Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
-            if ( xAnnotation.is() )
-            {
-                LOKCommentNotify(CommentNotificationType::Remove, &mrBase, xAnnotation);
-            }
-        }
+    if( !(aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged") )
+        return;
 
-        UpdateTags();
+    // AnnotationInsertion and modification is not handled here because when
+    // a new annotation is inserted, it consists of OnAnnotationInserted
+    // followed by a chain of OnAnnotationChanged (called for setting each
+    // of the annotation attributes - author, text etc.). This is not what a
+    // LOK client wants. So only handle removal here as annotation removal
+    // consists of only one event - 'OnAnnotationRemoved'
+    if ( aEvent.EventName == "OnAnnotationRemoved" )
+    {
+        Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
+        if ( xAnnotation.is() )
+        {
+            LOKCommentNotify(CommentNotificationType::Remove, &mrBase, xAnnotation);
+        }
     }
+
+    UpdateTags();
 }
 
 void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ )
@@ -401,130 +401,130 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
     Reference< XAnnotation > xAnnotation;
     sal_uInt32 nId = 0;
     OUString sText;
-    if (pArgs)
+    if (!pArgs)
+        return;
+
+    if (mpDoc->IsUndoEnabled())
+        mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_EDIT));
+
+    const SfxPoolItem* pPoolItem = nullptr;
+    if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_ID, true, &pPoolItem))
     {
-        if (mpDoc->IsUndoEnabled())
-            mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_EDIT));
-
-        const SfxPoolItem* pPoolItem = nullptr;
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_ID, true, &pPoolItem))
-        {
-            nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
-            xAnnotation = GetAnnotationById(nId);
-        }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
-            sText = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
-
-        if (xAnnotation.is() && !sText.isEmpty())
-        {
-            CreateChangeUndo(xAnnotation);
-
-            // TODO: Not allow other authors to change others' comments ?
-            Reference<XText> xText(xAnnotation->getTextRange());
-            xText->setString(sText);
-
-            LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
-        }
-
-        if (mpDoc->IsUndoEnabled())
-            mpDoc->EndUndo();
-
-        UpdateTags(true);
+        nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
+        xAnnotation = GetAnnotationById(nId);
     }
+    if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
+        sText = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
+
+    if (xAnnotation.is() && !sText.isEmpty())
+    {
+        CreateChangeUndo(xAnnotation);
+
+        // TODO: Not allow other authors to change others' comments ?
+        Reference<XText> xText(xAnnotation->getTextRange());
+        xText->setString(sText);
+
+        LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
+    }
+
+    if (mpDoc->IsUndoEnabled())
+        mpDoc->EndUndo();
+
+    UpdateTags(true);
 }
 
 void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 {
     SdPage* pPage = GetCurrentPage();
-    if( pPage )
+    if( !pPage )
+        return;
+
+    if( mpDoc->IsUndoEnabled() )
+        mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_INSERT ) );
+
+    // find free space for new annotation
+    int y = 0, x = 0;
+
+    AnnotationVector aAnnotations( pPage->getAnnotations() );
+    if( !aAnnotations.empty() )
     {
-        if( mpDoc->IsUndoEnabled() )
-            mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_INSERT ) );
+        const int page_width = pPage->GetSize().Width();
+        const int width = 1000;
+        const int height = 800;
+        ::tools::Rectangle aTagRect;
 
-        // find free space for new annotation
-        int y = 0, x = 0;
-
-        AnnotationVector aAnnotations( pPage->getAnnotations() );
-        if( !aAnnotations.empty() )
+        while( true )
         {
-            const int page_width = pPage->GetSize().Width();
-            const int width = 1000;
-            const int height = 800;
-            ::tools::Rectangle aTagRect;
+            ::tools::Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
+            bool bFree = true;
 
-            while( true )
+            for( const auto& rxAnnotation : aAnnotations )
             {
-                ::tools::Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
-                bool bFree = true;
+                RealPoint2D aPoint( rxAnnotation->getPosition() );
+                aTagRect.SetLeft( sal::static_int_cast< long >( aPoint.X * 100.0 ) );
+                aTagRect.SetTop( sal::static_int_cast< long >( aPoint.Y * 100.0 ) );
+                aTagRect.SetRight( aTagRect.Left() + width - 1 );
+                aTagRect.SetBottom( aTagRect.Top() + height - 1 );
 
-                for( const auto& rxAnnotation : aAnnotations )
+                if( aNewRect.IsOver( aTagRect ) )
                 {
-                    RealPoint2D aPoint( rxAnnotation->getPosition() );
-                    aTagRect.SetLeft( sal::static_int_cast< long >( aPoint.X * 100.0 ) );
-                    aTagRect.SetTop( sal::static_int_cast< long >( aPoint.Y * 100.0 ) );
-                    aTagRect.SetRight( aTagRect.Left() + width - 1 );
-                    aTagRect.SetBottom( aTagRect.Top() + height - 1 );
-
-                    if( aNewRect.IsOver( aTagRect ) )
-                    {
-                        bFree = false;
-                        break;
-                    }
-                }
-
-                if( !bFree )
-                {
-                    x += width;
-                    if( x > page_width )
-                    {
-                        x = 0;
-                        y += height;
-                    }
-                }
-                else
-                {
+                    bFree = false;
                     break;
                 }
             }
+
+            if( !bFree )
+            {
+                x += width;
+                if( x > page_width )
+                {
+                    x = 0;
+                    y += height;
+                }
+            }
+            else
+            {
+                break;
+            }
         }
-
-        Reference< XAnnotation > xAnnotation;
-        pPage->createAnnotation( xAnnotation );
-
-        OUString sAuthor;
-        if (comphelper::LibreOfficeKit::isActive())
-            sAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
-        else
-        {
-            SvtUserOptions aUserOptions;
-            sAuthor = aUserOptions.GetFullName();
-            xAnnotation->setInitials( aUserOptions.GetID() );
-        }
-
-        if (!rText.isEmpty())
-        {
-            Reference<XText> xText(xAnnotation->getTextRange());
-            xText->setString(rText);
-        }
-
-        // set current author to new annotation
-        xAnnotation->setAuthor( sAuthor );
-        // set current time to new annotation
-        xAnnotation->setDateTime( getCurrentDateTime() );
-
-        // set position
-        RealPoint2D aPos( static_cast<double>(x) / 100.0, static_cast<double>(y) / 100.0 );
-        xAnnotation->setPosition( aPos );
-
-        if( mpDoc->IsUndoEnabled() )
-            mpDoc->EndUndo();
-
-        // Tell our LOK clients about new comment added
-        LOKCommentNotifyAll(CommentNotificationType::Add, xAnnotation);
-
-        UpdateTags(true);
-        SelectAnnotation( xAnnotation, true );
     }
+
+    Reference< XAnnotation > xAnnotation;
+    pPage->createAnnotation( xAnnotation );
+
+    OUString sAuthor;
+    if (comphelper::LibreOfficeKit::isActive())
+        sAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+    else
+    {
+        SvtUserOptions aUserOptions;
+        sAuthor = aUserOptions.GetFullName();
+        xAnnotation->setInitials( aUserOptions.GetID() );
+    }
+
+    if (!rText.isEmpty())
+    {
+        Reference<XText> xText(xAnnotation->getTextRange());
+        xText->setString(rText);
+    }
+
+    // set current author to new annotation
+    xAnnotation->setAuthor( sAuthor );
+    // set current time to new annotation
+    xAnnotation->setDateTime( getCurrentDateTime() );
+
+    // set position
+    RealPoint2D aPos( static_cast<double>(x) / 100.0, static_cast<double>(y) / 100.0 );
+    xAnnotation->setPosition( aPos );
+
+    if( mpDoc->IsUndoEnabled() )
+        mpDoc->EndUndo();
+
+    // Tell our LOK clients about new comment added
+    LOKCommentNotifyAll(CommentNotificationType::Add, xAnnotation);
+
+    UpdateTags(true);
+    SelectAnnotation( xAnnotation, true );
 }
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
@@ -549,69 +549,69 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     }
 
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
-    if( pTextApi )
+    if( !pTextApi )
+        return;
+
+    std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
+
+    SdDrawDocument::SetCalcFieldValueHdl( pOutliner.get() );
+    pOutliner->SetUpdateMode( true );
+
+    OUString aStr(SdResId(STR_ANNOTATION_REPLY));
+    OUString sAuthor( xAnnotation->getAuthor() );
+    if( sAuthor.isEmpty() )
+        sAuthor = SdResId( STR_ANNOTATION_NOAUTHOR );
+
+    aStr = aStr.replaceFirst("%1", sAuthor);
+
+    aStr += " (" + getAnnotationDateTimeString( xAnnotation ) + "): \"";
+
+    OUString sQuote( pTextApi->GetText() );
+
+    if( sQuote.isEmpty() )
+        sQuote = "...";
+    aStr += sQuote + "\"\n";
+
+    for( sal_Int32 nIdx = 0; nIdx >= 0; )
+        pOutliner->Insert( aStr.getToken( 0, '\n', nIdx ), EE_PARA_APPEND, -1 );
+
+    if( pOutliner->GetParagraphCount() > 1 )
     {
-        std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
+        SfxItemSet aAnswerSet( pOutliner->GetEmptyItemSet() );
+        aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
 
-        SdDrawDocument::SetCalcFieldValueHdl( pOutliner.get() );
-        pOutliner->SetUpdateMode( true );
+        ESelection aSel;
+        aSel.nEndPara = pOutliner->GetParagraphCount()-2;
+        aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).getLength();
 
-        OUString aStr(SdResId(STR_ANNOTATION_REPLY));
-        OUString sAuthor( xAnnotation->getAuthor() );
-        if( sAuthor.isEmpty() )
-            sAuthor = SdResId( STR_ANNOTATION_NOAUTHOR );
-
-        aStr = aStr.replaceFirst("%1", sAuthor);
-
-        aStr += " (" + getAnnotationDateTimeString( xAnnotation ) + "): \"";
-
-        OUString sQuote( pTextApi->GetText() );
-
-        if( sQuote.isEmpty() )
-            sQuote = "...";
-        aStr += sQuote + "\"\n";
-
-        for( sal_Int32 nIdx = 0; nIdx >= 0; )
-            pOutliner->Insert( aStr.getToken( 0, '\n', nIdx ), EE_PARA_APPEND, -1 );
-
-        if( pOutliner->GetParagraphCount() > 1 )
-        {
-            SfxItemSet aAnswerSet( pOutliner->GetEmptyItemSet() );
-            aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
-
-            ESelection aSel;
-            aSel.nEndPara = pOutliner->GetParagraphCount()-2;
-            aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).getLength();
-
-            pOutliner->QuickSetAttribs( aAnswerSet, aSel );
-        }
-
-        if (!sReplyText.isEmpty())
-            pOutliner->Insert(sReplyText);
-
-        std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
-        pTextApi->SetText(*pOPO);
-
-        OUString sReplyAuthor;
-        if (comphelper::LibreOfficeKit::isActive())
-            sReplyAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
-        else
-        {
-            SvtUserOptions aUserOptions;
-            sReplyAuthor = aUserOptions.GetFullName();
-            xAnnotation->setInitials( aUserOptions.GetID() );
-        }
-
-        xAnnotation->setAuthor( sReplyAuthor );
-        // set current time to reply
-        xAnnotation->setDateTime( getCurrentDateTime() );
-
-        // Tell our LOK clients about this (comment modification)
-        LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
-
-        UpdateTags(true);
-        SelectAnnotation( xAnnotation, true );
+        pOutliner->QuickSetAttribs( aAnswerSet, aSel );
     }
+
+    if (!sReplyText.isEmpty())
+        pOutliner->Insert(sReplyText);
+
+    std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
+    pTextApi->SetText(*pOPO);
+
+    OUString sReplyAuthor;
+    if (comphelper::LibreOfficeKit::isActive())
+        sReplyAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+    else
+    {
+        SvtUserOptions aUserOptions;
+        sReplyAuthor = aUserOptions.GetFullName();
+        xAnnotation->setInitials( aUserOptions.GetID() );
+    }
+
+    xAnnotation->setAuthor( sReplyAuthor );
+    // set current time to reply
+    xAnnotation->setDateTime( getCurrentDateTime() );
+
+    // Tell our LOK clients about this (comment modification)
+    LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
+
+    UpdateTags(true);
+    SelectAnnotation( xAnnotation, true );
 }
 
 void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xAnnotation )
@@ -888,7 +888,10 @@ void AnnotationManagerImpl::invalidateSlots()
 
 void AnnotationManagerImpl::onSelectionChanged()
 {
-    if( mxView.is() && mrBase.GetDrawView() ) try
+    if( !(mxView.is() && mrBase.GetDrawView()) )
+        return;
+
+    try
     {
         Reference< XAnnotationAccess > xPage( mxView->getCurrentPage(), UNO_QUERY );
 
@@ -938,7 +941,10 @@ IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
 void AnnotationManagerImpl::CreateTags()
 {
 
-    if( mxCurrentPage.is() && mpDoc ) try
+    if( !(mxCurrentPage.is() && mpDoc) )
+        return;
+
+    try
     {
         int nIndex = 1;
         maFont = Application::GetSettings().GetStyleSettings().GetAppFont();

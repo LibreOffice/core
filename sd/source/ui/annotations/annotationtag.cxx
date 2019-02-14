@@ -178,62 +178,62 @@ void AnnotationHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if( mxAnnotation.is() )
+    if( !mxAnnotation.is() )
+        return;
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    const Point aTagPos( GetPos() );
+    basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
+
+    const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
+
+    BitmapEx aBitmapEx( mxTag->CreateAnnotationBitmap(mxTag->isSelected()) );
+    BitmapEx aBitmapEx2;
+    if( bFocused )
+        aBitmapEx2 = mxTag->CreateAnnotationBitmap(!mxTag->isSelected() );
+
+    if(!pHdlList)
+        return;
+
+    SdrMarkView* pView = pHdlList->GetView();
+
+    if(!(pView && !pView->areMarkHandlesHidden()))
+        return;
+
+    SdrPageView* pPageView = pView->GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
     {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-        const Point aTagPos( GetPos() );
-        basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
-
-        const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
-
-        BitmapEx aBitmapEx( mxTag->CreateAnnotationBitmap(mxTag->isSelected()) );
-        BitmapEx aBitmapEx2;
-        if( bFocused )
-            aBitmapEx2 = mxTag->CreateAnnotationBitmap(!mxTag->isSelected() );
-
-        if(pHdlList)
+        SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
+        const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
+        if(rPaintWindow.OutputToWindow() && xManager.is() )
         {
-            SdrMarkView* pView = pHdlList->GetView();
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
-            if(pView && !pView->areMarkHandlesHidden())
+            // animate focused handles
+            if(bFocused)
             {
-                SdrPageView* pPageView = pView->GetSdrPageView();
+                const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
-                if(pPageView)
-                {
-                    for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
-                    {
-                        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
-
-                        SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                        const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
-                        if(rPaintWindow.OutputToWindow() && xManager.is() )
-                        {
-                            std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
-
-                            // animate focused handles
-                            if(bFocused)
-                            {
-                                const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
-
-                                pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 ));
-                            }
-                            else
-                            {
-                                pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
-                            }
-
-                            // OVERLAYMANAGER
-                            insertNewlyCreatedOverlayObjectForSdrHdl(
-                                std::move(pOverlayObject),
-                                rPageWindow.GetObjectContact(),
-                                *xManager);
-                        }
-                    }
-                }
+                pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 ));
             }
+            else
+            {
+                pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
+            }
+
+            // OVERLAYMANAGER
+            insertNewlyCreatedOverlayObjectForSdrHdl(
+                std::move(pOverlayObject),
+                rPageWindow.GetObjectContact(),
+                *xManager);
         }
     }
 }
@@ -366,21 +366,21 @@ bool AnnotationTag::Command( const CommandEvent& rCEvt )
 
 void AnnotationTag::Move( int nDX, int nDY )
 {
-    if( mxAnnotation.is() )
-    {
-        if( mrManager.GetDoc()->IsUndoEnabled() )
-            mrManager.GetDoc()->BegUndo( SdResId( STR_ANNOTATION_UNDO_MOVE ) );
+    if( !mxAnnotation.is() )
+        return;
 
-        RealPoint2D aPosition( mxAnnotation->getPosition() );
-        aPosition.X += static_cast<double>(nDX) / 100.0;
-        aPosition.Y += static_cast<double>(nDY) / 100.0;
-        mxAnnotation->setPosition( aPosition );
+    if( mrManager.GetDoc()->IsUndoEnabled() )
+        mrManager.GetDoc()->BegUndo( SdResId( STR_ANNOTATION_UNDO_MOVE ) );
 
-        if( mrManager.GetDoc()->IsUndoEnabled() )
-            mrManager.GetDoc()->EndUndo();
+    RealPoint2D aPosition( mxAnnotation->getPosition() );
+    aPosition.X += static_cast<double>(nDX) / 100.0;
+    aPosition.Y += static_cast<double>(nDY) / 100.0;
+    mxAnnotation->setPosition( aPosition );
 
-        mrView.updateHandles();
-    }
+    if( mrManager.GetDoc()->IsUndoEnabled() )
+        mrManager.GetDoc()->EndUndo();
+
+    mrView.updateHandles();
 }
 
 bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
@@ -451,19 +451,19 @@ bool AnnotationTag::getContext( SdrViewContext& /*rContext*/ )
 
 void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    if( mxAnnotation.is() )
-    {
-        SmartTagReference xThis( this );
-        std::unique_ptr<AnnotationHdl> pHdl(new AnnotationHdl( xThis, mxAnnotation, Point() ));
-        pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-        pHdl->SetPageView( mrView.GetSdrPageView() );
+    if( !mxAnnotation.is() )
+        return;
 
-        RealPoint2D aPosition( mxAnnotation->getPosition() );
-        Point aBasePos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
-        pHdl->SetPos( aBasePos );
+    SmartTagReference xThis( this );
+    std::unique_ptr<AnnotationHdl> pHdl(new AnnotationHdl( xThis, mxAnnotation, Point() ));
+    pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
+    pHdl->SetPageView( mrView.GetSdrPageView() );
 
-        rHandlerList.AddHdl( std::move(pHdl) );
-    }
+    RealPoint2D aPosition( mxAnnotation->getPosition() );
+    Point aBasePos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
+    pHdl->SetPos( aBasePos );
+
+    rHandlerList.AddHdl( std::move(pHdl) );
 }
 
 void AnnotationTag::disposing()
@@ -611,61 +611,61 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
         vcl::Window* pWindow = rEvent.GetWindow();
 
-        if( pWindow )
-        {
-            if( pWindow == mpAnnotationWindow.get() )
-            {
-                if( rEvent.GetId() == VclEventId::WindowDeactivate )
-                {
-                    // tdf#99388 and tdf#99712 if PopupMenu is active, suppress
-                    // deletion of the AnnotationWindow which is triggered by
-                    // it losing focus
-                    if (!mrManager.getPopupMenuActive())
-                    {
-                        if( mnClosePopupEvent )
-                            Application::RemoveUserEvent( mnClosePopupEvent );
+        if( !pWindow )
+            return;
 
-                        mnClosePopupEvent = Application::PostUserEvent( LINK( this, AnnotationTag, ClosePopupHdl ) );
-                    }
+        if( pWindow == mpAnnotationWindow.get() )
+        {
+            if( rEvent.GetId() == VclEventId::WindowDeactivate )
+            {
+                // tdf#99388 and tdf#99712 if PopupMenu is active, suppress
+                // deletion of the AnnotationWindow which is triggered by
+                // it losing focus
+                if (!mrManager.getPopupMenuActive())
+                {
+                    if( mnClosePopupEvent )
+                        Application::RemoveUserEvent( mnClosePopupEvent );
+
+                    mnClosePopupEvent = Application::PostUserEvent( LINK( this, AnnotationTag, ClosePopupHdl ) );
                 }
             }
-            else if( pWindow == mpListenWindow )
+        }
+        else if( pWindow == mpListenWindow )
+        {
+            switch( rEvent.GetId() )
             {
-                switch( rEvent.GetId() )
+            case VclEventId::WindowMouseButtonUp:
                 {
-                case VclEventId::WindowMouseButtonUp:
-                    {
-                        // if we stop pressing the button without a mouse move we open the popup
-                        mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-                        mpListenWindow = nullptr;
-                        if( mpAnnotationWindow.get() == nullptr )
-                            OpenPopup(false);
-                    }
-                    break;
-                case VclEventId::WindowMouseMove:
-                    {
-                        // if we move the mouse after a button down we want to start dragging
-                        mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-                        mpListenWindow = nullptr;
-
-                        SdrHdl* pHdl = mrView.PickHandle(maMouseDownPos);
-                        if( pHdl )
-                        {
-                            mrView.BrkAction();
-                            const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(Size(DRGPIX,0)).Width());
-
-                            rtl::Reference< AnnotationTag > xTag( this );
-
-                            SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
-                            mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, pDragMethod );
-                        }
-                    }
-                    break;
-                case VclEventId::ObjectDying:
+                    // if we stop pressing the button without a mouse move we open the popup
+                    mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
                     mpListenWindow = nullptr;
-                    break;
-                default: break;
+                    if( mpAnnotationWindow.get() == nullptr )
+                        OpenPopup(false);
                 }
+                break;
+            case VclEventId::WindowMouseMove:
+                {
+                    // if we move the mouse after a button down we want to start dragging
+                    mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
+                    mpListenWindow = nullptr;
+
+                    SdrHdl* pHdl = mrView.PickHandle(maMouseDownPos);
+                    if( pHdl )
+                    {
+                        mrView.BrkAction();
+                        const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(Size(DRGPIX,0)).Width());
+
+                        rtl::Reference< AnnotationTag > xTag( this );
+
+                        SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
+                        mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, pDragMethod );
+                    }
+                }
+                break;
+            case VclEventId::ObjectDying:
+                mpListenWindow = nullptr;
+                break;
+            default: break;
             }
         }
 }
