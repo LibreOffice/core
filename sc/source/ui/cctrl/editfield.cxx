@@ -67,4 +67,29 @@ void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces )
         nDecPlaces, lclGetDecSep(), true/*bEraseTrailingDecZeros*/ ) );
 }
 
+DoubleField::DoubleField(std::unique_ptr<weld::Entry> xEntry)
+    : m_xEntry(std::move(xEntry))
+{
+}
+
+bool DoubleField::GetValue( double& rfValue ) const
+{
+    OUString aStr(comphelper::string::strip(m_xEntry->get_text(), ' '));
+    bool bOk = !aStr.isEmpty();
+    if( bOk )
+    {
+        rtl_math_ConversionStatus eStatus;
+        sal_Int32 nEnd;
+        rfValue = ScGlobal::GetpLocaleData()->stringToDouble( aStr, true, &eStatus, &nEnd );
+        bOk = (eStatus == rtl_math_ConversionStatus_Ok) && (nEnd == aStr.getLength() );
+    }
+    return bOk;
+}
+
+void DoubleField::SetValue( double fValue, sal_Int32 nDecPlaces )
+{
+    m_xEntry->set_text( ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G,
+        nDecPlaces, lclGetDecSep(), true/*bEraseTrailingDecZeros*/ ) );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

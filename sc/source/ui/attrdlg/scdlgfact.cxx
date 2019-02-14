@@ -168,7 +168,12 @@ short AbstractScNamePasteDlg_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDPNumGroupDlg_Impl);
+
+short AbstractScDPNumGroupDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
 
 short AbstractScDPShowDetailDlg_Impl::Execute()
@@ -614,7 +619,7 @@ void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) co
 
 ScDPNumGroupInfo AbstractScDPNumGroupDlg_Impl::GetGroupInfo() const
 {
-    return pDlg->GetGroupInfo();
+    return m_xDlg->GetGroupInfo();
 }
 
 ScDPNumGroupInfo AbstractScDPDateGroupDlg_Impl::GetGroupInfo() const
@@ -914,10 +919,9 @@ VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotal
     return VclPtr<AbstractScDPSubtotalDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(
-        vcl::Window* pParent, const ScDPNumGroupInfo& rInfo )
+VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)
 {
-    return VclPtr<AbstractScDPNumGroupDlg_Impl>::Create( VclPtr<ScDPNumGroupDlg>::Create( pParent, rInfo ) );
+    return VclPtr<AbstractScDPNumGroupDlg_Impl>::Create(new ScDPNumGroupDlg(pParent, rInfo));
 }
 
 VclPtr<AbstractScDPDateGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(

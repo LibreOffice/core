@@ -482,8 +482,8 @@ public:
                                                                 const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields ) = 0;
 
-    virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg( vcl::Window* pParent,
-                                                                const ScDPNumGroupInfo& rInfo ) = 0;
+    virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg(weld::Window* pParent,
+                                                                  const ScDPNumGroupInfo& rInfo) = 0;
 
     virtual VclPtr<AbstractScDPDateGroupDlg> CreateScDPDateGroupDlg( vcl::Window* pParent,
                                                                 const ScDPNumGroupInfo& rInfo,

@@ -1128,7 +1128,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         ScopedVclPtr<AbstractScDPNumGroupDlg> pDlg( pFact->CreateScDPNumGroupDlg(
-                            pTabViewShell->GetDialogParent(), aNumInfo ) );
+                            pTabViewShell->GetFrameWeld(), aNumInfo ) );
                         if( pDlg->Execute() == RET_OK )
                             pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
                     }
