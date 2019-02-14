@@ -27,6 +27,7 @@
 #include "ZipPackageFolderEnumeration.hxx"
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
@@ -81,12 +82,9 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
 {
     bool bHasUnexpected = false;
 
-    for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          !bHasUnexpected && aCI != aEnd;
-          ++aCI)
+    for (const auto& [rShortName, rxInfo] : maContents)
     {
-        const OUString &rShortName = (*aCI).first;
-        const ZipContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *rxInfo;
 
         if ( rInfo.bFolder )
         {
@@ -125,6 +123,9 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
                 }
             }
         }
+
+        if (bHasUnexpected)
+            break;
     }
 
     return bHasUnexpected;
@@ -138,12 +139,9 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     else
         aExt = "." + aPair.First;
 
-    for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd;
-          ++aCI)
+    for (const auto& [rShortName, rxInfo] : maContents)
     {
-        const OUString &rShortName = (*aCI).first;
-        const ZipContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *rxInfo;
 
         if ( rInfo.bFolder )
             rInfo.pFolder->setChildStreamsTypeByExtension( aPair );
@@ -229,13 +227,7 @@ uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
-    sal_uInt32 i=0, nSize = maContents.size();
-    uno::Sequence < OUString > aSequence ( nSize );
-    for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end();
-          aIterator != aEnd;
-          ++i, ++aIterator)
-        aSequence[i] = (*aIterator).first;
-    return aSequence;
+    return comphelper::mapKeysToSequence(maContents);
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
 {
@@ -335,12 +327,9 @@ void ZipPackageFolder::saveContents(
         }
     }
 
-    for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd;
-          ++aCI)
+    for (const auto& [rShortName, rxInfo] : maContents)
     {
-        const OUString &rShortName = (*aCI).first;
-        const ZipContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *rxInfo;
 
         if ( !bMimeTypeStreamStored || rShortName != aMimeTypeStreamName )
         {

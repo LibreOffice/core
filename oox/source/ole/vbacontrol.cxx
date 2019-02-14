@@ -450,21 +450,23 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                     }
                 }
                 // apply caption/titles to pages
-                auto itCtrlId = pMultiPage->mnIDs.begin();
-                auto itCtrlId_end = pMultiPage->mnIDs.end();
-                AxArrayString::iterator itCaption = sCaptions.begin();
 
                 maControls.clear();
                 // need to sort the controls according to the order of the ids
-                for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
+                if ( sCaptions.size() == idToPage.size() )
                 {
-                    IdToPageMap::iterator iter = idToPage.find( *itCtrlId );
-                    if ( iter != idToPage.end() )
+                    AxArrayString::iterator itCaption = sCaptions.begin();
+                    for ( const auto& rCtrlId : pMultiPage->mnIDs )
                     {
-                        AxPageModel* pPage = static_cast<AxPageModel*> ( iter->second->mxCtrlModel.get() );
+                        IdToPageMap::iterator iter = idToPage.find( rCtrlId );
+                        if ( iter != idToPage.end() )
+                        {
+                            AxPageModel* pPage = static_cast<AxPageModel*> ( iter->second->mxCtrlModel.get() );
 
-                        pPage->importProperty( XML_Caption, *itCaption );
-                        maControls.push_back( iter->second );
+                            pPage->importProperty( XML_Caption, *itCaption );
+                            maControls.push_back( iter->second );
+                        }
+                        ++itCaption;
                     }
                 }
             }
