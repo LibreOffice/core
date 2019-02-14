@@ -24,16 +24,16 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
-#include <svx/checklbx.hxx>
+#include <svtools/ctrlbox.hxx>
 #include "editfield.hxx"
 #include <dpnumgroupinfo.hxx>
 
 class ScDPGroupEditHelper
 {
 public:
-    explicit            ScDPGroupEditHelper(
-                            RadioButton* rRbAuto, RadioButton* rRbMan,
-                            Edit* rEdValue );
+    explicit ScDPGroupEditHelper(weld::RadioButton& rRbAuto,
+                                 weld::RadioButton& rRbMan,
+                                 weld::Widget& rEdValue);
 
     bool                IsAuto() const;
     double              GetValue() const;
@@ -46,47 +46,20 @@ private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
 
-    DECL_LINK( ClickHdl, Button*, void );
-
-private:
-    VclPtr<RadioButton>        mpRbAuto;
-    VclPtr<RadioButton>        mpRbMan;
-    VclPtr<Edit>               mpEdValue;
-};
-
-class DPGroupEditHelper
-{
-public:
-    explicit            DPGroupEditHelper(
-                            weld::RadioButton* rRbAuto, weld::RadioButton* rRbMan,
-                            weld::Entry* rEdValue );
-
-    bool                IsAuto() const;
-    double              GetValue() const;
-    void                SetValue( bool bAuto, double fValue );
-
-protected:
-    ~DPGroupEditHelper() {}
-
-private:
-    virtual bool        ImplGetValue( double& rfValue ) const = 0;
-    virtual void        ImplSetValue( double fValue ) = 0;
-
     DECL_LINK(ClickHdl, weld::Button&, void);
 
 private:
-    weld::RadioButton* mpRbAuto;
-    weld::RadioButton* mpRbMan;
-    weld::Entry*       mpEdValue;
+    weld::RadioButton& mrRbAuto;
+    weld::RadioButton& mrRbMan;
+    weld::Widget&      mrEdValue;
 };
 
-
-class ScDPNumGroupEditHelper : public DPGroupEditHelper
+class ScDPNumGroupEditHelper : public ScDPGroupEditHelper
 {
 public:
-    explicit            ScDPNumGroupEditHelper(
-                            weld::RadioButton* pRbAuto, weld::RadioButton* pRbMan,
-                            DoubleField* pEdValue );
+    explicit ScDPNumGroupEditHelper(weld::RadioButton& rRbAuto,
+                                    weld::RadioButton& rRbMan,
+                                    DoubleField& rEdValue);
 
     virtual             ~ScDPNumGroupEditHelper() {}
 private:
@@ -94,15 +67,16 @@ private:
     virtual void        ImplSetValue( double fValue ) override;
 
 private:
-    DoubleField*        mpEdValue;
+    DoubleField&        mrEdValue;
 };
 
 class ScDPDateGroupEditHelper : public ScDPGroupEditHelper
 {
 public:
-    explicit            ScDPDateGroupEditHelper(
-                            RadioButton* pRbAuto, RadioButton* pRbMan,
-                            DateField* pEdValue, const Date& rNullDate );
+    explicit ScDPDateGroupEditHelper(weld::RadioButton& rRbAuto,
+                                     weld::RadioButton& rRbMan,
+                                     SvtCalendarBox& rEdValue,
+                                     const Date& rNullDate);
 
     virtual ~ScDPDateGroupEditHelper() {}
 
@@ -111,8 +85,8 @@ private:
     virtual void        ImplSetValue( double fValue ) override;
 
 private:
-    VclPtr<DateField>          mpEdValue;
-    Date const                maNullDate;
+    SvtCalendarBox&     mrEdValue;
+    Date const          maNullDate;
 };
 
 class ScDPNumGroupDlg : public weld::GenericDialogController
@@ -134,32 +108,33 @@ private:
     ScDPNumGroupEditHelper maEndHelper;
 };
 
-class ScDPDateGroupDlg : public ModalDialog
+class ScDPDateGroupDlg : public weld::GenericDialogController
 {
 public:
-    explicit            ScDPDateGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo,
-                            sal_Int32 nDatePart, const Date& rNullDate );
-    virtual             ~ScDPDateGroupDlg() override;
-    virtual void        dispose() override;
-    ScDPNumGroupInfo    GetGroupInfo() const;
-    sal_Int32           GetDatePart() const;
+    explicit ScDPDateGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo,
+                              sal_Int32 nDatePart, const Date& rNullDate);
+    virtual ~ScDPDateGroupDlg() override;
+    ScDPNumGroupInfo GetGroupInfo() const;
+    sal_Int32 GetDatePart() const;
 
 private:
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( CheckHdl, SvTreeListBox*, void );
+    DECL_LINK(ClickHdl, weld::Button&, void);
+
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(CheckHdl, const row_col&, void);
 
 private:
-    VclPtr<RadioButton>         mpRbAutoStart;
-    VclPtr<RadioButton>         mpRbManStart;
-    VclPtr<DateField>           mpEdStart;
-    VclPtr<RadioButton>         mpRbAutoEnd;
-    VclPtr<RadioButton>         mpRbManEnd;
-    VclPtr<DateField>           mpEdEnd;
-    VclPtr<RadioButton>         mpRbNumDays;
-    VclPtr<RadioButton>         mpRbUnits;
-    VclPtr<NumericField>        mpEdNumDays;
-    VclPtr<SvxCheckListBox>     mpLbUnits;
-    VclPtr<OKButton>            mpBtnOk;
+    std::unique_ptr<weld::RadioButton> mxRbAutoStart;
+    std::unique_ptr<weld::RadioButton> mxRbManStart;
+    std::unique_ptr<SvtCalendarBox> mxEdStart;
+    std::unique_ptr<weld::RadioButton> mxRbAutoEnd;
+    std::unique_ptr<weld::RadioButton> mxRbManEnd;
+    std::unique_ptr<SvtCalendarBox> mxEdEnd;
+    std::unique_ptr<weld::RadioButton> mxRbNumDays;
+    std::unique_ptr<weld::RadioButton> mxRbUnits;
+    std::unique_ptr<weld::SpinButton> mxEdNumDays;
+    std::unique_ptr<weld::TreeView> mxLbUnits;
+    std::unique_ptr<weld::Button> mxBtnOk;
     ScDPDateGroupEditHelper maStartHelper;
     ScDPDateGroupEditHelper maEndHelper;
 };

@@ -44,7 +44,7 @@ public:
     bool GetValue(double& rfValue) const;
     void SetValue(double fValue, sal_Int32 nDecPlaces = 12);
 
-    weld::Entry* get_widget() { return m_xEntry.get(); }
+    weld::Entry& get_widget() { return *m_xEntry; }
 
     void grab_focus() { m_xEntry->grab_focus(); }
     bool get_sensitive() const { return m_xEntry->get_sensitive(); }

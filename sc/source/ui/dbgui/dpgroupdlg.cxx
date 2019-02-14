@@ -55,18 +55,18 @@ static const char* aDatePartResIds[] =
 
 } // namespace
 
-ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton* pRbAuto, RadioButton* pRbMan, Edit* pEdValue ) :
-    mpRbAuto( pRbAuto ),
-    mpRbMan( pRbMan ),
-    mpEdValue( pEdValue )
+ScDPGroupEditHelper::ScDPGroupEditHelper(weld::RadioButton& rRbAuto, weld::RadioButton& rRbMan, weld::Widget& rEdValue)
+    : mrRbAuto(rRbAuto)
+    , mrRbMan(rRbMan)
+    , mrEdValue(rEdValue)
 {
-    mpRbAuto->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
-    mpRbMan->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mrRbAuto.connect_clicked( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mrRbMan.connect_clicked( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
 }
 
 bool ScDPGroupEditHelper::IsAuto() const
 {
-    return mpRbAuto->IsChecked();
+    return mrRbAuto.get_active();
 }
 
 double ScDPGroupEditHelper::GetValue() const
@@ -81,112 +81,60 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
 {
     if( bAuto )
     {
-        mpRbAuto->Check();
-        ClickHdl( mpRbAuto );
+        mrRbAuto.set_active(true);
+        ClickHdl(mrRbAuto);
     }
     else
     {
-        mpRbMan->Check();
-        ClickHdl( mpRbMan );
+        mrRbMan.set_active(true);
+        ClickHdl(mrRbMan);
     }
     ImplSetValue( fValue );
 }
 
-IMPL_LINK( ScDPGroupEditHelper, ClickHdl, Button*, pButton, void )
+IMPL_LINK(ScDPGroupEditHelper, ClickHdl, weld::Button&, rButton, void)
 {
-    if( pButton == mpRbAuto )
+    if (&rButton == &mrRbAuto)
     {
         // disable edit field on clicking "automatic" radio button
-        mpEdValue->Disable();
+        mrEdValue.set_sensitive(false);
     }
-    else if( pButton == mpRbMan )
+    else if (&rButton == &mrRbMan)
     {
         // enable and set focus to edit field on clicking "manual" radio button
-        mpEdValue->Enable();
-        mpEdValue->GrabFocus();
+        mrEdValue.set_sensitive(true);
+        mrEdValue.grab_focus();
     }
 }
 
-DPGroupEditHelper::DPGroupEditHelper(weld::RadioButton* pRbAuto, weld::RadioButton* pRbMan, weld::Entry* pEdValue)
-    : mpRbAuto(pRbAuto)
-    , mpRbMan(pRbMan)
-    , mpEdValue(pEdValue)
-{
-    mpRbAuto->connect_clicked( LINK( this, DPGroupEditHelper, ClickHdl ) );
-    mpRbMan->connect_clicked( LINK( this, DPGroupEditHelper, ClickHdl ) );
-}
-
-bool DPGroupEditHelper::IsAuto() const
-{
-    return mpRbAuto->get_active();
-}
-
-double DPGroupEditHelper::GetValue() const
-{
-    double fValue;
-    if( !ImplGetValue( fValue ) )
-        fValue = 0.0;
-    return fValue;
-}
-
-void DPGroupEditHelper::SetValue( bool bAuto, double fValue )
-{
-    if( bAuto )
-    {
-        mpRbAuto->set_active(true);
-        ClickHdl(*mpRbAuto);
-    }
-    else
-    {
-        mpRbMan->set_active(true);
-        ClickHdl(*mpRbMan);
-    }
-    ImplSetValue( fValue );
-}
-
-IMPL_LINK(DPGroupEditHelper, ClickHdl, weld::Button&, rButton, void)
-{
-    if (&rButton == mpRbAuto)
-    {
-        // disable edit field on clicking "automatic" radio button
-        mpEdValue->set_sensitive(false);
-    }
-    else if (&rButton == mpRbMan)
-    {
-        // enable and set focus to edit field on clicking "manual" radio button
-        mpEdValue->set_sensitive(true);
-        mpEdValue->grab_focus();
-    }
-}
-
-ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(weld::RadioButton* pRbAuto,
-    weld::RadioButton* pRbMan, DoubleField* pEdValue)
-    : DPGroupEditHelper(pRbAuto, pRbMan, pEdValue->get_widget())
-    , mpEdValue(pEdValue)
+ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(weld::RadioButton& rRbAuto,
+    weld::RadioButton& rRbMan, DoubleField& rEdValue)
+    : ScDPGroupEditHelper(rRbAuto, rRbMan, rEdValue.get_widget())
+    , mrEdValue(rEdValue)
 {
 }
 
 bool ScDPNumGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    return mpEdValue->GetValue( rfValue );
+    return mrEdValue.GetValue(rfValue);
 }
 
 void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
 {
-    mpEdValue->SetValue( fValue );
+    mrEdValue.SetValue(fValue);
 }
 
-ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
-        RadioButton* pRbAuto, RadioButton* pRbMan, DateField* pEdValue, const Date& rNullDate ) :
-    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
-    mpEdValue( pEdValue ),
-    maNullDate( rNullDate )
+ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(weld::RadioButton& rRbAuto, weld::RadioButton& rRbMan,
+                                                 SvtCalendarBox& rEdValue, const Date& rNullDate)
+    : ScDPGroupEditHelper(rRbAuto, rRbMan, rEdValue.get_button())
+    , mrEdValue(rEdValue)
+    , maNullDate(rNullDate)
 {
 }
 
 bool ScDPDateGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    rfValue = mpEdValue->GetDate() - maNullDate;
+    rfValue = mrEdValue.get_date() - maNullDate;
     return true;
 }
 
@@ -194,7 +142,7 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
 {
     Date aDate( maNullDate );
     aDate.AddDays( fValue );
-    mpEdValue->SetDate( aDate );
+    mrEdValue.set_date( aDate );
 }
 
 ScDPNumGroupDlg::ScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)
@@ -206,8 +154,8 @@ ScDPNumGroupDlg::ScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& 
     , mxRbManEnd(m_xBuilder->weld_radio_button("manual_end"))
     , mxEdEnd(new DoubleField(m_xBuilder->weld_entry("edit_end")))
     , mxEdBy(new DoubleField(m_xBuilder->weld_entry("edit_by")))
-    , maStartHelper(mxRbAutoStart.get(), mxRbManStart.get(), mxEdStart.get())
-    , maEndHelper(mxRbAutoEnd.get(), mxRbManEnd.get(), mxEdEnd.get())
+    , maStartHelper(*mxRbAutoStart, *mxRbManStart, *mxEdStart)
+    , maEndHelper(*mxRbAutoEnd, *mxRbManEnd, *mxEdEnd)
 {
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
@@ -247,98 +195,82 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     return aInfo;
 }
 
-ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
-        const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
-    ModalDialog( pParent, "PivotTableGroupByDate", "modules/scalc/ui/groupbydate.ui" ),
-    mpRbAutoStart   ( get<RadioButton>("auto_start") ),
-    mpRbManStart    ( get<RadioButton>("manual_start") ),
-    mpEdStart       ( get<DateField>("start_date") ),
-    mpRbAutoEnd     ( get<RadioButton>("auto_end") ),
-    mpRbManEnd      ( get<RadioButton>("manual_end") ),
-    mpEdEnd         ( get<DateField>("end_date") ),
-    mpRbNumDays     ( get<RadioButton>("days") ),
-    mpRbUnits       ( get<RadioButton>("intervals") ),
-    mpEdNumDays     ( get<NumericField>("days_value") ),
-    mpLbUnits       ( get<SvxCheckListBox>("interval_list") ),
-    mpBtnOk         ( get<OKButton>("ok") ),
-    maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart, rNullDate ),
-    maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd, rNullDate )
+ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
+        const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate)
+    : GenericDialogController(pParent, "modules/scalc/ui/groupbydate.ui", "PivotTableGroupByDate")
+    , mxRbAutoStart(m_xBuilder->weld_radio_button("auto_start"))
+    , mxRbManStart(m_xBuilder->weld_radio_button("manual_start"))
+    , mxEdStart(new SvtCalendarBox(m_xBuilder->weld_menu_button("start_date")))
+    , mxRbAutoEnd(m_xBuilder->weld_radio_button("auto_end"))
+    , mxRbManEnd(m_xBuilder->weld_radio_button("manual_end"))
+    , mxEdEnd(new SvtCalendarBox(m_xBuilder->weld_menu_button("end_date")))
+    , mxRbNumDays(m_xBuilder->weld_radio_button("days"))
+    , mxRbUnits(m_xBuilder->weld_radio_button("intervals"))
+    , mxEdNumDays(m_xBuilder->weld_spin_button("days_value"))
+    , mxLbUnits(m_xBuilder->weld_tree_view("interval_list"))
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , maStartHelper(*mxRbAutoStart, *mxRbManStart, *mxEdStart, rNullDate)
+    , maEndHelper(*mxRbAutoEnd, *mxRbManEnd, *mxEdEnd, rNullDate)
 {
-    static const size_t nCount = SAL_N_ELEMENTS(aDatePartResIds);
-    for (const char* pDatePartResId : aDatePartResIds)
-        mpLbUnits->InsertEntry(ScResId(pDatePartResId));
-
-    mpEdStart->SetShowDateCentury( true );
-    mpEdEnd->SetShowDateCentury( true );
-
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
+    std::vector<int> aWidths;
+    aWidths.push_back(mxLbUnits->get_checkbox_column_width());
+    mxLbUnits->set_column_fixed_widths(aWidths);
+
     if( nDatePart == 0 )
         nDatePart = css::sheet::DataPilotFieldGroupBy::MONTHS;
-    for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
-        mpLbUnits->CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
+    for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aDatePartResIds); ++nIdx)
+    {
+        mxLbUnits->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+        mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) != 0, 0);
+        mxLbUnits->set_text(nIdx, ScResId(aDatePartResIds[nIdx]), 1);
+    }
 
     if( rInfo.mbDateValues )
     {
-        mpRbNumDays->Check();
-        ClickHdl( mpRbNumDays );
+        mxRbNumDays->set_active(true);
+        ClickHdl(*mxRbNumDays );
 
         double fNumDays = rInfo.mfStep;
         if( fNumDays < 1.0 )
             fNumDays = 1.0;
         else if( fNumDays > 32767.0 )
             fNumDays = 32767.0;
-        mpEdNumDays->SetValue( static_cast< long >( fNumDays ) );
+        mxEdNumDays->set_value(fNumDays);
     }
     else
     {
-        mpRbUnits->Check();
-        ClickHdl( mpRbUnits );
+        mxRbUnits->set_active(true);
+        ClickHdl(*mxRbUnits);
     }
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
-    if( mpEdStart->IsEnabled() )
-        mpEdStart->GrabFocus();
-    else if( mpEdEnd->IsEnabled() )
-        mpEdEnd->GrabFocus();
-    else if( mpEdNumDays->IsEnabled() )
-        mpEdNumDays->GrabFocus();
-    else if( mpLbUnits->IsEnabled() )
-        mpLbUnits->GrabFocus();
+    if( mxEdStart->get_sensitive() )
+        mxEdStart->grab_focus();
+    else if( mxEdEnd->get_sensitive() )
+        mxEdEnd->grab_focus();
+    else if( mxEdNumDays->get_sensitive() )
+        mxEdNumDays->grab_focus();
+    else if( mxLbUnits->get_sensitive() )
+        mxLbUnits->grab_focus();
 
-    mpRbNumDays->SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
-    mpRbUnits->SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
-    mpLbUnits->SetCheckButtonHdl( LINK( this, ScDPDateGroupDlg, CheckHdl ) );
+    mxRbNumDays->connect_clicked( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
+    mxRbUnits->connect_clicked( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
+    mxLbUnits->connect_toggled( LINK( this, ScDPDateGroupDlg, CheckHdl ) );
 }
 
 ScDPDateGroupDlg::~ScDPDateGroupDlg()
 {
-    disposeOnce();
-}
-
-void ScDPDateGroupDlg::dispose()
-{
-    mpRbAutoStart.clear();
-    mpRbManStart.clear();
-    mpEdStart.clear();
-    mpRbAutoEnd.clear();
-    mpRbManEnd.clear();
-    mpEdEnd.clear();
-    mpRbNumDays.clear();
-    mpRbUnits.clear();
-    mpEdNumDays.clear();
-    mpLbUnits.clear();
-    mpBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
     aInfo.mbEnable = true;
-    aInfo.mbDateValues = mpRbNumDays->IsChecked();
+    aInfo.mbDateValues = mxRbNumDays->get_active();
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
@@ -346,7 +278,7 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
-    sal_Int64 nNumDays = mpEdNumDays->GetValue();
+    sal_Int64 nNumDays = mxEdNumDays->get_value();
     aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0L );
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + nNumDays;
@@ -357,43 +289,55 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 {
     // return DAYS for special "number of days" mode
-    if( mpRbNumDays->IsChecked() )
+    if( mxRbNumDays->get_active() )
         return css::sheet::DataPilotFieldGroupBy::DAYS;
 
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
-    for( sal_uLong nIdx = 0, nCount = mpLbUnits->GetEntryCount(); nIdx < nCount; ++nIdx )
-        if( mpLbUnits->IsChecked( static_cast< sal_uInt16 >( nIdx ) ) )
+    for (int nIdx = 0, nCount = mxLbUnits->n_children(); nIdx < nCount; ++nIdx )
+        if (mxLbUnits->get_toggle(nIdx, 0))
             nDatePart |= spnDateParts[ nIdx ];
     return nDatePart;
 }
 
-IMPL_LINK( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
+IMPL_LINK(ScDPDateGroupDlg, ClickHdl, weld::Button&, rButton, void)
 {
-    if( pButton == mpRbNumDays )
+    if (&rButton == mxRbNumDays.get())
     {
-        mpLbUnits->Disable();
+        mxLbUnits->set_sensitive(false);
         // enable and set focus to edit field on clicking "num of days" radio button
-        mpEdNumDays->Enable();
-        mpEdNumDays->GrabFocus();
-        mpBtnOk->Enable();
+        mxEdNumDays->set_sensitive(true);
+        mxEdNumDays->grab_focus();
+        mxBtnOk->set_sensitive(true);
     }
-    else if( pButton == mpRbUnits )
+    else if (&rButton == mxRbUnits.get())
     {
-        mpEdNumDays->Disable();
+        mxEdNumDays->set_sensitive(false);
         // enable and set focus to listbox on clicking "units" radio button
-        mpLbUnits->Enable();
-        mpLbUnits->GrabFocus();
+        mxLbUnits->set_sensitive(true);
+        mxLbUnits->grab_focus();
         // disable OK button if no date part selected
-        CheckHdl( mpLbUnits );
+        CheckHdl(row_col(0, 0));
     }
 }
 
-IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvTreeListBox*, pListBox, void )
+namespace
+{
+    bool HasCheckedEntryCount(const weld::TreeView& rView)
+    {
+        for (int i = 0; i < rView.n_children(); ++i)
+        {
+            if (rView.get_toggle(i, 0))
+                return true;
+        }
+        return false;
+    }
+}
+
+IMPL_LINK_NOARG(ScDPDateGroupDlg, CheckHdl, const row_col&, void)
 {
     // enable/disable OK button on modifying check list box
-    if( pListBox == mpLbUnits )
-        mpBtnOk->Enable( mpLbUnits->GetCheckedEntryCount() > 0 );
+    mxBtnOk->set_sensitive(HasCheckedEntryCount(*mxLbUnits));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
