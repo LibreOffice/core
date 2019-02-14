@@ -309,7 +309,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
+    for ( const auto& rEntry : m_pZipFile->GetEntryHash() )
     {
         if ( aNames.getLength() < ++nLen )
         {
@@ -317,7 +317,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
             aNames.realloc( nLen );
         }
 
-        aNames[nLen-1] = (*aIter).second.sPath;
+        aNames[nLen-1] = rEntry.second.sPath;
     }
 
     if ( aNames.getLength() != nLen )
@@ -384,19 +384,18 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     // Code to compare strings by patterns
     uno::Sequence< OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
+    auto aIter = std::find_if(m_pZipFile->GetEntryHash().begin(), m_pZipFile->GetEntryHash().end(),
+        [&aPattern](const EntryHash::value_type& rEntry) { return StringGoodForPattern_Impl(rEntry.second.sPath, aPattern); });
+    if (aIter != m_pZipFile->GetEntryHash().end())
     {
-        if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
-        {
-            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
-                                                                                        ::rtl::Reference< EncryptionData >(),
-                                                                                        false,
-                                                                                        m_aMutexHolder ) );
+        uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
+                                                                                    ::rtl::Reference< EncryptionData >(),
+                                                                                    false,
+                                                                                    m_aMutexHolder ) );
 
-            if ( !xEntryStream.is() )
-                throw uno::RuntimeException(THROW_WHERE );
-            return xEntryStream;
-        }
+        if ( !xEntryStream.is() )
+            throw uno::RuntimeException(THROW_WHERE );
+        return xEntryStream;
     }
 
     throw container::NoSuchElementException(THROW_WHERE );

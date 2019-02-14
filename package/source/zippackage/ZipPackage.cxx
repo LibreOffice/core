@@ -1103,20 +1103,17 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
     sal_Int32 nOverSeqLength = 0;
-    for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
-            aEnd = aManList.end();
-         aIter != aEnd;
-         ++aIter)
+    for (const auto& rMan : aManList)
     {
         OUString aPath;
         OUString aType;
-        OSL_ENSURE( ( *aIter )[PKG_MNFST_MEDIATYPE].Name == "MediaType" && ( *aIter )[PKG_MNFST_FULLPATH].Name == "FullPath",
+        OSL_ENSURE( rMan[PKG_MNFST_MEDIATYPE].Name == "MediaType" && rMan[PKG_MNFST_FULLPATH].Name == "FullPath",
                     "The mediatype sequence format is wrong!" );
-        ( *aIter )[PKG_MNFST_MEDIATYPE].Value >>= aType;
+        rMan[PKG_MNFST_MEDIATYPE].Value >>= aType;
         if ( !aType.isEmpty() )
         {
             // only nonempty type makes sense here
-            ( *aIter )[PKG_MNFST_FULLPATH].Value >>= aPath;
+            rMan[PKG_MNFST_FULLPATH].Value >>= aPath;
             //FIXME: For now we have no way of differentiating defaults from others.
             aOverridesSequence[nOverSeqLength].First = "/" + aPath;
             aOverridesSequence[nOverSeqLength].Second = aType;

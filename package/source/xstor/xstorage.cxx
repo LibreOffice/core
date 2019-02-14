@@ -303,13 +303,12 @@ OStorage_Impl::~OStorage_Impl()
         }
         else if ( !m_aReadOnlyWrapVector.empty() )
         {
-            for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapVector.begin();
-                  pStorageIter != m_aReadOnlyWrapVector.end(); ++pStorageIter )
+            for ( auto& rStorage : m_aReadOnlyWrapVector )
             {
-                uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
+                uno::Reference< embed::XStorage > xTmp = rStorage.m_xWeakRef;
                 if ( xTmp.is() )
                     try {
-                        pStorageIter->m_pPointer->InternalDispose( false );
+                        rStorage.m_pPointer->InternalDispose( false );
                     } catch( const uno::Exception& rException )
                     {
                         SAL_INFO("package.xstor", "Quiet exception: " << rException);
@@ -652,11 +651,10 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( THROW_WHERE );
 
-    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
-          pElementIter != m_aChildrenVector.end(); ++pElementIter )
+    for ( auto& pElement : m_aChildrenVector )
     {
-        if ( !(*pElementIter)->m_bIsRemoved )
-            CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, bDirect );
+        if ( !pElement->m_bIsRemoved )
+            CopyStorageElement( pElement, xDest, pElement->m_aName, bDirect );
     }
 
     // move storage properties to the destination one ( means changeable properties )
@@ -1007,19 +1005,17 @@ void OStorage_Impl::Commit()
         xNewPackageFolder = m_xPackageFolder;
 
     // remove replaced removed elements
-    for ( SotElementVector_Impl::iterator pDeletedIter = m_aDeletedVector.begin();
-          pDeletedIter != m_aDeletedVector.end();
-          ++pDeletedIter )
+    for ( auto& pDeleted : m_aDeletedVector )
     {
 
-        if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pDeletedIter)->m_bIsStorage )
-            RemoveStreamRelInfo( (*pDeletedIter)->m_aOriginalName );
+        if ( m_nStorageType == embed::StorageFormats::OFOPXML && !pDeleted->m_bIsStorage )
+            RemoveStreamRelInfo( pDeleted->m_aOriginalName );
 
         // the removed elements are not in new temporary storage
         if ( m_bCommited || m_bIsRoot )
-            xNewPackageFolder->removeByName( (*pDeletedIter)->m_aOriginalName );
-        delete *pDeletedIter;
-        *pDeletedIter = nullptr;
+            xNewPackageFolder->removeByName( pDeleted->m_aOriginalName );
+        delete pDeleted;
+        pDeleted = nullptr;
     }
     m_aDeletedVector.clear();
 
@@ -1047,116 +1043,116 @@ void OStorage_Impl::Commit()
     }
 
     // there should be no more deleted elements
-    for ( pElementIter = m_aChildrenVector.begin(); pElementIter != m_aChildrenVector.end(); ++pElementIter )
+    for ( auto& pElement : m_aChildrenVector )
     {
         // if it is a 'duplicate commit' inserted elements must be really inserted to package later
         // since thay can conflict with renamed elements
 
-        if ( !(*pElementIter)->m_bIsInserted )
+        if ( !pElement->m_bIsInserted )
         {
             // for now stream is opened in direct mode that means that in case
             // storage is committed all the streams from it are committed in current state.
             // following two steps are separated to allow easily implement transacted mode
             // for streams if we need it in future.
             // Only hierarchical access uses transacted streams currently
-            if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStream
-              && !(*pElementIter)->m_xStream->IsTransacted() )
-                (*pElementIter)->m_xStream->Commit();
+            if ( !pElement->m_bIsStorage && pElement->m_xStream
+              && !pElement->m_xStream->IsTransacted() )
+                pElement->m_xStream->Commit();
 
             // if the storage was not open, there is no need to commit it ???
             // the storage should be checked that it is committed
-            if ((*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStorage && (*pElementIter)->m_xStorage->m_bCommited)
+            if (pElement->m_bIsStorage && pElement->m_xStorage && pElement->m_xStorage->m_bCommited)
             {
                 // it's temporary PackageFolder should be inserted instead of current one
                 // also the new copy of PackageFolder should be used by the children storages
 
                 // the renamed elements are not in new temporary storage
                 if ( m_bCommited || m_bIsRoot )
-                    xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                    xNewPackageFolder->removeByName( pElement->m_aOriginalName );
 
-                (*pElementIter)->m_xStorage->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
+                pElement->m_xStorage->InsertIntoPackageFolder(pElement->m_aName, xNewPackageFolder);
             }
-            else if (!(*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStream && (*pElementIter)->m_xStream->m_bFlushed)
+            else if (!pElement->m_bIsStorage && pElement->m_xStream && pElement->m_xStream->m_bFlushed)
             {
                 if ( m_nStorageType == embed::StorageFormats::OFOPXML )
-                    CommitStreamRelInfo( *pElementIter );
+                    CommitStreamRelInfo( pElement );
 
                 // the renamed elements are not in new temporary storage
                 if ( m_bCommited || m_bIsRoot )
-                    xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                    xNewPackageFolder->removeByName( pElement->m_aOriginalName );
 
-                (*pElementIter)->m_xStream->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
+                pElement->m_xStream->InsertIntoPackageFolder(pElement->m_aName, xNewPackageFolder);
             }
             else if ( !m_bCommited && !m_bIsRoot )
             {
                 // the element must be just copied to the new temporary package folder
                 // the connection with the original package should not be lost just because
                 // the element is still referred by the folder in the original hierarchy
-                uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
-                xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
+                uno::Any aPackageElement = m_xPackageFolder->getByName( pElement->m_aOriginalName );
+                xNewPackageFolder->insertByName( pElement->m_aName, aPackageElement );
             }
-            else if ( (*pElementIter)->m_aName != (*pElementIter)->m_aOriginalName )
+            else if ( pElement->m_aName != pElement->m_aOriginalName )
             {
                 // this is the case when xNewPackageFolder refers to m_xPackageFolder
                 // in case the name was changed and it is not a changed storage - rename the element
-                uno::Any aPackageElement = xNewPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
-                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
-                xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
+                uno::Any aPackageElement = xNewPackageFolder->getByName( pElement->m_aOriginalName );
+                xNewPackageFolder->removeByName( pElement->m_aOriginalName );
+                xNewPackageFolder->insertByName( pElement->m_aName, aPackageElement );
 
-                if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pElementIter)->m_bIsStorage )
+                if ( m_nStorageType == embed::StorageFormats::OFOPXML && !pElement->m_bIsStorage )
                 {
-                    if (!(*pElementIter)->m_xStream)
+                    if (!pElement->m_xStream)
                     {
-                        OpenSubStream( *pElementIter );
-                        if (!(*pElementIter)->m_xStream)
+                        OpenSubStream( pElement );
+                        if (!pElement->m_xStream)
                             throw uno::RuntimeException( THROW_WHERE );
                     }
 
-                    CommitStreamRelInfo( *pElementIter );
+                    CommitStreamRelInfo( pElement );
                 }
             }
 
-            (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
+            pElement->m_aOriginalName = pElement->m_aName;
         }
     }
 
-    for ( pElementIter = m_aChildrenVector.begin(); pElementIter != m_aChildrenVector.end(); ++pElementIter )
+    for ( auto& pElement : m_aChildrenVector )
     {
         // now inserted elements can be inserted to the package
-        if ( (*pElementIter)->m_bIsInserted )
+        if ( pElement->m_bIsInserted )
         {
-            (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
+            pElement->m_aOriginalName = pElement->m_aName;
 
-            if ( (*pElementIter)->m_bIsStorage )
+            if ( pElement->m_bIsStorage )
             {
-                if ((*pElementIter)->m_xStorage->m_bCommited)
+                if (pElement->m_xStorage->m_bCommited)
                 {
-                    OSL_ENSURE((*pElementIter)->m_xStorage, "An inserted storage is incomplete!");
-                    if (!(*pElementIter)->m_xStorage)
+                    OSL_ENSURE(pElement->m_xStorage, "An inserted storage is incomplete!");
+                    if (!pElement->m_xStorage)
                         throw uno::RuntimeException( THROW_WHERE );
 
-                    (*pElementIter)->m_xStorage->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
+                    pElement->m_xStorage->InsertIntoPackageFolder(pElement->m_aName, xNewPackageFolder);
 
-                    (*pElementIter)->m_bIsInserted = false;
+                    pElement->m_bIsInserted = false;
                 }
             }
             else
             {
-                OSL_ENSURE((*pElementIter)->m_xStream, "An inserted stream is incomplete!");
-                if (!(*pElementIter)->m_xStream)
+                OSL_ENSURE(pElement->m_xStream, "An inserted stream is incomplete!");
+                if (!pElement->m_xStream)
                     throw uno::RuntimeException( THROW_WHERE );
 
-                if (!(*pElementIter)->m_xStream->IsTransacted())
-                    (*pElementIter)->m_xStream->Commit();
+                if (!pElement->m_xStream->IsTransacted())
+                    pElement->m_xStream->Commit();
 
-                if ((*pElementIter)->m_xStream->m_bFlushed)
+                if (pElement->m_xStream->m_bFlushed)
                 {
                     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
-                        CommitStreamRelInfo( *pElementIter );
+                        CommitStreamRelInfo( pElement );
 
-                    (*pElementIter)->m_xStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+                    pElement->m_xStream->InsertIntoPackageFolder( pElement->m_aName, xNewPackageFolder );
 
-                    (*pElementIter)->m_bIsInserted = false;
+                    pElement->m_bIsInserted = false;
                 }
             }
         }
@@ -1235,16 +1231,14 @@ void OStorage_Impl::Revert()
     }
 
     // return replaced removed elements
-    for ( SotElementVector_Impl::iterator pDeletedIter = m_aDeletedVector.begin();
-          pDeletedIter != m_aDeletedVector.end();
-          ++pDeletedIter )
+    for ( auto& pDeleted : m_aDeletedVector )
     {
-        m_aChildrenVector.push_back( *pDeletedIter );
+        m_aChildrenVector.push_back( pDeleted );
 
-        ClearElement( *pDeletedIter );
+        ClearElement( pDeleted );
 
-        (*pDeletedIter)->m_aName = (*pDeletedIter)->m_aOriginalName;
-        (*pDeletedIter)->m_bIsRemoved = false;
+        pDeleted->m_aName = pDeleted->m_aOriginalName;
+        pDeleted->m_bIsRemoved = false;
     }
     m_aDeletedVector.clear();
 
@@ -1293,12 +1287,10 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
 
     ReadContents();
 
-    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
-          pElementIter != m_aChildrenVector.end(); ++pElementIter )
-    {
-        if ( (*pElementIter)->m_aName == rName && !(*pElementIter)->m_bIsRemoved )
-            return *pElementIter;
-    }
+    auto pElementIter = std::find_if(m_aChildrenVector.begin(), m_aChildrenVector.end(),
+        [&rName](const SotElement_Impl* pElement) { return pElement->m_aName == rName && !pElement->m_bIsRemoved; });
+    if (pElementIter != m_aChildrenVector.end())
+        return *pElementIter;
 
     return nullptr;
 }
@@ -1414,16 +1406,15 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
 
     SotElement_Impl* pDeletedElm = nullptr;
 
-    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
-          pElementIter != m_aChildrenVector.end(); ++pElementIter )
+    for ( const auto& pElement : m_aChildrenVector )
     {
-        if ( (*pElementIter)->m_aName == aName )
+        if ( pElement->m_aName == aName )
         {
-            SAL_WARN_IF( !(*pElementIter)->m_bIsRemoved, "package.xstor", "Try to insert an element instead of existing one!" );
-            if ( (*pElementIter)->m_bIsRemoved )
+            SAL_WARN_IF( !pElement->m_bIsRemoved, "package.xstor", "Try to insert an element instead of existing one!" );
+            if ( pElement->m_bIsRemoved )
             {
-                SAL_WARN_IF( (*pElementIter)->m_bIsInserted, "package.xstor", "Inserted elements must be deleted immediately!" );
-                pDeletedElm = *pElementIter;
+                SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted elements must be deleted immediately!" );
+                pDeletedElm = pElement;
                 break;
             }
         }
@@ -1500,11 +1491,10 @@ uno::Sequence< OUString > OStorage_Impl::GetElementNames()
     uno::Sequence< OUString > aElementNames( nSize );
 
     sal_uInt32 nInd = 0;
-    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
-          pElementIter != m_aChildrenVector.end(); ++pElementIter )
+    for ( const auto& pElement : m_aChildrenVector )
     {
-        if ( !(*pElementIter)->m_bIsRemoved )
-            aElementNames[nInd++] = (*pElementIter)->m_aName;
+        if ( !pElement->m_bIsRemoved )
+            aElementNames[nInd++] = pElement->m_aName;
     }
 
     aElementNames.realloc( nInd );
@@ -1847,10 +1837,9 @@ void OStorage::InternalDispose( bool bNotifyImpl )
             // deregister m_pData->m_pSubElDispListener and dispose all of them
             if ( !m_pData->m_aOpenSubComponentsVector.empty() )
             {
-                for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
-                      pCompIter != m_pData->m_aOpenSubComponentsVector.end(); ++pCompIter )
+                for ( auto& pComp : m_pData->m_aOpenSubComponentsVector )
                 {
-                    uno::Reference< lang::XComponent > xTmp = *pCompIter;
+                    uno::Reference< lang::XComponent > xTmp = pComp;
                     if ( xTmp.is() )
                     {
                         xTmp->removeEventListener( uno::Reference< lang::XEventListener >(
@@ -1898,17 +1887,12 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // this method must not contain any locking
     // the locking is done in the listener
 
-    for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
-          pCompIter != m_pData->m_aOpenSubComponentsVector.end(); )
-    {
-        uno::Reference< lang::XComponent > xTmp = *pCompIter;
-        if ( !xTmp.is() || xTmp == xChild )
-        {
-            pCompIter = m_pData->m_aOpenSubComponentsVector.erase(pCompIter);
-        }
-         else
-            ++pCompIter;
-    }
+    auto& rVec = m_pData->m_aOpenSubComponentsVector;
+    rVec.erase(std::remove_if(rVec.begin(), rVec.end(),
+        [&xChild](const uno::Reference<lang::XComponent>& xTmp) {
+            return !xTmp.is() || xTmp == xChild;
+        }),
+        rVec.end());
 }
 
 void OStorage::BroadcastModifiedIfNecessary()
@@ -2399,12 +2383,8 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
                 if ( nStorageMode & embed::ElementModes::TRUNCATE )
                 {
-                    for ( SotElementVector_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenVector.begin();
-                           pElementIter != pElement->m_xStorage->m_aChildrenVector.end(); )
+                    for ( SotElement_Impl* pElementToDel : pElement->m_xStorage->m_aChildrenVector )
                     {
-                        SotElement_Impl* pElementToDel = *pElementIter;
-                        ++pElementIter;
-
                         m_pImpl->RemoveElement( pElementToDel );
                     }
                 }
@@ -3616,15 +3596,13 @@ void SAL_CALL OStorage::revert()
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    for ( SotElementVector_Impl::iterator pElementIter = m_pImpl->m_aChildrenVector.begin();
-          pElementIter != m_pImpl->m_aChildrenVector.end(); ++pElementIter )
-    {
-        if ( ((*pElementIter)->m_xStorage
-                && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapVector.empty() ))
-          || ((*pElementIter)->m_xStream
-                  && ( (*pElementIter)->m_xStream->m_pAntiImpl || !(*pElementIter)->m_xStream->m_aInputStreamsVector.empty()) ) )
-            throw io::IOException( THROW_WHERE ); // TODO: access denied
-    }
+    bool bThrow = std::any_of(m_pImpl->m_aChildrenVector.begin(), m_pImpl->m_aChildrenVector.end(), [](const SotElement_Impl* pElement) {
+        return (pElement->m_xStorage
+                && (pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty()))
+            || (pElement->m_xStream
+                && (pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsVector.empty())); });
+    if (bThrow)
+        throw io::IOException( THROW_WHERE ); // TODO: access denied
 
     if ( m_pData->m_bReadOnlyWrap || !m_pImpl->m_bListCreated )
         return; // nothing to do

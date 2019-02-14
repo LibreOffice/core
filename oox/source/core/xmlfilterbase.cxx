@@ -782,30 +782,31 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
-    for (auto aIt = aprop.begin(); aIt != aprop.end(); ++aIt)
+    size_t nIndex = 0;
+    for (const auto& rProp : aprop)
     {
-        if ( !aIt->Name.isEmpty() )
+        if ( !rProp.Name.isEmpty() )
         {
-            OString aName = OUStringToOString( aIt->Name, RTL_TEXTENCODING_ASCII_US );
+            OString aName = OUStringToOString( rProp.Name, RTL_TEXTENCODING_ASCII_US );
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
-                XML_pid,    OString::number((aIt - aprop.begin()) + 2),
+                XML_pid,    OString::number(nIndex + 2),
                 XML_name,   aName,
                 FSEND);
 
-            switch ( aIt->Value.getValueTypeClass() )
+            switch ( rProp.Value.getValueTypeClass() )
             {
                 case TypeClass_STRING:
                 {
                     OUString aValue;
-                    aIt->Value >>= aValue;
+                    rProp.Value >>= aValue;
                     writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), aValue );
                 }
                 break;
                 case TypeClass_BOOLEAN:
                 {
-                    bool val = *o3tl::forceAccess<bool>(aIt->Value);
+                    bool val = *o3tl::forceAccess<bool>(rProp.Value);
                     writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val ? 1 : 0);
                 }
                 break;
@@ -815,23 +816,23 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     util::Date aDate;
                     util::Duration aDuration;
                     util::DateTime aDateTime;
-                    if ( ( aIt->Value ) >>= num )
+                    if ( rProp.Value >>= num )
                     {
                         writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), num );
                     }
-                    else if ( ( aIt->Value ) >>= aDate )
+                    else if ( rProp.Value >>= aDate )
                     {
                         aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Year, aDate.Month, aDate.Day, true );
                         writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime);
                     }
-                    else if ( ( aIt->Value ) >>= aDuration )
+                    else if ( rProp.Value >>= aDuration )
                     {
                         OUStringBuffer buf;
                         ::sax::Converter::convertDuration( buf, aDuration );
                         OUString aDurationStr = buf.makeStringAndClear();
                         writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), aDurationStr );
                     }
-                    else if ( ( aIt->Value ) >>= aDateTime )
+                    else if ( rProp.Value >>= aDateTime )
                             writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime );
                     else
                         //no other options
@@ -841,6 +842,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             }
             pAppProps->endElement( XML_property );
         }
+        ++nIndex;
     }
     pAppProps->endElement( XML_Properties );
 }
