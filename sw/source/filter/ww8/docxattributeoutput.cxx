@@ -495,6 +495,79 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
+static OUString convertToOOXMLVertOrient(sal_Int16 nOrient)
+{
+    switch( nOrient )
+    {
+        case text::VertOrientation::NONE:
+            return OUString();
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            return OUString( "center" );
+        case text::VertOrientation::BOTTOM:
+            return OUString( "bottom" );
+        case text::VertOrientation::LINE_BOTTOM:
+            return OUString( "outside" );
+        case text::VertOrientation::TOP:
+            return OUString( "top" );
+        case text::VertOrientation::LINE_TOP:
+        default:
+            return OUString( "inside" );
+    }
+}
+
+static OUString convertToOOXMLHoriOrient(sal_Int16 nOrient)
+{
+    switch( nOrient )
+    {
+        case text::VertOrientation::NONE:
+            return OUString();
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            return OUString( "center" );
+        case text::VertOrientation::BOTTOM:
+            return OUString( "bottom" );
+        case text::VertOrientation::LINE_BOTTOM:
+            return OUString( "outside" );
+        case text::VertOrientation::TOP:
+            return OUString( "top" );
+        case text::VertOrientation::LINE_TOP:
+        default:
+            return OUString( "inside" );
+    }
+}
+
+static OUString convertToOOXMLVertOrientRel(sal_Int16 nOrientRel)
+{
+    switch (nOrientRel)
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            return OUString("margin");
+        case text::RelOrientation::PAGE_FRAME:
+            return OUString("page");
+        case text::RelOrientation::FRAME:
+        case text::RelOrientation::TEXT_LINE:
+        default:
+            return OUString("text");
+    }
+}
+
+static OUString convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
+{
+    switch (nOrientRel)
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            return OUString("margin");
+        case text::RelOrientation::PAGE_FRAME:
+            return OUString("page");
+        case text::RelOrientation::CHAR:
+        case text::RelOrientation::PAGE_RIGHT:
+        case text::RelOrientation::FRAME:
+        default:
+            return OUString("text");
+    }
+}
+
 static void lcl_deleteAndResetTheLists( rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren.is() )
@@ -518,38 +591,8 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
     attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
-    const char* relativeFromH;
-    const char* relativeFromV;
-    switch (pFrameFormat->GetVertOrient().GetRelationOrient())
-    {
-        case text::RelOrientation::PAGE_PRINT_AREA:
-            relativeFromV = "margin";
-            break;
-        case text::RelOrientation::PAGE_FRAME:
-            relativeFromV = "page";
-            break;
-        case text::RelOrientation::FRAME:
-        case text::RelOrientation::TEXT_LINE:
-        default:
-            relativeFromV = "text";
-            break;
-    }
-
-    switch (pFrameFormat->GetHoriOrient().GetRelationOrient())
-    {
-        case text::RelOrientation::PAGE_PRINT_AREA:
-            relativeFromH = "margin";
-            break;
-        case text::RelOrientation::PAGE_FRAME:
-            relativeFromH = "page";
-            break;
-        case text::RelOrientation::CHAR:
-        case text::RelOrientation::PAGE_RIGHT:
-        case text::RelOrientation::FRAME:
-        default:
-            relativeFromH = "text";
-            break;
-    }
+    OUString relativeFromH = convertToOOXMLHoriOrientRel( pFrameFormat->GetHoriOrient().GetRelationOrient() );
+    OUString relativeFromV = convertToOOXMLVertOrientRel( pFrameFormat->GetVertOrient().GetRelationOrient() );
 
     switch (pFrameFormat->GetSurround().GetValue())
     {
@@ -567,8 +610,8 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
         attrList->add( FSNS( XML_w, XML_wrap), "auto");
         break;
     }
-    attrList->add( FSNS( XML_w, XML_vAnchor), relativeFromV);
-    attrList->add( FSNS( XML_w, XML_hAnchor), relativeFromH);
+    attrList->add( FSNS( XML_w, XML_vAnchor), OUStringToOString(relativeFromV, RTL_TEXTENCODING_UTF8) );
+    attrList->add( FSNS( XML_w, XML_hAnchor), OUStringToOString(relativeFromH, RTL_TEXTENCODING_UTF8) );
     attrList->add( FSNS( XML_w, XML_hRule), "exact");
 
     sax_fastparser::XFastAttributeListRef xAttrList(attrList);
@@ -8322,49 +8365,8 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 
 void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVert )
 {
-    OString sAlign;
-    switch( rFlyVert.GetVertOrient() )
-    {
-        case text::VertOrientation::NONE:
-            break;
-        case text::VertOrientation::CENTER:
-        case text::VertOrientation::LINE_CENTER:
-            sAlign = OString( "center" );
-            break;
-        case text::VertOrientation::BOTTOM:
-            sAlign = OString( "bottom" );
-            break;
-        case text::VertOrientation::LINE_BOTTOM:
-            sAlign = OString( "outside" );
-            break;
-        case text::VertOrientation::TOP:
-            sAlign = OString( "top" );
-            break;
-        case text::VertOrientation::LINE_TOP:
-        default:
-            sAlign = OString( "inside" );
-            break;
-    }
-    OString sVAnchor( "page" );
-    switch ( rFlyVert.GetRelationOrient( ) )
-    {
-        case text::RelOrientation::CHAR:
-        case text::RelOrientation::PRINT_AREA:
-        case text::RelOrientation::TEXT_LINE:
-        case text::RelOrientation::FRAME:
-            sVAnchor = OString( "text" );
-            break;
-        case text::RelOrientation::PAGE_LEFT:
-        case text::RelOrientation::PAGE_RIGHT:
-        case text::RelOrientation::FRAME_LEFT:
-        case text::RelOrientation::FRAME_RIGHT:
-        case text::RelOrientation::PAGE_PRINT_AREA:
-            sVAnchor = OString( "margin" );
-            break;
-        case text::RelOrientation::PAGE_FRAME:
-        default:
-            break;
-    }
+    OString sAlign   = OUStringToOString( convertToOOXMLVertOrient( rFlyVert.GetVertOrient() ), RTL_TEXTENCODING_UTF8);
+    OString sVAnchor = OUStringToOString( convertToOOXMLVertOrientRel( rFlyVert.GetRelationOrient() ), RTL_TEXTENCODING_UTF8);
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
@@ -8389,42 +8391,8 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
 
 void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyHori )
 {
-    OString sAlign;
-    switch( rFlyHori.GetHoriOrient() )
-    {
-        case text::HoriOrientation::NONE:
-            break;
-        case text::HoriOrientation::LEFT:
-            sAlign = OString( rFlyHori.IsPosToggle( ) ? "inside" : "left" );
-            break;
-        case text::HoriOrientation::RIGHT:
-            sAlign = OString( rFlyHori.IsPosToggle( ) ? "outside" : "right" );
-            break;
-        case text::HoriOrientation::CENTER:
-        case text::HoriOrientation::FULL: // FULL only for tables
-        default:
-            sAlign = OString( "center" );
-            break;
-    }
-    OString sHAnchor( "page" );
-    switch ( rFlyHori.GetRelationOrient( ) )
-    {
-        case text::RelOrientation::CHAR:
-        case text::RelOrientation::PRINT_AREA:
-        case text::RelOrientation::FRAME:
-            sHAnchor = OString( "text" );
-            break;
-        case text::RelOrientation::PAGE_LEFT:
-        case text::RelOrientation::PAGE_RIGHT:
-        case text::RelOrientation::FRAME_LEFT:
-        case text::RelOrientation::FRAME_RIGHT:
-        case text::RelOrientation::PAGE_PRINT_AREA:
-            sHAnchor = OString( "margin" );
-            break;
-        case text::RelOrientation::PAGE_FRAME:
-        default:
-            break;
-    }
+    OString sAlign   = OUStringToOString( convertToOOXMLHoriOrient( rFlyHori.GetHoriOrient() ), RTL_TEXTENCODING_UTF8);
+    OString sHAnchor = OUStringToOString( convertToOOXMLHoriOrientRel( rFlyHori.GetRelationOrient() ), RTL_TEXTENCODING_UTF8);
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
