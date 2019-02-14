@@ -28,6 +28,7 @@
 #include <memory>
 #include <iostream>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -472,6 +473,33 @@ RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const 
 const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
 {
     return boost::get<RectangleAndPart>(PayloadObject);
+}
+
+boost::property_tree::ptree& CallbackFlushHandler::CallbackData::setJson(const std::string& payload)
+{
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(payload);
+    boost::property_tree::read_json(aStream, aTree);
+
+    // Let boost normalize the payload so it always matches the cache.
+    setJson(aTree);
+
+    return boost::get<boost::property_tree::ptree>(PayloadObject);
+}
+
+void CallbackFlushHandler::CallbackData::setJson(const boost::property_tree::ptree& rTree)
+{
+    std::stringstream aJSONStream;
+    constexpr bool bPretty = false; // Don't waste time and bloat logs.
+    boost::property_tree::write_json(aJSONStream, rTree, bPretty);
+    PayloadString = boost::trim_copy(aJSONStream.str());
+
+    PayloadObject = rTree;
+}
+
+const boost::property_tree::ptree& CallbackFlushHandler::CallbackData::getJson() const
+{
+    return boost::get<boost::property_tree::ptree>(PayloadObject);
 }
 
 }
@@ -1177,9 +1205,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_WINDOW:
             {
                 // reading JSON by boost might be slow?
-                boost::property_tree::ptree aTree;
-                std::stringstream aStream(payload);
-                boost::property_tree::read_json(aStream, aTree);
+                boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
                 const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
                 if (aTree.get<std::string>("action", "") == "invalidate")
                 {
@@ -1191,9 +1217,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         removeAll([&nLOKWindowId] (const queue_type::value_type& elem) {
                                 if (elem.Type == LOK_CALLBACK_WINDOW)
                                 {
-                                    boost::property_tree::ptree aOldTree;
-                                    std::stringstream aOldStream(elem.PayloadString);
-                                    boost::property_tree::read_json(aOldStream, aOldTree);
+                                    const boost::property_tree::ptree& aOldTree = elem.getJson();
                                     const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
                                     if (aOldTree.get<std::string>("action", "") == "invalidate" &&
                                         nLOKWindowId == nOldDialogId)
@@ -1208,15 +1232,13 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     {
                         // if we have to invalidate all of the window, ignore
                         // any part invalidation message
-                        auto invAllExist = std::any_of(m_queue.rbegin(), m_queue.rend(),
+                        const auto invAllExist = std::any_of(m_queue.rbegin(), m_queue.rend(),
                                                        [&nLOKWindowId] (const queue_type::value_type& elem)
                                                        {
                                                            if (elem.Type != LOK_CALLBACK_WINDOW)
                                                                return false;
 
-                                                           boost::property_tree::ptree aOldTree;
-                                                           std::stringstream aOldStream(elem.PayloadString);
-                                                           boost::property_tree::read_json(aOldStream, aOldTree);
+                                                           const boost::property_tree::ptree& aOldTree = elem.getJson();
                                                            const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
                                                            return aOldTree.get<std::string>("action", "") == "invalidate" &&
                                                                nLOKWindowId == nOldDialogId &&
@@ -1240,9 +1262,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 if (elem.Type != LOK_CALLBACK_WINDOW)
                                     return false;
 
-                                boost::property_tree::ptree aOldTree;
-                                std::stringstream aOldStream(elem.PayloadString);
-                                boost::property_tree::read_json(aOldStream, aOldTree);
+                                const boost::property_tree::ptree& aOldTree = elem.getJson();
                                 if (aOldTree.get<std::string>("action", "") == "invalidate")
                                 {
                                     const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
@@ -1295,9 +1315,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         }
 
                         aTree.put("rectangle", aNewRect.toString().getStr());
-                        std::stringstream aJSONStream;
-                        boost::property_tree::write_json(aJSONStream, aTree);
-                        payload = aJSONStream.str();
+                        aCallbackData.setJson(aTree);
                     }
                 }
             }
