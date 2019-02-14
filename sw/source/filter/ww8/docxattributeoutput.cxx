@@ -3802,6 +3802,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         {
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
             uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
+            // look for a surrounding frame and take it's position values
+            const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
             for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
             {
                 if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
@@ -3842,11 +3844,42 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 }
                 else if (aTablePosition[i].Name == "tblpX")
                 {
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                    sal_Int32 nValue = 0;
+                    if (pFrame)
+                    {
+                        nValue = pFrame->GetFrameFormat().GetHoriOrient().GetPos();
+                        // we need to revert the additional shift introduced by
+                        // lcl_DecrementHoriOrientPosition() in writerfilter
+                        // 1st: left distance of the table
+                        const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+                        const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
+                        const SvxBoxItem& rBox = pFrameFormat->GetBox( );
+                        sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
+                        nValue += nLeftDistance;
+
+                        // 2nd: if a left border is given, revert the shift by half the width
+                        // from lcl_DecrementHoriOrientPosition() in writerfilter
+                        if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
+                        {
+                            long nWidth = pLeftBorder->GetWidth();
+                            nValue += (nWidth / 2);
+                        }
+                    }
+                    else
+                        nValue = aTablePosition[i].Value.get<sal_Int32>();
+
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
                 }
                 else if (aTablePosition[i].Name == "tblpY")
                 {
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                    sal_Int32 nValue = 0;
+                    if (pFrame)
+                        // no additional shift occur (like in the tblpX case)
+                        nValue = pFrame->GetFrameFormat().GetVertOrient().GetPos();
+                    else
+                        nValue = aTablePosition[i].Value.get<sal_Int32>();
+
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
                 }
             }
 
