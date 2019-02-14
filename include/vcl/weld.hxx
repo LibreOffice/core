@@ -1096,7 +1096,7 @@ public:
     // typically you only need to call this if set_text (e.g. with "") was
     // previously called to display some arbitrary text instead of the
     // formatted value and now you want to show it as formatted again
-    void reformat() { set_value(get_value(m_eSrcUnit), m_eSrcUnit); }
+    void reformat() { spin_button_output(*m_xSpinButton); }
 
     void set_range(int min, int max, FieldUnit eValueUnit)
     {
