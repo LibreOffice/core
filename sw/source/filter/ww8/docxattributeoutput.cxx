@@ -330,10 +330,14 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
 
+    m_rExport.SetFloatingTableFrame(pParentFrame);
+
     // unset parent frame, otherwise exporter thinks we are still in a frame
     m_rExport.m_pParentFrame = nullptr;
 
     GetExport().WriteText();
+
+    m_rExport.SetFloatingTableFrame(nullptr);
 }
 
 static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
@@ -3797,6 +3801,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         {
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
             uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
+            // look for a surrounding frame and take it's position values
+            const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
             for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
             {
                 if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
@@ -3837,11 +3843,23 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 }
                 else if (aTablePosition[i].Name == "tblpX")
                 {
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                    sal_Int32 nValue = 0;
+                    if (pFrame)
+                        nValue = pFrame->GetFrameFormat().GetHoriOrient().GetPos();
+                    else
+                        nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        SAL_DEBUG(" ### tblpX " << pFrame->GetFrameFormat().GetHoriOrient().GetPos() << " vs " << aTablePosition[i].Value.get<sal_Int32>());
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
                 }
                 else if (aTablePosition[i].Name == "tblpY")
                 {
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                    sal_Int32 nValue = 0;
+                    if (pFrame)
+                        nValue = pFrame->GetFrameFormat().GetVertOrient().GetPos();
+                    else
+                        nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        SAL_DEBUG(" ### tblpY " << pFrame->GetFrameFormat().GetVertOrient().GetPos() << " vs " << aTablePosition[i].Value.get<sal_Int32>());
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
                 }
             }
 

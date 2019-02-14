@@ -15,6 +15,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <sal/log.hxx>
+
 namespace writerfilter
 {
 namespace dmapper
@@ -52,6 +54,7 @@ void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
         break;
     case NS_ooxml::LN_CT_TblPPr_tblpX:
         m_nX = rVal.getInt();
+        SAL_DEBUG("TablePositionHandler::lcl_attribute m_nX: " << m_nX);
         break;
     case NS_ooxml::LN_CT_TblPPr_leftFromText:
         m_nLeftFromText = rVal.getInt();

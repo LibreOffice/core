@@ -1474,6 +1474,8 @@ bool SwFormatHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(bConvert)
                 nVal = convertMm100ToTwip(nVal);
             SetPos( nVal );
+            SAL_DEBUG("SwFormatHoriOrient::PutValue: " << nVal);
+
         }
         break;
         case MID_HORIORIENT_PAGETOGGLE:
