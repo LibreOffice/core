@@ -1057,6 +1057,8 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
 
                         ImplMouseSelect( aTempDate, nHitTest, false );
                     }
+                    if (rMEvt.GetClicks() == 2)
+                        maActivateHdl.Call(this);
                 }
             }
         }
@@ -1135,6 +1137,9 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             aNewDate.AddDays( aNewDate.GetDaysInMonth() );
             break;
 
+        case KEY_RETURN:
+            break;
+
         default:
             Control::KeyInput( rKEvt );
             break;
@@ -1146,6 +1151,14 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
         mbTravelSelect = true;
         Select();
         mbTravelSelect = false;
+    }
+
+    if (rKEvt.GetKeyCode().GetCode() == KEY_RETURN)
+    {
+        if (maActivateHdl.IsSet())
+            maActivateHdl.Call(this);
+        else
+            Control::KeyInput(rKEvt);
     }
 }
 
@@ -1545,6 +1558,11 @@ Size Calendar::CalcWindowSizePixel() const
     aSize.AdjustHeight(MONTH_OFFY );
 
     return aSize;
+}
+
+Size Calendar::GetOptimalSize() const
+{
+    return CalcWindowSizePixel();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

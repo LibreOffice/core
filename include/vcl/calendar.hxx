@@ -165,6 +165,7 @@ class VCL_DLLPUBLIC Calendar final : public Control
                     mbTravelSelect:1,
                     mbAllSel:1;
     Link<Calendar*,void>   maSelectHdl;
+    Link<Calendar*,void>   maActivateHdl;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -193,6 +194,7 @@ class VCL_DLLPUBLIC Calendar final : public Control
     VCL_DLLPRIVATE void         ImplEndTracking( bool bCancel );
     VCL_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
 
+    virtual Size GetOptimalSize() const override;
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~Calendar() override;
@@ -235,6 +237,7 @@ public:
     Size            CalcWindowSizePixel() const;
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
+    void            SetActivateHdl( const Link<Calendar*,void>& rLink ) { maActivateHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_CALENDAR_HXX

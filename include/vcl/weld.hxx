@@ -12,6 +12,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -942,6 +943,23 @@ public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
 };
 
+class VCL_DLLPUBLIC Calendar : virtual public Widget
+{
+protected:
+    Link<Calendar&, void> m_aSelectedHdl;
+    Link<Calendar&, void> m_aActivatedHdl;
+
+    void signal_selected() { m_aSelectedHdl.Call(*this); }
+    void signal_activated() { m_aActivatedHdl.Call(*this); }
+
+public:
+    void connect_selected(const Link<Calendar&, void>& rLink) { m_aSelectedHdl = rLink; }
+    void connect_activated(const Link<Calendar&, void>& rLink) { m_aActivatedHdl = rLink; }
+
+    virtual void set_date(const Date& rDate) = 0;
+    virtual Date get_date() const = 0;
+};
+
 // an entry + treeview pair, where the entry autocompletes from the
 // treeview list, and selecting something in the list sets the
 // entry to that text, i.e. a visually exploded ComboBox
@@ -1472,6 +1490,8 @@ public:
                                                            bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Image> weld_image(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<Calendar> weld_calendar(const OString& id, bool bTakeOwnership = false)
+        = 0;
     virtual std::unique_ptr<DrawingArea>
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,

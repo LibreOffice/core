@@ -36,6 +36,7 @@
 #include <utility>
 #include <tools/helpers.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
@@ -1787,6 +1788,54 @@ public:
         m_xImage->SetImage(::Image(StockImage::Yes, rIconName));
     }
 };
+
+class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
+{
+private:
+    VclPtr<::Calendar> m_xCalendar;
+
+    DECL_LINK(SelectHdl, ::Calendar*, void);
+    DECL_LINK(ActivateHdl, ::Calendar*, void);
+
+public:
+    SalInstanceCalendar(::Calendar* pCalendar, bool bTakeOwnership)
+        : SalInstanceWidget(pCalendar, bTakeOwnership)
+        , m_xCalendar(pCalendar)
+    {
+        m_xCalendar->SetSelectHdl(LINK(this, SalInstanceCalendar, SelectHdl));
+        m_xCalendar->SetActivateHdl(LINK(this, SalInstanceCalendar, ActivateHdl));
+    }
+
+    virtual void set_date(const Date& rDate) override
+    {
+        m_xCalendar->SetCurDate(rDate);
+    }
+
+    virtual Date get_date() const override
+    {
+        return m_xCalendar->GetFirstSelectedDate();
+    }
+
+    virtual ~SalInstanceCalendar() override
+    {
+        m_xCalendar->SetSelectHdl(Link<::Calendar*, void>());
+        m_xCalendar->SetActivateHdl(Link<::Calendar*, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void)
+{
+    if (notify_events_disabled())
+        return;
+    signal_selected();
+}
+
+IMPL_LINK_NOARG(SalInstanceCalendar, ActivateHdl, ::Calendar*, void)
+{
+    if (notify_events_disabled())
+        return;
+    signal_activated();
+}
 
 namespace
 {
@@ -3852,6 +3901,12 @@ public:
     {
         FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
         return pImage ? std::make_unique<SalInstanceImage>(pImage, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id, bool bTakeOwnership) override
+    {
+        Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
+        return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override

@@ -419,7 +419,14 @@ public:
 
 class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPDateGroupDlg_Impl, ScDPDateGroupDlg )
+protected:
+    std::unique_ptr<ScDPDateGroupDlg> m_xDlg;
+public:
+    explicit AbstractScDPDateGroupDlg_Impl(ScDPDateGroupDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual ScDPNumGroupInfo GetGroupInfo() const override;
     virtual sal_Int32 GetDatePart() const override;
 };
@@ -659,10 +666,10 @@ public:
     virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg(weld::Window* pParent,
                                                                   const ScDPNumGroupInfo& rInfo) override;
 
-    virtual VclPtr<AbstractScDPDateGroupDlg> CreateScDPDateGroupDlg( vcl::Window* pParent,
-                                                                const ScDPNumGroupInfo& rInfo,
-                                                                sal_Int32 nDatePart,
-                                                                const Date& rNullDate ) override;
+    virtual VclPtr<AbstractScDPDateGroupDlg> CreateScDPDateGroupDlg(weld::Window* pParent,
+                                                                    const ScDPNumGroupInfo& rInfo,
+                                                                    sal_Int32 nDatePart,
+                                                                    const Date& rNullDate) override;
 
     virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg(weld::Window* pParent,
                                                                 ScDPObject& rDPObj,

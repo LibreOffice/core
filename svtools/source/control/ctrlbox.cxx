@@ -2056,4 +2056,37 @@ void SvtLineListBox::UpdatePreview()
     }
 }
 
+SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl)
+    : m_xControl(std::move(pControl))
+    , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/datewindow.ui"))
+    , m_xTopLevel(m_xBuilder->weld_widget("date_popup_window"))
+    , m_xCalendar(m_xBuilder->weld_calendar("date"))
+{
+    m_xControl->set_popover(m_xTopLevel.get());
+    m_xCalendar->connect_selected(LINK(this, SvtCalendarBox, SelectHdl));
+    m_xCalendar->connect_activated(LINK(this, SvtCalendarBox, ActivateHdl));
+}
+
+void SvtCalendarBox::set_date(const Date& rDate)
+{
+    m_xCalendar->set_date(rDate);
+    SelectHdl(*m_xCalendar);
+}
+
+IMPL_LINK(SvtCalendarBox, SelectHdl, weld::Calendar&, rCalendar, void)
+{
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+    m_xControl->set_label(rLocaleData.getDate(rCalendar.get_date()));
+}
+
+IMPL_LINK_NOARG(SvtCalendarBox, ActivateHdl, weld::Calendar&, void)
+{
+    if (m_xControl->get_active())
+        m_xControl->set_active(false);
+}
+
+SvtCalendarBox::~SvtCalendarBox()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
