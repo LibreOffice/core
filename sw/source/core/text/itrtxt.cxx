@@ -274,7 +274,13 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
             case SvxParaVertAlignItem::Align::Automatic :
                 if ( bAutoToCentered || GetInfo().GetTextFrame()->IsVertical() )
                 {
-                    if( GetInfo().GetTextFrame()->IsVertLR() )
+                    // Vertical text has these cases to calculate the baseline:
+                    // - Implicitly TB and RL: the origo is the top right corner, offset is the
+                    //   ascent.
+                    // - (Implicitly TB and) LR: the origo is the top left corner, offset is the
+                    //   descent.
+                    // - BT and LR: the origo is the bottom left corner, offset is the ascent.
+                    if (GetInfo().GetTextFrame()->IsVertLR() && !GetInfo().GetTextFrame()->IsVertLRBT())
                             nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
                     else
                             nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
