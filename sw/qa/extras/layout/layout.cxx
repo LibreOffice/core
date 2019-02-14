@@ -2804,6 +2804,14 @@ void SwLayoutWriter::testBtlrCell()
     // the orientation was 0 (layout did not take btlr direction request from
     // doc model).
     assertXPath(pXmlDoc, "//font[1]", "orientation", "900");
+
+#ifndef MACOSX // macOS fails with actual == 2662 for some reason.
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 1915;
+    // Actual  : 1756', i.e. the AAA text was too close to the left cell border due to an ascent vs
+    // descent mismatch when calculating the baseline offset of the text portion.
+    assertXPath(pXmlDoc, "//textarray[1]", "x", "1915");
+    assertXPath(pXmlDoc, "//textarray[1]", "y", "2707");
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
