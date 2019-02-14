@@ -495,8 +495,6 @@ static OString convertToOOXMLVertOrient(sal_Int16 nOrient)
 {
     switch( nOrient )
     {
-        case text::VertOrientation::NONE:
-            return OString();
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
             return OString( "center" );
@@ -507,8 +505,9 @@ static OString convertToOOXMLVertOrient(sal_Int16 nOrient)
         case text::VertOrientation::TOP:
             return OString( "top" );
         case text::VertOrientation::LINE_TOP:
-        default:
             return OString( "inside" );
+        default:
+            return OString();
     }
 }
 
@@ -516,17 +515,19 @@ static OString convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bIsPosToggle)
 {
     switch( nOrient )
     {
-        case text::HoriOrientation::NONE:
-            return OString();
         case text::HoriOrientation::LEFT:
             return OString( bIsPosToggle ? "inside" : "left" );
+        case text::HoriOrientation::INSIDE:
+            return OString( "inside" );
         case text::HoriOrientation::RIGHT:
             return OString( bIsPosToggle ? "outside" : "right" );
+        case text::HoriOrientation::OUTSIDE:
+            return OString( "outside" );
         case text::HoriOrientation::CENTER:
-        // fall-through indended
         case text::HoriOrientation::FULL:
-        default:
             return OString( "center" );
+        default:
+            return OString();
     }
 }
 
@@ -3847,82 +3848,130 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
             // look for a surrounding frame and take it's position values
             const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
-            for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
+            if( pFrame )
             {
-                if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
-                {
-                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), strTemp.getStr() );
-                }
-                else if (aTablePosition[i].Name == "tblpYSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
-                {
-                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), strTemp.getStr() );
-                }
-                else if (aTablePosition[i].Name == "horzAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
-                {
-                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), strTemp.getStr() );
-                }
-                else if (aTablePosition[i].Name == "tblpXSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
-                {
-                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), strTemp.getStr() );
-                }
-                else if (aTablePosition[i].Name == "bottomFromText")
-                {
-                    attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
-                }
-                else if (aTablePosition[i].Name == "leftFromText")
-                {
-                    attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
-                }
-                else if (aTablePosition[i].Name == "rightFromText")
-                {
-                    attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
-                }
-                else if (aTablePosition[i].Name == "topFromText")
-                {
-                    attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
-                }
-                else if (aTablePosition[i].Name == "tblpX")
-                {
-                    sal_Int32 nValue = 0;
-                    if (pFrame)
-                    {
-                        nValue = pFrame->GetFrameFormat().GetHoriOrient().GetPos();
-                        // we need to revert the additional shift introduced by
-                        // lcl_DecrementHoriOrientPosition() in writerfilter
-                        // 1st: left distance of the table
-                        const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-                        const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
-                        const SvxBoxItem& rBox = pFrameFormat->GetBox( );
-                        sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
-                        nValue += nLeftDistance;
+                // we export the values of the surrounding Frame
+                OString sOrientation;
+                sal_Int32 nValue;
 
-                        // 2nd: if a left border is given, revert the shift by half the width
-                        // from lcl_DecrementHoriOrientPosition() in writerfilter
-                        if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
-                        {
-                            long nWidth = pLeftBorder->GetWidth();
-                            nValue += (nWidth / 2);
-                        }
+                // If tblpXSpec or tblpYSpec are present, we do not write tblpX or tblpY!
+                OString sTblpXSpec = convertToOOXMLHoriOrient( pFrame->GetFrameFormat().GetHoriOrient().GetHoriOrient(), pFrame->GetFrameFormat().GetHoriOrient().IsPosToggle() );
+                OString sTblpYSpec = convertToOOXMLVertOrient( pFrame->GetFrameFormat().GetVertOrient().GetVertOrient() );
+
+                sOrientation = convertToOOXMLVertOrientRel( pFrame->GetFrameFormat().GetVertOrient().GetRelationOrient() );
+                if(sOrientation != "page") // do not write default
+                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), sOrientation.getStr() );
+
+                if( !sTblpYSpec.isEmpty() )
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), sTblpYSpec.getStr() );
+
+                sOrientation = convertToOOXMLHoriOrientRel( pFrame->GetFrameFormat().GetHoriOrient().GetRelationOrient() );
+                if(sOrientation != "page") // do not wirte default
+                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), sOrientation.getStr() );
+
+                if( !sTblpXSpec.isEmpty() )
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), sTblpXSpec.getStr() );
+
+                nValue = pFrame->GetFrameFormat().GetULSpace().GetLower();
+                if( nValue != 0 )
+                    attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( nValue ) );
+
+                nValue = pFrame->GetFrameFormat().GetLRSpace().GetLeft();
+                if( nValue != 0 )
+                    attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( nValue ) );
+
+                nValue = pFrame->GetFrameFormat().GetLRSpace().GetRight();
+                if( nValue != 0 )
+                    attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( nValue ) );
+
+                nValue = pFrame->GetFrameFormat().GetULSpace().GetUpper();
+                if( nValue != 0 )
+                    attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( nValue ) );
+
+                if( sTblpXSpec.isEmpty() ) // do not write tblpX if tblpXSpec is present
+                {
+                    nValue = pFrame->GetFrameFormat().GetHoriOrient().GetPos();
+                    // we need to revert the additional shift introduced by
+                    // lcl_DecrementHoriOrientPosition() in writerfilter
+                    // 1st: left distance of the table
+                    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+                    const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
+                    const SvxBoxItem& rBox = pFrameFormat->GetBox( );
+                    sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
+                    nValue += nLeftDistance;
+
+                    // 2nd: if a left border is given, revert the shift by half the width
+                    // from lcl_DecrementHoriOrientPosition() in writerfilter
+                    if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
+                    {
+                        long nWidth = pLeftBorder->GetWidth();
+                        nValue += (nWidth / 2);
                     }
-                    else
-                        nValue = aTablePosition[i].Value.get<sal_Int32>();
 
                     attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
                 }
-                else if (aTablePosition[i].Name == "tblpY")
-                {
-                    sal_Int32 nValue = 0;
-                    if (pFrame)
-                        // no additional shift occur (like in the tblpX case)
-                        nValue = pFrame->GetFrameFormat().GetVertOrient().GetPos();
-                    else
-                        nValue = aTablePosition[i].Value.get<sal_Int32>();
 
+                if( sTblpYSpec.isEmpty() ) // do not write tblpY if tblpYSpec is present
+                {
+                    nValue = pFrame->GetFrameFormat().GetVertOrient().GetPos();
                     attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
+                }
+            }
+            else // ( pFrame = 0 )
+            {
+                // we export the values from the grabBag
+                for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
+                {
+                    if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    {
+                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), sOrientation.getStr() );
+                    }
+                    else if (aTablePosition[i].Name == "tblpYSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    {
+                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), sOrientation.getStr() );
+                    }
+                    else if (aTablePosition[i].Name == "horzAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    {
+                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), sOrientation.getStr() );
+                    }
+                    else if (aTablePosition[i].Name == "tblpXSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    {
+                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), sOrientation.getStr() );
+                    }
+                    else if (aTablePosition[i].Name == "bottomFromText")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( nValue ) );
+                    }
+                    else if (aTablePosition[i].Name == "leftFromText")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( nValue ) );
+                    }
+                    else if (aTablePosition[i].Name == "rightFromText")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( nValue ) );
+                    }
+                    else if (aTablePosition[i].Name == "topFromText")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( nValue ) );
+                    }
+                    else if (aTablePosition[i].Name == "tblpX")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
+                    }
+                    else if (aTablePosition[i].Name == "tblpY")
+                    {
+                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
+                    }
                 }
             }
 
