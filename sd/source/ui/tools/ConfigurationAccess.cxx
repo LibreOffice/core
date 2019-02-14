@@ -126,23 +126,23 @@ void ConfigurationAccess::ForAll (
     const ::std::vector<OUString>& rArguments,
     const Functor& rFunctor)
 {
-    if (rxContainer.is())
+    if (!rxContainer.is())
+        return;
+
+    ::std::vector<Any> aValues(rArguments.size());
+    Sequence<OUString> aKeys (rxContainer->getElementNames());
+    for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
     {
-        ::std::vector<Any> aValues(rArguments.size());
-        Sequence<OUString> aKeys (rxContainer->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
+        const OUString& rsKey (aKeys[nItemIndex]);
+        Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
+        if (xSetItem.is())
         {
-            const OUString& rsKey (aKeys[nItemIndex]);
-            Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
-            if (xSetItem.is())
-            {
-                // Get from the current item of the container the children
-                // that match the names in the rArguments list.
-                for (size_t nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
-                    aValues[nValueIndex] = xSetItem->getByName(rArguments[nValueIndex]);
-            }
-            rFunctor(rsKey, aValues);
+            // Get from the current item of the container the children
+            // that match the names in the rArguments list.
+            for (size_t nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
+                aValues[nValueIndex] = xSetItem->getByName(rArguments[nValueIndex]);
         }
+        rFunctor(rsKey, aValues);
     }
 }
 

@@ -302,30 +302,30 @@ void PreviewRenderer::PaintPage (
 
 void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
 {
-    if (!rSubstitutionText.isEmpty())
-    {
-        // Set the font size.
-        const vcl::Font& rOriginalFont (mpPreviewDevice->GetFont());
-        vcl::Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
-        sal_Int32 nHeight (mpPreviewDevice->PixelToLogic(Size(0,snSubstitutionTextSize)).Height());
-        aFont.SetFontHeight(nHeight);
-        mpPreviewDevice->SetFont (aFont);
+    if (rSubstitutionText.isEmpty())
+        return;
 
-        // Paint the substitution text.
-        ::tools::Rectangle aTextBox (
-            Point(0,0),
-            mpPreviewDevice->PixelToLogic(
-                mpPreviewDevice->GetOutputSizePixel()));
-        DrawTextFlags const nTextStyle =
-            DrawTextFlags::Center
-            | DrawTextFlags::VCenter
-            | DrawTextFlags::MultiLine
-            | DrawTextFlags::WordBreak;
-        mpPreviewDevice->DrawText (aTextBox, rSubstitutionText, nTextStyle);
+    // Set the font size.
+    const vcl::Font& rOriginalFont (mpPreviewDevice->GetFont());
+    vcl::Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
+    sal_Int32 nHeight (mpPreviewDevice->PixelToLogic(Size(0,snSubstitutionTextSize)).Height());
+    aFont.SetFontHeight(nHeight);
+    mpPreviewDevice->SetFont (aFont);
 
-        // Restore the font.
-        mpPreviewDevice->SetFont (rOriginalFont);
-    }
+    // Paint the substitution text.
+    ::tools::Rectangle aTextBox (
+        Point(0,0),
+        mpPreviewDevice->PixelToLogic(
+            mpPreviewDevice->GetOutputSizePixel()));
+    DrawTextFlags const nTextStyle =
+        DrawTextFlags::Center
+        | DrawTextFlags::VCenter
+        | DrawTextFlags::MultiLine
+        | DrawTextFlags::WordBreak;
+    mpPreviewDevice->DrawText (aTextBox, rSubstitutionText, nTextStyle);
+
+    // Restore the font.
+    mpPreviewDevice->SetFont (rOriginalFont);
 }
 
 void PreviewRenderer::PaintFrame()

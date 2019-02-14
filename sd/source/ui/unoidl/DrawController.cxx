@@ -126,42 +126,42 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(DrawController);
 
 void SAL_CALL DrawController::dispose()
 {
-    if( !mbDisposing )
+    if( mbDisposing )
+        return;
+
+    SolarMutexGuard aGuard;
+
+    if( mbDisposing )
+        return;
+
+    mbDisposing = true;
+
+    std::shared_ptr<ViewShell> pViewShell;
+    if (mpBase)
+        pViewShell = mpBase->GetMainViewShell();
+    if ( pViewShell )
     {
-        SolarMutexGuard aGuard;
-
-        if( !mbDisposing )
-        {
-            mbDisposing = true;
-
-            std::shared_ptr<ViewShell> pViewShell;
-            if (mpBase)
-                pViewShell = mpBase->GetMainViewShell();
-            if ( pViewShell )
-            {
-                pViewShell->DeactivateCurrentFunction();
-                DrawDocShell* pDocShell = pViewShell->GetDocSh();
-                if ( pDocShell != nullptr )
-                    pDocShell->SetDocShellFunction(nullptr);
-            }
-            pViewShell.reset();
-
-            // When the controller has not been detached from its view
-            // shell, i.e. mpViewShell is not NULL, then tell PaneManager
-            // and ViewShellManager to clear the shell stack.
-            if (mxSubController.is() && mpBase!=nullptr)
-            {
-                mpBase->DisconnectAllClients();
-                mpBase->GetViewShellManager()->Shutdown();
-            }
-
-            OPropertySetHelper::disposing();
-
-            DisposeFrameworkControllers();
-
-            SfxBaseController::dispose();
-        }
+        pViewShell->DeactivateCurrentFunction();
+        DrawDocShell* pDocShell = pViewShell->GetDocSh();
+        if ( pDocShell != nullptr )
+            pDocShell->SetDocShellFunction(nullptr);
     }
+    pViewShell.reset();
+
+    // When the controller has not been detached from its view
+    // shell, i.e. mpViewShell is not NULL, then tell PaneManager
+    // and ViewShellManager to clear the shell stack.
+    if (mxSubController.is() && mpBase!=nullptr)
+    {
+        mpBase->DisconnectAllClients();
+        mpBase->GetViewShellManager()->Shutdown();
+    }
+
+    OPropertySetHelper::disposing();
+
+    DisposeFrameworkControllers();
+
+    SfxBaseController::dispose();
 }
 
 void SAL_CALL DrawController::addEventListener(
@@ -276,23 +276,23 @@ void  SAL_CALL
     // Have to forward the event to our selection change listeners.
     OInterfaceContainerHelper* pListeners = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         cppu::UnoType<view::XSelectionChangeListener>::get());
-    if (pListeners)
+    if (!pListeners)
+        return;
+
+    // Re-send the event to all of our listeners.
+    OInterfaceIteratorHelper aIterator (*pListeners);
+    while (aIterator.hasMoreElements())
     {
-        // Re-send the event to all of our listeners.
-        OInterfaceIteratorHelper aIterator (*pListeners);
-        while (aIterator.hasMoreElements())
+        try
         {
-            try
-            {
-                view::XSelectionChangeListener* pListener =
-                    static_cast<view::XSelectionChangeListener*>(
-                        aIterator.next());
-                if (pListener != nullptr)
-                    pListener->selectionChanged (rEvent);
-            }
-            catch (const RuntimeException&)
-            {
-            }
+            view::XSelectionChangeListener* pListener =
+                static_cast<view::XSelectionChangeListener*>(
+                    aIterator.next());
+            if (pListener != nullptr)
+                pListener->selectionChanged (rEvent);
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 }
@@ -328,51 +328,51 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
 
 void DrawController::FireVisAreaChanged (const ::tools::Rectangle& rVisArea) throw()
 {
-    if( maLastVisArea != rVisArea )
-    {
-        Any aNewValue;
-        aNewValue <<= awt::Rectangle(
-            rVisArea.Left(),
-            rVisArea.Top(),
-            rVisArea.GetWidth(),
-            rVisArea.GetHeight() );
+    if( maLastVisArea == rVisArea )
+        return;
 
-        Any aOldValue;
-        aOldValue <<= awt::Rectangle(
-            maLastVisArea.Left(),
-            maLastVisArea.Top(),
-            maLastVisArea.GetWidth(),
-            maLastVisArea.GetHeight() );
+    Any aNewValue;
+    aNewValue <<= awt::Rectangle(
+        rVisArea.Left(),
+        rVisArea.Top(),
+        rVisArea.GetWidth(),
+        rVisArea.GetHeight() );
 
-        FirePropertyChange (PROPERTY_WORKAREA, aNewValue, aOldValue);
+    Any aOldValue;
+    aOldValue <<= awt::Rectangle(
+        maLastVisArea.Left(),
+        maLastVisArea.Top(),
+        maLastVisArea.GetWidth(),
+        maLastVisArea.GetHeight() );
 
-        maLastVisArea = rVisArea;
-    }
+    FirePropertyChange (PROPERTY_WORKAREA, aNewValue, aOldValue);
+
+    maLastVisArea = rVisArea;
 }
 
 void DrawController::FireSelectionChangeListener() throw()
 {
     OInterfaceContainerHelper * pLC = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         m_aSelectionTypeIdentifier);
-    if( pLC )
-    {
-        Reference< XInterface > xSource( static_cast<XWeak*>(this) );
-        const lang::EventObject aEvent( xSource );
+    if( !pLC )
+        return;
 
-        // iterate over all listeners and send events
-        OInterfaceIteratorHelper aIt( *pLC);
-        while( aIt.hasMoreElements() )
+    Reference< XInterface > xSource( static_cast<XWeak*>(this) );
+    const lang::EventObject aEvent( xSource );
+
+    // iterate over all listeners and send events
+    OInterfaceIteratorHelper aIt( *pLC);
+    while( aIt.hasMoreElements() )
+    {
+        try
         {
-            try
-            {
-                view::XSelectionChangeListener * pL =
-                    static_cast<view::XSelectionChangeListener*>(aIt.next());
-                if (pL != nullptr)
-                    pL->selectionChanged( aEvent );
-            }
-            catch (const RuntimeException&)
-            {
-            }
+            view::XSelectionChangeListener * pL =
+                static_cast<view::XSelectionChangeListener*>(aIt.next());
+            if (pL != nullptr)
+                pL->selectionChanged( aEvent );
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 }
@@ -406,28 +406,28 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
 void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 {
     SdrPage* pCurrentPage  = mpCurrentPage.get();
-    if (pNewCurrentPage != pCurrentPage)
+    if (pNewCurrentPage == pCurrentPage)
+        return;
+
+    try
     {
-        try
+        Any aNewValue (
+            makeAny(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
+
+        Any aOldValue;
+        if (pCurrentPage != nullptr)
         {
-            Any aNewValue (
-                makeAny(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
-
-            Any aOldValue;
-            if (pCurrentPage != nullptr)
-            {
-                Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage(), UNO_QUERY);
-                aOldValue <<= xOldPage;
-            }
-
-            FirePropertyChange(PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
-
-            mpCurrentPage.reset(pNewCurrentPage);
+            Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage(), UNO_QUERY);
+            aOldValue <<= xOldPage;
         }
-        catch (const uno::Exception& e)
-        {
-            SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << e);
-        }
+
+        FirePropertyChange(PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
+
+        mpCurrentPage.reset(pNewCurrentPage);
+    }
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << e);
     }
 }
 

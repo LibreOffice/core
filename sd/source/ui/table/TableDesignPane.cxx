@@ -211,30 +211,30 @@ void TableDesignWidget::ApplyOptions()
         ID_VAL_USEFIRSTCOLUMNSTYLE, ID_VAL_USELASTCOLUMNSTYLE, ID_VAL_USEBANDINGCOLUMNSTYLE
     };
 
-    if( mxSelectedTable.is() )
+    if( !mxSelectedTable.is() )
+        return;
+
+    SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
+
+    for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
-        SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
+        aReq.AppendItem( SfxBoolItem( gParamIds[i], m_aCheckBoxes[i]->IsChecked() ) );
+    }
 
-        for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
+    SdrView* pView = mrBase.GetDrawView();
+    if( !pView )
+        return;
+
+    const rtl::Reference< sdr::SelectionController >& xController( pView->getSelectionController() );
+    if( xController.is() )
+    {
+        xController->Execute( aReq );
+
+        SfxBindings* pBindings = getBindings( mrBase );
+        if( pBindings )
         {
-            aReq.AppendItem( SfxBoolItem( gParamIds[i], m_aCheckBoxes[i]->IsChecked() ) );
-        }
-
-        SdrView* pView = mrBase.GetDrawView();
-        if( pView )
-        {
-            const rtl::Reference< sdr::SelectionController >& xController( pView->getSelectionController() );
-            if( xController.is() )
-            {
-                xController->Execute( aReq );
-
-                SfxBindings* pBindings = getBindings( mrBase );
-                if( pBindings )
-                {
-                    pBindings->Invalidate( SID_UNDO );
-                    pBindings->Invalidate( SID_REDO );
-                }
-            }
+            pBindings->Invalidate( SID_UNDO );
+            pBindings->Invalidate( SID_REDO );
         }
     }
 }
@@ -282,36 +282,36 @@ void TableValueSet::Resize()
 {
     ValueSet::Resize();
     // Calculate the number of rows and columns.
-    if( GetItemCount() > 0 )
+    if( GetItemCount() <= 0 )
+        return;
+
+    Size aValueSetSize = GetSizePixel();
+
+    Image aImage = GetItemImage(GetItemId(0));
+    Size aItemSize = aImage.GetSizePixel();
+
+    aItemSize.AdjustHeight(10 );
+    int nColumnCount = (aValueSetSize.Width() - GetScrollWidth()) / aItemSize.Width();
+    if (nColumnCount < 1)
+        nColumnCount = 1;
+
+    int nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
+    if (nRowCount < 1)
+        nRowCount = 1;
+
+    int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
+
+    SetColCount (static_cast<sal_uInt16>(nColumnCount));
+    SetLineCount (static_cast<sal_uInt16>(nRowCount));
+
+    if( !m_bModal )
     {
-        Size aValueSetSize = GetSizePixel();
-
-        Image aImage = GetItemImage(GetItemId(0));
-        Size aItemSize = aImage.GetSizePixel();
-
-        aItemSize.AdjustHeight(10 );
-        int nColumnCount = (aValueSetSize.Width() - GetScrollWidth()) / aItemSize.Width();
-        if (nColumnCount < 1)
-            nColumnCount = 1;
-
-        int nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
-        if (nRowCount < 1)
-            nRowCount = 1;
-
-        int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
-
-        SetColCount (static_cast<sal_uInt16>(nColumnCount));
-        SetLineCount (static_cast<sal_uInt16>(nRowCount));
-
-        if( !m_bModal )
+        WinBits nStyle = GetStyle() & ~WB_VSCROLL;
+        if( nRowCount > nVisibleRowCount )
         {
-            WinBits nStyle = GetStyle() & ~WB_VSCROLL;
-            if( nRowCount > nVisibleRowCount )
-            {
-                nStyle |= WB_VSCROLL;
-            }
-            SetStyle( nStyle );
+            nStyle |= WB_VSCROLL;
         }
+        SetStyle( nStyle );
     }
 }
 
@@ -438,26 +438,26 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 : maBorder(SDRATTR_TABLE_BORDER)
 {
     SfxStyleSheet* pStyleSheet = SfxUnoStyleSheet::getUnoStyleSheet( xStyle );
-    if( pStyleSheet )
-    {
-        SfxItemSet& rSet = pStyleSheet->GetItemSet();
+    if( !pStyleSheet )
+        return;
 
-        // get style fill color
-        if( !GetDraftFillColor(rSet, maCellColor) )
-            maCellColor = COL_TRANSPARENT;
+    SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
-        // get style text color
-        const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);
-        if( pTextColor )
-            maTextColor = pTextColor->GetValue();
-        else
-            maTextColor = COL_TRANSPARENT;
+    // get style fill color
+    if( !GetDraftFillColor(rSet, maCellColor) )
+        maCellColor = COL_TRANSPARENT;
 
-        // get border
-        const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
-        if( pBoxItem )
-            maBorder = *pBoxItem;
-    }
+    // get style text color
+    const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);
+    if( pTextColor )
+        maTextColor = pTextColor->GetValue();
+    else
+        maTextColor = COL_TRANSPARENT;
+
+    // get border
+    const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
+    if( pBoxItem )
+        maBorder = *pBoxItem;
 }
 
 typedef std::vector< std::shared_ptr< CellInfo > > CellInfoVector;
@@ -484,7 +484,10 @@ struct TableStyleSettings
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {
     DBG_ASSERT( xTableStyle.is() && (xTableStyle->getCount() == sdr::table::style_count ), "sd::FillCellInfoVector(), invalid table style!" );
-    if( xTableStyle.is() ) try
+    if( !xTableStyle.is() )
+        return;
+
+    try
     {
         rVector.resize( sdr::table::style_count );
 

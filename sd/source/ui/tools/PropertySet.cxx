@@ -53,20 +53,20 @@ void SAL_CALL PropertySet::setPropertyValue (
     ThrowIfDisposed();
 
     Any aOldValue (SetPropertyValue(rsPropertyName,rsPropertyValue));
-    if (aOldValue != rsPropertyValue)
-    {
-        // Inform listeners that are registered specifically for the
-        // property and those registered for any property.
-        beans::PropertyChangeEvent aEvent(
-            static_cast<XWeak*>(this),
-            rsPropertyName,
-            false,
-            -1,
-            aOldValue,
-            rsPropertyValue);
-        CallListeners(rsPropertyName, aEvent);
-        CallListeners(OUString(), aEvent);
-    }
+    if (aOldValue == rsPropertyValue)
+        return;
+
+    // Inform listeners that are registered specifically for the
+    // property and those registered for any property.
+    beans::PropertyChangeEvent aEvent(
+        static_cast<XWeak*>(this),
+        rsPropertyName,
+        false,
+        -1,
+        aOldValue,
+        rsPropertyValue);
+    CallListeners(rsPropertyName, aEvent);
+    CallListeners(OUString(), aEvent);
 }
 
 Any SAL_CALL PropertySet::getPropertyValue (const OUString& rsPropertyName)

@@ -270,61 +270,61 @@ bool SdLayer::get( LayerAttribute what ) throw()
 
 void SdLayer::set( LayerAttribute what, bool flag ) throw()
 {
-    if(pLayer && mxLayerManager.is())
+    if(!(pLayer && mxLayerManager.is()))
+        return;
+
+    // Try 1. is an arbitrary page open?
+    ::sd::View *pView = mxLayerManager->GetView();
+    SdrPageView* pSdrPageView = nullptr;
+    if(pView)
+        pSdrPageView = pView->GetSdrPageView();
+
+    if(pSdrPageView)
     {
-        // Try 1. is an arbitrary page open?
-        ::sd::View *pView = mxLayerManager->GetView();
-        SdrPageView* pSdrPageView = nullptr;
-        if(pView)
-            pSdrPageView = pView->GetSdrPageView();
-
-        if(pSdrPageView)
+        OUString aLayerName(pLayer->GetName());
+        switch(what)
         {
-            OUString aLayerName(pLayer->GetName());
-            switch(what)
-            {
-            case VISIBLE:   pSdrPageView->SetLayerVisible(aLayerName,flag);
-                            break;
-            case PRINTABLE: pSdrPageView->SetLayerPrintable(aLayerName,flag);
-                            break;
-            case LOCKED:    pSdrPageView->SetLayerLocked(aLayerName,flag);
-                            break;
-            }
-        }
-
-        // Try 2. get info from FrameView
-        if(mxLayerManager->GetDocShell())
-        {
-            ::sd::FrameView *pFrameView = mxLayerManager->GetDocShell()->GetFrameView();
-
-            if(pFrameView)
-            {
-                SdrLayerIDSet aNewLayers;
-                switch(what)
-                {
-                case VISIBLE:   aNewLayers = pFrameView->GetVisibleLayers();
-                                break;
-                case PRINTABLE: aNewLayers = pFrameView->GetPrintableLayers();
-                                break;
-                case LOCKED:    aNewLayers = pFrameView->GetLockedLayers();
-                                break;
-                }
-
-                aNewLayers.Set(pLayer->GetID(),flag);
-
-                switch(what)
-                {
-                case VISIBLE:   pFrameView->SetVisibleLayers(aNewLayers);
-                                break;
-                case PRINTABLE: pFrameView->SetPrintableLayers(aNewLayers);
-                                break;
-                case LOCKED:    pFrameView->SetLockedLayers(aNewLayers);
-                                break;
-                }
-                return;
-            }
+        case VISIBLE:   pSdrPageView->SetLayerVisible(aLayerName,flag);
+                        break;
+        case PRINTABLE: pSdrPageView->SetLayerPrintable(aLayerName,flag);
+                        break;
+        case LOCKED:    pSdrPageView->SetLayerLocked(aLayerName,flag);
+                        break;
         }
     }
+
+    // Try 2. get info from FrameView
+    if(!mxLayerManager->GetDocShell())
+        return;
+
+    ::sd::FrameView *pFrameView = mxLayerManager->GetDocShell()->GetFrameView();
+
+    if(!pFrameView)
+        return;
+
+    SdrLayerIDSet aNewLayers;
+    switch(what)
+    {
+    case VISIBLE:   aNewLayers = pFrameView->GetVisibleLayers();
+                    break;
+    case PRINTABLE: aNewLayers = pFrameView->GetPrintableLayers();
+                    break;
+    case LOCKED:    aNewLayers = pFrameView->GetLockedLayers();
+                    break;
+    }
+
+    aNewLayers.Set(pLayer->GetID(),flag);
+
+    switch(what)
+    {
+    case VISIBLE:   pFrameView->SetVisibleLayers(aNewLayers);
+                    break;
+    case PRINTABLE: pFrameView->SetPrintableLayers(aNewLayers);
+                    break;
+    case LOCKED:    pFrameView->SetLockedLayers(aNewLayers);
+                    break;
+    }
+    return;
     //TODO: uno::Exception?
 }
 
@@ -618,19 +618,19 @@ sal_Bool SAL_CALL SdLayerManager::hasElements()
  */
 void SdLayerManager::UpdateLayerView() const throw()
 {
-    if(mpModel->mpDocShell)
+    if(!mpModel->mpDocShell)
+        return;
+
+    ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >( mpModel->mpDocShell->GetViewShell());
+
+    if(pDrViewSh)
     {
-        ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >( mpModel->mpDocShell->GetViewShell());
-
-        if(pDrViewSh)
-        {
-            bool bLayerMode = pDrViewSh->IsLayerModeActive();
-            pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), !bLayerMode);
-            pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), bLayerMode);
-        }
-
-        mpModel->mpDoc->SetChanged();
+        bool bLayerMode = pDrViewSh->IsLayerModeActive();
+        pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), !bLayerMode);
+        pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), bLayerMode);
     }
+
+    mpModel->mpDoc->SetChanged();
 }
 
 /** */

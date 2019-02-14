@@ -222,31 +222,31 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     // Listen for configuration changes.
     Reference<XControllerManager> xControllerManager (
         Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY);
-    if (xControllerManager.is())
-    {
-        Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
-        mxConfigurationControllerWeak = xConfigurationController;
-        if (xConfigurationController.is())
-        {
-            Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->addEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+    if (!xControllerManager.is())
+        return;
 
-            xConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msResourceActivationEvent,
-                makeAny(ResourceActivationEvent));
-            xConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msResourceDeactivationEvent,
-                makeAny(ResourceDeactivationEvent));
-            xConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msConfigurationUpdateEndEvent,
-                makeAny(ConfigurationUpdateEvent));
-        }
-    }
+    Reference<XConfigurationController> xConfigurationController (
+        xControllerManager->getConfigurationController());
+    mxConfigurationControllerWeak = xConfigurationController;
+    if (!xConfigurationController.is())
+        return;
+
+    Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+
+    xConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msResourceActivationEvent,
+        makeAny(ResourceActivationEvent));
+    xConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msResourceDeactivationEvent,
+        makeAny(ResourceDeactivationEvent));
+    xConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msConfigurationUpdateEndEvent,
+        makeAny(ConfigurationUpdateEvent));
 }
 
 EventMultiplexer::Implementation::~Implementation()
@@ -372,49 +372,49 @@ void EventMultiplexer::Implementation::ConnectToController()
 
 void EventMultiplexer::Implementation::DisconnectFromController()
 {
-    if (mbListeningToController)
+    if (!mbListeningToController)
+        return;
+
+    mbListeningToController = false;
+
+    Reference<frame::XController> xController = mxControllerWeak;
+
+    Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+    // Remove the property listener.
+    if (xSet.is())
     {
-        mbListeningToController = false;
-
-        Reference<frame::XController> xController = mxControllerWeak;
-
-        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-        // Remove the property listener.
-        if (xSet.is())
+        try
         {
-            try
-            {
-                xSet->removePropertyChangeListener(aCurrentPagePropertyName, this);
-            }
-            catch (const beans::UnknownPropertyException&)
-            {
-                SAL_WARN("sd", "DisconnectFromController: CurrentPage unknown");
-            }
-
-            try
-            {
-                xSet->removePropertyChangeListener(aEditModePropertyName, this);
-            }
-            catch (const beans::UnknownPropertyException&)
-            {
-                SAL_WARN("sd", "DisconnectFromController: IsMasterPageMode unknown");
-            }
+            xSet->removePropertyChangeListener(aCurrentPagePropertyName, this);
+        }
+        catch (const beans::UnknownPropertyException&)
+        {
+            SAL_WARN("sd", "DisconnectFromController: CurrentPage unknown");
         }
 
-        // Remove selection change listener.
-        Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
-        if (xSelection.is())
+        try
         {
-            xSelection->removeSelectionChangeListener(this);
+            xSet->removePropertyChangeListener(aEditModePropertyName, this);
         }
+        catch (const beans::UnknownPropertyException&)
+        {
+            SAL_WARN("sd", "DisconnectFromController: IsMasterPageMode unknown");
+        }
+    }
 
-        // Remove listener for disposing events.
-        Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
-        if (xComponent.is())
-        {
-            xComponent->removeEventListener (
-                Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
-        }
+    // Remove selection change listener.
+    Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
+    if (xSelection.is())
+    {
+        xSelection->removeSelectionChangeListener(this);
+    }
+
+    // Remove listener for disposing events.
+    Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
+    if (xComponent.is())
+    {
+        xComponent->removeEventListener (
+            Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
     }
 }
 
@@ -474,29 +474,31 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
     const frame::FrameActionEvent& rEvent)
 {
     Reference<frame::XFrame> xFrame (mxFrameWeak);
-    if (rEvent.Frame == xFrame)
-        switch (rEvent.Action)
-        {
-            case frame::FrameAction_COMPONENT_DETACHING:
-                DisconnectFromController();
-                CallListeners (EventMultiplexerEventId::ControllerDetached);
-                break;
+    if (rEvent.Frame != xFrame)
+        return;
 
-            case frame::FrameAction_COMPONENT_REATTACHED:
-                CallListeners (EventMultiplexerEventId::ControllerDetached);
-                DisconnectFromController();
-                ConnectToController();
-                CallListeners (EventMultiplexerEventId::ControllerAttached);
-                break;
+    switch (rEvent.Action)
+    {
+        case frame::FrameAction_COMPONENT_DETACHING:
+            DisconnectFromController();
+            CallListeners (EventMultiplexerEventId::ControllerDetached);
+            break;
 
-            case frame::FrameAction_COMPONENT_ATTACHED:
-                ConnectToController();
-                CallListeners (EventMultiplexerEventId::ControllerAttached);
-                break;
+        case frame::FrameAction_COMPONENT_REATTACHED:
+            CallListeners (EventMultiplexerEventId::ControllerDetached);
+            DisconnectFromController();
+            ConnectToController();
+            CallListeners (EventMultiplexerEventId::ControllerAttached);
+            break;
 
-            default:
-                break;
-        }
+        case frame::FrameAction_COMPONENT_ATTACHED:
+            ConnectToController();
+            CallListeners (EventMultiplexerEventId::ControllerAttached);
+            break;
+
+        default:
+            break;
+    }
 }
 
 //===== view::XSelectionChangeListener ========================================
