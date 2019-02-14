@@ -434,6 +434,7 @@ void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
 {
     // Add a new one and select it
     // Get the value from the display
+    ReformatHdl_Impl(*m_xTabBox);
     m_xTabSpin->set_text(m_xTabBox->get_active_text());
     auto nVal = m_xTabSpin->denormalize(m_xTabSpin->get_value(eDefUnit));
 
@@ -488,8 +489,7 @@ void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
 
 int SvxTabulatorTabPage::FindCurrentTab()
 {
-    ReformatHdl_Impl(*m_xTabBox);
-    return m_xTabBox->find_text(m_xTabBox->get_active_text());
+    return m_xTabBox->find_text(FormatTab());
 }
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl, weld::Button&, void)
@@ -632,11 +632,16 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, weld::TreeView&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxTabulatorTabPage, ReformatHdl_Impl, weld::Widget&, void)
+OUString SvxTabulatorTabPage::FormatTab()
 {
     m_xTabSpin->set_text(m_xTabBox->get_active_text());
-    m_xTabSpin->set_value(m_xTabSpin->get_value(FieldUnit::NONE), FieldUnit::NONE);
-    m_xTabBox->set_entry_text(m_xTabSpin->get_text());
+    m_xTabSpin->reformat();
+    return m_xTabSpin->get_text();
+}
+
+IMPL_LINK_NOARG(SvxTabulatorTabPage, ReformatHdl_Impl, weld::Widget&, void)
+{
+    m_xTabBox->set_entry_text(FormatTab());
 }
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl, weld::ComboBox&, void)
@@ -649,7 +654,6 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl, weld::ComboBox&, void)
 
         m_xTabSpin->set_text(m_xTabBox->get_active_text());
         aCurrentTab.GetTabPos() = m_xTabSpin->denormalize(m_xTabSpin->get_value(eDefUnit));
-
         m_xNewBtn->set_sensitive(false);
         m_xDelBtn->set_sensitive(true);
         return;
