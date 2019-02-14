@@ -19,6 +19,7 @@
 #include <vcl/pngwrite.hxx>
 
 #include <vcl/graphicfilter.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 
 static OUString const gaDataUrl = "/vcl/qa/cppunit/bitmaprender/data/";
 
@@ -37,10 +38,13 @@ public:
 
     void testTdf104141();
     void testTdf113918();
+    void testDrawBitmap32();
 
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
+    CPPUNIT_TEST(testDrawBitmap32);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -93,6 +97,29 @@ void BitmapRenderTest::testTdf113918()
     const Color aColor = pVDev->GetPixel(Point(1298, 1368));
     CPPUNIT_ASSERT(aColor.GetGreen() == aColor.GetRed() && aColor.GetGreen() == aColor.GetBlue());
     CPPUNIT_ASSERT(aColor.GetGreen() > 100);
+}
+
+void BitmapRenderTest::testDrawBitmap32()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetOutputSizePixel(Size(8, 8));
+    pVDev->SetBackground(Wallpaper(COL_WHITE));
+    pVDev->Erase();
+
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(2, 2)));
+
+    SvFileStream aFileStream(getFullUrl("ImageRGBA.png"), StreamMode::READ);
+
+    vcl::PngImageReader aPngReader(aFileStream);
+    BitmapEx aBitmapEx;
+    aPngReader.read(aBitmapEx);
+    pVDev->DrawBitmapEx(Point(), aBitmapEx);
+
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapRenderTest);
