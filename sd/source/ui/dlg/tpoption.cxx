@@ -323,39 +323,39 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
     const SfxPoolItem* pAttr = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
+    if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_METRIC , false,
                                     &pAttr ))
-    {
-        const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
+        return;
 
-        FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
+    const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
-        {
-            // set metrics
-            sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FieldUnit::TWIP ) );
-            SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, true );
-            m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FieldUnit::TWIP );
+    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
-            nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FieldUnit::TWIP ) );
-            SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
-            m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FieldUnit::TWIP );
+    if( eFUnit == m_pMtrFldOriginalWidth->GetUnit() )
+        return;
 
-            if( nWidth != 0 && nHeight != 0 )
-            {
-                m_pMtrFldInfo1->SetUnit( eFUnit );
-                m_pMtrFldInfo2->SetUnit( eFUnit );
+    // set metrics
+    sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FieldUnit::TWIP ) );
+    SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, true );
+    m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FieldUnit::TWIP );
 
-                SetMetricValue( *m_pMtrFldInfo1, nWidth, ePoolUnit );
-                aInfo1 = m_pMtrFldInfo1->GetText();
-                m_pFiInfo1->SetText( aInfo1 );
+    nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FieldUnit::TWIP ) );
+    SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
+    m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FieldUnit::TWIP );
 
-                SetMetricValue( *m_pMtrFldInfo2, nHeight, ePoolUnit );
-                aInfo2 = m_pMtrFldInfo2->GetText();
-                m_pFiInfo2->SetText( aInfo2 );
-            }
-        }
-    }
+    if( !(nWidth != 0 && nHeight != 0) )
+        return;
+
+    m_pMtrFldInfo1->SetUnit( eFUnit );
+    m_pMtrFldInfo2->SetUnit( eFUnit );
+
+    SetMetricValue( *m_pMtrFldInfo1, nWidth, ePoolUnit );
+    aInfo1 = m_pMtrFldInfo1->GetText();
+    m_pFiInfo1->SetText( aInfo1 );
+
+    SetMetricValue( *m_pMtrFldInfo2, nHeight, ePoolUnit );
+    aInfo2 = m_pMtrFldInfo2->GetText();
+    m_pFiInfo2->SetText( aInfo2 );
 }
 
 DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )

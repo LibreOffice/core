@@ -366,49 +366,49 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
 
 void LayerTabBar::EndRenaming()
 {
-    if( !IsEditModeCanceled() )
+    if( IsEditModeCanceled() )
+        return;
+
+    ::sd::View* pView = pDrViewSh->GetView();
+    DrawView* pDrView = dynamic_cast<DrawView*>( pView  );
+
+    SdDrawDocument& rDoc = pView->GetDoc();
+    OUString aLayerName = pView->GetActiveLayer();
+    SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
+    SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName);
+
+    if (!pLayer)
+        return;
+
+    OUString aNewName( GetEditText() );
+    assert (pDrView && "Rename layer undo action is only working with a SdDrawView");
+    if( pDrView )
     {
-        ::sd::View* pView = pDrViewSh->GetView();
-        DrawView* pDrView = dynamic_cast<DrawView*>( pView  );
-
-        SdDrawDocument& rDoc = pView->GetDoc();
-        OUString aLayerName = pView->GetActiveLayer();
-        SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName);
-
-        if (pLayer)
-        {
-            OUString aNewName( GetEditText() );
-            assert (pDrView && "Rename layer undo action is only working with a SdDrawView");
-            if( pDrView )
-            {
-                SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
-                std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
-                    &rDoc,
-                    pLayer,
-                    aLayerName,
-                    pLayer->GetTitle(),
-                    pLayer->GetDescription(),
-                    pDrView->IsLayerVisible(aLayerName),
-                    pDrView->IsLayerLocked(aLayerName),
-                    pDrView->IsLayerPrintable(aLayerName),
-                    aNewName,
-                    pLayer->GetTitle(),
-                    pLayer->GetDescription(),
-                    pDrView->IsLayerVisible(aLayerName),
-                    pDrView->IsLayerLocked(aLayerName),
-                    pDrView->IsLayerPrintable(aLayerName)
-                    ));
-                pManager->AddUndoAction( std::move(pAction) );
-            }
-
-            // First notify View since SetName() calls ResetActualLayer() and
-            // the View then already has to know the Layer
-            pView->SetActiveLayer(aNewName);
-            pLayer->SetName(aNewName);
-            rDoc.SetChanged();
-        }
+        SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
+        std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
+            &rDoc,
+            pLayer,
+            aLayerName,
+            pLayer->GetTitle(),
+            pLayer->GetDescription(),
+            pDrView->IsLayerVisible(aLayerName),
+            pDrView->IsLayerLocked(aLayerName),
+            pDrView->IsLayerPrintable(aLayerName),
+            aNewName,
+            pLayer->GetTitle(),
+            pLayer->GetDescription(),
+            pDrView->IsLayerVisible(aLayerName),
+            pDrView->IsLayerLocked(aLayerName),
+            pDrView->IsLayerPrintable(aLayerName)
+            ));
+        pManager->AddUndoAction( std::move(pAction) );
     }
+
+    // First notify View since SetName() calls ResetActualLayer() and
+    // the View then already has to know the Layer
+    pView->SetActiveLayer(aNewName);
+    pLayer->SetName(aNewName);
+    rDoc.SetChanged();
 }
 
 void LayerTabBar::ActivatePage()

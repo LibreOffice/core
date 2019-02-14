@@ -788,59 +788,59 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE )
+    if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE) )
+        return;
+
+    const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
+    NavState nState = static_cast<NavState>(rStateItem.GetValue());
+
+    // only if doc in LB is the active
+    NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
+    if( !(pInfo && pInfo->IsActive()) )
+        return;
+
+    sal_uInt16 nFirstId = pNavigatorWin->maToolbox->GetItemId("first");
+    sal_uInt16 nPrevId = pNavigatorWin->maToolbox->GetItemId("previous");
+    sal_uInt16 nLastId = pNavigatorWin->maToolbox->GetItemId("last");
+    sal_uInt16 nNextId = pNavigatorWin->maToolbox->GetItemId("next");
+
+    // First
+    if (nState & NavState::BtnFirstEnabled &&
+        !pNavigatorWin->maToolbox->IsItemEnabled(nFirstId))
+        pNavigatorWin->maToolbox->EnableItem(nFirstId);
+    if (nState & NavState::BtnFirstDisabled &&
+        pNavigatorWin->maToolbox->IsItemEnabled(nFirstId))
+        pNavigatorWin->maToolbox->EnableItem(nFirstId, false);
+
+    // Prev
+    if (nState & NavState::BtnPrevEnabled &&
+        !pNavigatorWin->maToolbox->IsItemEnabled(nPrevId))
+        pNavigatorWin->maToolbox->EnableItem(nPrevId);
+    if (nState & NavState::BtnPrevDisabled &&
+        pNavigatorWin->maToolbox->IsItemEnabled(nPrevId))
+        pNavigatorWin->maToolbox->EnableItem(nPrevId, false);
+
+    // Last
+    if (nState & NavState::BtnLastEnabled &&
+        !pNavigatorWin->maToolbox->IsItemEnabled(nLastId))
+        pNavigatorWin->maToolbox->EnableItem(nLastId);
+    if (nState & NavState::BtnLastDisabled &&
+        pNavigatorWin->maToolbox->IsItemEnabled(nLastId))
+        pNavigatorWin->maToolbox->EnableItem(nLastId, false);
+
+    // Next
+    if (nState & NavState::BtnNextEnabled &&
+        !pNavigatorWin->maToolbox->IsItemEnabled(nNextId))
+        pNavigatorWin->maToolbox->EnableItem(nNextId);
+    if (nState & NavState::BtnNextDisabled &&
+        pNavigatorWin->maToolbox->IsItemEnabled(nNextId))
+        pNavigatorWin->maToolbox->EnableItem(nNextId, false);
+
+    if (nState & NavState::TableUpdate)
     {
-        const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
-        NavState nState = static_cast<NavState>(rStateItem.GetValue());
-
-        // only if doc in LB is the active
-        NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
-        if( pInfo && pInfo->IsActive() )
-        {
-            sal_uInt16 nFirstId = pNavigatorWin->maToolbox->GetItemId("first");
-            sal_uInt16 nPrevId = pNavigatorWin->maToolbox->GetItemId("previous");
-            sal_uInt16 nLastId = pNavigatorWin->maToolbox->GetItemId("last");
-            sal_uInt16 nNextId = pNavigatorWin->maToolbox->GetItemId("next");
-
-            // First
-            if (nState & NavState::BtnFirstEnabled &&
-                !pNavigatorWin->maToolbox->IsItemEnabled(nFirstId))
-                pNavigatorWin->maToolbox->EnableItem(nFirstId);
-            if (nState & NavState::BtnFirstDisabled &&
-                pNavigatorWin->maToolbox->IsItemEnabled(nFirstId))
-                pNavigatorWin->maToolbox->EnableItem(nFirstId, false);
-
-            // Prev
-            if (nState & NavState::BtnPrevEnabled &&
-                !pNavigatorWin->maToolbox->IsItemEnabled(nPrevId))
-                pNavigatorWin->maToolbox->EnableItem(nPrevId);
-            if (nState & NavState::BtnPrevDisabled &&
-                pNavigatorWin->maToolbox->IsItemEnabled(nPrevId))
-                pNavigatorWin->maToolbox->EnableItem(nPrevId, false);
-
-            // Last
-            if (nState & NavState::BtnLastEnabled &&
-                !pNavigatorWin->maToolbox->IsItemEnabled(nLastId))
-                pNavigatorWin->maToolbox->EnableItem(nLastId);
-            if (nState & NavState::BtnLastDisabled &&
-                pNavigatorWin->maToolbox->IsItemEnabled(nLastId))
-                pNavigatorWin->maToolbox->EnableItem(nLastId, false);
-
-            // Next
-            if (nState & NavState::BtnNextEnabled &&
-                !pNavigatorWin->maToolbox->IsItemEnabled(nNextId))
-                pNavigatorWin->maToolbox->EnableItem(nNextId);
-            if (nState & NavState::BtnNextDisabled &&
-                pNavigatorWin->maToolbox->IsItemEnabled(nNextId))
-                pNavigatorWin->maToolbox->EnableItem(nNextId, false);
-
-            if (nState & NavState::TableUpdate)
-            {
-                // InitTlb; is initiated by Slot
-                if (maUpdateRequest)
-                    maUpdateRequest();
-            }
-        }
+        // InitTlb; is initiated by Slot
+        if (maUpdateRequest)
+            maUpdateRequest();
     }
 }
 
@@ -859,25 +859,25 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_PAGENAME )
-    {
-        // only if doc in LB is the active
-        NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
-        if( pInfo && pInfo->IsActive() )
-        {
-            const SfxStringItem& rStateItem = dynamic_cast<const SfxStringItem&>(*pItem);
-            const OUString& aPageName = rStateItem.GetValue();
+    if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_PAGENAME) )
+        return;
 
-            if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
-            {
-                if( pNavigatorWin->maTlbObjects->GetSelectionMode() == SelectionMode::Multiple )
-                {
-                    // because otherwise it is always additional select
-                    pNavigatorWin->maTlbObjects->SelectAll( false );
-                }
-                pNavigatorWin->maTlbObjects->SelectEntry( aPageName );
-            }
+    // only if doc in LB is the active
+    NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
+    if( !(pInfo && pInfo->IsActive()) )
+        return;
+
+    const SfxStringItem& rStateItem = dynamic_cast<const SfxStringItem&>(*pItem);
+    const OUString& aPageName = rStateItem.GetValue();
+
+    if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
+    {
+        if( pNavigatorWin->maTlbObjects->GetSelectionMode() == SelectionMode::Multiple )
+        {
+            // because otherwise it is always additional select
+            pNavigatorWin->maTlbObjects->SelectAll( false );
         }
+        pNavigatorWin->maTlbObjects->SelectEntry( aPageName );
     }
 }
 
