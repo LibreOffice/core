@@ -23,6 +23,7 @@
 #include <svx/svdocirc.hxx>
 #include <scitems.hxx>
 #include <drwlayer.hxx>
+#include <cliputil.hxx>
 
 #include <sc.hrc>
 
@@ -41,12 +42,14 @@ public:
     void testTdf76183();
     void testODFAnchorTypes();
     void testCopyColumnWithImages();
+    void testCutWithImages();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
     CPPUNIT_TEST(testTdf76183);
     CPPUNIT_TEST(testODFAnchorTypes);
     CPPUNIT_TEST(testCopyColumnWithImages);
+    CPPUNIT_TEST(testCutWithImages);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -302,6 +305,65 @@ void ScAnchorTest::testCopyColumnWithImages()
         std::map<SCROW, std::vector<SdrObject*>> aRowObjects
             = pDrawLayer->GetObjectsAnchoredToRange(0, 6, 2, 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to G3", 1,
+                                     static_cast<int>(aRowObjects[2].size()));
+    }
+
+    pDocSh->DoClose();
+}
+
+void ScAnchorTest::testCutWithImages()
+{
+    OUString aFileURL;
+    createFileURL("3AnchorTypes.ods", aFileURL);
+    // open the document with graphic included
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    ScDocument* pDoc = &(pDocSh->GetDocument());
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+    // Cut whole column
+    {
+        // Cut source range
+        ScRange aSrcRange;
+        aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+        pViewShell->GetViewData().GetView()->CutToClip();
+
+        std::map<SCROW, std::vector<SdrObject*>> aRowObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(0, 0, 0, 11);
+
+        // Images should have been removed from the cells
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no image anchored to A3", 0,
+                                     static_cast<int>(aRowObjects[2].size()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no image anchored to A11", 0,
+                                     static_cast<int>(aRowObjects[10].size()));
+    }
+
+    // Cut individual cells
+    {
+        // Cut source cells
+        ScRange aSrcRange;
+        aSrcRange.Parse("A3:B3", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+        pViewShell->GetViewData().GetView()->CutToClip();
+
+        // Image should have been removed from the cell
+        std::map<SCROW, std::vector<SdrObject*>> aRowObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(0, 0, 2, 2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no image anchored to A3", 0,
                                      static_cast<int>(aRowObjects[2].size()));
     }
 
