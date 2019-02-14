@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_EDITFIELD_HXX
 
 #include <vcl/edit.hxx>
+#include <vcl/weld.hxx>
 
 /** An edit control that contains a double precision floating-point value. */
 class ScDoubleField : public Edit
@@ -31,6 +32,22 @@ public:
     bool                GetValue( double& rfValue ) const;
     void                SetValue( double fValue,
                                   sal_Int32 nDecPlaces = 12 );
+};
+
+class DoubleField
+{
+private:
+    std::unique_ptr<weld::Entry> m_xEntry;
+public:
+    explicit            DoubleField(std::unique_ptr<weld::Entry> xEntry);
+
+    bool GetValue(double& rfValue) const;
+    void SetValue(double fValue, sal_Int32 nDecPlaces = 12);
+
+    weld::Entry* get_widget() { return m_xEntry.get(); }
+
+    void grab_focus() { m_xEntry->grab_focus(); }
+    bool get_sensitive() const { return m_xEntry->get_sensitive(); }
 };
 
 #endif

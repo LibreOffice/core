@@ -107,10 +107,62 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, Button*, pButton, void )
     }
 }
 
-ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
-        RadioButton* pRbAuto, RadioButton* pRbMan, ScDoubleField* pEdValue ) :
-    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
-    mpEdValue( pEdValue )
+DPGroupEditHelper::DPGroupEditHelper(weld::RadioButton* pRbAuto, weld::RadioButton* pRbMan, weld::Entry* pEdValue)
+    : mpRbAuto(pRbAuto)
+    , mpRbMan(pRbMan)
+    , mpEdValue(pEdValue)
+{
+    mpRbAuto->connect_clicked( LINK( this, DPGroupEditHelper, ClickHdl ) );
+    mpRbMan->connect_clicked( LINK( this, DPGroupEditHelper, ClickHdl ) );
+}
+
+bool DPGroupEditHelper::IsAuto() const
+{
+    return mpRbAuto->get_active();
+}
+
+double DPGroupEditHelper::GetValue() const
+{
+    double fValue;
+    if( !ImplGetValue( fValue ) )
+        fValue = 0.0;
+    return fValue;
+}
+
+void DPGroupEditHelper::SetValue( bool bAuto, double fValue )
+{
+    if( bAuto )
+    {
+        mpRbAuto->set_active(true);
+        ClickHdl(*mpRbAuto);
+    }
+    else
+    {
+        mpRbMan->set_active(true);
+        ClickHdl(*mpRbMan);
+    }
+    ImplSetValue( fValue );
+}
+
+IMPL_LINK(DPGroupEditHelper, ClickHdl, weld::Button&, rButton, void)
+{
+    if (&rButton == mpRbAuto)
+    {
+        // disable edit field on clicking "automatic" radio button
+        mpEdValue->set_sensitive(false);
+    }
+    else if (&rButton == mpRbMan)
+    {
+        // enable and set focus to edit field on clicking "manual" radio button
+        mpEdValue->set_sensitive(true);
+        mpEdValue->grab_focus();
+    }
+}
+
+ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(weld::RadioButton* pRbAuto,
+    weld::RadioButton* pRbMan, DoubleField* pEdValue)
+    : DPGroupEditHelper(pRbAuto, pRbMan, pEdValue->get_widget())
+    , mpEdValue(pEdValue)
 {
 }
 
@@ -145,50 +197,35 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     mpEdValue->SetDate( aDate );
 }
 
-ScDPNumGroupDlg::ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo ) :
-    ModalDialog     ( pParent, "PivotTableGroupByNumber", "modules/scalc/ui/groupbynumber.ui" ),
-    mpRbAutoStart   ( get<RadioButton>("auto_start") ),
-    mpRbManStart    ( get<RadioButton>("manual_start") ),
-    mpEdStart       ( get<ScDoubleField> ("edit_start") ),
-    mpRbAutoEnd     ( get<RadioButton> ( "auto_end" ) ),
-    mpRbManEnd      ( get<RadioButton> ("manual_end") ),
-    mpEdEnd         ( get<ScDoubleField>( "edit_end") ),
-    mpEdBy          ( get<ScDoubleField> ("edit_by") ),
-    maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart ),
-    maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd )
+ScDPNumGroupDlg::ScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)
+    : GenericDialogController(pParent, "modules/scalc/ui/groupbynumber.ui", "PivotTableGroupByNumber")
+    , mxRbAutoStart(m_xBuilder->weld_radio_button("auto_start"))
+    , mxRbManStart(m_xBuilder->weld_radio_button("manual_start"))
+    , mxEdStart(new DoubleField(m_xBuilder->weld_entry("edit_start")))
+    , mxRbAutoEnd(m_xBuilder->weld_radio_button("auto_end"))
+    , mxRbManEnd(m_xBuilder->weld_radio_button("manual_end"))
+    , mxEdEnd(new DoubleField(m_xBuilder->weld_entry("edit_end")))
+    , mxEdBy(new DoubleField(m_xBuilder->weld_entry("edit_by")))
+    , maStartHelper(mxRbAutoStart.get(), mxRbManStart.get(), mxEdStart.get())
+    , maEndHelper(mxRbAutoEnd.get(), mxRbManEnd.get(), mxEdEnd.get())
 {
-
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
-    mpEdBy->SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
+    mxEdBy->SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
-    if( mpEdStart->IsEnabled() )
-        mpEdStart->GrabFocus();
-    else if( mpEdEnd->IsEnabled() )
-        mpEdEnd->GrabFocus();
+    if (mxEdStart->get_sensitive())
+        mxEdStart->grab_focus();
+    else if (mxEdEnd->get_sensitive())
+        mxEdEnd->grab_focus();
     else
-        mpEdBy->GrabFocus();
+        mxEdBy->grab_focus();
 }
 
 ScDPNumGroupDlg::~ScDPNumGroupDlg()
 {
-    disposeOnce();
 }
-
-void ScDPNumGroupDlg::dispose()
-{
-    mpRbAutoStart.clear();
-    mpRbManStart.clear();
-    mpEdStart.clear();
-    mpRbAutoEnd.clear();
-    mpRbManEnd.clear();
-    mpEdEnd.clear();
-    mpEdBy.clear();
-    ModalDialog::dispose();
-}
-
 
 ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 {
@@ -202,7 +239,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
-    if( !mpEdBy->GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
+    if( !mxEdBy->GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
         aInfo.mfStep = 1.0;
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + aInfo.mfStep;
