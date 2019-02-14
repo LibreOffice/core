@@ -70,28 +70,28 @@ void SetValue( const ScDocument* pDoc, const ScColorScaleEntry* pEntry, Edit& aE
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
-    ModalDialog( pWindow, "DataBarOptions", "modules/scalc/ui/databaroptions.ui" ),
-    mpNumberFormatter( pDoc->GetFormatTable() ),
-    mpDoc(pDoc),
-    maPos(rPos)
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos)
+    : GenericDialogController(pParent, "modules/scalc/ui/databaroptions.ui", "DataBarOptions")
+    , mpNumberFormatter(pDoc->GetFormatTable())
+    , mpDoc(pDoc)
+    , maPos(rPos)
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxLbPos(new ColorListBox(m_xBuilder->weld_menu_button("positive_colour"), pParent))
+    , mxLbNeg(new ColorListBox(m_xBuilder->weld_menu_button("negative_colour"), pParent))
+    , mxLbFillType(m_xBuilder->weld_combo_box("fill_type"))
+    , mxLbTypeMin(m_xBuilder->weld_combo_box("min"))
+    , mxLbTypeMax(m_xBuilder->weld_combo_box("max"))
+    , mxLbAxisPos(m_xBuilder->weld_combo_box("axis_pos"))
+    , mxLbAxisCol(new ColorListBox(m_xBuilder->weld_menu_button("axis_colour"), pParent))
+    , mxEdMin(m_xBuilder->weld_entry("min_value"))
+    , mxEdMax(m_xBuilder->weld_entry("max_value"))
+    , mxLenMin(m_xBuilder->weld_entry("min_length"))
+    , mxLenMax(m_xBuilder->weld_entry("max_length"))
+    , mxCbOnlyBar(m_xBuilder->weld_check_button("only_bar"))
+    , mxStrSameValueFT(m_xBuilder->weld_label("str_same_value"))
 {
-    get( mpBtnOk, "ok");
-    get( mpBtnCancel, "cancel" );
-    get( mpLbPos, "positive_colour" );
-    get( mpLbNeg, "negative_colour" );
-    get( mpLbFillType, "fill_type" );
-    get( mpLbTypeMin, "min" );
-    get( mpLbTypeMax, "max" );
-    get( mpLbAxisPos, "axis_pos" );
-    get( mpLbAxisCol, "axis_colour" );
-    get( mpEdMin, "min_value" );
-    get( mpEdMax, "max_value" );
-    get( mpLenMin, "min_length" );
-    get( mpLenMax, "max_length" );
-    get( mpCbOnlyBar, "only_bar");
-
-    maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
+    maStrWarnSameValue = mxStrSameValueFT->get_label();
 
     Init();
 
@@ -103,13 +103,13 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     switch (rData.meAxisPosition)
     {
         case databar::NONE:
-            mpLbAxisPos->SelectEntryPos(2);
+            mxLbAxisPos->SelectEntryPos(2);
             break;
         case databar::AUTOMATIC:
-            mpLbAxisPos->SelectEntryPos(0);
+            mxLbAxisPos->SelectEntryPos(0);
             break;
         case databar::MIDDLE:
-            mpLbAxisPos->SelectEntryPos(1);
+            mxLbAxisPos->SelectEntryPos(1);
             break;
     }
     ::SetType(rData.mpLowerLimit.get(), *mpLbTypeMin);
@@ -127,38 +127,18 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
 
 ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
 {
-    disposeOnce();
-}
-
-void ScDataBarSettingsDlg::dispose()
-{
-    mpBtnOk.clear();
-    mpBtnCancel.clear();
-    mpLbPos.clear();
-    mpLbNeg.clear();
-    mpLbAxisCol.clear();
-    mpLbTypeMin.clear();
-    mpLbTypeMax.clear();
-    mpLbFillType.clear();
-    mpLbAxisPos.clear();
-    mpEdMin.clear();
-    mpEdMax.clear();
-    mpLenMin.clear();
-    mpLenMax.clear();
-    mpCbOnlyBar.clear();
-    ModalDialog::dispose();
 }
 
 void ScDataBarSettingsDlg::Init()
 {
-    mpLbNeg->SelectEntry(COL_LIGHTRED);
-    mpLbAxisCol->SelectEntry(COL_BLACK);
-    mpLbPos->SelectEntry(COL_LIGHTBLUE);
-    mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
+    mxLbNeg->SelectEntry(COL_LIGHTRED);
+    mxLbAxisCol->SelectEntry(COL_BLACK);
+    mxLbPos->SelectEntry(COL_LIGHTBLUE);
+    mxBtnOk->connect_clicked( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
-    mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
-    mpLbTypeMax->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
-    mpLbAxisPos->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, PosSelectHdl ) );
+    mxLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mxLbTypeMax->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mxLbAxisPos->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, PosSelectHdl ) );
 
 }
 
@@ -207,7 +187,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
 
     ::GetType(*mpLbTypeMin, *mpEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
     ::GetType(*mpLbTypeMax, *mpEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    GetAxesPosition(pData, mpLbAxisPos);
+    GetAxesPosition(pData, mxLbAxisPos);
     SetBarLength(pData, mpLenMin->GetText(), mpLenMax->GetText(), mpNumberFormatter);
 
     return pData;
@@ -303,7 +283,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
 {
-    sal_Int32 axisPos = mpLbAxisPos->GetSelectedEntryPos();
+    sal_Int32 axisPos = mxLbAxisPos->GetSelectedEntryPos();
     if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic
     {
         mpLenMin->Disable();

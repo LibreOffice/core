@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -7,7 +7,13 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="databaroptions|DataBarOptions">Data Bar</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -153,6 +159,7 @@
                           <object class="GtkEntry" id="min_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -163,6 +170,7 @@
                           <object class="GtkEntry" id="max_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -239,10 +247,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="positive_colour">
+                          <object class="GtkMenuButton" id="positive_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -250,10 +259,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="negative_colour">
+                          <object class="GtkMenuButton" id="negative_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -374,10 +384,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="axis_colour">
+                          <object class="GtkMenuButton" id="axis_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -457,6 +468,7 @@
                           <object class="GtkEntry" id="min_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -467,6 +479,7 @@
                           <object class="GtkEntry" id="max_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
