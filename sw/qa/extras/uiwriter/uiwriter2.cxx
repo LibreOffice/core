@@ -69,6 +69,7 @@ public:
     void testCheckboxFormFieldInsertion();
     void testDropDownFormFieldInsertion();
     void testMixedFormFieldInsertion();
+    void testDocxAttributeTableExport();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(testCheckboxFormFieldInsertion);
     CPPUNIT_TEST(testDropDownFormFieldInsertion);
     CPPUNIT_TEST(testMixedFormFieldInsertion);
+    CPPUNIT_TEST(testDocxAttributeTableExport);
     CPPUNIT_TEST_SUITE_END();
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
@@ -1125,6 +1127,34 @@ void SwUiWriterTest2::testMixedFormFieldInsertion()
     lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
+
+void SwUiWriterTest2::testDocxAttributeTableExport()
+{
+    createDoc("floating-table-position.docx");
+
+    // get the table frame, set new values and dismiss the references
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+        // change the properties
+        xShape->setPropertyValue("VertOrientPosition", uno::makeAny(sal_Int32(1000)));
+    }
+
+    // save it to docx
+    reload("Office Open XML Text", "floating-table-position.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // test the new values
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
 
