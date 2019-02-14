@@ -69,7 +69,6 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sbobjmod.hxx>
 #include <sbxbase.hxx>
 #include <svl/SfxBroadcaster.hxx>

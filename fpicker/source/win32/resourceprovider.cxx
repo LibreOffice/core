@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
 #include <osl/mutex.hxx>

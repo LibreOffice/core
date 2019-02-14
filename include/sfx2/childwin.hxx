@@ -24,7 +24,6 @@
 
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>

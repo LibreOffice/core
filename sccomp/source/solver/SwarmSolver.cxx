@@ -35,7 +35,6 @@
 #include <limits>
 #include <chrono>
 #include <random>
-#include <o3tl/make_unique.hxx>
 
 #include <unotools/resmgr.hxx>
 
