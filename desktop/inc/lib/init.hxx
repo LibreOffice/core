@@ -104,10 +104,16 @@ namespace desktop {
             RectangleAndPart& setRectangleAndPart(const std::string& payload);
             /// Return the parsed RectangleAndPart instance.
             const RectangleAndPart& getRectangleAndPart() const;
+            /// Parse and set the JSON object and return it. Clobbers PayloadString.
+            boost::property_tree::ptree& setJson(const std::string& payload);
+            /// Set a Json object and update PayloadString.
+            void setJson(const boost::property_tree::ptree& rTree);
+            /// Return the parsed JSON instance.
+            const boost::property_tree::ptree& getJson() const;
 
             int Type;
             std::string PayloadString;
-            boost::variant<boost::blank, RectangleAndPart> PayloadObject;
+            boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
         };
 
         typedef std::vector<CallbackData> queue_type;
