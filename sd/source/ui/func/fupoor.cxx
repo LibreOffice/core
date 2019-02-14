@@ -125,36 +125,36 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 {
     aScrollTimer.Stop();
 
-    if ( !mpView->IsDragHelpLine() && !mpView->IsSetPageOrg() &&
-            !SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
+    if ( mpView->IsDragHelpLine() || mpView->IsSetPageOrg() ||
+         SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
+        return;
+
+    Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
+    const ::tools::Rectangle& rRect = mpViewShell->GetAllWindowRect();
+
+    if ( bNoScrollUntilInside )
     {
-        Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
-        const ::tools::Rectangle& rRect = mpViewShell->GetAllWindowRect();
+        if ( rRect.IsInside(aPos) )
+            bNoScrollUntilInside = false;
+    }
+    else
+    {
+        short dx = 0, dy = 0;
 
-        if ( bNoScrollUntilInside )
+        if ( aPos.X() <= rRect.Left()   ) dx = -1;
+        if ( aPos.X() >= rRect.Right()  ) dx =  1;
+        if ( aPos.Y() <= rRect.Top()    ) dy = -1;
+        if ( aPos.Y() >= rRect.Bottom() ) dy =  1;
+
+        if ( dx != 0 || dy != 0 )
         {
-            if ( rRect.IsInside(aPos) )
-                bNoScrollUntilInside = false;
-        }
-        else
-        {
-            short dx = 0, dy = 0;
-
-            if ( aPos.X() <= rRect.Left()   ) dx = -1;
-            if ( aPos.X() >= rRect.Right()  ) dx =  1;
-            if ( aPos.Y() <= rRect.Top()    ) dy = -1;
-            if ( aPos.Y() >= rRect.Bottom() ) dy =  1;
-
-            if ( dx != 0 || dy != 0 )
+            if (bScrollable)
             {
-                if (bScrollable)
-                {
-                    // scroll action in derived class
-                    mpViewShell->ScrollLines(dx, dy);
-                    aScrollTimer.Start();
-                }
-                else if (! bDelayActive) StartDelayToScrollTimer ();
+                // scroll action in derived class
+                mpViewShell->ScrollLines(dx, dy);
+                aScrollTimer.Start();
             }
+            else if (! bDelayActive) StartDelayToScrollTimer ();
         }
     }
 }
@@ -937,18 +937,18 @@ void FuPoor::DoPasteUnformatted()
  */
 IMPL_LINK_NOARG(FuPoor, DragHdl, Timer *, void)
 {
-    if( mpView )
-    {
-        sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        SdrHdl* pHdl = mpView->PickHandle(aMDPos);
+    if( !mpView )
+        return;
 
-        if ( pHdl==nullptr && mpView->IsMarkedHit(aMDPos, nHitLog)
-             && !mpView->IsPresObjSelected(false) )
-        {
-            mpWindow->ReleaseMouse();
-            bIsInDragMode = true;
-            mpView->StartDrag( aMDPos, mpWindow );
-        }
+    sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+    SdrHdl* pHdl = mpView->PickHandle(aMDPos);
+
+    if ( pHdl==nullptr && mpView->IsMarkedHit(aMDPos, nHitLog)
+         && !mpView->IsPresObjSelected(false) )
+    {
+        mpWindow->ReleaseMouse();
+        bIsInDragMode = true;
+        mpView->StartDrag( aMDPos, mpWindow );
     }
 }
 
@@ -1043,30 +1043,31 @@ void FuPoor::ImpForceQuadratic(::tools::Rectangle& rRect)
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    if(auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+    auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell );
+    if(!pDrawViewShell)
+        return;
+
+    // Calculate the new index.
+    sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
+
+    // Make sure the new index lies inside the range of valid indices.
+    if (nIndex < 0)
+        nIndex = 0;
+    else if (nIndex >= pDrawViewShell->GetTabLayerCount ())
+        nIndex = pDrawViewShell->GetTabLayerCount() - 1;
+
+    // Set the new active layer.
+    if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
     {
-        // Calculate the new index.
-        sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
+        LayerTabBar* pLayerTabControl =
+            static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
+        if (pLayerTabControl != nullptr)
+            pLayerTabControl->SendDeactivatePageEvent ();
 
-        // Make sure the new index lies inside the range of valid indices.
-        if (nIndex < 0)
-            nIndex = 0;
-        else if (nIndex >= pDrawViewShell->GetTabLayerCount ())
-            nIndex = pDrawViewShell->GetTabLayerCount() - 1;
+        pDrawViewShell->SetActiveTabLayerIndex (nIndex);
 
-        // Set the new active layer.
-        if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
-        {
-            LayerTabBar* pLayerTabControl =
-                static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
-            if (pLayerTabControl != nullptr)
-                pLayerTabControl->SendDeactivatePageEvent ();
-
-            pDrawViewShell->SetActiveTabLayerIndex (nIndex);
-
-            if (pLayerTabControl != nullptr)
-                pLayerTabControl->SendActivatePageEvent ();
-        }
+        if (pLayerTabControl != nullptr)
+            pLayerTabControl->SendActivatePageEvent ();
     }
 }
 

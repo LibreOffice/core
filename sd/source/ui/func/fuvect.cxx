@@ -55,33 +55,34 @@ void FuVectorize::DoExecute( SfxRequest& )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-    if( rMarkList.GetMarkCount() == 1 )
+    if( rMarkList.GetMarkCount() != 1 )
+        return;
+
+    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+    auto pSdrGrafObj = dynamic_cast< const SdrGrafObj *>( pObj );
+    if( !pSdrGrafObj )
+        return;
+
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(
+            pFact->CreateSdVectorizeDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
+                                        pSdrGrafObj->GetGraphic().GetBitmapEx().GetBitmap(), mpDocSh ) );
+    if( pDlg->Execute() != RET_OK )
+        return;
+
+    const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
+    SdrPageView*        pPageView = mpView->GetSdrPageView();
+
+    if( pPageView && rMtf.GetActionSize() )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
-        if( auto pSdrGrafObj = dynamic_cast< const SdrGrafObj *>( pObj ) )
-        {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(
-                    pFact->CreateSdVectorizeDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
-                                                pSdrGrafObj->GetGraphic().GetBitmapEx().GetBitmap(), mpDocSh ) );
-            if( pDlg->Execute() == RET_OK )
-            {
-                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
-                SdrPageView*        pPageView = mpView->GetSdrPageView();
-
-                if( pPageView && rMtf.GetActionSize() )
-                {
-                    SdrGrafObj* pVectObj = static_cast<SdrGrafObj*>( pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()) );
-                    OUString aStr( mpView->GetDescriptionOfMarkedObjects() );
-                    aStr += " " + SdResId( STR_UNDO_VECTORIZE );
-                    mpView->BegUndo( aStr );
-                    pVectObj->SetGraphic( rMtf );
-                    mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
-                    mpView->EndUndo();
-                }
-            }
-        }
+        SdrGrafObj* pVectObj = static_cast<SdrGrafObj*>( pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()) );
+        OUString aStr( mpView->GetDescriptionOfMarkedObjects() );
+        aStr += " " + SdResId( STR_UNDO_VECTORIZE );
+        mpView->BegUndo( aStr );
+        pVectObj->SetGraphic( rMtf );
+        mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
+        mpView->EndUndo();
     }
 }
 

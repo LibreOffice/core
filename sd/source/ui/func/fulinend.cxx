@@ -55,90 +55,90 @@ void FuLineEnd::DoExecute( SfxRequest& )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-    if( rMarkList.GetMarkCount() == 1 )
+    if( rMarkList.GetMarkCount() != 1 )
+        return;
+
+    const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    const SdrObject* pNewObj;
+    SdrObject* pConvPolyObj = nullptr;
+
+    if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
     {
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        const SdrObject* pNewObj;
-        SdrObject* pConvPolyObj = nullptr;
+        pNewObj = pObj;
+    }
+    else
+    {
+        SdrObjTransformInfoRec aInfoRec;
+        pObj->TakeObjInfo( aInfoRec );
 
-        if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
+        if( aInfoRec.bCanConvToPath &&
+            pObj->GetObjInventor() == SdrInventor::Default &&
+            pObj->GetObjIdentifier() != OBJ_GRUP )
+            // bCanConvToPath is sal_True for group objects,
+            // but it crashes on ConvertToPathObj()!
         {
-            pNewObj = pObj;
+            pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
+
+            if( !pNewObj || dynamic_cast< const SdrPathObj *>( pNewObj ) ==  nullptr )
+                return; // Cancel, additional security, but it does not help
+                        // for group objects
         }
-        else
+        else return; // Cancel
+    }
+
+    const ::basegfx::B2DPolyPolygon aPolyPolygon = static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly();
+
+    // Delete the created poly-object
+    SdrObject::Free( pConvPolyObj );
+
+    XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
+
+    OUString aNewName( SdResId( STR_LINEEND ) );
+    OUString aDesc( SdResId( STR_DESC_LINEEND ) );
+    OUString aName;
+
+    long nCount = pLineEndList->Count();
+    long j = 1;
+    bool bDifferent = false;
+
+    while( !bDifferent )
+    {
+        aName = aNewName + " " + OUString::number(j++);
+        bDifferent = true;
+        for( long i = 0; i < nCount && bDifferent; i++ )
         {
-            SdrObjTransformInfoRec aInfoRec;
-            pObj->TakeObjInfo( aInfoRec );
-
-            if( aInfoRec.bCanConvToPath &&
-                pObj->GetObjInventor() == SdrInventor::Default &&
-                pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath is sal_True for group objects,
-                // but it crashes on ConvertToPathObj()!
-            {
-                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
-
-                if( !pNewObj || dynamic_cast< const SdrPathObj *>( pNewObj ) ==  nullptr )
-                    return; // Cancel, additional security, but it does not help
-                            // for group objects
-            }
-            else return; // Cancel
+            if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                bDifferent = false;
         }
+    }
 
-        const ::basegfx::B2DPolyPolygon aPolyPolygon = static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly();
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg( pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) );
 
-        // Delete the created poly-object
-        SdrObject::Free( pConvPolyObj );
+    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
 
-        XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
+    if( pDlg->Execute() != RET_OK )
+        return;
 
-        OUString aNewName( SdResId( STR_LINEEND ) );
-        OUString aDesc( SdResId( STR_DESC_LINEEND ) );
-        OUString aName;
+    pDlg->GetName( aName );
+    bDifferent = true;
 
-        long nCount = pLineEndList->Count();
-        long j = 1;
-        bool bDifferent = false;
+    for( long i = 0; i < nCount && bDifferent; i++ )
+    {
+        if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+            bDifferent = false;
+    }
 
-        while( !bDifferent )
-        {
-            aName = aNewName + " " + OUString::number(j++);
-            bDifferent = true;
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = false;
-            }
-        }
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg( pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) );
-
-        pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
-
-        if( pDlg->Execute() == RET_OK )
-        {
-            pDlg->GetName( aName );
-            bDifferent = true;
-
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
-            {
-                pLineEndList->Insert(std::make_unique<XLineEndEntry>(aPolyPolygon, aName));
-            }
-            else
-            {
-                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
-                                                           VclMessageType::Warning, VclButtonsType::Ok,
-                                                           SdResId(STR_WARN_NAME_DUPLICATE)));
-                xWarn->run();
-            }
-        }
+    if( bDifferent )
+    {
+        pLineEndList->Insert(std::make_unique<XLineEndEntry>(aPolyPolygon, aName));
+    }
+    else
+    {
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
+        xWarn->run();
     }
 }
 

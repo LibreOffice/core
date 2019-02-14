@@ -104,31 +104,31 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    if( pArgs )
+    if( !pArgs )
+        return;
+
+    const SfxPoolItem*  pPoolItem = nullptr;
+    if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
+        maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
+
+    if (nSlotId != SID_DRAW_FREELINE_NOFILL)
+        return;
+
+    const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+    const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+
+    if (pTransparence && pTransparence->GetValue() > 0)
     {
-        const SfxPoolItem*  pPoolItem = nullptr;
-        if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
-            maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
-
-        if (nSlotId == SID_DRAW_FREELINE_NOFILL)
-        {
-            const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
-            const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
-            const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
-
-            if (pTransparence && pTransparence->GetValue() > 0)
-            {
-                mnTransparence = pTransparence->GetValue();
-            }
-            if (pColor && !pColor->GetValue().isEmpty())
-            {
-                msColor = pColor->GetValue();
-            }
-            if (pWidth && pWidth->GetValue() > 0)
-            {
-                mnWidth = pWidth->GetValue();
-            }
-        }
+        mnTransparence = pTransparence->GetValue();
+    }
+    if (pColor && !pColor->GetValue().isEmpty())
+    {
+        msColor = pColor->GetValue();
+    }
+    if (pWidth && pWidth->GetValue() > 0)
+    {
+        mnWidth = pWidth->GetValue();
     }
 }
 

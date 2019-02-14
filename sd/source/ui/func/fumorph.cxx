@@ -77,106 +77,106 @@ void FuMorph::DoExecute( SfxRequest& )
 {
     const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
 
-    if(rMarkList.GetMarkCount() == 2)
+    if(rMarkList.GetMarkCount() != 2)
+        return;
+
+    // create clones
+    SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
+    SdrObject*  pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
+    SdrObject*  pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
+
+    // delete text at clone, otherwise we do net get a correct PathObj
+    pCloneObj1->SetOutlinerParaObject(nullptr);
+    pCloneObj2->SetOutlinerParaObject(nullptr);
+
+    // create path objects
+    SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
+    SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractMorphDlg> pDlg( pFact->CreateMorphDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, pObj1, pObj2) );
+    if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK))
     {
-        // create clones
-        SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObject*  pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
-        SdrObject*  pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
+        B2DPolyPolygonList_impl aPolyPolyList;
+        ::basegfx::B2DPolyPolygon aPolyPoly1;
+        ::basegfx::B2DPolyPolygon aPolyPoly2;
 
-        // delete text at clone, otherwise we do net get a correct PathObj
-        pCloneObj1->SetOutlinerParaObject(nullptr);
-        pCloneObj2->SetOutlinerParaObject(nullptr);
+        pDlg->SaveSettings();
 
-        // create path objects
-        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
-        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractMorphDlg> pDlg( pFact->CreateMorphDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, pObj1, pObj2) );
-        if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK))
+        // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
+        // containing SdrPathObjs. To get the polygons, I add two iters here
+        SdrObjListIter aIter1(*pPolyObj1);
+        SdrObjListIter aIter2(*pPolyObj2);
+
+        while(aIter1.IsMore())
         {
-            B2DPolyPolygonList_impl aPolyPolyList;
-            ::basegfx::B2DPolyPolygon aPolyPoly1;
-            ::basegfx::B2DPolyPolygon aPolyPoly2;
-
-            pDlg->SaveSettings();
-
-            // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
-            // containing SdrPathObjs. To get the polygons, I add two iters here
-            SdrObjListIter aIter1(*pPolyObj1);
-            SdrObjListIter aIter2(*pPolyObj2);
-
-            while(aIter1.IsMore())
-            {
-                SdrObject* pObj = aIter1.Next();
-                if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
-                    aPolyPoly1.append(pPathObj->GetPathPoly());
-            }
-
-            while(aIter2.IsMore())
-            {
-                SdrObject* pObj = aIter2.Next();
-                if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
-                    aPolyPoly2.append(pPathObj->GetPathPoly());
-            }
-
-            // perform morphing
-            if(aPolyPoly1.count() && aPolyPoly2.count())
-            {
-                aPolyPoly1 = ::basegfx::utils::correctOrientations(aPolyPoly1);
-                aPolyPoly1.removeDoublePoints();
-                ::basegfx::B2VectorOrientation eIsClockwise1(::basegfx::utils::getOrientation(aPolyPoly1.getB2DPolygon(0)));
-
-                aPolyPoly2 = ::basegfx::utils::correctOrientations(aPolyPoly2);
-                aPolyPoly2.removeDoublePoints();
-                ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::utils::getOrientation(aPolyPoly2.getB2DPolygon(0)));
-
-                // set same orientation
-                if(eIsClockwise1 != eIsClockwise2)
-                    aPolyPoly2.flip();
-
-                // force same poly count
-                if(aPolyPoly1.count() < aPolyPoly2.count())
-                    ImpAddPolys(aPolyPoly1, aPolyPoly2);
-                else if(aPolyPoly2.count() < aPolyPoly1.count())
-                    ImpAddPolys(aPolyPoly2, aPolyPoly1);
-
-                // use orientation flag from dialog
-                if(!pDlg->IsOrientationFade())
-                    aPolyPoly2.flip();
-
-                // force same point counts
-                for( sal_uInt32 a(0); a < aPolyPoly1.count(); a++ )
-                {
-                    ::basegfx::B2DPolygon aSub1(aPolyPoly1.getB2DPolygon(a));
-                    ::basegfx::B2DPolygon aSub2(aPolyPoly2.getB2DPolygon(a));
-
-                    if(aSub1.count() < aSub2.count())
-                        ImpEqualizePolyPointCount(aSub1, aSub2);
-                    else if(aSub2.count() < aSub1.count())
-                        ImpEqualizePolyPointCount(aSub2, aSub1);
-
-                    aPolyPoly1.setB2DPolygon(a, aSub1);
-                    aPolyPoly2.setB2DPolygon(a, aSub2);
-                }
-
-                ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList);
-
-                OUString aString(mpView->GetDescriptionOfMarkedObjects());
-                aString += " " + SdResId(STR_UNDO_MORPHING);
-
-                mpView->BegUndo(aString);
-                ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
-                mpView->EndUndo();
-            }
+            SdrObject* pObj = aIter1.Next();
+            if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
+                aPolyPoly1.append(pPathObj->GetPathPoly());
         }
-        SdrObject::Free( pCloneObj1 );
-        SdrObject::Free( pCloneObj2 );
 
-        SdrObject::Free( pPolyObj1 );
-        SdrObject::Free( pPolyObj2 );
+        while(aIter2.IsMore())
+        {
+            SdrObject* pObj = aIter2.Next();
+            if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
+                aPolyPoly2.append(pPathObj->GetPathPoly());
+        }
+
+        // perform morphing
+        if(aPolyPoly1.count() && aPolyPoly2.count())
+        {
+            aPolyPoly1 = ::basegfx::utils::correctOrientations(aPolyPoly1);
+            aPolyPoly1.removeDoublePoints();
+            ::basegfx::B2VectorOrientation eIsClockwise1(::basegfx::utils::getOrientation(aPolyPoly1.getB2DPolygon(0)));
+
+            aPolyPoly2 = ::basegfx::utils::correctOrientations(aPolyPoly2);
+            aPolyPoly2.removeDoublePoints();
+            ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::utils::getOrientation(aPolyPoly2.getB2DPolygon(0)));
+
+            // set same orientation
+            if(eIsClockwise1 != eIsClockwise2)
+                aPolyPoly2.flip();
+
+            // force same poly count
+            if(aPolyPoly1.count() < aPolyPoly2.count())
+                ImpAddPolys(aPolyPoly1, aPolyPoly2);
+            else if(aPolyPoly2.count() < aPolyPoly1.count())
+                ImpAddPolys(aPolyPoly2, aPolyPoly1);
+
+            // use orientation flag from dialog
+            if(!pDlg->IsOrientationFade())
+                aPolyPoly2.flip();
+
+            // force same point counts
+            for( sal_uInt32 a(0); a < aPolyPoly1.count(); a++ )
+            {
+                ::basegfx::B2DPolygon aSub1(aPolyPoly1.getB2DPolygon(a));
+                ::basegfx::B2DPolygon aSub2(aPolyPoly2.getB2DPolygon(a));
+
+                if(aSub1.count() < aSub2.count())
+                    ImpEqualizePolyPointCount(aSub1, aSub2);
+                else if(aSub2.count() < aSub1.count())
+                    ImpEqualizePolyPointCount(aSub2, aSub1);
+
+                aPolyPoly1.setB2DPolygon(a, aSub1);
+                aPolyPoly2.setB2DPolygon(a, aSub2);
+            }
+
+            ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList);
+
+            OUString aString(mpView->GetDescriptionOfMarkedObjects());
+            aString += " " + SdResId(STR_UNDO_MORPHING);
+
+            mpView->BegUndo(aString);
+            ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
+            mpView->EndUndo();
+        }
     }
+    SdrObject::Free( pCloneObj1 );
+    SdrObject::Free( pCloneObj2 );
+
+    SdrObject::Free( pPolyObj1 );
+    SdrObject::Free( pPolyObj2 );
 }
 
 static ::basegfx::B2DPolygon ImpGetExpandedPolygon(
@@ -377,65 +377,65 @@ void FuMorph::ImpInsertPolygons(
             bIgnoreFill = true;
     }
 
-    if ( pPageView )
+    if ( !pPageView )
+        return;
+
+    SfxItemSet      aSet( aSet1 );
+    SdrObjGroup*    pObjGroup = new SdrObjGroup(mpView->getSdrModelFromSdrView());
+    SdrObjList*     pObjList = pObjGroup->GetSubList();
+    const size_t    nCount = rPolyPolyList3D.size();
+    const double    fStep = 1. / ( nCount + 1 );
+    const double    fDelta = nEndLineWidth - nStartLineWidth;
+    double          fFactor = fStep;
+
+    aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
+    aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+
+    for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
     {
-        SfxItemSet      aSet( aSet1 );
-        SdrObjGroup*    pObjGroup = new SdrObjGroup(mpView->getSdrModelFromSdrView());
-        SdrObjList*     pObjList = pObjGroup->GetSubList();
-        const size_t    nCount = rPolyPolyList3D.size();
-        const double    fStep = 1. / ( nCount + 1 );
-        const double    fDelta = nEndLineWidth - nStartLineWidth;
-        double          fFactor = fStep;
+        const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
+        SdrPathObj* pNewObj = new SdrPathObj(
+            mpView->getSdrModelFromSdrView(),
+            OBJ_POLY,
+            rPolyPoly3D);
 
-        aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
-        aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-
-        for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
+        // line color
+        if ( bLineColor )
         {
-            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
-            SdrPathObj* pNewObj = new SdrPathObj(
-                mpView->getSdrModelFromSdrView(),
-                OBJ_POLY,
-                rPolyPoly3D);
-
-            // line color
-            if ( bLineColor )
-            {
-                const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
-                aSet.Put( XLineColorItem( "", Color(aLineColor)));
-            }
-            else if ( bIgnoreLine )
-                aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-
-            // fill color
-            if ( bFillColor )
-            {
-                const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
-                aSet.Put( XFillColorItem( "", Color(aFillColor)));
-            }
-            else if ( bIgnoreFill )
-                aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
-
-            // line width
-            if ( bLineWidth )
-                aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<long>( fFactor * fDelta + 0.5 ) ) );
-
-            pNewObj->SetMergedItemSetAndBroadcast(aSet);
-
-            pObjList->InsertObject( pNewObj );
+            const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
+            aSet.Put( XLineColorItem( "", Color(aLineColor)));
         }
+        else if ( bIgnoreLine )
+            aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
 
-        if ( nCount )
+        // fill color
+        if ( bFillColor )
         {
-            pObjList->InsertObject(
-                pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()),
-                0 );
-            pObjList->InsertObject(
-                pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()) );
-
-            mpView->DeleteMarked();
-            mpView->InsertObjectAtView( pObjGroup, *pPageView, SdrInsertFlags:: SETDEFLAYER );
+            const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
+            aSet.Put( XFillColorItem( "", Color(aFillColor)));
         }
+        else if ( bIgnoreFill )
+            aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+
+        // line width
+        if ( bLineWidth )
+            aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<long>( fFactor * fDelta + 0.5 ) ) );
+
+        pNewObj->SetMergedItemSetAndBroadcast(aSet);
+
+        pObjList->InsertObject( pNewObj );
+    }
+
+    if ( nCount )
+    {
+        pObjList->InsertObject(
+            pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()),
+            0 );
+        pObjList->InsertObject(
+            pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()) );
+
+        mpView->DeleteMarked();
+        mpView->InsertObjectAtView( pObjGroup, *pPageView, SdrInsertFlags:: SETDEFLAYER );
     }
 }
 
@@ -482,29 +482,29 @@ void FuMorph::ImpMorphPolygons(
     B2DPolyPolygonList_impl& rPolyPolyList3D
 )
 {
-    if(nSteps)
+    if(!nSteps)
+        return;
+
+    const ::basegfx::B2DRange aStartPolySize(::basegfx::utils::getRange(rPolyPoly1));
+    const ::basegfx::B2DPoint aStartCenter(aStartPolySize.getCenter());
+    const ::basegfx::B2DRange aEndPolySize(::basegfx::utils::getRange(rPolyPoly2));
+    const ::basegfx::B2DPoint aEndCenter(aEndPolySize.getCenter());
+    const ::basegfx::B2DPoint aDelta(aEndCenter - aStartCenter);
+    const double fFactor(1.0 / (nSteps + 1));
+    double fValue(0.0);
+
+    for(sal_uInt16 i(0); i < nSteps; i++)
     {
-        const ::basegfx::B2DRange aStartPolySize(::basegfx::utils::getRange(rPolyPoly1));
-        const ::basegfx::B2DPoint aStartCenter(aStartPolySize.getCenter());
-        const ::basegfx::B2DRange aEndPolySize(::basegfx::utils::getRange(rPolyPoly2));
-        const ::basegfx::B2DPoint aEndCenter(aEndPolySize.getCenter());
-        const ::basegfx::B2DPoint aDelta(aEndCenter - aStartCenter);
-        const double fFactor(1.0 / (nSteps + 1));
-        double fValue(0.0);
+        fValue += fFactor;
+        ::basegfx::B2DPolyPolygon aNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
 
-        for(sal_uInt16 i(0); i < nSteps; i++)
-        {
-            fValue += fFactor;
-            ::basegfx::B2DPolyPolygon aNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
+        const ::basegfx::B2DRange aNewPolySize(::basegfx::utils::getRange(aNewPolyPoly2D));
+        const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
+        const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
+        const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
 
-            const ::basegfx::B2DRange aNewPolySize(::basegfx::utils::getRange(aNewPolyPoly2D));
-            const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
-            const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
-            const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
-
-            aNewPolyPoly2D.transform(basegfx::utils::createTranslateB2DHomMatrix(aDiff));
-            rPolyPolyList3D.push_back( std::move(aNewPolyPoly2D) );
-        }
+        aNewPolyPoly2D.transform(basegfx::utils::createTranslateB2DHomMatrix(aDiff));
+        rPolyPolyList3D.push_back( std::move(aNewPolyPoly2D) );
     }
 }
 

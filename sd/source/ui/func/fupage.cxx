@@ -140,20 +140,20 @@ void FuPage::DoExecute( SfxRequest& )
         mpPage = mpDrawViewShell->getCurrentPage();
     }
 
-    if( mpPage )
-    {
-        // if there are no arguments given, open the dialog
-        if( !mpArgs )
-        {
-            mpView->SdrEndTextEdit();
-            mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr);
-        }
+    if( !mpPage )
+        return;
 
-        // if we now have arguments, apply them to current page
-        if( mpArgs )
-        {
-            ApplyItemSet( mpArgs );
-        }
+    // if there are no arguments given, open the dialog
+    if( !mpArgs )
+    {
+        mpView->SdrEndTextEdit();
+        mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr);
+    }
+
+    // if we now have arguments, apply them to current page
+    if( mpArgs )
+    {
+        ApplyItemSet( mpArgs );
     }
 }
 
