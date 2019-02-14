@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <path
+     style="fill:#555753"
+     d="M 1,15 15,12 V 4 L 1,1 Z M 3,12.525391 V 3.474609 l 10,2.142579 v 4.765625 z"
+     />
+  <path
+     style="opacity:0.35;fill:#555753"
+     d="M 3,12.525391 V 3.474609 l 10,2.142579 v 4.765625 z"
+     />
+</svg>
