@@ -71,6 +71,9 @@
 #include <cstddef>
 #include <memory>
 #include <swmodule.hxx>
+#include <MarkManager.hxx>
+#include <xmloff/odffields.hxx>
+#include <IDocumentContentOperations.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -715,6 +718,45 @@ FIELD_INSERT:
                 rReq.Done();
             }
             break;
+
+            case FN_INSERT_TEXT_FORMFIELD:
+            {
+                SwPaM* pCursorPos = rSh.GetCursor();
+                if(pCursorPos)
+                {
+                    // Insert five enspace into the text field so the field has extent
+                    sal_Unicode vEnSpaces[ODF_FORMTEXT_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+                    bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, OUString(vEnSpaces, ODF_FORMTEXT_DEFAULT_LENGTH));
+                    if(bSuccess)
+                    {
+                        IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+                        SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex()-5,
+                                        pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
+                        pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT);
+                    }
+                }
+            }
+            break;
+            case FN_INSERT_CHECKBOX_FORMFIELD:
+            {
+                SwPaM* pCursorPos = rSh.GetCursor();
+                if(pCursorPos)
+                {
+                    IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+                    pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMCHECKBOX);
+                }
+            }
+            break;
+            case FN_INSERT_DROPDOWN_FORMFIELD:
+            {
+                SwPaM* pCursorPos = rSh.GetCursor();
+                if(pCursorPos)
+                {
+                    IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+                    pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDROPDOWN);
+                }
+            }
+            break;
             default:
                 OSL_FAIL("wrong dispatcher");
                 return;
@@ -865,6 +907,9 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_FLD_TITLE:
         case FN_INSERT_FLD_TOPIC:
         case FN_INSERT_DBFIELD:
+        case FN_INSERT_TEXT_FORMFIELD:
+        case FN_INSERT_CHECKBOX_FORMFIELD:
+        case FN_INSERT_DROPDOWN_FORMFIELD:
             if ( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
