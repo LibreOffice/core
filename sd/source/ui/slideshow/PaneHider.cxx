@@ -45,7 +45,10 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
 {
      // Hide the left and right pane windows when a slideshow exists and is
     // not full screen.
-    if (pSlideShow!=nullptr && !pSlideShow->isFullScreen()) try
+    if (pSlideShow==nullptr || pSlideShow->isFullScreen())
+        return;
+
+    try
     {
         Reference<XControllerManager> xControllerManager (
             mrViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);

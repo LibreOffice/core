@@ -81,46 +81,46 @@ void SlideShowRestarter::Restart (bool bForce)
 IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation, void*, void)
 {
     mnEventId = nullptr;
-    if (mpSlideShow.is())
+    if (!mpSlideShow.is())
+        return;
+
+    if (mnDisplayCount == static_cast<sal_Int32>(Application::GetScreenCount()))
+        return;
+
+    bool bIsExitAfterPresenting = mpSlideShow->IsExitAfterPresenting();
+    mpSlideShow->SetExitAfterPresenting(false);
+    mpSlideShow->end();
+    mpSlideShow->SetExitAfterPresenting(bIsExitAfterPresenting);
+
+    // The following piece of code should not be here because the
+    // slide show should be aware of the existence of the presenter
+    // console (which is displayed in the FullScreenPane).  But the
+    // timing has to be right and I did not find a better place for
+    // it.
+
+    // Wait for the full screen pane, which displays the presenter
+    // console, to disappear.  Only when it is gone, call
+    // InitiatePresenterStart(), in order to begin the asynchronous
+    // restart of the slide show.
+    if (mpViewShellBase == nullptr)
+        return;
+
+    ::std::shared_ptr<FrameworkHelper> pHelper(
+        FrameworkHelper::Instance(*mpViewShellBase));
+    if (pHelper->GetConfigurationController()->getResource(
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
     {
-        if (mnDisplayCount != static_cast<sal_Int32>(Application::GetScreenCount()))
-        {
-            bool bIsExitAfterPresenting = mpSlideShow->IsExitAfterPresenting();
-            mpSlideShow->SetExitAfterPresenting(false);
-            mpSlideShow->end();
-            mpSlideShow->SetExitAfterPresenting(bIsExitAfterPresenting);
+        ::sd::framework::ConfigurationController::Lock aLock (
+            pHelper->GetConfigurationController());
 
-            // The following piece of code should not be here because the
-            // slide show should be aware of the existence of the presenter
-            // console (which is displayed in the FullScreenPane).  But the
-            // timing has to be right and I did not find a better place for
-            // it.
-
-            // Wait for the full screen pane, which displays the presenter
-            // console, to disappear.  Only when it is gone, call
-            // InitiatePresenterStart(), in order to begin the asynchronous
-            // restart of the slide show.
-            if (mpViewShellBase != nullptr)
-            {
-                ::std::shared_ptr<FrameworkHelper> pHelper(
-                    FrameworkHelper::Instance(*mpViewShellBase));
-                if (pHelper->GetConfigurationController()->getResource(
-                    FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
-                {
-                    ::sd::framework::ConfigurationController::Lock aLock (
-                        pHelper->GetConfigurationController());
-
-                    pHelper->RunOnConfigurationEvent(
-                        FrameworkHelper::msConfigurationUpdateEndEvent,
-                        ::std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
-                    pHelper->UpdateConfiguration();
-                }
-                else
-                {
-                    StartPresentation();
-                }
-            }
-        }
+        pHelper->RunOnConfigurationEvent(
+            FrameworkHelper::msConfigurationUpdateEndEvent,
+            ::std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
+        pHelper->UpdateConfiguration();
+    }
+    else
+    {
+        StartPresentation();
     }
 }
 
