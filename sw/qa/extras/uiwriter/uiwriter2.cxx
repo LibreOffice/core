@@ -45,6 +45,7 @@ public:
     void testTdf101873();
     void testTableWidth();
     void testTdf122942();
+    void testDocxAttributeTableExport();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST(testTdf122942);
+    CPPUNIT_TEST(testDocxAttributeTableExport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -529,6 +531,45 @@ void SwUiWriterTest2::testTdf122942()
     // paragraph mark, not above it.
     const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
     CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
+}
+
+void SwUiWriterTest2::testDocxAttributeTableExport()
+{
+    createDoc("floating-table-position.docx");
+
+    // get the table frame, set new values and dismiss the references
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
+                                                          uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+        // change the properties
+        // 8133 -> 8000
+        xShape->setPropertyValue("VertOrientPosition", uno::makeAny(static_cast<sal_Int32>(8000)));
+        // 5964 -> 5000
+        xShape->setPropertyValue("HoriOrientPosition", uno::makeAny(static_cast<sal_Int32>(5000)));
+        // 0 (frame) -> 8 (page print area)
+        xShape->setPropertyValue("VertOrientRelation", uno::makeAny(static_cast<sal_Int16>(8)));
+        // 8 (page print area) -> 0 (frame)
+        xShape->setPropertyValue("HoriOrientRelation", uno::makeAny(static_cast<sal_Int16>(0)));
+    }
+    // save it to docx
+    reload("Office Open XML Text", "floating-table-position.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // test the new values
+    sal_Int32 nValue = getProperty<sal_Int32>(xShape, "VertOrientPosition");
+    CPPUNIT_ASSERT(sal_Int32(7999) <= nValue && nValue <= sal_Int32(8001));
+    nValue = getProperty<sal_Int32>(xShape, "HoriOrientPosition");
+    CPPUNIT_ASSERT(sal_Int32(4999) <= nValue && nValue <= sal_Int32(5001));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
