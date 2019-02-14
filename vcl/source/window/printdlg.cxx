@@ -80,47 +80,35 @@ namespace {
    }
 }
 
-MoreOptionsDialog::MoreOptionsDialog( VclPtr<PrintDialog> i_pParent )
-    : ModalDialog(i_pParent, "MoreOptionsDialog", "vcl/ui/moreoptionsdialog.ui")
+MoreOptionsDialog::MoreOptionsDialog(VclPtr<PrintDialog> i_pParent)
+    : GenericDialogController(i_pParent->GetFrameWeld(), "vcl/ui/moreoptionsdialog.ui", "MoreOptionsDialog")
     , mpParent( i_pParent )
+    , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxCancelButton(m_xBuilder->weld_button("cancel"))
+    , mxSingleJobsBox(m_xBuilder->weld_check_button("singlejobs"))
 {
-    get(mpOKButton, "ok");
-    get(mpCancelButton, "cancel");
-    get(mpSingleJobsBox, "singlejobs");
+    mxSingleJobsBox->set_active( mpParent->isSingleJobs() );
 
-    mpSingleJobsBox->Check( mpParent->isSingleJobs() );
-
-    mpOKButton->SetClickHdl( LINK( this, MoreOptionsDialog, ClickHdl ) );
-    mpCancelButton->SetClickHdl( LINK( this, MoreOptionsDialog, ClickHdl ) );
+    mxOKButton->connect_clicked( LINK( this, MoreOptionsDialog, ClickHdl ) );
+    mxCancelButton->connect_clicked( LINK( this, MoreOptionsDialog, ClickHdl ) );
 }
 
 MoreOptionsDialog::~MoreOptionsDialog()
 {
-    disposeOnce();
 }
 
-void MoreOptionsDialog::dispose()
+IMPL_LINK (MoreOptionsDialog, ClickHdl, weld::Button&, rButton, void)
 {
-    mpOKButton.clear();
-    mpCancelButton.clear();
-    mpSingleJobsBox.clear();
-    mpParent.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK ( MoreOptionsDialog, ClickHdl, Button*, pButton, void )
-{
-    if ( pButton == mpOKButton )
+    if (&rButton == mxOKButton.get())
     {
-        mpParent->mbSingleJobs = mpSingleJobsBox->IsChecked();
-        EndDialog( RET_OK );
+        mpParent->mbSingleJobs = mxSingleJobsBox->get_active();
+        m_xDialog->response(RET_OK);
     }
-    else if ( pButton == mpCancelButton )
+    else if (&rButton == mxCancelButton.get())
     {
-        EndDialog( RET_CANCEL );
+        m_xDialog->response(RET_CANCEL);
     }
 }
-
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
@@ -754,7 +742,7 @@ void PrintDialog::dispose()
     mpNupOrderWin.clear();
     mpNupOrderTxt.clear();
     mpBorderCB.clear();
-    mpMoreOptionsDlg.disposeAndClear();
+    mxMoreOptionsDlg.reset();
     ModalDialog::dispose();
 }
 
@@ -1890,8 +1878,8 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     }
     else if ( pButton == mpMoreOptionsBtn )
     {
-        mpMoreOptionsDlg = VclPtr< MoreOptionsDialog >::Create( this );
-        mpMoreOptionsDlg->Execute();
+        mxMoreOptionsDlg.reset(new MoreOptionsDialog(this));
+        mxMoreOptionsDlg->run();
     }
     else
     {
