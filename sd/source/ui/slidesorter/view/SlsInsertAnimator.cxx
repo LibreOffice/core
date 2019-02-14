@@ -322,27 +322,27 @@ void PageObjectRun::UpdateOffsets(
     const sal_Int32 nLocalInsertIndex(bIsVertical
         ? rInsertPosition.GetRow()
         : rInsertPosition.GetColumn());
-    if (nLocalInsertIndex != mnLocalInsertIndex)
-    {
-        mnLocalInsertIndex = nLocalInsertIndex;
+    if (nLocalInsertIndex == mnLocalInsertIndex)
+        return;
 
-        model::SlideSorterModel& rModel (mrAnimatorAccess.GetModel());
-        const sal_Int32 nRunLength (mnEndIndex - mnStartIndex + 1);
-        for (sal_Int32 nIndex=0; nIndex<nRunLength; ++nIndex)
-        {
-            model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
-            if (pDescriptor)
-                maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
-            maEndOffset[nIndex] = nIndex < mnLocalInsertIndex
-                ? rInsertPosition.GetLeadingOffset()
-                : rInsertPosition.GetTrailingOffset();
-            if (bIsVertical)
-                maEndOffset[nIndex].setX( 0 );
-            else
-                maEndOffset[nIndex].setY( 0 );
-        }
-        RestartAnimation();
+    mnLocalInsertIndex = nLocalInsertIndex;
+
+    model::SlideSorterModel& rModel (mrAnimatorAccess.GetModel());
+    const sal_Int32 nRunLength (mnEndIndex - mnStartIndex + 1);
+    for (sal_Int32 nIndex=0; nIndex<nRunLength; ++nIndex)
+    {
+        model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
+        if (pDescriptor)
+            maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
+        maEndOffset[nIndex] = nIndex < mnLocalInsertIndex
+            ? rInsertPosition.GetLeadingOffset()
+            : rInsertPosition.GetTrailingOffset();
+        if (bIsVertical)
+            maEndOffset[nIndex].setX( 0 );
+        else
+            maEndOffset[nIndex].setY( 0 );
     }
+    RestartAnimation();
 }
 
 void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMode)

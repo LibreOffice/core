@@ -192,75 +192,75 @@ void Listener::ConnectToController()
 
     // Register at the controller of the main view shell (if we are that not
     // ourself).
-    if (pShell==nullptr || ! pShell->IsMainViewShell())
+    if (pShell!=nullptr && pShell->IsMainViewShell())
+        return;
+
+    Reference<frame::XController> xController (mrSlideSorter.GetXController());
+
+    // Listen to changes of certain properties.
+    Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+    if (xSet.is())
     {
-        Reference<frame::XController> xController (mrSlideSorter.GetXController());
-
-        // Listen to changes of certain properties.
-        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-        if (xSet.is())
-        {
-            try
-            {
-                xSet->addPropertyChangeListener("CurrentPage", this);
-            }
-            catch (beans::UnknownPropertyException&)
-            {
-                DBG_UNHANDLED_EXCEPTION("sd");
-            }
-            try
-            {
-                xSet->addPropertyChangeListener("IsMasterPageMode", this);
-            }
-            catch (beans::UnknownPropertyException&)
-            {
-                DBG_UNHANDLED_EXCEPTION("sd");
-            }
-        }
-
-        // Listen for disposing events.
-        Reference<XComponent> xComponent (xController, UNO_QUERY);
-        if (xComponent.is())
-        {
-            xComponent->addEventListener (
-                Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
-
-            mxControllerWeak = xController;
-            mbListeningToController = true;
-        }
-    }
-}
-
-void Listener::DisconnectFromController()
-{
-    if (mbListeningToController)
-    {
-        Reference<frame::XController> xController = mxControllerWeak;
-        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         try
         {
-            // Remove the property listener.
-            if (xSet.is())
-            {
-                xSet->removePropertyChangeListener( "CurrentPage", this );
-                xSet->removePropertyChangeListener( "IsMasterPageMode", this);
-            }
-
-            // Remove the dispose listener.
-            Reference<XComponent> xComponent (xController, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->removeEventListener (
-                    Reference<lang::XEventListener>(
-                        static_cast<XWeak*>(this), UNO_QUERY));
+            xSet->addPropertyChangeListener("CurrentPage", this);
         }
         catch (beans::UnknownPropertyException&)
         {
             DBG_UNHANDLED_EXCEPTION("sd");
         }
-
-        mbListeningToController = false;
-        mxControllerWeak = Reference<frame::XController>();
+        try
+        {
+            xSet->addPropertyChangeListener("IsMasterPageMode", this);
+        }
+        catch (beans::UnknownPropertyException&)
+        {
+            DBG_UNHANDLED_EXCEPTION("sd");
+        }
     }
+
+    // Listen for disposing events.
+    Reference<XComponent> xComponent (xController, UNO_QUERY);
+    if (xComponent.is())
+    {
+        xComponent->addEventListener (
+            Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
+
+        mxControllerWeak = xController;
+        mbListeningToController = true;
+    }
+}
+
+void Listener::DisconnectFromController()
+{
+    if (!mbListeningToController)
+        return;
+
+    Reference<frame::XController> xController = mxControllerWeak;
+    Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+    try
+    {
+        // Remove the property listener.
+        if (xSet.is())
+        {
+            xSet->removePropertyChangeListener( "CurrentPage", this );
+            xSet->removePropertyChangeListener( "IsMasterPageMode", this);
+        }
+
+        // Remove the dispose listener.
+        Reference<XComponent> xComponent (xController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener (
+                Reference<lang::XEventListener>(
+                    static_cast<XWeak*>(this), UNO_QUERY));
+    }
+    catch (beans::UnknownPropertyException&)
+    {
+        DBG_UNHANDLED_EXCEPTION("sd");
+    }
+
+    mbListeningToController = false;
+    mxControllerWeak = Reference<frame::XController>();
 }
 
 void Listener::Notify (
@@ -585,22 +585,22 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
 
     // When the page is a master page then invalidate the previews of all
     // pages that are linked to this master page.
-    if (pPage->IsMasterPage())
+    if (!pPage->IsMasterPage())
+        return;
+
+    for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PageKind::Standard);
+         nIndex<nCount;
+         ++nIndex)
     {
-        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PageKind::Standard);
-             nIndex<nCount;
-             ++nIndex)
+        const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PageKind::Standard);
+        if (pCandidate!=nullptr && pCandidate->TRG_HasMasterPage())
         {
-            const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PageKind::Standard);
-            if (pCandidate!=nullptr && pCandidate->TRG_HasMasterPage())
-            {
-                if (&pCandidate->TRG_GetMasterPage() == pPage)
-                    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pCandidate);
-            }
-            else
-            {
-                OSL_ASSERT(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
-            }
+            if (&pCandidate->TRG_GetMasterPage() == pPage)
+                pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pCandidate);
+        }
+        else
+        {
+            OSL_ASSERT(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
         }
     }
 }

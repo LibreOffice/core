@@ -166,24 +166,24 @@ CacheCompactionByCompression::CacheCompactionByCompression (
 
 void CacheCompactionByCompression::Run()
 {
-    if (mrCache.GetSize() > mnMaximalCacheSize)
+    if (mrCache.GetSize() <= mnMaximalCacheSize)
+        return;
+
+    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses to much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
+
+    ::std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
+        mrCache.GetCacheIndex());
+    for (const auto& rpIndex : *pIndex)
     {
-        SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses to much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
+        if (rpIndex == nullptr)
+            continue;
 
-        ::std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
-            mrCache.GetCacheIndex());
-        for (const auto& rpIndex : *pIndex)
-        {
-            if (rpIndex == nullptr)
-                continue;
-
-            mrCache.Compress(rpIndex, mpCompressor);
-            if (mrCache.GetSize() < mnMaximalCacheSize)
-                break;
-        }
-        mrCache.ReCalculateTotalCacheSize();
-        SAL_INFO("sd.sls", OSL_THIS_FUNC << ":    there are now " << mrCache.GetSize() << " bytes occupied");
+        mrCache.Compress(rpIndex, mpCompressor);
+        if (mrCache.GetSize() < mnMaximalCacheSize)
+            break;
     }
+    mrCache.ReCalculateTotalCacheSize();
+    SAL_INFO("sd.sls", OSL_THIS_FUNC << ":    there are now " << mrCache.GetSize() << " bytes occupied");
 }
 
 } // end of anonymous namespace

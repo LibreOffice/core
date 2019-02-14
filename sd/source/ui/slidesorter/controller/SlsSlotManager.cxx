@@ -746,55 +746,55 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     }
 
     // Cut, copy, and delete page are disabled when there is no selection.
-    if (rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT
+    if (!(rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_COPY)  == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_DELETE) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_DELETE_PAGE) == SfxItemState::DEFAULT
-        || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SfxItemState::DEFAULT)
+        || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SfxItemState::DEFAULT))
+        return;
+
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+            mrSlideSorter.GetModel()));
+
+    // For copy to work we have to have at least one selected page.
+    if ( ! aSelectedPages.HasMoreElements())
+        rSet.DisableItem(SID_COPY);
+
+    bool bDisable = false;
+    // The operations that lead to the deletion of a page are valid if
+    // a) there is at least one selected page
+    // b) deleting the selected pages leaves at least one page in the
+    // document
+    // c) selected master pages must not be used by slides.
+
+    // Test a).
+    if ( ! aSelectedPages.HasMoreElements())
+        bDisable = true;
+    // Test b): Count the number of selected pages.  It has to be less
+    // than the number of all pages.
+    else if (mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount()
+        >= mrSlideSorter.GetController().GetPageSelector().GetPageCount())
+        bDisable = true;
+    // Test c): Iterate over the selected pages and look for a master
+    // page that is used by at least one page.
+    else while (aSelectedPages.HasMoreElements())
     {
-        model::PageEnumeration aSelectedPages (
-            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                mrSlideSorter.GetModel()));
-
-        // For copy to work we have to have at least one selected page.
-        if ( ! aSelectedPages.HasMoreElements())
-            rSet.DisableItem(SID_COPY);
-
-        bool bDisable = false;
-        // The operations that lead to the deletion of a page are valid if
-        // a) there is at least one selected page
-        // b) deleting the selected pages leaves at least one page in the
-        // document
-        // c) selected master pages must not be used by slides.
-
-        // Test a).
-        if ( ! aSelectedPages.HasMoreElements())
-            bDisable = true;
-        // Test b): Count the number of selected pages.  It has to be less
-        // than the number of all pages.
-        else if (mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount()
-            >= mrSlideSorter.GetController().GetPageSelector().GetPageCount())
-            bDisable = true;
-        // Test c): Iterate over the selected pages and look for a master
-        // page that is used by at least one page.
-        else while (aSelectedPages.HasMoreElements())
+        SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
+        int nUseCount (mrSlideSorter.GetModel().GetDocument()
+            ->GetMasterPageUserCount(pPage));
+        if (nUseCount > 0)
         {
-            SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
-            int nUseCount (mrSlideSorter.GetModel().GetDocument()
-                ->GetMasterPageUserCount(pPage));
-            if (nUseCount > 0)
-            {
-                bDisable = true;
-                break;
-            }
+            bDisable = true;
+            break;
         }
+    }
 
-        if (bDisable)
-        {
-            rSet.DisableItem(SID_CUT);
-            rSet.DisableItem(SID_DELETE_PAGE);
-            rSet.DisableItem(SID_DELETE_MASTER_PAGE);
-        }
+    if (bDisable)
+    {
+        rSet.DisableItem(SID_CUT);
+        rSet.DisableItem(SID_DELETE_PAGE);
+        rSet.DisableItem(SID_DELETE_MASTER_PAGE);
     }
 }
 
@@ -860,57 +860,57 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
                 mrSlideSorter.GetModel()));
     if (aSelectedPages.HasMoreElements())
         pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
-    if (pSelectedPage != nullptr)
+    if (pSelectedPage == nullptr)
+        return;
+
+    // tdf#107183 Set different dialog titles when renaming
+    // master slides or normal ones
+    OUString aTitle;
+    if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
+        aTitle = SdResId( STR_TITLE_RENAMEMASTER );
+    else
+        aTitle = SdResId( STR_TITLE_RENAMESLIDE );
+
+    OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
+    OUString aPageName = pSelectedPage->GetName();
+
+    if(rRequest.GetArgs())
     {
-        // tdf#107183 Set different dialog titles when renaming
-        // master slides or normal ones
-        OUString aTitle;
-        if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
-            aTitle = SdResId( STR_TITLE_RENAMEMASTER );
-        else
-            aTitle = SdResId( STR_TITLE_RENAMESLIDE );
+       OUString aName;
+       aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
 
-        OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-        OUString aPageName = pSelectedPage->GetName();
-
-        if(rRequest.GetArgs())
-        {
-           OUString aName;
-           aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
-
-           bool bResult =  RenameSlideFromDrawViewShell(pSelectedPage->GetPageNum()/2, aName );
-           DBG_ASSERT( bResult, "Couldn't rename slide" );
-        }
-        else
-        {
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            vcl::Window* pWin = mrSlideSorter.GetContentWindow();
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-                    pWin ? pWin->GetFrameWeld() : nullptr,
-                    aPageName, aDescr));
-            aNameDlg->SetText( aTitle );
-            aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
-            aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-
-            if( aNameDlg->Execute() == RET_OK )
-            {
-                OUString aNewName;
-                aNameDlg->GetName( aNewName );
-                if (aNewName != aPageName)
-                {
-                    bool bResult =
-                            RenameSlideFromDrawViewShell(
-                              pSelectedPage->GetPageNum()/2, aNewName );
-                    DBG_ASSERT( bResult, "Couldn't rename slide" );
-                }
-            }
-            aNameDlg.disposeAndClear();
-        }
-        // Tell the slide sorter about the name change (necessary for
-        // accessibility.)
-        mrSlideSorter.GetController().PageNameHasChanged(
-                (pSelectedPage->GetPageNum()-1)/2, aPageName);
+       bool bResult =  RenameSlideFromDrawViewShell(pSelectedPage->GetPageNum()/2, aName );
+       DBG_ASSERT( bResult, "Couldn't rename slide" );
     }
+    else
+    {
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        vcl::Window* pWin = mrSlideSorter.GetContentWindow();
+        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+                pWin ? pWin->GetFrameWeld() : nullptr,
+                aPageName, aDescr));
+        aNameDlg->SetText( aTitle );
+        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+        if( aNameDlg->Execute() == RET_OK )
+        {
+            OUString aNewName;
+            aNameDlg->GetName( aNewName );
+            if (aNewName != aPageName)
+            {
+                bool bResult =
+                        RenameSlideFromDrawViewShell(
+                          pSelectedPage->GetPageNum()/2, aNewName );
+                DBG_ASSERT( bResult, "Couldn't rename slide" );
+            }
+        }
+        aNameDlg.disposeAndClear();
+    }
+    // Tell the slide sorter about the name change (necessary for
+    // accessibility.)
+    mrSlideSorter.GetController().PageNameHasChanged(
+            (pSelectedPage->GetPageNum()-1)/2, aPageName);
 }
 
 IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)

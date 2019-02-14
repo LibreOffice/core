@@ -118,20 +118,20 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     OSL_ASSERT(pWindow);
-    if (pWindow)
-    {
-        // The whole background is painted by the view and controls.
-        vcl::Window* pParentWindow = pWindow->GetParent();
-        OSL_ASSERT(pParentWindow!=nullptr);
-        pParentWindow->SetBackground (Wallpaper());
+    if (!pWindow)
+        return;
 
-        // Connect the view with the window that has been created by our base
-        // class.
-        pWindow->SetBackground(Wallpaper());
-        pWindow->SetCenterAllowed(false);
-        pWindow->SetMapMode(MapMode(MapUnit::MapPixel));
-        pWindow->SetViewSize(mrView.GetModelArea().GetSize());
-    }
+    // The whole background is painted by the view and controls.
+    vcl::Window* pParentWindow = pWindow->GetParent();
+    OSL_ASSERT(pParentWindow!=nullptr);
+    pParentWindow->SetBackground (Wallpaper());
+
+    // Connect the view with the window that has been created by our base
+    // class.
+    pWindow->SetBackground(Wallpaper());
+    pWindow->SetCenterAllowed(false);
+    pWindow->SetMapMode(MapMode(MapUnit::MapPixel));
+    pWindow->SetViewSize(mrView.GetModelArea().GetSize());
 }
 
 void SlideSorterController::Init()
@@ -264,21 +264,21 @@ void SlideSorterController::Paint (
     const ::tools::Rectangle& rBBox,
     vcl::Window* pWindow)
 {
-    if (mnPaintEntranceCount == 0)
+    if (mnPaintEntranceCount != 0)
+        return;
+
+    ++mnPaintEntranceCount;
+
+    try
     {
-        ++mnPaintEntranceCount;
-
-        try
-        {
-            mrView.CompleteRedraw(pWindow, vcl::Region(rBBox));
-        }
-        catch (const Exception&)
-        {
-            // Ignore all exceptions.
-        }
-
-        --mnPaintEntranceCount;
+        mrView.CompleteRedraw(pWindow, vcl::Region(rBBox));
     }
+    catch (const Exception&)
+    {
+        // Ignore all exceptions.
+    }
+
+    --mnPaintEntranceCount;
 }
 
 void SlideSorterController::FuTemporary (SfxRequest& rRequest)
@@ -677,41 +677,41 @@ void  SlideSorterController::Rearrange (bool bForce)
         mbIsForcedRearrangePending = false;
 
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
-    if (pWindow)
+    if (!pWindow)
+        return;
+
+    if (bForce)
+        mrView.UpdateOrientation();
+
+    // Place the scroll bars.
+    ::tools::Rectangle aNewContentArea = GetScrollBarManager().PlaceScrollBars(
+        maTotalWindowArea,
+        mrView.GetOrientation() != view::Layouter::VERTICAL,
+        mrView.GetOrientation() != view::Layouter::HORIZONTAL);
+
+    bool bSizeHasChanged (false);
+    // Only when bForce is not true we have to test for a size change in
+    // order to determine whether the window and the view have to be resized.
+    if ( ! bForce)
     {
-        if (bForce)
-            mrView.UpdateOrientation();
-
-        // Place the scroll bars.
-        ::tools::Rectangle aNewContentArea = GetScrollBarManager().PlaceScrollBars(
-            maTotalWindowArea,
-            mrView.GetOrientation() != view::Layouter::VERTICAL,
-            mrView.GetOrientation() != view::Layouter::HORIZONTAL);
-
-        bool bSizeHasChanged (false);
-        // Only when bForce is not true we have to test for a size change in
-        // order to determine whether the window and the view have to be resized.
-        if ( ! bForce)
-        {
-            ::tools::Rectangle aCurrentContentArea (pWindow->GetPosPixel(), pWindow->GetOutputSizePixel());
-            bSizeHasChanged = (aNewContentArea != aCurrentContentArea);
-        }
-        if (bForce || bSizeHasChanged)
-        {
-            // The browser window gets the remaining space.
-            pWindow->SetPosSizePixel (aNewContentArea.TopLeft(), aNewContentArea.GetSize());
-            mrView.Resize();
-        }
-
-        // Adapt the scroll bars to the new zoom factor of the browser
-        // window and the arrangement of the page objects.
-        GetScrollBarManager().UpdateScrollBars(!bForce);
-
-        // Keep the current slide in the visible area.
-        GetVisibleAreaManager().RequestCurrentSlideVisible();
-
-        mrView.RequestRepaint();
+        ::tools::Rectangle aCurrentContentArea (pWindow->GetPosPixel(), pWindow->GetOutputSizePixel());
+        bSizeHasChanged = (aNewContentArea != aCurrentContentArea);
     }
+    if (bForce || bSizeHasChanged)
+    {
+        // The browser window gets the remaining space.
+        pWindow->SetPosSizePixel (aNewContentArea.TopLeft(), aNewContentArea.GetSize());
+        mrView.Resize();
+    }
+
+    // Adapt the scroll bars to the new zoom factor of the browser
+    // window and the arrangement of the page objects.
+    GetScrollBarManager().UpdateScrollBars(!bForce);
+
+    // Keep the current slide in the visible area.
+    GetVisibleAreaManager().RequestCurrentSlideVisible();
+
+    mrView.RequestRepaint();
 }
 
 rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
@@ -731,32 +731,32 @@ void SlideSorterController::PrepareEditModeChange()
     //  Before we throw away the page descriptors we prepare for selecting
     //  descriptors in the other mode and for restoring the current
     //  selection when switching back to the current mode.
-    if (mrModel.GetEditMode() == EditMode::Page)
+    if (mrModel.GetEditMode() != EditMode::Page)
+        return;
+
+    maSelectionBeforeSwitch.clear();
+
+    // Search for the first selected page and determine the master page
+    // used by its page object.  It will be selected after the switch.
+    // In the same loop the current selection is stored.
+    PageEnumeration aSelectedPages (
+        PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
+    while (aSelectedPages.HasMoreElements())
     {
-        maSelectionBeforeSwitch.clear();
+        SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        SdPage* pPage = pDescriptor->GetPage();
+        // Remember the master page of the first selected descriptor.
+        if (pPage!=nullptr && mpEditModeChangeMasterPage==nullptr)
+            mpEditModeChangeMasterPage = &static_cast<SdPage&>(
+                pPage->TRG_GetMasterPage());
 
-        // Search for the first selected page and determine the master page
-        // used by its page object.  It will be selected after the switch.
-        // In the same loop the current selection is stored.
-        PageEnumeration aSelectedPages (
-            PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
-        while (aSelectedPages.HasMoreElements())
-        {
-            SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-            SdPage* pPage = pDescriptor->GetPage();
-            // Remember the master page of the first selected descriptor.
-            if (pPage!=nullptr && mpEditModeChangeMasterPage==nullptr)
-                mpEditModeChangeMasterPage = &static_cast<SdPage&>(
-                    pPage->TRG_GetMasterPage());
-
-            maSelectionBeforeSwitch.push_back(pPage);
-        }
-
-        // Remember the current page.
-        if (mrSlideSorter.GetViewShell() != nullptr)
-            mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell()->GetViewShellBase()
-            .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
+        maSelectionBeforeSwitch.push_back(pPage);
     }
+
+    // Remember the current page.
+    if (mrSlideSorter.GetViewShell() != nullptr)
+        mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell()->GetViewShellBase()
+        .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
 }
 
 void SlideSorterController::ChangeEditMode (EditMode eEditMode)

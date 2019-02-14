@@ -50,62 +50,62 @@ FocusManager::~FocusManager()
 
 void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 {
-    if (mnPageIndex >= 0 && mbPageIsFocused)
+    if (!(mnPageIndex >= 0 && mbPageIsFocused))
+        return;
+
+    HideFocusIndicator (GetFocusedPageDescriptor());
+
+    const sal_Int32 nColumnCount (mrSlideSorter.GetView().GetLayouter().GetColumnCount());
+    const sal_Int32 nPageCount (mrSlideSorter.GetModel().GetPageCount());
+    switch (eDirection)
     {
-        HideFocusIndicator (GetFocusedPageDescriptor());
-
-        const sal_Int32 nColumnCount (mrSlideSorter.GetView().GetLayouter().GetColumnCount());
-        const sal_Int32 nPageCount (mrSlideSorter.GetModel().GetPageCount());
-        switch (eDirection)
-        {
-            case FocusMoveDirection::Left:
-                if (mnPageIndex > 0)
-                    mnPageIndex -= 1;
-                break;
-
-            case FocusMoveDirection::Right:
-                if (mnPageIndex < nPageCount-1)
-                    mnPageIndex += 1;
-                break;
-
-            case FocusMoveDirection::Up:
-            {
-                const sal_Int32 nCandidate (mnPageIndex - nColumnCount);
-                if (nCandidate >= 0)
-                {
-                    // Move the focus the previous row.
-                    mnPageIndex = nCandidate;
-                }
-            }
+        case FocusMoveDirection::Left:
+            if (mnPageIndex > 0)
+                mnPageIndex -= 1;
             break;
 
-            case FocusMoveDirection::Down:
-            {
-                const sal_Int32 nCandidate (mnPageIndex + nColumnCount);
-                if (nCandidate < nPageCount)
-                {
-                    // Move the focus to the next row.
-                    mnPageIndex = nCandidate;
-                }
-            }
+        case FocusMoveDirection::Right:
+            if (mnPageIndex < nPageCount-1)
+                mnPageIndex += 1;
             break;
-        }
 
-        if (mnPageIndex < 0)
+        case FocusMoveDirection::Up:
         {
-            OSL_ASSERT(mnPageIndex>=0);
-            mnPageIndex = 0;
+            const sal_Int32 nCandidate (mnPageIndex - nColumnCount);
+            if (nCandidate >= 0)
+            {
+                // Move the focus the previous row.
+                mnPageIndex = nCandidate;
+            }
         }
-        else if (mnPageIndex >= nPageCount)
-        {
-            OSL_ASSERT(mnPageIndex<nPageCount);
-            mnPageIndex = nPageCount - 1;
-        }
+        break;
 
-        if (mbPageIsFocused)
+        case FocusMoveDirection::Down:
         {
-            ShowFocusIndicator(GetFocusedPageDescriptor(), true);
+            const sal_Int32 nCandidate (mnPageIndex + nColumnCount);
+            if (nCandidate < nPageCount)
+            {
+                // Move the focus to the next row.
+                mnPageIndex = nCandidate;
+            }
         }
+        break;
+    }
+
+    if (mnPageIndex < 0)
+    {
+        OSL_ASSERT(mnPageIndex>=0);
+        mnPageIndex = 0;
+    }
+    else if (mnPageIndex >= nPageCount)
+    {
+        OSL_ASSERT(mnPageIndex<nPageCount);
+        mnPageIndex = nPageCount - 1;
+    }
+
+    if (mbPageIsFocused)
+    {
+        ShowFocusIndicator(GetFocusedPageDescriptor(), true);
     }
 }
 
@@ -183,20 +183,20 @@ void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bScrollToFocus)
 {
-    if (rpDescriptor.get() != nullptr)
+    if (rpDescriptor.get() == nullptr)
+        return;
+
+    mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
+
+    if (bScrollToFocus)
     {
-        mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
-
-        if (bScrollToFocus)
-        {
-            // Scroll the focused page object into the visible area and repaint
-            // it, so that the focus indicator becomes visible.
-            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
-        }
-        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
-
-        NotifyFocusChangeListeners();
+        // Scroll the focused page object into the visible area and repaint
+        // it, so that the focus indicator becomes visible.
+        mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
     }
+    mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
+
+    NotifyFocusChangeListeners();
 }
 
 void FocusManager::AddFocusChangeListener (const Link<LinkParamNone*,void>& rListener)

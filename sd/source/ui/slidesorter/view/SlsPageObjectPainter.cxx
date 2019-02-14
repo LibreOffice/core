@@ -68,22 +68,22 @@ void PageObjectPainter::PaintPageObject (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (UpdatePageObjectLayouter())
-    {
-        PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
-        // Turn off antialiasing to avoid the bitmaps from being
-        // shifted by fractions of a pixel and thus show blurry edges.
-        const AntialiasingFlags nSavedAntialiasingMode (rDevice.GetAntialiasing());
-        rDevice.SetAntialiasing(nSavedAntialiasingMode & ~AntialiasingFlags::EnableB2dDraw);
+    if (!UpdatePageObjectLayouter())
+        return;
 
-        PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
-        PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
-        PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
-        PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
-        if (rpDescriptor->GetPage()->hasAnimationNode())
-            PaintCustomAnimationEffect(pPageObjectLayouter, rDevice, rpDescriptor);
-        rDevice.SetAntialiasing(nSavedAntialiasingMode);
-    }
+    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+    // Turn off antialiasing to avoid the bitmaps from being
+    // shifted by fractions of a pixel and thus show blurry edges.
+    const AntialiasingFlags nSavedAntialiasingMode (rDevice.GetAntialiasing());
+    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~AntialiasingFlags::EnableB2dDraw);
+
+    PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
+    if (rpDescriptor->GetPage()->hasAnimationNode())
+        PaintCustomAnimationEffect(pPageObjectLayouter, rDevice, rpDescriptor);
+    rDevice.SetAntialiasing(nSavedAntialiasingMode);
 }
 
 bool PageObjectPainter::UpdatePageObjectLayouter()
@@ -137,19 +137,19 @@ void PageObjectPainter::PaintPreview (
         PageObjectLayouter::Part::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    if (mpCache != nullptr)
-    {
-        const SdrPage* pPage = rpDescriptor->GetPage();
-        mpCache->SetPreciousFlag(pPage, true);
+    if (mpCache == nullptr)
+        return;
 
-        const BitmapEx aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
-        if ( ! aPreview.IsEmpty())
-        {
-            if (aPreview.GetSizePixel() != aBox.GetSize())
-                rDevice.DrawBitmapEx(aBox.TopLeft(), aBox.GetSize(), aPreview);
-            else
-                rDevice.DrawBitmapEx(aBox.TopLeft(), aPreview);
-        }
+    const SdrPage* pPage = rpDescriptor->GetPage();
+    mpCache->SetPreciousFlag(pPage, true);
+
+    const BitmapEx aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
+    if ( ! aPreview.IsEmpty())
+    {
+        if (aPreview.GetSizePixel() != aBox.GetSize())
+            rDevice.DrawBitmapEx(aBox.TopLeft(), aBox.GetSize(), aPreview);
+        else
+            rDevice.DrawBitmapEx(aBox.TopLeft(), aPreview);
     }
 }
 

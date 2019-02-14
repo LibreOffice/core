@@ -165,24 +165,24 @@ void SlideSorter::Init()
 
     // Initialize the window.
     sd::Window *pContentWindow = GetContentWindow().get();
-    if (pContentWindow)
-    {
-        vcl::Window* pParentWindow = pContentWindow->GetParent();
-        if (pParentWindow != nullptr)
-            pParentWindow->SetBackground(Wallpaper());
-        pContentWindow->SetBackground(Wallpaper());
-        pContentWindow->SetViewOrigin (Point(0,0));
-        // We do our own scrolling while dragging a page selection.
-        pContentWindow->SetUseDropScroll (false);
-        // Change the winbits so that the active window accepts the focus.
-        pContentWindow->SetStyle ((pContentWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
-        pContentWindow->Hide();
+    if (!pContentWindow)
+        return;
 
-        // Set view pointer of base class.
-        SetupControls();
+    vcl::Window* pParentWindow = pContentWindow->GetParent();
+    if (pParentWindow != nullptr)
+        pParentWindow->SetBackground(Wallpaper());
+    pContentWindow->SetBackground(Wallpaper());
+    pContentWindow->SetViewOrigin (Point(0,0));
+    // We do our own scrolling while dragging a page selection.
+    pContentWindow->SetUseDropScroll (false);
+    // Change the winbits so that the active window accepts the focus.
+    pContentWindow->SetStyle ((pContentWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
+    pContentWindow->Hide();
 
-        mbIsValid = true;
-    }
+    // Set view pointer of base class.
+    SetupControls();
+
+    mbIsValid = true;
 }
 
 SlideSorter::~SlideSorter()

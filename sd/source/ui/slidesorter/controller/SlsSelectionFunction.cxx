@@ -683,21 +683,21 @@ void SelectionFunction::SwitchToNormalMode()
 
 void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
 {
-    if (mpModeHandler->GetMode() != DragAndDropMode)
-    {
+    if (mpModeHandler->GetMode() == DragAndDropMode)
+        return;
+
 #ifndef MACOSX
-        std::shared_ptr<DragAndDropModeHandler> handler(
-            new DragAndDropModeHandler(mrSlideSorter, *this));
-        SwitchMode(handler);
-        // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
-        // could already trigger DND events, which would recursively trigger this code again,
-        // and without mpModeHandler set it would again try to set a new handler.
-        handler->Initialize(rMousePosition, mpWindow);
+    std::shared_ptr<DragAndDropModeHandler> handler(
+        new DragAndDropModeHandler(mrSlideSorter, *this));
+    SwitchMode(handler);
+    // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
+    // could already trigger DND events, which would recursively trigger this code again,
+    // and without mpModeHandler set it would again try to set a new handler.
+    handler->Initialize(rMousePosition, mpWindow);
 #else
-        SwitchMode(std::shared_ptr<ModeHandler>(
-            new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
+    SwitchMode(std::shared_ptr<ModeHandler>(
+        new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
 #endif
-    }
 }
 
 void SelectionFunction::SwitchToMultiSelectionMode (
@@ -973,19 +973,19 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
     // Switch to the draw view.  This is done only when the current
     // view is the main view.
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell!=nullptr && pViewShell->IsMainViewShell())
+    if (pViewShell==nullptr || !pViewShell->IsMainViewShell())
+        return;
+
+    if (rpDescriptor.get()!=nullptr && rpDescriptor->GetPage()!=nullptr)
     {
-        if (rpDescriptor.get()!=nullptr && rpDescriptor->GetPage()!=nullptr)
-        {
-            mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), true);
-            pViewShell->GetFrameView()->SetSelectedPage(
-                (rpDescriptor->GetPage()->GetPageNum()-1)/2);
-        }
-        if (mrSlideSorter.GetViewShellBase() != nullptr)
-        framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())->RequestView(
-            framework::FrameworkHelper::msImpressViewURL,
-            framework::FrameworkHelper::msCenterPaneURL);
+        mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), true);
+        pViewShell->GetFrameView()->SetSelectedPage(
+            (rpDescriptor->GetPage()->GetPageNum()-1)/2);
     }
+    if (mrSlideSorter.GetViewShellBase() != nullptr)
+    framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())->RequestView(
+        framework::FrameworkHelper::msImpressViewURL,
+        framework::FrameworkHelper::msCenterPaneURL);
 }
 
 void SelectionFunction::ModeHandler::StartDrag (
@@ -1201,26 +1201,26 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     model::SharedPageDescriptor pAnchor (rSelector.GetSelectionAnchor());
     DeselectAllPages();
 
-    if (pAnchor.get() != nullptr)
-    {
-        // Select all pages between the anchor and the given one, including
-        // the two.
-        const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
-        const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
+    if (pAnchor.get() == nullptr)
+        return;
 
-        // Iterate over all pages in the range.  Start with the anchor
-        // page.  This way the PageSelector will recognize it again as
-        // anchor (the first selected page after a DeselectAllPages()
-        // becomes the anchor.)
-        const sal_uInt16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
-        sal_uInt16 nIndex (nAnchorIndex);
-        while (true)
-        {
-            rSelector.SelectPage(nIndex);
-            if (nIndex == nOtherIndex)
-                break;
-            nIndex = nIndex + nStep;
-        }
+    // Select all pages between the anchor and the given one, including
+    // the two.
+    const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
+    const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
+
+    // Iterate over all pages in the range.  Start with the anchor
+    // page.  This way the PageSelector will recognize it again as
+    // anchor (the first selected page after a DeselectAllPages()
+    // becomes the anchor.)
+    const sal_uInt16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
+    sal_uInt16 nIndex (nAnchorIndex);
+    while (true)
+    {
+        rSelector.SelectPage(nIndex);
+        if (nIndex == nOtherIndex)
+            break;
+        nIndex = nIndex + nStep;
     }
 }
 
@@ -1441,19 +1441,19 @@ void MultiSelectionModeHandler::UpdateSelection()
             maSecondCorner,
             false,
             false));
-    if (nIndexUnderMouse>=0 && nIndexUnderMouse<nPageCount)
+    if (!(nIndexUnderMouse>=0 && nIndexUnderMouse<nPageCount))
+        return;
+
+    if (mnAnchorIndex < 0)
+        mnAnchorIndex = nIndexUnderMouse;
+    mnSecondIndex = nIndexUnderMouse;
+
+    Range aRange (mnAnchorIndex, mnSecondIndex);
+    aRange.Justify();
+
+    for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
     {
-        if (mnAnchorIndex < 0)
-            mnAnchorIndex = nIndexUnderMouse;
-        mnSecondIndex = nIndexUnderMouse;
-
-        Range aRange (mnAnchorIndex, mnSecondIndex);
-        aRange.Justify();
-
-        for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
-        {
-            UpdateSelectionState(rModel.GetPageDescriptor(nIndex), aRange.IsInside(nIndex));
-        }
+        UpdateSelectionState(rModel.GetPageDescriptor(nIndex), aRange.IsInside(nIndex));
     }
 }
 

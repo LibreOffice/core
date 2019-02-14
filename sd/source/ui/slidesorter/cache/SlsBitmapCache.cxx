@@ -490,27 +490,27 @@ inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize() const
 
 void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>& rpCompressor)
 {
-    if ( ! maPreview.IsEmpty())
+    if (  maPreview.IsEmpty())
+        return;
+
+    if (mpReplacement == nullptr)
     {
-        if (mpReplacement == nullptr)
-        {
-            mpReplacement = rpCompressor->Compress(maPreview);
+        mpReplacement = rpCompressor->Compress(maPreview);
 
 #ifdef DEBUG_SD_SLSBITMAPCACHE
-            sal_uInt32 nOldSize (maPreview.GetSizeBytes());
-            sal_uInt32 nNewSize (mpReplacement.get()!=NULL ? mpReplacement->GetMemorySize() : 0);
-            if (nOldSize == 0)
-                nOldSize = 1;
-            sal_Int32 nRatio (100L * nNewSize / nOldSize);
-            SAL_INFO("sd.sls", OSL_THIS_FUNC << ": compressing bitmap for " << %x << " from " << nOldSize << " to " << nNewSize << " bytes (" << nRatio << "%)");
+        sal_uInt32 nOldSize (maPreview.GetSizeBytes());
+        sal_uInt32 nNewSize (mpReplacement.get()!=NULL ? mpReplacement->GetMemorySize() : 0);
+        if (nOldSize == 0)
+            nOldSize = 1;
+        sal_Int32 nRatio (100L * nNewSize / nOldSize);
+        SAL_INFO("sd.sls", OSL_THIS_FUNC << ": compressing bitmap for " << %x << " from " << nOldSize << " to " << nNewSize << " bytes (" << nRatio << "%)");
 #endif
 
-            mpCompressor = rpCompressor;
-        }
-
-        maPreview.SetEmpty();
-        maMarkedPreview.SetEmpty();
+        mpCompressor = rpCompressor;
     }
+
+    maPreview.SetEmpty();
+    maMarkedPreview.SetEmpty();
 }
 
 inline void BitmapCache::CacheEntry::Decompress()
