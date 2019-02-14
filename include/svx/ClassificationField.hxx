@@ -14,7 +14,6 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 #include <editeng/flditem.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace svx {
 

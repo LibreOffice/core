@@ -12,7 +12,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <o3tl/make_unique.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
 
@@ -256,10 +255,10 @@ public:
     {
         o3tl::sorted_vector<std::unique_ptr<OUString>, o3tl::less_uniqueptr_to<OUString>> aVec;
 
-        auto str_c = aVec.insert(o3tl::make_unique<OUString>("c")).first->get();
-        auto str_b1 = aVec.insert(o3tl::make_unique<OUString>("b")).first->get();
-        CPPUNIT_ASSERT(!aVec.insert(o3tl::make_unique<OUString>("b")).second);
-        aVec.insert(o3tl::make_unique<OUString>("a"));
+        auto str_c = aVec.insert(std::make_unique<OUString>("c")).first->get();
+        auto str_b1 = aVec.insert(std::make_unique<OUString>("b")).first->get();
+        CPPUNIT_ASSERT(!aVec.insert(std::make_unique<OUString>("b")).second);
+        aVec.insert(std::make_unique<OUString>("a"));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), aVec.size() );
         CPPUNIT_ASSERT_EQUAL( OUString("a"), *aVec[0] );
         CPPUNIT_ASSERT_EQUAL( OUString("b"), *aVec[1] );
@@ -279,10 +278,10 @@ public:
         o3tl::sorted_vector<std::unique_ptr<OUString>, o3tl::less_uniqueptr_to<OUString>,
                             o3tl::find_partialorder_ptrequals> aVec;
 
-        auto str_c = aVec.insert(o3tl::make_unique<OUString>("c")).first->get();
-        auto str_b1 = aVec.insert(o3tl::make_unique<OUString>("b")).first->get();
-        auto str_b2 = aVec.insert(o3tl::make_unique<OUString>("b")).first->get();
-        aVec.insert(o3tl::make_unique<OUString>("a"));
+        auto str_c = aVec.insert(std::make_unique<OUString>("c")).first->get();
+        auto str_b1 = aVec.insert(std::make_unique<OUString>("b")).first->get();
+        auto str_b2 = aVec.insert(std::make_unique<OUString>("b")).first->get();
+        aVec.insert(std::make_unique<OUString>("a"));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), aVec.size() );
         CPPUNIT_ASSERT_EQUAL( OUString("a"), *aVec[0] );
         CPPUNIT_ASSERT_EQUAL( OUString("b"), *aVec[1] );

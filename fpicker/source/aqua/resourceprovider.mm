@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
