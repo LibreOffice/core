@@ -34,6 +34,24 @@
       "revId": "ea3045b28943e78673a669e9e1a310d374951675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_24742735",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-14T08:33:50Z",
+      "side": 1,
+      "message": "I still fail to see what was problematic with the original code.",
+      "parentUuid": "1f485f77_e43baf99",
+      "revId": "ea3045b28943e78673a669e9e1a310d374951675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
