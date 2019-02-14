@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7fc5068e",
+        "filename": "include/svx/sidebar/AreaPropertyPanelBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-14T15:34:54Z",
+      "side": 1,
+      "message": "mpPanel (\u0027m\u0027 for member variable)",
+      "revId": "18f4b9ae5af3d2d543f5000cff0f37759aa5168f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_ffd1f658",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-14T15:34:54Z",
+      "side": 1,
+      "message": "Please do this in constructor already and use pParent argument",
+      "revId": "18f4b9ae5af3d2d543f5000cff0f37759aa5168f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_dfd63a50",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-14T15:34:54Z",
+      "side": 1,
+      "message": "No need to do this yet, panel is not even fully constructed so why re-layout now?\nOr does it fix some real problem?",
+      "revId": "18f4b9ae5af3d2d543f5000cff0f37759aa5168f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
