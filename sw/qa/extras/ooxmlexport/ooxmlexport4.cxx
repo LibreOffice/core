@@ -1237,6 +1237,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
 }
 #endif
 
+DECLARE_OOXMLEXPORT_TEST(testDocxTablePosition, "floating-table-position.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // the exported positions were wrong due to some missing shifting in the export code
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpX", "3494");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
