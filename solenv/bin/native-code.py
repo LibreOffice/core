@@ -254,6 +254,7 @@ core_constructor_list = [
     "XMLVersionListPersistence_get_implementation",
     "com_sun_star_comp_Impress_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Impress_XMLOasisExporter_get_implementation",
+    "com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
     "com_sun_star_comp_xmlscript_XMLBasicImporter",
