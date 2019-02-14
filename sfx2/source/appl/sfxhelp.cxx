@@ -694,9 +694,8 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     OUString aHelpLink( "https://help.libreoffice.org/help.html?"  );
 
-    OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
-    aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
-    aHelpLink += aTarget;
+    aHelpLink += rURL.copy( aInternal.getLength() );
+    aHelpLink = aHelpLink.replaceAll("%2F","/");
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -961,9 +960,8 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     }
 
     OUString aHelpLink( aBaseInstallPath + "/index.html?" );
-    OUString aTarget = "Target=" + rURL.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
-    aTarget = aTarget.replaceAll("%2F","/").replaceAll("?","&");
-    aHelpLink += aTarget;
+    aHelpLink += rURL.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
+    aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
     // Get a html tempfile (for the flatpak case, create it in XDG_CACHE_HOME instead of /tmp for
     // technical reasons, so that it can be accessed by the browser running outside the sandbox):
