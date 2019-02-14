@@ -315,23 +315,23 @@ void SAL_CALL SdXImpressDocument::acquire() throw ( )
 
 void SAL_CALL SdXImpressDocument::release() throw ( )
 {
-    if (osl_atomic_decrement( &m_refCount ) == 0)
+    if (osl_atomic_decrement( &m_refCount ) != 0)
+        return;
+
+    // restore reference count:
+    osl_atomic_increment( &m_refCount );
+    if(!mbDisposed)
     {
-        // restore reference count:
-        osl_atomic_increment( &m_refCount );
-        if(!mbDisposed)
+        try
         {
-            try
-            {
-                dispose();
-            }
-            catch (const uno::RuntimeException& exc)
-            { // don't break throw ()
-                SAL_WARN( "sd", exc );
-            }
+            dispose();
         }
-        SfxBaseModel::release();
+        catch (const uno::RuntimeException& exc)
+        { // don't break throw ()
+            SAL_WARN( "sd", exc );
+        }
     }
+    SfxBaseModel::release();
 }
 
 namespace
@@ -657,23 +657,23 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
         throw lang::DisposedException();
 
     SfxBaseModel::setViewData( xData );
-    if( mpDocShell && (mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED) && xData.is() )
+    if( !(mpDocShell && (mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED) && xData.is()) )
+        return;
+
+    const sal_Int32 nCount = xData->getCount();
+
+    std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
+
+    rViews.clear();
+
+    uno::Sequence< beans::PropertyValue > aSeq;
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const sal_Int32 nCount = xData->getCount();
-
-        std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
-
-        rViews.clear();
-
-        uno::Sequence< beans::PropertyValue > aSeq;
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        if( xData->getByIndex( nIndex ) >>= aSeq )
         {
-            if( xData->getByIndex( nIndex ) >>= aSeq )
-            {
-                std::unique_ptr<::sd::FrameView> pFrameView(new ::sd::FrameView( mpDoc ));
-                pFrameView->ReadUserDataSequence( aSeq );
-                rViews.push_back( std::move(pFrameView) );
-            }
+            std::unique_ptr<::sd::FrameView> pFrameView(new ::sd::FrameView( mpDoc ));
+            pFrameView->ReadUserDataSequence( aSeq );
+            rViews.push_back( std::move(pFrameView) );
         }
     }
 }
@@ -1890,342 +1890,342 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    if (mpDocShell)
-    {
-        uno::Reference< awt::XDevice >  xRenderDevice;
-        const sal_Int32                 nPageNumber = nRenderer + 1;
-        PageKind                        ePageKind = PageKind::Standard;
-        bool                        bExportNotesPages = false;
+    if (!mpDocShell)
+        return;
 
-        for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    const sal_Int32                 nPageNumber = nRenderer + 1;
+    PageKind                        ePageKind = PageKind::Standard;
+    bool                        bExportNotesPages = false;
+
+    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if ( rxOptions[ nProperty ].Name == "RenderDevice" )
+            rxOptions[ nProperty ].Value >>= xRenderDevice;
+        else if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
         {
-            if ( rxOptions[ nProperty ].Name == "RenderDevice" )
-                rxOptions[ nProperty ].Value >>= xRenderDevice;
-            else if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
+            rxOptions[ nProperty].Value >>= bExportNotesPages;
+            if ( bExportNotesPages )
+                ePageKind = PageKind::Notes;
+        }
+    }
+
+    if( !(xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) )) )
+        return;
+
+    VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+    VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
+
+    if( !pOut )
+        return;
+
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
+
+    if ( !(!( mpDoc->GetSdPage(static_cast<sal_Int16>(nPageNumber)-1, PageKind::Standard)->IsExcluded() ) ||
+        (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides())) )
+        return;
+
+    std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
+    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
+    vcl::Region                       aRegion( aVisArea );
+
+    ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
+    ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : nullptr;
+
+    if  ( pOldSdView )
+        pOldSdView->SdrEndTextEdit();
+
+    pView->SetHlplVisible( false );
+    pView->SetGridVisible( false );
+    pView->SetBordVisible( false );
+    pView->SetPageVisible( false );
+    pView->SetGlueVisible( false );
+
+    pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
+    pOut->IntersectClipRegion( aVisArea );
+
+    uno::Reference< frame::XModel > xModel;
+    rSelection >>= xModel;
+
+    if( xModel == mpDocShell->GetModel() )
+    {
+        pView->ShowSdrPage( mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind ));
+        SdrPageView* pPV = pView->GetSdrPageView();
+
+        if( pOldSdView )
+        {
+            SdrPageView* pOldPV = pOldSdView->GetSdrPageView();
+            if( pPV && pOldPV )
             {
-                rxOptions[ nProperty].Value >>= bExportNotesPages;
-                if ( bExportNotesPages )
-                    ePageKind = PageKind::Notes;
+                pPV->SetVisibleLayers( pOldPV->GetVisibleLayers() );
+                pPV->SetPrintableLayers( pOldPV->GetPrintableLayers() );
             }
         }
 
-        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) ) )
+        ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
+            pPV, pPDFExtOutDevData );
+
+        // background color for outliner :o
+        SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : nullptr;
+        if( pPage )
         {
-            VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-            VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
+            SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
+            bool bScreenDisplay(true);
 
-            if( pOut )
+            // #i75566# printing; suppress AutoColor BackgroundColor generation
+            // for visibility reasons by giving GetPageBackgroundColor()
+            // the needed hint
+            // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
+            if (pOut && ((OUTDEV_PRINTER == pOut->GetOutDevType())
+                    || (OUTDEV_PDF == pOut->GetOutDevType())))
+                bScreenDisplay = false;
+
+            // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+            // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+            rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
+        }
+        pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
+
+        if ( pPDFExtOutDevData && pPage )
+        {
+            try
             {
-                vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
-
-                if ( !( mpDoc->GetSdPage(static_cast<sal_Int16>(nPageNumber)-1, PageKind::Standard)->IsExcluded() ) ||
-                    (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
+                uno::Any aAny;
+                uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
+                if ( xPage.is() )
                 {
-                    std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
-                    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
-                    vcl::Region                       aRegion( aVisArea );
-
-                    ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
-                    ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : nullptr;
-
-                    if  ( pOldSdView )
-                        pOldSdView->SdrEndTextEdit();
-
-                    pView->SetHlplVisible( false );
-                    pView->SetGridVisible( false );
-                    pView->SetBordVisible( false );
-                    pView->SetPageVisible( false );
-                    pView->SetGlueVisible( false );
-
-                    pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
-                    pOut->IntersectClipRegion( aVisArea );
-
-                    uno::Reference< frame::XModel > xModel;
-                    rSelection >>= xModel;
-
-                    if( xModel == mpDocShell->GetModel() )
+                    if ( pPDFExtOutDevData->GetIsExportNotes() )
+                        ImplPDFExportComments( xPage, *pPDFExtOutDevData );
+                    uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
+                    if( xPagePropSet.is() )
                     {
-                        pView->ShowSdrPage( mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind ));
-                        SdrPageView* pPV = pView->GetSdrPageView();
+                        // exporting object interactions to pdf
 
-                        if( pOldSdView )
+                        // if necessary, the master page interactions will be exported first
+                        bool bIsBackgroundObjectsVisible = false;   // #i39428# IsBackgroundObjectsVisible not available for Draw
+                        if ( mbImpressDoc && xPagePropSet->getPropertySetInfo()->hasPropertyByName( "IsBackgroundObjectsVisible" ) )
+                            xPagePropSet->getPropertyValue( "IsBackgroundObjectsVisible" ) >>= bIsBackgroundObjectsVisible;
+                        if ( bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
                         {
-                            SdrPageView* pOldPV = pOldSdView->GetSdrPageView();
-                            if( pPV && pOldPV )
+                            uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
+                            if ( xMasterPageTarget.is() )
                             {
-                                pPV->SetVisibleLayers( pOldPV->GetVisibleLayers() );
-                                pPV->SetPrintableLayers( pOldPV->GetPrintableLayers() );
+                                uno::Reference< drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
+                                if ( xMasterPage.is() )
+                                {
+                                    uno::Reference< drawing::XShapes> xShapes( xMasterPage, uno::UNO_QUERY );
+                                    sal_Int32 i, nCount = xShapes->getCount();
+                                    for ( i = 0; i < nCount; i++ )
+                                    {
+                                        aAny = xShapes->getByIndex( i );
+                                        uno::Reference< drawing::XShape > xShape;
+                                        if ( aAny >>= xShape )
+                                            ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
+                                    }
+                                }
                             }
                         }
 
-                        ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-                            pPV, pPDFExtOutDevData );
-
-                        // background color for outliner :o
-                        SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : nullptr;
-                        if( pPage )
+                        // exporting slide page object interactions
+                        uno::Reference< drawing::XShapes> xShapes( xPage, uno::UNO_QUERY );
+                        sal_Int32 i, nCount = xShapes->getCount();
+                        for ( i = 0; i < nCount; i++ )
                         {
-                            SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
-                            bool bScreenDisplay(true);
-
-                            // #i75566# printing; suppress AutoColor BackgroundColor generation
-                            // for visibility reasons by giving GetPageBackgroundColor()
-                            // the needed hint
-                            // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see printing)
-                            if (pOut && ((OUTDEV_PRINTER == pOut->GetOutDevType())
-                                    || (OUTDEV_PDF == pOut->GetOutDevType())))
-                                bScreenDisplay = false;
-
-                            // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
-                            // hint value if screen display. Only then the AutoColor mechanisms shall be applied
-                            rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
+                            aAny = xShapes->getByIndex( i );
+                            uno::Reference< drawing::XShape > xShape;
+                            if ( aAny >>= xShape )
+                                ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
                         }
-                        pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
-                        if ( pPDFExtOutDevData && pPage )
+                        // exporting transition effects to pdf
+                        if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
                         {
-                            try
+                            const OUString sEffect( "Effect" );
+                            const OUString sSpeed ( "Speed" );
+                            sal_Int32 nTime = 800;
+                            presentation::AnimationSpeed aAs;
+                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
                             {
-                                uno::Any aAny;
-                                uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
-                                if ( xPage.is() )
+                                aAny = xPagePropSet->getPropertyValue( sSpeed );
+                                if ( aAny >>= aAs )
                                 {
-                                    if ( pPDFExtOutDevData->GetIsExportNotes() )
-                                        ImplPDFExportComments( xPage, *pPDFExtOutDevData );
-                                    uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
-                                    if( xPagePropSet.is() )
+                                    switch( aAs )
                                     {
-                                        // exporting object interactions to pdf
-
-                                        // if necessary, the master page interactions will be exported first
-                                        bool bIsBackgroundObjectsVisible = false;   // #i39428# IsBackgroundObjectsVisible not available for Draw
-                                        if ( mbImpressDoc && xPagePropSet->getPropertySetInfo()->hasPropertyByName( "IsBackgroundObjectsVisible" ) )
-                                            xPagePropSet->getPropertyValue( "IsBackgroundObjectsVisible" ) >>= bIsBackgroundObjectsVisible;
-                                        if ( bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
-                                        {
-                                            uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
-                                            if ( xMasterPageTarget.is() )
-                                            {
-                                                uno::Reference< drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
-                                                if ( xMasterPage.is() )
-                                                {
-                                                    uno::Reference< drawing::XShapes> xShapes( xMasterPage, uno::UNO_QUERY );
-                                                    sal_Int32 i, nCount = xShapes->getCount();
-                                                    for ( i = 0; i < nCount; i++ )
-                                                    {
-                                                        aAny = xShapes->getByIndex( i );
-                                                        uno::Reference< drawing::XShape > xShape;
-                                                        if ( aAny >>= xShape )
-                                                            ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        // exporting slide page object interactions
-                                        uno::Reference< drawing::XShapes> xShapes( xPage, uno::UNO_QUERY );
-                                        sal_Int32 i, nCount = xShapes->getCount();
-                                        for ( i = 0; i < nCount; i++ )
-                                        {
-                                            aAny = xShapes->getByIndex( i );
-                                            uno::Reference< drawing::XShape > xShape;
-                                            if ( aAny >>= xShape )
-                                                ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
-                                        }
-
-                                        // exporting transition effects to pdf
-                                        if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
-                                        {
-                                            const OUString sEffect( "Effect" );
-                                            const OUString sSpeed ( "Speed" );
-                                            sal_Int32 nTime = 800;
-                                            presentation::AnimationSpeed aAs;
-                                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
-                                            {
-                                                aAny = xPagePropSet->getPropertyValue( sSpeed );
-                                                if ( aAny >>= aAs )
-                                                {
-                                                    switch( aAs )
-                                                    {
-                                                        case presentation::AnimationSpeed_SLOW : nTime = 1500; break;
-                                                        case presentation::AnimationSpeed_FAST : nTime = 300; break;
-                                                        default:
-                                                        case presentation::AnimationSpeed_MEDIUM : nTime = 800;
-                                                    }
-                                                }
-                                            }
-                                            presentation::FadeEffect eFe;
-                                            vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::PageTransition::Regular;
-                                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) )
-                                            {
-                                                aAny = xPagePropSet->getPropertyValue( sEffect );
-                                                if ( aAny >>= eFe )
-                                                {
-                                                    switch( eFe )
-                                                    {
-                                                        case presentation::FadeEffect_HORIZONTAL_LINES :
-                                                        case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
-                                                        case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsHorizontal; break;
-
-                                                        case presentation::FadeEffect_VERTICAL_LINES :
-                                                        case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
-                                                        case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsVertical; break;
-
-                                                        case presentation::FadeEffect_UNCOVER_TO_RIGHT :
-                                                        case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
-                                                        case presentation::FadeEffect_ROLL_FROM_LEFT :
-                                                        case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
-                                                        case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
-                                                        case presentation::FadeEffect_FADE_FROM_LEFT :
-                                                        case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::PageTransition::WipeLeftToRight; break;
-
-                                                        case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
-                                                        case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
-                                                        case presentation::FadeEffect_ROLL_FROM_TOP :
-                                                        case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
-                                                        case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
-                                                        case presentation::FadeEffect_FADE_FROM_TOP :
-                                                        case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::PageTransition::WipeTopToBottom; break;
-
-                                                        case presentation::FadeEffect_UNCOVER_TO_LEFT :
-                                                        case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
-                                                        case presentation::FadeEffect_ROLL_FROM_RIGHT :
-
-                                                        case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
-                                                        case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
-                                                        case presentation::FadeEffect_FADE_FROM_RIGHT :
-                                                        case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::PageTransition::WipeRightToLeft; break;
-
-                                                        case presentation::FadeEffect_UNCOVER_TO_TOP :
-                                                        case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
-                                                        case presentation::FadeEffect_ROLL_FROM_BOTTOM :
-                                                        case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
-                                                        case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
-                                                        case presentation::FadeEffect_FADE_FROM_BOTTOM :
-                                                        case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::PageTransition::WipeBottomToTop; break;
-
-                                                        case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalInward; break;
-                                                        case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalOutward; break;
-
-                                                        case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalInward; break;
-                                                        case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalOutward; break;
-
-                                                        case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::PageTransition::BoxInward; break;
-                                                        case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::PageTransition::BoxOutward; break;
-
-                                                        case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::PageTransition::Regular; break;
-
-                                                        case presentation::FadeEffect_RANDOM :
-                                                        case presentation::FadeEffect_DISSOLVE :
-                                                        default: eType = vcl::PDFWriter::PageTransition::Dissolve; break;
-                                                    }
-                                                }
-                                            }
-
-                                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) ||
-                                                xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
-                                            {
-                                                pPDFExtOutDevData->SetPageTransition( eType, nTime );
-                                            }
-                                        }
+                                        case presentation::AnimationSpeed_SLOW : nTime = 1500; break;
+                                        case presentation::AnimationSpeed_FAST : nTime = 300; break;
+                                        default:
+                                        case presentation::AnimationSpeed_MEDIUM : nTime = 800;
                                     }
                                 }
-
-                                Size        aPageSize( mpDoc->GetSdPage( 0, PageKind::Standard )->GetSize() );
-                                Point aPoint( 0, 0 );
-                                ::tools::Rectangle   aPageRect( aPoint, aPageSize );
-
-                                // resolving links found in this page by the method ImpEditEngine::Paint
-                                std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
-                                for ( const auto& rBookmark : rBookmarks )
-                                {
-                                    sal_Int32 nPage = ImplPDFGetBookmarkPage( rBookmark.aBookmark, *mpDoc );
-                                    if ( nPage != -1 )
-                                    {
-                                        if ( rBookmark.nLinkId != -1 )
-                                            pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle ) );
-                                        else
-                                            pPDFExtOutDevData->DescribeRegisteredDest( rBookmark.nDestId, aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
-                                    }
-                                    else
-                                        pPDFExtOutDevData->SetLinkURL( rBookmark.nLinkId, rBookmark.aBookmark );
-                                }
-                                rBookmarks.clear();
-                                //---> #i56629, #i40318
-                                //get the page name, will be used as outline element in PDF bookmark pane
-                                OUString aPageName = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1 , PageKind::Standard )->GetName();
-                                if( !aPageName.isEmpty() )
-                                {
-                                    // Destination PageNum
-                                    const sal_Int32 nDestPageNum = CalcOutputPageNum(pPDFExtOutDevData, mpDoc, nPageNumber);
-
-                                    // insert the bookmark to this page into the NamedDestinations
-                                    if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
-                                        pPDFExtOutDevData->CreateNamedDest(aPageName, aPageRect, nDestPageNum);
-
-                                    // add the name to the outline, (almost) same code as in sc/source/ui/unoobj/docuno.cxx
-                                    // issue #i40318.
-
-                                    if( pPDFExtOutDevData->GetIsExportBookmarks() )
-                                    {
-                                        // Destination Export
-                                        const sal_Int32 nDestId =
-                                            pPDFExtOutDevData->CreateDest(aPageRect , nDestPageNum);
-
-                                        // Create a new outline item:
-                                        pPDFExtOutDevData->CreateOutlineItem( -1 , aPageName, nDestId );
-                                    }
-                                }
-                                //<--- #i56629, #i40318
                             }
-                            catch (const uno::Exception&)
+                            presentation::FadeEffect eFe;
+                            vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::PageTransition::Regular;
+                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) )
                             {
+                                aAny = xPagePropSet->getPropertyValue( sEffect );
+                                if ( aAny >>= eFe )
+                                {
+                                    switch( eFe )
+                                    {
+                                        case presentation::FadeEffect_HORIZONTAL_LINES :
+                                        case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
+                                        case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsHorizontal; break;
+
+                                        case presentation::FadeEffect_VERTICAL_LINES :
+                                        case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
+                                        case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsVertical; break;
+
+                                        case presentation::FadeEffect_UNCOVER_TO_RIGHT :
+                                        case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
+                                        case presentation::FadeEffect_ROLL_FROM_LEFT :
+                                        case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
+                                        case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
+                                        case presentation::FadeEffect_FADE_FROM_LEFT :
+                                        case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::PageTransition::WipeLeftToRight; break;
+
+                                        case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
+                                        case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
+                                        case presentation::FadeEffect_ROLL_FROM_TOP :
+                                        case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
+                                        case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
+                                        case presentation::FadeEffect_FADE_FROM_TOP :
+                                        case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::PageTransition::WipeTopToBottom; break;
+
+                                        case presentation::FadeEffect_UNCOVER_TO_LEFT :
+                                        case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
+                                        case presentation::FadeEffect_ROLL_FROM_RIGHT :
+
+                                        case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
+                                        case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
+                                        case presentation::FadeEffect_FADE_FROM_RIGHT :
+                                        case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::PageTransition::WipeRightToLeft; break;
+
+                                        case presentation::FadeEffect_UNCOVER_TO_TOP :
+                                        case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
+                                        case presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                                        case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
+                                        case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
+                                        case presentation::FadeEffect_FADE_FROM_BOTTOM :
+                                        case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::PageTransition::WipeBottomToTop; break;
+
+                                        case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalInward; break;
+                                        case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalOutward; break;
+
+                                        case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalInward; break;
+                                        case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalOutward; break;
+
+                                        case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::PageTransition::BoxInward; break;
+                                        case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::PageTransition::BoxOutward; break;
+
+                                        case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::PageTransition::Regular; break;
+
+                                        case presentation::FadeEffect_RANDOM :
+                                        case presentation::FadeEffect_DISSOLVE :
+                                        default: eType = vcl::PDFWriter::PageTransition::Dissolve; break;
+                                    }
+                                }
                             }
 
+                            if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) ||
+                                xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
+                            {
+                                pPDFExtOutDevData->SetPageTransition( eType, nTime );
+                            }
                         }
                     }
-                    else
+                }
+
+                Size        aPageSize( mpDoc->GetSdPage( 0, PageKind::Standard )->GetSize() );
+                Point aPoint( 0, 0 );
+                ::tools::Rectangle   aPageRect( aPoint, aPageSize );
+
+                // resolving links found in this page by the method ImpEditEngine::Paint
+                std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
+                for ( const auto& rBookmark : rBookmarks )
+                {
+                    sal_Int32 nPage = ImplPDFGetBookmarkPage( rBookmark.aBookmark, *mpDoc );
+                    if ( nPage != -1 )
                     {
-                        uno::Reference< drawing::XShapes > xShapes;
-                        rSelection >>= xShapes;
+                        if ( rBookmark.nLinkId != -1 )
+                            pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle ) );
+                        else
+                            pPDFExtOutDevData->DescribeRegisteredDest( rBookmark.nDestId, aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
+                    }
+                    else
+                        pPDFExtOutDevData->SetLinkURL( rBookmark.nLinkId, rBookmark.aBookmark );
+                }
+                rBookmarks.clear();
+                //---> #i56629, #i40318
+                //get the page name, will be used as outline element in PDF bookmark pane
+                OUString aPageName = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1 , PageKind::Standard )->GetName();
+                if( !aPageName.isEmpty() )
+                {
+                    // Destination PageNum
+                    const sal_Int32 nDestPageNum = CalcOutputPageNum(pPDFExtOutDevData, mpDoc, nPageNumber);
 
-                        if( xShapes.is() && xShapes->getCount() )
+                    // insert the bookmark to this page into the NamedDestinations
+                    if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
+                        pPDFExtOutDevData->CreateNamedDest(aPageName, aPageRect, nDestPageNum);
+
+                    // add the name to the outline, (almost) same code as in sc/source/ui/unoobj/docuno.cxx
+                    // issue #i40318.
+
+                    if( pPDFExtOutDevData->GetIsExportBookmarks() )
+                    {
+                        // Destination Export
+                        const sal_Int32 nDestId =
+                            pPDFExtOutDevData->CreateDest(aPageRect , nDestPageNum);
+
+                        // Create a new outline item:
+                        pPDFExtOutDevData->CreateOutlineItem( -1 , aPageName, nDestId );
+                    }
+                }
+                //<--- #i56629, #i40318
+            }
+            catch (const uno::Exception&)
+            {
+            }
+
+        }
+    }
+    else
+    {
+        uno::Reference< drawing::XShapes > xShapes;
+        rSelection >>= xShapes;
+
+        if( xShapes.is() && xShapes->getCount() )
+        {
+            SdrPageView* pPV = nullptr;
+
+            ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
+                                pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
+
+            for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
+            {
+                uno::Reference< drawing::XShape > xShape;
+                xShapes->getByIndex( i ) >>= xShape;
+
+                if( xShape.is() )
+                {
+                    SvxShape* pShape = SvxShape::getImplementation( xShape );
+
+                    if( pShape )
+                    {
+                        SdrObject* pObj = pShape->GetSdrObject();
+                        if( pObj && pObj->getSdrPageFromSdrObject()
+                            && aImplRenderPaintProc.IsVisible( pObj )
+                                && aImplRenderPaintProc.IsPrintable( pObj ) )
                         {
-                            SdrPageView* pPV = nullptr;
+                            if( !pPV )
+                                pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
 
-                            ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-                                                pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
-
-                            for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
-                            {
-                                uno::Reference< drawing::XShape > xShape;
-                                xShapes->getByIndex( i ) >>= xShape;
-
-                                if( xShape.is() )
-                                {
-                                    SvxShape* pShape = SvxShape::getImplementation( xShape );
-
-                                    if( pShape )
-                                    {
-                                        SdrObject* pObj = pShape->GetSdrObject();
-                                        if( pObj && pObj->getSdrPageFromSdrObject()
-                                            && aImplRenderPaintProc.IsVisible( pObj )
-                                                && aImplRenderPaintProc.IsPrintable( pObj ) )
-                                        {
-                                            if( !pPV )
-                                                pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
-
-                                            if( pPV )
-                                                pView->MarkObj( pObj, pPV );
-                                        }
-                                    }
-                                }
-                            }
-                            pView->DrawMarkedObj(*pOut);
+                            if( pPV )
+                                pView->MarkObj( pObj, pPV );
                         }
                     }
                 }
             }
+            pView->DrawMarkedObj(*pOut);
         }
     }
 }
@@ -2693,23 +2693,23 @@ uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCha
 
 void SdXImpressDocument::initializeDocument()
 {
-    if( !mbClipBoard )
+    if( mbClipBoard )
+        return;
+
+    switch( mpDoc->GetPageCount() )
     {
-        switch( mpDoc->GetPageCount() )
-        {
-        case 1:
-        {
-            // nasty hack to detect clipboard document
-            mbClipBoard = true;
-            break;
-        }
-        case 0:
-        {
-            mpDoc->CreateFirstPages();
-            mpDoc->StopWorkStartupDelay();
-            break;
-        }
-        }
+    case 1:
+    {
+        // nasty hack to detect clipboard document
+        mbClipBoard = true;
+        break;
+    }
+    case 0:
+    {
+        mpDoc->CreateFirstPages();
+        mpDoc->StopWorkStartupDelay();
+        break;
+    }
     }
 }
 
@@ -2721,83 +2721,83 @@ SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const
 
 void SAL_CALL SdXImpressDocument::dispose()
 {
-    if( !mbDisposed )
+    if( mbDisposed )
+        return;
+
+    ::SolarMutexGuard aGuard;
+
+    if( mpDoc )
     {
-        ::SolarMutexGuard aGuard;
-
-        if( mpDoc )
-        {
-            EndListening( *mpDoc );
-            mpDoc = nullptr;
-        }
-
-        // Call the base class dispose() before setting the mbDisposed flag
-        // to true.  The reason for this is that if close() has not yet been
-        // called this is done in SfxBaseModel::dispose().  At the end of
-        // that dispose() is called again.  It is important to forward this
-        // second dispose() to the base class, too.
-        // As a consequence the following code has to be able to be run twice.
-        SfxBaseModel::dispose();
-        mbDisposed = true;
-
-        uno::Reference< container::XNameAccess > xLinks( mxLinks );
-        if( xLinks.is() )
-        {
-            uno::Reference< lang::XComponent > xComp( xLinks, uno::UNO_QUERY );
-            if( xComp.is() )
-                xComp->dispose();
-
-            xLinks = nullptr;
-        }
-
-        uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
-        if( xDrawPagesAccess.is() )
-        {
-            uno::Reference< lang::XComponent > xComp( xDrawPagesAccess, uno::UNO_QUERY );
-            if( xComp.is() )
-                xComp->dispose();
-
-            xDrawPagesAccess = nullptr;
-        }
-
-        uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
-        if( xDrawPagesAccess.is() )
-        {
-            uno::Reference< lang::XComponent > xComp( xMasterPagesAccess, uno::UNO_QUERY );
-            if( xComp.is() )
-                xComp->dispose();
-
-            xDrawPagesAccess = nullptr;
-        }
-
-        uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
-        if( xLayerManager.is() )
-        {
-            uno::Reference< lang::XComponent > xComp( xLayerManager, uno::UNO_QUERY );
-            if( xComp.is() )
-                xComp->dispose();
-
-            xLayerManager = nullptr;
-        }
-
-        uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
-        if( xCustomPresentationAccess.is() )
-        {
-            uno::Reference< lang::XComponent > xComp( xCustomPresentationAccess, uno::UNO_QUERY );
-            if( xComp.is() )
-                xComp->dispose();
-
-            xCustomPresentationAccess = nullptr;
-        }
-
-        mxDashTable = nullptr;
-        mxGradientTable = nullptr;
-        mxHatchTable = nullptr;
-        mxBitmapTable = nullptr;
-        mxTransGradientTable = nullptr;
-        mxMarkerTable = nullptr;
-        mxDrawingPool = nullptr;
+        EndListening( *mpDoc );
+        mpDoc = nullptr;
     }
+
+    // Call the base class dispose() before setting the mbDisposed flag
+    // to true.  The reason for this is that if close() has not yet been
+    // called this is done in SfxBaseModel::dispose().  At the end of
+    // that dispose() is called again.  It is important to forward this
+    // second dispose() to the base class, too.
+    // As a consequence the following code has to be able to be run twice.
+    SfxBaseModel::dispose();
+    mbDisposed = true;
+
+    uno::Reference< container::XNameAccess > xLinks( mxLinks );
+    if( xLinks.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( xLinks, uno::UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+
+        xLinks = nullptr;
+    }
+
+    uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
+    if( xDrawPagesAccess.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( xDrawPagesAccess, uno::UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+
+        xDrawPagesAccess = nullptr;
+    }
+
+    uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
+    if( xDrawPagesAccess.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( xMasterPagesAccess, uno::UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+
+        xDrawPagesAccess = nullptr;
+    }
+
+    uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
+    if( xLayerManager.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( xLayerManager, uno::UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+
+        xLayerManager = nullptr;
+    }
+
+    uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
+    if( xCustomPresentationAccess.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( xCustomPresentationAccess, uno::UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+
+        xCustomPresentationAccess = nullptr;
+    }
+
+    mxDashTable = nullptr;
+    mxGradientTable = nullptr;
+    mxHatchTable = nullptr;
+    mxBitmapTable = nullptr;
+    mxTransGradientTable = nullptr;
+    mxMarkerTable = nullptr;
+    mxDrawingPool = nullptr;
 }
 
 // class SdDrawPagesAccess
@@ -3236,37 +3236,37 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
         return; //Todo: this should be excepted
 
     // only standard pages can be removed directly
-    if( pPage->GetPageKind() == PageKind::Standard )
+    if( pPage->GetPageKind() != PageKind::Standard )
+        return;
+
+    sal_uInt16 nPage = pPage->GetPageNum();
+
+    SdDrawDocument& rDoc = *mpModel->mpDoc;
+
+    SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
+
+    bool bUndo = rDoc.IsUndoEnabled();
+    if( bUndo )
     {
-        sal_uInt16 nPage = pPage->GetPageNum();
+        // Add undo actions and delete the pages.  The order of adding
+        // the undo actions is important.
+        rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
+        rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+        rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+    }
 
-        SdDrawDocument& rDoc = *mpModel->mpDoc;
+    // remove both pages
+    rDoc.RemoveMasterPage( nPage );
+    rDoc.RemoveMasterPage( nPage );
 
-        SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
-
-        bool bUndo = rDoc.IsUndoEnabled();
-        if( bUndo )
-        {
-            // Add undo actions and delete the pages.  The order of adding
-            // the undo actions is important.
-            rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
-            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
-            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-        }
-
-        // remove both pages
-        rDoc.RemoveMasterPage( nPage );
-        rDoc.RemoveMasterPage( nPage );
-
-        if( bUndo )
-        {
-            rDoc.EndUndo();
-        }
-        else
-        {
-            delete pNotesPage;
-            delete pPage;
-        }
+    if( bUndo )
+    {
+        rDoc.EndUndo();
+    }
+    else
+    {
+        delete pNotesPage;
+        delete pPage;
     }
 }
 

@@ -81,22 +81,25 @@ namespace sd
 
 static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const OUString& sTableStyle )
 {
-    if( pModel && pObj )
+    if( !(pModel && pObj) )
+        return;
+
+    Reference< XNameAccess > xPool( dynamic_cast< XNameAccess* >( pModel->GetStyleSheetPool() ) );
+    if( !xPool.is() )
+        return;
+
+    try
     {
-        Reference< XNameAccess > xPool( dynamic_cast< XNameAccess* >( pModel->GetStyleSheetPool() ) );
-        if( xPool.is() ) try
-        {
-            Reference< XNameContainer > xTableFamily( xPool->getByName( "table" ), UNO_QUERY_THROW );
-            OUString aStdName( "default" );
-            if( !sTableStyle.isEmpty() )
-                aStdName = sTableStyle;
-            Reference< XIndexAccess > xStyle( xTableFamily->getByName( aStdName ), UNO_QUERY_THROW );
-            pObj->setTableStyle( xStyle );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL("sd::apply_default_table_style(), exception caught!");
-        }
+        Reference< XNameContainer > xTableFamily( xPool->getByName( "table" ), UNO_QUERY_THROW );
+        OUString aStdName( "default" );
+        if( !sTableStyle.isEmpty() )
+            aStdName = sTableStyle;
+        Reference< XIndexAccess > xStyle( xTableFamily->getByName( aStdName ), UNO_QUERY_THROW );
+        pObj->setTableStyle( xStyle );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL("sd::apply_default_table_style(), exception caught!");
     }
 }
 
@@ -262,26 +265,26 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 {
     rStream.Seek( 0 );
 
-    if( pModel )
-    {
-        SdrPage* pPage = pModel->GetPage(0);
-        if( pPage )
-        {
-            Size aSize( 200, 200 );
-            ::tools::Rectangle aRect (Point(), aSize);
-            sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
-                *pModel,
-                aRect,
-                1,
-                1);
-            pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
-            apply_table_style( pObj, pModel, OUString() );
+    if( !pModel )
+        return;
 
-            pPage->NbcInsertObject( pObj );
+    SdrPage* pPage = pModel->GetPage(0);
+    if( !pPage )
+        return;
 
-            sdr::table::SdrTableObj::ImportAsRTF( rStream, *pObj );
-        }
-    }
+    Size aSize( 200, 200 );
+    ::tools::Rectangle aRect (Point(), aSize);
+    sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
+        *pModel,
+        aRect,
+        1,
+        1);
+    pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
+    apply_table_style( pObj, pModel, OUString() );
+
+    pPage->NbcInsertObject( pObj );
+
+    sdr::table::SdrTableObj::ImportAsRTF( rStream, *pObj );
 }
 
 }

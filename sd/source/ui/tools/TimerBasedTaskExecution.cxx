@@ -63,20 +63,20 @@ void TimerBasedTaskExecution::Release()
 void TimerBasedTaskExecution::ReleaseTask (
     const std::weak_ptr<TimerBasedTaskExecution>& rpExecution)
 {
-    if ( ! rpExecution.expired())
+    if (  rpExecution.expired())
+        return;
+
+    try
     {
-        try
-        {
-            std::shared_ptr<tools::TimerBasedTaskExecution> pExecution (rpExecution);
-            pExecution->Release();
-        }
-        catch (const std::bad_weak_ptr&)
-        {
-            // When a bad_weak_ptr has been thrown then the object pointed
-            // to by rpTask has been released right after we checked that it
-            // still existed.  Too bad, but that means, that we have nothing
-            // more do.
-        }
+        std::shared_ptr<tools::TimerBasedTaskExecution> pExecution (rpExecution);
+        pExecution->Release();
+    }
+    catch (const std::bad_weak_ptr&)
+    {
+        // When a bad_weak_ptr has been thrown then the object pointed
+        // to by rpTask has been released right after we checked that it
+        // still existed.  Too bad, but that means, that we have nothing
+        // more do.
     }
 }
 
@@ -101,30 +101,30 @@ TimerBasedTaskExecution::~TimerBasedTaskExecution()
 
 IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback, Timer *, void)
 {
-    if (mpTask != nullptr)
+    if (mpTask == nullptr)
+        return;
+
+    if (mpTask->HasNextStep())
     {
-        if (mpTask->HasNextStep())
+        // Execute as many steps as fit into the time span of length
+        // mnMaxTimePerStep.  Note that the last step may take longer
+        // than allowed.
+        sal_uInt32 nStartTime (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime());
+        SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
+        do
         {
-            // Execute as many steps as fit into the time span of length
-            // mnMaxTimePerStep.  Note that the last step may take longer
-            // than allowed.
-            sal_uInt32 nStartTime (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime());
-            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
-            do
-            {
-                mpTask->RunNextStep();
-                sal_uInt32 nDuration (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime()-nStartTime);
-                SAL_INFO("sd.tools", OSL_THIS_FUNC << ": executed step in " << nDuration);
-                if (nDuration > mnMaxTimePerStep)
-                    break;
-            }
-            while (mpTask->HasNextStep());
-            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": TimerBasedTaskExecution sleeping");
-            maTimer.Start();
+            mpTask->RunNextStep();
+            sal_uInt32 nDuration (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime()-nStartTime);
+            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": executed step in " << nDuration);
+            if (nDuration > mnMaxTimePerStep)
+                break;
         }
-        else
-            mpSelf.reset();
+        while (mpTask->HasNextStep());
+        SAL_INFO("sd.tools", OSL_THIS_FUNC << ": TimerBasedTaskExecution sleeping");
+        maTimer.Start();
     }
+    else
+        mpSelf.reset();
 }
 
 } } // end of namespace ::sd::tools

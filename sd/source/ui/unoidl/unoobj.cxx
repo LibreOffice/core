@@ -897,72 +897,72 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     if( pObj == nullptr )
         return;
 
-    if( pObj->IsEmptyPresObj() != bEmpty )
+    if( pObj->IsEmptyPresObj() == bEmpty )
+        return;
+
+    if(!bEmpty)
     {
-        if(!bEmpty)
+        OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+        const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
+
+        // really delete SdrOutlinerObj at pObj
+        pObj->NbcSetOutlinerParaObject(nullptr);
+        if( bVertical && dynamic_cast<SdrTextObj*>( pObj )  )
+            static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
+
+        SdrGrafObj* pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj  );
+        if( pGraphicObj )
         {
-            OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-            const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
-
-            // really delete SdrOutlinerObj at pObj
-            pObj->NbcSetOutlinerParaObject(nullptr);
-            if( bVertical && dynamic_cast<SdrTextObj*>( pObj )  )
-                static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
-
-            SdrGrafObj* pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj  );
-            if( pGraphicObj )
-            {
-                Graphic aEmpty;
-                pGraphicObj->SetGraphic(aEmpty);
-            }
-            else
-            {
-                SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >( pObj );
-                if( pOleObj )
-                {
-                    pOleObj->ClearGraphic();
-                }
-            }
+            Graphic aEmpty;
+            pGraphicObj->SetGraphic(aEmpty);
         }
         else
         {
-            // now set an empty OutlinerParaObject at pObj without
-            // any content but with the style of the old OutlinerParaObjects
-            // first paragraph
-            do
+            SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >( pObj );
+            if( pOleObj )
             {
-                SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():nullptr;
-                DBG_ASSERT( pDoc, "no document?" );
-                if( pDoc == nullptr)
-                    break;
-
-                SdOutliner* pOutliner = pDoc->GetInternalOutliner();
-                DBG_ASSERT( pOutliner, "no outliner?" );
-                if( pOutliner == nullptr )
-                    break;
-
-                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
-                DBG_ASSERT( pPage, "no page?" );
-                if( pPage == nullptr )
-                    break;
-
-                OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-                pOutliner->SetText( *pOutlinerParaObject );
-                const bool bVertical = pOutliner->IsVertical();
-
-                pOutliner->Clear();
-                pOutliner->SetVertical( bVertical );
-                pOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pDoc->GetStyleSheetPool()) );
-                pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
-                pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
-                pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
-                pOutliner->Clear();
+                pOleObj->ClearGraphic();
             }
-            while(false);
         }
-
-        pObj->SetEmptyPresObj(bEmpty);
     }
+    else
+    {
+        // now set an empty OutlinerParaObject at pObj without
+        // any content but with the style of the old OutlinerParaObjects
+        // first paragraph
+        do
+        {
+            SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():nullptr;
+            DBG_ASSERT( pDoc, "no document?" );
+            if( pDoc == nullptr)
+                break;
+
+            SdOutliner* pOutliner = pDoc->GetInternalOutliner();
+            DBG_ASSERT( pOutliner, "no outliner?" );
+            if( pOutliner == nullptr )
+                break;
+
+            SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
+            DBG_ASSERT( pPage, "no page?" );
+            if( pPage == nullptr )
+                break;
+
+            OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+            pOutliner->SetText( *pOutlinerParaObject );
+            const bool bVertical = pOutliner->IsVertical();
+
+            pOutliner->Clear();
+            pOutliner->SetVertical( bVertical );
+            pOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pDoc->GetStyleSheetPool()) );
+            pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
+            pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
+            pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
+            pOutliner->Clear();
+        }
+        while(false);
+    }
+
+    pObj->SetEmptyPresObj(bEmpty);
 }
 
 bool SdXShape::IsMasterDepend() const throw()
@@ -973,20 +973,20 @@ bool SdXShape::IsMasterDepend() const throw()
 
 void SdXShape::SetMasterDepend( bool bDepend ) throw()
 {
-    if( IsMasterDepend() != bDepend )
+    if( IsMasterDepend() == bDepend )
+        return;
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if( pObj )
     {
-        SdrObject* pObj = mpShape->GetSdrObject();
-        if( pObj )
+        if( bDepend )
         {
-            if( bDepend )
-            {
-                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
-                pObj->SetUserCall( pPage );
-            }
-            else
-            {
-                pObj->SetUserCall( nullptr );
-            }
+            SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
+            pObj->SetUserCall( pPage );
+        }
+        else
+        {
+            pObj->SetUserCall( nullptr );
         }
     }
 }
@@ -1001,22 +1001,22 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny )
     SfxStyleSheet* pStyleSheet = SfxUnoStyleSheet::getUnoStyleSheet( xStyle );
 
     const SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
-    if( pOldStyleSheet != pStyleSheet )
+    if( pOldStyleSheet == pStyleSheet )
+        return;
+
+    if( pStyleSheet == nullptr || (pStyleSheet->GetFamily() != SfxStyleFamily::Para && pStyleSheet->GetFamily() != SfxStyleFamily::Page) )
+        throw lang::IllegalArgumentException();
+
+    pObj->SetStyleSheet( pStyleSheet, false );
+
+    SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : nullptr;
+    if( pDoc )
     {
-        if( pStyleSheet == nullptr || (pStyleSheet->GetFamily() != SfxStyleFamily::Para && pStyleSheet->GetFamily() != SfxStyleFamily::Page) )
-            throw lang::IllegalArgumentException();
+        ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
 
-        pObj->SetStyleSheet( pStyleSheet, false );
-
-        SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : nullptr;
-        if( pDoc )
-        {
-            ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
-            ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
-
-            if( pViewSh )
-                pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
-        }
+        if( pViewSh )
+            pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
     }
 }
 

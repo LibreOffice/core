@@ -479,35 +479,35 @@ awt::Point SdUnoDrawView::GetViewOffset() const
 void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
 {
     SfxViewFrame* pViewFrame = mrDrawViewShell.GetViewFrame();
-    if( pViewFrame )
+    if( !pViewFrame )
+        return;
+
+    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+    if( !pDispatcher )
+        return;
+
+    SvxZoomType eZoomType;
+    switch( nType )
     {
-        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-        if( pDispatcher )
-        {
-            SvxZoomType eZoomType;
-            switch( nType )
-            {
-                case css::view::DocumentZoomType::OPTIMAL:
-                    eZoomType = SvxZoomType::OPTIMAL;
-                    break;
+        case css::view::DocumentZoomType::OPTIMAL:
+            eZoomType = SvxZoomType::OPTIMAL;
+            break;
 
-                case css::view::DocumentZoomType::PAGE_WIDTH:
-                case css::view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                    eZoomType = SvxZoomType::PAGEWIDTH;
-                    break;
+        case css::view::DocumentZoomType::PAGE_WIDTH:
+        case css::view::DocumentZoomType::PAGE_WIDTH_EXACT:
+            eZoomType = SvxZoomType::PAGEWIDTH;
+            break;
 
-                case css::view::DocumentZoomType::ENTIRE_PAGE:
-                    eZoomType = SvxZoomType::WHOLEPAGE;
-                    break;
+        case css::view::DocumentZoomType::ENTIRE_PAGE:
+            eZoomType = SvxZoomType::WHOLEPAGE;
+            break;
 
-                default:
-                    return;
-            }
-            SvxZoomItem aZoomItem( eZoomType );
-            pDispatcher->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON,
-                    { &aZoomItem });
-        }
+        default:
+            return;
     }
+    SvxZoomItem aZoomItem( eZoomType );
+    pDispatcher->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON,
+            { &aZoomItem });
 }
 
 SdXImpressDocument* SdUnoDrawView::GetModel() const throw()
