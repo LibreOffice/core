@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
+#include <svx/colorbox.hxx>
 #include <address.hxx>
 
 struct ScDataBarFormatData;
@@ -20,44 +20,45 @@ class SvxColorListBox;
 class SvNumberFormatter;
 class Edit;
 
-class ScDataBarSettingsDlg : public ModalDialog
+class ScDataBarSettingsDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<OKButton> mpBtnOk;
-    VclPtr<CancelButton> mpBtnCancel;
-
-    VclPtr<SvxColorListBox> mpLbPos;
-    VclPtr<SvxColorListBox> mpLbNeg;
-    VclPtr<SvxColorListBox> mpLbAxisCol;
-
-    VclPtr<ListBox> mpLbFillType;
-    VclPtr<ListBox> mpLbTypeMin;
-    VclPtr<ListBox> mpLbTypeMax;
-    VclPtr<ListBox> mpLbAxisPos;
-
-    VclPtr<Edit> mpEdMin;
-    VclPtr<Edit> mpEdMax;
-    VclPtr<Edit> mpLenMin;
-    VclPtr<Edit> mpLenMax;
-
-    VclPtr<CheckBox> mpCbOnlyBar;
-
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
     ScDocument* const mpDoc;
     ScAddress const   maPos;
 
-    DECL_LINK(OkBtnHdl, Button*, void);
-    DECL_LINK(TypeSelectHdl, ListBox&, void);
-    DECL_LINK(PosSelectHdl, ListBox&, void);
+    std::unique_ptr<weld::Button> mxBtnOk;
+    std::unique_ptr<weld::Button> mxBtnCancel;
+
+    std::unique_ptr<ColorListBox> mxLbPos;
+    std::unique_ptr<ColorListBox> mxLbNeg;
+    std::unique_ptr<ColorListBox> mxLbAxisCol;
+
+    std::unique_ptr<weld::ComboBox> mxLbFillType;
+    std::unique_ptr<weld::ComboBox> mxLbTypeMin;
+    std::unique_ptr<weld::ComboBox> mxLbTypeMax;
+    std::unique_ptr<weld::ComboBox> mxLbAxisPos;
+
+    std::unique_ptr<weld::Entry> mxEdMin;
+    std::unique_ptr<weld::Entry> mxEdMax;
+    std::unique_ptr<weld::Entry> mxLenMin;
+    std::unique_ptr<weld::Entry> mxLenMax;
+
+    std::unique_ptr<weld::CheckButton> mxCbOnlyBar;
+
+    std::unique_ptr<weld::Label> mxStrSameValueFT;
+
+    DECL_LINK(OkBtnHdl, weld::Button&, void);
+    DECL_LINK(TypeSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(PosSelectHdl, weld::ComboBox&, void);
 
     void Init();
 
 public:
-    ScDataBarSettingsDlg(vcl::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
+    ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
     virtual ~ScDataBarSettingsDlg() override;
-    virtual void dispose() override;
 
     ScDataBarFormatData* GetData();
 };
