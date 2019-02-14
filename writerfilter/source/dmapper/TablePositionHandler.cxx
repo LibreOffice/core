@@ -15,6 +15,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <sal/log.hxx>
+
 namespace writerfilter
 {
 namespace dmapper
@@ -52,12 +54,15 @@ void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
         break;
     case NS_ooxml::LN_CT_TblPPr_tblpX:
         m_nX = rVal.getInt();
+        SAL_DEBUG("TablePositionHandler::lcl_attribute m_nX: " << m_nX);
         break;
     case NS_ooxml::LN_CT_TblPPr_leftFromText:
         m_nLeftFromText = rVal.getInt();
+        SAL_DEBUG("TablePositionHandler::lcl_attribute m_nLeftFromText: " << m_nLeftFromText);
         break;
     case NS_ooxml::LN_CT_TblPPr_rightFromText:
         m_nRightFromText = rVal.getInt();
+        SAL_DEBUG("TablePositionHandler::lcl_attribute m_nRightFromText: " << m_nRightFromText);
         break;
     case NS_ooxml::LN_CT_TblPPr_topFromText:
         m_nTopFromText = rVal.getInt();
@@ -89,6 +94,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     aFrameProperties["BottomBorderDistance"] <<= sal_Int32(0);
 
     aFrameProperties["LeftMargin"] <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
+    SAL_DEBUG("aFrameProperties[LeftMargin] = " << ConversionHelper::convertTwipToMM100(m_nLeftFromText) << " (" << m_nLeftFromText << ")");
     aFrameProperties["RightMargin"] <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
     aFrameProperties["TopMargin"] <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
     aFrameProperties["BottomMargin"] <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
@@ -123,6 +129,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     aFrameProperties["HoriOrient"] <<= nHoriOrient;
     aFrameProperties["HoriOrientRelation"] <<= nHoriOrientRelation;
     aFrameProperties["HoriOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nX);
+    SAL_DEBUG("aFrameProperties[HoriOrientPosition] = " << ConversionHelper::convertTwipToMM100(m_nX) << " (" << m_nX << ")");
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;

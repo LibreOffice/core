@@ -10,6 +10,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPOSITIONHANDLER_HXX
 
 #include "LoggedResources.hxx"
+#include <sal/log.hxx>
 #include <memory>
 
 namespace com
@@ -57,6 +58,7 @@ public:
     }
     sal_Int32 getX()
     {
+        SAL_DEBUG("TablePositionHandler::getX() = " << m_nX);
         return m_nX;
     }
     sal_Int32 getLeftFromText()

@@ -274,6 +274,7 @@ void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFramePr
         if (rPropertyValue.Name == "HoriOrientPosition")
         {
             sal_Int32 nValue = rPropertyValue.Value.get<sal_Int32>();
+            SAL_DEBUG("lcl_DecrementHoriOrientPosition: nAmount = " << nAmount << " value before = " << nValue);
             nValue -= nAmount;
             rPropertyValue.Value <<= nValue;
             return;

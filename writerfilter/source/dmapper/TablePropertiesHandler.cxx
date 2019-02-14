@@ -326,7 +326,10 @@ namespace dmapper {
                     if( pCellMarginHandler->m_bBottomMarginValid )
                         pMarginProps->setValue( TablePropertyMap::CELL_MAR_BOTTOM, pCellMarginHandler->m_nBottomMargin );
                     if( pCellMarginHandler->m_bLeftMarginValid )
+                    {
                         pMarginProps->setValue( TablePropertyMap::CELL_MAR_LEFT, pCellMarginHandler->m_nLeftMargin );
+                        SAL_DEBUG("pMarginProps->setValue: " << pCellMarginHandler->m_nLeftMargin);
+                    }
                     if( pCellMarginHandler->m_bRightMarginValid )
                         pMarginProps->setValue( TablePropertyMap::CELL_MAR_RIGHT, pCellMarginHandler->m_nRightMargin );
                     insertTableProps(pMarginProps);
