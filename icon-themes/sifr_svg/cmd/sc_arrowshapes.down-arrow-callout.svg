@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
   <path
      style="fill:#555753"
-     d="m 2,1 v 6 h 4 v 4 H 4 l 4,4 4,-4 H 10 V 7 h 4 V 1 Z M 3,2 H 13 V 6 H 9 c 0,2 0,4 0,6 H 9.5 L 8,13.5 6.5,12 H 7 C 7,10 7,6 7,6 H 3 Z"
+     d="M 2 1 L 2 7 L 6 7 L 6 11 L 4 11 L 8 15 L 12 11 L 10 11 L 10 7 L 14 7 L 14 1 L 2 1 z M 4 3 L 12 3 L 12 5 L 4 5 L 4 3 z "
      />
   <path
-     style="fill:#555753;opacity:0.35"
-     d="M 3 2 L 3 6 L 7 6 L 7 12 L 6.5 12 L 8 13.5 L 9.5 12 L 9 12 L 9 6 L 13 6 L 13 2 L 3 2 z "
+     style="opacity:0.35;fill:#555753"
+     d="M 4 3 L 4 5 L 12 5 L 12 3 L 4 3 z "
      />
 </svg>

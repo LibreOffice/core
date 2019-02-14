@@ -1,14 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
   <path
      style="fill:#555753"
-     d="M 5,1 V 13 H 15 V 1 Z m 1,1 h 8 V 12 H 6 Z"
-     />
+     d="M 5,1 V 13 H 15 V 1 Z m 2,2 h 6 v 8 H 7 Z"
+     id="path2"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccc" />
   <path
      style="fill:#555753"
-     d="m 2,6 v 9 H 3 V 6 Z"
+     d="m 1,6 v 9 H 3 V 6 Z"
      />
   <path
-     style="fill:#555753;opacity:0.35"
-     d="M 6 2 L 6 12 L 14 12 L 14 2 L 6 2 z "
+     style="opacity:0.35;fill:#555753"
+     d="m 7,3 v 8 h 6 V 3 Z"
      />
 </svg>
