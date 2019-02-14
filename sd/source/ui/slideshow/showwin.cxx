@@ -294,21 +294,21 @@ void ShowWindow::LoseFocus()
 
 void ShowWindow::SetEndMode()
 {
-    if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
+    if( !(( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView()) )
+        return;
+
+    DeleteWindowFromPaintView();
+    meShowWindowMode = SHOWWINDOWMODE_END;
+    maShowBackground = Wallpaper( COL_BLACK );
+
+    // hide navigator if it is visible
+    if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
     {
-        DeleteWindowFromPaintView();
-        meShowWindowMode = SHOWWINDOWMODE_END;
-        maShowBackground = Wallpaper( COL_BLACK );
-
-        // hide navigator if it is visible
-        if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
-        {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
-            mbShowNavigatorAfterSpecialMode = true;
-        }
-
-        Invalidate();
+        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
+        mbShowNavigatorAfterSpecialMode = true;
     }
+
+    Invalidate();
 }
 
 bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic const * pLogo )

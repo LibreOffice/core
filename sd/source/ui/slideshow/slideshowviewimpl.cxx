@@ -487,22 +487,22 @@ awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  )
 
 void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
 {
-    if( pSlideShow )
+    if( !pSlideShow )
+        return;
+
+    ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
+
+    if( mbFirstPaint )
     {
-        ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
+        mbFirstPaint = false;
+        SlideshowImpl* pTmpSlideShow = mpSlideShow;
+        rGuard.clear();
+        if( pTmpSlideShow )
+            pTmpSlideShow->onFirstPaint();
+    } else
+        rGuard.clear();
 
-        if( mbFirstPaint )
-        {
-            mbFirstPaint = false;
-            SlideshowImpl* pTmpSlideShow = mpSlideShow;
-            rGuard.clear();
-            if( pTmpSlideShow )
-                pTmpSlideShow->onFirstPaint();
-        } else
-            rGuard.clear();
-
-        pSlideShow->startUpdateTimer();
-    }
+    pSlideShow->startUpdateTimer();
 }
 
 // XWindowListener methods
@@ -662,18 +662,18 @@ void SlideShowView::init()
     // #i48939# only switch on kind of hacky scroll optimization, when
     // running fullscreen. this minimizes the probability that other
     // windows partially cover the show.
-    if( mbFullScreen )
+    if( !mbFullScreen )
+        return;
+
+    try
     {
-        try
-        {
-            Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
-                                                           uno::UNO_QUERY_THROW );
-            xCanvasProps->setPropertyValue("UnsafeScrolling",
-                uno::makeAny( true ) );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
+                                                       uno::UNO_QUERY_THROW );
+        xCanvasProps->setPropertyValue("UnsafeScrolling",
+            uno::makeAny( true ) );
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
