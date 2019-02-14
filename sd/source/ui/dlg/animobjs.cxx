@@ -696,171 +696,171 @@ void AnimationWindow::AddObj (::sd::View& rView )
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PageKind::Standard);
     const size_t nCloneCount = pPage->GetObjCount();
 
-    if (nMarkCount > 0)
+    if (nMarkCount <= 0)
+        return;
+
+    // If it is ONE animation object or one group object, which was
+    // 'individually taken', we insert the objects separately
+    bool bAnimObj = false;
+    if( nMarkCount == 1 )
     {
-        // If it is ONE animation object or one group object, which was
-        // 'individually taken', we insert the objects separately
-        bool bAnimObj = false;
-        if( nMarkCount == 1 )
+        SdrMark*            pMark = rMarkList.GetMark(0);
+        SdrObject*          pObject = pMark->GetMarkedSdrObj();
+        SdAnimationInfo*    pAnimInfo = SdDrawDocument::GetAnimationInfo( pObject );
+        SdrInventor         nInv = pObject->GetObjInventor();
+        sal_uInt16          nId = pObject->GetObjIdentifier();
+
+        // Animated Bitmap (GIF)
+        if( nInv == SdrInventor::Default && nId == OBJ_GRAF && static_cast<SdrGrafObj*>( pObject )->IsAnimated() )
         {
-            SdrMark*            pMark = rMarkList.GetMark(0);
-            SdrObject*          pObject = pMark->GetMarkedSdrObj();
-            SdAnimationInfo*    pAnimInfo = SdDrawDocument::GetAnimationInfo( pObject );
-            SdrInventor         nInv = pObject->GetObjInventor();
-            sal_uInt16          nId = pObject->GetObjIdentifier();
+            const SdrGrafObj*   pGrafObj = static_cast<SdrGrafObj*>(pObject);
+            Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );
+            sal_uInt16              nCount = 0;
 
-            // Animated Bitmap (GIF)
-            if( nInv == SdrInventor::Default && nId == OBJ_GRAF && static_cast<SdrGrafObj*>( pObject )->IsAnimated() )
+            if( aGraphic.IsAnimated() )
+                nCount = aGraphic.GetAnimation().Count();
+
+            if( nCount > 0 )
             {
-                const SdrGrafObj*   pGrafObj = static_cast<SdrGrafObj*>(pObject);
-                Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );
-                sal_uInt16              nCount = 0;
+                const Animation aAnimation( aGraphic.GetAnimation() );
 
-                if( aGraphic.IsAnimated() )
-                    nCount = aGraphic.GetAnimation().Count();
-
-                if( nCount > 0 )
+                for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
-                    const Animation aAnimation( aGraphic.GetAnimation() );
+                    const AnimationBitmap& rAnimBmp = aAnimation.Get( i );
 
-                    for( sal_uInt16 i = 0; i < nCount; i++ )
+                    // LoopCount
+                    if( i == 0 )
                     {
-                        const AnimationBitmap& rAnimBmp = aAnimation.Get( i );
+                        sal_uInt32 nLoopCount = aAnimation.GetLoopCount();
 
-                        // LoopCount
-                        if( i == 0 )
-                        {
-                            sal_uInt32 nLoopCount = aAnimation.GetLoopCount();
-
-                            if( !nLoopCount ) // endless
-                                m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
-                            else
-                                m_pLbLoopCount->SelectEntry(OUString::number( nLoopCount ) );
-                        }
-
-                        long nTime = rAnimBmp.nWait;
-                        ::tools::Time aTime( 0, 0, nTime / 100, nTime % 100 );
-                        size_t nIndex = m_nCurrentFrame + 1;
-                        m_FrameList.insert(
-                                m_FrameList.begin() + nIndex,
-                                ::std::make_pair(rAnimBmp.aBmpEx, aTime));
-
-                        // increment => next one inserted after this one
-                        ++m_nCurrentFrame;
+                        if( !nLoopCount ) // endless
+                            m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
+                        else
+                            m_pLbLoopCount->SelectEntry(OUString::number( nLoopCount ) );
                     }
-                    // if a animated GIF is taken, only such one can be created
-                    m_pRbtBitmap->Check();
-                    m_pRbtGroup->Enable( false );
-                    bAnimObj = true;
-                }
-            }
-            else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
-            {
-                // several objects
-                SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObject)->GetSubList();
 
-                for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
-                {
-                    SdrObject* pSnapShot(pObjList->GetObj(nObject));
-                    BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
+                    long nTime = rAnimBmp.nWait;
+                    ::tools::Time aTime( 0, 0, nTime / 100, nTime % 100 );
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
+                            ::std::make_pair(rAnimBmp.aBmpEx, aTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
-
-                    // Clone
-                    pPage->InsertObject(
-                        pSnapShot->CloneSdrObject(pPage->getSdrModelFromSdrPage()),
-                        m_nCurrentFrame);
                 }
+                // if a animated GIF is taken, only such one can be created
+                m_pRbtBitmap->Check();
+                m_pRbtGroup->Enable( false );
                 bAnimObj = true;
             }
         }
-        // also one single animated object
-        if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
+        else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
         {
-            BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
+            // several objects
+            SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObject)->GetSubList();
 
-            ::tools::Time aTime( m_pTimeField->GetTime() );
-
-            size_t nIndex = m_nCurrentFrame + 1;
-            m_FrameList.insert(
-                    m_FrameList.begin() + nIndex,
-                    ::std::make_pair(aBitmapEx, aTime));
-        }
-
-        // one single object
-        if( nMarkCount == 1 && !bAnimObj )
-        {
-            SdrMark*    pMark   = rMarkList.GetMark(0);
-            SdrObject*  pObject = pMark->GetMarkedSdrObj();
-            SdrObject* pClone(pObject->CloneSdrObject(pPage->getSdrModelFromSdrPage()));
-            size_t nIndex = m_nCurrentFrame + 1;
-            pPage->InsertObject(pClone, nIndex);
-        }
-        // several objects: group the clones
-        else if (nMarkCount > 1)
-        {
-            // take objects separately
-            if( bAllObjects )
+            for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
             {
-                for( size_t nObject= 0; nObject < nMarkCount; ++nObject )
-                {
-                    // Clone
-                    SdrObject* pObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj());
-                    BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
-                    size_t nIndex = m_nCurrentFrame + 1;
-                    m_FrameList.insert(
+                SdrObject* pSnapShot(pObjList->GetObj(nObject));
+                BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
+                size_t nIndex = m_nCurrentFrame + 1;
+                m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
                         ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
 
-                    // increment => next one inserted after this one
-                    ++m_nCurrentFrame;
+                // increment => next one inserted after this one
+                ++m_nCurrentFrame;
 
-                    pPage->InsertObject(
-                        pObject->CloneSdrObject(pPage->getSdrModelFromSdrPage()),
-                        m_nCurrentFrame);
-                }
-                bAnimObj = true; // that we don't change again
+                // Clone
+                pPage->InsertObject(
+                    pSnapShot->CloneSdrObject(pPage->getSdrModelFromSdrPage()),
+                    m_nCurrentFrame);
             }
-            else
-            {
-                SdrObjGroup* pCloneGroup = new SdrObjGroup(rView.getSdrModelFromSdrView());
-                SdrObjList*  pObjList    = pCloneGroup->GetSubList();
-
-                for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
-                {
-                    pObjList->InsertObject(
-                        rMarkList.GetMark(nObject)->GetMarkedSdrObj()->CloneSdrObject(
-                            pPage->getSdrModelFromSdrPage()));
-                }
-
-                size_t nIndex = m_nCurrentFrame + 1;
-                pPage->InsertObject(pCloneGroup, nIndex);
-            }
+            bAnimObj = true;
         }
-
-        if( !bAnimObj )
-        {
-            ++m_nCurrentFrame;
-        }
-
-        // if there was nothing in the animator before but now is something
-        // there, we can create a animation group
-        if (nCloneCount == 0 && !m_FrameList.empty())
-        {
-            m_pBtnCreateGroup->Enable();
-        }
-
-        // calculate and set zoom for DisplayWin
-        Fraction aFrac( GetScale() );
-        m_pCtlDisplay->SetScale(aFrac);
-
-        UpdateControl();
     }
+    // also one single animated object
+    if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
+    {
+        BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
+
+        ::tools::Time aTime( m_pTimeField->GetTime() );
+
+        size_t nIndex = m_nCurrentFrame + 1;
+        m_FrameList.insert(
+                m_FrameList.begin() + nIndex,
+                ::std::make_pair(aBitmapEx, aTime));
+    }
+
+    // one single object
+    if( nMarkCount == 1 && !bAnimObj )
+    {
+        SdrMark*    pMark   = rMarkList.GetMark(0);
+        SdrObject*  pObject = pMark->GetMarkedSdrObj();
+        SdrObject* pClone(pObject->CloneSdrObject(pPage->getSdrModelFromSdrPage()));
+        size_t nIndex = m_nCurrentFrame + 1;
+        pPage->InsertObject(pClone, nIndex);
+    }
+    // several objects: group the clones
+    else if (nMarkCount > 1)
+    {
+        // take objects separately
+        if( bAllObjects )
+        {
+            for( size_t nObject= 0; nObject < nMarkCount; ++nObject )
+            {
+                // Clone
+                SdrObject* pObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj());
+                BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
+                size_t nIndex = m_nCurrentFrame + 1;
+                m_FrameList.insert(
+                    m_FrameList.begin() + nIndex,
+                    ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
+
+                // increment => next one inserted after this one
+                ++m_nCurrentFrame;
+
+                pPage->InsertObject(
+                    pObject->CloneSdrObject(pPage->getSdrModelFromSdrPage()),
+                    m_nCurrentFrame);
+            }
+            bAnimObj = true; // that we don't change again
+        }
+        else
+        {
+            SdrObjGroup* pCloneGroup = new SdrObjGroup(rView.getSdrModelFromSdrView());
+            SdrObjList*  pObjList    = pCloneGroup->GetSubList();
+
+            for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
+            {
+                pObjList->InsertObject(
+                    rMarkList.GetMark(nObject)->GetMarkedSdrObj()->CloneSdrObject(
+                        pPage->getSdrModelFromSdrPage()));
+            }
+
+            size_t nIndex = m_nCurrentFrame + 1;
+            pPage->InsertObject(pCloneGroup, nIndex);
+        }
+    }
+
+    if( !bAnimObj )
+    {
+        ++m_nCurrentFrame;
+    }
+
+    // if there was nothing in the animator before but now is something
+    // there, we can create a animation group
+    if (nCloneCount == 0 && !m_FrameList.empty())
+    {
+        m_pBtnCreateGroup->Enable();
+    }
+
+    // calculate and set zoom for DisplayWin
+    Fraction aFrac( GetScale() );
+    m_pCtlDisplay->SetScale(aFrac);
+
+    UpdateControl();
 }
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )

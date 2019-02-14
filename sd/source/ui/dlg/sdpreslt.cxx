@@ -194,69 +194,69 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, weld::Button&, void)
             bCancel = true;
     }
 
-    if( !bCancel )
+    if( bCancel )
+        return;
+
+    // check if template already exists
+    OUString aCompareStr(maName);
+    if (aCompareStr.isEmpty())
+        aCompareStr = maStrNone;
+
+    auto it = std::find(maLayoutNames.begin(), maLayoutNames.end(), aCompareStr);
+    if (it != maLayoutNames.end())
     {
-        // check if template already exists
-        OUString aCompareStr(maName);
-        if (aCompareStr.isEmpty())
-            aCompareStr = maStrNone;
+        sal_uInt16 aPos = static_cast<sal_uInt16>(std::distance(maLayoutNames.begin(), it));
+        // select template
+        m_xVS->SelectItem( aPos + 1 );
+    }
+    else
+    {
+        // load document in order to determine preview bitmap (if template is selected)
+        if (!maName.isEmpty())
+        {
+            // determine document in order to call OpenBookmarkDoc
+            SdDrawDocument* pDoc = mpDocSh->GetDoc();
+            SdDrawDocument* pTemplDoc  = pDoc->OpenBookmarkDoc( maName );
 
-        auto it = std::find(maLayoutNames.begin(), maLayoutNames.end(), aCompareStr);
-        if (it != maLayoutNames.end())
-        {
-            sal_uInt16 aPos = static_cast<sal_uInt16>(std::distance(maLayoutNames.begin(), it));
-            // select template
-            m_xVS->SelectItem( aPos + 1 );
-        }
-        else
-        {
-            // load document in order to determine preview bitmap (if template is selected)
-            if (!maName.isEmpty())
+            if (pTemplDoc)
             {
-                // determine document in order to call OpenBookmarkDoc
-                SdDrawDocument* pDoc = mpDocSh->GetDoc();
-                SdDrawDocument* pTemplDoc  = pDoc->OpenBookmarkDoc( maName );
+                ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-                if (pTemplDoc)
+                sal_uInt16 nCount = pTemplDoc->GetMasterPageCount();
+
+                for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
                 {
-                    ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
-
-                    sal_uInt16 nCount = pTemplDoc->GetMasterPageCount();
-
-                    for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
+                    SdPage* pMaster = static_cast<SdPage*>( pTemplDoc->GetMasterPage(nLayout) );
+                    if (pMaster->GetPageKind() == PageKind::Standard)
                     {
-                        SdPage* pMaster = static_cast<SdPage*>( pTemplDoc->GetMasterPage(nLayout) );
-                        if (pMaster->GetPageKind() == PageKind::Standard)
-                        {
-                            OUString aLayoutName(pMaster->GetLayoutName());
-                            aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
-                            maLayoutNames.push_back(aLayoutName);
+                        OUString aLayoutName(pMaster->GetLayoutName());
+                        aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+                        maLayoutNames.push_back(aLayoutName);
 
-                            Image aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster));
-                            m_xVS->InsertItem(static_cast<sal_uInt16>(maLayoutNames.size()), aBitmap, aLayoutName);
-                        }
+                        Image aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster));
+                        m_xVS->InsertItem(static_cast<sal_uInt16>(maLayoutNames.size()), aBitmap, aLayoutName);
                     }
                 }
-                else
-                {
-                    bCancel = true;
-                }
-
-                pDoc->CloseBookmarkDoc();
             }
             else
             {
-                // empty layout
-                maLayoutNames.push_back(maStrNone);
-                m_xVS->InsertItem( static_cast<sal_uInt16>(maLayoutNames.size()),
-                        Image(BMP_FOIL_NONE), maStrNone );
+                bCancel = true;
             }
 
-            if (!bCancel)
-            {
-                // select template
-                m_xVS->SelectItem( static_cast<sal_uInt16>(maLayoutNames.size()) );
-            }
+            pDoc->CloseBookmarkDoc();
+        }
+        else
+        {
+            // empty layout
+            maLayoutNames.push_back(maStrNone);
+            m_xVS->InsertItem( static_cast<sal_uInt16>(maLayoutNames.size()),
+                    Image(BMP_FOIL_NONE), maStrNone );
+        }
+
+        if (!bCancel)
+        {
+            // select template
+            m_xVS->SelectItem( static_cast<sal_uInt16>(maLayoutNames.size()) );
         }
     }
 }

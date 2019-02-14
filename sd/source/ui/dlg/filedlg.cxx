@@ -157,20 +157,20 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
         return;
     }
 
-    if( mxControlAccess.is() )
+    if( !mxControlAccess.is() )
+        return;
+
+    try
     {
-        try
-        {
-            mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       SdResId( STR_PLAY ) );
-            mbLabelPlaying = false;
-        }
-        catch (const css::lang::IllegalArgumentException&)
-        {
+        mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                   SdResId( STR_PLAY ) );
+        mbLabelPlaying = false;
+    }
+    catch (const css::lang::IllegalArgumentException&)
+    {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot access play button" );
+        OSL_FAIL( "Cannot access play button" );
 #endif
-        }
     }
 }
 
@@ -187,19 +187,19 @@ SdFileDialog_Imp::SdFileDialog_Imp(weld::Window* pParent)
     // get the control access
     mxControlAccess.set( xFileDlg, css::uno::UNO_QUERY );
 
-    if( mxControlAccess.is() )
+    if( !mxControlAccess.is() )
+        return;
+
+    try
     {
-        try
-        {
-            mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       SdResId( STR_PLAY ) );
-        }
-        catch (const css::lang::IllegalArgumentException&)
-        {
+        mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                   SdResId( STR_PLAY ) );
+    }
+    catch (const css::lang::IllegalArgumentException&)
+    {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot set play button label" );
+        OSL_FAIL( "Cannot set play button label" );
 #endif
-        }
     }
 }
 

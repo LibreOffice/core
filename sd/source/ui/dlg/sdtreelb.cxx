@@ -303,20 +303,20 @@ void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
 
 void SdPageObjsTLB::SaveExpandedTreeItemState(SvTreeListEntry* pEntry, std::vector<OUString>& vectTreeItem)
 {
-    if (pEntry)
+    if (!pEntry)
+        return;
+
+    SvTreeListEntry* pListEntry = pEntry;
+    while (pListEntry)
     {
-        SvTreeListEntry* pListEntry = pEntry;
-        while (pListEntry)
+        if (pListEntry->HasChildren())
         {
-            if (pListEntry->HasChildren())
-            {
-                if (IsExpanded(pListEntry))
-                    vectTreeItem.push_back(GetEntryText(pListEntry));
-                SvTreeListEntry* pChildEntry = FirstChild(pListEntry);
-                SaveExpandedTreeItemState(pChildEntry, vectTreeItem);
-            }
-            pListEntry = pListEntry->NextSibling();
+            if (IsExpanded(pListEntry))
+                vectTreeItem.push_back(GetEntryText(pListEntry));
+            SvTreeListEntry* pChildEntry = FirstChild(pListEntry);
+            SaveExpandedTreeItemState(pChildEntry, vectTreeItem);
         }
+        pListEntry = pListEntry->NextSibling();
     }
 }
 void SdPageObjsTLB::Clear()
@@ -588,24 +588,24 @@ void SdPageObjsTLB::AddShapeList (
         }
     }
 
-    if( pEntry->HasChildren() )
+    if( !pEntry->HasChildren() )
+        return;
+
+    SetExpandedEntryBmp(
+        pEntry,
+        bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
+    SetCollapsedEntryBmp(
+        pEntry,
+        bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
+    if (mbSaveTreeItemState)
     {
-        SetExpandedEntryBmp(
-            pEntry,
-            bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
-        SetCollapsedEntryBmp(
-            pEntry,
-            bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
-        if (mbSaveTreeItemState)
-        {
-            OUString strEntry = GetEntryText(pEntry);
-            auto it = std::find(maTreeItem.begin(), maTreeItem.end(), strEntry);
-            if (it != maTreeItem.end())
-                Expand( pEntry );
-        }
-        else
+        OUString strEntry = GetEntryText(pEntry);
+        auto it = std::find(maTreeItem.begin(), maTreeItem.end(), strEntry);
+        if (it != maTreeItem.end())
             Expand( pEntry );
     }
+    else
+        Expand( pEntry );
 }
 
 void SdPageObjsTLB::SetShowAllShapes (
@@ -970,40 +970,40 @@ void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
 {
     SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 
-    if (pEntry && mpNavigator && mpNavigator->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE)
+    if (!(pEntry && mpNavigator && mpNavigator->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE))
+        return;
+
+    // Mark only the children of the page under the mouse as drop
+    // targets.  This prevents moving shapes from one page to another.
+
+    // Select all entries and disable them as drop targets.
+    SetSelectionMode(SelectionMode::Multiple);
+    SetCursor(static_cast<SvTreeListEntry*>(nullptr));
+    SelectAll(true, false);
+    EnableSelectionAsDropTarget(false);
+
+    // Enable only the entries as drop targets that are children of the
+    // page under the mouse.
+    SvTreeListEntry* pParent = GetRootLevelParent(pEntry);
+    if (pParent != nullptr)
     {
-        // Mark only the children of the page under the mouse as drop
-        // targets.  This prevents moving shapes from one page to another.
-
-        // Select all entries and disable them as drop targets.
-        SetSelectionMode(SelectionMode::Multiple);
-        SetCursor(static_cast<SvTreeListEntry*>(nullptr));
-        SelectAll(true, false);
-        EnableSelectionAsDropTarget(false);
-
-        // Enable only the entries as drop targets that are children of the
-        // page under the mouse.
-        SvTreeListEntry* pParent = GetRootLevelParent(pEntry);
-        if (pParent != nullptr)
-        {
-            SelectAll(false, false);
-            Select(pParent);
-            //            for (SvTreeListEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
-            //                Select(pChild, sal_True);
-            EnableSelectionAsDropTarget();//sal_False);
-        }
-
-        // Set selection back to the entry under the mouse.
         SelectAll(false, false);
-        SetSelectionMode(SelectionMode::Single);
-        Select(pEntry);
-
-        // We can delete the Navigator from ExecuteDrag (when switching to
-        // another document type), but that would kill the StarView MouseMove
-        // Handler which is calling Command().
-        // For this reason, Drag&Drop is asynchronous.
-        Application::PostUserEvent( LINK( this, SdPageObjsTLB, ExecDragHdl ), nullptr, true );
+        Select(pParent);
+        //            for (SvTreeListEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
+        //                Select(pChild, sal_True);
+        EnableSelectionAsDropTarget();//sal_False);
     }
+
+    // Set selection back to the entry under the mouse.
+    SelectAll(false, false);
+    SetSelectionMode(SelectionMode::Single);
+    Select(pEntry);
+
+    // We can delete the Navigator from ExecuteDrag (when switching to
+    // another document type), but that would kill the StarView MouseMove
+    // Handler which is calling Command().
+    // For this reason, Drag&Drop is asynchronous.
+    Application::PostUserEvent( LINK( this, SdPageObjsTLB, ExecDragHdl ), nullptr, true );
 }
 
 /**
@@ -1011,80 +1011,80 @@ void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
  */
 void SdPageObjsTLB::DoDrag()
 {
-    if (mpNavigator)
+    if (!mpNavigator)
+        return;
+
+    ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
+    OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    NavigatorDragType   eDragType = mpNavigator->GetNavigatorDragType();
+
+    aURL += "#" + GetSelectedEntry();
+
+    INetBookmark    aBookmark( aURL, GetSelectedEntry() );
+    sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
+
+    if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
+        nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
+    else if (mpDoc->GetSdPageCount(PageKind::Standard) == 1)
     {
-        ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
-        OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        NavigatorDragType   eDragType = mpNavigator->GetNavigatorDragType();
+        // Can not move away the last slide in a document.
+        nDNDActions = DND_ACTION_COPY;
+    }
 
-        aURL += "#" + GetSelectedEntry();
+    SvTreeListBox::ReleaseMouse();
 
-        INetBookmark    aBookmark( aURL, GetSelectedEntry() );
-        sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
+    bIsInDrag = true;
 
-        if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
-            nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
-        else if (mpDoc->GetSdPageCount(PageKind::Standard) == 1)
+    // Get the view.
+    ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);
+    if (pViewShell == nullptr)
+    {
+        OSL_ASSERT(pViewShell!=nullptr);
+        return;
+    }
+    sd::View* pView = pViewShell->GetView();
+    if (pView == nullptr)
+    {
+        OSL_ASSERT(pView!=nullptr);
+        return;
+    }
+
+    // object is destroyed by internal reference mechanism
+    SdTransferable* pTransferable =
+            new SdPageObjsTLB::SdPageObjsTransferable(
+                        *this, aBookmark, *pDocShell, eDragType);
+
+    SdrObject* pObject = nullptr;
+    void* pUserData = GetCurEntry()->GetUserData();
+    if (pUserData != nullptr && pUserData != reinterpret_cast<void*>(1))
+        pObject = static_cast<SdrObject*>(pUserData);
+    if (pObject != nullptr)
+    {
+        // For shapes without a user supplied name (the automatically
+        // created name does not count), a different drag and drop technique
+        // is used.
+        if (GetObjectName(pObject, false).isEmpty())
         {
-            // Can not move away the last slide in a document.
-            nDNDActions = DND_ACTION_COPY;
-        }
-
-        SvTreeListBox::ReleaseMouse();
-
-        bIsInDrag = true;
-
-        // Get the view.
-        ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);
-        if (pViewShell == nullptr)
-        {
-            OSL_ASSERT(pViewShell!=nullptr);
-            return;
-        }
-        sd::View* pView = pViewShell->GetView();
-        if (pView == nullptr)
-        {
-            OSL_ASSERT(pView!=nullptr);
-            return;
-        }
-
-        // object is destroyed by internal reference mechanism
-        SdTransferable* pTransferable =
-                new SdPageObjsTLB::SdPageObjsTransferable(
-                            *this, aBookmark, *pDocShell, eDragType);
-
-        SdrObject* pObject = nullptr;
-        void* pUserData = GetCurEntry()->GetUserData();
-        if (pUserData != nullptr && pUserData != reinterpret_cast<void*>(1))
-            pObject = static_cast<SdrObject*>(pUserData);
-        if (pObject != nullptr)
-        {
-            // For shapes without a user supplied name (the automatically
-            // created name does not count), a different drag and drop technique
-            // is used.
-            if (GetObjectName(pObject, false).isEmpty())
-            {
-                AddShapeToTransferable(*pTransferable, *pObject);
-                pTransferable->SetView(pView);
-                SD_MOD()->pTransferDrag = pTransferable;
-            }
-
-            // Unnamed shapes have to be selected to be recognized by the
-            // current drop implementation.  In order to have a consistent
-            // behaviour for all shapes, every shape that is to be dragged is
-            // selected first.
-            SdrPageView* pPageView = pView->GetSdrPageView();
-            pView->UnmarkAllObj(pPageView);
-            pView->MarkObj(pObject, pPageView);
-        }
-        else
-        {
+            AddShapeToTransferable(*pTransferable, *pObject);
             pTransferable->SetView(pView);
             SD_MOD()->pTransferDrag = pTransferable;
         }
 
-        pTransferable->StartDrag( this, nDNDActions );
+        // Unnamed shapes have to be selected to be recognized by the
+        // current drop implementation.  In order to have a consistent
+        // behaviour for all shapes, every shape that is to be dragged is
+        // selected first.
+        SdrPageView* pPageView = pView->GetSdrPageView();
+        pView->UnmarkAllObj(pPageView);
+        pView->MarkObj(pObject, pPageView);
     }
+    else
+    {
+        pTransferable->SetView(pView);
+        SD_MOD()->pTransferDrag = pTransferable;
+    }
+
+    pTransferable->StartDrag( this, nDNDActions );
 }
 
 void SdPageObjsTLB::OnDragFinished()

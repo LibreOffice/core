@@ -95,27 +95,27 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     pOut->IntersectClipRegion(aVisArea);
     pView->ShowSdrPage(pSelectedPage);
 
-    if (pOut->GetOutDevType() != OUTDEV_WINDOW)
+    if (pOut->GetOutDevType() == OUTDEV_WINDOW)
+        return;
+
+    MapMode aOldMapMode = pOut->GetMapMode();
+
+    if (pOut->GetOutDevType() == OUTDEV_PRINTER)
     {
-        MapMode aOldMapMode = pOut->GetMapMode();
+        MapMode aMapMode = aOldMapMode;
+        Point aOrigin = aMapMode.GetOrigin();
+        aOrigin.AdjustX(1 );
+        aOrigin.AdjustY(1 );
+        aMapMode.SetOrigin(aOrigin);
+        pOut->SetMapMode(aMapMode);
+    }
 
-        if (pOut->GetOutDevType() == OUTDEV_PRINTER)
-        {
-            MapMode aMapMode = aOldMapMode;
-            Point aOrigin = aMapMode.GetOrigin();
-            aOrigin.AdjustX(1 );
-            aOrigin.AdjustY(1 );
-            aMapMode.SetOrigin(aOrigin);
-            pOut->SetMapMode(aMapMode);
-        }
+    vcl::Region aRegion(aVisArea);
+    pView->CompleteRedraw(pOut, aRegion);
 
-        vcl::Region aRegion(aVisArea);
-        pView->CompleteRedraw(pOut, aRegion);
-
-        if (pOut->GetOutDevType() == OUTDEV_PRINTER)
-        {
-            pOut->SetMapMode(aOldMapMode);
-        }
+    if (pOut->GetOutDevType() == OUTDEV_PRINTER)
+    {
+        pOut->SetMapMode(aOldMapMode);
     }
 }
 

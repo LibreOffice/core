@@ -76,54 +76,54 @@ void Client::RequestNewObjectArea( ::tools::Rectangle& aObjRect )
         aObjRect.SetSize( aOldRect.GetSize() );
 
     ::tools::Rectangle aWorkArea( pView->GetWorkArea() );
-    if ( !aWorkArea.IsInside(aObjRect) && !bPosProtect && aObjRect != aOldRect )
-    {
-        // correct position
-        Point aPos = aObjRect.TopLeft();
-        Size  aSize = aObjRect.GetSize();
-        Point aWorkAreaTL = aWorkArea.TopLeft();
-        Point aWorkAreaBR = aWorkArea.BottomRight();
+    if ( aWorkArea.IsInside(aObjRect) || bPosProtect || aObjRect == aOldRect )
+        return;
 
-        aPos.setX( std::max(aPos.X(), aWorkAreaTL.X()) );
-        aPos.setX( std::min(aPos.X(), aWorkAreaBR.X()-aSize.Width()) );
-        aPos.setY( std::max(aPos.Y(), aWorkAreaTL.Y()) );
-        aPos.setY( std::min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height()) );
+    // correct position
+    Point aPos = aObjRect.TopLeft();
+    Size  aSize = aObjRect.GetSize();
+    Point aWorkAreaTL = aWorkArea.TopLeft();
+    Point aWorkAreaBR = aWorkArea.BottomRight();
 
-        aObjRect.SetPos(aPos);
-    }
+    aPos.setX( std::max(aPos.X(), aWorkAreaTL.X()) );
+    aPos.setX( std::min(aPos.X(), aWorkAreaBR.X()-aSize.Width()) );
+    aPos.setY( std::max(aPos.Y(), aWorkAreaTL.Y()) );
+    aPos.setY( std::min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height()) );
+
+    aObjRect.SetPos(aPos);
 }
 
 void Client::ObjectAreaChanged()
 {
     ::sd::View* pView = mpViewShell->GetView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
+    if (rMarkList.GetMarkCount() != 1)
+        return;
+
+    SdrMark* pMark = rMarkList.GetMark(0);
+    SdrOle2Obj* pObj = dynamic_cast< SdrOle2Obj* >(pMark->GetMarkedSdrObj());
+
+    if(!pObj)
+        return;
+
+    // no need to check for changes, this method is called only if the area really changed
+    ::tools::Rectangle aNewRectangle(GetScaledObjArea());
+
+    // #i118524# if sheared/rotated, center to non-rotated LogicRect
+    pObj->setSuppressSetVisAreaSize(true);
+
+    if(pObj->GetGeoStat().nRotationAngle || pObj->GetGeoStat().nShearAngle)
     {
-        SdrMark* pMark = rMarkList.GetMark(0);
-        SdrOle2Obj* pObj = dynamic_cast< SdrOle2Obj* >(pMark->GetMarkedSdrObj());
+        pObj->SetLogicRect( aNewRectangle );
 
-        if(pObj)
-        {
-            // no need to check for changes, this method is called only if the area really changed
-            ::tools::Rectangle aNewRectangle(GetScaledObjArea());
+        const ::tools::Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+        const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
 
-            // #i118524# if sheared/rotated, center to non-rotated LogicRect
-            pObj->setSuppressSetVisAreaSize(true);
-
-            if(pObj->GetGeoStat().nRotationAngle || pObj->GetGeoStat().nShearAngle)
-            {
-                pObj->SetLogicRect( aNewRectangle );
-
-                const ::tools::Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-                const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
-
-                aNewRectangle.Move(aDelta.X(), aDelta.Y());
-            }
-
-            pObj->SetLogicRect( aNewRectangle );
-            pObj->setSuppressSetVisAreaSize(false);
-        }
+        aNewRectangle.Move(aDelta.X(), aDelta.Y());
     }
+
+    pObj->SetLogicRect( aNewRectangle );
+    pObj->setSuppressSetVisAreaSize(false);
 }
 
 void Client::ViewChanged()
@@ -140,47 +140,47 @@ void Client::ViewChanged()
 
     //TODO/LATER: should we try to avoid the recalculation of the visareasize
     //if we know that it didn't change?
-    if (mpViewShell->GetActiveWindow())
+    if (!mpViewShell->GetActiveWindow())
+        return;
+
+    ::sd::View* pView = mpViewShell->GetView();
+    if (!pView)
+        return;
+
+    ::tools::Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
+    Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
+
+    if( pSdrOle2Obj->IsChart() )
     {
-        ::sd::View* pView = mpViewShell->GetView();
-        if (pView)
-        {
-            ::tools::Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
-            Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
-
-            if( pSdrOle2Obj->IsChart() )
-            {
-                //charts never should be stretched see #i84323# for example
-                pSdrOle2Obj->SetLogicRect( ::tools::Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
-                pSdrOle2Obj->BroadcastObjectChange();
-                return;
-            }
-
-            // TODO/LEAN: maybe we can do this without requesting the VisualArea?
-            // working with the visual area might need running state, so the object may switch itself to this state
-            MapMode             aMap100( MapUnit::Map100thMM );
-            ::tools::Rectangle           aVisArea;
-            Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
-
-            aVisArea.SetSize( aSize );
-            Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
-                                                static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
-
-            // react to the change if the difference is bigger than one pixel
-            Size aPixelDiff =
-                Application::GetDefaultDevice()->LogicToPixel(
-                    Size( aLogicRect.GetWidth() - aScaledSize.Width(),
-                          aLogicRect.GetHeight() - aScaledSize.Height() ),
-                    aMap100 );
-            if( aPixelDiff.Width() || aPixelDiff.Height() )
-            {
-                pSdrOle2Obj->SetLogicRect( ::tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
-                pSdrOle2Obj->BroadcastObjectChange();
-            }
-            else
-                pSdrOle2Obj->ActionChanged();
-        }
+        //charts never should be stretched see #i84323# for example
+        pSdrOle2Obj->SetLogicRect( ::tools::Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
+        pSdrOle2Obj->BroadcastObjectChange();
+        return;
     }
+
+    // TODO/LEAN: maybe we can do this without requesting the VisualArea?
+    // working with the visual area might need running state, so the object may switch itself to this state
+    MapMode             aMap100( MapUnit::Map100thMM );
+    ::tools::Rectangle           aVisArea;
+    Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
+
+    aVisArea.SetSize( aSize );
+    Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
+                                        static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
+
+    // react to the change if the difference is bigger than one pixel
+    Size aPixelDiff =
+        Application::GetDefaultDevice()->LogicToPixel(
+            Size( aLogicRect.GetWidth() - aScaledSize.Width(),
+                  aLogicRect.GetHeight() - aScaledSize.Height() ),
+            aMap100 );
+    if( aPixelDiff.Width() || aPixelDiff.Height() )
+    {
+        pSdrOle2Obj->SetLogicRect( ::tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
+        pSdrOle2Obj->BroadcastObjectChange();
+    }
+    else
+        pSdrOle2Obj->ActionChanged();
 }
 
 } // end of namespace sd

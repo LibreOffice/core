@@ -123,47 +123,47 @@ void SpellDialogChildWindow::ProvideOutliner()
 {
     ViewShellBase* pViewShellBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
 
-    if (pViewShellBase != nullptr)
-    {
-        ViewShell* pViewShell = pViewShellBase->GetMainViewShell().get();
-        // If there already exists an outliner that has been created
-        // for another view shell then destroy it first.
-        if (mpSdOutliner != nullptr)
-            if(( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && ! mbOwnOutliner)
-                || (dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && mbOwnOutliner))
-            {
-                EndSpellingAndClearOutliner();
-            }
+    if (pViewShellBase == nullptr)
+        return;
 
-        // Now create/get an outliner if none is present.
-        if (mpSdOutliner == nullptr)
+    ViewShell* pViewShell = pViewShellBase->GetMainViewShell().get();
+    // If there already exists an outliner that has been created
+    // for another view shell then destroy it first.
+    if (mpSdOutliner != nullptr)
+        if(( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && ! mbOwnOutliner)
+            || (dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && mbOwnOutliner))
         {
-            if( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr)
-            {
-                // We need an outliner for the spell check so we have
-                // to create one.
-                mbOwnOutliner = true;
-                SdDrawDocument *pDoc = pViewShell->GetDoc();
-                mpSdOutliner = new SdOutliner(pDoc, OutlinerMode::TextObject);
-                StartListening(*pDoc);
-            }
-            else if( dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr)
-            {
-                // An outline view is already visible. The SdOutliner
-                // will use it instead of creating its own.
-                mbOwnOutliner = false;
-                SdDrawDocument *pDoc = pViewShell->GetDoc();
-                mpSdOutliner = pDoc->GetOutliner();
-                StartListening(*pDoc);
-            }
-
-            // Initialize spelling.
-            if (mpSdOutliner != nullptr)
-            {
-                mpSdOutliner->PrepareSpelling();
-                mpSdOutliner->StartSpelling();
-            }
+            EndSpellingAndClearOutliner();
         }
+
+    // Now create/get an outliner if none is present.
+    if (mpSdOutliner != nullptr)
+        return;
+
+    if( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr)
+    {
+        // We need an outliner for the spell check so we have
+        // to create one.
+        mbOwnOutliner = true;
+        SdDrawDocument *pDoc = pViewShell->GetDoc();
+        mpSdOutliner = new SdOutliner(pDoc, OutlinerMode::TextObject);
+        StartListening(*pDoc);
+    }
+    else if( dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr)
+    {
+        // An outline view is already visible. The SdOutliner
+        // will use it instead of creating its own.
+        mbOwnOutliner = false;
+        SdDrawDocument *pDoc = pViewShell->GetDoc();
+        mpSdOutliner = pDoc->GetOutliner();
+        StartListening(*pDoc);
+    }
+
+    // Initialize spelling.
+    if (mpSdOutliner != nullptr)
+    {
+        mpSdOutliner->PrepareSpelling();
+        mpSdOutliner->StartSpelling();
     }
 }
 
