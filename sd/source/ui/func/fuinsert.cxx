@@ -247,32 +247,32 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 
     //TODO/MBA: testing
     nFormatId = pDlg->GetFormat( aDataHelper );
-    if( nFormatId != SotClipboardFormatId::NONE && aDataHelper.GetTransferable().is() )
+    if( nFormatId == SotClipboardFormatId::NONE || !aDataHelper.GetTransferable().is() )
+        return;
+
+    sal_Int8 nAction = DND_ACTION_COPY;
+    DrawViewShell* pDrViewSh = nullptr;
+
+    if (!mpView->InsertData( aDataHelper,
+                            mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                            nAction, false, nFormatId ))
     {
-        sal_Int8 nAction = DND_ACTION_COPY;
-        DrawViewShell* pDrViewSh = nullptr;
+        pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
+    }
 
-        if (!mpView->InsertData( aDataHelper,
-                                mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                                nAction, false, nFormatId ))
-        {
-            pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
-        }
+    if (!pDrViewSh)
+        return;
 
-        if (pDrViewSh)
-        {
-            INetBookmark        aINetBookmark( "", "" );
+    INetBookmark        aINetBookmark( "", "" );
 
-            if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
-                aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
-                aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
-                aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-            {
-                pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
-            }
-        }
+    if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+        aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+        ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+        aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+        ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+        aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+    {
+        pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
     }
 }
 
@@ -698,61 +698,61 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     }
 
     bool bLink(true);
-    if (bAPI
+    if (!(bAPI
 #if HAVE_FEATURE_AVMEDIA
-        || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, aURL, & bLink)
+        || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, aURL, & bLink))
 #endif
        )
-    {
-        Size aPrefSize;
+        return;
 
-        if( mpWindow )
-            mpWindow->EnterWait();
+    Size aPrefSize;
+
+    if( mpWindow )
+        mpWindow->EnterWait();
 
 #if HAVE_FEATURE_AVMEDIA
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
-        {
-            if( mpWindow )
-                mpWindow->LeaveWait();
-
-            if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox(mpWindow->GetFrameWeld());
-        }
-        else
-        {
-            Point       aPos;
-            Size        aSize;
-            sal_Int8    nAction = DND_ACTION_COPY;
-
-            if( aPrefSize.Width() && aPrefSize.Height() )
-            {
-                if( mpWindow )
-                    aSize = mpWindow->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-                else
-                    aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-            }
-            else
-                aSize = Size( 5000, 5000 );
-
-            if( mpWindow )
-            {
-                aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
-                aPos.AdjustX( -(aSize.Width() >> 1) );
-                aPos.AdjustY( -(aSize.Height() >> 1) );
-            }
-
-            mpView->InsertMediaURL( aURL, nAction, aPos, aSize, bLink ) ;
-
-            if( mpWindow )
-                mpWindow->LeaveWait();
-        }
-#else
+    if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
+    {
         if( mpWindow )
             mpWindow->LeaveWait();
-        (void) aPrefSize;
-        (void) bLink;
-#endif
+
+        if( !bAPI )
+            ::avmedia::MediaWindow::executeFormatErrorBox(mpWindow->GetFrameWeld());
     }
+    else
+    {
+        Point       aPos;
+        Size        aSize;
+        sal_Int8    nAction = DND_ACTION_COPY;
+
+        if( aPrefSize.Width() && aPrefSize.Height() )
+        {
+            if( mpWindow )
+                aSize = mpWindow->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
+            else
+                aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
+        }
+        else
+            aSize = Size( 5000, 5000 );
+
+        if( mpWindow )
+        {
+            aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
+            aPos.AdjustX( -(aSize.Width() >> 1) );
+            aPos.AdjustY( -(aSize.Height() >> 1) );
+        }
+
+        mpView->InsertMediaURL( aURL, nAction, aPos, aSize, bLink ) ;
+
+        if( mpWindow )
+            mpWindow->LeaveWait();
+    }
+#else
+    if( mpWindow )
+        mpWindow->LeaveWait();
+    (void) aPrefSize;
+    (void) bLink;
+#endif
 }
 
 } // end of namespace sd

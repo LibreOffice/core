@@ -106,45 +106,45 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         bUnique = true;
     }
 
-    if( bUnique )
+    if( !bUnique )
+        return;
+
+    OUString aStyleName = aLayoutName + SD_LT_SEPARATOR;
+    PresentationObjects ePO;
+
+    if( bPage )
     {
-        OUString aStyleName = aLayoutName + SD_LT_SEPARATOR;
-        PresentationObjects ePO;
+        ePO = PO_TITLE;
+        aStyleName += STR_LAYOUT_TITLE;
+    }
+    else
+    {
+        ePO = static_cast<PresentationObjects>( PO_OUTLINE_1 + nDepth - 1 );
+        aStyleName += STR_LAYOUT_OUTLINE " "
+            + OUString::number(nDepth);
+    }
 
-        if( bPage )
-        {
-            ePO = PO_TITLE;
-            aStyleName += STR_LAYOUT_TITLE;
-        }
-        else
-        {
-            ePO = static_cast<PresentationObjects>( PO_OUTLINE_1 + nDepth - 1 );
-            aStyleName += STR_LAYOUT_OUTLINE " "
-                + OUString::number(nDepth);
-        }
+    SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SfxStyleFamily::Page );
+    DBG_ASSERT(pStyleSheet, "StyleSheet missing");
 
-        SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SfxStyleFamily::Page );
-        DBG_ASSERT(pStyleSheet, "StyleSheet missing");
+    if( !pStyleSheet )
+        return;
 
-        if( pStyleSheet )
-        {
-            SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
+    SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg(mpDocSh, mpViewShell->GetFrameWeld(),
-                                                                false, rStyleSheet, ePO, pStyleSheetPool));
-            if( pDlg->Execute() == RET_OK )
-            {
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                // Undo-Action
-                mpDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), pOutSet));
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg(mpDocSh, mpViewShell->GetFrameWeld(),
+                                                        false, rStyleSheet, ePO, pStyleSheetPool));
+    if( pDlg->Execute() == RET_OK )
+    {
+        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+        // Undo-Action
+        mpDocSh->GetUndoManager()->AddUndoAction(
+            std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), pOutSet));
 
-                pStyleSheet->GetItemSet().Put( *pOutSet );
-                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
-            }
-        }
+        pStyleSheet->GetItemSet().Put( *pOutSet );
+        static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
     }
 }
 

@@ -157,19 +157,19 @@ void SmartTagSet::Dispose()
 
 void SmartTagSet::select( const SmartTagReference& xTag )
 {
-    if( mxSelectedTag != xTag )
-    {
-        if( mxSelectedTag.is() )
-            mxSelectedTag->deselect();
+    if( mxSelectedTag == xTag )
+        return;
 
-        mxSelectedTag = xTag;
-        mxSelectedTag->select();
-        mrView.SetPossibilitiesDirty();
-        if( mrView.GetMarkedObjectCount() > 0 )
-            mrView.UnmarkAllObj();
-        else
-            mrView.updateHandles();
-    }
+    if( mxSelectedTag.is() )
+        mxSelectedTag->deselect();
+
+    mxSelectedTag = xTag;
+    mxSelectedTag->select();
+    mrView.SetPossibilitiesDirty();
+    if( mrView.GetMarkedObjectCount() > 0 )
+        mrView.UnmarkAllObj();
+    else
+        mrView.updateHandles();
 }
 
 void SmartTagSet::deselect()

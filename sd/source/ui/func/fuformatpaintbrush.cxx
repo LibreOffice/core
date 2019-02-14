@@ -239,30 +239,30 @@ bool FuFormatPaintBrush::HasContentForThisType( SdrInventor nObjectInventor, sal
 void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if( mxItemSet.get() && ( rMarkList.GetMarkCount() == 1 ) )
+    if( !(mxItemSet.get() && ( rMarkList.GetMarkCount() == 1 )) )
+        return;
+
+    SdrObject* pObj( nullptr );
+    bool bUndo = mpDoc->IsUndoEnabled();
+
+    if( bUndo && !mpView->GetTextEditOutlinerView() )
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+    // n685123: ApplyFormatPaintBrush itself would store undo information
+    // except in a few cases (?)
+    if( pObj )
     {
-        SdrObject* pObj( nullptr );
-        bool bUndo = mpDoc->IsUndoEnabled();
+        OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(".uno:FormatPaintbrush" ) );
+        mpDoc->BegUndo( sLabel );
+        if (dynamic_cast< sdr::table::SdrTableObj* >( pObj ) == nullptr)
+            mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
+    }
 
-        if( bUndo && !mpView->GetTextEditOutlinerView() )
-            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    mpView->ApplyFormatPaintBrush( *mxItemSet, bNoCharacterFormats, bNoParagraphFormats );
 
-        // n685123: ApplyFormatPaintBrush itself would store undo information
-        // except in a few cases (?)
-        if( pObj )
-        {
-            OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(".uno:FormatPaintbrush" ) );
-            mpDoc->BegUndo( sLabel );
-            if (dynamic_cast< sdr::table::SdrTableObj* >( pObj ) == nullptr)
-                mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
-        }
-
-        mpView->ApplyFormatPaintBrush( *mxItemSet, bNoCharacterFormats, bNoParagraphFormats );
-
-        if( pObj )
-        {
-            mpDoc->EndUndo();
-        }
+    if( pObj )
+    {
+        mpDoc->EndUndo();
     }
 }
 

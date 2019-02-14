@@ -75,32 +75,32 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
-    if (pArgs)
-    {
-        const SfxUInt32Item* pCenterX = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_X);
-        const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
-        const SfxUInt32Item* pAxisX = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_X);
-        const SfxUInt32Item* pAxisY = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_Y);
-        const SfxUInt32Item* pPhiStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLESTART);
-        const SfxUInt32Item* pPhiEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLEEND);
+    if (!pArgs)
+        return;
 
-        ::tools::Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
-                                   pCenterY->GetValue () - pAxisY->GetValue () / 2,
-                                   pCenterX->GetValue () + pAxisX->GetValue () / 2,
-                                   pCenterY->GetValue () + pAxisY->GetValue () / 2);
+    const SfxUInt32Item* pCenterX = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_X);
+    const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
+    const SfxUInt32Item* pAxisX = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_X);
+    const SfxUInt32Item* pAxisY = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_Y);
+    const SfxUInt32Item* pPhiStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLESTART);
+    const SfxUInt32Item* pPhiEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLEEND);
 
-        Activate();  // sets aObjKind
-        SdrCircObj* pNewCircle =
-        new SdrCircObj(
-            mpView->getSdrModelFromSdrView(),
-            static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier()),
-            aNewRectangle,
-            static_cast<long>(pPhiStart->GetValue () * 10.0),
-            static_cast<long>(pPhiEnd->GetValue () * 10.0));
-        SdrPageView *pPV = mpView->GetSdrPageView();
+    ::tools::Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
+                               pCenterY->GetValue () - pAxisY->GetValue () / 2,
+                               pCenterX->GetValue () + pAxisX->GetValue () / 2,
+                               pCenterY->GetValue () + pAxisY->GetValue () / 2);
 
-        mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
-    }
+    Activate();  // sets aObjKind
+    SdrCircObj* pNewCircle =
+    new SdrCircObj(
+        mpView->getSdrModelFromSdrView(),
+        static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier()),
+        aNewRectangle,
+        static_cast<long>(pPhiStart->GetValue () * 10.0),
+        static_cast<long>(pPhiEnd->GetValue () * 10.0));
+    SdrPageView *pPV = mpView->GetSdrPageView();
+
+    mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
 }
 
 bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )

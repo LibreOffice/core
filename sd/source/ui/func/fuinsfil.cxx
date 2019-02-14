@@ -412,124 +412,124 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     sal_uInt16 nRet = pDlg->Execute();
     mpDocSh->SetWaitCursor( true );
 
-    if( nRet == RET_OK )
+    if( nRet != RET_OK )
+        return;
+
+    // selected file format: text, RTF or HTML (default is text)
+    EETextFormat nFormat = EETextFormat::Text;
+
+    if( aFilterName.indexOf( "Rich") != -1 )
+        nFormat = EETextFormat::Rtf;
+    else if( aFilterName.indexOf( "HTML" ) != -1 )
+        nFormat = EETextFormat::Html;
+
+    /* create our own outline since:
+       - it is possible that the document outliner is actually used in the
+         structuring mode
+       - the draw outliner of the drawing engine has to draw something in
+         between
+       - the global outliner could be used in SdPage::CreatePresObj */
+    std::unique_ptr<SdrOutliner> pOutliner(new SdOutliner( mpDoc, OutlinerMode::TextObject ));
+
+    // set reference device
+    pOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+
+    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
+    aLayoutName = pPage->GetLayoutName();
+    sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
+    if( nIndex != -1 )
+        aLayoutName = aLayoutName.copy(0, nIndex);
+
+    pOutliner->SetPaperSize(pPage->GetSize());
+
+    SvStream* pStream = pMedium->GetInStream();
+    assert(pStream && "No InStream!");
+    pStream->Seek( 0 );
+
+    ErrCode nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
+
+    if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
     {
-        // selected file format: text, RTF or HTML (default is text)
-        EETextFormat nFormat = EETextFormat::Text;
-
-        if( aFilterName.indexOf( "Rich") != -1 )
-            nFormat = EETextFormat::Rtf;
-        else if( aFilterName.indexOf( "HTML" ) != -1 )
-            nFormat = EETextFormat::Html;
-
-        /* create our own outline since:
-           - it is possible that the document outliner is actually used in the
-             structuring mode
-           - the draw outliner of the drawing engine has to draw something in
-             between
-           - the global outliner could be used in SdPage::CreatePresObj */
-        std::unique_ptr<SdrOutliner> pOutliner(new SdOutliner( mpDoc, OutlinerMode::TextObject ));
-
-        // set reference device
-        pOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
-
-        SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-        aLayoutName = pPage->GetLayoutName();
-        sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
-        if( nIndex != -1 )
-            aLayoutName = aLayoutName.copy(0, nIndex);
-
-        pOutliner->SetPaperSize(pPage->GetSize());
-
-        SvStream* pStream = pMedium->GetInStream();
-        assert(pStream && "No InStream!");
-        pStream->Seek( 0 );
-
-        ErrCode nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
-
-        if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
+        xErrorBox->run();
+    }
+    else
+    {
+        // is it a master page?
+        if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EditMode::MasterPage &&
+            !pPage->IsMasterPage())
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
-                                                           VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
-            xErrorBox->run();
+            pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));
+        }
+
+        assert(pPage && "page not found");
+
+        // if editing is going on right now, let it flow into this text object
+        OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
+        if( pOutlinerView )
+        {
+            SdrObject* pObj = mpView->GetTextEditObject();
+            if( pObj &&
+                pObj->GetObjInventor()   == SdrInventor::Default &&
+                pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
+                pOutliner->GetParagraphCount() > 1 )
+            {
+                // in title objects, only one paragraph is allowed
+                while ( pOutliner->GetParagraphCount() > 1 )
+                {
+                    Paragraph* pPara = pOutliner->GetParagraph( 0 );
+                    sal_uLong nLen = pOutliner->GetText( pPara ).getLength();
+                    pOutliner->QuickDelete( ESelection( 0, nLen, 1, 0 ) );
+                    pOutliner->QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
+                }
+            }
+        }
+
+        std::unique_ptr<OutlinerParaObject> pOPO = pOutliner->CreateParaObject();
+
+        if (pOutlinerView)
+        {
+            pOutlinerView->InsertText(*pOPO);
         }
         else
         {
-            // is it a master page?
-            if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EditMode::MasterPage &&
-                !pPage->IsMasterPage())
+            SdrRectObj* pTO = new SdrRectObj(
+                mpView->getSdrModelFromSdrView(),
+                OBJ_TEXT);
+            pTO->SetOutlinerParaObject(std::move(pOPO));
+
+            const bool bUndo = mpView->IsUndoEnabled();
+            if( bUndo )
+                mpView->BegUndo(SdResId(STR_UNDO_INSERT_TEXTFRAME));
+            pPage->InsertObject(pTO);
+
+            /* can be bigger as the maximal allowed size:
+               limit object size if necessary */
+            Size aSize(pOutliner->CalcTextSize());
+            Size aMaxSize = mpDoc->GetMaxObjSize();
+            aSize.setHeight( std::min(aSize.Height(), aMaxSize.Height()) );
+            aSize.setWidth( std::min(aSize.Width(), aMaxSize.Width()) );
+            aSize = mpWindow->LogicToPixel(aSize);
+
+            // put it at the center of the window
+            Size aTemp(mpWindow->GetOutputSizePixel());
+            Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
+            aPos.AdjustX( -(aSize.Width() / 2) );
+            aPos.AdjustY( -(aSize.Height() / 2) );
+            aSize = mpWindow->PixelToLogic(aSize);
+            aPos = mpWindow->PixelToLogic(aPos);
+            pTO->SetLogicRect(::tools::Rectangle(aPos, aSize));
+
+            if (pDlg->IsLink())
             {
-                pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));
+                pTO->SetTextLink(aFile, aFilterName );
             }
 
-            assert(pPage && "page not found");
-
-            // if editing is going on right now, let it flow into this text object
-            OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
-            if( pOutlinerView )
+            if( bUndo )
             {
-                SdrObject* pObj = mpView->GetTextEditObject();
-                if( pObj &&
-                    pObj->GetObjInventor()   == SdrInventor::Default &&
-                    pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
-                    pOutliner->GetParagraphCount() > 1 )
-                {
-                    // in title objects, only one paragraph is allowed
-                    while ( pOutliner->GetParagraphCount() > 1 )
-                    {
-                        Paragraph* pPara = pOutliner->GetParagraph( 0 );
-                        sal_uLong nLen = pOutliner->GetText( pPara ).getLength();
-                        pOutliner->QuickDelete( ESelection( 0, nLen, 1, 0 ) );
-                        pOutliner->QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
-                    }
-                }
-            }
-
-            std::unique_ptr<OutlinerParaObject> pOPO = pOutliner->CreateParaObject();
-
-            if (pOutlinerView)
-            {
-                pOutlinerView->InsertText(*pOPO);
-            }
-            else
-            {
-                SdrRectObj* pTO = new SdrRectObj(
-                    mpView->getSdrModelFromSdrView(),
-                    OBJ_TEXT);
-                pTO->SetOutlinerParaObject(std::move(pOPO));
-
-                const bool bUndo = mpView->IsUndoEnabled();
-                if( bUndo )
-                    mpView->BegUndo(SdResId(STR_UNDO_INSERT_TEXTFRAME));
-                pPage->InsertObject(pTO);
-
-                /* can be bigger as the maximal allowed size:
-                   limit object size if necessary */
-                Size aSize(pOutliner->CalcTextSize());
-                Size aMaxSize = mpDoc->GetMaxObjSize();
-                aSize.setHeight( std::min(aSize.Height(), aMaxSize.Height()) );
-                aSize.setWidth( std::min(aSize.Width(), aMaxSize.Width()) );
-                aSize = mpWindow->LogicToPixel(aSize);
-
-                // put it at the center of the window
-                Size aTemp(mpWindow->GetOutputSizePixel());
-                Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
-                aPos.AdjustX( -(aSize.Width() / 2) );
-                aPos.AdjustY( -(aSize.Height() / 2) );
-                aSize = mpWindow->PixelToLogic(aSize);
-                aPos = mpWindow->PixelToLogic(aPos);
-                pTO->SetLogicRect(::tools::Rectangle(aPos, aSize));
-
-                if (pDlg->IsLink())
-                {
-                    pTO->SetTextLink(aFile, aFilterName );
-                }
-
-                if( bUndo )
-                {
-                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
-                    mpView->EndUndo();
-                }
+                mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
+                mpView->EndUndo();
             }
         }
     }

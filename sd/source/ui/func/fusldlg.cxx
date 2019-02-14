@@ -107,117 +107,117 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSdStartPresDlg> pDlg( pFact->CreateSdStartPresentationDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, aDlgSet, aPageNameList, pCustomShowList) );
-    if( pDlg->Execute() == RET_OK )
+    if( pDlg->Execute() != RET_OK )
+        return;
+
+    OUString aPage;
+    long    nValue32;
+    bool    bValue;
+    bool    bValuesChanged = false;
+
+    pDlg->GetAttr( aDlgSet );
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALL, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbAll )
     {
-        OUString aPage;
-        long    nValue32;
-        bool    bValue;
-        bool    bValuesChanged = false;
-
-        pDlg->GetAttr( aDlgSet );
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALL, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbAll )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbAll = bValue;
-            // remove any previous existing slide
-            rPresentationSettings.maPresPage.clear();
-        }
-
-        if (!rPresentationSettings.mbAll)
-        {
-            aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
-            if( aPage != rPresentationSettings.maPresPage )
-            {
-                bValuesChanged = true;
-                rPresentationSettings.maPresPage = aPage;
-            }
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_CUSTOMSHOW, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbCustomShow )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbCustomShow = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ENDLESS, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbEndless )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbEndless = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MANUEL, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbManual )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbManual = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MOUSE, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbMouseVisible )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbMouseVisible = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_PEN, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbMouseAsPen )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbMouseAsPen = bValue;
-        }
-
-        bValue = !ITEMVALUE( aDlgSet, ATTR_PRESENT_CHANGE_PAGE, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbLockedPages )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbLockedPages = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ANIMATION_ALLOWED, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbAnimationAllowed )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbAnimationAllowed = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALWAYS_ON_TOP, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbAlwaysOnTop )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbAlwaysOnTop = bValue;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_FULLSCREEN, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbFullScreen )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbFullScreen = bValue;
-        }
-
-        nValue32 = ITEMVALUE( aDlgSet, ATTR_PRESENT_PAUSE_TIMEOUT, SfxUInt32Item );
-        if( nValue32 != rPresentationSettings.mnPauseTimeout )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mnPauseTimeout = nValue32;
-        }
-
-        bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_SHOW_PAUSELOGO, SfxBoolItem );
-        if ( bValue != rPresentationSettings.mbShowPauseLogo )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.mbShowPauseLogo = bValue;
-        }
-
-        pOptions->SetDisplay( ITEMVALUE( aDlgSet, ATTR_PRESENT_DISPLAY, SfxInt32Item ) );
-
-        // is something has changed, we set the modified flag
-        if ( bValuesChanged )
-            mpDoc->SetChanged();
+        bValuesChanged = true;
+        rPresentationSettings.mbAll = bValue;
+        // remove any previous existing slide
+        rPresentationSettings.maPresPage.clear();
     }
+
+    if (!rPresentationSettings.mbAll)
+    {
+        aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
+        if( aPage != rPresentationSettings.maPresPage )
+        {
+            bValuesChanged = true;
+            rPresentationSettings.maPresPage = aPage;
+        }
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_CUSTOMSHOW, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbCustomShow )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbCustomShow = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ENDLESS, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbEndless )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbEndless = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MANUEL, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbManual )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbManual = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MOUSE, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbMouseVisible )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbMouseVisible = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_PEN, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbMouseAsPen )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbMouseAsPen = bValue;
+    }
+
+    bValue = !ITEMVALUE( aDlgSet, ATTR_PRESENT_CHANGE_PAGE, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbLockedPages )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbLockedPages = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ANIMATION_ALLOWED, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbAnimationAllowed )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbAnimationAllowed = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALWAYS_ON_TOP, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbAlwaysOnTop )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbAlwaysOnTop = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_FULLSCREEN, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbFullScreen )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbFullScreen = bValue;
+    }
+
+    nValue32 = ITEMVALUE( aDlgSet, ATTR_PRESENT_PAUSE_TIMEOUT, SfxUInt32Item );
+    if( nValue32 != rPresentationSettings.mnPauseTimeout )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mnPauseTimeout = nValue32;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_SHOW_PAUSELOGO, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbShowPauseLogo )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbShowPauseLogo = bValue;
+    }
+
+    pOptions->SetDisplay( ITEMVALUE( aDlgSet, ATTR_PRESENT_DISPLAY, SfxInt32Item ) );
+
+    // is something has changed, we set the modified flag
+    if ( bValuesChanged )
+        mpDoc->SetChanged();
 }
 
 } // end of namespace sd

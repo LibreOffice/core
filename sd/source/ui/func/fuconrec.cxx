@@ -613,7 +613,7 @@ static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& 
 
 void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj)
 {
-    if ( (rObj.GetObjIdentifier() == OBJ_EDGE &&
+    if ( !((rObj.GetObjIdentifier() == OBJ_EDGE &&
           nSlotId != SID_TOOL_CONNECTOR        &&
           nSlotId != SID_CONNECTOR_LINE        &&
           nSlotId != SID_CONNECTOR_LINES       &&
@@ -624,177 +624,177 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
           nSlotId == SID_LINE_ARROW_CIRCLE     ||
           nSlotId == SID_LINE_CIRCLE_ARROW     ||
           nSlotId == SID_LINE_ARROW_SQUARE     ||
-          nSlotId == SID_LINE_SQUARE_ARROW )
+          nSlotId == SID_LINE_SQUARE_ARROW) )
+        return;
+
+    // set attributes of line start and ends
+    SdrModel& rModel(rObj.getSdrModelFromSdrObject());
+
+    // arrowhead
+    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
+    if( !aArrow.count() )
     {
-        // set attributes of line start and ends
-        SdrModel& rModel(rObj.getSdrModelFromSdrObject());
+        ::basegfx::B2DPolygon aNewArrow;
+        aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+        aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+        aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+        aNewArrow.setClosed(true);
+        aArrow.append(aNewArrow);
+    }
 
-        // arrowhead
-        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
-        if( !aArrow.count() )
+    // Circles
+    ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
+    if( !aCircle.count() )
+    {
+        ::basegfx::B2DPolygon aNewCircle;
+        aNewCircle = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
+        aNewCircle.setClosed(true);
+        aCircle.append(aNewCircle);
+    }
+
+    // Square
+    ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
+    if( !aSquare.count() )
+    {
+        ::basegfx::B2DPolygon aNewSquare;
+        aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
+        aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
+        aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
+        aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
+        aNewSquare.setClosed(true);
+        aSquare.append(aNewSquare);
+    }
+
+    SfxItemSet aSet( mpDoc->GetPool() );
+    mpView->GetAttributes( aSet );
+
+    // #i3908# Here, the default Line Start/End width for arrow construction is
+    // set. To have the same value in all situations (construction) in i3908
+    // it was decided to change the default to 0.03 cm for all situations.
+    long nWidth = 300; // (1/100th mm)
+
+    // determine line width and calculate with it the line end width
+    if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+    {
+        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        if( nValue > 0 )
+            nWidth = nValue * 3;
+    }
+
+    switch (nSlotId)
+    {
+        case SID_CONNECTOR_ARROWS:
+        case SID_CONNECTOR_LINE_ARROWS:
+        case SID_CONNECTOR_LINES_ARROWS:
+        case SID_CONNECTOR_CURVE_ARROWS:
+        case SID_LINE_ARROWS:
         {
-            ::basegfx::B2DPolygon aNewArrow;
-            aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
-            aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
-            aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
-            aNewArrow.setClosed(true);
-            aArrow.append(aNewArrow);
+            // connector with arrow ends
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineEndWidthItem(nWidth));
         }
+        break;
 
-        // Circles
-        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
-        if( !aCircle.count() )
+        case SID_CONNECTOR_ARROW_START:
+        case SID_CONNECTOR_LINE_ARROW_START:
+        case SID_CONNECTOR_LINES_ARROW_START:
+        case SID_CONNECTOR_CURVE_ARROW_START:
+        case SID_LINE_ARROW_START:
+        case SID_LINE_ARROW_CIRCLE:
+        case SID_LINE_ARROW_SQUARE:
         {
-            ::basegfx::B2DPolygon aNewCircle;
-            aNewCircle = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
-            aNewCircle.setClosed(true);
-            aCircle.append(aNewCircle);
+            // connector with arrow start
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineStartWidthItem(nWidth));
         }
+        break;
 
-        // Square
-        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
-        if( !aSquare.count() )
+        case SID_CONNECTOR_ARROW_END:
+        case SID_CONNECTOR_LINE_ARROW_END:
+        case SID_CONNECTOR_LINES_ARROW_END:
+        case SID_CONNECTOR_CURVE_ARROW_END:
+        case SID_LINE_ARROW_END:
+        case SID_LINE_CIRCLE_ARROW:
+        case SID_LINE_SQUARE_ARROW:
         {
-            ::basegfx::B2DPolygon aNewSquare;
-            aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
-            aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
-            aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
-            aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
-            aNewSquare.setClosed(true);
-            aSquare.append(aNewSquare);
+            // connector with arrow end
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineEndWidthItem(nWidth));
         }
+        break;
 
-        SfxItemSet aSet( mpDoc->GetPool() );
-        mpView->GetAttributes( aSet );
-
-        // #i3908# Here, the default Line Start/End width for arrow construction is
-        // set. To have the same value in all situations (construction) in i3908
-        // it was decided to change the default to 0.03 cm for all situations.
-        long nWidth = 300; // (1/100th mm)
-
-        // determine line width and calculate with it the line end width
-        if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+        case SID_CONNECTOR_CIRCLES:
+        case SID_CONNECTOR_LINE_CIRCLES:
+        case SID_CONNECTOR_LINES_CIRCLES:
+        case SID_CONNECTOR_CURVE_CIRCLES:
         {
-            long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
-            if( nValue > 0 )
-                nWidth = nValue * 3;
+            // connector with circle ends
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineEndWidthItem(nWidth));
         }
+        break;
 
-        switch (nSlotId)
+        case SID_CONNECTOR_CIRCLE_START:
+        case SID_CONNECTOR_LINE_CIRCLE_START:
+        case SID_CONNECTOR_LINES_CIRCLE_START:
+        case SID_CONNECTOR_CURVE_CIRCLE_START:
         {
-            case SID_CONNECTOR_ARROWS:
-            case SID_CONNECTOR_LINE_ARROWS:
-            case SID_CONNECTOR_LINES_ARROWS:
-            case SID_CONNECTOR_CURVE_ARROWS:
-            case SID_LINE_ARROWS:
-            {
-                // connector with arrow ends
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
-
-            case SID_CONNECTOR_ARROW_START:
-            case SID_CONNECTOR_LINE_ARROW_START:
-            case SID_CONNECTOR_LINES_ARROW_START:
-            case SID_CONNECTOR_CURVE_ARROW_START:
-            case SID_LINE_ARROW_START:
-            case SID_LINE_ARROW_CIRCLE:
-            case SID_LINE_ARROW_SQUARE:
-            {
-                // connector with arrow start
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-            }
-            break;
-
-            case SID_CONNECTOR_ARROW_END:
-            case SID_CONNECTOR_LINE_ARROW_END:
-            case SID_CONNECTOR_LINES_ARROW_END:
-            case SID_CONNECTOR_CURVE_ARROW_END:
-            case SID_LINE_ARROW_END:
-            case SID_LINE_CIRCLE_ARROW:
-            case SID_LINE_SQUARE_ARROW:
-            {
-                // connector with arrow end
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
-
-            case SID_CONNECTOR_CIRCLES:
-            case SID_CONNECTOR_LINE_CIRCLES:
-            case SID_CONNECTOR_LINES_CIRCLES:
-            case SID_CONNECTOR_CURVE_CIRCLES:
-            {
-                // connector with circle ends
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
-
-            case SID_CONNECTOR_CIRCLE_START:
-            case SID_CONNECTOR_LINE_CIRCLE_START:
-            case SID_CONNECTOR_LINES_CIRCLE_START:
-            case SID_CONNECTOR_CURVE_CIRCLE_START:
-            {
-                // connector with circle start
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-            }
-            break;
-
-            case SID_CONNECTOR_CIRCLE_END:
-            case SID_CONNECTOR_LINE_CIRCLE_END:
-            case SID_CONNECTOR_LINES_CIRCLE_END:
-            case SID_CONNECTOR_CURVE_CIRCLE_END:
-            {
-                // connector with circle ends
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
+            // connector with circle start
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartWidthItem(nWidth));
         }
+        break;
 
-        // and again, for the still missing ends
-        switch (nSlotId)
+        case SID_CONNECTOR_CIRCLE_END:
+        case SID_CONNECTOR_LINE_CIRCLE_END:
+        case SID_CONNECTOR_LINES_CIRCLE_END:
+        case SID_CONNECTOR_CURVE_CIRCLE_END:
         {
-            case SID_LINE_ARROW_CIRCLE:
-            {
-                // circle end
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
-
-            case SID_LINE_CIRCLE_ARROW:
-            {
-                // circle start
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-            }
-            break;
-
-            case SID_LINE_ARROW_SQUARE:
-            {
-                // square end
-                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
-                rAttr.Put(XLineEndWidthItem(nWidth));
-            }
-            break;
-
-            case SID_LINE_SQUARE_ARROW:
-            {
-                // square start
-                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
-                rAttr.Put(XLineStartWidthItem(nWidth));
-            }
-            break;
+            // connector with circle ends
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineEndWidthItem(nWidth));
         }
+        break;
+    }
+
+    // and again, for the still missing ends
+    switch (nSlotId)
+    {
+        case SID_LINE_ARROW_CIRCLE:
+        {
+            // circle end
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineEndWidthItem(nWidth));
+        }
+        break;
+
+        case SID_LINE_CIRCLE_ARROW:
+        {
+            // circle start
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+        }
+        break;
+
+        case SID_LINE_ARROW_SQUARE:
+        {
+            // square end
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
+            rAttr.Put(XLineEndWidthItem(nWidth));
+        }
+        break;
+
+        case SID_LINE_SQUARE_ARROW:
+        {
+            // square start
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+        }
+        break;
     }
 }
 

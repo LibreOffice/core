@@ -567,30 +567,30 @@ void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
 void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
 {
     // Normal Textobject
-    if (mpDoc->GetDocumentType() == DocumentType::Impress)
-    {
-        if( nSlotId == SID_ATTR_CHAR )
-        {
-            // Impress text object (rescales to line height)
-            SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(makeSdrTextMinFrameHeightItem(0));
-            aSet.Put(makeSdrTextMaxFrameHeightItem(0));
-            aSet.Put(makeSdrTextAutoGrowHeightItem(true));
-            aSet.Put(makeSdrTextAutoGrowWidthItem(false));
-            pTxtObj->SetMergedItemSet(aSet);
-        }
-        else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-        {
-            SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(makeSdrTextMinFrameWidthItem(0));
-            aSet.Put(makeSdrTextMaxFrameWidthItem(0));
-            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
-            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
-            pTxtObj->SetMergedItemSet(aSet);
-        }
+    if (mpDoc->GetDocumentType() != DocumentType::Impress)
+        return;
 
-        pTxtObj->AdjustTextFrameWidthAndHeight();
+    if( nSlotId == SID_ATTR_CHAR )
+    {
+        // Impress text object (rescales to line height)
+        SfxItemSet aSet(mpViewShell->GetPool());
+        aSet.Put(makeSdrTextMinFrameHeightItem(0));
+        aSet.Put(makeSdrTextMaxFrameHeightItem(0));
+        aSet.Put(makeSdrTextAutoGrowHeightItem(true));
+        aSet.Put(makeSdrTextAutoGrowWidthItem(false));
+        pTxtObj->SetMergedItemSet(aSet);
     }
+    else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+    {
+        SfxItemSet aSet(mpViewShell->GetPool());
+        aSet.Put(makeSdrTextMinFrameWidthItem(0));
+        aSet.Put(makeSdrTextMaxFrameWidthItem(0));
+        aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+        pTxtObj->SetMergedItemSet(aSet);
+    }
+
+    pTxtObj->AdjustTextFrameWidthAndHeight();
 }
 
 bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
@@ -1145,39 +1145,39 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
  */
 void FuText::DeleteDefaultText()
 {
-    if ( mxTextObj.is() && mxTextObj->IsEmptyPresObj() )
-    {
-        SdPage* pPage = static_cast<SdPage*>( mxTextObj->getSdrPageFromSdrObject() );
+    if ( !(mxTextObj.is() && mxTextObj->IsEmptyPresObj()) )
+        return;
 
-        if (pPage)
-        {
-            PresObjKind ePresObjKind = pPage->GetPresObjKind(mxTextObj.get());
+    SdPage* pPage = static_cast<SdPage*>( mxTextObj->getSdrPageFromSdrObject() );
 
-            if ( (ePresObjKind == PRESOBJ_TITLE   ||
-                  ePresObjKind == PRESOBJ_OUTLINE ||
-                  ePresObjKind == PRESOBJ_NOTES   ||
-                  ePresObjKind == PRESOBJ_TEXT) &&
-                  !pPage->IsMasterPage() )
-            {
-                ::Outliner* pOutliner = mpView->GetTextEditOutliner();
-                SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
-                bool bIsUndoEnabled = pOutliner->IsUndoEnabled();
-                if( bIsUndoEnabled )
-                    pOutliner->EnableUndo(false);
+    if (!pPage)
+        return;
 
-                pOutliner->SetText( OUString(), pOutliner->GetParagraph( 0 ) );
+    PresObjKind ePresObjKind = pPage->GetPresObjKind(mxTextObj.get());
 
-                if( bIsUndoEnabled )
-                    pOutliner->EnableUndo(true);
+    if ( !((ePresObjKind == PRESOBJ_TITLE   ||
+          ePresObjKind == PRESOBJ_OUTLINE ||
+          ePresObjKind == PRESOBJ_NOTES   ||
+          ePresObjKind == PRESOBJ_TEXT) &&
+          !pPage->IsMasterPage()) )
+        return;
 
-                if (pSheet &&
-                    (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))
-                    pOutliner->SetStyleSheet(0, pSheet);
+    ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+    SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
+    bool bIsUndoEnabled = pOutliner->IsUndoEnabled();
+    if( bIsUndoEnabled )
+        pOutliner->EnableUndo(false);
 
-                mxTextObj->SetEmptyPresObj(true);
-            }
-        }
-    }
+    pOutliner->SetText( OUString(), pOutliner->GetParagraph( 0 ) );
+
+    if( bIsUndoEnabled )
+        pOutliner->EnableUndo(true);
+
+    if (pSheet &&
+        (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))
+        pOutliner->SetStyleSheet(0, pSheet);
+
+    mxTextObj->SetEmptyPresObj(true);
 }
 
 bool FuText::RequestHelp(const HelpEvent& rHEvt)
@@ -1232,65 +1232,65 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
     // then we call the base class (besides others, nSlotId is NOT set there)
     FuPoor::ReceiveRequest(rReq);
 
-    if (nSlotId == SID_TEXTEDIT || mpViewShell->GetFrameView()->IsQuickEdit() || SID_ATTR_CHAR == nSlotId)
+    if (!(nSlotId == SID_TEXTEDIT || mpViewShell->GetFrameView()->IsQuickEdit() || SID_ATTR_CHAR == nSlotId))
+        return;
+
+    MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
+
+    mxTextObj.reset(nullptr);
+
+    if (nSlotId == SID_TEXTEDIT)
     {
-        MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
+        // are we currently editing?
+        if(!bTestText)
+            mxTextObj.reset( mpView->GetTextEditObject() );
 
-        mxTextObj.reset(nullptr);
-
-        if (nSlotId == SID_TEXTEDIT)
+        if (!mxTextObj.is())
         {
-            // are we currently editing?
-            if(!bTestText)
-                mxTextObj.reset( mpView->GetTextEditObject() );
+            // Try to select an object
+            SdrPageView* pPV = mpView->GetSdrPageView();
+            SdrViewEvent aVEvt;
+            mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
+            mpView->MarkObj(aVEvt.pRootObj, pPV);
 
-            if (!mxTextObj.is())
+            if (auto pSdrTextObj = dynamic_cast< SdrTextObj *>( aVEvt.pObj ))
             {
-                // Try to select an object
-                SdrPageView* pPV = mpView->GetSdrPageView();
-                SdrViewEvent aVEvt;
-                mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-                mpView->MarkObj(aVEvt.pRootObj, pPV);
-
-                if (auto pSdrTextObj = dynamic_cast< SdrTextObj *>( aVEvt.pObj ))
-                {
-                    mxTextObj.reset( pSdrTextObj );
-                }
+                mxTextObj.reset( pSdrTextObj );
             }
         }
-        else if (mpView->AreObjectsMarked())
-        {
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-            if (rMarkList.GetMarkCount() == 1)
-            {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-                if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
-                {
-                    mxTextObj.reset( static_cast< SdrTextObj* >( pObj ) );
-                }
-            }
-        }
-
-        bool bQuickDrag = true;
-
-        const SfxItemSet* pArgs = rReq.GetArgs();
-
-        if (pArgs
-
-            // test for type before using
-            && SID_TEXTEDIT == nSlotId
-            && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
-
-            && static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
-        {
-            // selection with double click -> do not allow QuickDrag
-            bQuickDrag = false;
-        }
-
-        SetInEditMode(aMEvt, bQuickDrag);
     }
+    else if (mpView->AreObjectsMarked())
+    {
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+            if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
+            {
+                mxTextObj.reset( static_cast< SdrTextObj* >( pObj ) );
+            }
+        }
+    }
+
+    bool bQuickDrag = true;
+
+    const SfxItemSet* pArgs = rReq.GetArgs();
+
+    if (pArgs
+
+        // test for type before using
+        && SID_TEXTEDIT == nSlotId
+        && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
+
+        && static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+    {
+        // selection with double click -> do not allow QuickDrag
+        bQuickDrag = false;
+    }
+
+    SetInEditMode(aMEvt, bQuickDrag);
 }
 
 void FuText::DoubleClick(const MouseEvent& )
