@@ -371,7 +371,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                 ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
                 OSL_ENSURE( aSeries.size() >= 3, "TypeGroupConverter::convertFromModel - too few stock chart series" );
                 int nRoleIdx = (aSeries.size() == 3) ? 1 : 0;
-                for( SeriesConvVector::iterator aIt = aSeries.begin(), aEnd = aSeries.end(); (nRoleIdx < 4) && (aIt != aEnd); ++nRoleIdx, ++aIt )
+                for( auto& rxSeriesConv : aSeries )
                 {
                     // create a data sequence with a specific role
                     OUString aRole;
@@ -382,9 +382,13 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                         case 2: aRole = "values-min";    break;
                         case 3: aRole = "values-last";   break;
                     }
-                    Reference< XLabeledDataSequence > xDataSeq = (*aIt)->createValueSequence( aRole );
+                    Reference< XLabeledDataSequence > xDataSeq = rxSeriesConv->createValueSequence( aRole );
                     if( xDataSeq.is() )
                         aLabeledSeqVec.push_back( xDataSeq );
+
+                    ++nRoleIdx;
+                    if (nRoleIdx >= 4)
+                        break;
                 }
 
                 // attach labeled data sequences to series and insert series into chart type

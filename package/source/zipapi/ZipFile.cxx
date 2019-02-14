@@ -1086,18 +1086,18 @@ void ZipFile::recover()
                     nCompressedSize = nCompressedSize32;
                     nSize = nSize32;
 
-                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); ++aIter )
+                    for( auto& rEntry : aEntries )
                     {
-                        ZipEntry aTmp = (*aIter).second;
+                        ZipEntry aTmp = rEntry.second;
 
                         // this is a broken package, accept this block not only for DEFLATED streams
-                        if( (*aIter).second.nFlag & 8 )
+                        if( rEntry.second.nFlag & 8 )
                         {
                             sal_Int64 nStreamOffset = nGenPos + nPos - nCompressedSize;
-                            if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
+                            if ( nStreamOffset == rEntry.second.nOffset && nCompressedSize > rEntry.second.nCompressedSize )
                             {
                                 // only DEFLATED blocks need to be checked
-                                bool bAcceptBlock = ( (*aIter).second.nMethod == STORED && nCompressedSize == nSize );
+                                bool bAcceptBlock = ( rEntry.second.nMethod == STORED && nCompressedSize == nSize );
 
                                 if ( !bAcceptBlock )
                                 {
@@ -1109,19 +1109,19 @@ void ZipFile::recover()
 
                                 if ( bAcceptBlock )
                                 {
-                                    (*aIter).second.nCrc = nCRC32;
-                                    (*aIter).second.nCompressedSize = nCompressedSize;
-                                    (*aIter).second.nSize = nSize;
+                                    rEntry.second.nCrc = nCRC32;
+                                    rEntry.second.nCompressedSize = nCompressedSize;
+                                    rEntry.second.nSize = nSize;
                                 }
                             }
 #if 0
 // for now ignore clearly broken streams
-                            else if( !(*aIter).second.nCompressedSize )
+                            else if( !rEntry.second.nCompressedSize )
                             {
-                                (*aIter).second.nCrc = nCRC32;
-                                sal_Int32 nRealStreamSize = nGenPos + nPos - (*aIter).second.nOffset;
-                                (*aIter).second.nCompressedSize = nGenPos + nPos - (*aIter).second.nOffset;
-                                (*aIter).second.nSize = nSize;
+                                rEntry.second.nCrc = nCRC32;
+                                sal_Int32 nRealStreamSize = nGenPos + nPos - rEntry.second.nOffset;
+                                rEntry.second.nCompressedSize = nRealStreamSize;
+                                rEntry.second.nSize = nSize;
                             }
 #endif
                         }
