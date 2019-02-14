@@ -264,24 +264,24 @@ void MasterPageContainer::AcquireToken (Token aToken)
 void MasterPageContainer::ReleaseToken (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
-    {
-        OSL_ASSERT(pDescriptor->mnUseCount>0);
-        --pDescriptor->mnUseCount;
-        if (pDescriptor->mnUseCount <= 0)
-        {
-            switch (pDescriptor->meOrigin)
-            {
-                case DEFAULT:
-                case TEMPLATE:
-                default:
-                    break;
+    if (pDescriptor.get() == nullptr)
+        return;
 
-                case MASTERPAGE:
-                    mpImpl->ReleaseDescriptor(aToken);
-                    break;
-            }
-        }
+    OSL_ASSERT(pDescriptor->mnUseCount>0);
+    --pDescriptor->mnUseCount;
+    if (pDescriptor->mnUseCount > 0)
+        return;
+
+    switch (pDescriptor->meOrigin)
+    {
+        case DEFAULT:
+        case TEMPLATE:
+        default:
+            break;
+
+        case MASTERPAGE:
+            mpImpl->ReleaseDescriptor(aToken);
+            break;
     }
 }
 
@@ -522,21 +522,21 @@ void MasterPageContainer::Implementation::LateInit()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (meInitializationState == NOT_INITIALIZED)
-    {
-        meInitializationState = INITIALIZING;
+    if (meInitializationState != NOT_INITIALIZED)
+        return;
 
-        OSL_ASSERT(Instance().get()==this);
-        mpRequestQueue.reset(MasterPageContainerQueue::Create(
-            std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
+    meInitializationState = INITIALIZING;
 
-        mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
-            std::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
-            5,
-            50);
+    OSL_ASSERT(Instance().get()==this);
+    mpRequestQueue.reset(MasterPageContainerQueue::Create(
+        std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
-        meInitializationState = INITIALIZED;
-    }
+    mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
+        std::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
+        5,
+        50);
+
+    meInitializationState = INITIALIZED;
 }
 
 void MasterPageContainer::Implementation::AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)

@@ -186,24 +186,24 @@ void MasterPageObserver::Implementation::AddEventListener (
     if (::std::find (
         maListeners.begin(),
         maListeners.end(),
-        rEventListener) == maListeners.end())
-    {
-        maListeners.push_back (rEventListener);
+        rEventListener) != maListeners.end())
+        return;
 
-        // Tell the new listener about all the master pages that are
-        // currently in use.
-        for (const auto& rDocument : maUsedMasterPages)
+    maListeners.push_back (rEventListener);
+
+    // Tell the new listener about all the master pages that are
+    // currently in use.
+    for (const auto& rDocument : maUsedMasterPages)
+    {
+        ::std::set<OUString>::reverse_iterator aNameIterator;
+        for (aNameIterator=rDocument.second.rbegin();
+             aNameIterator!=rDocument.second.rend();
+             ++aNameIterator)
         {
-            ::std::set<OUString>::reverse_iterator aNameIterator;
-            for (aNameIterator=rDocument.second.rbegin();
-                 aNameIterator!=rDocument.second.rend();
-                 ++aNameIterator)
-            {
-              MasterPageObserverEvent aEvent (
-                  MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS,
-                  *aNameIterator);
-              SendEvent (aEvent);
-            }
+          MasterPageObserverEvent aEvent (
+              MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS,
+              *aNameIterator);
+          SendEvent (aEvent);
         }
     }
 }
@@ -223,31 +223,31 @@ void MasterPageObserver::Implementation::Notify(
     const SfxHint& rHint)
 {
     const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
-    {
-        switch (pSdrHint->GetKind())
-        {
-            case SdrHintKind::PageOrderChange:
-                // Process the modified set of pages only when the number of
-                // standard and notes master pages are equal.  This test
-                // filters out events that are sent in between the insertion
-                // of a new standard master page and a new notes master
-                // page.
-                if (dynamic_cast< const SdDrawDocument *>( &rBroadcaster ) !=  nullptr)
-                {
-                    SdDrawDocument& rDocument (
-                        static_cast<SdDrawDocument&>(rBroadcaster));
-                    if (rDocument.GetMasterSdPageCount(PageKind::Standard)
-                        == rDocument.GetMasterSdPageCount(PageKind::Notes))
-                    {
-                        AnalyzeUsedMasterPages (rDocument);
-                    }
-                }
-                break;
+    if (!pSdrHint)
+        return;
 
-            default:
-                break;
-        }
+    switch (pSdrHint->GetKind())
+    {
+        case SdrHintKind::PageOrderChange:
+            // Process the modified set of pages only when the number of
+            // standard and notes master pages are equal.  This test
+            // filters out events that are sent in between the insertion
+            // of a new standard master page and a new notes master
+            // page.
+            if (dynamic_cast< const SdDrawDocument *>( &rBroadcaster ) !=  nullptr)
+            {
+                SdDrawDocument& rDocument (
+                    static_cast<SdDrawDocument&>(rBroadcaster));
+                if (rDocument.GetMasterSdPageCount(PageKind::Standard)
+                    == rDocument.GetMasterSdPageCount(PageKind::Notes))
+                {
+                    AnalyzeUsedMasterPages (rDocument);
+                }
+            }
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -268,41 +268,41 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     std::vector<OUString> aRemovedMasterPages;
     MasterPageContainer::iterator aOldMasterPagesDescriptor (
         maUsedMasterPages.find(&rDocument));
-    if (aOldMasterPagesDescriptor != maUsedMasterPages.end())
+    if (aOldMasterPagesDescriptor == maUsedMasterPages.end())
+        return;
+
+    // Send events about the newly used master pages.
+    ::std::set_difference (
+        aCurrentMasterPages.begin(),
+        aCurrentMasterPages.end(),
+        aOldMasterPagesDescriptor->second.begin(),
+        aOldMasterPagesDescriptor->second.end(),
+        std::back_inserter(aNewMasterPages));
+    for (auto& aNewMasterPage : aNewMasterPages)
     {
-        // Send events about the newly used master pages.
-        ::std::set_difference (
-            aCurrentMasterPages.begin(),
-            aCurrentMasterPages.end(),
-            aOldMasterPagesDescriptor->second.begin(),
-            aOldMasterPagesDescriptor->second.end(),
-            std::back_inserter(aNewMasterPages));
-        for (auto& aNewMasterPage : aNewMasterPages)
-        {
-            MasterPageObserverEvent aEvent (
-                MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
-                aNewMasterPage);
-            SendEvent (aEvent);
-        }
-
-        // Send events about master pages that are not used any longer.
-        ::std::set_difference (
-            aOldMasterPagesDescriptor->second.begin(),
-            aOldMasterPagesDescriptor->second.end(),
-            aCurrentMasterPages.begin(),
-            aCurrentMasterPages.end(),
-            std::back_inserter(aRemovedMasterPages));
-        for (auto& aRemovedMasterPage : aRemovedMasterPages)
-        {
-            MasterPageObserverEvent aEvent (
-                MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
-                aRemovedMasterPage);
-            SendEvent (aEvent);
-        }
-
-        // Store the new list of master pages.
-        aOldMasterPagesDescriptor->second = aCurrentMasterPages;
+        MasterPageObserverEvent aEvent (
+            MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
+            aNewMasterPage);
+        SendEvent (aEvent);
     }
+
+    // Send events about master pages that are not used any longer.
+    ::std::set_difference (
+        aOldMasterPagesDescriptor->second.begin(),
+        aOldMasterPagesDescriptor->second.end(),
+        aCurrentMasterPages.begin(),
+        aCurrentMasterPages.end(),
+        std::back_inserter(aRemovedMasterPages));
+    for (auto& aRemovedMasterPage : aRemovedMasterPages)
+    {
+        MasterPageObserverEvent aEvent (
+            MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
+            aRemovedMasterPage);
+        SendEvent (aEvent);
+    }
+
+    // Store the new list of master pages.
+    aOldMasterPagesDescriptor->second = aCurrentMasterPages;
 }
 
 void MasterPageObserver::Implementation::SendEvent (
