@@ -1190,35 +1190,35 @@ Reference< XShape > const & Shape::createAndInsert(
             if( aShapeProps.hasProperty( PROP_FillGradient ) )
             {
                 std::vector<beans::PropertyValue> aGradientStops;
-                auto aIt = aFillProperties.maGradientProps.maGradientStops.begin();
-                for( size_t i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
+                size_t i = 0;
+                for( const auto& [rPos, rColor] : aFillProperties.maGradientProps.maGradientStops )
                 { // for each stop in the gradient definition:
 
                     // save position
                     std::vector<beans::PropertyValue> aGradientStop;
-                    aGradientStop.push_back(comphelper::makePropertyValue("Pos", aIt->first));
+                    aGradientStop.push_back(comphelper::makePropertyValue("Pos", rPos));
 
-                    OUString sStopColorScheme = aIt->second.getSchemeName();
+                    OUString sStopColorScheme = rColor.getSchemeName();
                     if( sStopColorScheme.isEmpty() )
                     {
                         // save RGB color
-                        aGradientStop.push_back(comphelper::makePropertyValue("RgbClr", aIt->second.getColor(rGraphicHelper, nFillPhClr)));
+                        aGradientStop.push_back(comphelper::makePropertyValue("RgbClr", rColor.getColor(rGraphicHelper, nFillPhClr)));
                         // in the case of a RGB color, transformations are already applied to
                         // the color with the exception of alpha transformations. We only need
                         // to keep the transparency value to calculate the alpha value later.
-                        if( aIt->second.hasTransparency() )
-                            aGradientStop.push_back(comphelper::makePropertyValue("Transparency", aIt->second.getTransparency()));
+                        if( rColor.hasTransparency() )
+                            aGradientStop.push_back(comphelper::makePropertyValue("Transparency", rColor.getTransparency()));
                     }
                     else
                     {
                         // save color with scheme name
                         aGradientStop.push_back(comphelper::makePropertyValue("SchemeClr", sStopColorScheme));
                         // save all color transformations
-                        aGradientStop.push_back(comphelper::makePropertyValue("Transformations", aIt->second.getTransformations()));
+                        aGradientStop.push_back(comphelper::makePropertyValue("Transformations", rColor.getTransformations()));
                     }
 
                     aGradientStops.push_back(comphelper::makePropertyValue(OUString::number(i), comphelper::containerToSequence(aGradientStop)));
-                    ++aIt;
+                    ++i;
                 }
                 // If getFillProperties.moFillType is unused that means gradient is defined by a theme
                 // which is already saved into StyleFillRef property, so no need to save the explicit values too
