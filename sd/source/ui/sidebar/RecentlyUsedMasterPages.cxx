@@ -320,35 +320,34 @@ void RecentlyUsedMasterPages::AddMasterPage (
     // For the page to be inserted the token has to be valid and the page
     // has to have a valid URL.  This excludes master pages that do not come
     // from template files.
-    if (aToken != MasterPageContainer::NIL_TOKEN
-        && !mpContainer->GetURLForToken(aToken).isEmpty())
+    if (aToken == MasterPageContainer::NIL_TOKEN
+        || mpContainer->GetURLForToken(aToken).isEmpty())
+        return;
+
+    MasterPageList::iterator aIterator (
+        ::std::find_if(mvMasterPages.begin(),mvMasterPages.end(),
+            Descriptor::TokenComparator(aToken)));
+    if (aIterator != mvMasterPages.end())
     {
-
-        MasterPageList::iterator aIterator (
-            ::std::find_if(mvMasterPages.begin(),mvMasterPages.end(),
-                Descriptor::TokenComparator(aToken)));
-        if (aIterator != mvMasterPages.end())
-        {
-            // When an entry for the given token already exists then remove
-            // it now and insert it later at the head of the list.
-            mvMasterPages.erase (aIterator);
-        }
-
-        mvMasterPages.insert(mvMasterPages.begin(),
-            Descriptor(
-                aToken,
-                mpContainer->GetURLForToken(aToken),
-                mpContainer->GetStyleNameForToken(aToken)));
-
-        // Shorten list to maximal size.
-        while (mvMasterPages.size() > gnMaxListSize)
-        {
-            mvMasterPages.pop_back ();
-        }
-
-        SavePersistentValues ();
-        SendEvent();
+        // When an entry for the given token already exists then remove
+        // it now and insert it later at the head of the list.
+        mvMasterPages.erase (aIterator);
     }
+
+    mvMasterPages.insert(mvMasterPages.begin(),
+        Descriptor(
+            aToken,
+            mpContainer->GetURLForToken(aToken),
+            mpContainer->GetStyleNameForToken(aToken)));
+
+    // Shorten list to maximal size.
+    while (mvMasterPages.size() > gnMaxListSize)
+    {
+        mvMasterPages.pop_back ();
+    }
+
+    SavePersistentValues ();
+    SendEvent();
 }
 
 void RecentlyUsedMasterPages::ResolveList()
