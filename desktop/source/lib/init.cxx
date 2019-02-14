@@ -4629,7 +4629,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     return bInitialized;
 }
 
-SAL_DLLPUBLIC_EXPORT
+SAL_JNI_EXPORT
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
 {
     if (!gImpl)
@@ -4645,7 +4645,7 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
     return static_cast<LibreOfficeKit*>(gImpl);
 }
 
-SAL_DLLPUBLIC_EXPORT
+SAL_JNI_EXPORT
 LibreOfficeKit *libreofficekit_hook(const char* install_path)
 {
     return libreofficekit_hook_2(install_path, nullptr);
