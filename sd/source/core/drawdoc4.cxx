@@ -591,7 +591,10 @@ static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rN
 
 static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFamily, const OUString& rName, const Any& rBody, const Any& rHeading, const Any& rBanding )
 {
-    if( xTableFamily.is() ) try
+    if( !xTableFamily.is() )
+        return;
+
+    try
     {
         if( !xTableFamily->hasByName( rName ) )
         {
@@ -810,44 +813,44 @@ void SdDrawDocument::StopOnlineSpelling()
 // Start OnlineSpelling in the background
 void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 {
-    if (mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
-        mpDocSh && !mpDocSh->IsReadOnly() )
+    if (!(mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
+        mpDocSh && !mpDocSh->IsReadOnly()) )
+        return;
+
+    StopOnlineSpelling();
+
+    SdOutliner* pOutl = GetInternalOutliner();
+
+    Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+    if ( xSpellChecker.is() )
+        pOutl->SetSpeller( xSpellChecker );
+
+    Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+    if( xHyphenator.is() )
+        pOutl->SetHyphenator( xHyphenator );
+
+    pOutl->SetDefaultLanguage( meLanguage );
+
+    mpOnlineSpellingList.reset(new ShapeList);
+    sal_uInt16 nPage;
+
+    for ( nPage = 0; nPage < GetPageCount(); nPage++ )
     {
-        StopOnlineSpelling();
-
-        SdOutliner* pOutl = GetInternalOutliner();
-
-        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
-        if ( xSpellChecker.is() )
-            pOutl->SetSpeller( xSpellChecker );
-
-        Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
-        if( xHyphenator.is() )
-            pOutl->SetHyphenator( xHyphenator );
-
-        pOutl->SetDefaultLanguage( meLanguage );
-
-        mpOnlineSpellingList.reset(new ShapeList);
-        sal_uInt16 nPage;
-
-        for ( nPage = 0; nPage < GetPageCount(); nPage++ )
-        {
-            // Search in all pages
-            FillOnlineSpellingList(static_cast<SdPage*>(GetPage(nPage)));
-        }
-
-        for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
-        {
-            // Search all master pages
-            FillOnlineSpellingList(static_cast<SdPage*>( GetMasterPage(nPage) ));
-        }
-
-        mpOnlineSpellingList->seekShape(0);
-        mpOnlineSpellingIdle.reset(new Idle("OnlineSpelling"));
-        mpOnlineSpellingIdle->SetInvokeHandler( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
-        mpOnlineSpellingIdle->SetPriority(TaskPriority::LOWEST);
-        mpOnlineSpellingIdle->Start();
+        // Search in all pages
+        FillOnlineSpellingList(static_cast<SdPage*>(GetPage(nPage)));
     }
+
+    for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
+    {
+        // Search all master pages
+        FillOnlineSpellingList(static_cast<SdPage*>( GetMasterPage(nPage) ));
+    }
+
+    mpOnlineSpellingList->seekShape(0);
+    mpOnlineSpellingIdle.reset(new Idle("OnlineSpelling"));
+    mpOnlineSpellingIdle->SetInvokeHandler( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
+    mpOnlineSpellingIdle->SetPriority(TaskPriority::LOWEST);
+    mpOnlineSpellingIdle->Start();
 }
 
 // Fill OnlineSpelling list
@@ -944,54 +947,54 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
 // Spell object (for OnlineSpelling)
 void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 {
-    if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
+    if (!(pObj && pObj->GetOutlinerParaObject()) /* && pObj != pView->GetTextEditObject() */)
+        return;
+
+    mbHasOnlineSpellErrors = false;
+    SdOutliner* pOutl = GetInternalOutliner();
+    pOutl->SetUpdateMode(true);
+    Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
+    pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
+
+    OutlinerMode nOldOutlMode = pOutl->GetMode();
+    OutlinerMode nOutlMode = OutlinerMode::TextObject;
+    if (pObj->GetObjInventor() == SdrInventor::Default &&
+        pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
     {
-        mbHasOnlineSpellErrors = false;
-        SdOutliner* pOutl = GetInternalOutliner();
-        pOutl->SetUpdateMode(true);
-        Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
-        pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
+        nOutlMode = OutlinerMode::OutlineObject;
+    }
+    pOutl->Init( nOutlMode );
 
-        OutlinerMode nOldOutlMode = pOutl->GetMode();
-        OutlinerMode nOutlMode = OutlinerMode::TextObject;
-        if (pObj->GetObjInventor() == SdrInventor::Default &&
-            pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+    // Put text into the outliner
+    pOutl->SetText(*pObj->GetOutlinerParaObject());
+
+    if (!mpOnlineSearchItem || pOutl->HasText(*mpOnlineSearchItem))
+    {
+        // Spelling
+        pOutl->CompleteOnlineSpelling();
+
+        if (mbHasOnlineSpellErrors)
         {
-            nOutlMode = OutlinerMode::OutlineObject;
-        }
-        pOutl->Init( nOutlMode );
-
-        // Put text into the outliner
-        pOutl->SetText(*pObj->GetOutlinerParaObject());
-
-        if (!mpOnlineSearchItem || pOutl->HasText(*mpOnlineSearchItem))
-        {
-            // Spelling
-            pOutl->CompleteOnlineSpelling();
-
-            if (mbHasOnlineSpellErrors)
+            std::unique_ptr<OutlinerParaObject> pOPO = pOutl->CreateParaObject();
+            if (pOPO)
             {
-                std::unique_ptr<OutlinerParaObject> pOPO = pOutl->CreateParaObject();
-                if (pOPO)
+                if (!( *pOPO == *pObj->GetOutlinerParaObject() ) ||
+                     !pObj->GetOutlinerParaObject()->isWrongListEqual( *pOPO ))
                 {
-                    if (!( *pOPO == *pObj->GetOutlinerParaObject() ) ||
-                         !pObj->GetOutlinerParaObject()->isWrongListEqual( *pOPO ))
-                    {
-                        sd::ModifyGuard aGuard( this );
+                    sd::ModifyGuard aGuard( this );
 
-                        // taking text from the outliner
-                        // use non-broadcasting version to avoid O(n^2)
-                        pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
-                    }
+                    // taking text from the outliner
+                    // use non-broadcasting version to avoid O(n^2)
+                    pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
                 }
             }
         }
-
-        pOutl->SetStatusEventHdl(aEvtHdl);
-        pOutl->SetUpdateMode(false);
-        pOutl->Init( nOldOutlMode );
-        mbHasOnlineSpellErrors = false;
     }
+
+    pOutl->SetStatusEventHdl(aEvtHdl);
+    pOutl->SetUpdateMode(false);
+    pOutl->Init( nOldOutlMode );
+    mbHasOnlineSpellErrors = false;
 }
 
 // Object was inserted into model
@@ -1282,30 +1285,29 @@ css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 
 void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
 {
-    if( pItemPool )
+    if( !pItemPool )
+        return;
+
+    SvxFrameDirection nVal;
+    switch( eMode )
     {
-        SvxFrameDirection nVal;
-        switch( eMode )
-        {
-        case css::text::WritingMode_LR_TB: nVal = SvxFrameDirection::Horizontal_LR_TB; break;
-        case css::text::WritingMode_RL_TB: nVal = SvxFrameDirection::Horizontal_RL_TB; break;
-        case css::text::WritingMode_TB_RL: nVal = SvxFrameDirection::Vertical_RL_TB; break;
-        default:
-            OSL_FAIL( "Frame direction not supported yet" );
-            return;
-        }
-
-        SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
-        pItemPool->SetPoolDefaultItem( aModeItem );
-
-        SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );
-
-        if( eMode == css::text::WritingMode_RL_TB )
-            aAdjust.SetAdjust( SvxAdjust::Right );
-
-        pItemPool->SetPoolDefaultItem( aAdjust );
-
+    case css::text::WritingMode_LR_TB: nVal = SvxFrameDirection::Horizontal_LR_TB; break;
+    case css::text::WritingMode_RL_TB: nVal = SvxFrameDirection::Horizontal_RL_TB; break;
+    case css::text::WritingMode_TB_RL: nVal = SvxFrameDirection::Vertical_RL_TB; break;
+    default:
+        OSL_FAIL( "Frame direction not supported yet" );
+        return;
     }
+
+    SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
+    pItemPool->SetPoolDefaultItem( aModeItem );
+
+    SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );
+
+    if( eMode == css::text::WritingMode_RL_TB )
+        aAdjust.SetAdjust( SvxAdjust::Right );
+
+    pItemPool->SetPoolDefaultItem( aAdjust );
 }
 
 void SdDrawDocument::getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )

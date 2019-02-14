@@ -120,17 +120,17 @@ struct UndoAnimationPathImpl
         : mpPage( pThePage )
         , mnEffectOffset( -1 )
     {
-        if( mpPage && xNode.is() )
+        if( !(mpPage && xNode.is()) )
+            return;
+
+        std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+        if( pMainSequence.get() )
         {
-            std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
-            if( pMainSequence.get() )
+            CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
+            if( pEffect.get() )
             {
-                CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
-                if( pEffect.get() )
-                {
-                    mnEffectOffset = pMainSequence->getOffsetFromEffect( pEffect );
-                    msUndoPath = pEffect->getPath();
-                }
+                mnEffectOffset = pMainSequence->getOffsetFromEffect( pEffect );
+                msUndoPath = pEffect->getPath();
             }
         }
     }

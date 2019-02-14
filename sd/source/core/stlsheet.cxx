@@ -512,44 +512,44 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
         aStyleName = pRealStyle->GetName();
     }
 
-    if (eFamily == SfxStyleFamily::Page &&
-        aStyleName.indexOf(STR_LAYOUT_OUTLINE) != -1 &&
-        rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
+    if (!(eFamily == SfxStyleFamily::Page &&
+          aStyleName.indexOf(STR_LAYOUT_OUTLINE) != -1 &&
+          rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET))
+        return;
+
+    const SfxItemSet* pCurSet = &GetItemSet();
+    sal_uInt32 nNewHeight = rSet.Get(EE_CHAR_FONTHEIGHT).GetHeight();
+    sal_uInt32 nOldHeight = pCurSet->Get(EE_CHAR_FONTHEIGHT).GetHeight();
+
+    if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
     {
-        const SfxItemSet* pCurSet = &GetItemSet();
-        sal_uInt32 nNewHeight = rSet.Get(EE_CHAR_FONTHEIGHT).GetHeight();
-        sal_uInt32 nOldHeight = pCurSet->Get(EE_CHAR_FONTHEIGHT).GetHeight();
+        const SvxBulletItem& rBItem = pCurSet->Get(EE_PARA_BULLET);
+        double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
+        SvxBulletItem aNewBItem(rBItem);
+        aNewBItem.SetWidth(static_cast<sal_uInt32>(fBulletFraction * nNewHeight));
+        rSet.Put(aNewBItem);
+    }
 
-        if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
-        {
-            const SvxBulletItem& rBItem = pCurSet->Get(EE_PARA_BULLET);
-            double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
-            SvxBulletItem aNewBItem(rBItem);
-            aNewBItem.SetWidth(static_cast<sal_uInt32>(fBulletFraction * nNewHeight));
-            rSet.Put(aNewBItem);
-        }
+    if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
+    {
+        const SvxLRSpaceItem& rLRItem = pCurSet->Get(EE_PARA_LRSPACE);
+        double fIndentFraction = double(rLRItem.GetTextLeft()) / nOldHeight;
+        SvxLRSpaceItem aNewLRItem(rLRItem);
+        aNewLRItem.SetTextLeft(fIndentFraction * nNewHeight);
+        double fFirstIndentFraction = double(rLRItem.GetTextFirstLineOfst()) / nOldHeight;
+        aNewLRItem.SetTextFirstLineOfst(static_cast<short>(fFirstIndentFraction * nNewHeight));
+        rSet.Put(aNewLRItem);
+    }
 
-        if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
-        {
-            const SvxLRSpaceItem& rLRItem = pCurSet->Get(EE_PARA_LRSPACE);
-            double fIndentFraction = double(rLRItem.GetTextLeft()) / nOldHeight;
-            SvxLRSpaceItem aNewLRItem(rLRItem);
-            aNewLRItem.SetTextLeft(fIndentFraction * nNewHeight);
-            double fFirstIndentFraction = double(rLRItem.GetTextFirstLineOfst()) / nOldHeight;
-            aNewLRItem.SetTextFirstLineOfst(static_cast<short>(fFirstIndentFraction * nNewHeight));
-            rSet.Put(aNewLRItem);
-        }
-
-        if (rSet.GetItemState(EE_PARA_ULSPACE) != SfxItemState::SET || !bOnlyMissingItems)
-        {
-            const SvxULSpaceItem& rULItem = pCurSet->Get(EE_PARA_ULSPACE);
-            SvxULSpaceItem aNewULItem(rULItem);
-            double fLowerFraction = double(rULItem.GetLower()) / nOldHeight;
-            aNewULItem.SetLower(static_cast<sal_uInt16>(fLowerFraction * nNewHeight));
-            double fUpperFraction = double(rULItem.GetUpper()) / nOldHeight;
-            aNewULItem.SetUpper(static_cast<sal_uInt16>(fUpperFraction * nNewHeight));
-            rSet.Put(aNewULItem);
-        }
+    if (rSet.GetItemState(EE_PARA_ULSPACE) != SfxItemState::SET || !bOnlyMissingItems)
+    {
+        const SvxULSpaceItem& rULItem = pCurSet->Get(EE_PARA_ULSPACE);
+        SvxULSpaceItem aNewULItem(rULItem);
+        double fLowerFraction = double(rULItem.GetLower()) / nOldHeight;
+        aNewULItem.SetLower(static_cast<sal_uInt16>(fLowerFraction * nNewHeight));
+        double fUpperFraction = double(rULItem.GetUpper()) / nOldHeight;
+        aNewULItem.SetUpper(static_cast<sal_uInt16>(fUpperFraction * nNewHeight));
+        rSet.Put(aNewULItem);
     }
 }
 
@@ -691,21 +691,21 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
 
 void SAL_CALL SdStyleSheet::release(  ) throw ()
 {
-    if (osl_atomic_decrement( &m_refCount ) == 0)
+    if (osl_atomic_decrement( &m_refCount ) != 0)
+        return;
+
+    // restore reference count:
+    osl_atomic_increment( &m_refCount );
+    if (! mrBHelper.bDisposed) try
     {
-        // restore reference count:
-        osl_atomic_increment( &m_refCount );
-        if (! mrBHelper.bDisposed) try
-        {
-            dispose();
-        }
-        catch (RuntimeException const& exc)
-        { // don't break throw ()
-            SAL_WARN( "sd", exc );
-        }
-        OSL_ASSERT( mrBHelper.bDisposed );
-        SdStyleSheetBase::release();
+        dispose();
     }
+    catch (RuntimeException const& exc)
+    { // don't break throw ()
+        SAL_WARN( "sd", exc );
+    }
+    OSL_ASSERT( mrBHelper.bDisposed );
+    SdStyleSheetBase::release();
 }
 
 // XComponent
@@ -713,43 +713,43 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
 void SAL_CALL SdStyleSheet::dispose(  )
 {
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
-    if (!mrBHelper.bDisposed && !mrBHelper.bInDispose)
+    if (!(!mrBHelper.bDisposed && !mrBHelper.bInDispose))
+        return;
+
+    mrBHelper.bInDispose = true;
+    aGuard.clear();
+    try
     {
-        mrBHelper.bInDispose = true;
-        aGuard.clear();
+        // side effect: keeping a reference to this
+        EventObject aEvt( static_cast< OWeakObject * >( this ) );
         try
         {
-            // side effect: keeping a reference to this
-            EventObject aEvt( static_cast< OWeakObject * >( this ) );
-            try
-            {
-                mrBHelper.aLC.disposeAndClear( aEvt );
-                disposing();
-            }
-            catch (...)
-            {
-                MutexGuard aGuard2( mrBHelper.rMutex );
-                // bDisposed and bInDispose must be set in this order:
-                mrBHelper.bDisposed = true;
-                mrBHelper.bInDispose = false;
-                throw;
-            }
+            mrBHelper.aLC.disposeAndClear( aEvt );
+            disposing();
+        }
+        catch (...)
+        {
             MutexGuard aGuard2( mrBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
             mrBHelper.bDisposed = true;
             mrBHelper.bInDispose = false;
-        }
-        catch (RuntimeException &)
-        {
             throw;
         }
-        catch (const Exception & exc)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw css::lang::WrappedTargetRuntimeException(
-                "unexpected UNO exception caught: " + exc.Message ,
-                nullptr, anyEx );
-        }
+        MutexGuard aGuard2( mrBHelper.rMutex );
+        // bDisposed and bInDispose must be set in this order:
+        mrBHelper.bDisposed = true;
+        mrBHelper.bInDispose = false;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (const Exception & exc)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+            "unexpected UNO exception caught: " + exc.Message ,
+            nullptr, anyEx );
     }
 }
 
@@ -1321,21 +1321,21 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleS
     SdStyleSheet* pRealSheet = static_cast<SdStyleSheet const *>(pStyleSheet)->GetRealStyleSheet();
     pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 
-    if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
+    if( !((ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8)) )
+        return;
+
+    OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " ");
+
+    for( sal_uInt16 n = static_cast<sal_uInt16>(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
     {
-        OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " ");
+        OUString aName( sStyleName + OUString::number(n) );
 
-        for( sal_uInt16 n = static_cast<sal_uInt16>(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
+        SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SfxStyleFamily::Pseudo);
+
+        if(pSheet)
         {
-            OUString aName( sStyleName + OUString::number(n) );
-
-            SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SfxStyleFamily::Pseudo);
-
-            if(pSheet)
-            {
-                SdStyleSheet* pRealStyleSheet = static_cast<SdStyleSheet*>(pSheet)->GetRealStyleSheet();
-                pRealStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
-            }
+            SdStyleSheet* pRealStyleSheet = static_cast<SdStyleSheet*>(pSheet)->GetRealStyleSheet();
+            pRealStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
         }
     }
 }

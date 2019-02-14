@@ -103,25 +103,24 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
 ,   mpActualStyleSheet(nullptr)
 ,   mpDoc(pDocument)
 {
-    if( mpDoc )
-    {
-        rtl::Reference< SfxStyleSheetPool > xPool( this );
+    if( !mpDoc )
+        return;
 
-        // create graphics family
-        mxGraphicFamily = new SdStyleFamily( xPool, SfxStyleFamily::Para );
-        mxCellFamily = new SdStyleFamily( xPool, SfxStyleFamily::Frame );
+    rtl::Reference< SfxStyleSheetPool > xPool( this );
 
-        mxTableFamily = sdr::table::CreateTableDesignFamily();
-        Reference< XNamed > xNamed( mxTableFamily, UNO_QUERY );
-        if( xNamed.is() )
-            msTableFamilyName = xNamed->getName();
+    // create graphics family
+    mxGraphicFamily = new SdStyleFamily( xPool, SfxStyleFamily::Para );
+    mxCellFamily = new SdStyleFamily( xPool, SfxStyleFamily::Frame );
 
-        // create presentation families, one for each master page
-        const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
-        for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
-            AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PageKind::Standard) );
+    mxTableFamily = sdr::table::CreateTableDesignFamily();
+    Reference< XNamed > xNamed( mxTableFamily, UNO_QUERY );
+    if( xNamed.is() )
+        msTableFamilyName = xNamed->getName();
 
-    }
+    // create presentation families, one for each master page
+    const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
+    for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
+        AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PageKind::Standard) );
 }
 
 SdStyleSheetPool::~SdStyleSheetPool()
@@ -529,54 +528,54 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
     Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
     Reference< XSingleServiceFactory > xFactory( mxTableFamily, UNO_QUERY );
 
-    if( xSource.is() && xFactory.is() && mxTableFamily.is() )
+    if( !(xSource.is() && xFactory.is() && mxTableFamily.is()) )
+        return;
+
+    for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
     {
-        for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
+        Reference< XStyle > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY );
+        if( xSourceTableStyle.is() )
         {
-            Reference< XStyle > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY );
-            if( xSourceTableStyle.is() )
+            Reference< XStyle > xNewTableStyle( xFactory->createInstance(), UNO_QUERY );
+            if( xNewTableStyle.is() )
             {
-                Reference< XStyle > xNewTableStyle( xFactory->createInstance(), UNO_QUERY );
-                if( xNewTableStyle.is() )
+                Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
+
+                Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
+                OUString* pStyleNames( aStyleNames.getArray() );
+
+                Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
+
+                sal_Int32 nNames = aStyleNames.getLength();
+                while( nNames-- )
                 {
-                    Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
-
-                    Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
-                    OUString* pStyleNames( aStyleNames.getArray() );
-
-                    Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
-
-                    sal_Int32 nNames = aStyleNames.getLength();
-                    while( nNames-- )
+                    const OUString aName( *pStyleNames++ );
+                    Reference< XStyle > xSourceStyle( xSourceNames->getByName( aName ), UNO_QUERY );
+                    Reference< XStyle > xTargetStyle;
+                    if( xSourceStyle.is() ) try
                     {
-                        const OUString aName( *pStyleNames++ );
-                        Reference< XStyle > xSourceStyle( xSourceNames->getByName( aName ), UNO_QUERY );
-                        Reference< XStyle > xTargetStyle;
-                        if( xSourceStyle.is() ) try
-                        {
-                            mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
-                        }
-                        catch( Exception& )
-                        {
-                            OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
-                        }
-
-                        if( xTargetStyle.is() )
-                            xTargetNames->replaceByName( aName, Any( xTargetStyle ) );
+                        mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
                     }
-                }
+                    catch( Exception& )
+                    {
+                        OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                    }
 
-                OUString sName( xSourceTableStyle->getName() );
-                if( xTarget->hasByName( sName ) )
-                    xTarget->replaceByName( sName, Any( xNewTableStyle ) );
-                else
-                    xTarget->insertByName( sName, Any( xNewTableStyle ) );
+                    if( xTargetStyle.is() )
+                        xTargetNames->replaceByName( aName, Any( xTargetStyle ) );
+                }
             }
+
+            OUString sName( xSourceTableStyle->getName() );
+            if( xTarget->hasByName( sName ) )
+                xTarget->replaceByName( sName, Any( xNewTableStyle ) );
+            else
+                xTarget->insertByName( sName, Any( xNewTableStyle ) );
         }
-        catch( Exception& )
-        {
-            OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
-        }
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
     }
 }
 
@@ -753,26 +752,26 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
     std::vector<SfxStyleSheetBase*> aOutlineSheets;
     CreateOutlineSheetList(rLayoutName,aOutlineSheets);
 
-    if( !aOutlineSheets.empty() )
+    if( aOutlineSheets.empty() )
+        return;
+
+    std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
+    SfxStyleSheetBase* pParent = *it;
+    ++it;
+
+    while (it != aOutlineSheets.end())
     {
-        std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
-        SfxStyleSheetBase* pParent = *it;
+        pSheet = *it;
+
+        if (!pSheet)
+            break;
+
+        if (pSheet->GetParent().isEmpty())
+            pSheet->SetParent(pParent->GetName());
+
+        pParent = pSheet;
+
         ++it;
-
-        while (it != aOutlineSheets.end())
-        {
-            pSheet = *it;
-
-            if (!pSheet)
-                break;
-
-            if (pSheet->GetParent().isEmpty())
-                pSheet->SetParent(pParent->GetName());
-
-            pParent = pSheet;
-
-            ++it;
-        }
     }
 }
 
@@ -1198,18 +1197,18 @@ void SdStyleSheetPool::AddStyleFamily( const SdPage* pPage )
 void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
 {
     SdStyleFamilyMap::iterator iter( maStyleFamilyMap.find( pPage ) );
-    if( iter != maStyleFamilyMap.end() )
-    {
-        SdStyleFamilyRef xStyle( (*iter).second );
-        maStyleFamilyMap.erase( iter );
+    if( iter == maStyleFamilyMap.end() )
+        return;
 
-        if( xStyle.is() ) try
-        {
-            xStyle->dispose();
-        }
-        catch( Exception& )
-        {
-        }
+    SdStyleFamilyRef xStyle( (*iter).second );
+    maStyleFamilyMap.erase( iter );
+
+    if( xStyle.is() ) try
+    {
+        xStyle->dispose();
+    }
+    catch( Exception& )
+    {
     }
 }
 
@@ -1347,33 +1346,33 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index )
 
 void SAL_CALL SdStyleSheetPool::dispose()
 {
-    if( mpDoc )
+    if( !mpDoc )
+        return;
+
+    mxGraphicFamily->dispose();
+    mxGraphicFamily.clear();
+    mxCellFamily->dispose();
+    mxCellFamily.clear();
+
+    Reference< XComponent > xComp( mxTableFamily, UNO_QUERY );
+    if( xComp.is() )
+        xComp->dispose();
+    mxTableFamily = nullptr;
+
+    SdStyleFamilyMap aTempMap;
+    aTempMap.swap( maStyleFamilyMap );
+
+    for( auto& rEntry : aTempMap ) try
     {
-        mxGraphicFamily->dispose();
-        mxGraphicFamily.clear();
-        mxCellFamily->dispose();
-        mxCellFamily.clear();
-
-        Reference< XComponent > xComp( mxTableFamily, UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-        mxTableFamily = nullptr;
-
-        SdStyleFamilyMap aTempMap;
-        aTempMap.swap( maStyleFamilyMap );
-
-        for( auto& rEntry : aTempMap ) try
-        {
-            rEntry.second->dispose();
-        }
-        catch( Exception& )
-        {
-        }
-
-        mpDoc = nullptr;
-
-        Clear();
+        rEntry.second->dispose();
     }
+    catch( Exception& )
+    {
+    }
+
+    mpDoc = nullptr;
+
+    Clear();
 }
 
 void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ )

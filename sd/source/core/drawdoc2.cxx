@@ -509,174 +509,174 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     // If no page exists yet in the model, (File -> New), insert a page
     sal_uInt16 nPageCount = GetPageCount();
 
-    if (nPageCount <= 1)
+    if (nPageCount > 1)
+        return;
+
+    // #i57181# Paper size depends on Language, like in Writer
+    Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
+
+    // Insert handout page
+    SdPage* pHandoutPage = AllocSdPage(false);
+
+    SdPage* pRefPage = nullptr;
+
+    if( pRefDocument )
+        pRefPage = pRefDocument->GetSdPage( 0, PageKind::Handout );
+
+    if( pRefPage )
     {
-        // #i57181# Paper size depends on Language, like in Writer
-        Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
-
-        // Insert handout page
-        SdPage* pHandoutPage = AllocSdPage(false);
-
-        SdPage* pRefPage = nullptr;
-
-        if( pRefDocument )
-            pRefPage = pRefDocument->GetSdPage( 0, PageKind::Handout );
-
-        if( pRefPage )
-        {
-            pHandoutPage->SetSize(pRefPage->GetSize());
-            pHandoutPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
-        }
-        else
-        {
-            pHandoutPage->SetSize(aDefSize);
-            pHandoutPage->SetBorder(0, 0, 0, 0);
-        }
-
-        pHandoutPage->SetPageKind(PageKind::Handout);
-        pHandoutPage->SetName( SdResId(STR_HANDOUT) );
-        InsertPage(pHandoutPage, 0);
-
-        // Insert master page and register this with the handout page
-        SdPage* pHandoutMPage = AllocSdPage(true);
-        pHandoutMPage->SetSize( pHandoutPage->GetSize() );
-        pHandoutMPage->SetPageKind(PageKind::Handout);
-        pHandoutMPage->SetBorder( pHandoutPage->GetLeftBorder(),
-                                  pHandoutPage->GetUpperBorder(),
-                                  pHandoutPage->GetRightBorder(),
-                                  pHandoutPage->GetLowerBorder() );
-        InsertMasterPage(pHandoutMPage, 0);
-        pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
-
-        // Insert page
-        // If nPageCount==1 is, the model for the clipboard was created, thus a
-        // default page must already exist
-        SdPage* pPage;
-        bool bClipboard = false;
-
-        if( pRefDocument )
-            pRefPage = pRefDocument->GetSdPage( 0, PageKind::Standard );
-
-        if (nPageCount == 0)
-        {
-            pPage = AllocSdPage(false);
-
-            if( pRefPage )
-            {
-                pPage->SetSize( pRefPage->GetSize() );
-                pPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
-            }
-            else if (meDocType == DocumentType::Draw)
-            {
-                // Draw: always use default size with margins
-                pPage->SetSize(aDefSize);
-
-                SfxPrinter* pPrinter = mpDocSh->GetPrinter(false);
-                if (pPrinter && pPrinter->IsValid())
-                {
-                    Size aOutSize(pPrinter->GetOutputSize());
-                    Point aPageOffset(pPrinter->GetPageOffset());
-                    aPageOffset -= pPrinter->PixelToLogic( Point() );
-                    long nOffset = !aPageOffset.X() && !aPageOffset.Y() ? 0 : PRINT_OFFSET;
-
-                    sal_uLong nTop    = aPageOffset.Y();
-                    sal_uLong nLeft   = aPageOffset.X();
-                    sal_uLong nBottom = std::max(static_cast<long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
-                    sal_uLong nRight  = std::max(static_cast<long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
-
-                    pPage->SetBorder(nLeft, nTop, nRight, nBottom);
-                }
-                else
-                {
-                    // The printer is not available.  Use a border of 10mm
-                    // on each side instead.
-                    // This has to be kept synchronized with the border
-                    // width set in the
-                    // SvxPageDescPage::PaperSizeSelect_Impl callback.
-                    pPage->SetBorder(1000, 1000, 1000, 1000);
-                }
-            }
-            else
-            {
-                // Impress: always use screen format, landscape.
-                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_16_9, MapUnit::Map100thMM) );
-                pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
-                pPage->SetBorder(0, 0, 0, 0);
-            }
-
-            InsertPage(pPage, 1);
-        }
-        else
-        {
-            bClipboard = true;
-            pPage = static_cast<SdPage*>( GetPage(1) );
-        }
-
-        // Insert master page, then register this with the page
-        SdPage* pMPage = AllocSdPage(true);
-        pMPage->SetSize( pPage->GetSize() );
-        pMPage->SetBorder( pPage->GetLeftBorder(),
-                           pPage->GetUpperBorder(),
-                           pPage->GetRightBorder(),
-                           pPage->GetLowerBorder() );
-        InsertMasterPage(pMPage, 1);
-        pPage->TRG_SetMasterPage( *pMPage );
-        if( bClipboard )
-            pMPage->SetLayoutName( pPage->GetLayoutName() );
-
-        // Insert notes page
-        SdPage* pNotesPage = AllocSdPage(false);
-
-        if( pRefDocument )
-            pRefPage = pRefDocument->GetSdPage( 0, PageKind::Notes );
-
-        if( pRefPage )
-        {
-            pNotesPage->SetSize( pRefPage->GetSize() );
-            pNotesPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
-        }
-        else
-        {
-            // Always use portrait format
-            if (aDefSize.Height() >= aDefSize.Width())
-            {
-                pNotesPage->SetSize(aDefSize);
-            }
-            else
-            {
-                pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
-            }
-
-            pNotesPage->SetBorder(0, 0, 0, 0);
-        }
-        pNotesPage->SetPageKind(PageKind::Notes);
-        InsertPage(pNotesPage, 2);
-        if( bClipboard )
-            pNotesPage->SetLayoutName( pPage->GetLayoutName() );
-
-        // Insert master page, then register this with the notes page
-        SdPage* pNotesMPage = AllocSdPage(true);
-        pNotesMPage->SetSize( pNotesPage->GetSize() );
-        pNotesMPage->SetPageKind(PageKind::Notes);
-        pNotesMPage->SetBorder( pNotesPage->GetLeftBorder(),
-                                pNotesPage->GetUpperBorder(),
-                                pNotesPage->GetRightBorder(),
-                                pNotesPage->GetLowerBorder() );
-        InsertMasterPage(pNotesMPage, 2);
-        pNotesPage->TRG_SetMasterPage( *pNotesMPage );
-        if( bClipboard )
-            pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
-
-        if( !pRefPage && (meDocType != DocumentType::Draw) )
-            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
-
-        mpWorkStartupTimer.reset( new Timer("DrawWorkStartupTimer") );
-        mpWorkStartupTimer->SetInvokeHandler( LINK(this, SdDrawDocument, WorkStartupHdl) );
-        mpWorkStartupTimer->SetTimeout(2000);
-        mpWorkStartupTimer->Start();
-
-        SetChanged(false);
+        pHandoutPage->SetSize(pRefPage->GetSize());
+        pHandoutPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
     }
+    else
+    {
+        pHandoutPage->SetSize(aDefSize);
+        pHandoutPage->SetBorder(0, 0, 0, 0);
+    }
+
+    pHandoutPage->SetPageKind(PageKind::Handout);
+    pHandoutPage->SetName( SdResId(STR_HANDOUT) );
+    InsertPage(pHandoutPage, 0);
+
+    // Insert master page and register this with the handout page
+    SdPage* pHandoutMPage = AllocSdPage(true);
+    pHandoutMPage->SetSize( pHandoutPage->GetSize() );
+    pHandoutMPage->SetPageKind(PageKind::Handout);
+    pHandoutMPage->SetBorder( pHandoutPage->GetLeftBorder(),
+                              pHandoutPage->GetUpperBorder(),
+                              pHandoutPage->GetRightBorder(),
+                              pHandoutPage->GetLowerBorder() );
+    InsertMasterPage(pHandoutMPage, 0);
+    pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
+
+    // Insert page
+    // If nPageCount==1 is, the model for the clipboard was created, thus a
+    // default page must already exist
+    SdPage* pPage;
+    bool bClipboard = false;
+
+    if( pRefDocument )
+        pRefPage = pRefDocument->GetSdPage( 0, PageKind::Standard );
+
+    if (nPageCount == 0)
+    {
+        pPage = AllocSdPage(false);
+
+        if( pRefPage )
+        {
+            pPage->SetSize( pRefPage->GetSize() );
+            pPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
+        }
+        else if (meDocType == DocumentType::Draw)
+        {
+            // Draw: always use default size with margins
+            pPage->SetSize(aDefSize);
+
+            SfxPrinter* pPrinter = mpDocSh->GetPrinter(false);
+            if (pPrinter && pPrinter->IsValid())
+            {
+                Size aOutSize(pPrinter->GetOutputSize());
+                Point aPageOffset(pPrinter->GetPageOffset());
+                aPageOffset -= pPrinter->PixelToLogic( Point() );
+                long nOffset = !aPageOffset.X() && !aPageOffset.Y() ? 0 : PRINT_OFFSET;
+
+                sal_uLong nTop    = aPageOffset.Y();
+                sal_uLong nLeft   = aPageOffset.X();
+                sal_uLong nBottom = std::max(static_cast<long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
+                sal_uLong nRight  = std::max(static_cast<long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
+
+                pPage->SetBorder(nLeft, nTop, nRight, nBottom);
+            }
+            else
+            {
+                // The printer is not available.  Use a border of 10mm
+                // on each side instead.
+                // This has to be kept synchronized with the border
+                // width set in the
+                // SvxPageDescPage::PaperSizeSelect_Impl callback.
+                pPage->SetBorder(1000, 1000, 1000, 1000);
+            }
+        }
+        else
+        {
+            // Impress: always use screen format, landscape.
+            Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_16_9, MapUnit::Map100thMM) );
+            pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
+            pPage->SetBorder(0, 0, 0, 0);
+        }
+
+        InsertPage(pPage, 1);
+    }
+    else
+    {
+        bClipboard = true;
+        pPage = static_cast<SdPage*>( GetPage(1) );
+    }
+
+    // Insert master page, then register this with the page
+    SdPage* pMPage = AllocSdPage(true);
+    pMPage->SetSize( pPage->GetSize() );
+    pMPage->SetBorder( pPage->GetLeftBorder(),
+                       pPage->GetUpperBorder(),
+                       pPage->GetRightBorder(),
+                       pPage->GetLowerBorder() );
+    InsertMasterPage(pMPage, 1);
+    pPage->TRG_SetMasterPage( *pMPage );
+    if( bClipboard )
+        pMPage->SetLayoutName( pPage->GetLayoutName() );
+
+    // Insert notes page
+    SdPage* pNotesPage = AllocSdPage(false);
+
+    if( pRefDocument )
+        pRefPage = pRefDocument->GetSdPage( 0, PageKind::Notes );
+
+    if( pRefPage )
+    {
+        pNotesPage->SetSize( pRefPage->GetSize() );
+        pNotesPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
+    }
+    else
+    {
+        // Always use portrait format
+        if (aDefSize.Height() >= aDefSize.Width())
+        {
+            pNotesPage->SetSize(aDefSize);
+        }
+        else
+        {
+            pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
+        }
+
+        pNotesPage->SetBorder(0, 0, 0, 0);
+    }
+    pNotesPage->SetPageKind(PageKind::Notes);
+    InsertPage(pNotesPage, 2);
+    if( bClipboard )
+        pNotesPage->SetLayoutName( pPage->GetLayoutName() );
+
+    // Insert master page, then register this with the notes page
+    SdPage* pNotesMPage = AllocSdPage(true);
+    pNotesMPage->SetSize( pNotesPage->GetSize() );
+    pNotesMPage->SetPageKind(PageKind::Notes);
+    pNotesMPage->SetBorder( pNotesPage->GetLeftBorder(),
+                            pNotesPage->GetUpperBorder(),
+                            pNotesPage->GetRightBorder(),
+                            pNotesPage->GetLowerBorder() );
+    InsertMasterPage(pNotesMPage, 2);
+    pNotesPage->TRG_SetMasterPage( *pNotesMPage );
+    if( bClipboard )
+        pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
+
+    if( !pRefPage && (meDocType != DocumentType::Draw) )
+        pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
+
+    mpWorkStartupTimer.reset( new Timer("DrawWorkStartupTimer") );
+    mpWorkStartupTimer->SetInvokeHandler( LINK(this, SdDrawDocument, WorkStartupHdl) );
+    mpWorkStartupTimer->SetTimeout(2000);
+    mpWorkStartupTimer->Start();
+
+    SetChanged(false);
 }
 
 // Creates missing notes and handout pages (after PowerPoint import).
@@ -1117,118 +1117,118 @@ void SdDrawDocument::CheckMasterPages()
             break; // then we have a fatal error
     }
 
-    if( nPage < nMaxPages )
+    if( nPage >= nMaxPages )
+        return;
+
+    SdPage* pNotesPage = nullptr;
+
+    // there is a fatal error in the master page order,
+    // we need to repair the document
+    bool bChanged = false;
+
+    nPage = 1;
+    while( nPage < nMaxPages )
     {
-        SdPage* pNotesPage = nullptr;
-
-        // there is a fatal error in the master page order,
-        // we need to repair the document
-        bool bChanged = false;
-
-        nPage = 1;
-        while( nPage < nMaxPages )
+        pPage = static_cast<SdPage*> (GetMasterPage( nPage ));
+        if( pPage->GetPageKind() != PageKind::Standard )
         {
-            pPage = static_cast<SdPage*> (GetMasterPage( nPage ));
-            if( pPage->GetPageKind() != PageKind::Standard )
+            bChanged = true;
+            sal_uInt16 nFound = nPage + 1;
+            while( nFound < nMaxPages )
             {
-                bChanged = true;
-                sal_uInt16 nFound = nPage + 1;
-                while( nFound < nMaxPages )
+                pPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                if( PageKind::Standard == pPage->GetPageKind() )
                 {
-                    pPage = static_cast<SdPage*>(GetMasterPage( nFound ));
-                    if( PageKind::Standard == pPage->GetPageKind() )
-                    {
-                        MoveMasterPage( nFound, nPage );
-                        pPage->SetInserted();
-                        break;
-
-                    }
-
-                    nFound++;
-                }
-
-                // if we don't have any more standard pages, were done
-                if( nMaxPages == nFound )
+                    MoveMasterPage( nFound, nPage );
+                    pPage->SetInserted();
                     break;
-            }
 
-            nPage++;
-
-            if( nPage < nMaxPages )
-                pNotesPage = static_cast<SdPage*>(GetMasterPage( nPage ));
-            else
-                pNotesPage = nullptr;
-
-            if( (nullptr == pNotesPage) || (pNotesPage->GetPageKind() != PageKind::Notes) || ( pPage->GetLayoutName() != pNotesPage->GetLayoutName() ) )
-            {
-                bChanged = true;
-
-                sal_uInt16 nFound = nPage + 1;
-                while( nFound < nMaxPages )
-                {
-                    pNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
-                    if( (PageKind::Notes == pNotesPage->GetPageKind()) && ( pPage->GetLayoutName() == pNotesPage->GetLayoutName() ) )
-                    {
-                        MoveMasterPage( nFound, nPage );
-                        pNotesPage->SetInserted();
-                        break;
-                    }
-
-                    nFound++;
                 }
 
-                // looks like we lost a notes page
-                if( nMaxPages == nFound )
-                {
-                    // so create one
-
-                    // first find a reference notes page for size
-                    SdPage* pRefNotesPage = nullptr;
-                    nFound = 0;
-                    while( nFound < nMaxPages )
-                    {
-                        pRefNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
-                        if( PageKind::Notes == pRefNotesPage->GetPageKind() )
-                            break;
-                        nFound++;
-                    }
-                    if( nFound == nMaxPages )
-                        pRefNotesPage = nullptr;
-
-                    SdPage* pNewNotesPage = AllocSdPage(true);
-                    pNewNotesPage->SetPageKind(PageKind::Notes);
-                    if( pRefNotesPage )
-                    {
-                        pNewNotesPage->SetSize( pRefNotesPage->GetSize() );
-                        pNewNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
-                                                pRefNotesPage->GetUpperBorder(),
-                                                pRefNotesPage->GetRightBorder(),
-                                                pRefNotesPage->GetLowerBorder() );
-                    }
-                    InsertMasterPage(pNewNotesPage,  nPage );
-                    pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
-                    pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true );
-                    nMaxPages++;
-                }
+                nFound++;
             }
 
-            nPage++;
+            // if we don't have any more standard pages, were done
+            if( nMaxPages == nFound )
+                break;
         }
 
-        // now remove all remaining and unused non PageKind::Standard slides
-        while( nPage < nMaxPages )
+        nPage++;
+
+        if( nPage < nMaxPages )
+            pNotesPage = static_cast<SdPage*>(GetMasterPage( nPage ));
+        else
+            pNotesPage = nullptr;
+
+        if( (nullptr == pNotesPage) || (pNotesPage->GetPageKind() != PageKind::Notes) || ( pPage->GetLayoutName() != pNotesPage->GetLayoutName() ) )
         {
             bChanged = true;
 
-            RemoveMasterPage( nPage );
-            nMaxPages--;
+            sal_uInt16 nFound = nPage + 1;
+            while( nFound < nMaxPages )
+            {
+                pNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                if( (PageKind::Notes == pNotesPage->GetPageKind()) && ( pPage->GetLayoutName() == pNotesPage->GetLayoutName() ) )
+                {
+                    MoveMasterPage( nFound, nPage );
+                    pNotesPage->SetInserted();
+                    break;
+                }
+
+                nFound++;
+            }
+
+            // looks like we lost a notes page
+            if( nMaxPages == nFound )
+            {
+                // so create one
+
+                // first find a reference notes page for size
+                SdPage* pRefNotesPage = nullptr;
+                nFound = 0;
+                while( nFound < nMaxPages )
+                {
+                    pRefNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                    if( PageKind::Notes == pRefNotesPage->GetPageKind() )
+                        break;
+                    nFound++;
+                }
+                if( nFound == nMaxPages )
+                    pRefNotesPage = nullptr;
+
+                SdPage* pNewNotesPage = AllocSdPage(true);
+                pNewNotesPage->SetPageKind(PageKind::Notes);
+                if( pRefNotesPage )
+                {
+                    pNewNotesPage->SetSize( pRefNotesPage->GetSize() );
+                    pNewNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
+                                            pRefNotesPage->GetUpperBorder(),
+                                            pRefNotesPage->GetRightBorder(),
+                                            pRefNotesPage->GetLowerBorder() );
+                }
+                InsertMasterPage(pNewNotesPage,  nPage );
+                pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
+                pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true );
+                nMaxPages++;
+            }
         }
 
-        if( bChanged )
-        {
-            OSL_FAIL( "master pages where in a wrong order" );
-            RecalcPageNums( true);
-        }
+        nPage++;
+    }
+
+    // now remove all remaining and unused non PageKind::Standard slides
+    while( nPage < nMaxPages )
+    {
+        bChanged = true;
+
+        RemoveMasterPage( nPage );
+        nMaxPages--;
+    }
+
+    if( bChanged )
+    {
+        OSL_FAIL( "master pages where in a wrong order" );
+        RecalcPageNums( true);
     }
 }
 

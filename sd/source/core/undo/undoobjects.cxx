@@ -46,23 +46,23 @@ ViewShellId SdUndoAction::GetViewShellId() const
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 {
     SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
-    if( pPage )
-    {
-        if( pPage->IsPresObj(&rObject) )
-            mpUndoPresObj.reset( new UndoObjectPresentationKind( rObject ) );
-        if( rObject.GetUserCall() )
-            mpUndoUsercall.reset( new UndoObjectUserCall(rObject) );
+    if( !pPage )
+        return;
 
-        if( pPage->hasAnimationNode() )
+    if( pPage->IsPresObj(&rObject) )
+        mpUndoPresObj.reset( new UndoObjectPresentationKind( rObject ) );
+    if( rObject.GetUserCall() )
+        mpUndoUsercall.reset( new UndoObjectUserCall(rObject) );
+
+    if( pPage->hasAnimationNode() )
+    {
+        css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
+        if( pPage->getMainSequence()->hasEffect( xShape ) )
         {
-            css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
-            if( pPage->getMainSequence()->hasEffect( xShape ) )
-            {
-                mpUndoAnimation.reset(
-                    new UndoAnimation( // TTTT may use ref? Or just *SdrPage?
-                        static_cast< SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()),
-                        pPage));
-            }
+            mpUndoAnimation.reset(
+                new UndoAnimation( // TTTT may use ref? Or just *SdrPage?
+                    static_cast< SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()),
+                    pPage));
         }
     }
 }
