@@ -18005,6 +18005,8 @@ vcl/source/filter/jpeg/jpegc.cxx
 vcl/source/filter/jpeg/jpegcomp.h
 vcl/source/filter/jpeg/transupp.c
 vcl/source/filter/jpeg/transupp.h
+vcl/source/filter/png/pngread.cxx
+vcl/source/filter/png/pngwrite.cxx
 vcl/source/filter/wmf/emfwr.cxx
 vcl/source/filter/wmf/emfwr.hxx
 vcl/source/filter/wmf/wmf.cxx
@@ -18071,8 +18073,6 @@ vcl/source/gdi/pdfwriter.cxx
 vcl/source/gdi/pdfwriter_impl.cxx
 vcl/source/gdi/pdfwriter_impl.hxx
 vcl/source/gdi/pdfwriter_impl2.cxx
-vcl/source/gdi/pngread.cxx
-vcl/source/gdi/pngwrite.cxx
 vcl/source/gdi/print.cxx
 vcl/source/gdi/print2.cxx
 vcl/source/gdi/print3.cxx

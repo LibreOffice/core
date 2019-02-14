@@ -284,8 +284,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/pdfwriter \
     vcl/source/gdi/pdfwriter_impl2 \
     vcl/source/gdi/pdfwriter_impl \
-    vcl/source/gdi/pngread \
-    vcl/source/gdi/pngwrite \
     vcl/source/gdi/print2 \
     vcl/source/gdi/print3 \
     vcl/source/gdi/print \
@@ -409,6 +407,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmfexternal \
     vcl/source/filter/wmf/wmfwr \
     vcl/source/filter/png/PngImageReader \
+    vcl/source/filter/png/pngread \
+    vcl/source/filter/png/pngwrite \
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \
