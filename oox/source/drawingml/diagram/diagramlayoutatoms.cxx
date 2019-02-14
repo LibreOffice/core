@@ -150,10 +150,8 @@ void calculateHierChildOffsetScale(const oox::drawingml::ShapePtr& pShape,
     {
         const oox::drawingml::ShapePtr& pParentShape = rParents[nParent];
         const std::vector<oox::drawingml::ShapePtr>& rChildren = pParentShape->getChildren();
-        auto it = std::find_if(
-            rChildren.begin(), rChildren.end(),
-            [pShape](const oox::drawingml::ShapePtr& pChild) { return pChild == pShape; });
-        if (it == rChildren.end())
+        if (std::none_of(rChildren.begin(), rChildren.end(),
+                         [pShape](const oox::drawingml::ShapePtr& pChild) { return pChild == pShape; }))
             // This is not our parent.
             continue;
 
@@ -1152,23 +1150,20 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         pPresNode->msModelId);
     if( aNodeName != mrDgm.getData()->getPresOfNameMap().end() )
     {
-        DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
-        const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
-        while( aVecIter != aVecEnd )
+        for( const auto& rItem : aNodeName->second )
         {
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             // pPresNode is the presentation node of the aDataNode2 data node.
-            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
+            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.first);
             if (aDataNode2 == rMap.end())
             {
                 //busted, skip it
-                ++aVecIter;
                 continue;
             }
 
             rShape->setDataNodeType(aDataNode2->second->mnType);
 
-            if( aVecIter->second == 0 )
+            if( rItem.second == 0 )
             {
                 // grab shape attr from topmost element(s)
                 rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
@@ -1210,8 +1205,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 for (const auto& pSourceParagraph : rSourceParagraphs)
                 {
                     TextParagraph& rPara = pTextBody->addParagraph();
-                    if (aVecIter->second != -1)
-                        rPara.getProperties().setLevel(aVecIter->second);
+                    if (rItem.second != -1)
+                        rPara.getProperties().setLevel(rItem.second);
 
                     for (const auto& pRun : pSourceParagraph->getRuns())
                         rPara.addRun(pRun);
@@ -1219,8 +1214,6 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                     rPara.getProperties().apply(rBody->getParagraphs().front()->getProperties());
                 }
             }
-
-            ++aVecIter;
         }
     }
     else

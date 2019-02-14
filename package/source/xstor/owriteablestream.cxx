@@ -481,13 +481,12 @@ void OWriteStream_Impl::DisposeWrappers()
 
     if ( !m_aInputStreamsVector.empty() )
     {
-        for ( InputStreamsVector_Impl::iterator pStreamIter = m_aInputStreamsVector.begin();
-              pStreamIter != m_aInputStreamsVector.end(); ++pStreamIter )
+        for ( auto& pStream : m_aInputStreamsVector )
         {
-            if ( *pStreamIter )
+            if ( pStream )
             {
-                (*pStreamIter)->InternalDispose();
-                (*pStreamIter) = nullptr;
+                pStream->InternalDispose();
+                pStream = nullptr;
             }
         }
 

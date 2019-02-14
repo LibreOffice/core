@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <osl/diagnose.h>
 
 #include "ListenerHelper.h"
@@ -57,17 +59,10 @@ void ListenerHelper::RemoveListener(
         if ( aListeners[i].xFrame == xFrame )
         {
             StatusListeners& aL = aListeners[i].aContainer[aCommand];
-            StatusListeners::iterator aIter = aL.begin();
-            while ( aIter != aL.end() )
-            {
-                if ( (*aIter) == xControl )
-                {
-                    aL.erase( aIter );
-                    break;
-                }
-
-                ++aIter;
-            }
+            StatusListeners::iterator aIter = std::find_if(aL.begin(), aL.end(),
+                [&xControl](const StatusListeners::value_type& rxListener) { return rxListener == xControl; });
+            if (aIter != aL.end())
+                aL.erase( aIter );
         }
     }
 }
@@ -84,11 +79,9 @@ void ListenerHelper::Notify(
         {
             rEvent.Source = aListeners[i].xDispatch;
             StatusListeners& aL = aListeners[i].aContainer[aCommand];
-            StatusListeners::iterator aIter = aL.begin();
-            while ( aIter != aL.end() )
+            for ( auto& rxListener : aL )
             {
-                (*aIter)->statusChanged( rEvent );
-                ++aIter;
+                rxListener->statusChanged( rEvent );
             }
         }
     }
@@ -122,17 +115,10 @@ void ListenerHelper::AddDispatch(
 
 void SAL_CALL ListenerItemEventListener::disposing( const EventObject& aEvent) throw (RuntimeException)
 {
-    AllListeners::iterator aIter = aListeners.begin();
-    while ( aIter != aListeners.end() )
-    {
-        if ( (*aIter).xFrame == mxFrame )
-        {
-            aListeners.erase( aIter );
-            break;
-        }
-
-        ++aIter;
-    }
+    AllListeners::iterator aIter = std::find_if(aListeners.begin(), aListeners.end(),
+        [this](const ListenerItem& rItem) { return rItem.xFrame == mxFrame; });
+    if (aIter != aListeners.end())
+        aListeners.erase( aIter );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
