@@ -40,20 +40,19 @@ namespace vcl {
 
 namespace vcl
 {
-    class MoreOptionsDialog : public ModalDialog
+    class MoreOptionsDialog : public weld::GenericDialogController
     {
         VclPtr<PrintDialog>                     mpParent;
-        VclPtr<OKButton>                        mpOKButton;
-        VclPtr<CancelButton>                    mpCancelButton;
-        VclPtr<CheckBox>                        mpSingleJobsBox;
+        std::unique_ptr<weld::Button>           mxOKButton;
+        std::unique_ptr<weld::Button>           mxCancelButton;
+        std::unique_ptr<weld::CheckButton>      mxSingleJobsBox;
 
-        DECL_LINK( ClickHdl, Button*, void );
+        DECL_LINK( ClickHdl, weld::Button&, void );
 
     public:
 
         MoreOptionsDialog( VclPtr<PrintDialog> i_pParent );
         virtual ~MoreOptionsDialog() override;
-        virtual void dispose() override;
     };
 
     class PrintDialog : public ModalDialog
@@ -134,7 +133,7 @@ namespace vcl
 
         std::shared_ptr<PrinterController>      maPController;
 
-        VclPtr< MoreOptionsDialog >             mpMoreOptionsDlg;
+        std::unique_ptr<MoreOptionsDialog>      mxMoreOptionsDlg;
 
         VclPtr<TabControl>                      mpTabCtrl;
         VclPtr<VclFrame>                        mpPageLayoutFrame;
