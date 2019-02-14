@@ -460,6 +460,20 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     aRet.m_nPart = nPart;
     return aRet;
 }
+
+RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const std::string& payload)
+{
+    PayloadString = payload;
+
+    PayloadObject = RectangleAndPart::Create(payload);
+    return boost::get<RectangleAndPart>(PayloadObject);
+}
+
+const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
+{
+    return boost::get<RectangleAndPart>(PayloadObject);
+}
+
 }
 
 namespace {
@@ -862,8 +876,10 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
-    std::string payload(data ? data : "(nil)");
+    CallbackData aCallbackData(type, (data ? data : "(nil)"));
+    std::string& payload = aCallbackData.PayloadString;
     SAL_INFO("lok", "Queue: " << type << " : " << payload);
+
 
     if (m_bPartTilePainting)
     {
@@ -1021,7 +1037,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
             case LOK_CALLBACK_INVALIDATE_TILES:
             {
-                RectangleAndPart rcNew = RectangleAndPart::Create(payload);
+                RectangleAndPart& rcNew = aCallbackData.setRectangleAndPart(payload);
                 if (rcNew.isEmpty())
                 {
                     SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
@@ -1034,7 +1050,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         [] (const queue_type::value_type& elem) { return (elem.Type == LOK_CALLBACK_INVALIDATE_TILES); });
                 if (pos != m_queue.rend())
                 {
-                    const RectangleAndPart rcOld = RectangleAndPart::Create(pos->PayloadString);
+                    const RectangleAndPart& rcOld = pos->getRectangleAndPart();
                     if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
                     {
                         SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
@@ -1078,7 +1094,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         [&rcNew] (const queue_type::value_type& elem) {
                             if (elem.Type == LOK_CALLBACK_INVALIDATE_TILES)
                             {
-                                const RectangleAndPart rcOld = RectangleAndPart::Create(elem.PayloadString);
+                                const RectangleAndPart& rcOld = elem.getRectangleAndPart();
                                 if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
                                 {
                                     SAL_INFO("lok", "Nothing to merge between new: " << rcNew.toString() << ", and old: " << rcOld.toString());
@@ -1289,7 +1305,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         }
     }
 
-    m_queue.emplace_back(type, payload);
+    m_queue.emplace_back(aCallbackData);
     SAL_INFO("lok", "Queued #" << (m_queue.size() - 1) <<
              " [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
 
