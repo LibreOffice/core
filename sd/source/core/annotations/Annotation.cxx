@@ -487,18 +487,18 @@ void UndoInsertOrRemoveAnnotation::Undo()
 {
     SdPage* pPage = mxAnnotation->GetPage();
     SdrModel* pModel = mxAnnotation->GetModel();
-    if( pPage && pModel )
+    if( !(pPage && pModel) )
+        return;
+
+    Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+    if( mbInsert )
     {
-        Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
-        if( mbInsert )
-        {
-            pPage->removeAnnotation( xAnnotation );
-        }
-        else
-        {
-            pPage->addAnnotation( xAnnotation, mnIndex );
-            LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
-        }
+        pPage->removeAnnotation( xAnnotation );
+    }
+    else
+    {
+        pPage->addAnnotation( xAnnotation, mnIndex );
+        LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
     }
 }
 
@@ -506,19 +506,19 @@ void UndoInsertOrRemoveAnnotation::Redo()
 {
     SdPage* pPage = mxAnnotation->GetPage();
     SdrModel* pModel = mxAnnotation->GetModel();
-    if( pPage && pModel )
-    {
-        Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+    if( !(pPage && pModel) )
+        return;
 
-        if( mbInsert )
-        {
-            pPage->addAnnotation( xAnnotation, mnIndex );
-            LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
-        }
-        else
-        {
-            pPage->removeAnnotation( xAnnotation );
-        }
+    Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+
+    if( mbInsert )
+    {
+        pPage->addAnnotation( xAnnotation, mnIndex );
+        LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
+    }
+    else
+    {
+        pPage->removeAnnotation( xAnnotation );
     }
 }
 
