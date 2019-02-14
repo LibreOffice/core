@@ -1301,10 +1301,10 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, Button*, void )
                        *maEdDataBarMin, mpDoc, maPos);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType,
                        *maEdDataBarMax, mpDoc, maPos);
-    ScopedVclPtrInstance<ScDataBarSettingsDlg> pDlg(this, *mpDataBarData, mpDoc, maPos);
-    if( pDlg->Execute() == RET_OK)
+    ScDataBarSettingsDlg aDlg(GetFrameWeld(), *mpDataBarData, mpDoc, maPos);
+    if (aDlg.run() == RET_OK)
     {
-        mpDataBarData.reset(pDlg->GetData());
+        mpDataBarData.reset(aDlg.GetData());
         SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, *maLbDataBarMinType, *maEdDataBarMin, mpDoc);
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, *maLbDataBarMaxType, *maEdDataBarMax, mpDoc);
         DataBarTypeSelectHdl(*maLbDataBarMinType);

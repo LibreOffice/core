@@ -21,18 +21,18 @@
 
 namespace {
 
-void SetType(const ScColorScaleEntry* pEntry, ListBox& rLstBox)
+void SetType(const ScColorScaleEntry* pEntry, weld::ComboBox& rLstBox)
 {
-    rLstBox.SelectEntryPos(pEntry->GetType());
+    rLstBox.set_active(pEntry->GetType());
 }
 
-void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter,
+void GetType(const weld::ComboBox& rLstBox, const weld::Entry& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter,
         ScDocument* pDoc, const ScAddress& rPos )
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
-    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.GetSelectedEntryPos()));
-    switch(rLstBox.GetSelectedEntryPos())
+    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.get_active()));
+    switch (rLstBox.get_active())
     {
         case COLORSCALE_AUTO:
         case COLORSCALE_MIN:
@@ -41,11 +41,11 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
-            (void)pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
+            (void)pNumberFormatter->IsNumberFormat( rEd.get_text(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case COLORSCALE_FORMULA:
-            pEntry->SetFormula(rEd.GetText(), pDoc, rPos);
+            pEntry->SetFormula(rEd.get_text(), pDoc, rPos);
             break;
     }
 }
@@ -58,115 +58,95 @@ OUString convertNumberToString(double nVal, const ScDocument* pDoc)
     return aText;
 }
 
-void SetValue( const ScDocument* pDoc, const ScColorScaleEntry* pEntry, Edit& aEdit)
+void SetValue( const ScDocument* pDoc, const ScColorScaleEntry* pEntry, weld::Entry& rEdit)
 {
     if(pEntry->GetType() == COLORSCALE_FORMULA)
-        aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+        rEdit.set_text(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
     else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
-        aEdit.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
+        rEdit.set_text(convertNumberToString(pEntry->GetValue(), pDoc));
     else
-        aEdit.Disable();
+        rEdit.set_sensitive(false);
 }
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
-    ModalDialog( pWindow, "DataBarOptions", "modules/scalc/ui/databaroptions.ui" ),
-    mpNumberFormatter( pDoc->GetFormatTable() ),
-    mpDoc(pDoc),
-    maPos(rPos)
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos)
+    : GenericDialogController(pParent, "modules/scalc/ui/databaroptions.ui", "DataBarOptions")
+    , mpNumberFormatter(pDoc->GetFormatTable())
+    , mpDoc(pDoc)
+    , maPos(rPos)
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxLbPos(new ColorListBox(m_xBuilder->weld_menu_button("positive_colour"), pParent))
+    , mxLbNeg(new ColorListBox(m_xBuilder->weld_menu_button("negative_colour"), pParent))
+    , mxLbAxisCol(new ColorListBox(m_xBuilder->weld_menu_button("axis_colour"), pParent))
+    , mxLbFillType(m_xBuilder->weld_combo_box("fill_type"))
+    , mxLbTypeMin(m_xBuilder->weld_combo_box("min"))
+    , mxLbTypeMax(m_xBuilder->weld_combo_box("max"))
+    , mxLbAxisPos(m_xBuilder->weld_combo_box("axis_pos"))
+    , mxEdMin(m_xBuilder->weld_entry("min_value"))
+    , mxEdMax(m_xBuilder->weld_entry("max_value"))
+    , mxLenMin(m_xBuilder->weld_entry("min_length"))
+    , mxLenMax(m_xBuilder->weld_entry("max_length"))
+    , mxCbOnlyBar(m_xBuilder->weld_check_button("only_bar"))
+    , mxStrSameValueFT(m_xBuilder->weld_label("str_same_value"))
 {
-    get( mpBtnOk, "ok");
-    get( mpBtnCancel, "cancel" );
-    get( mpLbPos, "positive_colour" );
-    get( mpLbNeg, "negative_colour" );
-    get( mpLbFillType, "fill_type" );
-    get( mpLbTypeMin, "min" );
-    get( mpLbTypeMax, "max" );
-    get( mpLbAxisPos, "axis_pos" );
-    get( mpLbAxisCol, "axis_colour" );
-    get( mpEdMin, "min_value" );
-    get( mpEdMax, "max_value" );
-    get( mpLenMin, "min_length" );
-    get( mpLenMax, "max_length" );
-    get( mpCbOnlyBar, "only_bar");
-
-    maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
+    maStrWarnSameValue = mxStrSameValueFT->get_label();
 
     Init();
 
-    mpLbPos->SelectEntry(rData.maPositiveColor);
-    mpLbFillType->SelectEntryPos( rData.mbGradient ? 1 : 0 );
+    mxLbPos->SelectEntry(rData.maPositiveColor);
+    mxLbFillType->set_active( rData.mbGradient ? 1 : 0 );
     if (rData.mpNegativeColor)
-        mpLbNeg->SelectEntry(*rData.mpNegativeColor);
+        mxLbNeg->SelectEntry(*rData.mpNegativeColor);
 
     switch (rData.meAxisPosition)
     {
         case databar::NONE:
-            mpLbAxisPos->SelectEntryPos(2);
+            mxLbAxisPos->set_active(2);
             break;
         case databar::AUTOMATIC:
-            mpLbAxisPos->SelectEntryPos(0);
+            mxLbAxisPos->set_active(0);
             break;
         case databar::MIDDLE:
-            mpLbAxisPos->SelectEntryPos(1);
+            mxLbAxisPos->set_active(1);
             break;
     }
-    ::SetType(rData.mpLowerLimit.get(), *mpLbTypeMin);
-    ::SetType(rData.mpUpperLimit.get(), *mpLbTypeMax);
-    SetValue(mpDoc, rData.mpLowerLimit.get(), *mpEdMin);
-    SetValue(mpDoc, rData.mpUpperLimit.get(), *mpEdMax);
-    mpLenMin->SetText(convertNumberToString(rData.mnMinLength, mpDoc));
-    mpLenMax->SetText(convertNumberToString(rData.mnMaxLength, mpDoc));
-    mpLbAxisCol->SelectEntry(rData.maAxisColor);
-    mpCbOnlyBar->Check(rData.mbOnlyBar);
+    ::SetType(rData.mpLowerLimit.get(), *mxLbTypeMin);
+    ::SetType(rData.mpUpperLimit.get(), *mxLbTypeMax);
+    SetValue(mpDoc, rData.mpLowerLimit.get(), *mxEdMin);
+    SetValue(mpDoc, rData.mpUpperLimit.get(), *mxEdMax);
+    mxLenMin->set_text(convertNumberToString(rData.mnMinLength, mpDoc));
+    mxLenMax->set_text(convertNumberToString(rData.mnMaxLength, mpDoc));
+    mxLbAxisCol->SelectEntry(rData.maAxisColor);
+    mxCbOnlyBar->set_active(rData.mbOnlyBar);
 
-    TypeSelectHdl(*mpLbTypeMin);
-    PosSelectHdl(*mpLbTypeMin);
+    TypeSelectHdl(*mxLbTypeMin);
+    PosSelectHdl(*mxLbTypeMin);
 }
 
 ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
 {
-    disposeOnce();
-}
-
-void ScDataBarSettingsDlg::dispose()
-{
-    mpBtnOk.clear();
-    mpBtnCancel.clear();
-    mpLbPos.clear();
-    mpLbNeg.clear();
-    mpLbAxisCol.clear();
-    mpLbTypeMin.clear();
-    mpLbTypeMax.clear();
-    mpLbFillType.clear();
-    mpLbAxisPos.clear();
-    mpEdMin.clear();
-    mpEdMax.clear();
-    mpLenMin.clear();
-    mpLenMax.clear();
-    mpCbOnlyBar.clear();
-    ModalDialog::dispose();
 }
 
 void ScDataBarSettingsDlg::Init()
 {
-    mpLbNeg->SelectEntry(COL_LIGHTRED);
-    mpLbAxisCol->SelectEntry(COL_BLACK);
-    mpLbPos->SelectEntry(COL_LIGHTBLUE);
-    mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
+    mxLbNeg->SelectEntry(COL_LIGHTRED);
+    mxLbAxisCol->SelectEntry(COL_BLACK);
+    mxLbPos->SelectEntry(COL_LIGHTBLUE);
+    mxBtnOk->connect_clicked( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
-    mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
-    mpLbTypeMax->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
-    mpLbAxisPos->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, PosSelectHdl ) );
+    mxLbTypeMin->connect_changed( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mxLbTypeMax->connect_changed( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mxLbAxisPos->connect_changed( LINK( this, ScDataBarSettingsDlg, PosSelectHdl ) );
 
 }
 
 namespace {
 
-void GetAxesPosition(ScDataBarFormatData* pData, const ListBox* rLbox)
+void GetAxesPosition(ScDataBarFormatData* pData, const weld::ComboBox& rLbox)
 {
-    switch(rLbox->GetSelectedEntryPos())
+    switch (rLbox.get_active())
     {
         case 0:
             pData->meAxisPosition = databar::AUTOMATIC;
@@ -197,36 +177,36 @@ void SetBarLength(ScDataBarFormatData* pData, const OUString& minStr, const OUSt
 ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
 {
     ScDataBarFormatData* pData = new ScDataBarFormatData();
-    pData->maPositiveColor = mpLbPos->GetSelectEntryColor();
-    pData->mpNegativeColor.reset(new Color(mpLbNeg->GetSelectEntryColor()));
-    pData->mbGradient = ( mpLbFillType->GetSelectedEntryPos() == 1 );
+    pData->maPositiveColor = mxLbPos->GetSelectEntryColor();
+    pData->mpNegativeColor.reset(new Color(mxLbNeg->GetSelectEntryColor()));
+    pData->mbGradient = ( mxLbFillType->get_active() == 1 );
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
-    pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();
-    pData->mbOnlyBar = mpCbOnlyBar->IsChecked();
+    pData->maAxisColor = mxLbAxisCol->GetSelectEntryColor();
+    pData->mbOnlyBar = mxCbOnlyBar->get_active();
 
-    ::GetType(*mpLbTypeMin, *mpEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    ::GetType(*mpLbTypeMax, *mpEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    GetAxesPosition(pData, mpLbAxisPos);
-    SetBarLength(pData, mpLenMin->GetText(), mpLenMax->GetText(), mpNumberFormatter);
+    ::GetType(*mxLbTypeMin, *mxEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    ::GetType(*mxLbTypeMax, *mxEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    GetAxesPosition(pData, *mxLbAxisPos);
+    SetBarLength(pData, mxLenMin->get_text(), mxLenMax->get_text(), mpNumberFormatter);
 
     return pData;
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
+IMPL_LINK_NOARG(ScDataBarSettingsDlg, OkBtnHdl, weld::Button&, void)
 {
     //check that min < max
     bool bWarn = false;
-    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectedEntryPos();
+    int nSelectMin = mxLbTypeMin->get_active();
     if( nSelectMin == COLORSCALE_MAX )
         bWarn = true;
-    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectedEntryPos();
+    int nSelectMax = mxLbTypeMax->get_active();
     if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
     if(!bWarn) // databar length checks
     {
-        OUString aMinString = mpLenMin->GetText();
-        OUString aMaxString = mpLenMax->GetText();
+        OUString aMinString = mxLenMin->get_text();
+        OUString aMaxString = mxLenMax->get_text();
         double nMinValue = 0;
         sal_uInt32 nIndex = 0;
         (void)mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
@@ -236,13 +216,13 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
         if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue || nMaxValue > 100 || nMinValue < 0)
             bWarn = true;
     }
-    if(!bWarn && mpLbTypeMin->GetSelectedEntryPos() == mpLbTypeMax->GetSelectedEntryPos())
+    if (!bWarn && mxLbTypeMin->get_active() == mxLbTypeMax->get_active())
     {
 
         if(nSelectMax != COLORSCALE_FORMULA && nSelectMax != COLORSCALE_AUTO)
         {
-            OUString aMinString = mpEdMin->GetText();
-            OUString aMaxString = mpEdMax->GetText();
+            OUString aMinString = mxEdMin->get_text();
+            OUString aMaxString = mxEdMax->get_text();
             double nMinValue = 0;
             sal_uInt32 nIndex = 0;
             (void)mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
@@ -257,66 +237,66 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
     if(bWarn)
     {
         //show warning message and don't close
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                    maStrWarnSameValue));
         xWarn->run();
     }
     else
     {
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG(ScDataBarSettingsDlg, TypeSelectHdl, weld::ComboBox&, void)
 {
-    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectedEntryPos();
+    int nSelectMin = mxLbTypeMin->get_active();
     if( nSelectMin <= COLORSCALE_MAX)
-        mpEdMin->Disable();
+        mxEdMin->set_sensitive(false);
     else
     {
-        mpEdMin->Enable();
-        if(mpEdMin->GetText().isEmpty())
+        mxEdMin->set_sensitive(true);
+        if(mxEdMin->get_text().isEmpty())
         {
             if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
-                mpEdMin->SetText(OUString::number(50));
+                mxEdMin->set_text(OUString::number(50));
             else
-                mpEdMin->SetText(OUString::number(0));
+                mxEdMin->set_text(OUString::number(0));
         }
     }
 
-    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectedEntryPos();
-    if(nSelectMax <= COLORSCALE_MAX)
-        mpEdMax->Disable();
+    int nSelectMax = mxLbTypeMax->get_active();
+    if (nSelectMax <= COLORSCALE_MAX)
+        mxEdMax->set_sensitive(false);
     else
     {
-        mpEdMax->Enable();
-        if(mpEdMax->GetText().isEmpty())
+        mxEdMax->set_sensitive(true);
+        if (mxEdMax->get_text().isEmpty())
         {
             if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
-                mpEdMax->SetText(OUString::number(50));
+                mxEdMax->set_text(OUString::number(50));
             else
-                mpEdMax->SetText(OUString::number(0));
+                mxEdMax->set_text(OUString::number(0));
         }
     }
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG(ScDataBarSettingsDlg, PosSelectHdl, weld::ComboBox&, void)
 {
-    sal_Int32 axisPos = mpLbAxisPos->GetSelectedEntryPos();
+    int axisPos = mxLbAxisPos->get_active();
     if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic
     {
-        mpLenMin->Disable();
-        mpLenMax->Disable();
+        mxLenMin->set_sensitive(false);
+        mxLenMax->set_sensitive(false);
     }
     else
     {
-        mpLenMin->Enable();
-        mpLenMax->Enable();
-        if(mpLenMin->GetText().isEmpty())
+        mxLenMin->set_sensitive(true);
+        mxLenMax->set_sensitive(true);
+        if(mxLenMin->get_text().isEmpty())
         {
-            mpLenMin->SetText(OUString::number(0));
-            mpLenMax->SetText(OUString::number(100));
+            mxLenMin->set_text(OUString::number(0));
+            mxLenMax->set_text(OUString::number(100));
         }
     }
 }
