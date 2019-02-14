@@ -283,32 +283,32 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
 
     rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
 
-    if ( !nLevel )
-    {
-        if (aParagraphObj.bExtendedParameters &&
-             aParagraphObj.meBullet == css::beans::PropertyState_DIRECT_VALUE)
-        {
-            for ( sal_Int16 i = 0; i < 5; i++ )
-            {
-                PPTExParaLevel& rLevel = maParaLevel[ i ];
-                if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false, false );
-                rLevel.mnTextOfs = aParagraphObj.nTextOfs;
-                rLevel.mnBulletOfs = static_cast<sal_uInt16>(aParagraphObj.nBulletOfs);
-                rLevel.mnBulletChar = aParagraphObj.cBulletId;
-                FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
-                                                        aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
-                rLevel.mnBulletFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDescEntry ));
-                rLevel.mnBulletHeight = aParagraphObj.nBulletRealSize;
-                rLevel.mnBulletColor = aParagraphObj.nBulletColor;
+    if ( nLevel )
+        return;
 
-                rLevel.mbExtendedBulletsUsed = aParagraphObj.bExtendedBulletsUsed;
-                rLevel.mnBulletId = aParagraphObj.nBulletId;
-                rLevel.mnNumberingType = aParagraphObj.nNumberingType;
-                rLevel.mnBulletStart = aParagraphObj.nStartWith;
-                rLevel.mnMappedNumType = aParagraphObj.nMappedNumType;
-            }
-        }
+    if (!(aParagraphObj.bExtendedParameters &&
+         aParagraphObj.meBullet == css::beans::PropertyState_DIRECT_VALUE))
+        return;
+
+    for ( sal_Int16 i = 0; i < 5; i++ )
+    {
+        PPTExParaLevel& rLevel = maParaLevel[ i ];
+        if ( i )
+            aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false, false );
+        rLevel.mnTextOfs = aParagraphObj.nTextOfs;
+        rLevel.mnBulletOfs = static_cast<sal_uInt16>(aParagraphObj.nBulletOfs);
+        rLevel.mnBulletChar = aParagraphObj.cBulletId;
+        FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
+                                                aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
+        rLevel.mnBulletFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDescEntry ));
+        rLevel.mnBulletHeight = aParagraphObj.nBulletRealSize;
+        rLevel.mnBulletColor = aParagraphObj.nBulletColor;
+
+        rLevel.mbExtendedBulletsUsed = aParagraphObj.bExtendedBulletsUsed;
+        rLevel.mnBulletId = aParagraphObj.nBulletId;
+        rLevel.mnNumberingType = aParagraphObj.nNumberingType;
+        rLevel.mnBulletStart = aParagraphObj.nStartWith;
+        rLevel.mnMappedNumType = aParagraphObj.nMappedNumType;
     }
 }
 

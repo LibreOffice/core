@@ -2662,20 +2662,20 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 // export navigation graphics from button set
 void HtmlExport::CreateBitmaps()
 {
-    if(mnButtonThema != -1 && mpButtonSet.get() )
+    if(mnButtonThema == -1 || !mpButtonSet.get())
+        return;
+
+    for( int nButton = 0; nButton != SAL_N_ELEMENTS(pButtonNames); nButton++ )
     {
-        for( int nButton = 0; nButton != SAL_N_ELEMENTS(pButtonNames); nButton++ )
-        {
-            if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
-                continue;
+        if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
+            continue;
 
-            if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
-                continue;
+        if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
+            continue;
 
-            OUString aFull(maExportPath);
-            aFull += GetButtonName(nButton);
-            mpButtonSet->exportButton( mnButtonThema, aFull, GetButtonName(nButton) );
-        }
+        OUString aFull(maExportPath);
+        aFull += GetButtonName(nButton);
+        mpButtonSet->exportButton( mnButtonThema, aFull, GetButtonName(nButton) );
     }
 }
 

@@ -184,77 +184,77 @@ void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
 void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 {
 
-    if(!rTextShape.IsEmptyPresObj())
+    if(rTextShape.IsEmptyPresObj())
+        return;
+
+    OutlinerParaObject* pOPO = rTextShape.GetOutlinerParaObject();
+    if (!pOPO)
+        return;
+
+    mrOutliner.SetText( *pOPO );
+
+    sal_Int32 nCount = mrOutliner.GetParagraphCount();
+
+    bool bChange = false;
+
+    for(sal_Int32 nPara = 0; nPara < nCount; nPara++)
     {
-        OutlinerParaObject* pOPO = rTextShape.GetOutlinerParaObject();
-        if (pOPO)
+        SfxItemSet aParaSet( mrOutliner.GetParaAttribs( nPara ) );
+
+        bool bItemChange = false;
+
+        bool bState = false;
+        const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
+        if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
         {
-            mrOutliner.SetText( *pOPO );
-
-            sal_Int32 nCount = mrOutliner.GetParagraphCount();
-
-            bool bChange = false;
-
-            for(sal_Int32 nPara = 0; nPara < nCount; nPara++)
+            // disable bullet if text::enable-bullet="false" is found
+            if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor::Default) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
             {
-                SfxItemSet aParaSet( mrOutliner.GetParaAttribs( nPara ) );
+                // for outline object and level > 0 burn in the style sheet because it will be changed to "outline 1"
+                SfxStyleSheet* pStyleSheet = mrOutliner.GetStyleSheet( nPara );
 
-                bool bItemChange = false;
-
-                bool bState = false;
-                const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
-                if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
+                if( pStyleSheet )
                 {
-                    // disable bullet if text::enable-bullet="false" is found
-                    if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor::Default) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
+                    // optimize me: only put items hard into paragraph that are not equal to "outline 1" style!
+                    SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+
+                    SfxWhichIter aIter(aParaSet);
+                    sal_uInt16 nWhich(aIter.FirstWhich());
+
+                    // now set all none hard attributes from the style
+                    while(nWhich)
                     {
-                        // for outline object and level > 0 burn in the style sheet because it will be changed to "outline 1"
-                        SfxStyleSheet* pStyleSheet = mrOutliner.GetStyleSheet( nPara );
-
-                        if( pStyleSheet )
+                        if(SfxItemState::SET != aParaSet.GetItemState(nWhich))
                         {
-                            // optimize me: only put items hard into paragraph that are not equal to "outline 1" style!
-                            SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-
-                            SfxWhichIter aIter(aParaSet);
-                            sal_uInt16 nWhich(aIter.FirstWhich());
-
-                            // now set all none hard attributes from the style
-                            while(nWhich)
-                            {
-                                if(SfxItemState::SET != aParaSet.GetItemState(nWhich))
-                                {
-                                    aParaSet.Put(rStyleSet.Get(nWhich));
-                                    bItemChange = true;
-                                }
-
-                                nWhich = aIter.NextWhich();
-                            }
+                            aParaSet.Put(rStyleSet.Get(nWhich));
+                            bItemChange = true;
                         }
+
+                        nWhich = aIter.NextWhich();
                     }
-
-                    mrOutliner.SetDepth( mrOutliner.GetParagraph( nPara ), -1 );
-
-                    bChange = true;
-                }
-
-                bItemChange |= transformItemSet( aParaSet, bState );
-
-                bItemChange |= removeAlienAttributes( aParaSet );
-
-                if( bItemChange )
-                {
-                    mrOutliner.SetParaAttribs( nPara, aParaSet );
-                    bChange = true;
                 }
             }
 
-            if( bChange )
-                rTextShape.SetOutlinerParaObject(mrOutliner.CreateParaObject());
+            mrOutliner.SetDepth( mrOutliner.GetParagraph( nPara ), -1 );
 
-            mrOutliner.Clear();
+            bChange = true;
+        }
+
+        bItemChange |= transformItemSet( aParaSet, bState );
+
+        bItemChange |= removeAlienAttributes( aParaSet );
+
+        if( bItemChange )
+        {
+            mrOutliner.SetParaAttribs( nPara, aParaSet );
+            bChange = true;
         }
     }
+
+    if( bChange )
+        rTextShape.SetOutlinerParaObject(mrOutliner.CreateParaObject());
+
+    mrOutliner.Clear();
 }
 
 bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleSheetBase* pSheet, bool& rState )

@@ -189,22 +189,22 @@ sal_uInt32 ExSoundCollection::GetSize() const
 
 void ExSoundCollection::Write( SvStream& rSt ) const
 {
-    if (!maEntries.empty())
+    if (maEntries.empty())
+        return;
+
+    sal_uInt32 i = 1;
+    sal_uInt32 nSoundCount = maEntries.size();
+
+    // create SoundCollection Container
+    rSt.WriteUInt16( 0xf ).WriteUInt16( EPP_SoundCollection ).WriteUInt32( GetSize() - 8 );
+
+    // create SoundCollAtom ( reference to the next free SoundId );
+    rSt.WriteUInt32( EPP_SoundCollAtom << 16 ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
+
+    for ( const auto& rEntry : maEntries )
     {
-        sal_uInt32 i = 1;
-        sal_uInt32 nSoundCount = maEntries.size();
-
-        // create SoundCollection Container
-        rSt.WriteUInt16( 0xf ).WriteUInt16( EPP_SoundCollection ).WriteUInt32( GetSize() - 8 );
-
-        // create SoundCollAtom ( reference to the next free SoundId );
-        rSt.WriteUInt32( EPP_SoundCollAtom << 16 ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
-
-        for ( const auto& rEntry : maEntries )
-        {
-            rEntry.Write(rSt,i);
-            ++i;
-        }
+        rEntry.Write(rSt,i);
+        ++i;
     }
 }
 

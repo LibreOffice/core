@@ -1307,42 +1307,42 @@ void SdPublishingDlg::UpdatePage()
  */
 void SdPublishingDlg::LoadPreviewButtons()
 {
-    if (mpButtonSet)
+    if (!mpButtonSet)
+        return;
+
+    const int nButtonCount = 8;
+    static const char *pButtonNames[nButtonCount] =
     {
-        const int nButtonCount = 8;
-        static const char *pButtonNames[nButtonCount] =
+        "first.png",
+        "left.png",
+        "right.png",
+        "last.png",
+        "home.png",
+        "text.png",
+        "expand.png",
+        "collapse.png",
+    };
+
+    std::vector< OUString > aButtonNames;
+    for(const char * p : pButtonNames)
+        aButtonNames.push_back( OUString::createFromAscii( p ) );
+
+    int nSetCount = mpButtonSet->getCount();
+
+    int nHeight = 32;
+    Image aImage;
+    for( int nSet = 0; nSet < nSetCount; ++nSet )
+    {
+        if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
         {
-            "first.png",
-            "left.png",
-            "right.png",
-            "last.png",
-            "home.png",
-            "text.png",
-            "expand.png",
-            "collapse.png",
-        };
-
-        std::vector< OUString > aButtonNames;
-        for(const char * p : pButtonNames)
-            aButtonNames.push_back( OUString::createFromAscii( p ) );
-
-        int nSetCount = mpButtonSet->getCount();
-
-        int nHeight = 32;
-        Image aImage;
-        for( int nSet = 0; nSet < nSetCount; ++nSet )
-        {
-            if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
-            {
-                pPage5_Buttons->InsertItem( static_cast<sal_uInt16>(nSet)+1, aImage );
-                if( nHeight < aImage.GetSizePixel().Height() )
-                    nHeight = aImage.GetSizePixel().Height();
-            }
+            pPage5_Buttons->InsertItem( static_cast<sal_uInt16>(nSet)+1, aImage );
+            if( nHeight < aImage.GetSizePixel().Height() )
+                nHeight = aImage.GetSizePixel().Height();
         }
-
-        pPage5_Buttons->SetItemHeight( nHeight );
-        m_bButtonsDirty = false;
     }
+
+    pPage5_Buttons->SetItemHeight( nHeight );
+    m_bButtonsDirty = false;
 }
 
 // Clickhandler for the Forward Button

@@ -103,114 +103,114 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
     if ( bLast )
         mnTextSize++;
 
-    if ( mnTextSize )
+    if ( !mnTextSize )
+        return;
+
+    bool bRTL_endingParen = false;
+    mpFieldEntry = nullptr;
+    sal_uInt32 nFieldType = 0;
+
+    mXPropSet.set( rXTextRange, css::uno::UNO_QUERY );
+    mXPropState.set( rXTextRange, css::uno::UNO_QUERY );
+
+    bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
+    if ( bPropSetsValid )
+        nFieldType = ImplGetTextField( rXTextRange, mXPropSet, aURL );
+    if ( nFieldType )
     {
-        bool bRTL_endingParen = false;
-        mpFieldEntry = nullptr;
-        sal_uInt32 nFieldType = 0;
-
-        mXPropSet.set( rXTextRange, css::uno::UNO_QUERY );
-        mXPropState.set( rXTextRange, css::uno::UNO_QUERY );
-
-        bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
-        if ( bPropSetsValid )
-            nFieldType = ImplGetTextField( rXTextRange, mXPropSet, aURL );
-        if ( nFieldType )
+        mpFieldEntry.reset( new FieldEntry( nFieldType, 0, mnTextSize ) );
+        if ( nFieldType >> 28 == 4 )
         {
-            mpFieldEntry.reset( new FieldEntry( nFieldType, 0, mnTextSize ) );
-            if ( nFieldType >> 28 == 4 )
-            {
-                mpFieldEntry->aRepresentation = aString;
-                mpFieldEntry->aFieldUrl = aURL;
-            }
+            mpFieldEntry->aRepresentation = aString;
+            mpFieldEntry->aFieldUrl = aURL;
         }
-        bool bSymbol = false;
-
-        if ( bPropSetsValid && ImplGetPropertyValue( "CharFontCharSet", false ) )
-        {
-            sal_Int16 nCharset = 0;
-            mAny >>= nCharset;
-            if ( nCharset == css::awt::CharSet::SYMBOL )
-                bSymbol = true;
-        }
-        if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
-        {
-            mnTextSize = 1;
-            if ( bLast )
-                mnTextSize++;
-            mpText.reset( new sal_uInt16[ mnTextSize ] );
-            mpText[ 0 ] = 0x2a;
-        }
-        else
-        {
-            // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
-            // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
-            if (bLast && !aString.isEmpty()
-                && aString[aString.getLength() - 1] == ')'
-                && FontCollection::GetScriptDirection(aString) == css::i18n::ScriptDirection::RIGHT_TO_LEFT)
-            {
-                mnTextSize++;
-                bRTL_endingParen = true;
-            }
-            mpText.reset( new sal_uInt16[ mnTextSize ] );
-            sal_uInt16 nChar;
-            for ( sal_Int32 i = 0; i < aString.getLength(); i++ )
-            {
-                nChar = static_cast<sal_uInt16>(aString[ i ]);
-                if ( nChar == 0xa )
-                    nChar++;
-                else if ( !bSymbol )
-                {
-                    switch ( nChar )
-                    {
-                        // Currency
-                        case 128:   nChar = 0x20AC; break;
-                        // Punctuation and other
-                        case 130:   nChar = 0x201A; break;// SINGLE LOW-9 QUOTATION MARK
-                        case 131:   nChar = 0x0192; break;// LATIN SMALL LETTER F WITH HOOK
-                        case 132:   nChar = 0x201E; break;// DOUBLE LOW-9 QUOTATION MARK
-                                                              // LOW DOUBLE PRIME QUOTATION MARK
-                        case 133:   nChar = 0x2026; break;// HORIZONTAL ELLIPSES
-                        case 134:   nChar = 0x2020; break;// DAGGER
-                        case 135:   nChar = 0x2021; break;// DOUBLE DAGGER
-                        case 136:   nChar = 0x02C6; break;// MODIFIER LETTER CIRCUMFLEX ACCENT
-                        case 137:   nChar = 0x2030; break;// PER MILLE SIGN
-                        case 138:   nChar = 0x0160; break;// LATIN CAPITAL LETTER S WITH CARON
-                        case 139:   nChar = 0x2039; break;// SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-                        case 140:   nChar = 0x0152; break;// LATIN CAPITAL LIGATURE OE
-                        case 142:   nChar = 0x017D; break;// LATIN CAPITAL LETTER Z WITH CARON
-                        case 145:   nChar = 0x2018; break;// LEFT SINGLE QUOTATION MARK
-                                                              // MODIFIER LETTER TURNED COMMA
-                        case 146:   nChar = 0x2019; break;// RIGHT SINGLE QUOTATION MARK
-                                                              // MODIFIER LETTER APOSTROPHE
-                        case 147:   nChar = 0x201C; break;// LEFT DOUBLE QUOTATION MARK
-                                                              // REVERSED DOUBLE PRIME QUOTATION MARK
-                        case 148:   nChar = 0x201D; break;// RIGHT DOUBLE QUOTATION MARK
-                                                              // REVERSED DOUBLE PRIME QUOTATION MARK
-                        case 149:   nChar = 0x2022; break;// BULLET
-                        case 150:   nChar = 0x2013; break;// EN DASH
-                        case 151:   nChar = 0x2014; break;// EM DASH
-                        case 152:   nChar = 0x02DC; break;// SMALL TILDE
-                        case 153:   nChar = 0x2122; break;// TRADE MARK SIGN
-                        case 154:   nChar = 0x0161; break;// LATIN SMALL LETTER S WITH CARON
-                        case 155:   nChar = 0x203A; break;// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-                        case 156:   nChar = 0x0153; break;// LATIN SMALL LIGATURE OE
-                        case 158:   nChar = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
-                        case 159:   nChar = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
-                    }
-                }
-                mpText[ i ] = nChar;
-            }
-        }
-        if ( bRTL_endingParen )
-            mpText[ mnTextSize - 2 ] = 0x200F; // Unicode Right-to-Left mark
-
-        if ( bLast )
-            mpText[ mnTextSize - 1 ] = 0xd;
-
-        if ( bPropSetsValid )
-            ImplGetPortionValues( rFontCollection, true );
     }
+    bool bSymbol = false;
+
+    if ( bPropSetsValid && ImplGetPropertyValue( "CharFontCharSet", false ) )
+    {
+        sal_Int16 nCharset = 0;
+        mAny >>= nCharset;
+        if ( nCharset == css::awt::CharSet::SYMBOL )
+            bSymbol = true;
+    }
+    if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
+    {
+        mnTextSize = 1;
+        if ( bLast )
+            mnTextSize++;
+        mpText.reset( new sal_uInt16[ mnTextSize ] );
+        mpText[ 0 ] = 0x2a;
+    }
+    else
+    {
+        // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
+        // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
+        if (bLast && !aString.isEmpty()
+            && aString[aString.getLength() - 1] == ')'
+            && FontCollection::GetScriptDirection(aString) == css::i18n::ScriptDirection::RIGHT_TO_LEFT)
+        {
+            mnTextSize++;
+            bRTL_endingParen = true;
+        }
+        mpText.reset( new sal_uInt16[ mnTextSize ] );
+        sal_uInt16 nChar;
+        for ( sal_Int32 i = 0; i < aString.getLength(); i++ )
+        {
+            nChar = static_cast<sal_uInt16>(aString[ i ]);
+            if ( nChar == 0xa )
+                nChar++;
+            else if ( !bSymbol )
+            {
+                switch ( nChar )
+                {
+                    // Currency
+                    case 128:   nChar = 0x20AC; break;
+                    // Punctuation and other
+                    case 130:   nChar = 0x201A; break;// SINGLE LOW-9 QUOTATION MARK
+                    case 131:   nChar = 0x0192; break;// LATIN SMALL LETTER F WITH HOOK
+                    case 132:   nChar = 0x201E; break;// DOUBLE LOW-9 QUOTATION MARK
+                                                          // LOW DOUBLE PRIME QUOTATION MARK
+                    case 133:   nChar = 0x2026; break;// HORIZONTAL ELLIPSES
+                    case 134:   nChar = 0x2020; break;// DAGGER
+                    case 135:   nChar = 0x2021; break;// DOUBLE DAGGER
+                    case 136:   nChar = 0x02C6; break;// MODIFIER LETTER CIRCUMFLEX ACCENT
+                    case 137:   nChar = 0x2030; break;// PER MILLE SIGN
+                    case 138:   nChar = 0x0160; break;// LATIN CAPITAL LETTER S WITH CARON
+                    case 139:   nChar = 0x2039; break;// SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+                    case 140:   nChar = 0x0152; break;// LATIN CAPITAL LIGATURE OE
+                    case 142:   nChar = 0x017D; break;// LATIN CAPITAL LETTER Z WITH CARON
+                    case 145:   nChar = 0x2018; break;// LEFT SINGLE QUOTATION MARK
+                                                          // MODIFIER LETTER TURNED COMMA
+                    case 146:   nChar = 0x2019; break;// RIGHT SINGLE QUOTATION MARK
+                                                          // MODIFIER LETTER APOSTROPHE
+                    case 147:   nChar = 0x201C; break;// LEFT DOUBLE QUOTATION MARK
+                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
+                    case 148:   nChar = 0x201D; break;// RIGHT DOUBLE QUOTATION MARK
+                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
+                    case 149:   nChar = 0x2022; break;// BULLET
+                    case 150:   nChar = 0x2013; break;// EN DASH
+                    case 151:   nChar = 0x2014; break;// EM DASH
+                    case 152:   nChar = 0x02DC; break;// SMALL TILDE
+                    case 153:   nChar = 0x2122; break;// TRADE MARK SIGN
+                    case 154:   nChar = 0x0161; break;// LATIN SMALL LETTER S WITH CARON
+                    case 155:   nChar = 0x203A; break;// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+                    case 156:   nChar = 0x0153; break;// LATIN SMALL LIGATURE OE
+                    case 158:   nChar = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
+                    case 159:   nChar = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
+                }
+            }
+            mpText[ i ] = nChar;
+        }
+    }
+    if ( bRTL_endingParen )
+        mpText[ mnTextSize - 2 ] = 0x200F; // Unicode Right-to-Left mark
+
+    if ( bLast )
+        mpText[ mnTextSize - 1 ] = 0xd;
+
+    if ( bPropSetsValid )
+        ImplGetPortionValues( rFontCollection, true );
 }
 
 PortionObj::PortionObj( const PortionObj& rPortionObj )
@@ -711,29 +711,29 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const 
 
     mXPropState.set( rXTextContent, css::uno::UNO_QUERY );
 
-    if ( mXPropSet.is() && mXPropState.is() )
+    if ( !(mXPropSet.is() && mXPropState.is()) )
+        return;
+
+    css::uno::Reference< css::container::XEnumerationAccess > aXTextPortionEA( rXTextContent, css::uno::UNO_QUERY );
+    if ( aXTextPortionEA.is() )
     {
-        css::uno::Reference< css::container::XEnumerationAccess > aXTextPortionEA( rXTextContent, css::uno::UNO_QUERY );
-        if ( aXTextPortionEA.is() )
+        css::uno::Reference< css::container::XEnumeration > aXTextPortionE( aXTextPortionEA->createEnumeration() );
+        if ( aXTextPortionE.is() )
         {
-            css::uno::Reference< css::container::XEnumeration > aXTextPortionE( aXTextPortionEA->createEnumeration() );
-            if ( aXTextPortionE.is() )
+            while ( aXTextPortionE->hasMoreElements() )
             {
-                while ( aXTextPortionE->hasMoreElements() )
+                css::uno::Reference< css::text::XTextRange > aXCursorText;
+                css::uno::Any aAny( aXTextPortionE->nextElement() );
+                if ( aAny >>= aXCursorText )
                 {
-                    css::uno::Reference< css::text::XTextRange > aXCursorText;
-                    css::uno::Any aAny( aXTextPortionE->nextElement() );
-                    if ( aAny >>= aXCursorText )
-                    {
-                        std::unique_ptr<PortionObj> pPortionObj(new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection ));
-                        if ( pPortionObj->Count() )
-                            mvPortions.push_back( std::move(pPortionObj) );
-                    }
+                    std::unique_ptr<PortionObj> pPortionObj(new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection ));
+                    if ( pPortionObj->Count() )
+                        mvPortions.push_back( std::move(pPortionObj) );
                 }
             }
         }
-        ImplGetParagraphValues( &rProv, true );
     }
+    ImplGetParagraphValues( &rProv, true );
 }
 
 ParagraphObj::~ParagraphObj()
@@ -754,19 +754,19 @@ void ParagraphObj::ImplClear()
 
 void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 {
-    if ( ( nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
+    if ( !(( nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff )) )
+        return;
+
+    // calculate the bullet real size for this graphic
+    if ( aBuGraSize.Width() && aBuGraSize.Height() )
     {
-        // calculate the bullet real size for this graphic
-        if ( aBuGraSize.Width() && aBuGraSize.Height() )
-        {
-            double fCharHeight = nFontHeight;
-            double fLen = aBuGraSize.Height();
-            fCharHeight = fCharHeight * 0.2540;
-            double fQuo = fLen / fCharHeight;
-            nBulletRealSize = static_cast<sal_Int16>( fQuo + 0.5 );
-            if ( static_cast<sal_uInt16>(nBulletRealSize) > 400 )
-                nBulletRealSize = 400;
-        }
+        double fCharHeight = nFontHeight;
+        double fLen = aBuGraSize.Height();
+        fCharHeight = fCharHeight * 0.2540;
+        double fQuo = fLen / fCharHeight;
+        nBulletRealSize = static_cast<sal_Int16>( fQuo + 0.5 );
+        if ( static_cast<sal_uInt16>(nBulletRealSize) > 400 )
+            nBulletRealSize = 400;
     }
 }
 
