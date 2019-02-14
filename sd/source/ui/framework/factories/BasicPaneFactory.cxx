@@ -126,77 +126,77 @@ void SAL_CALL BasicPaneFactory::disposing()
 
 void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() > 0)
+    if (aArguments.getLength() <= 0)
+        return;
+
+    try
     {
+        // Get the XController from the first argument.
+        Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
+        mxControllerWeak = xController;
+
+        // Tunnel through the controller to obtain access to the ViewShellBase.
         try
         {
-            // Get the XController from the first argument.
-            Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
-            mxControllerWeak = xController;
-
-            // Tunnel through the controller to obtain access to the ViewShellBase.
-            try
-            {
-                Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-                DrawController* pController
-                    = reinterpret_cast<DrawController*>(
-                        (sal::static_int_cast<sal_uIntPtr>(
-                            xTunnel->getSomething(DrawController::getUnoTunnelId()))));
-                mpViewShellBase = pController->GetViewShellBase();
-            }
-            catch(RuntimeException&)
-            {}
-
-            Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
-            Reference<XConfigurationController> xCC (xCM->getConfigurationController());
-            mxConfigurationControllerWeak = xCC;
-
-            // Add pane factories for the two left panes (one for Impress and one for
-            // Draw) and the center pane.
-            if (xController.is() && xCC.is())
-            {
-                PaneDescriptor aDescriptor;
-                aDescriptor.msPaneURL = FrameworkHelper::msCenterPaneURL;
-                aDescriptor.mePaneId = CenterPaneId;
-                aDescriptor.mbIsReleased = false;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-
-                aDescriptor.msPaneURL = FrameworkHelper::msFullScreenPaneURL;
-                aDescriptor.mePaneId = FullScreenPaneId;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-
-                aDescriptor.msPaneURL = FrameworkHelper::msLeftImpressPaneURL;
-                aDescriptor.mePaneId = LeftImpressPaneId;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-
-                aDescriptor.msPaneURL = FrameworkHelper::msLeftDrawPaneURL;
-                aDescriptor.mePaneId = LeftDrawPaneId;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-            }
-
-            // Register as configuration change listener.
-            if (xCC.is())
-            {
-                xCC->addConfigurationChangeListener(
-                    this,
-                    FrameworkHelper::msConfigurationUpdateStartEvent,
-                    makeAny(gnConfigurationUpdateStartEvent));
-                xCC->addConfigurationChangeListener(
-                    this,
-                    FrameworkHelper::msConfigurationUpdateEndEvent,
-                    makeAny(gnConfigurationUpdateEndEvent));
-            }
+            Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
+            DrawController* pController
+                = reinterpret_cast<DrawController*>(
+                    (sal::static_int_cast<sal_uIntPtr>(
+                        xTunnel->getSomething(DrawController::getUnoTunnelId()))));
+            mpViewShellBase = pController->GetViewShellBase();
         }
-        catch (RuntimeException&)
+        catch(RuntimeException&)
+        {}
+
+        Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
+        Reference<XConfigurationController> xCC (xCM->getConfigurationController());
+        mxConfigurationControllerWeak = xCC;
+
+        // Add pane factories for the two left panes (one for Impress and one for
+        // Draw) and the center pane.
+        if (xController.is() && xCC.is())
         {
-            Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
-            if (xCC.is())
-                xCC->removeResourceFactoryForReference(this);
+            PaneDescriptor aDescriptor;
+            aDescriptor.msPaneURL = FrameworkHelper::msCenterPaneURL;
+            aDescriptor.mePaneId = CenterPaneId;
+            aDescriptor.mbIsReleased = false;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
+
+            aDescriptor.msPaneURL = FrameworkHelper::msFullScreenPaneURL;
+            aDescriptor.mePaneId = FullScreenPaneId;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
+
+            aDescriptor.msPaneURL = FrameworkHelper::msLeftImpressPaneURL;
+            aDescriptor.mePaneId = LeftImpressPaneId;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
+
+            aDescriptor.msPaneURL = FrameworkHelper::msLeftDrawPaneURL;
+            aDescriptor.mePaneId = LeftDrawPaneId;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
         }
+
+        // Register as configuration change listener.
+        if (xCC.is())
+        {
+            xCC->addConfigurationChangeListener(
+                this,
+                FrameworkHelper::msConfigurationUpdateStartEvent,
+                makeAny(gnConfigurationUpdateStartEvent));
+            xCC->addConfigurationChangeListener(
+                this,
+                FrameworkHelper::msConfigurationUpdateEndEvent,
+                makeAny(gnConfigurationUpdateEndEvent));
+        }
+    }
+    catch (RuntimeException&)
+    {
+        Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+        if (xCC.is())
+            xCC->removeResourceFactoryForReference(this);
     }
 }
 

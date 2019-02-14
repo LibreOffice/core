@@ -59,29 +59,29 @@ ToolBarModule::ToolBarModule (
     }
 
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
-    if (xControllerManager.is())
-    {
-        mxConfigurationController = xControllerManager->getConfigurationController();
-        if (mxConfigurationController.is())
-        {
-            mxConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msConfigurationUpdateStartEvent,
-                makeAny(gnConfigurationUpdateStartEvent));
-            mxConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msConfigurationUpdateEndEvent,
-                makeAny(gnConfigurationUpdateEndEvent));
-            mxConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msResourceActivationRequestEvent,
-                makeAny(gnResourceActivationRequestEvent));
-            mxConfigurationController->addConfigurationChangeListener(
-                this,
-                FrameworkHelper::msResourceDeactivationRequestEvent,
-                makeAny(gnResourceDeactivationRequestEvent));
-        }
-    }
+    if (!xControllerManager.is())
+        return;
+
+    mxConfigurationController = xControllerManager->getConfigurationController();
+    if (!mxConfigurationController.is())
+        return;
+
+    mxConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msConfigurationUpdateStartEvent,
+        makeAny(gnConfigurationUpdateStartEvent));
+    mxConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msConfigurationUpdateEndEvent,
+        makeAny(gnConfigurationUpdateEndEvent));
+    mxConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msResourceActivationRequestEvent,
+        makeAny(gnResourceActivationRequestEvent));
+    mxConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msResourceDeactivationRequestEvent,
+        makeAny(gnResourceDeactivationRequestEvent));
 }
 
 ToolBarModule::~ToolBarModule()
@@ -99,36 +99,36 @@ void SAL_CALL ToolBarModule::disposing()
 void SAL_CALL ToolBarModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (mxConfigurationController.is())
+    if (!mxConfigurationController.is())
+        return;
+
+    sal_Int32 nEventType = 0;
+    rEvent.UserData >>= nEventType;
+    switch (nEventType)
     {
-        sal_Int32 nEventType = 0;
-        rEvent.UserData >>= nEventType;
-        switch (nEventType)
-        {
-            case gnConfigurationUpdateStartEvent:
-                HandleUpdateStart();
-                break;
+        case gnConfigurationUpdateStartEvent:
+            HandleUpdateStart();
+            break;
 
-            case gnConfigurationUpdateEndEvent:
-                HandleUpdateEnd();
-                break;
+        case gnConfigurationUpdateEndEvent:
+            HandleUpdateEnd();
+            break;
 
-            case gnResourceActivationRequestEvent:
-            case gnResourceDeactivationRequestEvent:
-                // Remember the request for the activation or deactivation
-                // of the center pane view.  When that happens then on end
-                // of the next configuration update the set of visible tool
-                // bars will be updated.
-                if ( ! mbMainViewSwitchUpdatePending)
-                    if (rEvent.ResourceId->getResourceURL().match(
-                        FrameworkHelper::msViewURLPrefix)
-                        && rEvent.ResourceId->isBoundToURL(
-                            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
-                    {
-                        mbMainViewSwitchUpdatePending = true;
-                    }
-                break;
-        }
+        case gnResourceActivationRequestEvent:
+        case gnResourceDeactivationRequestEvent:
+            // Remember the request for the activation or deactivation
+            // of the center pane view.  When that happens then on end
+            // of the next configuration update the set of visible tool
+            // bars will be updated.
+            if ( ! mbMainViewSwitchUpdatePending)
+                if (rEvent.ResourceId->getResourceURL().match(
+                    FrameworkHelper::msViewURLPrefix)
+                    && rEvent.ResourceId->isBoundToURL(
+                        FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+                {
+                    mbMainViewSwitchUpdatePending = true;
+                }
+            break;
     }
 }
 

@@ -45,18 +45,18 @@ GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw()
 void SAL_CALL GenericConfigurationChangeRequest::execute (
     const Reference<XConfiguration>& rxConfiguration)
 {
-    if (rxConfiguration.is())
-    {
-        switch (meMode)
-        {
-            case Activation:
-                rxConfiguration->addResource(mxResourceId);
-                break;
+    if (!rxConfiguration.is())
+        return;
 
-            case Deactivation:
-                rxConfiguration->removeResource(mxResourceId);
-                break;
-        }
+    switch (meMode)
+    {
+        case Activation:
+            rxConfiguration->addResource(mxResourceId);
+            break;
+
+        case Deactivation:
+            rxConfiguration->removeResource(mxResourceId);
+            break;
     }
 }
 

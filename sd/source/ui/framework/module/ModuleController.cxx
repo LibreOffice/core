@@ -201,40 +201,40 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 {
     ResourceToFactoryMap::const_iterator iFactory (mpResourceToFactoryMap->find(rsResourceURL));
-    if (iFactory != mpResourceToFactoryMap->end())
+    if (iFactory == mpResourceToFactoryMap->end())
+        return;
+
+    // Check that the factory has already been loaded and not been
+    // destroyed in the meantime.
+    Reference<XInterface> xFactory;
+    LoadedFactoryContainer::const_iterator iLoadedFactory (
+        mpLoadedFactories->find(iFactory->second));
+    if (iLoadedFactory != mpLoadedFactories->end())
+        xFactory.set(iLoadedFactory->second, UNO_QUERY);
+    if (  xFactory.is())
+        return;
+
+    // Create a new instance of the factory.
+    Reference<uno::XComponentContext> xContext =
+        ::comphelper::getProcessComponentContext();
+
+    // Create the factory service.
+    Sequence<Any> aArguments(1);
+    aArguments[0] <<= mxController;
+    try
     {
-        // Check that the factory has already been loaded and not been
-        // destroyed in the meantime.
-        Reference<XInterface> xFactory;
-        LoadedFactoryContainer::const_iterator iLoadedFactory (
-            mpLoadedFactories->find(iFactory->second));
-        if (iLoadedFactory != mpLoadedFactories->end())
-            xFactory.set(iLoadedFactory->second, UNO_QUERY);
-        if ( ! xFactory.is())
-        {
-            // Create a new instance of the factory.
-            Reference<uno::XComponentContext> xContext =
-                ::comphelper::getProcessComponentContext();
-
-            // Create the factory service.
-            Sequence<Any> aArguments(1);
-            aArguments[0] <<= mxController;
-            try
-            {
-                xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    iFactory->second,
-                    aArguments,
-                    xContext);
-            }
-            catch (const Exception&)
-            {
-                SAL_WARN("sd.fwk", "caught exception while creating factory.");
-            }
-
-            // Remember that this factory has been instanced.
-            (*mpLoadedFactories)[iFactory->second] = xFactory;
-        }
+        xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            iFactory->second,
+            aArguments,
+            xContext);
     }
+    catch (const Exception&)
+    {
+        SAL_WARN("sd.fwk", "caught exception while creating factory.");
+    }
+
+    // Remember that this factory has been instanced.
+    (*mpLoadedFactories)[iFactory->second] = xFactory;
 }
 
 //----- XInitialization -------------------------------------------------------

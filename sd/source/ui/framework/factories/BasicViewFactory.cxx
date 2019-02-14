@@ -185,87 +185,87 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
     if ( ! rxView.is())
         throw lang::IllegalArgumentException();
 
-    if (rxView.is() && mpBase!=nullptr)
+    if (!rxView.is() || !mpBase)
+        return;
+
+    ViewShellContainer::iterator iViewShell (
+        ::std::find_if(
+            mpViewShellContainer->begin(),
+            mpViewShellContainer->end(),
+            [&] (std::shared_ptr<ViewDescriptor> const& pVD) {
+                return ViewDescriptor::CompareView(pVD, rxView);
+            } ));
+    if (iViewShell == mpViewShellContainer->end())
     {
-        ViewShellContainer::iterator iViewShell (
-            ::std::find_if(
-                mpViewShellContainer->begin(),
-                mpViewShellContainer->end(),
-                [&] (std::shared_ptr<ViewDescriptor> const& pVD) {
-                    return ViewDescriptor::CompareView(pVD, rxView);
-                } ));
-        if (iViewShell == mpViewShellContainer->end())
-        {
-            throw lang::IllegalArgumentException();
-        }
-
-        std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
-
-        if ((*iViewShell)->mxViewId->isBoundToURL(
-            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
-        {
-            // Obtain a pointer to and connect to the frame view of the
-            // view.  The next view, that is created, will be
-            // initialized with this frame view.
-            if (mpFrameView == nullptr)
-            {
-                mpFrameView = pViewShell->GetFrameView();
-                if (mpFrameView)
-                    mpFrameView->Connect();
-            }
-
-            // With the view in the center pane the sub controller is
-            // released, too.
-            mpBase->GetDrawController().SetSubController(
-                Reference<drawing::XDrawSubController>());
-
-            SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
-            if (pSfxViewShell != nullptr)
-                pSfxViewShell->DisconnectAllClients();
-        }
-
-        ReleaseView(*iViewShell, false);
-
-        mpViewShellContainer->erase(iViewShell);
+        throw lang::IllegalArgumentException();
     }
+
+    std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
+
+    if ((*iViewShell)->mxViewId->isBoundToURL(
+        FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+    {
+        // Obtain a pointer to and connect to the frame view of the
+        // view.  The next view, that is created, will be
+        // initialized with this frame view.
+        if (mpFrameView == nullptr)
+        {
+            mpFrameView = pViewShell->GetFrameView();
+            if (mpFrameView)
+                mpFrameView->Connect();
+        }
+
+        // With the view in the center pane the sub controller is
+        // released, too.
+        mpBase->GetDrawController().SetSubController(
+            Reference<drawing::XDrawSubController>());
+
+        SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+        if (pSfxViewShell != nullptr)
+            pSfxViewShell->DisconnectAllClients();
+    }
+
+    ReleaseView(*iViewShell, false);
+
+    mpViewShellContainer->erase(iViewShell);
 }
 
 void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() > 0)
+    if (aArguments.getLength() <= 0)
+        return;
+
+    try
     {
-        try
-        {
-            // Get the XController from the first argument.
-            Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
+        // Get the XController from the first argument.
+        Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
 
-            // Tunnel through the controller to obtain a ViewShellBase.
-            Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != nullptr)
-                mpBase = pController->GetViewShellBase();
+        // Tunnel through the controller to obtain a ViewShellBase.
+        Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
+        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
+            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+        if (pController != nullptr)
+            mpBase = pController->GetViewShellBase();
 
-            // Register the factory for its supported views.
-            Reference<XControllerManager> xCM (xController,UNO_QUERY_THROW);
-            mxConfigurationController = xCM->getConfigurationController();
-            if ( ! mxConfigurationController.is())
-                throw RuntimeException();
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msImpressViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msDrawViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msOutlineViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
-            mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
-        }
-        catch (RuntimeException&)
-        {
-            mpBase = nullptr;
-            if (mxConfigurationController.is())
-                mxConfigurationController->removeResourceFactoryForReference(this);
-            throw;
-        }
+        // Register the factory for its supported views.
+        Reference<XControllerManager> xCM (xController,UNO_QUERY_THROW);
+        mxConfigurationController = xCM->getConfigurationController();
+        if ( ! mxConfigurationController.is())
+            throw RuntimeException();
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msImpressViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msDrawViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msOutlineViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
+        mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
+    }
+    catch (RuntimeException&)
+    {
+        mpBase = nullptr;
+        if (mxConfigurationController.is())
+            mxConfigurationController->removeResourceFactoryForReference(this);
+        throw;
     }
 }
 

@@ -249,38 +249,38 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation() " <<
             FrameworkHelper::ResourceIdToString(rxResourceId));
 
-    if (rxResourceId.is())
+    if (!rxResourceId.is())
+        return;
+
+    if (eMode == ResourceActivationMode_REPLACE)
     {
-        if (eMode == ResourceActivationMode_REPLACE)
+        // Get a list of the matching resources and create deactivation
+        // requests for them.
+        Sequence<Reference<XResourceId> > aResourceList (
+            mpImplementation->mxRequestedConfiguration->getResources(
+                rxResourceId->getAnchor(),
+                rxResourceId->getResourceTypePrefix(),
+                AnchorBindingMode_DIRECT));
+
+        for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
         {
-            // Get a list of the matching resources and create deactivation
-            // requests for them.
-            Sequence<Reference<XResourceId> > aResourceList (
-                mpImplementation->mxRequestedConfiguration->getResources(
-                    rxResourceId->getAnchor(),
-                    rxResourceId->getResourceTypePrefix(),
-                    AnchorBindingMode_DIRECT));
+            // Do not request the deactivation of the resource for which
+            // this method was called.  Doing it would not change the
+            // outcome but would result in unnecessary work.
+            if (rxResourceId->compareTo(aResourceList[nIndex]) == 0)
+                continue;
 
-            for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
-            {
-                // Do not request the deactivation of the resource for which
-                // this method was called.  Doing it would not change the
-                // outcome but would result in unnecessary work.
-                if (rxResourceId->compareTo(aResourceList[nIndex]) == 0)
-                    continue;
-
-                // Request the deactivation of a resource and all resources
-                // linked to it.
-                requestResourceDeactivation(aResourceList[nIndex]);
-            }
+            // Request the deactivation of a resource and all resources
+            // linked to it.
+            requestResourceDeactivation(aResourceList[nIndex]);
         }
-
-        Reference<XConfigurationChangeRequest> xRequest(
-            new GenericConfigurationChangeRequest(
-                rxResourceId,
-                GenericConfigurationChangeRequest::Activation));
-        postChangeRequest(xRequest);
     }
+
+    Reference<XConfigurationChangeRequest> xRequest(
+        new GenericConfigurationChangeRequest(
+            rxResourceId,
+            GenericConfigurationChangeRequest::Activation));
+    postChangeRequest(xRequest);
 }
 
 void SAL_CALL ConfigurationController::requestResourceDeactivation (
@@ -292,31 +292,31 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceDeactivation() " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
 
-    if (rxResourceId.is())
-    {
-        // Request deactivation of all resources linked to the specified one
-        // as well.
-        const Sequence<Reference<XResourceId> > aLinkedResources (
-            mpImplementation->mxRequestedConfiguration->getResources(
-                rxResourceId,
-                OUString(),
-                AnchorBindingMode_DIRECT));
-        const sal_Int32 nCount (aLinkedResources.getLength());
-        for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-        {
-            // We do not add deactivation requests directly but call this
-            // method recursively, so that when one time there are resources
-            // linked to linked resources, these are handled correctly, too.
-            requestResourceDeactivation(aLinkedResources[nIndex]);
-        }
+    if (!rxResourceId.is())
+        return;
 
-        // Add a deactivation request for the specified resource.
-        Reference<XConfigurationChangeRequest> xRequest(
-            new GenericConfigurationChangeRequest(
-                rxResourceId,
-                GenericConfigurationChangeRequest::Deactivation));
-        postChangeRequest(xRequest);
+    // Request deactivation of all resources linked to the specified one
+    // as well.
+    const Sequence<Reference<XResourceId> > aLinkedResources (
+        mpImplementation->mxRequestedConfiguration->getResources(
+            rxResourceId,
+            OUString(),
+            AnchorBindingMode_DIRECT));
+    const sal_Int32 nCount (aLinkedResources.getLength());
+    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+        // We do not add deactivation requests directly but call this
+        // method recursively, so that when one time there are resources
+        // linked to linked resources, these are handled correctly, too.
+        requestResourceDeactivation(aLinkedResources[nIndex]);
     }
+
+    // Add a deactivation request for the specified resource.
+    Reference<XConfigurationChangeRequest> xRequest(
+        new GenericConfigurationChangeRequest(
+            rxResourceId,
+            GenericConfigurationChangeRequest::Deactivation));
+    postChangeRequest(xRequest);
 }
 
 Reference<XResource> SAL_CALL ConfigurationController::getResource (

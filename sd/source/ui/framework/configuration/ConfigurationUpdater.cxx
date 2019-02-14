@@ -191,19 +191,19 @@ void ConfigurationUpdater::UpdateConfiguration()
 
 void ConfigurationUpdater::CleanRequestedConfiguration()
 {
-    if (mxControllerManager.is())
+    if (!mxControllerManager.is())
+        return;
+
+    // Request the deactivation of pure anchors that have no child.
+    vector<Reference<XResourceId> > aResourcesToDeactivate;
+    CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
+    if (!aResourcesToDeactivate.empty())
     {
-        // Request the deactivation of pure anchors that have no child.
-        vector<Reference<XResourceId> > aResourcesToDeactivate;
-        CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
-        if (!aResourcesToDeactivate.empty())
-        {
-            Reference<XConfigurationController> xCC (
-                mxControllerManager->getConfigurationController());
-            for (auto& rxId : aResourcesToDeactivate)
-                if (rxId.is())
-                    xCC->requestResourceDeactivation(rxId);
-        }
+        Reference<XConfigurationController> xCC (
+            mxControllerManager->getConfigurationController());
+        for (auto& rxId : aResourcesToDeactivate)
+            if (rxId.is())
+                xCC->requestResourceDeactivation(rxId);
     }
 }
 
