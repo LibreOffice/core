@@ -406,7 +406,14 @@ class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg
 
 class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPNumGroupDlg_Impl, ScDPNumGroupDlg )
+protected:
+    std::unique_ptr<ScDPNumGroupDlg> m_xDlg;
+public:
+    explicit AbstractScDPNumGroupDlg_Impl(ScDPNumGroupDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual ScDPNumGroupInfo GetGroupInfo() const override;
 };
 
@@ -649,8 +656,8 @@ public:
                                                                 const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields ) override;
 
-    virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg( vcl::Window* pParent,
-                                                                const ScDPNumGroupInfo& rInfo ) override;
+    virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg(weld::Window* pParent,
+                                                                  const ScDPNumGroupInfo& rInfo) override;
 
     virtual VclPtr<AbstractScDPDateGroupDlg> CreateScDPDateGroupDlg( vcl::Window* pParent,
                                                                 const ScDPNumGroupInfo& rInfo,
