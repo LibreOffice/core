@@ -52,38 +52,38 @@ ChildWindowPane::ChildWindowPane (
     mrViewShellBase.GetViewShellManager()->ActivateShell(mpShell.get());
 
     SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-    if (pViewFrame != nullptr)
+    if (pViewFrame == nullptr)
+        return;
+
+    if (mrViewShellBase.IsActive())
     {
-        if (mrViewShellBase.IsActive())
+        if (pViewFrame->KnowsChildWindow(mnChildWindowId))
         {
-            if (pViewFrame->KnowsChildWindow(mnChildWindowId))
+            if (pViewFrame->HasChildWindow(mnChildWindowId))
             {
-                if (pViewFrame->HasChildWindow(mnChildWindowId))
-                {
-                    // The ViewShellBase has already been activated.  Make
-                    // the child window visible as soon as possible.
-                    pViewFrame->SetChildWindow(mnChildWindowId, true);
-                }
-                else
-                {
-                    // The window is created asynchronously.  Rely on the
-                    // ConfigurationUpdater to try another update, and with
-                    // that another request for this window, in a short
-                    // time.
-                }
+                // The ViewShellBase has already been activated.  Make
+                // the child window visible as soon as possible.
+                pViewFrame->SetChildWindow(mnChildWindowId, true);
             }
             else
             {
-                SAL_WARN("sd", "ChildWindowPane:not known");
+                // The window is created asynchronously.  Rely on the
+                // ConfigurationUpdater to try another update, and with
+                // that another request for this window, in a short
+                // time.
             }
         }
         else
         {
-            // The ViewShellBase has not yet been activated.  Hide the
-            // window and wait a little before it is made visible.  See
-            // comments in the GetWindow() method for an explanation.
-            pViewFrame->SetChildWindow(mnChildWindowId, false);
+            SAL_WARN("sd", "ChildWindowPane:not known");
         }
+    }
+    else
+    {
+        // The ViewShellBase has not yet been activated.  Hide the
+        // window and wait a little before it is made visible.  See
+        // comments in the GetWindow() method for an explanation.
+        pViewFrame->SetChildWindow(mnChildWindowId, false);
     }
 }
 

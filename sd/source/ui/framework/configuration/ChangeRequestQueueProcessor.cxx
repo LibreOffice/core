@@ -131,36 +131,35 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ProcessOneEvent");
 
-    if (mxConfiguration.is()
-        && ! maQueue.empty())
+    if (!mxConfiguration.is() || maQueue.empty())
+        return;
+
+    // Get and remove the first entry from the queue.
+    Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
+    maQueue.pop_front();
+
+    // Execute the change request.
+    if (xRequest.is())
     {
-        // Get and remove the first entry from the queue.
-        Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
-        maQueue.pop_front();
-
-        // Execute the change request.
-        if (xRequest.is())
-        {
 #if DEBUG_SD_CONFIGURATION_TRACE
-            TraceRequest(xRequest);
+        TraceRequest(xRequest);
 #endif
-            xRequest->execute(mxConfiguration);
-        }
+        xRequest->execute(mxConfiguration);
+    }
 
-        if (maQueue.empty())
-        {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
-            // The queue is empty so tell the ConfigurationManager to update
-            // its state.
-            if (mpConfigurationUpdater != nullptr)
-            {
+    if (!maQueue.empty())
+        return;
+
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
+    // The queue is empty so tell the ConfigurationManager to update
+    // its state.
+    if (mpConfigurationUpdater != nullptr)
+    {
 #if DEBUG_SD_CONFIGURATION_TRACE
-                ConfigurationTracer::TraceConfiguration (
-                    mxConfiguration, "updating to configuration");
+        ConfigurationTracer::TraceConfiguration (
+            mxConfiguration, "updating to configuration");
 #endif
-                mpConfigurationUpdater->RequestUpdate(mxConfiguration);
-            }
-        }
+        mpConfigurationUpdater->RequestUpdate(mxConfiguration);
     }
 }
 

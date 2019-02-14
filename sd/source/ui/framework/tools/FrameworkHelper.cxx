@@ -730,21 +730,21 @@ void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
 
 void FrameworkHelper::UpdateConfiguration()
 {
-    if (mxConfigurationController.is())
+    if (!mxConfigurationController.is())
+        return;
+
+    try
     {
-        try
-        {
-            if (mxConfigurationController.is())
-                mxConfigurationController->update();
-        }
-        catch (lang::DisposedException&)
-        {
-            Dispose();
-        }
-        catch (RuntimeException&)
-        {
-            DBG_UNHANDLED_EXCEPTION("sd");
-        }
+        if (mxConfigurationController.is())
+            mxConfigurationController->update();
+    }
+    catch (lang::DisposedException&)
+    {
+        Dispose();
+    }
+    catch (RuntimeException&)
+    {
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 
@@ -900,20 +900,20 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type == msEventType && maFilter(rEvent))
-    {
-        maCallback(true);
-        if (mxConfigurationController.is())
-        {
-            // Reset the reference to the configuration controller so that
-            // dispose() will not try to remove the listener a second time.
-            Reference<XConfigurationController> xCC (mxConfigurationController);
-            mxConfigurationController = nullptr;
+    if (!(rEvent.Type == msEventType && maFilter(rEvent)))
+        return;
 
-            // Removing this object from the controller may very likely lead
-            // to its destruction, so no calls after that.
-            xCC->removeConfigurationChangeListener(this);
-        }
+    maCallback(true);
+    if (mxConfigurationController.is())
+    {
+        // Reset the reference to the configuration controller so that
+        // dispose() will not try to remove the listener a second time.
+        Reference<XConfigurationController> xCC (mxConfigurationController);
+        mxConfigurationController = nullptr;
+
+        // Removing this object from the controller may very likely lead
+        // to its destruction, so no calls after that.
+        xCC->removeConfigurationChangeListener(this);
     }
 }
 

@@ -118,30 +118,30 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
 void CenterViewFocusModule::HandleNewView (
     const Reference<XConfiguration>& rxConfiguration)
 {
-    if (mbNewViewCreated)
-    {
-        mbNewViewCreated = false;
-        // Make the center pane the active one.  Tunnel through the
-        // controller to obtain a ViewShell pointer.
+    if (!mbNewViewCreated)
+        return;
 
-        Sequence<Reference<XResourceId> > xViewIds (rxConfiguration->getResources(
-            FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
-            FrameworkHelper::msViewURLPrefix,
-            AnchorBindingMode_DIRECT));
-        Reference<XView> xView;
-        if (xViewIds.getLength() > 0)
-            xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
-        Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
-        if (xTunnel.is() && mpBase!=nullptr)
+    mbNewViewCreated = false;
+    // Make the center pane the active one.  Tunnel through the
+    // controller to obtain a ViewShell pointer.
+
+    Sequence<Reference<XResourceId> > xViewIds (rxConfiguration->getResources(
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+        FrameworkHelper::msViewURLPrefix,
+        AnchorBindingMode_DIRECT));
+    Reference<XView> xView;
+    if (xViewIds.getLength() > 0)
+        xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
+    Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
+    if (xTunnel.is() && mpBase!=nullptr)
+    {
+        ViewShellWrapper* pViewShellWrapper = reinterpret_cast<ViewShellWrapper*>(
+            xTunnel->getSomething(ViewShellWrapper::getUnoTunnelId()));
+        if (pViewShellWrapper != nullptr)
         {
-            ViewShellWrapper* pViewShellWrapper = reinterpret_cast<ViewShellWrapper*>(
-                xTunnel->getSomething(ViewShellWrapper::getUnoTunnelId()));
-            if (pViewShellWrapper != nullptr)
-            {
-                std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
-                if (pViewShell != nullptr)
-                    mpBase->GetViewShellManager()->MoveToTop(*pViewShell);
-            }
+            std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
+            if (pViewShell != nullptr)
+                mpBase->GetViewShellManager()->MoveToTop(*pViewShell);
         }
     }
 }

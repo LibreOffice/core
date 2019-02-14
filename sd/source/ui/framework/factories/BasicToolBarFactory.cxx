@@ -69,43 +69,43 @@ void BasicToolBarFactory::Shutdown()
 
 void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() > 0)
+    if (aArguments.getLength() <= 0)
+        return;
+
+    try
     {
-        try
-        {
-            // Get the XController from the first argument.
-            mxController.set(aArguments[0], UNO_QUERY_THROW);
+        // Get the XController from the first argument.
+        mxController.set(aArguments[0], UNO_QUERY_THROW);
 
-            utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
-            if ( ! aDescriptor.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_PREVIEW(),
-                false))
-            {
-                // Register the factory for its supported tool bars.
-                Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
-                mxConfigurationController = xControllerManager->getConfigurationController();
-                if (mxConfigurationController.is())
-                {
-                    mxConfigurationController->addResourceFactory(
-                        FrameworkHelper::msViewTabBarURL, this);
-                }
-
-                Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
-                if (xComponent.is())
-                    xComponent->addEventListener(static_cast<lang::XEventListener*>(this));
-            }
-            else
-            {
-                // The view shell is in preview mode and thus does not need
-                // the view tab bar.
-                mxConfigurationController = nullptr;
-            }
-        }
-        catch (RuntimeException&)
+        utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
+        if ( ! aDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_PREVIEW(),
+            false))
         {
-            Shutdown();
-            throw;
+            // Register the factory for its supported tool bars.
+            Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
+            mxConfigurationController = xControllerManager->getConfigurationController();
+            if (mxConfigurationController.is())
+            {
+                mxConfigurationController->addResourceFactory(
+                    FrameworkHelper::msViewTabBarURL, this);
+            }
+
+            Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->addEventListener(static_cast<lang::XEventListener*>(this));
         }
+        else
+        {
+            // The view shell is in preview mode and thus does not need
+            // the view tab bar.
+            mxConfigurationController = nullptr;
+        }
+    }
+    catch (RuntimeException&)
+    {
+        Shutdown();
+        throw;
     }
 }
 

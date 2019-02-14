@@ -77,28 +77,28 @@ SlideSorterModule::SlideSorterModule (
                 makeAny(ResourceDeactivationRequestEvent));
         }
     }
-    if (mxConfigurationController.is())
-    {
-        UpdateViewTabBar(nullptr);
+    if (!mxConfigurationController.is())
+        return;
 
-        if (SvtSlideSorterBarOptions().GetVisibleImpressView())
-            AddActiveMainView(FrameworkHelper::msImpressViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleOutlineView())
-            AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleNotesView())
-            AddActiveMainView(FrameworkHelper::msNotesViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleHandoutView())
-            AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView())
-            AddActiveMainView(FrameworkHelper::msSlideSorterURL);
-        if (SvtSlideSorterBarOptions().GetVisibleDrawView())
-            AddActiveMainView(FrameworkHelper::msDrawViewURL);
+    UpdateViewTabBar(nullptr);
 
-        mxConfigurationController->addConfigurationChangeListener(
-            this,
-            FrameworkHelper::msResourceActivationEvent,
-            Any());
-    }
+    if (SvtSlideSorterBarOptions().GetVisibleImpressView())
+        AddActiveMainView(FrameworkHelper::msImpressViewURL);
+    if (SvtSlideSorterBarOptions().GetVisibleOutlineView())
+        AddActiveMainView(FrameworkHelper::msOutlineViewURL);
+    if (SvtSlideSorterBarOptions().GetVisibleNotesView())
+        AddActiveMainView(FrameworkHelper::msNotesViewURL);
+    if (SvtSlideSorterBarOptions().GetVisibleHandoutView())
+        AddActiveMainView(FrameworkHelper::msHandoutViewURL);
+    if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView())
+        AddActiveMainView(FrameworkHelper::msSlideSorterURL);
+    if (SvtSlideSorterBarOptions().GetVisibleDrawView())
+        AddActiveMainView(FrameworkHelper::msDrawViewURL);
+
+    mxConfigurationController->addConfigurationChangeListener(
+        this,
+        FrameworkHelper::msResourceActivationEvent,
+        Any());
 }
 
 SlideSorterModule::~SlideSorterModule()
@@ -202,22 +202,22 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             xBar.set(xCC->getResource(mxViewTabBarId), UNO_QUERY);
     }
 
-    if (xBar.is())
-    {
-        TabBarButton aButtonA;
-        aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
-            FrameworkHelper::msSlideSorterURL,
-            FrameworkHelper::msCenterPaneURL);
-        aButtonA.ButtonLabel = SdResId(STR_SLIDE_SORTER_MODE);
+    if (!xBar.is())
+        return;
 
-        TabBarButton aButtonB;
-        aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
-            FrameworkHelper::msHandoutViewURL,
-            FrameworkHelper::msCenterPaneURL);
+    TabBarButton aButtonA;
+    aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
+        FrameworkHelper::msSlideSorterURL,
+        FrameworkHelper::msCenterPaneURL);
+    aButtonA.ButtonLabel = SdResId(STR_SLIDE_SORTER_MODE);
 
-        if ( ! xBar->hasTabBarButton(aButtonA))
-            xBar->addTabBarButtonAfter(aButtonA, aButtonB);
-    }
+    TabBarButton aButtonB;
+    aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
+        FrameworkHelper::msHandoutViewURL,
+        FrameworkHelper::msCenterPaneURL);
+
+    if ( ! xBar->hasTabBarButton(aButtonA))
+        xBar->addTabBarButtonAfter(aButtonA, aButtonB);
 }
 
 void SlideSorterModule::AddActiveMainView (
@@ -250,25 +250,25 @@ void SlideSorterModule::HandleMainViewSwitch (
     else
         msCurrentMainViewURL.clear();
 
-    if (mxConfigurationController.is())
-    {
-        ConfigurationController::Lock aLock (mxConfigurationController);
+    if (!mxConfigurationController.is())
+        return;
 
-        if (maActiveMainViewContainer.find(msCurrentMainViewURL)
-               != maActiveMainViewContainer.end())
-        {
-            // Activate resource.
-            mxConfigurationController->requestResourceActivation(
-                mxResourceId->getAnchor(),
-                ResourceActivationMode_ADD);
-            mxConfigurationController->requestResourceActivation(
-                mxResourceId,
-                ResourceActivationMode_REPLACE);
-        }
-        else
-        {
-            mxConfigurationController->requestResourceDeactivation(mxResourceId);
-        }
+    ConfigurationController::Lock aLock (mxConfigurationController);
+
+    if (maActiveMainViewContainer.find(msCurrentMainViewURL)
+           != maActiveMainViewContainer.end())
+    {
+        // Activate resource.
+        mxConfigurationController->requestResourceActivation(
+            mxResourceId->getAnchor(),
+            ResourceActivationMode_ADD);
+        mxConfigurationController->requestResourceActivation(
+            mxResourceId,
+            ResourceActivationMode_REPLACE);
+    }
+    else
+    {
+        mxConfigurationController->requestResourceDeactivation(mxResourceId);
     }
 }
 

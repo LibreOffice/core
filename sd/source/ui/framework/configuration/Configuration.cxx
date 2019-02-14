@@ -243,24 +243,24 @@ void Configuration::PostEvent (
 {
     OSL_ASSERT(rxResourceId.is());
 
-    if (mxBroadcaster.is())
-    {
-        ConfigurationChangeEvent aEvent;
-        aEvent.ResourceId = rxResourceId;
-        if (bActivation)
-            if (mbBroadcastRequestEvents)
-                aEvent.Type = FrameworkHelper::msResourceActivationRequestEvent;
-            else
-                aEvent.Type = FrameworkHelper::msResourceActivationEvent;
-        else
-            if (mbBroadcastRequestEvents)
-                aEvent.Type = FrameworkHelper::msResourceDeactivationRequestEvent;
-            else
-                aEvent.Type = FrameworkHelper::msResourceDeactivationEvent;
-        aEvent.Configuration = this;
+    if (!mxBroadcaster.is())
+        return;
 
-        mxBroadcaster->notifyEvent(aEvent);
-    }
+    ConfigurationChangeEvent aEvent;
+    aEvent.ResourceId = rxResourceId;
+    if (bActivation)
+        if (mbBroadcastRequestEvents)
+            aEvent.Type = FrameworkHelper::msResourceActivationRequestEvent;
+        else
+            aEvent.Type = FrameworkHelper::msResourceActivationEvent;
+    else
+        if (mbBroadcastRequestEvents)
+            aEvent.Type = FrameworkHelper::msResourceDeactivationRequestEvent;
+        else
+            aEvent.Type = FrameworkHelper::msResourceDeactivationEvent;
+    aEvent.Configuration = this;
+
+    mxBroadcaster->notifyEvent(aEvent);
 }
 
 void Configuration::ThrowIfDisposed() const

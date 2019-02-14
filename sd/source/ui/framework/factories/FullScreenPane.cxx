@@ -151,21 +151,21 @@ void SAL_CALL FullScreenPane::setAccessible (
 {
     ThrowIfDisposed();
 
-    if (mpWindow != nullptr)
+    if (mpWindow == nullptr)
+        return;
+
+    Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
+    if (xInitializable.is())
     {
-        Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
-        if (xInitializable.is())
-        {
-            vcl::Window* pParentWindow = mpWindow->GetParent();
-            Reference<css::accessibility::XAccessible> xAccessibleParent;
-            if (pParentWindow != nullptr)
-                xAccessibleParent = pParentWindow->GetAccessible();
-            Sequence<Any> aArguments (1);
-            aArguments[0] <<= xAccessibleParent;
-            xInitializable->initialize(aArguments);
-        }
-        GetWindow()->SetAccessible(rxAccessible);
+        vcl::Window* pParentWindow = mpWindow->GetParent();
+        Reference<css::accessibility::XAccessible> xAccessibleParent;
+        if (pParentWindow != nullptr)
+            xAccessibleParent = pParentWindow->GetAccessible();
+        Sequence<Any> aArguments (1);
+        aArguments[0] <<= xAccessibleParent;
+        xInitializable->initialize(aArguments);
     }
+    GetWindow()->SetAccessible(rxAccessible);
 }
 
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)

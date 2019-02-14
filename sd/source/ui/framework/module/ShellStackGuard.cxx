@@ -122,18 +122,18 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pIdle, void)
 #else
     (void)pIdle;
 #endif
-    if (mpUpdateLock != nullptr)
+    if (mpUpdateLock == nullptr)
+        return;
+
+    if ( ! IsPrinting())
     {
-        if ( ! IsPrinting())
-        {
-            // Printing finished.  Release the update lock.
-            mpUpdateLock.reset();
-        }
-        else
-        {
-            // Wait long for the printing to finish.
-            maPrinterPollingIdle.Start();
-        }
+        // Printing finished.  Release the update lock.
+        mpUpdateLock.reset();
+    }
+    else
+    {
+        // Wait long for the printing to finish.
+        maPrinterPollingIdle.Start();
     }
 }
 
