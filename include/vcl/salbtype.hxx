@@ -133,7 +133,10 @@ public:
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const BitmapColor& rColor)
 {
-    return rStream << "#(" << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(rColor.GetRed()) << static_cast<int>(rColor.GetGreen()) << static_cast<int>(rColor.GetBlueOrIndex()) << static_cast<int>(rColor.GetAlpha()) << ")";
+    return rStream << "#(" << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(rColor.GetRed())
+                           << std::setw(2) << static_cast<int>(rColor.GetGreen())
+                           << std::setw(2) << static_cast<int>(rColor.GetBlueOrIndex())
+                           << std::setw(2) << static_cast<int>(rColor.GetAlpha()) << ")";
 }
 
 class VCL_DLLPUBLIC BitmapPalette
