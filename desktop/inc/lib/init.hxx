@@ -15,6 +15,8 @@
 #include <memory>
 #include <mutex>
 
+#include <boost/variant.hpp>
+
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
 #include <vcl/idle.hxx>
@@ -98,8 +100,14 @@ namespace desktop {
             {
             }
 
+            /// Parse and set the RectangleAndPart object and return it. Clobbers PayloadString.
+            RectangleAndPart& setRectangleAndPart(const std::string& payload);
+            /// Return the parsed RectangleAndPart instance.
+            const RectangleAndPart& getRectangleAndPart() const;
+
             int Type;
             std::string PayloadString;
+            boost::variant<boost::blank, RectangleAndPart> PayloadObject;
         };
 
         typedef std::vector<CallbackData> queue_type;
