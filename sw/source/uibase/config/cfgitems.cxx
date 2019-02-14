@@ -38,11 +38,8 @@ SwDocDisplayItem::SwDocDisplayItem() :
     bSpace              =
     bNonbreakingSpace   =
     bSoftHyphen         =
-    bFieldHiddenText      =
     bCharHiddenText     =
-    bManualBreak        =
-    bShowHiddenPara     = false;
-
+    bManualBreak        = true;
 };
 
 // Item for the Settings dialog, page document view
@@ -55,9 +52,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
     bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
-    bFieldHiddenText      = rVOpt.IsShowHiddenField();
     bManualBreak        = rVOpt.IsLineBreak(true);
-    bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 }
 
 SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
@@ -77,9 +72,7 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bNonbreakingSpace     == rItem.bNonbreakingSpace   &&
               bSoftHyphen           == rItem.bSoftHyphen         &&
               bCharHiddenText       == rItem.bCharHiddenText         &&
-              bFieldHiddenText        == rItem.bFieldHiddenText         &&
-              bManualBreak          == rItem.bManualBreak        &&
-              bShowHiddenPara       == rItem.bShowHiddenPara );
+              bManualBreak          == rItem.bManualBreak );
 }
 
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -90,9 +83,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetHardBlank  (bNonbreakingSpace  );
     rVOpt.SetSoftHyph   (bSoftHyphen        );
     rVOpt.SetShowHiddenChar(bCharHiddenText );
-    rVOpt.SetShowHiddenField(bFieldHiddenText        );
     rVOpt.SetLineBreak  (bManualBreak       );
-    rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
 
 SwElemItem::SwElemItem() :
@@ -108,6 +99,8 @@ SwElemItem::SwElemItem() :
     bFieldName          =
     bNotes              = false;
     bShowInlineTooltips = true;
+    bFieldHiddenText =
+    bShowHiddenPara  = false;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
@@ -123,7 +116,8 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     bFieldName          = rVOpt.IsFieldName();
     bNotes              = rVOpt.IsPostIts();
     bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
-
+    bFieldHiddenText = rVOpt.IsShowHiddenField();
+    bShowHiddenPara  = rVOpt.IsShowHiddenPara();
 }
 
 SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
@@ -146,7 +140,9 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bDrawing              == rItem.bDrawing            &&
                 bFieldName            == rItem.bFieldName          &&
                 bNotes                == rItem.bNotes              &&
-                bShowInlineTooltips   == rItem.bShowInlineTooltips );
+                bShowInlineTooltips   == rItem.bShowInlineTooltips &&
+                bFieldHiddenText == rItem.bFieldHiddenText &&
+                bShowHiddenPara  == rItem.bShowHiddenPara);
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -162,6 +158,8 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetFieldName  (bFieldName         );
     rVOpt.SetPostIts    (bNotes             );
     rVOpt.SetShowInlineTooltips( bShowInlineTooltips );
+    rVOpt.SetShowHiddenField(bFieldHiddenText );
+    rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
 
 // CTOR for empty Item

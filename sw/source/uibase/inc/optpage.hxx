@@ -58,7 +58,8 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<ListBox>    m_pMetricLB;
 
     VclPtr<CheckBox>   m_pShowInlineTooltips;
-
+    VclPtr<CheckBox>   m_pFieldHiddenCB;
+    VclPtr<CheckBox>   m_pFieldHiddenParaCB;
     DECL_LINK(VertRulerHdl, Button*, void);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
@@ -234,8 +235,6 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox> m_pTabCB;
     VclPtr<CheckBox> m_pBreakCB;
     VclPtr<CheckBox> m_pCharHiddenCB;
-    VclPtr<CheckBox> m_pFieldHiddenCB;
-    VclPtr<CheckBox> m_pFieldHiddenParaCB;
 
     VclPtr<VclFrame> m_pDirectCursorFrame;
     VclPtr<CheckBox> m_pOnOffCB;
