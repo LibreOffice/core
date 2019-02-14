@@ -1100,6 +1100,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             include_path_node.text = include_path_node_text
+            additional_options_node = ET.SubElement(conf_node, '{%s}AdditionalOptions' % ns)
+            additional_options_node.text = '-std:c++17'
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
