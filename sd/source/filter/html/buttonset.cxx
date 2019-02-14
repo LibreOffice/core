@@ -167,18 +167,18 @@ ButtonSetImpl::ButtonSetImpl()
 void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
 {
     osl::Directory aDirectory( rPath );
-    if( aDirectory.open() == osl::FileBase::E_None )
+    if( aDirectory.open() != osl::FileBase::E_None )
+        return;
+
+    osl::DirectoryItem aItem;
+    while( aDirectory.getNextItem( aItem, 2211 ) == osl::FileBase::E_None )
     {
-        osl::DirectoryItem aItem;
-        while( aDirectory.getNextItem( aItem, 2211 ) == osl::FileBase::E_None )
+        osl::FileStatus aStatus( osl_FileStatus_Mask_FileName|osl_FileStatus_Mask_FileURL );
+        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
-            osl::FileStatus aStatus( osl_FileStatus_Mask_FileName|osl_FileStatus_Mask_FileURL );
-            if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
-            {
-                OUString sFileName( aStatus.getFileName() );
-                if( sFileName.endsWithIgnoreAsciiCase( ".zip" ) )
-                    maButtons.push_back( std::make_shared< ButtonsImpl >( aStatus.getFileURL() ) );
-            }
+            OUString sFileName( aStatus.getFileName() );
+            if( sFileName.endsWithIgnoreAsciiCase( ".zip" ) )
+                maButtons.push_back( std::make_shared< ButtonsImpl >( aStatus.getFileURL() ) );
         }
     }
 }

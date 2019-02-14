@@ -870,21 +870,21 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
 
 // TODO: DFF_ANIM_ENDAFTERSLIDE / DFF_ANIM_VOLUME handling. git history has sample code
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
-    if( xColor.is() )
-    {
-        if( rSet.hasProperty( DFF_ANIM_DIRECTION ) )
-        {
-            bool bDirection = false;
-            if( rSet.getProperty( DFF_ANIM_DIRECTION ) >>= bDirection )
-                xColor->setDirection( !bDirection );
-        }
+    if( !xColor.is() )
+        return;
 
-        if( rSet.hasProperty( DFF_ANIM_COLORSPACE ) )
-        {
-            sal_Int32 nColorSpace = 0;
-            rSet.getProperty( DFF_ANIM_COLORSPACE ) >>= nColorSpace;
-            xColor->setColorInterpolation( (nColorSpace == 0) ? AnimationColorSpace::RGB : AnimationColorSpace::HSL );
-        }
+    if( rSet.hasProperty( DFF_ANIM_DIRECTION ) )
+    {
+        bool bDirection = false;
+        if( rSet.getProperty( DFF_ANIM_DIRECTION ) >>= bDirection )
+            xColor->setDirection( !bDirection );
+    }
+
+    if( rSet.hasProperty( DFF_ANIM_COLORSPACE ) )
+    {
+        sal_Int32 nColorSpace = 0;
+        rSet.getProperty( DFF_ANIM_COLORSPACE ) >>= nColorSpace;
+        xColor->setColorInterpolation( (nColorSpace == 0) ? AnimationColorSpace::RGB : AnimationColorSpace::HSL );
     }
 }
 
@@ -1077,75 +1077,75 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
     Reference< XTransitionFilter > xFilter( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateFilter && xFilter.is(), "invalid call to ppt::AnimationImporter::importAnimateFilterContainer()!");
-    if( pAtom && xFilter.is() )
+    if( !(pAtom && xFilter.is()) )
+        return;
+
+    sal_uInt32 nBits = 0;
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        sal_uInt32 nBits = 0;
-
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
-            {
-                if( !pChildAtom->seekToContent() )
-                    break;
-            }
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
 
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtAnimateFilterData:
-            {
-                sal_uInt32 transition;
-                mrStCtrl.ReadUInt32( nBits );
-                mrStCtrl.ReadUInt32( transition );
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateFilterData:
+        {
+            sal_uInt32 transition;
+            mrStCtrl.ReadUInt32( nBits );
+            mrStCtrl.ReadUInt32( transition );
 
-                if( nBits & 1 )
-                    xFilter->setMode( transition == 0 );
+            if( nBits & 1 )
+                xFilter->setMode( transition == 0 );
 
-                dump( " transition=\"%s\"", (transition == 0) ? "in" : "out" );
-            }
-            break;
+            dump( " transition=\"%s\"", (transition == 0) ? "in" : "out" );
+        }
+        break;
 
-            case DFF_msofbtAnimAttributeValue:
+        case DFF_msofbtAnimAttributeValue:
+        {
+            if( (nBits & 2 ) && ( pChildAtom->getInstance() == 1 )  )
             {
-                if( (nBits & 2 ) && ( pChildAtom->getInstance() == 1 )  )
+                Any aAny;
+                if ( importAttributeValue( pChildAtom, aAny ) )
                 {
-                    Any aAny;
-                    if ( importAttributeValue( pChildAtom, aAny ) )
+                    OUString filter;
+                    aAny >>= filter;
+
+                    dump( " filter=\"%s\"", filter );
+
+                    const oox::ppt::transition* pTransition = oox::ppt::transition::find( filter );
+                    if( pTransition )
                     {
-                        OUString filter;
-                        aAny >>= filter;
-
-                        dump( " filter=\"%s\"", filter );
-
-                        const oox::ppt::transition* pTransition = oox::ppt::transition::find( filter );
-                        if( pTransition )
-                        {
-                            xFilter->setTransition( pTransition->mnType );
-                            xFilter->setSubtype( pTransition->mnSubType );
-                            xFilter->setDirection( pTransition->mbDirection );
-                        }
-                        else
-                        {
-                            OSL_FAIL( "unknown transition!" );
-                        }
+                        xFilter->setTransition( pTransition->mnType );
+                        xFilter->setSubtype( pTransition->mnSubType );
+                        xFilter->setDirection( pTransition->mbDirection );
+                    }
+                    else
+                    {
+                        OSL_FAIL( "unknown transition!" );
                     }
                 }
             }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
             break;
 
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
 
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1357,68 +1357,68 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateColor && xColor.is(), "invalid call to ppt::AnimationImporter::importAnimateColorContainer()!");
-    if( pAtom && xColor.is() )
+    if( !(pAtom && xColor.is()) )
+        return;
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
+
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateColorData:
+        {
+            sal_uInt32 nBits;
+            sal_Int32 nByMode, nByA, nByB, nByC;
+            sal_Int32 nFromMode, nFromA, nFromB, nFromC;
+            sal_Int32 nToMode, nToA, nToB, nToC;
+            mrStCtrl.ReadUInt32( nBits );
+            mrStCtrl.ReadInt32( nByMode ).ReadInt32( nByA ).ReadInt32( nByB ).ReadInt32( nByC );
+            mrStCtrl.ReadInt32( nFromMode ).ReadInt32( nFromA ).ReadInt32( nFromB ).ReadInt32( nFromC );
+            mrStCtrl.ReadInt32( nToMode ).ReadInt32( nToA ).ReadInt32( nToB ).ReadInt32( nToC );
+
+            if( nBits & 1 )
             {
-                if( !pChildAtom->seekToContent() )
-                    break;
+                dump( " by=\"" );
+                xColor->setBy( implGetColorAny( nByMode, nByA, nByB, nByC ) );
+                xColor->setColorInterpolation( implGetColorSpace( nByMode, nByA, nByB, nByC ) );
+                dump( "\"");
             }
 
-            switch( pChildAtom->getType() )
+            if( nBits & 2 )
             {
-            case DFF_msofbtAnimateColorData:
-            {
-                sal_uInt32 nBits;
-                sal_Int32 nByMode, nByA, nByB, nByC;
-                sal_Int32 nFromMode, nFromA, nFromB, nFromC;
-                sal_Int32 nToMode, nToA, nToB, nToC;
-                mrStCtrl.ReadUInt32( nBits );
-                mrStCtrl.ReadInt32( nByMode ).ReadInt32( nByA ).ReadInt32( nByB ).ReadInt32( nByC );
-                mrStCtrl.ReadInt32( nFromMode ).ReadInt32( nFromA ).ReadInt32( nFromB ).ReadInt32( nFromC );
-                mrStCtrl.ReadInt32( nToMode ).ReadInt32( nToA ).ReadInt32( nToB ).ReadInt32( nToC );
-
-                if( nBits & 1 )
-                {
-                    dump( " by=\"" );
-                    xColor->setBy( implGetColorAny( nByMode, nByA, nByB, nByC ) );
-                    xColor->setColorInterpolation( implGetColorSpace( nByMode, nByA, nByB, nByC ) );
-                    dump( "\"");
-                }
-
-                if( nBits & 2 )
-                {
-                    dump( " from=\"" );
-                    xColor->setFrom( implGetColorAny( nFromMode, nFromA, nFromB, nFromC ) );
-                    xColor->setColorInterpolation( implGetColorSpace( nFromMode, nFromA, nFromB, nFromC ) );
-                    dump( "\"");
-                }
-
-                if( nBits & 4 )
-                {
-                    dump( " to=\"" );
-                    xColor->setTo( implGetColorAny( nToMode, nToA, nToB, nToC ) );
-                    xColor->setColorInterpolation( implGetColorSpace( nToMode, nToA, nToB, nToC ) );
-                    dump( "\"");
-                }
+                dump( " from=\"" );
+                xColor->setFrom( implGetColorAny( nFromMode, nFromA, nFromB, nFromC ) );
+                xColor->setColorInterpolation( implGetColorSpace( nFromMode, nFromA, nFromB, nFromC ) );
+                dump( "\"");
             }
+
+            if( nBits & 4 )
+            {
+                dump( " to=\"" );
+                xColor->setTo( implGetColorAny( nToMode, nToA, nToB, nToC ) );
+                xColor->setColorInterpolation( implGetColorSpace( nToMode, nToA, nToB, nToC ) );
+                dump( "\"");
+            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
             break;
 
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1427,55 +1427,55 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
     Reference< XAnimateSet > xSet( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateSet && xSet.is(), "invalid call to ppt::AnimationImporter::importAnimateSetContainer()!");
-    if( pAtom && xSet.is() )
+    if( !(pAtom && xSet.is()) )
+        return;
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
-            {
-                if( !pChildAtom->seekToContent() )
-                    break;
-            }
-
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtAnimateSetData:
-            {
-                sal_Int32 nU1, nU2;
-                mrStCtrl.ReadInt32( nU1 ).ReadInt32( nU2 );
-
-                dump( " set_1=\"%ld\"", nU1 );
-                dump( " set_2=\"%ld\"", nU2 );
-            }
-            break;
-
-            case DFF_msofbtAnimAttributeValue:
-            {
-                Any aTo;
-                if ( importAttributeValue( pChildAtom, aTo ) )
-                {
-                    xSet->setTo( aTo );
-
-                    dump( " value=\"" );
-                    dump( aTo );
-                    dump( "\"" );
-                }
-            }
-            break;
-
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
+            if( !pChildAtom->seekToContent() )
                 break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
+
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateSetData:
+        {
+            sal_Int32 nU1, nU2;
+            mrStCtrl.ReadInt32( nU1 ).ReadInt32( nU2 );
+
+            dump( " set_1=\"%ld\"", nU1 );
+            dump( " set_2=\"%ld\"", nU2 );
+        }
+        break;
+
+        case DFF_msofbtAnimAttributeValue:
+        {
+            Any aTo;
+            if ( importAttributeValue( pChildAtom, aTo ) )
+            {
+                xSet->setTo( aTo );
+
+                dump( " value=\"" );
+                dump( aTo );
+                dump( "\"" );
+            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
+            break;
+
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
+        }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1484,75 +1484,75 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
     Reference< XAnimate > xAnim( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimate && xAnim.is(), "invalid call to ppt::AnimationImporter::importAnimateContainer()!");
-    if( pAtom && xAnim.is() )
-    {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
+    if( !(pAtom && xAnim.is()) )
+        return;
 
-        while( pChildAtom )
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
+    {
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
+
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateData:
+        {
+            sal_uInt32 nCalcmode, nBits, nValueType;
+            mrStCtrl.ReadUInt32( nCalcmode ).ReadUInt32( nBits ).ReadUInt32( nValueType );
+
+            if( nBits & 0x08 )
             {
-                if( !pChildAtom->seekToContent() )
-                    break;
+                sal_Int16 n = (nCalcmode == 1) ? AnimationCalcMode::LINEAR : /* (nCalcmode == 2) ? AnimationCalcMode::FORMULA : */ AnimationCalcMode::DISCRETE;
+                xAnim->setCalcMode( n );
+                dump( " calcmode=\"%s\"", (nCalcmode == 0) ? "discrete" : (nCalcmode == 1) ? "linear" : (nCalcmode == 2) ? "formula" : "unknown" );
             }
 
-            switch( pChildAtom->getType() )
+            if( nBits & 0x30 )
             {
-            case DFF_msofbtAnimateData:
+                sal_Int16 n = (nValueType == 1) ? AnimationValueType::NUMBER : (nValueType == 2 ) ? AnimationValueType::COLOR : AnimationValueType::STRING;
+                xAnim->setValueType( n );
+                dump( " valueType=\"%s\"", (nValueType == 0) ? "string" : (nValueType == 1) ? "number" : (nValueType == 2) ? "color" : "unknown" );
+            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
+            break;
+
+        case DFF_msofbtAnimKeyPoints:
+            importAnimateKeyPoints( pChildAtom, xNode );
+            break;
+
+        case DFF_msofbtAnimAttributeValue:
             {
-                sal_uInt32 nCalcmode, nBits, nValueType;
-                mrStCtrl.ReadUInt32( nCalcmode ).ReadUInt32( nBits ).ReadUInt32( nValueType );
-
-                if( nBits & 0x08 )
+                Any a;
+                if ( importAttributeValue( pChildAtom, a ) )
                 {
-                    sal_Int16 n = (nCalcmode == 1) ? AnimationCalcMode::LINEAR : /* (nCalcmode == 2) ? AnimationCalcMode::FORMULA : */ AnimationCalcMode::DISCRETE;
-                    xAnim->setCalcMode( n );
-                    dump( " calcmode=\"%s\"", (nCalcmode == 0) ? "discrete" : (nCalcmode == 1) ? "linear" : (nCalcmode == 2) ? "formula" : "unknown" );
-                }
+                    switch( pChildAtom->getInstance() )
+                    {
+                    case 1: xAnim->setBy( a ); dump( " by=\"" ); break;
+                    case 2: xAnim->setFrom( a ); dump( " from=\"" ); break;
+                    case 3: xAnim->setTo( a ); dump( " to=\"" ); break;
+                    default:
+                        dump( " unknown_value=\"" );
+                    }
 
-                if( nBits & 0x30 )
-                {
-                    sal_Int16 n = (nValueType == 1) ? AnimationValueType::NUMBER : (nValueType == 2 ) ? AnimationValueType::COLOR : AnimationValueType::STRING;
-                    xAnim->setValueType( n );
-                    dump( " valueType=\"%s\"", (nValueType == 0) ? "string" : (nValueType == 1) ? "number" : (nValueType == 2) ? "color" : "unknown" );
+                    dump( a );
+                    dump( "\"" );
                 }
             }
             break;
-
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
-
-            case DFF_msofbtAnimKeyPoints:
-                importAnimateKeyPoints( pChildAtom, xNode );
-                break;
-
-            case DFF_msofbtAnimAttributeValue:
-                {
-                    Any a;
-                    if ( importAttributeValue( pChildAtom, a ) )
-                    {
-                        switch( pChildAtom->getInstance() )
-                        {
-                        case 1: xAnim->setBy( a ); dump( " by=\"" ); break;
-                        case 2: xAnim->setFrom( a ); dump( " from=\"" ); break;
-                        case 3: xAnim->setTo( a ); dump( " to=\"" ); break;
-                        default:
-                            dump( " unknown_value=\"" );
-                        }
-
-                        dump( a );
-                        dump( "\"" );
-                    }
-                }
-                break;
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1561,78 +1561,78 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
     Reference< XAnimateMotion > xMotion( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateMotion && xMotion.is(), "invalid call to ppt::AnimationImporter::importAnimateMotionContainer()!");
-    if( pAtom && xMotion.is() )
+    if( !(pAtom && xMotion.is()) )
+        return;
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
-            {
-                if( !pChildAtom->seekToContent() )
-                    break;
-            }
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
 
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtAnimateMotionData:
-            {
-                sal_uInt32 nBits, nOrigin;
-                float fByX, fByY, fFromX, fFromY, fToX, fToY;
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateMotionData:
+        {
+            sal_uInt32 nBits, nOrigin;
+            float fByX, fByY, fFromX, fFromY, fToX, fToY;
 
-                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nOrigin );
+            mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nOrigin );
 
 #ifdef DBG_ANIM_LOG
-                if( nBits & 1 )
-                    fprintf( mpFile, " by=\"%g,%g\"", (double)fByX, (double)fByY );
+            if( nBits & 1 )
+                fprintf( mpFile, " by=\"%g,%g\"", (double)fByX, (double)fByY );
 
-                if( nBits & 2 )
-                    fprintf( mpFile, " from=\"%g,%g\"", (double)fFromX, (double)fFromY );
+            if( nBits & 2 )
+                fprintf( mpFile, " from=\"%g,%g\"", (double)fFromX, (double)fFromY );
 
-                if( nBits & 4 )
-                    fprintf( mpFile, " to=\"%g,%g\"", (double)fToX, (double)fToY );
+            if( nBits & 4 )
+                fprintf( mpFile, " to=\"%g,%g\"", (double)fToX, (double)fToY );
 
-                if( nBits & 8 )
-                    fprintf( mpFile, " origin=\"%s\"", (nOrigin == 1) ? "parent" : (nOrigin == 2) ? "layout" : "unknown" );
+            if( nBits & 8 )
+                fprintf( mpFile, " origin=\"%s\"", (nOrigin == 1) ? "parent" : (nOrigin == 2) ? "layout" : "unknown" );
 
 #endif
-            }
-            break;
+        }
+        break;
 
-            case DFF_msofbtAnimAttributeValue:
+        case DFF_msofbtAnimAttributeValue:
+        {
+            Any aPath;
+            if ( importAttributeValue( pChildAtom, aPath ) )
             {
-                Any aPath;
-                if ( importAttributeValue( pChildAtom, aPath ) )
+                OUString aStr;
+                if ( aPath >>= aStr )
                 {
-                    OUString aStr;
-                    if ( aPath >>= aStr )
-                    {
-                        // E can appear inside a number, so we only check for its presence at the end
-                        aStr = aStr.trim();
-                        if (aStr.endsWith("E"))
-                            aStr = aStr.copy(0, aStr.getLength() - 1);
-                        aStr = aStr.trim();
-                        aPath <<= aStr;
-                        xMotion->setPath( aPath );
-                        dump( " path=\"" );
-                        dump( aPath );
-                        dump( "\"" );
-                    }
+                    // E can appear inside a number, so we only check for its presence at the end
+                    aStr = aStr.trim();
+                    if (aStr.endsWith("E"))
+                        aStr = aStr.copy(0, aStr.getLength() - 1);
+                    aStr = aStr.trim();
+                    aPath <<= aStr;
+                    xMotion->setPath( aPath );
+                    dump( " path=\"" );
+                    dump( aPath );
+                    dump( "\"" );
                 }
             }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
             break;
 
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1640,116 +1640,116 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
 {
     Reference< XCommand > xCommand( xNode, UNO_QUERY );
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimCommand && xCommand.is(), "invalid call to ppt::AnimationImporter::importCommandContainer()!");
-    if( pAtom && xCommand.is() )
+    if( !(pAtom && xCommand.is()) )
+        return;
+
+    sal_Int32 nBits = 0;
+    Any aValue;
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        sal_Int32 nBits = 0;
-        Any aValue;
-
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
-            {
-                if( !pChildAtom->seekToContent() )
-                    break;
-            }
-
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtCommandData:
-            {
-                sal_Int32 nCommandType;
-                // looks like U1 is a bitset, bit 1 enables the type and bit 2 enables
-                // a propertyvalue that follows
-                mrStCtrl.ReadInt32( nBits );
-                mrStCtrl.ReadInt32( nCommandType );
-
-                if( nBits & 1 )
-                {
-                    dump( " type=\"%s\"", (nCommandType == 0) ? "event" : ( nCommandType == 1) ? "call" : "verb" );
-                }
-            }
-            break;
-
-            case DFF_msofbtAnimAttributeValue:
-            {
-                if ( importAttributeValue( pChildAtom, aValue ) )
-                {
-                    if( nBits & 2 )
-                    {
-                        dump( " cmd=\"" );
-                        dump( aValue );
-                        dump( "\"" );
-                    }
-                }
-            }
-            break;
-
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
+            if( !pChildAtom->seekToContent() )
                 break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
 
-        if( nBits & 3 )
+        switch( pChildAtom->getType() )
         {
-            OUString aParam;
-            aValue >>= aParam;
+        case DFF_msofbtCommandData:
+        {
+            sal_Int32 nCommandType;
+            // looks like U1 is a bitset, bit 1 enables the type and bit 2 enables
+            // a propertyvalue that follows
+            mrStCtrl.ReadInt32( nBits );
+            mrStCtrl.ReadInt32( nCommandType );
 
-            sal_Int16 nCommand = EffectCommands::CUSTOM;
-
-            NamedValue aParamValue;
-
-            if ( aParam == "onstopaudio" )
+            if( nBits & 1 )
             {
-                nCommand = EffectCommands::STOPAUDIO;
-            }
-            else if ( aParam == "play" )
-            {
-                nCommand = EffectCommands::PLAY;
-            }
-            else if( aParam.startsWith( "playFrom" ) )
-            {
-                const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
-                rtl_math_ConversionStatus eStatus;
-                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
-                if( eStatus == rtl_math_ConversionStatus_Ok )
-                {
-                    aParamValue.Name = "MediaTime";
-                    aParamValue.Value <<= fMediaTime;
-                }
-                nCommand = EffectCommands::PLAY;
-            }
-            else if ( aParam == "togglePause" )
-            {
-                nCommand = EffectCommands::TOGGLEPAUSE;
-            }
-            else if ( aParam == "stop" )
-            {
-                nCommand = EffectCommands::STOP;
-            }
-
-            xCommand->setCommand( nCommand );
-            if( nCommand == EffectCommands::CUSTOM )
-            {
-                OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
-                aParamValue.Name = "UserDefined";
-                aParamValue.Value <<= aParam;
-            }
-
-            if( aParamValue.Value.hasValue() )
-            {
-                Sequence< NamedValue > aParamSeq( &aParamValue, 1 );
-                xCommand->setParameter( makeAny( aParamSeq ) );
+                dump( " type=\"%s\"", (nCommandType == 0) ? "event" : ( nCommandType == 1) ? "call" : "verb" );
             }
         }
+        break;
+
+        case DFF_msofbtAnimAttributeValue:
+        {
+            if ( importAttributeValue( pChildAtom, aValue ) )
+            {
+                if( nBits & 2 )
+                {
+                    dump( " cmd=\"" );
+                    dump( aValue );
+                    dump( "\"" );
+                }
+            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
+            break;
+
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
+        }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
+    }
+
+    if( !(nBits & 3) )
+        return;
+
+    OUString aParam;
+    aValue >>= aParam;
+
+    sal_Int16 nCommand = EffectCommands::CUSTOM;
+
+    NamedValue aParamValue;
+
+    if ( aParam == "onstopaudio" )
+    {
+        nCommand = EffectCommands::STOPAUDIO;
+    }
+    else if ( aParam == "play" )
+    {
+        nCommand = EffectCommands::PLAY;
+    }
+    else if( aParam.startsWith( "playFrom" ) )
+    {
+        const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
+        rtl_math_ConversionStatus eStatus;
+        double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
+        if( eStatus == rtl_math_ConversionStatus_Ok )
+        {
+            aParamValue.Name = "MediaTime";
+            aParamValue.Value <<= fMediaTime;
+        }
+        nCommand = EffectCommands::PLAY;
+    }
+    else if ( aParam == "togglePause" )
+    {
+        nCommand = EffectCommands::TOGGLEPAUSE;
+    }
+    else if ( aParam == "stop" )
+    {
+        nCommand = EffectCommands::STOP;
+    }
+
+    xCommand->setCommand( nCommand );
+    if( nCommand == EffectCommands::CUSTOM )
+    {
+        OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
+        aParamValue.Name = "UserDefined";
+        aParamValue.Value <<= aParam;
+    }
+
+    if( aParamValue.Value.hasValue() )
+    {
+        Sequence< NamedValue > aParamSeq( &aParamValue, 1 );
+        xCommand->setParameter( makeAny( aParamSeq ) );
     }
 }
 
@@ -1835,96 +1835,96 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
     Reference< XAnimateTransform > xTransform( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateScale && xTransform.is(), "invalid call to ppt::AnimationImporter::importAnimateScaleContainer()!");
-    if( pAtom && xTransform.is() )
+    if( !(pAtom && xTransform.is()) )
+        return;
+
+    xTransform->setTransformType( AnimationTransformType::SCALE );
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        xTransform->setTransformType( AnimationTransformType::SCALE );
-
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
+
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateScaleData:
+        {
+            sal_uInt32 nBits, nZoomContents;
+            float fByX, fByY, fFromX, fFromY, fToX, fToY;
+
+            // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
+            mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nZoomContents );
+
+            ValuePair aPair;
+            // 'from' value
+            if( nBits & 2 )
             {
-                if( !pChildAtom->seekToContent() )
-                    break;
+                aPair.First <<= static_cast<double>(fFromX) / 100.0;
+                aPair.Second <<= static_cast<double>(fFromY) / 100.0;
+                xTransform->setFrom( makeAny( aPair ) );
             }
 
-            switch( pChildAtom->getType() )
+            // 'to' value
+            if( nBits & 4 )
             {
-            case DFF_msofbtAnimateScaleData:
+                aPair.First <<= static_cast<double>(fToX) / 100.0;
+                aPair.Second <<= static_cast<double>(fToY) / 100.0;
+                xTransform->setTo( makeAny( aPair ) );
+            }
+
+            // 'by' value
+            if( nBits & 1 )
             {
-                sal_uInt32 nBits, nZoomContents;
-                float fByX, fByY, fFromX, fFromY, fToX, fToY;
+                aPair.First <<= static_cast<double>(fByX) / 100.0;
+                aPair.Second <<= static_cast<double>(fByY) / 100.0;
 
-                // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
-                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nZoomContents );
-
-                ValuePair aPair;
-                // 'from' value
                 if( nBits & 2 )
                 {
-                    aPair.First <<= static_cast<double>(fFromX) / 100.0;
-                    aPair.Second <<= static_cast<double>(fFromY) / 100.0;
-                    xTransform->setFrom( makeAny( aPair ) );
+                    // 'from' value given, import normally
+                    xTransform->setBy( makeAny( aPair ) );
                 }
-
-                // 'to' value
-                if( nBits & 4 )
+                else
                 {
-                    aPair.First <<= static_cast<double>(fToX) / 100.0;
-                    aPair.Second <<= static_cast<double>(fToY) / 100.0;
+                    // mapping 'by' to 'to', if no 'from' is
+                    // given. This is due to a non-conformity in
+                    // PPT, which exports animateScale effects
+                    // with a sole 'by' value, but with the
+                    // semantics of a sole 'to' animation
                     xTransform->setTo( makeAny( aPair ) );
                 }
-
-                // 'by' value
-                if( nBits & 1 )
-                {
-                    aPair.First <<= static_cast<double>(fByX) / 100.0;
-                    aPair.Second <<= static_cast<double>(fByY) / 100.0;
-
-                    if( nBits & 2 )
-                    {
-                        // 'from' value given, import normally
-                        xTransform->setBy( makeAny( aPair ) );
-                    }
-                    else
-                    {
-                        // mapping 'by' to 'to', if no 'from' is
-                        // given. This is due to a non-conformity in
-                        // PPT, which exports animateScale effects
-                        // with a sole 'by' value, but with the
-                        // semantics of a sole 'to' animation
-                        xTransform->setTo( makeAny( aPair ) );
-                    }
-                }
+            }
 
 #ifdef DBG_ANIM_LOG
-                if( nBits & 1 )
-                    fprintf( mpFile, " by=\"%g,%g\"", (double)fByX, (double)fByY );
+            if( nBits & 1 )
+                fprintf( mpFile, " by=\"%g,%g\"", (double)fByX, (double)fByY );
 
-                if( nBits & 2 )
-                    fprintf( mpFile, " from=\"%g,%g\"", (double)fFromX, (double)fFromY );
+            if( nBits & 2 )
+                fprintf( mpFile, " from=\"%g,%g\"", (double)fFromX, (double)fFromY );
 
-                if( nBits & 4 )
-                    fprintf( mpFile, " to=\"%g,%g\"", (double)fToX, (double)fToY );
+            if( nBits & 4 )
+                fprintf( mpFile, " to=\"%g,%g\"", (double)fToX, (double)fToY );
 
-                if( nBits & 8 )
-                    fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
+            if( nBits & 8 )
+                fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
 #endif
-            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
             break;
 
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -1933,66 +1933,66 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
     Reference< XAnimateTransform > xTransform( xNode, UNO_QUERY );
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimateRotation && xTransform.is(), "invalid call to ppt::AnimationImporter::importAnimateRotationContainer()!");
-    if( pAtom && xTransform.is() )
+    if( !(pAtom && xTransform.is()) )
+        return;
+
+    xTransform->setTransformType( AnimationTransformType::ROTATE );
+
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+
+    while( pChildAtom )
     {
-        xTransform->setTransformType( AnimationTransformType::ROTATE );
-
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
+        if( !pChildAtom->isContainer() )
         {
-            if( !pChildAtom->isContainer() )
-            {
-                if( !pChildAtom->seekToContent() )
-                    break;
-            }
+            if( !pChildAtom->seekToContent() )
+                break;
+        }
 
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtAnimateRotationData:
-            {
-                sal_uInt32 nBits, nU1;
-                float fBy, fFrom, fTo;
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimateRotationData:
+        {
+            sal_uInt32 nBits, nU1;
+            float fBy, fFrom, fTo;
 
-                // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
-                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fBy ).ReadFloat( fFrom ).ReadFloat( fTo ).ReadUInt32( nU1 );
+            // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
+            mrStCtrl.ReadUInt32( nBits ).ReadFloat( fBy ).ReadFloat( fFrom ).ReadFloat( fTo ).ReadUInt32( nU1 );
 
-                if( nBits & 1 )
-                    xTransform->setBy( makeAny( static_cast<double>(fBy) ) );
+            if( nBits & 1 )
+                xTransform->setBy( makeAny( static_cast<double>(fBy) ) );
 
-                if( nBits & 2 )
-                    xTransform->setFrom( makeAny( static_cast<double>(fFrom) ) );
+            if( nBits & 2 )
+                xTransform->setFrom( makeAny( static_cast<double>(fFrom) ) );
 
-                if( nBits & 4 )
-                    xTransform->setTo( makeAny( static_cast<double>(fTo) ) );
+            if( nBits & 4 )
+                xTransform->setTo( makeAny( static_cast<double>(fTo) ) );
 
 #ifdef DBG_ANIM_LOG
-                if( nBits & 1 )
-                    fprintf( mpFile, " by=\"%g\"", (double)fBy );
+            if( nBits & 1 )
+                fprintf( mpFile, " by=\"%g\"", (double)fBy );
 
-                if( nBits & 2 )
-                    fprintf( mpFile, " from=\"%g\"", (double)fFrom );
+            if( nBits & 2 )
+                fprintf( mpFile, " from=\"%g\"", (double)fFrom );
 
-                if( nBits & 4 )
-                    fprintf( mpFile, " to=\"%g\"", (double)fTo );
+            if( nBits & 4 )
+                fprintf( mpFile, " to=\"%g\"", (double)fTo );
 
-                if( nU1 )
-                    fprintf( mpFile, " rotation_1=\"%ld\"", nU1 );
+            if( nU1 )
+                fprintf( mpFile, " rotation_1=\"%ld\"", nU1 );
 #endif
-            }
+        }
+        break;
+
+        case DFF_msofbtAnimateTarget:
+            importAnimateAttributeTargetContainer( pChildAtom, xNode );
             break;
 
-            case DFF_msofbtAnimateTarget:
-                importAnimateAttributeTargetContainer( pChildAtom, xNode );
-                break;
-
-            default:
-                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
-                break;
-            }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+        default:
+            dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
+            break;
         }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 
@@ -2035,75 +2035,75 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
 {
     DBG_ASSERT( pAtom, "invalid call to ppt::AnimationImporter::importAnimationValues()!" );
 
-    if( pAtom )
+    if( !pAtom )
+        return;
+
+    const Atom* pValueAtom = pAtom->findFirstChildAtom( DFF_msofbtAnimValue );
+
+    while( pValueAtom && pValueAtom->seekToContent() )
     {
-        const Atom* pValueAtom = pAtom->findFirstChildAtom( DFF_msofbtAnimValue );
-
-        while( pValueAtom && pValueAtom->seekToContent() )
+        sal_uInt32 nType;
+        mrStCtrl.ReadUInt32( nType );
+        switch( nType )
         {
-            sal_uInt32 nType;
-            mrStCtrl.ReadUInt32( nType );
-            switch( nType )
-            {
-            case 0:
-            {
-                float fRepeat;
-                mrStCtrl.ReadFloat( fRepeat );
-                xNode->setRepeatCount( (fRepeat < (float(3.40282346638528860e+38))) ? makeAny( static_cast<double>(fRepeat) ) : makeAny( Timing_INDEFINITE ) );
+        case 0:
+        {
+            float fRepeat;
+            mrStCtrl.ReadFloat( fRepeat );
+            xNode->setRepeatCount( (fRepeat < (float(3.40282346638528860e+38))) ? makeAny( static_cast<double>(fRepeat) ) : makeAny( Timing_INDEFINITE ) );
 
 #ifdef DBG_ANIM_LOG
-                if( (fRepeat < ((float)3.40282346638528860e+38)) )
-                {
-                    dump( " repeat=\"%g\"", (double)fRepeat );
-                }
-                else
-                {
-                    dump( " repeat=\"indefinite\"" );
-                }
+            if( (fRepeat < ((float)3.40282346638528860e+38)) )
+            {
+                dump( " repeat=\"%g\"", (double)fRepeat );
+            }
+            else
+            {
+                dump( " repeat=\"indefinite\"" );
+            }
 #endif
-            }
-            break;
-
-            case 3:
-            {
-                float faccelerate;
-                mrStCtrl.ReadFloat( faccelerate );
-                xNode->setAcceleration( faccelerate );
-                dump( " accelerate=\"%g\"", static_cast<double>(faccelerate) );
-            }
-            break;
-
-            case 4:
-            {
-                float fdecelerate;
-                mrStCtrl.ReadFloat( fdecelerate );
-                xNode->setDecelerate( fdecelerate );
-                dump( " decelerate=\"%g\"", static_cast<double>(fdecelerate) );
-            }
-            break;
-
-            case 5:
-            {
-                sal_Int32 nAutoreverse;
-                mrStCtrl.ReadInt32( nAutoreverse );
-                xNode->setAutoReverse( nAutoreverse != 0 );
-                dump( " autoreverse=\"%#lx\"", nAutoreverse );
-            }
-            break;
-
-            default:
-            {
-                sal_uInt32 nUnknown;
-                mrStCtrl.ReadUInt32( nUnknown );
-#ifdef DBG_ANIM_LOG
-                fprintf(mpFile, " attribute_%d=\"%#lx\"", nType, nUnknown );
-#endif
-            }
-            break;
-            }
-
-            pValueAtom = pAtom->findNextChildAtom( DFF_msofbtAnimValue, pValueAtom );
         }
+        break;
+
+        case 3:
+        {
+            float faccelerate;
+            mrStCtrl.ReadFloat( faccelerate );
+            xNode->setAcceleration( faccelerate );
+            dump( " accelerate=\"%g\"", static_cast<double>(faccelerate) );
+        }
+        break;
+
+        case 4:
+        {
+            float fdecelerate;
+            mrStCtrl.ReadFloat( fdecelerate );
+            xNode->setDecelerate( fdecelerate );
+            dump( " decelerate=\"%g\"", static_cast<double>(fdecelerate) );
+        }
+        break;
+
+        case 5:
+        {
+            sal_Int32 nAutoreverse;
+            mrStCtrl.ReadInt32( nAutoreverse );
+            xNode->setAutoReverse( nAutoreverse != 0 );
+            dump( " autoreverse=\"%#lx\"", nAutoreverse );
+        }
+        break;
+
+        default:
+        {
+            sal_uInt32 nUnknown;
+            mrStCtrl.ReadUInt32( nUnknown );
+#ifdef DBG_ANIM_LOG
+            fprintf(mpFile, " attribute_%d=\"%#lx\"", nType, nUnknown );
+#endif
+        }
+        break;
+        }
+
+        pValueAtom = pAtom->findNextChildAtom( DFF_msofbtAnimValue, pValueAtom );
     }
 }
 
@@ -2113,116 +2113,116 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
 
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimKeyPoints && xAnim.is(), "invalid call to ppt::AnimationImporter::importAnimateKeyPoints()!" );
 
-    if( pAtom && xAnim.is() )
+    if( !(pAtom && xAnim.is()) )
+        return;
+
+    // first count keytimes
+    const Atom* pIter = nullptr;
+    int nKeyTimes = 0;
+
+    while( (pIter = pAtom->findNextChildAtom( DFF_msofbtAnimKeyTime,  pIter )) != nullptr )
+        nKeyTimes++;
+
+    Sequence< double > aKeyTimes( nKeyTimes );
+    Sequence< Any > aValues( nKeyTimes );
+    OUString aFormula;
+
+    pIter = pAtom->findFirstChildAtom(DFF_msofbtAnimKeyTime);
+    sal_Int32 nTemp;
+    bool bToNormalize = false;
+    for( int nKeyTime = 0; (nKeyTime < nKeyTimes) && pIter; nKeyTime++ )
     {
-        // first count keytimes
-        const Atom* pIter = nullptr;
-        int nKeyTimes = 0;
-
-        while( (pIter = pAtom->findNextChildAtom( DFF_msofbtAnimKeyTime,  pIter )) != nullptr )
-            nKeyTimes++;
-
-        Sequence< double > aKeyTimes( nKeyTimes );
-        Sequence< Any > aValues( nKeyTimes );
-        OUString aFormula;
-
-        pIter = pAtom->findFirstChildAtom(DFF_msofbtAnimKeyTime);
-        sal_Int32 nTemp;
-        bool bToNormalize = false;
-        for( int nKeyTime = 0; (nKeyTime < nKeyTimes) && pIter; nKeyTime++ )
+        if( pIter->seekToContent() )
         {
-            if( pIter->seekToContent() )
-            {
-                mrStCtrl.ReadInt32( nTemp );
-                double fTemp = static_cast<double>(nTemp) / 1000.0;
-                aKeyTimes[nKeyTime] = fTemp;
-                if( fTemp == -1 )
-                    bToNormalize = true;
+            mrStCtrl.ReadInt32( nTemp );
+            double fTemp = static_cast<double>(nTemp) / 1000.0;
+            aKeyTimes[nKeyTime] = fTemp;
+            if( fTemp == -1 )
+                bToNormalize = true;
 
-                const Atom* pValue = Atom::findNextChildAtom(pIter);
-                if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
+            const Atom* pValue = Atom::findNextChildAtom(pIter);
+            if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
+            {
+                Any aValue1, aValue2;
+                if( importAttributeValue( pValue, aValue1 ) )
                 {
-                    Any aValue1, aValue2;
-                    if( importAttributeValue( pValue, aValue1 ) )
+                    pValue = Atom::findNextChildAtom(pValue);
+                    if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
                     {
-                        pValue = Atom::findNextChildAtom(pValue);
-                        if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
-                        {
-                            // Any occurrence of the formula becomes the formula of the whole list.
-                            if (importAttributeValue(pValue, aValue2) && aFormula.isEmpty())
-                                aValue2 >>= aFormula;
-                        }
-                        aValues[nKeyTime] = aValue1;
+                        // Any occurrence of the formula becomes the formula of the whole list.
+                        if (importAttributeValue(pValue, aValue2) && aFormula.isEmpty())
+                            aValue2 >>= aFormula;
                     }
+                    aValues[nKeyTime] = aValue1;
                 }
             }
-            pIter = pAtom->findNextChildAtom(DFF_msofbtAnimKeyTime, pIter);
         }
+        pIter = pAtom->findNextChildAtom(DFF_msofbtAnimKeyTime, pIter);
+    }
 
 #ifdef DBG_ANIM_LOG
-        dump( " keyTimes=\"" );
-        for( int i=0; i<nKeyTimes; ++i )
-            dump( "%f;", aKeyTimes[i] );
+    dump( " keyTimes=\"" );
+    for( int i=0; i<nKeyTimes; ++i )
+        dump( "%f;", aKeyTimes[i] );
 
-        if( !aFormula.isEmpty() )
-        {
-            dump( "formula=\"%s", aFormula );
-        }
-
-        dump( "\" values=\"" );
-        double nVal;
-        OUString aStr;
-        for( int i=0; i<nKeyTimes; ++i )
-        {
-            if( i != 0 )
-                dump( ";" );
-
-            if( aValues[i] >>= aStr )
-                dump( "%s",
-                      OUStringToOString( aStr,
-                                                RTL_TEXTENCODING_ASCII_US ).getStr() );
-            else if( aValues[i] >>= nVal )
-                dump( "%f", nVal );
-            else
-            {
-                ValuePair aValuePair;
-
-                if( aValues[i] >>= aValuePair )
-                {
-                    if( aValuePair.First >>= aStr )
-                        dump( "%s",
-                              OUStringToOString( aStr,
-                                                        RTL_TEXTENCODING_ASCII_US ).getStr() );
-                    else if( aValuePair.First >>= nVal )
-                        dump( "%f", nVal );
-                    else
-                        dump( "%X", (sal_Int64)&aValuePair.First );
-
-                    if( aValuePair.Second >>= aStr )
-                        dump( ",%s",
-                              OUStringToOString( aStr,
-                                                        RTL_TEXTENCODING_ASCII_US ).getStr() );
-                    else if( aValuePair.Second >>= nVal )
-                        dump( ",%f", nVal );
-                    else
-                        dump( ",%X", (sal_Int64)&aValuePair.Second );
-                }
-            }
-        }
-        dump( "\"" );
-#endif
-        if( bToNormalize && nKeyTimes >= 2 )
-        {
-            // if TimeAnimationValueList contains time -1000, key points must be evenly distributed between 0 and 1 ([MS-PPT] 2.8.31)
-            for( int nKeyTime = 0; nKeyTime < nKeyTimes; ++nKeyTime )
-            {
-                aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
-            }
-        }
-        xAnim->setKeyTimes( aKeyTimes );
-        xAnim->setValues( aValues );
-        xAnim->setFormula( aFormula );
+    if( !aFormula.isEmpty() )
+    {
+        dump( "formula=\"%s", aFormula );
     }
+
+    dump( "\" values=\"" );
+    double nVal;
+    OUString aStr;
+    for( int i=0; i<nKeyTimes; ++i )
+    {
+        if( i != 0 )
+            dump( ";" );
+
+        if( aValues[i] >>= aStr )
+            dump( "%s",
+                  OUStringToOString( aStr,
+                                            RTL_TEXTENCODING_ASCII_US ).getStr() );
+        else if( aValues[i] >>= nVal )
+            dump( "%f", nVal );
+        else
+        {
+            ValuePair aValuePair;
+
+            if( aValues[i] >>= aValuePair )
+            {
+                if( aValuePair.First >>= aStr )
+                    dump( "%s",
+                          OUStringToOString( aStr,
+                                                    RTL_TEXTENCODING_ASCII_US ).getStr() );
+                else if( aValuePair.First >>= nVal )
+                    dump( "%f", nVal );
+                else
+                    dump( "%X", (sal_Int64)&aValuePair.First );
+
+                if( aValuePair.Second >>= aStr )
+                    dump( ",%s",
+                          OUStringToOString( aStr,
+                                                    RTL_TEXTENCODING_ASCII_US ).getStr() );
+                else if( aValuePair.Second >>= nVal )
+                    dump( ",%f", nVal );
+                else
+                    dump( ",%X", (sal_Int64)&aValuePair.Second );
+            }
+        }
+    }
+    dump( "\"" );
+#endif
+    if( bToNormalize && nKeyTimes >= 2 )
+    {
+        // if TimeAnimationValueList contains time -1000, key points must be evenly distributed between 0 and 1 ([MS-PPT] 2.8.31)
+        for( int nKeyTime = 0; nKeyTime < nKeyTimes; ++nKeyTime )
+        {
+            aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
+        }
+    }
+    xAnim->setKeyTimes( aKeyTimes );
+    xAnim->setValues( aValues );
+    xAnim->setFormula( aFormula );
 }
 
 bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
@@ -2418,37 +2418,37 @@ void AnimationImporter::importAnimationActions( const Atom* pAtom, const Referen
 {
     DBG_ASSERT( pAtom && xNode.is(), "invalid call to ppt::AnimationImporter::importAnimationActions()!");
 
-    if( pAtom )
+    if( !pAtom )
+        return;
+
+    const Atom* pActionAtom = pAtom->findFirstChildAtom( DFF_msofbtAnimAction );
+
+    if( !(pActionAtom && pActionAtom->seekToContent()) )
+        return;
+
+    sal_Int32 nConcurrent, nNextAction, nEndSync, nU4, nU5;
+    mrStCtrl.ReadInt32( nConcurrent );
+    mrStCtrl.ReadInt32( nNextAction );
+    mrStCtrl.ReadInt32( nEndSync );
+    mrStCtrl.ReadInt32( nU4 );
+    mrStCtrl.ReadInt32( nU5 );
+
+    if( nEndSync == 1 )
+        xNode->setEndSync( makeAny( AnimationEndSync::ALL ) );
+
+#ifdef DBG_ANIM_LOG
+    dump( " concurrent=\"%s\"", nConcurrent == 0 ? "disabled" : (nConcurrent == 1 ? "enabled" : "unknown") );
+
+    dump( " nextAction=\"%s\"", nNextAction == 0 ? "none" : (nNextAction == 1 ? "seek" : "unknown") );
+
+    if( nEndSync != 0 )
     {
-        const Atom* pActionAtom = pAtom->findFirstChildAtom( DFF_msofbtAnimAction );
-
-        if( pActionAtom && pActionAtom->seekToContent() )
-        {
-            sal_Int32 nConcurrent, nNextAction, nEndSync, nU4, nU5;
-            mrStCtrl.ReadInt32( nConcurrent );
-            mrStCtrl.ReadInt32( nNextAction );
-            mrStCtrl.ReadInt32( nEndSync );
-            mrStCtrl.ReadInt32( nU4 );
-            mrStCtrl.ReadInt32( nU5 );
-
-            if( nEndSync == 1 )
-                xNode->setEndSync( makeAny( AnimationEndSync::ALL ) );
-
-    #ifdef DBG_ANIM_LOG
-            dump( " concurrent=\"%s\"", nConcurrent == 0 ? "disabled" : (nConcurrent == 1 ? "enabled" : "unknown") );
-
-            dump( " nextAction=\"%s\"", nNextAction == 0 ? "none" : (nNextAction == 1 ? "seek" : "unknown") );
-
-            if( nEndSync != 0 )
-            {
-                dump( " endSync=\"%s\"", nEndSync == 1 ? "all" : "unknown" );
-            }
-
-            dump( " action_4=\"%#lx\"", nU4 );
-            dump( " action_5=\"%#lx\"", nU5 );
-    #endif
-        }
+        dump( " endSync=\"%s\"", nEndSync == 1 ? "all" : "unknown" );
     }
+
+    dump( " action_4=\"%#lx\"", nU4 );
+    dump( " action_5=\"%#lx\"", nU5 );
+#endif
 }
 
 void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rTarget, sal_Int16& rSubType )
@@ -2457,116 +2457,116 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
     sal_Int32 nRefMode = -1;
 
     DBG_ASSERT( pAtom && (pAtom->getType() == DFF_msofbtAnimateTargetElement), "invalid call to ppt::AnimationImporter::importTargetElementContainer()!" );
-    if( pAtom )
-    {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-        while( pChildAtom && pChildAtom->seekToContent() )
-        {
-            switch( pChildAtom->getType() )
-            {
-            case DFF_msofbtAnimReference:
-            {
-                sal_Int32 nRefType,nRefId;
-                sal_Int32 begin,end;
-                mrStCtrl.ReadInt32( nRefMode );
-                mrStCtrl.ReadInt32( nRefType );
-                mrStCtrl.ReadInt32( nRefId );
-                mrStCtrl.ReadInt32( begin );
-                mrStCtrl.ReadInt32( end );
+    if( !pAtom )
+        return;
 
-                switch( nRefType )
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+    while( pChildAtom && pChildAtom->seekToContent() )
+    {
+        switch( pChildAtom->getType() )
+        {
+        case DFF_msofbtAnimReference:
+        {
+            sal_Int32 nRefType,nRefId;
+            sal_Int32 begin,end;
+            mrStCtrl.ReadInt32( nRefMode );
+            mrStCtrl.ReadInt32( nRefType );
+            mrStCtrl.ReadInt32( nRefId );
+            mrStCtrl.ReadInt32( begin );
+            mrStCtrl.ReadInt32( end );
+
+            switch( nRefType )
+            {
+            case 1: // shape
+            {
+                SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
+                if( pSdrObject == nullptr )
+                    break;
+
+                rTarget <<= pSdrObject->getUnoShape();
+
+                switch( nRefMode )
                 {
-                case 1: // shape
+                case 6: rSubType = ShapeAnimationSubType::ONLY_BACKGROUND; break;
+                case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
+                case 2: // one paragraph
+                {
+                    if( ((begin == -1) && (end == -1)) || dynamic_cast< SdrTextObj *>( pSdrObject ) ==  nullptr  )
+                        break;
+
+                    SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
+
+                    const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+                    if( pOPO == nullptr )
+                        break;
+
+                    const EditTextObject& rEditTextObject = pOPO->GetTextObject();
+
+                    const sal_Int32 nParaCount = rEditTextObject.GetParagraphCount();
+
+                    sal_Int32 nPara = 0;
+
+                    while( (nPara < nParaCount) && (begin > 0) )
+                    {
+                        sal_Int32 nParaLength = rEditTextObject.GetText( nPara ).getLength() + 1;
+                        begin -= nParaLength;
+                        end -= nParaLength;
+                        nPara++;
+                    }
+
+                    if( nPara < nParaCount )
+                    {
+                        ParagraphTarget aParaTarget;
+                        rTarget >>= aParaTarget.Shape;
+                        /* FIXME: Paragraph should be sal_Int32 as well */
+                        aParaTarget.Paragraph = static_cast<sal_Int16>(nPara);
+                        rTarget <<= aParaTarget;
+
+                        rSubType = ShapeAnimationSubType::ONLY_TEXT;
+                        dump( " paragraph %d,", nPara);
+                        dump( " %d characters", end );
+                    }
+                }
+                }
+            }
+            break;
+
+            case 2: // sound
+                {
+                    OUString aSoundURL( mpPPTImport->ReadSound( nRefId ) );
+                    rTarget <<= aSoundURL;
+                    dump( " srcRef=\"%s\"", aSoundURL );
+                }
+                break;
+            case 3: // audio object
+            case 4: // video object
                 {
                     SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
                     if( pSdrObject == nullptr )
                         break;
 
                     rTarget <<= pSdrObject->getUnoShape();
-
-                    switch( nRefMode )
-                    {
-                    case 6: rSubType = ShapeAnimationSubType::ONLY_BACKGROUND; break;
-                    case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
-                    case 2: // one paragraph
-                    {
-                        if( ((begin == -1) && (end == -1)) || dynamic_cast< SdrTextObj *>( pSdrObject ) ==  nullptr  )
-                            break;
-
-                        SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
-
-                        const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
-                        if( pOPO == nullptr )
-                            break;
-
-                        const EditTextObject& rEditTextObject = pOPO->GetTextObject();
-
-                        const sal_Int32 nParaCount = rEditTextObject.GetParagraphCount();
-
-                        sal_Int32 nPara = 0;
-
-                        while( (nPara < nParaCount) && (begin > 0) )
-                        {
-                            sal_Int32 nParaLength = rEditTextObject.GetText( nPara ).getLength() + 1;
-                            begin -= nParaLength;
-                            end -= nParaLength;
-                            nPara++;
-                        }
-
-                        if( nPara < nParaCount )
-                        {
-                            ParagraphTarget aParaTarget;
-                            rTarget >>= aParaTarget.Shape;
-                            /* FIXME: Paragraph should be sal_Int32 as well */
-                            aParaTarget.Paragraph = static_cast<sal_Int16>(nPara);
-                            rTarget <<= aParaTarget;
-
-                            rSubType = ShapeAnimationSubType::ONLY_TEXT;
-                            dump( " paragraph %d,", nPara);
-                            dump( " %d characters", end );
-                        }
-                    }
-                    }
                 }
                 break;
-
-                case 2: // sound
-                    {
-                        OUString aSoundURL( mpPPTImport->ReadSound( nRefId ) );
-                        rTarget <<= aSoundURL;
-                        dump( " srcRef=\"%s\"", aSoundURL );
-                    }
-                    break;
-                case 3: // audio object
-                case 4: // video object
-                    {
-                        SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
-                        if( pSdrObject == nullptr )
-                            break;
-
-                        rTarget <<= pSdrObject->getUnoShape();
-                    }
-                    break;
-                default:
-                    OSL_FAIL("unknown reference type");
-                }
-
-            }
-            break;
-            case 0x2b01:
-            {
-                sal_Int32 nU1;
-                mrStCtrl.ReadInt32( nU1 );
-            }
-            break;
             default:
-                OSL_FAIL("unknown atom inside ppt::AnimationImporter::importTargetElementContainer()!");
-                break;
+                OSL_FAIL("unknown reference type");
             }
-
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
 
         }
+        break;
+        case 0x2b01:
+        {
+            sal_Int32 nU1;
+            mrStCtrl.ReadInt32( nU1 );
+        }
+        break;
+        default:
+            OSL_FAIL("unknown atom inside ppt::AnimationImporter::importTargetElementContainer()!");
+            break;
+        }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
+
     }
 }
 
@@ -2574,24 +2574,24 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
 {
     DBG_ASSERT( pAtom && (pAtom->getType() == DFF_msofbtAnimPropertySet), "invalid call to ppt::AnimationImporter::importPropertySetContainer()!" );
 
-    if( pAtom )
-    {
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-        while( pChildAtom )
-        {
-            if( pChildAtom->getType() == DFF_msofbtAnimAttributeValue )
-            {
-                Any aAny;
-                (void)importAttributeValue( pChildAtom, aAny );
-                rSet.maProperties[ pChildAtom->getInstance() ] = aAny;
-            }
-            else
-            {
-                OSL_FAIL("unknown atom inside ppt::AnimationImporter::importPropertySetContainer()!");
-            }
+    if( !pAtom )
+        return;
 
-            pChildAtom = Atom::findNextChildAtom( pChildAtom );
+    const Atom* pChildAtom = pAtom->findFirstChildAtom();
+    while( pChildAtom )
+    {
+        if( pChildAtom->getType() == DFF_msofbtAnimAttributeValue )
+        {
+            Any aAny;
+            (void)importAttributeValue( pChildAtom, aAny );
+            rSet.maProperties[ pChildAtom->getInstance() ] = aAny;
         }
+        else
+        {
+            OSL_FAIL("unknown atom inside ppt::AnimationImporter::importPropertySetContainer()!");
+        }
+
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
     }
 }
 

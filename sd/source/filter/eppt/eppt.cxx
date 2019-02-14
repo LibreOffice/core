@@ -504,44 +504,44 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
     uno::Reference<document::XDocumentProperties> xDocProps(
         xDPS->getDocumentProperties());
 
-    if (xDocProps.is()) {
+    if (!xDocProps.is())
+        return;
 
-        // no idea what this is...
-        static const sal_Int8 aGuid[ 0x52 ] =
+    // no idea what this is...
+    static const sal_Int8 aGuid[ 0x52 ] =
+    {
+        0x4e, 0x00, 0x00, 0x00,
+        '{',0,'D',0,'B',0,'1',0,'A',0,'C',0,'9',0,'6',0,'4',0,'-',0,
+        'E',0,'3',0,'9',0,'C',0,'-',0,'1',0,'1',0,'D',0,'2',0,'-',0,
+        'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
+        '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
+    };
+    uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
+
+    SvMemoryStream  aHyperBlob;
+    ImplCreateHyperBlob( aHyperBlob );
+
+    uno::Sequence<sal_Int8> aHyperSeq(aHyperBlob.Tell());
+    const sal_Int8* pBlob(
+        static_cast<const sal_Int8*>(aHyperBlob.GetData()));
+    for (sal_Int32 j = 0; j < aHyperSeq.getLength(); ++j) {
+        aHyperSeq[j] = pBlob[j];
+    }
+
+    if ( mnCnvrtFlags & 0x8000 )
+    {
+        uno::Sequence<sal_Int8> aThumbSeq;
+        if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, "PreviewBitmap" ) )
         {
-            0x4e, 0x00, 0x00, 0x00,
-            '{',0,'D',0,'B',0,'1',0,'A',0,'C',0,'9',0,'6',0,'4',0,'-',0,
-            'E',0,'3',0,'9',0,'C',0,'-',0,'1',0,'1',0,'D',0,'2',0,'-',0,
-            'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
-            '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
-        };
-        uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
-
-        SvMemoryStream  aHyperBlob;
-        ImplCreateHyperBlob( aHyperBlob );
-
-        uno::Sequence<sal_Int8> aHyperSeq(aHyperBlob.Tell());
-        const sal_Int8* pBlob(
-            static_cast<const sal_Int8*>(aHyperBlob.GetData()));
-        for (sal_Int32 j = 0; j < aHyperSeq.getLength(); ++j) {
-            aHyperSeq[j] = pBlob[j];
+            aThumbSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(mAny);
         }
-
-        if ( mnCnvrtFlags & 0x8000 )
-        {
-            uno::Sequence<sal_Int8> aThumbSeq;
-            if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, "PreviewBitmap" ) )
-            {
-                aThumbSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(mAny);
-            }
-            sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
-                    &aThumbSeq, &aGuidSeq, &aHyperSeq);
-        }
-        else
-        {
-            sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
-                    nullptr, &aGuidSeq, &aHyperSeq );
-        }
+        sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
+                &aThumbSeq, &aGuidSeq, &aHyperSeq);
+    }
+    else
+    {
+        sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
+                nullptr, &aGuidSeq, &aHyperSeq );
     }
 }
 
@@ -560,108 +560,108 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
 
 void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
-    if ( rXPagePropSet.is() )
+    if ( !rXPagePropSet.is() )
+        return;
+
+    OUString aString;
+    css::uno::Any aAny;
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "HeaderText", true ) )
     {
-        OUString aString;
-        css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "HeaderText", true ) )
-        {
-            if ( aAny >>= aString )
-                PPTWriter::WriteCString( rStrm, aString, 1 );
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "FooterText", true ) )
-        {
-            if ( aAny >>= aString )
-                PPTWriter::WriteCString( rStrm, aString, 2 );
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeText", true ) )
-        {
-            if ( aAny >>= aString )
-                PPTWriter::WriteCString( rStrm, aString );
-        }
+        if ( aAny >>= aString )
+            PPTWriter::WriteCString( rStrm, aString, 1 );
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "FooterText", true ) )
+    {
+        if ( aAny >>= aString )
+            PPTWriter::WriteCString( rStrm, aString, 2 );
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeText", true ) )
+    {
+        if ( aAny >>= aString )
+            PPTWriter::WriteCString( rStrm, aString );
     }
 }
 
 void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
-    if ( rXPagePropSet.is() )
-    {
-        bool bVal = false;
-        sal_uInt32 nVal = 0;
-        css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsHeaderVisible", true ) )
-        {
-            if ( ( aAny >>= bVal ) && bVal )
-                nVal |= 0x100000;
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsFooterVisible", true ) )
-        {
-            if ( ( aAny >>= bVal ) && bVal )
-                nVal |= 0x200000;
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeVisible", true ) )
-        {
-            if ( ( aAny >>= bVal ) && bVal )
-                nVal |= 0x010000;
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsPageNumberVisible", true ) )
-        {
-            if ( ( aAny >>= bVal ) && bVal )
-                nVal |= 0x080000;
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeFixed", true ) )
-        {
-            if ( ( aAny >>= bVal ) && !bVal )
-                nVal |= 0x20000;
-            else
-                nVal |= 0x40000;
-        }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeFormat", true ) )
-        {
-            sal_Int32 nFormat = *o3tl::doAccess<sal_Int32>(aAny);
-            SvxDateFormat eDateFormat = static_cast<SvxDateFormat>( nFormat & 0xf );
-            SvxTimeFormat eTimeFormat = static_cast<SvxTimeFormat>( ( nFormat >> 4 ) & 0xf );
-            switch( eDateFormat )
-            {
-                case SvxDateFormat::F :
-                    nFormat = 1;
-                break;
-                case SvxDateFormat::D :
-                    nFormat = 2;
-                break;
-                case SvxDateFormat::C :
-                    nFormat = 4;
-                break;
-                default:
-                case SvxDateFormat::A :
-                    nFormat = 0;
-            }
-            switch( eTimeFormat )
-            {
-                case SvxTimeFormat::HH24_MM :
-                    nFormat = 9;
-                break;
-                case SvxTimeFormat::HH12_MM :
-                    nFormat = 11;
-                break;
-                case SvxTimeFormat::HH24_MM_SS :
-                    nFormat = 10;
-                break;
-                case SvxTimeFormat::HH12_MM_SS :
-                    nFormat = 12;
-                break;
-                default:
-                    break;
-            }
-            nVal |= nFormat;
-        }
+    if ( !rXPagePropSet.is() )
+        return;
 
-        mpPptEscherEx->OpenContainer( EPP_HeadersFooters );
-        mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
-        mpStrm->WriteUInt32( nVal );
-        ImplCreateHeaderFooterStrings( *mpStrm, rXPagePropSet );
-        mpPptEscherEx->CloseContainer();
+    bool bVal = false;
+    sal_uInt32 nVal = 0;
+    css::uno::Any aAny;
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsHeaderVisible", true ) )
+    {
+        if ( ( aAny >>= bVal ) && bVal )
+            nVal |= 0x100000;
     }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsFooterVisible", true ) )
+    {
+        if ( ( aAny >>= bVal ) && bVal )
+            nVal |= 0x200000;
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeVisible", true ) )
+    {
+        if ( ( aAny >>= bVal ) && bVal )
+            nVal |= 0x010000;
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsPageNumberVisible", true ) )
+    {
+        if ( ( aAny >>= bVal ) && bVal )
+            nVal |= 0x080000;
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeFixed", true ) )
+    {
+        if ( ( aAny >>= bVal ) && !bVal )
+            nVal |= 0x20000;
+        else
+            nVal |= 0x40000;
+    }
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeFormat", true ) )
+    {
+        sal_Int32 nFormat = *o3tl::doAccess<sal_Int32>(aAny);
+        SvxDateFormat eDateFormat = static_cast<SvxDateFormat>( nFormat & 0xf );
+        SvxTimeFormat eTimeFormat = static_cast<SvxTimeFormat>( ( nFormat >> 4 ) & 0xf );
+        switch( eDateFormat )
+        {
+            case SvxDateFormat::F :
+                nFormat = 1;
+            break;
+            case SvxDateFormat::D :
+                nFormat = 2;
+            break;
+            case SvxDateFormat::C :
+                nFormat = 4;
+            break;
+            default:
+            case SvxDateFormat::A :
+                nFormat = 0;
+        }
+        switch( eTimeFormat )
+        {
+            case SvxTimeFormat::HH24_MM :
+                nFormat = 9;
+            break;
+            case SvxTimeFormat::HH12_MM :
+                nFormat = 11;
+            break;
+            case SvxTimeFormat::HH24_MM_SS :
+                nFormat = 10;
+            break;
+            case SvxTimeFormat::HH12_MM_SS :
+                nFormat = 12;
+            break;
+            default:
+                break;
+        }
+        nVal |= nFormat;
+    }
+
+    mpPptEscherEx->OpenContainer( EPP_HeadersFooters );
+    mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
+    mpStrm->WriteUInt32( nVal );
+    ImplCreateHeaderFooterStrings( *mpStrm, rXPagePropSet );
+    mpPptEscherEx->CloseContainer();
 }
 
 bool PPTWriter::ImplCreateDocument()

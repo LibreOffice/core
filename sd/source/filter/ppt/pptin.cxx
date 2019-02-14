@@ -182,50 +182,50 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     , mnBackgroundLayerID(0)
     , mnBackgroundObjectsLayerID(0)
 {
-    if ( bOk )
+    if ( !bOk )
+        return;
+
+    mbDocumentFound = SeekToDocument( &maDocHd );                           // maDocHd = the latest DocumentHeader
+    while ( SeekToRec( rStCtrl, PPT_PST_Document, nStreamLen, &maDocHd ) )
+        mbDocumentFound = true;
+
+    sal_uInt32 nDggContainerOfs = 0;
+
+    if ( mbDocumentFound )
     {
-        mbDocumentFound = SeekToDocument( &maDocHd );                           // maDocHd = the latest DocumentHeader
-        while ( SeekToRec( rStCtrl, PPT_PST_Document, nStreamLen, &maDocHd ) )
-            mbDocumentFound = true;
+        sal_uLong nPosMerk = rStCtrl.Tell();
 
-        sal_uInt32 nDggContainerOfs = 0;
+        pStData = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
 
-        if ( mbDocumentFound )
+        rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
+        sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
+        DffRecordHeader aPPDGHd;
+        if ( SeekToRec( rStCtrl, PPT_PST_PPDrawingGroup, nDocLen, &aPPDGHd ) )
         {
-            sal_uLong nPosMerk = rStCtrl.Tell();
-
-            pStData = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
-
-            rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
-            sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
-            DffRecordHeader aPPDGHd;
-            if ( SeekToRec( rStCtrl, PPT_PST_PPDrawingGroup, nDocLen, &aPPDGHd ) )
-            {
-                sal_uLong nPPDGLen = aPPDGHd.GetRecEndFilePos();
-                if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen ) )
-                    nDggContainerOfs = rStCtrl.Tell();
-            }
-            rStCtrl.Seek( nPosMerk );
+            sal_uLong nPPDGLen = aPPDGHd.GetRecEndFilePos();
+            if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen ) )
+                nDggContainerOfs = rStCtrl.Tell();
         }
-        sal_uInt32 nSvxMSDffOLEConvFlags2 = 0;
-
-        const SvtFilterOptions& rBasOpt = SvtFilterOptions::Get();
-        if ( rBasOpt.IsLoadPPointBasicCode() )
-            mnFilterOptions |= 1;
-        if ( rBasOpt.IsMathType2Math() )
-            nSvxMSDffOLEConvFlags2 |= OLE_MATHTYPE_2_STARMATH;
-        if ( rBasOpt.IsWinWord2Writer() )
-            nSvxMSDffOLEConvFlags2 |= OLE_WINWORD_2_STARWRITER;
-        if ( rBasOpt.IsExcel2Calc() )
-            nSvxMSDffOLEConvFlags2 |= OLE_EXCEL_2_STARCALC;
-        if ( rBasOpt.IsPowerPoint2Impress() )
-            nSvxMSDffOLEConvFlags2 |= OLE_POWERPOINT_2_STARIMPRESS;
-
-        InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
-        SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS
-            | SVXMSDFF_SETTINGS_IMPORT_PPT );
-        SetModel( mpDoc, 576 );
+        rStCtrl.Seek( nPosMerk );
     }
+    sal_uInt32 nSvxMSDffOLEConvFlags2 = 0;
+
+    const SvtFilterOptions& rBasOpt = SvtFilterOptions::Get();
+    if ( rBasOpt.IsLoadPPointBasicCode() )
+        mnFilterOptions |= 1;
+    if ( rBasOpt.IsMathType2Math() )
+        nSvxMSDffOLEConvFlags2 |= OLE_MATHTYPE_2_STARMATH;
+    if ( rBasOpt.IsWinWord2Writer() )
+        nSvxMSDffOLEConvFlags2 |= OLE_WINWORD_2_STARWRITER;
+    if ( rBasOpt.IsExcel2Calc() )
+        nSvxMSDffOLEConvFlags2 |= OLE_EXCEL_2_STARCALC;
+    if ( rBasOpt.IsPowerPoint2Impress() )
+        nSvxMSDffOLEConvFlags2 |= OLE_POWERPOINT_2_STARIMPRESS;
+
+    InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
+    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS
+        | SVXMSDFF_SETTINGS_IMPORT_PPT );
+    SetModel( mpDoc, 576 );
 }
 
 // Dtor
@@ -1426,68 +1426,68 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
         return;
     PptSlidePersistEntry& rSlidePersist = (*pList)[ nCurrentPageNum ];
     HeaderFooterEntry* pHFE = rSlidePersist.xHeaderFooterEntry.get();
-    if (pHFE)
-    {
-        for ( i = 0; i < 4; i++ )
-        {
-            bool bVisible = pHFE->IsToDisplay( i );
-            if ( ( eCurrentPageKind == PPT_SLIDEPAGE )
-                && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PptSlideLayout::TITLESLIDE )
-                    && ( aDocAtom.bTitlePlaceholdersOmitted  ) )
-            {
-                bVisible = false;
-            }
-            if ( bVisible && pMasterPersist )
-            {
-                sal_uInt32 nPosition = pHFE->NeedToImportInstance( i, rSlidePersist );
-                if ( nPosition )
-                {
-                    ::tools::Rectangle aEmpty;
-                    bVisible = false;
-                    rStCtrl.Seek( nPosition );
-                    ProcessData aProcessData( rSlidePersist, SdPageCapsule(pPage) );
-                    SdrObject* pObj = ImportObj( rStCtrl, aProcessData, aEmpty, aEmpty, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
-                    if ( pObj )
-                        pPage->NbcInsertObject( pObj, 0 );
-                }
-            }
-            OUString aPlaceHolderString = pHFE->pPlaceholder[ i ];
+    if (!pHFE)
+        return;
 
-            sd::HeaderFooterSettings rHeaderFooterSettings( pPage->getHeaderFooterSettings() );
-            switch( i )
-            {
-                case 0 :
-                {
-                    rHeaderFooterSettings.mbDateTimeVisible = bVisible;
-                    rHeaderFooterSettings.mbDateTimeIsFixed = ( pHFE->nAtom & 0x20000 ) == 0;
-                    rHeaderFooterSettings.maDateTimeText = aPlaceHolderString;
-                    SvxDateFormat eDateFormat;
-                    SvxTimeFormat eTimeFormat;
-                    PPTFieldEntry::GetDateTime( pHFE->nAtom & 0xff, eDateFormat, eTimeFormat );
-                    rHeaderFooterSettings.meDateFormat = eDateFormat;
-                    rHeaderFooterSettings.meTimeFormat = eTimeFormat;
-                }
-                break;
-                case 1 :
-                {
-                    rHeaderFooterSettings.mbHeaderVisible = bVisible;
-                    rHeaderFooterSettings.maHeaderText = aPlaceHolderString;
-                }
-                break;
-                case 2 :
-                {
-                    rHeaderFooterSettings.mbFooterVisible = bVisible;
-                    rHeaderFooterSettings.maFooterText = aPlaceHolderString;
-                }
-                break;
-                case 3 :
-                {
-                    rHeaderFooterSettings.mbSlideNumberVisible = bVisible;
-                }
-                break;
-            }
-            pPage->setHeaderFooterSettings( rHeaderFooterSettings );
+    for ( i = 0; i < 4; i++ )
+    {
+        bool bVisible = pHFE->IsToDisplay( i );
+        if ( ( eCurrentPageKind == PPT_SLIDEPAGE )
+            && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PptSlideLayout::TITLESLIDE )
+                && ( aDocAtom.bTitlePlaceholdersOmitted  ) )
+        {
+            bVisible = false;
         }
+        if ( bVisible && pMasterPersist )
+        {
+            sal_uInt32 nPosition = pHFE->NeedToImportInstance( i, rSlidePersist );
+            if ( nPosition )
+            {
+                ::tools::Rectangle aEmpty;
+                bVisible = false;
+                rStCtrl.Seek( nPosition );
+                ProcessData aProcessData( rSlidePersist, SdPageCapsule(pPage) );
+                SdrObject* pObj = ImportObj( rStCtrl, aProcessData, aEmpty, aEmpty, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+                if ( pObj )
+                    pPage->NbcInsertObject( pObj, 0 );
+            }
+        }
+        OUString aPlaceHolderString = pHFE->pPlaceholder[ i ];
+
+        sd::HeaderFooterSettings rHeaderFooterSettings( pPage->getHeaderFooterSettings() );
+        switch( i )
+        {
+            case 0 :
+            {
+                rHeaderFooterSettings.mbDateTimeVisible = bVisible;
+                rHeaderFooterSettings.mbDateTimeIsFixed = ( pHFE->nAtom & 0x20000 ) == 0;
+                rHeaderFooterSettings.maDateTimeText = aPlaceHolderString;
+                SvxDateFormat eDateFormat;
+                SvxTimeFormat eTimeFormat;
+                PPTFieldEntry::GetDateTime( pHFE->nAtom & 0xff, eDateFormat, eTimeFormat );
+                rHeaderFooterSettings.meDateFormat = eDateFormat;
+                rHeaderFooterSettings.meTimeFormat = eTimeFormat;
+            }
+            break;
+            case 1 :
+            {
+                rHeaderFooterSettings.mbHeaderVisible = bVisible;
+                rHeaderFooterSettings.maHeaderText = aPlaceHolderString;
+            }
+            break;
+            case 2 :
+            {
+                rHeaderFooterSettings.mbFooterVisible = bVisible;
+                rHeaderFooterSettings.maFooterText = aPlaceHolderString;
+            }
+            break;
+            case 3 :
+            {
+                rHeaderFooterSettings.mbSlideNumberVisible = bVisible;
+            }
+            break;
+        }
+        pPage->setHeaderFooterSettings( rHeaderFooterSettings );
     }
 }
 

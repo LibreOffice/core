@@ -85,56 +85,56 @@ namespace ppt
 
 static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMode )
 {
-    if ( eTranslateMode != TRANSLATE_NONE )
+    if ( eTranslateMode == TRANSLATE_NONE )
+        return;
+
+    if ( ( eTranslateMode & TRANSLATE_VALUE ) || ( eTranslateMode & TRANSLATE_ATTRIBUTE ) )
     {
-        if ( ( eTranslateMode & TRANSLATE_VALUE ) || ( eTranslateMode & TRANSLATE_ATTRIBUTE ) )
+        const oox::ppt::ImplAttributeNameConversion* p = oox::ppt::getAttributeConversionList();
+        while( p->mpAPIName )
         {
-            const oox::ppt::ImplAttributeNameConversion* p = oox::ppt::getAttributeConversionList();
-            while( p->mpAPIName )
-            {
-                if( rString.equalsAscii( p->mpAPIName ) )
-                    break;
-                p++;
-            }
-            if( p->mpMSName )
-            {
-                if ( eTranslateMode & TRANSLATE_VALUE )
-                {
-                    rString = "#";
-                    rString += OUString::createFromAscii( p->mpMSName );
-                }
-                else
-                    rString = OUString::createFromAscii( p->mpMSName );
-            }
+            if( rString.equalsAscii( p->mpAPIName ) )
+                break;
+            p++;
         }
-        else if ( eTranslateMode & TRANSLATE_MEASURE )
+        if( p->mpMSName )
         {
-            const sal_Char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", nullptr };
-            const sal_Char* pSource[] = { "x", "y", "width", "height", nullptr };
-            sal_Int32 nIndex = 0;
-
-            const sal_Char** ps = pSource;
-            const sal_Char** pd = pDest;
-
-            while( *ps )
+            if ( eTranslateMode & TRANSLATE_VALUE )
             {
-                const OUString aSearch( OUString::createFromAscii( *ps ) );
-                while( (nIndex = rString.indexOf( aSearch, nIndex )) != -1  )
-                {
-                    sal_Int32 nLength = aSearch.getLength();
-                    if( nIndex && ( rString[nIndex-1] == '#' ) )
-                    {
-                        nIndex--;
-                        nLength++;
-                    }
-
-                    const OUString aNew( OUString::createFromAscii( *pd ) );
-                    rString = rString.replaceAt( nIndex, nLength, aNew );
-                    nIndex += aNew.getLength();
-                }
-                ps++;
-                pd++;
+                rString = "#";
+                rString += OUString::createFromAscii( p->mpMSName );
             }
+            else
+                rString = OUString::createFromAscii( p->mpMSName );
+        }
+    }
+    else if ( eTranslateMode & TRANSLATE_MEASURE )
+    {
+        const sal_Char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", nullptr };
+        const sal_Char* pSource[] = { "x", "y", "width", "height", nullptr };
+        sal_Int32 nIndex = 0;
+
+        const sal_Char** ps = pSource;
+        const sal_Char** pd = pDest;
+
+        while( *ps )
+        {
+            const OUString aSearch( OUString::createFromAscii( *ps ) );
+            while( (nIndex = rString.indexOf( aSearch, nIndex )) != -1  )
+            {
+                sal_Int32 nLength = aSearch.getLength();
+                if( nIndex && ( rString[nIndex-1] == '#' ) )
+                {
+                    nIndex--;
+                    nLength++;
+                }
+
+                const OUString aNew( OUString::createFromAscii( *pd ) );
+                rString = rString.replaceAt( nIndex, nLength, aNew );
+                nIndex += aNew.getLength();
+            }
+            ps++;
+            pd++;
         }
     }
 }
@@ -866,8 +866,9 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
 {
     // storing user data into pAny, to allow direct access later
     memset( pAny, 0, nLen );
-    if ( rUserData.getLength() )
-    {
+    if ( !rUserData.getLength() )
+        return;
+
     const NamedValue* p = rUserData.getConstArray();
     sal_Int32 nLength = rUserData.getLength();
     while( nLength-- )
@@ -893,7 +894,6 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
         pAny[ DFF_ANIM_AFTEREFFECT ] = &(p->Value);
         }
         p++;
-    }
     }
 }
 
@@ -1516,20 +1516,20 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
 void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAnimationNode >& xNode, int nAfterEffectType )
 {
     Reference< XAnimateSet > xSet( xNode, UNO_QUERY );
-    if( xSet.is() )
+    if( !xSet.is() )
+        return;
+
+    EscherExContainer aAnimateSet( rStrm, DFF_msofbtAnimateSet, 0 );
     {
-        EscherExContainer aAnimateSet( rStrm, DFF_msofbtAnimateSet, 0 );
-        {
-            EscherExAtom aAnimateSetData( rStrm, DFF_msofbtAnimateSetData );
-            sal_uInt32 const nId1 = 1;            // ??
-            sal_uInt32 const nId2 = 1;            // ??
-            rStrm.WriteUInt32( nId1 ).WriteUInt32( nId2 );
-        }
-        Any aConvertedValue( convertAnimateValue( xSet->getTo(), xSet->getAttributeName() ) );
-        if ( aConvertedValue.hasValue() )
-            exportAnimProperty( rStrm, 1, aConvertedValue, TRANSLATE_NONE );
-        exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
+        EscherExAtom aAnimateSetData( rStrm, DFF_msofbtAnimateSetData );
+        sal_uInt32 const nId1 = 1;            // ??
+        sal_uInt32 const nId2 = 1;            // ??
+        rStrm.WriteUInt32( nId1 ).WriteUInt32( nId2 );
     }
+    Any aConvertedValue( convertAnimateValue( xSet->getTo(), xSet->getAttributeName() ) );
+    if ( aConvertedValue.hasValue() )
+        exportAnimProperty( rStrm, 1, aConvertedValue, TRANSLATE_NONE );
+    exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
 }
 
 sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAttributeName )
@@ -1586,118 +1586,118 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
 void AnimationExporter::exportAnimate( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
     Reference< XAnimate > xAnimate( xNode, UNO_QUERY );
-    if ( xAnimate.is() )
+    if ( !xAnimate.is() )
+        return;
+
+    Any aBy  ( xAnimate->getBy() );
+    Any aFrom( xAnimate->getFrom() );
+    Any aTo  ( xAnimate->getTo() );
+
+    EscherExContainer aContainer( rStrm, DFF_msofbtAnimate, 0 );
     {
-        Any aBy  ( xAnimate->getBy() );
-        Any aFrom( xAnimate->getFrom() );
-        Any aTo  ( xAnimate->getTo() );
+        EscherExAtom    aAnimateData( rStrm, DFF_msofbtAnimateData );
+        sal_uInt32 nBits = 0x38;
+        sal_Int16 nTmp = xAnimate->getCalcMode();
+        sal_uInt32 nCalcMode = /* (nTmp == AnimationCalcMode::FORMULA) ? 2 : */ (nTmp == AnimationCalcMode::LINEAR) ? 1 : 0;
+        sal_uInt32 nValueType = GetValueTypeForAttributeName( xAnimate->getAttributeName() );
 
-        EscherExContainer aContainer( rStrm, DFF_msofbtAnimate, 0 );
-        {
-            EscherExAtom    aAnimateData( rStrm, DFF_msofbtAnimateData );
-            sal_uInt32 nBits = 0x38;
-            sal_Int16 nTmp = xAnimate->getCalcMode();
-            sal_uInt32 nCalcMode = /* (nTmp == AnimationCalcMode::FORMULA) ? 2 : */ (nTmp == AnimationCalcMode::LINEAR) ? 1 : 0;
-            sal_uInt32 nValueType = GetValueTypeForAttributeName( xAnimate->getAttributeName() );
-
-            if ( aBy.hasValue() )
-                nBits |= 1;
-            if ( aFrom.hasValue() )
-                nBits |= 2;
-            if ( aTo.hasValue() )
-                nBits |= 4;
-
-            rStrm.WriteUInt32( nCalcMode )
-                 .WriteUInt32( nBits )
-                 .WriteUInt32( nValueType );
-        }
         if ( aBy.hasValue() )
-            exportAnimProperty( rStrm, 1, aBy, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+            nBits |= 1;
         if ( aFrom.hasValue() )
-            exportAnimProperty( rStrm, 2, aFrom, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+            nBits |= 2;
         if ( aTo.hasValue() )
-            exportAnimProperty( rStrm, 3, aTo, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+            nBits |= 4;
 
-        exportAnimateKeyPoints( rStrm, xAnimate );
-        exportAnimateTarget( rStrm, xNode );
+        rStrm.WriteUInt32( nCalcMode )
+             .WriteUInt32( nBits )
+             .WriteUInt32( nValueType );
     }
+    if ( aBy.hasValue() )
+        exportAnimProperty( rStrm, 1, aBy, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+    if ( aFrom.hasValue() )
+        exportAnimProperty( rStrm, 2, aFrom, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+    if ( aTo.hasValue() )
+        exportAnimProperty( rStrm, 3, aTo, TRANSLATE_NUMBER_TO_STRING | TRANSLATE_MEASURE );
+
+    exportAnimateKeyPoints( rStrm, xAnimate );
+    exportAnimateTarget( rStrm, xNode );
 }
 
 void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_uInt32 nForceAttributeNames, int nAfterEffectType )
 {
     EscherExContainer aAnimateTarget( rStrm, DFF_msofbtAnimateTarget, 0 );
     Reference< XAnimate > xAnimate( xNode, UNO_QUERY );
-    if ( xAnimate.is() )
-    {
-        {
-            EscherExAtom aAnimateTargetSettings( rStrm, DFF_msofbtAnimateTargetSettings, 0 );
-            // nBits %0001: additive, %0010: accumulate, %0100: attributeName, %1000: transformtype
-            // nAdditive 0 = base, 1 = sum, 2 = replace, 3 = multiply, 4 = none
-            // nAccumulate 0 = none, 1 = always
-            // nTransformType 0: "property" else "image"
-            sal_uInt32 nBits = 0;
-            sal_uInt32 nAdditive = 0;
-            sal_uInt32 nAccumulate = 0;
-            sal_uInt32 const nTransformType = 0;
-            if ( xAnimate.is() )
-            {
-                if ( !xAnimate->getAttributeName().isEmpty() )
-                    nBits |= 4;     // what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
-                sal_Int16 nAdditiveMode = xAnimate->getAdditive();
-                if ( nAdditiveMode != AnimationAdditiveMode::BASE )
-                {
-                    nBits |= 1;
-                    switch( nAdditiveMode )
-                    {
-                        case AnimationAdditiveMode::SUM : nAdditive = 1; break;
-                        case AnimationAdditiveMode::REPLACE : nAdditive = 2; break;
-                        case AnimationAdditiveMode::MULTIPLY : nAdditive = 3; break;
-                        case AnimationAdditiveMode::NONE : nAdditive = 4; break;
-                    }
-                }
-                if ( xAnimate->getAccumulate() )
-                {
-                    nBits  |= 2;
-                    nAccumulate = 1;
-                }
-            }
-            rStrm.WriteUInt32( nBits )
-               .WriteUInt32( nAdditive )
-               .WriteUInt32( nAccumulate )
-               .WriteUInt32( nTransformType );
-        }
-        if ( !xAnimate->getAttributeName().isEmpty() || nForceAttributeNames )
-        {
-            EscherExContainer aAnimateAttributeNames( rStrm, DFF_msofbtAnimateAttributeNames, 1 );
-            OUString aAttributeName( xAnimate->getAttributeName() );
-            if ( nForceAttributeNames )
-            {
-                if( nForceAttributeNames == 1 )
-                {
-                    aAttributeName = "r";
-                }
-            }
-            sal_Int32 nIndex = 0;
-            do
-            {
-                OUString aToken( aAttributeName.getToken( 0, ';', nIndex ) );
-                exportAnimPropertyString( rStrm, 0, aToken, TRANSLATE_ATTRIBUTE );
-            }
-            while ( nIndex >= 0 );
-        }
+    if ( !xAnimate.is() )
+        return;
 
-        if( nAfterEffectType != AFTEREFFECT_NONE )
+    {
+        EscherExAtom aAnimateTargetSettings( rStrm, DFF_msofbtAnimateTargetSettings, 0 );
+        // nBits %0001: additive, %0010: accumulate, %0100: attributeName, %1000: transformtype
+        // nAdditive 0 = base, 1 = sum, 2 = replace, 3 = multiply, 4 = none
+        // nAccumulate 0 = none, 1 = always
+        // nTransformType 0: "property" else "image"
+        sal_uInt32 nBits = 0;
+        sal_uInt32 nAdditive = 0;
+        sal_uInt32 nAccumulate = 0;
+        sal_uInt32 const nTransformType = 0;
+        if ( xAnimate.is() )
         {
-            EscherExContainer aAnimPropertySet( rStrm, DFF_msofbtAnimPropertySet );
-            exportAnimPropertyuInt32( rStrm, 6, 1 );
-            if( nAfterEffectType == AFTEREFFECT_COLOR )
+            if ( !xAnimate->getAttributeName().isEmpty() )
+                nBits |= 4;     // what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
+            sal_Int16 nAdditiveMode = xAnimate->getAdditive();
+            if ( nAdditiveMode != AnimationAdditiveMode::BASE )
             {
-                exportAnimPropertyuInt32( rStrm, 4, 0 );
-                exportAnimPropertyuInt32( rStrm, 5, 0 );
+                nBits |= 1;
+                switch( nAdditiveMode )
+                {
+                    case AnimationAdditiveMode::SUM : nAdditive = 1; break;
+                    case AnimationAdditiveMode::REPLACE : nAdditive = 2; break;
+                    case AnimationAdditiveMode::MULTIPLY : nAdditive = 3; break;
+                    case AnimationAdditiveMode::NONE : nAdditive = 4; break;
+                }
+            }
+            if ( xAnimate->getAccumulate() )
+            {
+                nBits  |= 2;
+                nAccumulate = 1;
             }
         }
-        exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), false );
+        rStrm.WriteUInt32( nBits )
+           .WriteUInt32( nAdditive )
+           .WriteUInt32( nAccumulate )
+           .WriteUInt32( nTransformType );
     }
+    if ( !xAnimate->getAttributeName().isEmpty() || nForceAttributeNames )
+    {
+        EscherExContainer aAnimateAttributeNames( rStrm, DFF_msofbtAnimateAttributeNames, 1 );
+        OUString aAttributeName( xAnimate->getAttributeName() );
+        if ( nForceAttributeNames )
+        {
+            if( nForceAttributeNames == 1 )
+            {
+                aAttributeName = "r";
+            }
+        }
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken( aAttributeName.getToken( 0, ';', nIndex ) );
+            exportAnimPropertyString( rStrm, 0, aToken, TRANSLATE_ATTRIBUTE );
+        }
+        while ( nIndex >= 0 );
+    }
+
+    if( nAfterEffectType != AFTEREFFECT_NONE )
+    {
+        EscherExContainer aAnimPropertySet( rStrm, DFF_msofbtAnimPropertySet );
+        exportAnimPropertyuInt32( rStrm, 6, 1 );
+        if( nAfterEffectType == AFTEREFFECT_COLOR )
+        {
+            exportAnimPropertyuInt32( rStrm, 4, 0 );
+            exportAnimPropertyuInt32( rStrm, 5, 0 );
+        }
+    }
+    exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), false );
 }
 
 Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget )
@@ -1763,27 +1763,27 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any& 
     if( bParagraphTarget )
         nRefMode = 2;
 
-    if ( xShape.is() || bCreate2b01Atom )
+    if ( !(xShape.is() || bCreate2b01Atom) )
+        return;
+
+    EscherExContainer aAnimateTargetElement( rStrm, DFF_msofbtAnimateTargetElement );
+    if ( xShape.is() )
     {
-        EscherExContainer aAnimateTargetElement( rStrm, DFF_msofbtAnimateTargetElement );
-        if ( xShape.is() )
-        {
-            EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
+        EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
 
-            sal_uInt32 const nRefType = 1;    // TODO: nRefType == 2 -> Sound;
-            sal_uInt32 nRefId = mrSolverContainer.GetShapeId( xShape );
+        sal_uInt32 const nRefType = 1;    // TODO: nRefType == 2 -> Sound;
+        sal_uInt32 nRefId = mrSolverContainer.GetShapeId( xShape );
 
-            rStrm.WriteUInt32( nRefMode )
-                 .WriteUInt32( nRefType )
-                 .WriteUInt32( nRefId )
-                 .WriteInt32( begin )
-                 .WriteInt32( end );
-        }
-        if ( bCreate2b01Atom )
-        {
-            EscherExAtom a2b01Atom( rStrm, 0x2b01 );
-            rStrm.WriteUInt32( 1 );     // ?
-        }
+        rStrm.WriteUInt32( nRefMode )
+             .WriteUInt32( nRefType )
+             .WriteUInt32( nRefId )
+             .WriteInt32( begin )
+             .WriteInt32( end );
+    }
+    if ( bCreate2b01Atom )
+    {
+        EscherExAtom a2b01Atom( rStrm, 0x2b01 );
+        rStrm.WriteUInt32( 1 );     // ?
     }
 }
 
@@ -1792,38 +1792,38 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
     Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
     Sequence< Any > aValues( xAnimate->getValues() );
     OUString aFormula( xAnimate->getFormula() );
-    if ( aKeyTimes.getLength() )
+    if ( !aKeyTimes.getLength() )
+        return;
+
+    EscherExContainer aAnimKeyPoints( rStrm, DFF_msofbtAnimKeyPoints );
+    sal_Int32 i;
+    for ( i = 0; i < aKeyTimes.getLength(); i++ )
     {
-        EscherExContainer aAnimKeyPoints( rStrm, DFF_msofbtAnimKeyPoints );
-        sal_Int32 i;
-        for ( i = 0; i < aKeyTimes.getLength(); i++ )
         {
+            EscherExAtom aAnimKeyTime( rStrm, DFF_msofbtAnimKeyTime );
+            sal_Int32 nKeyTime = static_cast<sal_Int32>( aKeyTimes[ i ] * 1000.0 );
+            rStrm.WriteInt32( nKeyTime );
+        }
+        Any aAny[ 2 ];
+        if ( aValues[ i ].hasValue() )
+        {
+            ValuePair aPair;
+            if ( aValues[ i ] >>= aPair )
             {
-                EscherExAtom aAnimKeyTime( rStrm, DFF_msofbtAnimKeyTime );
-                sal_Int32 nKeyTime = static_cast<sal_Int32>( aKeyTimes[ i ] * 1000.0 );
-                rStrm.WriteInt32( nKeyTime );
+                aAny[ 0 ] = convertAnimateValue( aPair.First, xAnimate->getAttributeName() );
+                aAny[ 1 ] = convertAnimateValue( aPair.Second, xAnimate->getAttributeName() );
             }
-            Any aAny[ 2 ];
-            if ( aValues[ i ].hasValue() )
+            else
             {
-                ValuePair aPair;
-                if ( aValues[ i ] >>= aPair )
-                {
-                    aAny[ 0 ] = convertAnimateValue( aPair.First, xAnimate->getAttributeName() );
-                    aAny[ 1 ] = convertAnimateValue( aPair.Second, xAnimate->getAttributeName() );
-                }
-                else
-                {
-                    aAny[ 0 ] = convertAnimateValue( aValues[ i ], xAnimate->getAttributeName() );
-                }
-                if ( !i && !aFormula.isEmpty() )
-                {
-                    ImplTranslateAttribute( aFormula, TRANSLATE_MEASURE );
-                    aAny[ 1 ] <<= aFormula;
-                }
-                exportAnimProperty( rStrm, 0, aAny[ 0 ], TRANSLATE_NONE );
-                exportAnimProperty( rStrm, 1, aAny[ 1 ], TRANSLATE_NONE );
+                aAny[ 0 ] = convertAnimateValue( aValues[ i ], xAnimate->getAttributeName() );
             }
+            if ( !i && !aFormula.isEmpty() )
+            {
+                ImplTranslateAttribute( aFormula, TRANSLATE_MEASURE );
+                aAny[ 1 ] <<= aFormula;
+            }
+            exportAnimProperty( rStrm, 0, aAny[ 0 ], TRANSLATE_NONE );
+            exportAnimProperty( rStrm, 1, aAny[ 1 ], TRANSLATE_NONE );
         }
     }
 }
@@ -1885,147 +1885,147 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
 void AnimationExporter::exportTransitionFilter( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
     Reference< XTransitionFilter > xFilter( xNode, UNO_QUERY );
-    if ( xFilter.is() )
-    {
-        EscherExContainer aAnimateFilter( rStrm, DFF_msofbtAnimateFilter );
-        {
-            EscherExAtom aAnimateFilterData( rStrm, DFF_msofbtAnimateFilterData );
-            sal_uInt32 const nBits = 3;       // bit 0 -> use AnimAttributeValue
-                                              // bit 1 -> use nTransition
+    if ( !xFilter.is() )
+        return;
 
-            sal_uInt32 nTransition = xFilter->getMode() ? 0 : 1;
-            rStrm.WriteUInt32( nBits )
-                 .WriteUInt32( nTransition );
-        }
-        const sal_Char* pFilter = FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
-        if ( pFilter )
-        {
-            const OUString aStr( OUString::createFromAscii( pFilter ) );
-            exportAnimPropertyString( rStrm, 1, aStr, TRANSLATE_NONE );
-        }
-        exportAnimateTarget( rStrm, xNode );
+    EscherExContainer aAnimateFilter( rStrm, DFF_msofbtAnimateFilter );
+    {
+        EscherExAtom aAnimateFilterData( rStrm, DFF_msofbtAnimateFilterData );
+        sal_uInt32 const nBits = 3;       // bit 0 -> use AnimAttributeValue
+                                          // bit 1 -> use nTransition
+
+        sal_uInt32 nTransition = xFilter->getMode() ? 0 : 1;
+        rStrm.WriteUInt32( nBits )
+             .WriteUInt32( nTransition );
     }
+    const sal_Char* pFilter = FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
+    if ( pFilter )
+    {
+        const OUString aStr( OUString::createFromAscii( pFilter ) );
+        exportAnimPropertyString( rStrm, 1, aStr, TRANSLATE_NONE );
+    }
+    exportAnimateTarget( rStrm, xNode );
 }
 
 void AnimationExporter::exportAnimateMotion( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
     Reference< XAnimateMotion > xMotion( xNode, UNO_QUERY );
-    if ( xMotion.is() )
-    {
-        EscherExContainer aAnimateMotion( rStrm, DFF_msofbtAnimateMotion );
-        {
-            {   //SJ: Ignored from import filter
-                EscherExAtom aAnimateMotionData( rStrm, DFF_msofbtAnimateMotionData );
-                sal_uInt32 const nBits = 0x98;
-                sal_uInt32 const nOrigin = 0x2;
-                float const fByX = 100.0; // nBits&1
-                float const fByY = 100.0; // nBits&1
-                float const fFromX = 0.0; // nBits&2
-                float const fFromY = 0.0; // nBits&2
-                float const fToX = 100.0; // nBits&4
-                float const fToY = 100.0; // nBits&4
-                rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nOrigin );
-            }
+    if ( !xMotion.is() )
+        return;
 
-            OUString aStr;
-            if ( xMotion->getPath() >>= aStr )
-            {
-                if ( !aStr.isEmpty() )
-                    exportAnimPropertyString( rStrm, 1, aStr, TRANSLATE_NONE );
-            }
-            exportAnimateTarget( rStrm, xNode );
+    EscherExContainer aAnimateMotion( rStrm, DFF_msofbtAnimateMotion );
+    {
+        {   //SJ: Ignored from import filter
+            EscherExAtom aAnimateMotionData( rStrm, DFF_msofbtAnimateMotionData );
+            sal_uInt32 const nBits = 0x98;
+            sal_uInt32 const nOrigin = 0x2;
+            float const fByX = 100.0; // nBits&1
+            float const fByY = 100.0; // nBits&1
+            float const fFromX = 0.0; // nBits&2
+            float const fFromY = 0.0; // nBits&2
+            float const fToX = 100.0; // nBits&4
+            float const fToY = 100.0; // nBits&4
+            rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nOrigin );
         }
+
+        OUString aStr;
+        if ( xMotion->getPath() >>= aStr )
+        {
+            if ( !aStr.isEmpty() )
+                exportAnimPropertyString( rStrm, 1, aStr, TRANSLATE_NONE );
+        }
+        exportAnimateTarget( rStrm, xNode );
     }
 }
 
 void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
     Reference< XAnimateTransform > xTransform( xNode, UNO_QUERY );
-    if ( xTransform.is() )
+    if ( !xTransform.is() )
+        return;
+
+    if ( xTransform->getTransformType() ==  AnimationTransformType::SCALE )
     {
-        if ( xTransform->getTransformType() ==  AnimationTransformType::SCALE )
+        EscherExContainer aAnimateScale( rStrm, DFF_msofbtAnimateScale );
         {
-            EscherExContainer aAnimateScale( rStrm, DFF_msofbtAnimateScale );
+            EscherExAtom aAnimateScaleData( rStrm, DFF_msofbtAnimateScaleData );
+            sal_uInt32 nBits = 0;
+            sal_uInt32 const nZoomContents = 1;
+            float fByX = 100.0;
+            float fByY = 100.0;
+            float fFromX = 0.0;
+            float fFromY = 0.0;
+            float fToX = 100.0;
+            float fToY = 100.0;
+
+            double fX = 0.0, fY = 0.0;
+            ValuePair aPair;
+            if ( xTransform->getBy() >>= aPair )
             {
-                EscherExAtom aAnimateScaleData( rStrm, DFF_msofbtAnimateScaleData );
-                sal_uInt32 nBits = 0;
-                sal_uInt32 const nZoomContents = 1;
-                float fByX = 100.0;
-                float fByY = 100.0;
-                float fFromX = 0.0;
-                float fFromY = 0.0;
-                float fToX = 100.0;
-                float fToY = 100.0;
-
-                double fX = 0.0, fY = 0.0;
-                ValuePair aPair;
-                if ( xTransform->getBy() >>= aPair )
-                {
-                    if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
-                    {
-                        nBits |= 1;
-                        fByX = static_cast<float>( fX * 100 );
-                        fByY = static_cast<float>( fY * 100 );
-                    }
-                }
-                if ( xTransform->getFrom() >>= aPair )
-                {
-                    if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
-                    {
-                        nBits |= 2;
-                        fFromX = static_cast<float>( fX * 100 );
-                        fFromY = static_cast<float>( fY * 100 );
-                    }
-                }
-                if( xTransform->getTo() >>= aPair )
-                {
-                    if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
-                    {
-                        nBits |= 4;
-                        fToX = static_cast<float>( fX * 100 );
-                        fToY = static_cast<float>( fY * 100 );
-                    }
-                }
-
-                // TODO: ZoomContents:
-                //if( nBits & 8 )
-                //( fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
-
-                rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nZoomContents );
-            }
-            exportAnimateTarget( rStrm, xNode );
-        }
-        else if ( xTransform->getTransformType() ==  AnimationTransformType::ROTATE )
-        {
-            EscherExContainer aAnimateRotation( rStrm, DFF_msofbtAnimateRotation );
-            {
-                EscherExAtom aAnimateRotationData( rStrm, DFF_msofbtAnimateRotationData );
-                sal_uInt32 nBits = 0;
-                sal_uInt32 const nU1 = 0;
-                float fBy = 360.0;
-                float fFrom = 0.0;
-                float fTo = 360.0;
-
-                double fVal = 0.0;
-                if ( xTransform->getBy() >>= fVal )
+                if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                 {
                     nBits |= 1;
-                    fBy = static_cast<float>(fVal);
+                    fByX = static_cast<float>( fX * 100 );
+                    fByY = static_cast<float>( fY * 100 );
                 }
-                if ( xTransform->getFrom() >>= fVal )
+            }
+            if ( xTransform->getFrom() >>= aPair )
+            {
+                if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                 {
                     nBits |= 2;
-                    fFrom = static_cast<float>(fVal);
+                    fFromX = static_cast<float>( fX * 100 );
+                    fFromY = static_cast<float>( fY * 100 );
                 }
-                if ( xTransform->getTo() >>= fVal )
+            }
+            if( xTransform->getTo() >>= aPair )
+            {
+                if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                 {
                     nBits |= 4;
-                    fTo = static_cast<float>(fVal);
+                    fToX = static_cast<float>( fX * 100 );
+                    fToY = static_cast<float>( fY * 100 );
                 }
-                rStrm.WriteUInt32( nBits ).WriteFloat( fBy ).WriteFloat( fFrom ).WriteFloat( fTo ).WriteUInt32( nU1 );
             }
-            exportAnimateTarget( rStrm, xNode, 1 );
+
+            // TODO: ZoomContents:
+            //if( nBits & 8 )
+            //( fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
+
+            rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nZoomContents );
         }
+        exportAnimateTarget( rStrm, xNode );
+    }
+    else if ( xTransform->getTransformType() ==  AnimationTransformType::ROTATE )
+    {
+        EscherExContainer aAnimateRotation( rStrm, DFF_msofbtAnimateRotation );
+        {
+            EscherExAtom aAnimateRotationData( rStrm, DFF_msofbtAnimateRotationData );
+            sal_uInt32 nBits = 0;
+            sal_uInt32 const nU1 = 0;
+            float fBy = 360.0;
+            float fFrom = 0.0;
+            float fTo = 360.0;
+
+            double fVal = 0.0;
+            if ( xTransform->getBy() >>= fVal )
+            {
+                nBits |= 1;
+                fBy = static_cast<float>(fVal);
+            }
+            if ( xTransform->getFrom() >>= fVal )
+            {
+                nBits |= 2;
+                fFrom = static_cast<float>(fVal);
+            }
+            if ( xTransform->getTo() >>= fVal )
+            {
+                nBits |= 4;
+                fTo = static_cast<float>(fVal);
+            }
+            rStrm.WriteUInt32( nBits ).WriteFloat( fBy ).WriteFloat( fFrom ).WriteFloat( fTo ).WriteUInt32( nU1 );
+        }
+        exportAnimateTarget( rStrm, xNode, 1 );
     }
 }
 
@@ -2059,106 +2059,106 @@ bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpac
 void AnimationExporter::exportAnimateColor( SvStream& rStrm, const Reference< XAnimationNode >& xNode, int nAfterEffectType )
 {
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
-    if ( xColor.is() )
+    if ( !xColor.is() )
+        return;
+
+    EscherExContainer aAnimateColor( rStrm, DFF_msofbtAnimateColor );
     {
-        EscherExContainer aAnimateColor( rStrm, DFF_msofbtAnimateColor );
+        EscherExAtom aAnimateColorData( rStrm, DFF_msofbtAnimateColorData );
+        sal_uInt32 nBits = 8;
+
+        sal_Int32 nByMode, nByA, nByB, nByC;
+        nByMode = nByA = nByB = nByC = 0;
+
+        sal_Int32 nFromMode, nFromA, nFromB, nFromC;
+        nFromMode = nFromA = nFromB = nFromC = 0;
+
+        sal_Int32 nToMode, nToA, nToB, nToC;
+        nToMode = nToA = nToB = nToC = 0;
+
+        sal_Int16 nColorSpace = xColor->getColorInterpolation();
+
+        Any aAny( xColor->getBy() );
+        if ( aAny.hasValue() )
         {
-            EscherExAtom aAnimateColorData( rStrm, DFF_msofbtAnimateColorData );
-            sal_uInt32 nBits = 8;
-
-            sal_Int32 nByMode, nByA, nByB, nByC;
-            nByMode = nByA = nByB = nByC = 0;
-
-            sal_Int32 nFromMode, nFromA, nFromB, nFromC;
-            nFromMode = nFromA = nFromB = nFromC = 0;
-
-            sal_Int32 nToMode, nToA, nToB, nToC;
-            nToMode = nToA = nToB = nToC = 0;
-
-            sal_Int16 nColorSpace = xColor->getColorInterpolation();
-
-            Any aAny( xColor->getBy() );
-            if ( aAny.hasValue() )
-            {
-                if ( getColorAny( aAny, nColorSpace, nByMode, nByA, nByB, nByC ) )
-                    nBits |= 0x11;
-            }
-            aAny = xColor->getFrom();
-            if ( aAny.hasValue() )
-            {
-                if ( getColorAny( aAny, nColorSpace, nFromMode, nFromA, nFromB, nFromC ) )
-                    nBits |= 0x12;
-            }
-            aAny = xColor->getTo();
-            if ( aAny.hasValue() )
-            {
-                if ( getColorAny( aAny, nColorSpace, nToMode, nToA, nToB, nToC ) )
-                    nBits |= 0x14;
-            }
-            rStrm  .WriteUInt32( nBits )
-                   .WriteInt32( nByMode ).WriteInt32( nByA ).WriteInt32( nByB ).WriteInt32( nByC )
-                   .WriteInt32( nFromMode ).WriteInt32( nFromA ).WriteInt32( nFromB ).WriteInt32( nFromC )
-                   .WriteInt32( nToMode ).WriteInt32( nToA ).WriteInt32( nToB ).WriteInt32( nToC );
+            if ( getColorAny( aAny, nColorSpace, nByMode, nByA, nByB, nByC ) )
+                nBits |= 0x11;
         }
-        exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
+        aAny = xColor->getFrom();
+        if ( aAny.hasValue() )
+        {
+            if ( getColorAny( aAny, nColorSpace, nFromMode, nFromA, nFromB, nFromC ) )
+                nBits |= 0x12;
+        }
+        aAny = xColor->getTo();
+        if ( aAny.hasValue() )
+        {
+            if ( getColorAny( aAny, nColorSpace, nToMode, nToA, nToB, nToC ) )
+                nBits |= 0x14;
+        }
+        rStrm  .WriteUInt32( nBits )
+               .WriteInt32( nByMode ).WriteInt32( nByA ).WriteInt32( nByB ).WriteInt32( nByC )
+               .WriteInt32( nFromMode ).WriteInt32( nFromA ).WriteInt32( nFromB ).WriteInt32( nFromC )
+               .WriteInt32( nToMode ).WriteInt32( nToA ).WriteInt32( nToB ).WriteInt32( nToC );
     }
+    exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
 }
 
 void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
     Reference< XIterateContainer > xIterate( xNode, UNO_QUERY );
-    if ( xIterate.is() )
+    if ( !xIterate.is() )
+        return;
+
+    EscherExAtom aAnimIteration( rStrm, DFF_msofbtAnimIteration );
+
+    float       fInterval = 10.0;
+    sal_Int32   nTextUnitEffect = 0;
+    sal_Int32 const nU1 = 1;
+    sal_Int32 const nU2 = 1;
+    sal_Int32 const nU3 = 0xe;
+
+    sal_Int16 nIterateType = xIterate->getIterateType();
+    switch( nIterateType )
     {
-        EscherExAtom aAnimIteration( rStrm, DFF_msofbtAnimIteration );
+        case TextAnimationType::BY_WORD : nTextUnitEffect = 1; break;
+        case TextAnimationType::BY_LETTER : nTextUnitEffect = 2; break;
+    }
 
-        float       fInterval = 10.0;
-        sal_Int32   nTextUnitEffect = 0;
-        sal_Int32 const nU1 = 1;
-        sal_Int32 const nU2 = 1;
-        sal_Int32 const nU3 = 0xe;
+    fInterval = static_cast<float>(xIterate->getIterateInterval());
 
-        sal_Int16 nIterateType = xIterate->getIterateType();
-        switch( nIterateType )
+    // convert interval from absolute to percentage
+    double fDuration = 0.0;
+
+    Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+    if( xEnumerationAccess.is() )
+    {
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+        if( xEnumeration.is() )
         {
-            case TextAnimationType::BY_WORD : nTextUnitEffect = 1; break;
-            case TextAnimationType::BY_LETTER : nTextUnitEffect = 2; break;
-        }
-
-        fInterval = static_cast<float>(xIterate->getIterateInterval());
-
-        // convert interval from absolute to percentage
-        double fDuration = 0.0;
-
-        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
-        if( xEnumerationAccess.is() )
-        {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
-            if( xEnumeration.is() )
+            while( xEnumeration->hasMoreElements() )
             {
-                while( xEnumeration->hasMoreElements() )
+                Reference< XAnimate > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                if( xChildNode.is() )
                 {
-                    Reference< XAnimate > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
-                    if( xChildNode.is() )
-                    {
-                        double fChildBegin = 0.0;
-                        double fChildDuration = 0.0;
-                        xChildNode->getBegin() >>= fChildBegin;
-                        xChildNode->getDuration() >>= fChildDuration;
+                    double fChildBegin = 0.0;
+                    double fChildDuration = 0.0;
+                    xChildNode->getBegin() >>= fChildBegin;
+                    xChildNode->getDuration() >>= fChildDuration;
 
-                        fChildDuration += fChildBegin;
-                        if( fChildDuration > fDuration )
-                            fDuration = fChildDuration;
-                    }
+                    fChildDuration += fChildBegin;
+                    if( fChildDuration > fDuration )
+                        fDuration = fChildDuration;
                 }
             }
         }
-
-        if( fDuration )
-            fInterval = static_cast<float>(100.0 * fInterval / fDuration);
-
-        rStrm.WriteFloat( fInterval ).WriteInt32( nTextUnitEffect ).WriteInt32( nU1 ).WriteInt32( nU2 ).WriteInt32( nU3 );
-        aTarget = xIterate->getTarget();
     }
+
+    if( fDuration )
+        fInterval = static_cast<float>(100.0 * fInterval / fDuration);
+
+    rStrm.WriteFloat( fInterval ).WriteInt32( nTextUnitEffect ).WriteInt32( nU1 ).WriteInt32( nU2 ).WriteInt32( nU3 );
+    aTarget = xIterate->getTarget();
 }
 
 } // namespace ppt;

@@ -165,42 +165,42 @@ void PptEscherEx::CloseContainer()
        not creating group objects with a depth higher than 16, because then
        PPT is having a big performance problem when starting a slide show
     */
-    if ( ( mRecTypes.back() != ESCHER_SpgrContainer ) || ( mnGroupLevel < 12 ) )
+    if ( ( mRecTypes.back() == ESCHER_SpgrContainer ) && ( mnGroupLevel >= 12 ) )
+        return;
+
+    sal_uInt32 nSize, nPos = mpOutStrm->Tell();
+    nSize = ( nPos - mOffsets.back() ) - 4;
+    mpOutStrm->Seek( mOffsets.back() );
+    mpOutStrm->WriteUInt32( nSize );
+
+    switch( mRecTypes.back() )
     {
-        sal_uInt32 nSize, nPos = mpOutStrm->Tell();
-        nSize = ( nPos - mOffsets.back() ) - 4;
-        mpOutStrm->Seek( mOffsets.back() );
-        mpOutStrm->WriteUInt32( nSize );
-
-        switch( mRecTypes.back() )
+        case ESCHER_DgContainer :
         {
-            case ESCHER_DgContainer :
+            if ( mbEscherDg )
             {
-                if ( mbEscherDg )
-                {
-                    mbEscherDg = false;
-                    if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                        mpOutStrm->WriteUInt32( mxGlobal->GetDrawingShapeCount( mnCurrentDg ) ).WriteUInt32( mxGlobal->GetLastShapeId( mnCurrentDg ) );
-                }
+                mbEscherDg = false;
+                if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
+                    mpOutStrm->WriteUInt32( mxGlobal->GetDrawingShapeCount( mnCurrentDg ) ).WriteUInt32( mxGlobal->GetLastShapeId( mnCurrentDg ) );
             }
-            break;
-
-            case ESCHER_SpgrContainer :
-            {
-                if ( mbEscherSpgr )
-                {
-                    mbEscherSpgr = false;
-                }
-            }
-            break;
-
-            default:
-            break;
         }
-        mOffsets.pop_back();
-        mRecTypes.pop_back();
-        mpOutStrm->Seek( nPos );
+        break;
+
+        case ESCHER_SpgrContainer :
+        {
+            if ( mbEscherSpgr )
+            {
+                mbEscherSpgr = false;
+            }
+        }
+        break;
+
+        default:
+        break;
     }
+    mOffsets.pop_back();
+    mRecTypes.pop_back();
+    mpOutStrm->Seek( nPos );
 }
 
 sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMemoryStream* pClientData )

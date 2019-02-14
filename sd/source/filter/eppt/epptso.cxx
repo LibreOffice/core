@@ -1031,33 +1031,33 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
 
 void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt )
 {
-    if ( !mbFontIndependentLineSpacing )
+    if ( mbFontIndependentLineSpacing )
+        return;
+
+    if ( !rTextObj.ParagraphCount() )
+        return;
+
+    ParagraphObj* pPara = rTextObj.GetParagraph(0);
+    if ( pPara->empty() )
+        return;
+
+    const PortionObj& rPortion = pPara->front();
+    sal_Int16 nLineSpacing = pPara->mnLineSpacing;
+    const FontCollectionEntry* pDesc = maFontCollection.GetById( rPortion.mnFont );
+    if ( pDesc )
+         nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) * pDesc->Scaling + 0.5 );
+
+    if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
     {
-        if ( rTextObj.ParagraphCount() )
-        {
-            ParagraphObj* pPara = rTextObj.GetParagraph(0);
-            if ( !pPara->empty() )
-            {
-                const PortionObj& rPortion = pPara->front();
-                sal_Int16 nLineSpacing = pPara->mnLineSpacing;
-                const FontCollectionEntry* pDesc = maFontCollection.GetById( rPortion.mnFont );
-                if ( pDesc )
-                     nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) * pDesc->Scaling + 0.5 );
+        double fCharHeight = rPortion.mnCharHeight;
+        fCharHeight *= 2540 / 72.0;
+        fCharHeight *= 100 - nLineSpacing;
+        fCharHeight /= 100;
 
-                if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
-                {
-                    double fCharHeight = rPortion.mnCharHeight;
-                    fCharHeight *= 2540 / 72.0;
-                    fCharHeight *= 100 - nLineSpacing;
-                    fCharHeight /= 100;
-
-                    sal_uInt32 nUpperDistance = 0;
-                    rPropOpt.GetOpt( ESCHER_Prop_dyTextTop, nUpperDistance );
-                    nUpperDistance += static_cast< sal_uInt32 >( fCharHeight * 360.0 );
-                    rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, nUpperDistance );
-                }
-            }
-        }
+        sal_uInt32 nUpperDistance = 0;
+        rPropOpt.GetOpt( ESCHER_Prop_dyTextTop, nUpperDistance );
+        nUpperDistance += static_cast< sal_uInt32 >( fCharHeight * 360.0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, nUpperDistance );
     }
 }
 
@@ -1071,312 +1071,312 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;
-    if ( !mbEmptyPresObj )
+    if ( mbEmptyPresObj )
+        return;
+
+    ParagraphObj* pPara;
+    TextObjBinary aTextObj( mXText, nTextInstance, maFontCollection, static_cast<PPTExBulletProvider&>(*this) );
+
+    // leaving out EPP_TextCharsAtom w/o text - still write out
+    // attribute info though
+    if ( mnTextSize )
+        aTextObj.Write( &rOut );
+
+    if ( pPropOpt && mType != "drawing.Table" )
+        ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
+
+    sal_uInt32 nSize, nPos = rOut.Tell();
+
+    rOut.WriteUInt32( EPP_StyleTextPropAtom << 16 ).WriteUInt32( 0 );
+    ImplWriteParagraphs( rOut, aTextObj );
+    ImplWritePortions( rOut, aTextObj );
+    nSize = rOut.Tell() - nPos;
+    rOut.SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
+    rOut.WriteUInt32( nSize - 8 );
+    rOut.SeekRel( nSize - 8 );
+
+    for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
     {
-        ParagraphObj* pPara;
-        TextObjBinary aTextObj( mXText, nTextInstance, maFontCollection, static_cast<PPTExBulletProvider&>(*this) );
+        pPara = aTextObj.GetParagraph(i);
+        for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+        {
+            const PortionObj& rPortion = **it;
+            if ( rPortion.mpFieldEntry )
+            {
+                const FieldEntry* pFieldEntry = rPortion.mpFieldEntry.get();
 
-        // leaving out EPP_TextCharsAtom w/o text - still write out
-        // attribute info though
-        if ( mnTextSize )
-            aTextObj.Write( &rOut );
+                switch ( pFieldEntry->nFieldType >> 28 )
+                {
+                    case 1 :
+                    case 2 :
+                    {
+                        rOut.WriteUInt32( EPP_DateTimeMCAtom << 16 ).WriteUInt32( 8 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos )             // TxtOffset to TxtField;
+                            .WriteUChar( pFieldEntry->nFieldType & 0xff )       // Type
+                            .WriteUChar( 0 ).WriteUInt16( 0 );                      // PadBytes
+                    }
+                    break;
+                    case 3 :
+                    {
+                        rOut.WriteUInt32( EPP_SlideNumberMCAtom << 16 ).WriteUInt32( 4 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos );
+                    }
+                    break;
+                    case 4 :
+                    {
+                        sal_uInt32 nPageIndex = 0;
+                        OUString aPageUrl;
+                        OUString aFile( pFieldEntry->aFieldUrl );
+                        OUString aTarget( pFieldEntry->aFieldUrl );
+                        INetURLObject aUrl( pFieldEntry->aFieldUrl );
+                        if ( INetProtocol::File == aUrl.GetProtocol() )
+                            aFile = aUrl.PathToFileName();
+                        else if ( INetProtocol::Smb == aUrl.GetProtocol() )
+                        {
+                            // Convert smb notation to '\\' and skip the 'smb:' part
+                            aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE).copy(4);
+                            aFile = aFile.replaceAll( "/", "\\" );
+                            aTarget = aFile;
+                        }
+                        else if ( pFieldEntry->aFieldUrl.startsWith("#") )
+                        {
+                            OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, INetURLObject::DecodeMechanism::WithCharset ) );
+                            aPage = aPage.copy( 1 );
 
-        if ( pPropOpt && mType != "drawing.Table" )
-            ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
+                            std::vector<OUString>::const_iterator pIter = std::find(
+                                        maSlideNameList.begin(),maSlideNameList.end(),aPage);
 
-        sal_uInt32 nSize, nPos = rOut.Tell();
+                            if ( pIter != maSlideNameList.end() )
+                            {
+                                nPageIndex = pIter - maSlideNameList.begin();
+                                aPageUrl = OUString::number(256 + nPageIndex);
+                                aPageUrl += ",";
+                                aPageUrl += OUString::number(nPageIndex + 1);
+                                aPageUrl += ",Slide ";
+                                aPageUrl += OUString::number(nPageIndex + 1);
+                            }
+                        }
+                        sal_uInt32 nHyperId(0);
+                        if ( !aPageUrl.isEmpty() )
+                            nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1U << 31 ), pFieldEntry->aRepresentation, "", "", aPageUrl );
+                        else
+                            nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, "", "" );
 
-        rOut.WriteUInt32( EPP_StyleTextPropAtom << 16 ).WriteUInt32( 0 );
-        ImplWriteParagraphs( rOut, aTextObj );
-        ImplWritePortions( rOut, aTextObj );
-        nSize = rOut.Tell() - nPos;
-        rOut.SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
-        rOut.WriteUInt32( nSize - 8 );
-        rOut.SeekRel( nSize - 8 );
+                        rOut.WriteUInt32( ( EPP_InteractiveInfo << 16 ) | 0xf ).WriteUInt32( 24 )
+                            .WriteUInt32( EPP_InteractiveInfoAtom << 16 ).WriteUInt32( 16 )
+                            .WriteUInt32( 0 )                                   // soundref
+                            .WriteUInt32( nHyperId )                                        // hyperlink id
+                            .WriteUChar( 4 )                                    // hyperlink action
+                            .WriteUChar( 0 )                                    // ole verb
+                            .WriteUChar( 0 )                                    // jump
+                            .WriteUChar( 0 )                                    // flags
+                            .WriteUChar( 8 )                                    // hyperlink type ?
+                            .WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )
+                            .WriteUInt32( EPP_TxInteractiveInfoAtom << 16 ).WriteUInt32( 8 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos )
+                            .WriteUInt32( pFieldEntry->nFieldEndPos );
+                    }
+                    break;
+                    case 5 :
+                    {
+                        rOut.WriteUInt32( EPP_GenericDateMCAtom << 16 ).WriteUInt32( 4 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos );
+                    }
+                    break;
+                    case 6 :
+                    {
+                        rOut.WriteUInt32( EPP_HeaderMCAtom << 16 ).WriteUInt32( 4 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos );
+                    }
+                    break;
+                    case 7 :
+                    {
+                        rOut.WriteUInt32( EPP_FooterMCAtom << 16 ).WriteUInt32( 4 )
+                            .WriteUInt32( pFieldEntry->nFieldStartPos );
+                    }
+                    break;
+                    default:
+                    break;
+                }
+            }
+        }
+    }
+
+    aTextObj.WriteTextSpecInfo( &rOut );
+
+    // write Star Office Default TabSizes (if necessary)
+    if ( aTextObj.ParagraphCount() )
+    {
+        pPara = aTextObj.GetParagraph(0);
+        sal_uInt32  nParaFlags = 0x1f;
+        sal_Int16   nMask, nNumberingRule[ 10 ];
+        sal_uInt32  nTextOfs = pPara->nTextOfs;
+        sal_uInt32  nTabs = pPara->maTabStop.getLength();
+        const css::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
 
         for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
         {
             pPara = aTextObj.GetParagraph(i);
-            for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+            if ( pPara->bExtendedParameters )
             {
-                const PortionObj& rPortion = **it;
-                if ( rPortion.mpFieldEntry )
+                nMask = 1 << pPara->nDepth;
+                if ( nParaFlags & nMask )
                 {
-                    const FieldEntry* pFieldEntry = rPortion.mpFieldEntry.get();
-
-                    switch ( pFieldEntry->nFieldType >> 28 )
+                    nParaFlags &=~ nMask;
+                    if ( ( rParaSheet.maParaLevel[ pPara->nDepth ].mnTextOfs != pPara->nTextOfs ) ||
+                        ( rParaSheet.maParaLevel[ pPara->nDepth ].mnBulletOfs != pPara->nBulletOfs ) )
                     {
-                        case 1 :
-                        case 2 :
-                        {
-                            rOut.WriteUInt32( EPP_DateTimeMCAtom << 16 ).WriteUInt32( 8 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos )             // TxtOffset to TxtField;
-                                .WriteUChar( pFieldEntry->nFieldType & 0xff )       // Type
-                                .WriteUChar( 0 ).WriteUInt16( 0 );                      // PadBytes
-                        }
-                        break;
-                        case 3 :
-                        {
-                            rOut.WriteUInt32( EPP_SlideNumberMCAtom << 16 ).WriteUInt32( 4 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos );
-                        }
-                        break;
-                        case 4 :
-                        {
-                            sal_uInt32 nPageIndex = 0;
-                            OUString aPageUrl;
-                            OUString aFile( pFieldEntry->aFieldUrl );
-                            OUString aTarget( pFieldEntry->aFieldUrl );
-                            INetURLObject aUrl( pFieldEntry->aFieldUrl );
-                            if ( INetProtocol::File == aUrl.GetProtocol() )
-                                aFile = aUrl.PathToFileName();
-                            else if ( INetProtocol::Smb == aUrl.GetProtocol() )
-                            {
-                                // Convert smb notation to '\\' and skip the 'smb:' part
-                                aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE).copy(4);
-                                aFile = aFile.replaceAll( "/", "\\" );
-                                aTarget = aFile;
-                            }
-                            else if ( pFieldEntry->aFieldUrl.startsWith("#") )
-                            {
-                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, INetURLObject::DecodeMechanism::WithCharset ) );
-                                aPage = aPage.copy( 1 );
-
-                                std::vector<OUString>::const_iterator pIter = std::find(
-                                            maSlideNameList.begin(),maSlideNameList.end(),aPage);
-
-                                if ( pIter != maSlideNameList.end() )
-                                {
-                                    nPageIndex = pIter - maSlideNameList.begin();
-                                    aPageUrl = OUString::number(256 + nPageIndex);
-                                    aPageUrl += ",";
-                                    aPageUrl += OUString::number(nPageIndex + 1);
-                                    aPageUrl += ",Slide ";
-                                    aPageUrl += OUString::number(nPageIndex + 1);
-                                }
-                            }
-                            sal_uInt32 nHyperId(0);
-                            if ( !aPageUrl.isEmpty() )
-                                nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1U << 31 ), pFieldEntry->aRepresentation, "", "", aPageUrl );
-                            else
-                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, "", "" );
-
-                            rOut.WriteUInt32( ( EPP_InteractiveInfo << 16 ) | 0xf ).WriteUInt32( 24 )
-                                .WriteUInt32( EPP_InteractiveInfoAtom << 16 ).WriteUInt32( 16 )
-                                .WriteUInt32( 0 )                                   // soundref
-                                .WriteUInt32( nHyperId )                                        // hyperlink id
-                                .WriteUChar( 4 )                                    // hyperlink action
-                                .WriteUChar( 0 )                                    // ole verb
-                                .WriteUChar( 0 )                                    // jump
-                                .WriteUChar( 0 )                                    // flags
-                                .WriteUChar( 8 )                                    // hyperlink type ?
-                                .WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )
-                                .WriteUInt32( EPP_TxInteractiveInfoAtom << 16 ).WriteUInt32( 8 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos )
-                                .WriteUInt32( pFieldEntry->nFieldEndPos );
-                        }
-                        break;
-                        case 5 :
-                        {
-                            rOut.WriteUInt32( EPP_GenericDateMCAtom << 16 ).WriteUInt32( 4 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos );
-                        }
-                        break;
-                        case 6 :
-                        {
-                            rOut.WriteUInt32( EPP_HeaderMCAtom << 16 ).WriteUInt32( 4 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos );
-                        }
-                        break;
-                        case 7 :
-                        {
-                            rOut.WriteUInt32( EPP_FooterMCAtom << 16 ).WriteUInt32( 4 )
-                                .WriteUInt32( pFieldEntry->nFieldStartPos );
-                        }
-                        break;
-                        default:
-                        break;
+                        nParaFlags |= nMask << 16;
+                        nNumberingRule[ pPara->nDepth << 1 ] = pPara->nTextOfs;
+                        nNumberingRule[ ( pPara->nDepth << 1 ) + 1 ] = static_cast<sal_Int16>(pPara->nBulletOfs);
                     }
                 }
             }
         }
+        nParaFlags >>= 16;
 
-        aTextObj.WriteTextSpecInfo( &rOut );
-
-        // write Star Office Default TabSizes (if necessary)
-        if ( aTextObj.ParagraphCount() )
+        sal_Int32 nDefaultTabSizeSrc = 2011; // I've no idea where this number came from, honestly
+        const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
+        if ( xPropSet.is() )
         {
-            pPara = aTextObj.GetParagraph(0);
-            sal_uInt32  nParaFlags = 0x1f;
-            sal_Int16   nMask, nNumberingRule[ 10 ];
-            sal_uInt32  nTextOfs = pPara->nTextOfs;
-            sal_uInt32  nTabs = pPara->maTabStop.getLength();
-            const css::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
-
-            for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
+            if(ImplGetPropertyValue( xPropSet, "TabStop" ))
             {
-                pPara = aTextObj.GetParagraph(i);
-                if ( pPara->bExtendedParameters )
-                {
-                    nMask = 1 << pPara->nDepth;
-                    if ( nParaFlags & nMask )
-                    {
-                        nParaFlags &=~ nMask;
-                        if ( ( rParaSheet.maParaLevel[ pPara->nDepth ].mnTextOfs != pPara->nTextOfs ) ||
-                            ( rParaSheet.maParaLevel[ pPara->nDepth ].mnBulletOfs != pPara->nBulletOfs ) )
-                        {
-                            nParaFlags |= nMask << 16;
-                            nNumberingRule[ pPara->nDepth << 1 ] = pPara->nTextOfs;
-                            nNumberingRule[ ( pPara->nDepth << 1 ) + 1 ] = static_cast<sal_Int16>(pPara->nBulletOfs);
-                        }
-                    }
-                }
-            }
-            nParaFlags >>= 16;
-
-            sal_Int32 nDefaultTabSizeSrc = 2011; // I've no idea where this number came from, honestly
-            const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                if(ImplGetPropertyValue( xPropSet, "TabStop" ))
-                {
-                    sal_Int32 nTabStop( 0 );
-                    if ( mAny >>= nTabStop )
-                        nDefaultTabSizeSrc = nTabStop;
-                }
-            }
-            const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
-            sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
-            if ( nTabs )
-                nDefaultTabs -= static_cast<sal_Int32>( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
-            if ( static_cast<sal_Int32>(nDefaultTabs) < 0 )
-                nDefaultTabs = 0;
-
-            sal_uInt32 nTabCount = nTabs + nDefaultTabs;
-            sal_uInt32 i, nTextRulerAtomFlags = 0;
-
-            if ( nTabCount )
-                nTextRulerAtomFlags |= 4;
-            if ( nParaFlags )
-                nTextRulerAtomFlags |= ( ( nParaFlags << 3 ) | ( nParaFlags << 8 ) );
-
-            if ( nTextRulerAtomFlags )
-            {
-                SvStream* pRuleOut = &rOut;
-                if ( pTextRule )
-                {
-                    pTextRule->pOut.reset( new SvMemoryStream( 0x100, 0x100 ) );
-                    pRuleOut = pTextRule->pOut.get();
-                }
-
-                sal_uInt32 nRulePos = pRuleOut->Tell();
-                pRuleOut->WriteUInt32( EPP_TextRulerAtom << 16 ).WriteUInt32( 0 );
-                pRuleOut->WriteUInt32( nTextRulerAtomFlags );
-                if ( nTextRulerAtomFlags & 4 )
-                {
-                    pRuleOut->WriteUInt16( nTabCount );
-                    for ( i = 0; i < nTabs; i++ )
-                    {
-                        sal_uInt16 nPosition = static_cast<sal_uInt16>( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
-                        sal_uInt16 nType;
-                        switch ( pTabStop[ i ].Alignment )
-                        {
-                            case css::style::TabAlign_DECIMAL :    nType = 3; break;
-                            case css::style::TabAlign_RIGHT :      nType = 2; break;
-                            case css::style::TabAlign_CENTER :     nType = 1; break;
-
-                            case css::style::TabAlign_LEFT :
-                            default:                               nType = 0;
-                        };
-                        pRuleOut->WriteUInt16( nPosition )
-                                 .WriteUInt16( nType );
-                    }
-
-                    sal_uInt32 nWidth = 1;
-                    if ( nTabs )
-                        nWidth += static_cast<sal_Int32>( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
-                    nWidth *= nDefaultTabSize;
-                    for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
-                        pRuleOut->WriteUInt32( nWidth );
-                }
-                for ( i = 0; i < 5; i++ )
-                {
-                    if ( nTextRulerAtomFlags & ( 8 << i ) )
-                        pRuleOut->WriteInt16( nNumberingRule[ i << 1 ] );
-                    if ( nTextRulerAtomFlags & ( 256 << i ) )
-                        pRuleOut->WriteInt16( nNumberingRule[ ( i << 1 ) + 1 ] );
-                }
-                sal_uInt32 nBufSize = pRuleOut->Tell() - nRulePos;
-                pRuleOut->SeekRel( - ( static_cast<sal_Int32>(nBufSize) - 4 ) );
-                pRuleOut->WriteUInt32( nBufSize - 8 );
-                pRuleOut->SeekRel( nBufSize - 8 );
+                sal_Int32 nTabStop( 0 );
+                if ( mAny >>= nTabStop )
+                    nDefaultTabSizeSrc = nTabStop;
             }
         }
-        if ( aTextObj.HasExtendedBullets() )
+        const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
+        sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
+        if ( nTabs )
+            nDefaultTabs -= static_cast<sal_Int32>( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
+        if ( static_cast<sal_Int32>(nDefaultTabs) < 0 )
+            nDefaultTabs = 0;
+
+        sal_uInt32 nTabCount = nTabs + nDefaultTabs;
+        sal_uInt32 i, nTextRulerAtomFlags = 0;
+
+        if ( nTabCount )
+            nTextRulerAtomFlags |= 4;
+        if ( nParaFlags )
+            nTextRulerAtomFlags |= ( ( nParaFlags << 3 ) | ( nParaFlags << 8 ) );
+
+        if ( nTextRulerAtomFlags )
         {
-            if ( aTextObj.ParagraphCount() )
+            SvStream* pRuleOut = &rOut;
+            if ( pTextRule )
             {
-                sal_uInt32  nNumberingType = 0, nPos2 = rExtBuStr.Tell();
-
-                rExtBuStr.WriteUInt32( EPP_PST_ExtendedParagraphAtom << 16 ).WriteUInt32( 0 );
-
-                for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
-                {
-                    ParagraphObj* pBulletPara = aTextObj.GetParagraph(i);
-                    sal_uInt32  nBulletFlags = 0;
-                    sal_uInt16 nBulletId = pBulletPara->nBulletId;
-
-                    if ( pBulletPara->bExtendedBulletsUsed )
-                    {
-                        nBulletFlags = 0x800000;
-                        if ( pBulletPara->nNumberingType != SVX_NUM_BITMAP )
-                            nBulletFlags = 0x3000000;
-                    }
-                    rExtBuStr.WriteUInt32( nBulletFlags );
-
-                    if ( nBulletFlags & 0x800000 )
-                        rExtBuStr.WriteUInt16( nBulletId );
-                    if ( nBulletFlags & 0x1000000 )
-                    {
-                        switch( pBulletPara->nNumberingType )
-                        {
-                            case SVX_NUM_NUMBER_NONE :
-                            case SVX_NUM_CHAR_SPECIAL :
-                                nNumberingType = 0;
-                            break;
-                            case SVX_NUM_CHARS_UPPER_LETTER :
-                            case SVX_NUM_CHARS_UPPER_LETTER_N :
-                            case SVX_NUM_CHARS_LOWER_LETTER :
-                            case SVX_NUM_CHARS_LOWER_LETTER_N :
-                            case SVX_NUM_ROMAN_UPPER :
-                            case SVX_NUM_ROMAN_LOWER :
-                            case SVX_NUM_ARABIC :
-                            case SVX_NUM_NUMBER_UPPER_ZH:
-                            case SVX_NUM_CIRCLE_NUMBER:
-                            case SVX_NUM_NUMBER_UPPER_ZH_TW:
-                            case SVX_NUM_NUMBER_LOWER_ZH:
-                            case SVX_NUM_FULL_WIDTH_ARABIC:
-                                nNumberingType = pBulletPara->nMappedNumType;
-                            break;
-
-                            case SVX_NUM_BITMAP :
-                                nNumberingType = 0;
-                            break;
-                            default: break;
-                        }
-                        rExtBuStr.WriteUInt32( nNumberingType );
-                    }
-                    if ( nBulletFlags & 0x2000000 )
-                        rExtBuStr.WriteUInt16( pBulletPara->nStartWith );
-                    rExtBuStr.WriteUInt32( 0 ).WriteUInt32( 0 );
-                }
-                sal_uInt32 nBulletSize = ( rExtBuStr.Tell() - nPos2 ) - 8;
-                rExtBuStr.SeekRel( - ( static_cast<sal_Int32>(nBulletSize) + 4 ) );
-                rExtBuStr.WriteUInt32( nBulletSize );
-                rExtBuStr.SeekRel( nBulletSize );
+                pTextRule->pOut.reset( new SvMemoryStream( 0x100, 0x100 ) );
+                pRuleOut = pTextRule->pOut.get();
             }
+
+            sal_uInt32 nRulePos = pRuleOut->Tell();
+            pRuleOut->WriteUInt32( EPP_TextRulerAtom << 16 ).WriteUInt32( 0 );
+            pRuleOut->WriteUInt32( nTextRulerAtomFlags );
+            if ( nTextRulerAtomFlags & 4 )
+            {
+                pRuleOut->WriteUInt16( nTabCount );
+                for ( i = 0; i < nTabs; i++ )
+                {
+                    sal_uInt16 nPosition = static_cast<sal_uInt16>( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
+                    sal_uInt16 nType;
+                    switch ( pTabStop[ i ].Alignment )
+                    {
+                        case css::style::TabAlign_DECIMAL :    nType = 3; break;
+                        case css::style::TabAlign_RIGHT :      nType = 2; break;
+                        case css::style::TabAlign_CENTER :     nType = 1; break;
+
+                        case css::style::TabAlign_LEFT :
+                        default:                               nType = 0;
+                    };
+                    pRuleOut->WriteUInt16( nPosition )
+                             .WriteUInt16( nType );
+                }
+
+                sal_uInt32 nWidth = 1;
+                if ( nTabs )
+                    nWidth += static_cast<sal_Int32>( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
+                nWidth *= nDefaultTabSize;
+                for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
+                    pRuleOut->WriteUInt32( nWidth );
+            }
+            for ( i = 0; i < 5; i++ )
+            {
+                if ( nTextRulerAtomFlags & ( 8 << i ) )
+                    pRuleOut->WriteInt16( nNumberingRule[ i << 1 ] );
+                if ( nTextRulerAtomFlags & ( 256 << i ) )
+                    pRuleOut->WriteInt16( nNumberingRule[ ( i << 1 ) + 1 ] );
+            }
+            sal_uInt32 nBufSize = pRuleOut->Tell() - nRulePos;
+            pRuleOut->SeekRel( - ( static_cast<sal_Int32>(nBufSize) - 4 ) );
+            pRuleOut->WriteUInt32( nBufSize - 8 );
+            pRuleOut->SeekRel( nBufSize - 8 );
         }
     }
+    if ( !aTextObj.HasExtendedBullets() )
+        return;
+
+    if ( !aTextObj.ParagraphCount() )
+        return;
+
+    sal_uInt32  nNumberingType = 0, nPos2 = rExtBuStr.Tell();
+
+    rExtBuStr.WriteUInt32( EPP_PST_ExtendedParagraphAtom << 16 ).WriteUInt32( 0 );
+
+    for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
+    {
+        ParagraphObj* pBulletPara = aTextObj.GetParagraph(i);
+        sal_uInt32  nBulletFlags = 0;
+        sal_uInt16 nBulletId = pBulletPara->nBulletId;
+
+        if ( pBulletPara->bExtendedBulletsUsed )
+        {
+            nBulletFlags = 0x800000;
+            if ( pBulletPara->nNumberingType != SVX_NUM_BITMAP )
+                nBulletFlags = 0x3000000;
+        }
+        rExtBuStr.WriteUInt32( nBulletFlags );
+
+        if ( nBulletFlags & 0x800000 )
+            rExtBuStr.WriteUInt16( nBulletId );
+        if ( nBulletFlags & 0x1000000 )
+        {
+            switch( pBulletPara->nNumberingType )
+            {
+                case SVX_NUM_NUMBER_NONE :
+                case SVX_NUM_CHAR_SPECIAL :
+                    nNumberingType = 0;
+                break;
+                case SVX_NUM_CHARS_UPPER_LETTER :
+                case SVX_NUM_CHARS_UPPER_LETTER_N :
+                case SVX_NUM_CHARS_LOWER_LETTER :
+                case SVX_NUM_CHARS_LOWER_LETTER_N :
+                case SVX_NUM_ROMAN_UPPER :
+                case SVX_NUM_ROMAN_LOWER :
+                case SVX_NUM_ARABIC :
+                case SVX_NUM_NUMBER_UPPER_ZH:
+                case SVX_NUM_CIRCLE_NUMBER:
+                case SVX_NUM_NUMBER_UPPER_ZH_TW:
+                case SVX_NUM_NUMBER_LOWER_ZH:
+                case SVX_NUM_FULL_WIDTH_ARABIC:
+                    nNumberingType = pBulletPara->nMappedNumType;
+                break;
+
+                case SVX_NUM_BITMAP :
+                    nNumberingType = 0;
+                break;
+                default: break;
+            }
+            rExtBuStr.WriteUInt32( nNumberingType );
+        }
+        if ( nBulletFlags & 0x2000000 )
+            rExtBuStr.WriteUInt16( pBulletPara->nStartWith );
+        rExtBuStr.WriteUInt32( 0 ).WriteUInt32( 0 );
+    }
+    sal_uInt32 nBulletSize = ( rExtBuStr.Tell() - nPos2 ) - 8;
+    rExtBuStr.SeekRel( - ( static_cast<sal_Int32>(nBulletSize) + 4 ) );
+    rExtBuStr.WriteUInt32( nBulletSize );
+    rExtBuStr.SeekRel( nBulletSize );
 }
 
 void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAction eCa, bool bMediaClickAction )
@@ -3349,29 +3349,28 @@ void TextObjBinary::Write( SvStream* pStrm )
 void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
 {
     sal_uInt32 nCharactersLeft( Count() );
-    if ( nCharactersLeft >= 1 )
-    {
-        EscherExAtom aAnimationInfoAtom( *pStrm, EPP_TextSpecInfoAtom, 0, 0 );
-        for ( sal_uInt32 i = 0; nCharactersLeft && i < ParagraphCount(); ++i )
-        {
-            ParagraphObj* pPtr = GetParagraph(i);
-            for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
-            {
-                const PortionObj& rPortion = **it;
-                sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
-                sal_Int32 const nFlags = 7;
-                nCharactersLeft -= nPortionSize;
-                pStrm ->WriteUInt32( nPortionSize )
-                       .WriteInt32( nFlags )
-                       .WriteInt16( 1 )    // spellinfo -> needs rechecking
-                       .WriteInt16( static_cast<sal_uInt16>(LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType()) )
-                       .WriteInt16( 0 );   // alt language
-            }
-        }
-        if ( nCharactersLeft )
-            pStrm->WriteUInt32( nCharactersLeft ).WriteInt32( 1 ).WriteInt16( 1 );
+    if ( nCharactersLeft < 1 )
+        return;
 
+    EscherExAtom aAnimationInfoAtom( *pStrm, EPP_TextSpecInfoAtom, 0, 0 );
+    for ( sal_uInt32 i = 0; nCharactersLeft && i < ParagraphCount(); ++i )
+    {
+        ParagraphObj* pPtr = GetParagraph(i);
+        for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
+        {
+            const PortionObj& rPortion = **it;
+            sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
+            sal_Int32 const nFlags = 7;
+            nCharactersLeft -= nPortionSize;
+            pStrm ->WriteUInt32( nPortionSize )
+                   .WriteInt32( nFlags )
+                   .WriteInt16( 1 )    // spellinfo -> needs rechecking
+                   .WriteInt16( static_cast<sal_uInt16>(LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType()) )
+                   .WriteInt16( 0 );   // alt language
+        }
     }
+    if ( nCharactersLeft )
+        pStrm->WriteUInt32( nCharactersLeft ).WriteInt32( 1 ).WriteInt16( 1 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

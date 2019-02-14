@@ -162,25 +162,24 @@ void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     }
 
     Sequence<double> aHSL(3);
-    if (rAny >>= aHSL)
+    if (!(rAny >>= aHSL))
+        return;
+
+    pFS->startElementNS(XML_p, nToken, FSEND);
+
+    if (nToken == XML_by)
     {
-        pFS->startElementNS(XML_p, nToken, FSEND);
-
-        if (nToken == XML_by)
-        {
-            // CT_TLByHslColorTransform
-            pFS->singleElementNS(XML_p, XML_hsl, XML_h, I32S(aHSL[0] * 60000), // ST_Angel
-                                 XML_s, I32S(aHSL[1] * 100000), XML_l, I32S(aHSL[2] * 100000),
-                                 FSEND);
-        }
-        else
-        {
-            // CT_Color
-            SAL_WARN("sd.eppt", "Export p:hsl in p:from or p:to of animClr isn't implemented yet.");
-        }
-
-        pFS->endElementNS(XML_p, nToken);
+        // CT_TLByHslColorTransform
+        pFS->singleElementNS(XML_p, XML_hsl, XML_h, I32S(aHSL[0] * 60000), // ST_Angel
+                             XML_s, I32S(aHSL[1] * 100000), XML_l, I32S(aHSL[2] * 100000), FSEND);
     }
+    else
+    {
+        // CT_Color
+        SAL_WARN("sd.eppt", "Export p:hsl in p:from or p:to of animClr isn't implemented yet.");
+    }
+
+    pFS->endElementNS(XML_p, nToken);
 }
 
 void WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue, const OUString& rAttributeName)
@@ -239,30 +238,29 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
 void WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay, const char* pEvent,
                              double fDelay, bool bHasFDelay, sal_Int32 nToken)
 {
-    if (bHasFDelay || pDelay || pEvent)
+    if (!(bHasFDelay || pDelay || pEvent))
+        return;
+
+    pFS->startElementNS(XML_p, nToken, FSEND);
+
+    if (!pEvent)
+        pFS->singleElementNS(XML_p, XML_cond, XML_delay,
+                             bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0)) : pDelay,
+                             FSEND);
+    else
     {
-        pFS->startElementNS(XML_p, nToken, FSEND);
+        pFS->startElementNS(XML_p, XML_cond, XML_delay,
+                            bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0)) : pDelay,
+                            XML_evt, pEvent, FSEND);
 
-        if (!pEvent)
-            pFS->singleElementNS(
-                XML_p, XML_cond, XML_delay,
-                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0)) : pDelay, FSEND);
-        else
-        {
-            pFS->startElementNS(XML_p, XML_cond, XML_delay,
-                                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0))
-                                           : pDelay,
-                                XML_evt, pEvent, FSEND);
+        pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
+        pFS->singleElementNS(XML_p, XML_sldTgt, FSEND);
+        pFS->endElementNS(XML_p, XML_tgtEl);
 
-            pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-            pFS->singleElementNS(XML_p, XML_sldTgt, FSEND);
-            pFS->endElementNS(XML_p, XML_tgtEl);
-
-            pFS->endElementNS(XML_p, XML_cond);
-        }
-
-        pFS->endElementNS(XML_p, nToken);
+        pFS->endElementNS(XML_p, XML_cond);
     }
+
+    pFS->endElementNS(XML_p, nToken);
 }
 
 void WriteAnimationCondition(const FSHelperPtr& pFS, Any const& rAny, bool bWriteEvent,
@@ -709,22 +707,22 @@ void PPTXAnimationExport::WriteAnimationTarget(const Any& rTarget)
         }
     }
 
-    if (rXShape.is())
-    {
-        sal_Int32 nShapeID = mrPowerPointExport.GetShapeID(rXShape);
+    if (!rXShape.is())
+        return;
 
-        mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-        mpFS->startElementNS(XML_p, XML_spTgt, XML_spid, I32S(nShapeID), FSEND);
-        if (bParagraphTarget)
-        {
-            mpFS->startElementNS(XML_p, XML_txEl, FSEND);
-            mpFS->singleElementNS(XML_p, XML_pRg, XML_st, I32S(nParagraph), XML_end,
-                                  I32S(nParagraph), FSEND);
-            mpFS->endElementNS(XML_p, XML_txEl);
-        }
-        mpFS->endElementNS(XML_p, XML_spTgt);
-        mpFS->endElementNS(XML_p, XML_tgtEl);
+    sal_Int32 nShapeID = mrPowerPointExport.GetShapeID(rXShape);
+
+    mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
+    mpFS->startElementNS(XML_p, XML_spTgt, XML_spid, I32S(nShapeID), FSEND);
+    if (bParagraphTarget)
+    {
+        mpFS->startElementNS(XML_p, XML_txEl, FSEND);
+        mpFS->singleElementNS(XML_p, XML_pRg, XML_st, I32S(nParagraph), XML_end, I32S(nParagraph),
+                              FSEND);
+        mpFS->endElementNS(XML_p, XML_txEl);
     }
+    mpFS->endElementNS(XML_p, XML_spTgt);
+    mpFS->endElementNS(XML_p, XML_tgtEl);
 }
 
 void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
@@ -1097,40 +1095,40 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
 {
     SAL_INFO("sd.eppt", "write animation node COMMAND");
     Reference<XCommand> xCommand(getCurrentNode(), UNO_QUERY);
-    if (xCommand.is())
+    if (!xCommand.is())
+        return;
+
+    const char* pType = "call";
+    const char* pCommand = nullptr;
+    switch (xCommand->getCommand())
     {
-        const char* pType = "call";
-        const char* pCommand = nullptr;
-        switch (xCommand->getCommand())
-        {
-            case EffectCommands::VERB:
-                pType = "verb";
-                pCommand = "1"; /* FIXME hardcoded viewing */
-                break;
-            case EffectCommands::PLAY:
-                pCommand = "play";
-                break;
-            case EffectCommands::TOGGLEPAUSE:
-                pCommand = "togglePause";
-                break;
-            case EffectCommands::STOP:
-                pCommand = "stop";
-                break;
-            default:
-                SAL_WARN("sd.eppt", "unknown command: " << xCommand->getCommand());
-                break;
-        }
-
-        mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand, FSEND);
-
-        WriteAnimationNodeAnimateInside(false);
-        mpFS->startElementNS(XML_p, XML_cBhvr, FSEND);
-        WriteAnimationNodeCommonPropsStart();
-        WriteAnimationTarget(xCommand->getTarget());
-        mpFS->endElementNS(XML_p, XML_cBhvr);
-
-        mpFS->endElementNS(XML_p, XML_cmd);
+        case EffectCommands::VERB:
+            pType = "verb";
+            pCommand = "1"; /* FIXME hardcoded viewing */
+            break;
+        case EffectCommands::PLAY:
+            pCommand = "play";
+            break;
+        case EffectCommands::TOGGLEPAUSE:
+            pCommand = "togglePause";
+            break;
+        case EffectCommands::STOP:
+            pCommand = "stop";
+            break;
+        default:
+            SAL_WARN("sd.eppt", "unknown command: " << xCommand->getCommand());
+            break;
     }
+
+    mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand, FSEND);
+
+    WriteAnimationNodeAnimateInside(false);
+    mpFS->startElementNS(XML_p, XML_cBhvr, FSEND);
+    WriteAnimationNodeCommonPropsStart();
+    WriteAnimationTarget(xCommand->getTarget());
+    mpFS->endElementNS(XML_p, XML_cBhvr);
+
+    mpFS->endElementNS(XML_p, XML_cmd);
 }
 
 void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
@@ -1178,32 +1176,31 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
 void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage)
 {
     Reference<XAnimationNodeSupplier> xNodeSupplier(rXDrawPage, UNO_QUERY);
-    if (xNodeSupplier.is())
+    if (!xNodeSupplier.is())
+        return;
+
+    const Reference<XAnimationNode> xNode(xNodeSupplier->getAnimationNode());
+    if (!xNode.is())
+        return;
+
+    Reference<XEnumerationAccess> xEnumerationAccess(xNode, UNO_QUERY);
+    if (!xEnumerationAccess.is())
+        return;
+
+    Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(), UNO_QUERY);
+    if (!(xEnumeration.is() && xEnumeration->hasMoreElements()))
+        return;
+
+    auto pNodeContext = std::make_unique<NodeContext>(xNode, false, false);
+    if (pNodeContext->isValid())
     {
-        const Reference<XAnimationNode> xNode(xNodeSupplier->getAnimationNode());
-        if (xNode.is())
-        {
-            Reference<XEnumerationAccess> xEnumerationAccess(xNode, UNO_QUERY);
-            if (xEnumerationAccess.is())
-            {
-                Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(),
-                                                     UNO_QUERY);
-                if (xEnumeration.is() && xEnumeration->hasMoreElements())
-                {
-                    auto pNodeContext = std::make_unique<NodeContext>(xNode, false, false);
-                    if (pNodeContext->isValid())
-                    {
-                        mpFS->startElementNS(XML_p, XML_timing, FSEND);
-                        mpFS->startElementNS(XML_p, XML_tnLst, FSEND);
+        mpFS->startElementNS(XML_p, XML_timing, FSEND);
+        mpFS->startElementNS(XML_p, XML_tnLst, FSEND);
 
-                        WriteAnimationNode(pNodeContext);
+        WriteAnimationNode(pNodeContext);
 
-                        mpFS->endElementNS(XML_p, XML_tnLst);
-                        mpFS->endElementNS(XML_p, XML_timing);
-                    }
-                }
-            }
-        }
+        mpFS->endElementNS(XML_p, XML_tnLst);
+        mpFS->endElementNS(XML_p, XML_timing);
     }
 }
 
