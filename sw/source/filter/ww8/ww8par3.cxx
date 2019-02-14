@@ -1521,7 +1521,7 @@ static bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
             //The SvxNumberFormat compare, not the SwNumFormat compare
             const SvxNumberFormat &rO = rOne.Get(n);
             const SvxNumberFormat &rT = rTwo.Get(n);
-            if (!(rO == rT))
+            if (rO != rT)
             {
                 bRet = false;
                 break;

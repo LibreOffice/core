@@ -156,7 +156,7 @@ IconThemeSelector::operator==(const vcl::IconThemeSelector& other) const
 bool
 IconThemeSelector::operator!=(const vcl::IconThemeSelector& other) const
 {
-    return !((*this) == other);
+    return !(*this == other);
 }
 
 /*static*/ OUString

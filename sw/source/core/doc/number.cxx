@@ -563,7 +563,7 @@ bool SwNumRule::operator==( const SwNumRule& rRule ) const
     if( bRet )
     {
         for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
-            if( !( rRule.Get( n ) == Get( n ) ))
+            if( rRule.Get( n ) != Get( n ) )
             {
                 bRet = false;
                 break;
@@ -577,7 +577,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
     OSL_ENSURE( i < MAXLEVEL, "Serious defect" );
     if( i < MAXLEVEL )
     {
-        if( !maFormats[ i ] || !(rNumFormat == Get( i )) )
+        if( !maFormats[ i ] || (rNumFormat != Get( i )) )
         {
             maFormats[ i ].reset(new SwNumFormat( rNumFormat ));
             mbInvalidRuleFlag = true;

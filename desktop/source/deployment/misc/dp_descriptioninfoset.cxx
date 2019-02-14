@@ -217,7 +217,7 @@ ExtensionDescription::ExtensionDescription(
                 sDescriptionUri + " contains no root element.", nullptr);
         }
 
-        if ( ! (xRoot->getTagName() == "description"))
+        if ( xRoot->getTagName() != "description")
         {
             throw css::uno::Exception(
                 sDescriptionUri + " does not contain the root element <description>.", nullptr);
@@ -227,7 +227,7 @@ ExtensionDescription::ExtensionDescription(
         OUString nsDescription = xRoot->getNamespaceURI();
 
         //check if this namespace is supported
-        if ( ! (nsDescription == "http://openoffice.org/extensions/description/2006"))
+        if ( nsDescription != "http://openoffice.org/extensions/description/2006")
         {
             throw css::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", nullptr);
         }

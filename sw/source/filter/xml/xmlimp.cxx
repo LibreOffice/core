@@ -1089,7 +1089,7 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
                 // check style of the each list level
                 for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
                 {
-                    if( !( pNumRule1->Get( n ) == pNumRule2->Get( n ) ))
+                    if( pNumRule1->Get( n ) != pNumRule2->Get( n ) )
                     {
                         return;
                     }

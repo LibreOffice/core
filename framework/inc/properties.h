@@ -164,7 +164,7 @@ class PropHelper
         aChangedValue.clear();
 
         // if value change ...
-        bChanged = !(aCurrentValue==aNewValue);
+        bChanged = aCurrentValue != aNewValue;
         if (bChanged)
         {
             // ... set information of change.

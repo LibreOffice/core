@@ -1515,7 +1515,7 @@ SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
-    if (!(m_TemplateDate == the_value)) {
+    if (m_TemplateDate != the_value) {
         m_TemplateDate = the_value;
         g.clear();
         setModified(true);

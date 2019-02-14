@@ -910,7 +910,7 @@ void ExtensionManager::enableExtension(
         if (!extension.is())
             return;
         OUString repository = extension->getRepositoryName();
-        if (!(repository == "user"))
+        if (repository != "user")
             throw lang::IllegalArgumentException(
                 "No valid repository name provided.",
                 static_cast<cppu::OWeakObject*>(this), 0);
@@ -1012,7 +1012,7 @@ void ExtensionManager::disableExtension(
         if (!extension.is())
             return;
         const OUString repository( extension->getRepositoryName());
-        if (! (repository == "user"))
+        if (repository != "user")
             throw lang::IllegalArgumentException(
                 "No valid repository name provided.",
                 static_cast<cppu::OWeakObject*>(this), 0);

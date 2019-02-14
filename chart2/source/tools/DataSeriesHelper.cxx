@@ -625,7 +625,7 @@ bool hasAttributedDataPointDifferentValue( const Reference< chart2::XDataSeries 
             if(!xPointProp.is())
                 continue;
             uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
-            if( !( rPropertyValue==aPointValue ) )
+            if( rPropertyValue != aPointValue )
                 return true;
         }
     }
