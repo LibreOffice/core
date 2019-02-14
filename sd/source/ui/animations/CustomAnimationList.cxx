@@ -1002,7 +1002,10 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     OUString aDescription;
 
     Any aTarget( pEffect->getTarget() );
-    if( aTarget.hasValue() ) try
+    if( !aTarget.hasValue() )
+        return;
+
+    try
     {
         aDescription = getDescription( aTarget, pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_BACKGROUND );
 
@@ -1239,24 +1242,24 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const ::tool
     SvTreeListBox::Paint(rRenderContext, rRect);
 
     // draw help text if list box is still empty
-    if( First() == nullptr )
-    {
-        Color aOldColor(rRenderContext.GetTextColor());
-        rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
-        ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MapMode(MapUnit::MapAppFont)));
+    if( First() != nullptr )
+        return;
 
-        ::tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
+    Color aOldColor(rRenderContext.GetTextColor());
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
+    ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MapMode(MapUnit::MapAppFont)));
 
-        aRect.AdjustLeft(aOffset.X() );
-        aRect.AdjustTop(aOffset.Y() );
-        aRect.AdjustRight( -(aOffset.X()) );
-        aRect.AdjustBottom( -(aOffset.Y()) );
+    ::tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
 
-        rRenderContext.DrawText(aRect, SdResId(STR_CUSTOMANIMATION_LIST_HELPTEXT),
-                                DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );
+    aRect.AdjustLeft(aOffset.X() );
+    aRect.AdjustTop(aOffset.Y() );
+    aRect.AdjustRight( -(aOffset.X()) );
+    aRect.AdjustBottom( -(aOffset.Y()) );
 
-        rRenderContext.SetTextColor(aOldColor);
-    }
+    rRenderContext.DrawText(aRect, SdResId(STR_CUSTOMANIMATION_LIST_HELPTEXT),
+                            DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );
+
+    rRenderContext.SetTextColor(aOldColor);
 }
 
 }

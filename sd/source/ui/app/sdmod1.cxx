@@ -375,53 +375,53 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE ) );
     }
 
-    if ( !mbEventListenerAdded )
-    {
-        ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-        if( pDocShell ) // Impress or Draw ?
-        {
-            ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+    if ( mbEventListenerAdded )
+        return;
 
-            if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
-            {
-                // add our event listener as soon as possible
-                Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
-                mbEventListenerAdded = true;
-            }
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+    if( pDocShell ) // Impress or Draw ?
+    {
+        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+        if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
+        {
+            // add our event listener as soon as possible
+            Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
+            mbEventListenerAdded = true;
         }
     }
 }
 
 IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
 {
-    if( (rSimpleEvent.GetId() == VclEventId::WindowCommand) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData() )
+    if( !((rSimpleEvent.GetId() == VclEventId::WindowCommand) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData()) )
+        return;
+
+    const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData());
+
+    if( rEvent.GetCommand() != CommandEventId::Media )
+        return;
+
+    CommandMediaData* pMediaData = rEvent.GetMediaData();
+    pMediaData->SetPassThroughToOS(false);
+    switch (pMediaData->GetMediaId())
     {
-        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData());
-
-        if( rEvent.GetCommand() == CommandEventId::Media )
+        case MediaCommand::Play:
         {
-            CommandMediaData* pMediaData = rEvent.GetMediaData();
-            pMediaData->SetPassThroughToOS(false);
-            switch (pMediaData->GetMediaId())
+            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+            if( pDocShell )  // Impress or Draw ?
             {
-                case MediaCommand::Play:
-                {
-                    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-                    if( pDocShell )  // Impress or Draw ?
-                    {
-                        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
-                        // #i97925# start the presentation if and only if an Impress document is focused
-                        if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
-                            pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
-                    }
-                    break;
-                }
-                default:
-                    pMediaData->SetPassThroughToOS(true);
-                    break;
+                // #i97925# start the presentation if and only if an Impress document is focused
+                if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
             }
+            break;
         }
+        default:
+            pMediaData->SetPassThroughToOS(true);
+            break;
     }
 }
 
@@ -545,54 +545,54 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     // OutlineToImpressFinalizer object.  Therefore a local copy of the
     // stream is created.
     const SvStream* pStream (rBytes.GetStream());
-    if (pStream != nullptr)
+    if (pStream == nullptr)
+        return;
+
+    // Create a memory stream and prepare to fill it with the content of
+    // the original stream.
+    mpStream.reset(new SvMemoryStream());
+    static const std::size_t nBufferSize = 4096;
+    ::std::unique_ptr<sal_Int8[]> pBuffer (new sal_Int8[nBufferSize]);
+
+    sal_uInt64 nReadPosition(0);
+    bool bLoop (true);
+    while (bLoop)
     {
-        // Create a memory stream and prepare to fill it with the content of
-        // the original stream.
-        mpStream.reset(new SvMemoryStream());
-        static const std::size_t nBufferSize = 4096;
-        ::std::unique_ptr<sal_Int8[]> pBuffer (new sal_Int8[nBufferSize]);
+        // Read the next part of the original stream.
+        std::size_t nReadByteCount (0);
+        const ErrCode nErrorCode (
+            rBytes.ReadAt(
+                nReadPosition,
+                pBuffer.get(),
+                nBufferSize,
+                &nReadByteCount));
 
-        sal_uInt64 nReadPosition(0);
-        bool bLoop (true);
-        while (bLoop)
+        // Check the error code and stop copying the stream data when an
+        // error has occurred.
+        if (nErrorCode == ERRCODE_NONE)
         {
-            // Read the next part of the original stream.
-            std::size_t nReadByteCount (0);
-            const ErrCode nErrorCode (
-                rBytes.ReadAt(
-                    nReadPosition,
-                    pBuffer.get(),
-                    nBufferSize,
-                    &nReadByteCount));
-
-            // Check the error code and stop copying the stream data when an
-            // error has occurred.
-            if (nErrorCode == ERRCODE_NONE)
-            {
-                if (nReadByteCount == 0)
-                    bLoop = false;
-            }
-            else if (nErrorCode == ERRCODE_IO_PENDING)
-                ;
-            else
-            {
+            if (nReadByteCount == 0)
                 bLoop = false;
-                nReadByteCount = 0;
-            }
-
-            // Append the read bytes to the end of the memory stream.
-            if (nReadByteCount > 0)
-            {
-                mpStream->WriteBytes(pBuffer.get(), nReadByteCount);
-                nReadPosition += nReadByteCount;
-            }
+        }
+        else if (nErrorCode == ERRCODE_IO_PENDING)
+            ;
+        else
+        {
+            bLoop = false;
+            nReadByteCount = 0;
         }
 
-        // Rewind the memory stream so that in the operator() method its
-        // content is properly read.
-        mpStream->Seek(STREAM_SEEK_TO_BEGIN);
+        // Append the read bytes to the end of the memory stream.
+        if (nReadByteCount > 0)
+        {
+            mpStream->WriteBytes(pBuffer.get(), nReadByteCount);
+            nReadPosition += nReadByteCount;
+        }
     }
+
+    // Rewind the memory stream so that in the operator() method its
+    // content is properly read.
+    mpStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 
 void OutlineToImpressFinalizer::operator() (bool)

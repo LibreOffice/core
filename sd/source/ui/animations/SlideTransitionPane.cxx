@@ -779,19 +779,19 @@ void SlideTransitionPane::openSoundFileDialog()
             mpLB_SOUND->SelectEntryPos( nPos + 3 );
     }
 
-    if( ! bValidSoundFile )
+    if(  bValidSoundFile )
+        return;
+
+    if( !maCurrentSoundFile.isEmpty() )
     {
-        if( !maCurrentSoundFile.isEmpty() )
-        {
-            std::vector<OUString>::size_type nPos = 0;
-            if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                mpLB_SOUND->SelectEntryPos( nPos + 3 );
-            else
-                mpLB_SOUND->SelectEntryPos( 0 );  // NONE
-        }
+        std::vector<OUString>::size_type nPos = 0;
+        if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
+            mpLB_SOUND->SelectEntryPos( nPos + 3 );
         else
             mpLB_SOUND->SelectEntryPos( 0 );  // NONE
     }
+    else
+        mpLB_SOUND->SelectEntryPos( 0 );  // NONE
 }
 
 impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() const
@@ -909,30 +909,30 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
 
 void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
 {
-    if( ! mbUpdatingControls )
+    if(  mbUpdatingControls )
+        return;
+
+    Window *pFocusWindow = Application::GetFocusWindow();
+
+    ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
+    impl::TransitionEffect aEffect = getTransitionEffectFromControls();
+    if( ! pSelectedPages->empty())
     {
-        Window *pFocusWindow = Application::GetFocusWindow();
-
-        ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
-        impl::TransitionEffect aEffect = getTransitionEffectFromControls();
-        if( ! pSelectedPages->empty())
-        {
-            lcl_CreateUndoForPages( pSelectedPages, mrBase );
-            lcl_ApplyToPages( pSelectedPages, aEffect );
-            mrBase.GetDocShell()->SetModified();
-        }
-        if( mpCB_AUTO_PREVIEW->IsEnabled() &&
-            mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
-        {
-            if (aEffect.mnType) // mnType = 0 denotes no transition
-                playCurrentEffect();
-            else if( mxView.is() )
-                SlideShow::Stop( mrBase );
-        }
-
-        if (pFocusWindow)
-            pFocusWindow->GrabFocus();
+        lcl_CreateUndoForPages( pSelectedPages, mrBase );
+        lcl_ApplyToPages( pSelectedPages, aEffect );
+        mrBase.GetDocShell()->SetModified();
     }
+    if( mpCB_AUTO_PREVIEW->IsEnabled() &&
+        mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
+    {
+        if (aEffect.mnType) // mnType = 0 denotes no transition
+            playCurrentEffect();
+        else if( mxView.is() )
+            SlideShow::Stop( mrBase );
+    }
+
+    if (pFocusWindow)
+        pFocusWindow->GrabFocus();
 }
 
 void SlideTransitionPane::playCurrentEffect()

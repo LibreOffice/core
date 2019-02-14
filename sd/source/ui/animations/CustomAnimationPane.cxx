@@ -842,21 +842,21 @@ void CustomAnimationPane::updateMotionPathTags()
 
 void CustomAnimationPane::onSelectionChanged()
 {
-    if( !maSelectionLock.isLocked() )
-    {
-        ScopeLockGuard aGuard( maSelectionLock );
+    if( maSelectionLock.isLocked() )
+        return;
 
-        if( mxView.is() ) try
-        {
-            Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-            maViewSelection = xSel->getSelection();
-            mpCustomAnimationList->onSelectionChanged( maViewSelection );
-            updateControls();
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception caught!" );
-        }
+    ScopeLockGuard aGuard( maSelectionLock );
+
+    if( mxView.is() ) try
+    {
+        Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
+        maViewSelection = xSel->getSelection();
+        mpCustomAnimationList->onSelectionChanged( maViewSelection );
+        updateControls();
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception caught!" );
     }
 }
 
@@ -891,19 +891,19 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent&)
 
 void CustomAnimationPane::UpdateLook()
 {
-    if( !mbHorizontal )
-    {
-        Wallpaper aBackground (
-            ::sfx2::sidebar::Theme::GetWallpaper(
-                ::sfx2::sidebar::Theme::Paint_PanelBackground));
-        SetBackground(aBackground);
-        if (mpFTStart != nullptr)
-            mpFTStart->SetBackground(aBackground);
-        if (mpFTProperty != nullptr)
-            mpFTProperty->SetBackground(aBackground);
-        if (mpFTDuration != nullptr)
-            mpFTDuration->SetBackground(aBackground);
-    }
+    if( mbHorizontal )
+        return;
+
+    Wallpaper aBackground (
+        ::sfx2::sidebar::Theme::GetWallpaper(
+            ::sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(aBackground);
+    if (mpFTStart != nullptr)
+        mpFTStart->SetBackground(aBackground);
+    if (mpFTProperty != nullptr)
+        mpFTProperty->SetBackground(aBackground);
+    if (mpFTDuration != nullptr)
+        mpFTDuration->SetBackground(aBackground);
 }
 
 static void addValue( const std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
@@ -1659,7 +1659,10 @@ void CustomAnimationPane::showOptions(const OString& rPage)
 
 void CustomAnimationPane::onChangeCurrentPage()
 {
-    if( mxView.is() ) try
+    if( !mxView.is() )
+        return;
+
+    try
     {
         Reference< XDrawPage > xNewPage( mxView->getCurrentPage() );
         if( xNewPage != mxCurrentPage )
@@ -1863,23 +1866,23 @@ void CustomAnimationPane::onAdd()
 
 void CustomAnimationPane::onRemove()
 {
-   if( !maListSelection.empty() )
+    if( maListSelection.empty() )
+        return;
+
+    addUndo();
+
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    EffectSequence aList( maListSelection );
+
+    for( CustomAnimationEffectPtr& pEffect : aList )
     {
-        addUndo();
-
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        EffectSequence aList( maListSelection );
-
-        for( CustomAnimationEffectPtr& pEffect : aList )
-        {
-            if( pEffect->getEffectSequence() )
-                pEffect->getEffectSequence()->remove( pEffect );
-        }
-
-        maListSelection.clear();
-        mrBase.GetDocShell()->SetModified();
+        if( pEffect->getEffectSequence() )
+            pEffect->getEffectSequence()->remove( pEffect );
     }
+
+    maListSelection.clear();
+    mrBase.GetDocShell()->SetModified();
 }
 
 void CustomAnimationPane::remove( CustomAnimationEffectPtr const & pEffect )
@@ -1894,20 +1897,20 @@ void CustomAnimationPane::remove( CustomAnimationEffectPtr const & pEffect )
 
 void CustomAnimationPane::onChangeStart()
 {
-    if( mpLBStart->GetSelectedEntryCount() == 1 )
-    {
-        sal_Int16 nNodeType;
-        switch( mpLBStart->GetSelectedEntryPos() )
-        {
-        case 0: nNodeType = EffectNodeType::ON_CLICK; break;
-        case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
-        case 2: nNodeType = EffectNodeType::AFTER_PREVIOUS; break;
-        default:
-            return;
-        }
+    if( mpLBStart->GetSelectedEntryCount() != 1 )
+        return;
 
-        onChangeStart( nNodeType );
+    sal_Int16 nNodeType;
+    switch( mpLBStart->GetSelectedEntryPos() )
+    {
+    case 0: nNodeType = EffectNodeType::ON_CLICK; break;
+    case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
+    case 2: nNodeType = EffectNodeType::AFTER_PREVIOUS; break;
+    default:
+        return;
     }
+
+    onChangeStart( nNodeType );
 }
 
 void CustomAnimationPane::onChangeStart( sal_Int16 nNodeType )
@@ -2007,23 +2010,23 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
     default: break;
     }
 
-    if( nSID )
+    if( !nSID )
+        return;
+
+    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+
+    if( pViewShell )
     {
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+        DrawView* pView = pViewShell->GetDrawView();
+        if( pView )
+            pView->UnmarkAllObj();
 
-        if( pViewShell )
-        {
-            DrawView* pView = pViewShell->GetDrawView();
-            if( pView )
-                pView->UnmarkAllObj();
-
-            std::vector< Any > aTargets( 1, Any( fDuration ) );
-            aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );
-            Sequence< Any > aTargetSequence( comphelper::containerToSequence( aTargets ) );
-            const SfxUnoAnyItem aItem( SID_ADD_MOTION_PATH, Any( aTargetSequence ) );
-            pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList( nSID, SfxCallMode::ASYNCHRON, {&aItem} );
-        }
+        std::vector< Any > aTargets( 1, Any( fDuration ) );
+        aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );
+        Sequence< Any > aTargetSequence( comphelper::containerToSequence( aTargets ) );
+        const SfxUnoAnyItem aItem( SID_ADD_MOTION_PATH, Any( aTargetSequence ) );
+        pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList( nSID, SfxCallMode::ASYNCHRON, {&aItem} );
     }
 }
 
@@ -2031,32 +2034,32 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
 /// this link is called when the property box is modified by the user
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
-    if( mpLBProperty->getSubControl() )
+    if( !mpLBProperty->getSubControl() )
+        return;
+
+    addUndo();
+
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    const Any aValue( mpLBProperty->getSubControl()->getValue() );
+
+    bool bNeedUpdate = false;
+
+    // change selected effect
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
-        addUndo();
-
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        const Any aValue( mpLBProperty->getSubControl()->getValue() );
-
-        bool bNeedUpdate = false;
-
-        // change selected effect
-        for( CustomAnimationEffectPtr& pEffect : maListSelection )
-        {
-            if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
-                bNeedUpdate = true;
-        }
-
-        if( bNeedUpdate )
-        {
-            mpMainSequence->rebuild();
-            updateControls();
-            mrBase.GetDocShell()->SetModified();
-        }
-
-        onPreview( false );
+        if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
+            bNeedUpdate = true;
     }
+
+    if( bNeedUpdate )
+    {
+        mpMainSequence->rebuild();
+        updateControls();
+        mrBase.GetDocShell()->SetModified();
+    }
+
+    onPreview( false );
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, DelayModifiedHdl, Edit&, void)
@@ -2084,65 +2087,65 @@ IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
 
 IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
-    if( maListSelection.size() == 1 )
+    if( maListSelection.size() != 1 )
+        return;
+
+    CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectedEntryData());
+    PathKind ePathKind = getCreatePathKind();
+
+    // tdf#99137, the selected entry may also be a subcategory title, so not an effect
+    // just leave in this case
+    if ( !pPreset && ( ePathKind == PathKind::NONE ) )
+        return;
+
+    if ( ePathKind != PathKind::NONE )
     {
-        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectedEntryData());
-        PathKind ePathKind = getCreatePathKind();
-
-        // tdf#99137, the selected entry may also be a subcategory title, so not an effect
-        // just leave in this case
-        if ( !pPreset && ( ePathKind == PathKind::NONE ) )
-            return;
-
-        if ( ePathKind != PathKind::NONE )
-        {
-            std::vector< Any > aTargets;
-            MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-            for( CustomAnimationEffectPtr& pEffect : maListSelection )
-            {
-                aTargets.push_back( pEffect->getTarget() );
-
-                EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-                if( !pEffectSequence )
-                    pEffectSequence = mpMainSequence.get();
-
-                // delete the old animation, new one will be appended
-                // by createPath and SID_ADD_MOTION_PATH therein
-                pEffectSequence->remove( pEffect );
-            }
-
-            createPath( ePathKind, aTargets, 0.0 );
-            updateMotionPathTags();
-            return;
-        }
-
-        CustomAnimationPresetPtr pDescriptor(*pPreset);
-        const double fDuration = (*pPreset)->getDuration();
+        std::vector< Any > aTargets;
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-        // get selected effect
         for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            // Dispose the deprecated motion path tag. It will be rebuilt later.
-            if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
-            {
-                for (auto const& xTag: maMotionPathTags)
-                {
-                    if(xTag->getEffect() == pEffect && !xTag->isDisposed())
-                        xTag->Dispose();
-                }
-            }
+            aTargets.push_back( pEffect->getTarget() );
 
             EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
             if( !pEffectSequence )
                 pEffectSequence = mpMainSequence.get();
 
-            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
+            // delete the old animation, new one will be appended
+            // by createPath and SID_ADD_MOTION_PATH therein
+            pEffectSequence->remove( pEffect );
         }
 
-        onPreview(false);
+        createPath( ePathKind, aTargets, 0.0 );
+        updateMotionPathTags();
+        return;
     }
+
+    CustomAnimationPresetPtr pDescriptor(*pPreset);
+    const double fDuration = (*pPreset)->getDuration();
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    // get selected effect
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
+    {
+        // Dispose the deprecated motion path tag. It will be rebuilt later.
+        if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
+        {
+            for (auto const& xTag: maMotionPathTags)
+            {
+                if(xTag->getEffect() == pEffect && !xTag->isDisposed())
+                    xTag->Dispose();
+            }
+        }
+
+        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+        if( !pEffectSequence )
+            pEffectSequence = mpMainSequence.get();
+
+        pEffectSequence->replace( pEffect, pDescriptor, fDuration );
+    }
+
+    onPreview(false);
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
@@ -2415,23 +2418,23 @@ void CustomAnimationPane::onSelect()
     updateControls();
 
     // mark shapes from selected effects
-    if( !maSelectionLock.isLocked() )
-    {
-        ScopeLockGuard aGuard( maSelectionLock );
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-        DrawView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    if( maSelectionLock.isLocked() )
+        return;
 
-        if( pView )
+    ScopeLockGuard aGuard( maSelectionLock );
+    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+    DrawView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+
+    if( pView )
+    {
+        pView->UnmarkAllObj();
+        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            pView->UnmarkAllObj();
-            for( const CustomAnimationEffectPtr& pEffect : maListSelection )
-            {
-                Reference< XShape > xShape( pEffect->getTargetShape() );
-                SdrObject* pObj = GetSdrObjectFromXShape( xShape );
-                if( pObj )
-                    pView->MarkObj(pObj, pView->GetSdrPageView());
-            }
+            Reference< XShape > xShape( pEffect->getTargetShape() );
+            SdrObject* pObj = GetSdrObjectFromXShape( xShape );
+            if( pObj )
+                pView->MarkObj(pObj, pView->GetSdrPageView());
         }
     }
 }
@@ -2440,60 +2443,60 @@ void CustomAnimationPane::onSelect()
 // pEffectInsertBefore may be null if moving to end of list.
 void CustomAnimationPane::onDragNDropComplete(std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore)
 {
-    if ( mpMainSequence.get() )
+    if ( !mpMainSequence.get() )
+        return;
+
+    addUndo();
+
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    // Move all selected effects
+    for( auto const& pEffectDragged : pEffectsDragged )
     {
-        addUndo();
+        // Move this dragged effect and any hidden sub-effects
+        EffectSequence::iterator aIter = mpMainSequence->find( pEffectDragged );
+        const EffectSequence::iterator aEnd( mpMainSequence->getEnd() );
 
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        // Move all selected effects
-        for( auto const& pEffectDragged : pEffectsDragged )
+        while( aIter != aEnd )
         {
-            // Move this dragged effect and any hidden sub-effects
-            EffectSequence::iterator aIter = mpMainSequence->find( pEffectDragged );
-            const EffectSequence::iterator aEnd( mpMainSequence->getEnd() );
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
-            while( aIter != aEnd )
-            {
-                CustomAnimationEffectPtr pEffect = *aIter++;
+            // Update model with new location (function triggers a rebuild)
+            // target may be null, which will insert at the end.
+            mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
 
-                // Update model with new location (function triggers a rebuild)
-                // target may be null, which will insert at the end.
-                mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
-
-                // Done moving effect and its hidden sub-effects when *next* effect is visible.
-                if ( mpCustomAnimationList->isVisible( *aIter ) )
-                    break;
-            }
-
+            // Done moving effect and its hidden sub-effects when *next* effect is visible.
+            if ( mpCustomAnimationList->isVisible( *aIter ) )
+                break;
         }
 
-
-        updateControls();
-        mrBase.GetDocShell()->SetModified();
     }
+
+
+    updateControls();
+    mrBase.GetDocShell()->SetModified();
 }
 
 
 void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag )
 {
     MainSequenceRebuildGuard aGuard( mpMainSequence );
-    if( xTag.is() )
-    {
-        SdrPathObj* pPathObj = xTag->getPathObj();
-        CustomAnimationEffectPtr pEffect = xTag->getEffect();
-        if( (pPathObj != nullptr) && pEffect.get() != nullptr )
-        {
-            SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
-            if( pManager )
-            {
-                SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
-                if( pPage )
-                    pManager->AddUndoAction( std::make_unique<UndoAnimationPath>( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
-            }
+    if( !xTag.is() )
+        return;
 
-            pEffect->updatePathFromSdrPathObj( *pPathObj );
+    SdrPathObj* pPathObj = xTag->getPathObj();
+    CustomAnimationEffectPtr pEffect = xTag->getEffect();
+    if( (pPathObj != nullptr) && pEffect.get() != nullptr )
+    {
+        SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+        if( pManager )
+        {
+            SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
+            if( pPage )
+                pManager->AddUndoAction( std::make_unique<UndoAnimationPath>( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
         }
+
+        pEffect->updatePathFromSdrPathObj( *pPathObj );
     }
 }
 

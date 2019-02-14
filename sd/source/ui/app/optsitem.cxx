@@ -104,27 +104,27 @@ SdOptionsGeneric& SdOptionsGeneric::operator=(SdOptionsGeneric const & rSource)
 
 void SdOptionsGeneric::Init() const
 {
-    if( !mbInit )
+    if( mbInit )
+        return;
+
+    SdOptionsGeneric* pThis = const_cast<SdOptionsGeneric*>(this);
+
+    if( !mpCfgItem )
+        pThis->mpCfgItem.reset( new SdOptionsItem( *this, maSubTree ) );
+
+    const Sequence< OUString >  aNames( GetPropertyNames() );
+    const Sequence< Any >       aValues = mpCfgItem->GetProperties( aNames );
+
+    if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
     {
-        SdOptionsGeneric* pThis = const_cast<SdOptionsGeneric*>(this);
+        const Any* pValues = aValues.getConstArray();
 
-        if( !mpCfgItem )
-            pThis->mpCfgItem.reset( new SdOptionsItem( *this, maSubTree ) );
-
-        const Sequence< OUString >  aNames( GetPropertyNames() );
-        const Sequence< Any >       aValues = mpCfgItem->GetProperties( aNames );
-
-        if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
-        {
-            const Any* pValues = aValues.getConstArray();
-
-            pThis->EnableModify( false );
-            pThis->mbInit = pThis->ReadData( pValues );
-            pThis->EnableModify( true );
-        }
-        else
-            pThis->mbInit = true;
+        pThis->EnableModify( false );
+        pThis->mbInit = pThis->ReadData( pValues );
+        pThis->EnableModify( true );
     }
+    else
+        pThis->mbInit = true;
 }
 
 SdOptionsGeneric::~SdOptionsGeneric()
@@ -695,39 +695,39 @@ bool SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
 
 void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 {
-    if( pOpts )
-    {
-        pOpts->SetStartWithTemplate( maOptionsMisc.IsStartWithTemplate() );
-        pOpts->SetMarkedHitMovesAlways( maOptionsMisc.IsMarkedHitMovesAlways() );
-        pOpts->SetMoveOnlyDragging( maOptionsMisc.IsMoveOnlyDragging() );
-        pOpts->SetCrookNoContortion( maOptionsMisc.IsCrookNoContortion() );
-        pOpts->SetQuickEdit( maOptionsMisc.IsQuickEdit() );
-        pOpts->SetMasterPagePaintCaching( maOptionsMisc.IsMasterPagePaintCaching() );
-        pOpts->SetDragWithCopy( maOptionsMisc.IsDragWithCopy() );
-        pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
-        pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
-        pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
-        pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
-        pOpts->SetEnablePresenterScreen( maOptionsMisc.IsEnablePresenterScreen() );
-        pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
-        pOpts->SetTabBarVisible( maOptionsMisc.IsTabBarVisible() );
+    if( !pOpts )
+        return;
 
-        pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
-        pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
-        pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
-        pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
-        pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
-        pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
+    pOpts->SetStartWithTemplate( maOptionsMisc.IsStartWithTemplate() );
+    pOpts->SetMarkedHitMovesAlways( maOptionsMisc.IsMarkedHitMovesAlways() );
+    pOpts->SetMoveOnlyDragging( maOptionsMisc.IsMoveOnlyDragging() );
+    pOpts->SetCrookNoContortion( maOptionsMisc.IsCrookNoContortion() );
+    pOpts->SetQuickEdit( maOptionsMisc.IsQuickEdit() );
+    pOpts->SetMasterPagePaintCaching( maOptionsMisc.IsMasterPagePaintCaching() );
+    pOpts->SetDragWithCopy( maOptionsMisc.IsDragWithCopy() );
+    pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
+    pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
+    pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
+    pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
+    pOpts->SetEnablePresenterScreen( maOptionsMisc.IsEnablePresenterScreen() );
+    pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
+    pOpts->SetTabBarVisible( maOptionsMisc.IsTabBarVisible() );
 
-        pOpts->SetPreviewNewEffects( maOptionsMisc.IsPreviewNewEffects() );
-        pOpts->SetPreviewChangedEffects( maOptionsMisc.IsPreviewChangedEffects() );
-        pOpts->SetPreviewTransitions( maOptionsMisc.IsPreviewTransitions() );
+    pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
+    pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
+    pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
+    pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
+    pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
+    pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
 
-        pOpts->SetDisplay( maOptionsMisc.GetDisplay() );
+    pOpts->SetPreviewNewEffects( maOptionsMisc.IsPreviewNewEffects() );
+    pOpts->SetPreviewChangedEffects( maOptionsMisc.IsPreviewChangedEffects() );
+    pOpts->SetPreviewTransitions( maOptionsMisc.IsPreviewTransitions() );
 
-        pOpts->SetPresentationPenColor( maOptionsMisc.GetPresentationPenColor() );
-        pOpts->SetPresentationPenWidth( maOptionsMisc.GetPresentationPenWidth() );
-    }
+    pOpts->SetDisplay( maOptionsMisc.GetDisplay() );
+
+    pOpts->SetPresentationPenColor( maOptionsMisc.GetPresentationPenColor() );
+    pOpts->SetPresentationPenWidth( maOptionsMisc.GetPresentationPenWidth() );
 }
 
 /*************************************************************************
@@ -880,19 +880,19 @@ bool SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
 
 void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 {
-    if( pOpts )
-    {
-        pOpts->SetSnapHelplines( maOptionsSnap.IsSnapHelplines() );
-        pOpts->SetSnapBorder( maOptionsSnap.IsSnapBorder() );
-        pOpts->SetSnapFrame( maOptionsSnap.IsSnapFrame() );
-        pOpts->SetSnapPoints( maOptionsSnap.IsSnapPoints() );
-        pOpts->SetOrtho( maOptionsSnap.IsOrtho() );
-        pOpts->SetBigOrtho( maOptionsSnap.IsBigOrtho() );
-        pOpts->SetRotate( maOptionsSnap.IsRotate() );
-        pOpts->SetSnapArea( maOptionsSnap.GetSnapArea() );
-        pOpts->SetAngle( maOptionsSnap.GetAngle() );
-        pOpts->SetEliminatePolyPointLimitAngle( maOptionsSnap.GetEliminatePolyPointLimitAngle() );
-    }
+    if( !pOpts )
+        return;
+
+    pOpts->SetSnapHelplines( maOptionsSnap.IsSnapHelplines() );
+    pOpts->SetSnapBorder( maOptionsSnap.IsSnapBorder() );
+    pOpts->SetSnapFrame( maOptionsSnap.IsSnapFrame() );
+    pOpts->SetSnapPoints( maOptionsSnap.IsSnapPoints() );
+    pOpts->SetOrtho( maOptionsSnap.IsOrtho() );
+    pOpts->SetBigOrtho( maOptionsSnap.IsBigOrtho() );
+    pOpts->SetRotate( maOptionsSnap.IsRotate() );
+    pOpts->SetSnapArea( maOptionsSnap.GetSnapArea() );
+    pOpts->SetAngle( maOptionsSnap.GetAngle() );
+    pOpts->SetEliminatePolyPointLimitAngle( maOptionsSnap.GetEliminatePolyPointLimitAngle() );
 }
 
 /*************************************************************************
@@ -1296,28 +1296,28 @@ SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
 :   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
 ,   maOptionsPrint  ( false, false )
 {
-    if( pOpts )
-    {
-        maOptionsPrint.SetDraw( pOpts->IsDraw() );
-        maOptionsPrint.SetNotes( pOpts->IsNotes() );
-        maOptionsPrint.SetHandout( pOpts->IsHandout() );
-        maOptionsPrint.SetOutline( pOpts->IsOutline() );
-        maOptionsPrint.SetDate( pOpts->IsDate() );
-        maOptionsPrint.SetTime( pOpts->IsTime() );
-        maOptionsPrint.SetPagename( pOpts->IsPagename() );
-        maOptionsPrint.SetHiddenPages( pOpts->IsHiddenPages() );
-        maOptionsPrint.SetPagesize( pOpts->IsPagesize() );
-        maOptionsPrint.SetPagetile( pOpts->IsPagetile() );
-        maOptionsPrint.SetWarningPrinter( pOpts->IsWarningPrinter() );
-        maOptionsPrint.SetWarningSize( pOpts->IsWarningSize() );
-        maOptionsPrint.SetWarningOrientation( pOpts->IsWarningOrientation() );
-        maOptionsPrint.SetBooklet( pOpts->IsBooklet() );
-        maOptionsPrint.SetFrontPage( pOpts->IsFrontPage() );
-        maOptionsPrint.SetBackPage( pOpts->IsBackPage() );
-        maOptionsPrint.SetCutPage( pOpts->IsCutPage() );
-        maOptionsPrint.SetPaperbin( pOpts->IsPaperbin() );
-        maOptionsPrint.SetOutputQuality( pOpts->GetOutputQuality() );
-    }
+    if( !pOpts )
+        return;
+
+    maOptionsPrint.SetDraw( pOpts->IsDraw() );
+    maOptionsPrint.SetNotes( pOpts->IsNotes() );
+    maOptionsPrint.SetHandout( pOpts->IsHandout() );
+    maOptionsPrint.SetOutline( pOpts->IsOutline() );
+    maOptionsPrint.SetDate( pOpts->IsDate() );
+    maOptionsPrint.SetTime( pOpts->IsTime() );
+    maOptionsPrint.SetPagename( pOpts->IsPagename() );
+    maOptionsPrint.SetHiddenPages( pOpts->IsHiddenPages() );
+    maOptionsPrint.SetPagesize( pOpts->IsPagesize() );
+    maOptionsPrint.SetPagetile( pOpts->IsPagetile() );
+    maOptionsPrint.SetWarningPrinter( pOpts->IsWarningPrinter() );
+    maOptionsPrint.SetWarningSize( pOpts->IsWarningSize() );
+    maOptionsPrint.SetWarningOrientation( pOpts->IsWarningOrientation() );
+    maOptionsPrint.SetBooklet( pOpts->IsBooklet() );
+    maOptionsPrint.SetFrontPage( pOpts->IsFrontPage() );
+    maOptionsPrint.SetBackPage( pOpts->IsBackPage() );
+    maOptionsPrint.SetCutPage( pOpts->IsCutPage() );
+    maOptionsPrint.SetPaperbin( pOpts->IsPaperbin() );
+    maOptionsPrint.SetOutputQuality( pOpts->GetOutputQuality() );
 }
 
 SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
@@ -1333,28 +1333,28 @@ bool SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
 
 void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 {
-    if( pOpts )
-    {
-        pOpts->SetDraw( maOptionsPrint.IsDraw() );
-        pOpts->SetNotes( maOptionsPrint.IsNotes() );
-        pOpts->SetHandout( maOptionsPrint.IsHandout() );
-        pOpts->SetOutline( maOptionsPrint.IsOutline() );
-        pOpts->SetDate( maOptionsPrint.IsDate() );
-        pOpts->SetTime( maOptionsPrint.IsTime() );
-        pOpts->SetPagename( maOptionsPrint.IsPagename() );
-        pOpts->SetHiddenPages( maOptionsPrint.IsHiddenPages() );
-        pOpts->SetPagesize( maOptionsPrint.IsPagesize() );
-        pOpts->SetPagetile( maOptionsPrint.IsPagetile() );
-        pOpts->SetWarningPrinter( maOptionsPrint.IsWarningPrinter() );
-        pOpts->SetWarningSize( maOptionsPrint.IsWarningSize() );
-        pOpts->SetWarningOrientation( maOptionsPrint.IsWarningOrientation() );
-        pOpts->SetBooklet( maOptionsPrint.IsBooklet() );
-        pOpts->SetFrontPage( maOptionsPrint.IsFrontPage() );
-        pOpts->SetBackPage( maOptionsPrint.IsBackPage() );
-        pOpts->SetCutPage( maOptionsPrint.IsCutPage() );
-        pOpts->SetPaperbin( maOptionsPrint.IsPaperbin() );
-        pOpts->SetOutputQuality( maOptionsPrint.GetOutputQuality() );
-    }
+    if( !pOpts )
+        return;
+
+    pOpts->SetDraw( maOptionsPrint.IsDraw() );
+    pOpts->SetNotes( maOptionsPrint.IsNotes() );
+    pOpts->SetHandout( maOptionsPrint.IsHandout() );
+    pOpts->SetOutline( maOptionsPrint.IsOutline() );
+    pOpts->SetDate( maOptionsPrint.IsDate() );
+    pOpts->SetTime( maOptionsPrint.IsTime() );
+    pOpts->SetPagename( maOptionsPrint.IsPagename() );
+    pOpts->SetHiddenPages( maOptionsPrint.IsHiddenPages() );
+    pOpts->SetPagesize( maOptionsPrint.IsPagesize() );
+    pOpts->SetPagetile( maOptionsPrint.IsPagetile() );
+    pOpts->SetWarningPrinter( maOptionsPrint.IsWarningPrinter() );
+    pOpts->SetWarningSize( maOptionsPrint.IsWarningSize() );
+    pOpts->SetWarningOrientation( maOptionsPrint.IsWarningOrientation() );
+    pOpts->SetBooklet( maOptionsPrint.IsBooklet() );
+    pOpts->SetFrontPage( maOptionsPrint.IsFrontPage() );
+    pOpts->SetBackPage( maOptionsPrint.IsBackPage() );
+    pOpts->SetCutPage( maOptionsPrint.IsCutPage() );
+    pOpts->SetPaperbin( maOptionsPrint.IsPaperbin() );
+    pOpts->SetOutputQuality( maOptionsPrint.GetOutputQuality() );
 }
 
 /*************************************************************************

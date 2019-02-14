@@ -267,37 +267,37 @@ void SdPathHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList)
+    if(!pHdlList)
+        return;
+
+    SdrMarkView* pView = pHdlList->GetView();
+
+    if(!(pView && !pView->areMarkHandlesHidden()))
+        return;
+
+    SdrPageView* pPageView = pView->GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
     {
-        SdrMarkView* pView = pHdlList->GetView();
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-        if(pView && !pView->areMarkHandlesHidden())
+        if(rPageWindow.GetPaintWindow().OutputToWindow())
         {
-            SdrPageView* pPageView = pView->GetSdrPageView();
-
-            if(pPageView)
+            const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
+            if (xManager.is() && mpPathObj)
             {
-                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
-                {
-                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+                const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
+                const drawinglayer::primitive2d::Primitive2DContainer& aSequence = rVC.getViewIndependentPrimitive2DContainer();
+                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
 
-                    if(rPageWindow.GetPaintWindow().OutputToWindow())
-                    {
-                        const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
-                        if (xManager.is() && mpPathObj)
-                        {
-                            const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
-                            const drawinglayer::primitive2d::Primitive2DContainer& aSequence = rVC.getViewIndependentPrimitive2DContainer();
-                            std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
-
-                            // OVERLAYMANAGER
-                            insertNewlyCreatedOverlayObjectForSdrHdl(
-                                std::move(pNew),
-                                rPageWindow.GetObjectContact(),
-                                *xManager);
-                        }
-                    }
-                }
+                // OVERLAYMANAGER
+                insertNewlyCreatedOverlayObjectForSdrHdl(
+                    std::move(pNew),
+                    rPageWindow.GetObjectContact(),
+                    *xManager);
             }
         }
     }
@@ -391,18 +391,18 @@ void MotionPathTag::updatePathAttributes()
 
 void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( mpPathObj && !mbInUpdatePath && dynamic_cast< const SdrHint* >( &rHint ) && (mpEffect.get() != nullptr) )
+    if( !(mpPathObj && !mbInUpdatePath && dynamic_cast< const SdrHint* >( &rHint ) && (mpEffect.get() != nullptr)) )
+        return;
+
+    if( mxPolyPoly != mpPathObj->GetPathPoly() )
     {
-        if( mxPolyPoly != mpPathObj->GetPathPoly() )
-        {
-            mbInUpdatePath = true;
-            mxPolyPoly = mpPathObj->GetPathPoly();
-            rtl::Reference< MotionPathTag > xTag( this );
-            mrPane.updatePathFromMotionPathTag( xTag );
-            msLastPath = mpEffect->getPath();
-            updatePathAttributes();
-            mbInUpdatePath = false;
-        }
+        mbInUpdatePath = true;
+        mxPolyPoly = mpPathObj->GetPathPoly();
+        rtl::Reference< MotionPathTag > xTag( this );
+        mrPane.updatePathFromMotionPathTag( xTag );
+        msLastPath = mpEffect->getPath();
+        updatePathAttributes();
+        mbInUpdatePath = false;
     }
 }
 
@@ -840,130 +840,130 @@ bool MotionPathTag::getContext( SdrViewContext& rContext )
 
 void MotionPathTag::CheckPossibilities()
 {
-    if( mpPathObj && isSelected() )
+    if( !(mpPathObj && isSelected()) )
+        return;
+
+    mrView.SetMoveAllowed( true );
+    mrView.SetMoveProtected( false );
+    mrView.SetResizeFreeAllowed( true );
+    mrView.SetResizePropAllowed( true );
+    mrView.SetResizeProtected( false );
+
+    if( !mrView.IsFrameDragSingles() )
     {
-        mrView.SetMoveAllowed( true );
-        mrView.SetMoveProtected( false );
-        mrView.SetResizeFreeAllowed( true );
-        mrView.SetResizePropAllowed( true );
-        mrView.SetResizeProtected( false );
+        bool b1stSmooth(true);
+        bool b1stSegm(true);
+        bool bCurve(false);
+        bool bSmoothFuz(false);
+        bool bSegmFuz(false);
+        basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
 
-        if( !mrView.IsFrameDragSingles() )
-        {
-            bool b1stSmooth(true);
-            bool b1stSegm(true);
-            bool bCurve(false);
-            bool bSmoothFuz(false);
-            bool bSegmFuz(false);
-            basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
-
-            mrView.CheckPolyPossibilitiesHelper( mpMark.get(), b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
-        }
+        mrView.CheckPolyPossibilitiesHelper( mpMark.get(), b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
     }
 }
 
 void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    if( mpPathObj )
+    if( !mpPathObj )
+        return;
+
+    css::awt::Point aPos;
+    if (mxOrigin.is())
+        aPos = mxOrigin->getPosition();
+    if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
     {
-        css::awt::Point aPos;
-        if (mxOrigin.is())
-            aPos = mxOrigin->getPosition();
-        if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
+            aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
+        mxPolyPoly.transform( aTransform );
+        mpPathObj->SetPathPoly( mxPolyPoly );
+        maOriginPos = aPos;
+    }
+
+    SmartTagReference xThis( this );
+    std::unique_ptr<SdPathHdl> pHdl(new SdPathHdl( xThis, mpPathObj ));
+    pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
+    pHdl->SetPageView( mrView.GetSdrPageView() );
+    pHdl->SetObj(mpPathObj);
+    rHandlerList.AddHdl( std::move(pHdl) );
+
+    if( !isSelected() )
+        return;
+
+    mrView.GetSdrPageView()->SetHasMarkedObj(true);
+
+    if( !mrView.IsFrameDragSingles() )
+    {
+        SdrHdlList aTemp( rHandlerList.GetView() );
+        mpPathObj->AddToHdlList( aTemp );
+        const SdrUShortCont& rMrkPnts = mpMark->GetMarkedPoints();
+
+        for( size_t nHandle = 0; nHandle < aTemp.GetHdlCount(); ++nHandle )
         {
-            const basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
-                aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
-            mxPolyPoly.transform( aTransform );
-            mpPathObj->SetPathPoly( mxPolyPoly );
-            maOriginPos = aPos;
-        }
+            SdrHdl* pTempHdl = aTemp.GetHdl( nHandle );
 
-        SmartTagReference xThis( this );
-        std::unique_ptr<SdPathHdl> pHdl(new SdPathHdl( xThis, mpPathObj ));
-        pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-        pHdl->SetPageView( mrView.GetSdrPageView() );
-        pHdl->SetObj(mpPathObj);
-        rHandlerList.AddHdl( std::move(pHdl) );
+            SmartHdl* pSmartHdl = new SmartHdl( xThis, mpPathObj, pTempHdl->GetPos(), pTempHdl->GetKind() );
+            pSmartHdl->SetObjHdlNum( static_cast<sal_uInt32>(nHandle) );
+            pSmartHdl->SetPolyNum( pTempHdl->GetPolyNum() );
+            pSmartHdl->SetPointNum( pTempHdl->GetPointNum() );
+            pSmartHdl->SetPlusHdl(  pTempHdl->IsPlusHdl() );
+            pSmartHdl->SetSourceHdlNum( pTempHdl->GetSourceHdlNum() );
+            pSmartHdl->SetPageView( mrView.GetSdrPageView() );
 
-        if( isSelected() )
-        {
-            mrView.GetSdrPageView()->SetHasMarkedObj(true);
+            rHandlerList.AddHdl( std::unique_ptr<SmartHdl>(pSmartHdl) );
 
-            if( !mrView.IsFrameDragSingles() )
+            const bool bSelected = rMrkPnts.find( sal_uInt16(nHandle) ) != rMrkPnts.end();
+            pSmartHdl->SetSelected(bSelected);
+
+            if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
             {
-                SdrHdlList aTemp( rHandlerList.GetView() );
-                mpPathObj->AddToHdlList( aTemp );
-                const SdrUShortCont& rMrkPnts = mpMark->GetMarkedPoints();
-
-                for( size_t nHandle = 0; nHandle < aTemp.GetHdlCount(); ++nHandle )
+                SdrHdlList plusList(nullptr);
+                mpPathObj->AddToPlusHdlList(plusList, *pSmartHdl);
+                sal_uInt32 nPlusHdlCnt=plusList.GetHdlCount();
+                for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
                 {
-                    SdrHdl* pTempHdl = aTemp.GetHdl( nHandle );
-
-                    SmartHdl* pSmartHdl = new SmartHdl( xThis, mpPathObj, pTempHdl->GetPos(), pTempHdl->GetKind() );
-                    pSmartHdl->SetObjHdlNum( static_cast<sal_uInt32>(nHandle) );
-                    pSmartHdl->SetPolyNum( pTempHdl->GetPolyNum() );
-                    pSmartHdl->SetPointNum( pTempHdl->GetPointNum() );
-                    pSmartHdl->SetPlusHdl(  pTempHdl->IsPlusHdl() );
-                    pSmartHdl->SetSourceHdlNum( pTempHdl->GetSourceHdlNum() );
-                    pSmartHdl->SetPageView( mrView.GetSdrPageView() );
-
-                    rHandlerList.AddHdl( std::unique_ptr<SmartHdl>(pSmartHdl) );
-
-                    const bool bSelected = rMrkPnts.find( sal_uInt16(nHandle) ) != rMrkPnts.end();
-                    pSmartHdl->SetSelected(bSelected);
-
-                    if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
-                    {
-                        SdrHdlList plusList(nullptr);
-                        mpPathObj->AddToPlusHdlList(plusList, *pSmartHdl);
-                        sal_uInt32 nPlusHdlCnt=plusList.GetHdlCount();
-                        for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
-                        {
-                            SdrHdl* pPlusHdl = plusList.GetHdl(nPlusNum);
-                            pPlusHdl->SetObj(mpPathObj);
-                            pPlusHdl->SetPageView(mrView.GetSdrPageView());
-                            pPlusHdl->SetPlusHdl(true);
-                        }
-                        plusList.MoveTo(rHandlerList);
-                    }
+                    SdrHdl* pPlusHdl = plusList.GetHdl(nPlusNum);
+                    pPlusHdl->SetObj(mpPathObj);
+                    pPlusHdl->SetPageView(mrView.GetSdrPageView());
+                    pPlusHdl->SetPlusHdl(true);
                 }
+                plusList.MoveTo(rHandlerList);
             }
-            else
+        }
+    }
+    else
+    {
+        ::tools::Rectangle aRect(mpPathObj->GetCurrentBoundRect());
+
+        if(!aRect.IsEmpty())
+        {
+            size_t nCount = rHandlerList.GetHdlCount();
+
+            bool bWdt0=aRect.Left()==aRect.Right();
+            bool bHgt0=aRect.Top()==aRect.Bottom();
+            if (bWdt0 && bHgt0)
             {
-                ::tools::Rectangle aRect(mpPathObj->GetCurrentBoundRect());
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
+            }
+            else if (bWdt0 || bHgt0)
+            {
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
+            }
+            else // !bWdt0 && !bHgt0
+            {
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
+            }
 
-                if(!aRect.IsEmpty())
-                {
-                    size_t nCount = rHandlerList.GetHdlCount();
-
-                    bool bWdt0=aRect.Left()==aRect.Right();
-                    bool bHgt0=aRect.Top()==aRect.Bottom();
-                    if (bWdt0 && bHgt0)
-                    {
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
-                    }
-                    else if (bWdt0 || bHgt0)
-                    {
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
-                    }
-                    else // !bWdt0 && !bHgt0
-                    {
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
-                        rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
-                    }
-
-                    while( nCount < rHandlerList.GetHdlCount() )
-                    {
-                        rHandlerList.GetHdl(nCount++)->SetPageView( mrView.GetSdrPageView() );
-                    }
-                }
+            while( nCount < rHandlerList.GetHdlCount() )
+            {
+                rHandlerList.GetHdl(nCount++)->SetPageView( mrView.GetSdrPageView() );
             }
         }
     }
@@ -1018,23 +1018,23 @@ void MotionPathTag::selectionChanged()
 
 void MotionPathTag::DeleteMarkedPoints()
 {
-    if( mpPathObj && IsDeleteMarkedPointsPossible() )
+    if( !(mpPathObj && IsDeleteMarkedPointsPossible()) )
+        return;
+
+    mrView.BrkAction();
+
+    SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+    PolyPolygonEditor aEditor( mpPathObj->GetPathPoly());
+    if (aEditor.DeletePoints(rPts))
     {
-        mrView.BrkAction();
-
-        SdrUShortCont& rPts = mpMark->GetMarkedPoints();
-        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly());
-        if (aEditor.DeletePoints(rPts))
+        if( aEditor.GetPolyPolygon().count() )
         {
-            if( aEditor.GetPolyPolygon().count() )
-            {
-                mpPathObj->SetPathPoly( aEditor.GetPolyPolygon() );
-            }
-
-            mrView.UnmarkAllPoints();
-            mrView.MarkListHasChanged();
-            mrView.updateHandles();
+            mpPathObj->SetPathPoly( aEditor.GetPolyPolygon() );
         }
+
+        mrView.UnmarkAllPoints();
+        mrView.MarkListHasChanged();
+        mrView.updateHandles();
     }
 }
 
