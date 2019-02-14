@@ -40,6 +40,7 @@ protected:
 public:
     Chart2ExportTest() : ChartTest() {}
     void testErrorBarXLSX();
+    void testErrorBarPropXLSX();
     void testTrendline();
     void testTrendlineOOXML();
     void testTrendlineXLS();
@@ -130,6 +131,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
+    CPPUNIT_TEST(testErrorBarPropXLSX);
     CPPUNIT_TEST(testTrendline);
     CPPUNIT_TEST(testTrendlineOOXML);
     CPPUNIT_TEST(testTrendlineXLS);
@@ -493,6 +495,23 @@ void Chart2ExportTest::testErrorBarXLSX()
         xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
         testErrorBar(xErrorBarYProps);
     }
+}
+
+void Chart2ExportTest::testErrorBarPropXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testErrorBarProp.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test y error bars property
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:errDir", "val", "y");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln", "w", "12600");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "ff0000");
+
+    // test x error bars property
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:errDir", "val", "x");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln", "w", "9360");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "595959");
 }
 
 // This method tests the preservation of properties for trendlines / regression curves
