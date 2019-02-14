@@ -3868,6 +3868,8 @@ void ChartExport::exportErrorBar(const Reference< XPropertySet>& xErrorBarProps,
                 FSEND );
     }
 
+    exportShapeProps( xErrorBarProps );
+
     pFS->endElement( FSNS( XML_c, XML_errBars) );
 }
 
