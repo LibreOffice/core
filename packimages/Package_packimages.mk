@@ -53,10 +53,10 @@ $(WORKDIR)/CustomTarget/packimages/bin/images.zip : $(COMMAND_IMAGE_LIST)
 		-c $(SRCDIR)/packimages \
 		-l $(OUTDIR)/res/img \
 		-s $(SORTED_LIST) \
-		-l $(OUTDIR)/res/img \
+		-l $(WORKDIR)/CustomTarget/packimages/res/img \
 		-o $@
 
-$(WORKDIR)/CustomTarget/packimages/bin/images_% : $(COMMAND_IMAGE_LIST)
+$(WORKDIR)/CustomTarget/packimages/bin/images_%.zip : $(COMMAND_IMAGE_LIST)
 	mkdir -p $(dir $@) && \
 	$(PERL) $(SOLARENV)/bin/packimages.pl \
 		$(VERBOSESWITCH) \
