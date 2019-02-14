@@ -130,6 +130,8 @@ private:
     void            SetFillAndTabType_Impl();
     void            NewHdl_Impl(const weld::Button*);
 
+    OUString        FormatTab();
+
     // Handler
     DECL_LINK(NewHdl_Impl, weld::Button&, void);
     DECL_LINK(DelHdl_Impl, weld::Button&, void);
