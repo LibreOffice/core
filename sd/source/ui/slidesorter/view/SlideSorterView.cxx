@@ -439,79 +439,79 @@ void SlideSorterView::InvalidatePageObjectVisibilities()
 void SlideSorterView::DeterminePageObjectVisibilities()
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
-    if (pWindow)
+    if (!pWindow)
+        return;
+
+    // Set this flag to true here so that an invalidate during the
+    // visibility calculation can correctly invalidate it again.
+    mbPageObjectVisibilitiesValid = true;
+
+    ::tools::Rectangle aViewArea (pWindow->PixelToLogic(::tools::Rectangle(Point(0,0),pWindow->GetSizePixel())));
+    const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(aViewArea));
+    const Range aUnion(
+        ::std::min(maVisiblePageRange.Min(), aRange.Min()),
+        ::std::max(maVisiblePageRange.Max(), aRange.Max()));
+
+    // For page objects that just dropped off the visible area we
+    // decrease the priority of pending requests for preview bitmaps.
+    if (maVisiblePageRange != aRange)
+        mbPreciousFlagUpdatePending |= true;
+
+    model::SharedPageDescriptor pDescriptor;
+    for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
     {
-        // Set this flag to true here so that an invalidate during the
-        // visibility calculation can correctly invalidate it again.
-        mbPageObjectVisibilitiesValid = true;
-
-        ::tools::Rectangle aViewArea (pWindow->PixelToLogic(::tools::Rectangle(Point(0,0),pWindow->GetSizePixel())));
-        const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(aViewArea));
-        const Range aUnion(
-            ::std::min(maVisiblePageRange.Min(), aRange.Min()),
-            ::std::max(maVisiblePageRange.Max(), aRange.Max()));
-
-        // For page objects that just dropped off the visible area we
-        // decrease the priority of pending requests for preview bitmaps.
-        if (maVisiblePageRange != aRange)
-            mbPreciousFlagUpdatePending |= true;
-
-        model::SharedPageDescriptor pDescriptor;
-        for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
-        {
-            pDescriptor = mrModel.GetPageDescriptor(nIndex);
-            if (pDescriptor.get() != nullptr)
-                SetState(
-                    pDescriptor,
-                    PageDescriptor::ST_Visible,
-                    aRange.IsInside(nIndex));
-        }
-
-        // Broadcast a change of the set of visible page objects.
-        if (maVisiblePageRange != aRange)
-        {
-            maVisiblePageRange = aRange;
-
-            // Tell the listeners that the visibility of some objects has
-            // changed.
-            ::std::vector<Link<LinkParamNone*,void>>& aChangeListeners (maVisibilityChangeListeners);
-            for (const auto& rLink : aChangeListeners)
-            {
-                rLink.Call(nullptr);
-            }
-        }
-
-        // Restore the mouse over state.
-        UpdatePageUnderMouse();
+        pDescriptor = mrModel.GetPageDescriptor(nIndex);
+        if (pDescriptor.get() != nullptr)
+            SetState(
+                pDescriptor,
+                PageDescriptor::ST_Visible,
+                aRange.IsInside(nIndex));
     }
+
+    // Broadcast a change of the set of visible page objects.
+    if (maVisiblePageRange != aRange)
+    {
+        maVisiblePageRange = aRange;
+
+        // Tell the listeners that the visibility of some objects has
+        // changed.
+        ::std::vector<Link<LinkParamNone*,void>>& aChangeListeners (maVisibilityChangeListeners);
+        for (const auto& rLink : aChangeListeners)
+        {
+            rLink.Call(nullptr);
+        }
+    }
+
+    // Restore the mouse over state.
+    UpdatePageUnderMouse();
 }
 
 void SlideSorterView::UpdatePreciousFlags()
 {
-    if (mbPreciousFlagUpdatePending)
+    if (!mbPreciousFlagUpdatePending)
+        return;
+
+    mbPreciousFlagUpdatePending = false;
+
+    model::SharedPageDescriptor pDescriptor;
+    std::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
+    sal_Int32 nPageCount (mrModel.GetPageCount());
+
+    for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
     {
-        mbPreciousFlagUpdatePending = false;
-
-        model::SharedPageDescriptor pDescriptor;
-        std::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
-        sal_Int32 nPageCount (mrModel.GetPageCount());
-
-        for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
+        pDescriptor = mrModel.GetPageDescriptor(nIndex);
+        if (pDescriptor.get() != nullptr)
         {
-            pDescriptor = mrModel.GetPageDescriptor(nIndex);
-            if (pDescriptor.get() != nullptr)
-            {
-                pCache->SetPreciousFlag(
-                    pDescriptor->GetPage(),
-                    maVisiblePageRange.IsInside(nIndex));
-            }
-            else
-            {
-                // At least one cache entry can not be updated.  Remember to
-                // repeat the whole updating later and leave the loop now.
-                mbPreciousFlagUpdatePending = true;
-                break;
-            }
+            pCache->SetPreciousFlag(
+                pDescriptor->GetPage(),
+                maVisiblePageRange.IsInside(nIndex));
+        }
+        else
+        {
+            // At least one cache entry can not be updated.  Remember to
+            // repeat the whole updating later and leave the loop now.
+            mbPreciousFlagUpdatePending = true;
+            break;
         }
     }
 }
@@ -770,20 +770,20 @@ void SlideSorterView::UpdatePageUnderMouse (
 void SlideSorterView::SetPageUnderMouse (
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (mpPageUnderMouse != rpDescriptor)
-    {
-        if (mpPageUnderMouse)
-            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, false);
+    if (mpPageUnderMouse == rpDescriptor)
+        return;
 
-        mpPageUnderMouse = rpDescriptor;
+    if (mpPageUnderMouse)
+        SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, false);
 
-        if (mpPageUnderMouse)
-            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true);
+    mpPageUnderMouse = rpDescriptor;
 
-        // Change the quick help text to display the name of the page under
-        // the mouse.
-        mpToolTip->SetPage(rpDescriptor);
-    }
+    if (mpPageUnderMouse)
+        SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true);
+
+    // Change the quick help text to display the name of the page under
+    // the mouse.
+    mpToolTip->SetPage(rpDescriptor);
 }
 
 bool SlideSorterView::SetState (

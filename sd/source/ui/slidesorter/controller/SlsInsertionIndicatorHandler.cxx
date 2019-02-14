@@ -149,26 +149,23 @@ void InsertionIndicatorHandler::SetPosition (
         maIconSize,
         mrSlideSorter.GetModel()));
 
-    if (maInsertPosition != aInsertPosition
-        || meMode != eMode
-        //        || ! mpInsertionIndicatorOverlay->IsVisible()
-        )
-    {
-        maInsertPosition = aInsertPosition;
-        meMode = eMode;
-        mbIsInsertionTrivial = IsInsertionTrivial(maInsertPosition.GetIndex(), eMode);
-        if (maInsertPosition.GetIndex()>=0 && ! mbIsInsertionTrivial)
-        {
-            mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
+    if (maInsertPosition == aInsertPosition && meMode == eMode)
+        return;
 
-            GetInsertAnimator()->SetInsertPosition(maInsertPosition);
-            mpInsertionIndicatorOverlay->Show();
-        }
-        else
-        {
-            GetInsertAnimator()->Reset(Animator::AM_Animated);
-            mpInsertionIndicatorOverlay->Hide();
-        }
+    maInsertPosition = aInsertPosition;
+    meMode = eMode;
+    mbIsInsertionTrivial = IsInsertionTrivial(maInsertPosition.GetIndex(), eMode);
+    if (maInsertPosition.GetIndex()>=0 && ! mbIsInsertionTrivial)
+    {
+        mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
+
+        GetInsertAnimator()->SetInsertPosition(maInsertPosition);
+        mpInsertionIndicatorOverlay->Show();
+    }
+    else
+    {
+        GetInsertAnimator()->Reset(Animator::AM_Animated);
+        mpInsertionIndicatorOverlay->Hide();
     }
 }
 

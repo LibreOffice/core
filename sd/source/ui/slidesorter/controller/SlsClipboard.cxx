@@ -236,19 +236,19 @@ void Clipboard::DoPaste ()
 {
     SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
 
-    if (pClipTransferable!=nullptr && pClipTransferable->IsPageTransferable())
-    {
-        sal_Int32 nInsertPosition = GetInsertionPosition();
+    if (pClipTransferable==nullptr || !pClipTransferable->IsPageTransferable())
+        return;
 
-        if (nInsertPosition >= 0)
-        {
-            // Paste the pages from the clipboard.
-            sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
-            // Select the pasted pages and make the first of them the
-            // current page.
-            mrSlideSorter.GetContentWindow()->GrabFocus();
-            SelectPageRange(nInsertPosition, nInsertPageCount);
-        }
+    sal_Int32 nInsertPosition = GetInsertionPosition();
+
+    if (nInsertPosition >= 0)
+    {
+        // Paste the pages from the clipboard.
+        sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
+        // Select the pasted pages and make the first of them the
+        // current page.
+        mrSlideSorter.GetContentWindow()->GrabFocus();
+        SelectPageRange(nInsertPosition, nInsertPageCount);
     }
 }
 
@@ -429,57 +429,57 @@ void Clipboard::CreateSlideTransferable (
             break;
     }
 
-    if (!aBookmarkList.empty())
+    if (aBookmarkList.empty())
+        return;
+
+    mrSlideSorter.GetView().BrkAction();
+    SdTransferable* pTransferable = TransferableData::CreateTransferable (
+        pDocument,
+        dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
+        aRepresentatives);
+
+    if (bDrag)
+        SD_MOD()->pTransferDrag = pTransferable;
+    else
+        SD_MOD()->pTransferClip = pTransferable;
+
+    pDocument->CreatingDataObj (pTransferable);
+    pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
+    std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
+    pTransferable->GetWorkDocument()->GetDocSh()
+        ->FillTransferableObjectDescriptor (*pObjDesc);
+
+    if (pDataDocSh != nullptr)
+        pObjDesc->maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+
+    vcl::Window* pActionWindow = pWindow;
+    if (pActionWindow == nullptr)
     {
-        mrSlideSorter.GetView().BrkAction();
-        SdTransferable* pTransferable = TransferableData::CreateTransferable (
-            pDocument,
-            dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
-            aRepresentatives);
-
-        if (bDrag)
-            SD_MOD()->pTransferDrag = pTransferable;
-        else
-            SD_MOD()->pTransferClip = pTransferable;
-
-        pDocument->CreatingDataObj (pTransferable);
-        pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
-        std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
-        pTransferable->GetWorkDocument()->GetDocSh()
-            ->FillTransferableObjectDescriptor (*pObjDesc);
-
-        if (pDataDocSh != nullptr)
-            pObjDesc->maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-
-        vcl::Window* pActionWindow = pWindow;
-        if (pActionWindow == nullptr)
-        {
-            ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-            if (pViewShell != nullptr)
-                pActionWindow = pViewShell->GetActiveWindow();
-        }
-
-        assert(pActionWindow);
-
-        pTransferable->SetStartPos (pActionWindow->PixelToLogic(
-            pActionWindow->GetPointerPosPixel()));
-        pTransferable->SetObjectDescriptor (std::move(pObjDesc));
-
-        {
-            TemporarySlideTrackingDeactivator aDeactivator (mrController);
-            pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
-        }
-
-        if (bDrag)
-        {
-            pTransferable->SetView (&mrSlideSorter.GetView());
-            pTransferable->StartDrag (pActionWindow, DND_ACTION_COPY | DND_ACTION_MOVE);
-        }
-        else
-            pTransferable->CopyToClipboard (pActionWindow);
-
-        pDocument->CreatingDataObj(nullptr);
+        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+        if (pViewShell != nullptr)
+            pActionWindow = pViewShell->GetActiveWindow();
     }
+
+    assert(pActionWindow);
+
+    pTransferable->SetStartPos (pActionWindow->PixelToLogic(
+        pActionWindow->GetPointerPosPixel()));
+    pTransferable->SetObjectDescriptor (std::move(pObjDesc));
+
+    {
+        TemporarySlideTrackingDeactivator aDeactivator (mrController);
+        pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
+    }
+
+    if (bDrag)
+    {
+        pTransferable->SetView (&mrSlideSorter.GetView());
+        pTransferable->StartDrag (pActionWindow, DND_ACTION_COPY | DND_ACTION_MOVE);
+    }
+    else
+        pTransferable->CopyToClipboard (pActionWindow);
+
+    pDocument->CreatingDataObj(nullptr);
 }
 
 std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData (SdTransferable* pTransferable)

@@ -67,21 +67,21 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
 
 void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 {
-    if (mnCurrentSlideIndex != nSlideIndex)
+    if (mnCurrentSlideIndex == nSlideIndex)
+        return;
+
+    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter.GetController().GetPageSelector());
+
+    mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+
+    ReleaseCurrentSlide();
+    AcquireCurrentSlide(nSlideIndex);
+
+    // Update the selection.
+    if (mpCurrentSlide)
     {
-        PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter.GetController().GetPageSelector());
-
-        mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
-
-        ReleaseCurrentSlide();
-        AcquireCurrentSlide(nSlideIndex);
-
-        // Update the selection.
-        if (mpCurrentSlide)
-        {
-            mrSlideSorter.GetController().GetPageSelector().SelectPage(mpCurrentSlide);
-            mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(mpCurrentSlide);
-        }
+        mrSlideSorter.GetController().GetPageSelector().SelectPage(mpCurrentSlide);
+        mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(mpCurrentSlide);
     }
 }
 
@@ -120,44 +120,44 @@ void CurrentSlideManager::SwitchCurrentSlide (
     const SharedPageDescriptor& rpDescriptor,
     const bool bUpdateSelection)
 {
-    if (rpDescriptor.get() != nullptr && mpCurrentSlide!=rpDescriptor)
+    if (!(rpDescriptor.get() != nullptr && mpCurrentSlide!=rpDescriptor))
+        return;
+
+    ReleaseCurrentSlide();
+    AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNum()-1)/2);
+
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell != nullptr && pViewShell->IsMainViewShell())
     {
-        ReleaseCurrentSlide();
-        AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNum()-1)/2);
-
-        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-        if (pViewShell != nullptr && pViewShell->IsMainViewShell())
-        {
-            // The slide sorter is the main view.
-            FrameView* pFrameView = pViewShell->GetFrameView();
-            if (pFrameView != nullptr)
-                pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
-            mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
-        }
-
-        // We do not tell the XController/ViewShellBase about the new
-        // slide right away.  This is done asynchronously after a short
-        // delay to allow for more slide switches in the slide sorter.
-        // This goes under the assumption that slide switching inside
-        // the slide sorter is fast (no expensive redraw of the new page
-        // (unless the preview of the new slide is not yet preset)) and
-        // that slide switching in the edit view is slow (all shapes of
-        // the new slide have to be repainted.)
-        maSwitchPageDelayTimer.Start();
-
-        // We have to store the (index of the) new current slide at
-        // the tab control because there are other asynchronous
-        // notifications of the slide switching that otherwise
-        // overwrite the correct value.
-        SetCurrentSlideAtTabControl(mpCurrentSlide);
-
-        if (bUpdateSelection)
-        {
-            mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
-            mrSlideSorter.GetController().GetPageSelector().SelectPage(rpDescriptor);
-        }
-        mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(rpDescriptor);
+        // The slide sorter is the main view.
+        FrameView* pFrameView = pViewShell->GetFrameView();
+        if (pFrameView != nullptr)
+            pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
+        mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
     }
+
+    // We do not tell the XController/ViewShellBase about the new
+    // slide right away.  This is done asynchronously after a short
+    // delay to allow for more slide switches in the slide sorter.
+    // This goes under the assumption that slide switching inside
+    // the slide sorter is fast (no expensive redraw of the new page
+    // (unless the preview of the new slide is not yet preset)) and
+    // that slide switching in the edit view is slow (all shapes of
+    // the new slide have to be repainted.)
+    maSwitchPageDelayTimer.Start();
+
+    // We have to store the (index of the) new current slide at
+    // the tab control because there are other asynchronous
+    // notifications of the slide switching that otherwise
+    // overwrite the correct value.
+    SetCurrentSlideAtTabControl(mpCurrentSlide);
+
+    if (bUpdateSelection)
+    {
+        mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+        mrSlideSorter.GetController().GetPageSelector().SelectPage(rpDescriptor);
+    }
+    mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(rpDescriptor);
 }
 
 void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescriptor& rpDescriptor)

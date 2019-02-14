@@ -244,38 +244,38 @@ void InsertionIndicatorOverlay::PaintPageCount (
     // Paint the number of slides.
     std::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
     std::shared_ptr<vcl::Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
-    if (pFont)
-    {
-        OUString sNumber (OUString::number(nSelectionCount));
+    if (!pFont)
+        return;
 
-        // Determine the size of the (painted) text and create a bounding
-        // box that centers the text on the first preview.
-        rDevice.SetFont(*pFont);
-        ::tools::Rectangle aTextBox;
-        rDevice.GetTextBoundRect(aTextBox, sNumber);
-        Point aTextOffset (aTextBox.TopLeft());
-        Size aTextSize (aTextBox.GetSize());
-        // Place text inside the first page preview.
-        Point aTextLocation(rFirstPageOffset);
-        // Center the text.
-        aTextLocation += Point(
-            (rPreviewSize.Width()-aTextBox.GetWidth())/2,
-            (rPreviewSize.Height()-aTextBox.GetHeight())/2);
-        aTextBox = ::tools::Rectangle(aTextLocation, aTextSize);
+    OUString sNumber (OUString::number(nSelectionCount));
 
-        // Paint background, border and text.
-        static const sal_Int32 nBorder = 5;
-        rDevice.SetFillColor(pTheme->GetColor(Theme::Color_Selection));
-        rDevice.SetLineColor(pTheme->GetColor(Theme::Color_Selection));
-        rDevice.DrawRect(GrowRectangle(aTextBox, nBorder));
+    // Determine the size of the (painted) text and create a bounding
+    // box that centers the text on the first preview.
+    rDevice.SetFont(*pFont);
+    ::tools::Rectangle aTextBox;
+    rDevice.GetTextBoundRect(aTextBox, sNumber);
+    Point aTextOffset (aTextBox.TopLeft());
+    Size aTextSize (aTextBox.GetSize());
+    // Place text inside the first page preview.
+    Point aTextLocation(rFirstPageOffset);
+    // Center the text.
+    aTextLocation += Point(
+        (rPreviewSize.Width()-aTextBox.GetWidth())/2,
+        (rPreviewSize.Height()-aTextBox.GetHeight())/2);
+    aTextBox = ::tools::Rectangle(aTextLocation, aTextSize);
 
-        rDevice.SetFillColor();
-        rDevice.SetLineColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
-        rDevice.DrawRect(GrowRectangle(aTextBox, nBorder-1));
+    // Paint background, border and text.
+    static const sal_Int32 nBorder = 5;
+    rDevice.SetFillColor(pTheme->GetColor(Theme::Color_Selection));
+    rDevice.SetLineColor(pTheme->GetColor(Theme::Color_Selection));
+    rDevice.DrawRect(GrowRectangle(aTextBox, nBorder));
 
-        rDevice.SetTextColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
-        rDevice.DrawText(aTextBox.TopLeft()-aTextOffset, sNumber);
-    }
+    rDevice.SetFillColor();
+    rDevice.SetLineColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
+    rDevice.DrawRect(GrowRectangle(aTextBox, nBorder-1));
+
+    rDevice.SetTextColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
+    rDevice.DrawText(aTextBox.TopLeft()-aTextOffset, sNumber);
 }
 
 void InsertionIndicatorOverlay::SetLocation (const Point& rLocation)
@@ -318,35 +318,35 @@ void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidat
 
 void InsertionIndicatorOverlay::Show()
 {
-    if ( ! mbIsVisible)
-    {
-        mbIsVisible = true;
+    if (  mbIsVisible)
+        return;
 
-        std::shared_ptr<LayeredDevice> pLayeredDevice (
-            mrSlideSorter.GetView().GetLayeredDevice());
-        if (pLayeredDevice)
-        {
-            pLayeredDevice->RegisterPainter(shared_from_this(), gnLayerIndex);
-            if (mpLayerInvalidator)
-                mpLayerInvalidator->Invalidate(GetBoundingBox());
-        }
+    mbIsVisible = true;
+
+    std::shared_ptr<LayeredDevice> pLayeredDevice (
+        mrSlideSorter.GetView().GetLayeredDevice());
+    if (pLayeredDevice)
+    {
+        pLayeredDevice->RegisterPainter(shared_from_this(), gnLayerIndex);
+        if (mpLayerInvalidator)
+            mpLayerInvalidator->Invalidate(GetBoundingBox());
     }
 }
 
 void InsertionIndicatorOverlay::Hide()
 {
-    if (mbIsVisible)
-    {
-        mbIsVisible = false;
+    if (!mbIsVisible)
+        return;
 
-        std::shared_ptr<LayeredDevice> pLayeredDevice (
-            mrSlideSorter.GetView().GetLayeredDevice());
-        if (pLayeredDevice)
-        {
-            if (mpLayerInvalidator)
-                mpLayerInvalidator->Invalidate(GetBoundingBox());
-            pLayeredDevice->RemovePainter(shared_from_this(), gnLayerIndex);
-        }
+    mbIsVisible = false;
+
+    std::shared_ptr<LayeredDevice> pLayeredDevice (
+        mrSlideSorter.GetView().GetLayeredDevice());
+    if (pLayeredDevice)
+    {
+        if (mpLayerInvalidator)
+            mpLayerInvalidator->Invalidate(GetBoundingBox());
+        pLayeredDevice->RemovePainter(shared_from_this(), gnLayerIndex);
     }
 }
 

@@ -216,35 +216,35 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
 void SelectionManager::SelectionHasChanged ()
 {
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell != nullptr)
+    if (pViewShell == nullptr)
+        return;
+
+    pViewShell->Invalidate (SID_EXPAND_PAGE);
+    pViewShell->Invalidate (SID_SUMMARY_PAGE);
+    pViewShell->Invalidate(SID_SHOW_SLIDE);
+    pViewShell->Invalidate(SID_HIDE_SLIDE);
+    pViewShell->Invalidate(SID_DELETE_PAGE);
+    pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
+    pViewShell->Invalidate(SID_ASSIGN_LAYOUT);
+
+    // StatusBar
+    pViewShell->Invalidate (SID_STATUS_PAGE);
+    pViewShell->Invalidate (SID_STATUS_LAYOUT);
+
+    OSL_ASSERT(mrController.GetCurrentSlideManager());
+    SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
+    if (pDescriptor.get() != nullptr)
+        pViewShell->UpdatePreview(pDescriptor->GetPage());
+
+    // Tell the selection change listeners that the selection has changed.
+    for (auto& rLink : maSelectionChangeListeners)
     {
-        pViewShell->Invalidate (SID_EXPAND_PAGE);
-        pViewShell->Invalidate (SID_SUMMARY_PAGE);
-        pViewShell->Invalidate(SID_SHOW_SLIDE);
-        pViewShell->Invalidate(SID_HIDE_SLIDE);
-        pViewShell->Invalidate(SID_DELETE_PAGE);
-        pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
-        pViewShell->Invalidate(SID_ASSIGN_LAYOUT);
-
-        // StatusBar
-        pViewShell->Invalidate (SID_STATUS_PAGE);
-        pViewShell->Invalidate (SID_STATUS_LAYOUT);
-
-        OSL_ASSERT(mrController.GetCurrentSlideManager());
-        SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
-        if (pDescriptor.get() != nullptr)
-            pViewShell->UpdatePreview(pDescriptor->GetPage());
-
-        // Tell the selection change listeners that the selection has changed.
-        for (auto& rLink : maSelectionChangeListeners)
-        {
-            rLink.Call(nullptr);
-        }
-
-        // Reset the insertion position: until set again it is calculated from
-        // the current selection.
-        mnInsertionPosition = -1;
+        rLink.Call(nullptr);
     }
+
+    // Reset the insertion position: until set again it is calculated from
+    // the current selection.
+    mnInsertionPosition = -1;
 }
 
 void SelectionManager::AddSelectionChangeListener (const Link<LinkParamNone*,void>& rListener)

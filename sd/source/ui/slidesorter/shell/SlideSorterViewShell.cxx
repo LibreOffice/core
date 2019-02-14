@@ -537,31 +537,31 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
 void SlideSorterViewShell::WriteFrameViewData()
 {
     assert(mpSlideSorter.get()!=nullptr);
-    if (mpFrameView != nullptr)
+    if (mpFrameView == nullptr)
+        return;
+
+    view::SlideSorterView& rView (mpSlideSorter->GetView());
+    mpFrameView->SetSlidesPerRow(static_cast<sal_uInt16>(rView.GetLayouter().GetColumnCount()));
+
+    // DrawMode for 'main' window
+    if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
+        mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
+
+    SdPage* pActualPage = GetActualPage();
+    if (pActualPage != nullptr)
     {
-        view::SlideSorterView& rView (mpSlideSorter->GetView());
-        mpFrameView->SetSlidesPerRow(static_cast<sal_uInt16>(rView.GetLayouter().GetColumnCount()));
-
-        // DrawMode for 'main' window
-        if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
-            mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
-
-        SdPage* pActualPage = GetActualPage();
-        if (pActualPage != nullptr)
-        {
-            if (IsMainViewShell())
-                mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
-            // else
-            // The slide sorter is not expected to switch the current page
-            // other than by double clicks.  That is handled separately.
-        }
-        else
-        {
-            // We have no current page to set but at least we can make sure
-            // that the index of the frame view has a legal value.
-            if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
-                mpFrameView->SetSelectedPage(static_cast<sal_uInt16>(mpSlideSorter->GetModel().GetPageCount())-1);
-        }
+        if (IsMainViewShell())
+            mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
+        // else
+        // The slide sorter is not expected to switch the current page
+        // other than by double clicks.  That is handled separately.
+    }
+    else
+    {
+        // We have no current page to set but at least we can make sure
+        // that the index of the frame view has a legal value.
+        if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
+            mpFrameView->SetSelectedPage(static_cast<sal_uInt16>(mpSlideSorter->GetModel().GetPageCount())-1);
     }
 }
 

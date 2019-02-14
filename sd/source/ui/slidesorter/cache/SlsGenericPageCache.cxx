@@ -81,27 +81,27 @@ void GenericPageCache::ChangePreviewSize (
     const Size& rPreviewSize,
     const bool bDoSuperSampling)
 {
-    if (rPreviewSize!=maPreviewSize || bDoSuperSampling!=mbDoSuperSampling)
-    {
-        // A large size may indicate an error of the caller.  After all we
-        // are creating previews.
-        DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
-            "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
-            "This may indicate an error.");
+    if (rPreviewSize==maPreviewSize && bDoSuperSampling==mbDoSuperSampling)
+        return;
 
-        if (mpBitmapCache != nullptr)
+    // A large size may indicate an error of the caller.  After all we
+    // are creating previews.
+    DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
+        "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
+        "This may indicate an error.");
+
+    if (mpBitmapCache != nullptr)
+    {
+        mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
+            mpBitmapCache, maPreviewSize, rPreviewSize);
+        if (mpQueueProcessor != nullptr)
         {
-            mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
-                mpBitmapCache, maPreviewSize, rPreviewSize);
-            if (mpQueueProcessor != nullptr)
-            {
-                mpQueueProcessor->SetPreviewSize(rPreviewSize, bDoSuperSampling);
-                mpQueueProcessor->SetBitmapCache(mpBitmapCache);
-            }
+            mpQueueProcessor->SetPreviewSize(rPreviewSize, bDoSuperSampling);
+            mpQueueProcessor->SetBitmapCache(mpBitmapCache);
         }
-        maPreviewSize = rPreviewSize;
-        mbDoSuperSampling = bDoSuperSampling;
     }
+    maPreviewSize = rPreviewSize;
+    mbDoSuperSampling = bDoSuperSampling;
 }
 
 BitmapEx GenericPageCache::GetPreviewBitmap (
@@ -186,20 +186,20 @@ void GenericPageCache::RequestPreviewBitmap (
               bIsUpToDate = false;
     }
 
-    if ( ! bIsUpToDate)
+    if (  bIsUpToDate)
+        return;
+
+    // No, the bitmap is not up-to-date.  Request a new one.
+    RequestPriorityClass ePriorityClass (NOT_VISIBLE);
+    if (mpCacheContext->IsVisible(aKey))
     {
-        // No, the bitmap is not up-to-date.  Request a new one.
-        RequestPriorityClass ePriorityClass (NOT_VISIBLE);
-        if (mpCacheContext->IsVisible(aKey))
-        {
-            if (mpBitmapCache->HasBitmap(pPage))
-                ePriorityClass = VISIBLE_OUTDATED_PREVIEW;
-            else
-                ePriorityClass = VISIBLE_NO_PREVIEW;
-        }
-        maRequestQueue.AddRequest(aKey, ePriorityClass);
-        mpQueueProcessor->Start(ePriorityClass);
+        if (mpBitmapCache->HasBitmap(pPage))
+            ePriorityClass = VISIBLE_OUTDATED_PREVIEW;
+        else
+            ePriorityClass = VISIBLE_NO_PREVIEW;
     }
+    maRequestQueue.AddRequest(aKey, ePriorityClass);
+    mpQueueProcessor->Start(ePriorityClass);
 }
 
 bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
@@ -219,20 +219,20 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 
 void GenericPageCache::InvalidateCache ()
 {
-    if (mpBitmapCache)
-    {
-        // When the cache is being invalidated then it makes no sense to
-        // continue creating preview bitmaps.  However, this may be
-        // re-started below.
-        mpQueueProcessor->Stop();
-        maRequestQueue.Clear();
+    if (!mpBitmapCache)
+        return;
 
-        // Mark the previews in the cache as not being up-to-date anymore.
-        // Depending on the given bUpdateCache flag we start to create new
-        // preview bitmaps.
-        mpBitmapCache->InvalidateCache();
-        RequestFactory()(maRequestQueue, mpCacheContext);
-    }
+    // When the cache is being invalidated then it makes no sense to
+    // continue creating preview bitmaps.  However, this may be
+    // re-started below.
+    mpQueueProcessor->Stop();
+    maRequestQueue.Clear();
+
+    // Mark the previews in the cache as not being up-to-date anymore.
+    // Depending on the given bUpdateCache flag we start to create new
+    // preview bitmaps.
+    mpBitmapCache->InvalidateCache();
+    RequestFactory()(maRequestQueue, mpCacheContext);
 }
 
 void GenericPageCache::SetPreciousFlag (

@@ -78,19 +78,19 @@ void VisibleAreaManager::RequestVisible (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bForce)
 {
-    if (rpDescriptor)
+    if (!rpDescriptor)
+        return;
+
+    if (mnDisableCount == 0)
     {
-        if (mnDisableCount == 0)
-        {
-            maVisibleRequests.push_back(
-                mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
-                    rpDescriptor->GetPageIndex(),
-                    true));
-        }
-        if (bForce && ! mbIsCurrentSlideTrackingActive)
-            ActivateCurrentSlideTracking();
-        MakeVisible();
+        maVisibleRequests.push_back(
+            mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
+                rpDescriptor->GetPageIndex(),
+                true));
     }
+    if (bForce && ! mbIsCurrentSlideTrackingActive)
+        ActivateCurrentSlideTracking();
+    MakeVisible();
 }
 
 void VisibleAreaManager::RequestCurrentSlideVisible()

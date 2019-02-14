@@ -145,25 +145,25 @@ void PageSelector::SelectPage (const SdPage* pPage)
 
 void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get()!=nullptr
-        && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
-    {
-        ++mnSelectedPageCount;
-        mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
-        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
+    if (rpDescriptor.get()==nullptr
+        || !mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
+        return;
 
-        mpMostRecentlySelectedPage = rpDescriptor;
-        if (mpSelectionAnchor == nullptr)
-            mpSelectionAnchor = rpDescriptor;
+    ++mnSelectedPageCount;
+    mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
+    mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
-        if (mnBroadcastDisableLevel > 0)
-            mbSelectionChangeBroadcastPending = true;
-        else
-            mrController.GetSelectionManager()->SelectionHasChanged();
-        UpdateCurrentPage();
+    mpMostRecentlySelectedPage = rpDescriptor;
+    if (mpSelectionAnchor == nullptr)
+        mpSelectionAnchor = rpDescriptor;
 
-        CheckConsistency();
-    }
+    if (mnBroadcastDisableLevel > 0)
+        mbSelectionChangeBroadcastPending = true;
+    else
+        mrController.GetSelectionManager()->SelectionHasChanged();
+    UpdateCurrentPage();
+
+    CheckConsistency();
 }
 
 void PageSelector::DeselectPage (int nPageIndex)
@@ -177,23 +177,23 @@ void PageSelector::DeselectPage (
     const SharedPageDescriptor& rpDescriptor,
     const bool bUpdateCurrentPage)
 {
-    if (rpDescriptor.get()!=nullptr
-        && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
-    {
-        --mnSelectedPageCount;
-        mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
-        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
-        if (mpMostRecentlySelectedPage == rpDescriptor)
-            mpMostRecentlySelectedPage.reset();
-        if (mnBroadcastDisableLevel > 0)
-            mbSelectionChangeBroadcastPending = true;
-        else
-            mrController.GetSelectionManager()->SelectionHasChanged();
-        if (bUpdateCurrentPage)
-            UpdateCurrentPage();
+    if (rpDescriptor.get()==nullptr
+        || mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
+        return;
 
-        CheckConsistency();
-    }
+    --mnSelectedPageCount;
+    mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
+    mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
+    if (mpMostRecentlySelectedPage == rpDescriptor)
+        mpMostRecentlySelectedPage.reset();
+    if (mnBroadcastDisableLevel > 0)
+        mbSelectionChangeBroadcastPending = true;
+    else
+        mrController.GetSelectionManager()->SelectionHasChanged();
+    if (bUpdateCurrentPage)
+        UpdateCurrentPage();
+
+    CheckConsistency();
 }
 
 void PageSelector::CheckConsistency() const
@@ -312,20 +312,20 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
         }
     }
 
-    if (pCurrentPageDescriptor)
-    {
-        // Switching the current slide normally sets also the
-        // selection to just the new current slide.  To prevent that,
-        // we store (and at the end of this scope restore) the current
-        // selection.
-        std::shared_ptr<PageSelection> pSelection (GetPageSelection());
+    if (!pCurrentPageDescriptor)
+        return;
 
-        mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
+    // Switching the current slide normally sets also the
+    // selection to just the new current slide.  To prevent that,
+    // we store (and at the end of this scope restore) the current
+    // selection.
+    std::shared_ptr<PageSelection> pSelection (GetPageSelection());
 
-        // Restore the selection and prevent a recursive call to
-        // UpdateCurrentPage().
-        SetPageSelection(pSelection, false);
-    }
+    mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
+
+    // Restore the selection and prevent a recursive call to
+    // UpdateCurrentPage().
+    SetPageSelection(pSelection, false);
 }
 
 //===== PageSelector::UpdateLock ==============================================
