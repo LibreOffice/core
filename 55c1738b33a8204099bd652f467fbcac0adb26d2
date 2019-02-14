@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_e4c28fe9",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2019-02-14T10:45:49Z",
+      "side": 1,
+      "message": "I think I modify the Doc model right here where I overwrite the format size attributes.\n\nThat\u0027s why I commented it with TODO and HACK",
+      "revId": "55c1738b33a8204099bd652f467fbcac0adb26d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
