@@ -138,7 +138,7 @@ Sequence< Type > SAL_CALL OHCatalog::getTypes(  )
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if ( !(*pBegin == cppu::UnoType<XGroupsSupplier>::get()))
+        if ( *pBegin != cppu::UnoType<XGroupsSupplier>::get())
         {
             aOwnTypes.push_back(*pBegin);
         }

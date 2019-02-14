@@ -2899,7 +2899,7 @@ void DomainMapper::lcl_startParagraphGroup()
     if (!mbIsSplitPara)
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
     mbIsSplitPara = false;
-    if (!(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) == m_pImpl->GetTopContext()))
+    if (m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) != m_pImpl->GetTopContext())
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 
     if (m_pImpl->GetTopContext())

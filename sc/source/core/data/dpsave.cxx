@@ -254,7 +254,7 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
 
     if( pReferenceValue && r.pReferenceValue )
     {
-        if ( !(*pReferenceValue == *r.pReferenceValue) )
+        if ( *pReferenceValue != *r.pReferenceValue )
         {
             return false;
         }
@@ -265,7 +265,7 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
     }
     if( this->pSortInfo && r.pSortInfo )
     {
-        if ( !(*this->pSortInfo == *r.pSortInfo) )
+        if ( *this->pSortInfo != *r.pSortInfo )
         {
             return false;
         }
@@ -276,7 +276,7 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
     }
     if( this->pAutoShowInfo && r.pAutoShowInfo )
     {
-        if ( !(*this->pAutoShowInfo == *r.pAutoShowInfo) )
+        if ( *this->pAutoShowInfo != *r.pAutoShowInfo )
         {
             return false;
         }

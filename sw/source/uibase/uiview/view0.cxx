@@ -568,7 +568,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
     SwModule* pModule = SW_MOD();
-    if( !(*rSh.GetViewOptions() == *pOpt ))
+    if( *rSh.GetViewOptions() != *pOpt )
     {
         rSh.ApplyViewOptions( *pOpt );
         if( bBrowseModeChanged )

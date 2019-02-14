@@ -133,7 +133,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
         // That can be done in one go by the handler.
         rShell.CallChgLnk();
     }
-    else if( !bHasSelection != !(*pCurrentCursor->GetPoint() != *pCurrentCursor->GetMark()) )
+    else if( !bHasSelection != (*pCurrentCursor->GetPoint() == *pCurrentCursor->GetMark()) )
     {
         // always call change link when selection changes
         rShell.CallChgLnk();

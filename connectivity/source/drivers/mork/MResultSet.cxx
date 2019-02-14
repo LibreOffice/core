@@ -1001,7 +1001,7 @@ static bool matchRow( OValueRow const & row1, OValueRow const & row2 )
         if ( row1Iter->isBound())
         {
             // Compare values, if at anytime there's a mismatch return false
-            if ( !( (*row1Iter) == (*row2Iter) ) )
+            if ( *row1Iter != *row2Iter )
                 return false;
         }
     }

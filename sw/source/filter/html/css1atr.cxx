@@ -1220,9 +1220,9 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
             }
             else
             {
-                if( !( *pItem == *pItemCJK ) ||
-                    !( *pItem == *pItemCTL ) ||
-                    !( *pItemCJK == *pItemCTL ) )
+                if( *pItem != *pItemCJK ||
+                    *pItem != *pItemCTL ||
+                    *pItemCJK != *pItemCTL )
                     return true;
             }
         }

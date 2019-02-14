@@ -393,7 +393,7 @@ extern "C" int unopkg_main()
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
         //prevent the deletion of the registry data folder
         //syncing is done in XExtensionManager.reinstall
-        if (!subcmd_gui && ! (subCommand == "reinstall")
+        if (!subcmd_gui && subCommand != "reinstall"
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(false, xCmdEnv);
 

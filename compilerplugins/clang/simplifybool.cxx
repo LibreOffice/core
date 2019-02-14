@@ -53,6 +53,38 @@ Expr const * getSubExprOfLogicalNegation(Expr const * expr) {
         ? nullptr : e->getSubExpr();
 }
 
+bool existsOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode) {
+    OverloadedOperatorKind over = BinaryOperator::getOverloadedOperator(opcode);
+    CXXRecordDecl const * recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (!recordDecl)
+        return false;
+    // search for member overloads
+    for (auto it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it) {
+        if (it->getOverloadedOperator() == over) {
+            return true;
+        }
+    }
+    // search for free function overloads
+    auto ctx = recordDecl->getDeclContext();
+    if (ctx->getDeclKind() == Decl::LinkageSpec) {
+        ctx = ctx->getParent();
+    }
+    auto declName = compiler.getASTContext().DeclarationNames.getCXXOperatorName(over);
+    auto res = ctx->lookup(declName);
+    for (auto d = res.begin(); d != res.end(); ++d) {
+        FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
+        if (!f || f->getNumParams() != 2)
+            continue;
+        auto qt = f->getParamDecl(0)->getType();
+        auto lvalue = dyn_cast<LValueReferenceType>(qt.getTypePtr());
+        if (!lvalue)
+            continue;
+        if (lvalue->getPointeeType().getTypePtr() == recordType)
+            return true;
+    }
+    return false;
+}
+
 enum class Value { Unknown, False, True };
 
 Value getValue(Expr const * expr) {
@@ -99,6 +131,13 @@ public:
     bool VisitBinNE(BinaryOperator const * expr);
 
     bool VisitConditionalOperator(ConditionalOperator const * expr);
+
+    bool TraverseFunctionDecl(FunctionDecl *);
+
+    bool TraverseCXXMethodDecl(CXXMethodDecl *);
+
+private:
+    FunctionDecl* m_insideFunctionDecl = nullptr;
 };
 
 void SimplifyBool::run() {
@@ -138,15 +177,50 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         // triggers.
         if (compat::getBeginLoc(binaryOp).isMacroID())
             return true;
+        if (!binaryOp->isComparisonOp())
+            return true;
         auto t = binaryOp->getLHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
-        // RecordType would require more smarts - we'd need to verify that an inverted operator actually existed
-        if (t->isTemplateTypeParmType() || t->isRecordType() || t->isDependentType())
+        if (t->isTemplateTypeParmType() || t->isDependentType() || t->isRecordType())
             return true;
         // for floating point (with NaN) !(x<y) need not be equivalent to x>=y
         if (t->isFloatingType() ||
             binaryOp->getRHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType()->isFloatingType())
             return true;
-        if (!binaryOp->isComparisonOp())
+        report(
+            DiagnosticsEngine::Warning,
+            ("logical negation of comparison operator, can be simplified by inverting operator"),
+            compat::getBeginLoc(expr))
+            << expr->getSourceRange();
+    }
+    if (auto binaryOp = dyn_cast<CXXOperatorCallExpr>(expr->getSubExpr()->IgnoreParenImpCasts())) {
+        // Ignore macros, otherwise
+        //    OSL_ENSURE(!b, ...);
+        // triggers.
+        if (compat::getBeginLoc(binaryOp).isMacroID())
+            return true;
+        auto op = binaryOp->getOperator();
+        // Negating things like > and >= would probably not be wise, there is no guarantee the negation holds for operator overloaded types.
+        // However, == and != are normally considered ok.
+        if (!(op == OO_EqualEqual || op == OO_ExclaimEqual))
+            return true;
+        BinaryOperator::Opcode negatedOpcode = BinaryOperator::negateComparisonOp(BinaryOperator::getOverloadedOpcode(op));
+        auto t = binaryOp->getArg(0)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        // we need to verify that a negated operator actually existed
+        if (!t->isRecordType())
+            return true;
+        auto recordType = dyn_cast<RecordType>(t);
+        if (!existsOperator(compiler, recordType, negatedOpcode))
+            return true;
+        // if we are inside a similar operator, ignore, eg. operator!= is often defined by calling !operator==
+        if (m_insideFunctionDecl && m_insideFunctionDecl->getNumParams() >= 1) {
+            auto qt = m_insideFunctionDecl->getParamDecl(0)->getType();
+            auto lvalue = dyn_cast<LValueReferenceType>(qt.getTypePtr());
+            if (lvalue && lvalue->getPointeeType()->getUnqualifiedDesugaredType() == recordType)
+                return true;
+        }
+        // QA code
+        StringRef fn(handler.getMainFileName());
+        if (loplugin::isSamePathname(fn, SRCDIR "/testtools/source/bridgetest/bridgetest.cxx"))
             return true;
         report(
             DiagnosticsEngine::Warning,
@@ -1084,6 +1158,22 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
         break;
     }
     return true;
+}
+
+bool SimplifyBool::TraverseFunctionDecl(FunctionDecl * functionDecl) {
+    auto copy = m_insideFunctionDecl;
+    m_insideFunctionDecl = functionDecl;
+    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+    m_insideFunctionDecl = copy;
+    return ret;
+}
+
+bool SimplifyBool::TraverseCXXMethodDecl(CXXMethodDecl * functionDecl) {
+    auto copy = m_insideFunctionDecl;
+    m_insideFunctionDecl = functionDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(functionDecl);
+    m_insideFunctionDecl = copy;
+    return ret;
 }
 
 loplugin::Plugin::Registration<SimplifyBool> X("simplifybool");

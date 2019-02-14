@@ -2081,7 +2081,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if(aCol != aBoxItem.GetBottom()->GetColor() )
                             bColDisable = true;
-                        if(!( aLine == *(aBoxItem.GetBottom())) )
+                        if( aLine != *aBoxItem.GetBottom() )
                             bStyleDisable = true;
                     }
                 }
@@ -2100,7 +2100,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if(aCol != aBoxItem.GetLeft()->GetColor() )
                             bColDisable = true;
-                        if(!( aLine == *(aBoxItem.GetLeft())) )
+                        if( aLine != *aBoxItem.GetLeft() )
                             bStyleDisable = true;
                     }
                 }
@@ -2119,7 +2119,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if(aCol != aBoxItem.GetRight()->GetColor() )
                             bColDisable = true;
-                        if(!( aLine == *(aBoxItem.GetRight())) )
+                        if( aLine != *aBoxItem.GetRight() )
                             bStyleDisable = true;
                     }
                 }
@@ -2138,7 +2138,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if(aCol != aInfoItem.GetVert()->GetColor() )
                             bColDisable = true;
-                        if(!( aLine == *(aInfoItem.GetVert())) )
+                        if( aLine != *aInfoItem.GetVert() )
                             bStyleDisable = true;
                     }
                 }
@@ -2157,7 +2157,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if(aCol != aInfoItem.GetHori()->GetColor() )
                             bColDisable = true;
-                        if(!( aLine == *(aInfoItem.GetHori())) )
+                        if( aLine != *aInfoItem.GetHori() )
                             bStyleDisable = true;
                     }
                 }

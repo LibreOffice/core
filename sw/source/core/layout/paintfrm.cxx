@@ -1989,7 +1989,7 @@ void DrawGraphic(
         // to get color of brush, check background color against COL_TRANSPARENT ("no fill"/"auto fill")
         // instead of checking, if transparency is not set.
         const Color aColor( pBrush &&
-                            ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
+                            ( (pBrush->GetColor() != COL_TRANSPARENT) ||
                               gProp.bSFlyMetafile )
                     ? pBrush->GetColor()
                     : aGlobalRetoucheColor );
@@ -3920,7 +3920,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 //     to determine, if background has to be painted, by checking, if
                 //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
                 //     or a background graphic exists.
-                bPaintCompleteBack = !(aBack.GetColor() == COL_TRANSPARENT) ||
+                bPaintCompleteBack = (aBack.GetColor() != COL_TRANSPARENT) ||
                                      aBack.GetGraphicPos() != GPOS_NONE;
             }
         }

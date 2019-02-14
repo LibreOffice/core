@@ -104,7 +104,7 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTL
 
         if( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(RES_BOX,true, &pItem )
             || nullptr == ( pBrd = GetLineTB( static_cast<const SvxBoxItem*>(pItem), bTop ))
-            || !( *pBrd == rBrdLn ))
+            || *pBrd != rBrdLn )
             break;
         nLastPos = nPos;
     }

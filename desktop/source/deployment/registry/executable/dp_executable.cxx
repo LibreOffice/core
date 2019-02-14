@@ -239,7 +239,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (getMyBackend()->m_context == "shared")
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else if (!(getMyBackend()->m_context == "bundled"))
+            else if (getMyBackend()->m_context != "bundled")
                 //Bundled extensions are required to be in the properly
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(false);

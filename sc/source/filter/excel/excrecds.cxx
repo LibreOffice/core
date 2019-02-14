@@ -251,7 +251,7 @@ Exc1904::Exc1904( const ScDocument& rDoc )
 {
     const Date& rDate = rDoc.GetFormatTable()->GetNullDate();
     bVal = (rDate == Date( 1, 1, 1904 ));
-    bDateCompatibility = !(rDate == Date( 30, 12, 1899 ));
+    bDateCompatibility = (rDate != Date( 30, 12, 1899 ));
 }
 
 sal_uInt16 Exc1904::GetNum() const

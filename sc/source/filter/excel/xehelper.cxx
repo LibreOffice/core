@@ -734,7 +734,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetFamilyName() );
                 aNewData.mnWeight = (aFont.GetWeight() > WEIGHT_NORMAL) ? EXC_FONTWGHT_BOLD : EXC_FONTWGHT_NORMAL;
                 aNewData.mbItalic = (aFont.GetItalic() != ITALIC_NONE);
-                bool bNewFont = !(aFontData.maName == aNewData.maName);
+                bool bNewFont = (aFontData.maName != aNewData.maName);
                 bool bNewStyle = (aFontData.mnWeight != aNewData.mnWeight) ||
                                  (aFontData.mbItalic != aNewData.mbItalic);
                 if( bNewFont || (bNewStyle && pFontList) )

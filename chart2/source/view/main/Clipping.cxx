@@ -260,7 +260,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
                 // compose an Polygon of as many consecutive points as possible
                 if(aFrom == aLast)
                 {
-                    if( !(aTo==aFrom) )
+                    if( aTo != aFrom )
                     {
                         lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
                     }
@@ -274,7 +274,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
                             nNewPolyIndex++;
                     }
                     lcl_addPointToPoly( aResult, aFrom, nNewPolyIndex, aResultPointCount, nOldPointCount );
-                    if( !(aTo==aFrom) )
+                    if( aTo != aFrom )
                         lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
                 }
                 aLast = aTo;

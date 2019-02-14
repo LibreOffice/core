@@ -188,7 +188,7 @@ void PackageManagerImpl::initActivationLayer(
         // The data base can always be written because it is always in the user installation
         m_activePackagesDB.reset( new ActivePackages( dbName ) );
 
-        if (! m_readOnly && ! (m_context == "bundled"))
+        if (! m_readOnly && m_context != "bundled")
         {
             // clean up activation layer, scan for zombie temp dirs:
             ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
@@ -957,7 +957,7 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
-    if (!(m_context == "bundled"))
+    if (m_context != "bundled")
     {
         buf.append( "_/" );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
@@ -1028,7 +1028,7 @@ PackageManagerImpl::getDeployedPackages_(
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     for (auto const& elem : id2temp)
     {
-        if (! (elem.second.failedPrerequisites == "0"))
+        if (elem.second.failedPrerequisites != "0")
             continue;
         try {
             packages.push_back(

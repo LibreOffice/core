@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtl/ustring.hxx>
+
 void f1(int a, int b)
 {
     if (!(a < b))
@@ -55,5 +57,61 @@ bool f1(E1 e) { return !!(e & E1_1); }
 bool f2(E2 e) { return !!(e & E2_1); }
 
 bool f3(E3 e) { return !!(e & E3::E1); }
+
+// record types
+
+struct Record1
+{
+    bool operator==(const Record1&) const;
+};
+
+struct Record2
+{
+    bool operator==(const Record2&) const;
+    bool operator!=(const Record2&) const;
+};
+
+struct Record3
+{
+};
+
+bool operator==(const Record3&, const Record3&);
+bool operator!=(const Record3&, const Record3&);
+
+void testRecord()
+{
+    Record1 a1;
+    Record1 a2;
+    // no warning expected, because a negated operator does not exist
+    bool v = !(a1 == a2);
+    Record2 b1;
+    Record2 b2;
+    v = !(b1 == b2);
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+    Record3 c1;
+    Record3 c2;
+    v = !(c1 == c2);
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+    OUString d1;
+    OUString d2;
+    v = !(d1 == d2);
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+}
+
+struct Record4
+{
+    bool operator==(Record4 const&) const;
+    bool operator!=(Record4 const& other) const
+    {
+        // no warning expected
+        bool v = !operator==(other);
+        v = !(*this == other);
+        OUString c1;
+        OUString c2;
+        v = !(c1 == c2);
+        // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+        return v;
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

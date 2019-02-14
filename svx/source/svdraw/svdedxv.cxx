@@ -2602,7 +2602,7 @@ static SfxItemSet CreatePaintSet( const sal_uInt16 *pRanges, SfxItemPool& rPool,
             const SfxPoolItem* pSourceItem = rSourceSet.GetItem( nWhich );
             const SfxPoolItem* pTargetItem = rTargetSet.GetItem( nWhich );
 
-            if( (pSourceItem && !pTargetItem) || (pSourceItem && pTargetItem && !((*pSourceItem) == (*pTargetItem)) ) )
+            if( (pSourceItem && !pTargetItem) || (pSourceItem && pTargetItem && *pSourceItem != *pTargetItem ) )
             {
                 aPaintSet.Put( *pSourceItem );
             }
