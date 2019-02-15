@@ -1604,8 +1604,9 @@ PatchFile::Prepare()
     // extract the patch to a temporary file
     mPatchIndex = sPatchIndex++;
 
-    NS_tsnprintf(spath, sizeof(spath)/sizeof(spath[0]),
+    int nWrittenBytes = NS_tsnprintf(spath, sizeof(spath)/sizeof(spath[0]),
                  NS_T("%s/updating/%d.patch"), gWorkingDirPath, mPatchIndex);
+    (void) nWrittenBytes;
 
     NS_tremove(spath);
 
@@ -2491,8 +2492,9 @@ ProcessReplaceRequest()
     // need to have the last-update.log and backup-update.log files moved from the
     // old installation directory to the new installation directory.
     NS_tchar tmpLog[MAXPATHLEN];
-    NS_tsnprintf(tmpLog, sizeof(tmpLog)/sizeof(tmpLog[0]),
+    int nWrittenBytes = NS_tsnprintf(tmpLog, sizeof(tmpLog)/sizeof(tmpLog[0]),
                  NS_T("%s/updates/last-update.log"), tmpDir);
+    (void) nWrittenBytes;
     if (!NS_taccess(tmpLog, F_OK))
     {
         NS_tchar destLog[MAXPATHLEN];
@@ -2672,7 +2674,7 @@ CheckSignature(ArchiveReader& archiveReader)
 
             // TODO: moggi: needs adaption for LibreOffice
             // These paths need to be adapted for us.
-            NS_tsnprintf(updateSettingsPath,
+            int nWrittenBytes = NS_tsnprintf(updateSettingsPath,
                          sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
 #ifdef MACOSX
                          NS_T("%s/Contents/Resources/update-settings.ini"),
@@ -2680,6 +2682,7 @@ CheckSignature(ArchiveReader& archiveReader)
                          NS_T("%s/update-settings.ini"),
 #endif
                          gWorkingDirPath);
+            (void) nWrittenBytes;
             MARChannelStringTable MARStrings;
             if (ReadMARChannelIDs(updateSettingsPath, &MARStrings) != OK)
             {
@@ -2743,8 +2746,9 @@ UpdateThreadFunc(void * /*param*/)
                 rv = DoUpdate(archiveReader);
             }
             NS_tchar updatingDir[MAXPATHLEN];
-            NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
+            int nWrittenBytes = NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
                          NS_T("%s/updating"), gWorkingDirPath);
+            (void) nWrittenBytes;
             ensure_remove_recursive(updatingDir);
         }
     }
@@ -4452,8 +4456,9 @@ int AddPreCompleteActions(ActionList *list)
 int DoUpdate(ArchiveReader& archiveReader)
 {
     NS_tchar manifest[MAXPATHLEN];
-    NS_tsnprintf(manifest, sizeof(manifest)/sizeof(manifest[0]),
+    int nWrittenBytes = NS_tsnprintf(manifest, sizeof(manifest)/sizeof(manifest[0]),
                  NS_T("%s/updating/update.manifest"), gWorkingDirPath);
+    (void) nWrittenBytes;
     ensure_parent_dir(manifest);
 
     // extract the manifest
