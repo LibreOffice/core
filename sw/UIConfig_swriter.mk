@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,modules/swriter))
 
 $(eval $(call gb_UIConfig_add_menubarfiles,modules/swriter,\
 	sw/uiconfig/swriter/menubar/menubar \
+	sw/uiconfig/swriter/menubar/mscompatibleformsmenu \
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\

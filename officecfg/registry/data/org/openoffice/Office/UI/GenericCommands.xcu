@@ -6829,6 +6829,11 @@
           <value xml:lang="en-US">More Fields</value>
         </prop>
       </node>
+      <node oor:name=".uno:MSCompatActiveXControls" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">ActiveX Controls</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

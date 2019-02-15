@@ -178,6 +178,7 @@ namespace framework
             void implts_reset( bool bAttach );
             void implts_updateMenuBarClose();
             bool implts_resetMenuBar();
+            void implts_createMSCompatibleMenuBar(const OUString& rName);
 
             //  locking
 
