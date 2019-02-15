@@ -739,7 +739,10 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
                     pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if (m_pConfig->IsGlobalActive())
             ToggleTree();
+        m_aGlobalTree->GrabFocus();
     }
+    else
+        m_aContentTree->GrabFocus();
     UsePage();
     m_aPageChgIdle.SetInvokeHandler(LINK(this, SwNavigationPI, ChangePageHdl));
     m_aPageChgIdle.SetPriority(TaskPriority::LOWEST);

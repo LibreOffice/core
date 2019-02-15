@@ -43,7 +43,6 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
 
     static_cast<SfxDockingWindow*>( GetWindow() )->Initialize( pInfo );
     SetHideNotDelete( true );
-    Show( ShowFlags::NoFocusChange );
 }
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
