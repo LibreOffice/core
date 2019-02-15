@@ -14,7 +14,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/weld.hxx>
 #include <svx/colorwindow.hxx>
-#include <sfx2/controlwrapper.hxx>
 
 class SvxColorListBox;
 class ColorListBox;
