@@ -28,6 +28,8 @@
 #include <osl/thread.hxx>
 #include <vcl/vclenum.hxx>
 
+#include "backend/BackendCapabilities.hxx"
+
 #include "displayconnectiondispatch.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -134,6 +136,11 @@ public:
     virtual SalSystem*      CreateSalSystem() = 0;
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() = 0;
+    // BackendCapabilities
+    virtual std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities()
+    {
+        return std::make_shared<vcl::BackendCapabilities>();
+    }
 
     // YieldMutex
     comphelper::SolarMutex* GetYieldMutex();
