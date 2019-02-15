@@ -41,32 +41,9 @@ class TextSectionHandler(object):
         xAllTextSections = self.xTextDocument.TextSections
         return xAllTextSections.hasByName(SectionName)
 
-    def removeLastTextSection(self):
-        try:
-            xAllTextSections = self.xTextDocument.TextSections
-            oTextSection = xAllTextSections.getByIndex(
-                xAllTextSections.getCount() - 1)
-            self.removeTextSection(oTextSection)
-        except Exception:
-            traceback.print_exc()
-
     def removeTextSection(self, _oTextSection):
         try:
             self.xText.removeTextContent(_oTextSection)
-        except Exception:
-            traceback.print_exc()
-
-    def removeInvisibleTextSections(self):
-        try:
-            xAllTextSections = self.xTextDocument.TextSections
-            TextSectionCount = xAllTextSections.getCount()
-            i = TextSectionCount - 1
-            while i >= 0:
-                xTextContentTextSection = xAllTextSections.getByIndex(i)
-                if not bool(xTextContentTextSection.getPropertyValue("IsVisible")):
-                    self.xText.removeTextContent(xTextContentTextSection)
-
-                i -= 1
         except Exception:
             traceback.print_exc()
 

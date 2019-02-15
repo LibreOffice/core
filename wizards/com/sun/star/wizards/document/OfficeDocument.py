@@ -200,20 +200,6 @@ class OfficeDocument(object):
 
         return bState
 
-    def ArraytoCellRange(self, datalist, oTable, xpos, ypos):
-        try:
-            rowcount = datalist.length
-            if rowcount > 0:
-                colcount = datalist[0].length
-                if colcount > 0:
-                    xNewRange = oTable.getCellRangeByPosition(
-                        xpos, ypos, (colcount + xpos) - 1,
-                            (rowcount + ypos) - 1)
-                    xNewRange.setDataArray(datalist)
-
-        except Exception:
-            traceback.print_exc()
-
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):
 

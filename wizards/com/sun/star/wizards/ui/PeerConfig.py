@@ -60,18 +60,3 @@ class PeerConfig(object):
 
         except Exception:
             traceback.print_exc()
-
-    '''
-    @param oAPIControl an API control that the interface
-        XControl can be derived from
-    @param _propnames
-    @param _propvalues
-    '''
-
-    def setPeerProperties(self, _xControl, propnames, propvalues):
-        oPeerTask = self.PeerTask(_xControl, propnames, propvalues)
-        self.m_aPeerTasks.append(oPeerTask)
-
-    def setImageUrl(self, _ocontrolmodel, _oResource):
-        oImageUrlTask = self.ImageUrlTask(_ocontrolmodel, _oResource)
-        self.aImageUrlTasks.append(oImageUrlTask)

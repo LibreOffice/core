@@ -46,79 +46,7 @@ class UnoDialog(object):
         except Exception:
             traceback.print_exc()
 
-    def getPeerConfiguration(self):
-        if self.m_oPeerConfig is None:
-            self.m_oPeerConfig = PeerConfig(self)
-        return self.m_oPeerConfig
-
-    def getMAPConversionFactor(self, ControlName):
-        xControl2 = self.xUnoDialog.getControl(ControlName)
-        aSize = xControl2.Size
-        dblMAPWidth = xControl2.Model.Width
-        return (aSize.Width / dblMAPWidth)
-
-    def getpreferredLabelSize(self, LabelName, sLabel):
-        xControl2 = self.xUnoDialog.getControl(LabelName)
-        OldText = xControl2.Text
-        xControl2.setText(sLabel)
-        aSize = xControl2.PreferredSize
-        xControl2.setText(OldText)
-        return aSize
-
-    def removeSelectedItems(self, xListBox):
-        SelList = xListBox.SelectedItemsPos
-        Sellen = SelList.length
-        i = Sellen - 1
-        while i >= 0:
-            xListBox.removeItems(SelList[i], 1)
-            i -= 1
-
-    def getListBoxItemCount(self, _xListBox):
-        # This function may look ugly, but this is the only way to check
-        # the count of values in the model,which is always right.
-        # the control is only a view and could be right or not.
-        fieldnames = getModel(_xListBox).StringItemList
-        return fieldnames.length
-
-    def getSelectedItemPos(self, _xListBox):
-        ipos = getModel(_xListBox).SelectedItems
-        return ipos[0]
-
-    def isListBoxSelected(self, _xListBox):
-        ipos = getModel(_xListBox).SelectedItems
-        return ipos.length > 0
-
-    '''
-    The problem with setting the visibility of controls is that
-    changing the current step of a dialog will automatically make
-    all controls visible. The PropertyNames.PROPERTY_STEP property
-    always wins against the property "visible".
-    Therefore a control meant to be invisible is placed on a step far far away.
-    Afterwards the step property of the dialog has to be set with
-    "repaintDialogStep". As the performance of that method is very bad it
-    should be used only once for all controls
-    @param controlname the name of the control
-    @param bIsVisible sets the control visible or invisible
-    '''
-
-    def setControlVisible(self, controlname, bIsVisible):
-        try:
-            iCurControlStep = int(getControlProperty(
-                controlname, PropertyNames.PROPERTY_STEP))
-            iCurDialogStep = int(self.xDialogModel.Step)
-            if bIsVisible:
-                setControlProperty(
-                    controlname, PropertyNames.PROPERTY_STEP, iCurDialogStep)
-            else:
-                setControlProperty(
-                    controlname, PropertyNames.PROPERTY_STEP,
-                    UIConsts.INVISIBLESTEP)
-
-        except Exception:
-            traceback.print_exc()
-
     # repaints the currentDialogStep
-
     def repaintDialogStep(self):
         try:
             ncurstep = int(self.xDialogModel.Step)
@@ -143,22 +71,6 @@ class UnoDialog(object):
     def setFocus(self, ControlName):
         oFocusControl = self.xUnoDialog.getControl(ControlName)
         oFocusControl.setFocus()
-
-    def selectListBoxItem(self, xListBox, iFieldsSelIndex):
-        if iFieldsSelIndex > -1:
-            FieldCount = xListBox.getItemCount()
-            if FieldCount > 0:
-                if iFieldsSelIndex < FieldCount:
-                    xListBox.selectItemPos(iFieldsSelIndex, True)
-                else:
-                    xListBox.selectItemPos((short)(iFieldsSelIndex - 1), True)
-
-    # deselects a Listbox. MultipleMode is not supported
-    def deselectListBox(self, _xBasisListBox):
-        oListBoxModel = getModel(_xBasisListBox)
-        sList = oListBoxModel.StringItemList
-        oListBoxModel.StringItemList = [[],[]]
-        oListBoxModel.StringItemList = sList
 
     def calculateDialogPosition(self, FramePosSize):
         # Todo:check if it would be useful or possible to create a dialog peer
@@ -214,11 +126,6 @@ class UnoDialog(object):
                 return self.executeDialog(w.PosSize)
 
         return self.executeDialog( Rectangle (0, 0, 640, 400))
-
-    def modifyFontWeight(self, ControlName, FontWeight):
-        oFontDesc = FontDescriptor.FontDescriptor()
-        oFontDesc.Weight = FontWeight
-        setControlProperty(ControlName, "FontDescriptor", oFontDesc)
 
     '''
     create a peer for this

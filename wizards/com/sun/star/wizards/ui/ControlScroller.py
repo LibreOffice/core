@@ -71,7 +71,7 @@ class ControlScroller(object):
         for i in range(ControlScroller.nblockincrement):
             self.insertControlGroup(i, ypos)
             ypos += self.linedistance
-            
+
     def fillupControls(self, binitialize):
         for i in range(ControlScroller.nblockincrement):
             if i < self.ncurfieldcount:
@@ -79,7 +79,7 @@ class ControlScroller(object):
 
         if binitialize:
             self.CurUnoDialog.repaintDialogStep()
-            
+
 
     def fillupControl(self, guiRow):
         nameProps = self.scrollfields[guiRow]
@@ -113,24 +113,6 @@ class ControlScroller(object):
                 self.ntotfieldcount - ControlScroller.nblockincrement
         else:
             self.xScrollBar.Model.Enabled = False
-
-    def toggleComponent(self, _bdoenable):
-        bdoenable = _bdoenable and \
-            (self.ntotfieldcount > ControlScroller.nblockincrement)
-        setattr("TitleScrollBar" + self.sincSuffix,
-                PropertyNames.PROPERTY_ENABLED, bdoenable)
-
-    def toggleControls(self, _bdoenable):
-        n = 0
-        while n < self.scrollfields.size():
-            curproperties = self.scrollfields.elementAt(n)
-            m = 0
-            while m < curproperties.length:
-                curproperty = curproperties[m]
-                setattr(curproperty.Name, PropertyNames.PROPERTY_ENABLED,
-                    _bdoenable)
-                m += 1
-            n += 1
 
     def scrollControls(self):
         try:
@@ -191,17 +173,4 @@ class ControlScroller(object):
         if propertyname:
             return getattr(oControlModel, propertyname)
         else:
-            return None
-
-    def getScrollFieldValues(self):
-        retproperties = [[self.scrollfields.size()],[]]
-        try:
-            i = 0
-            while i < self.scrollfields.size():
-                curproperties = self.scrollfields.elementAt(i)
-                retproperties[i] = curproperties
-                i += 1
-            return retproperties
-        except Exception:
-            traceback.print_exc()
             return None
