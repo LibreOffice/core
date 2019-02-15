@@ -478,7 +478,6 @@ custom_widgets = [
     'ScCondFormatList',
     'ScCsvTableBox',
     'ScCursorRefEdit',
-    'ScDPFunctionListBox',
     'ScDataTableView',
     'ScDoubleField',
     'ScEditWindow',

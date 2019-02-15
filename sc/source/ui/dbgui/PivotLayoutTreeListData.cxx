@@ -85,7 +85,7 @@ bool ScPivotLayoutTreeListData::DoubleClickHdl()
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
     ScopedVclPtr<AbstractScDPFunctionDlg> pDialog(
-        pFactory->CreateScDPFunctionDlg(this, mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
+        pFactory->CreateScDPFunctionDlg(GetFrameWeld(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
 
     if (pDialog->Execute() == RET_OK)
     {

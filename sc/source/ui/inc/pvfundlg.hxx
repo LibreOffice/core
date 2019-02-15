@@ -23,40 +23,18 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
-#include <svx/checklbx.hxx>
-#include <sfx2/controlwrapper.hxx>
 #include <pivot.hxx>
 
 #include <memory>
 #include <unordered_map>
 
-typedef sfx::ListBoxWrapper< sal_Int32 > ScDPListBoxWrapper;
-
 class ScDPObject;
 
-class ScDPFunctionListBox : public ListBox
+class ScDPFunctionListBox
 {
 public:
-    ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle);
-
-    void                SetSelection( PivotFunc nFuncMask );
-    PivotFunc           GetSelection() const;
-
-private:
-    void                FillFunctionNames();
-};
-
-class DPFunctionListBox
-{
-public:
-    DPFunctionListBox(std::unique_ptr<weld::TreeView> xControl);
+    ScDPFunctionListBox(std::unique_ptr<weld::TreeView> xControl);
 
     void                SetSelection( PivotFunc nFuncMask );
     PivotFunc           GetSelection() const;
@@ -72,14 +50,13 @@ private:
     void                FillFunctionNames();
 };
 
-class ScDPFunctionDlg : public ModalDialog
+class ScDPFunctionDlg : public weld::GenericDialogController
 {
     typedef std::unordered_map< OUString, OUString > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
-                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    explicit ScDPFunctionDlg(weld::Window* pParent, const ScDPLabelDataVector& rLabelVec,
+                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
     virtual ~ScDPFunctionDlg() override;
-    virtual void            dispose() override;
     PivotFunc               GetFuncMask() const;
     css::sheet::DataPilotFieldReference GetFieldRef() const;
 
@@ -92,23 +69,21 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( DblClickHdl, ListBox&, void );
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(DblClickHdl, weld::TreeView&, void);
 
 private:
-    VclPtr<ScDPFunctionListBox> mpLbFunc;
-    VclPtr<FixedText>           mpFtName;
-    VclPtr<ListBox>             mpLbType;
-    VclPtr<FixedText>           mpFtBaseField;
-    VclPtr<ListBox>             mpLbBaseField;
-    VclPtr<FixedText>           mpFtBaseItem;
-    VclPtr<ListBox>             mpLbBaseItem;
-    VclPtr<OKButton>            mpBtnOk;
+    std::unique_ptr<ScDPFunctionListBox> mxLbFunc;
+    std::unique_ptr<weld::Label>         mxFtName;
+    std::unique_ptr<weld::ComboBox>      mxLbType;
+    std::unique_ptr<weld::Label>         mxFtBaseField;
+    std::unique_ptr<weld::ComboBox>      mxLbBaseField;
+    std::unique_ptr<weld::Label>         mxFtBaseItem;
+    std::unique_ptr<weld::ComboBox>      mxLbBaseItem;
+    std::unique_ptr<weld::Button>        mxBtnOk;
 
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
-
-    std::unique_ptr<ScDPListBoxWrapper>  mxLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
     const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
     bool                 mbEmptyItem;        /// true = Empty base item in listbox.
@@ -142,7 +117,7 @@ private:
     std::unique_ptr<weld::RadioButton>   mxRbNone;
     std::unique_ptr<weld::RadioButton>   mxRbAuto;
     std::unique_ptr<weld::RadioButton>   mxRbUser;
-    std::unique_ptr<DPFunctionListBox>   mxLbFunc;
+    std::unique_ptr<ScDPFunctionListBox>   mxLbFunc;
     std::unique_ptr<weld::Label>         mxFtName;
     std::unique_ptr<weld::CheckButton>   mxCbShowAll;
     std::unique_ptr<weld::Button>        mxBtnOk;
