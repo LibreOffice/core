@@ -35,6 +35,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -74,6 +75,7 @@
 #include <unonames.hxx>
 
 using namespace com::sun::star;
+using namespace css::uno;
 
 ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     mrDocShell(rDocSh),
@@ -384,6 +386,18 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
 
     bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+
+    if (aBaseURL.isEmpty())
+    {
+        const Reference<lang::XMultiComponentFactory> xMsf(xContext->getServiceManager());
+        const Reference<frame::XTransientDocumentsDocumentContentFactory> xTDDCF(
+            xMsf->createInstanceWithContext(
+                "com.sun.star.frame.TransientDocumentsDocumentContentFactory", xContext),
+            UNO_QUERY_THROW);
+        const Reference<ucb::XContent> xContent(xTDDCF->createDocumentContent(xModel));
+        OSL_ENSURE(xContent.is(), "cannot create DocumentContent");
+        aBaseURL = xContent->getIdentifier()->getContentIdentifier();
+    }
 
     if ((nMode & ImportFlags::Metadata) && bOasis)
     {
