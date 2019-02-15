@@ -4725,6 +4725,9 @@ static void lo_destroy(LibreOfficeKit* pThis)
 }
 
 #ifdef IOS
+
+// Used by the unmaintained LibreOfficeLight app. Once that has been retired, get rid of this, too.
+
 extern "C"
 {
 __attribute__((visibility("default")))
