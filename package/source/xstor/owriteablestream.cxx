@@ -48,6 +48,7 @@
 
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>
 
@@ -2362,8 +2363,8 @@ void SAL_CALL OWriteStream::dispose()
             }
             catch( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Rethrow: " << rException);
                 uno::Any aCaught( ::cppu::getCaughtException() );
+                SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
                 throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!",
                                                 static_cast< OWeakObject* >( this ),
                                                 aCaught );
@@ -2491,8 +2492,8 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw lang::WrappedTargetRuntimeException( "Problems on hasEncryptionData!",
                                   static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
@@ -3171,8 +3172,8 @@ void SAL_CALL OWriteStream::commit()
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw embed::StorageWrappedTargetException( "Problems on commit!",
                                   static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
@@ -3226,8 +3227,8 @@ void SAL_CALL OWriteStream::revert()
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw embed::StorageWrappedTargetException( "Problems on revert!",
                                   static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );

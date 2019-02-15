@@ -29,6 +29,7 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
+#include <tools/diagnose_ex.h>
 
 #include "pointersymbol.hxx"
 #include <eventmultiplexer.hxx>
@@ -126,7 +127,7 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
+        SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
     }
 
     maViews.emplace_back( rView, sprite );
