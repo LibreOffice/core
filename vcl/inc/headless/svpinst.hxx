@@ -167,6 +167,8 @@ public:
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
+    std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities() override;
+
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
