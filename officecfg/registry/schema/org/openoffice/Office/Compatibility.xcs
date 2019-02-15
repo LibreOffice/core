@@ -151,5 +151,18 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="View">
+      <info>
+        <desc>Compatibility options affecting GUI</desc>
+      </info>
+      <prop oor:name="MSCompatibleFormsMenu" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Writer - Compatibility - Global Options -->
+        <info>
+          <desc>Specifies whether Forms menu should be customized for an MSO workflow. The MS compatible Forms menu contains only MS compatible form controls.</desc>
+          <label>Reorganize Forms menu to have it MS compatible.</label>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>

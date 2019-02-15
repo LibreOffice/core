@@ -25,6 +25,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
+#include <unotools/compatibilityviewoptions.hxx>
 #include <svx/checklbx.hxx>
 #include <rtl/ustring.hxx>
 
@@ -36,11 +37,16 @@ class SwCompatibilityOptPage : public SfxTabPage
 private:
     // controls
     VclPtr<VclFrame>               m_pMain;
+    VclPtr<VclFrame>               m_pGlobalOptionsFrame;
     VclPtr<ListBox>                m_pFormattingLB;
+    VclPtr<ListBox>                m_pGlobalOptionsLB;
     VclPtr<SvxCheckListBox>        m_pOptionsLB;
+    VclPtr<SvxCheckListBox>        m_pGlobalOptionsCLB;
     VclPtr<PushButton>             m_pDefaultPB;
     // config item
     SvtCompatibilityOptions m_aConfigItem;
+    // config item
+    SvtCompatibilityViewOptions m_aViewConfigItem;
     // text of the user entry
     OUString                m_sUserEntry;
     // shell of the current document
@@ -49,6 +55,7 @@ private:
     std::unique_ptr<SwCompatibilityOptPage_Impl> m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
     sal_uLong                   m_nSavedOptions;
+    bool                        m_bSavedMSFormsMenuOption;
 
     // handler
     DECL_LINK(SelectHdl, ListBox&, void);

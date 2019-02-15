@@ -27,6 +27,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
+#include <unotools/compatibilityviewoptions.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/eventcfg.hxx>
@@ -128,6 +129,10 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::Compatibility :
             rItem.pItem.reset( new SvtCompatibilityOptions() );
+            break;
+
+        case EItem::CompatibilityView :
+            rItem.pItem.reset( new SvtCompatibilityViewOptions() );
             break;
 
         case EItem::DefaultOptions :
