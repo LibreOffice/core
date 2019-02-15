@@ -92,7 +92,6 @@ public final class AsynchronousFinalizer {
             done = true;
             queue.notify();
         }
-        thread.join();
     }
 
     /**
