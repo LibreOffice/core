@@ -94,7 +94,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokcharthelper.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -576,6 +575,13 @@ int lcl_getViewId(const std::string& payload)
         return strtol(payload.substr(numberPos).c_str(), nullptr, 10);
 
     return 0;
+}
+
+int lcl_getViewId(const desktop::CallbackFlushHandler::CallbackData& rCallbackData)
+{
+    if (rCallbackData.isCached())
+        return rCallbackData.getJson().get<int>("viewId");
+    return lcl_getViewId(rCallbackData.PayloadString);
 }
 
 std::string extractCertificate(const std::string & certificate)
@@ -1079,7 +1085,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 const int nViewId = lcl_getViewId(payload);
                 removeAll(
                     [type, nViewId] (const queue_type::value_type& elem) {
-                        return (elem.Type == type && nViewId == lcl_getViewId(elem.PayloadString));
+                        return (elem.Type == type && nViewId == lcl_getViewId(elem));
                     }
                 );
             }
@@ -1380,11 +1386,11 @@ void CallbackFlushHandler::Invoke()
         std::unique_lock<std::mutex> lock(m_mutex);
 
         SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
-        for (auto& pair : m_queue)
+        for (const auto& rCallbackData : m_queue)
         {
-            const int type = pair.Type;
-            const auto& payload = pair.PayloadString;
-            const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(payload) : -1;
+            const int type = rCallbackData.Type;
+            const auto& payload = rCallbackData.PayloadString;
+            const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(rCallbackData) : -1;
 
             if (viewId == -1)
             {
