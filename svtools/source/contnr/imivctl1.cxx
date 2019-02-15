@@ -1979,8 +1979,7 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
 
 void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
 {
-    if( !(!maZOrderList.empty()
-           && pEntry != maZOrderList.back()))
+    if( maZOrderList.empty() || pEntry == maZOrderList.back())
         return;
 
     auto it = std::find(maZOrderList.begin(), maZOrderList.end(), pEntry);
@@ -2698,7 +2697,7 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     pView->SetBackground( rStyleSettings.GetFieldColor());
 
     long nScrBarSize = rStyleSettings.GetScrollBarSize();
-    if( !(nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth) )
+    if( nScrBarSize == nHorSBarHeight && nScrBarSize == nVerSBarWidth )
         return;
 
     nHorSBarHeight = nScrBarSize;

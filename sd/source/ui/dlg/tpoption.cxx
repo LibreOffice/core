@@ -343,7 +343,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
     m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FieldUnit::TWIP );
 
-    if( !(nWidth != 0 && nHeight != 0) )
+    if( nWidth == 0 || nHeight == 0 )
         return;
 
     m_pMtrFldInfo1->SetUnit( eFUnit );

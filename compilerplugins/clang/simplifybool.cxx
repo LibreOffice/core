@@ -177,20 +177,47 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         // triggers.
         if (compat::getBeginLoc(binaryOp).isMacroID())
             return true;
-        if (!binaryOp->isComparisonOp())
-            return true;
-        auto t = binaryOp->getLHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
-        if (t->isTemplateTypeParmType() || t->isDependentType() || t->isRecordType())
-            return true;
-        // for floating point (with NaN) !(x<y) need not be equivalent to x>=y
-        if (t->isFloatingType() ||
-            binaryOp->getRHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType()->isFloatingType())
-            return true;
-        report(
-            DiagnosticsEngine::Warning,
-            ("logical negation of comparison operator, can be simplified by inverting operator"),
-            compat::getBeginLoc(expr))
-            << expr->getSourceRange();
+        if (binaryOp->isComparisonOp())
+        {
+            auto t = binaryOp->getLHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+            if (t->isTemplateTypeParmType() || t->isDependentType() || t->isRecordType())
+                return true;
+            // for floating point (with NaN) !(x<y) need not be equivalent to x>=y
+            if (t->isFloatingType() ||
+                binaryOp->getRHS()->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType()->isFloatingType())
+                return true;
+            report(
+                DiagnosticsEngine::Warning,
+                ("logical negation of comparison operator, can be simplified by inverting operator"),
+                compat::getBeginLoc(expr))
+                << expr->getSourceRange();
+        }
+        else if (binaryOp->isLogicalOp())
+        {
+            auto containsNegation = [](Expr const * expr) {
+                expr = ignoreParenImpCastAndComma(expr);
+                if (auto unaryOp = dyn_cast<UnaryOperator>(expr))
+                    if (unaryOp->getOpcode() == UO_LNot)
+                        return expr;
+                if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
+                    if (binaryOp->getOpcode() == BO_NE)
+                        return expr;
+                if (auto cxxOpCall = dyn_cast<CXXOperatorCallExpr>(expr))
+                    if (cxxOpCall->getOperator() == OO_ExclaimEqual)
+                        return expr;
+                return (Expr const*)nullptr;
+            };
+            auto lhs = containsNegation(binaryOp->getLHS());
+            auto rhs = containsNegation(binaryOp->getRHS());
+            if (!lhs || !rhs)
+                return true;
+            if (lhs || rhs)
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("logical negation of logical op containing negation, can be simplified"),
+                    compat::getBeginLoc(binaryOp))
+                    << binaryOp->getSourceRange();
+        }
     }
     if (auto binaryOp = dyn_cast<CXXOperatorCallExpr>(expr->getSubExpr()->IgnoreParenImpCasts())) {
         // Ignore macros, otherwise

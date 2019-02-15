@@ -493,7 +493,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
     const Size  aSizePixel( rBmpEx.GetSizePixel() );
 
-    if( !(rAttr.GetRotation() != 0 && !IsAnimated()) )
+    if( rAttr.GetRotation() == 0 || IsAnimated() )
         return;
 
     if( !(aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height()) )

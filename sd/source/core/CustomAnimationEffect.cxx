@@ -717,7 +717,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
 
 void CustomAnimationEffect::setDuration( double fDuration )
 {
-    if( !((mfDuration != -1.0) && (mfDuration != fDuration)) )
+    if( (mfDuration == -1.0) || (mfDuration == fDuration) )
         return;
 
     try

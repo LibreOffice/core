@@ -1331,7 +1331,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
         std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-    if (!(pDrawViewShell != nullptr && ePageKind != pDrawViewShell->GetPageKind()))
+    if (pDrawViewShell == nullptr || ePageKind == pDrawViewShell->GetPageKind())
         return;
 
     // Restore old edit mode.

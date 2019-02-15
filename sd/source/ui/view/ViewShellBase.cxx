@@ -829,7 +829,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // We have to check the existence of the window, too.
     // The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
-    if (!(pMainViewShell != nullptr && GetWindow()!=nullptr))
+    if (pMainViewShell == nullptr || GetWindow()==nullptr)
         return;
 
     SvBorder aCurrentBorder (GetBorderPixel());
