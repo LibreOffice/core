@@ -92,7 +92,9 @@ public final class AsynchronousFinalizer {
             done = true;
             queue.notify();
         }
-        thread.join();
+        // tdf#123481 Only join if we are not in our own thread, else we have a deadlock
+        if (Thread.currentThread() != thread)
+            thread.join();
     }
 
     /**
