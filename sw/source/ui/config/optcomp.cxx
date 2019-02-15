@@ -51,10 +51,14 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     , m_pWrtShell(nullptr)
     , m_pImpl(new SwCompatibilityOptPage_Impl)
     , m_nSavedOptions(0)
+    , m_bSavedMSFormsMenuOption(false)
 {
     get(m_pMain, "compatframe");
+    get(m_pGlobalOptionsFrame, "globalcompatframe");
     get(m_pFormattingLB, "format");
+    get(m_pGlobalOptionsLB, "globaloptions");
     get(m_pOptionsLB, "options");
+    get(m_pGlobalOptionsCLB, "globaloptioncheckboxs");
     get(m_pDefaultPB, "default");
 
     for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
@@ -76,6 +80,16 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     m_pOptionsLB->SetStyle( m_pOptionsLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_pOptionsLB->SetHighlightRange();
 
+    SvTreeListEntry* pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ) );
+    if ( pEntry )
+    {
+        m_pGlobalOptionsCLB->SetCheckButtonState( pEntry, SvButtonState::Unchecked );
+    }
+    m_pGlobalOptionsLB->Clear();
+
+    m_pGlobalOptionsCLB->SetStyle( m_pGlobalOptionsCLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_pGlobalOptionsCLB->SetHighlightRange();
+
     InitControls( rSet );
 
     // set handler
@@ -92,8 +106,11 @@ void SwCompatibilityOptPage::dispose()
 {
     m_pImpl.reset();
     m_pMain.clear();
+    m_pGlobalOptionsFrame.clear();
     m_pFormattingLB.clear();
+    m_pGlobalOptionsLB.clear();
     m_pOptionsLB.clear();
+    m_pGlobalOptionsCLB.clear();
     m_pDefaultPB.clear();
     SfxTabPage::dispose();
 }
@@ -185,6 +202,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     else
     {
         m_pMain->Disable();
+        m_pGlobalOptionsFrame->Disable();
     }
     const OUString& rText = m_pMain->get_label();
     m_pMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
@@ -428,6 +446,14 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     if ( bModified )
         WriteOptions();
 
+    bool bNewMSFormsMenuOption = m_pGlobalOptionsCLB->IsChecked(0);
+    if (m_bSavedMSFormsMenuOption != bNewMSFormsMenuOption)
+    {
+        m_aViewConfigItem.SetMSOCompatibleFormsMenu(bNewMSFormsMenuOption);
+        m_bSavedMSFormsMenuOption = bNewMSFormsMenuOption;
+        bModified = true;
+    }
+
     return bModified;
 }
 
@@ -438,6 +464,9 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
     sal_uLong nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
+
+    m_pGlobalOptionsCLB->CheckEntryPos( 0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() );
+    m_bSavedMSFormsMenuOption = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
