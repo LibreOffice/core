@@ -74,6 +74,9 @@ jboolean libreofficekit_initialize(JNIEnv* env,
     const char *cacheDirPath;
     const char *apkFilePath;
 
+    const char *fontsConf = "/etc/fonts/fonts.conf";
+    char *fontsConfPath;
+
     setenv("OOO_DISABLE_RECOVERY", "1", 1);
 
     native_asset_manager = AAssetManager_fromJava(env, assetManager);
@@ -88,6 +91,18 @@ jboolean libreofficekit_initialize(JNIEnv* env,
 
     // TMPDIR is used by osl_getTempDirURL()
     setenv("TMPDIR", cache_dir, 1);
+
+    fontsConfPath = malloc(strlen(data_dir) + sizeof(fontsConf));
+    strcpy(fontsConfPath, data_dir);
+    strcat(fontsConfPath, fontsConf);
+
+    fd = open(fontsConfPath, O_RDONLY);
+    if (fd != -1) {
+        close(fd);
+        LOGI("Setting FONTCONFIG_FILE to %s", fontsConfPath);
+        setenv("FONTCONFIG_FILE", fontsConfPath, 1);
+    }
+    free(fontsConfPath);
 
     apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
 
