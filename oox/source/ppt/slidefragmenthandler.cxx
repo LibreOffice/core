@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -251,7 +252,7 @@ void SlideFragmentHandler::finalizeImport()
     catch( uno::Exception& )
     {
         SAL_WARN( "oox", "oox::ppt::SlideFragmentHandler::EndElement(), "
-                    "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
+                    "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 

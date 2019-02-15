@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace comphelper {
 
@@ -148,11 +149,8 @@ namespace comphelper {
         catch ( const Exception& )
         {
             css::uno::Any caught( ::cppu::getCaughtException() );
-            css::uno::Exception exception;
-            caught >>= exception;
-            SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()
-                                    << "\nmessage: " << exception
-                                    << "\nin function:\n" << OSL_THIS_FUNC);
+            SAL_WARN( "comphelper", "caught an exception: " << exceptionToString(caught)
+                        << "\nin function:\n" << OSL_THIS_FUNC);
         }
 
         return sTitle;

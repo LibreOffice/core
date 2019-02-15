@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     cppuhelper \
     sal \
     salhelper \
+    tl \
     ucbhelper \
 	i18nlangtag \
 ))
