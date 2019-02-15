@@ -31,6 +31,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
@@ -541,7 +542,7 @@ void FormattedFieldElement::endElement()
         catch (const util::MalformedNumberFormatException & exc)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            SAL_WARN( "xmlscript.xmldlg", exc );
+            SAL_WARN( "xmlscript.xmldlg", exceptionToString(anyEx) );
             // rethrow
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), anyEx );
         }

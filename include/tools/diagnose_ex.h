@@ -129,6 +129,10 @@ inline css::uno::Any DbgGetCaughtException()
         return;   \
     }
 
+/** Convert a caught exception to a string suitable for logging.
+*/
+TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
