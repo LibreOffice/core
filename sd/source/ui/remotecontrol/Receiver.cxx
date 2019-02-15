@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace sd;
 using namespace ::osl;
@@ -147,7 +148,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         catch ( Exception& )
         {
             SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerPosition(), "
-                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
         }
 
         if (xSlideShow.is()) try
@@ -161,7 +162,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         catch ( Exception& )
         {
             SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerMode(), "
-                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
         }
 
         SAL_INFO( "sdremote", "Pointer started, we display the pointer on screen" );
@@ -180,7 +181,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         catch ( Exception& )
         {
             SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerMode(), "
-                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
         }
 
         SAL_INFO( "sdremote", "Pointer dismissed, we hide the pointer on screen" );
@@ -205,7 +206,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         catch ( Exception& )
         {
             SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerPosition(), "
-                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
         }
     }
     else if ( aCommand[0] == "presentation_resume" )
