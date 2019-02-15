@@ -114,6 +114,8 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
         nVisibleTab( 0 ),
+        nPosLeft( 0 ),
+        nPosTop( 0 ),
         eLinkMode(LM_UNKNOWN),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT || eMode == SCDOCMODE_FUNCTIONACCESS ),
         bAutoCalcShellDisabled( false ),
