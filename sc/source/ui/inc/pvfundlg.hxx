@@ -131,14 +131,13 @@ private:
     bool                 mbEnableLayout;     /// true = Enable Layout mode controls.
 };
 
-class ScDPSubtotalOptDlg : public ModalDialog
+class ScDPSubtotalOptDlg : public weld::GenericDialogController
 {
 public:
-    explicit            ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
+    explicit            ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
     virtual              ~ScDPSubtotalOptDlg() override;
-    virtual void        dispose() override;
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
@@ -148,35 +147,32 @@ private:
     ScDPName GetFieldName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_Int32 FindListBoxEntry( const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
+    sal_Int32 FindListBoxEntry( const weld::ComboBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK( RadioClickHdl, Button*, void );
-    DECL_LINK( CheckHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( CheckHdl, weld::Button&, void );
+    DECL_LINK( SelectHdl, weld::ComboBox&, void );
 
 private:
-    VclPtr<ListBox>            m_pLbSortBy;
-    VclPtr<RadioButton>        m_pRbSortAsc;
-    VclPtr<RadioButton>        m_pRbSortDesc;
-    VclPtr<RadioButton>        m_pRbSortMan;
-    VclPtr<VclContainer>       m_pLayoutFrame;
-    VclPtr<ListBox>            m_pLbLayout;
-    VclPtr<CheckBox>           m_pCbLayoutEmpty;
-    VclPtr<CheckBox>           m_pCbRepeatItemLabels;
-    VclPtr<CheckBox>           m_pCbShow;
-    VclPtr<NumericField>       m_pNfShow;
-    VclPtr<FixedText>          m_pFtShow;
-    VclPtr<FixedText>          m_pFtShowFrom;
-    VclPtr<ListBox>            m_pLbShowFrom;
-    VclPtr<FixedText>          m_pFtShowUsing;
-    VclPtr<ListBox>            m_pLbShowUsing;
-    VclPtr<VclContainer>       m_pHideFrame;
-    VclPtr<SvxCheckListBox>    m_pLbHide;
-    VclPtr<FixedText>          m_pFtHierarchy;
-    VclPtr<ListBox>            m_pLbHierarchy;
-
-    std::unique_ptr<ScDPListBoxWrapper> m_xLbLayoutWrp;      /// Wrapper for direct usage of API constants.
-    std::unique_ptr<ScDPListBoxWrapper> m_xLbShowFromWrp;    /// Wrapper for direct usage of API constants.
+    std::unique_ptr<weld::ComboBox>     m_xLbSortBy;
+    std::unique_ptr<weld::RadioButton>  m_xRbSortAsc;
+    std::unique_ptr<weld::RadioButton>  m_xRbSortDesc;
+    std::unique_ptr<weld::RadioButton>  m_xRbSortMan;
+    std::unique_ptr<weld::Widget>       m_xLayoutFrame;
+    std::unique_ptr<weld::ComboBox>     m_xLbLayout;
+    std::unique_ptr<weld::CheckButton>  m_xCbLayoutEmpty;
+    std::unique_ptr<weld::CheckButton>  m_xCbRepeatItemLabels;
+    std::unique_ptr<weld::CheckButton>  m_xCbShow;
+    std::unique_ptr<weld::SpinButton>   m_xNfShow;
+    std::unique_ptr<weld::Label>        m_xFtShow;
+    std::unique_ptr<weld::Label>        m_xFtShowFrom;
+    std::unique_ptr<weld::ComboBox>     m_xLbShowFrom;
+    std::unique_ptr<weld::Label>        m_xFtShowUsing;
+    std::unique_ptr<weld::ComboBox>     m_xLbShowUsing;
+    std::unique_ptr<weld::Widget>       m_xHideFrame;
+    std::unique_ptr<weld::TreeView>     m_xLbHide;
+    std::unique_ptr<weld::Label>        m_xFtHierarchy;
+    std::unique_ptr<weld::ComboBox>     m_xLbHierarchy;
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
