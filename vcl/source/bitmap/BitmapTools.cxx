@@ -1041,12 +1041,12 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return bRet;
     }
 
-    static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+    sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
     {
         return (a == 0) ? 0 : (c * 255 + a / 2) / a;
     }
 
-    static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+    sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
     {
         return (c * a + 127) / 255;
     }
@@ -1083,6 +1083,45 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return premultiply_table;
     }
 
+bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
+{
+    Bitmap aBitmap(rInput.GetBitmap());
+    if (aBitmap.GetBitCount() != 32)
+        return false;
+
+    Size aSize = aBitmap.GetSizePixel();
+    Bitmap aResultBitmap(aSize, 24);
+    AlphaMask aResultAlpha(aSize);
+    {
+        BitmapScopedWriteAccess pResultBitmapAccess(aResultBitmap);
+        AlphaScopedWriteAccess pResultAlphaAccess(aResultAlpha);
+
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+
+        for (long nY = 0; nY < aSize.Height(); ++nY)
+        {
+            Scanline aResultScan = pResultBitmapAccess->GetScanline(nY);
+            Scanline aResultScanAlpha = pResultAlphaAccess->GetScanline(nY);
+
+            Scanline aReadScan = pReadAccess->GetScanline(nY);
+
+            for (long nX = 0; nX < aSize.Width(); ++nX)
+            {
+                const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
+                BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
+                BitmapColor aResultColorAlpha(aColor.GetAlpha(), aColor.GetAlpha(), aColor.GetAlpha());
+
+                pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
+                pResultAlphaAccess->SetPixelOnData(aResultScanAlpha, nX, aResultColorAlpha);
+            }
+        }
+    }
+    if (rInput.IsTransparent())
+        rResult = BitmapEx(aResultBitmap, rInput.GetAlpha());
+    else
+        rResult = BitmapEx(aResultBitmap, aResultAlpha);
+    return true;
+}
 
 }} // end vcl::bitmap
 
