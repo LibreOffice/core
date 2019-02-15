@@ -500,7 +500,7 @@ void ScaleTabPage::SetNumFormat()
 
     if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
     {
-        sal_uLong nFmt = static_cast<sal_uLong>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
 
         m_xFmtFldMax->set_format_key(nFmt);
         m_xFmtFldMin->set_format_key(nFmt);

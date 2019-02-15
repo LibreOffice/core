@@ -243,7 +243,7 @@ void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     const SfxPoolItem *pPoolItem = nullptr;
     if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, true, &pPoolItem ) == SfxItemState::SET )
     {
-        sal_uLong nFmt = static_cast<sal_uLong>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
         m_xED_CrossesAt->set_format_key( nFmt );
     }
 }
