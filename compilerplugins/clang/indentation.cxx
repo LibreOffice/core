@@ -114,7 +114,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
             // similar thing in forms/
             if (macroName == "DECL_IFACE_PROP_IMPL" || macroName == "DECL_BOOL_PROP_IMPL")
                 continue;
-#if CLANG_VERSION >= 80000
+#if CLANG_VERSION >= 70000
             stmtLoc = SM.getExpansionRange(stmtLoc).getBegin();
 #else
             stmtLoc = SM.getExpansionRange(stmtLoc).first;
