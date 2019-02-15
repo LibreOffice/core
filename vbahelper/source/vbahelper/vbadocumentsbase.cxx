@@ -285,6 +285,12 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         }
     }
 
+    // FIXME: Should we add an AsTemplate property with value false
+    // here, to be absolutely sure it doesn't (for some mysterious
+    // reason) open the document as a template (as happens for a .rtf
+    // file at a customer)? Nah, let's see first if I can figure out
+    // what the mysterious reason is...
+
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL( aURL,
         "_default" ,
         frame::FrameSearchFlag::CREATE,
