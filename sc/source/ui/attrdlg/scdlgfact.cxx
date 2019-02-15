@@ -167,7 +167,11 @@ short AbstractScNamePasteDlg_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
+
+short AbstractScDPSubtotalDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDPNumGroupDlg_Impl::Execute()
 {
@@ -615,12 +619,12 @@ css::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() 
 
 PivotFunc AbstractScDPSubtotalDlg_Impl::GetFuncMask() const
 {
-     return pDlg->GetFuncMask();
+     return m_xDlg->GetFuncMask();
 }
 
 void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) const
 {
-    pDlg->FillLabelData( rLabelData );
+    m_xDlg->FillLabelData( rLabelData );
 }
 
 ScDPNumGroupInfo AbstractScDPNumGroupDlg_Impl::GetGroupInfo() const
@@ -915,14 +919,13 @@ VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunction
     return VclPtr<AbstractScDPFunctionDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( vcl::Window* pParent,
-                                                                ScDPObject& rDPObj,
-                                                                const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData,
-                                                                const ScDPNameVec& rDataFields )
+VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg(weld::Window* pParent,
+                                                                                    ScDPObject& rDPObj,
+                                                                                    const ScDPLabelData& rLabelData,
+                                                                                    const ScPivotFuncData& rFuncData,
+                                                                                    const ScDPNameVec& rDataFields)
 {
-    VclPtr<ScDPSubtotalDlg> pDlg = VclPtr<ScDPSubtotalDlg>::Create( pParent, rDPObj, rLabelData, rFuncData, rDataFields, true/*bEnableLayout*/ );
-    return VclPtr<AbstractScDPSubtotalDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScDPSubtotalDlg_Impl>::Create(std::make_unique<ScDPSubtotalDlg>(pParent, rDPObj, rLabelData, rFuncData, rDataFields, true/*bEnableLayout*/));
 }
 
 VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)

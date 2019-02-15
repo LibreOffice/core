@@ -53,6 +53,25 @@ private:
     void                FillFunctionNames();
 };
 
+class DPFunctionListBox
+{
+public:
+    DPFunctionListBox(std::unique_ptr<weld::TreeView> xControl);
+
+    void                SetSelection( PivotFunc nFuncMask );
+    PivotFunc           GetSelection() const;
+
+    void set_sensitive(bool sensitive) { m_xControl->set_sensitive(sensitive); }
+    void set_selection_mode(SelectionMode eMode) { m_xControl->set_selection_mode(eMode); }
+    void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
+    int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
+    void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
+
+private:
+    std::unique_ptr<weld::TreeView> m_xControl;
+    void                FillFunctionNames();
+};
+
 class ScDPFunctionDlg : public ModalDialog
 {
     typedef std::unordered_map< OUString, OUString > NameMapType;
@@ -95,14 +114,13 @@ private:
     bool                 mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
-class ScDPSubtotalDlg : public ModalDialog
+class ScDPSubtotalDlg : public weld::GenericDialogController
 {
 public:
-    explicit            ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
+    explicit            ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
-                            const ScDPNameVec& rDataFields, bool bEnableLayout );
+                            const ScDPNameVec& rDataFields, bool bEnableLayout);
     virtual             ~ScDPSubtotalDlg() override;
-    virtual void        dispose() override;
     PivotFunc           GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
@@ -110,25 +128,25 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    DECL_LINK( DblClickHdl, ListBox&, void );
-    DECL_LINK( RadioClickHdl, Button*, void );
-    DECL_LINK( ClickHdl, Button*, void );
+    DECL_LINK( DblClickHdl, weld::TreeView&, void );
+    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
 
 private:
-    VclPtr<RadioButton>         mpRbNone;
-    VclPtr<RadioButton>         mpRbAuto;
-    VclPtr<RadioButton>         mpRbUser;
-    VclPtr<ScDPFunctionListBox> mpLbFunc;
-    VclPtr<FixedText>           mpFtName;
-    VclPtr<CheckBox>            mpCbShowAll;
-    VclPtr<OKButton>            mpBtnOk;
-    VclPtr<PushButton>          mpBtnOptions;
-
     ScDPObject&          mrDPObj;            /// The DataPilot object (for member names).
     const ScDPNameVec&   mrDataFields;       /// The list of all data field names.
 
     ScDPLabelData        maLabelData;        /// Cache for sub dialog.
     bool                 mbEnableLayout;     /// true = Enable Layout mode controls.
+
+    std::unique_ptr<weld::RadioButton>   mxRbNone;
+    std::unique_ptr<weld::RadioButton>   mxRbAuto;
+    std::unique_ptr<weld::RadioButton>   mxRbUser;
+    std::unique_ptr<DPFunctionListBox>   mxLbFunc;
+    std::unique_ptr<weld::Label>         mxFtName;
+    std::unique_ptr<weld::CheckButton>   mxCbShowAll;
+    std::unique_ptr<weld::Button>        mxBtnOk;
+    std::unique_ptr<weld::Button>        mxBtnOptions;
 };
 
 class ScDPSubtotalOptDlg : public weld::GenericDialogController
