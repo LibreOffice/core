@@ -116,6 +116,9 @@ namespace desktop {
             /// Validate that the payload and parsed object match.
             bool validate() const;
 
+            /// Returns true iff there is cached data.
+            bool isCached() const { return PayloadObject.which() != 0; }
+
             int Type;
             std::string PayloadString;
 
