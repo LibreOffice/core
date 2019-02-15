@@ -82,7 +82,7 @@ String STR_WELCOME_MIGRATION
 
 String STR_WELCOME_WITHOUT_LICENSE
 {
-    Text [ en-US ] = "This wizard will guide you through the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+    Text [ en-US ] = "This wizard will guide you through the setup of %PRODUCTNAME.\n\nClick 'Next' to continue.";
 };
 
 String STR_FINISH
@@ -436,3 +436,4 @@ TabPage TP_REGISTRATION
     };
 };
 
+// ********************************************************************** EOF
