@@ -26,6 +26,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include "dx_config.hxx"
 
@@ -83,7 +84,7 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "canvas", comphelper::anyToString( cppu::getCaughtException() ) );
+            SAL_WARN( "canvas", exceptionToString( cppu::getCaughtException() ) );
         }
     }
 
@@ -114,7 +115,7 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "canvas", comphelper::anyToString( cppu::getCaughtException() ) );
+            SAL_WARN( "canvas", exceptionToString( cppu::getCaughtException() ) );
         }
     }
 

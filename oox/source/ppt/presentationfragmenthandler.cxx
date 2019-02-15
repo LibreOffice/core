@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -442,7 +443,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
     catch( uno::Exception& )
     {
         SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument(), "
-                  "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
+                  "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -493,7 +494,7 @@ void PresentationFragmentHandler::finalizeImport()
         catch( uno::Exception& )
         {
             SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::finalizeImport(), "
-                        "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
+                        "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
         }
         // todo error handling;
         if ( rxStatusIndicator.is() )
