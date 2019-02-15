@@ -72,6 +72,22 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, s
     return bEmpty;
 }
 
+bool lclFillListBox(weld::ComboBox& rLBox, const Sequence< OUString >& rStrings)
+{
+    bool bEmpty = false;
+    for (const OUString& str : rStrings)
+    {
+        if (!str.isEmpty())
+            rLBox.append_text(str);
+        else
+        {
+            rLBox.append_text(ScResId(STR_EMPTYDATA));
+            bEmpty = true;
+        }
+    }
+    return bEmpty;
+}
+
 template< typename ListBoxType >
 bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_Int32 nEmptyPos = LISTBOX_APPEND )
 {
@@ -84,6 +100,27 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
         else
         {
             rLBox.InsertEntry(ScResId(STR_EMPTYDATA), nEmptyPos);
+            bEmpty = true;
+        }
+    }
+    return bEmpty;
+}
+
+bool lclFillListBox(weld::TreeView& rLBox, const vector<ScDPLabelData::Member>& rMembers)
+{
+    bool bEmpty = false;
+    for (const auto& rMember : rMembers)
+    {
+        rLBox.insert(nullptr, -1, nullptr, nullptr,
+                     nullptr, nullptr, nullptr, false);
+        int pos = rLBox.n_children() - 1;
+        rLBox.set_toggle(pos, false, 0);
+        OUString aName = rMember.getDisplayName();
+        if (!aName.isEmpty())
+            rLBox.set_text(pos, aName, 1);
+        else
+        {
+            rLBox.set_text(pos, ScResId(STR_EMPTYDATA), 1);
             bEmpty = true;
         }
     }
@@ -128,21 +165,6 @@ static const ScDPListBoxWrapper::MapEntryType spRefTypeMap[] =
     { 7,                        DataPilotFieldReferenceType::TOTAL_PERCENTAGE           },
     { 8,                        DataPilotFieldReferenceType::INDEX                      },
     { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldReferenceType::NONE               }
-};
-
-static const ScDPListBoxWrapper::MapEntryType spLayoutMap[] =
-{
-    { 0,                        DataPilotFieldLayoutMode::TABULAR_LAYOUT            },
-    { 1,                        DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP     },
-    { 2,                        DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM  },
-    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldLayoutMode::TABULAR_LAYOUT    }
-};
-
-static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
-{
-    { 0,                        DataPilotFieldShowItemsMode::FROM_TOP       },
-    { 1,                        DataPilotFieldShowItemsMode::FROM_BOTTOM    },
-    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldShowItemsMode::FROM_TOP }
 };
 
 } // namespace
@@ -522,110 +544,140 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, Button*, pBtn, void )
 {
     if (pBtn == mpBtnOptions)
     {
-        VclPtrInstance< ScDPSubtotalOptDlg > pDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout );
-        if( pDlg->Execute() == RET_OK )
-            pDlg->FillLabelData( maLabelData );
+        ScDPSubtotalOptDlg aDlg(GetFrameWeld(), mrDPObj, maLabelData, mrDataFields, mbEnableLayout);
+        if (aDlg.run() == RET_OK)
+            aDlg.FillLabelData(maLabelData);
     }
 }
 
-ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
+namespace
+{
+    int FromDataPilotFieldLayoutMode(int eMode)
+    {
+        switch (eMode)
+        {
+            case DataPilotFieldLayoutMode::TABULAR_LAYOUT:
+                return 0;
+            case DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP:
+                return 1;
+            case DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM:
+                return 2;
+        }
+        return -1;
+    }
+
+    int ToDataPilotFieldLayoutMode(int nPos)
+    {
+        switch (nPos)
+        {
+            case 0:
+                return DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+            case 1:
+                return DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
+            case 2:
+                return DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
+        }
+        return DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+    }
+
+    int FromDataPilotFieldShowItemsMode(int eMode)
+    {
+        switch (eMode)
+        {
+            case DataPilotFieldShowItemsMode::FROM_TOP:
+                return 0;
+            case DataPilotFieldShowItemsMode::FROM_BOTTOM:
+                return 1;
+        }
+        return -1;
+    }
+
+    int ToDataPilotFieldShowItemsMode(int nPos)
+    {
+        switch (nPos)
+        {
+            case 0:
+                return DataPilotFieldShowItemsMode::FROM_TOP;
+            case 1:
+                return DataPilotFieldShowItemsMode::FROM_BOTTOM;
+        }
+        return DataPilotFieldShowItemsMode::FROM_TOP;
+    }
+}
+
+ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
         bool bEnableLayout )
-    : ModalDialog(pParent, "DataFieldOptionsDialog",
-        "modules/scalc/ui/datafieldoptionsdialog.ui")
+    : GenericDialogController(pParent, "modules/scalc/ui/datafieldoptionsdialog.ui",
+                              "DataFieldOptionsDialog")
+    , m_xLbSortBy(m_xBuilder->weld_combo_box("sortby"))
+    , m_xRbSortAsc(m_xBuilder->weld_radio_button("ascending"))
+    , m_xRbSortDesc(m_xBuilder->weld_radio_button("descending"))
+    , m_xRbSortMan(m_xBuilder->weld_radio_button("manual"))
+    , m_xLayoutFrame(m_xBuilder->weld_widget("layoutframe"))
+    , m_xLbLayout(m_xBuilder->weld_combo_box("layout"))
+    , m_xCbLayoutEmpty(m_xBuilder->weld_check_button("emptyline"))
+    , m_xCbRepeatItemLabels(m_xBuilder->weld_check_button("repeatitemlabels"))
+    , m_xCbShow(m_xBuilder->weld_check_button("show"))
+    , m_xNfShow(m_xBuilder->weld_spin_button("items"))
+    , m_xFtShow(m_xBuilder->weld_label("showft"))
+    , m_xFtShowFrom(m_xBuilder->weld_label("showfromft"))
+    , m_xLbShowFrom(m_xBuilder->weld_combo_box("from"))
+    , m_xFtShowUsing(m_xBuilder->weld_label("usingft"))
+    , m_xLbShowUsing(m_xBuilder->weld_combo_box("using"))
+    , m_xHideFrame(m_xBuilder->weld_widget("hideframe"))
+    , m_xLbHide(m_xBuilder->weld_tree_view("hideitems"))
+    , m_xFtHierarchy(m_xBuilder->weld_label("hierarchyft"))
+    , m_xLbHierarchy(m_xBuilder->weld_combo_box("hierarchy"))
     , mrDPObj(rDPObj)
     , maLabelData(rLabelData)
 {
-    get(m_pLbSortBy, "sortby");
-    m_pLbSortBy->set_width_request(m_pLbSortBy->approximate_char_width() * 20);
-    get(m_pRbSortAsc, "ascending");
-    get(m_pRbSortDesc, "descending");
-    get(m_pRbSortMan, "manual");
-    get(m_pLayoutFrame, "layoutframe");
-    get(m_pLbLayout, "layout");
-    get(m_pCbLayoutEmpty, "emptyline");
-    get(m_pCbRepeatItemLabels, "repeatitemlabels");
-    get(m_pCbShow, "show");
-    get(m_pNfShow, "items");
-    get(m_pFtShow, "showft");
-    get(m_pFtShowFrom, "showfromft");
-    get(m_pLbShowFrom, "from");
-    get(m_pFtShowUsing, "usingft");
-    get(m_pLbShowUsing, "using");
-    get(m_pHideFrame, "hideframe");
-    get(m_pLbHide, "hideitems");
-    m_pLbHide->set_height_request(GetTextHeight() * 5);
-    get(m_pFtHierarchy, "hierarchyft");
-    get(m_pLbHierarchy, "hierarchy");
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xLbHide->get_checkbox_column_width());
+    m_xLbHide->set_column_fixed_widths(aWidths);
 
-    m_xLbLayoutWrp.reset(new ScDPListBoxWrapper(*m_pLbLayout, spLayoutMap));
-    m_xLbShowFromWrp.reset(new ScDPListBoxWrapper(*m_pLbShowFrom, spShowFromMap));
-
-    Init( rDataFields, bEnableLayout );
+    m_xLbSortBy->set_size_request(m_xLbSortBy->get_approximate_digit_width() * 18, -1);
+    m_xLbHide->set_size_request(-1, m_xLbHide->get_height_rows(5));
+    Init(rDataFields, bEnableLayout);
 }
 
 ScDPSubtotalOptDlg::~ScDPSubtotalOptDlg()
 {
-    disposeOnce();
-}
-
-void ScDPSubtotalOptDlg::dispose()
-{
-    m_pLbSortBy.clear();
-    m_pRbSortAsc.clear();
-    m_pRbSortDesc.clear();
-    m_pRbSortMan.clear();
-    m_pLayoutFrame.clear();
-    m_pLbLayout.clear();
-    m_pCbLayoutEmpty.clear();
-    m_pCbRepeatItemLabels.clear();
-    m_pCbShow.clear();
-    m_pNfShow.clear();
-    m_pFtShow.clear();
-    m_pFtShowFrom.clear();
-    m_pLbShowFrom.clear();
-    m_pFtShowUsing.clear();
-    m_pLbShowUsing.clear();
-    m_pHideFrame.clear();
-    m_pLbHide.clear();
-    m_pFtHierarchy.clear();
-    m_pLbHierarchy.clear();
-    ModalDialog::dispose();
 }
 
 void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 {
     // *** SORTING ***
 
-    if( m_pRbSortMan->IsChecked() )
+    if (m_xRbSortMan->get_active())
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::MANUAL;
-    else if( m_pLbSortBy->GetSelectedEntryPos() == SC_SORTNAME_POS )
+    else if (m_xLbSortBy->get_active() == SC_SORTNAME_POS)
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::NAME;
     else
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::DATA;
 
-    ScDPName aFieldName = GetFieldName(m_pLbSortBy->GetSelectedEntry());
+    ScDPName aFieldName = GetFieldName(m_xLbSortBy->get_active_text());
     if (!aFieldName.maName.isEmpty())
     {
         rLabelData.maSortInfo.Field =
             ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
-        rLabelData.maSortInfo.IsAscending = m_pRbSortAsc->IsChecked();
+        rLabelData.maSortInfo.IsAscending = m_xRbSortAsc->get_active();
     }
 
     // *** LAYOUT MODE ***
 
-    rLabelData.maLayoutInfo.LayoutMode = m_xLbLayoutWrp->GetControlValue();
-    rLabelData.maLayoutInfo.AddEmptyLines = m_pCbLayoutEmpty->IsChecked();
-    rLabelData.mbRepeatItemLabels = m_pCbRepeatItemLabels->IsChecked();
+    rLabelData.maLayoutInfo.LayoutMode = ToDataPilotFieldLayoutMode(m_xLbLayout->get_active());
+    rLabelData.maLayoutInfo.AddEmptyLines = m_xCbLayoutEmpty->get_active();
+    rLabelData.mbRepeatItemLabels = m_xCbRepeatItemLabels->get_active();
 
     // *** AUTO SHOW ***
 
-    aFieldName = GetFieldName(m_pLbShowUsing->GetSelectedEntry());
+    aFieldName = GetFieldName(m_xLbShowUsing->get_active_text());
     if (!aFieldName.maName.isEmpty())
     {
-        rLabelData.maShowInfo.IsEnabled = m_pCbShow->IsChecked();
-        rLabelData.maShowInfo.ShowItemsMode = m_xLbShowFromWrp->GetControlValue();
-        rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( m_pNfShow->GetValue() );
+        rLabelData.maShowInfo.IsEnabled = m_xCbShow->get_active();
+        rLabelData.maShowInfo.ShowItemsMode = ToDataPilotFieldShowItemsMode(m_xLbShowFrom->get_active());
+        rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( m_xNfShow->get_value() );
         rLabelData.maShowInfo.DataField =
             ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
     }
@@ -633,13 +685,13 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     // *** HIDDEN ITEMS ***
 
     rLabelData.maMembers = maLabelData.maMembers;
-    sal_uLong nVisCount = m_pLbHide->GetEntryCount();
-    for( sal_uLong nPos = 0; nPos < nVisCount; ++nPos )
-        rLabelData.maMembers[nPos].mbVisible = !m_pLbHide->IsChecked(nPos);
+    int nVisCount = m_xLbHide->n_children();
+    for (int nPos = 0; nPos < nVisCount; ++nPos)
+        rLabelData.maMembers[nPos].mbVisible = !m_xLbHide->get_toggle(nPos, 0);
 
     // *** HIERARCHY ***
 
-    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectedEntryCount() ? m_pLbHierarchy->GetSelectedEntryPos() : 0;
+    rLabelData.mnUsedHier = m_xLbHierarchy->get_active() != -1 ? m_xLbHierarchy->get_active() : 0;
 }
 
 void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayout )
@@ -649,75 +701,72 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
 
     // sort fields list box
-    m_pLbSortBy->InsertEntry(maLabelData.getDisplayName());
+    m_xLbSortBy->append_text(maLabelData.getDisplayName());
 
     for( const auto& rDataField : rDataFields )
     {
         // Cache names for later lookup.
         maDataFieldNameMap.emplace(rDataField.maLayoutName, rDataField);
 
-        m_pLbSortBy->InsertEntry( rDataField.maLayoutName );
-        m_pLbShowUsing->InsertEntry( rDataField.maLayoutName );  // for AutoShow
+        m_xLbSortBy->append_text(rDataField.maLayoutName);
+        m_xLbShowUsing->append_text(rDataField.maLayoutName);  // for AutoShow
     }
-
-    if( m_pLbSortBy->GetEntryCount() > SC_SORTDATA_POS )
-        m_pLbSortBy->SetSeparatorPos( SC_SORTDATA_POS - 1 );
 
     sal_Int32 nSortPos = SC_SORTNAME_POS;
     if( nSortMode == DataPilotFieldSortMode::DATA )
     {
-        nSortPos = FindListBoxEntry( *m_pLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
-        if( nSortPos >= m_pLbSortBy->GetEntryCount() )
+        nSortPos = FindListBoxEntry( *m_xLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
+        if( nSortPos == -1 )
         {
             nSortPos = SC_SORTNAME_POS;
             nSortMode = DataPilotFieldSortMode::MANUAL;
         }
     }
-    m_pLbSortBy->SelectEntryPos( nSortPos );
+    m_xLbSortBy->set_active(nSortPos);
 
     // sorting mode
-    m_pRbSortAsc->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_pRbSortDesc->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_pRbSortMan->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortAsc->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortDesc->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortMan->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
 
-    RadioButton* pRBtn = nullptr;
+    weld::RadioButton* pRBtn = nullptr;
     switch( nSortMode )
     {
         case DataPilotFieldSortMode::NONE:
         case DataPilotFieldSortMode::MANUAL:
-            pRBtn = m_pRbSortMan;
+            pRBtn = m_xRbSortMan.get();
         break;
         default:
-            pRBtn = maLabelData.maSortInfo.IsAscending ? m_pRbSortAsc.get() : m_pRbSortDesc.get();
+            pRBtn = maLabelData.maSortInfo.IsAscending ? m_xRbSortAsc.get() : m_xRbSortDesc.get();
     }
-    pRBtn->Check();
-    RadioClickHdl( pRBtn );
+    pRBtn->set_active(true);
+    RadioClickHdl(*pRBtn);
 
     // *** LAYOUT MODE ***
 
-    m_pLayoutFrame->Enable(bEnableLayout);
+    m_xLayoutFrame->set_sensitive(bEnableLayout);
 
-    m_xLbLayoutWrp->SetControlValue( maLabelData.maLayoutInfo.LayoutMode );
-    m_pCbLayoutEmpty->Check( maLabelData.maLayoutInfo.AddEmptyLines );
-    m_pCbRepeatItemLabels->Check( maLabelData.mbRepeatItemLabels );
+    m_xLbLayout->set_active(FromDataPilotFieldLayoutMode(maLabelData.maLayoutInfo.LayoutMode));
+    m_xCbLayoutEmpty->set_active( maLabelData.maLayoutInfo.AddEmptyLines );
+    m_xCbRepeatItemLabels->set_active( maLabelData.mbRepeatItemLabels );
 
     // *** AUTO SHOW ***
 
-    m_pCbShow->Check( maLabelData.maShowInfo.IsEnabled );
-    m_pCbShow->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
+    m_xCbShow->set_active( maLabelData.maShowInfo.IsEnabled );
+    m_xCbShow->connect_clicked( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
 
-    m_xLbShowFromWrp->SetControlValue( maLabelData.maShowInfo.ShowItemsMode );
+    m_xLbShowFrom->set_active(FromDataPilotFieldShowItemsMode(maLabelData.maShowInfo.ShowItemsMode));
     long nCount = static_cast< long >( maLabelData.maShowInfo.ItemCount );
     if( nCount < 1 )
         nCount = SC_SHOW_DEFAULT;
-    m_pNfShow->SetValue( nCount );
+    m_xNfShow->set_value( nCount );
 
-    // m_pLbShowUsing already filled above
-    m_pLbShowUsing->SelectEntry( maLabelData.maShowInfo.DataField );
-    if( m_pLbShowUsing->GetSelectedEntryPos() >= m_pLbShowUsing->GetEntryCount() )
-        m_pLbShowUsing->SelectEntryPos( 0 );
+    // m_xLbShowUsing already filled above
+    m_xLbShowUsing->set_active_text(maLabelData.maShowInfo.DataField);
+    if (m_xLbShowUsing->get_active() == -1)
+        m_xLbShowUsing->set_active(0);
 
-    CheckHdl(m_pCbShow);      // enable/disable dependent controls
+    CheckHdl(*m_xCbShow);      // enable/disable dependent controls
 
     // *** HIDDEN ITEMS ***
 
@@ -727,28 +776,28 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
 
     if( maLabelData.maHiers.getLength() > 1 )
     {
-        lclFillListBox( *m_pLbHierarchy, maLabelData.maHiers );
+        lclFillListBox(*m_xLbHierarchy, maLabelData.maHiers);
         sal_Int32 nHier = maLabelData.mnUsedHier;
         if( (nHier < 0) || (nHier >= maLabelData.maHiers.getLength()) ) nHier = 0;
-        m_pLbHierarchy->SelectEntryPos( nHier );
-        m_pLbHierarchy->SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
+        m_xLbHierarchy->set_active( nHier );
+        m_xLbHierarchy->connect_changed( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
     }
     else
     {
-        m_pFtHierarchy->Disable();
-        m_pLbHierarchy->Disable();
+        m_xFtHierarchy->set_sensitive(false);
+        m_xLbHierarchy->set_sensitive(false);
     }
 }
 
 void ScDPSubtotalOptDlg::InitHideListBox()
 {
-    m_pLbHide->Clear();
-    lclFillListBox( *m_pLbHide, maLabelData.maMembers );
+    m_xLbHide->clear();
+    lclFillListBox(*m_xLbHide, maLabelData.maMembers);
     size_t n = maLabelData.maMembers.size();
-    for (sal_uLong i = 0; i < n; ++i)
-        m_pLbHide->CheckEntryPos(i, !maLabelData.maMembers[i].mbVisible);
-    bool bEnable = m_pLbHide->GetEntryCount() > 0;
-    m_pHideFrame->Enable(bEnable);
+    for (size_t i = 0; i < n; ++i)
+        m_xLbHide->set_toggle(i, !maLabelData.maMembers[i].mbVisible, 0);
+    bool bEnable = m_xLbHide->n_children() > 0;
+    m_xHideFrame->set_sensitive(bEnable);
 }
 
 ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
@@ -758,14 +807,14 @@ ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
 }
 
 sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
-    const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const
+    const weld::ComboBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const
 {
     sal_Int32 nPos = nStartPos;
     bool bFound = false;
-    while (nPos < rLBox.GetEntryCount())
+    while (nPos < rLBox.get_count())
     {
         // translate the displayed field name back to its original field name.
-        ScDPName aName = GetFieldName(rLBox.GetEntry(nPos));
+        ScDPName aName = GetFieldName(rLBox.get_text(nPos));
         OUString aUnoName = ScDPUtil::createDuplicateDimensionName(aName.maName, aName.mnDupCount);
         if (aUnoName == rEntry)
         {
@@ -774,37 +823,34 @@ sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
         }
         ++nPos;
     }
-    return bFound ? nPos : LISTBOX_ENTRY_NOTFOUND;
+    return bFound ? nPos : -1;
 }
 
-IMPL_LINK( ScDPSubtotalOptDlg, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Button&, rBtn, void)
 {
-    m_pLbSortBy->Enable( pBtn != m_pRbSortMan );
+    m_xLbSortBy->set_sensitive(&rBtn != m_xRbSortMan.get());
 }
 
-IMPL_LINK( ScDPSubtotalOptDlg, CheckHdl, Button*, pCBox, void )
+IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::Button&, rCBox, void)
 {
-    if (pCBox == m_pCbShow)
+    if (&rCBox == m_xCbShow.get())
     {
-        bool bEnable = m_pCbShow->IsChecked();
-        m_pNfShow->Enable( bEnable );
-        m_pFtShow->Enable( bEnable );
-        m_pFtShowFrom->Enable( bEnable );
-        m_pLbShowFrom->Enable( bEnable );
+        bool bEnable = m_xCbShow->get_active();
+        m_xNfShow->set_sensitive( bEnable );
+        m_xFtShow->set_sensitive( bEnable );
+        m_xFtShowFrom->set_sensitive( bEnable );
+        m_xLbShowFrom->set_sensitive( bEnable );
 
-        bool bEnableUsing = bEnable && (m_pLbShowUsing->GetEntryCount() > 0);
-        m_pFtShowUsing->Enable(bEnableUsing);
-        m_pLbShowUsing->Enable(bEnableUsing);
+        bool bEnableUsing = bEnable && (m_xLbShowUsing->get_count() > 0);
+        m_xFtShowUsing->set_sensitive(bEnableUsing);
+        m_xLbShowUsing->set_sensitive(bEnableUsing);
     }
 }
 
-IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox&, rLBox, void )
+IMPL_LINK_NOARG(ScDPSubtotalOptDlg, SelectHdl, weld::ComboBox&, void)
 {
-    if (&rLBox == m_pLbHierarchy)
-    {
-        mrDPObj.GetMembers(maLabelData.mnCol, m_pLbHierarchy->GetSelectedEntryPos(), maLabelData.maMembers);
-        InitHideListBox();
-    }
+    mrDPObj.GetMembers(maLabelData.mnCol, m_xLbHierarchy->get_active(), maLabelData.maMembers);
+    InitHideListBox();
 }
 
 ScDPShowDetailDlg::ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient)
