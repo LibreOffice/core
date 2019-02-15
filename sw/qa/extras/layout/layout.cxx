@@ -2807,10 +2807,15 @@ void SwLayoutWriter::testBtlrCell()
 
 #if !defined(MACOSX) && !defined(_WIN32) // macOS fails with actual == 2662 for some reason.
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1915;
-    // Actual  : 1756', i.e. the AAA text was too close to the left cell border due to an ascent vs
+    // Actual  : 1756', i.e. the AAA1 text was too close to the left cell border due to an ascent vs
     // descent mismatch when calculating the baseline offset of the text portion.
     assertXPath(pXmlDoc, "//textarray[1]", "x", "1915");
     assertXPath(pXmlDoc, "//textarray[1]", "y", "2707");
+
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 269;
+    // Actual  : 0', i.e. the AAA2 frame was not visible due to 0 width.
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "width", "269");
 #endif
 }
 
