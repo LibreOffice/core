@@ -67,19 +67,6 @@ public final class LibreOfficeKit
         String cacheDir = activity.getApplication().getCacheDir().getAbsolutePath();
         String apkFile = activity.getApplication().getPackageResourcePath();
 
-        // If there is a fonts.conf file in the apk that can be extracted, automatically
-        // set the FONTCONFIG_FILE env var.
-        InputStream inputStream;
-        try {
-            inputStream = activity.getAssets().open("unpack/etc/fonts/fonts.conf");
-        } catch (java.io.IOException exception) {
-            inputStream = null;
-        }
-
-        if (inputStream != null) {
-            putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
-        }
-
         if (!initializeNative(dataDir, cacheDir, apkFile, mgr)) {
             Log.e(LOGTAG, "Initialize native failed!");
             return;
