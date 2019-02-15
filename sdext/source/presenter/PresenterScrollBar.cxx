@@ -185,7 +185,7 @@ void PresenterScrollBar::SetThumbPosition (
 {
     nPosition = ValidateThumbPosition(nPosition);
 
-    if (!(nPosition != mnThumbPosition && ! mbIsNotificationActive))
+    if (nPosition == mnThumbPosition || mbIsNotificationActive)
         return;
 
     mnThumbPosition = nPosition;

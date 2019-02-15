@@ -192,7 +192,7 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(!(!rTarget.empty() && Display_none != getDisplay()))
+            if(rTarget.empty() || Display_none == getDisplay())
                 return;
 
             drawinglayer::primitive2d::Primitive2DContainer aMaskTarget;

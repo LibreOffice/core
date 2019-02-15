@@ -9,6 +9,8 @@
 
 #include <rtl/ustring.hxx>
 
+namespace group1
+{
 void f1(int a, int b)
 {
     if (!(a < b))
@@ -25,9 +27,11 @@ void f2(float a, float b)
         a = b;
     }
 };
+};
 
 // Consistently either warn about all or none of the below occurrences of "!!":
-
+namespace group2
+{
 enum E1
 {
     E1_1 = 1
@@ -57,9 +61,11 @@ bool f1(E1 e) { return !!(e & E1_1); }
 bool f2(E2 e) { return !!(e & E2_1); }
 
 bool f3(E3 e) { return !!(e & E3::E1); }
+};
 
 // record types
-
+namespace group3
+{
 struct Record1
 {
     bool operator==(const Record1&) const;
@@ -112,6 +118,26 @@ struct Record4
         // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
         return v;
     }
+};
+};
+
+namespace group4
+{
+bool foo1(bool a, bool b)
+{
+    return !(!a && !b);
+    // expected-error@-1 {{logical negation of logical op containing negation, can be simplified [loplugin:simplifybool]}}
+}
+bool foo2(int a, bool b)
+{
+    return !(a != 1 && !b);
+    // expected-error@-1 {{logical negation of logical op containing negation, can be simplified [loplugin:simplifybool]}}
+}
+bool foo3(int a, bool b)
+{
+    // no warning expected
+    return !(a != 1 && b);
+}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

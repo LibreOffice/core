@@ -147,7 +147,7 @@ namespace svgio
         {
             // aSelectors: possible comma-separated list of CssStyle definitions, no spaces at start/end
             // aContent: the svg style definitions as string
-            if(!(!aSelectors.isEmpty() && !aContent.isEmpty()))
+            if(aSelectors.isEmpty() || aContent.isEmpty())
                 return;
 
             // create new style and add to local list (for ownership control)

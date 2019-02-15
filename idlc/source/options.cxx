@@ -227,7 +227,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
     {
     case 'O':
       {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        if ((++first == last) || ((*first)[0] == '-'))
         {
           return badOption("invalid", option);
         }
@@ -237,7 +237,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
       }
     case 'M':
       {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        if ((++first == last) || ((*first)[0] == '-'))
         {
           return badOption("invalid", option);
         }
@@ -247,7 +247,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
       }
     case 'I':
       {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        if ((++first == last) || ((*first)[0] == '-'))
         {
           return badOption("invalid", option);
         }
@@ -283,7 +283,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
       }
     case 'D':
       {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        if ((++first == last) || ((*first)[0] == '-'))
         {
           return badOption("invalid", option);
         }

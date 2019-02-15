@@ -243,12 +243,12 @@ uno::Reference< drawing::XShapes > const & ScMyTables::GetCurrentXShapes()
 
 bool ScMyTables::HasDrawPage()
 {
-    return !((maCurrentCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is());
+    return (maCurrentCellPos.Tab() == nCurrentDrawPage) && xDrawPage.is();
 }
 
 bool ScMyTables::HasXShapes()
 {
-    return !((maCurrentCellPos.Tab() != nCurrentXShapes) || !xShapes.is());
+    return (maCurrentCellPos.Tab() == nCurrentXShapes) && xShapes.is();
 }
 
 void ScMyTables::AddOLE(const uno::Reference <drawing::XShape>& rShape,

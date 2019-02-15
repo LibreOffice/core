@@ -1096,8 +1096,8 @@ void PresenterTextCaret::SetPosition (
     const sal_Int32 nParagraphIndex,
     const sal_Int32 nCharacterIndex)
 {
-    if (!(mnParagraphIndex != nParagraphIndex
-        || mnCharacterIndex != nCharacterIndex))
+    if (mnParagraphIndex == nParagraphIndex
+        && mnCharacterIndex == nCharacterIndex)
         return;
 
     if (mnParagraphIndex >= 0)

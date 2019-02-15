@@ -644,7 +644,7 @@ bool SwReader::HasGlossaries( const Reader& rOptions )
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if( !( nullptr != (po->m_pMedium = pMedium ) && !po->SetStrmStgPtr() ))
+    if(  nullptr == (po->m_pMedium = pMedium ) || po->SetStrmStgPtr() )
         bRet = po->HasGlossaries();
     return bRet;
 }
@@ -660,7 +660,7 @@ bool SwReader::ReadGlossaries( const Reader& rOptions,
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if( !( nullptr != (po->m_pMedium = pMedium ) && !po->SetStrmStgPtr() ))
+    if( nullptr == (po->m_pMedium = pMedium ) || po->SetStrmStgPtr() )
         bRet = po->ReadGlossaries( rBlocks, bSaveRelFiles );
     return bRet;
 }
