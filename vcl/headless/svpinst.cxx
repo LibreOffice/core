@@ -537,6 +537,13 @@ void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 {
 }
 
+std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities()
+{
+    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
+    pBackendCapabilities->mbSupportsBitmap32 = true;
+    return pBackendCapabilities;
+}
+
 //obviously doesn't actually do anything, it's just a nonfunctional stub
 
 #ifdef LIBO_HEADLESS
