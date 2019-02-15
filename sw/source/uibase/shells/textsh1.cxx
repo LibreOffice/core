@@ -119,6 +119,8 @@
 #include <svx/drawitem.hxx>
 #include <numrule.hxx>
 #include <memory>
+#include <xmloff/odffields.hxx>
+#include <swabstdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1367,6 +1369,32 @@ void SwTextShell::Execute(SfxRequest &rReq)
         GetView().UpdateWordCount(this, nSlot);
     }
     break;
+    case SID_FM_CTL_PROPERTIES:
+    {
+        SwPosition aPos(*GetShell().GetCursor()->GetPoint());
+        sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+        if ( !pFieldBM )
+        {
+            --aPos.nContent;
+            pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+        }
+
+        if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
+            pDlg->Execute();
+            pFieldBM->Invalidate();
+            rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+        }
+        else
+        {
+            SfxRequest aReq( GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES );
+            aReq.AppendItem( SfxBoolItem( SID_FM_CTL_PROPERTIES, true ) );
+            rWrtSh.GetView().GetFormShell()->Execute( aReq );
+        }
+    }
+    break;
     default:
         OSL_ENSURE(false, "wrong dispatcher");
         return;
@@ -1903,6 +1931,37 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 bool bEnabled = aCTLOptions.IsCTLFontEnabled();
                 GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
                 if(!bEnabled)
+                    rSet.DisableItem(nWhich);
+            }
+            break;
+            case SID_FM_CTL_PROPERTIES:
+            {
+                bool bDisable = false;
+
+                // First get the state from the form shell
+                SfxItemSet aSet(GetShell().GetAttrPool(), svl::Items<SID_FM_CTL_PROPERTIES, SID_FM_CTL_PROPERTIES>{});
+                aSet.Put(SfxBoolItem( SID_FM_CTL_PROPERTIES, true ));
+                GetShell().GetView().GetFormShell()->GetState( aSet );
+
+                if(SfxItemState::DISABLED == aSet.GetItemState(SID_FM_CTL_PROPERTIES))
+                {
+                    bDisable = true;
+                }
+
+                // Enable it if we have a valid object other than what form shell knows
+                SwPosition aPos(*GetShell().GetCursor()->GetPoint());
+                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                if ( !pFieldBM )
+                {
+                    --aPos.nContent;
+                    pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                }
+                if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+                {
+                    bDisable = false;
+                }
+
+                if(bDisable)
                     rSet.DisableItem(nWhich);
             }
             break;

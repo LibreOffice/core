@@ -1694,5 +1694,11 @@ interface BaseText
         StateMethod = StateField ;
     ]
 
+    SID_FM_CTL_PROPERTIES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
 }  // end of interface text
 
