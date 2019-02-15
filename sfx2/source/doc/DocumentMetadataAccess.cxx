@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/frame/XTransientDocumentsDocumentContentIdentifierFactory.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>
@@ -116,16 +117,44 @@ static bool isReservedFile(OUString const & i_rPath)
 
 uno::Reference<rdf::XURI> createBaseURI(
     uno::Reference<uno::XComponentContext> const & i_xContext,
-    uno::Reference<embed::XStorage> const & i_xStorage,
+    uno::Reference<frame::XModel> const & i_xModel,
     OUString const & i_rPkgURI, OUString const & i_rSubDocument)
 {
-    if (!i_xContext.is() || !i_xStorage.is() || i_rPkgURI.isEmpty()) {
+    if (!i_xContext.is() || (!i_xModel.is() && i_rPkgURI.isEmpty())) {
         throw uno::RuntimeException();
+    }
+
+    OUString pkgURI(i_rPkgURI);
+
+    // tdf#123293 chicken/egg problem when loading from stream: there is no URI,
+    // and also the model doesn't have a storage yet, so we need to get the
+    // tdoc URI without a storage...
+    if (pkgURI.isEmpty())
+    {
+        assert(i_xModel.is());
+        uno::Reference<frame::XTransientDocumentsDocumentContentIdentifierFactory>
+            const xTDDCIF(
+                    i_xContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.ucb.TransientDocumentsContentProvider",
+                        i_xContext),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XContentIdentifier> const xContentId(
+            xTDDCIF->createDocumentContentIdentifier(i_xModel));
+        SAL_WARN_IF(!xContentId.is(), "sfx", "createBaseURI: cannot create ContentIdentifier");
+        if (!xContentId.is())
+        {
+            throw uno::RuntimeException("createBaseURI: cannot create ContentIdentifier");
+        }
+        pkgURI = xContentId->getContentIdentifier();
+        assert(!pkgURI.isEmpty());
+        if (!pkgURI.isEmpty() && !pkgURI.endsWith("/"))
+        {
+            pkgURI = pkgURI + "/";
+        }
     }
 
     // #i108078# workaround non-hierarchical vnd.sun.star.expand URIs
     // this really should be done somewhere else, not here.
-    OUString pkgURI(i_rPkgURI);
     if (pkgURI.matchIgnoreAsciiCase("vnd.sun.star.expand:"))
     {
         // expand it here (makeAbsolute requires hierarchical URI)
@@ -1283,11 +1312,11 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     }
     uno::Reference<rdf::XURI> xBaseURI;
     try {
-        xBaseURI = createBaseURI(m_pImpl->m_xContext, xStorage, BaseURL);
+        xBaseURI = createBaseURI(m_pImpl->m_xContext, nullptr, BaseURL);
     } catch (const uno::Exception &) {
         // fall back to URL
         try {
-            xBaseURI = createBaseURI(m_pImpl->m_xContext, xStorage, URL);
+            xBaseURI = createBaseURI(m_pImpl->m_xContext, nullptr, URL);
         } catch (const uno::Exception &) {
             OSL_FAIL("cannot create base URI");
         }
