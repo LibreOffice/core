@@ -40,6 +40,7 @@
 #include <docfnote.hxx>
 #include <docstdlg.hxx>
 #include <DropDownFieldDialog.hxx>
+#include <DropDownFormFieldDialog.hxx>
 #include <envlop.hxx>
 #include <label.hxx>
 #include <drpcps.hxx>
@@ -84,6 +85,7 @@
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace css::frame;
@@ -167,6 +169,11 @@ short AbstractSwConvertTableDlg_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 
 short AbstractDropDownFieldDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+short AbstractDropDownFormFieldDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -832,6 +839,11 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
     SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFieldDialog>(pParent, rSh, pField, bPrevButton, bNextButton));
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Window *pParent, sw::mark::IFieldmark* pDropDownField)
+{
+    return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(o3tl::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
