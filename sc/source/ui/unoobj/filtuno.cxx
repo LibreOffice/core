@@ -316,7 +316,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         }
         else
         {
-            ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
+            ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(Application::GetFrameWeld(xDialogParent),
                                                                             bAscii, &aOptions, &aTitle,
                                                                             bDBEnc, !bExport));
             if ( pDlg->Execute() == RET_OK )

@@ -510,11 +510,11 @@ public:
                                                                   const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                   const Color& rDefaultColor) = 0; //Currently selected Color
 
-    virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
-                                                                    const ScImportOptions*  pOptions,
-                                                                    const OUString*         pStrTitle,
-                                                                    bool                    bOnlyDbtoolsEncodings,
-                                                                    bool                    bImport = true ) = 0;
+    virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg(weld::Window* pParent, bool bAscii,
+                                                                        const ScImportOptions*  pOptions,
+                                                                        const OUString*         pStrTitle,
+                                                                        bool                    bOnlyDbtoolsEncodings,
+                                                                        bool                    bImport = true ) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg(weld::Window* pParent,
                                                     const SfxItemSet* pCellAttrs) = 0;
