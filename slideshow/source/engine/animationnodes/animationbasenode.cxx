@@ -209,7 +209,7 @@ bool AnimationBaseNode::init_st()
         mpActivity = createActivity();
     }
     catch (uno::Exception const&) {
-        SAL_WARN( "slideshow",  comphelper::anyToString(cppu::getCaughtException()) );
+        SAL_WARN( "slideshow", exceptionToString(cppu::getCaughtException()) );
         // catch and ignore. We later handle empty activities, but for
         // other nodes to function properly, the core functionality of
         // this node must remain up and running.

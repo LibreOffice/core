@@ -44,6 +44,7 @@
 #include <svx/fmglob.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/diagnose_ex.h>
 
 #include <view/viewoverlaymanager.hxx>
 
@@ -249,7 +250,7 @@ void DrawViewShell::SelectionHasChanged()
     catch( css::uno::Exception& )
     {
         SAL_WARN( "sd", "sd::DrawViewShell::SelectionHasChanged(), exception caught: "
-                << comphelper::anyToString( cppu::getCaughtException() ) );
+                << exceptionToString( cppu::getCaughtException() ) );
     }
 
     if( HasCurrentFunction() )

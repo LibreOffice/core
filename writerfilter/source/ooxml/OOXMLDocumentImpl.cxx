@@ -34,6 +34,7 @@
 #include "OOXMLPropertySet.hxx"
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -519,7 +520,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         catch (uno::Exception const&)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << anyEx);
+            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << exceptionToString(anyEx));
             throw lang::WrappedTargetRuntimeException("", nullptr, anyEx);
         }
         catch (...)

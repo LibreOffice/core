@@ -36,6 +36,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <animations/animationnodehelper.hxx>
 
 #include <svx/svditer.hxx>
@@ -123,7 +125,7 @@ namespace sd
         catch( Exception& )
         {
             SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::Clone(), "
-                      "exception caught: " <<  comphelper::anyToString( cppu::getCaughtException() ) );
+                      "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
             Reference< XAnimationNode > xEmpty;
             return xEmpty;
         }
@@ -200,7 +202,7 @@ namespace sd
         {
             SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformNode(), "
                       "exception caught: "
-                      << comphelper::anyToString( cppu::getCaughtException() ) );
+                      << exceptionToString( cppu::getCaughtException() ) );
         }
     }
 
@@ -271,7 +273,7 @@ namespace sd
         {
             SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformValue(), "
                       "exception caught: "
-                      << comphelper::anyToString( cppu::getCaughtException() ) );
+                      << exceptionToString( cppu::getCaughtException() ) );
         }
 
         return rValue;

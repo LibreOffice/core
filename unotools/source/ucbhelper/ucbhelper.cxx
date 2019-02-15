@@ -56,6 +56,7 @@
 #include <sal/types.h>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -102,8 +103,7 @@ std::vector<OUString> getContents(OUString const & url) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
             "unotools.ucbhelper",
-            "getContents(" << url << ") " << e.getValueType().getTypeName()
-                << " \"" << e.get<css::uno::Exception>() << '"');
+            "getContents(" << url << ") " << exceptionToString(e));
         return std::vector<OUString>();
     }
 }
@@ -151,8 +151,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::IsDocument(" << url << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return false;
     }
 }
@@ -172,8 +171,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::GetProperty(" << url << ", " << property << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return css::uno::Any();
     }
 }
@@ -191,8 +189,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::IsFolder(" << url << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return false;
     }
 }
@@ -213,8 +210,7 @@ bool utl::UCBContentHelper::GetTitle(
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::GetTitle(" << url << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return false;
     }
 }
@@ -235,8 +231,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::Kill(" << url << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return false;
     }
 }
@@ -291,8 +286,7 @@ bool utl::UCBContentHelper::MakeFolder(
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::MakeFolder(" << title << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
     }
     if (exists) {
         INetURLObject o(parent.getURL());
@@ -327,8 +321,7 @@ bool utl::UCBContentHelper::IsYounger(
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::IsYounger(" << younger << ", " << older << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
         return false;
     }
 }
@@ -412,8 +405,7 @@ bool utl::UCBContentHelper::IsSubPath(
         SAL_INFO(
             "unotools.ucbhelper",
             "UCBContentHelper::IsSubPath(" << parent << ", " << child << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>() << '"');
+                << exceptionToString(e));
     }
     return false;
 }

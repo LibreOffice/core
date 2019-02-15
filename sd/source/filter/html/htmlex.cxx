@@ -75,6 +75,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -3058,7 +3059,7 @@ bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > cons
     catch( css::uno::Exception& )
     {
         SAL_WARN( "sd", "sd::HtmlExport::checkFileExists(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 
     return false;
@@ -3109,7 +3110,7 @@ bool HtmlExport::checkForExistingFiles()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::HtmlExport::checkForExistingFiles(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
         bFound = false;
     }
 

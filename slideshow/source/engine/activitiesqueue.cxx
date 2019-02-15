@@ -18,8 +18,7 @@
  */
 
 
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
@@ -123,7 +122,7 @@ namespace slideshow
                     // since this will also capture segmentation
                     // violations and the like. In such a case, we
                     // still better let our clients now...
-                    SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
+                    SAL_WARN( "slideshow", exceptionToString(cppu::getCaughtException()) );
                 }
                 catch( SlideShowException& )
                 {

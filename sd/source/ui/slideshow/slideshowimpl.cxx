@@ -38,6 +38,7 @@
 #include <svl/urihelper.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
@@ -312,7 +313,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
     {
         SAL_WARN( "sd", "sd::AnimationSlideController::getSlideAPI(), "
                     "exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 
     return false;
@@ -605,7 +606,7 @@ void SAL_CALL SlideshowImpl::disposing()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::stop(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 
     mxShow.clear();
@@ -819,7 +820,7 @@ bool SlideshowImpl::startPreview(
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::startPreview(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
         bRet = false;
     }
 
@@ -1019,7 +1020,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
     catch (const Exception&)
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::startShow(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
         bRet = false;
     }
 
@@ -1089,7 +1090,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::startShowImpl(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
         return false;
     }
 }
@@ -1123,7 +1124,7 @@ void SlideshowImpl::paint()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::paint(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1198,7 +1199,7 @@ void SlideshowImpl::removeShapeEvents()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::removeShapeEvents(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1227,7 +1228,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::registerShapeEvents(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1299,7 +1300,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::registerShapeEvents(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1365,7 +1366,7 @@ void SAL_CALL SlideshowImpl::pause()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::pause(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1395,7 +1396,7 @@ void SAL_CALL SlideshowImpl::resume()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::resume(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 #ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStarted( this );
@@ -1703,7 +1704,7 @@ void SlideshowImpl::updateSlideShow()
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::updateSlideShow(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -1828,7 +1829,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     {
         bRet = false;
         SAL_WARN( "sd", "sd::SlideshowImpl::keyInput(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 
     return bRet;
@@ -2209,7 +2210,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
     catch( uno::Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::createSlideShow(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 
     return xShow;
@@ -2390,7 +2391,7 @@ void SlideshowImpl::resize( const Size& rSize )
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::resize(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -2654,7 +2655,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::setUsePen(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -2699,7 +2700,7 @@ void SlideshowImpl::setEraseAllInk(bool bEraseAllInk)
         catch( Exception& )
         {
             SAL_WARN( "sd.slideshow", "sd::SlideshowImpl::setEraseAllInk(), "
-                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+                      "exception caught: " << exceptionToString( cppu::getCaughtException() ));
         }
     }
 }
@@ -2897,7 +2898,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::gotoPreviousSlide(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -2982,7 +2983,7 @@ void SAL_CALL SlideshowImpl::stopSound(  )
     catch( Exception& )
     {
         SAL_WARN( "sd", "sd::SlideshowImpl::stopSound(), exception caught: "
-                    << comphelper::anyToString( cppu::getCaughtException() ) );
+                    << exceptionToString( cppu::getCaughtException() ) );
     }
 }
 

@@ -913,7 +913,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                                 "basic",
                                 "couldn't open sub storage for library \""
                                     << rLib.aName << "\". Exception: "
-                                    << comphelper::anyToString(aError));
+                                    << exceptionToString(aError));
                             #endif
                         }
                     }
@@ -1943,7 +1943,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                             "basic",
                             "couldn't create sub storage for library \""
                                 << rLib.aName << "\". Exception: "
-                                << comphelper::anyToString(aError));
+                                << exceptionToString(aError));
                         throw;
                     }
 #endif
@@ -2353,8 +2353,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 SAL_WARN(
                     "basic",
                     "couldn't open sub storage for library \"" << Name
-                        << "\". Exception: "
-                        << comphelper::anyToString(aError));
+                        << "\". Exception: " << exceptionToString(aError));
                 throw;
             }
 #endif

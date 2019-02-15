@@ -30,6 +30,8 @@
 #include <sal/types.h>
 #include <svdata.hxx>
 #include <tools/time.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
@@ -473,10 +475,10 @@ bool Scheduler::ProcessTaskScheduling()
         {
             pTask->Invoke();
         }
-        catch (css::uno::Exception& e)
+        catch (css::uno::Exception&)
         {
-            auto const e2 = cppu::getCaughtException();
-            SAL_WARN("vcl.schedule", "Uncaught " << e2.getValueTypeName() << " " << e.Message);
+            auto const ex = cppu::getCaughtException();
+            SAL_WARN("vcl.schedule", "Uncaught " << exceptionToString(ex));
             std::abort();
         }
         catch (std::exception& e)
