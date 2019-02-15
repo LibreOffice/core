@@ -108,7 +108,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
+                SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
             }
         }
 

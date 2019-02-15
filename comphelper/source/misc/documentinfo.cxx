@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace comphelper {
 
@@ -147,12 +148,14 @@ namespace comphelper {
         }
         catch ( const Exception& )
         {
+            // Cannot use tools::exceptionToString here, because the tools module depends on the comphelper module
             css::uno::Any caught( ::cppu::getCaughtException() );
             css::uno::Exception exception;
             caught >>= exception;
             SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()
                                     << "\nmessage: " << exception
                                     << "\nin function:\n" << OSL_THIS_FUNC);
+
         }
 
         return sTitle;

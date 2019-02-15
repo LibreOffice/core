@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svdata.hxx>
@@ -112,7 +113,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             catch (css::uno::Exception& e)
             {
                 auto const e2 = cppu::getCaughtException();
-                SAL_WARN("vcl", "Uncaught " << e2.getValueTypeName() << " " << e.Message);
+                SAL_WARN("vcl", "Uncaught " << exceptionToString(e2));
                 std::abort();
             }
             catch (std::exception& e)
