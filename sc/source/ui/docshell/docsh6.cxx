@@ -172,6 +172,12 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         SCTAB nTab = pViewData->GetTabNo();
         if ( nTab != m_aDocument.GetVisibleTab() )
             m_aDocument.SetVisibleTab( nTab );
+        SCCOL nCol = pViewData->GetPosX(SC_SPLIT_LEFT);
+        if ( nCol != m_aDocument.GetPosLeft() )
+            m_aDocument.SetPosLeft( nCol );
+        SCROW nRow = pViewData->GetPosY(SC_SPLIT_BOTTOM);
+        if ( nRow != m_aDocument.GetPosTop() )
+            m_aDocument.SetPosTop( nRow );
 
         bool bNegativePage = m_aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
