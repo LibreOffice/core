@@ -60,19 +60,25 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), pAccess->GetBitCount());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
+            if (pAccess->GetBitCount() == 24 || pAccess->GetBitCount() == 32)
+            {
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 2));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(2, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(2, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(2, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0x00), pAccess->GetPixel(2, 2));
+            }
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE("Bitmap is not 24 or 32 bit.", false);
+            }
         }
     }
     for (const OUString& aFileName :
@@ -87,19 +93,24 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), pAccess->GetBitCount());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
+            if (pAccess->GetBitCount() == 24 || pAccess->GetBitCount() == 32)
+            {
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
-
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xFF, 0x00, 0x00), pAccess->GetPixel(1, 2));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xFF, 0x00), pAccess->GetPixel(2, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0x00, 0x00), pAccess->GetPixel(2, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xFF, 0x00, 0x00), pAccess->GetPixel(1, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xFF, 0x00), pAccess->GetPixel(2, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0x00, 0x00), pAccess->GetPixel(2, 2));
+            }
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE("Bitmap is not 24 or 32 bit.", false);
+            }
         }
     }
     for (const OUString& aFileName : { OUString("alpha-rect-8bit-RGBA.png") })
@@ -113,39 +124,65 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), pAccess->GetBitCount());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
+            if (pAccess->GetBitCount() == 24)
+            {
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 3));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(3, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 3));
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xFF, 0x00, 0x00), pAccess->GetPixel(1, 2));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xFF, 0x00), pAccess->GetPixel(2, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0x00, 0x00), pAccess->GetPixel(2, 2));
-        }
-        AlphaMask aAlpha = aBitmapEx.GetAlpha();
-        {
-            AlphaMask::ScopedReadAccess pAccess(aAlpha);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAccess->GetBitCount());
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0x00, 0x00, 0x00), pAccess->GetPixel(1, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xFF, 0x00, 0x00), pAccess->GetPixel(1, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xFF, 0x00), pAccess->GetPixel(2, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0x00, 0x00), pAccess->GetPixel(2, 2));
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00), pAccess->GetPixel(0, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00), pAccess->GetPixel(3, 3));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00), pAccess->GetPixel(3, 0));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00), pAccess->GetPixel(0, 3));
+                AlphaMask aAlpha = aBitmapEx.GetAlpha();
+                {
+                    AlphaMask::ScopedReadAccess pAlphaAccess(aAlpha);
+                    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAlphaAccess->GetBitCount());
+                    CPPUNIT_ASSERT_EQUAL(4L, pAlphaAccess->Width());
+                    CPPUNIT_ASSERT_EQUAL(4L, pAlphaAccess->Height());
 
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x40, 0x00), pAccess->GetPixel(1, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xC0, 0x00), pAccess->GetPixel(1, 2));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xC0, 0x00), pAccess->GetPixel(2, 1));
-            CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x40, 0x00), pAccess->GetPixel(2, 2));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00),
+                                         pAlphaAccess->GetPixel(0, 0));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00),
+                                         pAlphaAccess->GetPixel(3, 3));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00),
+                                         pAlphaAccess->GetPixel(3, 0));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00),
+                                         pAlphaAccess->GetPixel(0, 3));
+
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x40, 0x00),
+                                         pAlphaAccess->GetPixel(1, 1));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xC0, 0x00),
+                                         pAlphaAccess->GetPixel(1, 2));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xC0, 0x00),
+                                         pAlphaAccess->GetPixel(2, 1));
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x40, 0x00),
+                                         pAlphaAccess->GetPixel(2, 2));
+                }
+            }
+            else if (pAccess->GetBitCount() == 32)
+            {
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x80), pAccess->GetPixel(0, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x80), pAccess->GetPixel(3, 3));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x80), pAccess->GetPixel(3, 0));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x80), pAccess->GetPixel(0, 3));
+
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0x00, 0x00, 0x40), pAccess->GetPixel(1, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xFF, 0x00, 0xC0), pAccess->GetPixel(1, 2));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0xFF, 0xC0), pAccess->GetPixel(2, 1));
+                CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0x00, 0x40), pAccess->GetPixel(2, 2));
+            }
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE("Bitmap is not 24 or 32 bit.", false);
+            }
         }
     }
-    // CPPUNIT_ASSERT(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PngFilterTest);

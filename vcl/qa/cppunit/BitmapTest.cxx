@@ -30,6 +30,9 @@
 #include <BitmapSymmetryCheck.hxx>
 #include <bitmapwriteaccess.hxx>
 
+#include <svdata.hxx>
+#include <salinst.hxx>
+
 namespace
 {
 class BitmapTest : public CppUnit::TestFixture
@@ -44,6 +47,8 @@ class BitmapTest : public CppUnit::TestFixture
     void testCRC();
     void testGreyPalette();
     void testCustom8BitPalette();
+    void testErase();
+    void testBitmap32();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -56,6 +61,8 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST(testGreyPalette);
     CPPUNIT_TEST(testCustom8BitPalette);
+    CPPUNIT_TEST(testErase);
+    CPPUNIT_TEST(testBitmap32);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -151,6 +158,10 @@ void BitmapTest::testCreation()
                                      aBmp.GetSizeBytes());
     }
 
+    // Check backend capabilities and return from the test successfully
+    // if the backend doesn't support 32-bit bitmap
+    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+    if (pBackendCapabilities->mbSupportsBitmap32)
     {
         Bitmap aBmp(Size(10, 10), 32);
         Size aSize = aBmp.GetSizePixel();
@@ -158,12 +169,11 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
-                                     aBmp.GetColorCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
-                                     aBmp.GetSizeBytes());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", sal_uInt16(32), aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(4294967296U),
+                                     sal_Int64(aBmp.GetColorCount()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", sal_uLong(400), aBmp.GetSizeBytes());
     }
 }
 
@@ -596,6 +606,48 @@ void BitmapTest::testCustom8BitPalette()
 
         CPPUNIT_ASSERT_EQUAL(255, int(pAccess->GetPixelIndex(1, 2)));
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xCC, 0x22), pAccess->GetColor(1, 2));
+    }
+}
+
+void BitmapTest::testErase()
+{
+    Bitmap aBitmap(Size(3, 3), 24);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(Color(0x11, 0x22, 0x33));
+    }
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapColor aColor(pReadAccess->GetPixel(0, 0));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x11, 0x22, 0x33, 0x00), aColor);
+    }
+}
+
+void BitmapTest::testBitmap32()
+{
+    // Check backend capabilities and return from the test successfully
+    // if the backend doesn't support 32-bit bitmap
+    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+    if (!pBackendCapabilities->mbSupportsBitmap32)
+        return;
+
+    Bitmap aBitmap(Size(3, 3), 32);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(Color(0xFF, 0x11, 0x22, 0x33));
+        pWriteAccess->SetPixel(1, 1, BitmapColor(0x44, 0xFF, 0xBB, 0x00));
+        pWriteAccess->SetPixel(2, 2, BitmapColor(0x99, 0x77, 0x66, 0x55));
+    }
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapColor aColor = pReadAccess->GetPixel(0, 0);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0xFF), aColor);
+
+        aColor = pReadAccess->GetPixel(1, 1);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x44, 0xFF, 0xBB, 0x00), aColor);
+
+        aColor = pReadAccess->GetPixel(2, 2);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x99, 0x77, 0x66, 0x55), aColor);
     }
 }
 
