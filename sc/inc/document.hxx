@@ -463,6 +463,8 @@ private:
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
     SCTAB                   nVisibleTab;                    // for OLE etc., don't use inside ScDocument
+    SCCOL                   nPosLeft;                       // for OLE etc., don't use inside ScDocument
+    SCROW                   nPosTop;                        // for OLE etc., don't use inside ScDocument
 
     ScLkUpdMode         eLinkMode;
 
@@ -830,6 +832,10 @@ public:
 
     SCTAB             GetVisibleTab() const       { return nVisibleTab; }
     SC_DLLPUBLIC void SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
+    SCCOL             GetPosLeft() const          { return nPosLeft; }
+    SC_DLLPUBLIC void SetPosLeft(SCCOL nCol)      { nPosLeft = nCol; }
+    SCROW             GetPosTop() const           { return nPosTop; }
+    SC_DLLPUBLIC void SetPosTop(SCROW nRow)       { nPosTop = nRow; }
 
     SC_DLLPUBLIC bool HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC bool GetHashCode( SCTAB nTab, sal_Int64& rHashCode) const;

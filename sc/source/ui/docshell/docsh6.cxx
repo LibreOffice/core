@@ -175,7 +175,11 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
 
         bool bNegativePage = m_aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
+        if ( nX != m_aDocument.GetPosLeft() )
+            m_aDocument.SetPosLeft( nX );
         SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
+        if ( nY != m_aDocument.GetPosTop() )
+            m_aDocument.SetPosTop( nY );
         tools::Rectangle aMMRect = m_aDocument.GetMMRect( nX,nY, nX,nY, nTab );
         if (bNegativePage)
             lcl_SetTopRight( aNewArea, aMMRect.TopRight() );

@@ -720,7 +720,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         getScDocument().SetCalcConfig(aCalcConfig);
     }
 
-    // set selected sheet
+    // set selected sheet and positionleft/positiontop for OLE objects
     Reference<XViewDataSupplier> xViewDataSupplier(getDocument(), UNO_QUERY);
     if (xViewDataSupplier.is())
     {
@@ -730,20 +730,47 @@ void WorkbookHelper::finalizeWorkbookImport()
             Sequence< PropertyValue > aSeq;
             if (xIndexAccess->getByIndex(0) >>= aSeq)
             {
+                OUString sTabName;
+                Reference< XNameAccess > xSheetsNC;
                 sal_Int32 nCount (aSeq.getLength());
                 for (sal_Int32 i = 0; i < nCount; ++i)
                 {
                     OUString sName(aSeq[i].Name);
                     if (sName == SC_ACTIVETABLE)
                     {
-                        OUString sTabName;
                         if(aSeq[i].Value >>= sTabName)
                         {
                             SCTAB nTab(0);
                             if (getScDocument().GetTable(sTabName, nTab))
-                            {
                                 getScDocument().SetVisibleTab(nTab);
-                                i = nCount;
+                        }
+                    }
+                    else if (sName == SC_TABLES)
+                    {
+                        aSeq[i].Value >>= xSheetsNC;
+                    }
+                }
+                if (xSheetsNC.is() && xSheetsNC->hasByName(sTabName))
+                {
+                    Sequence<PropertyValue> aProperties;
+                    Any aAny = xSheetsNC->getByName(sTabName);
+                    if ( aAny >>= aProperties )
+                    {
+                        nCount = aProperties.getLength();
+                        for (sal_Int32 i = 0; i < nCount; ++i)
+                        {
+                            OUString sName(aProperties[i].Name);
+                            if (sName == SC_POSITIONLEFT)
+                            {
+                                SCCOL nPosLeft;
+                                aProperties[i].Value >>= nPosLeft;
+                                getScDocument().SetPosLeft(nPosLeft);
+                            }
+                            else if (sName == SC_POSITIONTOP)
+                            {
+                                SCROW nPosTop;
+                                aProperties[i].Value >>= nPosTop;
+                                getScDocument().SetPosTop(nPosTop);
                             }
                         }
                     }
