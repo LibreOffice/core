@@ -519,7 +519,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         catch (uno::Exception const&)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << anyEx);
+            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << exceptionToString(anyEx));
             throw lang::WrappedTargetRuntimeException("", nullptr, anyEx);
         }
         catch (...)

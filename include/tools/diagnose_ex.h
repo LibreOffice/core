@@ -129,6 +129,14 @@ inline css::uno::Any DbgGetCaughtException()
         return;   \
     }
 
+/** This function uses cppu::getCaughtException to capture an exception, and then attempts
+    to convert it to an informative string.
+*/
+TOOLS_DLLPUBLIC OString getCaughtExceptionAsString();
+/** Convert a caught exception to a string suitable for logging.
+*/
+TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
