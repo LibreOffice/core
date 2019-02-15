@@ -49,6 +49,7 @@ class SwSplitTableDlg;
 namespace sw
 {
 class DropDownFieldDialog;
+class DropDownFormFieldDialog;
 }
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
@@ -301,6 +302,18 @@ public:
     virtual short Execute() override;
     virtual bool          PrevButtonPressed() const override;
     virtual bool          NextButtonPressed() const override;
+};
+
+class AbstractDropDownFormFieldDialog_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<sw::DropDownFormFieldDialog> m_xDlg;
+public:
+    explicit AbstractDropDownFormFieldDialog_Impl(std::unique_ptr<sw::DropDownFormFieldDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
 };
 
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
@@ -613,6 +626,7 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Window* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
+    virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Window* pParent, sw::mark::IFieldmark* pDropDownField) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
