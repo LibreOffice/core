@@ -1390,7 +1390,7 @@ void SfxBaseController::ShowInfoBars( )
             bIsGoogleFile = true;
     }
 
-    if ( !(!bCheckedOut && !bIsGoogleFile) )
+    if ( bCheckedOut || bIsGoogleFile )
         return;
 
     // Get the Frame and show the InfoBar if not checked out

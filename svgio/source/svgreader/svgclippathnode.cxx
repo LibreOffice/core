@@ -127,7 +127,7 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DContainer& rContent,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(!(!rContent.empty() && Display_none != getDisplay()))
+            if(rContent.empty() || Display_none == getDisplay())
                 return;
 
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;

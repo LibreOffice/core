@@ -713,7 +713,7 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
 void SAL_CALL SdStyleSheet::dispose(  )
 {
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
-    if (!(!mrBHelper.bDisposed && !mrBHelper.bInDispose))
+    if (mrBHelper.bDisposed || mrBHelper.bInDispose)
         return;
 
     mrBHelper.bInDispose = true;

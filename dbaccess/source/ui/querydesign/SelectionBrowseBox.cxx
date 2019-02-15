@@ -65,7 +65,7 @@ namespace
 {
     bool isFieldNameAsterisk(const OUString& _sFieldName )
     {
-        bool bAsterisk = !(!_sFieldName.isEmpty() && _sFieldName.toChar() != '*');
+        bool bAsterisk = _sFieldName.isEmpty() || _sFieldName.toChar() == '*';
         if ( !bAsterisk )
         {
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(_sFieldName, '.');

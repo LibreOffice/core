@@ -1375,9 +1375,8 @@ private:
 
         PrintInfo aInfo (mpPrinter, mpOptions->IsPrintMarkedOnly());
 
-        if (!(aInfo.mpPrinter!=nullptr && pShell!=nullptr))
-return;
-
+        if (aInfo.mpPrinter==nullptr || pShell==nullptr)
+            return;
 
         MapMode aMap (aInfo.mpPrinter->GetMapMode());
         aMap.SetMapUnit(MapUnit::Map100thMM);
