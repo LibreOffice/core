@@ -4472,7 +4472,7 @@
               <desc>Specifies whether borders are applied to paragraphs automatically.</desc>
               <label>Apply border</label>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="ChangeToTable" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/ByInput -->
