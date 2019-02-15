@@ -385,7 +385,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
 
     bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
-    if ((nMode & ImportFlags::Metadata) && bOasis)
+    if ((nMode & ImportFlags::Metadata) && bOasis && !aBaseURL.isEmpty())
     {
         // RDF metadata: ODF >= 1.2
         try
