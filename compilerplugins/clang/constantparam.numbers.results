@@ -870,10 +870,6 @@ include/sfx2/childwin.hxx:142
     void SfxChildWindowContext::RegisterChildWindowContext(class SfxModule *,unsigned short,class std::unique_ptr<struct SfxChildWinContextFactory, struct std::default_delete<struct SfxChildWinContextFactory> >)
     unsigned short 
     10366
-include/sfx2/controlwrapper.hxx:82
-    void sfx::PosValueMapper::PosValueMapper<PosT, ValueT>(type-parameter-?-?,const struct sfx::PosValueMapper::MapEntryType *)
-    type-parameter-?-? nNFPos
-    65535
 include/sfx2/ctrlitem.hxx:89
     void SfxStatusForwarder::SfxStatusForwarder(unsigned short,class SfxControllerItem &)
     unsigned short nSlotId

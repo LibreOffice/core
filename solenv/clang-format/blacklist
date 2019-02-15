@@ -6774,7 +6774,6 @@ include/sfx2/charwin.hxx
 include/sfx2/checkin.hxx
 include/sfx2/childwin.hxx
 include/sfx2/classificationhelper.hxx
-include/sfx2/controlwrapper.hxx
 include/sfx2/ctrlitem.hxx
 include/sfx2/dialoghelper.hxx
 include/sfx2/dinfdlg.hxx
@@ -12878,7 +12877,6 @@ sfx2/source/dialog/filtergrouping.cxx
 sfx2/source/dialog/filtergrouping.hxx
 sfx2/source/dialog/infobar.cxx
 sfx2/source/dialog/inputdlg.cxx
-sfx2/source/dialog/itemconnect.cxx
 sfx2/source/dialog/mailmodel.cxx
 sfx2/source/dialog/mgetempl.cxx
 sfx2/source/dialog/navigat.cxx
