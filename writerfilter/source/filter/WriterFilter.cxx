@@ -43,6 +43,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -211,7 +212,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         catch (uno::Exception const&)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << anyEx);
+            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
             throw lang::WrappedTargetRuntimeException("",
                     static_cast<OWeakObject*>(this), anyEx);
         }
