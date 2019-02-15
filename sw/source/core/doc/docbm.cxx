@@ -505,12 +505,18 @@ namespace sw { namespace mark
         const OUString& rName,
         const OUString& rType)
     {
+        bool bEnableSetModified = m_pDoc->getIDocumentState().IsEnableSetModified();
+        m_pDoc->getIDocumentState().SetEnableSetModified(false);
+
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
                 IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK,
                 sw::mark::InsertMode::New);
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
+
+        m_pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
+        m_pDoc->getIDocumentState().SetModified();
 
         return pFieldMark;
     }

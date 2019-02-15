@@ -22,6 +22,7 @@
 
 
 #define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
+#define ODF_FORMTEXT_DEFAULT_LENGTH 5
 
 #define ODF_FORMCHECKBOX "vnd.oasis.opendocument.field.FORMCHECKBOX"
 #define ODF_FORMCHECKBOX_HELPTEXT "Checkbox_HelpText"
