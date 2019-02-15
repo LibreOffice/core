@@ -88,42 +88,56 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
     return OUString();
 }
 
-// ScImportOptionsDlg
-
-ScImportOptionsDlg::ScImportOptionsDlg(
-        vcl::Window*                 pParent,
-        bool                    bAscii,
-        const ScImportOptions*  pOptions,
-        const OUString*         pStrTitle,
-        bool                    bMultiByte,
-        bool                    bOnlyDbtoolsEncodings,
-        bool                    bImport )
-    :   ModalDialog ( pParent, "ImOptDialog",
-            "modules/scalc/ui/imoptdialog.ui" ),
-        m_bIsAsciiImport( bAscii )
+void ScImportOptionsDlg::FillFromTextEncodingTable(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
 {
-    get(m_pFieldFrame, "fieldframe");
-    get(m_pFtCharset, "charsetft");
+    if (m_bIsAsciiImport)
+        m_xLbCharset->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
+    else
+        m_xTvCharset->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
+}
+
+void ScImportOptionsDlg::FillFromDbTextEncodingMap(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
+{
+    if (m_bIsAsciiImport)
+        m_xLbCharset->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
+    else
+        m_xTvCharset->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
+}
+
+// ScImportOptionsDlg
+ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
+                                       const ScImportOptions*  pOptions,
+                                       const OUString* pStrTitle,
+                                       bool bMultiByte, bool bOnlyDbtoolsEncodings,
+                                       bool bImport)
+    : GenericDialogController(pParent, "modules/scalc/ui/imoptdialog.ui", "ImOptDialog")
+    , m_bIsAsciiImport(bAscii)
+    , m_xFieldFrame(m_xBuilder->weld_frame("fieldframe"))
+    , m_xFtCharset(m_xBuilder->weld_label("charsetft"))
+    , m_xEncGrid(m_xBuilder->weld_widget("grid2"))
+    , m_xFtFieldSep(m_xBuilder->weld_label("fieldft"))
+    , m_xEdFieldSep(m_xBuilder->weld_combo_box("field"))
+    , m_xFtTextSep(m_xBuilder->weld_label("textft"))
+    , m_xEdTextSep(m_xBuilder->weld_combo_box("text"))
+    , m_xCbShown(m_xBuilder->weld_check_button("asshown"))
+    , m_xCbFormulas(m_xBuilder->weld_check_button("formulas"))
+    , m_xCbQuoteAll(m_xBuilder->weld_check_button("quoteall"))
+    , m_xCbFixed(m_xBuilder->weld_check_button("fixedwidth"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xLbCharset(new TextEncodingBox(m_xBuilder->weld_combo_box("charsetdropdown")))
+    , m_xTvCharset(new TextEncodingTreeView(m_xBuilder->weld_tree_view("charsetlist")))
+{
     if (bAscii)
-        get(m_pLbCharset, "charsetdropdown");
+    {
+        m_xDialog->set_help_id(m_xDialog->get_help_id() + "?config=NonTextImport");
+        m_xLbCharset->show();
+    }
     else
     {
-        get(m_pLbCharset, "charsetlist");
-        m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
-        get(m_pEncGrid, "grid2");
-        m_pEncGrid->set_vexpand(true);
+        m_xTvCharset->set_size_request(-1, m_xTvCharset->get_height_rows(6));
+        m_xEncGrid->set_vexpand(true);
+        m_xTvCharset->show();
     }
-    m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
-    m_pLbCharset->Show();
-    get(m_pFtFieldSep, "fieldft");
-    get(m_pEdFieldSep, "field");
-    get(m_pFtTextSep, "textft");
-    get(m_pEdTextSep, "text");
-    get(m_pCbShown, "asshown");
-    get(m_pCbFormulas, "formulas");
-    get(m_pCbQuoteAll, "quoteall");
-    get(m_pCbFixed, "fixedwidth");
-    get(m_pBtnOk, "ok");
 
     OUString sFieldSep(SCSTR_FIELDSEP);
     sFieldSep = sFieldSep.replaceFirst( "%TAB",   ScResId(SCSTR_FIELDSEP_TAB) );
@@ -136,37 +150,37 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     OUString aStr = pFieldSepTab->FirstDel();
     sal_Unicode nCode;
 
-    while ( !aStr.isEmpty() )
+    while (!aStr.isEmpty())
     {
-        m_pEdFieldSep->InsertEntry( aStr );
+        m_xEdFieldSep->append_text(aStr);
         aStr = pFieldSepTab->NextDel();
     }
 
     aStr = pTextSepTab->FirstDel();
 
-    while ( !aStr.isEmpty() )
+    while (!aStr.isEmpty())
     {
-        m_pEdTextSep->InsertEntry( aStr );
+        m_xEdTextSep->append_text(aStr);
         aStr = pTextSepTab->NextDel();
     }
 
-    m_pEdFieldSep->SetText( m_pEdFieldSep->GetEntry(0) );
-    m_pEdTextSep->SetText( m_pEdTextSep->GetEntry(0) );
+    m_xEdFieldSep->set_active(0);
+    m_xEdTextSep->set_active(0);
 
     if ( bOnlyDbtoolsEncodings )
     {
         // Even dBase export allows multibyte now
         if ( bMultiByte )
-            m_pLbCharset->FillFromDbTextEncodingMap( bImport );
+            FillFromDbTextEncodingMap( bImport );
         else
-            m_pLbCharset->FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
+            FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else if ( !bAscii )
     {   //!TODO: Unicode would need work in each filter
         if ( bMultiByte )
-            m_pLbCharset->FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
+            FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
         else
-            m_pLbCharset->FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
+            FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else
@@ -177,20 +191,20 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                m_pEdFieldSep->SetText( OUString(nCode) );
+                m_xEdFieldSep->set_entry_text(OUString(nCode));
             else
-                m_pEdFieldSep->SetText( aStr );
+                m_xEdFieldSep->set_entry_text(aStr);
 
             nCode = pOptions->nTextSepCode;
             aStr  = pTextSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                m_pEdTextSep->SetText( OUString(nCode) );
+                m_xEdTextSep->set_entry_text(OUString(nCode));
             else
-                m_pEdTextSep->SetText( aStr );
+                m_xEdTextSep->set_entry_text(aStr);
         }
         // all encodings allowed, even Unicode
-        m_pLbCharset->FillFromTextEncodingTable( bImport );
+        FillFromTextEncodingTable( bImport );
     }
 
     if( bAscii )
@@ -203,99 +217,76 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         bool bQuoteAllTextCells = officecfg::Office::Calc::Dialogs::CSVExport::QuoteAllTextCells::get();
         bool bFixedWidth = officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::get();
 
-        m_pCbFixed->Show();
-        m_pCbFixed->SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        m_pCbFixed->Check( bFixedWidth );
-        FixedWidthHdl(m_pCbFixed);
-        m_pCbShown->Show();
-        m_pCbShown->Check( bSaveTrueCellContent );
-        m_pCbQuoteAll->Show();
-        m_pCbQuoteAll->Check( bQuoteAllTextCells );
-        m_pCbFormulas->Show();
+        m_xCbFixed->show();
+        m_xCbFixed->connect_toggled(LINK(this, ScImportOptionsDlg, FixedWidthHdl));
+        m_xCbFixed->set_active( bFixedWidth );
+        FixedWidthHdl(*m_xCbFixed);
+        m_xCbShown->show();
+        m_xCbShown->set_active( bSaveTrueCellContent );
+        m_xCbQuoteAll->show();
+        m_xCbQuoteAll->set_active( bQuoteAllTextCells );
+        m_xCbFormulas->show();
         // default option for "save formulas" no longer taken from view shell but from persisted dialog settings
-        m_pCbFormulas->Check( bSaveCellFormulas );
+        m_xCbFormulas->set_active( bSaveCellFormulas );
         // if no charset, text separator or field separator exist, keep the values from dialog initialization
         if (strFieldSeparator.getLength() > 0)
-            m_pEdFieldSep->SetText( strFieldSeparator );
+            m_xEdFieldSep->set_entry_text(strFieldSeparator);
         if (strTextSeparator.getLength() > 0)
-            m_pEdTextSep->SetText( strTextSeparator );
+            m_xEdTextSep->set_entry_text(strTextSeparator);
         if (nCharSet < 0 || nCharSet == RTL_TEXTENCODING_DONTKNOW )
-            m_pLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
+            m_xLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
         else
-            m_pLbCharset->SelectTextEncoding(nCharSet);
+            m_xLbCharset->SelectTextEncoding(nCharSet);
     }
     else
     {
-        m_pFieldFrame->set_label(m_pFtCharset->GetText());
-        m_pFtFieldSep->Hide();
-        m_pFtTextSep->Hide();
-        m_pFtCharset->Hide();
-        m_pEdFieldSep->Hide();
-        m_pEdTextSep->Hide();
-        m_pCbFixed->Hide();
-        m_pCbShown->Hide();
-        m_pCbQuoteAll->Hide();
-        m_pCbFormulas->Hide();
-        m_pLbCharset->GrabFocus();
-        m_pLbCharset->SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
-
-        m_pLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet :
-            osl_getThreadTextEncoding());
+        m_xFieldFrame->set_label(m_xFtCharset->get_label());
+        m_xFtFieldSep->hide();
+        m_xFtTextSep->hide();
+        m_xFtCharset->hide();
+        m_xEdFieldSep->hide();
+        m_xEdTextSep->hide();
+        m_xCbFixed->hide();
+        m_xCbShown->hide();
+        m_xCbQuoteAll->hide();
+        m_xCbFormulas->hide();
+        m_xTvCharset->grab_focus();
+        m_xTvCharset->connect_row_activated(LINK(this, ScImportOptionsDlg, DoubleClickHdl));
+        m_xTvCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
     }
 
-
     // optional title:
-    if ( pStrTitle )
-        SetText( *pStrTitle );
+    if (pStrTitle)
+        m_xDialog->set_title(*pStrTitle);
 }
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
-    disposeOnce();
-}
-
-void ScImportOptionsDlg::dispose()
-{
-    pFieldSepTab.reset();
-    pTextSepTab.reset();
-    m_pEncGrid.clear();
-    m_pFieldFrame.clear();
-    m_pFtCharset.clear();
-    m_pLbCharset.clear();
-    m_pFtFieldSep.clear();
-    m_pEdFieldSep.clear();
-    m_pFtTextSep.clear();
-    m_pEdTextSep.clear();
-    m_pCbShown.clear();
-    m_pCbFormulas.clear();
-    m_pCbQuoteAll.clear();
-    m_pCbFixed.clear();
-    m_pBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
-    rOptions.SetTextEncoding( m_pLbCharset->GetSelectTextEncoding() );
+    auto nEncoding = m_bIsAsciiImport ? m_xLbCharset->GetSelectTextEncoding() : m_xTvCharset->GetSelectTextEncoding();
+    rOptions.SetTextEncoding(nEncoding);
 
-    if ( m_pCbFixed->IsVisible() )
+    if (m_xCbFixed->get_visible())
     {
-        rOptions.nFieldSepCode = GetCodeFromCombo( *m_pEdFieldSep );
-        rOptions.nTextSepCode  = GetCodeFromCombo( *m_pEdTextSep );
-        rOptions.bFixedWidth = m_pCbFixed->IsChecked();
-        rOptions.bSaveAsShown = m_pCbShown->IsChecked();
-        rOptions.bQuoteAllText = m_pCbQuoteAll->IsChecked();
-        rOptions.bSaveFormulas = m_pCbFormulas->IsChecked();
+        rOptions.nFieldSepCode = GetCodeFromCombo( *m_xEdFieldSep );
+        rOptions.nTextSepCode  = GetCodeFromCombo( *m_xEdTextSep );
+        rOptions.bFixedWidth = m_xCbFixed->get_active();
+        rOptions.bSaveAsShown = m_xCbShown->get_active();
+        rOptions.bQuoteAllText = m_xCbQuoteAll->get_active();
+        rOptions.bSaveFormulas = m_xCbFormulas->get_active();
     }
 }
 
-sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
+sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo(const weld::ComboBox& rEd) const
 {
     ScDelimiterTable* pTab;
-    OUString  aStr( rEd.GetText() );
+    OUString  aStr( rEd.get_active_text() );
     sal_uInt16  nCode;
 
-    if ( &rEd == m_pEdTextSep )
+    if (&rEd == m_xEdTextSep.get())
         pTab = pTextSepTab.get();
     else
         pTab = pFieldSepTab.get();
@@ -315,43 +306,33 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     return nCode;
 }
 
-OString ScImportOptionsDlg::GetScreenshotId() const
+IMPL_LINK_NOARG(ScImportOptionsDlg, FixedWidthHdl, weld::ToggleButton&, void)
 {
-    return (m_bIsAsciiImport) ? GetHelpId() : GetHelpId() + "?config=NonTextImport";
+    bool bEnable = !m_xCbFixed->get_active();
+    m_xFtFieldSep->set_sensitive( bEnable );
+    m_xEdFieldSep->set_sensitive( bEnable );
+    m_xFtTextSep->set_sensitive( bEnable );
+    m_xEdTextSep->set_sensitive( bEnable );
+    m_xCbShown->set_sensitive( bEnable );
+    m_xCbQuoteAll->set_sensitive( bEnable );
 }
 
-IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
+IMPL_LINK_NOARG(ScImportOptionsDlg, DoubleClickHdl, weld::TreeView&, void)
 {
-    if (pCheckBox == m_pCbFixed)
-    {
-        bool bEnable = !m_pCbFixed->IsChecked();
-        m_pFtFieldSep->Enable( bEnable );
-        m_pEdFieldSep->Enable( bEnable );
-        m_pFtTextSep->Enable( bEnable );
-        m_pEdTextSep->Enable( bEnable );
-        m_pCbShown->Enable( bEnable );
-        m_pCbQuoteAll->Enable( bEnable );
-    }
-}
-
-IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
-{
-    if (&rLb == m_pLbCharset)
-    {
-        m_pBtnOk->Click();
-    }
+    m_xDialog->response(RET_OK);
 }
 
 void ScImportOptionsDlg::SaveImportOptions() const
 {
     std::shared_ptr < comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(m_pLbCharset->GetSelectTextEncoding(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::set(m_pEdFieldSep->GetText(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::set(m_pEdTextSep->GetText(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::set(m_pCbFixed->IsChecked(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::SaveCellFormulas::set(m_pCbFormulas->IsChecked(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::SaveTrueCellContent::set(m_pCbShown->IsChecked(), batch);
-    officecfg::Office::Calc::Dialogs::CSVExport::QuoteAllTextCells::set(m_pCbQuoteAll->IsChecked(), batch);
+    auto nEncoding = m_bIsAsciiImport ? m_xLbCharset->GetSelectTextEncoding() : m_xTvCharset->GetSelectTextEncoding();
+    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(nEncoding, batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::set(m_xEdFieldSep->get_active_text(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::set(m_xEdTextSep->get_active_text(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::set(m_xCbFixed->get_active(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::SaveCellFormulas::set(m_xCbFormulas->get_active(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::SaveTrueCellContent::set(m_xCbShown->get_active(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::QuoteAllTextCells::set(m_xCbQuoteAll->get_active(), batch);
     batch->commit();
 }
 

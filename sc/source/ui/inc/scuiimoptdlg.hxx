@@ -20,57 +20,56 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
 
-#include <vcl/layout.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <svx/txencbox.hxx>
 
 class ScDelimiterTable;
 class ScImportOptions;
 
-class ScImportOptionsDlg : public ModalDialog
+class ScImportOptionsDlg : public weld::GenericDialogController
 {
 public:
-    ScImportOptionsDlg( vcl::Window*            pParent,
-                        bool                    bAscii,
-                        const ScImportOptions*  pOptions,
-                        const OUString*         pStrTitle,
-                        bool                    bMultiByte,
-                        bool                    bOnlyDbtoolsEncodings,
-                        bool                    bImport );
+    ScImportOptionsDlg(weld::Window*           pParent,
+                       bool                    bAscii,
+                       const ScImportOptions*  pOptions,
+                       const OUString*         pStrTitle,
+                       bool                    bMultiByte,
+                       bool                    bOnlyDbtoolsEncodings,
+                       bool                    bImport);
 
     virtual ~ScImportOptionsDlg() override;
-    virtual void dispose() override;
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
     void SaveImportOptions() const;
-    virtual OString GetScreenshotId() const override;
 
 private:
-    VclPtr<VclFrame>           m_pFieldFrame;
-    VclPtr<FixedText>          m_pFtCharset;
-    VclPtr<VclContainer>       m_pEncGrid;
-    VclPtr<SvxTextEncodingBox> m_pLbCharset;
-    VclPtr<FixedText>          m_pFtFieldSep;
-    VclPtr<ComboBox>           m_pEdFieldSep;
-    VclPtr<FixedText>          m_pFtTextSep;
-    VclPtr<ComboBox>           m_pEdTextSep;
-    VclPtr<CheckBox>           m_pCbShown;
-    VclPtr<CheckBox>           m_pCbFormulas;
-    VclPtr<CheckBox>           m_pCbQuoteAll;
-    VclPtr<CheckBox>           m_pCbFixed;
-    VclPtr<OKButton>           m_pBtnOk;
-
-
     std::unique_ptr<ScDelimiterTable> pFieldSepTab;
     std::unique_ptr<ScDelimiterTable> pTextSepTab;
 
     bool const m_bIsAsciiImport;
 
-private:
-    sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
+    std::unique_ptr<weld::Frame> m_xFieldFrame;
+    std::unique_ptr<weld::Label> m_xFtCharset;
+    std::unique_ptr<weld::Widget> m_xEncGrid;
+    std::unique_ptr<weld::Label> m_xFtFieldSep;
+    std::unique_ptr<weld::ComboBox> m_xEdFieldSep;
+    std::unique_ptr<weld::Label> m_xFtTextSep;
+    std::unique_ptr<weld::ComboBox> m_xEdTextSep;
+    std::unique_ptr<weld::CheckButton> m_xCbShown;
+    std::unique_ptr<weld::CheckButton> m_xCbFormulas;
+    std::unique_ptr<weld::CheckButton> m_xCbQuoteAll;
+    std::unique_ptr<weld::CheckButton> m_xCbFixed;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<TextEncodingBox> m_xLbCharset;
+    std::unique_ptr<TextEncodingTreeView> m_xTvCharset;
 
-    DECL_LINK( FixedWidthHdl, Button*, void );
-    DECL_LINK( DoubleClickHdl, ListBox&, void );
+private:
+    sal_uInt16 GetCodeFromCombo( const weld::ComboBox& rEd ) const;
+    void FillFromTextEncodingTable(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags = 0);
+    void FillFromDbTextEncodingMap(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags = 0);
+
+    DECL_LINK(FixedWidthHdl, weld::ToggleButton&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
 };
 
 #endif

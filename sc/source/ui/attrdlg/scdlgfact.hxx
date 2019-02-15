@@ -518,7 +518,14 @@ public:
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScImportOptionsDlg_Impl, ScImportOptionsDlg)
+protected:
+    std::unique_ptr<ScImportOptionsDlg> m_xDlg;
+public:
+    explicit AbstractScImportOptionsDlg_Impl(std::unique_ptr<ScImportOptionsDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual void GetImportOptions( ScImportOptions& rOptions ) const override;
     virtual void SaveImportOptions() const override;
 };
@@ -691,11 +698,12 @@ public:
                                                                   const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                   const Color& rDefaultColor) override; //Currently selected Color
 
-    virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
-                                                                    const ScImportOptions*  pOptions,
-                                                                    const OUString*         pStrTitle,
-                                                                    bool                    bOnlyDbtoolsEncodings,
-                                                                    bool                    bImport = true ) override;
+    virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg(weld::Window* pParent, bool bAscii,
+                                                                        const ScImportOptions* pOptions,
+                                                                        const OUString* pStrTitle,
+                                                                        bool bOnlyDbtoolsEncodings,
+                                                                        bool bImport = true) override;
+
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg(weld::Window* pParent,
                                                          const SfxItemSet* pCellAttrs) override;
 

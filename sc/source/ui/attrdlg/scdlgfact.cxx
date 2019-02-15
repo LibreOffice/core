@@ -209,7 +209,10 @@ short AbstractScTabBgColorDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
+short AbstractScImportOptionsDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScTextImportOptionsDlg_Impl::Execute()
 {
@@ -691,12 +694,12 @@ void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const
 
 void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOptions ) const
 {
-    pDlg->GetImportOptions(rOptions);
+    m_xDlg->GetImportOptions(rOptions);
 }
 
 void AbstractScImportOptionsDlg_Impl::SaveImportOptions() const
 {
-    pDlg->SaveImportOptions();
+    m_xDlg->SaveImportOptions();
 }
 
 LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
@@ -967,15 +970,14 @@ VclPtr<AbstractScTabBgColorDlg> ScAbstractDialogFactory_Impl::CreateScTabBgColor
     return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(std::make_unique<ScTabBgColorDlg>(pParent, rTitle, rTabBgColorNoColorText, rDefaultColor));
 }
 
-VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg (
-                                                                    bool                    bAscii,
-                                                                    const ScImportOptions*  pOptions,
-                                                                    const OUString*         pStrTitle,
-                                                                    bool                    bOnlyDbtoolsEncodings,
-                                                                    bool                    bImport )
+VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg(weld::Window* pParent,
+                                                                                          bool bAscii,
+                                                                                          const ScImportOptions* pOptions,
+                                                                                          const OUString* pStrTitle,
+                                                                                          bool bOnlyDbtoolsEncodings,
+                                                                                          bool bImport)
 {
-    VclPtr<ScImportOptionsDlg> pDlg = VclPtr<ScImportOptionsDlg>::Create( nullptr, bAscii, pOptions,pStrTitle, true/*bMultiByte*/,bOnlyDbtoolsEncodings, bImport );
-    return VclPtr<AbstractScImportOptionsDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScImportOptionsDlg_Impl>::Create(std::make_unique<ScImportOptionsDlg>(pParent, bAscii, pOptions, pStrTitle, true/*bMultiByte*/, bOnlyDbtoolsEncodings, bImport));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
