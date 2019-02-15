@@ -24,6 +24,10 @@
 #include <postmac.h>
 #endif
 
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
+
 #include <algorithm>
 #include <memory>
 #include <iostream>
@@ -4457,11 +4461,16 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
     else
     {
+#ifdef ANDROID
+        aAppPath = OUString::fromUtf8(lo_get_app_data_dir()) + "/program";
+#else
         // Fun conversion dance back and forth between URLs and system paths...
         OUString aAppURL;
         ::osl::Module::getUrlFromAddress( reinterpret_cast< oslGenericFunction >(lo_initialize),
                                           aAppURL);
         osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
+#endif
+
 #ifdef IOS
         // The above gives something like
         // "/private/var/containers/Bundle/Application/953AA851-CC15-4C60-A2CB-C2C6F24E6F71/Foo.app/Foo",
