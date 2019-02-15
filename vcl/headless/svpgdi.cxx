@@ -1624,7 +1624,7 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
 {
     SourceHelper aSurface(rSourceBitmap);
     cairo_surface_t* source = aSurface.getSurface();
-    copySource(rTR, source);
+    copyWithOperator(rTR, source, CAIRO_OPERATOR_OVER);
 }
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const BitmapBuffer* pBuffer, cairo_operator_t eOp)
@@ -1749,11 +1749,10 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( long nX, long nY, long nWi
 Color SvpSalGraphics::getPixel( long nX, long nY )
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface,
+    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
 #else
-    cairo_surface_t *target = cairo_image_surface_create(
+    cairo_surface_t *target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
 #endif
-            CAIRO_FORMAT_ARGB32, 1, 1);
 
     cairo_t* cr = cairo_create(target);
 
@@ -1769,11 +1768,10 @@ Color SvpSalGraphics::getPixel( long nX, long nY )
     sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
     sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
     sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
-    Color nRet = Color(r, g, b);
-
+    Color aColor(0xFF - a, r, g, b);
     cairo_surface_destroy(target);
 
-    return nRet;
+    return aColor;
 }
 
 namespace
