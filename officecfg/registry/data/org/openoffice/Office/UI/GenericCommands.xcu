@@ -6296,6 +6296,30 @@
           <value xml:lang="en-US">Synony~ms</value>
         </prop>
       </node>
+      <node oor:name=".uno:TextFormField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Text Form Field</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CheckBoxFormField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Check Box Form Field</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DropDownFormField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Drop-Down Form Field</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:PasteSpecialMenu" oor:op="replace">
@@ -6812,6 +6836,11 @@
       <node oor:name=".uno:MSCompatActiveXControls" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">ActiveX Controls</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MSCompatLegacyControls" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Legacy Forms</value>
         </prop>
       </node>
     </node>
