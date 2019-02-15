@@ -55,22 +55,6 @@ namespace {
 
     @return  true = The passed string list contains an empty string entry.
  */
-template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, sal_Int32 nEmptyPos = LISTBOX_APPEND )
-{
-    bool bEmpty = false;
-    for (const OUString& str : rStrings)
-    {
-        if (!str.isEmpty())
-            rLBox.InsertEntry(str);
-        else
-        {
-            rLBox.InsertEntry(ScResId(STR_EMPTYDATA), nEmptyPos);
-            bEmpty = true;
-        }
-    }
-    return bEmpty;
-}
 
 bool lclFillListBox(weld::ComboBox& rLBox, const Sequence< OUString >& rStrings)
 {
@@ -88,18 +72,18 @@ bool lclFillListBox(weld::ComboBox& rLBox, const Sequence< OUString >& rStrings)
     return bEmpty;
 }
 
-template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_Int32 nEmptyPos = LISTBOX_APPEND )
+bool lclFillListBox(weld::ComboBox& rLBox, const vector<ScDPLabelData::Member>& rMembers, int nEmptyPos)
 {
     bool bEmpty = false;
-    for (const auto& rMember : rMembers)
+    vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
+    for (; itr != itrEnd; ++itr)
     {
-        OUString aName = rMember.getDisplayName();
+        OUString aName = itr->getDisplayName();
         if (!aName.isEmpty())
-            rLBox.InsertEntry(aName);
+            rLBox.append_text(aName);
         else
         {
-            rLBox.InsertEntry(ScResId(STR_EMPTYDATA), nEmptyPos);
+            rLBox.insert_text(nEmptyPos, ScResId(STR_EMPTYDATA));
             bEmpty = true;
         }
     }
@@ -153,63 +137,15 @@ const sal_uInt16 SC_SORTDATA_POS = 1;
 
 const long SC_SHOW_DEFAULT = 10;
 
-static const ScDPListBoxWrapper::MapEntryType spRefTypeMap[] =
-{
-    { 0,                        DataPilotFieldReferenceType::NONE                       },
-    { 1,                        DataPilotFieldReferenceType::ITEM_DIFFERENCE            },
-    { 2,                        DataPilotFieldReferenceType::ITEM_PERCENTAGE            },
-    { 3,                        DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE },
-    { 4,                        DataPilotFieldReferenceType::RUNNING_TOTAL              },
-    { 5,                        DataPilotFieldReferenceType::ROW_PERCENTAGE             },
-    { 6,                        DataPilotFieldReferenceType::COLUMN_PERCENTAGE          },
-    { 7,                        DataPilotFieldReferenceType::TOTAL_PERCENTAGE           },
-    { 8,                        DataPilotFieldReferenceType::INDEX                      },
-    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldReferenceType::NONE               }
-};
-
 } // namespace
 
-ScDPFunctionListBox::ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox(pParent, nStyle)
-{
-    FillFunctionNames();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ScDPFunctionListBox, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE)
-
-void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
-{
-    if( (nFuncMask == PivotFunc::NONE) || (nFuncMask == PivotFunc::Auto) )
-        SetNoSelection();
-    else
-        for( sal_Int32 nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
-            SelectEntryPos( nEntry, bool(nFuncMask & spnFunctions[ nEntry ]) );
-}
-
-PivotFunc ScDPFunctionListBox::GetSelection() const
-{
-    PivotFunc nFuncMask = PivotFunc::NONE;
-    for( sal_Int32 nSel = 0, nCount = GetSelectedEntryCount(); nSel < nCount; ++nSel )
-        nFuncMask |= spnFunctions[ GetSelectedEntryPos( nSel ) ];
-    return nFuncMask;
-}
-
-void ScDPFunctionListBox::FillFunctionNames()
-{
-    OSL_ENSURE( !GetEntryCount(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
-    Clear();
-    for (size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(SCSTR_DPFUNCLISTBOX); ++nIndex)
-        InsertEntry(ScResId(SCSTR_DPFUNCLISTBOX[nIndex]));
-    assert(GetEntryCount() == SAL_N_ELEMENTS(spnFunctions));
-}
-
-DPFunctionListBox::DPFunctionListBox(std::unique_ptr<weld::TreeView> xControl)
+ScDPFunctionListBox::ScDPFunctionListBox(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
     FillFunctionNames();
 }
 
-void DPFunctionListBox::SetSelection( PivotFunc nFuncMask )
+void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
 {
     if( (nFuncMask == PivotFunc::NONE) || (nFuncMask == PivotFunc::Auto) )
         m_xControl->unselect_all();
@@ -225,7 +161,7 @@ void DPFunctionListBox::SetSelection( PivotFunc nFuncMask )
     }
 }
 
-PivotFunc DPFunctionListBox::GetSelection() const
+PivotFunc ScDPFunctionListBox::GetSelection() const
 {
     PivotFunc nFuncMask = PivotFunc::NONE;
     std::vector<int> aRows = m_xControl->get_selected_rows();
@@ -234,7 +170,7 @@ PivotFunc DPFunctionListBox::GetSelection() const
     return nFuncMask;
 }
 
-void DPFunctionListBox::FillFunctionNames()
+void ScDPFunctionListBox::FillFunctionNames()
 {
     OSL_ENSURE( !m_xControl->n_children(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
     m_xControl->clear();
@@ -245,60 +181,99 @@ void DPFunctionListBox::FillFunctionNames()
     assert(m_xControl->n_children() == SAL_N_ELEMENTS(spnFunctions));
 }
 
+namespace
+{
+    int FromDataPilotFieldReferenceType(int eMode)
+    {
+        switch (eMode)
+        {
+            case DataPilotFieldReferenceType::NONE:
+                return 0;
+            case DataPilotFieldReferenceType::ITEM_DIFFERENCE:
+                return 1;
+            case DataPilotFieldReferenceType::ITEM_PERCENTAGE:
+                return 2;
+            case DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
+                return 3;
+            case DataPilotFieldReferenceType::RUNNING_TOTAL:
+                return 4;
+            case DataPilotFieldReferenceType::ROW_PERCENTAGE:
+                return 5;
+            case DataPilotFieldReferenceType::COLUMN_PERCENTAGE:
+                return 6;
+            case DataPilotFieldReferenceType::TOTAL_PERCENTAGE:
+                return 7;
+            case DataPilotFieldReferenceType::INDEX:
+                return 8;
+        }
+        return -1;
+    }
+
+    int ToDataPilotFieldReferenceType(int nPos)
+    {
+        switch (nPos)
+        {
+            case 0:
+                return DataPilotFieldReferenceType::NONE;
+            case 1:
+                return DataPilotFieldReferenceType::ITEM_DIFFERENCE;
+            case 2:
+                return DataPilotFieldReferenceType::ITEM_PERCENTAGE;
+            case 3:
+                return DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE;
+            case 4:
+                return DataPilotFieldReferenceType::RUNNING_TOTAL;
+            case 5:
+                return DataPilotFieldReferenceType::ROW_PERCENTAGE;
+            case 6:
+                return DataPilotFieldReferenceType::COLUMN_PERCENTAGE;
+            case 7:
+                return DataPilotFieldReferenceType::TOTAL_PERCENTAGE;
+            case 8:
+                return DataPilotFieldReferenceType::INDEX;
+        }
+        return DataPilotFieldReferenceType::NONE;
+
+    }
+}
+
 ScDPFunctionDlg::ScDPFunctionDlg(
-        vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        weld::Window* pParent, const ScDPLabelDataVector& rLabelVec,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData)
-    : ModalDialog(pParent, "DataFieldDialog",
-        "modules/scalc/ui/datafielddialog.ui")
+    : GenericDialogController(pParent, "modules/scalc/ui/datafielddialog.ui", "DataFieldDialog")
+    , mxLbFunc(new ScDPFunctionListBox(m_xBuilder->weld_tree_view("functions")))
+    , mxFtName(m_xBuilder->weld_label("name"))
+    , mxLbType(m_xBuilder->weld_combo_box("type"))
+    , mxFtBaseField(m_xBuilder->weld_label("basefieldft"))
+    , mxLbBaseField(m_xBuilder->weld_combo_box("basefield"))
+    , mxFtBaseItem(m_xBuilder->weld_label("baseitemft"))
+    , mxLbBaseItem(m_xBuilder->weld_combo_box("baseitem"))
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
     , mrLabelVec(rLabelVec)
     , mbEmptyItem(false)
 {
-    get(mpFtName, "name");
-    get(mpLbType, "type");
-    mxLbTypeWrp.reset(new ScDPListBoxWrapper(*mpLbType, spRefTypeMap));
-    get(mpLbFunc, "functions");
-    mpLbFunc->set_height_request(mpLbFunc->GetTextHeight() * 8);
-    get(mpFtBaseField, "basefieldft");
-    get(mpLbBaseField, "basefield");
-    get(mpFtBaseItem, "baseitemft");
-    get(mpLbBaseItem, "baseitem");
-    get(mpBtnOk, "ok");
+    mxLbFunc->set_size_request(-1, mxLbFunc->get_height_rows(8));
 
-    Init( rLabelData, rFuncData );
+    Init(rLabelData, rFuncData);
 }
 
 ScDPFunctionDlg::~ScDPFunctionDlg()
 {
-    disposeOnce();
 }
-
-void ScDPFunctionDlg::dispose()
-{
-    mpLbFunc.clear();
-    mpFtName.clear();
-    mpLbType.clear();
-    mpFtBaseField.clear();
-    mpLbBaseField.clear();
-    mpFtBaseItem.clear();
-    mpLbBaseItem.clear();
-    mpBtnOk.clear();
-    ModalDialog::dispose();
-}
-
 
 PivotFunc ScDPFunctionDlg::GetFuncMask() const
 {
-    return mpLbFunc->GetSelection();
+    return mxLbFunc->GetSelection();
 }
 
 DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
 {
     DataPilotFieldReference aRef;
 
-    aRef.ReferenceType = mxLbTypeWrp->GetControlValue();
-    aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectedEntry());
+    aRef.ReferenceType = ToDataPilotFieldReferenceType(mxLbType->get_active());
+    aRef.ReferenceField = GetBaseFieldName(mxLbBaseField->get_active_text());
 
-    sal_Int32 nBaseItemPos = mpLbBaseItem->GetSelectedEntryPos();
+    sal_Int32 nBaseItemPos = mxLbBaseItem->get_active();
     switch( nBaseItemPos )
     {
         case SC_BASEITEM_PREV_POS:
@@ -311,7 +286,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
         {
             aRef.ReferenceItemType = DataPilotFieldReferenceItemType::NAMED;
             if( !mbEmptyItem || (nBaseItemPos > SC_BASEITEM_USER_POS) )
-                aRef.ReferenceItemName = GetBaseItemName(mpLbBaseItem->GetSelectedEntry());
+                aRef.ReferenceItemName = GetBaseItemName(mxLbBaseItem->get_active_text());
         }
     }
 
@@ -322,62 +297,59 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 {
     // list box
     PivotFunc nFuncMask = (rFuncData.mnFuncMask == PivotFunc::NONE) ? PivotFunc::Sum : rFuncData.mnFuncMask;
-    mpLbFunc->SetSelection( nFuncMask );
+    mxLbFunc->SetSelection( nFuncMask );
 
     // field name
-    mpFtName->SetText(rLabelData.getDisplayName());
+    mxFtName->set_label(rLabelData.getDisplayName());
 
     // handlers
-    mpLbFunc->SetDoubleClickHdl( LINK( this, ScDPFunctionDlg, DblClickHdl ) );
-    mpLbType->SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
-    mpLbBaseField->SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
+    mxLbFunc->connect_row_activated( LINK( this, ScDPFunctionDlg, DblClickHdl ) );
+    mxLbType->connect_changed( LINK( this, ScDPFunctionDlg, SelectHdl ) );
+    mxLbBaseField->connect_changed( LINK( this, ScDPFunctionDlg, SelectHdl ) );
 
     // base field list box
     OUString aSelectedEntry;
     for( const auto& rxLabel : mrLabelVec )
     {
-        mpLbBaseField->InsertEntry(rxLabel->getDisplayName());
+        mxLbBaseField->append_text(rxLabel->getDisplayName());
         maBaseFieldNameMap.emplace(rxLabel->getDisplayName(), rxLabel->maName);
         if (rxLabel->maName == rFuncData.maFieldRef.ReferenceField)
             aSelectedEntry = rxLabel->getDisplayName();
     }
 
-    // base item list box
-    mpLbBaseItem->SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );
-
     // select field reference type
-    mxLbTypeWrp->SetControlValue( rFuncData.maFieldRef.ReferenceType );
-    SelectHdl( *mpLbType );         // enables base field/item list boxes
+    mxLbType->set_active(FromDataPilotFieldReferenceType(rFuncData.maFieldRef.ReferenceType));
+    SelectHdl( *mxLbType );         // enables base field/item list boxes
 
     // select base field
-    mpLbBaseField->SelectEntry(aSelectedEntry);
-    if( mpLbBaseField->GetSelectedEntryPos() >= mpLbBaseField->GetEntryCount() )
-        mpLbBaseField->SelectEntryPos( 0 );
-    SelectHdl( *mpLbBaseField );    // fills base item list, selects base item
+    mxLbBaseField->set_active_text(aSelectedEntry);
+    if (mxLbBaseField->get_active() == -1)
+        mxLbBaseField->set_active(0);
+    SelectHdl( *mxLbBaseField );    // fills base item list, selects base item
 
     // select base item
     switch( rFuncData.maFieldRef.ReferenceItemType )
     {
         case DataPilotFieldReferenceItemType::PREVIOUS:
-            mpLbBaseItem->SelectEntryPos( SC_BASEITEM_PREV_POS );
+            mxLbBaseItem->set_active( SC_BASEITEM_PREV_POS );
         break;
         case DataPilotFieldReferenceItemType::NEXT:
-            mpLbBaseItem->SelectEntryPos( SC_BASEITEM_NEXT_POS );
+            mxLbBaseItem->set_active( SC_BASEITEM_NEXT_POS );
         break;
         default:
         {
             if( mbEmptyItem && rFuncData.maFieldRef.ReferenceItemName.isEmpty() )
             {
                 // select special "(empty)" entry added before other items
-                mpLbBaseItem->SelectEntryPos( SC_BASEITEM_USER_POS );
+                mxLbBaseItem->set_active( SC_BASEITEM_USER_POS );
             }
             else
             {
                 sal_Int32 nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
                 sal_Int32 nPos = FindBaseItemPos( rFuncData.maFieldRef.ReferenceItemName, nStartPos );
-                if( nPos >= mpLbBaseItem->GetEntryCount() )
-                    nPos = (mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
-                mpLbBaseItem->SelectEntryPos( nPos );
+                if( nPos == -1)
+                    nPos = (mxLbBaseItem->get_count() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
+                mxLbBaseItem->set_active( nPos );
             }
         }
     }
@@ -399,10 +371,10 @@ sal_Int32 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_Int32 nS
 {
     sal_Int32 nPos = nStartPos;
     bool bFound = false;
-    while (nPos < mpLbBaseItem->GetEntryCount())
+    while (nPos < mxLbBaseItem->get_count())
     {
         // translate the displayed field name back to its original field name.
-        const OUString& rInName = mpLbBaseItem->GetEntry(nPos);
+        const OUString& rInName = mxLbBaseItem->get_text(nPos);
         const OUString& rName = GetBaseItemName(rInName);
         if (rName == rEntry)
         {
@@ -411,15 +383,15 @@ sal_Int32 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_Int32 nS
         }
         ++nPos;
     }
-    return bFound ? nPos : LISTBOX_ENTRY_NOTFOUND;
+    return bFound ? nPos : -1;
 }
 
-IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
+IMPL_LINK( ScDPFunctionDlg, SelectHdl, weld::ComboBox&, rLBox, void )
 {
-    if( &rLBox == mpLbType )
+    if (&rLBox == mxLbType.get())
     {
         bool bEnableField, bEnableItem;
-        switch( mxLbTypeWrp->GetControlValue() )
+        switch (ToDataPilotFieldReferenceType(mxLbType->get_active()))
         {
             case DataPilotFieldReferenceType::ITEM_DIFFERENCE:
             case DataPilotFieldReferenceType::ITEM_PERCENTAGE:
@@ -436,27 +408,27 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
                 bEnableField = bEnableItem = false;
         }
 
-        bEnableField &= mpLbBaseField->GetEntryCount() > 0;
-        mpFtBaseField->Enable( bEnableField );
-        mpLbBaseField->Enable( bEnableField );
+        bEnableField &= (mxLbBaseField->get_count() > 0);
+        mxFtBaseField->set_sensitive( bEnableField );
+        mxLbBaseField->set_sensitive( bEnableField );
 
         bEnableItem &= bEnableField;
-        mpFtBaseItem->Enable( bEnableItem );
-        mpLbBaseItem->Enable( bEnableItem );
+        mxFtBaseItem->set_sensitive( bEnableItem );
+        mxLbBaseItem->set_sensitive( bEnableItem );
     }
-    else if( &rLBox == mpLbBaseField )
+    else if (&rLBox == mxLbBaseField.get())
     {
         // keep "previous" and "next" entries
-        while( mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS )
-            mpLbBaseItem->RemoveEntry( SC_BASEITEM_USER_POS );
+        while (mxLbBaseItem->get_count() > SC_BASEITEM_USER_POS)
+             mxLbBaseItem->remove(SC_BASEITEM_USER_POS);
 
         // update item list for current base field
         mbEmptyItem = false;
-        size_t nBasePos = mpLbBaseField->GetSelectedEntryPos();
-        if( nBasePos < mrLabelVec.size() )
+        size_t nBasePos = mxLbBaseField->get_active();
+        if (nBasePos < mrLabelVec.size())
         {
             const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos]->maMembers;
-            mbEmptyItem = lclFillListBox(*mpLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
+            mbEmptyItem = lclFillListBox(*mxLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
             // build cache for base names.
             NameMapType aMap;
             for (const auto& rMember : rMembers)
@@ -465,14 +437,14 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
         }
 
         // select base item
-        sal_uInt16 nItemPos = (mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
-        mpLbBaseItem->SelectEntryPos( nItemPos );
+        sal_uInt16 nItemPos = (mxLbBaseItem->get_count() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
+        mxLbBaseItem->set_active( nItemPos );
     }
 }
 
-IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, void)
 {
-    mpBtnOk->Click();
+    m_xDialog->response(RET_OK);
 }
 
 ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
@@ -486,7 +458,7 @@ ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
     , mxRbNone(m_xBuilder->weld_radio_button("none"))
     , mxRbAuto(m_xBuilder->weld_radio_button("auto"))
     , mxRbUser(m_xBuilder->weld_radio_button("user"))
-    , mxLbFunc(new DPFunctionListBox(m_xBuilder->weld_tree_view("functions")))
+    , mxLbFunc(new ScDPFunctionListBox(m_xBuilder->weld_tree_view("functions")))
     , mxFtName(m_xBuilder->weld_label("name"))
     , mxCbShowAll(m_xBuilder->weld_check_button("showall"))
     , mxBtnOk(m_xBuilder->weld_button("ok"))

@@ -469,10 +469,6 @@
                         generic-name="CondFormatList" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
-    <glade-widget-class title="ScDPFunctionListBox" name="scuilo-ScDPFunctionListBox"
-                        generic-name="DPFunctionListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-
     <glade-widget-class title="OTableTreeListBox" name="dbulo-OTableTreeListBox"
                         generic-name="OTableTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
