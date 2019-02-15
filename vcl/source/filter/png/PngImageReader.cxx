@@ -14,6 +14,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/BitmapTools.hxx>
 
 namespace
 {
@@ -34,11 +35,14 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
 
 bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
 {
+    static bool bUseRGB32 = true;
+
     enum
     {
         PNG_SIGNATURE_SIZE = 8
     };
 
+    // Check signature bytes
     sal_uInt8 aHeader[PNG_SIGNATURE_SIZE];
     rStream.ReadBytes(aHeader, PNG_SIGNATURE_SIZE);
 
@@ -62,9 +66,11 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
         return false;
     }
 
+    png_set_option(pPng, PNG_MAXIMUM_INFLATE_WINDOW, PNG_OPTION_ON);
+
     png_set_read_fn(pPng, &rStream, lclReadStream);
 
-    png_set_crc_action(pPng, PNG_CRC_WARN_USE, PNG_CRC_WARN_DISCARD);
+    png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
 
     png_set_sig_bytes(pPng, PNG_SIGNATURE_SIZE);
 
@@ -84,9 +90,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
         png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
     }
-
-    Bitmap aBitmap(Size(width, height), 24);
-    AlphaMask aBitmapAlpha(Size(width, height), nullptr);
 
     if (colorType == PNG_COLOR_TYPE_PALETTE)
         png_set_palette_to_rgb(pPng);
@@ -135,61 +138,114 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-            BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-            if (eFormat == ScanlineFormat::N24BitTcBgr)
-                png_set_bgr(pPng);
-
-            std::vector<png_byte> aRow(aRowSizeBytes, 0);
-
-            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            Bitmap aBitmap(Size(width, height), 24);
             {
-                for (png_uint_32 y = 0; y < height; y++)
+                BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+                if (eFormat == ScanlineFormat::N24BitTcBgr)
+                    png_set_bgr(pPng);
+
+                std::vector<std::vector<png_byte>> aRows(height);
+                for (auto& rRow : aRows)
+                    rRow.resize(aRowSizeBytes, 0);
+
+                for (int pass = 0; pass < nNumberOfPasses; pass++)
                 {
-                    Scanline pScanline = pWriteAccess->GetScanline(y);
-                    png_bytep pRow = aRow.data();
-                    png_read_rows(pPng, &pRow, nullptr, 1);
-                    size_t iColor = 0;
-                    for (size_t i = 0; i < aRowSizeBytes; i += 3)
+                    for (png_uint_32 y = 0; y < height; y++)
                     {
-                        pScanline[iColor++] = pRow[i + 0];
-                        pScanline[iColor++] = pRow[i + 1];
-                        pScanline[iColor++] = pRow[i + 2];
+                        Scanline pScanline = pWriteAccess->GetScanline(y);
+                        png_bytep pRow = aRows[y].data();
+                        png_read_row(pPng, pRow, nullptr);
+                        size_t iColor = 0;
+                        for (size_t i = 0; i < aRowSizeBytes; i += 3)
+                        {
+                            pScanline[iColor++] = pRow[i + 0];
+                            pScanline[iColor++] = pRow[i + 1];
+                            pScanline[iColor++] = pRow[i + 2];
+                        }
                     }
                 }
             }
+            rBitmapEx = BitmapEx(aBitmap);
         }
         else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-            BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            AlphaScopedWriteAccess pWriteAccessAlpha(aBitmapAlpha);
-
-            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-            if (eFormat == ScanlineFormat::N24BitTcBgr)
-                png_set_bgr(pPng);
-
-            std::vector<png_byte> aRow(aRowSizeBytes, 0);
-
-            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            if (bUseRGB32)
             {
-                for (png_uint_32 y = 0; y < height; y++)
+                Bitmap aBitmap(Size(width, height), 32);
                 {
-                    Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                    Scanline pScanline = pWriteAccess->GetScanline(y);
-                    png_bytep pRow = aRow.data();
-                    png_read_rows(pPng, &pRow, nullptr, 1);
-                    size_t iAlpha = 0;
-                    size_t iColor = 0;
-                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                    BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                    ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+                    if (eFormat == ScanlineFormat::N32BitTcAbgr
+                        || eFormat == ScanlineFormat::N32BitTcBgra)
                     {
-                        pScanline[iColor++] = pRow[i + 0];
-                        pScanline[iColor++] = pRow[i + 1];
-                        pScanline[iColor++] = pRow[i + 2];
-                        pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                        png_set_bgr(pPng);
+                    }
+
+                    std::vector<std::vector<png_byte>> aRows(height);
+                    for (auto& rRow : aRows)
+                        rRow.resize(aRowSizeBytes, 0);
+
+                    for (int pass = 0; pass < nNumberOfPasses; pass++)
+                    {
+                        for (png_uint_32 y = 0; y < height; y++)
+                        {
+                            Scanline pScanline = pWriteAccess->GetScanline(y);
+                            png_bytep pRow = aRows[y].data();
+                            png_read_row(pPng, pRow, nullptr);
+                            size_t iColor = 0;
+                            for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                            {
+                                sal_Int8 alpha = pRow[i + 3];
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 0], alpha);
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 1], alpha);
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 2], alpha);
+                                pScanline[iColor++] = alpha;
+                            }
+                        }
                     }
                 }
+                rBitmapEx = BitmapEx(aBitmap);
+            }
+            else
+            {
+                Bitmap aBitmap(Size(width, height), 24);
+                AlphaMask aBitmapAlpha(Size(width, height), nullptr);
+                {
+                    BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                    ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+                    if (eFormat == ScanlineFormat::N24BitTcBgr)
+                        png_set_bgr(pPng);
+
+                    AlphaScopedWriteAccess pWriteAccessAlpha(aBitmapAlpha);
+
+                    std::vector<std::vector<png_byte>> aRows(height);
+                    for (auto& rRow : aRows)
+                        rRow.resize(aRowSizeBytes, 0);
+
+                    for (int pass = 0; pass < nNumberOfPasses; pass++)
+                    {
+                        for (png_uint_32 y = 0; y < height; y++)
+                        {
+                            Scanline pScanline = pWriteAccess->GetScanline(y);
+                            Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
+                            png_bytep pRow = aRows[y].data();
+                            png_read_row(pPng, pRow, nullptr);
+                            size_t iAlpha = 0;
+                            size_t iColor = 0;
+                            for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                            {
+                                pScanline[iColor++] = pRow[i + 0];
+                                pScanline[iColor++] = pRow[i + 1];
+                                pScanline[iColor++] = pRow[i + 2];
+                                pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                            }
+                        }
+                    }
+                }
+                rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             }
         }
     }
@@ -197,8 +253,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx)
     png_read_end(pPng, pInfo);
 
     png_destroy_read_struct(&pPng, &pInfo, nullptr);
-
-    rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
 
     return true;
 }
