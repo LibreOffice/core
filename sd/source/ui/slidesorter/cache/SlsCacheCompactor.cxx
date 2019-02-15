@@ -169,7 +169,7 @@ void CacheCompactionByCompression::Run()
     if (mrCache.GetSize() <= mnMaximalCacheSize)
         return;
 
-    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses to much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
+    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses too much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
 
     ::std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
         mrCache.GetCacheIndex());
