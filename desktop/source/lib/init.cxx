@@ -457,10 +457,16 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
 
 RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const std::string& payload)
 {
-    PayloadString = payload;
+    setRectangleAndPart(RectangleAndPart::Create(payload));
 
-    PayloadObject = RectangleAndPart::Create(payload);
+    // Return reference to the cached object.
     return boost::get<RectangleAndPart>(PayloadObject);
+}
+
+void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndPart& rRectAndPart)
+{
+    PayloadString = rRectAndPart.toString().getStr();
+    PayloadObject = rRectAndPart;
 }
 
 const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
@@ -478,6 +484,7 @@ boost::property_tree::ptree& CallbackFlushHandler::CallbackData::setJson(const s
     // Let boost normalize the payload so it always matches the cache.
     setJson(aTree);
 
+    // Return reference to the cached object.
     return boost::get<boost::property_tree::ptree>(PayloadObject);
 }
 
@@ -914,7 +921,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     CallbackData aCallbackData(type, (data ? data : "(nil)"));
-    std::string& payload = aCallbackData.PayloadString;
+    const std::string& payload = aCallbackData.PayloadString;
     SAL_INFO("lok", "Queue: " << type << " : " << payload);
 
 #ifdef DBG_UTIL
@@ -1203,7 +1210,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     }
                 }
 
-                payload = rcNew.toString().getStr();
+                aCallbackData.setRectangleAndPart(rcNew);
             }
             break;
 
