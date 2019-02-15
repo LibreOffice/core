@@ -18,7 +18,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <unonames.hxx>
 
-#include <cliputil.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <scitems.hxx>
