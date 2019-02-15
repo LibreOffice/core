@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+#ifndef __com_sun_star_frame_XTransientDocumentsDocumentContentIdentifierFactory_idl__
+#define __com_sun_star_frame_XTransientDocumentsDocumentContentIdentifierFactory_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/ucb/XContentIdentifier.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+module com { module sun { module star { module frame {
+
+/** a factory for identifiers of
+    com::sun::star::ucb::TransientDocumentsDocumentContents.
+
+    @see com::sun::star::document::OfficeDocument
+    @see com::sun::star::ucb::XContentIdentifier
+
+    @since LibreOffice 6.3
+*/
+interface XTransientDocumentsDocumentContentIdentifierFactory
+    : com::sun::star::uno::XInterface
+{
+    /** creates a com::sun::star::ucb::XContentIdentifier
+        based on a given com::sun::star::document::OfficeDocument.
+
+        @param Model
+            the document model for which a
+            com::sun::star::ucb::XContentIdentifier
+            is requested. The model must be an implementation of service
+            com::sun::star::document::OfficeDocument.
+
+        @returns
+            a content identifier based on the given document model.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the document model cannot be associated with content for any reason.
+    */
+    com::sun::star::ucb::XContentIdentifier
+    createDocumentContentIdentifier(
+            [in] com::sun::star::frame::XModel Model )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
