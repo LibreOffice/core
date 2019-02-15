@@ -323,20 +323,6 @@ class WizardDialog(UnoDialog2):
             except Exception:
                 traceback.print_exc()
 
-    def setStepEnabled(self, _nStep, bEnabled, enableNextButton=None):
-        xRoadmapItem = self.getRoadmapItemByID(_nStep)
-        if xRoadmapItem is not None:
-            xRoadmapItem.Enabled = bEnabled
-        if enableNextButton is not None:
-            if self.getNextAvailableStep() > 0:
-                self.enableNextButton(bEnabled)
-
-    def enableNavigationButtons(
-            self, _bEnableBack, _bEnableNext, _bEnableFinish):
-        self.enableBackButton(_bEnableBack)
-        self.enableNextButton(_bEnableNext)
-        self.enableFinishButton(_bEnableFinish)
-
     def enableBackButton(self, enabled):
         self.xDialogModel.btnWizardBack.Enabled = enabled
 
@@ -345,16 +331,6 @@ class WizardDialog(UnoDialog2):
 
     def enableFinishButton(self, enabled):
         self.xDialogModel.btnWizardFinish.Enabled = enabled
-
-    def enablefromStep(self, _iStep, _bDoEnable):
-        if _iStep <= self.nMaxStep:
-            for i in list(range(_iStep, self.nMaxStep)):
-                self.setStepEnabled(i, _bDoEnable)
-            enableFinishButton(_bDoEnable)
-            if not _bDoEnable:
-                enableNextButton(_iStep > getCurrentStep() + 1)
-            else:
-                enableNextButton(not (getCurrentStep() == self.nMaxStep))
 
     def isStepEnabled(self, _nStep):
         try:
@@ -430,29 +406,6 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
             return -1
-
-    def setCurrentStep(self, _nNewstep):
-        self.nNewStep = _nNewstep
-        changeToStep(self.nNewStep)
-
-    def setRightPaneHeaders(self, _sRightPaneHeaders):
-        self.nMaxStep = len(_sRightPaneHeaders)
-        self.sRightPaneHeaders = _sRightPaneHeaders
-        oFontDesc = uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        oFontDesc.Weight = BOLD
-        for i in range(self.nMaxStep):
-            self.insertLabel("lblQueryTitle" + str(i),
-                ("FontDescriptor",
-                PropertyNames.PROPERTY_HEIGHT,
-                PropertyNames.PROPERTY_LABEL,
-                PropertyNames.PROPERTY_MULTILINE,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
-                PropertyNames.PROPERTY_WIDTH),(
-                    oFontDesc, 16, _sRightPaneHeaders[i],
-                    True, 91, 8, i + 1, 12, 212))
 
     def cancelWizard(self):
         #can be overwritten by extending class

@@ -70,24 +70,6 @@ class FileAccess(object):
             return ""
 
     @classmethod
-    def combinePaths(self, xMSF, _sFirstPath, _sSecondPath):
-        bexists = False
-        ReturnPath = ""
-        try:
-            xUcbInterface = xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            ReturnPath = _sFirstPath + _sSecondPath
-            bexists = xUcbInterface.exists(ReturnPath)
-        except Exception:
-            traceback.print_exc()
-            return ""
-
-        if not bexists:
-            raise NoValidPathException (xMSF, "")
-
-        return ReturnPath
-
-    @classmethod
     def getFolderTitles(self, xMSF, FilterName, FolderName, resDict=None):
         #Returns and ordered dict containing the template's name and path
 
@@ -130,17 +112,6 @@ class FileAccess(object):
             traceback.print_exc()
 
         return locLayoutFiles
-
-    @classmethod
-    def addPath(self, _sPath, _sPath2):
-        if not _sPath.endsWith("/"):
-            _sPath += "/"
-
-        if _sPath2.startsWith("/"):
-            _sPath2 = _sPath2.substring(1)
-
-        sNewPath = _sPath + _sPath2
-        return sNewPath
 
     @classmethod
     def getTitle(self, xMSF, _sFile):

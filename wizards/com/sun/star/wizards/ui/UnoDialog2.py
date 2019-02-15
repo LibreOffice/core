@@ -55,18 +55,6 @@ class UnoDialog2(UnoDialog):
 
         return xButton
 
-    def insertImageButton(
-            self, sName, actionPerformed, sPropNames, oPropValues, listener):
-        xButton = self.insertControlModel(
-            "com.sun.star.awt.UnoControlButtonModel",
-            sName, sPropNames, oPropValues)
-        if actionPerformed is not None:
-            actionPerformed = getattr(listener, actionPerformed)
-            xButton.addActionListener(
-                ActionListenerProcAdapter(actionPerformed))
-
-        return xButton
-
     def insertCheckBox(
         self, sName, itemChanged, sPropNames, oPropValues, listener):
         xCheckBox = self.insertControlModel(
@@ -182,13 +170,6 @@ class UnoDialog2(UnoDialog):
         return self.insertEditField(
             sName, sTextChanged,
             "com.sun.star.awt.UnoControlTimeFieldModel",
-            sPropNames, oPropValues, listener)
-
-    def insertFormattedField(
-        self, sName, sTextChanged, sPropNames, oPropValues, listener):
-        return self.insertEditField(
-            sName, sTextChanged,
-            "com.sun.star.awt.UnoControlFormattedFieldModel",
             sPropNames, oPropValues, listener)
 
     def insertFixedLine(self, sName, sPropNames, oPropValues):

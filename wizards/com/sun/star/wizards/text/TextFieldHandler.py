@@ -40,47 +40,6 @@ class TextFieldHandler(object):
         xUp = self.xTextFieldsSupplier.TextFields
         xUp.refresh()
 
-    def getUserFieldContent(self, xTextCursor):
-        try:
-            xTextRange = xTextCursor.getEnd()
-            oTextField = xTextRange.TextField
-            if com.sun.star.uno.AnyConverter.isVoid(oTextField):
-                return ""
-            else:
-                xMaster = oTextField.getTextFieldMaster()
-                UserFieldContent = xMaster.Content
-                return UserFieldContent
-
-        except Exception:
-            traceback.print_exc()
-
-        return ""
-
-    def insertUserField(self, xTextCursor, FieldName, FieldTitle):
-        try:
-            xField = self.xMSFDoc.createInstance(
-                "com.sun.star.text.TextField.User")
-
-            if self.xTextFieldsSupplier.TextFieldMasters.hasByName(
-                "com.sun.star.text.FieldMaster.User." + FieldName):
-                oMaster = self.xTextFieldsSupplier.TextFieldMasters.getByName( \
-                    "com.sun.star.text.FieldMaster.User." + FieldName)
-                oMaster.dispose()
-
-            xPSet = createUserField(FieldName, FieldTitle)
-            xField.attachTextFieldMaster(xPSet)
-            xTextCursor.getText().insertTextContent(
-                xTextCursor, xField, False)
-        except Exception:
-            traceback.print_exc()
-
-    def createUserField(self, FieldName, FieldTitle):
-        xPSet = self.xMSFDoc.createInstance(
-            "com.sun.star.text.FieldMaster.User")
-        xPSet.Name = FieldName
-        xPSet.Content = FieldTitle
-        return xPSet
-
     def __getTextFields(self):
         try:
             if self.xTextFieldsSupplier.TextFields.hasElements():
@@ -140,15 +99,6 @@ class TextFieldHandler(object):
                     except RuntimeException:
                         pass
 
-        except Exception:
-            traceback.print_exc()
-
-    def fixDateFields(self, _bSetFixed):
-        try:
-            for i in TextFieldHandler.arrayTextFields:
-                if i.supportsService(
-                    "com.sun.star.text.TextField.DateTime"):
-                    i.IsFixed = _bSetFixed
         except Exception:
             traceback.print_exc()
 
