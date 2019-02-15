@@ -575,10 +575,13 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             else
                                 aFilterOut = aParam.copy( nPathIndex+1 );
 
-                            INetURLObject aOutFilename( aObj );
-                            aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                            OUString aOutFile = aFilterOut + "/" + aOutFilename.getName();
+                            INetURLObject aOutFilename(aFilterOut);
+                            aOutFilename.Append(aObj.getName(INetURLObject::LAST_SEGMENT, true,
+                                                             INetURLObject::DecodeMechanism::NONE));
+                            aOutFilename.SetExtension(aFilterExt);
+                            OUString aOutFile
+                                = aOutFilename.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                             std::unique_ptr<utl::TempFile> fileForCat;
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
