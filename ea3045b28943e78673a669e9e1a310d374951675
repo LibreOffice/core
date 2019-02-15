@@ -70,6 +70,24 @@
       "revId": "ea3045b28943e78673a669e9e1a310d374951675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_da51a810",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-15T10:02:07Z",
+      "side": 1,
+      "message": "I would suggest to remove that confusing comment.",
+      "parentUuid": "1f485f77_df999a1f",
+      "revId": "ea3045b28943e78673a669e9e1a310d374951675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
