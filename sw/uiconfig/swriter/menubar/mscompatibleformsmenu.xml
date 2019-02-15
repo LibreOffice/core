@@ -24,6 +24,13 @@
           <menu:menuitem menu:id=".uno:DateField"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:MSCompatLegacyControls">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:TextFormField"/>
+          <menu:menuitem menu:id=".uno:CheckBoxFormField"/>
+          <menu:menuitem menu:id=".uno:DropDownFormField"/>
+        </menu:menupopup>
+      </menu:menu>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>
