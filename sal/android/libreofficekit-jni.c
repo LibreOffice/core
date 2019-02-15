@@ -65,8 +65,7 @@ void Java_org_libreoffice_kit_LibreOfficeKit_redirectStdio
 
 /// Initialize the LibreOfficeKit.
 __attribute__ ((visibility("default")))
-jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
-    (JNIEnv* env, jobject clazz,
+jboolean libreofficekit_initialize(JNIEnv* env,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
 {
     struct stat st;
@@ -75,10 +74,7 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     const char *cacheDirPath;
     const char *apkFilePath;
 
-    const char program_dir[] = "/program";
-    size_t data_dir_len;
-
-    (void) clazz;
+    setenv("OOO_DISABLE_RECOVERY", "1", 1);
 
     native_asset_manager = AAssetManager_fromJava(env, assetManager);
 
@@ -89,6 +85,9 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     cacheDirPath = (*env)->GetStringUTFChars(env, cacheDir, NULL);
     cache_dir = strdup(cacheDirPath);
     (*env)->ReleaseStringUTFChars(env, cacheDir, cacheDirPath);
+
+    // TMPDIR is used by osl_getTempDirURL()
+    setenv("TMPDIR", cache_dir, 1);
 
     apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
 
@@ -128,6 +127,21 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
         return JNI_FALSE;
     }
 
+    LOGI("LibreOfficeKit: libreofficekit_initialize finished");
+}
+
+/// Initialize the LibreOfficeKit.
+__attribute__ ((visibility("default")))
+jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
+    (JNIEnv* env, jobject clazz,
+     jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
+{
+    const char program_dir[] = "/program";
+    size_t data_dir_len;
+
+    (void) clazz;
+    libreofficekit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
+
     // LibreOfficeKit expects a path to the program/ directory
     free(full_program_dir);
     data_dir_len = strlen(data_dir);
@@ -166,8 +180,7 @@ __attribute__ ((visibility("default")))
 AAssetManager *
 lo_get_native_assetmgr(void)
 {
-        return native_asset_manager;
+    return native_asset_manager;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,14 +76,9 @@ public final class LibreOfficeKit
             inputStream = null;
         }
 
-        putenv("OOO_DISABLE_RECOVERY=1");
-
         if (inputStream != null) {
             putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
         }
-
-        // TMPDIR is used by osl_getTempDirURL()
-        putenv("TMPDIR=" + cacheDir);
 
         if (!initializeNative(dataDir, cacheDir, apkFile, mgr)) {
             Log.e(LOGTAG, "Initialize native failed!");
