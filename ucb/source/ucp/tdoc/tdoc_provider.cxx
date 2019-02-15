@@ -88,6 +88,7 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
                                                static_cast< lang::XTypeProvider* >(this),
                                                static_cast< lang::XServiceInfo* >(this),
                                                static_cast< ucb::XContentProvider* >(this),
+                                               static_cast< frame::XTransientDocumentsDocumentContentIdentifierFactory* >(this),
                                                static_cast< frame::XTransientDocumentsDocumentContentFactory* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
@@ -96,10 +97,11 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 // XTypeProvider methods.
 
 
-XTYPEPROVIDER_IMPL_4( ContentProvider,
+XTYPEPROVIDER_IMPL_5( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider,
+                      frame::XTransientDocumentsDocumentContentIdentifierFactory,
                       frame::XTransientDocumentsDocumentContentFactory );
 
 
@@ -164,13 +166,11 @@ ContentProvider::queryContent(
 }
 
 
-// XTransientDocumentsDocumentContentFactory methods.
+// XTransientDocumentsDocumentContentIdentifierFactory methods.
 
-
-// virtual
-uno::Reference< ucb::XContent > SAL_CALL
-ContentProvider::createDocumentContent(
-        const uno::Reference< frame::XModel >& Model )
+uno::Reference<ucb::XContentIdentifier> SAL_CALL
+ContentProvider::createDocumentContentIdentifier(
+        uno::Reference<frame::XModel> const& xModel)
 {
     // model -> id -> content identifier -> queryContent
     if ( !m_xDocsMgr.is() )
@@ -181,7 +181,7 @@ ContentProvider::createDocumentContent(
             1 );
      }
 
-    OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId( Model );
+    OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId(xModel);
     if ( aDocId.isEmpty() )
     {
         throw lang::IllegalArgumentException(
@@ -196,6 +196,17 @@ ContentProvider::createDocumentContent(
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
+    return xId;
+}
+
+// XTransientDocumentsDocumentContentFactory methods.
+
+uno::Reference< ucb::XContent > SAL_CALL
+ContentProvider::createDocumentContent(
+        uno::Reference<frame::XModel> const& xModel)
+{
+    uno::Reference<ucb::XContentIdentifier> const xId(
+            createDocumentContentIdentifier(xModel));
 
     osl::MutexGuard aGuard( m_aMutex );
 

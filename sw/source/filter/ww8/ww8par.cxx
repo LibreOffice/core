@@ -4921,10 +4921,11 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         // Initialize RDF metadata, to be able to add statements during the import.
         try
         {
-            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XModel> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
+            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY_THROW);
             uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
             uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, xStorage, m_sBaseURL));
+            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, xModel, m_sBaseURL));
             uno::Reference<task::XInteractionHandler> xHandler;
             xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }

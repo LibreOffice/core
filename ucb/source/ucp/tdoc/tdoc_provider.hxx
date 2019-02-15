@@ -22,6 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
+#include <com/sun/star/frame/XTransientDocumentsDocumentContentIdentifierFactory.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -53,9 +54,10 @@ namespace tdoc_ucp {
 
 class StorageElementFactory;
 
-class ContentProvider :
-    public ::ucbhelper::ContentProviderImplHelper,
-    public css::frame::XTransientDocumentsDocumentContentFactory
+class ContentProvider
+    : public ::ucbhelper::ContentProviderImplHelper
+    , public css::frame::XTransientDocumentsDocumentContentIdentifierFactory
+    , public css::frame::XTransientDocumentsDocumentContentFactory
 {
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -87,6 +89,11 @@ public:
     // XContentProvider
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+
+    // XTransientDocumentsDocumentContentIdentifierFactory
+    virtual css::uno::Reference<css::ucb::XContentIdentifier> SAL_CALL
+    createDocumentContentIdentifier(
+        css::uno::Reference<css::frame::XModel> const& xModel) override;
 
     // XTransientDocumentsDocumentContentFactory
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
