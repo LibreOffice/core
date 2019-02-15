@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/bootstrap \
     unotools/source/config/cmdoptions \
     unotools/source/config/compatibility \
+    unotools/source/config/compatibilityviewoptions \
     unotools/source/config/configitem \
     unotools/source/config/configmgr \
     unotools/source/config/confignode \
