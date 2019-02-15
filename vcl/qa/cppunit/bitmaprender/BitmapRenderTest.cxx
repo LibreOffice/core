@@ -120,7 +120,7 @@ void BitmapRenderTest::testDrawBitmap32()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));
 
-// sometimes on windows we get roundign error in blending so let's ignore this on Windows for now.
+// sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.
 #if !defined(_WIN32)
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
