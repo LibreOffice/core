@@ -298,20 +298,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_btLr:
-                        {
-                            // We have to fake this text direction
-                            pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
-                            pPropMap->Insert( PROP_CHAR_ROTATION, uno::makeAny( sal_Int16( 900 ) ));
-                            SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
-
-                            // We're faking a text direction, so don't allow multiple lines.
-                            if (!getCellProps() || !getCellProps()->isSet(PROP_VERTICAL_MERGE))
-                            {
-                                // Though in case there will be a vertical merge, don't do this, it hides text that is supposed to be visible.
-                                m_bRowSizeTypeInserted = true;
-                            }
-                            m_bHasBtlrCell = true;
-                        }
+                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::BT_LR ));
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
