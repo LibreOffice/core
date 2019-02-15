@@ -476,11 +476,11 @@ public:
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData ) = 0;
 
-    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg( vcl::Window* pParent,
-                                                                ScDPObject& rDPObj,
-                                                                const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData,
-                                                                const ScDPNameVec& rDataFields ) = 0;
+    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg(weld::Window* pParent,
+                                                                  ScDPObject& rDPObj,
+                                                                  const ScDPLabelData& rLabelData,
+                                                                  const ScPivotFuncData& rFuncData,
+                                                                  const ScDPNameVec& rDataFields) = 0;
 
     virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg(weld::Window* pParent,
                                                                   const ScDPNumGroupInfo& rInfo) = 0;

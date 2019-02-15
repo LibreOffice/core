@@ -203,6 +203,48 @@ void ScDPFunctionListBox::FillFunctionNames()
     assert(GetEntryCount() == SAL_N_ELEMENTS(spnFunctions));
 }
 
+DPFunctionListBox::DPFunctionListBox(std::unique_ptr<weld::TreeView> xControl)
+    : m_xControl(std::move(xControl))
+{
+    FillFunctionNames();
+}
+
+void DPFunctionListBox::SetSelection( PivotFunc nFuncMask )
+{
+    if( (nFuncMask == PivotFunc::NONE) || (nFuncMask == PivotFunc::Auto) )
+        m_xControl->unselect_all();
+    else
+    {
+        for( sal_Int32 nEntry = 0, nCount = m_xControl->n_children(); nEntry < nCount; ++nEntry )
+        {
+            if (bool(nFuncMask & spnFunctions[ nEntry ]))
+                m_xControl->select(nEntry);
+            else
+                m_xControl->unselect(nEntry);
+        }
+    }
+}
+
+PivotFunc DPFunctionListBox::GetSelection() const
+{
+    PivotFunc nFuncMask = PivotFunc::NONE;
+    std::vector<int> aRows = m_xControl->get_selected_rows();
+    for (int nSel : aRows)
+        nFuncMask |= spnFunctions[nSel];
+    return nFuncMask;
+}
+
+void DPFunctionListBox::FillFunctionNames()
+{
+    OSL_ENSURE( !m_xControl->n_children(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
+    m_xControl->clear();
+    m_xControl->freeze();
+    for (size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(SCSTR_DPFUNCLISTBOX); ++nIndex)
+        m_xControl->append_text(ScResId(SCSTR_DPFUNCLISTBOX[nIndex]));
+    m_xControl->thaw();
+    assert(m_xControl->n_children() == SAL_N_ELEMENTS(spnFunctions));
+}
+
 ScDPFunctionDlg::ScDPFunctionDlg(
         vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData)
@@ -433,56 +475,40 @@ IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, ListBox&, void)
     mpBtnOk->Click();
 }
 
-ScDPSubtotalDlg::ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
+ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
-        const ScDPNameVec& rDataFields, bool bEnableLayout )
-    : ModalDialog(pParent, "PivotFieldDialog",
-        "modules/scalc/ui/pivotfielddialog.ui")
+        const ScDPNameVec& rDataFields, bool bEnableLayout)
+    : GenericDialogController(pParent, "modules/scalc/ui/pivotfielddialog.ui", "PivotFieldDialog")
     , mrDPObj(rDPObj)
     , mrDataFields(rDataFields)
     , maLabelData(rLabelData)
     , mbEnableLayout(bEnableLayout)
+    , mxRbNone(m_xBuilder->weld_radio_button("none"))
+    , mxRbAuto(m_xBuilder->weld_radio_button("auto"))
+    , mxRbUser(m_xBuilder->weld_radio_button("user"))
+    , mxLbFunc(new DPFunctionListBox(m_xBuilder->weld_tree_view("functions")))
+    , mxFtName(m_xBuilder->weld_label("name"))
+    , mxCbShowAll(m_xBuilder->weld_check_button("showall"))
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnOptions(m_xBuilder->weld_button("options"))
 {
-    get(mpBtnOk, "ok");
-    get(mpBtnOptions, "options");
-    get(mpCbShowAll, "showall");
-    get(mpFtName, "name");
-    get(mpLbFunc, "functions");
-    mpLbFunc->EnableMultiSelection(true);
-    mpLbFunc->set_height_request(mpLbFunc->GetTextHeight() * 8);
-    get(mpRbNone, "none");
-    get(mpRbAuto, "auto");
-    get(mpRbUser, "user");
-
-    Init( rLabelData, rFuncData );
+    mxLbFunc->set_selection_mode(SelectionMode::Multiple);
+    mxLbFunc->set_size_request(-1, mxLbFunc->get_height_rows(8));
+    Init(rLabelData, rFuncData);
 }
 
 ScDPSubtotalDlg::~ScDPSubtotalDlg()
 {
-    disposeOnce();
-}
-
-void ScDPSubtotalDlg::dispose()
-{
-    mpRbNone.clear();
-    mpRbAuto.clear();
-    mpRbUser.clear();
-    mpLbFunc.clear();
-    mpFtName.clear();
-    mpCbShowAll.clear();
-    mpBtnOk.clear();
-    mpBtnOptions.clear();
-    ModalDialog::dispose();
 }
 
 PivotFunc ScDPSubtotalDlg::GetFuncMask() const
 {
     PivotFunc nFuncMask = PivotFunc::NONE;
 
-    if( mpRbAuto->IsChecked() )
+    if (mxRbAuto->get_active())
         nFuncMask = PivotFunc::Auto;
-    else if( mpRbUser->IsChecked() )
-        nFuncMask = mpLbFunc->GetSelection();
+    else if (mxRbUser->get_active())
+        nFuncMask = mxLbFunc->GetSelection();
 
     return nFuncMask;
 }
@@ -491,7 +517,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 {
     rLabelData.mnFuncMask = GetFuncMask();
     rLabelData.mnUsedHier = maLabelData.mnUsedHier;
-    rLabelData.mbShowAll = mpCbShowAll->IsChecked();
+    rLabelData.mbShowAll = mxCbShowAll->get_active();
     rLabelData.maMembers = maLabelData.maMembers;
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
@@ -502,49 +528,49 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // field name
-    mpFtName->SetText(rLabelData.getDisplayName());
+    mxFtName->set_label(rLabelData.getDisplayName());
 
     // radio buttons
-    mpRbNone->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    mpRbAuto->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    mpRbUser->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbNone->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbAuto->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbUser->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
 
-    RadioButton* pRBtn = nullptr;
+    weld::RadioButton* pRBtn = nullptr;
     switch( rFuncData.mnFuncMask )
     {
-        case PivotFunc::NONE:   pRBtn = mpRbNone;  break;
-        case PivotFunc::Auto:   pRBtn = mpRbAuto;  break;
-        default:                pRBtn = mpRbUser;
+        case PivotFunc::NONE:   pRBtn = mxRbNone.get();  break;
+        case PivotFunc::Auto:   pRBtn = mxRbAuto.get();  break;
+        default:                pRBtn = mxRbUser.get();
     }
-    pRBtn->Check();
-    RadioClickHdl( pRBtn );
+    pRBtn->set_active(true);
+    RadioClickHdl(*pRBtn);
 
     // list box
-    mpLbFunc->SetSelection( rFuncData.mnFuncMask );
-    mpLbFunc->SetDoubleClickHdl( LINK( this, ScDPSubtotalDlg, DblClickHdl ) );
+    mxLbFunc->SetSelection( rFuncData.mnFuncMask );
+    mxLbFunc->connect_row_activated( LINK( this, ScDPSubtotalDlg, DblClickHdl ) );
 
     // show all
-    mpCbShowAll->Check( rLabelData.mbShowAll );
+    mxCbShowAll->set_active( rLabelData.mbShowAll );
 
     // options
-    mpBtnOptions->SetClickHdl( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
+    mxBtnOptions->connect_clicked( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
 }
 
-IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::Button&, rBtn, void)
 {
-    mpLbFunc->Enable( pBtn == mpRbUser );
+    mxLbFunc->set_sensitive(&rBtn == mxRbUser.get());
 }
 
-IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl, weld::TreeView&, void)
 {
-    mpBtnOk->Click();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( ScDPSubtotalDlg, ClickHdl, Button*, pBtn, void )
+IMPL_LINK(ScDPSubtotalDlg, ClickHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == mpBtnOptions)
+    if (&rBtn == mxBtnOptions.get())
     {
-        ScDPSubtotalOptDlg aDlg(GetFrameWeld(), mrDPObj, maLabelData, mrDataFields, mbEnableLayout);
+        ScDPSubtotalOptDlg aDlg(m_xDialog.get(), mrDPObj, maLabelData, mrDataFields, mbEnableLayout);
         if (aDlg.run() == RET_OK)
             aDlg.FillLabelData(maLabelData);
     }

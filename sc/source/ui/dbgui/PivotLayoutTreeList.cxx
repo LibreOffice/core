@@ -57,7 +57,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     ScopedVclPtr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
+        pFactory->CreateScDPSubtotalDlg(GetFrameWeld(), mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
 
     if (pDialog->Execute() == RET_OK)
     {
