@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_550fcb2d",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-02-15T22:01:51Z",
+      "side": 1,
+      "message": "Both true and false seem to execute the same code, is it intentional? :-)",
+      "range": {
+        "startLine": 505,
+        "startChar": 22,
+        "endLine": 505,
+        "endChar": 25
+      },
+      "revId": "61bb90aac5038b5ff051668f7ae86eb61658e4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
