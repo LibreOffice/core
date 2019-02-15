@@ -173,6 +173,7 @@ namespace framework
 
             //  menu bar
 
+            void implts_createMenuBar( const OUString& rMenuBarName );
             void impl_clearUpMenuBar();
             void implts_reset( bool bAttach );
             void implts_updateMenuBarClose();
