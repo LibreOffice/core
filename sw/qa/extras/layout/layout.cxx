@@ -2816,6 +2816,26 @@ void SwLayoutWriter::testBtlrCell()
     // Actual  : 0', i.e. the AAA2 frame was not visible due to 0 width.
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "width", "269");
+
+    // Test the position of the cursor after doc load.
+    // We expect that it's inside the first text frame in the first cell.
+    // More precisely, this is a bottom to top vertical frame, so we expect it's at the start, which
+    // means it's at the lower half of the text frame rectangle (vertically).
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    const SwRect& rCharRect = pWrtShell->GetCharRect();
+    SwTwips nFirstParaTop
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[1]/infos/bounds", "top").toInt32();
+    SwTwips nFirstParaHeight
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[1]/infos/bounds", "height")
+              .toInt32();
+    SwTwips nFirstParaMiddle = nFirstParaTop + nFirstParaHeight / 2;
+    SwTwips nFirstParaBottom = nFirstParaTop + nFirstParaHeight;
+    // Without the accompanying fix in place, this test would have failed: the lower half (vertical)
+    // range was 2273 -> 2835, the good vertical position is 2730, the bad one was 1830.
+    CPPUNIT_ASSERT_GREATER(nFirstParaMiddle, rCharRect.Top());
+    CPPUNIT_ASSERT_LESS(nFirstParaBottom, rCharRect.Top());
 #endif
 }
 
