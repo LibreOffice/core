@@ -74,6 +74,7 @@
 #include <comphelper/uno3.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
+#include <unotools/compatibilityviewoptions.hxx>
 
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -157,6 +158,14 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
 {
     SolarMutexClearableGuard aWriteLock;
 
+    // Create a customized menu if compatibility mode is on
+    SvtCompatibilityViewOptions aCompOptions;
+    if( aCompOptions.HasMSOCompatibleFormsMenu() && m_aModuleIdentifier == "com.sun.star.text.TextDocument" )
+    {
+        implts_createMSCompatibleMenuBar(rMenuBarName);
+    }
+
+    // Create the default menubar otherwise
     if (!m_bInplaceMenuSet && !m_xMenuBar.is())
     {
         m_xMenuBar = implts_createElement( rMenuBarName );
@@ -208,6 +217,8 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
 void LayoutManager::impl_clearUpMenuBar()
 {
     implts_lock();
+
+    implts_resetInplaceMenuBar();
 
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
@@ -2522,6 +2533,60 @@ bool LayoutManager::implts_resetMenuBar()
     }
 
     return false;
+}
+
+void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
+{
+    SolarMutexClearableGuard aWriteLock;
+
+    // Find Forms menu in the original menubar
+    m_xMenuBar = implts_createElement( aName );
+    uno::Reference< XUIElementSettings > xMenuBarSettings(m_xMenuBar, UNO_QUERY);
+    uno::Reference< container::XIndexReplace > xMenuIndex(xMenuBarSettings->getSettings(true), UNO_QUERY);
+
+    sal_Int32 nFormsMenu = -1;
+    for (sal_Int32 nIndex = 0; nIndex < xMenuIndex->getCount(); ++nIndex)
+    {
+        uno::Sequence< beans::PropertyValue > aProps;
+        xMenuIndex->getByIndex( nIndex ) >>= aProps;
+        OUString aCommand;
+        for (sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); ++nSeqInd)
+        {
+            if (aProps[nSeqInd].Name == "CommandURL")
+            {
+                aProps[nSeqInd].Value >>= aCommand;
+                break;
+            }
+        }
+
+        if (aCommand == ".uno:FormatFormMenu")
+            nFormsMenu = nIndex;
+    }
+    assert(nFormsMenu != -1);
+
+    // Create the MS compatible Forms menu
+    css::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( "private:resource/menubar/mscompatibleformsmenu" );
+    if(!xFormsMenu.is())
+        return;
+
+    // Merge the MS compatible Forms menu into the menubar
+    uno::Reference< XUIElementSettings > xFormsMenuSettings(xFormsMenu, UNO_QUERY);
+    uno::Reference< container::XIndexAccess > xFormsMenuIndex(xFormsMenuSettings->getSettings(true));
+
+    assert(xFormsMenuIndex->getCount() >= 1);
+    uno::Sequence< beans::PropertyValue > aNewFormsMenu;
+    xFormsMenuIndex->getByIndex( 0 ) >>= aNewFormsMenu;
+    xMenuIndex->replaceByIndex(nFormsMenu, uno::makeAny(aNewFormsMenu));
+
+    setMergedMenuBar( xMenuIndex );
+
+    // Clear up the temporal forms menubar
+    Reference< XComponent > xFormsMenuComp( xFormsMenu, UNO_QUERY );
+    if ( xFormsMenuComp.is() )
+        xFormsMenuComp->dispose();
+    xFormsMenu.clear();
+
+    aWriteLock.clear();
 }
 
 IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
