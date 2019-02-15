@@ -238,7 +238,7 @@ void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
     m_pFrame->CallCallback(SalEvent::Close, nullptr);
 }
 
-static sal_uInt16 GetKeyCode(int keyval)
+static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
 {
     sal_uInt16 nCode = 0;
     if (keyval >= Qt::Key_0 && keyval <= Qt::Key_9)
@@ -247,6 +247,11 @@ static sal_uInt16 GetKeyCode(int keyval)
         nCode = KEY_A + (keyval - Qt::Key_A);
     else if (keyval >= Qt::Key_F1 && keyval <= Qt::Key_F26)
         nCode = KEY_F1 + (keyval - Qt::Key_F1);
+    else if (modifiers.testFlag(Qt::KeypadModifier)
+             && (keyval == Qt::Key_Period || keyval == Qt::Key_Comma))
+        // Qt doesn't use a special keyval for decimal separator ("," or ".")
+        // on numerical keypad, but sets Qt::KeypadModifier in addition
+        nCode = KEY_DECIMAL;
     else
     {
         switch (keyval)
@@ -385,7 +390,7 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
 
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
     aEvent.mnRepeat = 0;
-    aEvent.mnCode = GetKeyCode(pEvent->key());
+    aEvent.mnCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
     aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
 
     bool bStopProcessingKey;
