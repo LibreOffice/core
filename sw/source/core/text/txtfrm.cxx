@@ -478,8 +478,18 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
     long nOfstX, nOfstY;
     if ( IsVertLR() )
     {
-        nOfstX = rRect.Left() - getFrameArea().Left();
-        nOfstY = rRect.Top() - getFrameArea().Top();
+        if (IsVertLRBT())
+        {
+            // X and Y offsets here mean the position of the point that will be the top left corner
+            // after the switch.
+            nOfstX = rRect.Left() + rRect.Width() - getFrameArea().Left();
+            nOfstY = rRect.Top() - getFrameArea().Top();
+        }
+        else
+        {
+            nOfstX = rRect.Left() - getFrameArea().Left();
+            nOfstY = rRect.Top() - getFrameArea().Top();
+        }
     }
     else
     {
@@ -491,7 +501,12 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
     const long nHeight = rRect.Height();
 
     if ( IsVertLR() )
-        rRect.Left(getFrameArea().Left() + nOfstY);
+    {
+        if (IsVertLRBT())
+            rRect.Left(getFrameArea().Left() + nOfstY);
+        else
+            rRect.Left(getFrameArea().Left() + nOfstY);
+    }
     else
     {
         if ( mbIsSwapped )
@@ -501,7 +516,14 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
             rRect.Left( getFrameArea().Left() + getFrameArea().Width() - nOfstY );
     }
 
-    rRect.Top( getFrameArea().Top() + nOfstX );
+    if (IsVertLRBT())
+    {
+        SAL_WARN_IF(!mbIsSwapped, "sw.core",
+                    "SwTextFrame::SwitchHorizontalToVertical, IsVertLRBT, not swapped");
+        rRect.Top(getFrameArea().Top() + getFrameArea().Width() - nOfstX);
+    }
+    else
+        rRect.Top(getFrameArea().Top() + nOfstX);
     rRect.Width( nHeight );
     rRect.Height( nWidth );
 }
