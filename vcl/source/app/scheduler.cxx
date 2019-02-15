@@ -31,6 +31,7 @@
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
@@ -476,7 +477,7 @@ bool Scheduler::ProcessTaskScheduling()
         catch (css::uno::Exception& e)
         {
             auto const e2 = cppu::getCaughtException();
-            SAL_WARN("vcl.schedule", "Uncaught " << e2.getValueTypeName() << " " << e.Message);
+            SAL_WARN("vcl.schedule", "Uncaught " << exceptionToString(e2));
             std::abort();
         }
         catch (std::exception& e)
