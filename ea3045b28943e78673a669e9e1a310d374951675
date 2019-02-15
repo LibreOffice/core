@@ -52,6 +52,24 @@
       "revId": "ea3045b28943e78673a669e9e1a310d374951675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_df999a1f",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2019-02-15T06:45:34Z",
+      "side": 1,
+      "message": "There was nothing problematic with the code. Initializing variables at declaration is just a nice to have and I saw no reasons to not do that.\nThe comment is just a memo to keep the variables, since evaluating indexed getToken/copy directly in the following function call would trigger undefined behavior (on top of losing some information about the meaning of the fields).",
+      "parentUuid": "1f485f77_24742735",
+      "revId": "ea3045b28943e78673a669e9e1a310d374951675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
