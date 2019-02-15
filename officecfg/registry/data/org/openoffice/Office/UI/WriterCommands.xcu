@@ -3402,6 +3402,21 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:MSCompatActiveXControls" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">ActiveX Controls</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MSCompatLegacyControls" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Legacy Form Fields</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MSCompatContentControls" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Content Controls</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
