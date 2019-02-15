@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     UnoControls \
     accessibility \
     animations \
+    apple_remote \
     autodoc \
     automation \
     avmedia \

@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\apple_remote
-..\inc\*.h %_DEST%\inc%_EXT%\apple_remote\*
-
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-
