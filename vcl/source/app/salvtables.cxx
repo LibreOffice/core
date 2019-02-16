@@ -1180,6 +1180,18 @@ public:
         rVertScrollBar.SetRangeMax(upper);
     }
 
+    virtual int vadjustment_get_lower() const override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.GetRangeMin();
+    }
+
+    virtual void vadjustment_set_lower(int lower) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetRangeMin(lower);
+    }
+
     virtual int vadjustment_get_page_size() const override
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
