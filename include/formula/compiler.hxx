@@ -506,7 +506,8 @@
 #define SC_OPCODE_FINDB             495
 #define SC_OPCODE_SEARCHB           496
 #define SC_OPCODE_REGEX             497
-#define SC_OPCODE_STOP_2_PAR        498     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_FOURIER           498
+#define SC_OPCODE_STOP_2_PAR        499     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

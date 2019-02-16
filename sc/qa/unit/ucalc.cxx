@@ -2423,6 +2423,7 @@ void Test::testFunctionLists()
     };
 
     const char* aArray[] = {
+        "FOURIER",
         "FREQUENCY",
         "GROWTH",
         "LINEST",
