@@ -40,6 +40,7 @@
 #include <docfnote.hxx>
 #include <docstdlg.hxx>
 #include <DropDownFieldDialog.hxx>
+#include <DropDownFormFieldDialog.hxx>
 #include <envlop.hxx>
 #include <label.hxx>
 #include <drpcps.hxx>
@@ -86,6 +87,7 @@
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
 
+
 using namespace ::com::sun::star;
 
 IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
@@ -99,9 +101,11 @@ IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractDropDownFormFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl);
+
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
@@ -769,6 +773,12 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
 {
     VclPtr<sw::DropDownFieldDialog> pDlg = VclPtr<sw::DropDownFieldDialog>::Create(nullptr, rSh, pField, bPrevButton, bNextButton);
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(sw::mark::IFieldmark* pDropDownField)
+{
+    VclPtr<sw::DropDownFormFieldDialog> pDlg = VclPtr<sw::DropDownFormFieldDialog>::Create(nullptr, pDropDownField);
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet,
