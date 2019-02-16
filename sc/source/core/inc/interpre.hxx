@@ -857,6 +857,7 @@ private:
     void ScLogest();
     void ScForecast();
     void ScForecast_Ets( ScETSType eETSType );
+    void ScFourier();
     void ScNoName();
     void ScBadName();
     // Statistics:

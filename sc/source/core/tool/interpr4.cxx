@@ -4357,6 +4357,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBetaDist_MS      : ScBetaDist_MS();              break;
                 case ocBetaInv          :
                 case ocBetaInv_MS       : ScBetaInv();                  break;
+                case ocFourier          : ScFourier();                  break;
                 case ocExternal         : ScExternal();                 break;
                 case ocTableOp          : ScTableOp();                  break;
                 case ocStop :                                           break;
