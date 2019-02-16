@@ -129,16 +129,25 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     Reference< XPropertySet > xSet( xShape, UNO_QUERY );
     bool bAppendIndex = true;
 
-    if( xSet.is() )
+    if(xSet.is()) try
     {
         Reference<XPropertySetInfo> xInfo(xSet->getPropertySetInfo());
+        if (xInfo.is())
+        {
+            const OUString aPropName1("Name");
+            if(xInfo->hasPropertyByName(aPropName1))
+                xSet->getPropertyValue(aPropName1) >>= aDescription;
 
-        xSet->getPropertyValue("Name") >>= aDescription;
-        bAppendIndex = aDescription.isEmpty();
+            bAppendIndex = aDescription.isEmpty();
 
-        const OUString aPropName("UINameSingular");
-        if(xInfo->hasPropertyByName(aPropName))
-            xSet->getPropertyValue(aPropName) >>= aDescription;
+            const OUString aPropName2("UINameSingular");
+            if(xInfo->hasPropertyByName(aPropName2))
+                xSet->getPropertyValue(aPropName2) >>= aDescription;
+        }
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL("sd::getShapeDescription(), exception caught!" );
     }
 
     if (bAppendIndex)
