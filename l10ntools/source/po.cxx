@@ -137,8 +137,8 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream
             << "#. "
             << m_sExtractCom.toString().replaceAll("\n","\n#. ") << std::endl;
-    for(std::vector<OString>::const_iterator it =  m_sReferences.begin(); it != m_sReferences.end(); ++it)
-        rOFStream << "#: " << *it << std::endl;
+    for(const auto& rReference : m_sReferences)
+        rOFStream << "#: " << rReference << std::endl;
     if ( m_bFuzzy )
         rOFStream << "#, fuzzy" << std::endl;
     if ( m_bCFormat )

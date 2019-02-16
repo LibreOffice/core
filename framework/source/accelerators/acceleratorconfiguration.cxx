@@ -668,20 +668,8 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 
 static AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const AcceleratorCache::TKeyList& lKeys)
 {
-    AcceleratorCache::TKeyList::const_iterator pIt;
-    for (  pIt  = lKeys.begin ();
-           pIt != lKeys.end   ();
-         ++pIt                  )
-    {
-        const css::awt::KeyEvent& rAWTKey = *pIt;
-        const vcl::KeyCode        aVCLKey = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey);
-        const OUString            sName   = aVCLKey.GetName();
-
-        if (!sName.isEmpty())
-            return pIt;
-    }
-
-    return lKeys.end();
+    return std::find_if(lKeys.begin(), lKeys.end(), [](const css::awt::KeyEvent& rAWTKey) {
+        return !::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey).GetName().isEmpty(); });
 }
 
 css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)

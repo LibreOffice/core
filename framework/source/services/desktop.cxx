@@ -1610,15 +1610,11 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     css::lang::EventObject                          aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-    Desktop::TTerminateListenerList::const_iterator pIt;
-    for (  pIt  = lCalledListener.begin();
-           pIt != lCalledListener.end  ();
-         ++pIt                           )
+    for (const css::uno::Reference<css::frame::XTerminateListener>& xListener : lCalledListener)
     {
         try
         {
             // Note: cancelTermination() is a new and optional interface method !
-            css::uno::Reference< css::frame::XTerminateListener  > xListener           = *pIt;
             css::uno::Reference< css::frame::XTerminateListener2 > xListenerGeneration2(xListener, css::uno::UNO_QUERY);
             if ( ! xListenerGeneration2.is() )
                 continue;

@@ -71,11 +71,9 @@ Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType)
 
 void OComponentEventThread::impl_clearEventQueue()
 {
-    while ( !m_aEvents.empty() )
-    {
-        delete *m_aEvents.begin();
-        m_aEvents.erase( m_aEvents.begin() );
-    }
+    for ( auto& rEvent : m_aEvents )
+        delete rEvent;
+    m_aEvents.clear();
     m_aControls.erase( m_aControls.begin(), m_aControls.end() );
     m_aFlags.erase( m_aFlags.begin(), m_aFlags.end() );
 }

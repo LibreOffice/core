@@ -999,8 +999,6 @@ std::vector<OUString> PathSettings::impl_convertOldStyle2Path(const OUString& sO
 void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
                                         std::vector<OUString>& lList)
 {
-    std::vector<OUString>::iterator pIt;
-
     // Erase items in the internal path list from lList.
     // Also erase items in the internal path list from the user path list.
     for (auto const& internalPath : rPath.lInternalPaths)
@@ -1014,20 +1012,11 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
     }
 
     // Erase items not in lList from the user path list.
-    pIt = rPath.lUserPaths.begin();
-    while ( pIt != rPath.lUserPaths.end() )
-    {
-        const OUString& rItem = *pIt;
-        std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
-        if ( pItem == lList.end() )
-        {
-            pIt = rPath.lUserPaths.erase(pIt);
-        }
-        else
-        {
-            ++pIt;
-        }
-    }
+    rPath.lUserPaths.erase(std::remove_if(rPath.lUserPaths.begin(), rPath.lUserPaths.end(),
+        [&lList](const OUString& rItem) {
+            return std::find(lList.begin(), lList.end(), rItem) == lList.end();
+        }),
+        rPath.lUserPaths.end());
 
     // Erase items in the user path list from lList.
     for (auto const& userPath : rPath.lUserPaths)

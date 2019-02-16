@@ -85,18 +85,8 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 
 sal_uInt16 AstScope::getNodeCount(NodeType nodeType) const
 {
-    DeclList::const_iterator iter = getIteratorBegin();
-    DeclList::const_iterator end = getIteratorEnd();
-    sal_uInt16 count = 0;
-
-    while ( iter != end )
-    {
-        AstDeclaration* pDecl = *iter;
-        if ( pDecl->getNodeType() == nodeType )
-            count++;
-        ++iter;
-    }
-    return count;
+    return static_cast<sal_uInt16>(std::count_if(getIteratorBegin(), getIteratorEnd(),
+        [&nodeType](const AstDeclaration* pDecl) { return pDecl->getNodeType() == nodeType; }));
 }
 
 AstDeclaration* AstScope::lookupByName(const OString& scopedName)

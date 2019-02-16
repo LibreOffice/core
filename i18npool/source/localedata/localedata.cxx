@@ -1459,9 +1459,9 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     if (!pSymbol)
     {
         ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-        for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+        for (const auto& rFallback : aFallbacks)
         {
-            pSymbol = rLookupTable.getFunctionSymbolByName( *it, pFunction, &pCachedItem);
+            pSymbol = rLookupTable.getFunctionSymbolByName(rFallback, pFunction, &pCachedItem);
             if (pSymbol)
                 break;
         }
@@ -1611,9 +1611,9 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const css::lang::Locale & rL
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
         aVec = LanguageTag( rLocale).getFallbackStrings( false);
-        for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
+        for (auto& rItem : aVec)
         {
-            *it = (*it).replace( cHyphen, cUnder);
+            rItem = rItem.replace(cHyphen, cUnder);
         }
     }
     else if (!rLocale.Country.isEmpty())
