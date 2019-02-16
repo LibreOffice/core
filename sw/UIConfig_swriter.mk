@@ -122,6 +122,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/datasourcesunavailabledialog \
 	sw/uiconfig/swriter/ui/dropcapspage \
 	sw/uiconfig/swriter/ui/dropdownfielddialog \
+	sw/uiconfig/swriter/ui/dropdownformfielddialog \
 	sw/uiconfig/swriter/ui/editcategories \
 	sw/uiconfig/swriter/ui/editfielddialog \
 	sw/uiconfig/swriter/ui/editsectiondialog \
