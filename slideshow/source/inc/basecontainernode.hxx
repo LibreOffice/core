@@ -88,6 +88,7 @@ protected:
     double       mnLeftIterations;
 
 private:
+    const bool          mbRepeatIndefinite;
     const bool          mbDurationIndefinite;
 };
 

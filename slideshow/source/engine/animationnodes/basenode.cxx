@@ -539,12 +539,26 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         // if anim base node has no activity, this is called to schedule deactivation,
         // but what if it does not schedule anything?
 
-        // TODO(F2): Handle end time attribute, too
         auto self(mpSelf);
-        mpCurrentEvent = generateEvent(
-            mxAnimationNode->getDuration(),
-            [self] () { self->deactivate(); },
-            maContext, 0.0 );
+        if (mxAnimationNode->getEnd().hasValue())
+        {
+            // TODO: We may need to calculate the duration if the end value is numeric.
+            // We expect that the end value contains EventTrigger::ON_NEXT here.
+            // LibreOffice does not generate numeric values, so we can leave it
+            // until we find a test case.
+            mpCurrentEvent = generateEvent(
+                mxAnimationNode->getEnd(),
+                [self] () { self->deactivate(); },
+                maContext, 0.0 );
+
+        }
+        else
+        {
+            mpCurrentEvent = generateEvent(
+                mxAnimationNode->getDuration(),
+                [self] () { self->deactivate(); },
+                maContext, 0.0 );
+        }
     }
 }
 
