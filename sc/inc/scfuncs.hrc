@@ -4118,6 +4118,20 @@ const char* SC_OPCODE_SEARCHB_ARY[] =
     NC_("SC_OPCODE_SEARCHB", "The position in the text from which the search starts.")
 };
 
+// -=*# Resource for function FOURIER #*=-
+const char* SC_OPCODE_FOURIER_ARY[] =
+{
+    NC_("SC_OPCODE_FOURIER", "Computes the Discrete Fourier Transform (DFT) of an array"),
+    NC_("SC_OPCODE_FOURIER", "Array"),
+    NC_("SC_OPCODE_FOURIER", "The array whose DFT needs to be computed. The dimensions of this array can be Nx1 or Nx2 or 1xN or 2xN."),
+    NC_("SC_OPCODE_FOURIER", "GroupedByColumns"),
+    NC_("SC_OPCODE_FOURIER", "Flag to indicate whether the array is grouped by columns or not (default TRUE)."),
+    NC_("SC_OPCODE_FOURIER", "Inverse"),
+    NC_("SC_OPCODE_FOURIER", "Flag to indicate whether an inverse DFT is to be computed (default FALSE)."),
+    NC_("SC_OPCODE_FOURIER", "Polar"),
+    NC_("SC_OPCODE_FOURIER", "Flag to indicate whether to return the results in polar form (default FALSE).")
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
