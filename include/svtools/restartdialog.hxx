@@ -54,6 +54,9 @@ enum RestartReason {
         // "For the extension to work properly,
         // %PRODUCTNAME must be restarted."
     RESTART_REASON_OPENGL,
+    // For restructuring the Forms menu,
+    // %PRODUCTNAME must be restarted:
+    RESTART_REASON_MSCOMPATIBLE_FORMS_MENU,
         // No particular reason
     RESTART_REASON_NONE
 };
