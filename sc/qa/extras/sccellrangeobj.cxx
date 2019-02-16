@@ -115,6 +115,11 @@ public:
     CPPUNIT_TEST(testQueryColumnDifference);
     CPPUNIT_TEST(testQueryContentDifference);
     CPPUNIT_TEST(testQueryEmptyCells);
+    CPPUNIT_TEST(testQueryFormulaCells);
+    CPPUNIT_TEST(testQueryIntersection);
+    CPPUNIT_TEST(testQueryRowDifference);
+    CPPUNIT_TEST(testQueryVisibleCells);
+
     //CPPUNIT_TEST(testQueryFormulaCells);
     CPPUNIT_TEST(testQueryIntersection);
     CPPUNIT_TEST(testQueryRowDifference);

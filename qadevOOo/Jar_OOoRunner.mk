@@ -563,7 +563,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocument \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormatField \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeData \
-    qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery \
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
