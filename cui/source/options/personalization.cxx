@@ -389,6 +389,17 @@ void SelectPersonaDialog::ClearSearchResults()
     }
 }
 
+namespace {
+    /*
+     * Meant to check if the Mozilla Addons/Themes API is reachable,
+     * and returns the results we expect.
+     * */
+    bool isMOZAPIAvailable()
+    {
+        return false;
+    }
+}
+
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
 {
@@ -398,10 +409,21 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     get( m_pAppliedThemeLabel, "applied_theme_link" );
 
     get( m_pOwnPersona, "own_persona" );
-    m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
-
     get( m_pSelectPersona, "select_persona" );
-    m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+
+    if (isMOZAPIAvailable())
+    {
+        m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+        m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
+    }
+    else
+    {
+        m_pSelectPersona->Disable();
+        m_pSelectPersona->SetQuickHelpText( CuiResId( RID_SVXSTR_MOZAPIUNREACHABLE ) );
+
+        m_pOwnPersona->Disable();
+        m_pOwnPersona->SetQuickHelpText( CuiResId( RID_SVXSTR_MOZAPIUNREACHABLE ) );
+    }
 
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
