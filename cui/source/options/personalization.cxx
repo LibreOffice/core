@@ -417,10 +417,14 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     get( m_pAppliedThemeLabel, "applied_theme_link" );
 
     get( m_pOwnPersona, "own_persona" );
-    m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
-
     get( m_pSelectPersona, "select_persona" );
-    m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+
+    // Mozilla API and the Mozilla personas are no longer useful for us
+    // We will probably remove this altogether before 6.3
+    m_pSelectPersona->Disable();
+    m_pOwnPersona->Disable();
+    m_pSelectPersona->SetQuickHelpText( CuiResId( RID_SVXSTR_MOZAPIUNREACHABLE ) );
+    m_pOwnPersona->SetQuickHelpText( CuiResId( RID_SVXSTR_MOZAPIUNREACHABLE ) );
 
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {

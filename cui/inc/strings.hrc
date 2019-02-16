@@ -372,6 +372,7 @@
 #define RID_SVXSTR_NORESULTS                        NC_("RID_SVXSTR_NORESULTS", "No results found.")
 #define RID_SVXSTR_APPLYPERSONA                     NC_("RID_SVXSTR_APPLYPERSONA", "Applying Theme...")
 #define RID_SVXSTR_INVALIDPERSONAURL                NC_("RID_SVXSTR_INVALIDPERSONAURL", "Please enter a valid theme address or a search term.")
+#define RID_SVXSTR_MOZAPIUNREACHABLE                NC_("RID_SVXSTR_MOZAPIUNREACHABLE", "The Mozilla Themes API is currently unavailable.")
 
 #define RID_SVXSTR_TABLE_PRESET_NONE                NC_("RID_SVXSTR_TABLE_PRESET_NONE", "Set No Borders")
 #define RID_SVXSTR_TABLE_PRESET_ONLYOUTER           NC_("RID_SVXSTR_TABLE_PRESET_ONLYOUTER", "Set Outer Border Only")
