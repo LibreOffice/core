@@ -14,6 +14,7 @@
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangeformula.hxx>
+#include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
@@ -46,6 +47,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellRangeData,
                                                public apitest::XCellRangeFormula,
+                                               public apitest::XCellRangesQuery,
                                                public apitest::XCellSeries,
                                                public apitest::XColumnRowRange,
                                                public apitest::XFormulaQuery,
@@ -97,6 +99,15 @@ public:
 
     // XCellRangeFormula
     CPPUNIT_TEST(testGetSetFormulaArray);
+
+    // XCellRangesQuery
+    CPPUNIT_TEST(testQueryColumnDifference);
+    CPPUNIT_TEST(testQueryContentDifference);
+    CPPUNIT_TEST(testQueryEmptyCells);
+    CPPUNIT_TEST(testQueryFormulaCells);
+    CPPUNIT_TEST(testQueryIntersection);
+    CPPUNIT_TEST(testQueryRowDifference);
+    CPPUNIT_TEST(testQueryVisibleCells);
 
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);

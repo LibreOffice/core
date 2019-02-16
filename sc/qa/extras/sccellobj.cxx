@@ -11,6 +11,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/sheetcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
+#include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
 #include <test/table/xcell.hxx>
@@ -38,6 +39,7 @@ class ScCellObj : public CalcUnoApiTest,
                   public apitest::SheetCell,
                   public apitest::XCell,
                   public apitest::XCellAddressable,
+                  public apitest::XCellRangesQuery,
                   public apitest::XColumnRowRange,
                   public apitest::XEnumerationAccess,
                   public apitest::XFormulaQuery,
@@ -66,6 +68,15 @@ public:
 
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);
+
+    // XCellRangesQuery
+    CPPUNIT_TEST(testQueryColumnDifference);
+    CPPUNIT_TEST(testQueryContentDifference);
+    CPPUNIT_TEST(testQueryEmptyCells);
+    CPPUNIT_TEST(testQueryFormulaCells);
+    CPPUNIT_TEST(testQueryIntersection);
+    CPPUNIT_TEST(testQueryRowDifference);
+    CPPUNIT_TEST(testQueryVisibleCells);
 
     // XColumnRowRange
     CPPUNIT_TEST(testGetColumns);
