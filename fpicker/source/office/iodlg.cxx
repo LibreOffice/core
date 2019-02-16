@@ -1767,12 +1767,9 @@ void SvtFileDialog::EnableUI( bool _bEnable )
 
     if ( _bEnable )
     {
-        for ( auto aLoop = m_aDisabledControls.begin();
-              aLoop != m_aDisabledControls.end();
-              ++aLoop
-            )
+        for ( auto& rxControl : m_aDisabledControls )
         {
-            (*aLoop)->Enable( false );
+            rxControl->Enable( false );
         }
     }
 }

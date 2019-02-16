@@ -105,17 +105,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
             { continue; }
     }
 
-    c1 = static_cast<sal_Int32>(lInfos.size());
-    i1 = 0;
-
-    css::uno::Sequence< css::frame::DispatchInformation >       lReturn(c1);
-    for (auto pStepp  = lInfos.begin();
-           pStepp != lInfos.end  () && i1<c1;
-         ++pStepp, ++i1                      )
-    {
-        lReturn[i1] = pStepp->second;
-    }
-    return lReturn;
+    return comphelper::mapValuesToSequence(lInfos);
 }
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()

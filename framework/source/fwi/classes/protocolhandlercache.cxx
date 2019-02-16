@@ -54,15 +54,11 @@ namespace {
 
 PatternHash::const_iterator findPatternKey(PatternHash const * hash, const OUString& sURL)
 {
-    auto pItem = hash->begin();
-    while( pItem!=hash->end() )
-    {
-        WildCard aPattern(pItem->first);
-        if (aPattern.Matches(sURL))
-            break;
-        ++pItem;
-    }
-    return pItem;
+    return std::find_if(hash->begin(), hash->end(),
+        [&sURL](const PatternHash::value_type& rEntry) {
+            WildCard aPattern(rEntry.first);
+            return aPattern.Matches(sURL);
+        });
 }
 
 }

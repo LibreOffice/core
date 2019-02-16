@@ -6903,12 +6903,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 if (xEntry)
                                 {
                                     // sorting fields ( hi >> lo )
-                                    auto it = FieldList.begin();
-                                    for( ; it != FieldList.end(); ++it ) {
-                                        if ( (*it)->nPos < xEntry->nPos ) {
-                                            break;
-                                        }
-                                    }
+                                    auto it = std::find_if(FieldList.begin(), FieldList.end(),
+                                        [&xEntry](const std::unique_ptr<PPTFieldEntry>& rxField) {
+                                            return rxField->nPos < xEntry->nPos; });
                                     if ( it != FieldList.end() ) {
                                         FieldList.insert(it, std::move(xEntry));
                                     } else {
@@ -6935,8 +6932,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     while ( ( FE < FieldList.end() ) && nCount-- )
                                     {
                                         nPos--;
-                                        while ( ( FE < FieldList.end() ) && ( (*FE)->nPos > nPos ) )
-                                            ++FE;
+                                        FE = std::find_if(FE, FieldList.end(),
+                                            [&nPos](const std::unique_ptr<PPTFieldEntry>& rxField) {return rxField->nPos <= nPos;});
                                         if ( !(FE < FieldList.end()) )
                                             break;
 

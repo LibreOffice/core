@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <memory>
 #include <stdexcept>
 #include <osl/diagnose.h>
@@ -150,13 +151,10 @@ sal_Int32 CFilterContainer::getFilterTagPos( const OUString& aName ) const
 {
     if ( !m_vFilters.empty() )
     {
-        sal_Int32 i = 0;
-        FILTER_VECTOR_T::const_iterator iter;
-        FILTER_VECTOR_T::const_iterator iter_end = m_vFilters.end( );
-
-        for ( iter = m_vFilters.begin( ); iter != iter_end; ++iter, ++i )
-            if ( ( *iter ).first.equalsIgnoreAsciiCase( aName ) )
-                return i;
+        FILTER_VECTOR_T::const_iterator iter = std::find_if(m_vFilters.begin(), m_vFilters.end(),
+            [&aName](const FILTER_ENTRY_T& rFilter) { return rFilter.first.equalsIgnoreAsciiCase(aName); });
+        if (iter != m_vFilters.end())
+            return std::distance(m_vFilters.begin(), iter);
     }
 
     return -1;

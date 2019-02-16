@@ -167,9 +167,9 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
         if (!bLoaded)
         {
             ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            for (const auto& rFallback : aFallbacks)
             {
-                bLoaded = createLocaleSpecificCharacterClassification( *it, rLocale);
+                bLoaded = createLocaleSpecificCharacterClassification(rFallback, rLocale);
                 if (bLoaded)
                     break;
             }
