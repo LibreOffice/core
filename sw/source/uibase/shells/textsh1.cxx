@@ -120,7 +120,6 @@
 #include <numrule.hxx>
 #include <memory>
 #include <xmloff/odffields.hxx>
-#include <swabstdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
