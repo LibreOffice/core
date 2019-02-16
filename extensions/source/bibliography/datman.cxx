@@ -448,41 +448,35 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
     EndDialog(bModified ? RET_OK : RET_CANCEL);
 }
 
-class DBChangeDialog_Impl : public ModalDialog
+class DBChangeDialog_Impl : public weld::GenericDialogController
 {
-    VclPtr<ListBox>    m_pSelectionLB;
-    DBChangeDialogConfig_Impl   aConfig;
-
+    DBChangeDialogConfig_Impl aConfig;
     BibDataManager* pDatMan;
 
-    DECL_LINK(DoubleClickHdl, ListBox&, void);
+    std::unique_ptr<weld::TreeView> m_xSelectionLB;
+
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
 public:
-    DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
-    virtual ~DBChangeDialog_Impl() override;
-    virtual void dispose() override;
+    DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pMan);
 
     OUString     GetCurrentURL()const;
 };
 
-DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan )
-    : ModalDialog(pParent, "ChooseDataSourceDialog",
-        "modules/sbibliography/ui/choosedatasourcedialog.ui")
-    ,
-    pDatMan(pMan)
+DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pMan )
+    : GenericDialogController(pParent, "modules/sbibliography/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
+    , pDatMan(pMan)
+    , m_xSelectionLB(m_xBuilder->weld_tree_view("treeview"))
 {
-    get(m_pSelectionLB, "treeview");
-    m_pSelectionLB->set_height_request(m_pSelectionLB->GetTextHeight() * 6);
-
-    m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() | WB_SORT);
-    m_pSelectionLB->SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
+    m_xSelectionLB->set_size_request(-1, m_xSelectionLB->get_height_rows(6));
+    m_xSelectionLB->connect_row_activated(LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
+    m_xSelectionLB->make_sorted();
 
     try
     {
         OUString sActiveSource = pDatMan->getActiveDataSource();
         for (const OUString& rSourceName : aConfig.GetDataSourceNames())
-            m_pSelectionLB->InsertEntry(rSourceName);
-
-        m_pSelectionLB->SelectEntry(sActiveSource);
+            m_xSelectionLB->append_text(rSourceName);
+        m_xSelectionLB->select_text(sActiveSource);
     }
     catch (const Exception& e)
     {
@@ -492,25 +486,14 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* p
     }
 }
 
-IMPL_LINK_NOARG(DBChangeDialog_Impl, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(DBChangeDialog_Impl, DoubleClickHdl, weld::TreeView&, void)
 {
-    EndDialog(RET_OK);
-}
-
-DBChangeDialog_Impl::~DBChangeDialog_Impl()
-{
-    disposeOnce();
-}
-
-void DBChangeDialog_Impl::dispose()
-{
-    m_pSelectionLB.clear();
-    ModalDialog::dispose();
+    m_xDialog->response(RET_OK);
 }
 
 OUString  DBChangeDialog_Impl::GetCurrentURL()const
 {
-    return m_pSelectionLB->GetSelectedEntry();
+    return m_xSelectionLB->get_selected_text();
 }
 
 // XDispatchProvider
@@ -1483,13 +1466,13 @@ void BibDataManager::CreateMappingDialog(vcl::Window* pParent)
     }
 }
 
-OUString BibDataManager::CreateDBChangeDialog(vcl::Window* pParent)
+OUString BibDataManager::CreateDBChangeDialog(weld::Window* pParent)
 {
     OUString uRet;
-    VclPtrInstance< DBChangeDialog_Impl > pDlg(pParent, this );
-    if(RET_OK == pDlg->Execute())
+    DBChangeDialog_Impl aDlg(pParent, this);
+    if (aDlg.run() == RET_OK)
     {
-        OUString sNewURL = pDlg->GetCurrentURL();
+        OUString sNewURL = aDlg.GetCurrentURL();
         if(sNewURL != getActiveDataSource())
         {
             uRet = sNewURL;

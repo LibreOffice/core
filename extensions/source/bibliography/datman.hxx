@@ -35,7 +35,7 @@
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
-
+namespace weld { class Window; }
 
 namespace bib
 {
@@ -157,7 +157,7 @@ public:
                                                         bool bForceListBox);
 
         void                        CreateMappingDialog(vcl::Window* pParent);
-        OUString                    CreateDBChangeDialog(vcl::Window* pParent);
+        OUString                    CreateDBChangeDialog(weld::Window* pParent);
 
         void                        DispatchDBChangeDialog();
 
