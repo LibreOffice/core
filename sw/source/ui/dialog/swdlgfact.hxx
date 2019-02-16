@@ -44,6 +44,7 @@ class SwSplitTableDlg;
 namespace sw
 {
 class DropDownFieldDialog;
+class DropDownFormFieldDialog;
 }
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
@@ -165,6 +166,11 @@ class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
     virtual void          SetWindowState( const OString& rStr ) override; //this method inherit from SystemWindow
     virtual bool          PrevButtonPressed() const override;
     virtual bool          NextButtonPressed() const override;
+};
+
+class AbstractDropDownFormFieldDialog_Impl : public VclAbstractDialog
+{
+    DECL_ABSTDLG_BASE(AbstractDropDownFormFieldDialog_Impl, sw::DropDownFormFieldDialog)
 };
 
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
@@ -403,6 +409,7 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
+    virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(sw::mark::IFieldmark* pDropDownField) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
