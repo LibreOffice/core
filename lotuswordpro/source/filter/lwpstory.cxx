@@ -68,6 +68,7 @@
 #include "lwppagelayout.hxx"
 #include <rtl/ustrbuf.hxx>
 
+#include <algorithm>
 #include <set>
 
 
@@ -183,17 +184,9 @@ void LwpStory::SetCurrentLayout(LwpPageLayout *pPageLayout)
 **************************************************************************/
 LwpPageLayout* LwpStory::GetNextPageLayout()
 {
-    std::vector<LwpPageLayout*>::iterator it;
-    for( it = m_LayoutList.begin(); it != m_LayoutList.end(); ++it )
-    {
-        if(m_pCurrentLayout == *it)
-        {
-            if((it+1) !=m_LayoutList.end())
-            {
-                return *(it+1);
-            }
-        }
-    }
+    std::vector<LwpPageLayout*>::iterator it = std::find(m_LayoutList.begin(), m_LayoutList.end(), m_pCurrentLayout);
+    if (it != m_LayoutList.end() && (it+1) != m_LayoutList.end())
+        return *(it+1);
     return nullptr;
 }
 /**************************************************************************
@@ -222,22 +215,15 @@ void LwpStory::SortPageLayout()
         xLayout = GetLayout(xLayout.get());
     }
     // sort the pagelayout according to their position
-    std::vector<LwpPageLayout*>::iterator aIt;
     if (!aLayoutList.empty())
     {
-        for( aIt = aLayoutList.begin(); aIt != aLayoutList.end() -1; ++aIt)
+        for( std::vector<LwpPageLayout*>::iterator aIt = aLayoutList.begin(); aIt != aLayoutList.end() -1; ++aIt)
         {
             for( std::vector<LwpPageLayout*>::iterator bIt = aIt +1; bIt != aLayoutList.end(); ++bIt )
             {
-                if(**aIt < **bIt)
+                if(!(**aIt < **bIt))
                 {
-                    continue;
-                }
-                else
-                {
-                    LwpPageLayout* pTemp = *aIt;
-                    *aIt = *bIt;
-                    *bIt = pTemp;
+                    std::swap(*aIt, *bIt);
                 }
             }
         }
@@ -477,17 +463,8 @@ OUString LwpStory::RegisterFirstFribStyle()
 
 bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, sal_uInt8 nPos)
 {
-    std::vector <NamePosPair>::reverse_iterator rIter;
-    for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); ++rIter)
-    {
-        OUString aName = (*rIter).first;
-        sal_uInt8 nPosition = (*rIter).second;
-        if (aName == rStyleName && nPosition == nPos)
-        {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(m_vBulletStyleNameList.rbegin(), m_vBulletStyleNameList.rend(),
+        [&rStyleName, &nPos](const NamePosPair& rPair) { return rPair.first == rStyleName && rPair.second == nPos; });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

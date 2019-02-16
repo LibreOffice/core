@@ -115,11 +115,10 @@ static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rD
 
 Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
 {
-    for (auto aIter(maTypeNodes.begin()), aEnd(maTypeNodes.end()); aIter != aEnd; ++aIter)
-    {
-        if( (*aIter)->maName == rType )
-            return aIter->get();
-    }
+    auto aIter = std::find_if(maTypeNodes.begin(), maTypeNodes.end(),
+        [&rType](const std::unique_ptr<Node>& rxNode) { return rxNode->maName == rType; });
+    if (aIter != maTypeNodes.end())
+        return aIter->get();
 
     return nullptr;
 }

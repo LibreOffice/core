@@ -1176,30 +1176,22 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
                 if ( fD != 0.0 )
                     fDist /= fD;
 
-                std::vector< ShadeColor >::const_iterator aIter( rShadeColors.begin() );
                 double fA = 0.0;
-                Color aColorA = aIter->aColor;
+                Color aColorA = rShadeColors.front().aColor;
                 double fB = 1.0;
                 Color aColorB( aColorA );
-                while ( aIter != rShadeColors.end() )
+                for ( const auto& rShadeColor : rShadeColors )
                 {
-                    if ( aIter->fDist <= fDist )
+                    if ( fA <= rShadeColor.fDist && rShadeColor.fDist <= fDist )
                     {
-                        if ( aIter->fDist >= fA )
-                        {
-                            fA = aIter->fDist;
-                            aColorA = aIter->aColor;
-                        }
+                        fA = rShadeColor.fDist;
+                        aColorA = rShadeColor.aColor;
                     }
-                    if ( aIter->fDist > fDist )
+                    if ( fDist < rShadeColor.fDist && rShadeColor.fDist <= fB )
                     {
-                        if ( aIter->fDist <= fB )
-                        {
-                            fB = aIter->fDist;
-                            aColorB = aIter->aColor;
-                        }
+                        fB = rShadeColor.fDist;
+                        aColorB = rShadeColor.aColor;
                     }
-                    ++aIter;
                 }
                 double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
                 double fD1 = fB - fA;
@@ -7501,17 +7493,10 @@ void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
 
 void SvxMSDffManager::removeShapeId( SdrObject const * pShape )
 {
-    SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.begin() );
-    const SvxMSDffShapeIdContainer::iterator aEnd( maShapeIdContainer.end() );
-    while( aIter != aEnd )
-    {
-        if( (*aIter).second == pShape )
-        {
-            maShapeIdContainer.erase( aIter );
-            break;
-        }
-        ++aIter;
-    }
+    SvxMSDffShapeIdContainer::iterator aIter = std::find_if(maShapeIdContainer.begin(), maShapeIdContainer.end(),
+        [&pShape](const SvxMSDffShapeIdContainer::value_type& rEntry) { return rEntry.second == pShape; });
+    if (aIter != maShapeIdContainer.end())
+        maShapeIdContainer.erase( aIter );
 }
 
 SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )

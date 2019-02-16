@@ -20,6 +20,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <algorithm>
 #include <map>
 #include <unordered_set>
 
@@ -2581,14 +2582,10 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     if (rList.empty())
         return rList.end();
 
-    ::std::vector< OUString >::const_iterator it;
-
     // Try the simple case first without constructing fallbacks.
-    for (it = rList.begin(); it != rList.end(); ++it)
-    {
-        if (*it == rReference)
-            return it;  // exact match
-    }
+    ::std::vector< OUString >::const_iterator it = std::find(rList.begin(), rList.end(), rReference);
+    if (it != rList.end())
+        return it;  // exact match
 
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     if (rReference != "en-US")
@@ -2606,13 +2603,11 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
      * "x-no-translate" and "x-notranslate" apparently was never used anywhere.
      * Did that ever work? Was it supposed to work at all like this? */
 
-    for (::std::vector< OUString >::const_iterator fb = aFallbacks.begin(); fb != aFallbacks.end(); ++fb)
+    for (const auto& fb : aFallbacks)
     {
-        for (it = rList.begin(); it != rList.end(); ++it)
-        {
-            if (*it == *fb)
-                return it;  // fallback found
-        }
+        it = std::find(rList.begin(), rList.end(), fb);
+        if (it != rList.end())
+            return it;  // fallback found
     }
 
     // Did not find anything so return something of the list, the first value
@@ -2630,16 +2625,14 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     if (rList.empty())
         return rList.end();
 
-    ::std::vector< lang::Locale >::const_iterator it;
-
     // Try the simple case first without constructing fallbacks.
-    for (it = rList.begin(); it != rList.end(); ++it)
-    {
-        if (    (*it).Language == rReference.Language &&
-                (*it).Country  == rReference.Country  &&
-                (*it).Variant  == rReference.Variant)
-            return it;  // exact match
-    }
+    ::std::vector< lang::Locale >::const_iterator it = std::find_if(rList.begin(), rList.end(),
+        [&rReference](const lang::Locale& rLocale) {
+            return rLocale.Language == rReference.Language
+                && rLocale.Country  == rReference.Country
+                && rLocale.Variant  == rReference.Variant; });
+    if (it != rList.end())
+        return it;  // exact match
 
     // Now for each reference fallback test the fallbacks of the list in order.
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));

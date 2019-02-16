@@ -3794,13 +3794,10 @@ void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 
 void EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    for(auto it = maPersistTable.begin(); it != maPersistTable.end() ; ++it)
-    {
-        if ( (*it)->mnID == nID ) {
-            maPersistTable.erase( it );
-            break;
-        }
-    }
+    auto it = std::find_if(maPersistTable.begin(), maPersistTable.end(),
+        [&nID](const std::unique_ptr<EscherPersistEntry>& rxEntry) { return rxEntry->mnID == nID; });
+    if (it != maPersistTable.end())
+        maPersistTable.erase( it );
 }
 
 sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )

@@ -154,10 +154,9 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
     Sequence< Sequence< PropertyValue > > aSeqSeq;
 
     sal_Int32 nIndex( 0 );
-    FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.begin();
-    while ( pIter != m_aFactoryManagerMap.end() )
+    for ( const auto& rEntry : m_aFactoryManagerMap )
     {
-        OUString aFactory = pIter->first;
+        OUString aFactory = rEntry.first;
         if ( !aFactory.isEmpty() )
         {
             sal_Int32                 nToken = 0;
@@ -181,8 +180,6 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 
             aSeqSeq[nIndex++] = aSeq;
         }
-
-        ++pIter;
     }
 
     return aSeqSeq;

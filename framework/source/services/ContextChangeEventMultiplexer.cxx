@@ -205,17 +205,13 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
             "can not remove an empty reference",
             static_cast<XWeak*>(this), 0);
 
-    for (ListenerMap::iterator
-             iContainer(maListeners.begin()),
-             iEnd(maListeners.end());
-         iContainer!=iEnd;
-         ++iContainer)
+    for (auto& rContainer : maListeners)
     {
         const ListenerContainer::iterator iListener (
-            ::std::find(iContainer->second.maListeners.begin(), iContainer->second.maListeners.end(), rxListener));
-        if (iListener != iContainer->second.maListeners.end())
+            ::std::find(rContainer.second.maListeners.begin(), rContainer.second.maListeners.end(), rxListener));
+        if (iListener != rContainer.second.maListeners.end())
         {
-            iContainer->second.maListeners.erase(iListener);
+            rContainer.second.maListeners.erase(iListener);
 
             // We hold on to the focus descriptor even when the last listener has been removed.
             // This allows us to keep track of the current context and send it to new listeners.

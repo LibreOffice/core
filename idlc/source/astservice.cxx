@@ -37,22 +37,14 @@ bool AstService::checkLastConstructor() const {
             }
             sal_uInt32 n = ctor->nMembers();
             if (n == last->nMembers()) {
-                for (DeclList::const_iterator i1(ctor->getIteratorBegin()),
-                         i2(last->getIteratorBegin());
-                     i1 != ctor->getIteratorEnd(); ++i1, ++i2)
-                {
-                    sal_Int32 r1;
-                    AstDeclaration const * t1 = deconstructAndResolveTypedefs(
-                        static_cast< AstMember * >(*i1)->getType(), &r1);
-                    sal_Int32 r2;
-                    AstDeclaration const * t2 = deconstructAndResolveTypedefs(
-                        static_cast< AstMember * >(*i2)->getType(), &r2);
-                    if (r1 != r2 || t1->getScopedName() != t2->getScopedName())
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                return std::equal(ctor->getIteratorBegin(), ctor->getIteratorEnd(), last->getIteratorBegin(),
+                    [](AstDeclaration* a, AstDeclaration* b) {
+                        sal_Int32 r1;
+                        AstDeclaration const * t1 = deconstructAndResolveTypedefs(static_cast< AstMember * >(a)->getType(), &r1);
+                        sal_Int32 r2;
+                        AstDeclaration const * t2 = deconstructAndResolveTypedefs(static_cast< AstMember * >(b)->getType(), &r2);
+                        return r1 == r2 && t1->getScopedName() == t2->getScopedName();
+                    });
             }
         }
     }

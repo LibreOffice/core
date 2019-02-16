@@ -38,16 +38,11 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
     DeclList::const_iterator iter = getIteratorBegin();
     DeclList::const_iterator end = getIteratorEnd();
 
-    while ( iter != end)
-    {
-        AstDeclaration* pDecl = *iter;
-        AstConstant* pConst = static_cast<AstConstant*>(pDecl);
+    iter = std::find_if(iter, end, [&pExpr](AstDeclaration* pDecl) {
+        return static_cast<AstConstant*>(pDecl)->getConstValue()->compareLong(pExpr); });
 
-        if (pConst->getConstValue()->compareLong(pExpr))
-            return pConst;
-
-        ++iter;
-    }
+    if (iter != end)
+        return static_cast<AstConstant*>(*iter);
 
     if ( pExpr->getExprValue()->u.lval > m_enumValueCount )
         m_enumValueCount = pExpr->getExprValue()->u.lval + 1;

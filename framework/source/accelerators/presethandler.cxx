@@ -729,13 +729,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     }
     else
     {
-        for (  pFound  = lLocalizedValues.begin();
-               pFound != lLocalizedValues.end();
-             ++pFound                            )
-        {
-            if (*pFound == rLanguageTag)
-                break;
-        }
+        pFound = std::find(lLocalizedValues.begin(), lLocalizedValues.end(), rLanguageTag);
     }
 
     return pFound;
