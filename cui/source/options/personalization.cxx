@@ -389,6 +389,17 @@ void SelectPersonaDialog::ClearSearchResults()
     }
 }
 
+namespace {
+    /*
+     * Meant to check if the Mozilla Addons/Themes API is reachable,
+     * and returns the results we expect.
+     * */
+    bool isMOZAPIAvailable()
+    {
+        return false;
+    }
+}
+
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
 {
@@ -401,7 +412,15 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
 
     get( m_pSelectPersona, "select_persona" );
-    m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+    if (isMOZAPIAvailable())
+    {
+        m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+    }
+    else
+    {
+        m_pSelectPersona->Disable();
+        m_pSelectPersona->SetQuickHelpText("The Mozilla Themes API is currently unreachable.");
+    }
 
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
