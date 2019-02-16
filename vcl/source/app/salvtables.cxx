@@ -236,9 +236,11 @@ private:
     VclPtr<vcl::Window> m_xWidget;
 
     DECL_LINK(EventListener, VclWindowEvent&, void);
+    DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
 
     const bool m_bTakeOwnership;
     bool m_bEventListener;
+    bool m_bKeyEventListener;
     int m_nBlockNotify;
 
     void ensure_event_listener()
@@ -250,14 +252,28 @@ private:
         }
     }
 
+    // we want the ability to mark key events as handled, so use this variant
+    // for those, we get all keystrokes in this case, so we will need to filter
+    // them later
+    void ensure_key_listener()
+    {
+        if (!m_bKeyEventListener)
+        {
+            Application::AddKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
+            m_bKeyEventListener = true;
+        }
+    }
+
 protected:
     virtual void HandleEventListener(VclWindowEvent& rEvent);
+    virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, bool bTakeOwnership)
         : m_xWidget(pWidget)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bEventListener(false)
+        , m_bKeyEventListener(false)
         , m_nBlockNotify(0)
     {
     }
@@ -475,13 +491,13 @@ public:
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
     {
-        ensure_event_listener();
+        ensure_key_listener();
         weld::Widget::connect_key_press(rLink);
     }
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
     {
-        ensure_event_listener();
+        ensure_key_listener();
         weld::Widget::connect_key_release(rLink);
     }
 
@@ -534,6 +550,8 @@ public:
 
     virtual ~SalInstanceWidget() override
     {
+        if (m_bKeyEventListener)
+            Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
         if (m_bEventListener)
             m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, EventListener));
         if (m_bTakeOwnership)
@@ -574,21 +592,35 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
         m_aFocusOutHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
-    else if (rEvent.GetId() == VclEventId::WindowKeyInput)
+}
+
+bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
+{
+    // we get all key events here, ignore them unless we have focus
+    if (!m_xWidget->HasFocus())
+        return false;
+    if (rEvent.GetId() == VclEventId::WindowKeyInput)
     {
         const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
-        m_aKeyPressHdl.Call(*pKeyEvent);
+        return m_aKeyPressHdl.Call(*pKeyEvent);
     }
     else if (rEvent.GetId() == VclEventId::WindowKeyUp)
     {
         const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
-        m_aKeyReleaseHdl.Call(*pKeyEvent);
+        return m_aKeyReleaseHdl.Call(*pKeyEvent);
     }
+    return false;
 }
+
 
 IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 {
     HandleEventListener(rEvent);
+}
+
+IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
+{
+    return HandleKeyEventListener(rEvent);
 }
 
 namespace
@@ -3147,13 +3179,16 @@ private:
     // in VclDrawingArea
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
-        if (rEvent.GetId() == VclEventId::WindowResize ||
-            rEvent.GetId() == VclEventId::WindowKeyInput ||
-            rEvent.GetId() == VclEventId::WindowKeyUp)
+        if (rEvent.GetId() == VclEventId::WindowResize)
         {
             return;
         }
         SalInstanceWidget::HandleEventListener(rEvent);
+    }
+
+    virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override
+    {
+        return false;
     }
 
 public:
