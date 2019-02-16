@@ -637,7 +637,8 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
     EXC_FUNCENTRY_OOO( ocForecast_ETS_PIM, 3,  7,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.PI.MULT" ),
     EXC_FUNCENTRY_OOO( ocForecast_ETS_STM, 3,  6,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.STAT.MULT" ),
     EXC_FUNCENTRY_OOO( ocRoundSig,      2,  2,  0,  "ORG.LIBREOFFICE.ROUNDSIG" ),
-    EXC_FUNCENTRY_OOO( ocRegex,         2,  4,  0,  "ORG.LIBREOFFICE.REGEX" )
+    EXC_FUNCENTRY_OOO( ocRegex,         2,  4,  0,  "ORG.LIBREOFFICE.REGEX" ),
+    EXC_FUNCENTRY_OOO( ocFourier,       2,  4,  0,  "ORG.LIBREOFFICE.FOURIER" )
 };
 
 #undef EXC_FUNCENTRY_OOO_IBR

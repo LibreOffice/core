@@ -578,6 +578,7 @@
 #define HID_FUNC_FINDB                                          "SC_HID_FUNC_FINDB"
 #define HID_FUNC_SEARCHB                                        "SC_HID_FUNC_SEARCHB"
 #define HID_FUNC_REGEX                                          "SC_HID_FUNC_REGEX"
+#define HID_FUNC_FOURIER                                        "SC_HID_FUNC_FOURIER"
 
 #endif
 

@@ -4721,4 +4721,301 @@ void ScInterpreter::ScForecast()
     }
 }
 
+static void lcl_roundUpNearestPow2(SCSIZE& nNum, SCSIZE& nNumBits)
+{
+    // Find the least power of 2 that is less than or equal to nNum.
+    SCSIZE nPow2(1);
+    nNumBits = std::numeric_limits<SCSIZE>::digits;
+    nPow2 <<= (nNumBits - 1);
+    while (nPow2 >= 1)
+    {
+        if (nNum & nPow2)
+            break;
+
+        --nNumBits;
+        nPow2 >>= 1;
+    }
+
+    if (nPow2 != nNum)
+        nNum = nPow2 ? (nPow2 << 1) : 1;
+    else
+        --nNumBits;
+}
+
+static SCSIZE lcl_bitReverse(SCSIZE nIn, SCSIZE nBound)
+{
+    SCSIZE nOut = 0;
+    for (SCSIZE nMask = 1; nMask < nBound; nMask <<= 1)
+    {
+        nOut <<= 1;
+
+        if (nIn & nMask)
+            nOut |= 1;
+    }
+
+    return nOut;
+}
+
+class ScFFT2
+{
+public:
+    ScFFT2(ScMatrixRef& pMat, SCSIZE nPoints, bool bRealInput, bool bInverse, bool bPolar) :
+        mpMat(pMat),
+        mnPoints(nPoints),
+        mnStages(0),
+        mbRealInput(bRealInput),
+        mbInverse(bInverse),
+        mbPolar(bPolar)
+    {}
+
+    void Compute();
+private:
+
+    void prepare();
+    void computeTFactors();
+    void normalize();
+    void convertToPolar();
+
+    double getReal(SCSIZE nIdx)
+    {
+        return mpMat->GetDouble(0, nIdx);
+    }
+
+    void setReal(double fVal, SCSIZE nIdx)
+    {
+        mpMat->PutDouble(fVal, 0, nIdx);
+    }
+
+    double getImag(SCSIZE nIdx)
+    {
+        return mpMat->GetDouble(1, nIdx);
+    }
+
+    void setImag(double fVal, SCSIZE nIdx)
+    {
+        mpMat->PutDouble(fVal, 1, nIdx);
+    }
+
+    SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScale)
+    {
+        return ( ( nPtIndex * nTfIdxScale ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
+    }
+
+    void computeFly(SCSIZE nTopIdx, SCSIZE nBottomIdx, SCSIZE nWIdx1, SCSIZE nWIdx2, SCSIZE nStage)
+    {
+        const double x1r = getReal(nTopIdx);
+
+        const double& w1r = mfWReal[nWIdx1];
+        const double& w1i = mfWImag[nWIdx1];
+
+        const double x2r = getReal(nBottomIdx);
+
+        const double& w2r = mfWReal[nWIdx2];
+        const double& w2i = mfWImag[nWIdx2];
+
+        // Optimization for real input in stage #0
+        if (nStage == 0 && mbRealInput)
+        {
+            setReal(x1r + x2r*w1r, nTopIdx);
+            setImag(x2r*w1i, nTopIdx);
+
+            setReal(x1r + x2r*w2r, nBottomIdx);
+            setImag(x2r*w2i, nBottomIdx);
+
+            return;
+        }
+
+        const double x1i = getImag(nTopIdx);
+        const double x2i = getImag(nBottomIdx);
+
+        setReal(x1r + x2r*w1r - x2i*w1i, nTopIdx);
+        setImag(x1i + x2i*w1r + x2r*w1i, nTopIdx);
+
+        setReal(x1r + x2r*w2r - x2i*w2i, nBottomIdx);
+        setImag(x1i + x2i*w2r + x2r*w2i, nBottomIdx);
+    }
+
+    ScMatrixRef& mpMat;
+    std::vector<double> mfWReal;
+    std::vector<double> mfWImag;
+    SCSIZE mnPoints;
+    SCSIZE mnStages;
+    bool mbRealInput:1;
+    bool mbInverse:1;
+    bool mbPolar:1;
+};
+
+void ScFFT2::prepare()
+{
+    lcl_roundUpNearestPow2(mnPoints, mnStages);
+
+    mpMat->Resize(2, mnPoints, 0.0);
+
+    // Reorder array by bit-reversed indices.
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        SCSIZE nRevIdx = lcl_bitReverse(nIdx, mnPoints);
+        if (nIdx < nRevIdx)
+        {
+            double fTmp = getReal(nIdx);
+            setReal(getReal(nRevIdx), nIdx);
+            setReal(fTmp, nRevIdx);
+
+            if (!mbRealInput)
+            {
+                fTmp = getImag(nIdx);
+                setImag(getImag(nRevIdx), nIdx);
+                setImag(fTmp, nRevIdx);
+            }
+        }
+    }
+}
+
+void ScFFT2::computeTFactors()
+{
+    mfWReal.resize(mnPoints);
+    mfWImag.resize(mnPoints);
+
+    double nW = -2.0*F_PI/static_cast<double>(mnPoints);
+    if (mbInverse)
+        nW = -nW;
+
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        mfWReal[nIdx] = cos(nW*static_cast<double>(nIdx));
+        mfWImag[nIdx] = sin(nW*static_cast<double>(nIdx));
+    }
+}
+
+void ScFFT2::normalize()
+{
+    const double fScale = 1.0/static_cast<double>(mnPoints);
+
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+        setReal(getReal(nIdx)*fScale, nIdx);
+
+    // If already in polar coordinates, we should only scale the magnitude part
+    // which is stored where "real" part was stored before.
+    if (!mbPolar)
+        for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+            setImag(getImag(nIdx)*fScale, nIdx);
+}
+
+void ScFFT2::convertToPolar()
+{
+    double fMag, fPhase, fR, fI;
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        fR = getReal(nIdx);
+        fI = getImag(nIdx);
+        fPhase = atan(fI/fR);
+        fMag = sqrt(fR*fR + fI*fI);
+
+        setReal(fMag, nIdx);
+        setImag(fPhase, nIdx);
+    }
+}
+
+void ScFFT2::Compute()
+{
+    prepare();
+    computeTFactors();
+
+    const SCSIZE nFliesInStage = mnPoints/2;
+    for (SCSIZE nStage = 0; nStage < mnStages; ++nStage)
+    {
+        const SCSIZE nTFIdxScale = (1 << (mnStages-nStage-1));  // Twiddle factor index's scale factor.
+        const SCSIZE nFliesInGroup = 1<<nStage;
+        const SCSIZE nGroups = nFliesInStage/nFliesInGroup;
+        const SCSIZE nFlyWidth = nFliesInGroup;
+        for (SCSIZE nGroup = 0, nFlyTopIdx = 0; nGroup < nGroups; ++nGroup)
+        {
+            for (SCSIZE nFly = 0; nFly < nFliesInGroup; ++nFly, ++nFlyTopIdx)
+            {
+                SCSIZE nFlyBottomIdx = nFlyTopIdx + nFlyWidth;
+                SCSIZE nWIdx1 = getTFactorIndex(nFlyTopIdx, nTFIdxScale);
+                SCSIZE nWIdx2 = getTFactorIndex(nFlyBottomIdx, nTFIdxScale);
+
+                computeFly(nFlyTopIdx, nFlyBottomIdx, nWIdx1, nWIdx2, nStage);
+            }
+
+            nFlyTopIdx += nFlyWidth;
+        }
+    }
+
+    if (mbPolar)
+        convertToPolar();
+
+    // Normalize after converting to polar, so we have a chance to
+    // save O(mnPoints) flops.
+    if (mbInverse)
+        normalize();
+}
+
+void ScInterpreter::ScFourier()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 2, 4 ) )
+        return;
+
+    bool bInverse = false;
+    bool bPolar = false;
+
+    if (nParamCount == 4)
+        bPolar = GetBool();
+
+    if (nParamCount > 2)
+    {
+        if (IsMissing())
+            Pop();
+        else
+            bInverse = GetBool();
+    }
+
+    bool bGroupedByColumn = GetBool();
+
+    ScMatrixRef pInputMat = GetMatrix();
+    if (!pInputMat)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    SCSIZE nC, nR;
+    pInputMat->GetDimensions(nC, nR);
+
+    if ((bGroupedByColumn && nC > 2) || (!bGroupedByColumn && nR > 2))
+    {
+        // There can be no more than 2 columns (real, imaginary) if data grouped by columns.
+        // and no more than 2 rows if data is grouped by rows.
+        PushIllegalArgument();
+        return;
+    }
+
+    if (!pInputMat->IsNumeric())
+    {
+        PushNoValue();
+        return;
+    }
+
+    SCSIZE nNumPoints;
+    bool bRealInput = true;
+    if (!bGroupedByColumn)
+    {
+        pInputMat->MatTrans(*pInputMat);
+        nNumPoints = nC;
+        bRealInput = (nR == 1);
+    }
+    else
+    {
+        nNumPoints = nR;
+        bRealInput = (nC == 1);
+    }
+
+    ScFFT2 aFFT2(pInputMat, nNumPoints, bRealInput, bInverse, bPolar);
+    aFFT2.Compute();
+
+    PushMatrix(pInputMat);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

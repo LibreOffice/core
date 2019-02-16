@@ -500,6 +500,7 @@ enum OpCode : sal_uInt16
         ocErf_MS            = SC_OPCODE_ERF_MS,
         ocErfc_MS           = SC_OPCODE_ERFC_MS,
         ocEncodeURL         = SC_OPCODE_ENCODEURL,
+        ocFourier           = SC_OPCODE_FOURIER,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -972,6 +973,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocErf_MS: return "Erf_MS";
     case ocErfc_MS: return "Erfc_MS";
     case ocEncodeURL: return "EncodeURL";
+    case ocFourier: return "Fourier";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";
