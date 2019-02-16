@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f485f77_754ac727",
+        "filename": "chart2/source/view/charttypes/ConfigAccess.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T12:08:49Z",
+      "side": 1,
+      "message": "Obviously this should not be CalcConfigItem ;). Maybe name it ChartConfigItem instead.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_155153d9",
+        "filename": "chart2/source/view/charttypes/ConfigAccess.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T12:08:49Z",
+      "side": 1,
+      "message": "This should most likely be in the Office.Chart namespace and not Office.Calc. However I\u0027ll discuss the general configuration approach in the general review comments.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5547cb1e",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T12:08:49Z",
+      "side": 1,
+      "message": "This condition combined with other changes means we might not get and error bar rendering at all if ErrorBarStyle is NONE for one of the two. In the old code at least the other error bar would still be rendered.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f55fd7e2",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T12:08:49Z",
+      "side": 1,
+      "message": "I think there is an error in the transformation code here that might only work for the X coordinates. Please check that the code correctly works for the Y coordinate transformation.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_e803900e",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
         "patchSetId": 3
