@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_fa8ea425",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T09:47:42Z",
+      "side": 1,
+      "message": "I\u0027m quite unhappy with these new variables inside of ScDocument. Especially as these are not even really used as part of ScDocument.",
+      "revId": "5c39f3c1fc18ec17f6c2de8c2fcabd1364b83b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
