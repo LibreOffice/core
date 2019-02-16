@@ -385,7 +385,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Bib/sdbsource")
         {
-            OUString aURL = m_xDatMan->CreateDBChangeDialog(pParent);
+            OUString aURL = m_xDatMan->CreateDBChangeDialog(pParent ? pParent->GetFrameWeld() : nullptr);
             if(!aURL.isEmpty())
             {
                 try
