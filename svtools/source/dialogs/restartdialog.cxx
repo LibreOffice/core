@@ -64,6 +64,9 @@ public:
         case svtools::RESTART_REASON_OPENGL:
             get(reason_, "reason_opengl");
             break;
+        case svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU:
+            get(reason_, "reason_mscompatible_formsmenu");
+            break;
         default:
             assert(false); // this cannot happen
         }

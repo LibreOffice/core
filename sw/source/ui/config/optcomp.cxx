@@ -35,6 +35,8 @@
 #include <svtools/treelistentry.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vector>
+#include <svtools/restartdialog.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -458,6 +460,12 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
         m_aViewConfigItem.SetMSOCompatibleFormsMenu(bNewMSFormsMenuOption);
         m_bSavedMSFormsMenuOption = bNewMSFormsMenuOption;
         bModified = true;
+
+        // Show a message about that the option needs a restart to be applied
+        {
+            svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                          nullptr, svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU);
+        }
     }
 
     return bModified;
