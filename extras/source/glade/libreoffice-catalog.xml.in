@@ -521,9 +521,6 @@
                         generic-name="DataTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
 
-    <glade-widget-class title="Suggestion Edit" name="cuilo-SuggestionEdit"
-                        generic-name="SuggestionEdit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Suggestion Display" name="cuilo-SuggestionDisplay"
                         generic-name="SuggestionDisplay" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>

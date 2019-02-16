@@ -244,26 +244,31 @@ namespace svx
     };
 
     class SuggestionList;
+    class HangulHanjaEditDictDialog;
 
-    class SuggestionEdit : public Edit
+    class SuggestionEdit
     {
     private:
-        VclPtr<SuggestionEdit>     m_pPrev;
-        VclPtr<SuggestionEdit>     m_pNext;
-        VclPtr<ScrollBar>          m_pScrollBar;
+        HangulHanjaEditDictDialog* m_pParent;
+        SuggestionEdit*     m_pPrev;
+        SuggestionEdit*     m_pNext;
+        weld::ScrolledWindow* m_pScrollBar;
+        std::unique_ptr<weld::Entry> m_xEntry;
 
         bool                ShouldScroll( bool _bUp ) const;
         void                DoJump( bool _bUp );
     public:
-                            SuggestionEdit( vcl::Window* pParent, WinBits nBits );
-        virtual             ~SuggestionEdit() override;
-        virtual void        dispose() override;
-        virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-        void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
+        SuggestionEdit(std::unique_ptr<weld::Entry> xEntry, HangulHanjaEditDictDialog* pParent);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        void init(weld::ScrolledWindow* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
+
+        void grab_focus() { m_xEntry->grab_focus(); }
+        OUString get_text() const { return m_xEntry->get_text(); }
+        void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
+        void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
     };
 
-
-    class HangulHanjaEditDictDialog : public ModalDialog
+    class HangulHanjaEditDictDialog : public weld::GenericDialogController
     {
     private:
         const OUString  m_aEditHintText;
@@ -273,52 +278,49 @@ namespace svx
         OUString        m_aOriginal;
         std::unique_ptr<SuggestionList> m_pSuggestions;
 
-        VclPtr<ListBox>        m_aBookLB;
-        VclPtr<ComboBox>       m_aOriginalLB;
-        VclPtr<SuggestionEdit> m_aEdit1;
-        VclPtr<SuggestionEdit> m_aEdit2;
-        VclPtr<SuggestionEdit> m_aEdit3;
-        VclPtr<SuggestionEdit> m_aEdit4;
-        VclPtr<ScrollBar>      m_aScrollSB;
-        VclPtr<PushButton>     m_aNewPB;
-        VclPtr<PushButton>     m_aDeletePB;
-
         sal_uInt16      m_nTopPos;
         bool            m_bModifiedSuggestions;
         bool            m_bModifiedOriginal;
 
-        DECL_LINK( OriginalModifyHdl, Edit&, void );
-        DECL_LINK( ScrollHdl, ScrollBar*, void );
-        DECL_LINK( EditModifyHdl1, Edit&, void );
-        DECL_LINK( EditModifyHdl2, Edit&, void );
-        DECL_LINK( EditModifyHdl3, Edit&, void );
-        DECL_LINK( EditModifyHdl4, Edit&, void );
+        std::unique_ptr<weld::ComboBox> m_xBookLB;
+        std::unique_ptr<weld::ComboBox> m_xOriginalLB;
+        std::unique_ptr<SuggestionEdit> m_xEdit1;
+        std::unique_ptr<SuggestionEdit> m_xEdit2;
+        std::unique_ptr<SuggestionEdit> m_xEdit3;
+        std::unique_ptr<SuggestionEdit> m_xEdit4;
+        std::unique_ptr<weld::Widget> m_xContents;
+        std::unique_ptr<weld::ScrolledWindow> m_xScrollSB;
+        std::unique_ptr<weld::Button> m_xNewPB;
+        std::unique_ptr<weld::Button> m_xDeletePB;
 
-        DECL_LINK( BookLBSelectHdl, ListBox&, void );
-        DECL_LINK( NewPBPushHdl, Button*, void );
-        DECL_LINK( DeletePBPushHdl, Button*, void );
+        DECL_LINK( OriginalModifyHdl, weld::ComboBox&, void );
+        DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
+        DECL_LINK( EditModifyHdl1, weld::Entry&, void );
+        DECL_LINK( EditModifyHdl2, weld::Entry&, void );
+        DECL_LINK( EditModifyHdl3, weld::Entry&, void );
+        DECL_LINK( EditModifyHdl4, weld::Entry&, void );
 
-        void            InitEditDictDialog( sal_uInt32 _nSelDict );
+        DECL_LINK( BookLBSelectHdl, weld::ComboBox&, void );
+        DECL_LINK( NewPBPushHdl, weld::Button&, void );
+        DECL_LINK( DeletePBPushHdl, weld::Button&, void );
+
+        void            InitEditDictDialog(sal_uInt32 nSelDict);
         void            UpdateOriginalLB();
         void            UpdateSuggestions();
         void            UpdateButtonStates();
 
-        void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
-        void            EditModify( Edit const * _pEdit, sal_uInt8 _nEntryOffset );
+        void            SetEditText( SuggestionEdit& rEdit, sal_uInt16 nEntryNum );
+        void            EditModify( const weld::Entry* pEdit, sal_uInt8 nEntryOffset );
 
         bool            DeleteEntryFromDictionary( const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
 
     public:
-                        HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
-                        virtual ~HangulHanjaEditDictDialog() override;
-        virtual void    dispose() override;
+        HangulHanjaEditDictDialog(weld::Window* pParent, HHDictList& rDictList, sal_uInt32 nSelDict);
+        virtual ~HangulHanjaEditDictDialog() override;
 
         void            UpdateScrollbar();
     };
-
-
 }
-
 
 #endif // SVX_HANGUL_HANJA_HXX
 
