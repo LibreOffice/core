@@ -502,7 +502,6 @@ custom_widgets = [
     'StatusBar',
     'StructListBox',
     'SuggestionDisplay',
-    'SuggestionEdit',
     'SvSimpleTableContainer',
     'SvTreeListBox',
     'SvtFileView',

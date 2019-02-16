@@ -217,6 +217,8 @@ public:
     virtual int vadjustment_get_upper() const = 0;
     virtual void vadjustment_set_upper(int upper) = 0;
     virtual int vadjustment_get_page_size() const = 0;
+    virtual int vadjustment_get_lower() const = 0;
+    virtual void vadjustment_set_lower(int upper) = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
     virtual VclPolicyType get_vpolicy() const = 0;
     void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
