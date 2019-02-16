@@ -785,8 +785,6 @@ bool SVGFilter::implExportDocument()
         if(xPrimitiveFactory.is())
         {
             Reference< XShape > xShapeCandidate;
-            const Sequence< PropertyValue > aViewInformation;
-            const Sequence< PropertyValue > aParams;
 
             for(sal_Int32 a(0); a < maShapeSelection->getCount(); a++)
             {
