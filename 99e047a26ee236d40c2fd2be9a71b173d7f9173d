@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f536b7b4",
+        "filename": "chart2/source/model/template/ChartTypeTemplate.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T11:49:27Z",
+      "side": 1,
+      "message": "Incorrect indentation.",
+      "revId": "99e047a26ee236d40c2fd2be9a71b173d7f9173d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d53bbb99",
+        "filename": "chart2/source/model/template/ChartTypeTemplate.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T11:49:27Z",
+      "side": 1,
+      "message": "Please use a new line for the code after the else.\n\nWe don\u0027t use NULL in C++ code anymore. Either nullptr for a pointer or 0 for a number. So, in this case please use 0.",
+      "revId": "99e047a26ee236d40c2fd2be9a71b173d7f9173d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b5403f09",
+        "filename": "chart2/source/model/template/ChartTypeTemplate.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-02-16T11:49:27Z",
+      "side": 1,
+      "message": "We don\u0027t use NULL anymore. In this case the correct value would be 0.",
+      "revId": "99e047a26ee236d40c2fd2be9a71b173d7f9173d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
