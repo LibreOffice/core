@@ -4044,8 +4044,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 const ScAddress::Details aDetails( pConv->meConv, aPos );
                 if ( nRefs == 2 )
                 {
-                    aRef[0] = aSymbol.getToken( 0, ':' );
-                    aRef[1] = aSymbol.getToken( 1, ':' );
+                    sal_Int32 nIdx{ 0 };
+                    aRef[0] = aSymbol.getToken( 0, ':', nIdx );
+                    aRef[1] = aSymbol.getToken( 0, ':', nIdx );
                 }
                 else
                     aRef[0] = aSymbol;
