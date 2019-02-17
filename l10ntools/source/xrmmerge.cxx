@@ -261,12 +261,8 @@ void XRMResParser::Execute( int nToken, char * pToken )
 
 OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttribute )
 {
-    OString sTmp( rToken );
-    sTmp = sTmp.replace('\t', ' ');
-
-    OString sSearch( " " );
-    sSearch += rAttribute;
-    sSearch += "=";
+    const OString sSearch{ " " + rAttribute + "=" };
+    OString sTmp{ rToken.replace('\t', ' ') };
     sal_Int32 nPos = sTmp.indexOf( sSearch );
 
     if ( nPos<0 )
@@ -293,9 +289,7 @@ XRMResExport::XRMResExport(
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
     {
-        OString sError( "Unable to open output file: " );
-        sError += rOutputFile;
-        Error( sError );
+        Error( "Unable to open output file: " + rOutputFile );
     }
 }
 
@@ -310,9 +304,8 @@ void XRMResExport::WorkOnDesc(
     const OString &rOpenTag,
     OString &rText )
 {
-    OString sDescFileName(
-        sInputFileName.replaceAll("description.xml", OString()));
-    sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
+    const OString sDescFileName{ sInputFileName.replaceAll("description.xml", OString())
+        + GetAttribute( rOpenTag, "xlink:href" ) };
     ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
         int size = static_cast<int>(file.tellg());
@@ -377,9 +370,7 @@ XRMResMerge::XRMResMerge(
     pOutputStream.open(
         rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
     if (!pOutputStream.is_open()) {
-        OString sError( "Unable to open output file: " );
-        sError += rOutputFile;
-        Error( sError );
+        Error( "Unable to open output file: " + rOutputFile );
     }
 }
 
@@ -405,10 +396,8 @@ void XRMResMerge::WorkOnDesc(
                     ( pEntrys->GetText( sText, sCur, true )) &&
                     !sText.isEmpty())
                 {
-                    OString sAdditionalLine( "\n        " );
-                    sAdditionalLine += rOpenTag;
-                    OString sSearch = sLangAttribute;
-                    sSearch += "=\"";
+                    OString sAdditionalLine{ "\n        "  + rOpenTag };
+                    OString sSearch{ sLangAttribute + "=\"" };
                     OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
@@ -419,9 +408,7 @@ void XRMResMerge::WorkOnDesc(
                     sSearch = OString("xlink:href=\"");
                     sReplace = sSearch;
 
-                    OString sLocDescFilename = sDescFilename;
-                    sLocDescFilename = sLocDescFilename.replaceFirst(
-                        "en-US", sCur);
+                    const OString sLocDescFilename = sDescFilename.replaceFirst( "en-US", sCur);
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;
@@ -491,20 +478,15 @@ void XRMResMerge::EndOfText(
                     helper::isWellFormedXML( sContent ))
                 {
                     const OString& sText( sContent );
-                    OString sAdditionalLine( "\n        " );
-                    sAdditionalLine += rOpenTag;
-                    OString sSearch = sLangAttribute;
-                    sSearch += "=\"";
+                    OString sAdditionalLine{ "\n        " + rOpenTag };
+                    OString sSearch{ sLangAttribute + "=\"" };
                     OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
 
                     sAdditionalLine = sAdditionalLine.replaceFirst(
-                        sSearch, sReplace);
-
-                    sAdditionalLine += sText;
-                    sAdditionalLine += rCloseTag;
+                        sSearch, sReplace) + sText + rCloseTag;
 
                     Output( sAdditionalLine );
                 }
