@@ -33,23 +33,23 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DefaultCharStyle"/>
-      <menu:menuitem menu:id=".uno:EmphasisCharStyle"/>
-      <menu:menuitem menu:id=".uno:StrongEmphasisCharStyle"/>
-      <menu:menuitem menu:id=".uno:QuoteCharStyle"/>
-      <menu:menuitem menu:id=".uno:SourceCharStyle"/>
+      <menu:menuitem menu:id=".uno:DefaultCharStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:EmphasisCharStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StrongEmphasisCharStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:QuoteCharStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SourceCharStyle" menu:style="radio"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ParagraphMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TextBodyParaStyle"/>
-      <menu:menuitem menu:id=".uno:Heading1ParaStyle"/>
-      <menu:menuitem menu:id=".uno:Heading2ParaStyle"/>
-      <menu:menuitem menu:id=".uno:Heading3ParaStyle"/>
-      <menu:menuitem menu:id=".uno:QuotationsParStyle"/>
-      <menu:menuitem menu:id=".uno:PreformattedParaStyle"/>
+      <menu:menuitem menu:id=".uno:TextBodyParaStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:Heading1ParaStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:Heading2ParaStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:Heading3ParaStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:QuotationsParStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:PreformattedParaStyle" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
     </menu:menupopup>
@@ -58,12 +58,12 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:BulletListStyle"/>
-      <menu:menuitem menu:id=".uno:NumberListStyle"/>
-      <menu:menuitem menu:id=".uno:AlphaListStyle"/>
-      <menu:menuitem menu:id=".uno:AlphaLowListStyle"/>
-      <menu:menuitem menu:id=".uno:RomanListStyle"/>
-      <menu:menuitem menu:id=".uno:RomanLowListStyle"/>
+      <menu:menuitem menu:id=".uno:BulletListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:NumberListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:AlphaListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:AlphaLowListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:RomanListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:RomanLowListStyle" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:IncrementLevel"/>
       <menu:menuitem menu:id=".uno:DecrementLevel"/>

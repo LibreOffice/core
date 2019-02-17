@@ -40,17 +40,15 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles" menu:style="radio"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
