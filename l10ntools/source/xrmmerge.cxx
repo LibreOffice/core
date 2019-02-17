@@ -269,13 +269,10 @@ OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttri
     sSearch += "=";
     sal_Int32 nPos = sTmp.indexOf( sSearch );
 
-    if ( nPos != -1 )
-    {
-        sTmp = sTmp.copy( nPos );
-        OString sId = sTmp.getToken(1, '"');
-        return sId;
-    }
-    return OString();
+    if ( nPos<0 )
+        return OString();
+
+    return sTmp.getToken(1, '"', nPos);
 }
 
 
