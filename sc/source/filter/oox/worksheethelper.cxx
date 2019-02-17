@@ -1057,8 +1057,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
 
             try
             {
-                sal_Int32 nIndex = 0;
-                OUString aToken = validation.msRef.getToken( 0, ' ', nIndex );
+                const OUString aToken = validation.msRef.getToken( 0, ' ' );
 
                 Reference<XSpreadsheet> xSheet = getSheetFromDoc( getCurrentSheetIndex() );
                 Reference<XCellRange> xDBCellRange;
