@@ -762,8 +762,8 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
             tools::Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
             nScreenX = aRect.Left();
             nScreenY = aRect.Top();
-            nScreenDX = aRect.getWidth()+1;  // difference between java/awt convention and vcl
-            nScreenDY = aRect.getHeight()+1; // difference between java/awt convention and vcl
+            nScreenDX = aRect.GetWidth();
+            nScreenDY = aRect.GetHeight();
         }
         else
         {
@@ -774,8 +774,8 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
             }
             nScreenX  = aCombined.Left();
             nScreenY  = aCombined.Top();
-            nScreenDX = aCombined.getWidth();
-            nScreenDY = aCombined.getHeight();
+            nScreenDX = aCombined.GetWidth();
+            nScreenDY = aCombined.GetHeight();
         }
     }
     catch( Exception& )
