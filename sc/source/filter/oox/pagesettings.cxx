@@ -823,9 +823,9 @@ void HeaderFooterParser::convertFontName( const OUString& rName )
 void HeaderFooterParser::convertFontStyle( const OUString& rStyle )
 {
     maFontModel.mbBold = maFontModel.mbItalic = false;
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rStyle.getLength();
-    while( (0 <= nPos) && (nPos < nLen) )
+    if (rStyle.isEmpty())
+        return;
+    for( sal_Int32 nPos{ 0 }; nPos>=0; )
     {
         OString aToken = OUStringToOString( rStyle.getToken( 0, ' ', nPos ), RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
         if( !aToken.isEmpty() )
