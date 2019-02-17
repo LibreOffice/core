@@ -196,32 +196,31 @@ namespace svx
 
     typedef std::vector< css::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
 
-    class HangulHanjaOptionsDialog : public ModalDialog
+    class HangulHanjaOptionsDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<SvxCheckListBox>    m_pDictsLB;
-        VclPtr<CheckBox>           m_pIgnorepostCB;
-        VclPtr<CheckBox>           m_pShowrecentlyfirstCB;
-        VclPtr<CheckBox>           m_pAutoreplaceuniqueCB;
-        VclPtr<PushButton>         m_pNewPB;
-        VclPtr<PushButton>         m_pEditPB;
-        VclPtr<PushButton>         m_pDeletePB;
-        VclPtr<OKButton>           m_pOkPB;
-
         HHDictList          m_aDictList;
         css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
-        DECL_LINK( OkHdl, Button*, void );
-        DECL_LINK( DictsLB_SelectHdl, SvTreeListBox*, void );
-        DECL_LINK( NewDictHdl, Button*, void );
-        DECL_LINK( EditDictHdl, Button*, void );
-        DECL_LINK( DeleteDictHdl, Button*, void );
+        std::unique_ptr<weld::TreeView> m_xDictsLB;
+        std::unique_ptr<weld::CheckButton> m_xIgnorepostCB;
+        std::unique_ptr<weld::CheckButton> m_xShowrecentlyfirstCB;
+        std::unique_ptr<weld::CheckButton> m_xAutoreplaceuniqueCB;
+        std::unique_ptr<weld::Button> m_xNewPB;
+        std::unique_ptr<weld::Button> m_xEditPB;
+        std::unique_ptr<weld::Button> m_xDeletePB;
+        std::unique_ptr<weld::Button> m_xOkPB;
+
+        DECL_LINK( OkHdl, weld::Button&, void );
+        DECL_LINK( DictsLB_SelectHdl, weld::TreeView&, void );
+        DECL_LINK( NewDictHdl, weld::Button&, void );
+        DECL_LINK( EditDictHdl, weld::Button&, void );
+        DECL_LINK( DeleteDictHdl, weld::Button&, void );
 
         void                Init();       ///< reads settings from core and init controls
     public:
-                            HangulHanjaOptionsDialog( vcl::Window* _pParent );
-        virtual             ~HangulHanjaOptionsDialog() override;
-        virtual void        dispose() override;
+        HangulHanjaOptionsDialog(weld::Window* pParent);
+        virtual ~HangulHanjaOptionsDialog() override;
 
         void                AddDict( const OUString& _rName, bool _bChecked );
     };
