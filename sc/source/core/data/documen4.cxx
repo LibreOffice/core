@@ -1168,8 +1168,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             sal_Int32 nIndex = 0;
             OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
             aProText.append(aTabName);
-            nIndex = 0;
-            aProText.append(aTemplate.getToken( 1, '#', nIndex ));
+            aProText.append(aTemplate.getToken( 0, '#', nIndex ));
             ScProgress aProgress( GetDocumentShell(),
                                         aProText.makeStringAndClear(), 3*nThisEndRow, true );  // 2x FindOrder, 1x here
             long nProgressStart = 2*nThisEndRow;                    // start for here
