@@ -112,12 +112,10 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             ORptFilter::TGroupFunctionMap::const_iterator aFind = aFunctions.find(sValue);
                             if ( aFind != aFunctions.end() )
                             {
-                                sal_Int32 nIndex = 0;
                                 const OUString sCompleteFormula = aFind->second->getFormula();
-                                OUString sExpression = sCompleteFormula.getToken(1,'[',nIndex);
-                                nIndex = 0;
-                                sExpression = sExpression.getToken(0,']',nIndex);
-                                nIndex = 0;
+                                OUString sExpression = sCompleteFormula.getToken(1,'[');
+                                sExpression = sExpression.getToken(0,']');
+                                sal_Int32 nIndex = 0;
                                 const OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
@@ -125,8 +123,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
                                     OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
-                                    nIndex = 0;
-                                    sInterval = sInterval.getToken(0,')',nIndex);
+                                    sInterval = sInterval.getToken(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
                                 else if ( sFormula == "rpt:YEAR")
@@ -153,11 +150,8 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
                                     sExpression = sExpression.copy(OUString("INT_count_").getLength());
-
-                                    nIndex = 0;
-                                    OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);
-                                    nIndex = 0;
-                                    sInterval = sInterval.getToken(0,')',nIndex);
+                                    OUString sInterval = sCompleteFormula.getToken(1,'/');
+                                    sInterval = sInterval.getToken(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
 
