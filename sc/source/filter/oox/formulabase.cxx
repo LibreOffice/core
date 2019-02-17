@@ -1685,9 +1685,7 @@ void FormulaProcessorBase::convertStringToStringList(
     if( extractString( aString, orTokens ) && !aString.isEmpty() )
     {
         ::std::vector< ApiToken > aNewTokens;
-        sal_Int32 nPos = 0;
-        sal_Int32 nLen = aString.getLength();
-        while( (0 <= nPos) && (nPos < nLen) )
+        for( sal_Int32 nPos{ 0 }; nPos>=0; )
         {
             OUString aEntry = aString.getToken( 0, cStringSep, nPos );
             if( bTrimLeadingSpaces )
