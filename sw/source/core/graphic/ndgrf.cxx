@@ -569,13 +569,10 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
         if( rFltName == "DDE" )
         {
             sal_Int32 nTmp = 0;
-            // Cannot use getToken as argument in function call:
-            // evaluation order is undefined!
             const OUString sApp{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
             const OUString sTopic{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
             const OUString sItem{ rGrfName.copy( nTmp ) };
-            rIDLA.GetLinkManager().InsertDDELink( refLink.get(),
-                                            sApp, sTopic, sItem );
+            rIDLA.GetLinkManager().InsertDDELink( refLink.get(), sApp, sTopic, sItem );
         }
         else
         {
