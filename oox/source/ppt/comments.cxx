@@ -29,16 +29,15 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 }
 
 //DateTime is saved as : 2013-01-10T15:53:26.000
-void Comment::setDateTime (const OUString& _datetime)
+void Comment::setDateTime (const OUString& sDateTime)
 {
-    OUString datetime = _datetime;
-    aDateTime.Year = datetime.getToken(0,'-').toInt32();
-    aDateTime.Month = datetime.getToken(1,'-').toUInt32();
-    aDateTime.Day = datetime.getToken(2,'-').toUInt32();
-    datetime = datetime.getToken(1,'T');
-    aDateTime.Hours = datetime.getToken(0,':').toUInt32();
-    aDateTime.Minutes = datetime.getToken(1,':').toUInt32();
-    double seconds = datetime.getToken(2,':').toDouble();
+    sal_Int32 nIdx{ 0 };
+    aDateTime.Year = sDateTime.getToken(0, '-', nIdx).toInt32();
+    aDateTime.Month = sDateTime.getToken(0, '-', nIdx).toUInt32();
+    aDateTime.Day = sDateTime.getToken(0, 'T', nIdx).toUInt32();
+    aDateTime.Hours = sDateTime.getToken(0, ':', nIdx).toUInt32();
+    aDateTime.Minutes = sDateTime.getToken(0, ':', nIdx).toUInt32();
+    double seconds = sDateTime.copy(nIdx).toDouble();
     aDateTime.Seconds = floor(seconds);
     seconds -= aDateTime.Seconds;
     aDateTime.NanoSeconds = ::rtl::math::round(seconds * 1000000000);
