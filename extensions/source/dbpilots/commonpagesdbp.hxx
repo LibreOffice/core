@@ -107,7 +107,24 @@ namespace dbp
         virtual void dispose() override;
 
     protected:
-        void setDescriptionText(const OUString& _rDesc) { m_pDescription->SetText(_rDesc); }
+        void setDescriptionText(const OUString& rDesc)
+        {
+            m_pDescription->set_width_request(-1);
+            m_pDescription->set_height_request(-1);
+
+            auto nWidthAvail = GetParent()->GetSizePixel().Width();
+
+            m_pDescription->SetText(rDesc);
+
+            //tdf#122307 wrap based on current wizard width
+            Size aPrefSize(m_pDescription->get_preferred_size());
+            Size aSize(m_pDescription->CalcMinimumSize(nWidthAvail));
+            if (aSize.Height() > aPrefSize.Height())
+            {
+                m_pDescription->set_width_request(aSize.Width());
+                m_pDescription->set_height_request(aSize.Height());
+            }
+        }
 
         // OWizardPage overridables
         virtual void initializePage() override;
