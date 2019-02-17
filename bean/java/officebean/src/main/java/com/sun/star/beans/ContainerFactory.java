@@ -26,7 +26,7 @@ package com.sun.star.beans;
 import java.awt.Container;
 
 /**
- * This interface reprecents an AWT container factory.
+ * This interface represents an AWT container factory.
  *
  * @see OfficeBean
  * @deprecated
