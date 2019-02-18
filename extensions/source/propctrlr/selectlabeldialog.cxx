@@ -104,7 +104,7 @@ namespace pcr
             OUString sRootName(PcrRes(RID_STR_FORMS));
             OUString aFormImage(RID_EXTBMP_FORMS);
             m_xControlTree->insert(nullptr, -1, &sRootName, nullptr,
-                                   nullptr, nullptr, &aFormImage, false);
+                                   nullptr, nullptr, &aFormImage, false, nullptr);
 
             // build the tree
             m_xInitialSelection.reset();
@@ -179,7 +179,7 @@ namespace pcr
                     OUString aFormImage(RID_EXTBMP_FORM);
 
                     m_xControlTree->insert(&rContainerEntry, -1, &sName, nullptr,
-                                           nullptr, nullptr, &aFormImage, false);
+                                           nullptr, nullptr, &aFormImage, false, nullptr);
                     auto xIter = m_xControlTree->make_iterator(&rContainerEntry);
                     m_xControlTree->iter_nth_child(*xIter, nChildren);
                     sal_Int32 nContChildren = InsertEntries(xCont, *xIter);
@@ -208,7 +208,7 @@ namespace pcr
             // all requirements met -> insert
             m_xUserData.emplace_back(new Reference<XPropertySet>(xAsSet));
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_xUserData.back().get())));
-            m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, &m_aRequiredControlImage, false);
+            m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, &m_aRequiredControlImage, false, nullptr);
 
             if (m_xInitialLabelControl == xAsSet)
             {

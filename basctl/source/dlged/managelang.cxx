@@ -272,8 +272,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
         for (sal_Int32 j = 0;  j < nCountLang; ++j)
         {
             LanguageType eLang = m_xLanguageCB->get_id(j);
-            m_xCheckLangLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                                   nullptr, nullptr, false);
+            m_xCheckLangLB->append();
             const int nRow = m_xCheckLangLB->n_children() - 1;
             m_xCheckLangLB->set_toggle(nRow, false, 0);
             m_xCheckLangLB->set_text(nRow, m_xLanguageCB->get_text(j), 1);

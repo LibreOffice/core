@@ -2087,6 +2087,7 @@ private:
     VclPtr<SvTabListBox> m_xTreeView;
     SvLBoxButtonData m_aCheckButtonData;
     SvLBoxButtonData m_aRadioButtonData;
+    int m_nSortColumn;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
@@ -2095,12 +2096,14 @@ private:
     DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
+    DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
         , m_xTreeView(pTreeView)
         , m_aCheckButtonData(pTreeView, false)
         , m_aRadioButtonData(pTreeView, true)
+        , m_nSortColumn(-1)
     {
         m_xTreeView->SetNodeDefaultImages();
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
@@ -2186,8 +2189,8 @@ public:
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface, const OUString* pExpanderName,
-                        bool bChildrenOnDemand) override
+                        const OUString* pIconName, VirtualDevice* pImageSurface,
+                        const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet) override
     {
         SalInstanceTreeIter* pVclIter = static_cast<SalInstanceTreeIter*>(pParent);
         SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
@@ -2222,6 +2225,12 @@ public:
             Image aImage(createImage(*pExpanderName));
             m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
             m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
+        }
+
+        if (pRet)
+        {
+            SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
+            pVclRetIter->iter = pEntry;
         }
 
         if (bChildrenOnDemand)
@@ -2455,11 +2464,16 @@ public:
         return *pRet;
     }
 
+    void set_id(SvTreeListEntry* pEntry, const OUString& rId)
+    {
+        m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+        pEntry->SetUserData(m_aUserData.back().get());
+    }
+
     virtual void set_id(int pos, const OUString& rId) override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-        pEntry->SetUserData(m_aUserData.back().get());
+        set_id(pEntry, rId);
     }
 
     virtual int get_selected_index() const override
@@ -2644,6 +2658,12 @@ public:
         return OUString();
     }
 
+    virtual void set_id(weld::TreeIter& rIter, const OUString& rId) override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        set_id(rVclIter.iter, rId);
+    }
+
     virtual void set_expander_image(const weld::TreeIter& rIter, const OUString& rImage) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
@@ -2704,28 +2724,12 @@ public:
     virtual void make_sorted() override
     {
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
+        m_xTreeView->GetModel()->SetCompareHdl(LINK(this, SalInstanceTreeView, CompareHdl));
         set_sort_order(true);
     }
 
     virtual void set_sort_order(bool bAscending) override
     {
-        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
-        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-        {
-            sal_uInt16 nTextId = pHeaderBar->GetItemId(0);
-            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
-            if (nBits & HeaderBarItemBits::CLICKABLE)
-            {
-                nBits &= ~HeaderBarItemBits::UPARROW;
-                nBits &= ~HeaderBarItemBits::DOWNARROW;
-                if (bAscending)
-                    nBits |= HeaderBarItemBits::DOWNARROW;
-                else
-                    nBits |= HeaderBarItemBits::UPARROW;
-                pHeaderBar->SetItemBits(nTextId, nBits);
-            }
-        }
-
         SvTreeList* pListModel = m_xTreeView->GetModel();
         pListModel->SetSortMode(bAscending ? SortAscending : SortDescending);
         pListModel->Resort();
@@ -2734,6 +2738,62 @@ public:
     virtual bool get_sort_order() const override
     {
         return m_xTreeView->GetModel()->GetSortMode() == SortAscending;
+    }
+
+    virtual void set_sort_indicator(TriState eState, int col) override
+    {
+        if (col == -1)
+            col = 0;
+
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            sal_uInt16 nTextId = pHeaderBar->GetItemId(col);
+            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
+            nBits &= ~HeaderBarItemBits::UPARROW;
+            nBits &= ~HeaderBarItemBits::DOWNARROW;
+            if (eState != TRISTATE_INDET)
+            {
+                if (eState == TRISTATE_TRUE)
+                    nBits |= HeaderBarItemBits::DOWNARROW;
+                else
+                    nBits |= HeaderBarItemBits::UPARROW;
+            }
+            pHeaderBar->SetItemBits(nTextId, nBits);
+        }
+    }
+
+    virtual TriState get_sort_indicator(int col) const override
+    {
+        if (col == -1)
+            col = 0;
+
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            sal_uInt16 nTextId = pHeaderBar->GetItemId(col);
+            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
+            if (nBits & HeaderBarItemBits::DOWNARROW)
+                return TRISTATE_TRUE;
+            if (nBits & HeaderBarItemBits::UPARROW)
+                return TRISTATE_FALSE;
+        }
+
+        return TRISTATE_INDET;
+    }
+
+    virtual int get_sort_column() const override
+    {
+        return m_nSortColumn;
+    }
+
+    virtual void set_sort_column(int nColumn) override
+    {
+        if (nColumn != m_nSortColumn)
+        {
+            m_nSortColumn = nColumn;
+            m_xTreeView->GetModel()->Resort();
+        }
     }
 
     SvTabListBox& getTreeView()
@@ -2755,6 +2815,45 @@ public:
         m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
     }
 };
+
+IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int32)
+{
+    const SvTreeListEntry* pLHS = rSortData.pLeft;
+    const SvTreeListEntry* pRHS = rSortData.pRight;
+    assert(pLHS && pRHS);
+
+    const SvLBoxString* pLeftTextItem;
+    const SvLBoxString* pRightTextItem;
+
+    if (m_nSortColumn != -1)
+    {
+        size_t col = m_nSortColumn;
+
+        ++col; //skip dummy/expander column
+
+        if (col < pLHS->ItemCount())
+        {
+            const SvLBoxString& rLeftTextItem = static_cast<const SvLBoxString&>(pLHS->GetItem(col));
+            pLeftTextItem = &rLeftTextItem;
+        }
+        else
+            pLeftTextItem = nullptr;
+        if (col < pRHS->ItemCount())
+        {
+            const SvLBoxString& rRightTextItem = static_cast<const SvLBoxString&>(pRHS->GetItem(col));
+            pRightTextItem = &rRightTextItem;
+        }
+        else
+            pRightTextItem = nullptr;
+    }
+    else
+    {
+        pLeftTextItem = static_cast<const SvLBoxString*>(pLHS->GetFirstItem(SvLBoxItemType::String));
+        pRightTextItem = static_cast<const SvLBoxString*>(pRHS->GetFirstItem(SvLBoxItemType::String));
+    }
+
+    return m_xTreeView->DefaultCompare(pLeftTextItem, pRightTextItem);
+}
 
 IMPL_LINK_NOARG(SalInstanceTreeView, VisibleRangeChangedHdl, SvTreeListBox*, void)
 {

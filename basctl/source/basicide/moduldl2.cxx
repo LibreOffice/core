@@ -808,8 +808,7 @@ void LibPage::InsertLib()
                 ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
         {
             weld::TreeView& rView = xLibDlg->GetLibBox();
-            rView.insert(nullptr, -1, nullptr, nullptr, nullptr,
-                                      nullptr, nullptr, false);
+            rView.append();
             const int nRow = rView.n_children() - 1;
             rView.set_toggle(nRow, true, 0);
             rView.set_text(nRow, aLibName, 1);

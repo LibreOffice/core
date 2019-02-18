@@ -3312,16 +3312,21 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         Control::RequestHelp( rHEvt );
 }
 
+sal_Int32 SvTreeListBox::DefaultCompare(const SvLBoxString* pLeftText, const SvLBoxString* pRightText)
+{
+    OUString aLeft = pLeftText ? pLeftText->GetText() : OUString();
+    OUString aRight = pRightText ? pRightText->GetText() : OUString();
+    pImpl->UpdateStringSorter();
+    return pImpl->m_pStringSorter->compare(aLeft, aRight);
+}
+
 IMPL_LINK( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
 {
     const SvTreeListEntry* pLeft = rData.pLeft;
     const SvTreeListEntry* pRight = rData.pRight;
     const SvLBoxString* pLeftText = static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SvLBoxItemType::String));
     const SvLBoxString* pRightText = static_cast<const SvLBoxString*>(pRight->GetFirstItem(SvLBoxItemType::String));
-    OUString aLeft = pLeftText ? pLeftText->GetText() : OUString();
-    OUString aRight = pRightText ? pRightText->GetText() : OUString();
-    pImpl->UpdateStringSorter();
-    return pImpl->m_pStringSorter->compare(aLeft, aRight);
+    return DefaultCompare(pLeftText, pRightText);
 }
 
 void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,

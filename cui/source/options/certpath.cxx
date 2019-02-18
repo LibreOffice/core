@@ -69,8 +69,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
             if (!profile.isEmpty())
             {
-                m_xCertPathList->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                                        nullptr, nullptr, false);
+                m_xCertPathList->append();
                 const int nRow = m_xCertPathList->n_children() - 1;
                 m_xCertPathList->set_toggle(nRow, false, 0);
                 OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + profile;
@@ -174,8 +173,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         }
     }
 
-    m_xCertPathList->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                            nullptr, nullptr, false);
+    m_xCertPathList->append();
     const int nRow = m_xCertPathList->n_children() - 1;
     m_xCertPathList->set_toggle(nRow, true, 0);
     m_xCertPathList->set_text(nRow, rProfile, 1);

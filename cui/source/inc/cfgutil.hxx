@@ -140,7 +140,7 @@ public:
     void append(const OUString& rId, const OUString& rStr) { m_xTreeView->append(rId, rStr); }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        m_xTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false);
+        m_xTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, nullptr);
     }
     int n_children() const { return m_xTreeView->n_children(); }
     void select(int pos) { m_xTreeView->select(pos); }

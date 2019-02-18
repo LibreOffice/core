@@ -616,16 +616,16 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     m_xCheckLB->clear();   // remove all entries
 
     // Writer objects
-    sal_uLong nPos = 0;
-    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    int nPos = 0;
+    m_xCheckLB->append();
     m_xCheckLB->set_toggle(nPos, false, 0);
     m_xCheckLB->set_text(nPos, m_sSWTable, 1);
     SetOptions(nPos++, TABLE_CAP);
-    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xCheckLB->append();
     m_xCheckLB->set_toggle(nPos, false, 0);
     m_xCheckLB->set_text(nPos, m_sSWFrame, 1);
     SetOptions(nPos++, FRAME_CAP);
-    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xCheckLB->append();
     m_xCheckLB->set_toggle(nPos, false, 0);
     m_xCheckLB->set_text(nPos, m_sSWGraphic, 1);
     SetOptions(nPos++, GRAPHIC_CAP);
@@ -650,7 +650,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
             sClass = aObjS[i].GetHumanName();
         // don't show product version
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
-        m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+        m_xCheckLB->append();
         m_xCheckLB->set_toggle(nPos, false, 0);
         m_xCheckLB->set_text(nPos, sClass, 1);
         SetOptions( nPos++, OLE_CAP, &rOleId );

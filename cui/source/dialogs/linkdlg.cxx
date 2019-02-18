@@ -575,11 +575,9 @@ void SvBaseLinksDlg::InsertEntry(const SvBaseLink& rLink, int nPos, bool bSelect
 
     if (nPos == -1)
         nPos = m_xTbLinks->n_children();
-    m_xTbLinks->insert(nullptr, nPos, nullptr, nullptr, nullptr,
-                       nullptr, nullptr, false);
-
-    m_xTbLinks->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(&rLink)));
+    m_xTbLinks->insert(nPos);
     m_xTbLinks->set_text(nPos, aTxt, 0);
+    m_xTbLinks->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(&rLink)));
     if( OBJECT_CLIENT_GRF == rLink.GetObjType() )
         m_xTbLinks->set_text(nPos, sFilter, 1);
     else
