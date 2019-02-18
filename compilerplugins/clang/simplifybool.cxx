@@ -53,15 +53,15 @@ Expr const * getSubExprOfLogicalNegation(Expr const * expr) {
         ? nullptr : e->getSubExpr();
 }
 
-bool existsOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode) {
+FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode) {
     OverloadedOperatorKind over = BinaryOperator::getOverloadedOperator(opcode);
     CXXRecordDecl const * recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
     if (!recordDecl)
-        return false;
+        return nullptr;
     // search for member overloads
     for (auto it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it) {
         if (it->getOverloadedOperator() == over) {
-            return true;
+            return *it;
         }
     }
     // search for free function overloads
@@ -80,9 +80,9 @@ bool existsOperator(CompilerInstance& compiler, clang::RecordType const * record
         if (!lvalue)
             continue;
         if (lvalue->getPointeeType().getTypePtr() == recordType)
-            return true;
+            return f;
     }
-    return false;
+    return nullptr;
 }
 
 enum class Value { Unknown, False, True };
@@ -236,7 +236,8 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (!t->isRecordType())
             return true;
         auto recordType = dyn_cast<RecordType>(t);
-        if (!existsOperator(compiler, recordType, negatedOpcode))
+        auto const negOp = findOperator(compiler, recordType, negatedOpcode);
+        if (!negOp)
             return true;
         // if we are inside a similar operator, ignore, eg. operator!= is often defined by calling !operator==
         if (m_insideFunctionDecl && m_insideFunctionDecl->getNumParams() >= 1) {
@@ -254,6 +255,10 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
             ("logical negation of comparison operator, can be simplified by inverting operator"),
             compat::getBeginLoc(expr))
             << expr->getSourceRange();
+        report(
+            DiagnosticsEngine::Note, "the presumed corresponding negated operator is declared here",
+            negOp->getLocation())
+            << negOp->getSourceRange();
     }
     return true;
 }

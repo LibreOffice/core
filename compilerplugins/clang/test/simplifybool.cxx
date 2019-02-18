@@ -8,6 +8,7 @@
  */
 
 #include <rtl/ustring.hxx>
+// expected-note@rtl/ustring.hxx:* 2 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
 
 namespace group1
 {
@@ -75,6 +76,7 @@ struct Record2
 {
     bool operator==(const Record2&) const;
     bool operator!=(const Record2&) const;
+    // expected-note@-1 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
 };
 
 struct Record3
@@ -83,6 +85,7 @@ struct Record3
 
 bool operator==(const Record3&, const Record3&);
 bool operator!=(const Record3&, const Record3&);
+// expected-note@-1 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
 
 void testRecord()
 {
