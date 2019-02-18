@@ -80,7 +80,7 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
           m_aPropVals.begin(), m_aPropVals.end(), rPropName,
           SbCompare_UString_PropertyValue_Impl );
-    if (it == m_aPropVals.end() || !SbCompare_UString_PropertyValue_Impl(*it, rPropName))
+    if (it == m_aPropVals.end() || it->Name != rPropName)
     {
         throw beans::UnknownPropertyException(
                 "Property not found: " + rPropName,
