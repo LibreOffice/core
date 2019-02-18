@@ -1595,25 +1595,25 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         rBuffer.append( "[ " );
         if( rInfo.GetDashLen() == rInfo.GetDotLen() ) // degraded case
         {
-            appendMappedLength( static_cast<sal_Int32>(rInfo.GetDashLen()), rBuffer );
+            appendMappedLength( rInfo.GetDashLen(), rBuffer );
             rBuffer.append( ' ' );
-            appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
+            appendMappedLength( rInfo.GetDistance(), rBuffer );
             rBuffer.append( ' ' );
         }
         else
         {
             for( int n = 0; n < rInfo.GetDashCount(); n++ )
             {
-                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDashLen()), rBuffer );
+                appendMappedLength( rInfo.GetDashLen(), rBuffer );
                 rBuffer.append( ' ' );
-                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
+                appendMappedLength( rInfo.GetDistance(), rBuffer );
                 rBuffer.append( ' ' );
             }
             for( int m = 0; m < rInfo.GetDotCount(); m++ )
             {
-                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDotLen()), rBuffer );
+                appendMappedLength( rInfo.GetDotLen(), rBuffer );
                 rBuffer.append( ' ' );
-                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
+                appendMappedLength( rInfo.GetDistance(), rBuffer );
                 rBuffer.append( ' ' );
             }
         }
@@ -1622,7 +1622,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
 
     if( rInfo.GetWidth() > 1 )
     {
-        appendMappedLength( static_cast<sal_Int32>(rInfo.GetWidth()), rBuffer );
+        appendMappedLength( rInfo.GetWidth(), rBuffer );
         rBuffer.append( " w\n" );
     }
     else if( rInfo.GetWidth() == 0 )
