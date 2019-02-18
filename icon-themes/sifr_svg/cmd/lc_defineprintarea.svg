@@ -7,8 +7,4 @@
      style="fill:#555753;opacity:0.35"
      d="M 4,4 V 7 H 7 V 4 Z m 4,0 v 3 h 3 V 4 Z m 4,0 v 3 h 3 V 4 Z M 4,8 v 3 H 7 V 8 Z m 4,0 v 3 h 3 V 8 Z m 4,0 v 2 h 3 V 8 Z m -8,4 v 3 h 3 v -3 z m 4,0 v 3 h 1 v -0.002 C 9,13.715464 9.8471647,12.608607 11,12.1875 V 12 Z"
      />
- <path
-     style="fill:#ffffff"
-     d="M 16 4 L 16 7 L 19 7 L 19 4 L 16 4 z M 16 8 L 16 10 L 19 10 L 19 8 L 16 8 z M 4 16 L 4 19 L 7 19 L 7 16 L 4 16 z M 8 16 L 8 19 L 9 19 L 9 16 L 8 16 z "
-     />
  </svg>
