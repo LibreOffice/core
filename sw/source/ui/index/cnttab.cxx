@@ -787,10 +787,10 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); ++i)
     {
         OUString sId(OUString::number(static_cast<sal_uInt32>(RES_SRCTYPES[i].second)));
-        m_xFromObjCLB->insert(nullptr, -1, nullptr, &sId,
-                              nullptr, nullptr, nullptr, false);
+        m_xFromObjCLB->append();
         m_xFromObjCLB->set_toggle(i, false, 0);
         m_xFromObjCLB->set_text(i, SwResId(RES_SRCTYPES[i].first), 1);
+        m_xFromObjCLB->set_id(i, sId);
     }
 
     SetExchangeSupport();

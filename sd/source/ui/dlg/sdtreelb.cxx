@@ -1563,7 +1563,7 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, weld::TreeIter&, rFileEntry, boo
                 {
                     OUString sId(OUString::number(1));
                     m_xTreeView->insert(&rFileEntry, -1, &pPage->GetName(), &sId,
-                                        nullptr, nullptr, &sImgPage, false);
+                                        nullptr, nullptr, &sImgPage, false, nullptr);
 
                     if (!xPageEntry)
                     {
@@ -1584,17 +1584,17 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, weld::TreeIter&, rFileEntry, boo
                             if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgOle, false);
+                                                    nullptr, nullptr, &sImgOle, false, nullptr);
                             }
                             else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgGraphic, false);
+                                                    nullptr, nullptr, &sImgGraphic, false, nullptr);
                             }
                             else
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgObjects, false);
+                                                    nullptr, nullptr, &sImgObjects, false, nullptr);
                             }
                         }
                     }
@@ -1666,7 +1666,7 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 
     OUString sId(OUString::number(1));
     // insert document name
-    m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, &sImgDoc, true);
+    m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, &sImgDoc, true, nullptr);
 }
 
 SdPageObjsTLV::~SdPageObjsTLV()

@@ -398,7 +398,7 @@ public:
 
     void InsertEntry(const OUString &rName, const OUString &rExpander)
     {
-        m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false);
+        m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false, nullptr);
     }
 };
 

@@ -960,6 +960,8 @@ namespace svx
                 }
             }
         }
+        if (m_xDictsLB->n_children())
+            m_xDictsLB->select(0);
     }
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, OkHdl, weld::Button&, void)
@@ -1142,8 +1144,7 @@ namespace svx
 
     void HangulHanjaOptionsDialog::AddDict(const OUString& rName, bool bChecked)
     {
-        m_xDictsLB->insert(nullptr, -1, nullptr, nullptr,
-                           nullptr, nullptr, nullptr, false);
+        m_xDictsLB->append();
         int nRow = m_xDictsLB->n_children() - 1;
         m_xDictsLB->set_toggle(nRow, bChecked, 0);
         m_xDictsLB->set_text(nRow, rName, 1);
