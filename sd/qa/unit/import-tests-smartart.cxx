@@ -874,6 +874,12 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT_EQUAL(xA2Shape->getPosition().X, xD2Shape->getPosition().X);
     CPPUNIT_ASSERT_GREATER(xA2Shape->getPosition().Y, xD2Shape->getPosition().Y);
 
+    // Without the accompanying fix in place, this test would have failed: width was expected to be
+    // 4887, was actually 7331.
+    uno::Reference<drawing::XShape> xA1Shape(xA1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA1Shape.is());
+    CPPUNIT_ASSERT_EQUAL(xA1Shape->getSize().Height, xA1Shape->getSize().Width);
+
     xDocShRef->DoClose();
 }
 
