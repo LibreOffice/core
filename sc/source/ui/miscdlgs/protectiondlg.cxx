@@ -91,8 +91,7 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 
 void ScTableProtectionDlg::InsertEntry(const OUString& rTxt)
 {
-    m_xOptionsListBox->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                              nullptr, nullptr, false);
+    m_xOptionsListBox->append();
     const int nRow = m_xOptionsListBox->n_children() - 1;
     m_xOptionsListBox->set_toggle(nRow, false, 0);
     m_xOptionsListBox->set_text(nRow, rTxt, 1);

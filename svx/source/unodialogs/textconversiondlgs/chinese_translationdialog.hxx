@@ -20,43 +20,34 @@
 #ifndef INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATIONDIALOG_HXX
 #define INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATIONDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-
+#include <vcl/weld.hxx>
 
 namespace textconversiondlgs
 {
 
-
 class ChineseDictionaryDialog;
 
-class ChineseTranslationDialog : public ModalDialog
+class ChineseTranslationDialog : public weld::GenericDialogController
 {
 public:
-    explicit ChineseTranslationDialog( vcl::Window* pParent );
+    explicit ChineseTranslationDialog(weld::Window* pParent);
     virtual ~ChineseTranslationDialog() override;
-    virtual void dispose() override;
 
     void getSettings( bool& rbDirectionToSimplified
                     , bool& rbTranslateCommonTerms ) const;
 
 private:
-    DECL_LINK( DictionaryHdl, Button*, void );
-    DECL_LINK( OkHdl, Button*, void );
+    DECL_LINK( DictionaryHdl, weld::Button&, void );
+    DECL_LINK( OkHdl, weld::Button&, void );
 
 private:
-    VclPtr<RadioButton> m_pRB_To_Simplified;
-    VclPtr<RadioButton> m_pRB_To_Traditional;
-
-    VclPtr<CheckBox>   m_pCB_Translate_Commonterms;
-    VclPtr<PushButton> m_pPB_Editterms;
-
-    VclPtr<OKButton>   m_pBP_OK;
-
-    VclPtr<ChineseDictionaryDialog> m_pDictionaryDialog;
+    std::unique_ptr<weld::Button> m_xBP_OK;
+    std::unique_ptr<weld::Button> m_xPB_Editterms;
+    std::unique_ptr<weld::RadioButton> m_xRB_To_Simplified;
+    std::unique_ptr<weld::RadioButton> m_xRB_To_Traditional;
+    std::unique_ptr<weld::CheckButton> m_xCB_Translate_Commonterms;
+    std::unique_ptr<ChineseDictionaryDialog> m_xDictionaryDialog;
 };
-
 
 } //end namespace
 

@@ -146,8 +146,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
             sal_uInt32 nId  = SvxAttrNameTable::FindIndex(nSlot);
             if (RESARRAY_INDEX_NOTFOUND != nId)
             {
-                m_xAttrLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                                  nullptr, nullptr, false);
+                m_xAttrLB->append();
                 const int nRow = m_xAttrLB->n_children() - 1;
                 m_xAttrLB->set_toggle(nRow, bChecked, 0);
                 m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 1);

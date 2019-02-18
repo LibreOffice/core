@@ -241,8 +241,7 @@ void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 
 void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
 {
-    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                       nullptr, nullptr, false);
+    m_xCheckLB->append();
     const int nRow = m_xCheckLB->n_children() - 1;
     m_xCheckLB->set_toggle(nRow, false, CBCOL_FIRST);
     m_xCheckLB->set_text(nRow, rTxt, 1);
@@ -382,8 +381,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(TabPageParent pParent,
 
 void OfaSwAutoFmtOptionsPage::CreateEntry(const OUString& rTxt, sal_uInt16 nCol)
 {
-    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                       nullptr, nullptr, false);
+    m_xCheckLB->append();
     const int nRow = m_xCheckLB->n_children() - 1;
     if (nCol == CBCOL_FIRST || nCol == CBCOL_BOTH)
         m_xCheckLB->set_toggle(nRow, false, CBCOL_FIRST);
@@ -1530,8 +1528,7 @@ enum OfaQuoteOptions
 
 void OfaQuoteTabPage::CreateEntry(weld::TreeView& rCheckLB, const OUString& rTxt, sal_uInt16 nCol, sal_uInt16 nTextCol)
 {
-    rCheckLB.insert(nullptr, -1, nullptr, nullptr, nullptr,
-                    nullptr, nullptr, false);
+    rCheckLB.append();
     const int nRow = rCheckLB.n_children() - 1;
     if (nCol == CBCOL_FIRST || nCol == CBCOL_BOTH)
         rCheckLB.set_toggle(nRow, false, CBCOL_FIRST);
@@ -2207,8 +2204,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
             const OUString aLBEntry = aSmartTagCaption + " (" + aName + ")";
 
-            m_xSmartTagTypesLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                                       nullptr, nullptr, false);
+            m_xSmartTagTypesLB->append();
             const int nRow = m_xSmartTagTypesLB->n_children() - 1;
             const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
             m_xSmartTagTypesLB->set_toggle(nRow, bCheck, CBCOL_FIRST);
