@@ -2233,7 +2233,7 @@ public:
     virtual void set_font_color(int pos, const Color& rColor) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        pEntry->SetTextColor(&rColor);
+        pEntry->SetTextColor(rColor);
     }
 
     virtual void remove(int pos) override

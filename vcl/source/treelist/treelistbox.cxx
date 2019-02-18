@@ -2701,8 +2701,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             if (bCurFontIsSel || rEntry.GetTextColor())
             {
                 bCurFontIsSel = false;
-                if (const auto* pCustomTextColor = rEntry.GetTextColor())
-                    rRenderContext.SetTextColor(*pCustomTextColor);
+                if (const auto & xCustomTextColor = rEntry.GetTextColor())
+                    rRenderContext.SetTextColor(*xCustomTextColor);
                 else
                     rRenderContext.SetTextColor(aBackupTextColor);
                 rRenderContext.SetFont(aBackupFont);
