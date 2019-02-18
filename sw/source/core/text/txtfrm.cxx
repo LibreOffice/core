@@ -502,10 +502,7 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
 
     if ( IsVertLR() )
     {
-        if (IsVertLRBT())
-            rRect.Left(getFrameArea().Left() + nOfstY);
-        else
-            rRect.Left(getFrameArea().Left() + nOfstY);
+        rRect.Left(getFrameArea().Left() + nOfstY);
     }
     else
     {
