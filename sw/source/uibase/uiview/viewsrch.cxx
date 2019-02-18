@@ -608,6 +608,8 @@ bool SwView::SearchAndWrap(bool bApi)
         m_bExtra = true;
         if (FUNC_Search(aOpts))
             m_bFound = true;
+        else
+            m_bExtra = false;
     }
 
     m_pWrtShell->EndAllAction();
