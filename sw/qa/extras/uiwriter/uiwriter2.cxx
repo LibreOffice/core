@@ -41,6 +41,7 @@ public:
     void testTdf119019();
     void testTdf119824();
     void testTdf105413();
+    void testTdf101873();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testTdf119019);
     CPPUNIT_TEST(testTdf119824);
     CPPUNIT_TEST(testTdf105413);
+    CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -440,6 +442,40 @@ void SwUiWriterTest2::testTdf105413()
     // first paragraph gets the same heading style
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
+void SwUiWriterTest2::testTdf101873()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Insert some content.
+    pWrtShell->Insert("something");
+
+    // Search for something which does not exist, twice.
+    uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("fig")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+
+    uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("something")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSecond);
+
+    // Without the accompanying fix in place, this test would have failed with "Expected: something;
+    // Actual:", i.e. searching for "something" failed, even if it was inserted above.
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("something"), pShellCursor->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
