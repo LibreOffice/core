@@ -53,7 +53,12 @@ Expr const * getSubExprOfLogicalNegation(Expr const * expr) {
         ? nullptr : e->getSubExpr();
 }
 
-FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode) {
+// Search for an operator with matching parameter types; while this may miss some operators with
+// odd parameter types that would actually be used by the compiler, it is overall better to have too
+// many false negatives (i.e., miss valid loplugin:simplifybool warnings) than false positives here:
+FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode, QualType lhs, QualType rhs) {
+    auto const clhs = lhs.isNull() ? nullptr : lhs.getCanonicalType().getTypePtr();
+    auto const crhs = rhs.getCanonicalType().getTypePtr();
     OverloadedOperatorKind over = BinaryOperator::getOverloadedOperator(opcode);
     CXXRecordDecl const * recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
     if (!recordDecl)
@@ -61,7 +66,9 @@ FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType 
     // search for member overloads
     for (auto it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it) {
         if (it->getOverloadedOperator() == over) {
-            return *it;
+            assert(it->getNumParams() == 1);
+            if (it->getParamDecl(0)->getType().getCanonicalType().getTypePtr() == crhs)
+                return *it;
         }
     }
     // search for free function overloads
@@ -75,12 +82,22 @@ FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType 
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (!f || f->getNumParams() != 2)
             continue;
-        auto qt = f->getParamDecl(0)->getType();
-        auto lvalue = dyn_cast<LValueReferenceType>(qt.getTypePtr());
-        if (!lvalue)
+        if (f->getParamDecl(1)->getType().getCanonicalType().getTypePtr() != crhs)
             continue;
-        if (lvalue->getPointeeType().getTypePtr() == recordType)
-            return f;
+        auto const p0 = f->getParamDecl(0)->getType().getCanonicalType().getTypePtr();
+        if (clhs) {
+            if (p0 != clhs)
+                continue;
+        } else {
+            if (p0 != recordType) {
+                auto lvalue = dyn_cast<LValueReferenceType>(p0);
+                if (!lvalue)
+                    continue;
+                if (lvalue->getPointeeType().getTypePtr() != recordType)
+                    continue;
+            }
+        }
+        return f;
     }
     return nullptr;
 }
@@ -236,7 +253,20 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (!t->isRecordType())
             return true;
         auto recordType = dyn_cast<RecordType>(t);
-        auto const negOp = findOperator(compiler, recordType, negatedOpcode);
+        auto const fdecl = binaryOp->getDirectCallee();
+        if (!fdecl) // e.g. CXXOperatorCallExpr with UnresolvedLookupExpr
+            return true;
+        QualType lhs;
+        QualType rhs;
+        if (auto const mdecl = dyn_cast<CXXMethodDecl>(fdecl)) {
+            assert(fdecl->getNumParams() == 1);
+            rhs = fdecl->getParamDecl(0)->getType();
+        } else {
+            assert(fdecl->getNumParams() == 2);
+            lhs = fdecl->getParamDecl(0)->getType();
+            rhs = fdecl->getParamDecl(1)->getType();
+        }
+        auto const negOp = findOperator(compiler, recordType, negatedOpcode, lhs, rhs);
         if (!negOp)
             return true;
         // if we are inside a similar operator, ignore, eg. operator!= is often defined by calling !operator==
