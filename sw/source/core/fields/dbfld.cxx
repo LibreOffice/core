@@ -451,16 +451,16 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat) :
     SwField(pTyp, nFormat),
-    aDBData(rDBData),
-    nSubType(0)
+    m_aDBData(rDBData),
+    m_nSubType(0)
 {
 }
 
 SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
 {
     SwDBData aRet;
-    if(!aDBData.sDataSource.isEmpty())
-        aRet = aDBData;
+    if(!m_aDBData.sDataSource.isEmpty())
+        aRet = m_aDBData;
     else
         aRet = pDoc->GetDBData();
     return aRet;
@@ -468,18 +468,18 @@ SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
 
 void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 {
-    aDBData = rDBData;
+    m_aDBData = rDBData;
 }
 
 OUString SwDBNameInfField::GetFieldName() const
 {
     OUString sStr( SwField::GetFieldName() );
-    if (!aDBData.sDataSource.isEmpty())
+    if (!m_aDBData.sDataSource.isEmpty())
     {
         sStr += ":"
-            + aDBData.sDataSource
+            + m_aDBData.sDataSource
             + OUStringLiteral1(DB_DELIM)
-            + aDBData.sCommand;
+            + m_aDBData.sCommand;
     }
     return lcl_DBSeparatorConvert(sStr);
 }
@@ -489,13 +489,13 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= aDBData.sDataSource;
+        rAny <<= m_aDBData.sDataSource;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= aDBData.sCommand;
+        rAny <<= m_aDBData.sCommand;
         break;
     case FIELD_PROP_SHORT1:
-        rAny <<= aDBData.nCommandType;
+        rAny <<= m_aDBData.nCommandType;
         break;
     case FIELD_PROP_BOOL2:
         rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
@@ -511,13 +511,13 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny >>= aDBData.sDataSource;
+        rAny >>= m_aDBData.sDataSource;
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= aDBData.sCommand;
+        rAny >>= m_aDBData.sCommand;
         break;
     case FIELD_PROP_SHORT1:
-        rAny >>= aDBData.nCommandType;
+        rAny >>= m_aDBData.nCommandType;
         break;
     case FIELD_PROP_BOOL2:
     {
@@ -540,12 +540,12 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 sal_uInt16 SwDBNameInfField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 void SwDBNameInfField::SetSubType(sal_uInt16 nType)
 {
-    nSubType = nType;
+    m_nSubType = nType;
 }
 
 // next dataset
@@ -566,7 +566,7 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const OUString& rCond,
                                    const SwDBData& rDBData) :
-    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
+    SwDBNameInfField(pTyp, rDBData), m_aCond(rCond), m_bCondValid(true)
 {}
 
 OUString SwDBNextSetField::ExpandImpl(SwRootFrame const*const) const
@@ -577,9 +577,9 @@ OUString SwDBNextSetField::ExpandImpl(SwRootFrame const*const) const
 std::unique_ptr<SwField> SwDBNextSetField::Copy() const
 {
     std::unique_ptr<SwDBNextSetField> pTmp(new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(GetTyp()),
-                                         aCond, GetDBData()));
+                                         m_aCond, GetDBData()));
     pTmp->SetSubType(GetSubType());
-    pTmp->bCondValid = bCondValid;
+    pTmp->m_bCondValid = m_bCondValid;
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
@@ -587,7 +587,7 @@ void SwDBNextSetField::Evaluate(SwDoc const * pDoc)
 {
     SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& rData = GetDBData();
-    if( !bCondValid ||
+    if( !m_bCondValid ||
             !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, false))
         return ;
     pMgr->ToNextRecord(rData.sDataSource, rData.sCommand);
@@ -596,13 +596,13 @@ void SwDBNextSetField::Evaluate(SwDoc const * pDoc)
 /// get condition
 OUString SwDBNextSetField::GetPar1() const
 {
-    return aCond;
+    return m_aCond;
 }
 
 /// set condition
 void SwDBNextSetField::SetPar1(const OUString& rStr)
 {
-    aCond = rStr;
+    m_aCond = rStr;
 }
 
 bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -611,7 +611,7 @@ bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        rAny <<= aCond;
+        rAny <<= m_aCond;
         break;
     default:
         bRet = SwDBNameInfField::QueryValue( rAny, nWhichId );
@@ -625,7 +625,7 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        rAny >>= aCond;
+        rAny >>= m_aCond;
         break;
     default:
         bRet = SwDBNameInfField::PutValue( rAny, nWhichId );
@@ -651,9 +651,9 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
                                  const OUString& rDBNum,
                                  const SwDBData& rDBData) :
     SwDBNameInfField(pTyp, rDBData),
-    aCond(rCond),
-    aPar2(rDBNum),
-    bCondValid(true)
+    m_aCond(rCond),
+    m_aPar2(rDBNum),
+    m_bCondValid(true)
 {}
 
 OUString SwDBNumSetField::ExpandImpl(SwRootFrame const*const) const
@@ -664,8 +664,8 @@ OUString SwDBNumSetField::ExpandImpl(SwRootFrame const*const) const
 std::unique_ptr<SwField> SwDBNumSetField::Copy() const
 {
     std::unique_ptr<SwDBNumSetField> pTmp(new SwDBNumSetField(static_cast<SwDBNumSetFieldType*>(GetTyp()),
-                                         aCond, aPar2, GetDBData()));
-    pTmp->bCondValid = bCondValid;
+                                         m_aCond, m_aPar2, GetDBData()));
+    pTmp->m_bCondValid = m_bCondValid;
     pTmp->SetSubType(GetSubType());
     return std::unique_ptr<SwField>(pTmp.release());
 }
@@ -675,35 +675,35 @@ void SwDBNumSetField::Evaluate(SwDoc const * pDoc)
     SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& aTmpData = GetDBData();
 
-    if( bCondValid && pMgr && pMgr->IsInMerge() &&
+    if( m_bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
     {   // condition OK -> adjust current Set
-        pMgr->ToRecordId(std::max(static_cast<sal_uInt16>(aPar2.toInt32()), sal_uInt16(1))-1);
+        pMgr->ToRecordId(std::max(static_cast<sal_uInt16>(m_aPar2.toInt32()), sal_uInt16(1))-1);
     }
 }
 
 /// get LogDBName
 OUString SwDBNumSetField::GetPar1() const
 {
-    return aCond;
+    return m_aCond;
 }
 
 /// set LogDBName
 void SwDBNumSetField::SetPar1(const OUString& rStr)
 {
-    aCond = rStr;
+    m_aCond = rStr;
 }
 
 /// get condition
 OUString SwDBNumSetField::GetPar2() const
 {
-    return aPar2;
+    return m_aPar2;
 }
 
 /// set condition
 void SwDBNumSetField::SetPar2(const OUString& rStr)
 {
-    aPar2 = rStr;
+    m_aPar2 = rStr;
 }
 
 bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -712,10 +712,10 @@ bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        rAny <<= aCond;
+        rAny <<= m_aCond;
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= aPar2.toInt32();
+        rAny <<= m_aPar2.toInt32();
         break;
     default:
         bRet = SwDBNameInfField::QueryValue(rAny, nWhichId );
@@ -729,13 +729,13 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        rAny >>= aCond;
+        rAny >>= m_aCond;
         break;
     case FIELD_PROP_FORMAT:
         {
             sal_Int32 nVal = 0;
             rAny >>= nVal;
-            aPar2 = OUString::number(nVal);
+            m_aPar2 = OUString::number(nVal);
         }
         break;
     default:
@@ -747,18 +747,18 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
     : SwFieldType( SwFieldIds::DatabaseName )
 {
-    pDoc = pDocument;
+    m_pDoc = pDocument;
 }
 
 OUString SwDBNameFieldType::Expand() const
 {
-    const SwDBData aData = pDoc->GetDBData();
+    const SwDBData aData = m_pDoc->GetDBData();
     return aData.sDataSource + "." + aData.sCommand;
 }
 
 SwFieldType* SwDBNameFieldType::Copy() const
 {
-    SwDBNameFieldType *pTmp = new SwDBNameFieldType(pDoc);
+    SwDBNameFieldType *pTmp = new SwDBNameFieldType(m_pDoc);
     return pTmp;
 }
 
@@ -810,14 +810,14 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,
                                        sal_uInt32 nFormat)
-    : SwDBNameInfField(pTyp, rDBData, nFormat), nNumber(0)
+    : SwDBNameInfField(pTyp, rDBData, nFormat), m_nNumber(0)
 {}
 
 OUString SwDBSetNumberField::ExpandImpl(SwRootFrame const*const) const
 {
-    if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
+    if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || m_nNumber == 0)
         return OUString();
-    return FormatNumber(nNumber, static_cast<SvxNumType>(GetFormat()));
+    return FormatNumber(m_nNumber, static_cast<SvxNumType>(GetFormat()));
 }
 
 void SwDBSetNumberField::Evaluate(SwDoc const * pDoc)
@@ -828,7 +828,7 @@ void SwDBSetNumberField::Evaluate(SwDoc const * pDoc)
     if (!pMgr || !pMgr->IsInMerge() ||
         !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, false))
         return;
-    nNumber = pMgr->GetSelectedRecordId();
+    m_nNumber = pMgr->GetSelectedRecordId();
 }
 
 std::unique_ptr<SwField> SwDBSetNumberField::Copy() const
@@ -836,7 +836,7 @@ std::unique_ptr<SwField> SwDBSetNumberField::Copy() const
     std::unique_ptr<SwDBSetNumberField> pTmp(
         new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(GetTyp()), GetDBData(), GetFormat()));
     pTmp->SetLanguage(GetLanguage());
-    pTmp->SetSetNumber(nNumber);
+    pTmp->SetSetNumber(m_nNumber);
     pTmp->SetSubType(GetSubType());
     return std::unique_ptr<SwField>(pTmp.release());
 }
@@ -850,7 +850,7 @@ bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= nNumber;
+        rAny <<= m_nNumber;
         break;
     default:
         bRet = SwDBNameInfField::QueryValue( rAny, nWhichId );
@@ -872,7 +872,7 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_FORMAT:
-        rAny >>= nNumber;
+        rAny >>= m_nNumber;
         break;
     default:
         bRet = SwDBNameInfField::PutValue( rAny, nWhichId );

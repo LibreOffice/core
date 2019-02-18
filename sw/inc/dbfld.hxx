@@ -120,19 +120,19 @@ inline void SwDBField::ChgBodyTextFlag( bool bIsInBody )
 // Base class for all other database fields.
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
-    SwDBData        aDBData;
-    sal_uInt16      nSubType;
+    SwDBData        m_aDBData;
+    sal_uInt16      m_nSubType;
 
 protected:
-    const SwDBData& GetDBData() const {return aDBData;}
-    SwDBData&       GetDBData() {return aDBData;}
+    const SwDBData& GetDBData() const {return m_aDBData;}
+    SwDBData&       GetDBData() {return m_aDBData;}
 
     SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
 public:
     /// DBName
-    const SwDBData&  GetRealDBData() const { return aDBData; }
-    SwDBData&        GetRealDBData() { return aDBData; }
+    const SwDBData&  GetRealDBData() const { return m_aDBData; }
+    SwDBData&        GetRealDBData() { return m_aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);
@@ -157,8 +157,8 @@ public:
 // Next data record with condition.
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
-    OUString  aCond;
-    bool    bCondValid;
+    OUString  m_aCond;
+    bool    m_bCondValid;
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
@@ -179,10 +179,10 @@ public:
 };
 
 inline bool SwDBNextSetField::IsCondValid() const
-    { return bCondValid; }
+    { return m_bCondValid; }
 
 inline void SwDBNextSetField::SetCondValid(bool bCond)
-    { bCondValid = bCond; }
+    { m_bCondValid = bCond; }
 
 // Database field next record.
 class SwDBNumSetFieldType : public SwFieldType
@@ -197,9 +197,9 @@ public:
 // Number is in nFormat (bit of a misuse!)
 class SwDBNumSetField : public SwDBNameInfField
 {
-    OUString  aCond;
-    OUString  aPar2;
-    bool    bCondValid;
+    OUString  m_aCond;
+    OUString  m_aPar2;
+    bool    m_bCondValid;
 
 public:
     SwDBNumSetField(SwDBNumSetFieldType*, const OUString& rCond, const OUString& rDBNum, const SwDBData& rDBData);
@@ -225,15 +225,15 @@ public:
 };
 
 inline bool SwDBNumSetField::IsCondValid() const
-    { return bCondValid; }
+    { return m_bCondValid; }
 
 inline void SwDBNumSetField::SetCondValid(bool bCond)
-    { bCondValid = bCond; }
+    { m_bCondValid = bCond; }
 
 // Database name.
 class SwDBNameFieldType : public SwFieldType
 {
-        SwDoc *pDoc;
+        SwDoc *m_pDoc;
 public:
     SwDBNameFieldType(SwDoc*);
 
@@ -265,7 +265,7 @@ public:
 // Database field.
 class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
-    long    nNumber;
+    long    m_nNumber;
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
@@ -280,10 +280,10 @@ public:
 };
 
 inline long SwDBSetNumberField::GetSetNumber() const
-    { return nNumber; }
+    { return m_nNumber; }
 
 inline void SwDBSetNumberField::SetSetNumber(long nNum)
-    { nNumber = nNum; }
+    { m_nNumber = nNum; }
 
 #endif // INCLUDED_SW_INC_DBFLD_HXX
 
