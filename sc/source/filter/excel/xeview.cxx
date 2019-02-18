@@ -419,6 +419,20 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetViews, FSEND );
+
+    // handle missing viewdata at embedded XLSX OLE objects
+    if (maData.mbSelected)
+    {
+        SCCOL nPosLeft = rStrm.GetRoot().GetDoc().GetPosLeft();
+        SCROW nPosTop = rStrm.GetRoot().GetDoc().GetPosTop();
+        if (nPosLeft > 0 || nPosTop > 0)
+        {
+            ScAddress aLeftTop(nPosLeft, nPosTop, 0);
+            XclExpAddressConverter& rAddrConv = GetAddressConverter();
+            maData.maFirstXclPos = rAddrConv.CreateValidAddress( aLeftTop, false );
+        }
+    }
+
     rWorksheet->startElement( XML_sheetView,
             // OOXTODO: XML_windowProtection,
             XML_showFormulas,               ToPsz( maData.mbShowFormulas ),
