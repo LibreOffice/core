@@ -25,8 +25,6 @@
 #include <AccessibleCell.hxx>
 #include <tabvwsh.hxx>
 #include <editutil.hxx>
-#include <cellvalue.hxx>
-#include <formulacell.hxx>
 #include <document.hxx>
 #include <scmod.hxx>
 #include <prevwsh.hxx>
@@ -38,8 +36,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vcl/virdev.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/svdmodel.hxx>

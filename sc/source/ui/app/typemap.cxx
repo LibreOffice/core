@@ -19,14 +19,10 @@
 
 #include <config_options.h>
 
-#include <svx/svxids.hrc>
-#include <sc.hrc>
 #include <mid.h>
-#include <scitems.hxx>
 #include <editeng/memberids.h>
 
 #include <sfx2/msg.hxx>
-#include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -50,8 +46,6 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlineit0.hxx>
@@ -69,12 +63,10 @@
 #include <svx/xftshxy.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <svx/grafctrl.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -89,10 +81,8 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
-#include <svx/AffineMatrixItem.hxx>
 #include <svx/galleryitem.hxx>
-#include <svx/sdshitm.hxx>
-#include <svl/aeitem.hxx>
+#include <svx/sdooitm.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/frame.hxx>
 #include <attrib.hxx>

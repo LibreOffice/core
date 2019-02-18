@@ -27,7 +27,6 @@
 #include <sfx2/app.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <formula/errorcodes.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
@@ -35,8 +34,6 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/escapementitem.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
@@ -45,7 +42,6 @@
 #include <editeng/misspellrange.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/zforlist.hxx>
@@ -77,7 +73,6 @@
 #include <appoptio.hxx>
 #include <docoptio.hxx>
 #include <validat.hxx>
-#include <userlist.hxx>
 #include <rfindlst.hxx>
 #include <inputopt.hxx>
 #include <simpleformulacalc.hxx>

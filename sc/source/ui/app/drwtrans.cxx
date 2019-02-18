@@ -35,14 +35,10 @@
 
 #include <svtools/embedtransfer.hxx>
 #include <sot/storage.hxx>
-#include <vcl/virdev.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdxcgv.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itempool.hxx>
 #include <svl/urlbmk.hxx>
@@ -54,12 +50,7 @@
 #include <drawview.hxx>
 #include <viewdata.hxx>
 #include <scmod.hxx>
-#include <chartlis.hxx>
-#include <rangeutl.hxx>
-#include <formula/grammar.hxx>
 #include <dragdata.hxx>
-
-#include <scitems.hxx>
 
 #include <editeng/eeitem.hxx>
 

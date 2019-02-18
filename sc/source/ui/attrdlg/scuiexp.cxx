@@ -20,38 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include "scdlgfact.hxx"
-#include <corodlg.hxx>
-#include <condformatmgr.hxx>
-#include <dapitype.hxx>
-#include <dapidata.hxx>
-#include <datafdlg.hxx>
-#include <delcodlg.hxx>
-#include <delcldlg.hxx>
-#include <dpgroupdlg.hxx>
-#include <filldlg.hxx>
-#include <groupdlg.hxx>
-#include <linkarea.hxx>
-#include <lbseldlg.hxx>
-#include <inscldlg.hxx>
-#include <instbdlg.hxx>
-#include <inscodlg.hxx>
-#include <mtrindlg.hxx>
-#include <mvtabdlg.hxx>
-#include <namecrea.hxx>
-#include <namepast.hxx>
-#include <pfiltdlg.hxx>
-#include <pvfundlg.hxx>
-#include <shtabdlg.hxx>
-#include <scendlg.hxx>
-#include <scuiasciiopt.hxx>
-#include <scuiautofmt.hxx>
-#include <scuiimoptdlg.hxx>
-#include <sortdlg.hxx>
-#include <strindlg.hxx>
-#include <tabbgcolordlg.hxx>
-#include <textimportoptions.hxx>
 #include <sal/types.h>
-#include <sfx2/sfxdlg.hxx>
 
 namespace scui
 {

@@ -28,7 +28,6 @@
 class ScDrawView;
 class ScTabViewShell;
 class SdrModel;
-class Dialog;
 class CommandEvent;
 class KeyEvent;
 class MouseEvent;

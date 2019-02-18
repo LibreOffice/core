@@ -458,6 +458,13 @@ blacklist:
     sc/source/ui/inc/anyrefdg.hxx:
     # base struct has to be a complete type
     - sfx2/basedlgs.hxx
+    sc/source/ui/inc/colorformat.hxx:
+    # Needed for VclPtr type
+    - svx/colorbox.hxx
+    - vcl/edit.hxx
+    sc/source/ui/inc/condformatdlg.hxx:
+    # Needed for typedef
+    - condformatdlgentry.hxx
     sc/source/ui/inc/condformatuno.hxx:
     # base struct has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -470,6 +477,9 @@ blacklist:
     sc/source/ui/inc/dataprovider.hxx:
     # Don't replace with an implementation detail
     - orcus/csv_parser.hpp
+    sc/source/ui/inc/dpcontrol.hxx:
+    # Needed for unique_ptr type
+    - vcl/outdev.hxx
     sc/source/ui/inc/DrawModelBroadcaster.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XEventBroadcaster.hpp
@@ -691,7 +701,7 @@ blacklist:
     sc/source/filter/lotus/filter.cxx:
     # Needed to avoid loplugin:unreffun error
     - filter.hxx
-    sc/source/filter/lotus/memory.cxx
+    sc/source/filter/lotus/memory.cxx:
     # Needed to avoid loplugin:unreffun error
     - scmem.h
     sc/source/filter/lotus/op.cxx:
@@ -723,3 +733,90 @@ blacklist:
     sc/source/filter/xml/xmlsubti.cxx:
     # Needed for direct member access
     - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/ui/attrdlg/scdlgfact.cxx:
+    # Complete type needed for unique_ptr & ScConditionalFormatList
+    - conditio.hxx
+    sc/source/ui/attrdlg/scdlgfact.hxx:
+    # Complete type needed for unique_ptr & ScLinkedAreaDlg
+    - linkarea.hxx
+    sc/source/ui/app/inputhdl.cxx:
+    # Complete type needed for unique_ptr
+    - docpool.hxx
+    sc/source/ui/app/scdll.cxx:
+    # Needed for linker visibility of ScResId
+    - scresid.hxx
+    sc/source/ui/app/scmod.cxx:
+    # Needed for direct member access
+    - ooo/vba/XSinkCaller.hpp
+    sc/source/ui/app/typemap.cxx:
+    # Needed for STATIC_LINKING to be there for scslots.hxx
+    - config_options.h
+    # Needed for MID* macros
+    - mid.h
+    - editeng/memberids.h
+    # Needed by scslots.hxx
+    - sfx2/msg.hxx
+    - svl/slstitm.hxx
+    - editeng/fontitem.hxx
+    - svx/hlnkitem.hxx
+    - svl/srchitem.hxx
+    - svx/postattr.hxx
+    - editeng/postitem.hxx
+    - sfx2/tplpitem.hxx
+    - sfx2/zoomitem.hxx
+    - editeng/brushitem.hxx
+    - editeng/wghtitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/colritem.hxx
+    - editeng/boxitem.hxx
+    - editeng/lineitem.hxx
+    - svl/ptitem.hxx
+    - editeng/sizeitem.hxx
+    - svx/algitem.hxx
+    - svx/clipfmtitem.hxx
+    - editeng/udlnitem.hxx
+    - svx/xlnstit.hxx
+    - svx/xlnedit.hxx
+    - svx/xfillit0.hxx
+    - svx/xflclit.hxx
+    - svx/xflhtit.hxx
+    - svx/xbtmpit.hxx
+    - svx/xlineit0.hxx
+    - svx/xlndsit.hxx
+    - svx/xlnwtit.hxx
+    - svx/xlnclit.hxx
+    - svx/xtextit0.hxx
+    - svx/xftadit.hxx
+    - svx/xftdiit.hxx
+    - svx/xftstit.hxx
+    - svx/xftmrit.hxx
+    - svx/xftouit.hxx
+    - svx/xftshit.hxx
+    - svx/xftshcit.hxx
+    - svx/xftshxy.hxx
+    - editeng/langitem.hxx
+    - editeng/justifyitem.hxx
+    - editeng/shdditem.hxx
+    - editeng/shaditem.hxx
+    - editeng/contouritem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/charreliefitem.hxx
+    - editeng/lrspitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/kernitem.hxx
+    - svx/rotmodit.hxx
+    - svx/drawitem.hxx
+    - svl/ilstitem.hxx
+    - svl/globalnameitem.hxx
+    - svx/chrtitem.hxx
+    - svx/zoomslideritem.hxx
+    - svx/xflftrit.hxx
+    - svx/xlncapit.hxx
+    - svx/xlinjoit.hxx
+    - svx/galleryitem.hxx
+    - svx/sdooitm.hxx
+    - sfx2/frame.hxx
+    - attrib.hxx
+    - svx/sdprcitm.hxx
+    - svx/sdmetitm.hxx

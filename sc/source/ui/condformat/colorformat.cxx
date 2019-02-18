@@ -11,11 +11,8 @@
 #include <colorscale.hxx>
 
 #include <document.hxx>
-#include <sc.hrc>
 
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

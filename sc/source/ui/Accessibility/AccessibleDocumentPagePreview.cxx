@@ -30,18 +30,15 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <DrawModelBroadcaster.hxx>
-#include <docsh.hxx>
-#include <drawview.hxx>
 #include <preview.hxx>
 #include <postit.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/gen.hxx>
+#include <svx/fmview.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
@@ -50,12 +47,9 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <svx/unoshape.hxx>
-#include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <utility>
 #include <vector>
 #include <algorithm>
 #include <memory>

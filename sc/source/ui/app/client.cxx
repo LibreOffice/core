@@ -22,15 +22,11 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdograf.hxx>
-#include <svtools/embedhlp.hxx>
 
 #include <client.hxx>
 #include <tabvwsh.hxx>

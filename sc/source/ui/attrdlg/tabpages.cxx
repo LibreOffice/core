@@ -19,8 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <global.hxx>
-#include <document.hxx>
 #include <attrib.hxx>
 #include <sc.hrc>
 

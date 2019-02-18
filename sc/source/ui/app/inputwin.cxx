@@ -20,14 +20,12 @@
 #include <memory>
 #include <algorithm>
 
-#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -37,9 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
-#include <stdlib.h>
 #include <editeng/scriptspaceitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
@@ -48,7 +44,6 @@
 
 #include <inputwin.hxx>
 #include <scmod.hxx>
-#include <uiitems.hxx>
 #include <global.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
@@ -62,20 +57,17 @@
 #include <docsh.hxx>
 #include <appoptio.hxx>
 #include <rangenam.hxx>
-#include <formula/compiler.hxx>
-#include <dbdata.hxx>
 #include <rangeutl.hxx>
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
-#include <markdata.hxx>
 #include <editeng/fontitem.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <AccessibleEditObject.hxx>
 #include <AccessibleText.hxx>
-#include <svtools/miscopt.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
+
+namespace com::sun::star::accessibility { class XAccessible; }
 
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?

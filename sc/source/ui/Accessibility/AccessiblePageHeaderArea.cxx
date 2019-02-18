@@ -22,10 +22,8 @@
 #include <tools/gen.hxx>
 #include <AccessiblePageHeaderArea.hxx>
 #include <AccessibleText.hxx>
-#include <AccessibilityHints.hxx>
 #include <editsrc.hxx>
 #include <prevwsh.hxx>
-#include <prevloc.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
@@ -36,7 +34,6 @@
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 

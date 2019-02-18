@@ -19,16 +19,12 @@
 
 #include <sal/config.h>
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
 #include <AccessibleText.hxx>
 #include <editsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <AccessiblePreviewHeaderCell.hxx>
-#include <AccessibilityHints.hxx>
 #include <prevwsh.hxx>
-#include <miscuno.hxx>
 #include <prevloc.hxx>
 #include <strings.hxx>
 

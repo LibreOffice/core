@@ -18,28 +18,21 @@
  */
 
 #include <AccessibleCellBase.hxx>
-#include <attrib.hxx>
-#include <scitems.hxx>
-#include <miscuno.hxx>
 #include <document.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
-#include <formulacell.hxx>
 #include <strings.hxx>
 #include <unonames.hxx>
 #include <detfunc.hxx>
-#include <chgtrack.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>

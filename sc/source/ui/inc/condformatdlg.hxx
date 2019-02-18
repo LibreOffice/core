@@ -16,6 +16,7 @@
 
 #include <rangelst.hxx>
 #include "condformatdlgitem.hxx"
+#include "condformatdlgentry.hxx"
 
 #include "anyrefdg.hxx"
 
@@ -26,7 +27,6 @@
 
 class ScDocument;
 class ScConditionalFormat;
-class ScCondFrmtEntry;
 class ScViewData;
 
 class ScCondFormatDlg;

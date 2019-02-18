@@ -21,11 +21,9 @@
 
 #include "scdlgfact.hxx"
 
-#include <sc.hrc>
 #include <scuiasciiopt.hxx>
 #include <scuiautofmt.hxx>
 #include <corodlg.hxx>
-#include <crdlg.hxx>
 #include <dapidata.hxx>
 #include <dapitype.hxx>
 #include <delcldlg.hxx>
@@ -41,7 +39,6 @@
 #include <mvtabdlg.hxx>
 #include <namecrea.hxx>
 #include <namepast.hxx>
-#include <namedefdlg.hxx>
 #include <pfiltdlg.hxx>
 #include <pvfundlg.hxx>
 #include <dpgroupdlg.hxx>
@@ -67,11 +64,7 @@
 #include <datafdlg.hxx>
 #include <tpcompatibility.hxx>
 #include <tpdefaults.hxx>
-#include <colorformat.hxx>
-#include <condformatdlg.hxx>
 #include <condformatmgr.hxx>
-#include <xmlsourcedlg.hxx>
-#include <editutil.hxx>
 #include <scres.hrc>
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxdlg.hxx>

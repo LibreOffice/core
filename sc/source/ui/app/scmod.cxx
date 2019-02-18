@@ -17,31 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <scitems.hxx>
 #include <sfx2/app.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/outliner.hxx>
-#include <basic/sbstar.hxx>
 
-#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
 #include <IAnyRefDialog.hxx>
-#include <anyrefdg.hxx>
 
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -50,17 +43,10 @@
 
 #include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/selctrl.hxx>
-#include <svx/insctrl.hxx>
-#include <svx/zoomctrl.hxx>
-#include <svx/modctrl.hxx>
-#include <svx/pszctrl.hxx>
-#include <svx/zoomsliderctrl.hxx>
 #include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/resmgr.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
@@ -68,8 +54,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
 
 #include <scmod.hxx>
@@ -97,24 +81,17 @@
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 #include <msgpool.hxx>
-#include <dwfunctr.hxx>
 #include <formdata.hxx>
-#include <tpprint.hxx>
-#include <tpdefaults.hxx>
-#include <transobj.hxx>
 #include <detfunc.hxx>
 #include <preview.hxx>
 #include <dragdata.hxx>
 #include <markdata.hxx>
-
-#include <svx/xmlsecctrl.hxx>
 
 #define ShellClass_ScModule
 #include <scslots.hxx>
 
 #include <scabstdlg.hxx>
 #include <formula/errorcodes.hxx>
-#include <formulagroup.hxx>
 #include <documentlinkmgr.hxx>
 
 #define SC_IDLE_MIN     150

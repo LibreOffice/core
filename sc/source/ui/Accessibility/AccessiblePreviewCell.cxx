@@ -20,12 +20,10 @@
 #include <sal/config.h>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
 #include <AccessibleText.hxx>
 #include <editsrc.hxx>
 #include <AccessiblePreviewCell.hxx>
-#include <AccessibilityHints.hxx>
 #include <prevwsh.hxx>
 #include <prevloc.hxx>
 #include <document.hxx>

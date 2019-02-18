@@ -17,21 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <tbzoomsliderctrl.hxx>
+#include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
-#include <svl/itemset.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <set>
-#include <docsh.hxx>
-#include <stlpool.hxx>
-#include <scitems.hxx>
-#include <printfun.hxx>
 #include <bitmaps.hlst>
 
 // class ScZoomSliderControl ---------------------------------------

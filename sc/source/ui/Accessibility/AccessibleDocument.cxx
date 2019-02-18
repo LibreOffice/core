@@ -23,7 +23,6 @@
 #include <AccessibilityHints.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
-#include <shapeuno.hxx>
 #include <DrawModelBroadcaster.hxx>
 #include <drawview.hxx>
 #include <gridwin.hxx>
@@ -32,7 +31,6 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <table.hxx>
 #include <markdata.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -68,10 +66,7 @@
 #include <editeng/editeng.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <list>
 #include <algorithm>
-
-#include <AccessibleCell.hxx>
 
 #include <svx/unoapi.hxx>
 #include <scmod.hxx>

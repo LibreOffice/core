@@ -23,8 +23,6 @@
 #include <utility>
 
 #include <AccessibleEditObject.hxx>
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <AccessibleText.hxx>
 #include <editsrc.hxx>
 #include <scmod.hxx>
