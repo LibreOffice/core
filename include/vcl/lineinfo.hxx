@@ -32,18 +32,19 @@ namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    LineStyle               meStyle;
     long                    mnWidth;
-    sal_uInt16              mnDashCount;
     long                    mnDashLen;
-    sal_uInt16              mnDotCount;
     long                    mnDotLen;
     long                    mnDistance;
 
     basegfx::B2DLineJoin    meLineJoin;
     css::drawing::LineCap   meLineCap;
+    LineStyle               meStyle;
 
-                        ImplLineInfo();
+    sal_uInt16              mnDashCount;
+    sal_uInt16              mnDotCount;
+
+    ImplLineInfo();
 
     bool operator==( const ImplLineInfo& ) const;
 };
