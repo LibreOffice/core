@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b90a7923",
+        "filename": "sd/source/ui/view/viewshel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-18T09:40:28Z",
+      "side": 1,
+      "message": "this does not do the same as the original code; it would return true also for e.g. the (hypothetical) MIME type \"text/plain;charset\u003dutf-8-java\"",
+      "revId": "4d341228fc9988fbf22695494197ace5a342426c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
