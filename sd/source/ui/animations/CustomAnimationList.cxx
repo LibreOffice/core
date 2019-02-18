@@ -1108,12 +1108,79 @@ void CustomAnimationList::onSelectionChanged(const Any& rSelection)
     }
 }
 
+// Notify controller to refresh UI when we are notified of selection change from base class
 void CustomAnimationList::SelectHdl()
 {
     if( mbIgnorePaint )
         return;
     SvTreeListBox::SelectHdl();
     mpController->onSelect();
+}
+
+// Notify controller to refresh UI when we are notified of selection change from base class
+void CustomAnimationList::DeselectHdl()
+{
+    if( mbIgnorePaint )
+        return;
+    SvTreeListBox::DeselectHdl();
+    mpController->onSelect();
+}
+
+
+bool CustomAnimationList::Expand( SvTreeListEntry* pParent )
+{
+    bool result = SvTreeListBox::Expand( pParent );
+
+    // If expanded entry is selected, then select its children too.
+    if( IsSelected( pParent )) {
+        for( auto pChild = FirstChild( pParent ); pChild; pChild = pChild->NextSibling() )
+        {
+            if( !IsSelected( pChild ) )
+            {
+                SelectListEntry( pChild, true );
+            }
+        }
+    }
+
+    // Notify controller that selection has changed (it should update the UI)
+    mpController->onSelect();
+
+    return result;
+}
+
+bool CustomAnimationList::Collapse( SvTreeListEntry* pParent )
+{
+    // SvTreeListBox::Collapse(..) discards multi-selection state
+    // of list entries, so first save current selection state
+    std::vector< SvTreeListEntry* > selectedEntries;
+    for( auto pEntry = FirstSelected(); pEntry; pEntry = NextSelected( pEntry ))
+    {
+        selectedEntries.push_back( pEntry );
+    }
+
+    // Execute collapse on base class
+    bool result = SvTreeListBox::Collapse( pParent );
+
+    // Deselect all entries as SvTreeListBox::Collapse selects the last
+    // entry to have focus (or its parent), which is not desired
+    for( auto pEntry = FirstSelected(); pEntry; pEntry = NextSelected( pEntry ))
+    {
+        SelectListEntry( pEntry, false );
+    }
+
+    // Restore selection state for entries which are still visible
+    for( auto &pEntry : selectedEntries )
+    {
+        if( IsEntryVisible( pEntry ))
+        {
+            SelectListEntry( pEntry, true );
+        }
+    }
+
+    // Notify controller that selection has changed (it should update the UI)
+    mpController->onSelect();
+
+    return result;
 }
 
 bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) const
