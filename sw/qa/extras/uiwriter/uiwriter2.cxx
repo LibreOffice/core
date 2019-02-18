@@ -60,6 +60,7 @@ public:
     void testTdf122901();
     void testTdf122942();
     void testTdf52391();
+    void testTdf101873();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testTdf122901);
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testTdf52391);
+    CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -876,6 +878,40 @@ void SwUiWriterTest2::testTdf52391()
     // accepted for "Reject All". Now rejection clears formatting of the text
     // in format-only changes, concatenating the text portions in the first paragraph.
     CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
+}
+
+void SwUiWriterTest2::testTdf101873()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Insert some content.
+    pWrtShell->Insert("something");
+
+    // Search for something which does not exist, twice.
+    uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("fig")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+
+    uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("something")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSecond);
+
+    // Without the accompanying fix in place, this test would have failed with "Expected: something;
+    // Actual:", i.e. searching for "something" failed, even if it was inserted above.
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("something"), pShellCursor->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
