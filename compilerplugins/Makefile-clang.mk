@@ -8,16 +8,6 @@
 
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
-CLANG_COMMA :=,
-
-ifeq ($(OS),WNT)
-CLANG_DL_EXT = .dll
-CLANG_EXE_EXT = .exe
-else
-CLANG_DL_EXT = .so
-CLANG_EXE_EXT =
-endif
-
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin); you
 # may occasionally want to override these:
 ifeq ($(OS),WNT)
@@ -33,6 +23,16 @@ CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
 endif
 
 # The uninteresting rest.
+
+CLANG_COMMA :=,
+
+ifeq ($(OS),WNT)
+CLANG_DL_EXT = .dll
+CLANG_EXE_EXT = .exe
+else
+CLANG_DL_EXT = .so
+CLANG_EXE_EXT =
+endif
 
 # Clang headers require these.
 CLANGDEFS=-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
