@@ -1189,7 +1189,7 @@ int GetRTFToken( const OUString& rSearch )
             return s.compareToIgnoreAsciiCaseAscii(lhs.sToken.data) > 0;
         };
     auto findIt = std::lower_bound( std::begin(aRTFTokenTab), std::end(aRTFTokenTab), rSearch, findCompare);
-    if (findIt != std::end(aRTFTokenTab) && !findCompare(*findIt, rSearch))
+    if (findIt != std::end(aRTFTokenTab) && rSearch.compareToIgnoreAsciiCaseAscii(findIt->sToken.data)==0)
         return findIt->nToken;
 
     return 0;
