@@ -26,16 +26,16 @@
 #include <numeric>
 
 
-ImplLineInfo::ImplLineInfo() :
-    meStyle     ( LineStyle::Solid ),
-    mnWidth     ( 0 ),
-    mnDashCount ( 0 ),
-    mnDashLen   ( 0 ),
-    mnDotCount  ( 0 ),
-    mnDotLen    ( 0 ),
-    mnDistance  ( 0 ),
-    meLineJoin  ( basegfx::B2DLineJoin::Round ),
-    meLineCap   ( css::drawing::LineCap_BUTT )
+ImplLineInfo::ImplLineInfo()
+    : mnWidth(0)
+    , mnDashLen(0)
+    , mnDotLen(0)
+    , mnDistance(0)
+    , meLineJoin(basegfx::B2DLineJoin::Round)
+    , meLineCap(css::drawing::LineCap_BUTT)
+    , meStyle(LineStyle::Solid)
+    , mnDashCount(0)
+    , mnDotCount(0)
 {
 }
 
