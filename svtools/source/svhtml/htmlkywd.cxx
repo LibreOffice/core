@@ -40,9 +40,18 @@ static bool sortCompare(const TokenEntry<T> & lhs, const TokenEntry<T> & rhs)
     return strcmp(lhs.sToken.data, rhs.sToken.data) < 0;
 }
 template<typename T>
-static bool findCompare(const TokenEntry<T> & lhs, const OUString & s)
+static bool findCompare(const TokenEntry<T> & lhs, const OUString & rhs)
 {
-    return s.compareToAscii(lhs.sToken.data) > 0;
+    return rhs.compareToAscii(lhs.sToken.data) > 0;
+}
+template<typename T, size_t LEN>
+static T search(TokenEntry<T> const (&dataTable)[LEN], const OUString & key, T notFoundValue)
+{
+    auto findIt = std::lower_bound( std::begin(dataTable), std::end(dataTable),
+                                     key, findCompare<T> );
+    if (findIt != std::end(dataTable) && key.compareToAscii(findIt->sToken.data)==0)
+        return findIt->nToken;
+    return notFoundValue;
 }
 
 using HTML_TokenEntry = TokenEntry<HtmlTokenId>;
@@ -174,10 +183,7 @@ HtmlTokenId GetHTMLToken( const OUString& rName )
     if( rName.startsWith( OOO_STRING_SVTOOLS_HTML_comment ))
         return HtmlTokenId::COMMENT;
 
-    auto findIt = std::lower_bound( std::begin(aHTMLTokenTab), std::end(aHTMLTokenTab), rName, findCompare<HtmlTokenId>);
-    if( findIt != std::end(aHTMLTokenTab) && !findCompare<HtmlTokenId>(*findIt, rName))
-        return findIt->nToken;
-    return HtmlTokenId::NONE;
+    return search( aHTMLTokenTab, rName, HtmlTokenId::NONE);
 }
 
 using HTML_CharEntry = TokenEntry<sal_Unicode>;
@@ -459,11 +465,7 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
         bSortCharKeyWords = true;
     }
 
-    auto findIt = std::lower_bound( std::begin(aHTMLCharNameTab), std::end(aHTMLCharNameTab),
-                                     rName, findCompare<sal_Unicode> );
-    if (findIt != std::end(aHTMLCharNameTab) && !findCompare<sal_Unicode>(*findIt, rName))
-        return findIt->nToken;
-    return 0;
+    return search<sal_Unicode>( aHTMLCharNameTab, rName, 0);
 }
 
 // Flag: Options table has already been sorted
@@ -634,10 +636,7 @@ HtmlOptionId GetHTMLOption( const OUString& rName )
         bSortOptionKeyWords = true;
     }
 
-    auto findIt = std::lower_bound( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), rName, findCompare<HtmlOptionId>);
-    if (findIt != std::end(aHTMLOptionTab) && !findCompare<HtmlOptionId>(*findIt, rName))
-        return findIt->nToken;
-    return HtmlOptionId::UNKNOWN;
+    return search( aHTMLOptionTab, rName, HtmlOptionId::UNKNOWN);
 }
 
 
@@ -805,12 +804,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
 
     OUString aLowerCase(rName.toAsciiLowerCase());
 
-    auto findIt = std::lower_bound( std::begin(aHTMLColorNameTab), std::end(aHTMLColorNameTab),
-                                     aLowerCase, findCompare<sal_uInt32> );
-    if (findIt != std::end(aHTMLColorNameTab) && !findCompare<sal_uInt32>(*findIt, aLowerCase))
-        return findIt->nToken;
-
-    return HTML_NO_COLOR;
+    return search<sal_uInt32>( aHTMLColorNameTab, aLowerCase, HTML_NO_COLOR);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
