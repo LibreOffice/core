@@ -35,6 +35,10 @@ int lo_apk_closedir(lo_apk_dir *dirp);
 
 int lo_apk_lstat(const char *path, struct stat *statp);
 
+/// "libreofficekit_" prefix, because it is exported from the .so, when we are
+/// initializing the JNI externally.
+void libreofficekit_set_javavm(JavaVM *vm);
+
 JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);

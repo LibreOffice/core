@@ -898,6 +898,13 @@ Java_org_libreoffice_android_Bootstrap_address_1of_1direct_1byte_1buffer(JNIEnv 
 }
 
 __attribute__ ((visibility("default")))
+void
+libreofficekit_set_javavm(JavaVM *vm)
+{
+    the_java_vm = vm;
+}
+
+__attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {
