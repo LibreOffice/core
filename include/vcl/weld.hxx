@@ -171,7 +171,7 @@ public:
 
     virtual Container* weld_parent() const = 0;
 
-    //iterate upwards through the hierarchy sarting at this widgets parent,
+    //iterate upwards through the hierarchy starting at this widgets parent,
     //calling func with their helpid until func returns true or we run out of
     //parents
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) = 0;
