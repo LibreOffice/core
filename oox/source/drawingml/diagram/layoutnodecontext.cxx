@@ -67,10 +67,18 @@ public:
             {
                 case DGM_TOKEN( param ):
                 {
-                    const sal_Int32 nValTok = rAttribs.getToken( XML_val, 0 );
-                    mpNode->addParam(
-                        rAttribs.getToken( XML_type, 0 ),
-                        nValTok>0 ? nValTok : rAttribs.getInteger( XML_val, 0 ) );
+                    sal_Int32 nType = rAttribs.getToken(XML_type, 0);
+                    switch (nType)
+                    {
+                        case XML_ar:
+                            mpNode->setAspectRatio(rAttribs.getDouble(XML_val, 0));
+                            break;
+                        default:
+                            const sal_Int32 nValTok = rAttribs.getToken(XML_val, 0);
+                            mpNode->addParam(nType, nValTok > 0 ? nValTok
+                                                                : rAttribs.getInteger(XML_val, 0));
+                            break;
+                    }
                     break;
                 }
                 default:

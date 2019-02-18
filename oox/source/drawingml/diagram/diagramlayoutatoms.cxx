@@ -489,12 +489,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             LayoutPropertyMap aProperties;
             LayoutProperty& rParent = aProperties[""];
-            rParent[XML_w] = rShape->getSize().Width;
-            rParent[XML_h] = rShape->getSize().Height;
-            rParent[XML_l] = 0;
-            rParent[XML_t] = 0;
-            rParent[XML_r] = rShape->getSize().Width;
-            rParent[XML_b] = rShape->getSize().Height;
+
+            sal_Int32 nParentXOffset = 0;
+            if (mfAspectRatio != 1.0)
+            {
+                rParent[XML_w] = rShape->getSize().Width;
+                rParent[XML_h] = rShape->getSize().Height;
+                rParent[XML_l] = 0;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width;
+                rParent[XML_b] = rShape->getSize().Height;
+            }
+            else
+            {
+                // Shrink width to be only as large as height.
+                rParent[XML_w] = std::min(rShape->getSize().Width, rShape->getSize().Height);
+                rParent[XML_h] = rShape->getSize().Height;
+                if (rParent[XML_w] < rShape->getSize().Width)
+                    nParentXOffset = (rShape->getSize().Width - rParent[XML_w]) / 2;
+                rParent[XML_l] = nParentXOffset;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width - rParent[XML_l];
+                rParent[XML_b] = rShape->getSize().Height;
+            }
 
             for (const auto & rConstr : rConstraints)
             {
@@ -556,6 +573,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if ( (it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end() )
                         aSize.Height = it2->second - it->second;
 
+                    aPos.X += nParentXOffset;
                     aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
                     aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
                 }

@@ -169,9 +169,13 @@ public:
     /// Gives access to <dgm:param type="..." val="..."/>.
     const ParamMap& getMap() const { return maMap; }
 
+    void setAspectRatio(double fAspectRatio) { mfAspectRatio = fAspectRatio; }
+
 private:
     sal_Int32 mnType;
     ParamMap  maMap;
+    /// Aspect ratio is not integer, so not part of maMap.
+    double mfAspectRatio = 0;
 };
 
 typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
