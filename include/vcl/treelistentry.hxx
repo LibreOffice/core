@@ -22,10 +22,12 @@
 
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
+#include <tools/color.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentries.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <boost/optional.hpp>
 #include <vector>
 #include <memory>
 
@@ -62,7 +64,7 @@ class VCL_DLLPUBLIC SvTreeListEntry
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
     Color               maBackColor;
-    std::unique_ptr<Color> mxTextColor;
+    boost::optional<Color> mxTextColor;
 
 private:
     void ClearChildren();
@@ -110,8 +112,8 @@ public:
     void SetBackColor( const Color& rColor ) { maBackColor = rColor; }
     const Color& GetBackColor() const { return maBackColor; }
 
-    void SetTextColor( const Color* pColor ) { mxTextColor.reset(pColor ? new Color(*pColor) : nullptr); }
-    const Color* GetTextColor() const { return mxTextColor.get(); }
+    void SetTextColor( boost::optional<Color> xColor ) { mxTextColor = xColor; }
+    boost::optional<Color> const & GetTextColor() const { return mxTextColor; }
 
     SvTreeListEntry* GetParent() const { return pParent; }
 
