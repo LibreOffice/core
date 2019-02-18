@@ -80,8 +80,7 @@ IMPL_LINK(SvxMultiPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
 
 void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
 {
-    m_xRadioLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
-                       nullptr, nullptr, false);
+    m_xRadioLB->append();
     const int nRow = m_xRadioLB->n_children() - 1;
     m_xRadioLB->set_toggle(nRow, false, 0);
     m_xRadioLB->set_text(nRow, rText, 1);

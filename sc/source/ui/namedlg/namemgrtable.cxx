@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(RangeManagerTable, SizeAllocHdl, const Size&, void)
 void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
     int nRow = m_xTreeView->n_children();
-    m_xTreeView->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xTreeView->append();
     m_xTreeView->set_text(nRow, rLine.aName, 0);
     m_xTreeView->set_text(nRow, rLine.aExpression, 1);
     m_xTreeView->set_text(nRow, rLine.aScope, 2);

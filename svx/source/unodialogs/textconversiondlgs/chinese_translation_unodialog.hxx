@@ -114,7 +114,7 @@ private:
     css::uno::Reference<
         css::awt::XWindow >              m_xParentWindow;
 
-    VclPtr<ChineseTranslationDialog>     m_pDialog;
+    std::unique_ptr<ChineseTranslationDialog> m_xDialog;
 
     bool m_bDisposed; ///Dispose call ready.
     bool m_bInDispose;///In dispose call

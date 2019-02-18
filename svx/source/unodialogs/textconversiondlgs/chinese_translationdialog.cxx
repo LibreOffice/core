@@ -24,107 +24,70 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 
-
 namespace textconversiondlgs
 {
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
-    : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
-    , m_pDictionaryDialog(nullptr)
+ChineseTranslationDialog::ChineseTranslationDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "svx/ui/chineseconversiondialog.ui", "ChineseConversionDialog")
+    , m_xBP_OK(m_xBuilder->weld_button("ok"))
+    , m_xPB_Editterms(m_xBuilder->weld_button("editterms"))
+    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button("tosimplified"))
+    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button("totraditional"))
+    , m_xCB_Translate_Commonterms(m_xBuilder->weld_check_button("commonterms"))
 {
-    get(m_pBP_OK, "ok");
-    get(m_pPB_Editterms, "editterms");
-    get(m_pRB_To_Simplified, "tosimplified");
-    get(m_pRB_To_Traditional, "totraditional");
-    get(m_pCB_Translate_Commonterms, "commonterms");
-
     SvtLinguConfig  aLngCfg;
     bool bValue = false;
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
-        m_pRB_To_Simplified->Check();
+        m_xRB_To_Simplified->set_active(true);
     else
-        m_pRB_To_Traditional->Check();
+        m_xRB_To_Traditional->set_active(true);
 
     aAny = aLngCfg.GetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ) );
     if( aAny >>= bValue )
-        m_pCB_Translate_Commonterms->Check( bValue );
+        m_xCB_Translate_Commonterms->set_active( bValue );
 
-    m_pPB_Editterms->SetClickHdl( LINK( this, ChineseTranslationDialog, DictionaryHdl ) );
-    m_pBP_OK->SetClickHdl( LINK( this, ChineseTranslationDialog, OkHdl ) );
+    m_xPB_Editterms->connect_clicked( LINK( this, ChineseTranslationDialog, DictionaryHdl ) );
+    m_xBP_OK->connect_clicked( LINK( this, ChineseTranslationDialog, OkHdl ) );
 }
 
 ChineseTranslationDialog::~ChineseTranslationDialog()
 {
-    disposeOnce();
-}
-
-void ChineseTranslationDialog::dispose()
-{
-    if(m_pDictionaryDialog)
-    {
-        if(m_pDictionaryDialog->IsInExecute())
-            m_pDictionaryDialog->EndDialog();
-    }
-    m_pDictionaryDialog.disposeAndClear();
-    m_pRB_To_Simplified.clear();
-    m_pRB_To_Traditional.clear();
-    m_pCB_Translate_Commonterms.clear();
-    m_pPB_Editterms.clear();
-    m_pBP_OK.clear();
-    ModalDialog::dispose();
 }
 
 void ChineseTranslationDialog::getSettings( bool& rbDirectionToSimplified
                                           , bool& rbTranslateCommonTerms ) const
 {
-    rbDirectionToSimplified = m_pRB_To_Simplified->IsChecked();
-    rbTranslateCommonTerms = m_pCB_Translate_Commonterms->IsChecked();
+    rbDirectionToSimplified = m_xRB_To_Simplified->get_active();
+    rbTranslateCommonTerms = m_xCB_Translate_Commonterms->get_active();
 }
 
-IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl, weld::Button&, void)
 {
     //save settings to configuration
     SvtLinguConfig  aLngCfg;
     Any aAny;
-    aAny <<= m_pRB_To_Simplified->IsChecked();
+    aAny <<= m_xRB_To_Simplified->get_active();
     aLngCfg.SetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
-    aAny <<= m_pCB_Translate_Commonterms->IsChecked();
+    aAny <<= m_xCB_Translate_Commonterms->get_active();
     aLngCfg.SetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
 
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl, weld::Button&, void)
 {
-    if( !m_pDictionaryDialog )
-    {
-        m_pDictionaryDialog = VclPtr<ChineseDictionaryDialog>::Create(this);
-    }
-    if( m_pDictionaryDialog )
-    {
-        if( m_pDictionaryDialog->IsInExecute() )
-        {
-            if( !m_pDictionaryDialog->IsReallyVisible() )
-            {
-                m_pDictionaryDialog->ToTop();
-                m_pDictionaryDialog->GrabFocusToFirstControl();
-            }
-        }
-        else
-        {
-            sal_Int32 nTextConversionOptions = i18n::TextConversionOption::NONE;
-            if( !m_pCB_Translate_Commonterms->IsChecked() )
-                nTextConversionOptions = nTextConversionOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-            m_pDictionaryDialog->setDirectionAndTextConversionOptions( m_pRB_To_Simplified->IsChecked(), nTextConversionOptions );
-            m_pDictionaryDialog->Execute();
-        }
-    }
+    if( !m_xDictionaryDialog )
+        m_xDictionaryDialog.reset(new ChineseDictionaryDialog(m_xDialog.get()));
+    sal_Int32 nTextConversionOptions = i18n::TextConversionOption::NONE;
+    if (!m_xCB_Translate_Commonterms->get_active())
+        nTextConversionOptions = nTextConversionOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+    m_xDictionaryDialog->setDirectionAndTextConversionOptions(m_xRB_To_Simplified->get_active(), nTextConversionOptions);
+    m_xDictionaryDialog->run();
 }
 
 

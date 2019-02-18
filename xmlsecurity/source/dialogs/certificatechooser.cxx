@@ -210,8 +210,7 @@ void CertificateChooser::ImplInitialize()
 
             OUString sIssuer = xmlsec::GetContentPart( xCerts[ nC ]->getIssuerName() );
 
-            m_xCertLB->insert(nullptr, -1, nullptr, nullptr,
-                              nullptr, nullptr, nullptr, false);
+            m_xCertLB->append();
             int nRow = m_xCertLB->n_children() - 1;
             m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCerts[nC]->getSubjectName()), 0);
             m_xCertLB->set_text(nRow, sIssuer, 1);

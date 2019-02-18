@@ -32,8 +32,7 @@ namespace textconversiondlgs
 using namespace ::com::sun::star;
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog()
-                    : m_pDialog( nullptr )
-                    , m_bDisposed(false)
+                    : m_bDisposed(false)
                     , m_bInDispose(false)
                     , m_aContainerMutex()
                     , m_aDisposeEventListeners(m_aContainerMutex)
@@ -48,11 +47,10 @@ ChineseTranslation_UnoDialog::~ChineseTranslation_UnoDialog()
 
 void ChineseTranslation_UnoDialog::impl_DeleteDialog()
 {
-    if( m_pDialog )
+    if (m_xDialog)
     {
-        if(m_pDialog->IsInExecute())
-            m_pDialog->EndDialog();
-        m_pDialog.disposeAndClear();
+        m_xDialog->response(RET_CANCEL);
+        m_xDialog.reset();
     }
 }
 
@@ -110,39 +108,23 @@ void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno
     }
 }
 
-
 sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
     {
         SolarMutexGuard aSolarGuard;
-        if( m_bDisposed || m_bInDispose )
+        if (m_bDisposed || m_bInDispose)
             return nRet;
-
-        if( !m_pDialog )
-        {
-            vcl::Window* pParent = nullptr;
-            if( m_xParentWindow.is() )
-            {
-                VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
-                if (pImplementation)
-                    pParent = pImplementation->GetWindow().get();
-            }
-            uno::Reference< XComponent > xComp( this );
-            m_pDialog = VclPtr<ChineseTranslationDialog>::Create( pParent );
-        }
-        if( !m_pDialog )
-            return nRet;
-        nRet = m_pDialog->Execute();
-        if(nRet==RET_OK)
+        if (!m_xDialog)
+            m_xDialog.reset(new ChineseTranslationDialog(Application::GetFrameWeld(m_xParentWindow)));
+        nRet = m_xDialog->run();
+        if (nRet == RET_OK)
            nRet=ui::dialogs::ExecutableDialogResults::OK;
     }
     return nRet;
 }
 
-
 // lang::XComponent
-
 void SAL_CALL ChineseTranslation_UnoDialog::dispose()
 {
     lang::EventObject aEvt;
@@ -185,11 +167,13 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog:
 {
     return nullptr;
 }
+
 void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const OUString&, const uno::Any& )
 {
     //only read only properties
     throw beans::PropertyVetoException();
 }
+
 uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString& rPropertyName )
 {
     uno::Any aRet;
@@ -199,9 +183,9 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
 
     {
         SolarMutexGuard aSolarGuard;
-        if( m_bDisposed || m_bInDispose || !m_pDialog )
+        if (m_bDisposed || m_bInDispose || !m_xDialog)
             return aRet;
-        m_pDialog->getSettings( bDirectionToSimplified, bTranslateCommonTerms );
+        m_xDialog->getSettings(bDirectionToSimplified, bTranslateCommonTerms);
     }
 
     if( rPropertyName == "IsDirectionToSimplified" )
@@ -223,25 +207,27 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
     return aRet;
 
 }
+
 void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  )
 {
     //only not bound properties -> ignore listener
 }
+
 void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  )
 {
     //only not bound properties -> ignore listener
 }
+
 void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  )
 {
     //only not bound properties -> ignore listener
 }
+
 void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  )
 {
     //only not bound properties -> ignore listener
 }
 
-
 } //end namespace
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
