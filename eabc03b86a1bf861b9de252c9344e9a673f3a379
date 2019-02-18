@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f960f134",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-02-18T08:30:12Z",
+      "side": 1,
+      "message": "Separators make no sense in Calc since all options are cell styles.",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 497,
+        "endChar": 33
+      },
+      "revId": "eabc03b86a1bf861b9de252c9344e9a673f3a379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
