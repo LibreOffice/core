@@ -22,6 +22,30 @@
       "revId": "61bb90aac5038b5ff051668f7ae86eb61658e4f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_59c70514",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-02-18T08:30:19Z",
+      "side": 1,
+      "message": "You\u0027re right, that duplication should be removed. I worked like: I added \"if (IsVertLRBT())\" everywhere, then filled in the conditions -- and didn\u0027t notice that in this case the special-casing is not needed. Fixed in \u003chttps://gerrit.libreoffice.org/67955\u003e. Thanks for spotting this! :-)",
+      "parentUuid": "1f485f77_550fcb2d",
+      "range": {
+        "startLine": 505,
+        "startChar": 22,
+        "endLine": 505,
+        "endChar": 25
+      },
+      "revId": "61bb90aac5038b5ff051668f7ae86eb61658e4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
