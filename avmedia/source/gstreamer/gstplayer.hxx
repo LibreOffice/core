@@ -101,6 +101,8 @@ private:
     int                     mnWidth;
     int                     mnHeight;
 
+    css::awt::Rectangle     maArea;     // Area of the player window.
+
     guint                   mnWatchID;
     bool                    mbWatchID;
 
