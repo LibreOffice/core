@@ -74,8 +74,8 @@ void OComponentEventThread::impl_clearEventQueue()
     for ( auto& rEvent : m_aEvents )
         delete rEvent;
     m_aEvents.clear();
-    m_aControls.erase( m_aControls.begin(), m_aControls.end() );
-    m_aFlags.erase( m_aFlags.begin(), m_aFlags.end() );
+    m_aControls.clear();
+    m_aFlags.clear();
 }
 
 void OComponentEventThread::disposing( const EventObject& evt )
