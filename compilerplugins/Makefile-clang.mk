@@ -24,6 +24,9 @@ endif
 
 # The uninteresting rest.
 
+include $(SRCDIR)/solenv/gbuild/gbuild.mk
+include $(SRCDIR)/solenv/gbuild/Output.mk
+
 CLANG_COMMA :=,
 
 ifeq ($(OS),WNT)
@@ -106,7 +109,7 @@ ifeq ($(OS),WNT)
 
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
-	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
+	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
         $(CLANGINCLUDES) /I$(BUILDDIR)/config_host $(2) /MD \
         /c /Fo: $(3)
@@ -121,7 +124,7 @@ else
 
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
-	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
+	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
@@ -135,7 +138,7 @@ endif
 $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(src),$(CLANGOUTDIR)/$(src:.cxx=.o))))
 
 $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(CLANGOBJS)
-	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),LNK,4)
 ifeq ($(OS),WNT)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) /LD $(CLANGOBJS) /Fe: $@ $(CLANGLIBDIR)/clang.lib \
         mincore.lib version.lib /link $(COMPILER_PLUGINS_CXX_LINKFLAGS)
