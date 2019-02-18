@@ -31,7 +31,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -50,7 +49,6 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <editutil.hxx>
 
 using ::utl::AccessibleRelationSetHelper;
 using ::utl::AccessibleStateSetHelper;

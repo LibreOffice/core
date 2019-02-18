@@ -19,19 +19,15 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <scitems.hxx>
-
 #include <sfx2/objsh.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include <tabpages.hxx>
 #include <attrdlg.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>
-#include <sfx2/app.hxx>
 #include <osl/diagnose.h>
 
 ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)

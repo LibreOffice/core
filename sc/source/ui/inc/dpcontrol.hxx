@@ -24,8 +24,8 @@
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 
-class OutputDevice;
 class StyleSettings;
 class ScDocument;
 

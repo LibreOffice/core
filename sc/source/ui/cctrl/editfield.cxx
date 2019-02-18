@@ -24,7 +24,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/builder.hxx>
 #include <global.hxx>
 
 namespace {

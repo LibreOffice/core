@@ -21,7 +21,6 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <global.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
 #include <docpool.hxx>

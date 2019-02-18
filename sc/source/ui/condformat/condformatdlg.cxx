@@ -9,25 +9,16 @@
 
 #include <condformatdlg.hxx>
 
-#include <vcl/vclevent.hxx>
-#include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
-#include <libxml/tree.h>
 
 #include <anyrefdg.hxx>
 #include <document.hxx>
 #include <conditio.hxx>
-#include <stlpool.hxx>
 #include <tabvwsh.hxx>
 #include <colorscale.hxx>
-#include <colorformat.hxx>
 #include <reffact.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>

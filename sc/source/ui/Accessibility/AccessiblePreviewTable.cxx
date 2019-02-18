@@ -21,9 +21,7 @@
 #include <AccessiblePreviewTable.hxx>
 #include <AccessiblePreviewCell.hxx>
 #include <AccessiblePreviewHeaderCell.hxx>
-#include <AccessibilityHints.hxx>
 #include <prevwsh.hxx>
-#include <miscuno.hxx>
 #include <prevloc.hxx>
 #include <attrib.hxx>
 #include <document.hxx>

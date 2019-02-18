@@ -20,20 +20,11 @@
 #include <AccessibleGlobal.hxx>
 #include <AccessibleFilterMenu.hxx>
 #include <AccessibleFilterMenuItem.hxx>
-#include <global.hxx>
-#include <docpool.hxx>
 
 #include <tools/gen.hxx>
-#include <editeng/unoedsrc.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/outliner.hxx>
-#include <vcl/unohelp.hxx>
 #include <checklistmenu.hxx>
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 

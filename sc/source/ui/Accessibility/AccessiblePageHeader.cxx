@@ -19,9 +19,7 @@
 
 #include <AccessiblePageHeader.hxx>
 #include <AccessiblePageHeaderArea.hxx>
-#include <AccessibilityHints.hxx>
 #include <prevwsh.hxx>
-#include <miscuno.hxx>
 #include <prevloc.hxx>
 #include <document.hxx>
 #include <stlpool.hxx>
@@ -41,11 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svl/style.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/editobj.hxx>
-#include <toolkit/helper/convert.hxx>
-
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

@@ -21,7 +21,6 @@
 #include <AccessibleFilterMenu.hxx>
 #include <checklistmenu.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace ::com::sun::star;

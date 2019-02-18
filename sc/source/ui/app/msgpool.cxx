@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <svx/dialogs.hrc>
 
 #include <sc.hrc>
 #include <docpool.hxx>

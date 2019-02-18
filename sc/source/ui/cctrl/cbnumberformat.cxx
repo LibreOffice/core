@@ -18,7 +18,6 @@
  */
 
 #include <cbnumberformat.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sfx2/dispatch.hxx>

@@ -23,7 +23,6 @@
 
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdouno.hxx>
 

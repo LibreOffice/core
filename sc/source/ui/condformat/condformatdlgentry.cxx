@@ -17,21 +17,17 @@
 
 #include <document.hxx>
 
-#include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <vcl/settings.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
 #include <tokenarray.hxx>
 #include <stlpool.hxx>
 #include <tabvwsh.hxx>
-#include <simpleformulacalc.hxx>
 #include <unotools/charclass.hxx>
 
 #include <colorformat.hxx>

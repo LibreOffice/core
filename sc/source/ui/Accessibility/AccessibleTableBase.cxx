@@ -18,7 +18,6 @@
  */
 
 #include <AccessibleTableBase.hxx>
-#include <miscuno.hxx>
 #include <document.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>

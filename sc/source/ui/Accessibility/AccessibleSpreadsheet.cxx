@@ -18,7 +18,6 @@
  */
 
 #include <AccessibleSpreadsheet.hxx>
-#include <AccessibilityHints.hxx>
 #include <AccessibleCell.hxx>
 #include <AccessibleDocument.hxx>
 #include <tabvwsh.hxx>
@@ -30,7 +29,6 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>

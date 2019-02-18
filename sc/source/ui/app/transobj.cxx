@@ -18,13 +18,10 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/justifyitem.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -35,10 +32,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/wrkwin.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <transobj.hxx>
 #include <patattr.hxx>
@@ -53,14 +47,10 @@
 #include <docfunc.hxx>
 #include <scmod.hxx>
 #include <dragdata.hxx>
-#include <clipparam.hxx>
 
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
 #include <formula/errorcodes.hxx>
-#include <svx/algitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/zforlist.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
 #include <stlpool.hxx>
@@ -69,7 +59,6 @@
 #include <cellsuno.hxx>
 #include <stringutil.hxx>
 #include <formulaiter.hxx>
-#include <gridwin.hxx>
 
 using namespace com::sun::star;
 
