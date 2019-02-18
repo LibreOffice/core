@@ -48,7 +48,7 @@ class OComponentEventThread
             ,public css::lang::XEventListener
             ,public ::cppu::OWeakObject
 {
-    typedef std::vector<css::lang::EventObject*> ThreadEvents;
+    typedef std::vector<std::unique_ptr<css::lang::EventObject>> ThreadEvents;
     typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
 
     ::osl::Mutex                    m_aMutex;
@@ -65,9 +65,6 @@ protected:
     virtual void SAL_CALL run() override;
 
     virtual void SAL_CALL onTerminated() override;
-
-    // The following method is called to duplicate the Event while respecting its type.
-    virtual css::lang::EventObject* cloneEvent(const css::lang::EventObject* _pEvt) const = 0;
 
     // Edit an Event:
     // The mutex is not locked, but pCompImpl stays valid in any case.
@@ -88,8 +85,8 @@ public:
     explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread() override;
 
-    void addEvent( const css::lang::EventObject* _pEvt );
-    void addEvent( const css::lang::EventObject* _pEvt, const css::uno::Reference< css::awt::XControl>& rControl,
+    void addEvent( std::unique_ptr<css::lang::EventObject> _pEvt );
+    void addEvent( std::unique_ptr<css::lang::EventObject> _pEvt, const css::uno::Reference< css::awt::XControl>& rControl,
                    bool bFlag = false );
 
     // css::lang::XEventListener

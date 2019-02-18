@@ -195,7 +195,7 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e)
     {
         // if there are listeners, start the action in an own thread, to not allow
         // them to block us here (we're in the application's main thread)
-        getImageProducerThread()->OComponentEventThread::addEvent( &e );
+        getImageProducerThread()->OComponentEventThread::addEvent( std::make_unique<awt::MouseEvent>(e) );
     }
     else
     {
