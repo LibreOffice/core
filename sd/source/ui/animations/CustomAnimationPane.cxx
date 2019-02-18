@@ -1807,16 +1807,30 @@ void CustomAnimationPane::onAdd()
 
     CustomAnimationPresetPtr pDescriptor;
     mpFTCategory->Enable();
-    mpLBCategory->Enable();
     mpFTAnimation->Enable();
-    mpLBAnimation->Enable();
-    mpLBCategory->SelectEntryPos(0);
 
-    sal_uInt32 nFirstEffect = fillAnimationLB( bHasText );
-    if(nFirstEffect == LISTBOX_ENTRY_NOTFOUND)
-        return;
+    bool bCategoryReset = false;
 
-    mpLBAnimation->SelectEntryPos(nFirstEffect);
+    if (!mpLBCategory->IsEnabled() ||
+            mpLBCategory->GetSelectedEntryPos()  == LISTBOX_ENTRY_NOTFOUND)
+    {
+        mpLBCategory->Enable();
+        mpLBCategory->SelectEntryPos(0);
+        bCategoryReset = true;
+    }
+
+    if (bCategoryReset || !mpLBAnimation->IsEnabled() ||
+            mpLBAnimation->GetSelectedEntryPos()  == LISTBOX_ENTRY_NOTFOUND)
+    {
+        mpLBAnimation->Enable();
+
+        sal_uInt32 nFirstEffect = fillAnimationLB( bHasText );
+        if(nFirstEffect == LISTBOX_ENTRY_NOTFOUND)
+            return;
+
+        mpLBAnimation->SelectEntryPos(nFirstEffect);
+    }
+
     void* pEntryData = mpLBAnimation->GetSelectedEntryData();
     if( pEntryData )
         pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
