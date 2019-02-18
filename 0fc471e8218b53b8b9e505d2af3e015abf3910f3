@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_9980dd8d",
+        "filename": "chart2/source/view/charttypes/ConfigAccess.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-02-18T09:27:33Z",
+      "side": 1,
+      "message": "You\u0027re quite right.",
+      "parentUuid": "1f485f77_754ac727",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_155153d9",
         "filename": "chart2/source/view/charttypes/ConfigAccess.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-16T12:08:49Z",
       "side": 1,
       "message": "This should most likely be in the Office.Chart namespace and not Office.Calc. However I\u0027ll discuss the general configuration approach in the general review comments.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_7956412c",
+        "filename": "chart2/source/view/charttypes/ConfigAccess.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-02-18T09:27:33Z",
+      "side": 1,
+      "message": "Well, yes, the location of the item is only a suggestion and not one I have strong preferences for.",
+      "parentUuid": "1f485f77_155153d9",
       "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_992e9da3",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-02-18T09:27:33Z",
+      "side": 1,
+      "message": "I will remedy this; if one error bar is \u0027disabled\u0027 the other should still be shown (as a rectangle with height of width 0).",
+      "parentUuid": "1f485f77_5547cb1e",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_f55fd7e2",
         "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2019-02-16T12:08:49Z",
       "side": 1,
       "message": "I think there is an error in the transformation code here that might only work for the X coordinates. Please check that the code correctly works for the Y coordinate transformation.",
+      "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_792be193",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-02-18T09:27:33Z",
+      "side": 1,
+      "message": "I will recheck, but possibly I don\u0027t understand what you mean.\nAs you can see from the attachment to the bug report, a proper rectangle is created.\n\nDo you mean there is/may be an error in lcl_transformMixedToScene that does not show in X- and Y-error bars but does/may show in error rectangles?",
+      "parentUuid": "1f485f77_f55fd7e2",
       "revId": "0fc471e8218b53b8b9e505d2af3e015abf3910f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
