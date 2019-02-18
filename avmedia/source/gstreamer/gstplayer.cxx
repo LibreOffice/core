@@ -513,7 +513,13 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
             g_object_ref( G_OBJECT ( mpXOverlay ) );
             if ( mnWindowID != 0 )
+            {
                 gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+
+                if (maArea.Width > 0 && maArea.Height > 0)
+                    gst_video_overlay_set_render_rectangle(mpXOverlay, maArea.X, maArea.Y, maArea.Width, maArea.Height);
+            }
+
             return GST_BUS_DROP;
         }
 #ifndef AVMEDIA_GST_0_10
@@ -928,7 +934,12 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     ::osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference< ::media::XPlayerWindow >    xRet;
-    awt::Size                                   aSize( getPreferredPlayerWindowSize() );
+    awt::Size                                   aSize;
+
+    if (rArguments.getLength() > 1 && (rArguments[1] >>= maArea))
+        aSize = awt::Size(maArea.Width, maArea.Height);
+    else
+        aSize = getPreferredPlayerWindowSize();
 
     if( mbFakeVideo )
         preparePlaybin( maURL, nullptr );
@@ -952,6 +963,19 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             {
                 OUString aToolkit = OUString::createFromAscii(pEnvData->pToolkit);
                 OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
+
+                // tdf#124027: the position of embedded window is identical w/ the position
+                // of media object in all other vclplugs (gtk, kde5, gen), in gtk3 w/o gtksink it
+                // needs to be translated
+                if (aToolkit == "gtk3")
+                {
+                    if (pParentWindow)
+                    {
+                        Point aPoint = pParentWindow->GetPosPixel();
+                        maArea.X = aPoint.getX();
+                        maArea.Y = aPoint.getY();
+                    }
+                }
 
                 GstElement *pVideosink = nullptr;
 #if defined(ENABLE_GTKSINK)
