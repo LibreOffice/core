@@ -49,6 +49,7 @@
 #include <editeng/paragraphdata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <boost/optional.hpp>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -497,8 +498,8 @@ private:
     Outliner*           pOutliner;
     const SvxFieldItem& rFldItem;
 
-    std::unique_ptr<Color> pTxtColor;
-    std::unique_ptr<Color> pFldColor;
+    boost::optional<Color> mxTxtColor;
+    boost::optional<Color> mxFldColor;
 
     OUString            aRepresentation;
 
@@ -522,15 +523,11 @@ public:
 
     const SvxFieldItem& GetField() const { return rFldItem; }
 
-    Color*          GetTextColor() const { return pTxtColor.get(); }
-    void            SetTextColor( const Color& rColor )
-                        { pTxtColor.reset( new Color( rColor ) ); }
+    boost::optional<Color> const & GetTextColor() const { return mxTxtColor; }
+    void            SetTextColor( boost::optional<Color> xCol ) { mxTxtColor = xCol; }
 
-    Color*          GetFieldColor() const { return pFldColor.get(); }
-    void            SetFieldColor( const Color& rColor )
-                        { pFldColor.reset( new Color( rColor ) ); }
-    void            ClearFieldColor()
-                        { pFldColor.reset(); }
+    boost::optional<Color> const & GetFieldColor() const { return mxFldColor; }
+    void            SetFieldColor( boost::optional<Color> xCol ) { mxFldColor = xCol; }
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
