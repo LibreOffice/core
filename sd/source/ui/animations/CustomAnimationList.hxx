@@ -72,6 +72,7 @@ public:
 
     // overrides
     virtual void    SelectHdl() override;
+    virtual void    DeselectHdl() override;
     virtual bool    DoubleClickHdl() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
@@ -83,6 +84,8 @@ public:
 
     virtual void notify_change() override;
 
+    virtual bool Expand( SvTreeListEntry* pParent ) override;
+    virtual bool Collapse( SvTreeListEntry* pParent ) override;
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
     bool isVisible( const CustomAnimationEffectPtr& pEffect ) const;
 
