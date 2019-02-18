@@ -533,9 +533,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     LayoutProperty::const_iterator it, it2;
 
                     if ( (it = rProp.find(XML_w)) != rProp.end() )
-                        aSize.Width = it->second;
+                        aSize.Width = std::min(it->second, rShape->getSize().Width);
                     if ( (it = rProp.find(XML_h)) != rProp.end() )
-                        aSize.Height = it->second;
+                        aSize.Height = std::min(it->second, rShape->getSize().Height);
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() )
                         aPos.X = it->second;

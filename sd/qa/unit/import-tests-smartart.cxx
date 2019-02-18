@@ -821,6 +821,10 @@ void SdImportTestSmartArt::testCycleMatrix()
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
 
+    // Without the accompanying fix in place, this test would have failed: the height was 12162,
+    // which is not the mm100 equivalent of the 4064000 EMU in the input file.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11287), xGroup->getSize().Height);
+
     uno::Reference<text::XText> xA1(getChildShape(getChildShape(xGroup, 1), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xA1.is());
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), xA1->getString());
