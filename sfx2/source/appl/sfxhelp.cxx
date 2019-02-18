@@ -1231,26 +1231,22 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
 
             if ( impl_hasHelpInstalled() && pWidget && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
-                // no help found -> try with parent help id.
-                std::unique_ptr<weld::Widget> xParent(pWidget->weld_parent());
-                while (xParent)
-                {
-                    OString aHelpId = xParent->get_help_id();
-                    aHelpURL = CreateHelpURL( OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
+                bool bUseFinalFallback = true;
+                // no help found -> try ids of parents.
+                pWidget->help_hierarchy_foreach([&aHelpModuleName, &aHelpURL, &bUseFinalFallback](const OString& rHelpId){
+                    if (rHelpId.isEmpty())
+                        return false;
+                    aHelpURL = CreateHelpURL( OStringToOUString(rHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName);
+                    bool bFinished = !SfxContentHelper::IsHelpErrorDocument(aHelpURL);
+                    if (bFinished)
+                        bUseFinalFallback = false;
+                    return bFinished;
+                });
 
-                    if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        xParent.reset(xParent->weld_parent());
-                        if (!xParent)
-                        {
-                            // create help url of start page ( helpid == 0 -> start page)
-                            aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
-                        }
-                    }
+                if (bUseFinalFallback)
+                {
+                    // create help url of start page ( helpid == 0 -> start page)
+                    aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
                 }
             }
             break;
