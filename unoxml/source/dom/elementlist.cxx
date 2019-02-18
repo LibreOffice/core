@@ -120,7 +120,7 @@ namespace DOM
             {
                 return;
             } else {
-                m_nodevector.erase(m_nodevector.begin(), m_nodevector.end());
+                m_nodevector.clear();
                 m_bRebuild = false; // don't rebuild until tree is mutated
             }
         }

@@ -298,7 +298,7 @@ static void trim(std::string& str)
             str.erase(0, pos);
     }
     else
-        str.erase(str.begin(), str.end());
+        str.clear();
 }
 
 void myparser::traverse( xmlNodePtr parentNode )

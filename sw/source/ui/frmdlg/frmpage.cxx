@@ -2935,10 +2935,10 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             }
             else
                 m_xPrevLB->set_active(0);
-            aPrevPageFrames.erase(aPrevPageFrames.begin(), aPrevPageFrames.end());
-            aNextPageFrames.erase(aNextPageFrames.begin(), aNextPageFrames.end());
-            aThisPageFrames.erase(aThisPageFrames.begin(), aThisPageFrames.end());
-            aRemainFrames.erase(aRemainFrames.begin(), aRemainFrames.end());
+            aPrevPageFrames.clear();
+            aNextPageFrames.clear();
+            aThisPageFrames.clear();
+            aRemainFrames.clear();
 
             m_pWrtSh->GetConnectableFrameFormats(*pFormat, sPrevChain, true,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );

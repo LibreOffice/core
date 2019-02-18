@@ -119,7 +119,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         // Prevent buffer from growing massively large.
         if ( aRead > MAX_LINE_LENGTH )
         {
-            aBuffer.erase( aBuffer.begin(), aBuffer.end() );
+            aBuffer.clear();
             return 0;
         }
         aRead += aRet;
