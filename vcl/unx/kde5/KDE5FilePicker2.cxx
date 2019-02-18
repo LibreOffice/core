@@ -662,7 +662,7 @@ uno::Any KDE5FilePicker::handleGetListValue(QComboBox* pQComboBox, sal_Int16 nAc
         case ControlActions::GET_SELECTED_ITEM_INDEX:
         {
             int nCurrent = pQComboBox->currentIndex();
-            aAny <<= nCurrent;
+            aAny <<= static_cast<sal_Int32>(nCurrent);
         }
         break;
         default:
