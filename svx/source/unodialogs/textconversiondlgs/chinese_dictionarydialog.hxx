@@ -20,21 +20,14 @@
 #ifndef INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_DICTIONARYDIALOG_HXX
 #define INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_DICTIONARYDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 
 #include <vector>
 
-
 namespace textconversiondlgs
 {
-
 
 struct DictionaryEntry final
 {
@@ -51,16 +44,13 @@ struct DictionaryEntry final
     bool const     m_bNewEntry;
 };
 
-class DictionaryList : public SvSimpleTable
+class DictionaryList
 {
 public:
-    DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
-    virtual ~DictionaryList() override;
-    virtual void dispose() override;
+    DictionaryList(std::unique_ptr<weld::TreeView> xTreeView);
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
-        vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
-        vcl::Window const *pFT_Term, vcl::Window const *pFT_Mapping, vcl::Window const *pFT_Property);
+        weld::Entry *pED_Term, weld::Entry *pED_Mapping, weld::ComboBox *pLB_Property);
 
     void deleteAll();
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
@@ -70,8 +60,8 @@ public:
     bool hasTerm( const OUString& rTerm ) const;
 
     void addEntry( const OUString& rTerm, const OUString& rMapping
-            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, sal_uIntPtr nPos = TREELIST_APPEND );
-    sal_uIntPtr deleteEntries( const OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
+            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, int nPos = -1);
+    int deleteEntries( const OUString& rTerm ); //return lowest position of deleted entries or -1 if no entry was deleted
     void deleteEntryOnPos( sal_Int32 nPos  );
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;
     DictionaryEntry* getFirstSelectedEntry() const;
@@ -79,52 +69,64 @@ public:
     void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
     sal_uInt16 getSortColumn() const { return m_nSortColumnIndex;}
 
+    void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
+    void hide() { m_xControl->hide(); }
+    void show() { m_xControl->show(); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_column_clicked(const Link<int, void>& rLink) { m_xControl->connect_column_clicked(rLink); }
+    bool get_sort_order() const { return m_xControl->get_sort_order(); }
+    void set_sort_order(bool bAscending) { return m_xControl->set_sort_order(bAscending); }
+    void set_sort_column(int nColumn) { return m_xControl->set_sort_column(nColumn); }
+    int get_sort_column() const { return m_xControl->get_sort_column(); }
+    int get_selected_index() const { return m_xControl->get_selected_index(); }
+    int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
+    bool get_visible() const { return m_xControl->get_visible(); }
+    void set_sort_indicator(TriState eState, int nColumn) { m_xControl->set_sort_indicator(eState, nColumn); }
+    weld::TreeView& get_widget() const { return *m_xControl; }
+
 private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
-    OUString makeTabString( const DictionaryEntry& rEntry ) const;
 
-    DECL_LINK( CompareHdl, const SvSortData&, sal_Int32 );
-    sal_Int32 ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
-    SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
-
-    void setColSizes();
-
-    virtual void Resize() override;
+    DECL_LINK(ResizeHdl, const Size&, void);
 
 public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 
 private:
-    VclPtr<vcl::Window>     m_pED_Term;
-    VclPtr<vcl::Window>     m_pED_Mapping;
-    VclPtr<ListBox>         m_pLB_Property;
+    std::unique_ptr<weld::TreeView> m_xControl;
+    std::unique_ptr<weld::TreeIter> m_xIter;
+    weld::Entry* m_pED_Term;
+    weld::Entry* m_pED_Mapping;
+    weld::ComboBox* m_pLB_Property;
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
 
     sal_uInt16      m_nSortColumnIndex;
 };
 
-class ChineseDictionaryDialog : public ModalDialog
+class ChineseDictionaryDialog : public weld::GenericDialogController
 {
 public:
-    explicit ChineseDictionaryDialog( vcl::Window* pParent );
+    explicit ChineseDictionaryDialog(weld::Window* pParent);
     virtual ~ChineseDictionaryDialog() override;
-    virtual void dispose() override;
 
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
 
-    virtual short   Execute() override;
+    virtual short run() override;
 
 private:
-    DECL_LINK( DirectionHdl, Button*, void );
-    DECL_LINK( EditFieldsHdl, Edit&, void );
-    DECL_LINK( EditFieldsListBoxHdl, ListBox&, void );
-    DECL_LINK( MappingSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( AddHdl, Button*, void );
-    DECL_LINK( ModifyHdl, Button*, void );
-    DECL_LINK( DeleteHdl, Button*, void );
-    DECL_LINK( HeaderBarClick, HeaderBar*, void );
+    DECL_LINK( DirectionHdl, weld::Button&, void );
+    DECL_LINK( EditFieldsHdl, weld::Entry&, void );
+    DECL_LINK( EditFieldsListBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( MappingSelectHdl, weld::TreeView&, void );
+    DECL_LINK( AddHdl, weld::Button&, void );
+    DECL_LINK( ModifyHdl, weld::Button&, void );
+    DECL_LINK( DeleteHdl, weld::Button&, void );
+    static void HeaderBarClick(DictionaryList& rList, int nColumn);
+    DECL_LINK(ToSimplifiedHeaderBarClick, int, void);
+    DECL_LINK(ToTraditionalHeaderBarClick, int, void);
+    DECL_LINK(SizeAllocHdl, const Size&, void);
 
     void initDictionaryControl(DictionaryList *pList,
         const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);
@@ -144,30 +146,28 @@ private:
 private:
     sal_Int32    m_nTextConversionOptions; //i18n::TextConversionOption
 
-    VclPtr<RadioButton> m_pRB_To_Simplified;
-    VclPtr<RadioButton> m_pRB_To_Traditional;
-
-    VclPtr<CheckBox>    m_pCB_Reverse;
-
-    VclPtr<FixedText>   m_pFT_Term;
-    VclPtr<Edit>        m_pED_Term;
-
-    VclPtr<FixedText>   m_pFT_Mapping;
-    VclPtr<Edit>        m_pED_Mapping;
-
-    VclPtr<FixedText>   m_pFT_Property;
-    VclPtr<ListBox>     m_pLB_Property;
-
-    VclPtr<SvSimpleTableContainer> mpToSimplifiedContainer;
-    VclPtr<DictionaryList>         m_pCT_DictionaryToSimplified;
-    VclPtr<SvSimpleTableContainer> mpToTraditionalContainer;
-    VclPtr<DictionaryList>         m_pCT_DictionaryToTraditional;
-
-    VclPtr<PushButton>  m_pPB_Add;
-    VclPtr<PushButton>  m_pPB_Modify;
-    VclPtr<PushButton>  m_pPB_Delete;
-
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
+
+    std::unique_ptr<weld::RadioButton> m_xRB_To_Simplified;
+    std::unique_ptr<weld::RadioButton> m_xRB_To_Traditional;
+
+    std::unique_ptr<weld::CheckButton> m_xCB_Reverse;
+
+    std::unique_ptr<weld::Label> m_xFT_Term;
+    std::unique_ptr<weld::Entry> m_xED_Term;
+
+    std::unique_ptr<weld::Label> m_xFT_Mapping;
+    std::unique_ptr<weld::Entry> m_xED_Mapping;
+
+    std::unique_ptr<weld::Label> m_xFT_Property;
+    std::unique_ptr<weld::ComboBox> m_xLB_Property;
+
+    std::unique_ptr<DictionaryList> m_xCT_DictionaryToSimplified;
+    std::unique_ptr<DictionaryList> m_xCT_DictionaryToTraditional;
+
+    std::unique_ptr<weld::Button>  m_xPB_Add;
+    std::unique_ptr<weld::Button>  m_xPB_Modify;
+    std::unique_ptr<weld::Button>  m_xPB_Delete;
 };
 
 

@@ -374,7 +374,7 @@ void CertificateViewerCertPathTP::InsertCert(weld::TreeIter* pParent, const OUSt
     OUString sImage = bValid ? OUStringLiteral(BMP_CERT_OK) : OUStringLiteral(BMP_CERT_NOT_OK);
     maUserData.emplace_back(std::make_unique<CertPath_UserData>(rxCert, bValid));
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maUserData.back().get())));
-    mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, &sImage, false);
+    mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, &sImage, false, nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

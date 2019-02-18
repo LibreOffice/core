@@ -37,63 +37,38 @@
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
-
 namespace textconversiondlgs
 {
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define HEADER_BAR_BITS ( HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS )
-
-DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
-    : SvSimpleTable(rParent, nBits)
+DictionaryList::DictionaryList(std::unique_ptr<weld::TreeView> xControl)
+    : m_xControl(std::move(xControl))
+    , m_xIter(m_xControl->make_iterator())
     , m_pED_Term(nullptr)
     , m_pED_Mapping(nullptr)
     , m_pLB_Property(nullptr)
     , m_aToBeDeleted()
     , m_nSortColumnIndex(0)
 {
-}
-
-DictionaryList::~DictionaryList()
-{
-    disposeOnce();
-}
-
-void DictionaryList::dispose()
-{
-    m_pED_Term.clear();
-    m_pED_Mapping.clear();
-    m_pLB_Property.clear();
-    SvSimpleTable::dispose();
+    m_xControl->make_sorted();
 }
 
 OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
 {
-    if(!m_pLB_Property || !m_pLB_Property->GetEntryCount())
+    if (!m_pLB_Property || !m_pLB_Property->get_count())
         return OUString();
 
     sal_uInt16 nPos = static_cast<sal_uInt16>( nConversionPropertyType )-1;
-    if(nPos<m_pLB_Property->GetEntryCount())
-        return m_pLB_Property->GetEntry(nPos);
-    return m_pLB_Property->GetEntry(0);
-}
-
-OUString DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
-{
-    OUString aStr( rEntry.m_aTerm );
-    aStr += "\t";
-    aStr += rEntry.m_aMapping;
-    aStr += "\t";
-    aStr += getPropertyTypeName( rEntry.m_nConversionPropertyType );
-    return aStr;
+    if (nPos < m_pLB_Property->get_count())
+        return m_pLB_Property->get_text(nPos);
+    return m_pLB_Property->get_text(0);
 }
 
 void DictionaryList::save()
 {
-    if( !m_xDictionary.is() )
+    if (!m_xDictionary.is())
         return;
 
     Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
@@ -106,7 +81,8 @@ void DictionaryList::save()
         pE = m_aToBeDeleted[nN];
         m_xDictionary->removeEntry( pE->m_aTerm, pE->m_aMapping );
     }
-    for( nN = GetRowCount(); nN--; )
+    int nRowCount = m_xControl->n_children();
+    for( nN = nRowCount; nN--; )
     {
         pE = getEntryOnPos( nN );
         if(pE->m_bNewEntry)
@@ -130,7 +106,8 @@ void DictionaryList::save()
 void DictionaryList::deleteAll()
 {
     sal_Int32 nN;
-    for( nN = GetRowCount(); nN--; )
+    int nRowCount = m_xControl->n_children();
+    for( nN = nRowCount; nN--; )
         deleteEntryOnPos( nN  );
     for( nN = m_aToBeDeleted.size(); nN--; )
     {
@@ -174,40 +151,34 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
             nConversionPropertyType = xPropertyType->getPropertyType(aLeft, aRight);
 
         DictionaryEntry* pEntry = new DictionaryEntry( aLeft, aRight, nConversionPropertyType );
-        SvTreeListEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ) );
-        pLBEntry->SetUserData( pEntry );
-    }
 
-    if( GetEntryCount() > 0 )
-        SelectRow( 0 );
+        m_xControl->append(m_xIter.get());
+        m_xControl->set_text(*m_xIter, pEntry->m_aTerm, 0);
+        m_xControl->set_text(*m_xIter, pEntry->m_aMapping, 1);
+        m_xControl->set_text(*m_xIter, getPropertyTypeName(pEntry->m_nConversionPropertyType), 2);
+        m_xControl->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    }
 }
 
 DictionaryEntry* DictionaryList::getFirstSelectedEntry() const
 {
     DictionaryEntry* pRet=nullptr;
-    for( sal_Int32 nN=GetRowCount(); nN--; )
-    {
-        if( IsRowSelected( nN ) )
-        {
-            pRet = getEntryOnPos( nN );
-            break;
-        }
-    }
+    int nN = m_xControl->get_selected_index();
+    if (nN != -1)
+        pRet = getEntryOnPos( nN );
     return pRet;
 }
 
-DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
+DictionaryEntry* DictionaryList::getEntryOnPos(sal_Int32 nPos) const
 {
-    DictionaryEntry* pEntry=nullptr;
-    SvTreeListEntry* pLBEntry = GetEntryOnPos( nPos );
-    if(pLBEntry)
-        pEntry = static_cast<DictionaryEntry*>(pLBEntry->GetUserData());
-    return pEntry;
+    OUString sLBEntry = m_xControl->get_id(nPos);
+    return reinterpret_cast<DictionaryEntry*>(sLBEntry.toInt64());
 }
 
 DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
 {
-    for( sal_Int32 nN=GetRowCount(); nN--; )
+    int nRowCount = m_xControl->n_children();
+    for( sal_Int32 nN = nRowCount; nN--; )
     {
         DictionaryEntry* pE = getEntryOnPos( nN );
         if( pE && rTerm == pE->m_aTerm )
@@ -221,25 +192,26 @@ bool DictionaryList::hasTerm( const OUString& rTerm ) const
     return getTermEntry(rTerm) !=nullptr ;
 }
 
-void DictionaryList::addEntry( const OUString& rTerm, const OUString& rMapping
-                              , sal_Int16 nConversionPropertyType, sal_uIntPtr nPos )
+void DictionaryList::addEntry(const OUString& rTerm, const OUString& rMapping,
+                              sal_Int16 nConversionPropertyType, int nPos)
 {
     if( hasTerm( rTerm ) )
         return;
 
     DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, true );
-    SvTreeListEntry* pLBEntry = InsertEntryToColumn( makeTabString( *pEntry ), nPos );
-    pLBEntry->SetUserData( pEntry );
-    SelectRow( GetEntryPos( pLBEntry ) );
+    m_xControl->insert(nPos, m_xIter.get());
+    m_xControl->set_text(*m_xIter, pEntry->m_aTerm, 0);
+    m_xControl->set_text(*m_xIter, pEntry->m_aMapping, 1);
+    m_xControl->set_text(*m_xIter, getPropertyTypeName(pEntry->m_nConversionPropertyType), 2);
+    m_xControl->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    m_xControl->select(*m_xIter);
 }
 
 void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
 {
-    SvTreeListEntry* pLBEntry = GetEntryOnPos( nPos );
     DictionaryEntry* pEntry = getEntryOnPos( nPos );
-    if( pLBEntry )
-        RemoveParentKeepChildren( pLBEntry );
-    if( pEntry )
+    m_xControl->remove(nPos);
+    if (pEntry)
     {
         if( pEntry->m_bNewEntry )
             delete pEntry;
@@ -248,17 +220,17 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     }
 }
 
-sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
+int DictionaryList::deleteEntries( const OUString& rTerm )
 {
-    sal_uIntPtr nPos = TREELIST_APPEND;
-    for( sal_Int32 nN=GetRowCount(); nN--; )
+    int nPos = -1;
+    int nRowCount = m_xControl->n_children();
+    for (sal_Int32 nN = nRowCount; nN--;)
     {
         DictionaryEntry* pCurEntry = getEntryOnPos( nN );
         if( rTerm == pCurEntry->m_aTerm )
         {
             nPos = nN;
-            SvTreeListEntry* pCurLBEntry = GetEntryOnPos( nN );
-            RemoveParentKeepChildren( pCurLBEntry );
+            m_xControl->remove(nN);
             if( pCurEntry->m_bNewEntry )
                 delete pCurEntry;
             else
@@ -267,75 +239,6 @@ sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
     }
     return nPos;
 }
-
-void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
-{
-    m_nSortColumnIndex=nSortColumnIndex;
-    if( nSortColumnIndex<3 )
-    {
-        if(bSortAtoZ)
-            GetModel()->SetSortMode(SortAscending);
-        else
-            GetModel()->SetSortMode(SortDescending);
-
-        GetModel()->SetCompareHdl( LINK( this, DictionaryList, CompareHdl));
-        GetModel()->Resort();
-    }
-    else
-        GetModel()->SetSortMode(SortNone);
-}
-
-
-IMPL_LINK( DictionaryList, CompareHdl, const SvSortData&, rData, sal_Int32 )
-{
-    SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(rData.pLeft);
-    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);
-    return ColumnCompare(pLeft,pRight);
-}
-
-sal_Int32 DictionaryList::ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight )
-{
-    sal_Int32 nCompare = 0;
-
-    SvLBoxItem* pLeftItem = getItemAtColumn( pLeft, m_nSortColumnIndex );
-    SvLBoxItem* pRightItem = getItemAtColumn( pRight, m_nSortColumnIndex );
-
-    if(pLeftItem != nullptr && pRightItem != nullptr)
-    {
-        SvLBoxItemType nLeftKind = pLeftItem->GetType();
-        SvLBoxItemType nRightKind = pRightItem->GetType();
-
-        if (nRightKind == SvLBoxItemType::String &&
-             nLeftKind == SvLBoxItemType::String)
-        {
-            IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
-            const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
-
-            nCompare = pCollator->compareString( static_cast<SvLBoxString*>(pLeftItem)->GetText(),
-                                    static_cast<SvLBoxString*>(pRightItem)->GetText());
-
-            if (nCompare == 0)
-                nCompare = -1;
-        }
-    }
-    return nCompare;
-}
-
-SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const
-{
-    SvLBoxItem* pItem = nullptr;
-    if( pEntry )
-    {
-        sal_uInt16 nCount = pEntry->ItemCount();
-        nColumn++;
-        if( nTreeFlags & SvTreeFlags::CHKBTN )
-            nColumn++;
-        if( nColumn < nCount )
-            pItem = &pEntry->GetItem( nColumn );
-    }
-    return pItem;
-}
-
 
 DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType
@@ -353,39 +256,26 @@ DictionaryEntry::~DictionaryEntry()
 {
 }
 
-void DictionaryList::setColSizes()
+IMPL_LINK_NOARG(ChineseDictionaryDialog, SizeAllocHdl, const Size&, void)
 {
-    HeaderBar &rBar = GetTheHeaderBar();
-    if (rBar.GetItemCount() < 3)
+    DictionaryList* pControl = m_xCT_DictionaryToTraditional->get_visible() ?
+                                m_xCT_DictionaryToTraditional.get() :
+                                m_xCT_DictionaryToSimplified.get();
+    std::vector<int> aWidths;
+    int x1, x2, y, width, height;
+    if (!m_xED_Mapping->get_extents_relative_to(pControl->get_widget(), x1, y, width, height))
         return;
-
-    long nWidth1 = m_pED_Term->get_preferred_size().Width();
-    long nWidth2 = m_pED_Mapping->get_preferred_size().Width();
-    long nWidth3 = m_pLB_Property->get_preferred_size().Width();
-
-    long nWidth = GetSizePixel().Width();
-    long nPos3 = nWidth - nWidth3;
-    long nRemainder = nWidth - (nWidth1 + nWidth2 + nWidth3);
-
-    long aTabPositions[] = { 0, nWidth1 + (nRemainder/2), nPos3 };
-    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
-}
-
-void DictionaryList::Resize()
-{
-    SvSimpleTable::Resize();
-    setColSizes();
+    aWidths.push_back(x1);
+    if (!m_xLB_Property->get_extents_relative_to(pControl->get_widget(), x2, y, width, height))
+        return;
+    aWidths.push_back(x2 - x1);
+    m_xCT_DictionaryToTraditional->get_widget().set_column_fixed_widths(aWidths);
+    m_xCT_DictionaryToSimplified->get_widget().set_column_fixed_widths(aWidths);
 }
 
 void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& xDictionary,
-    vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
-    vcl::Window const *pFT_Term, vcl::Window const *pFT_Mapping, vcl::Window const *pFT_Property)
+    weld::Entry *pED_Term, weld::Entry *pED_Mapping, weld::ComboBox *pLB_Property)
 {
-    SetStyle( WB_VSCROLL | WB_TABSTOP );
-    SetSelectionMode( SelectionMode::Single );
-    SetBorderStyle( WindowBorderStyle::MONO );
-    SetHighlightRange();
-
     if (m_xDictionary.is())
         return;
 
@@ -395,72 +285,51 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
     m_pED_Mapping = pED_Mapping;
     m_pLB_Property = pLB_Property;
 
-    HeaderBar& rHeaderBar = GetTheHeaderBar();
+    m_xControl->set_sort_column(0);
+    m_xControl->set_sort_indicator(TRISTATE_TRUE, 0);
 
-    OUString aColumn1( OutputDevice::GetNonMnemonicString( pFT_Term->GetText() ) );
-    OUString aColumn2( OutputDevice::GetNonMnemonicString( pFT_Mapping->GetText() ) );
-    OUString aColumn3( OutputDevice::GetNonMnemonicString( pFT_Property->GetText() ) );
-
-    long nWidth1 = m_pED_Term->get_preferred_size().Width();
-    long nWidth2 = m_pED_Mapping->get_preferred_size().Width();
-    long nWidth3 = m_pLB_Property->get_preferred_size().Width();
-
-    HeaderBarItemBits nBits = HEADER_BAR_BITS;
-    rHeaderBar.InsertItem( 1, aColumn1, nWidth1, nBits | HeaderBarItemBits::UPARROW );
-    rHeaderBar.InsertItem( 2, aColumn2, nWidth2, nBits );
-    rHeaderBar.InsertItem( 3, aColumn3, nWidth3, nBits );
-
-    long aTabPositions[] = { 0, nWidth1, nWidth1 + nWidth2 };
-    SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
+    std::vector<int> aWidths;
+    aWidths.push_back(m_pED_Term->get_preferred_size().Width());
+    aWidths.push_back(m_pED_Mapping->get_preferred_size().Width());
+    m_xControl->set_column_fixed_widths(aWidths);
 }
 
 void ChineseDictionaryDialog::initDictionaryControl(DictionaryList *pList,
     const Reference< linguistic2::XConversionDictionary>& xDictionary)
 {
-    //init HeaderBar and set tabs
-    HeaderBar& rHeaderBar = pList->GetTheHeaderBar();
-    //set hdl
-    rHeaderBar.SetSelectHdl( LINK( this, ChineseDictionaryDialog, HeaderBarClick ) );
     //set widgets to track the width of for columns
     pList->init(xDictionary,
-        m_pED_Term, m_pED_Mapping, m_pLB_Property,
-        m_pFT_Term, m_pFT_Mapping, m_pFT_Property);
+        m_xED_Term.get(), m_xED_Mapping.get(), m_xLB_Property.get());
 }
 
-ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
-    : ModalDialog(pParent, "ChineseDictionaryDialog",
-         "svx/ui/chinesedictionary.ui")
+ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "svx/ui/chinesedictionary.ui", "ChineseDictionaryDialog")
     , m_nTextConversionOptions(i18n::TextConversionOption::NONE)
+    , m_xRB_To_Simplified(m_xBuilder->weld_radio_button("tradtosimple"))
+    , m_xRB_To_Traditional(m_xBuilder->weld_radio_button("simpletotrad"))
+    , m_xCB_Reverse(m_xBuilder->weld_check_button("reverse"))
+    , m_xFT_Term(m_xBuilder->weld_label("termft"))
+    , m_xED_Term(m_xBuilder->weld_entry("term"))
+    , m_xFT_Mapping(m_xBuilder->weld_label("mappingft"))
+    , m_xED_Mapping(m_xBuilder->weld_entry("mapping"))
+    , m_xFT_Property(m_xBuilder->weld_label("propertyft"))
+    , m_xLB_Property(m_xBuilder->weld_combo_box("property"))
+    , m_xCT_DictionaryToSimplified(new DictionaryList(m_xBuilder->weld_tree_view("tradtosimpleview")))
+    , m_xCT_DictionaryToTraditional(new DictionaryList(m_xBuilder->weld_tree_view("simpletotradview")))
+    , m_xPB_Add(m_xBuilder->weld_button("add"))
+    , m_xPB_Modify(m_xBuilder->weld_button("modify"))
+    , m_xPB_Delete(m_xBuilder->weld_button("delete"))
 {
-    get(m_pRB_To_Simplified, "tradtosimple");
-    get(m_pRB_To_Traditional, "simpletotrad");
-    get(m_pCB_Reverse, "reverse");
-    get(m_pFT_Term, "termft");
-    get(m_pED_Term, "term");
-    get(m_pFT_Mapping, "mappingft");
-    get(m_pED_Mapping, "mapping");
-    get(m_pFT_Property, "propertyft");
-    get(m_pLB_Property, "property");
-
-    get(m_pPB_Add, "add");
-    get(m_pPB_Modify, "modify");
-    get(m_pPB_Delete, "delete");
-
-    get(mpToSimplifiedContainer, "tradtosimpleview");
-    mpToSimplifiedContainer->set_height_request(mpToSimplifiedContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToSimplified = VclPtr<DictionaryList>::Create(*mpToSimplifiedContainer, 0);
-    get(mpToTraditionalContainer, "simpletotradview");
-    mpToTraditionalContainer->set_height_request(mpToTraditionalContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToTraditional = VclPtr<DictionaryList>::Create(*mpToTraditionalContainer, 0);
+    m_xCT_DictionaryToSimplified->set_size_request(-1, m_xCT_DictionaryToSimplified->get_height_rows(8));
+    m_xCT_DictionaryToTraditional->set_size_request(-1, m_xCT_DictionaryToTraditional->get_height_rows(8));
 
     SvtLinguConfig  aLngCfg;
     bool bValue;
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
-        m_pCB_Reverse->Check( bValue );
+        m_xCB_Reverse->set_active( bValue );
 
-    m_pLB_Property->SetDropDownLineCount( m_pLB_Property->GetEntryCount() );
-    m_pLB_Property->SelectEntryPos(0);
+    m_xLB_Property->set_active(0);
 
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Simplified;
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional;
@@ -519,69 +388,53 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
     }
 
     //init dictionary controls
-    initDictionaryControl(m_pCT_DictionaryToSimplified, xDictionary_To_Simplified);
-    initDictionaryControl(m_pCT_DictionaryToTraditional, xDictionary_To_Traditional);
+    initDictionaryControl(m_xCT_DictionaryToSimplified.get(), xDictionary_To_Simplified);
+    initDictionaryControl(m_xCT_DictionaryToTraditional.get(), xDictionary_To_Traditional);
+
+    //set hdl
+    m_xCT_DictionaryToSimplified->connect_column_clicked(LINK(this, ChineseDictionaryDialog, ToSimplifiedHeaderBarClick));
+    m_xCT_DictionaryToTraditional->connect_column_clicked(LINK(this, ChineseDictionaryDialog, ToTraditionalHeaderBarClick));
 
     updateAfterDirectionChange();
 
-    m_pED_Term->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
-    m_pED_Mapping->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
-    m_pLB_Property->SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsListBoxHdl ) );
+    m_xED_Term->connect_changed( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_xED_Mapping->connect_changed( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_xLB_Property->connect_changed( LINK( this, ChineseDictionaryDialog, EditFieldsListBoxHdl ) );
 
-    m_pRB_To_Simplified->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
-    m_pRB_To_Traditional->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_xRB_To_Simplified->connect_clicked( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_xRB_To_Traditional->connect_clicked( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
 
-    m_pCT_DictionaryToSimplified->SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
-    m_pCT_DictionaryToTraditional->SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
+    m_xCT_DictionaryToSimplified->connect_changed( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
+    m_xCT_DictionaryToTraditional->connect_changed( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
 
-    m_pPB_Add->SetClickHdl( LINK( this, ChineseDictionaryDialog, AddHdl ) );
-    m_pPB_Modify->SetClickHdl( LINK( this, ChineseDictionaryDialog, ModifyHdl ) );
-    m_pPB_Delete->SetClickHdl( LINK( this, ChineseDictionaryDialog, DeleteHdl ) );
+    m_xPB_Add->connect_clicked( LINK( this, ChineseDictionaryDialog, AddHdl ) );
+    m_xPB_Modify->connect_clicked( LINK( this, ChineseDictionaryDialog, ModifyHdl ) );
+    m_xPB_Delete->connect_clicked( LINK( this, ChineseDictionaryDialog, DeleteHdl ) );
+
+    m_xED_Mapping->connect_size_allocate(LINK(this, ChineseDictionaryDialog, SizeAllocHdl));
+    m_xLB_Property->connect_size_allocate(LINK(this, ChineseDictionaryDialog, SizeAllocHdl));
 }
 
 ChineseDictionaryDialog::~ChineseDictionaryDialog()
 {
-    disposeOnce();
-}
-
-void ChineseDictionaryDialog::dispose()
-{
-    m_xContext=nullptr;
-    m_pCT_DictionaryToSimplified.disposeAndClear();
-    m_pCT_DictionaryToTraditional.disposeAndClear();
-    m_pRB_To_Simplified.clear();
-    m_pRB_To_Traditional.clear();
-    m_pCB_Reverse.clear();
-    m_pFT_Term.clear();
-    m_pED_Term.clear();
-    m_pFT_Mapping.clear();
-    m_pED_Mapping.clear();
-    m_pFT_Property.clear();
-    m_pLB_Property.clear();
-    mpToSimplifiedContainer.clear();
-    mpToTraditionalContainer.clear();
-    m_pPB_Add.clear();
-    m_pPB_Modify.clear();
-    m_pPB_Delete.clear();
-    ModalDialog::dispose();
 }
 
 void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )
 {
-    if( bDirectionToSimplified == m_pRB_To_Simplified->IsChecked()
+    if( bDirectionToSimplified == m_xRB_To_Simplified->get_active()
         && nTextConversionOptions == m_nTextConversionOptions )
         return;
 
     m_nTextConversionOptions = nTextConversionOptions;
 
-    if( bDirectionToSimplified )
-        m_pRB_To_Simplified->Check();
+    if (bDirectionToSimplified)
+        m_xRB_To_Simplified->set_active(true);
     else
-        m_pRB_To_Traditional->Check();
+        m_xRB_To_Traditional->set_active(true);
     updateAfterDirectionChange();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, weld::Button&, void)
 {
     updateAfterDirectionChange();
 }
@@ -590,42 +443,44 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
 {
     Reference< linguistic2::XConversionDictionary > xDictionary;
 
-    if( m_pRB_To_Simplified->IsChecked() )
+    if (m_xRB_To_Simplified->get_active())
     {
-        mpToTraditionalContainer->Hide();
-        mpToSimplifiedContainer->Show();
-        xDictionary = m_pCT_DictionaryToSimplified->m_xDictionary;
+        m_xCT_DictionaryToTraditional->hide();
+        m_xCT_DictionaryToSimplified->show();
+        xDictionary = m_xCT_DictionaryToSimplified->m_xDictionary;
     }
     else
     {
-        mpToSimplifiedContainer->Hide();
-        mpToTraditionalContainer->Show();
-        xDictionary = m_pCT_DictionaryToTraditional->m_xDictionary;
+        m_xCT_DictionaryToSimplified->hide();
+        m_xCT_DictionaryToTraditional->show();
+        xDictionary = m_xCT_DictionaryToTraditional->m_xDictionary;
     }
 
     updateButtons();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsListBoxHdl, weld::ComboBox&, void)
 {
     updateButtons();
 }
-IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl, Edit&, void)
+
+IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl, weld::Entry&, void)
 {
     updateButtons();
 }
-IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
+
+IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl, weld::TreeView&, void)
 {
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
-    if(pE)
+    if (pE)
     {
-        m_pED_Term->SetText( pE->m_aTerm );
-        m_pED_Mapping->SetText( pE->m_aMapping );
+        m_xED_Term->set_text( pE->m_aTerm );
+        m_xED_Mapping->set_text( pE->m_aMapping );
         sal_Int16 nPos = pE->m_nConversionPropertyType-1;
-        if( nPos<0 || nPos>=m_pLB_Property->GetEntryCount() )
+        if (nPos<0 || nPos>=m_xLB_Property->get_count())
             nPos=0;
-        if( m_pLB_Property->GetEntryCount() )
-            m_pLB_Property->SelectEntryPos(nPos);
+        if (m_xLB_Property->get_count())
+            m_xLB_Property->set_active(nPos);
     }
 
     updateButtons();
@@ -633,7 +488,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
 
 bool ChineseDictionaryDialog::isEditFieldsHaveContent() const
 {
-    return !m_pED_Term->GetText().isEmpty() && !m_pED_Mapping->GetText().isEmpty();
+    return !m_xED_Term->get_text().isEmpty() && !m_xED_Mapping->get_text().isEmpty();
 }
 
 bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() const
@@ -641,11 +496,11 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if( pE )
     {
-        if( pE->m_aTerm != m_pED_Term->GetText() )
+        if (pE->m_aTerm != m_xED_Term->get_text())
             return false;
-        if( pE->m_aMapping != m_pED_Mapping->GetText() )
+        if (pE->m_aMapping != m_xED_Mapping->get_text())
             return false;
-        if( pE->m_nConversionPropertyType != m_pLB_Property->GetSelectedEntryPos()+1 )
+        if (pE->m_nConversionPropertyType != m_xLB_Property->get_active() + 1)
             return false;
         return true;
     }
@@ -654,75 +509,72 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
 
 const DictionaryList& ChineseDictionaryDialog::getActiveDictionary() const
 {
-    if( m_pRB_To_Traditional->IsChecked() )
-        return *m_pCT_DictionaryToTraditional;
-    return *m_pCT_DictionaryToSimplified;
+    if( m_xRB_To_Traditional->get_active() )
+        return *m_xCT_DictionaryToTraditional;
+    return *m_xCT_DictionaryToSimplified;
 }
 
 DictionaryList& ChineseDictionaryDialog::getActiveDictionary()
 {
-    if( m_pRB_To_Traditional->IsChecked() )
-        return *m_pCT_DictionaryToTraditional;
-    return *m_pCT_DictionaryToSimplified;
+    if( m_xRB_To_Traditional->get_active() )
+        return *m_xCT_DictionaryToTraditional;
+    return *m_xCT_DictionaryToSimplified;
 }
 
 const DictionaryList& ChineseDictionaryDialog::getReverseDictionary() const
 {
-    if( m_pRB_To_Traditional->IsChecked() )
-        return *m_pCT_DictionaryToSimplified;
-    return *m_pCT_DictionaryToTraditional;
+    if( m_xRB_To_Traditional->get_active() )
+        return *m_xCT_DictionaryToSimplified;
+    return *m_xCT_DictionaryToTraditional;
 }
 
 DictionaryList& ChineseDictionaryDialog::getReverseDictionary()
 {
-    if( m_pRB_To_Traditional->IsChecked() )
-        return *m_pCT_DictionaryToSimplified;
-    return *m_pCT_DictionaryToTraditional;
+    if( m_xRB_To_Traditional->get_active() )
+        return *m_xCT_DictionaryToSimplified;
+    return *m_xCT_DictionaryToTraditional;
 }
 
 void ChineseDictionaryDialog::updateButtons()
 {
-    bool bAdd = isEditFieldsHaveContent() && !getActiveDictionary().hasTerm( m_pED_Term->GetText() );
-    m_pPB_Add->Enable( bAdd );
+    bool bAdd = isEditFieldsHaveContent() && !getActiveDictionary().hasTerm(m_xED_Term->get_text());
+    m_xPB_Add->set_sensitive( bAdd );
 
-    m_pPB_Delete->Enable( !bAdd && getActiveDictionary().GetSelectedRowCount()>0 );
-
-//    DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
+    m_xPB_Delete->set_sensitive(!bAdd && getActiveDictionary().get_selected_index() != -1);
 
     bool bModify = false;
     {
         DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
-        bModify = !bAdd && getActiveDictionary().GetSelectedRowCount()==1
-                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm == m_pED_Term->GetText();
+        bModify = !bAdd && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm == m_xED_Term->get_text();
         if( bModify && isEditFieldsContentEqualsSelectedListContent() )
             bModify = false;
     }
-    m_pPB_Modify->Enable( bModify );
+    m_xPB_Modify->set_sensitive( bModify );
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl, weld::Button&, void)
 {
     if( !isEditFieldsHaveContent() )
         return;
 
-    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectedEntryPos()+1;
+    sal_Int16 nConversionPropertyType = m_xLB_Property->get_active() + 1;
 
-    getActiveDictionary().addEntry( m_pED_Term->GetText(), m_pED_Mapping->GetText(), nConversionPropertyType );
+    getActiveDictionary().addEntry( m_xED_Term->get_text(), m_xED_Mapping->get_text(), nConversionPropertyType );
 
-    if( m_pCB_Reverse->IsChecked() )
+    if( m_xCB_Reverse->get_active() )
     {
-        getReverseDictionary().deleteEntries( m_pED_Mapping->GetText() );
-        getReverseDictionary().addEntry( m_pED_Mapping->GetText(), m_pED_Term->GetText(), nConversionPropertyType );
+        getReverseDictionary().deleteEntries( m_xED_Mapping->get_text() );
+        getReverseDictionary().addEntry( m_xED_Mapping->get_text(), m_xED_Term->get_text(), nConversionPropertyType );
     }
 
     updateButtons();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, weld::Button&, void)
 {
-    OUString aTerm( m_pED_Term->GetText() );
-    OUString aMapping( m_pED_Mapping->GetText() );
-    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectedEntryPos()+1;
+    OUString aTerm( m_xED_Term->get_text() );
+    OUString aMapping( m_xED_Mapping->get_text() );
+    sal_Int16 nConversionPropertyType = m_xLB_Property->get_active() + 1;
 
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();
@@ -735,7 +587,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, Button*, void)
     {
         if( pE->m_aMapping != aMapping || pE->m_nConversionPropertyType != nConversionPropertyType )
         {
-            if( m_pCB_Reverse->IsChecked() )
+            if( m_xCB_Reverse->get_active() )
             {
                 rReverse.deleteEntries( pE->m_aMapping );
                 sal_uIntPtr nPos = rReverse.deleteEntries( aMapping );
@@ -750,86 +602,84 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, Button*, void)
     updateButtons();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl, weld::Button&, void)
 {
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();
 
-    if( rActive.GetSelectedRowCount()>0)
+    int nEntry = rActive.get_selected_index();
+    if (nEntry != -1)
     {
-        DictionaryEntry* pEntry;
-
-        OUString aMapping;
-        for( sal_Int32 nN=rActive.GetRowCount(); nN--; )
+        DictionaryEntry* pEntry = rActive.getEntryOnPos(nEntry);
+        if (pEntry)
         {
-            if( rActive.IsRowSelected( nN ) )
-            {
-                pEntry = rActive.getEntryOnPos( nN );
-                if(pEntry)
-                {
-                    aMapping = pEntry->m_aMapping;
-                    rActive.deleteEntryOnPos( nN );
-                    if( m_pCB_Reverse->IsChecked() )
-                        rReverse.deleteEntries( aMapping  );
-                }
-                break;
-            }
+            OUString aMapping = pEntry->m_aMapping;
+            rActive.deleteEntryOnPos(nEntry);
+            if (m_xCB_Reverse->get_active())
+                rReverse.deleteEntries(aMapping);
         }
     }
 
     updateButtons();
 }
 
-short ChineseDictionaryDialog::Execute()
+short ChineseDictionaryDialog::run()
 {
     sal_Int32 nTextConversionOptions = m_nTextConversionOptions;
     if(m_nTextConversionOptions & i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
         nTextConversionOptions = nTextConversionOptions^i18n::TextConversionOption::USE_CHARACTER_VARIANTS ;
 
-    m_pCT_DictionaryToSimplified->refillFromDictionary( nTextConversionOptions );
-    m_pCT_DictionaryToTraditional->refillFromDictionary( m_nTextConversionOptions );
+    m_xCT_DictionaryToSimplified->refillFromDictionary( nTextConversionOptions );
+    m_xCT_DictionaryToTraditional->refillFromDictionary( m_nTextConversionOptions );
 
-    short nRet = ModalDialog::Execute();
+    short nRet = GenericDialogController::run();
 
     if( nRet == RET_OK )
     {
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
-        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), uno::Any(m_pCB_Reverse->IsChecked()) );
+        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), uno::Any(m_xCB_Reverse->get_active()) );
 
-        m_pCT_DictionaryToSimplified->save();
-        m_pCT_DictionaryToTraditional->save();
+        m_xCT_DictionaryToSimplified->save();
+        m_xCT_DictionaryToTraditional->save();
     }
 
-    m_pCT_DictionaryToSimplified->deleteAll();
-    m_pCT_DictionaryToTraditional->deleteAll();
+    m_xCT_DictionaryToSimplified->deleteAll();
+    m_xCT_DictionaryToTraditional->deleteAll();
 
     return nRet;
 }
 
-IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar, void)
+void ChineseDictionaryDialog::HeaderBarClick(DictionaryList& rList, int nColumn)
 {
-    sal_uInt16 nId = pHeaderBar->GetCurItemId();
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nId);
-    if( nBits & HeaderBarItemBits::CLICKABLE )
-    {
-        //set new arrow positions in headerbar
-        pHeaderBar->SetItemBits( getActiveDictionary().getSortColumn()+1, HEADER_BAR_BITS );
-        if( nBits & HeaderBarItemBits::UPARROW )
-            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HeaderBarItemBits::DOWNARROW );
-        else
-            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HeaderBarItemBits::UPARROW );
+    bool bSortAtoZ = rList.get_sort_order();
 
-        //sort lists
-        nBits = pHeaderBar->GetItemBits(nId);
-        bool bSortAtoZ = bool(nBits & HeaderBarItemBits::UPARROW);
-        getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
-        getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
+    //set new arrow positions in headerbar
+    if (nColumn == rList.get_sort_column())
+    {
+        bSortAtoZ = !bSortAtoZ;
+        rList.set_sort_order(bSortAtoZ);
     }
+    else
+    {
+        rList.set_sort_indicator(TRISTATE_INDET, rList.get_sort_column());
+        rList.set_sort_column(nColumn);
+    }
+
+    //sort lists
+    rList.set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
 }
 
+IMPL_LINK(ChineseDictionaryDialog, ToSimplifiedHeaderBarClick, int, nColumn, void)
+{
+    HeaderBarClick(*m_xCT_DictionaryToSimplified, nColumn);
+}
+
+IMPL_LINK(ChineseDictionaryDialog, ToTraditionalHeaderBarClick, int, nColumn, void)
+{
+    HeaderBarClick(*m_xCT_DictionaryToTraditional, nColumn);
+}
 
 } //end namespace
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5155,8 +5155,11 @@ private:
     std::vector<gulong> m_aColumnSignalIds;
     // map from toggle column to toggle visibility column
     std::map<int, int> m_aToggleVisMap;
+    std::vector<GtkSortType> m_aSavedSortTypes;
+    std::vector<int> m_aSavedSortColumns;
+    std::vector<int> m_aViewColToModelCol;
+    std::vector<int> m_aModelColToViewCol;
     gint m_nTextCol;
-    gint m_nTextColHeader;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
@@ -5164,7 +5167,6 @@ private:
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
     gulong m_nVAdjustmentChangedSignalId;
-    GtkSortType m_eSortType;
 
     DECL_LINK(async_signal_changed, void*, void);
 
@@ -5379,13 +5381,22 @@ private:
         pThis->signal_visible_range_changed();
     }
 
+    int get_model_col(int viewcol) const
+    {
+        return m_aViewColToModelCol[viewcol];
+    }
+
+    int get_view_col(int modelcol) const
+    {
+        return m_aModelColToViewCol[modelcol];
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_nTextCol(-1)
-        , m_nTextColHeader(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
@@ -5393,10 +5404,9 @@ public:
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
         , m_nVAdjustmentChangedSignalId(0)
-        , m_eSortType(GTK_SORT_ASCENDING)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
-        int nIndex(0), nHeader(0);
+        int nIndex(0);
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
@@ -5408,7 +5418,6 @@ public:
                 if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     m_nTextCol = nIndex;
-                    m_nTextColHeader = nHeader;
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
@@ -5424,10 +5433,11 @@ public:
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
                 }
+                m_aModelColToViewCol.push_back(m_aViewColToModelCol.size());
                 ++nIndex;
             }
             g_list_free(pRenderers);
-            ++nHeader;
+            m_aViewColToModelCol.push_back(nIndex - 1);
         }
         m_nIdCol = nIndex++;
         for (auto& a : m_aToggleVisMap)
@@ -5472,7 +5482,8 @@ public:
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, const OUString* pExpanderName, bool bChildrenOnDemand) override
+                        VirtualDevice* pImageSurface, const OUString* pExpanderName,
+                        bool bChildrenOnDemand, weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;
@@ -5483,6 +5494,11 @@ public:
             GtkTreeIter subiter;
             OUString sDummy("<dummy>");
             insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+        }
+        if (pRet)
+        {
+            GtkInstanceTreeIter* pGtkRetIter = static_cast<GtkInstanceTreeIter*>(pRet);
+            pGtkRetIter->iter = iter;
         }
         enable_notify_events();
     }
@@ -5560,18 +5576,66 @@ public:
 
     virtual void set_sort_order(bool bAscending) override
     {
-        m_eSortType = bAscending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
+        GtkSortType eSortType = bAscending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
+
+        gint sort_column_id(0);
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-        gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, m_eSortType);
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextColHeader));
-        assert(pColumn && "wrong count");
-        if (gtk_tree_view_column_get_sort_indicator(pColumn))
-            gtk_tree_view_column_set_sort_order(pColumn, m_eSortType);
+        gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr);
+        gtk_tree_sortable_set_sort_column_id(pSortable, sort_column_id, eSortType);
     }
 
     virtual bool get_sort_order() const override
     {
-        return m_eSortType == GTK_SORT_ASCENDING;
+        GtkSortType eSortType;
+
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
+        return eSortType == GTK_SORT_ASCENDING;
+    }
+
+    virtual void set_sort_indicator(TriState eState, int col) override
+    {
+        if (col == -1)
+            col = get_view_col(m_nTextCol);
+
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
+        assert(pColumn && "wrong count");
+        if (eState == TRISTATE_INDET)
+            gtk_tree_view_column_set_sort_indicator(pColumn, false);
+        else
+        {
+            gtk_tree_view_column_set_sort_indicator(pColumn, true);
+            GtkSortType eSortType = eState == TRISTATE_TRUE ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
+            gtk_tree_view_column_set_sort_order(pColumn, eSortType);
+        }
+    }
+
+    virtual TriState get_sort_indicator(int col) const override
+    {
+        if (col == -1)
+            col = get_view_col(m_nTextCol);
+
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
+        if (!gtk_tree_view_column_get_sort_indicator(pColumn))
+            return TRISTATE_INDET;
+        return gtk_tree_view_column_get_sort_order(pColumn) == GTK_SORT_ASCENDING ? TRISTATE_TRUE : TRISTATE_FALSE;
+    }
+
+    virtual int get_sort_column() const override
+    {
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gint sort_column_id(0);
+        if (!gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr))
+            return -1;
+        return get_view_col(sort_column_id);
+    }
+
+    virtual void set_sort_column(int nColumn) override
+    {
+        GtkSortType eSortType;
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
+        gtk_tree_sortable_set_sort_column_id(pSortable, get_model_col(nColumn), eSortType);
     }
 
     virtual int n_children() const override
@@ -5707,23 +5771,26 @@ public:
     {
         if (col == -1)
             return get(pos, m_nTextCol);
-        return get(pos, col);
+        return get(pos, get_model_col(col));
     }
 
     virtual void set_text(int pos, const OUString& rText, int col) override
     {
         if (col == -1)
             col = m_nTextCol;
+        else
+            col = get_model_col(col);
         return set(pos, col, rText);
     }
 
     virtual bool get_toggle(int pos, int col) const override
     {
-        return get_bool(pos, col);
+        return get_bool(pos, get_model_col(col));
     }
 
     virtual void set_toggle(int pos, bool bOn, int col) override
     {
+        col = get_model_col(col);
         // checkbuttons are invisible until toggled on or off
         set(pos, m_aToggleVisMap[col], true);
         return set(pos, col, bOn);
@@ -5959,6 +6026,8 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         if (col == -1)
             col = m_nTextCol;
+        else
+            col = get_model_col(col);
         return get(rGtkIter.iter, col);
     }
 
@@ -5967,18 +6036,21 @@ public:
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         if (col == -1)
             col = m_nTextCol;
+        else
+            col = get_model_col(col);
         set(rGtkIter.iter, col, rText);
     }
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        gchar* pStr;
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nIdCol, &pStr, -1);
-        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-        g_free(pStr);
-        return sRet;
+        return get(rGtkIter.iter, m_nIdCol);
+    }
+
+    virtual void set_id(weld::TreeIter& rIter, const OUString& rId) override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        set(rGtkIter.iter, m_nIdCol, rId);
     }
 
     virtual void set_expander_image(const weld::TreeIter& rIter, const OUString& rExpanderName) override
@@ -6000,8 +6072,14 @@ public:
         gtk_tree_view_set_model(m_pTreeView, nullptr);
         if (m_xSorter)
         {
+            int nSortColumn;
+            GtkSortType eSortType;
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, m_eSortType);
+            gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
+            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
+
+            m_aSavedSortColumns.push_back(nSortColumn);
+            m_aSavedSortTypes.push_back(eSortType);
         }
         enable_notify_events();
     }
@@ -6012,7 +6090,9 @@ public:
         if (m_xSorter)
         {
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-            gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, m_eSortType);
+            gtk_tree_sortable_set_sort_column_id(pSortable, m_aSavedSortColumns.back(), m_aSavedSortTypes.back());
+            m_aSavedSortTypes.pop_back();
+            m_aSavedSortColumns.pop_back();
         }
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore));
         GtkInstanceContainer::thaw();
@@ -6119,7 +6199,7 @@ public:
 
     int starts_with(const OUString& rStr, int col, int nStartRow)
     {
-        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, col, nStartRow);
+        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, get_model_col(col), nStartRow);
     }
 
     virtual void disable_notify_events() override
