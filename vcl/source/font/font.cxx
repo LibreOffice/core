@@ -611,7 +611,8 @@ namespace
                     aEnt.string_len = (pClose-pOpen)-1;
                     aEnt.weight = WEIGHT_NORMAL;
                     WeightSearchEntry const * pFound = std::lower_bound( std::begin(weight_table), std::end(weight_table), aEnt );
-                    if( pFound != std::end(weight_table) && !(*pFound < aEnt))
+                    if( pFound != std::end(weight_table) &&
+                        rtl_str_compareIgnoreAsciiCase_WithLength( pFound->string, pFound->string_len, aEnt.string, aEnt.string_len) == 0 )
                         o_rResult.SetWeight( pFound->weight );
                 }
             }

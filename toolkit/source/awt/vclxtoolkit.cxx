@@ -791,7 +791,8 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
 
     auto it = std::lower_bound( std::begin(aComponentInfos), std::end(aComponentInfos), sSearch,
                                 ComponentInfoFindCompare );
-    if (it != std::end(aComponentInfos)  && !ComponentInfoFindCompare(*it, sSearch) )
+    if (it != std::end(aComponentInfos) &&
+        rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(sSearch.pData->buffer, sSearch.pData->length, it->sName.data, it->sName.size) == 0)
         return it->nWinType;
     return WindowType::NONE;
 }
