@@ -183,8 +183,7 @@ void ScSolverOptionsDialog::FillListBox()
         uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();
 
-        m_xLbSettings->insert(nullptr, -1, nullptr, nullptr,
-                              nullptr, nullptr, nullptr, false);
+        m_xLbSettings->append();
 
         if ( eClass == uno::TypeClass_BOOLEAN )
         {

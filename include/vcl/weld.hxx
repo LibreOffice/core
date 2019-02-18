@@ -489,40 +489,47 @@ protected:
 public:
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const OUString* pExpanderName, bool bChildrenOnDemand)
+                        const OUString* pExpanderName, bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
+
+    void insert(int nRow, TreeIter* pRet = nullptr)
+    {
+        insert(nullptr, nRow, nullptr, nullptr, nullptr, nullptr, nullptr, false, pRet);
+    }
+
+    void append(TreeIter* pRet = nullptr) { insert(-1, pRet); }
 
     virtual void set_expander_image(const weld::TreeIter& rIter, const OUString& rExpanderName) = 0;
 
     void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
                 VirtualDevice* pImageSurface)
     {
-        insert(nullptr, pos, &rStr, pId, pIconName, pImageSurface, nullptr, false);
+        insert(nullptr, pos, &rStr, pId, pIconName, pImageSurface, nullptr, false, nullptr);
     }
     void insert_text(int pos, const OUString& rStr)
     {
-        insert(nullptr, pos, &rStr, nullptr, nullptr, nullptr, nullptr, false);
+        insert(nullptr, pos, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append_text(const OUString& rStr)
     {
-        insert(nullptr, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
     }
     void append(weld::TreeIter* pParent, const OUString& rId, const OUString& rStr,
                 const OUString& rImage)
     {
-        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false);
+        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false, nullptr);
     }
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
@@ -606,6 +613,7 @@ public:
     virtual void collapse_row(TreeIter& rIter) = 0;
     virtual void set_text(TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
+    virtual void set_id(TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
@@ -626,9 +634,16 @@ public:
     void unselect_all() { select(-1); }
 
     virtual int n_children() const = 0;
+
     virtual void make_sorted() = 0;
     virtual bool get_sort_order() const = 0;
     virtual void set_sort_order(bool bAscending) = 0;
+    // TRUE ascending, FALSE, descending, INDET, neither (off)
+    virtual void set_sort_indicator(TriState eState, int nColumn = -1) = 0;
+    virtual TriState get_sort_indicator(int nColumn = -1) const = 0;
+    virtual int get_sort_column() const = 0;
+    virtual void set_sort_column(int nColumn) = 0;
+
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
 
