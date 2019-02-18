@@ -134,9 +134,6 @@ class OFormSubmitResetThread: public OComponentEventThread
 {
 protected:
 
-    // duplicate an event with respect to its type
-    virtual EventObject *cloneEvent( const EventObject *pEvt ) const override;
-
     // process an event. while processing the mutex isn't locked, and pCompImpl
     // is made sure to remain valid
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
@@ -148,13 +145,6 @@ public:
 
     explicit OFormSubmitResetThread(ODatabaseForm* pControl) : OComponentEventThread(pControl) { }
 };
-
-
-EventObject* OFormSubmitResetThread::cloneEvent(
-        const EventObject *pEvt ) const
-{
-    return new css::awt::MouseEvent( *static_cast<const css::awt::MouseEvent *>(pEvt) );
-}
 
 
 void OFormSubmitResetThread::processEvent(
@@ -1908,8 +1898,7 @@ void SAL_CALL ODatabaseForm::reset()
             m_pThread = new OFormSubmitResetThread(this);
             m_pThread->create();
         }
-        EventObject aEvt;
-        m_pThread->addEvent(&aEvt);
+        m_pThread->addEvent(std::make_unique<EventObject>());
     }
     else
     {
@@ -2078,7 +2067,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
             m_pThread = new OFormSubmitResetThread(this);
             m_pThread->create();
         }
-        m_pThread->addEvent(&MouseEvt, Control, true);
+        m_pThread->addEvent(std::make_unique<css::awt::MouseEvent>(MouseEvt), Control, true);
     }
     else
     {

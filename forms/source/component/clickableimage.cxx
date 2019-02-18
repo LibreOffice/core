@@ -842,13 +842,6 @@ namespace frm
 
     // OImageProducerThread_Impl
 
-
-    EventObject* OImageProducerThread_Impl::cloneEvent( const EventObject* _pEvt ) const
-    {
-        return new EventObject( *_pEvt );
-    }
-
-
     void OImageProducerThread_Impl::processEvent( ::cppu::OComponentHelper *pCompImpl,
                                                 const EventObject* pEvt,
                                                 const Reference<XControl>&,

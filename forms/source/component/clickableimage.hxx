@@ -255,9 +255,6 @@ namespace frm
     {
     protected:
 
-        // This method was called to duplicate the Event by taking its type into account
-        virtual css::lang::EventObject* cloneEvent( const css::lang::EventObject* _pEvt ) const override;
-
         // Process an Event.
         // The mutex is not locked, pCompImpl stays valid in any case
         virtual void processEvent( ::cppu::OComponentHelper *pCompImpl,
@@ -270,7 +267,7 @@ namespace frm
             OComponentEventThread( pControl )
         {}
 
-        void addEvent() { css::lang::EventObject aEvt; OComponentEventThread::addEvent( &aEvt ); }
+        void addEvent() { OComponentEventThread::addEvent( std::make_unique<css::lang::EventObject>() ); }
 
     protected:
         using OComponentEventThread::addEvent;
