@@ -967,6 +967,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xIndexAccess->getCount());
 
     uno::Sequence<beans::PropertyValue> aSeq;
+    sal_Int32 nCheck = 0;
     if (xIndexAccess->getByIndex(0) >>= aSeq)
     {
         sal_Int32 nCount(aSeq.getLength());
@@ -977,11 +978,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
             {
                 OUString sTabName;
                 if (aSeq[i].Value >>= sTabName)
+                {
                     // Sheet2, not Sheet1
                     CPPUNIT_ASSERT_EQUAL(OUString("Munka2"), sTabName);
+                    nCheck++;
+                }
+            }
+            // tdf#122624 column and row viewarea positions
+            else if (sName == "PositionLeft")
+            {
+                sal_Int32 nPosLeft;
+                aSeq[i].Value >>= nPosLeft;
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nPosLeft);
+                nCheck++;
+            }
+            else if (sName == "PositionTop")
+            {
+                sal_Int32 nPosTop;
+                aSeq[i].Value >>= nPosTop;
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nPosTop);
+                nCheck++;
             }
         }
     }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nCheck);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
