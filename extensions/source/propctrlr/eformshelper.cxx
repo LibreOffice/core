@@ -57,12 +57,10 @@ namespace pcr
 
         OUString composeModelElementUIName( const OUString& _rModelName, const OUString& _rElementName )
         {
-            OUStringBuffer aBuffer;
-            aBuffer.append( "[" );
-            aBuffer.append( _rModelName );
-            aBuffer.append( "] " );
-            aBuffer.append( _rElementName );
-            return aBuffer.makeStringAndClear();
+            OUString a = "["
+                       + _rModelName + "] "
+                       + _rElementName;
+            return a;
         }
     }
 
