@@ -27,8 +27,8 @@ DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Window* pParent,
     , m_xListUpButton(m_xBuilder->weld_button("up_button"))
     , m_xListDownButton(m_xBuilder->weld_button("down_button"))
 {
-    getDialog()->connect_key_press(LINK(this, DropDownFormFieldDialog, KeyPressedHdl));
-    getDialog()->connect_key_release(LINK(this, DropDownFormFieldDialog, KeyReleasedHdl));
+    m_xListItemEntry->connect_key_press(LINK(this, DropDownFormFieldDialog, KeyPressedHdl));
+    m_xListItemEntry->connect_key_release(LINK(this, DropDownFormFieldDialog, KeyReleasedHdl));
 
     m_xListItemsTreeView->set_size_request(m_xListItemEntry->get_preferred_size().Width(),
                                            m_xListItemEntry->get_preferred_size().Height() * 5);
@@ -49,20 +49,18 @@ IMPL_LINK_NOARG(DropDownFormFieldDialog, ListChangedHdl, weld::TreeView&, void) 
 
 IMPL_LINK(DropDownFormFieldDialog, KeyPressedHdl, const KeyEvent&, rEvent, bool)
 {
-    if (m_xListItemEntry->has_focus() && rEvent.GetKeyCode().GetCode() == KEY_RETURN)
+    if (rEvent.GetKeyCode().GetCode() == KEY_RETURN && !m_xListItemEntry->get_text().isEmpty())
     {
         AppendItemToList();
+        return true;
     }
-    return false; // Call the dialog's input handler too
+    return false;
 }
 
 IMPL_LINK_NOARG(DropDownFormFieldDialog, KeyReleasedHdl, const KeyEvent&, bool)
 {
-    if (m_xListItemEntry->has_focus())
-    {
-        UpdateButtons();
-    }
-    return false; // Call the dialog's input handler too
+    UpdateButtons();
+    return false;
 }
 
 IMPL_LINK(DropDownFormFieldDialog, ButtonPushedHdl, weld::Button&, rButton, void)
