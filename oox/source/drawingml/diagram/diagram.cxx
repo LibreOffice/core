@@ -271,8 +271,7 @@ void Diagram::build(  )
         if( connection.mnType == XML_presOf )
         {
             DiagramData::StringMap::value_type::second_type& rVec=getData()->getPresOfNameMap()[connection.msDestId];
-            rVec.emplace_back(
-                    connection.msSourceId,sal_Int32(0));
+            rVec[connection.mnDestOrder] = { connection.msSourceId, sal_Int32(0) };
         }
     }
 
@@ -282,9 +281,8 @@ void Diagram::build(  )
     {
         for (auto & elem : elemPresOf.second)
         {
-            const sal_Int32 nDepth=calcDepth(elem.first,
-                                             getData()->getConnections());
-            elem.second = nDepth != 0 ? nDepth : -1;
+            const sal_Int32 nDepth = calcDepth(elem.second.msSourceId, getData()->getConnections());
+            elem.second.mnDepth = nDepth != 0 ? nDepth : -1;
             if (nDepth > getData()->getMaxDepth())
                 getData()->setMaxDepth(nDepth);
         }

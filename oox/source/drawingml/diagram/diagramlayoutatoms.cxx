@@ -1168,11 +1168,12 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         pPresNode->msModelId);
     if( aNodeName != mrDgm.getData()->getPresOfNameMap().end() )
     {
-        for( const auto& rItem : aNodeName->second )
+        for (const auto& rPair : aNodeName->second)
         {
+            const DiagramData::SourceIdAndDepth& rItem = rPair.second;
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             // pPresNode is the presentation node of the aDataNode2 data node.
-            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.first);
+            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.msSourceId);
             if (aDataNode2 == rMap.end())
             {
                 //busted, skip it
@@ -1181,7 +1182,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
 
             rShape->setDataNodeType(aDataNode2->second->mnType);
 
-            if( rItem.second == 0 )
+            if (rItem.mnDepth == 0)
             {
                 // grab shape attr from topmost element(s)
                 rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
@@ -1223,8 +1224,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 for (const auto& pSourceParagraph : rSourceParagraphs)
                 {
                     TextParagraph& rPara = pTextBody->addParagraph();
-                    if (rItem.second != -1)
-                        rPara.getProperties().setLevel(rItem.second);
+                    if (rItem.mnDepth != -1)
+                        rPara.getProperties().setLevel(rItem.mnDepth);
 
                     for (const auto& pRun : pSourceParagraph->getRuns())
                         rPara.addRun(pRun);
