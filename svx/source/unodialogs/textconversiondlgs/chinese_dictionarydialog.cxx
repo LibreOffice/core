@@ -55,6 +55,7 @@ DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
     , m_aToBeDeleted()
     , m_nSortColumnIndex(0)
 {
+    m_xControl->make_sorted();
 }
 
 DictionaryList::~DictionaryList()
