@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5fe92518",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-02-19T07:03:03Z",
+      "side": 1,
+      "message": "Strictly speaking, this is not equivalent, and will give different results on strings like \"text/plain;charset\u003dutf8+...\" - if they are possible, of course.",
+      "range": {
+        "startLine": 836,
+        "startChar": 19,
+        "endLine": 836,
+        "endChar": 67
+      },
+      "revId": "0ae876595e9d9af44fc4d4bc948f8a42d8a27e8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
