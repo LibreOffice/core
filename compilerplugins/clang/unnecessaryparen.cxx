@@ -447,8 +447,9 @@ bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
         return true;
 
     // these two are for "parentheses were disambiguated as a function declaration [-Werror,-Wvexing-parse]"
-    if (isa<CXXBindTemporaryExpr>(sub)
-        || isa<CXXFunctionalCastExpr>(sub))
+    auto const sub2 = sub->IgnoreImplicit();
+    if (isa<CXXTemporaryObjectExpr>(sub2)
+        || isa<CXXFunctionalCastExpr>(sub2))
         return true;
 
     report(

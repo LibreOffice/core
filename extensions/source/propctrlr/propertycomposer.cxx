@@ -160,7 +160,7 @@ namespace pcr
 
         // loop through the secondary sets
         PropertyState eSecondaryState = PropertyState_DIRECT_VALUE;
-        for ( HandlerArray::const_iterator loop = ( m_aSlaveHandlers.begin() + 1 );
+        for ( HandlerArray::const_iterator loop = m_aSlaveHandlers.begin() + 1;
               loop != m_aSlaveHandlers.end();
               ++loop
             )
@@ -210,7 +210,7 @@ namespace pcr
             putIntoBag( (*m_aSlaveHandlers.begin())->getSupportedProperties(), m_aSupportedProperties );
 
             // now intersect with the properties of *all* other handlers
-            for ( HandlerArray::const_iterator loop = ( m_aSlaveHandlers.begin() + 1 );
+            for ( HandlerArray::const_iterator loop = m_aSlaveHandlers.begin() + 1;
                 loop != m_aSlaveHandlers.end();
                 ++loop
                 )
