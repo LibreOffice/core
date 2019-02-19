@@ -87,8 +87,10 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::Toolbar:
         case ControlType::Menubar:
         case ControlType::MenuPopup:
+            return false;
         case ControlType::Progress:
         case ControlType::IntroProgress:
+            return true;
         case ControlType::Tooltip:
         case ControlType::WindowBackground:
         case ControlType::Frame:
@@ -478,7 +480,24 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
             break;
         case ControlType::Progress:
         case ControlType::IntroProgress:
-            break;
+        {
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
+            if (pPart)
+            {
+                auto aStates = pPart->getStates(eState, rValue);
+                if (!aStates.empty())
+                {
+                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                    {
+                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
+                                          nHeight);
+                        bOK = true;
+                    }
+                }
+            }
+        }
+        break;
         case ControlType::Tooltip:
             break;
         case ControlType::WindowBackground:
