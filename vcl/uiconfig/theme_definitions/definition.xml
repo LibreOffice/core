@@ -201,4 +201,17 @@
         </part>
     </slider>
 
+    <fixedline>
+        <part value="SeparatorHorz">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+            </state>
+        </part>
+        <part value="SeparatorVert">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+            </state>
+        </part>
+    </fixedline>
+
 </widgets>
