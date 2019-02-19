@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_c2c2de85",
+        "filename": "svx/source/svdraw/svdcrtv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-19T17:00:28Z",
+      "side": 1,
+      "message": "perhaps \"pObjCreated\" would fit better",
+      "revId": "b443c0c1fc5c61881025230f8a0bbdf6e119442c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
