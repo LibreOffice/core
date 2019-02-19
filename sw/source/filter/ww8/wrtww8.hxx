@@ -847,7 +847,6 @@ protected:
 
     /// Output SwSectionNode
     void OutputSectionNode( const SwSectionNode& );
-    static void UpdateTocSectionNodeProperties(const SwSectionNode& rSectionNode);
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) = 0;
 
