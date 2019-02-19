@@ -38,6 +38,7 @@ private:
     sal_uInt16 mnFillTransparence;  // Default: 0
     OUString msFillColor;           // Default: ""
     sal_uInt16 mnLineStyle;         // Default: SAL_MAX_UINT16
+    OUString msShapeName;           // Default: ""
 
 public:
 
