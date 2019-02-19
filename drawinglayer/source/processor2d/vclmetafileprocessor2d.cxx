@@ -1006,15 +1006,10 @@ namespace drawinglayer
                 // for PDF export
                 if(mpPDFExtOutDevData->GetIsExportTaggedPDF() && nullptr != getObjectInfoPrimitive2D())
                 {
-                    OUString aAlternateDescription(getObjectInfoPrimitive2D()->getName());
+                    OUString aAlternateDescription;
 
                     if(!getObjectInfoPrimitive2D()->getTitle().isEmpty())
                     {
-                        if(!aAlternateDescription.isEmpty())
-                        {
-                            aAlternateDescription += " - ";
-                        }
-
                         aAlternateDescription += getObjectInfoPrimitive2D()->getTitle();
                     }
 
