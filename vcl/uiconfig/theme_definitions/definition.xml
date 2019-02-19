@@ -140,6 +140,29 @@
         </part>
     </editbox>
 
+    <spinbox>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+            </state>
+        </part>
+        <part value="ButtonDown">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+                <line stroke="#007AFF" stroke-width="2" x1="0.4" y1="0.5" x2="0.6" y2="0.5"/>
+                <!-- <image source="spinbox-left.svgx" /> -->
+            </state>
+        </part>
+        <part value="ButtonUp">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="5" ry="5" margin="0"/>
+                <line stroke="#007AFF" stroke-width="2" x1="0.4" y1="0.5" x2="0.6" y2="0.5"/>
+                <line stroke="#007AFF" stroke-width="2" x1="0.5" y1="0.4" x2="0.5" y2="0.6"/>
+                <!-- <image source="spinbox-right.svgx" /> -->
+            </state>
+        </part>
+    </spinbox>
+
     <scrollbar>
         <part value="ThumbHorz">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
