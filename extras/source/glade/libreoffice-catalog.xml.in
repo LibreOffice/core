@@ -521,12 +521,6 @@
                         generic-name="DataTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
 
-    <glade-widget-class title="Suggestion Display" name="cuilo-SuggestionDisplay"
-                        generic-name="SuggestionDisplay" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="Ruby RadioButton" name="cuilo-RubyRadioButton"
-                        generic-name="RubyRadioButton" parent="GtkRadioButton"
-                        icon-name="widget-gtk-radiobutton"/>
     <glade-widget-class title="Char Win" name="sfxlo-SvxCharViewControl"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

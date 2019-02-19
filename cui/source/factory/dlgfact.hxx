@@ -170,20 +170,27 @@ public:
 
 class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConversionDialog
 {
-    DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog)
+private:
+    std::unique_ptr<HangulHanjaConversionDialog> m_xDlg;
+public:
+    explicit AbstractHangulHanjaConversionDialog_Impl(std::unique_ptr<HangulHanjaConversionDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short     Execute() override;
     virtual void      EndDialog(sal_Int32 nResult) override;
     virtual void      EnableRubySupport( bool _bVal ) override;
     virtual void      SetByCharacter( bool _bByCharacter ) override ;
     virtual void      SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) override;
     virtual void      SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) override;
     virtual void      SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl ) override;
-    virtual void      SetIgnoreHdl( const Link<Button*,void>& _rHdl ) override;
-    virtual void      SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) override ;
-    virtual void      SetChangeHdl( const Link<Button*,void>& _rHdl ) override ;
-    virtual void      SetChangeAllHdl( const Link<Button*,void>& _rHdl ) override ;
-    virtual void      SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl ) override ;
-    virtual void      SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) override ;
-    virtual void      SetFindHdl( const Link<Button*,void>& _rHdl ) override;
+    virtual void      SetIgnoreHdl( const Link<weld::Button&,void>& _rHdl ) override;
+    virtual void      SetIgnoreAllHdl( const Link<weld::Button&,void>& _rHdl ) override ;
+    virtual void      SetChangeHdl( const Link<weld::Button&,void>& _rHdl ) override ;
+    virtual void      SetChangeAllHdl( const Link<weld::Button&,void>& rHdl ) override ;
+    virtual void      SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& rHdl ) override ;
+    virtual void      SetConversionFormatChangedHdl( const Link<weld::Button&,void>& _rHdl ) override ;
+    virtual void      SetFindHdl( const Link<weld::Button&,void>& _rHdl ) override;
     virtual bool      GetUseBothDirections( ) const override;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                       GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const override;
@@ -730,7 +737,7 @@ public:
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
 
-    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog( vcl::Window* _pParent ) override;
+    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage ) override;
 

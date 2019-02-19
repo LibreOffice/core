@@ -117,7 +117,10 @@ short AbstractSvxDistributeDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
+short AbstractHangulHanjaConversionDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractFmShowColsDialog_Impl::Execute()
 {
@@ -385,76 +388,77 @@ SvxDistributeVertical AbstractSvxDistributeDialog_Impl::GetDistributeVer()const
 
 void AbstractHangulHanjaConversionDialog_Impl::EndDialog(sal_Int32 nResult)
 {
-    pDlg->EndDialog(nResult);
+    m_xDlg->response(nResult);
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::EnableRubySupport( bool _bVal )
 {
-    pDlg->EnableRubySupport(_bVal);
+    m_xDlg->EnableRubySupport(_bVal);
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( bool _bByCharacter )
 {
-    pDlg->SetByCharacter(_bByCharacter);
+    m_xDlg->SetByCharacter(_bByCharacter);
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
 {
-    pDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
+    m_xDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType )
 {
-     pDlg->SetConversionFormat(_eType);
+    m_xDlg->SetConversionFormat(_eType);
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl )
 {
-     pDlg->SetOptionsChangedHdl(_rHdl );
+    m_xDlg->SetOptionsChangedHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link<Button*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link<weld::Button&,void>& _rHdl )
 {
-     pDlg->SetIgnoreHdl(_rHdl );
+    m_xDlg->SetIgnoreHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl( const Link<Button*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl(const Link<weld::Button&,void>& rHdl)
 {
-     pDlg->SetIgnoreAllHdl(_rHdl );
+    m_xDlg->SetIgnoreAllHdl(rHdl);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl( const Link<Button*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl(const Link<weld::Button&,void>& rHdl)
 {
-    pDlg->SetChangeHdl(_rHdl );
+    m_xDlg->SetChangeHdl(rHdl);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<Button*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<weld::Button&,void>& rHdl )
 {
-    pDlg->SetChangeAllHdl(_rHdl );
+    m_xDlg->SetChangeAllHdl(rHdl);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl )
 {
-     pDlg->SetClickByCharacterHdl(_rHdl );
+    m_xDlg->SetClickByCharacterHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl(const Link<weld::Button&,void>& rHdl)
 {
-    pDlg->SetConversionFormatChangedHdl(_rHdl );
+    m_xDlg->SetConversionFormatChangedHdl(rHdl);
 }
-void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link<Button*,void>& _rHdl )
+
+void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link<weld::Button&,void>& rHdl )
 {
-     pDlg->SetFindHdl(_rHdl );
+    m_xDlg->SetFindHdl(rHdl);
 }
 
 bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
 {
-    return pDlg->GetUseBothDirections();
+    return m_xDlg->GetUseBothDirections();
 }
 
 editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
 {
-    return pDlg->GetDirection( _eDefaultDirection );
+    return m_xDlg->GetDirection( _eDefaultDirection );
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
@@ -463,25 +467,27 @@ void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
                     bool _bOriginatesFromDocument
                 )
 {
-     pDlg->SetCurrentString(_rNewString,_rSuggestions,_bOriginatesFromDocument);
+     m_xDlg->SetCurrentString(_rNewString,_rSuggestions,_bOriginatesFromDocument);
 }
-OUString   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
+
+OUString AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
 {
-    return pDlg->GetCurrentString();
+    return m_xDlg->GetCurrentString();
 }
-editeng::HangulHanjaConversion::ConversionFormat     AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
+
+editeng::HangulHanjaConversion::ConversionFormat AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
 {
-    return pDlg->GetConversionFormat();
+    return m_xDlg->GetConversionFormat();
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::FocusSuggestion( )
 {
-    pDlg->FocusSuggestion();
+    m_xDlg->FocusSuggestion();
 }
 
-OUString  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
+OUString AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 {
-    return pDlg->GetCurrentSuggestion();
+    return m_xDlg->GetCurrentSuggestion();
 }
 
 OUString AbstractThesaurusDialog_Impl::GetWord()
@@ -1036,10 +1042,9 @@ VclPtr<AbstractSvxDistributeDialog> AbstractDialogFactory_Impl::CreateSvxDistrib
     return VclPtr<AbstractSvxDistributeDialog_Impl>::Create(std::make_unique<SvxDistributeDialog>(pParent, rAttr, SvxDistributeHorizontal::NONE, SvxDistributeVertical::NONE));
 }
 
-VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(vcl::Window* pParent)
+VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(weld::Window* pParent)
 {
-    VclPtrInstance<HangulHanjaConversionDialog> pDlg(pParent);
-    return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create(std::make_unique<HangulHanjaConversionDialog>(pParent));
 }
 
 VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialog( vcl::Window* pParent,

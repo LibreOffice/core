@@ -547,6 +547,8 @@ public:
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
     Color           GetItemColor( sal_uInt16 nItemId ) const;
+    void            SetItemData( sal_uInt16 nItemId, void* pData );
+    void*           GetItemData( sal_uInt16 nItemId ) const;
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     bool            IsColor() const
