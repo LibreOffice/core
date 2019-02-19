@@ -82,8 +82,8 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
                 return false;
             return true;
         case ControlType::Slider:
-            return true;
         case ControlType::Fixedline:
+            return true;
         case ControlType::Toolbar:
         case ControlType::Menubar:
         case ControlType::MenuPopup:
@@ -453,6 +453,24 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Fixedline:
+        {
+            std::shared_ptr<WidgetDefinitionPart> pPart
+                = m_aWidgetDefinition.getDefinition(eType, ePart);
+            if (pPart)
+            {
+                auto aStates = pPart->getStates(eState, rValue);
+                if (!aStates.empty())
+                {
+                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                    {
+                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
+                                          nHeight);
+                        bOK = true;
+                    }
+                }
+            }
+        }
+        break;
         case ControlType::Toolbar:
         case ControlType::Menubar:
             break;
