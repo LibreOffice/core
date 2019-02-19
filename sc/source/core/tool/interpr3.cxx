@@ -4796,9 +4796,9 @@ private:
         mpMat->PutDouble(fVal, 1, nIdx);
     }
 
-    SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScale)
+    SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScaleBits)
     {
-        return ( ( nPtIndex * nTfIdxScale ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
+        return ( ( nPtIndex << nTfIdxScaleBits ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
     }
 
     void computeFly(SCSIZE nTopIdx, SCSIZE nBottomIdx, SCSIZE nWIdx1, SCSIZE nWIdx2, SCSIZE nStage)
@@ -4876,14 +4876,104 @@ void ScFFT2::computeTFactors()
     mfWReal.resize(mnPoints);
     mfWImag.resize(mnPoints);
 
-    double nW = -2.0*F_PI/static_cast<double>(mnPoints);
-    if (mbInverse)
-        nW = -nW;
+    double nW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnPoints);
 
-    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    if (mnPoints == 1)
     {
-        mfWReal[nIdx] = cos(nW*static_cast<double>(nIdx));
-        mfWImag[nIdx] = sin(nW*static_cast<double>(nIdx));
+        mfWReal[0] = 1.0;
+        mfWImag[0] = 0.0;
+    }
+    else if (mnPoints == 2)
+    {
+        mfWReal[0] = 1;
+        mfWImag[0] = 0;
+
+        mfWReal[1] = -1;
+        mfWImag[1] = 0;
+    }
+    else if (mnPoints == 4)
+    {
+        mfWReal[0] = 1;
+        mfWImag[0] = 0;
+
+        mfWReal[1] = 0;
+        mfWImag[1] = (mbInverse ? 1.0 : -1.0);
+
+        mfWReal[2] = -1;
+        mfWImag[2] = 0;
+
+        mfWReal[3] = 0;
+        mfWImag[3] = (mbInverse ? -1.0 : 1.0);
+    }
+    else
+    {
+        const SCSIZE nQSize = mnPoints >> 2;
+        // Compute cos of the start quadrant.
+        // This is the first quadrant if mbInverse == true, else it is the fourth quadrant.
+        for (SCSIZE nIdx = 0; nIdx <= nQSize; ++nIdx)
+            mfWReal[nIdx] = cos(nW*static_cast<double>(nIdx));
+
+        if (mbInverse)
+        {
+            const SCSIZE nQ1End = nQSize;
+            // First quadrant
+            for (SCSIZE nIdx = 0; nIdx <= nQ1End; ++nIdx)
+                mfWImag[nIdx] = mfWReal[nQ1End-nIdx];
+
+            // Second quadrant
+            const SCSIZE nQ2End = nQ1End << 1;
+            for (SCSIZE nIdx = nQ1End+1; nIdx <= nQ2End; ++nIdx)
+            {
+                mfWReal[nIdx] = -mfWReal[nQ2End - nIdx];
+                mfWImag[nIdx] =  mfWImag[nQ2End - nIdx];
+            }
+
+            // Third quadrant
+            const SCSIZE nQ3End = nQ2End + nQ1End;
+            for (SCSIZE nIdx = nQ2End+1; nIdx <= nQ3End; ++nIdx)
+            {
+                mfWReal[nIdx] = -mfWReal[nIdx - nQ2End];
+                mfWImag[nIdx] = -mfWImag[nIdx - nQ2End];
+            }
+
+            // Fourth Quadrant
+            for (SCSIZE nIdx = nQ3End+1; nIdx < mnPoints; ++nIdx)
+            {
+                mfWReal[nIdx] =  mfWReal[mnPoints - nIdx];
+                mfWImag[nIdx] = -mfWImag[mnPoints - nIdx];
+            }
+        }
+        else
+        {
+            const SCSIZE nQ4End = nQSize;
+            const SCSIZE nQ3End = nQSize << 1;
+            const SCSIZE nQ2End = nQ3End + nQSize;
+
+            // Fourth quadrant.
+            for (SCSIZE nIdx = 0; nIdx <= nQ4End; ++nIdx)
+                mfWImag[nIdx] = -mfWReal[nQ4End - nIdx];
+
+            // Third quadrant.
+            for (SCSIZE nIdx = nQ4End+1; nIdx <= nQ3End; ++nIdx)
+            {
+                mfWReal[nIdx] = -mfWReal[nQ3End - nIdx];
+                mfWImag[nIdx] =  mfWImag[nQ3End - nIdx];
+            }
+
+            // Second quadrant.
+            for (SCSIZE nIdx = nQ3End+1; nIdx <= nQ2End; ++nIdx)
+            {
+                mfWReal[nIdx] = -mfWReal[nIdx - nQ3End];
+                mfWImag[nIdx] = -mfWImag[nIdx - nQ3End];
+            }
+
+            // First quadrant.
+            for (SCSIZE nIdx = nQ2End+1; nIdx < mnPoints; ++nIdx)
+            {
+                mfWReal[nIdx] =  mfWReal[mnPoints - nIdx];
+                mfWImag[nIdx] = -mfWImag[mnPoints - nIdx];
+            }
+        }
     }
 }
 
@@ -4924,7 +5014,7 @@ void ScFFT2::Compute()
     const SCSIZE nFliesInStage = mnPoints/2;
     for (SCSIZE nStage = 0; nStage < mnStages; ++nStage)
     {
-        const SCSIZE nTFIdxScale = (1 << (mnStages-nStage-1));  // Twiddle factor index's scale factor.
+        const SCSIZE nTFIdxScaleBits = mnStages - nStage - 1;  // Twiddle factor index's scale factor in bits.
         const SCSIZE nFliesInGroup = 1<<nStage;
         const SCSIZE nGroups = nFliesInStage/nFliesInGroup;
         const SCSIZE nFlyWidth = nFliesInGroup;
@@ -4933,8 +5023,8 @@ void ScFFT2::Compute()
             for (SCSIZE nFly = 0; nFly < nFliesInGroup; ++nFly, ++nFlyTopIdx)
             {
                 SCSIZE nFlyBottomIdx = nFlyTopIdx + nFlyWidth;
-                SCSIZE nWIdx1 = getTFactorIndex(nFlyTopIdx, nTFIdxScale);
-                SCSIZE nWIdx2 = getTFactorIndex(nFlyBottomIdx, nTFIdxScale);
+                SCSIZE nWIdx1 = getTFactorIndex(nFlyTopIdx, nTFIdxScaleBits);
+                SCSIZE nWIdx2 = getTFactorIndex(nFlyBottomIdx, nTFIdxScaleBits);
 
                 computeFly(nFlyTopIdx, nFlyBottomIdx, nWIdx1, nWIdx2, nStage);
             }
