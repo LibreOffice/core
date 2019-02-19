@@ -132,12 +132,11 @@ ControlPart xmlStringToControlPart(OString const& sPart)
 
 bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
 {
-    static std::unordered_map<OString, ControlType> aPartMap = {
-        { "pushbutton", ControlType::Pushbutton }, { "radiobutton", ControlType::Radiobutton },
-        { "checkbox", ControlType::Checkbox },     { "combobox", ControlType::Combobox },
-        { "editbox", ControlType::Editbox },       { "scrollbar", ControlType::Scrollbar },
-        { "spinbox", ControlType::Spinbox },
-    };
+    static std::unordered_map<OString, ControlType> aPartMap
+        = { { "pushbutton", ControlType::Pushbutton }, { "radiobutton", ControlType::Radiobutton },
+            { "checkbox", ControlType::Checkbox },     { "combobox", ControlType::Combobox },
+            { "editbox", ControlType::Editbox },       { "scrollbar", ControlType::Scrollbar },
+            { "spinbox", ControlType::Spinbox },       { "slider", ControlType::Slider } };
 
     auto const& rIterator = aPartMap.find(rString);
     if (rIterator != aPartMap.end())

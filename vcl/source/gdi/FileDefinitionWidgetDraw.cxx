@@ -76,7 +76,9 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::TabHeader:
         case ControlType::TabBody:
         case ControlType::Scrollbar:
+            return false;
         case ControlType::Slider:
+            return true;
         case ControlType::Fixedline:
         case ControlType::Toolbar:
         case ControlType::Menubar:
@@ -375,7 +377,51 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::TabPane:
         case ControlType::TabBody:
         case ControlType::Scrollbar:
+            break;
         case ControlType::Slider:
+        {
+            {
+                std::shared_ptr<WidgetDefinitionPart> pPart
+                    = m_aWidgetDefinition.getDefinition(eType, ePart);
+                if (pPart)
+                {
+                    auto aStates = pPart->getStates(eState, rValue);
+                    if (!aStates.empty())
+                    {
+                        std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                        {
+                            munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
+                                              nHeight);
+                            bOK = true;
+                        }
+                    }
+                }
+            }
+            if (bOK)
+            {
+                const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
+
+                std::shared_ptr<WidgetDefinitionPart> pPart
+                    = m_aWidgetDefinition.getDefinition(eType, ControlPart::Button);
+                if (pPart)
+                {
+                    auto aStates = pPart->getStates(eState | pSliderValue->mnThumbState, rValue);
+                    if (!aStates.empty())
+                    {
+                        std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
+                        {
+                            munchDrawCommands(pState->mpDrawCommands, m_rGraphics,
+                                              pSliderValue->maThumbRect.Left(),
+                                              pSliderValue->maThumbRect.Top(),
+                                              pSliderValue->maThumbRect.GetWidth() - 1,
+                                              pSliderValue->maThumbRect.GetHeight() - 1);
+                            bOK = true;
+                        }
+                    }
+                }
+            }
+        }
+        break;
         case ControlType::Fixedline:
         case ControlType::Toolbar:
         case ControlType::Menubar:
