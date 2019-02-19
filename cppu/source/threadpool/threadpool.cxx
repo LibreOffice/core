@@ -179,7 +179,7 @@ namespace cppu_threadpool
             }
         }
 
-        rtl::Reference< ORequestThread > pThread(
+        rtl::Reference pThread(
             new ORequestThread( this, pQueue , aThreadId, bAsynchron) );
         return pThread->launch();
     }

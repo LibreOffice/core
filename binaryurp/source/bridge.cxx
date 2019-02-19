@@ -205,8 +205,8 @@ Bridge::Bridge(
 }
 
 void Bridge::start() {
-    rtl::Reference< Reader > r(new Reader(this));
-    rtl::Reference< Writer > w(new Writer(this));
+    rtl::Reference r(new Reader(this));
+    rtl::Reference w(new Writer(this));
     {
         osl::MutexGuard g(mutex_);
         assert(

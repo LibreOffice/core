@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     if (!xPopupController.is())
         return;
 
-    rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu);
+    rtl::Reference xPopupMenu(new VCLXPopupMenu);
     xPopupController->setPopupMenu(xPopupMenu.get());
     VclPtr<PopupMenu> aMenu(static_cast<PopupMenu*>(xPopupMenu->GetMenu()));
 

@@ -270,16 +270,16 @@ void Test::testEmpty2(
             OUString("any"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
-    rtl::Reference< BoundListener > boundListener1(new BoundListener);
+    rtl::Reference boundListener1(new BoundListener);
     empty2p->addPropertyChangeListener(OUString(), boundListener1.get());
     empty2p->addPropertyChangeListener(OUString(), boundListener1.get());
-    rtl::Reference< BoundListener > boundListener2(new BoundListener);
+    rtl::Reference boundListener2(new BoundListener);
     empty2p->removePropertyChangeListener(
         OUString(), boundListener2.get());
-    rtl::Reference< VetoListener > vetoListener1(new VetoListener);
+    rtl::Reference vetoListener1(new VetoListener);
     empty2p->addVetoableChangeListener(OUString(), vetoListener1.get());
     empty2p->addVetoableChangeListener(OUString(), vetoListener1.get());
-    rtl::Reference< VetoListener > vetoListener2(new VetoListener);
+    rtl::Reference vetoListener2(new VetoListener);
     empty2p->addVetoableChangeListener(OUString(), vetoListener2.get());
     empty2p->removeVetoableChangeListener(OUString(), vetoListener2.get());
     css::uno::Reference< css::beans::XFastPropertySet > empty2f(

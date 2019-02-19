@@ -43,7 +43,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             return EXIT_FAILURE;
         }
 
-        rtl::Reference< TypeManager > typeMgr(new TypeManager);
+        rtl::Reference typeMgr(new TypeManager);
         for (const OString& i : options.getExtraInputFiles())
         {
             typeMgr->loadProvider(convertToFileUrl(i), false);

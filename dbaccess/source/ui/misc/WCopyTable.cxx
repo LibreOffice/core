@@ -878,8 +878,8 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
                             OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
                             SQLContext aError;
                             aError.Message = sMsg;
-                            ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
-                            ::rtl::Reference< ::comphelper::OInteractionApprove > xYes = new ::comphelper::OInteractionApprove;
+                            ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
+                            ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
                             xRequest->addContinuation( xYes.get() );
                             xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
                             ::rtl::Reference< ::comphelper::OInteractionAbort > xAbort = new ::comphelper::OInteractionAbort;

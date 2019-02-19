@@ -267,7 +267,7 @@ namespace cairocanvas
 
             clip_cairo_from_dev(*mpVirtualDevice);
 
-            rtl::Reference< TextLayout > pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
+            rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
             pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
         }
 

@@ -942,8 +942,8 @@ namespace
         Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
         if ( xHandler.is() )
         {
-            rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rException ) );
-            rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+            rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rException ) );
+            rtl::Reference pApprove( new ::comphelper::OInteractionApprove );
             pRequest->addContinuation( pApprove.get() );
 
             try

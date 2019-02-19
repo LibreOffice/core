@@ -485,7 +485,7 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
     if ( !m_xMenuController.is() )
         return nullptr;
 
-    rtl::Reference<VCLXPopupMenu> xPopupMenu( new VCLXPopupMenu );
+    rtl::Reference xPopupMenu( new VCLXPopupMenu );
     m_xMenuController->setPopupMenu( xPopupMenu.get() );
     VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
     pContextMenu->AddEventListener( LINK( this, DBTreeListBox, MenuEventListener ) );

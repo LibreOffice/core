@@ -306,7 +306,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         // parameters not to be included in the traversal
         return;
 
-    ::rtl::Reference< OSQLColumns > pSubQueryParameterColumns( new OSQLColumns() );
+    ::rtl::Reference pSubQueryParameterColumns( new OSQLColumns() );
 
     // get the command and the EscapeProcessing properties from the sub query
     OUString sSubQueryCommand;

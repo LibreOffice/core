@@ -1119,7 +1119,7 @@ void Access::insertByName(
                         aName, static_cast<cppu::OWeakObject *>(this), 0);
                 }
                 checkValue(aElement, TYPE_ANY, true);
-                rtl::Reference< ChildAccess > child(
+                rtl::Reference child(
                     new ChildAccess(
                         components_, getRootAccess(), this, aName,
                         new PropertyNode(
@@ -1508,7 +1508,7 @@ void Access::insertLocalizedValueChild(
     LocalizedPropertyNode * locprop = static_cast< LocalizedPropertyNode * >(
         getNode().get());
     checkValue(value, locprop->getStaticType(), locprop->isNillable());
-    rtl::Reference< ChildAccess > child(
+    rtl::Reference child(
         new ChildAccess(
             components_, getRootAccess(), this, name,
             new LocalizedValueNode(Data::NO_LAYER, value)));
@@ -1932,7 +1932,7 @@ rtl::Reference< ChildAccess > Access::getModifiedChild(
 rtl::Reference< ChildAccess > Access::createUnmodifiedChild(
                 const OUString &name, const rtl::Reference< Node > &node)
 {
-    rtl::Reference< ChildAccess > child(
+    rtl::Reference child(
         new ChildAccess(components_, getRootAccess(), this, name, node));
     cachedChildren_[name] = child.get();
     return child;

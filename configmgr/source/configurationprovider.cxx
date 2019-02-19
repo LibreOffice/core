@@ -259,7 +259,7 @@ Service::createInstanceWithArguments(
     }
     osl::MutexGuard guard(*lock_);
     Components & components = Components::getSingleton(context_);
-    rtl::Reference< RootAccess > root(
+    rtl::Reference root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
         throw css::uno::Exception(

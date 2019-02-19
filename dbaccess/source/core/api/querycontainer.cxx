@@ -99,7 +99,7 @@ rtl::Reference<OQueryContainer> OQueryContainer::create(
                 , const Reference< XComponentContext >& _rxORB,
                 ::dbtools::WarningsContainer* _pWarnings)
 {
-    rtl::Reference<OQueryContainer> c(
+    rtl::Reference c(
         new OQueryContainer(
             _rxCommandDefinitions, _rxConn, _rxORB, _pWarnings));
     c->init();

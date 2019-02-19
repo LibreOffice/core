@@ -53,10 +53,10 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
         throw css::uno::DeploymentException(
             "Cannot open uno ini " + iniUri);
     }
-    rtl::Reference< cppuhelper::ServiceManager > smgr(
+    rtl::Reference smgr(
         new cppuhelper::ServiceManager);
     smgr->init(getBootstrapVariable(bs, "UNO_SERVICES"));
-    rtl::Reference< cppuhelper::TypeManager > tmgr(new cppuhelper::TypeManager);
+    rtl::Reference tmgr(new cppuhelper::TypeManager);
     tmgr->init(getBootstrapVariable(bs, "UNO_TYPES"));
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
