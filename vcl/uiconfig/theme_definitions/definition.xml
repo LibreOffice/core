@@ -140,6 +140,49 @@
         </part>
     </editbox>
 
+    <scrollbar>
+        <part value="ThumbHorz">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <line stroke="#007AFF" stroke-width="5" x1="0.01" y1="0.5" x2="0.99" y2="0.5"/>
+            </state>
+        </part>
+        <part value="ThumbVert">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <line stroke="#007AFF" stroke-width="5" x1="0.5" y1="0.01" x2="0.5" y2="0.99"/>
+            </state>
+        </part>
+        <part value="ButtonUp">
+        </part>
+        <part value="ButtonDown">
+        </part>
+        <part value="ButtonLeft">
+        </part>
+        <part value="ButtonRight">
+        </part>
+        <part value="TrackHorzLeft">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+            </state>
+        </part>
+        <part value="TrackHorzRight">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+            </state>
+        </part>
+        <part value="TrackVertUpper">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+            </state>
+        </part>
+        <part value="TrackVertLower">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+            </state>
+        </part>
+    </scrollbar>
+
     <slider>
         <part value="Button">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
