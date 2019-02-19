@@ -86,10 +86,13 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     Stmt const* firstStmt = nullptr;
     unsigned curLine = MAX;
     unsigned prevLine = MAX;
+    SourceLocation prevEnd;
     auto& SM = compiler.getSourceManager();
     for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
     {
         auto stmt = *i;
+        auto const actualPrevEnd = prevEnd;
+        prevEnd = compat::getEndLoc(stmt); // compute early, before below `continue`s
 
         // these show up in macro expansions, not interesting
         if (isa<NullStmt>(stmt))
@@ -158,6 +161,10 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         }
         else if (column != tmpColumn)
         {
+            if (containsPreprocessingConditionalInclusion(SourceRange(
+                    locationAfterToken(compiler.getSourceManager().getExpansionLoc(actualPrevEnd)),
+                    compiler.getSourceManager().getExpansionLoc(compat::getBeginLoc(stmt)))))
+                continue;
             report(DiagnosticsEngine::Warning, "statement mis-aligned compared to neighbours %0",
                    stmtLoc)
                 << macroName;
