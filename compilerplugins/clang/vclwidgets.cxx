@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include <memory>
 #include <string>
 #include <iostream>
@@ -32,7 +34,10 @@ public:
     explicit VCLWidgets(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    void run() override
+    {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
 
@@ -859,8 +864,10 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");
+loplugin::Plugin::Registration< VCLWidgets > X5("vclwidgets");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

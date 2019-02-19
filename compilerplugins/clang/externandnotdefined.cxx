@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include <string>
 
 #include "plugin.hxx"
@@ -71,8 +73,10 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
 }
 
 
-loplugin::Plugin::Registration< ExternAndNotDefined > X("externandnotdefined");
+loplugin::Plugin::Registration< ExternAndNotDefined > X16("externandnotdefined");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

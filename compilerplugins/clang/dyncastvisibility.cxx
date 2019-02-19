@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -184,9 +186,12 @@ public:
         return true;
     }
 
+    virtual bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus;
+    }
 private:
     void run() override {
-        if (compiler.getLangOpts().CPlusPlus) {
+        if (preRun()) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
@@ -196,5 +201,7 @@ static loplugin::Plugin::Registration<DynCastVisibility> reg(
     "dyncastvisibility");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

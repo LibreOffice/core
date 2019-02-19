@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include <memory>
 #include <cassert>
 #include <string>
@@ -34,6 +36,10 @@ public:
     bool TraverseReturnStmt(ReturnStmt*) { return true; }
     bool TraverseInitListExpr(InitListExpr*) { return true; }
     bool TraverseCXXBindTemporaryExpr(CXXBindTemporaryExpr*) { return true; }
+    // ignore them for the shared visitor too
+    bool PreTraverseReturnStmt(ReturnStmt*) { return false; }
+    bool PreTraverseInitListExpr(InitListExpr*) { return false; }
+    bool PreTraverseCXXBindTemporaryExpr(CXXBindTemporaryExpr*) { return false; }
 };
 
 bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
@@ -63,7 +69,9 @@ bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructE
     return true;
 }
 
-loplugin::Plugin::Registration<SimplifyConstruct> X("simplifyconstruct", true);
+loplugin::Plugin::Registration<SimplifyConstruct> X13("simplifyconstruct", true);
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

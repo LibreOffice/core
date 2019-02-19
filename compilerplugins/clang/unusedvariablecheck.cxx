@@ -9,6 +9,8 @@
  *
  */
 
+#ifdef FOO
+
 #include <config_global.h>
 
 #include "compat.hxx"
@@ -72,8 +74,10 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
     return true;
     }
 
-static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
+static Plugin::Registration< UnusedVariableCheck > X6( "unusedvariablecheck" );
 
 } // namespace
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

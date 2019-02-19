@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include <cassert>
 #include <string>
 
@@ -46,8 +48,10 @@ bool InlineVisible::VisitFunctionDecl(FunctionDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<InlineVisible> X("inlinevisible");
+loplugin::Plugin::Registration<InlineVisible> X15("inlinevisible");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

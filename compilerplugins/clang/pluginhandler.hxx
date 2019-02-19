@@ -50,7 +50,8 @@ public:
     PluginHandler( CompilerInstance& compiler, const std::vector< std::string >& args );
     virtual ~PluginHandler();
     virtual void HandleTranslationUnit( ASTContext& context ) override;
-    static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+    static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName,
+        bool isPPCallback, bool isSharedPlugin, bool byDefault );
     DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     bool ignoreLocation(SourceLocation loc);

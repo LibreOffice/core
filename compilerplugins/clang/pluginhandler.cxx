@@ -9,6 +9,8 @@
  *
  */
 
+#include <sys/time.h>
+
 #include <memory>
 #include <system_error>
 
@@ -46,7 +48,9 @@ struct PluginData
     Plugin* object;
     const char* optionName;
     bool isPPCallback;
+    bool isSharedPlugin;
     bool byDefault;
+    bool disabledRun;
 };
 
 const int MAX_PLUGINS = 200;
@@ -150,9 +154,26 @@ void PluginHandler::createPlugins( std::set< std::string > rewriters )
     }
     for( auto r: rewriters )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << r;
+    // If there is a shared plugin, make it handle all plugins that it can handle.
+    for( int i = 0; i < pluginCount; ++i )
+    {
+        if( plugins[ i ].isSharedPlugin && plugins[ i ].object != nullptr )
+        {
+            Plugin* plugin = plugins[ i ].object;
+            for( int j = 0; j < pluginCount; ++j )
+            {
+                if( plugins[ j ].object != nullptr
+                    && plugin->setSharedPlugin( plugins[ j ].object, plugins[ j ].optionName ))
+                {
+                    plugins[ j ].disabledRun = true;
+                }
+            }
+        }
+    }
 }
 
-void PluginHandler::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
+void PluginHandler::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName,
+    bool isPPCallback, bool isSharedPlugin, bool byDefault )
 {
     assert( !bPluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
@@ -160,7 +181,9 @@ void PluginHandler::registerPlugin( Plugin* (*create)( const InstantiationData& 
     plugins[ pluginCount ].object = NULL;
     plugins[ pluginCount ].optionName = optionName;
     plugins[ pluginCount ].isPPCallback = isPPCallback;
+    plugins[ pluginCount ].isSharedPlugin = isSharedPlugin;
     plugins[ pluginCount ].byDefault = byDefault;
+    plugins[ pluginCount ].disabledRun = false;
     ++pluginCount;
 }
 
@@ -276,13 +299,21 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         return;
     }
 
+    long total = 0;
     for( int i = 0; i < pluginCount; ++i )
     {
-        if( plugins[ i ].object != NULL )
+        if( plugins[ i ].object != NULL && !plugins[ i ].disabledRun )
         {
+            struct timeval tm1, tm2;
+            gettimeofday( &tm1, nullptr );
             plugins[ i ].object->run();
+            gettimeofday( &tm2, nullptr );
+            long tm = (tm2.tv_sec-tm1.tv_sec)*1000000+tm2.tv_usec-tm1.tv_usec;
+            total += tm;
+//            fprintf(stderr,"P: %s %ld\n", plugins[i].optionName, tm );
         }
     }
+//    fprintf(stderr,"T: %ld\n", total);
 #if defined _WIN32
     //TODO: make the call to 'rename' work on Windows (where the renamed-to
     // original file is probably still held open somehow):

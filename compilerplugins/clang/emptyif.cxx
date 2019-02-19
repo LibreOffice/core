@@ -84,7 +84,7 @@ bool EmptyIf::VisitIfStmt(IfStmt const* ifStmt)
     return true;
 }
 
-loplugin::Plugin::Registration<EmptyIf> X("emptyif", true);
+loplugin::Plugin::Registration<EmptyIf> X23("emptyif", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

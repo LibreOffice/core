@@ -234,7 +234,7 @@ void LoopVarTooSmall::checkExpr(Expr const * expr) {
     }
 }
 
-loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall");
+loplugin::Plugin::Registration< LoopVarTooSmall > X24("loopvartoosmall");
 
 }
 

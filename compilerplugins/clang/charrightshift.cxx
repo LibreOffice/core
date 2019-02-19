@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -51,8 +53,10 @@ public:
     }
 };
 
-loplugin::Plugin::Registration<CharRightShift> X("charrightshift");
+loplugin::Plugin::Registration<CharRightShift> X3("charrightshift");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

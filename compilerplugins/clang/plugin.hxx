@@ -51,9 +51,16 @@ class Plugin
 public:
     explicit Plugin( const InstantiationData& data );
     virtual ~Plugin() {}
+    // TODO comment
     virtual void run() = 0;
+    // TODO comment
+    virtual bool preRun() { return true; }
+    // TODO called only if false is never returned from Visit*() etc.
+    virtual void postRun() {}
+    virtual bool setSharedPlugin( Plugin* /*plugin*/, const char* /*name*/ ) { return false; }
     template< typename T > class Registration;
     enum { isPPCallback = false };
+    enum { isSharedPlugin = false };
     // Returns location right after the end of the token that starts at the given location.
     SourceLocation locationAfterToken( SourceLocation location );
 protected:
@@ -92,7 +99,8 @@ protected:
         Expr const * argument1, Expr const * argument2);
 
 private:
-    static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+    static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName,
+        bool isPPCallback, bool isSharedPlugin, bool byDefault );
     template< typename T > static Plugin* createHelper( const InstantiationData& data );
     bool evaluate(const Expr* expr, APSInt& x);
 
@@ -220,7 +228,7 @@ template< typename T >
 inline
 Plugin::Registration< T >::Registration( const char* optionName, bool byDefault )
 {
-    registerPlugin( &T::template createHelper< T >, optionName, T::isPPCallback, byDefault );
+    registerPlugin( &T::template createHelper< T >, optionName, T::isPPCallback, T::isSharedPlugin, byDefault );
 }
 
 inline

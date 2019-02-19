@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include "plugin.hxx"
 
 namespace {
@@ -48,8 +50,10 @@ bool PrivateBase::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<PrivateBase> X("privatebase");
+loplugin::Plugin::Registration<PrivateBase> X25("privatebase");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

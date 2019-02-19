@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef FOO
+
 #include "plugin.hxx"
 
 namespace {
@@ -38,8 +40,10 @@ bool DerefNullPtr::VisitUnaryDeref(UnaryOperator const * op) {
     return true;
 }
 
-loplugin::Plugin::Registration<DerefNullPtr> X("derefnullptr");
+loplugin::Plugin::Registration<DerefNullPtr> X20("derefnullptr");
 
 }
+
+#endif // FOO
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
