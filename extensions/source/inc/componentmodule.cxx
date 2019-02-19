@@ -91,17 +91,14 @@ namespace compmodule
                     &&  (s_pImplementationNames->size() == s_pFactoryFunctionPointers->size()),
             "OModule::revokeComponent : inconsistent state !");
 
-        sal_Int32 nLen = s_pImplementationNames->size();
-        for (sal_Int32 i=0; i<nLen; ++i)
+        auto it = std::find(s_pImplementationNames->begin(), s_pImplementationNames->end(), _rImplementationName);
+        if (it != s_pImplementationNames->end())
         {
-            if ((*s_pImplementationNames)[i] == _rImplementationName)
-            {
-                s_pImplementationNames->erase(s_pImplementationNames->begin() + i);
-                s_pSupportedServices->erase(s_pSupportedServices->begin() + i);
-                s_pCreationFunctionPointers->erase(s_pCreationFunctionPointers->begin() + i);
-                s_pFactoryFunctionPointers->erase(s_pFactoryFunctionPointers->begin() + i);
-                break;
-            }
+            sal_Int32 i = static_cast<sal_Int32>(std::distance(s_pImplementationNames->begin(), it));
+            s_pImplementationNames->erase(it);
+            s_pSupportedServices->erase(s_pSupportedServices->begin() + i);
+            s_pCreationFunctionPointers->erase(s_pCreationFunctionPointers->begin() + i);
+            s_pFactoryFunctionPointers->erase(s_pFactoryFunctionPointers->begin() + i);
         }
 
         if (s_pImplementationNames->empty())

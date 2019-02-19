@@ -913,12 +913,11 @@ namespace accessibility
             uno::Sequence< beans::PropertyValue > aSeq = mpImpl->GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
             PropertyValueVector aIntersectionVec;
 
-            PropertyValueVector::const_iterator aEnd = aDefAttrVec.end();
-            for ( PropertyValueVector::const_iterator aItr = aDefAttrVec.begin(); aItr != aEnd; ++aItr )
+            for ( const auto& rDefAttr : aDefAttrVec )
             {
                 const beans::PropertyValue* pItr = aSeq.getConstArray();
                 const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
-                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, PropertyValueEqualFunctor(*aItr) );
+                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, PropertyValueEqualFunctor(rDefAttr) );
                 if ( pFind != pEnd )
                 {
                     aIntersectionVec.push_back( *pFind );

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/inetmime.hxx>
 
@@ -51,18 +52,7 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( )
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 {
-    Sequence< OUString > seqParams;
-
-    map< OUString, OUString >::iterator iter;
-    map< OUString, OUString >::iterator iter_end = m_ParameterMap.end( );
-
-    for ( iter = m_ParameterMap.begin( ); iter != iter_end; ++iter )
-    {
-        seqParams.realloc( seqParams.getLength( ) + 1 );
-        seqParams[seqParams.getLength( ) - 1] = iter->first;
-    }
-
-    return seqParams;
+    return comphelper::mapKeysToSequence(m_ParameterMap);
 }
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )

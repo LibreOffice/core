@@ -93,14 +93,13 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     // set pointer to file start
     fseek( fstream, 0, SEEK_SET );
 
-    vector< string >::iterator iter_end = vecData.end( );
-    for ( vector< string >::iterator iter = vecData.begin( ); iter != iter_end; ++iter )
+    for ( const auto& rData : vecData )
     {
         try
         {
-            fprintf( fstream, "Read: %s\n", iter->c_str( ) );
+            fprintf( fstream, "Read: %s\n", rData.c_str( ) );
 
-            Reference< XMimeContentType > xMCntTyp = cnttypeFactory->createMimeContentType( OUString::createFromAscii( iter->c_str( ) ) );
+            Reference< XMimeContentType > xMCntTyp = cnttypeFactory->createMimeContentType( OUString::createFromAscii( rData.c_str( ) ) );
 
             fwprintf( fstream, OUString("Type: %s\n"),  xMCntTyp->getMediaType( ).getStr( ) );
             fwprintf( fstream, OUString("Subtype: %s\n"), xMCntTyp->getMediaSubtype( ).getStr( ) );

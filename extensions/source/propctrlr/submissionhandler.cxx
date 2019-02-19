@@ -269,7 +269,7 @@ namespace pcr
         }
         if ( aProperties.empty() )
             return Sequence< Property >();
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence(aProperties);
     }
 
 

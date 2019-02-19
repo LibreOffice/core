@@ -858,7 +858,7 @@ namespace pcr
 
         if ( aProperties.empty() )
             return Sequence< Property >();
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence(aProperties);
     }
 
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getSupersededProperties( )
@@ -892,7 +892,7 @@ namespace pcr
         aInterestingProperties.push_back(  PROPERTY_FORMATKEY );
         aInterestingProperties.push_back(  PROPERTY_EMPTY_IS_NULL );
         aInterestingProperties.push_back(  PROPERTY_TOGGLE );
-        return Sequence< OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
+        return comphelper::containerToSequence(aInterestingProperties);
     }
 
     LineDescriptor SAL_CALL FormComponentPropertyHandler::describePropertyLine( const OUString& _rPropertyName,

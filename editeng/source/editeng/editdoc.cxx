@@ -2798,12 +2798,13 @@ const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 n
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
-    AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
-    for (; it != itEnd; ++it)
+    AttribsType::const_reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
+        [&nWhich, &nPos](const AttribsType::value_type& rxAttr) {
+            return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
+    if (it != aAttribs.rend())
     {
         const EditCharAttrib& rAttr = **it;
-        if (rAttr.Which() == nWhich && rAttr.IsIn(nPos))
-            return &rAttr;
+        return &rAttr;
     }
     return nullptr;
 }
@@ -2812,12 +2813,13 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
-    AttribsType::reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
-    for (; it != itEnd; ++it)
+    AttribsType::reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
+        [&nWhich, &nPos](AttribsType::value_type& rxAttr) {
+            return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
+    if (it != aAttribs.rend())
     {
         EditCharAttrib& rAttr = **it;
-        if (rAttr.Which() == nWhich && rAttr.IsIn(nPos))
-            return &rAttr;
+        return &rAttr;
     }
     return nullptr;
 }
@@ -2836,14 +2838,9 @@ const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int
 
 bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 {
-    AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
-    for (; it != itEnd; ++it)
-    {
-        const EditCharAttrib& rAttr = **it;
-        if (rAttr.GetStart() < nEndPos && rAttr.GetEnd() > nStartPos)
-            return true;
-    }
-    return false;
+    return std::any_of(aAttribs.rbegin(), aAttribs.rend(),
+        [&nStartPos, &nEndPos](const AttribsType::value_type& rxAttr) {
+            return rxAttr->GetStart() < nEndPos && rxAttr->GetEnd() > nStartPos; });
 }
 
 

@@ -97,11 +97,8 @@ namespace pcr
             m_aPropertyPageIds.swap( aEmpty );
         }
 
-        while ( !m_aHiddenPages.empty() )
-        {
-            m_aHiddenPages.begin()->second.pPage.disposeAndClear();
-            m_aHiddenPages.erase( m_aHiddenPages.begin() );
-        }
+        for (auto& rEntry : m_aHiddenPages)
+            rEntry.second.pPage.disposeAndClear();
         m_aHiddenPages.clear();
     }
 

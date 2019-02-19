@@ -401,27 +401,22 @@ void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
 
 void WrongList::InsertWrong( size_t nStart, size_t nEnd )
 {
-    WrongList::iterator nPos = maRanges.end();
-    for (WrongList::iterator i = maRanges.begin(); i != maRanges.end(); ++i)
-    {
-        if (i->mnStart >= nStart)
-        {
-            nPos = i;
-            {
-                // It can really only happen that the Wrong starts exactly here
-                // and runs along, but not that there are several ranges ...
-                // Exactly in the range is no one allowed to be, otherwise this
-                // Method can not be called!
-                SAL_WARN_IF((i->mnStart != nStart || i->mnEnd <= nEnd) && i->mnStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
-                if (i->mnStart == nStart && i->mnEnd > nEnd)
-                    i->mnStart = nEnd + 1;
-            }
-            break;
-        }
-    }
+    WrongList::iterator nPos = std::find_if(maRanges.begin(), maRanges.end(),
+        [&nStart](const editeng::MisspellRange& rRange) { return rRange.mnStart >= nStart; });
 
     if (nPos != maRanges.end())
+    {
+        {
+            // It can really only happen that the Wrong starts exactly here
+            // and runs along, but not that there are several ranges ...
+            // Exactly in the range is no one allowed to be, otherwise this
+            // Method can not be called!
+            SAL_WARN_IF((nPos->mnStart != nStart || nPos->mnEnd <= nEnd) && nPos->mnStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
+            if (nPos->mnStart == nStart && nPos->mnEnd > nEnd)
+                nPos->mnStart = nEnd + 1;
+        }
         maRanges.insert(nPos, editeng::MisspellRange(nStart, nEnd));
+    }
     else
         maRanges.emplace_back(nStart, nEnd);
 
@@ -444,20 +439,12 @@ bool WrongList::operator==(const WrongList& rCompare) const
 {
     // check direct members
     if(GetInvalidStart() != rCompare.GetInvalidStart()
-        || GetInvalidEnd() != rCompare.GetInvalidEnd()
-        || maRanges.size() != rCompare.maRanges.size())
+        || GetInvalidEnd() != rCompare.GetInvalidEnd())
         return false;
 
-    WrongList::const_iterator rCB = rCompare.maRanges.begin();
-
-    for (auto const& rangeA : maRanges)
-    {
-        if(rangeA.mnStart != rCB->mnStart || rangeA.mnEnd != rCB->mnEnd)
-            return false;
-        ++rCB;
-    }
-
-    return true;
+    return std::equal(maRanges.begin(), maRanges.end(), rCompare.maRanges.begin(), rCompare.maRanges.end(),
+        [](const editeng::MisspellRange& a, const editeng::MisspellRange& b) {
+            return a.mnStart == b.mnStart && a.mnEnd == b.mnEnd; });
 }
 
 bool WrongList::empty() const
@@ -506,10 +493,8 @@ bool WrongList::DbgIsBuggy() const
     bool bError = false;
     for (WrongList::const_iterator i = maRanges.begin(); !bError && (i != maRanges.end()); ++i)
     {
-        for (WrongList::const_iterator j = i + 1; !bError && (j != maRanges.end()); ++j)
-        {
-            bError = i->mnStart <= j->mnEnd && j->mnStart <= i->mnEnd;
-        }
+        bError = std::any_of(i + 1, maRanges.end(), [&i](const editeng::MisspellRange& rRange) {
+            return i->mnStart <= rRange.mnEnd && rRange.mnStart <= i->mnEnd; });
     }
     return bError;
 }

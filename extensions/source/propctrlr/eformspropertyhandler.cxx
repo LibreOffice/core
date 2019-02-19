@@ -310,7 +310,7 @@ namespace pcr
 
         if ( aProperties.empty() )
             return Sequence< Property >();
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence(aProperties);
     }
 
 
@@ -392,7 +392,7 @@ namespace pcr
         std::vector< OUString > aInterestedInActuations( 2 );
         aInterestedInActuations[ 0 ] = PROPERTY_XML_DATA_MODEL;
         aInterestedInActuations[ 1 ] = PROPERTY_BINDING_NAME;
-        return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
+        return comphelper::containerToSequence(aInterestedInActuations);
     }
 
 
