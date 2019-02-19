@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_025fd6e2",
+        "filename": "dbaccess/source/filter/hsqldb/parseschema.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-19T17:16:25Z",
+      "side": 1,
+      "message": "where is it guaranteed that m_sql is at least SET_TABLE_LITERAL_SIZE characters long?\n\ndoes m_sql originate from the input file, or is it somehow synthesized by LO code?",
+      "revId": "2167eb03b82cb97a16872cb5644592954ed3c7ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
