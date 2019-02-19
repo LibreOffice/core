@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_dff99580",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-02-19T11:35:23Z",
+      "side": 1,
+      "message": "Note: for correctness (I don\u0027t think the BIFF information is used anywhere now, but..) the return type instead of V should be A here (Array). I\u0027ll do that in a follow-up commit.",
+      "range": {
+        "startLine": 914,
+        "startChar": 84,
+        "endLine": 914,
+        "endChar": 85
+      },
+      "revId": "f017e98fe7d993e1c7290fc389a49d5767e3301c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
