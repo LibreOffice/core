@@ -156,6 +156,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 const SfxUInt16Item* pFillTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
                 const SfxStringItem* pFillColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
                 const SfxUInt16Item* pLineStyle         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+                const SfxStringItem* pShapeName         = rReq.GetArg<SfxStringItem>(SID_SHAPE_NAME);
 
                 if (pFillTransparence && pFillTransparence->GetValue() > 0)
                 {
@@ -168,6 +169,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 if (pLineStyle)
                 {
                     mnLineStyle = pLineStyle->GetValue();
+                }
+                if (pShapeName && !pShapeName->GetValue().isEmpty())
+                {
+                    msShapeName = pShapeName->GetValue();
                 }
 
                 if (!pMouseStartX || !pMouseStartY || !pMouseEndX || !pMouseEndY)
@@ -565,6 +570,8 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             rAttr.Put(XFillTransparenceItem(mnFillTransparence));
         if (!msFillColor.isEmpty())
             rAttr.Put(XFillColorItem(OUString(), strToColor(msFillColor)));
+        if (!msShapeName.isEmpty())
+            pObj->SetName(msShapeName);
 
         switch(mnLineStyle)
         {

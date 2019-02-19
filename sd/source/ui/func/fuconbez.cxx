@@ -56,7 +56,8 @@ namespace sd {
 /*//Extra attributes coming from parameters
     sal_uInt16  mnTransparence;  // Default: 0
     OUString    msColor;         // Default: ""
-    sal_uInt16  mnWidth;         // Default: 0*/
+    sal_uInt16  mnWidth;         // Default: 0
+    OUString    msShapeName;     // Default: ""*/
 FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -114,9 +115,13 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     if (nSlotId != SID_DRAW_FREELINE_NOFILL)
         return;
 
+    // This piece is only relevant for SID_DRAW_FREELINE_NOFILL
+    // Adding this note for the future because the if-block gets auto-flattened
+    // by loplugins
     const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
     const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
     const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+    const SfxStringItem* pShapeName     = rReq.GetArg<SfxStringItem>(SID_SHAPE_NAME);
 
     if (pTransparence && pTransparence->GetValue() > 0)
     {
@@ -130,6 +135,11 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     {
         mnWidth = pWidth->GetValue();
     }
+    if (pShapeName && !pShapeName->GetValue().isEmpty())
+    {
+        msShapeName = pShapeName->GetValue();
+    }
+    // End of the SID_DRAW_FREELINE_NOFILL block
 }
 
 bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
@@ -174,7 +184,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
-            SetAttributes(aAttr);
+            SetAttributes(aAttr, pObj);
             pObj->SetMergedItemSet(aAttr);
         }
     }
@@ -352,7 +362,7 @@ Color strToColor(const OUString& sColor)
 }
 }
 
-void FuConstructBezierPolygon::SetAttributes(SfxItemSet& rAttr)
+void FuConstructBezierPolygon::SetAttributes(SfxItemSet& rAttr, SdrObject *pObj)
 {
     if (nSlotId == SID_DRAW_FREELINE_NOFILL)
     {
@@ -362,6 +372,8 @@ void FuConstructBezierPolygon::SetAttributes(SfxItemSet& rAttr)
             rAttr.Put(XLineColorItem(OUString(), strToColor(msColor)));
         if (mnWidth > 0)
             rAttr.Put(XLineWidthItem(mnWidth));
+        if (!msShapeName.isEmpty())
+            pObj->SetName(msShapeName);
     }
 }
 
