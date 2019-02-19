@@ -22,6 +22,7 @@
 #include <vcl/font.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/uitest/factory.hxx>
+#include <vcl/wall.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -161,6 +162,8 @@ public:
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual vcl::Font get_font() = 0;
+
+    virtual Wallpaper get_wallpaper() const = 0;
 
     //true for rtl, false otherwise
     virtual bool get_direction() const = 0;

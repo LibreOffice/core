@@ -1556,7 +1556,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
         bIsStart = true;
 
-    TextConvWrapper aWrp( Application::GetDefDialogParent(),
+    TextConvWrapper aWrp( pEditView->GetWindow()->GetFrameWeld(),
                           ::comphelper::getProcessComponentContext(),
                           LanguageTag::convertToLocale( nSrcLang ),
                           LanguageTag::convertToLocale( nDestLang ),
