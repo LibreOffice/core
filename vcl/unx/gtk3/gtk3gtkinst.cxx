@@ -1428,6 +1428,11 @@ public:
                             Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
+    virtual Wallpaper get_wallpaper() const override
+    {
+        return Wallpaper(COL_TRANSPARENT);
+    }
+
     virtual void set_grid_left_attach(int nAttach) override
     {
         GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
@@ -3766,6 +3771,9 @@ public:
             gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
     }
 };
+
+#include <vcl/pngwrite.hxx>
+#include <tools/stream.hxx>
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {

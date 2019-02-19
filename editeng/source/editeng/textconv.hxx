@@ -40,7 +40,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
                                       // starts from the cursor position
 
     EditView *      m_pEditView;
-    VclPtr<vcl::Window>  m_pWin;
+    weld::Window *  m_pWin;
 
     bool            m_bStartChk;
     bool            m_bStartDone;
@@ -92,7 +92,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
 
 
 public:
-    TextConvWrapper( vcl::Window* pWindow,
+    TextConvWrapper(weld::Window* pWindow,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::lang::Locale& rSourceLocale,
             const css::lang::Locale& rTargetLocale,

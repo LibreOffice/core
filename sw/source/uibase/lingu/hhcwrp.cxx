@@ -88,7 +88,7 @@ SwHHCWrapper::SwHHCWrapper(
         sal_Int32 nConvOptions,
         bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection )
-    : editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
+    : editeng::HangulHanjaConversion(pSwView->GetEditWin().GetFrameWeld(), rxContext,
                                 LanguageTag::convertToLocale( nSourceLanguage ),
                                 LanguageTag::convertToLocale( nTargetLanguage ),
                                 pTargetFont,

@@ -78,6 +78,7 @@ struct SvtValueSetItem
     Image               maImage;
     Color               maColor;
     OUString            maText;
+    void*               mpData;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     explicit SvtValueSetItem( SvtValueSet& rParent );

@@ -386,6 +386,11 @@ public:
         return m_xWidget->GetPointFont(*m_xWidget);
     }
 
+    virtual Wallpaper get_wallpaper() const override
+    {
+        return Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor());
+    }
+
     virtual OString get_buildable_name() const override
     {
         return m_xWidget->get_id().toUtf8();
@@ -1392,8 +1397,7 @@ public:
         m_xButton->SetImageAlign(ImageAlign::Left);
         if (pDevice)
         {
-            BitmapEx aBitmap(pDevice->GetBitmap(Point(0, 0), pDevice->GetOutputSize()));
-            m_xButton->SetModeImage(Image(aBitmap));
+            m_xButton->SetModeImage(createImage(*pDevice));
         }
         else
             m_xButton->SetModeImage(Image());
@@ -1589,6 +1593,9 @@ public:
     }
 };
 
+#include <vcl/pngwrite.hxx>
+#include <tools/stream.hxx>
+
 IMPL_LINK_NOARG(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, void)
 {
     signal_clicked();
@@ -1619,6 +1626,23 @@ public:
     virtual bool get_active() const override
     {
         return m_xRadioButton->IsChecked();
+    }
+
+    virtual void set_image(VirtualDevice* pDevice) override
+    {
+        m_xRadioButton->SetImageAlign(ImageAlign::Center);
+        if (pDevice)
+        {
+            BitmapEx aBitmap(pDevice->GetBitmapEx(Point(0, 0), pDevice->GetOutputSize()));
+
+            vcl::PNGWriter aWriter(aBitmap);
+            SvFileStream sOutput("file:///tmp/demo.png", StreamMode::WRITE);
+            aWriter.Write(sOutput);
+
+            m_xRadioButton->SetModeImage(createImage(*pDevice));
+        }
+        else
+            m_xRadioButton->SetModeImage(Image());
     }
 
     virtual void set_from_icon_name(const OUString& rIconName) override
