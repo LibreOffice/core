@@ -132,39 +132,20 @@ ControlPart xmlStringToControlPart(OString const& sPart)
 
 bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
 {
-    bool bReturn = false;
-    if (rString == "pushbutton")
-    {
-        reType = ControlType::Pushbutton;
-        bReturn = true;
-    }
-    else if (rString == "radiobutton")
-    {
-        reType = ControlType::Radiobutton;
-        bReturn = true;
-    }
-    else if (rString == "editbox")
-    {
-        reType = ControlType::Editbox;
-        bReturn = true;
-    }
-    else if (rString == "checkbox")
-    {
-        reType = ControlType::Checkbox;
-        bReturn = true;
-    }
-    else if (rString == "combobox")
-    {
-        reType = ControlType::Combobox;
-        bReturn = true;
-    }
-    else if (rString == "spinbox")
-    {
-        reType = ControlType::Spinbox;
-        bReturn = true;
-    }
+    static std::unordered_map<OString, ControlType> aPartMap = {
+        { "pushbutton", ControlType::Pushbutton }, { "radiobutton", ControlType::Radiobutton },
+        { "checkbox", ControlType::Checkbox },     { "combobox", ControlType::Combobox },
+        { "editbox", ControlType::Editbox },       { "scrollbar", ControlType::Scrollbar },
+        { "spinbox", ControlType::Spinbox },
+    };
 
-    return bReturn;
+    auto const& rIterator = aPartMap.find(rString);
+    if (rIterator != aPartMap.end())
+    {
+        reType = rIterator->second;
+        return true;
+    }
+    return false;
 }
 
 } // end anonymous namespace
