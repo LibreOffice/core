@@ -50,7 +50,7 @@ public:
     /**
      * set attribute for the object to be created
      */
-    void SetAttributes(SfxItemSet& rAttr);
+    void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
 
     virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
@@ -69,6 +69,7 @@ private:
     sal_uInt16  mnTransparence;  // Default: 0
     OUString    msColor;         // Default: ""
     sal_uInt16  mnWidth;         // Default: 0
+    OUString    msShapeName;     // Default: ""
 };
 
 } // end of namespace sd

@@ -734,46 +734,28 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         if (!xInfo.is())
                             continue;
 
-                        // Rectangle redaction
-                        if (xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
+                        OUString sShapeName;
+                        if (xInfo->hasPropertyByName("Name"))
                         {
-                            uno::Any aAnyTransp = xPropSet->getPropertyValue("FillTransparence");
-                            uno::Any aAnyColor = xPropSet->getPropertyValue("FillColor");
-
-                            sal_Int16 nTransp = 0;
-                            Color aColor;
-                            const OUString sRectangleName("RectangleRedactionShape");
-
-                            aAnyTransp >>= nTransp;
-                            aAnyColor >>= aColor;
-
-                            if (nTransp == 50 && aColor == COL_GRAY7)
-                            {
-                                xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
-                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
-                                xPropSet->setPropertyValue("Name", css::uno::makeAny(sRectangleName));
-                            }
+                            uno::Any aAnyShapeName = xPropSet->getPropertyValue("Name");
+                            aAnyShapeName >>= sShapeName;
                         }
-                        //FIXME: Turn this into an else-if when we have the name-check
-                        // Freeform redaction
-                        if (xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
+                        else
+                            continue;
+
+                        // Rectangle redaction
+                        if (sShapeName == "RectangleRedactionShape"
+                                && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
                         {
-                            uno::Any aAnyTransp = xPropSet->getPropertyValue("LineTransparence");
-                            uno::Any aAnyColor = xPropSet->getPropertyValue("LineColor");
-
-                            sal_Int16 nTransp = 0;
-                            Color aColor;
-                            const OUString sFreeformName("FreeformRedactionShape");
-
-                            aAnyTransp >>= nTransp;
-                            aAnyColor >>= aColor;
-
-                            if (nTransp == 50 && aColor == COL_GRAY7)
-                            {
+                            xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
+                        }
+                        // Freeform redaction
+                        else if (sShapeName == "FreeformRedactionShape"
+                                 && xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
+                        {
                                 xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
                                 xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
-                                xPropSet->setPropertyValue("Name", css::uno::makeAny(sFreeformName));
-                            }
                         }
                     }
                 }

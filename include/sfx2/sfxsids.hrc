@@ -416,7 +416,9 @@ class SfxDocumentInfoItem;
 #define SID_PASTE_ONLY_TEXT                 (SID_SFX_START + 802)
 #define SID_PASTE_ONLY_FORMULA              (SID_SFX_START + 803)
 #define SID_PASTE_ONLY_VALUE                (SID_SFX_START + 804)
-    // FREE: SID_SFX_START + 808
+
+// Used for redaction
+#define SID_SHAPE_NAME                      (SID_SFX_START + 808)
     // FREE: SID_SFX_START + 809
     // FREE: SID_SFX_START + 810
 #define SID_ASYNCHRON                       (SID_SFX_START + 811)
