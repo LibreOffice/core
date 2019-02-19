@@ -157,7 +157,7 @@ OUString StringResourceImpl::implResolveString
     if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap::iterator it = pLocaleItem->m_aIdToStringMap.find( ResourceID );
-        if( !( it == pLocaleItem->m_aIdToStringMap.end() ) )
+        if( it != pLocaleItem->m_aIdToStringMap.end() )
         {
             aRetStr = (*it).second;
             bSuccess = true;
@@ -189,7 +189,7 @@ bool StringResourceImpl::implHasEntryForId( const OUString& ResourceID, LocaleIt
     if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap::iterator it = pLocaleItem->m_aIdToStringMap.find( ResourceID );
-        if( !( it == pLocaleItem->m_aIdToStringMap.end() ) )
+        if( it != pLocaleItem->m_aIdToStringMap.end() )
             bSuccess = true;
     }
     return bSuccess;
@@ -2039,7 +2039,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
             {
                 OUString aResourceID = *pStr;
                 IdToStringMap::const_iterator it = rHashMap.find( aResourceID );
-                if( !( it == rHashMap.end() ) )
+                if( it != rHashMap.end() )
                 {
                     implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
                     xTextOutputStream->writeString( "=" );
