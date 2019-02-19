@@ -220,8 +220,6 @@ void LayoutManager::impl_clearUpMenuBar()
 {
     implts_lock();
 
-    implts_resetInplaceMenuBar();
-
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
     {
@@ -272,6 +270,7 @@ void LayoutManager::impl_clearUpMenuBar()
         m_xInplaceMenuBar.clear();
     }
     pMenuBar.disposeAndClear();
+    m_bInplaceMenuSet = false;
 
     Reference< XComponent > xComp( m_xMenuBar, UNO_QUERY );
     if ( xComp.is() )
