@@ -3473,7 +3473,8 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
 
 SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
 (SfxUInt16Item Transparence FN_PARAM_1, SfxStringItem Color FN_PARAM_2,
- SfxUInt16Item Width FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4)
+ SfxUInt16Item Width FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4,
+ SfxStringItem ShapeName SID_SHAPE_NAME)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6830,7 +6831,8 @@ SfxBoolItem Rect SID_DRAW_RECT
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X, SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,
  SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X, SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y,
  SfxUInt16Item FillTransparence FN_PARAM_1, SfxStringItem FillColor FN_PARAM_2,
- SfxUInt16Item LineStyle FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4)
+ SfxUInt16Item LineStyle FN_PARAM_3, SfxBoolItem IsSticky FN_PARAM_4,
+ SfxStringItem ShapeName SID_SHAPE_NAME)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
