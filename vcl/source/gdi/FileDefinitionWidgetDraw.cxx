@@ -534,7 +534,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
     {
         case ControlType::Spinbox:
         {
-            Size aButtonSize(44, 26);
+            Size aButtonSize(32, 32);
             Point aLocation(rBoundingControlRegion.TopLeft());
 
             if (ePart == ControlPart::ButtonUp)
