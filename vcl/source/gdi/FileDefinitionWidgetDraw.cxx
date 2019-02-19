@@ -45,6 +45,10 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbNoFocusRects = true;
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
+    pSVData->maNWFData.mbNoActiveTabTextRaise = true;
+    pSVData->maNWFData.mbCenteredTabs = true;
+    pSVData->maNWFData.mbProgressNeedsErase = true;
+    pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
 }
 
 bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
@@ -71,11 +75,12 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
                 return false;
             return true;
         case ControlType::SpinButtons:
+            return false;
         case ControlType::TabItem:
         case ControlType::TabPane:
         case ControlType::TabHeader:
         case ControlType::TabBody:
-            return false;
+            return true;
         case ControlType::Scrollbar:
             if (ePart == ControlPart::DrawBackgroundHorz
                 || ePart == ControlPart::DrawBackgroundVert)
@@ -402,9 +407,15 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::SpinButtons:
+            break;
         case ControlType::TabItem:
+        case ControlType::TabHeader:
         case ControlType::TabPane:
         case ControlType::TabBody:
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::Scrollbar:
         {
             bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
@@ -568,6 +579,14 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::Radiobutton:
             rNativeContentRegion = tools::Rectangle(Point(), Size(32, 32));
             return true;
+        case ControlType::TabItem:
+        {
+            rNativeBoundingRegion = tools::Rectangle(rBoundingControlRegion.TopLeft(),
+                                                     Size(rBoundingControlRegion.GetWidth() + 20,
+                                                          rBoundingControlRegion.GetHeight() + 6));
+            rNativeContentRegion = rNativeBoundingRegion;
+            return true;
+        }
         default:
             break;
     }
