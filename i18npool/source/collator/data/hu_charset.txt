@@ -22,7 +22,11 @@
 
 [caseLevel on]
 [caseFirst lower]
-[alternate shifted]
+
+# Because of the different requirements of Writer and Calc,
+# don't ignore the special characters, yet.
+# See tdf#123204 "EDITING Not all special characters appear in the AutoFilter window"
+# [alternate shifted]
 
 & c < cs <<< Cs <<< CS
 & d < dz <<< DZ < dzs <<< Dzs <<< DZS
