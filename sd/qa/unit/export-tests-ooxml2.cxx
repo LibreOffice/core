@@ -1764,8 +1764,8 @@ void SdOOXMLExportTest2::testTdf90627()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    // Don't export empty conditions
-    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[2]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:endCondLst", 0);
+    // Don't export empty endCondLst without cond.
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[2]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:endCondLst[not(*)]", 0);
 
     xDocShRef->DoClose();
 }
