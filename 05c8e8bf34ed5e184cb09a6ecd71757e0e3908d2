@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_bf24990e",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3424,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-02-19T12:26:39Z",
+      "side": 1,
+      "message": "This is not only for regular expressions but also wildcards. I suggest\n\n \"exact match or wildcard or regular expression match\"",
+      "range": {
+        "startLine": 3424,
+        "startChar": 104,
+        "endLine": 3424,
+        "endChar": 122
+      },
+      "revId": "05c8e8bf34ed5e184cb09a6ecd71757e0e3908d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
