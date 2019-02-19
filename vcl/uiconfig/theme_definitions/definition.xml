@@ -222,4 +222,39 @@
         </part>
     </progress>
 
+    <tabitem>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any">
+                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+    </tabitem>
+
+    <tabheader>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#FF0000" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+    </tabheader>
+
+    <tabpane>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FF00" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+    </tabpane>
+
+    <tabbody>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+    </tabbody>
+
 </widgets>
