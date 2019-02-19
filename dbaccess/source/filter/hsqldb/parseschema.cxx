@@ -75,12 +75,7 @@ public:
     OUString getTableName() const
     {
         // SET TABLE <tableName>
-        constexpr int SET_TABLE_LITERAL_SIZE = 9;
-        if (m_sql.indexOf("\"") >= 0) // delimited identifier
-            return m_sql.copy(m_sql.indexOf("\""),
-                              m_sql.lastIndexOf("\"") - SET_TABLE_LITERAL_SIZE);
-        else
-            return string::split(m_sql, u' ')[2];
+        return string::split(m_sql, u' ')[2];
     }
 };
 
