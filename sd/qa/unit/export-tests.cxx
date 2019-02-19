@@ -103,6 +103,7 @@ public:
     void testBulletsAsImage();
     void testTdf113818();
     void testTdf119629();
+    void testTdf123557();
     void testTdf113822();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testBulletsAsImage);
     CPPUNIT_TEST(testTdf113818);
     CPPUNIT_TEST(testTdf119629);
+    CPPUNIT_TEST(testTdf123557);
     CPPUNIT_TEST(testTdf113822);
 
     CPPUNIT_TEST_SUITE_END();
@@ -153,6 +155,7 @@ public:
             { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
             { "xlink", "http://www.w3c.org/1999/xlink" },
             { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
+            { "smil", "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" },
             // user-defined
             { "foo", "http://example.com/" },
         };
@@ -1157,6 +1160,27 @@ void SdExportTest::testTdf119629()
             "/anim:par[@presentation:node-type='with-previous']"
             "/anim:par[@presentation:node-type='on-click']"
             "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf123557()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/trigger.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    // Contians 2 interactive sequence and 3 triggered effects.
+    assertXPath(pXmlDoc, "//draw:page", 1);
+    assertXPath(pXmlDoc, "//draw:page/anim:par", 1);
+    assertXPath(pXmlDoc, "//draw:page"
+            "/anim:par[@presentation:node-type='timing-root']"
+            "/anim:seq[@presentation:node-type='interactive-sequence']", 2);
+    assertXPath(pXmlDoc, "//draw:page"
+            "/anim:par[@presentation:node-type='timing-root']"
+            "/anim:seq[@presentation:node-type='interactive-sequence']"
+            "/anim:par[@smil:begin]",3);
     xDocShRef->DoClose();
 }
 
