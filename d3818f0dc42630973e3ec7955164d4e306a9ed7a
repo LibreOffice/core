@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_bfcdb95e",
+        "filename": "chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-02-19T11:25:59Z",
+      "side": 1,
+      "message": "It seems, this is an unintended comment.",
+      "range": {
+        "startLine": 586,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 28
+      },
+      "revId": "d3818f0dc42630973e3ec7955164d4e306a9ed7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9fdafd14",
+        "filename": "chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-02-19T11:25:59Z",
+      "side": 1,
+      "message": "Could you fix all the indentation problems, please? (Blocks are in line with beginning of the expressions.)",
+      "range": {
+        "startLine": 839,
+        "startChar": 16,
+        "endLine": 839,
+        "endChar": 19
+      },
+      "revId": "d3818f0dc42630973e3ec7955164d4e306a9ed7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
