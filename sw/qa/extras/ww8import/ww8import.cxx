@@ -16,6 +16,8 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -246,6 +248,17 @@ DECLARE_WW8IMPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetUpper());
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetLower());
     }
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
+{
+    // The input document is an empty .doc, but without file name
+    // extension. Check that it was loaded as a normal .doc document,
+    // and not a template.
+    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    OUString s = pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetFilterName();
+    CPPUNIT_ASSERT(s != "MS Word 97 Vorlage");
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT

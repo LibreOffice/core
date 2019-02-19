@@ -95,7 +95,29 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             {
                 bIsDetected = aStorage->IsContained( "WordDocument" );
                 if ( bIsDetected && aTypeName.startsWith( "writer_MS_Word_97" ) )
+                {
                     bIsDetected = ( aStorage->IsContained("0Table") || aStorage->IsContained("1Table") );
+
+                    // If we are checking the template type, and the document is not a .dot, don't
+                    // mis-detect it.
+                    if ( bIsDetected && aTypeName == "writer_MS_Word_97_Vorlage" )
+                    {
+                        // Super ugly hack, but we don't want to use the whole WW8Fib thing here in
+                        // the swd library, apparently. We know (do we?) that the "aBits1" byte, as
+                        // the variable is called in WW8Fib::WW8Fib(SvStream&,sal_uInt8,sal_uInt32),
+                        // is at offset 10 in the WordDocument stream. The fDot bit is bit 0x01 of
+                        // that byte.
+                        tools::SvRef<SotStorageStream> xWordDocument = aStorage->OpenSotStream("WordDocument", StreamMode::STD_READ);
+                        xWordDocument->Seek( 10 );
+                        if ( xWordDocument->Tell() == 10 )
+                        {
+                            sal_uInt8 aBits1;
+                            xWordDocument->ReadUChar( aBits1 );
+                            // Check fDot bit
+                            bIsDetected = ((aBits1 & 0x01) == 0x01);
+                        }
+                    }
+                }
             }
         }
         catch (...)
