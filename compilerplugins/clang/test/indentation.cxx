@@ -35,6 +35,13 @@ void top1(int x) {
         case 1: foo(); break; // 1expected-note {{measured against this one [loplugin:indentation]}}
          case 2: foo(); break; // 1expected-error {{statement mis-aligned compared to neighbours [loplugin:indentation]}}
     };
+
+#if 0
+    if (x)
+        foo();
+    else
+#endif
+        foo();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
