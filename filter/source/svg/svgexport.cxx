@@ -2289,7 +2289,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
                 return;
             }
-            bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
+            bool bHasCharSetMap = mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) != mTextFieldCharSets.end();
 
             static const OUString aHeaderId( NSPREFIX "header-field" );
             static const OUString aFooterId( aOOOAttrFooterField );

@@ -2137,7 +2137,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
             {
                 MutexGuard aGuard( rInit.getMutex() );
                 WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pRef->pTypeName->buffer );
-                if( !(aIt == rInit.pWeakMap->end()) && (*aIt).second == pRef )
+                if( aIt != rInit.pWeakMap->end() && (*aIt).second == pRef )
                 {
                     // remove only if it contains the same object
                     rInit.pWeakMap->erase( aIt );
