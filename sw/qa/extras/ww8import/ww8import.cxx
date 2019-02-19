@@ -14,6 +14,8 @@
 #include <ndtxt.hxx>
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -157,6 +159,17 @@ DECLARE_WW8IMPORT_TEST(testTdf112346, "tdf112346.doc")
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
+{
+    // The input document is an empty .doc, but without file name
+    // extension. Check that it was loaded as a normal .doc document,
+    // and not a template.
+    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    OUString sFilterName = pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetFilterName();
+    CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
