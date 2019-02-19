@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_6237aab2",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-19T17:02:51Z",
+      "side": 1,
+      "message": "\"nOldPos\" or \"nOrigPos\" would fit here",
+      "revId": "967a71f266f820791afd3e609ecef334121e8d4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_423cae92",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-19T17:02:51Z",
+      "side": 1,
+      "message": "... as above, etc.",
+      "revId": "967a71f266f820791afd3e609ecef334121e8d4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
