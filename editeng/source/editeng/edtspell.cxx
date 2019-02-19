@@ -508,12 +508,7 @@ bool WrongList::DbgIsBuggy() const
     {
         for (WrongList::const_iterator j = i + 1; !bError && (j != maRanges.end()); ++j)
         {
-            // 1) Start before, End after the second Start
-            if (i->mnStart <= j->mnStart && i->mnEnd >= j->mnStart)
-                bError = true;
-            // 2) Start after the second Start, but still before the second End
-            else if (i->mnStart >= j->mnStart && i->mnStart <= j->mnEnd)
-                bError = true;
+            bError = i->mnStart <= j->mnEnd && j->mnStart <= i->mnEnd;
         }
     }
     return bError;
