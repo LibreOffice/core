@@ -24,6 +24,10 @@ private:
     SalGraphics& m_rGraphics;
     WidgetDefinition m_aWidgetDefinition;
 
+    bool resolveDefinition(ControlType eType, ControlPart ePart, ControlState eState,
+                           const ImplControlValue& rValue, long nX, long nY, long nWidth,
+                           long nHeight);
+
 public:
     FileDefinitionWidgetDraw(SalGraphics& rGraphics);
 

@@ -75,8 +75,12 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::TabPane:
         case ControlType::TabHeader:
         case ControlType::TabBody:
-        case ControlType::Scrollbar:
             return false;
+        case ControlType::Scrollbar:
+            if (ePart == ControlPart::DrawBackgroundHorz
+                || ePart == ControlPart::DrawBackgroundVert)
+                return false;
+            return true;
         case ControlType::Slider:
             return true;
         case ControlType::Fixedline:
@@ -200,6 +204,29 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
 }
 
 } // end anonymous namespace
+
+bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart ePart,
+                                                 ControlState eState,
+                                                 const ImplControlValue& rValue, long nX, long nY,
+                                                 long nWidth, long nHeight)
+{
+    bool bOK = false;
+    auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ePart);
+    if (pPart)
+    {
+        auto const& aStates = pPart->getStates(eState, rValue);
+        if (!aStates.empty())
+        {
+            // use last defined state
+            auto const& pState = aStates.back();
+            {
+                munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                bOK = true;
+            }
+        }
+    }
+    return bOK;
+}
 
 bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                                  const tools::Rectangle& rControlRegion,
@@ -377,7 +404,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::TabPane:
         case ControlType::TabBody:
         case ControlType::Scrollbar:
-            break;
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::Slider:
         {
             {
