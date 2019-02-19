@@ -360,8 +360,8 @@ fpicker/res/fp011.png res/sc06303.png
 sfx2/res/styfam1.png sw/res/sf01.png
 sfx2/res/styfam2.png sw/res/sf02.png
 sfx2/res/styfam4.png sw/res/sf04.png
-extensions/source/scanner/minus.png sfx2/res/minus.png
-extensions/source/scanner/plus.png sfx2/res/plus.png
+extensions/res/scanner/minus.png sfx2/res/minus.png
+extensions/res/scanner/plus.png sfx2/res/plus.png
 res/minus.png sfx2/res/minus.png
 res/plus.png sfx2/res/plus.png
 sc/res/sf02.png sw/res/sf04.png

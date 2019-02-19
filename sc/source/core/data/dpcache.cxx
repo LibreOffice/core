@@ -1391,6 +1391,11 @@ struct ClearGroupItems
 void ScDPCache::ClearGroupFields()
 {
     maGroupFields.clear();
+}
+
+void ScDPCache::ClearAllFields()
+{
+    ClearGroupFields();
     std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
 }
 

@@ -208,6 +208,24 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1696"), aTop);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
+{
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFirstPara = getParagraphOfText(1, xShape->getText());
+    uno::Reference<text::XTextRange> xFirstRun = getRun(xFirstPara, 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xFirstRun, "CharEscapement"));
+    // This failed with a NoSuchElementException, super/subscript property was
+    // lost on import, so the whole paragraph was a single run.
+    uno::Reference<text::XTextRange> xSecondRun = getRun(xFirstPara, 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30),
+                         getProperty<sal_Int32>(xSecondRun, "CharEscapement"));
+    uno::Reference<text::XTextRange> xThirdRun = getRun(xFirstPara, 3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-25),
+                         getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -220,6 +238,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf116486, "tdf116486.docx")
 {
     OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
     CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW);
+    // This was "** Expression is faulty **", because of the unnecessary DOCX number format string
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), xCell->getString());
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT

@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/streamwrap.hxx>
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
 #include <vcl/builderfactory.hxx>
@@ -68,7 +70,6 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     Dialog::InitFlag eFlag)
     : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui", eFlag)
     , mxContext( rxContext )
-    , m_bIsClosable(true)
     , m_sTemplatePath("$(user)/template/")
     , m_sDocTypePrefix("doctype:")
 {
@@ -132,7 +133,8 @@ void XMLFilterSettingsDialog::dispose()
 
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
 {
-    m_bIsClosable = false;
+    // tdf#122171 block closing libreoffice until the following dialog is dismissed
+    incBusy();
 
     if (m_pPBNew == pButton)
     {
@@ -163,7 +165,7 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
         Close();
     }
 
-    m_bIsClosable = true;
+    decBusy();
 }
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)

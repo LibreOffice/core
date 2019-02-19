@@ -521,7 +521,7 @@ CanvasSettings::CanvasSettings() :
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
 #if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+    if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
         mbHWAccelAvailable = false;
 
     else

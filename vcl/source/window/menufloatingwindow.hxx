@@ -121,6 +121,8 @@ public:
 
     void SetPosInParent( sal_uInt16 nPos ) { nPosInParent = nPos; }
 
+    bool MenuInHierarchyHasFocus() const;
+
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 };
 

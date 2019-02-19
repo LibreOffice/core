@@ -18,6 +18,23 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/// Gets one child of xShape, which one is specified by nIndex.
+uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XShape>& xShape, sal_Int32 nIndex)
+{
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    CPPUNIT_ASSERT(xGroup->getCount() > nIndex);
+
+    uno::Reference<drawing::XShape> xRet(xGroup->getByIndex(nIndex), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRet.is());
+
+    return xRet;
+}
+}
+
 class SdImportTestSmartArt : public SdModelTestBase
 {
 public:
@@ -33,6 +50,7 @@ public:
     void testTableList();
     void testAccentProcess();
     void testContinuousBlockProcess();
+    void testOrgChart();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -48,6 +66,7 @@ public:
     CPPUNIT_TEST(testTableList);
     CPPUNIT_TEST(testAccentProcess);
     CPPUNIT_TEST(testContinuousBlockProcess);
+    CPPUNIT_TEST(testOrgChart);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -398,6 +417,132 @@ void SdImportTestSmartArt::testContinuousBlockProcess()
     // need to divide that to 1, 0.5, 1, 0.5 and 1 units), while the old value
     // was 4703 and the new one is 5461.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(5000), xAShape->getSize().Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testOrgChart()
+{
+    // Simple org chart with 1 manager and 1 employee only.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-org-chart.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<text::XText> xManager(
+        getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager.is());
+    // Without the accompanying fix in place, this test would have failed: this
+    // was just "Manager", and the second paragraph was lost.
+    OUString aExpected("Manager\nSecond para");
+    CPPUNIT_ASSERT_EQUAL(aExpected, xManager->getString());
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xManager, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nActualColor = xRun->getPropertyValue("CharColor").get<sal_Int32>();
+    // Without the accompanying fix in place, this test would have failed: the
+    // "Manager" font color was black, not white.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nActualColor);
+
+    uno::Reference<drawing::XShape> xManagerShape(xManager, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManagerShape.is());
+
+    awt::Point aManagerPos = xManagerShape->getPosition();
+    awt::Size aManagerSize = xManagerShape->getSize();
+
+    // Make sure that the manager has 2 employees.
+    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 2),
+                                                uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployees.is());
+    // 4 children: connector, 1st employee, connector, 2nd employee.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xEmployees->getCount());
+
+    uno::Reference<text::XText> xEmployee(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Employee"), xEmployee->getString());
+
+    uno::Reference<drawing::XShape> xEmployeeShape(xEmployee, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployeeShape.is());
+
+    awt::Point aEmployeePos = xEmployeeShape->getPosition();
+    awt::Size aEmployeeSize = xEmployeeShape->getSize();
+
+    CPPUNIT_ASSERT_EQUAL(aManagerPos.X, aEmployeePos.X);
+
+    // Without the accompanying fix in place, this test would have failed: the
+    // two shapes were overlapping, i.e. "manager" was not above "employee".
+    CPPUNIT_ASSERT_GREATER(aManagerPos.Y, aEmployeePos.Y);
+
+    // Make sure that the second employee is on the right of the first one.
+    // Without the accompanying fix in place, this test would have failed, as
+    // the second employee was below the first one.
+    uno::Reference<text::XText> xEmployee2(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 3), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Employee2"), xEmployee2->getString());
+
+    uno::Reference<drawing::XShape> xEmployee2Shape(xEmployee2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee2Shape.is());
+
+    awt::Point aEmployee2Pos = xEmployee2Shape->getPosition();
+    awt::Size aEmployee2Size = xEmployee2Shape->getSize();
+    CPPUNIT_ASSERT_GREATER(aEmployeePos.X, aEmployee2Pos.X);
+
+    // Make sure that assistant is above employees.
+    uno::Reference<text::XText> xAssistant(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Assistant"), xAssistant->getString());
+
+    uno::Reference<drawing::XShape> xAssistantShape(xAssistant, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAssistantShape.is());
+
+    awt::Point aAssistantPos = xAssistantShape->getPosition();
+    // Without the accompanying fix in place, this test would have failed: the
+    // assistant shape was below the employee shape.
+    CPPUNIT_ASSERT_GREATER(aAssistantPos.Y, aEmployeePos.Y);
+
+    // Make sure the connector of the assistant is above the shape.
+    uno::Reference<drawing::XShape> xAssistantConnector(
+        getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAssistantConnector.is());
+    awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
+    // This failed, the vertical positions of the connector and the shape of
+    // the assistant were the same.
+    CPPUNIT_ASSERT_LESS(aAssistantPos.Y, aAssistantConnectorPos.Y);
+
+    // Make sure the height of xManager and xManager2 is the same.
+    uno::Reference<text::XText> xManager2(
+        getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Manager2"), xManager2->getString());
+
+    uno::Reference<drawing::XShape> xManager2Shape(xManager2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager2Shape.is());
+
+    awt::Size aManager2Size = xManager2Shape->getSize();
+    // Without the accompanying fix in place, this test would have failed:
+    // xManager2's height was 3 times larger than xManager's height.
+    CPPUNIT_ASSERT_EQUAL(aManagerSize.Height, aManager2Size.Height);
+
+    // Make sure the employee nodes use the free space on the right, since
+    // manager2 has no assistants / employees.
+    CPPUNIT_ASSERT_GREATER(aManagerSize.Width, aEmployeeSize.Width + aEmployee2Size.Width);
+
+    // Without the accompanying fix in place, this test would have failed: an
+    // employee was exactly the third of the total height, without any spacing.
+    CPPUNIT_ASSERT_LESS(xGroup->getSize().Height / 3, aEmployeeSize.Height);
 
     xDocShRef->DoClose();
 }

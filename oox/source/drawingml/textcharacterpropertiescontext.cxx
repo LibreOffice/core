@@ -203,6 +203,17 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                     mrTextCharacterProperties.moCaseMap = XML_none;
             }
             break;
+        case W_TOKEN(vertAlign):
+        {
+            // Map wordprocessingML <w:vertAlign w:val="..."/> to drawingML
+            // <a:rPr baseline="...">.
+            sal_Int32 nVal = rAttribs.getToken(W_TOKEN(val), 0);
+            if (nVal == XML_superscript)
+                mrTextCharacterProperties.moBaseline = 30000;
+            else if (nVal == XML_subscript)
+                mrTextCharacterProperties.moBaseline = -25000;
+            break;
+        }
         case OOX_TOKEN(w14, glow):
         case OOX_TOKEN(w14, shadow):
         case OOX_TOKEN(w14, reflection):

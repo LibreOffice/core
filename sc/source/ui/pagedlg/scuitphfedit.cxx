@@ -64,6 +64,10 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pWndRight->SetLocation(Right);
 
     get(m_pLbDefined,"comboLB_DEFINED");
+    // tdf#114695 override natural size with a small value
+    // we expect this to get stretched to some larger but
+    // limited size based on surrounding widgets
+    m_pLbDefined->set_width_request(m_pLbDefined->approximate_digit_width() * 20);
 
     get(m_pBtnText,"buttonBTN_TEXT");
     get(m_pBtnTable,"buttonBTN_TABLE");

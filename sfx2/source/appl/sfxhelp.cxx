@@ -55,6 +55,7 @@
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -843,6 +844,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
         if ( !impl_hasHelpInstalled() )
         {
+            TopLevelWindowLocker aBusy;
+
+            aBusy.incBusy(pWindow);
             std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
             std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
 
@@ -851,15 +855,19 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             OUString sPrimText = xQueryBox->get_primary_text();
             xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
             short OnlineHelpBox = xQueryBox->run();
+            xQueryBox.reset();
+            aBusy.decBusy();
 
-            if(OnlineHelpBox == RET_OK)
+            if (OnlineHelpBox == RET_OK)
             {
                 if ( impl_showOnlineHelp( aHelpURL ) )
                     return true;
                 else
                 {
+                    aBusy.incBusy(pWindow);
                     NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
                     aErrBox.run();
+                    aBusy.decBusy();
                     return false;
                 }
             }

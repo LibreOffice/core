@@ -109,6 +109,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
             E_GET_CURRENT_FILTER,
             E_CREATE_OPEN_DIALOG,
             E_CREATE_SAVE_DIALOG,
+            E_CREATE_FOLDER_PICKER,
             E_SET_MULTISELECTION_MODE,
             E_SET_TITLE,
             E_SET_FILENAME,
@@ -180,6 +181,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
         /// implementation of request E_CREATE_SAVE_DIALOG
         void impl_sta_CreateSaveDialog(const RequestRef& rRequest);
+
+
+        /// implementation of request E_CREATE_FOLDER_PICKER
+        void impl_sta_CreateFolderPicker(const RequestRef& rRequest);
 
 
         /// implementation of request E_SET_MULTISELECTION_MODE
@@ -272,6 +277,14 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_SetDefaultExtension( const OUString& currentFilter );
 
    private:
+        enum class PickerDialog
+        {
+            FileOpen,
+            FileSave,
+            Folder,
+        };
+
+        void impl_sta_CreateDialog(const RequestRef& rRequest, PickerDialog eType, DWORD nOrFlags);
 
 
         /// COM object representing a file open dialog
@@ -280,6 +293,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
         /// COM object representing a file save dialog
         TFileSaveDialog m_iDialogSave;
+
+
+        /// COM object representing a folder picker dialog
+        TFolderPickerDialog m_iFolderPicker;
 
 
         /// knows the return state of the last COM call

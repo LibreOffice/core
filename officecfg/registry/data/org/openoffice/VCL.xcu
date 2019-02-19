@@ -47,9 +47,6 @@
       <prop oor:name="CollateBox" oor:op="replace" oor:type="xs:string">
         <value>Default</value>
       </prop>
-      <prop oor:name="CollateSingleJobs" oor:op="replace" oor:type="xs:string">
-        <value>true</value>
-      </prop>
     </node>
     <node oor:name="WM" oor:op="replace">
       <prop oor:name="ShouldSwitchWorkspace" oor:op="replace" oor:type="xs:string">

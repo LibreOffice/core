@@ -75,7 +75,14 @@ AsyncRequests::~AsyncRequests()
     aLock.clear();
     // <- SYNCHRONIZED
 
-    join();
+    // The static AsyncRequests aNotify in VistaFilePickerEventHandler::impl_sendEvent
+    // is destructed at DLL atexit. But it won't run, so needs no join and release of
+    // the already destructed SolarMutex, which would crash LO on exit.
+    if (isRunning())
+    {
+        SolarMutexReleaser aReleaser;
+        join();
+    }
 }
 
 void AsyncRequests::triggerJobExecution()

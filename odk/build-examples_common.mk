@@ -31,6 +31,7 @@ endif
 	$(foreach my_dir,$(2), \
 	    && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
 		&& printf 'yes\n' | LC_ALL=C make \
+			CC="$(CXX)" LINK="$(CXX)" LIB="$(CXX)" \
 		    $(if $(filter MACOSX,$(OS)), SHELL=$(ODK_BUILD_SHELL), )))) \
 	    >$(call gb_CustomTarget_get_workdir,$(1))/log 2>&1 \
 	|| (RET=$$$$? \

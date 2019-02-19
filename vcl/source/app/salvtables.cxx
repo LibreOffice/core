@@ -1640,6 +1640,7 @@ private:
     DECL_LINK(LoseFocusHdl, Control&, void);
     DECL_LINK(OutputHdl, Edit&, bool);
     DECL_LINK(InputHdl, sal_Int64*, TriState);
+    DECL_LINK(ActivateHdl, Edit&, void);
 
 public:
     SalInstanceSpinButton(NumericField* pButton, bool bTakeOwnership)
@@ -1651,6 +1652,7 @@ public:
         m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
         m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
         m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
+        m_xButton->GetSubEdit()->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
     }
 
     virtual int get_value() const override
@@ -1705,6 +1707,8 @@ public:
 
     virtual ~SalInstanceSpinButton() override
     {
+        if (Edit* pEdit = m_xButton->GetSubEdit())
+            pEdit->SetActivateHdl(Link<Edit&, void>());
         m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
         m_xButton->SetOutputHdl(Link<Edit&, bool>());
         m_xButton->SetLoseFocusHdl(Link<Control&, void>());
@@ -1712,6 +1716,12 @@ public:
         m_xButton->SetUpHdl(Link<SpinField&, void>());
     }
 };
+
+IMPL_LINK_NOARG(SalInstanceSpinButton, ActivateHdl, Edit&, void)
+{
+    // tdf#122348 return pressed to end dialog
+    signal_value_changed();
+}
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, UpDownHdl, SpinField&, void)
 {

@@ -298,7 +298,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     o_rOutputBuf.resize(header_size);
 
     // initialize stream
-    Guchar *p;
+    unsigned char *p;
     GfxRGB rgb;
     std::unique_ptr<ImageStream> imgStr(
         new ImageStream(str,
@@ -401,7 +401,7 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
                 oneColor = { byteToCol( 0xff ), byteToCol( 0xff ), byteToCol( 0xff ) };
         if( colorMap->getColorSpace()->getMode() == csIndexed || colorMap->getColorSpace()->getMode() == csDeviceGray )
         {
-            Guchar nIndex = 0;
+            unsigned char nIndex = 0;
             colorMap->getRGB( &nIndex, &zeroColor );
             nIndex = 1;
             colorMap->getRGB( &nIndex, &oneColor );
@@ -514,7 +514,7 @@ void PDFOutDev::printPath( GfxPath* pPath )
 PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_pDoc( pDoc ),
     m_aFontMap(),
-    m_pUtf8Map( new UnicodeMap("UTF-8", gTrue, &mapUTF8) ),
+    m_pUtf8Map( new UnicodeMap("UTF-8", true, &mapUTF8) ),
     m_bSkipImages(false)
 {
 }
@@ -555,7 +555,11 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     LinkAction* pAction = link->getAction();
     if (pAction && pAction->getKind() == actionURI)
     {
+#if POPPLER_CHECK_VERSION(0, 72, 0)
+        const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->c_str();
+#else
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
+#endif
 
         std::vector<char> aEsc( lcl_escapeLineFeeds(pURI) );
 
@@ -578,7 +582,11 @@ void PDFOutDev::restoreState(GfxState*)
     printf( "restoreState\n" );
 }
 
+#if POPPLER_CHECK_VERSION(0, 71, 0)
+void PDFOutDev::setDefaultCTM(const double *pMat)
+#else
 void PDFOutDev::setDefaultCTM(double *pMat)
+#endif
 {
     assert(pMat);
 
@@ -753,7 +761,11 @@ void PDFOutDev::updateFont(GfxState *state)
 
             aFont = it->second;
 
+#if POPPLER_CHECK_VERSION(0, 72, 0)
+            std::vector<char> aEsc( lcl_escapeLineFeeds(aFont.familyName.c_str()) );
+#else
             std::vector<char> aEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
+#endif
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
                     aFont.isBold,
@@ -939,11 +951,11 @@ void PDFOutDev::endTextObject(GfxState*)
 }
 
 void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
-                              int width, int height, GBool invert,
+                              int width, int height, poppler_bool invert,
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                              GBool /*interpolate*/,
+                              poppler_bool /*interpolate*/,
 #endif
-                              GBool /*inlineImg*/ )
+                              poppler_bool /*inlineImg*/ )
 {
     if (m_bSkipImages)
         return;
@@ -972,9 +984,9 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
 void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
                           int width, int height, GfxImageColorMap* colorMap,
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                          GBool /*interpolate*/,
+                          poppler_bool /*interpolate*/,
 #endif
-                          int* maskColors, GBool /*inlineImg*/ )
+                          int* maskColors, poppler_bool /*inlineImg*/ )
 {
     if (m_bSkipImages)
         return;
@@ -1023,13 +1035,13 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
                                 int width, int height,
                                 GfxImageColorMap* colorMap,
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                                GBool /*interpolate*/,
+                                poppler_bool /*interpolate*/,
 #endif
                                 Stream* maskStr,
                                 int maskWidth, int maskHeight,
-                                GBool maskInvert
+                                poppler_bool maskInvert
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                                , GBool /*maskInterpolate*/
+                                , poppler_bool /*maskInterpolate*/
 #endif
                                )
 {
@@ -1045,13 +1057,13 @@ void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
                                     int width, int height,
                                     GfxImageColorMap* colorMap,
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                                    GBool /*interpolate*/,
+                                    poppler_bool /*interpolate*/,
 #endif
                                     Stream* maskStr,
                                     int maskWidth, int maskHeight,
                                     GfxImageColorMap* maskColorMap
 #if POPPLER_CHECK_VERSION(0, 12, 0)
-                                    , GBool /*maskInterpolate*/
+                                    , poppler_bool /*maskInterpolate*/
 #endif
                                    )
 {

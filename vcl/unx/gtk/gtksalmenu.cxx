@@ -497,6 +497,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbReturnFocusToDocument( false ),
     mbAddedGrab( false ),
     mpMenuBarContainerWidget( nullptr ),
+    mpMenuAllowShrinkWidget( nullptr ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
@@ -785,10 +786,21 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_grid_insert_row(pGrid, 0);
     gtk_grid_attach(pGrid, mpMenuBarContainerWidget, 0, 0, 1, 1);
 
+    mpMenuAllowShrinkWidget = gtk_scrolled_window_new(nullptr, nullptr);
+    gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_SHADOW_NONE);
+    // tdf#116290 external policy on scrolledwindow will not show a scrollbar,
+    // but still allow scrolled window to not be sized to the child content.
+    // So the menubar can be shrunk past its nominal smallest width.
+    // Unlike a hack using GtkFixed/GtkLayout the correct placement of the menubar occurs under RTL
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
+    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuAllowShrinkWidget, 0, 0, 1, 1);
+
     mpMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
     gtk_widget_insert_action_group(mpMenuBarWidget, "win", mpActionGroup);
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
-    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuBarWidget, 0, 0, 1, 1);
+    gtk_widget_set_hexpand(mpMenuAllowShrinkWidget, true);
+    gtk_container_add(GTK_CONTAINER(mpMenuAllowShrinkWidget), mpMenuBarWidget);
+
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "deactivate", G_CALLBACK(MenuBarReturnFocus), this);
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
 
@@ -796,6 +808,7 @@ void GtkSalMenu::CreateMenuBarWidget()
 
     ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
 #else
+    (void)mpMenuAllowShrinkWidget;
     (void)mpMenuBarContainerWidget;
 #endif
 }

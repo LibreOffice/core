@@ -1114,8 +1114,8 @@ desktop/res/lock_16.png cmd/sc_protect.png
 # extensions
 # ==============================================
 extensions/res/arrow.png cmd/sc_nextrecord.png
-extensions/res/buttonminus.png extensions/source/scanner/minus.png
-extensions/res/buttonplus.png extensions/source/scanner/plus.png
+extensions/res/buttonminus.png extensions/res/scanner/minus.png
+extensions/res/buttonplus.png extensions/res/scanner/plus.png
 
 # formula
 # ==============================================

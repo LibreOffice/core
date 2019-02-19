@@ -26,6 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/waitobj.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -105,11 +106,12 @@ public:
 
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
-    bool    isClosable() { return m_bIsClosable;}
-
 private:
     void    initFilterList();
     void    disposeFilterList();
+
+    void    incBusy() { maBusy.incBusy(this); }
+    void    decBusy() { maBusy.decBusy(); }
 
     bool    insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = nullptr );
 
@@ -125,6 +127,7 @@ private:
 
     std::vector< filter_info_impl* > maFilterVector;
 
+    TopLevelWindowLocker maBusy;
     VclPtr<XMLFilterListBox>   m_pFilterListBox;
     VclPtr<SvxPathControl> m_pCtrlFilterList;
     VclPtr<PushButton> m_pPBNew;
@@ -134,8 +137,6 @@ private:
     VclPtr<PushButton> m_pPBSave;
     VclPtr<PushButton> m_pPBOpen;
     VclPtr<CloseButton> m_pPBClose;
-
-    bool m_bIsClosable;
 
     OUString m_sTemplatePath;
     OUString m_sDocTypePrefix;
