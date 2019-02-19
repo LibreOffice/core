@@ -1421,7 +1421,15 @@ public:
     bool operator() (std::unique_ptr<SvTreeListEntry> const& rpLeft,
                      std::unique_ptr<SvTreeListEntry> const& rpRight) const
     {
-        return mrList.Compare(rpLeft.get(), rpRight.get()) < 0;
+        int nCompare = mrList.Compare(rpLeft.get(), rpRight.get());
+        if (nCompare != 0 && mrList.GetSortMode() == SortDescending)
+        {
+            if( nCompare < 0 )
+                nCompare = 1;
+            else
+                nCompare = -1;
+        }
+        return nCompare < 0;
     }
 };
 
@@ -1496,7 +1504,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
         k = (i+j)/2;
         const SvTreeListEntry* pTempEntry = rChildList[k].get();
         nCompare = Compare( pEntry, pTempEntry );
-        if( eSortMode == SortDescending && nCompare != 0 )
+        if (nCompare != 0 && eSortMode == SortDescending)
         {
             if( nCompare < 0 )
                 nCompare = 1;
