@@ -4908,7 +4908,7 @@ void ScFFT2::convertToPolar()
     {
         fR = getReal(nIdx);
         fI = getImag(nIdx);
-        fPhase = atan(fI/fR);
+        fPhase = atan2(fI, fR);
         fMag = sqrt(fR*fR + fI*fI);
 
         setReal(fMag, nIdx);
