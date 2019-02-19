@@ -4867,7 +4867,8 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
     if (nLen < 2)
     {
         // end of attribute
-        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLSTYLE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLCOLOR );
     }
     else
     {
@@ -4885,7 +4886,8 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
     if (nLen <= 0)
     {
         // end of attribute
-        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLSTYLE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLCOLOR );
     }
     else
     {
