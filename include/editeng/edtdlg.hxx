@@ -25,6 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/weld.hxx>
 #include <editeng/hangulhanja.hxx>
 
 namespace com { namespace sun { namespace star { namespace linguistic2
@@ -62,13 +63,13 @@ public:
     virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
     virtual void     SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
     virtual void     SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl ) = 0;
-    virtual void     SetIgnoreHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetChangeHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetChangeAllHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl ) = 0;
-    virtual void     SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetFindHdl( const Link<Button*,void>& _rHdl ) = 0;
+    virtual void     SetIgnoreHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetIgnoreAllHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetChangeHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetChangeAllHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetFindHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                      GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
@@ -95,7 +96,7 @@ public:
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper) = 0;
-    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog( vcl::Window* _pParent ) = 0;
+    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Window* pParent) = 0;
 };
 
 #endif

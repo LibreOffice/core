@@ -107,7 +107,7 @@ namespace editeng
 
     public:
         HangulHanjaConversion(
-            vcl::Window* _pUIParent,
+            weld::Window* pUIParent,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::lang::Locale& _rSourceLocale,
             const css::lang::Locale& _rTargetLocale,
