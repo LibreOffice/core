@@ -58,6 +58,7 @@
 
 #include <algorithm>
 #include <math.h>
+#include <unordered_set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1442,6 +1443,31 @@ static basegfx::B2DPolygon CreateArc( const tools::Rectangle& rRect, const Point
     return aRetval;
 }
 
+static double lcl_getNormalizedCircleAngleRad(const double fWR, const double fHR, const double fEllipseAngleDeg)
+{
+    double fRet(0.0);
+    double fEAngleDeg(fmod(fEllipseAngleDeg, 360.0));
+    if (fEAngleDeg < 0.0)
+        fEAngleDeg += 360.0;
+    const double fX(fHR * cos(basegfx::deg2rad(fEAngleDeg)));
+    const double fY(fWR * sin(basegfx::deg2rad(fEAngleDeg)));
+    if (fX != 0.0 || fY != 0.0)
+    {
+        fRet = atan2(fY, fX);
+        if (fRet < 0.0)
+            fRet += F_2PI;
+    }
+    return fRet;
+}
+
+static double lcl_getNormalizedAngleRad(const double fCircleAngleDeg)
+{
+    double fRet(fmod(fCircleAngleDeg, 360.0));
+    if (fRet < 0.0)
+        fRet += 360.0;
+    return basegfx::deg2rad(fRet);
+}
+
 void EnhancedCustomShape2d::CreateSubPath(
     sal_Int32& rSrcPt,
     sal_Int32& rSegmentInd,
@@ -1555,142 +1581,154 @@ void EnhancedCustomShape2d::CreateSubPath(
                 }
                 break;
 
-                case ANGLEELLIPSE :
+                case ANGLEELLIPSE: // command U
+                case ANGLEELLIPSETO: // command T
                 {
-                    if ( nPntCount )
+                    // Some shapes will need special handling, decide on property 'Type'.
+                    OUString sShpType;
+                    SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(mrSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+                    Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+                    if (pAny)
+                        *pAny >>= sShpType;
+                    // User defined shapes in MS binary format, which contain command U or T after import
+                    // in LibreOffice, starts with "mso".
+                    const bool bIsFromBinaryImport(sShpType.startsWith("mso"));
+                    // The only own or imported preset shapes with U command are those listed below.
+                    // Command T is not used in preset shapes.
+                    const std::unordered_set<OUString> aPresetShapesWithU =
+                        { "ellipse",  "ring", "smiley", "sun", "forbidden", "flowchart-connector",
+                          "flowchart-summing-junction", "flowchart-or", "cloud-callout"};
+                    std::unordered_set<OUString>::const_iterator aIter = aPresetShapesWithU.find(sShpType);
+                    const bool bIsPresetShapeWithU(aIter != aPresetShapesWithU.end());
+
+                    for (sal_uInt16 i = 0; (i < nPntCount) && ((rSrcPt + 2) < nCoordSize); i++)
                     {
-                        if(aNewB2DPolygon.count() > 1)
+                        // ANGLEELLIPSE is the same as ANGLEELLIPSETO, only that it
+                        // makes an implicit MOVETO. That ends the previous subpath.
+                        if (ANGLEELLIPSE == nCommand)
                         {
-                            // #i76201# Add conversion to closed polygon when first and last points are equal
-                            basegfx::utils::checkClosed(aNewB2DPolygon);
-                            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-                        }
-                        aNewB2DPolygon.clear();
-                    }
-                    [[fallthrough]];
-                }
-                case ANGLEELLIPSETO :
-                {
-                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
-                    {
-                        // create a circle
-                        Point _aCenter;
-                        double fWidth, fHeight;
-                        const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( mso_sptEllipse  );
-                        bool bIsDefaultViewBox = false;
-                        bool bIsDefaultPath = false;
-                        bool bIsMSEllipse = false;
-
-                        if( ( nCoordWidth == pDefCustomShape->nCoordWidth )
-                            && ( nCoordHeight == pDefCustomShape->nCoordHeight ) )
-                            bIsDefaultViewBox = true;
-                        sal_Int32 j, nCount = pDefCustomShape->nVertices;//==3
-                        std::vector< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
-
-                        seqCoordinates1.resize( nCount );
-                        for ( j = 0; j < nCount; j++ )
-                        {
-                            seqCoordinates1[j] = seqCoordinates[ rSrcPt + j];
-                        }
-
-                        seqCoordinates2.resize( nCount );
-                        for ( j = 0; j < nCount; j++ )
-                        {
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].First, pDefCustomShape->pVertices[ j ].nValA );
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].Second, pDefCustomShape->pVertices[ j ].nValB );
-                        }
-                        if(seqCoordinates1 == seqCoordinates2)
-                            bIsDefaultPath = true;
-
-                        OUString sShpType;
-                        SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-                        Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
-                        if ( pAny )
-                            *pAny >>= sShpType;
-                        if( sShpType.getLength() > 3 &&
-                            sShpType.startsWith( "mso" )){
-                                bIsMSEllipse = true;
-                        }
-                        if( (! bIsDefaultPath   && ! bIsDefaultViewBox) || (bIsDefaultViewBox && bIsMSEllipse) /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
-                        {
-                            _aCenter = GetPoint( seqCoordinates[ rSrcPt ], true, true );
-                            GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false );
-                            GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, false, true );
-                            fWidth /= 2;
-                            fHeight /= 2;
-                        }else if( bIsDefaultPath && !bIsDefaultViewBox /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
-                        {
-                            _aCenter.setX( nCoordWidth/2 * fXScale );
-                            _aCenter.setY( nCoordHeight/2 * fYScale );
-                            fWidth = nCoordWidth/2;
-                            fHeight = nCoordHeight/2;
-                            const Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
-                            css::awt::Rectangle aViewBox;
-                            if ( pViewBox && (*pViewBox >>= aViewBox ) )
+                            if (aNewB2DPolygon.count() > 1)
                             {
-                                aViewBox.Width = pDefCustomShape->nCoordWidth;
-                                aViewBox.Height = pDefCustomShape->nCoordHeight;
+                                // #i76201# Add conversion to closed polygon when first and last points are equal
+                                basegfx::utils::checkClosed(aNewB2DPolygon);
+                                aNewB2DPolyPolygon.append(aNewB2DPolygon);
                             }
-                            css::beans::PropertyValue aPropVal;
-                            aPropVal.Name = "ViewBox";
-                            aPropVal.Value <<= aViewBox;
-                            rGeometryItem.SetPropertyValue( aPropVal );
-                            mrSdrObjCustomShape.SetMergedItem( rGeometryItem );
-                        }else{
-                            _aCenter = GetPoint( seqCoordinates[ rSrcPt ], true, true );
-                            GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false);
-                            GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, false, true );
+                            aNewB2DPolygon.clear();
                         }
 
-                        fWidth *= fXScale;
-                        fHeight*= fYScale;
-                        Point aP( static_cast<sal_Int32>( _aCenter.X() - fWidth ), static_cast<sal_Int32>( _aCenter.Y() - fHeight ) );
-                        Size  aS( static_cast<sal_Int32>( fWidth * 2.0 ), static_cast<sal_Int32>( fHeight * 2.0 ) );
-                        tools::Rectangle aRect( aP, aS );
-                        if ( aRect.GetWidth() && aRect.GetHeight() )
-                        {
-                            double fStartAngle, fEndAngle;
-                            GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  false, false );
-                            GetParameter( fEndAngle  , seqCoordinates[ rSrcPt + 2 ].Second, false, false );
-
-                            if ( (static_cast<sal_Int32>(fStartAngle) % 360) != (static_cast<sal_Int32>(fEndAngle) % 360) )
-                            {
-                                if ( static_cast<sal_Int32>(fStartAngle) & 0x7fff0000 )  // SJ: if the angle was imported from our escher import, then the
-                                    fStartAngle /= 65536.0;                 // value is shifted by 16. TODO: already change the fixed float to a
-                                if ( static_cast<sal_Int32>(fEndAngle) & 0x7fff0000 )    // double in the import filter
-                                {
-                                    fEndAngle /= 65536.0;
-                                    fEndAngle = fEndAngle + fStartAngle;
-                                    if ( fEndAngle < 0 )
-                                    {   // in the binary filter the endangle is the amount
-                                        double fTemp = fStartAngle;
-                                        fStartAngle = fEndAngle;
-                                        fEndAngle = fTemp;
-                                    }
-                                }
-                                double fCenterX = aRect.Center().X();
-                                double fCenterY = aRect.Center().Y();
-                                double fx1 = cos(basegfx::deg2rad(fStartAngle)) * 65536.0 * fXScale
-                                             + fCenterX;
-                                double fy1 = -sin(basegfx::deg2rad(fStartAngle)) * 65536.0 * fYScale
-                                             + fCenterY;
-                                double fx2 = cos(basegfx::deg2rad(fEndAngle)) * 65536.0 * fXScale
-                                             + fCenterX;
-                                double fy2 = -sin(basegfx::deg2rad(fEndAngle)) * 65536.0 * fYScale
-                                             + fCenterY;
-                                aNewB2DPolygon.append(CreateArc( aRect, Point( static_cast<sal_Int32>(fx1), static_cast<sal_Int32>(fy1) ), Point( static_cast<sal_Int32>(fx2), static_cast<sal_Int32>(fy2) ), false));
-                            }
-                            else
-                            {
-                                basegfx::B2DPoint aEllipseCenter(aRect.Center().X(),aRect.Center().Y());
-                                double fRadiusX(aRect.GetWidth()/2.0);
-                                double fRadiusY(aRect.GetHeight()/2.0);
-                                aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipse(aEllipseCenter,fRadiusX,fRadiusY, 3));
-                            }
-                        }
+                        // Read all parameters, but do not finally handle them.
+                        basegfx::B2DPoint aCenter(GetPointAsB2DPoint(seqCoordinates[ rSrcPt ], true, true));
+                        double fWR; // horizontal ellipse radius
+                        double fHR; // vertical ellipse radius
+                        GetParameter(fWR, seqCoordinates[rSrcPt + 1].First, true, false);
+                        GetParameter(fHR, seqCoordinates[rSrcPt + 1].Second, false, true);
+                        double fStartAngle;
+                        GetParameter(fStartAngle, seqCoordinates[rSrcPt + 2].First, false, false);
+                        double fEndAngle;
+                        GetParameter(fEndAngle, seqCoordinates[rSrcPt + 2].Second, false, false);
+                        // Increasing here allows flat case differentiation tree by using 'continue'.
                         rSrcPt += 3;
-                    }
-                }
+
+                        double fScaledWR(fWR * fXScale);
+                        double fScaledHR(fHR * fYScale);
+                        if (fScaledWR == 0.0 && fScaledHR == 0.0)
+                        {
+                            // degenerated ellipse, add center point
+                            aNewB2DPolygon.append(aCenter);
+                            continue;
+                        }
+
+                        if (bIsFromBinaryImport)
+                        {
+                            // If a shape comes from MS binary ('escher') import, the angles are in degrees*2^16
+                            // and the second angle is not an end angle, but a swing angle.
+                            // MS Word shows this behavior: 0deg right, 90deg top, 180deg left and 270deg
+                            // bottom. Third and forth parameter are horizontal and vertical radius, not width
+                            // and height as noted in VML spec. A positive swing angle goes counter-clock
+                            // wise (in user view). The swing angle might go several times around in case
+                            // abs(swing angle) >= 360deg. Stroke accumulates, so that e.g. dash-dot might fill the
+                            // gaps of previous turn. Fill does not accumulate but uses even-odd rule, semi-transparent
+                            // fill does not become darker. The start and end points of the arc are calculated by
+                            // using the angles on a circle and then scaling the circle to the ellipse. Caution, that
+                            // is different from angle handling in ARCANGLETO and ODF.
+                            // The following implementation generates such rendering. It is only for rendering legacy
+                            // MS shapes and independent of the meaning of commands U and T in ODF specification.
+
+                            // Convert from fixedfloat to double
+                            double fSwingAngle;
+                            fStartAngle /= 65536.0;
+                            fSwingAngle = fEndAngle / 65536.0;
+                            // Convert orientation
+                            fStartAngle = -fStartAngle;
+                            fSwingAngle = -fSwingAngle;
+
+                            fEndAngle = fStartAngle + fSwingAngle;
+                            if (fSwingAngle < 0.0)
+                                std::swap(fStartAngle, fEndAngle);
+                            double fFrom(fStartAngle);
+                            double fTo(fFrom + 180.0);
+                            basegfx::B2DPolygon aTempB2DPolygon;
+                            double fS; // fFrom in radians in [0..2Pi[
+                            double fE; // fTo or fEndAngle in radians in [0..2PI[
+                            while (fTo < fEndAngle)
+                            {
+                                fS = lcl_getNormalizedAngleRad(fFrom);
+                                fE = lcl_getNormalizedAngleRad(fTo);
+                                aTempB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fS,fE));
+                                fFrom = fTo;
+                                fTo += 180.0;
+                            }
+                            fS = lcl_getNormalizedAngleRad(fFrom);
+                            fE = lcl_getNormalizedAngleRad(fEndAngle);
+                            aTempB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR,fS, fE));
+                            if (fSwingAngle < 0)
+                                aTempB2DPolygon.flip();
+                            aNewB2DPolygon.append(aTempB2DPolygon);
+                            continue;
+                        }
+
+                        // The not yet handled shapes are own preset shapes, or preset shapes from MS binary import, or user
+                        // defined shapes, or foreign shapes. Shapes from OOXML import do not use ANGLEELLIPSE or
+                        // ANGLEELLIPSETO, but use ARCANGLETO.
+                        if (bIsPresetShapeWithU)
+                        {
+                            // Besides "cloud-callout" all preset shapes have angle values '0 360'.
+                            // The imported "cloud-callout" has angle values '0 360' too, only our own "cloud-callout"
+                            // has values '0 23592960'. But that is fixedfloat and means 360*2^16. Thus all these shapes
+                            // have a full ellipse with start at 0deg.
+                            aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipse(aCenter, fScaledWR, fScaledHR));
+                            continue;
+                        }
+
+                        // In all other cases, full ODF conform handling is necessary. ODF rules:
+                        // Third and forth parameter are horizontal and vertical radius.
+                        // An angle determines the start or end point of the segment by intersection of the second angle
+                        // leg with the ellipse. The first angle leg is always the positive x-axis. For the position
+                        // of the intersection points the angle is used modulo 360deg in range [0deg..360deg[.
+                        // The position of range [0deg..360deg[ is the same as in command ARCANGLETO, with 0deg right,
+                        // 90deg bottom, 180deg left and 270deg top. Only if abs(end angle - start angle) == 360 deg,
+                        // a full ellipse is drawn. The segment is always drawn clock wise (in user view) from start
+                        // point to end point. The end point of the segment becomes the new "current" point.
+
+                        if (fabs(fabs(fEndAngle - fStartAngle) - 360.0) < 1.0E-15)
+                        {
+                            // draw full ellipse
+                            // Because createPolygonFromEllipseSegment cannot create full ellipse and
+                            // createPolygonFromEllipse has no variing starts, we use two half ellipses.
+                            const double fS(lcl_getNormalizedCircleAngleRad(fWR, fHR, fStartAngle));
+                            const double fH(lcl_getNormalizedCircleAngleRad(fWR, fHR, fStartAngle + 180.0));
+                            const double fE(lcl_getNormalizedCircleAngleRad(fWR, fHR, fEndAngle));
+                            aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fS, fH));
+                            aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fH, fE));
+                            continue;
+                        }
+
+                        // remaining cases with central segment angle < 360
+                        double fS(lcl_getNormalizedCircleAngleRad(fWR, fHR, fStartAngle));
+                        double fE(lcl_getNormalizedCircleAngleRad(fWR, fHR, fEndAngle));
+                        aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fS, fE));
+                    } // end for
+                } // end case
                 break;
 
                 case QUADRATICCURVETO :
