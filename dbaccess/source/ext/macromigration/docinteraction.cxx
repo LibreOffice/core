@@ -77,9 +77,9 @@ namespace dbmm
             _rDocumentName
         );
 
-        ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( makeAny( aRequest ) ) );
-        ::rtl::Reference< ::comphelper::OInteractionPassword > pPassword( new ::comphelper::OInteractionPassword( _io_rPassword ) );
-        ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
+        ::rtl::Reference pRequest( new ::comphelper::OInteractionRequest( makeAny( aRequest ) ) );
+        ::rtl::Reference pPassword( new ::comphelper::OInteractionPassword( _io_rPassword ) );
+        ::rtl::Reference pAbort( new ::comphelper::OInteractionAbort );
         pRequest->addContinuation( pPassword.get() );
         pRequest->addContinuation( pAbort.get() );
 
@@ -96,8 +96,8 @@ namespace dbmm
 
     void InteractionHandler::reportError( const Any& _rError )
     {
-        ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
-        ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+        ::rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rError ) );
+        ::rtl::Reference pApprove( new ::comphelper::OInteractionApprove );
         pRequest->addContinuation( pApprove.get() );
 
         m_pData->xHandler->handle( pRequest.get() );

@@ -391,7 +391,7 @@ SAL_IMPLEMENT_MAIN()
         // now); a welcome clean-up would be to make TypeEmitter work on
         // unoidl::Entity directly like the other codemakers:
         css::uno::Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
-        rtl::Reference< unoidl::Manager > unoidlMgr(new unoidl::Manager);
+        rtl::Reference unoidlMgr(new unoidl::Manager);
         std::vector< rtl::Reference< unoidl::Provider > > unoidlMandatoryProvs;
         for (vector< OUString >::iterator i(extra_registries.begin());
              i != extra_registries.end(); ++i)

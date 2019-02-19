@@ -226,7 +226,7 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
-    ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
+    ::rtl::Reference pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
     m_aForwardList[ _sName ] = pForward;
 }
 

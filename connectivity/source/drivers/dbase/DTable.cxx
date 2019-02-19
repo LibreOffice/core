@@ -2332,7 +2332,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 {
     OUString sTempName = createTempFile();
 
-    rtl::Reference<ODbaseTable> xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
+    rtl::Reference xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
     xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);
@@ -2390,7 +2390,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 {
     OUString sTempName = createTempFile();
 
-    rtl::Reference<ODbaseTable> xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
+    rtl::Reference xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
     xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);

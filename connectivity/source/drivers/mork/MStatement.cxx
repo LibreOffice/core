@@ -173,7 +173,7 @@ Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 {
     clearCachedResultSet();
 
-    ::rtl::Reference< OResultSet > pResult( new OResultSet( this, m_pSQLIterator ) );
+    ::rtl::Reference pResult( new OResultSet( this, m_pSQLIterator ) );
     initializeResultSet( pResult.get() );
 
     pResult->executeQuery();

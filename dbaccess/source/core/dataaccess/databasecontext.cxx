@@ -238,7 +238,7 @@ Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  )
 
 Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
 {
-    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext, *this ) );
+    ::rtl::Reference pImpl( new ODatabaseModelImpl( m_aContext, *this ) );
     Reference< XDataSource > xDataSource( pImpl->getOrCreateDataSource() );
 
     return xDataSource.get();

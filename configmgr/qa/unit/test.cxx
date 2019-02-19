@@ -359,14 +359,14 @@ void Test::testListener()
 
     // test with no props.
     {
-        rtl::Reference<comphelper::ConfigurationListener> xListener(
+        rtl::Reference xListener(
             new comphelper::ConfigurationListener(aRandomPath));
         xListener->dispose();
     }
 
     // test some changes
     {
-        rtl::Reference<comphelper::ConfigurationListener> xListener(
+        rtl::Reference xListener(
             new comphelper::ConfigurationListener(aRandomPath));
 
         comphelper::ConfigurationListenerProperty<bool> aSetting(xListener, "AutoRedraw");

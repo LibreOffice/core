@@ -2198,7 +2198,7 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
         xDBContextTunnel->getSomething(
             dbaccess::ODatabaseContext::getUnoTunnelImplementationId()));
 
-    rtl::Reference<dbaccess::ODatabaseModelImpl> pImpl(
+    rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));
     css::uno::Reference<XInterface> inst(pImpl->createNewModel_deliverOwnership());
     inst->acquire();

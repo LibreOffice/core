@@ -538,7 +538,7 @@ namespace dbaccess
         if ( xDocDefinition.is() )
         {
             Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
-            rtl::Reference< SubComponentLoader >( new SubComponentLoader( xController, xDocDefinition ) );
+            rtl::Reference( new SubComponentLoader( xController, xDocDefinition ) );
         }
 
         return xSubComponent;
@@ -591,7 +591,7 @@ namespace dbaccess
         }
 
         Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
-        rtl::Reference< SubComponentLoader >( new SubComponentLoader( xController, xSubComponent ) );
+        rtl::Reference( new SubComponentLoader( xController, xSubComponent ) );
 
         return xSubComponent;
     }

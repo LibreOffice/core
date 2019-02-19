@@ -1028,7 +1028,7 @@ namespace dbmm
         m_rProgress.startObject( sObjectName, OUString(), DEFAULT_DOC_PROGRESS_RANGE );
 
         // load the document
-        rtl::Reference< ProgressCapture > pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
+        rtl::Reference pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
         SubDocument aSubDocument( _rDocument );
         OpenDocResult eResult = lcl_loadSubDocument_nothrow( aSubDocument, pStatusIndicator.get(), m_rLogger );
         if ( eResult != eOpenedDoc )

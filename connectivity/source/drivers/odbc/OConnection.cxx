@@ -484,7 +484,7 @@ SQLHANDLE OConnection::createStatementHandle()
         sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
         if(nMaxStatements && nMaxStatements <= m_nStatementCount)
         {
-            rtl::Reference<OConnection> xConnection(new OConnection(m_pDriverHandleCopy,m_xDriver.get()));
+            rtl::Reference xConnection(new OConnection(m_pDriverHandleCopy,m_xDriver.get()));
             xConnection->Construct(m_sURL,getConnectionInfo());
             xConnectionTemp = xConnection;
             bNew = true;

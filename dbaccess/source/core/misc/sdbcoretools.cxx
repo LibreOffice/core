@@ -81,8 +81,8 @@ namespace dbaccess
         {
             Reference< XInteractionRequestStringResolver > xStringResolver = InteractionRequestStringResolver::create(_rContext);
 
-            ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
-            ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+            ::rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rError ) );
+            ::rtl::Reference pApprove( new ::comphelper::OInteractionApprove );
             pRequest->addContinuation( pApprove.get() );
             Optional< OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
             if ( aMessage.IsPresent )
