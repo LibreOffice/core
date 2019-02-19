@@ -214,4 +214,12 @@
         </part>
     </fixedline>
 
+    <progress>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="7" ry="7"/>
+            </state>
+        </part>
+    </progress>
+
 </widgets>
