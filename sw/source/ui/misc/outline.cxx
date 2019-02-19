@@ -823,13 +823,30 @@ static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
-    vcl::Font aFont(*rFormat.GetBulletFont());
-    aFont.SetFontSize(rSize);
+    // via Uno it's possible that no font has been set!
+    vcl::Font aFont(rFormat.GetBulletFont() ? *rFormat.GetBulletFont() : aTmpFont);
+    Size aTmpSize(rSize);
+    aTmpSize.setWidth( aTmpSize.Width() * ( rFormat.GetBulletRelSize()) );
+    aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
+    aTmpSize.setHeight( aTmpSize.Height() * ( rFormat.GetBulletRelSize()) );
+    aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
+    // in case of a height of zero it is drawn in original height
+    if(!aTmpSize.Height())
+        aTmpSize.setHeight( 1 );
+    aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
-    pVDev->SetFont(aFont);
+    Color aBulletColor = rFormat.GetBulletColor();
+    if(aBulletColor == COL_AUTO)
+        aBulletColor = pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK;
+    else if(aBulletColor == pVDev->GetFillColor())
+        aBulletColor.Invert();
+    aFont.SetColor(aBulletColor);
+    pVDev->SetFont( aFont );
     OUString aText(rFormat.GetBulletChar());
-    pVDev->DrawText(Point(nXStart, nYStart), aText);
-    const long nRet = pVDev->GetTextWidth(aText);
+    long nY = nYStart;
+    nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
+    pVDev->DrawText( Point(nXStart, nY), aText );
+    long nRet = pVDev->GetTextWidth(aText);
 
     pVDev->SetFont(aTmpFont);
     return nRet;
