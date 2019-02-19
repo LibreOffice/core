@@ -140,4 +140,22 @@
         </part>
     </editbox>
 
+    <slider>
+        <part value="Button">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <circ stroke="#AAAAAA" fill="#FFFFFF" stroke-width="1" rx="7" ry="7"/>
+            </state>
+        </part>
+        <part value="TrackHorzArea">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+            </state>
+        </part>
+        <part value="TrackVertArea">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+            </state>
+        </part>
+    </slider>
+
 </widgets>
