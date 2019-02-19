@@ -44,7 +44,7 @@
         <inactiveTabColor value="#C0C0C0"/>
         <tabTextColor value="#000000"/>
         <tabRolloverTextColor value="#000000"/>
-        <tabHighlightTextColor value="#000000"/>
+        <tabHighlightTextColor value="#FFFFFF"/>
         <disableColor value="#808080"/>
         <helpColor value="#FFFFE0"/>
         <helpTextColor value="#000000"/>
@@ -67,29 +67,46 @@
 
     <radiobutton>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
-                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" />
+           <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="true">
+                <image source="tick-on.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
-                <circ stroke="#007AFF" fill="#FFFFFF" stroke-width="1" />
-                <circ stroke="#007AFF" fill="#007AFF" stroke-width="1" x1="0.1" y1="0.1" x2="0.9" y2="0.9"/>
+            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="true">
+                <image source="tick-on-pressed.svgx" />
+            </state>
+            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+                <image source="tick-on-disabled.svgx" />
+            </state>
+            <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="false">
+                <image source="tick-off.svgx" />
+            </state>
+            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="false">
+                <image source="tick-off-pressed.svgx" />
+            </state>
+            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+                <image source="tick-on-disabled.svgx" />
             </state>
         </part>
     </radiobutton>
 
     <checkbox>
         <part value="Entire">
-           <state enabled="any" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="true">
-                <image source="checkbox-on.svgx" />
+           <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="true">
+                <image source="switch-on.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="true">
-                <image source="checkbox-on-pressed.svgx" />
+            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="true">
+                <image source="switch-on-pressed.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="false">
-                <image source="checkbox-off.svgx" />
+            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+                <image source="switch-on-disabled.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="false">
-                <image source="checkbox-off-pressed.svgx" />
+            <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="false">
+                <image source="switch-off.svgx" />
+            </state>
+            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="false">
+                <image source="switch-off-pressed.svgx" />
+            </state>
+            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+                <image source="switch-on-disabled.svgx" />
             </state>
         </part>
     </checkbox>

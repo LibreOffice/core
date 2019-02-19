@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1344"
+   version="1.1"
+   viewBox="0 0 6.8791662 6.8791669"
+   height="26"
+   width="26"
+   sodipodi:docname="tick-on-disabled-inkscape.svg"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     id="namedview13"
+     showgrid="false"
+     inkscape:zoom="12.836708"
+     inkscape:cx="25.776711"
+     inkscape:cy="5.7547945"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1338">
+    <radialGradient
+       gradientTransform="matrix(1.1736111,-2.5566718e-7,2.5566717e-7,1.173611,-295.03909,-135.13117)"
+       gradientUnits="userSpaceOnUse"
+       r="3.175"
+       fy="74.485405"
+       fx="45.177605"
+       cy="74.485405"
+       cx="45.177605"
+       id="radialGradient88258"
+       xlink:href="#linearGradient87950" />
+    <linearGradient
+       id="linearGradient87950">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0"
+         id="stop87946" />
+      <stop
+         style="stop-color:#7b7b7b;stop-opacity:0"
+         offset="1"
+         id="stop87948" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient90579"
+       id="radialGradient91656"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.1153842,7.9576548e-7,-6.4384668e-7,1.7115383,-355.07655,-175.19895)"
+       cx="53.445831"
+       cy="74.485405"
+       fx="53.445831"
+       fy="74.485405"
+       r="3.4395833" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient90579">
+      <stop
+         style="stop-color:#007aff;stop-opacity:0"
+         offset="0"
+         id="stop90575" />
+      <stop
+         style="stop-color:#646464;stop-opacity:0.19607843"
+         offset="1"
+         id="stop90577" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata1341">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(245.45773,51.15387)"
+     id="layer1">
+    <rect
+       ry="3.4395828"
+       rx="3.4395833"
+       y="-51.15387"
+       x="-245.45773"
+       height="6.8791656"
+       width="6.8791666"
+       id="rect91648"
+       style="opacity:1;fill:#8ab4e4;fill-opacity:1;stroke:none;stroke-width:0.34406587;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       sodipodi:nodetypes="ccccccc"
+       inkscape:connector-curvature="0"
+       id="path91650"
+       d="m -244.06867,-47.763897 0.26459,-0.264583 1.2237,1.223698 2.34818,-2.348175 0.26458,0.264583 -2.61276,2.612758 z"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:url(#radialGradient91656);stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect91652"
+       width="6.614583"
+       height="6.6145825"
+       x="-245.32544"
+       y="-51.02158"
+       rx="3.3072915"
+       ry="3.3072913" />
+  </g>
+</svg>

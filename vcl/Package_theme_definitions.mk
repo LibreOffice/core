@@ -11,10 +11,18 @@ $(eval $(call gb_Package_Package,vcl_theme_definitions,$(SRCDIR)/vcl/uiconfig/th
 
 $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/theme_definitions,\
 	definition.xml \
-	checkbox-on.svgx \
-	checkbox-off.svgx \
-	checkbox-on-pressed.svgx \
-	checkbox-off-pressed.svgx \
+	switch-off.svgx \
+	switch-off-disabled.svgx \
+	switch-off-pressed.svgx \
+	switch-on.svgx \
+	switch-on-pressed.svgx \
+	switch-on-disabled.svgx \
+	tick-off.svgx \
+	tick-off-disabled.svgx \
+	tick-off-pressed.svgx \
+	tick-on.svgx \
+	tick-on-pressed.svgx \
+	tick-on-disabled.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
