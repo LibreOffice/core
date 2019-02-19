@@ -128,10 +128,13 @@ void SwView::ExecLingu(SfxRequest &rReq)
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
                     {
+                        Reference<awt::XWindow> xParentWindow;
+                        if (weld::Window* pParentWindow = rReq.GetFrameWeld())
+                            xParentWindow = pParentWindow->GetXWindow();
                         //  initialize dialog
                         uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                         {
-                            {"ParentWindow", uno::Any(Reference< awt::XWindow >())}
+                            {"ParentWindow", uno::Any(xParentWindow)}
                         }));
                         xInit->initialize( aSeq );
 
