@@ -69,7 +69,7 @@ namespace editeng
         // general
         VclPtr<AbstractHangulHanjaConversionDialog>
                                 m_pConversionDialog;    // the dialog to display for user interaction
-        VclPtr<vcl::Window>     m_pUIParent;            // the parent window for any UI we raise
+        weld::Window*           m_pUIParent;            // the parent window for any UI we raise
         Reference< XComponentContext >
                                 m_xContext;             // the service factory to use
         Reference< XExtendedTextConversion >
@@ -119,7 +119,7 @@ namespace editeng
 
     public:
         HangulHanjaConversion_Impl(
-            vcl::Window* _pUIParent,
+            weld::Window* pUIParent,
             const Reference< XComponentContext >& rxContext,
             const lang::Locale& _rSourceLocale,
             const lang::Locale& _rTargetLocale,
@@ -151,13 +151,13 @@ namespace editeng
 
     private:
         DECL_LINK( OnOptionsChanged, LinkParamNone*, void );
-        DECL_LINK( OnIgnore, Button*, void );
-        DECL_LINK( OnIgnoreAll, Button*, void );
-        DECL_LINK( OnChange, Button*, void );
-        DECL_LINK( OnChangeAll, Button*, void );
-        DECL_LINK( OnByCharClicked, CheckBox*, void );
-        DECL_LINK( OnConversionTypeChanged, Button*, void );
-        DECL_LINK( OnFind, Button*, void );
+        DECL_LINK( OnIgnore, weld::Button&, void );
+        DECL_LINK( OnIgnoreAll, weld::Button&, void );
+        DECL_LINK( OnChange, weld::Button&, void );
+        DECL_LINK( OnChangeAll, weld::Button&, void );
+        DECL_LINK( OnByCharClicked, weld::ToggleButton&, void );
+        DECL_LINK( OnConversionTypeChanged, weld::Button&, void );
+        DECL_LINK( OnFind, weld::Button&, void );
 
         /** proceed, after the current convertible has been handled
 
@@ -227,7 +227,7 @@ namespace editeng
 
     HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
 
-    HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( vcl::Window* _pUIParent,
+    HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( weld::Window* pUIParent,
                                                             const Reference< XComponentContext >& rxContext,
                                                             const lang::Locale& _rSourceLocale,
                                                             const lang::Locale& _rTargetLocale,
@@ -236,7 +236,7 @@ namespace editeng
                                                             bool _bIsInteractive,
                                                             HangulHanjaConversion* _pAntiImpl )
         : m_pConversionDialog()
-        , m_pUIParent( _pUIParent )
+        , m_pUIParent( pUIParent )
         , m_xContext( rxContext )
         , m_aSourceLocale( _rSourceLocale )
         , m_nSourceLang( LanguageTag::convertToLanguageType( _rSourceLocale ) )
@@ -811,13 +811,13 @@ namespace editeng
         implUpdateData();
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnore, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnore, weld::Button&, void)
     {
         // simply ignore, and proceed
         implProceed( false );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnoreAll, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnoreAll, weld::Button&, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnIgnoreAll: no dialog! How this?" );
 
@@ -835,7 +835,7 @@ namespace editeng
         }
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChange, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChange, weld::Button&, void)
     {
         // change
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
@@ -845,7 +845,7 @@ namespace editeng
         implProceed( false );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChangeAll, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChangeAll, weld::Button&, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
@@ -867,22 +867,22 @@ namespace editeng
         }
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnByCharClicked, CheckBox*, _pBox, void )
+    IMPL_LINK(HangulHanjaConversion_Impl, OnByCharClicked, weld::ToggleButton&, rBox, void)
     {
-        m_bByCharacter = _pBox->IsChecked();
+        m_bByCharacter = rBox.get_active();
 
         // continue conversion, without advancing to the next unit, but instead continuing with the current unit
         implProceed( true );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged, weld::Button&, void)
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
         if( m_pConversionDialog )
             m_eConversionFormat = m_pConversionDialog->GetConversionFormat( );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnFind, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnFind, weld::Button&, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnFind: where did this come from?" );
         if ( m_pConversionDialog )
@@ -944,12 +944,12 @@ namespace editeng
     bool    HangulHanjaConversion::m_bTryBothDirectionsSave = false;
     HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
 
-    HangulHanjaConversion::HangulHanjaConversion( vcl::Window* _pUIParent,
+    HangulHanjaConversion::HangulHanjaConversion( weld::Window* pUIParent,
         const Reference< XComponentContext >& rxContext,
         const lang::Locale& _rSourceLocale, const lang::Locale& _rTargetLocale,
         const vcl::Font* _pTargetFont,
         sal_Int32 _nOptions, bool _bIsInteractive)
-        :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
+        :m_pImpl( new HangulHanjaConversion_Impl( pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
     {
     }
 

@@ -839,9 +839,8 @@ static short impl_askUserForWizardCancel(weld::Widget* pParent, const char* pRes
         return DLG_RET_CANCEL;
 }
 
-RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
-    : Dialog(pParent, "DocRecoveryRecoverDialog",
-        "svx/ui/docrecoveryrecoverdialog.ui")
+RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
+    : GenericDialogController(pParent, "svx/ui/docrecoveryrecoverdialog.ui", "DocRecoveryRecoverDialog")
     , m_aTitleRecoveryInProgress(SvxResId(RID_SVXSTR_RECOVERY_INPROGRESS))
     , m_aRecoveryOnlyFinish (SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH))
     , m_aRecoveryOnlyFinishDescr(SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH_DESCR))
@@ -859,18 +858,18 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     SvSimpleTableContainer* pFileListLBContainer = get<SvSimpleTableContainer>("filelist");
     Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, 68), MapMode(MapUnit::MapAppFont)));
     pFileListLBContainer->set_height_request(aSize.Height());
-    m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer);
+    m_xFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer);
 
     static long aTabPositions[] = { 0, 40*RECOV_CONTROLWIDTH/100 };
-    m_pFileListLB->SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
-    m_pFileListLB->InsertHeaderEntry(get<FixedText>("nameft")->GetText() + "\t" + get<FixedText>("statusft")->GetText());
+    m_xFileListLB->SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
+    m_xFileListLB->InsertHeaderEntry(get<FixedText>("nameft")->GetText() + "\t" + get<FixedText>("statusft")->GetText());
 
     PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
     m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    m_pFileListLB->SetBackground( rStyleSettings.GetDialogColor() );
+    m_xFileListLB->SetBackground( rStyleSettings.GetDialogColor() );
 
     m_pNextBtn->Enable();
     m_pNextBtn->SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
@@ -883,14 +882,14 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
         OUString sName( rInfo.DisplayName );
         sName += "\t";
         sName += impl_getStatusString( rInfo );
-        SvTreeListEntry* pEntry = m_pFileListLB->InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
+        SvTreeListEntry* pEntry = m_xFileListLB->InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData(const_cast<TURLInfo *>(&rInfo));
     }
 
     // mark first item
-    SvTreeListEntry* pFirst = m_pFileListLB->First();
+    SvTreeListEntry* pFirst = m_xFileListLB->First();
     if (pFirst)
-        m_pFileListLB->SetCursor(pFirst, true);
+        m_xFileListLB->SetCursor(pFirst, true);
 }
 
 RecoveryDialog::~RecoveryDialog()
@@ -900,7 +899,7 @@ RecoveryDialog::~RecoveryDialog()
 
 void RecoveryDialog::dispose()
 {
-    m_pFileListLB.disposeAndClear();
+    m_xFileListLB.disposeAndClear();
     m_pDescrFT.clear();
     m_pProgrParent.clear();
     m_pNextBtn.clear();
@@ -1082,11 +1081,11 @@ void RecoveryDialog::start()
 
 void RecoveryDialog::updateItems()
 {
-    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
+    sal_uIntPtr c = m_xFileListLB->GetEntryCount();
     sal_uIntPtr i = 0;
     for ( i=0; i<c; ++i )
     {
-        SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);
+        SvTreeListEntry* pEntry = m_xFileListLB->GetEntry(i);
         if ( !pEntry )
             continue;
 
@@ -1096,20 +1095,20 @@ void RecoveryDialog::updateItems()
 
         OUString sStatus = impl_getStatusString( *pInfo );
         if ( !sStatus.isEmpty() )
-            m_pFileListLB->SetEntryText( sStatus, pEntry, 1 );
+            m_xFileListLB->SetEntryText( sStatus, pEntry, 1 );
     }
 
-    m_pFileListLB->Invalidate();
-    m_pFileListLB->Update();
+    m_xFileListLB->Invalidate();
+    m_xFileListLB->Update();
 }
 
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
-    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
+    sal_uIntPtr c = m_xFileListLB->GetEntryCount();
     sal_uIntPtr i = 0;
     for (i=0; i<c; ++i)
     {
-        SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);
+        SvTreeListEntry* pEntry = m_xFileListLB->GetEntry(i);
         if (!pEntry)
             continue;
 
@@ -1117,10 +1116,10 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
         if (pInfo->ID != pItem->ID)
             continue;
 
-        m_pFileListLB->SetCursor(pEntry, true);
-        m_pFileListLB->MakeVisible(pEntry);
-        m_pFileListLB->Invalidate();
-        m_pFileListLB->Update();
+        m_xFileListLB->SetCursor(pEntry, true);
+        m_xFileListLB->MakeVisible(pEntry);
+        m_xFileListLB->Invalidate();
+        m_xFileListLB->Update();
         break;
     }
 }
@@ -1130,7 +1129,7 @@ void RecoveryDialog::end()
     m_bWaitForCore = false;
 }
 
-IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, Button*, void)
+IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, weld::Button&, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1150,7 +1149,7 @@ IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, Button*, void)
+IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, weld::Button&, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1179,19 +1178,19 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     switch ( rInfo.RecoveryState )
     {
         case E_SUCCESSFULLY_RECOVERED :
-            sStatus = m_pFileListLB->m_aSuccessRecovStr;
+            sStatus = m_xFileListLB->m_aSuccessRecovStr;
             break;
         case E_ORIGINAL_DOCUMENT_RECOVERED :
-            sStatus = m_pFileListLB->m_aOrigDocRecovStr;
+            sStatus = m_xFileListLB->m_aOrigDocRecovStr;
             break;
         case E_RECOVERY_FAILED :
-            sStatus = m_pFileListLB->m_aRecovFailedStr;
+            sStatus = m_xFileListLB->m_aRecovFailedStr;
             break;
         case E_RECOVERY_IS_IN_PROGRESS :
-            sStatus = m_pFileListLB->m_aRecovInProgrStr;
+            sStatus = m_xFileListLB->m_aRecovInProgrStr;
             break;
         case E_NOT_RECOVERED_YET :
-            sStatus = m_pFileListLB->m_aNotRecovYetStr;
+            sStatus = m_xFileListLB->m_aNotRecovYetStr;
             break;
         default:
             break;
