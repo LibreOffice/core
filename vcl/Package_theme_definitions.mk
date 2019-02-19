@@ -23,6 +23,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	tick-on.svgx \
 	tick-on-pressed.svgx \
 	tick-on-disabled.svgx \
+	spinbox-left.svgx \
+	spinbox-right.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
