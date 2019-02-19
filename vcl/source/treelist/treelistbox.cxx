@@ -3316,8 +3316,10 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
 {
     const SvTreeListEntry* pLeft = rData.pLeft;
     const SvTreeListEntry* pRight = rData.pRight;
-    OUString aLeft( static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SvLBoxItemType::String))->GetText());
-    OUString aRight( static_cast<const SvLBoxString*>(pRight->GetFirstItem(SvLBoxItemType::String))->GetText());
+    const SvLBoxString* pLeftText = static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SvLBoxItemType::String));
+    const SvLBoxString* pRightText = static_cast<const SvLBoxString*>(pRight->GetFirstItem(SvLBoxItemType::String));
+    OUString aLeft = pLeftText ? pLeftText->GetText() : OUString();
+    OUString aRight = pRightText ? pRightText->GetText() : OUString();
     pImpl->UpdateStringSorter();
     return pImpl->m_pStringSorter->compare(aLeft, aRight);
 }
