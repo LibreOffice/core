@@ -137,7 +137,9 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
             { "checkbox", ControlType::Checkbox },     { "combobox", ControlType::Combobox },
             { "editbox", ControlType::Editbox },       { "scrollbar", ControlType::Scrollbar },
             { "spinbox", ControlType::Spinbox },       { "slider", ControlType::Slider },
-            { "fixedline", ControlType::Fixedline },   { "progress", ControlType::Progress } };
+            { "fixedline", ControlType::Fixedline },   { "progress", ControlType::Progress },
+            { "tabitem", ControlType::TabItem },       { "tabheader", ControlType::TabHeader },
+            { "tabpane", ControlType::TabPane },       { "tabbody", ControlType::TabBody } };
 
     auto const& rIterator = aPartMap.find(rString);
     if (rIterator != aPartMap.end())
