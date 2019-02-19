@@ -1225,14 +1225,8 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     OSL_ASSERT(DISABLED == m_eState || CHECK_SCHEDULED == m_eState);
 
     // Ignore leading non direct download if we get direct ones
-    std::vector< DownloadSource >::iterator iter = m_aUpdateInfo.Sources.begin();
-    while( iter != m_aUpdateInfo.Sources.end() )
-    {
-        if( iter->IsDirect )
-            break;
-
-        ++iter;
-    }
+    std::vector< DownloadSource >::iterator iter = std::find_if(m_aUpdateInfo.Sources.begin(), m_aUpdateInfo.Sources.end(),
+        [](const DownloadSource& rSource) { return rSource.IsDirect; });
 
     if( (iter != m_aUpdateInfo.Sources.begin()) &&
         (iter != m_aUpdateInfo.Sources.end()) &&

@@ -555,7 +555,7 @@ namespace pcr
         if ( impl_haveSheetAnchorType_nothrow() )
             addInt32PropertyDescription( aProperties, PROPERTY_SHEET_ANCHOR_TYPE );
 
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence(aProperties);
     }
 
 

@@ -235,8 +235,8 @@ namespace accessibility
             rChild.SetState( AccessibleStateType::FOCUSED );
 
         // add states passed from outside
-        for( VectorOfStates::const_iterator aIt = maChildStates.begin(), aEnd = maChildStates.end(); aIt != aEnd; ++aIt )
-            rChild.SetState( *aIt );
+        for( const auto& rState : maChildStates )
+            rChild.SetState( rState );
     }
 
     void AccessibleParaManager::SetState( sal_Int32 nChild, const sal_Int16 nStateId )

@@ -178,20 +178,18 @@ namespace dbp
         {
             Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
 
-            std::vector< OUString >::const_iterator pColumnServiceName = aColumnServiceNames.begin();
             std::vector< OUString >::const_iterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
             std::vector< OUString >::const_iterator pFormFieldName = aFormFieldNames.begin();
-            std::vector< OUString >::const_iterator pColumnServiceNameEnd = aColumnServiceNames.end();
 
-            for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
+            for (const auto& rColumnServiceName : aColumnServiceNames)
             {
                 // create a (grid)column for the (resultset)column
                 try
                 {
-                    Reference< XPropertySet > xColumn( xColumnFactory->createColumn(*pColumnServiceName), UNO_SET_THROW );
+                    Reference< XPropertySet > xColumn( xColumnFactory->createColumn(rColumnServiceName), UNO_SET_THROW );
                     Reference< XPropertySetInfo > xColumnPSI( xColumn->getPropertySetInfo(), UNO_SET_THROW );
 
-                    OUString sColumnName(*pColumnServiceName);
+                    OUString sColumnName(rColumnServiceName);
                     disambiguateName(xExistenceChecker, sColumnName);
 
                     // the data field the column should be bound to
@@ -213,6 +211,9 @@ namespace dbp
                               "unexpected exception while creating the grid column for field " <<
                               *pFormFieldName );
                 }
+
+                ++pColumnLabelPostfix;
+                ++pFormFieldName;
             }
         }
     }

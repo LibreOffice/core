@@ -1292,16 +1292,12 @@ size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
 
 void Outliner::RemoveView( OutlinerView const * pView )
 {
-
-    for ( ViewList::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
+    ViewList::iterator it = std::find(aViewList.begin(), aViewList.end(), pView);
+    if (it != aViewList.end())
     {
-        if ( *it == pView )
-        {
-            pView->pEditView->HideCursor(); // HACK
-            pEditEngine->RemoveView(  pView->pEditView.get() );
-            aViewList.erase( it );
-            break;
-        }
+        pView->pEditView->HideCursor(); // HACK
+        pEditEngine->RemoveView(  pView->pEditView.get() );
+        aViewList.erase( it );
     }
 }
 

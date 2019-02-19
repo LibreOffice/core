@@ -222,7 +222,7 @@ namespace pcr
 
         if ( aProperties.empty() )
             return Sequence< Property >();
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence(aProperties);
     }
 
 
@@ -242,7 +242,7 @@ namespace pcr
         }
         if ( aSuperseded.empty() )
             return Sequence< OUString >();
-        return Sequence< OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
+        return comphelper::containerToSequence(aSuperseded);
     }
 
 
@@ -253,7 +253,7 @@ namespace pcr
         if ( implHaveTextTypeProperty() )
             aInterestingActuatingProps.push_back(  PROPERTY_TEXTTYPE );
         aInterestingActuatingProps.push_back( PROPERTY_MULTILINE );
-        return Sequence< OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
+        return comphelper::containerToSequence(aInterestingActuatingProps);
     }
 
 

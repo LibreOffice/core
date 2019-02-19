@@ -355,38 +355,27 @@ namespace {
 void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor )
 {
     /*
-        we break the for loop if we find the first CF_INVALID
+        we stop search if we find the first CF_INVALID
         because in the translation table the entries with a
         standard clipboard format id appear before the other
         entries with CF_INVALID
     */
-    vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
-    for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( ); citer != citer_end; ++citer )
-    {
-        sal_Int32 stdId = citer->aStandardFormatId;
-        if ( aStandardFormatId == stdId )
-        {
-            aDataFlavor = citer->aDataFlavor;
-            break;
-        }
-        else if ( stdId == CF_INVALID )
-            break;
-    }
+    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+        [&aStandardFormatId](const FormatEntry& rEntry) {
+            return rEntry.aStandardFormatId == aStandardFormatId
+                || rEntry.aStandardFormatId == CF_INVALID;
+        });
+    if (citer != g_TranslTable.end() && citer->aStandardFormatId == aStandardFormatId)
+        aDataFlavor = citer->aDataFlavor;
 }
 
 void findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor )
 {
-    vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
-    for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( );
-          citer != citer_end;
-          ++citer )
-    {
-        if ( aNativeFormatName.equalsIgnoreAsciiCase( citer->aNativeFormatName ) )
-        {
-            aDataFlavor = citer->aDataFlavor;
-            break;
-        }
-    }
+    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+        [&aNativeFormatName](const FormatEntry& rEntry) {
+            return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName); });
+    if (citer != g_TranslTable.end())
+        aDataFlavor = citer->aDataFlavor;
 }
 
 void findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
@@ -403,16 +392,13 @@ void findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
 
 void setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny )
 {
-    vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
-    for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( ); citer != citer_end; ++citer )
-    {
-        if ( aNativeFormatName.equalsIgnoreAsciiCase( citer->aNativeFormatName ) &&
-             (CF_INVALID != citer->aStandardFormatId) )
-        {
-            aAny <<= citer->aStandardFormatId;
-            break;
-        }
-    }
+    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+        [&aNativeFormatName](const FormatEntry& rEntry) {
+            return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName)
+                && (CF_INVALID != rEntry.aStandardFormatId);
+        });
+    if (citer != g_TranslTable.end())
+        aAny <<= citer->aStandardFormatId;
 }
 
 void findStdFormatIdOrNativeFormatNameForFullMediaType(
@@ -420,23 +406,21 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
     const OUString& aFullMediaType,
     Any& aAny )
 {
-    vector< FormatEntry >::const_iterator citer_end = g_TranslTable.end( );
-    for ( vector< FormatEntry >::const_iterator citer = g_TranslTable.begin( ); citer != citer_end; ++citer )
+    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+        [&aRefXMimeFactory, &aFullMediaType](const FormatEntry& rEntry) {
+            Reference<XMimeContentType> refXMime( aRefXMimeFactory->createMimeContentType(rEntry.aDataFlavor.MimeType) );
+            return aFullMediaType.equalsIgnoreAsciiCase(refXMime->getFullMediaType());
+        });
+    if (citer != g_TranslTable.end())
     {
-        Reference< XMimeContentType >
-        refXMime( aRefXMimeFactory->createMimeContentType( citer->aDataFlavor.MimeType ) );
-        if ( aFullMediaType.equalsIgnoreAsciiCase( refXMime->getFullMediaType( ) ) )
+        sal_Int32 cf = citer->aStandardFormatId;
+        if ( CF_INVALID != cf )
+            aAny <<= cf;
+        else
         {
-            sal_Int32 cf = citer->aStandardFormatId;
-            if ( CF_INVALID != cf )
-                aAny <<= cf;
-            else
-            {
-                OSL_ENSURE( citer->aNativeFormatName.getLength( ),
-                    "Invalid standard format id and empty native format name in translation table" );
-                aAny <<= citer->aNativeFormatName;
-            }
-            break;
+            OSL_ENSURE( citer->aNativeFormatName.getLength( ),
+                "Invalid standard format id and empty native format name in translation table" );
+            aAny <<= citer->aNativeFormatName;
         }
     }
 }

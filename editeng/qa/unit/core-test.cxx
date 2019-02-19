@@ -884,36 +884,20 @@ void Test::testHyperlinkSearch()
 
 bool hasBold(const editeng::Section& rSecAttr)
 {
-    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
-    for (; it != itEnd; ++it)
-    {
-        const SfxPoolItem* p = *it;
-        if (p->Which() != EE_CHAR_WEIGHT)
-            continue;
-
-        if (static_cast<const SvxWeightItem*>(p)->GetWeight() != WEIGHT_BOLD)
-            continue;
-
-        return true;
-    }
-    return false;
+    return std::any_of(rSecAttr.maAttributes.begin(), rSecAttr.maAttributes.end(),
+        [](const SfxPoolItem* p) {
+            return p->Which() == EE_CHAR_WEIGHT
+                && static_cast<const SvxWeightItem*>(p)->GetWeight() == WEIGHT_BOLD;
+        });
 }
 
 bool hasItalic(const editeng::Section& rSecAttr)
 {
-    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
-    for (; it != itEnd; ++it)
-    {
-        const SfxPoolItem* p = *it;
-        if (p->Which() != EE_CHAR_ITALIC)
-            continue;
-
-        if (static_cast<const SvxPostureItem*>(p)->GetPosture() != ITALIC_NORMAL)
-            continue;
-
-        return true;
-    }
-    return false;
+    return std::any_of(rSecAttr.maAttributes.begin(), rSecAttr.maAttributes.end(),
+        [](const SfxPoolItem* p) {
+            return p->Which() == EE_CHAR_ITALIC
+                && static_cast<const SvxPostureItem*>(p)->GetPosture() == ITALIC_NORMAL;
+        });
 }
 
 void Test::testBoldItalicCopyPaste()
@@ -1104,19 +1088,11 @@ void Test::testBoldItalicCopyPaste()
 // Auxiliary function to test Underline text Copy/Paste using Legacy Format
 bool hasUnderline(const editeng::Section& rSecAttr)
 {
-    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
-    for (; it != itEnd; ++it)
-    {
-        const SfxPoolItem* p = *it;
-        if (p->Which() != EE_CHAR_UNDERLINE)
-            continue;
-
-        if (static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() != LINESTYLE_SINGLE)
-            continue;
-
-        return true;
-    }
-    return false;
+    return std::any_of(rSecAttr.maAttributes.begin(), rSecAttr.maAttributes.end(),
+        [](const SfxPoolItem* p) {
+            return p->Which() == EE_CHAR_UNDERLINE
+                && static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() == LINESTYLE_SINGLE;
+        });
 }
 
 void Test::testUnderlineCopyPaste()

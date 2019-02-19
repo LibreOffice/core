@@ -621,9 +621,8 @@ namespace pcr
 
     void OBrowserListBox::SetPropertyValue(const OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
-        ListBoxLines::iterator line = m_aLines.begin();
-        for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
-            ;
+        ListBoxLines::iterator line = std::find_if(m_aLines.begin(), m_aLines.end(),
+            [&_rEntryName](const ListBoxLine& rLine) { return rLine.aName == _rEntryName; });
 
         if ( line != m_aLines.end() )
         {
@@ -658,9 +657,8 @@ namespace pcr
 
     bool OBrowserListBox::impl_getBrowserLineForName( const OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const
     {
-        ListBoxLines::const_iterator line = m_aLines.begin();
-        for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
-            ;
+        ListBoxLines::const_iterator line = std::find_if(m_aLines.begin(), m_aLines.end(),
+            [&_rEntryName](const ListBoxLine& rLine) { return rLine.aName == _rEntryName; });
 
         if ( line != m_aLines.end() )
             _out_rpLine = line->pLine;
@@ -1023,14 +1021,13 @@ namespace pcr
 
     bool OBrowserListBox::RemoveEntry( const OUString& _rName )
     {
-        ListBoxLines::size_type nPos = 0;
-        ListBoxLines::iterator it = m_aLines.begin();
-        for ( ; it != m_aLines.end() && ( it->aName != _rName ); ++it, ++nPos )
-            ;
+        ListBoxLines::iterator it = std::find_if(m_aLines.begin(), m_aLines.end(),
+            [&_rName](const ListBoxLine& rLine) { return rLine.aName == _rName; });
 
         if ( it == m_aLines.end() )
             return false;
 
+        ListBoxLines::size_type nPos = static_cast<ListBoxLines::size_type>(std::distance(m_aLines.begin(), it));
         m_aLines.erase( it );
         m_aOutOfDateLines.erase( m_aLines.size() );
 

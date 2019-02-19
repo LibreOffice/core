@@ -652,9 +652,8 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput.WriteCharPtr( "}}" );    // 1xparentheses paragraphs, 1xparentheses RTF document
     rOutput.Flush();
 
-    std::vector<SvxFontItem*>::iterator it;
-    for (it = aFontTable.begin(); it != aFontTable.end(); ++it)
-        delete *it;
+    for (auto& pItem : aFontTable)
+        delete pItem;
 
     return rOutput.GetError();
 }
@@ -2122,8 +2121,6 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
                     aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
                     SetAttribs( *aCurrentOldPosition, aSet );
                 }
-                if(aCurrentNewPortion == rNewPortions.begin())
-                    break;
             }
             while(aCurrentNewPortion != rNewPortions.begin());
         }
@@ -2139,15 +2136,14 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
 
             //delete the sentence completely
             ImpDeleteSelection( aAllSentence );
-            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
             EditPaM aCurrentPaM = aAllSentence.Min();
-            while(aCurrentNewPortion != rNewPortions.end())
+            for(const auto& rCurrentNewPortion : rNewPortions)
             {
                 //set the language attribute
                 LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
-                if(eCurLanguage != aCurrentNewPortion->eLanguage)
+                if(eCurLanguage != rCurrentNewPortion.eLanguage)
                 {
-                    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( rCurrentNewPortion.eLanguage );
                     sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                     switch(nScriptType)
                     {
@@ -2156,12 +2152,11 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
                         default: break;
                     }
                     SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
-                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
+                    aSet.Put(SvxLanguageItem(rCurrentNewPortion.eLanguage, nLangWhichId));
                     SetAttribs( aCurrentPaM, aSet );
                 }
                 //insert the new string and set the cursor to the end of the inserted string
-                aCurrentPaM = ImpInsertText( aCurrentPaM , aCurrentNewPortion->sText );
-                ++aCurrentNewPortion;
+                aCurrentPaM = ImpInsertText( aCurrentPaM , rCurrentNewPortion.sText );
             }
         }
         UndoActionEnd();
