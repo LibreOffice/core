@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_a2bfe2f9",
+        "filename": "compilerplugins/clang/sharedvisitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-19T17:07:18Z",
+      "side": 1,
+      "message": "IIUC, this implies that it would be harmless to have shouldVisitTemplateInstantiations()\u003d\u003dtrue for a plugin for which it should be \u003d\u003dfalse; I don\u0027t know whether that is correct",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_6260caa6",
+        "filename": "compilerplugins/clang/sharedvisitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-19T17:07:18Z",
+      "side": 1,
+      "message": "do any of our plugins actually make use of returning false from Visit* etc. functions?  if not, we could simplify all this setting individual plugins to nullptr and calling anyPluginActive()",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_c2477e1d",
+        "filename": "compilerplugins/clang/unreffun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-19T17:07:18Z",
+      "side": 1,
+      "message": "why drop the \"member var with trailing underline\" idiom?",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
