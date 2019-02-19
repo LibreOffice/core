@@ -408,7 +408,6 @@
 #define UNO_NAME_LOAD_FRAME_STYLES "LoadFrameStyles"
 #define UNO_NAME_LOAD_TEXT_STYLES "LoadTextStyles"
 #define UNO_NAME_FILE_NAME "FileName"
-#define UNO_NAME_FILTER_NAME "FilterName"
 #define UNO_NAME_COPY_COUNT "CopyCount"
 #define UNO_NAME_COLLATE "Collate"
 #define UNO_NAME_SORT "Sort"
