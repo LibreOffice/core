@@ -853,7 +853,9 @@ void SdImportTestSmartArt::testCycleMatrix()
     uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1),
                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xC2.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("C2"), xC2->getString());
+    // Without the accompanying fix in place, this test would have failed, i.e. the order of the
+    // lines in the shape were wrong: C2-1\nC2-4\nC2-3\nC2-2.
+    CPPUNIT_ASSERT_EQUAL(OUString("C2-1\nC2-2\nC2-3\nC2-4"), xC2->getString());
     uno::Reference<drawing::XShape> xC2Shape(xC2, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xC2Shape.is());
 

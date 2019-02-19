@@ -160,8 +160,14 @@ public:
     typedef std::map< OUString,
                       std::vector<dgm::Point*> >   PointsNameMap;
     typedef std::map< OUString, const dgm::Connection* > ConnectionNameMap;
+    struct SourceIdAndDepth
+    {
+        OUString msSourceId;
+        sal_Int32 mnDepth = 0;
+    };
+    /// Tracks connections: destination id -> {destination order, details} map.
     typedef std::map< OUString,
-                      std::vector<std::pair<OUString,sal_Int32> > > StringMap;
+                      std::map<sal_Int32, SourceIdAndDepth > > StringMap;
 
     DiagramData();
     FillPropertiesPtr & getFillProperties()
