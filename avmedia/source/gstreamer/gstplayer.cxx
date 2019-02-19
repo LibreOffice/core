@@ -489,9 +489,10 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             if ( mnWindowID != 0 )
             {
                 gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
-
+#ifndef AVMEDIA_GST_0_10
                 if (maArea.Width > 0 && maArea.Height > 0)
                     gst_video_overlay_set_render_rectangle(mpXOverlay, maArea.X, maArea.Y, maArea.Width, maArea.Height);
+#endif
             }
 
             return GST_BUS_DROP;
