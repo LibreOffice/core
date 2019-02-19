@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/animations/Event.hpp>
 
 #include <oox/drawingml/shape.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -35,6 +36,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 
@@ -169,13 +171,17 @@ namespace oox { namespace ppt {
         return aTarget;
     }
 
+    // Convert a time node condition to XAnimation.Begin or XAnimation.End
     Any AnimationCondition::convert(const SlidePersistPtr & pSlide) const
     {
         Any aAny;
-        if( mpTarget )
+        Event aEvent;
+        if(mpTarget && (maValue >>= aEvent))
         {
             sal_Int16 nSubType;
             aAny = mpTarget->convert( pSlide, nSubType );
+            aEvent.Source = aAny;
+            aAny <<= aEvent;
         }
         else
         {
@@ -187,6 +193,10 @@ namespace oox { namespace ppt {
     Any AnimationCondition::convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l)
     {
         Any aAny;
+
+        if (l.size() == 1)
+            return l[0].convert(pSlide);
+
         for (auto const& elem : l)
         {
             aAny = addToSequence( aAny, elem.convert(pSlide) );
