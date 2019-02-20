@@ -73,7 +73,7 @@ void XMLFrameOOoTransformerContext::StartElement(
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
-        if( !(aIter == pActions->end() ) )
+        if( aIter != pActions->end() )
         {
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
@@ -110,7 +110,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::CreateChild
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
     XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
 
-    if( !(aIter == pActions->end()) )
+    if( aIter != pActions->end() )
     {
         switch( (*aIter).second.m_nActionType )
         {

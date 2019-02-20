@@ -64,7 +64,7 @@ void XMLDlgOASISTransformerContext::StartElement(
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
 
-        if( !(aIter == pActions->end() ) )
+        if( aIter != pActions->end() )
         {
             if( !pMutableAttrList )
             {

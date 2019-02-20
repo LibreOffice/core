@@ -170,7 +170,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
             XMLTransformerActions::const_iterator aIter =
                 pActions->find( aKey );
 
-            if( !(aIter == pActions->end()) )
+            if( aIter != pActions->end() )
             {
                 switch( (*aIter).second.m_nActionType )
                 {
@@ -223,7 +223,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
             XMLTransformerActions::const_iterator aIter =
                 pActions->find( aKey );
 
-            if( !(aIter == pActions->end()) )
+            if( aIter != pActions->end() )
             {
                 switch( (*aIter).second.m_nActionType )
                 {
