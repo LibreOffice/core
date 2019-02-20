@@ -741,16 +741,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             cy = rSize.Height();
     }
 
-    OString aWidth(OString::number(TwipsToEMU(cx)));
     //we explicitly check the converted EMU value for the range as mentioned in above comment.
-    aWidth = (aWidth.toInt64() > 0 ? (aWidth.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE)
-                                                                           : aWidth.getStr())
-                                   : "0");
-    OString aHeight(OString::number(TwipsToEMU(cy)));
-    aHeight
-        = (aHeight.toInt64() > 0 ? (aHeight.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE)
-                                                                          : aHeight.getStr())
-                                 : "0");
+    cx = std::max(std::min(TwipsToEMU(cx), MAX_INTEGER_VALUE), sal_Int64(0));
+    OString aWidth(OString::number(cx));
+    cy = std::max(std::min(TwipsToEMU(cy), MAX_INTEGER_VALUE), sal_Int64(0));
+    OString aHeight(OString::number(cy));
 
     m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_extent, XML_cx, aWidth, XML_cy, aHeight,
                                               FSEND);
