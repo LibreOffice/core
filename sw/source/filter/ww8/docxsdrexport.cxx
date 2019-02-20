@@ -710,47 +710,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     *   2147483647( MAX_INTEGER_VALUE ).
     *  Therefore changing the following accordingly so that LO sync's up with MSO.
     **/
-    sal_uInt64 cx = 0;
-    sal_uInt64 cy = 0;
-    const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
-
-    // the 'Size' type uses 'long' for width and height, so on
-    // platforms where 'long' is 32 bits they can obviously never be
-    // larger than the max signed 32-bit integer.
-#if SAL_TYPES_SIZEOFLONG > 4
-    if (rSize.Width() > MAX_INTEGER_VALUE)
-        cx = MAX_INTEGER_VALUE;
-    else
-#endif
-    {
-        if (0 > rSize.Width())
-            cx = 0;
-        else
-            cx = rSize.Width();
-    }
-
-#if SAL_TYPES_SIZEOFLONG > 4
-    if (rSize.Height() > MAX_INTEGER_VALUE)
-        cy = MAX_INTEGER_VALUE;
-    else
-#endif
-    {
-        if (0 > rSize.Height())
-            cy = 0;
-        else
-            cy = rSize.Height();
-    }
-
-    OString aWidth(OString::number(TwipsToEMU(cx)));
-    //we explicitly check the converted EMU value for the range as mentioned in above comment.
-    aWidth = (aWidth.toInt64() > 0 ? (aWidth.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE)
-                                                                           : aWidth.getStr())
-                                   : "0");
-    OString aHeight(OString::number(TwipsToEMU(cy)));
-    aHeight
-        = (aHeight.toInt64() > 0 ? (aHeight.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE)
-                                                                          : aHeight.getStr())
-                                 : "0");
+    sal_uInt64 cx = TwipsToEMU(std::clamp(rSize.Width(), 0L, long(SAL_MAX_INT32)));
+    OString aWidth(OString::number(std::min(cx, sal_uInt64(SAL_MAX_INT32))));
+    sal_uInt64 cy = TwipsToEMU(std::clamp(rSize.Height(), 0L, long(SAL_MAX_INT32)));
+    OString aHeight(OString::number(std::min(cy, sal_uInt64(SAL_MAX_INT32))));
 
     m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_extent, XML_cx, aWidth, XML_cy, aHeight,
                                               FSEND);
