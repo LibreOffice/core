@@ -1227,6 +1227,7 @@
 #define RID_SVXSTR_OVERWRITE_HELPTEXT                       NC_("RID_SVXSTR_OVERWRITE_HELPTEXT", "Overwrite mode. Click to change to insert mode.")
 // To be shown in the status bar when in overwrite mode, please try to make it not longer than the word 'Overwrite'.
 #define RID_SVXSTR_OVERWRITE_TEXT                           NC_("RID_SVXSTR_OVERWRITE_TEXT", "Overwrite")
+#define RID_SVXSTR_INSERT_TEXT                              NC_("RID_SVXSTR_INSERT_TEXT", "Insert")
 #define RID_SVXSTR_XMLSEC_SIG_OK                            NC_("RID_SVXSTR_XMLSEC_SIG_OK", "Digital Signature: The document signature is OK.")
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY                  NC_("RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY", "Digital Signature: The document signature is OK, but the certificates could not be validated.")
 #define RID_SVXSTR_XMLSEC_SIG_NOT_OK                        NC_("RID_SVXSTR_XMLSEC_SIG_NOT_OK", "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document.")
