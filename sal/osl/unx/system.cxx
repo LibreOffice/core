@@ -63,12 +63,12 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
      *                  NULL
      *                  addr1addr2addr3...addrn
      */
-      struct hostent* res;
+    struct hostent* res;
 
-      RTL_MUTEX_LOCK
+    RTL_MUTEX_LOCK
 
-      if ( (res = gethostbyname(name)) )
-      {
+    if ( (res = gethostbyname(name)) )
+    {
         int nname, naliases, naddr_list, naliasesdata;
         char **p, **parray, *data;
 
@@ -98,7 +98,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             memcpy(result, res, sizeof(struct hostent));
 
             strcpy(buffer, res->h_name);
-              result->h_name = buffer;
+            result->h_name = buffer;
             buffer += nname;
 
             parray = reinterpret_cast<char**>(buffer);
@@ -122,7 +122,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             }
             *parray = nullptr;
 
-               res = result;
+            res = result;
         }
         else
         {

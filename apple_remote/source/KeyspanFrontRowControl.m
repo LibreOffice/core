@@ -38,60 +38,60 @@
 
 @implementation KeyspanFrontRowControl
 
-- (void) setCookieMappingInDictionary: (NSMutableDictionary*) _cookieToButtonMapping	{
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlus]		 forKey:@"11_18_99_10_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMinus]		 forKey:@"11_18_98_10_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu]		 forKey:@"11_18_58_10_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay]		 forKey:@"11_18_61_10_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight]		 forKey:@"11_18_96_10_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft]		 forKey:@"11_18_97_10_"];
-	/* hold events are not being send by this device
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight_Hold]	forKey:@"14_6_4_2_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft_Hold]	forKey:@"14_6_3_2_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu_Hold]	forKey:@"14_6_14_6_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay_Sleep]	forKey:@"18_14_6_18_14_6_"];
-	[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteControl_Switched]	forKey:@"19_"];
-	*/
+- (void) setCookieMappingInDictionary: (NSMutableDictionary*) _cookieToButtonMapping    {
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlus]         forKey:@"11_18_99_10_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMinus]        forKey:@"11_18_98_10_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu]         forKey:@"11_18_58_10_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay]         forKey:@"11_18_61_10_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight]        forKey:@"11_18_96_10_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft]         forKey:@"11_18_97_10_"];
+    /* hold events are not being send by this device
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight_Hold]  forKey:@"14_6_4_2_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft_Hold]   forKey:@"14_6_3_2_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu_Hold]   forKey:@"14_6_14_6_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay_Sleep]  forKey:@"18_14_6_18_14_6_"];
+    [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteControl_Switched]  forKey:@"19_"];
+    */
 }
 
 + (io_object_t) findRemoteDevice {
-	CFMutableDictionaryRef hidMatchDictionary = NULL;
-	IOReturn ioReturnValue = kIOReturnSuccess;
-	io_iterator_t hidObjectIterator = 0;
-	io_object_t	hidDevice = 0;
-	SInt32                  idVendor = 1741;
-	SInt32                  idProduct = 0x420;
+    CFMutableDictionaryRef hidMatchDictionary = NULL;
+    IOReturn ioReturnValue = kIOReturnSuccess;
+    io_iterator_t hidObjectIterator = 0;
+    io_object_t hidDevice = 0;
+    SInt32                  idVendor = 1741;
+    SInt32                  idProduct = 0x420;
 
-	// Set up a matching dictionary to search the I/O Registry by class
-	// name for all HID class devices
-	hidMatchDictionary = IOServiceMatching(kIOHIDDeviceKey);
+    // Set up a matching dictionary to search the I/O Registry by class
+    // name for all HID class devices
+    hidMatchDictionary = IOServiceMatching(kIOHIDDeviceKey);
 
-	CFNumberRef numberRefVendor = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &idVendor);
+    CFNumberRef numberRefVendor = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &idVendor);
     if ( numberRefVendor )
     {
         CFDictionaryAddValue(hidMatchDictionary, CFSTR(kIOHIDVendorIDKey), numberRefVendor);
         CFRelease(numberRefVendor);
-	}
+    }
 
     CFNumberRef numberRefProduct = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &idProduct);
     if ( numberRefProduct )
     {
         CFDictionaryAddValue(hidMatchDictionary, CFSTR(kIOHIDProductIDKey), numberRefProduct);
         CFRelease(numberRefProduct);
-	}
+    }
 
-	// Now search I/O Registry for matching devices.
-	ioReturnValue = IOServiceGetMatchingServices(kIOMasterPortDefault, hidMatchDictionary, &hidObjectIterator);
+    // Now search I/O Registry for matching devices.
+    ioReturnValue = IOServiceGetMatchingServices(kIOMasterPortDefault, hidMatchDictionary, &hidObjectIterator);
 
-	if ((ioReturnValue == kIOReturnSuccess) && (hidObjectIterator != 0)) {
-		hidDevice = IOIteratorNext(hidObjectIterator);
-	}
+    if ((ioReturnValue == kIOReturnSuccess) && (hidObjectIterator != 0)) {
+        hidDevice = IOIteratorNext(hidObjectIterator);
+    }
 
-	// release the iterator
+    // release the iterator
     if ( hidObjectIterator )
         IOObjectRelease(hidObjectIterator);
 
-	return hidDevice;
+    return hidDevice;
 
 }
 

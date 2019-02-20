@@ -886,7 +886,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
       // Make sure the focused object is a descendant of self
 //    do  {
 //       if( self == ancestor )
-             return focusedUIElement;
+    return focusedUIElement;
 
 //       ancestor = [ ancestor accessibilityAttributeValue: NSAccessibilityParentAttribute ];
 //    }  while( nil != ancestor );

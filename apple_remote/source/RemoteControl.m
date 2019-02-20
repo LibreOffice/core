@@ -49,7 +49,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 // returns nil if the remote control device is not available
 - (id) initWithDelegate: (id) _remoteControlDelegate {
-	if ( (self = [super init]) ) {
+    if ( (self = [super init]) ) {
         delegate = [_remoteControlDelegate retain];
 #ifdef DEBUG
         NSLog( @"Apple RemoteControl initWithDelegate ok");
@@ -59,8 +59,8 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 }
 
 - (void) dealloc {
-	[delegate release];
-	[super dealloc];
+    [delegate release];
+    [super dealloc];
 }
 
 - (void) setListeningToRemote: (BOOL) value {

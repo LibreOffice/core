@@ -268,11 +268,11 @@ using namespace ::com::sun::star::uno;
 }
 
 +(id)getRoleDescriptionFrom: (NSString *) role with: (NSString *) subRole {
-	id roleDescription;
-	if ( [ subRole length ] == 0 )
-		roleDescription = NSAccessibilityRoleDescription( role, nil );
-	else
-		roleDescription = NSAccessibilityRoleDescription( role, subRole );
+    id roleDescription;
+    if ( [ subRole length ] == 0 )
+        roleDescription = NSAccessibilityRoleDescription( role, nil );
+    else
+        roleDescription = NSAccessibilityRoleDescription( role, subRole );
     return roleDescription;
 }
 

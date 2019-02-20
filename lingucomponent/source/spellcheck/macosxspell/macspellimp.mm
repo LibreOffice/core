@@ -92,15 +92,15 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-        // this routine should return the locales supported by the installed
-        // dictionaries.  So here we need to parse both the user edited
-        // dictionary list and the shared dictionary list
-        // to see what dictionaries the admin/user has installed
+    // this routine should return the locales supported by the installed
+    // dictionaries.  So here we need to parse both the user edited
+    // dictionary list and the shared dictionary list
+    // to see what dictionaries the admin/user has installed
 
-        int numshr;          // number of shared dictionary entries
-        rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
+    int numshr;          // number of shared dictionary entries
+    rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
-        std::vector<NSString *> postspdict;
+    std::vector<NSString *> postspdict;
 
     if (!numdict) {
 
@@ -263,12 +263,12 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         } else {
             /* no dictionary.lst found so register no dictionaries */
             numdict = 0;
-                aDEncs  = nullptr;
-                aDLocs = nullptr;
-                aDNames = nullptr;
-                aSuppLocales.realloc(0);
-            }
+            aDEncs  = nullptr;
+            aDLocs = nullptr;
+            aDNames = nullptr;
+            aSuppLocales.realloc(0);
         }
+    }
 
     return aSuppLocales;
 }
@@ -307,16 +307,16 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 
     sal_Int16 nRes = -1;
 
-        // first handle smart quotes both single and double
+    // first handle smart quotes both single and double
     OUStringBuffer rBuf(rWord);
-        sal_Int32 n = rBuf.getLength();
-        sal_Unicode c;
+    sal_Int32 n = rBuf.getLength();
+    sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++) {
         c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = u'"';
         if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = u'\'';
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+    }
+    OUString nWord(rBuf.makeStringAndClear());
 
     if (n)
     {
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-     if (rLocale == Locale()  ||  !rWord.getLength())
+    if (rLocale == Locale()  ||  !rWord.getLength())
         return true;
 
     if (!hasLocale( rLocale ))
@@ -411,14 +411,14 @@ Reference< XSpellAlternatives >
 
         // first handle smart quotes (single and double)
     OUStringBuffer rBuf(rWord);
-        sal_Int32 n = rBuf.getLength();
-        sal_Unicode c;
+    sal_Int32 n = rBuf.getLength();
+    sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++) {
          c = rBuf[ix];
          if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = u'"';
          if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = u'\'';
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+    }
+    OUString nWord(rBuf.makeStringAndClear());
 
     if (n)
     {
@@ -438,24 +438,24 @@ Reference< XSpellAlternatives >
         {
            aStr.realloc( count );
            OUString *pStr = aStr.getArray();
-               for (int ii=0; ii < count; ii++)
-               {
+           for (int ii=0; ii < count; ii++)
+           {
                   // if needed add: if (suglst[ii] == NULL) continue;
                   NSString* guess = [guesses objectAtIndex:ii];
                   OUString cvtwrd(reinterpret_cast<const sal_Unicode*>([guess cStringUsingEncoding:NSUnicodeStringEncoding]), static_cast<sal_Int32>([guess length]));
                   pStr[ii] = cvtwrd;
-               }
+           }
         }
-       [pool release];
+        [pool release];
     }
 
-            // now return an empty alternative for no suggestions or the list of alternatives if some found
-        SpellAlternatives *pAlt = new SpellAlternatives;
-        pAlt->SetWordLanguage( rWord, nLang );
-        pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
-        pAlt->SetAlternatives( aStr );
-        xRes = pAlt;
-        return xRes;
+    // now return an empty alternative for no suggestions or the list of alternatives if some found
+    SpellAlternatives *pAlt = new SpellAlternatives;
+    pAlt->SetWordLanguage( rWord, nLang );
+    pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
+    pAlt->SetAlternatives( aStr );
+    xRes = pAlt;
+    return xRes;
 
 }
 
@@ -467,7 +467,7 @@ Reference< XSpellAlternatives > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-     if (rLocale == Locale()  ||  !rWord.getLength())
+    if (rLocale == Locale()  ||  !rWord.getLength())
         return nullptr;
 
     if (!hasLocale( rLocale ))

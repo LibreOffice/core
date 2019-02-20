@@ -856,13 +856,13 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if(mpFontInstance->mpConversion)
             pLayoutCache = nullptr;
 
-    #ifdef MACOSX
-        // FIXME: tdf#112990
-        // Cache text layout crashes on mac with OpenGL enabled
-        // Force it to not use the cache
-        if(OpenGLHelper::isVCLOpenGLEnabled())
-            pLayoutCache = nullptr;
-    #endif
+#ifdef MACOSX
+    // FIXME: tdf#112990
+    // Cache text layout crashes on mac with OpenGL enabled
+    // Force it to not use the cache
+    if(OpenGLHelper::isVCLOpenGLEnabled())
+        pLayoutCache = nullptr;
+#endif
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, SalLayoutFlags::NONE, nullptr, pLayoutCache);
     if(pSalLayout)
