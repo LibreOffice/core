@@ -1270,6 +1270,11 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+    SID_DRAWTBX_REDACTED_EXPORT // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DRAWTBX_LINES // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
