@@ -25,6 +25,7 @@
 #include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -69,9 +70,14 @@
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
@@ -245,6 +251,7 @@ public:
     void testCharacterSetXLSXML();
     void testTdf62268();
     void testVBAMacroFunctionODS();
+    void testTdf123293();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -383,6 +390,7 @@ public:
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
+    CPPUNIT_TEST(testTdf123293);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4243,6 +4251,33 @@ void ScFiltersTest::testVBAMacroFunctionODS()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, rDoc.GetValue(2, 0, 0), 1e-6);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf123293()
+{
+    const OUString aFileNameBase("tdf62268.");
+    OUString aFileExtension(getFileFormats()[FORMAT_ODS].pName,
+                            strlen(getFileFormats()[FORMAT_ODS].pName), RTL_TEXTENCODING_UTF8);
+    OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    uno::Reference<ucb::XSimpleFileAccess3> xSFA
+        = ucb::SimpleFileAccess::create(getComponentContext());
+    uno::Reference<io::XInputStream> xIn = xSFA->openFileRead(aFileName);
+
+    uno::Sequence<beans::PropertyValue> args
+        = { comphelper::makePropertyValue("InputStream", xIn),
+            comphelper::makePropertyValue("Hidden", false),
+            comphelper::makePropertyValue("AsTemplate", true),
+            comphelper::makePropertyValue("FilterName", OUString("calc8")) };
+
+    uno::Reference<css::frame::XDesktop2> xDesktop(frame::Desktop::create(getComponentContext()));
+    uno::Reference<frame::XComponentLoader> xLoader(xDesktop, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xComponent
+        = xLoader->loadComponentFromURL("private:stream", "_blank", 0, args);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("No error code expected",
+                           !pFoundShell->GetMedium()->GetErrorCode().IsError());
+    pFoundShell->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
