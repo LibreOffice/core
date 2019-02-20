@@ -4737,7 +4737,7 @@ static void lcl_roundUpNearestPow2(SCSIZE& nNum, SCSIZE& nNumBits)
     }
 
     if (nPow2 != nNum)
-        nNum = nPow2 ? static_cast<SCSIZE>(nPow2 << 1) : 1;
+        nNum = nPow2 ? (nPow2 << 1) : 1;
     else
         --nNumBits;
 }
@@ -4798,7 +4798,7 @@ private:
 
     SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScaleBits)
     {
-        return ( static_cast<SCSIZE>( nPtIndex << nTfIdxScaleBits ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
+        return ( ( nPtIndex << nTfIdxScaleBits ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
     }
 
     void computeFly(SCSIZE nTopIdx, SCSIZE nBottomIdx, SCSIZE nWIdx1, SCSIZE nWIdx2, SCSIZE nStage)
@@ -4907,7 +4907,7 @@ void ScFFT2::computeTFactors()
     }
     else
     {
-        const SCSIZE nQSize = static_cast<SCSIZE>(mnPoints >> 2);
+        const SCSIZE nQSize = mnPoints >> 2;
         // Compute cos of the start quadrant.
         // This is the first quadrant if mbInverse == true, else it is the fourth quadrant.
         for (SCSIZE nIdx = 0; nIdx <= nQSize; ++nIdx)
@@ -4921,7 +4921,7 @@ void ScFFT2::computeTFactors()
                 mfWImag[nIdx] = mfWReal[nQ1End-nIdx];
 
             // Second quadrant
-            const SCSIZE nQ2End = static_cast<SCSIZE>(nQ1End << 1);
+            const SCSIZE nQ2End = nQ1End << 1;
             for (SCSIZE nIdx = nQ1End+1; nIdx <= nQ2End; ++nIdx)
             {
                 mfWReal[nIdx] = -mfWReal[nQ2End - nIdx];
@@ -4946,7 +4946,7 @@ void ScFFT2::computeTFactors()
         else
         {
             const SCSIZE nQ4End = nQSize;
-            const SCSIZE nQ3End = static_cast<SCSIZE>(nQSize << 1);
+            const SCSIZE nQ3End = nQSize << 1;
             const SCSIZE nQ2End = nQ3End + nQSize;
 
             // Fourth quadrant.
@@ -5015,7 +5015,7 @@ void ScFFT2::Compute()
     for (SCSIZE nStage = 0; nStage < mnStages; ++nStage)
     {
         const SCSIZE nTFIdxScaleBits = mnStages - nStage - 1;  // Twiddle factor index's scale factor in bits.
-        const SCSIZE nFliesInGroup = static_cast<SCSIZE>(1<<nStage);
+        const SCSIZE nFliesInGroup = SCSIZE(1) << nStage;
         const SCSIZE nGroups = nFliesInStage/nFliesInGroup;
         const SCSIZE nFlyWidth = nFliesInGroup;
         for (SCSIZE nGroup = 0, nFlyTopIdx = 0; nGroup < nGroups; ++nGroup)
