@@ -1310,6 +1310,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:RedactedExportToolbox" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Redacted Export</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ConnectorLineArrowEnd" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Straight Connector ends with Arrow</value>
@@ -2409,6 +2417,28 @@
       <node oor:name=".uno:HangingIndent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Hanging Indent</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RedactedExportBlack" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Redacted Export (Black)</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:ExportDirectToPDF?IsRedactMode:bool=true&amp;RedactionStyle:string=Black</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RedactedExportWhite" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Redacted Export (White)</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:ExportDirectToPDF?IsRedactMode:bool=true&amp;RedactionStyle:string=White</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

@@ -614,6 +614,20 @@
           <value>ellipsesbar;.uno:Ellipse</value>
         </prop>
       </node>
+      <node oor:name="RedactedExportToolbox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RedactedExportToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>redactedexportbar;.uno:ExportDirectToPDF?IsRedactMode:bool=true</value>
+        </prop>
+      </node>
       <node oor:name="LineToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:LineToolbox</value>
