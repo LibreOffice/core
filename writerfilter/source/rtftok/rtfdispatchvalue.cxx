@@ -822,23 +822,23 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             switch (nParam)
             {
                 case 1:
-                    m_aStates.top().aShape.nWrap = text::WrapTextMode_NONE;
+                    m_aStates.top().aShape.setWrap(text::WrapTextMode_NONE);
                     break;
                 case 2:
-                    m_aStates.top().aShape.nWrap = text::WrapTextMode_PARALLEL;
+                    m_aStates.top().aShape.setWrap(text::WrapTextMode_PARALLEL);
                     break;
                 case 3:
-                    m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
+                    m_aStates.top().aShape.setWrap(text::WrapTextMode_THROUGH);
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone,
                                                         new RTFValue());
                     break;
                 case 4:
-                    m_aStates.top().aShape.nWrap = text::WrapTextMode_PARALLEL;
+                    m_aStates.top().aShape.setWrap(text::WrapTextMode_PARALLEL);
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight,
                                                         new RTFValue());
                     break;
                 case 5:
-                    m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
+                    m_aStates.top().aShape.setWrap(text::WrapTextMode_THROUGH);
                     break;
             }
         }
@@ -1060,19 +1060,19 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_SHPLEFT:
-            m_aStates.top().aShape.nLeft = convertTwipToMm100(nParam);
+            m_aStates.top().aShape.setLeft(convertTwipToMm100(nParam));
             break;
         case RTF_SHPTOP:
-            m_aStates.top().aShape.nTop = convertTwipToMm100(nParam);
+            m_aStates.top().aShape.setTop(convertTwipToMm100(nParam));
             break;
         case RTF_SHPRIGHT:
-            m_aStates.top().aShape.nRight = convertTwipToMm100(nParam);
+            m_aStates.top().aShape.setRight(convertTwipToMm100(nParam));
             break;
         case RTF_SHPBOTTOM:
-            m_aStates.top().aShape.nBottom = convertTwipToMm100(nParam);
+            m_aStates.top().aShape.setBottom(convertTwipToMm100(nParam));
             break;
         case RTF_SHPZ:
-            m_aStates.top().aShape.oZ.reset(nParam);
+            m_aStates.top().aShape.setZ(nParam);
             break;
         case RTF_FFTYPE:
             switch (nParam)
@@ -1204,16 +1204,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
         case RTF_DPX:
-            m_aStates.top().aDrawingObject.nLeft = convertTwipToMm100(nParam);
+            m_aStates.top().aDrawingObject.setLeft(convertTwipToMm100(nParam));
             break;
         case RTF_DPY:
-            m_aStates.top().aDrawingObject.nTop = convertTwipToMm100(nParam);
+            m_aStates.top().aDrawingObject.setTop(convertTwipToMm100(nParam));
             break;
         case RTF_DPXSIZE:
-            m_aStates.top().aDrawingObject.nRight = convertTwipToMm100(nParam);
+            m_aStates.top().aDrawingObject.setRight(convertTwipToMm100(nParam));
             break;
         case RTF_DPYSIZE:
-            m_aStates.top().aDrawingObject.nBottom = convertTwipToMm100(nParam);
+            m_aStates.top().aDrawingObject.setBottom(convertTwipToMm100(nParam));
             break;
         case RTF_PNSTART:
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
@@ -1380,7 +1380,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_SHPFBLWTXT:
             // Shape is below text -> send it to the background.
-            m_aStates.top().aShape.bInBackground = nParam;
+            m_aStates.top().aShape.setInBackground(nParam != 0);
             break;
         case RTF_CLPADB:
         case RTF_CLPADL:

@@ -284,10 +284,10 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
     // first, find the shape type
     int nType = -1;
     auto iter = std::find_if(
-        rShape.aProperties.begin(), rShape.aProperties.end(),
+        rShape.getProperties().begin(), rShape.getProperties().end(),
         [](std::pair<OUString, OUString> aProperty) { return aProperty.first == "shapeType"; });
 
-    if (iter == rShape.aProperties.end())
+    if (iter == rShape.getProperties().end())
     {
         if (SHAPE == shapeOrPict)
         {
@@ -391,7 +391,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
-    for (auto& rProperty : rShape.aProperties)
+    for (auto& rProperty : rShape.getProperties())
     {
         if (rProperty.first == "shapeType")
         {
@@ -567,7 +567,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dhgt")
         {
             // dhgt is Word 2007, \shpz is Word 97-2003, the later has priority.
-            if (!rShape.oZ)
+            if (!rShape.hasZ())
                 resolveDhgt(xPropertySet, rProperty.second.toInt32(), /*bOldStyle=*/false);
         }
         // These are in EMU, convert to mm100.
@@ -598,8 +598,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dxWrapDistLeft")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distL,
-                                             new RTFValue(rProperty.second.toInt32()));
+                rShape.getAnchorAttributes().set(NS_ooxml::LN_CT_Anchor_distL,
+                                                 new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("LeftMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -607,8 +607,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dyWrapDistTop")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distT,
-                                             new RTFValue(rProperty.second.toInt32()));
+                rShape.getAnchorAttributes().set(NS_ooxml::LN_CT_Anchor_distT,
+                                                 new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("TopMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -616,8 +616,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dxWrapDistRight")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distR,
-                                             new RTFValue(rProperty.second.toInt32()));
+                rShape.getAnchorAttributes().set(NS_ooxml::LN_CT_Anchor_distR,
+                                                 new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("RightMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -625,8 +625,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dyWrapDistBottom")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distB,
-                                             new RTFValue(rProperty.second.toInt32()));
+                rShape.getAnchorAttributes().set(NS_ooxml::LN_CT_Anchor_distB,
+                                                 new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("BottomMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -667,7 +667,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             switch (rProperty.second.toInt32())
             {
                 case 1:
-                    rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    rShape.setHoriOrientRelation(text::RelOrientation::PAGE_FRAME);
                     break;
                 default:
                     break;
@@ -678,7 +678,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             switch (rProperty.second.toInt32())
             {
                 case 1:
-                    rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    rShape.setVertOrientRelation(text::RelOrientation::PAGE_FRAME);
                     break;
                 default:
                     break;
@@ -774,13 +774,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         {
             // horizontal rule height
             sal_uInt32 const nHeight(convertTwipToMm100(rProperty.second.toInt32()));
-            rShape.nBottom = rShape.nTop + nHeight;
+            rShape.setBottom(rShape.getTop() + nHeight);
         }
         else if (rProperty.first == "dxWidthHR")
         {
             // horizontal rule width
             sal_uInt32 const nWidth(convertTwipToMm100(rProperty.second.toInt32()));
-            rShape.nRight = rShape.nLeft + nWidth;
+            rShape.setRight(rShape.getLeft() + nWidth);
         }
         else if (rProperty.first == "alignHR")
         {
@@ -830,7 +830,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                                       new RTFValue(aPathAttributes), RTFOverwrite::NO_APPEND);
                 }
             } while (nCharIndex >= 0);
-            rShape.aWrapPolygonSprms = aPolygonSprms;
+            rShape.getWrapPolygonSprms() = aPolygonSprms;
         }
         else if (rProperty.first == "fRelFlipV")
             obRelFlipV = rProperty.second.toInt32() == 1;
@@ -846,10 +846,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     if (xPropertySet.is())
     {
         resolveLineColorAndWidth(m_bTextFrame, xPropertySet, aLineColor, aLineWidth);
-        if (rShape.oZ)
+        if (rShape.hasZ())
         {
             bool bOldStyle = m_aParents.size() > 1;
-            resolveDhgt(xPropertySet, *rShape.oZ, bOldStyle);
+            resolveDhgt(xPropertySet, rShape.getZ(), bOldStyle);
         }
         if (m_bTextFrame)
             // Writer textframes implement text::WritingMode2, which is a different data type.
@@ -974,8 +974,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     // Set position and size
     if (xShape.is())
     {
-        sal_Int32 nLeft = rShape.nLeft;
-        sal_Int32 nTop = rShape.nTop;
+        sal_Int32 nLeft = rShape.getLeft();
+        sal_Int32 nTop = rShape.getTop();
 
         bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom && oRelLeft
                              && oRelTop && oRelRight && oRelBottom;
@@ -983,14 +983,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (bInShapeGroup)
         {
             // See lclGetAbsPoint() in the VML import: rShape is the group shape, oGroup is its coordinate system, oRel is the relative child shape.
-            sal_Int32 nShapeWidth = rShape.nRight - rShape.nLeft;
-            sal_Int32 nShapeHeight = rShape.nBottom - rShape.nTop;
+            sal_Int32 nShapeWidth = rShape.getRight() - rShape.getLeft();
+            sal_Int32 nShapeHeight = rShape.getBottom() - rShape.getTop();
             sal_Int32 nCoordSysWidth = *oGroupRight - *oGroupLeft;
             sal_Int32 nCoordSysHeight = *oGroupBottom - *oGroupTop;
             double fWidthRatio = static_cast<double>(nShapeWidth) / nCoordSysWidth;
             double fHeightRatio = static_cast<double>(nShapeHeight) / nCoordSysHeight;
-            nLeft = static_cast<sal_Int32>(rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft));
-            nTop = static_cast<sal_Int32>(rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop));
+            nLeft = static_cast<sal_Int32>(rShape.getLeft()
+                                           + fWidthRatio * (*oRelLeft - *oGroupLeft));
+            nTop = static_cast<sal_Int32>(rShape.getTop() + fHeightRatio * (*oRelTop - *oGroupTop));
 
             // See lclGetAbsRect() in the VML import.
             aSize.Width = std::lround(fWidthRatio * (*oRelRight - *oRelLeft));
@@ -1008,7 +1009,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (bInShapeGroup)
             xShape->setSize(aSize);
         else
-            xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+            xShape->setSize(awt::Size(rShape.getRight() - rShape.getLeft(),
+                                      rShape.getBottom() - rShape.getTop()));
 
         if (obFlipH == true || obFlipV == true)
         {
@@ -1028,14 +1030,14 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
         }
 
-        if (rShape.nHoriOrientRelation != 0)
+        if (rShape.getHoriOrientRelation() != 0)
             xPropertySet->setPropertyValue("HoriOrientRelation",
-                                           uno::makeAny(rShape.nHoriOrientRelation));
-        if (rShape.nVertOrientRelation != 0)
+                                           uno::makeAny(rShape.getHoriOrientRelation()));
+        if (rShape.getVertOrientRelation() != 0)
             xPropertySet->setPropertyValue("VertOrientRelation",
-                                           uno::makeAny(rShape.nVertOrientRelation));
-        if (rShape.nWrap != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
-            xPropertySet->setPropertyValue("Surround", uno::makeAny(rShape.nWrap));
+                                           uno::makeAny(rShape.getVertOrientRelation()));
+        if (rShape.getWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+            xPropertySet->setPropertyValue("Surround", uno::makeAny(rShape.getWrap()));
         oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
         if (aFillModel.moType.has())
         {

@@ -190,27 +190,103 @@ class RTFShape : public virtual SvRefBase
 {
 public:
     RTFShape();
-    std::vector<std::pair<OUString, OUString>> aProperties; ///< Properties of a single shape.
+
+    std::vector<std::pair<OUString, OUString>>& getProperties() { return m_aProperties; }
+
+    const std::vector<std::pair<OUString, OUString>>& getProperties() const
+    {
+        return m_aProperties;
+    }
+
+    std::vector<std::pair<OUString, OUString>>& getGroupProperties() { return m_aGroupProperties; }
+
+    void setLeft(sal_Int32 nLeft) { m_nLeft = nLeft; }
+
+    sal_Int32 getLeft() const { return m_nLeft; }
+
+    void setTop(sal_Int32 nTop) { m_nTop = nTop; }
+
+    sal_Int32 getTop() const { return m_nTop; }
+
+    void setRight(sal_Int32 nRight) { m_nRight = nRight; }
+
+    sal_Int32 getRight() const { return m_nRight; }
+
+    void setBottom(sal_Int32 nBottom) { m_nBottom = nBottom; }
+
+    sal_Int32 getBottom() const { return m_nBottom; }
+
+    void setZ(sal_Int32 nZ) { m_oZ.reset(nZ); }
+
+    bool hasZ() const { return m_oZ.has_value(); }
+
+    sal_Int32 getZ() const { return *m_oZ; }
+
+    void setHoriOrientRelation(sal_Int16 nHoriOrientRelation)
+    {
+        m_nHoriOrientRelation = nHoriOrientRelation;
+    }
+
+    sal_Int16 getHoriOrientRelation() const { return m_nHoriOrientRelation; }
+
+    void setVertOrientRelation(sal_Int16 nVertOrientRelation)
+    {
+        m_nVertOrientRelation = nVertOrientRelation;
+    }
+
+    sal_Int16 getVertOrientRelation() const { return m_nVertOrientRelation; }
+
+    void setHoriOrientRelationToken(sal_uInt32 nHoriOrientRelationToken)
+    {
+        m_nHoriOrientRelationToken = nHoriOrientRelationToken;
+    }
+
+    sal_uInt32 getHoriOrientRelationToken() const { return m_nHoriOrientRelationToken; }
+
+    void setVertOrientRelationToken(sal_uInt32 nVertOrientRelationToken)
+    {
+        m_nVertOrientRelationToken = nVertOrientRelationToken;
+    }
+
+    sal_uInt32 getVertOrientRelationToken() const { return m_nVertOrientRelationToken; }
+
+    void setWrap(css::text::WrapTextMode nWrap) { m_nWrap = nWrap; }
+
+    css::text::WrapTextMode getWrap() const { return m_nWrap; }
+
+    void setInBackground(bool bInBackground) { m_bInBackground = bInBackground; }
+
+    bool getInBackground() const { return m_bInBackground; }
+
+    RTFSprms& getWrapPolygonSprms() { return m_aWrapPolygonSprms; }
+
+    RTFSprms& getAnchorAttributes() { return m_aAnchorAttributes; }
+
+    std::pair<Id, RTFValue::Pointer_t>& getWrapSprm() { return m_aWrapSprm; }
+
+private:
+    std::vector<std::pair<OUString, OUString>> m_aProperties; ///< Properties of a single shape.
     std::vector<std::pair<OUString, OUString>>
-        aGroupProperties; ///< Properties applied on the groupshape.
-    sal_Int32 nLeft = 0;
-    sal_Int32 nTop = 0;
-    sal_Int32 nRight = 0;
-    sal_Int32 nBottom = 0;
-    boost::optional<sal_Int32> oZ; ///< Z-Order of the shape.
-    sal_Int16 nHoriOrientRelation = 0; ///< Horizontal text::RelOrientation for drawinglayer shapes.
-    sal_Int16 nVertOrientRelation = 0; ///< Vertical text::RelOrientation for drawinglayer shapes.
-    sal_uInt32 nHoriOrientRelationToken = 0; ///< Horizontal dmapper token for Writer pictures.
-    sal_uInt32 nVertOrientRelationToken = 0; ///< Vertical dmapper token for Writer pictures.
-    css::text::WrapTextMode nWrap = css::text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE;
+        m_aGroupProperties; ///< Properties applied on the groupshape.
+    sal_Int32 m_nLeft = 0;
+    sal_Int32 m_nTop = 0;
+    sal_Int32 m_nRight = 0;
+    sal_Int32 m_nBottom = 0;
+    boost::optional<sal_Int32> m_oZ; ///< Z-Order of the shape.
+    sal_Int16 m_nHoriOrientRelation
+        = 0; ///< Horizontal text::RelOrientation for drawinglayer shapes.
+    sal_Int16 m_nVertOrientRelation = 0; ///< Vertical text::RelOrientation for drawinglayer shapes.
+    sal_uInt32 m_nHoriOrientRelationToken = 0; ///< Horizontal dmapper token for Writer pictures.
+    sal_uInt32 m_nVertOrientRelationToken = 0; ///< Vertical dmapper token for Writer pictures.
+    css::text::WrapTextMode m_nWrap = css::text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE;
     /// If shape is below text (true) or text is below shape (false).
-    bool bInBackground = false;
+    bool m_bInBackground = false;
     /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
-    RTFSprms aWrapPolygonSprms;
+    RTFSprms m_aWrapPolygonSprms;
     /// Anchor attributes like wrap distance, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
-    RTFSprms aAnchorAttributes;
+    RTFSprms m_aAnchorAttributes;
     /// Wrap type, written by RTFDocumentImpl::popState(), read by RTFDocumentImpl::resolvePict().
-    std::pair<Id, RTFValue::Pointer_t> aWrapSprm{ 0, nullptr };
+    std::pair<Id, RTFValue::Pointer_t> m_aWrapSprm{ 0, nullptr };
 };
 
 /// Stores the properties of a drawing object.
