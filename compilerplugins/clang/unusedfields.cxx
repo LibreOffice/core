@@ -496,7 +496,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
     // walk up the tree until we find something interesting
     bool bPotentiallyReadFrom = false;
     bool bDump = false;
-    auto walkupUp = [&]() {
+    auto walkUp = [&]() {
        child = parent;
        auto parentsRange = compiler.getASTContext().getParents(*parent);
        parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
@@ -526,7 +526,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
         else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
              || isa<ArrayInitLoopExpr>(parent) || isa<ExprWithCleanups>(parent))
         {
-            walkupUp();
+            walkUp();
         }
         else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
         {
@@ -547,7 +547,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                 UO_PreInc / UO_PostInc / UO_PreDec / UO_PostDec
                 But we still walk up in case the result of the expression is used in a read sense.
             */
-            walkupUp();
+            walkUp();
         }
         else if (auto caseStmt = dyn_cast<CaseStmt>(parent))
         {
@@ -571,7 +571,41 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                 bPotentiallyReadFrom = true;
                 break;
             }
-            walkupUp();
+            walkUp();
+        }
+        else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
+        {
+            BinaryOperator::Opcode op = binaryOp->getOpcode();
+            const bool assignmentOp = op == BO_Assign || op == BO_MulAssign
+                || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
+                || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
+                || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign;
+            if (binaryOp->getLHS() == child && assignmentOp)
+                break;
+            else
+            {
+                bPotentiallyReadFrom = true;
+                break;
+            }
+        }
+        else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent))
+        {
+            auto op = operatorCallExpr->getOperator();
+            const bool assignmentOp = op == OO_Equal || op == OO_StarEqual ||
+                    op == OO_SlashEqual || op == OO_PercentEqual ||
+                    op == OO_PlusEqual || op == OO_MinusEqual ||
+                    op == OO_LessLessEqual || op == OO_GreaterGreaterEqual ||
+                    op == OO_AmpEqual || op == OO_CaretEqual ||
+                    op == OO_PipeEqual;
+            if (operatorCallExpr->getArg(0) == child && assignmentOp)
+                break;
+            else if (op == OO_GreaterGreaterEqual && operatorCallExpr->getArg(1) == child)
+                break; // this is a write-only call
+            else
+            {
+                bPotentiallyReadFrom = true;
+                break;
+            }
         }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
@@ -594,9 +628,6 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                     || name == "clear" || name == "fill")
                     // write-only modifications to collections
                     ;
-                else if (name.find(">>=") != std::string::npos && callExpr->getArg(1) == child)
-                    // this is a write-only call
-                    ;
                 else if (name == "dispose" || name == "disposeAndClear" || name == "swap")
                     // we're abusing the write-only analysis here to look for fields which don't have anything useful
                     // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
@@ -607,19 +638,6 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
             }
             else
                 bPotentiallyReadFrom = true;
-            break;
-        }
-        else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
-        {
-            BinaryOperator::Opcode op = binaryOp->getOpcode();
-            // If the child is on the LHS and it is an assignment op, we are obviously not reading from it
-            const bool assignmentOp = op == BO_Assign || op == BO_MulAssign
-                || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
-                || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
-                || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign;
-            if (!(binaryOp->getLHS() == child && assignmentOp)) {
-                bPotentiallyReadFrom = true;
-            }
             break;
         }
         else if (isa<ReturnStmt>(parent)
@@ -705,7 +723,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
     // walk up the tree until we find something interesting
     bool bPotentiallyWrittenTo = false;
     bool bDump = false;
-    auto walkupUp = [&]() {
+    auto walkUp = [&]() {
        child = parent;
        auto parentsRange = compiler.getASTContext().getParents(*parent);
        parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
@@ -738,7 +756,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
         else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
              || isa<ArrayInitLoopExpr>(parent) || isa<ExprWithCleanups>(parent))
         {
-            walkupUp();
+            walkUp();
         }
         else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
         {
@@ -753,7 +771,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
         {
             if (arraySubscriptExpr->getIdx() == child)
                 break;
-            walkupUp();
+            walkUp();
         }
         else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent))
         {
