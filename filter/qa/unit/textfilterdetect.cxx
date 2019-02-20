@@ -16,18 +16,9 @@
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
+namespace com::sun::star::io
 {
 class XInputStream;
-}
-}
-}
 }
 
 using namespace com::sun::star;
@@ -37,17 +28,11 @@ namespace
 /// Test class for PlainTextFilterDetect.
 class TextFilterDetectTest : public test::BootstrapFixture
 {
-public:
-    void testTdf114428();
-
-    CPPUNIT_TEST_SUITE(TextFilterDetectTest);
-    CPPUNIT_TEST(testTdf114428);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
 
-void TextFilterDetectTest::testTdf114428()
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 {
     uno::Reference<uno::XComponentContext> xComponentContext
         = comphelper::getComponentContext(getMultiServiceFactory());
@@ -68,8 +53,6 @@ void TextFilterDetectTest::testTdf114428()
     // This was empty, XML declaration caused HTML detect to not handle XHTML.
     CPPUNIT_ASSERT_EQUAL(OUString("HTML (StarWriter)"), aFilterName);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TextFilterDetectTest);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
