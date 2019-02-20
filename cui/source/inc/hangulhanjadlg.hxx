@@ -126,7 +126,6 @@ namespace svx
         VclPtr<CheckBox>           m_pHanjaOnly;
         VclPtr<CheckBox>           m_pReplaceByChar;
 
-        VclPtr<CheckBox>           m_pIgnoreNonPrimary;
         /** are we working for a document? This is normally true, but in case
             the user uses the "find" functionality, we switch to working
             with what the user entered, which then does not have any relation to
