@@ -2443,18 +2443,12 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             xRet.set( xCont, uno::UNO_QUERY_THROW );
 
             uno::Sequence< beans::PropertyValue > aSeq;
-            aSeq.realloc(3);
+            aSeq.realloc(1);
             OUString sName;
             pDocShell->GetDocument().GetName( pDocShell->GetDocument().GetVisibleTab(), sName );
             OUString sOUName(sName);
             aSeq[0].Name = SC_ACTIVETABLE;
             aSeq[0].Value <<= sOUName;
-            SCCOL nPosLeft = pDocShell->GetDocument().GetPosLeft();
-            aSeq[1].Name = SC_POSITIONLEFT;
-            aSeq[1].Value <<= nPosLeft;
-            SCROW nPosTop = pDocShell->GetDocument().GetPosTop();
-            aSeq[2].Name = SC_POSITIONTOP;
-            aSeq[2].Value <<= nPosTop;
             xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
         }
     }
