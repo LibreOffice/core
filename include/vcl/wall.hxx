@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_WALL_HXX
 #define INCLUDED_VCL_WALL_HXX
 
+#include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -97,6 +98,12 @@ public:
     bool            operator==( const Wallpaper& rWallpaper ) const;
     bool            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
+
+    bool            IsEmpty() const
+    {
+        return GetStyle() == WallpaperStyle::NONE && GetColor() == COL_TRANSPARENT &&
+               !IsBitmap() && !IsGradient() && !IsRect();
+    }
 
     friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
