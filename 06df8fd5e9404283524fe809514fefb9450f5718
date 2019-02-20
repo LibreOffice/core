@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_adc23384",
+        "filename": "svx/source/stbctrls/insctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-20T10:38:51Z",
+      "side": 1,
+      "message": "typically, ifdef and endif are aligned on the first column of the file (because they\u0027re processed by the pre-processor, not the actual compiler, so they\u0027re not logically part of the code)",
+      "revId": "06df8fd5e9404283524fe809514fefb9450f5718",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
