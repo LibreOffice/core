@@ -247,8 +247,9 @@
 #define SID_NO_FILE_SYNC                    (SID_SFX_START + 1729)
 
 #define SID_IS_REDACT_MODE                  (SID_SFX_START + 1731)
+#define SID_REDACTION_STYLE                 (SID_SFX_START + 1732)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1732)
+//      SID_SFX_free_START                  (SID_SFX_START + 1733)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
