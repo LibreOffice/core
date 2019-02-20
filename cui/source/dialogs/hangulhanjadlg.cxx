@@ -320,7 +320,7 @@ namespace svx
             aSecondarySize = GetTextRect( rect, m_aRubyText.getSecondaryText() ).GetSize();
         }
 
-        Size minimumSize =  CalcMinimumSize();
+        Size minimumSize;
         minimumSize.setHeight( aPrimarySize.Height() + aSecondarySize.Height() + 5 );
         minimumSize.setWidth( aPrimarySize.Width() + aSecondarySize.Width() + 5 );
         return minimumSize;
