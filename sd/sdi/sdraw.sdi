@@ -1372,6 +1372,24 @@ SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
     GroupId = SfxGroupId::Drawing;
 ]
 
+SfxVoidItem RedactedExportToolbox SID_DRAWTBX_REDACTED_EXPORT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Drawing;
+]
+
 SfxVoidItem ExpandPage SID_EXPAND_PAGE
 ()
 [
