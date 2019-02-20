@@ -110,6 +110,7 @@ endif
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
+gb_OBJCFLAGS := -x objective-c -fobjc-exceptions
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),)
@@ -231,6 +232,25 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 
+# ObjCObject class
+
+define gb_ObjCObject__command
+$(call gb_Output_announce,$(2),$(true),OC ,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_OBJCFLAGS) \
+		$(OBJCFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-MMD -MT $(1) \
+		-MF $(4) \
+		-I$(dir $(3)) \
+		$(INCLUDE_STL) $(INCLUDE))
+endef
+
+
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
@@ -270,6 +290,7 @@ endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_OBJCFLAGS)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS)
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
@@ -310,6 +331,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
@@ -330,6 +352,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \

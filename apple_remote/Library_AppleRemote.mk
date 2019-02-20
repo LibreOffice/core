@@ -42,7 +42,7 @@ $(eval $(call gb_Library_add_libs,AppleRemote,\
 	-framework IOKit \
 ))
 
-$(eval $(call gb_Library_add_objcxxobjects,AppleRemote,\
+$(eval $(call gb_Library_add_objcobjects,AppleRemote,\
 	apple_remote/source/AppleRemote \
 	apple_remote/source/RemoteControl \
 	apple_remote/source/RemoteControlContainer \
@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_objcxxobjects,AppleRemote,\
 	apple_remote/source/HIDRemoteControlDevice \
 	apple_remote/source/MultiClickRemoteBehavior \
 	apple_remote/source/RemoteMainController \
+	apple_remote/source/KeyspanFrontRowControl \
 ))
 
 # vim: set noet sw=4 ts=4:
