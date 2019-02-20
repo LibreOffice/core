@@ -21,16 +21,12 @@
 
 
 
-
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
 #include "dialog.hrc"
 #include "toolbox.hrc"
 #include "smcommands.h"
-
-#define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
-#define IMAGE_STDBTN_COLOR_HC IMAGE_STDBTN_COLOR
 
 #define MN_SUB_TOOLBAR 32
 #define WORKARROUND_1 1
@@ -39,68 +35,68 @@
 
 ModalDialog RID_FONTDIALOG
 {
-    HelpID = "starmath:ModalDialog:RID_FONTDIALOG";
+    HelpID = "starmath:ModalDialog:RID_FONTDIALOG" ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 183 , 150 ) ;
+    Size = MAP_APPFONT ( 183, 150 ) ;
     Text [ en-US ] = "Fonts" ;
     FixedText 1
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ en-US ] = "~Font";
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 40, 8 ) ;
+        Text [ en-US ] = "~Font" ;
     };
     ComboBox 1
     {
-        HelpID = "starmath:ComboBox:RID_FONTDIALOG:1";
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 111 , 60 ) ;
+        HelpID = "starmath:ComboBox:RID_FONTDIALOG:1" ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( 111, 60 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         VScroll = TRUE ;
     };
     CheckBox 1
     {
-        HelpID = "starmath:CheckBox:RID_FONTDIALOG:1";
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 84 ) ;
-        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Pos = MAP_APPFONT ( 60, 84 ) ;
+        Size = MAP_APPFONT ( 33, 10 ) ;
         Text [ en-US ] = "~Bold" ;
     };
     CheckBox 2
     {
-        HelpID = "starmath:CheckBox:RID_FONTDIALOG:2";
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:2" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 97 ) ;
-        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Pos = MAP_APPFONT ( 60, 97 ) ;
+        Size = MAP_APPFONT ( 33, 10 ) ;
         Text [ en-US ] = "~Italic" ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 126 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 126, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 126 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 126, 24 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     Control 1
     {
         Disable = TRUE ;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 113 ) ;
-        Size = MAP_APPFONT ( 111 , 31 ) ;
+        Pos = MAP_APPFONT ( 6, 113 ) ;
+        Size = MAP_APPFONT ( 111, 31 ) ;
     };
     FixedText 2
     {
-        Pos = MAP_APPFONT ( 6 , 85 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 85 ) ;
+        Size = MAP_APPFONT ( 42, 8 ) ;
         Text [ en-US ] = "Attributes" ;
     };
 };
@@ -111,21 +107,21 @@ ModalDialog RID_FONTSIZEDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_FONTSIZE ;
-    Size = MAP_APPFONT ( 171 , 120 ) ;
+    Size = MAP_APPFONT ( 171, 120 ) ;
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 7 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Base ~size";
+        Pos = MAP_APPFONT ( 12, 7 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "Base ~size" ;
     };
     MetricField 1
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:1";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:1" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 6 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 6 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -136,17 +132,17 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedText 4
     {
-        Pos = MAP_APPFONT ( 12 , 37 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 37 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Text";
+        Text [ en-US ] = "~Text" ;
     };
     MetricField 4
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:4";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:4" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 36 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 36 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -157,17 +153,17 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedText 5
     {
-        Pos = MAP_APPFONT ( 12 , 52 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 52 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Indexes";
+        Text [ en-US ] = "~Indexes" ;
     };
     MetricField 5
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:5";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:5" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 51 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 51 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -178,17 +174,17 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedText 6
     {
-        Pos = MAP_APPFONT ( 12 , 67 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 67 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Functions";
+        Text [ en-US ] = "~Functions" ;
     };
     MetricField 6
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:6";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:6" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 66 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 66 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -199,17 +195,17 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedText 7
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 82 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Operators";
+        Text [ en-US ] = "~Operators" ;
     };
     MetricField 7
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:7";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:7" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 81 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 81 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -220,17 +216,17 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedText 8
     {
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 97 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Limits";
+        Text [ en-US ] = "~Limits" ;
     };
     MetricField 8
     {
-        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:8";
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:8" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 96 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 57, 96 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -241,29 +237,29 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     FixedLine 1
     {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
-        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 24 ) ;
+        Size = MAP_APPFONT ( 99, 8 ) ;
         Text [ en-US ] = "Relative sizes" ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 114 , 3 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 114, 3 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 114 , 21 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 114, 21 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     PushButton 1
     {
-        HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
+        HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 114 , 45 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 114, 45 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
 };
@@ -273,161 +269,161 @@ ModalDialog RID_FONTTYPEDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_FONT ;
-    Size = MAP_APPFONT ( 282 , 153 ) ;
+    Size = MAP_APPFONT ( 282, 153 ) ;
     Text [ en-US ] = "Fonts" ;
     Moveable = TRUE ;
     FixedLine 1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 207 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 207, 8 ) ;
         Text [ en-US ] = "Formula fonts" ;
     };
     FixedLine 2
     {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
-        Size = MAP_APPFONT ( 207 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 84 ) ;
+        Size = MAP_APPFONT ( 207, 8 ) ;
         Text [ en-US ] = "Custom fonts" ;
     };
     FixedText 1
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 18 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "~Variables";
+        Pos = MAP_APPFONT ( 12, 18 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Variables" ;
     };
     ListBox 1
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:1";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:1" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 18 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 18 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 2
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "~Functions";
+        Pos = MAP_APPFONT ( 12, 33 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Functions" ;
     };
     ListBox 2
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:2";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:2" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 33 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 33 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 3
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "~Numbers";
+        Pos = MAP_APPFONT ( 12, 51 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Numbers" ;
     };
     ListBox 3
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:3";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:3" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 48 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 48 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 4
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "~Text";
+        Pos = MAP_APPFONT ( 12, 66 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Text" ;
     };
     ListBox 4
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:4";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:4" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 63 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 63 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 5
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "~Serif";
+        Pos = MAP_APPFONT ( 12, 97 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Serif" ;
     };
     ListBox 5
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:5";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:5" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 96 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 96 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 6
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "S~ans";
+        Pos = MAP_APPFONT ( 12, 112 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "S~ans" ;
     };
     ListBox 6
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:6";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:6" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 111 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 111 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText 7
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "F~ixed";
+        Pos = MAP_APPFONT ( 12, 127 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "F~ixed" ;
     };
     ListBox 7
     {
-        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:7";
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:7" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 126 ) ;
-        Size = MAP_APPFONT ( 150 , 69 ) ;
+        Pos = MAP_APPFONT ( 54, 126 ) ;
+        Size = MAP_APPFONT ( 150, 69 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 225 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 225, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 225 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 225, 24 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     MenuButton 1
     {
-        HelpID = "starmath:MenuButton:RID_FONTTYPEDIALOG:1";
+        HelpID = "starmath:MenuButton:RID_FONTTYPEDIALOG:1" ;
         TabStop = TRUE ;
-        ButtonMenu = Menu , RID_FONTMENU ;
-        Pos = MAP_APPFONT ( 225 , 48 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        ButtonMenu = Menu, RID_FONTMENU ;
+        Pos = MAP_APPFONT ( 225, 48 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
     PushButton 2
     {
-        HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2";
+        HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 225 , 66 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 225, 66 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
 };
@@ -438,135 +434,135 @@ ModalDialog RID_DISTANCEDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_DISTANCE ;
-    Size = MAP_APPFONT ( 240 , 90 ) ;
+    Size = MAP_APPFONT ( 240, 90 ) ;
     Text [ en-US ] = "Spacing" ;
     FixedText 1
     {
-        Pos = MAP_APPFONT ( 12 , 19 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 19 ) ;
+        Size = MAP_APPFONT ( 65, 10 ) ;
         Left = TRUE ;
     };
     MetricField 1
     {
-        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:1";
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:1" ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
         Repeat = TRUE;
-        Pos = MAP_APPFONT ( 78 , 18 ) ;
-        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Pos = MAP_APPFONT ( 78, 18 ) ;
+        Size = MAP_APPFONT ( 38, 12 ) ;
     };
     FixedText 2
     {
         Disable = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 35 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 35 ) ;
+        Size = MAP_APPFONT ( 65, 10 ) ;
         Left = TRUE ;
     };
     MetricField 2
     {
-        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:2";
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:2" ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
         Repeat = TRUE;
-        Pos = MAP_APPFONT ( 78 , 34 ) ;
-        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Pos = MAP_APPFONT ( 78, 34 ) ;
+        Size = MAP_APPFONT ( 38, 12 ) ;
     };
     CheckBox 1
     {
-        HelpID = "starmath:CheckBox:RID_DISTANCEDIALOG:1";
+        HelpID = "starmath:CheckBox:RID_DISTANCEDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
-        Size = MAP_APPFONT ( 110 , 12 ) ;
-        Text [ en-US ] = "Scale all brackets";
+        Pos = MAP_APPFONT ( 12, 55 ) ;
+        Size = MAP_APPFONT ( 110, 12 ) ;
+        Text [ en-US ] = "Scale all brackets" ;
     };
     FixedText 3
     {
         Disable = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 51 ) ;
+        Size = MAP_APPFONT ( 65, 10 ) ;
         Left = TRUE ;
     };
     MetricField 3
     {
-        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:3";
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:3" ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
         Repeat = TRUE;
-        Pos = MAP_APPFONT ( 78 , 50 ) ;
-        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Pos = MAP_APPFONT ( 78, 50 ) ;
+        Size = MAP_APPFONT ( 38, 12 ) ;
     };
     FixedText 4
     {
         Disable = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 67 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 67 ) ;
+        Size = MAP_APPFONT ( 65, 10 ) ;
         Left = TRUE ;
     };
     MetricField 4
     {
-        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:4";
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:4" ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
         Repeat = TRUE;
-        Pos = MAP_APPFONT ( 78 , 66 ) ;
-        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Pos = MAP_APPFONT ( 78, 66 ) ;
+        Size = MAP_APPFONT ( 38, 12 ) ;
         TabStop = TRUE ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 184 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 184 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184, 24 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     PushButton 1
     {
-        HelpID = "starmath:PushButton:RID_DISTANCEDIALOG:1";
+        HelpID = "starmath:PushButton:RID_DISTANCEDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 69 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184, 69 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
     MenuButton 1
     {
-        HelpID = "starmath:MenuButton:RID_DISTANCEDIALOG:1";
+        HelpID = "starmath:MenuButton:RID_DISTANCEDIALOG:1" ;
         TabStop = TRUE ;
-        ButtonMenu = Menu , RID_DISTANCEMENU ;
-        Pos = MAP_APPFONT ( 184 , 51 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        ButtonMenu = Menu, RID_DISTANCEMENU ;
+        Pos = MAP_APPFONT ( 184, 51 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Category" ;
     };
     FixedBitmap 1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 18 ) ;
-        Size = MAP_APPFONT ( 49 , 53 ) ;
+        Pos = MAP_APPFONT ( 122, 18 ) ;
+        Size = MAP_APPFONT ( 49, 53 ) ;
     };
     FixedLine 1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 171 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 171, 8 ) ;
         Text [ en-US ] = "Category" ;
     };
     Resource 1
@@ -577,70 +573,70 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Spacing";
+            Text [ en-US ] = "~Spacing" ;
         };
         Bitmap 20
         {
-            File = "dist11.bmp" ;
+            File = "dist11.png" ;
         };
         Bitmap 21
         {
-            File = "dist11_h.bmp" ;
+            File = "dist11_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Line spacing";
+            Text [ en-US ] = "~Line spacing" ;
         };
         Bitmap 30
         {
-            File = "dist12.bmp" ;
+            File = "dist12.png" ;
         };
         Bitmap 31
         {
-            File = "dist12_h.bmp" ;
+            File = "dist12_h.png" ;
         };
         String 4
         {
-            Text [ en-US ] = "~Root spacing";
+            Text [ en-US ] = "~Root spacing" ;
         };
         Bitmap 40
         {
-            File = "dist13.bmp" ;
+            File = "dist13.png" ;
         };
         Bitmap 41
         {
-            File = "dist13_h.bmp" ;
+            File = "dist13_h.png" ;
         };
     };
     Resource 2
     {
         String 1
         {
-            Text [ en-US ] = "Indexes";
+            Text [ en-US ] = "Indexes" ;
         };
         String 2
         {
-            Text [ en-US ] = "~Superscript";
+            Text [ en-US ] = "~Superscript" ;
         };
         Bitmap 20
         {
-            File = "dist21.bmp" ;
+            File = "dist21.png" ;
         };
         Bitmap 21
         {
-            File = "dist21_h.bmp" ;
+            File = "dist21_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "S~ubscript";
+            Text [ en-US ] = "S~ubscript" ;
         };
         Bitmap 30
         {
-            File = "dist22.bmp" ;
+            File = "dist22.png" ;
         };
         Bitmap 31
         {
-            File = "dist22_h.bmp" ;
+            File = "dist22_h.png" ;
         };
     };
     Resource 3
@@ -651,27 +647,27 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Numerator";
+            Text [ en-US ] = "~Numerator" ;
         };
         Bitmap 20
         {
-            File = "dist31.bmp" ;
+            File = "dist31.png" ;
         };
         Bitmap 21
         {
-            File = "dist31_h.bmp" ;
+            File = "dist31_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Denominator";
+            Text [ en-US ] = "~Denominator" ;
         };
         Bitmap 30
         {
-            File = "dist32.bmp" ;
+            File = "dist32.png" ;
         };
         Bitmap 31
         {
-            File = "dist32_h.bmp" ;
+            File = "dist32_h.png" ;
         };
     };
     Resource 4
@@ -682,27 +678,27 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Excess length";
+            Text [ en-US ] = "~Excess length" ;
         };
         Bitmap 20
         {
-            File = "dist41.bmp" ;
+            File = "dist41.png" ;
         };
         Bitmap 21
         {
-            File = "dist41_h.bmp" ;
+            File = "dist41_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Weight";
+            Text [ en-US ] = "~Weight" ;
         };
         Bitmap 30
         {
-            File = "dist42.bmp" ;
+            File = "dist42.png" ;
         };
         Bitmap 31
         {
-            File = "dist42_h.bmp" ;
+            File = "dist42_h.png" ;
         };
     };
     Resource 5
@@ -713,27 +709,27 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Upper limit";
+            Text [ en-US ] = "~Upper limit" ;
         };
         Bitmap 20
         {
-            File = "dist51.bmp" ;
+            File = "dist51.png" ;
         };
         Bitmap 21
         {
-            File = "dist51_h.bmp" ;
+            File = "dist51_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Lower limit";
+            Text [ en-US ] = "~Lower limit" ;
         };
         Bitmap 30
         {
-            File = "dist52.bmp" ;
+            File = "dist52.png" ;
         };
         Bitmap 31
         {
-            File = "dist52_h.bmp" ;
+            File = "dist52_h.png" ;
         };
     };
     Resource 6
@@ -744,39 +740,39 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Excess size (left/right)";
+            Text [ en-US ] = "~Excess size (left/right)" ;
         };
         Bitmap 20
         {
-            File = "dist61.bmp" ;
+            File = "dist61.png" ;
         };
         Bitmap 21
         {
-            File = "dist61_h.bmp" ;
+            File = "dist61_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Spacing";
+            Text [ en-US ] = "~Spacing" ;
         };
         Bitmap 30
         {
-            File = "dist62.bmp" ;
+            File = "dist62.png" ;
         };
         Bitmap 31
         {
-            File = "dist62_h.bmp" ;
+            File = "dist62_h.png" ;
         };
         String 5
         {
-            Text [ en-US ] = "~Excess size";
+            Text [ en-US ] = "~Excess size" ;
         };
         Bitmap 50
         {
-            File = "dist61.bmp" ;
+            File = "dist61.png" ;
         };
         Bitmap 51
         {
-            File = "dist61_h.bmp" ;
+            File = "dist61_h.png" ;
         };
     };
     Resource 7
@@ -787,27 +783,27 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Line spacing";
+            Text [ en-US ] = "~Line spacing" ;
         };
         Bitmap 20
         {
-            File = "dist71.bmp" ;
+            File = "dist71.png" ;
         };
         Bitmap 21
         {
-            File = "dist71_h.bmp" ;
+            File = "dist71_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Column spacing";
+            Text [ en-US ] = "~Column spacing" ;
         };
         Bitmap 30
         {
-            File = "dist72.bmp" ;
+            File = "dist72.png" ;
         };
         Bitmap 31
         {
-            File = "dist72_h.bmp" ;
+            File = "dist72_h.png" ;
         };
     };
     Resource 8
@@ -818,27 +814,27 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Primary height";
+            Text [ en-US ] = "~Primary height" ;
         };
         Bitmap 20
         {
-            File = "dist81.bmp" ;
+            File = "dist81.png" ;
         };
         Bitmap 21
         {
-            File = "dist81_h.bmp" ;
+            File = "dist81_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Minimum spacing";
+            Text [ en-US ] = "~Minimum spacing" ;
         };
         Bitmap 30
         {
-            File = "dist82.bmp" ;
+            File = "dist82.png" ;
         };
         Bitmap 31
         {
-            File = "dist82_h.bmp" ;
+            File = "dist82_h.png" ;
         };
     };
     Resource 9
@@ -849,82 +845,82 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ en-US ] = "~Excess size";
+            Text [ en-US ] = "~Excess size" ;
         };
         Bitmap 20
         {
-            File = "dist91.bmp" ;
+            File = "dist91.png" ;
         };
         Bitmap 21
         {
-            File = "dist91_h.bmp" ;
+            File = "dist91_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Spacing";
+            Text [ en-US ] = "~Spacing" ;
         };
         Bitmap 30
         {
-            File = "dist92.bmp" ;
+            File = "dist92.png" ;
         };
         Bitmap 31
         {
-            File = "dist92_h.bmp" ;
+            File = "dist92_h.png" ;
         };
     };
     Resource 10
     {
         String 1
         {
-            Text [ en-US ] = "Borders";
+            Text [ en-US ] = "Borders" ;
         };
         String 2
         {
-            Text [ en-US ] = "~Left";
+            Text [ en-US ] = "~Left" ;
         };
         Bitmap 20
         {
-            File = "dist101.bmp" ;
+            File = "dist101.png" ;
         };
         Bitmap 21
         {
-            File = "dist101_h.bmp" ;
+            File = "dist101_h.png" ;
         };
         String 3
         {
-            Text [ en-US ] = "~Right";
+            Text [ en-US ] = "~Right" ;
         };
         Bitmap 30
         {
-            File = "dist102.bmp" ;
+            File = "dist102.png" ;
         };
         Bitmap 31
         {
-            File = "dist102_h.bmp" ;
+            File = "dist102_h.png" ;
         };
         String 4
         {
-            Text [ en-US ] = "~Top";
+            Text [ en-US ] = "~Top" ;
         };
         Bitmap 40
         {
-            File = "dist103.bmp" ;
+            File = "dist103.png" ;
         };
         Bitmap 41
         {
-            File = "dist103_h.bmp" ;
+            File = "dist103_h.png" ;
         };
         String 5
         {
-            Text [ en-US ] = "~Bottom";
+            Text [ en-US ] = "~Bottom" ;
         };
         Bitmap 50
         {
-            File = "dist104.bmp" ;
+            File = "dist104.png" ;
         };
         Bitmap 51
         {
-            File = "dist104_h.bmp" ;
+            File = "dist104_h.png" ;
         };
     };
 };
@@ -936,134 +932,134 @@ ModalDialog RID_ALIGNDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_ALIGN ;
-    Size = MAP_APPFONT ( 139 , 66 ) ;
+    Size = MAP_APPFONT ( 139, 66 ) ;
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
     {
-        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:1";
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 17 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
         Text [ en-US ] = "~Left" ;
     };
     RadioButton 2
     {
-        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:2";
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:2" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 31 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
         Text [ en-US ] = "~Centered" ;
     };
     RadioButton 3
     {
-        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:3";
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:3" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 44 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
         Text [ en-US ] = "~Right" ;
     };
     FixedLine 1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
         Text [ en-US ] = "Horizontal" ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 83 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 83, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 83 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 83, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     PushButton 1
     {
-        HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
+        HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 46 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 83, 46 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
 };
 
 TabPage RID_PRINTOPTIONPAGE
 {
-    HelpID = "starmath:TabPage:RID_PRINTOPTIONPAGE";
+    HelpID = "starmath:TabPage:RID_PRINTOPTIONPAGE" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ en-US ] = "Formula Options:Settings";
+    Size = MAP_APPFONT ( 260, 185 ) ;
+    Text [ en-US ] = "Formula Options:Settings" ;
     FixedLine FL_PRINTOPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Print options";
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Print options" ;
     };
     CheckBox CB_TITLEROW
     {
-        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_TITLEROW";
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_TITLEROW" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 68, 10 ) ;
         Text [ en-US ] = "~Title row" ;
     };
     CheckBox CB_EQUATION_TEXT
     {
-        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_EQUATION_TEXT";
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_EQUATION_TEXT" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 28 ) ;
+        Size = MAP_APPFONT ( 68, 10 ) ;
         Text [ en-US ] = "~Formula text" ;
     };
     CheckBox CB_FRAME
     {
-        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_FRAME";
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_FRAME" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 42 ) ;
+        Size = MAP_APPFONT ( 68, 10 ) ;
         Text [ en-US ] = "B~order" ;
     };
     FixedLine FL_PRINT_FORMAT
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 58 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Print format" ;
     };
     RadioButton RB_ORIGINAL_SIZE
     {
-        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ORIGINAL_SIZE";
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ORIGINAL_SIZE" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 69 ) ;
+        Size = MAP_APPFONT ( 90, 10 ) ;
         Text [ en-US ] = "O~riginal size" ;
     };
     RadioButton RB_FIT_TO_PAGE
     {
-        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_FIT_TO_PAGE";
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_FIT_TO_PAGE" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 83 ) ;
+        Size = MAP_APPFONT ( 90, 10 ) ;
         Text [ en-US ] = "Fit to ~page" ;
     };
     RadioButton RB_ZOOM
     {
-        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ZOOM";
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ZOOM" ;
+        Pos = MAP_APPFONT ( 12, 97 ) ;
+        Size = MAP_APPFONT ( 90, 10 ) ;
         Text [ en-US ] = "~Scaling" ;
         TabStop = TRUE ;
     };
     MetricField MF_ZOOM
     {
-        HelpID = "starmath:MetricField:RID_PRINTOPTIONPAGE:MF_ZOOM";
+        HelpID = "starmath:MetricField:RID_PRINTOPTIONPAGE:MF_ZOOM" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 18 , 111 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 18, 111 ) ;
+        Size = MAP_APPFONT ( 30, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1074,48 +1070,48 @@ TabPage RID_PRINTOPTIONPAGE
     };
     FixedLine FL_MISC_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 129 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Miscellaneous options";
+        Pos = MAP_APPFONT ( 6, 129 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Miscellaneous options" ;
     };
     CheckBox CB_IGNORE_SPACING
     {
-        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_IGNORE_SPACING";
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_IGNORE_SPACING" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 140 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line";
+        Pos = MAP_APPFONT ( 12, 140 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
+        Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line" ;
     };
     CheckBox CB_SAVE_ONLY_USED_SYMBOLS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 154 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ en-US ] = "Embed only used symbols (smaller file size)";
+        Pos = MAP_APPFONT ( 12, 154 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
+        Text [ en-US ] = "Embed only used symbols (smaller file size)" ;
     };
 };
 
 ModalDialog RID_SYMBOLDIALOG
 {
-    HelpID = "starmath:ModalDialog:RID_SYMBOLDIALOG";
+    HelpID = "starmath:ModalDialog:RID_SYMBOLDIALOG" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Closeable = TRUE;   // Close Button in Window Leiste explizit einbauen
-    Size = MAP_APPFONT ( 239 , 123 ) ;
+    Size = MAP_APPFONT ( 239, 123 ) ;
     Text [ en-US ] = "Symbols" ;
     Moveable = TRUE ;
     FixedText 1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 92, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Symbol set";
+        Text [ en-US ] = "~Symbol set" ;
     };
     ListBox 1
     {
-        HelpID = "starmath:ListBox:RID_SYMBOLDIALOG:1";
+        HelpID = "starmath:ListBox:RID_SYMBOLDIALOG:1" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
         Size = MAP_APPFONT ( 92, 57 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
@@ -1126,86 +1122,86 @@ ModalDialog RID_SYMBOLDIALOG
     {
         HelpID = HID_SMA_CONTROL_SYMBOLSET_VIEW ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 96 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 35 ) ;
+        Size = MAP_APPFONT ( 96, 72 ) ;
         TabStop = TRUE ;
     };
     Control 2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 35 ) ;
-        Size = MAP_APPFONT ( 63 , 72 ) ;
+        Pos = MAP_APPFONT ( 108, 35 ) ;
+        Size = MAP_APPFONT ( 63, 72 ) ;
     };
     FixedText 2
     {
         Center = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 108 ) ;
-        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 108 ) ;
+        Size = MAP_APPFONT ( 92, 8 ) ;
         Text [ en-US ] = "Unknown" ;
     };
     PushButton 2
     {
-        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:2";
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:2" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 6 ) ;
-        Size = MAP_APPFONT ( 56 , 14 ) ;
+        Pos = MAP_APPFONT ( 177, 6 ) ;
+        Size = MAP_APPFONT ( 56, 14 ) ;
         DefButton = TRUE ;
         Text [ en-US ] = "~Insert" ;
     };
     PushButton 3
     {
-        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:3";
-        Pos = MAP_APPFONT ( 177 , 24 ) ;
-        Size = MAP_APPFONT ( 56 , 14 ) ;
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:3" ;
+        Pos = MAP_APPFONT ( 177, 24 ) ;
+        Size = MAP_APPFONT ( 56, 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Close";
+        Text [ en-US ] = "~Close" ;
     };
     PushButton 1
     {
-        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:1";
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 42 ) ;
-        Size = MAP_APPFONT ( 56 , 14 ) ;
+        Pos = MAP_APPFONT ( 177, 42 ) ;
+        Size = MAP_APPFONT ( 56, 14 ) ;
         Text [ en-US ] = "~Edit..." ;
     };
 };
 
 ModalDialog RID_SYMDEFINEDIALOG
 {
-    HelpID = "starmath:ModalDialog:RID_SYMDEFINEDIALOG";
+    HelpID = "starmath:ModalDialog:RID_SYMDEFINEDIALOG" ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 365 , 215 ) ;
+    Size = MAP_APPFONT ( 365, 215 ) ;
     Text [ en-US ] = "Edit Symbols" ;
     FixedText 1
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 8 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Old symbol";
+        Text [ en-US ] = "~Old symbol" ;
     };
     ComboBox 1
     {
-        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:1";
-        Pos = MAP_APPFONT ( 59 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 100 ) ;
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:1" ;
+        Pos = MAP_APPFONT ( 59, 6 ) ;
+        Size = MAP_APPFONT ( 80, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     FixedText 2
     {
-        Pos = MAP_APPFONT ( 145 , 8 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 145, 8 ) ;
+        Size = MAP_APPFONT ( 60, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "O~ld symbol set";
+        Text [ en-US ] = "O~ld symbol set" ;
     };
     ComboBox 2
     {
-        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:2";
-        Pos = MAP_APPFONT ( 210 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 100 ) ;
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:2" ;
+        Pos = MAP_APPFONT ( 210, 6 ) ;
+        Size = MAP_APPFONT ( 80, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1214,23 +1210,23 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         HelpID = HID_SMA_CONTROL_FONTCHAR_VIEW ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
-        Size = MAP_APPFONT ( 295 , 87 ) ;
+        Pos = MAP_APPFONT ( 6, 24 ) ;
+        Size = MAP_APPFONT ( 295, 87 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
     };
     FixedText 9
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 118 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Symbol";
+        Text [ en-US ] = "~Symbol" ;
     };
     ComboBox 4
     {
-        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:4";
-        Pos = MAP_APPFONT ( 80 , 115 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:4" ;
+        Pos = MAP_APPFONT ( 80, 115 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1238,15 +1234,15 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 10
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 133 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
-        Text [ en-US ] = "Symbol s~et";
+        Pos = MAP_APPFONT ( 6, 133 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
+        Text [ en-US ] = "Symbol s~et" ;
     };
     ComboBox 5
     {
-        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:5";
-        Pos = MAP_APPFONT ( 80 , 130 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:5" ;
+        Pos = MAP_APPFONT ( 80, 130 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1254,16 +1250,16 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 3
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 148 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
-        Text [ en-US ] = "~Font";
+        Pos = MAP_APPFONT ( 6, 148 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
+        Text [ en-US ] = "~Font" ;
     };
     ListBox 1
     {
-        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:1";
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:1" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 145 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        Pos = MAP_APPFONT ( 80, 145 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         DropDown = TRUE ;
@@ -1271,16 +1267,16 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText FT_FONTS_SUBSET
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 163 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
-        Text [ en-US ] = "~Subset";
+        Pos = MAP_APPFONT ( 6, 163 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
+        Text [ en-US ] = "~Subset" ;
     };
     ListBox LB_FONTS_SUBSET
     {
-        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET";
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 160 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        Pos = MAP_APPFONT ( 80, 160 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
         DropDown = TRUE ;
@@ -1288,16 +1284,16 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 4
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 178 ) ;
-        Size = MAP_APPFONT ( 71 , 8 ) ;
-        Text [ en-US ] = "~Typeface";
+        Pos = MAP_APPFONT ( 6, 178 ) ;
+        Size = MAP_APPFONT ( 71, 8 ) ;
+        Text [ en-US ] = "~Typeface" ;
     };
     ComboBox 3
     {
-        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:3";
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:3" ;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 80 , 175 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        Pos = MAP_APPFONT ( 80, 175 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = FALSE ;
@@ -1305,102 +1301,99 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 5
     {
         Center = TRUE ;
-        Pos  = MAP_APPFONT ( 303 , 130 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 303, 130 ) ;
+        Size = MAP_APPFONT ( 54, 8 ) ;
     };
     Control 2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 310 , 140 ) ;
-        Size = MAP_APPFONT ( 40 , 40 ) ;
+        Pos = MAP_APPFONT ( 310, 140 ) ;
+        Size = MAP_APPFONT ( 40, 40 ) ;
     };
     FixedText 6
     {
         Center = TRUE ;
-        Pos  = MAP_APPFONT ( 303 , 182 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 303, 182 ) ;
+        Size = MAP_APPFONT ( 54, 8 ) ;
     };
     Image 1
     {
-        ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        ImageBitmap = Bitmap { File = "ar_right.png" ; };
     };
     Image 2
     {
-        ImageBitmap = Bitmap { File = "ar_right_h.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        ImageBitmap = Bitmap { File = "ar_right_h.png" ; };
     };
     FixedImage BMP_ARROW_RIGHT
     {
-        Pos  = MAP_APPFONT ( 252 , 142 ) ;
-        Size = MAP_APPFONT ( 36 , 36 ) ;
+        Pos = MAP_APPFONT ( 252, 142 ) ;
+        Size = MAP_APPFONT ( 36, 36 ) ;
 
         Fixed = Image
         {
-            ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            ImageBitmap = Bitmap { File = "ar_right.png" ; };
         };
     };
     FixedText 7
     {
         Center = TRUE ;
-        Pos  = MAP_APPFONT ( 183 , 130 ) ;
-        Size = MAP_APPFONT ( 54 , 9 ) ;
+        Pos = MAP_APPFONT ( 183, 130 ) ;
+        Size = MAP_APPFONT ( 54, 9 ) ;
     };
     Control 3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 190 , 140 ) ;
-        Size = MAP_APPFONT ( 40 , 40 ) ;
+        Pos = MAP_APPFONT ( 190, 140 ) ;
+        Size = MAP_APPFONT ( 40, 40 ) ;
     };
     FixedText 8
     {
         Center = TRUE ;
-        Pos  = MAP_APPFONT ( 183 , 182 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 183, 182 ) ;
+        Size = MAP_APPFONT ( 54, 8 ) ;
     };
     PushButton 1
     {
-        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:1";
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:1" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 305 , 195 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 305, 195 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Add" ;
     };
     PushButton 2
     {
-        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:2";
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:2" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 245 , 195 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 245, 195 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
     PushButton 3
     {
-        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:3";
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:3" ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 195 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 185, 195 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Delete" ;
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 310 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 310, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 310 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 310, 24 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
 };
 
 WarningBox RID_NOMATHTYPEFACEWARNING
 {
-    Message [ en-US ] = "The 'StarMath' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
+    Message [ en-US ] = "The 'OpenSymbol' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
 };
 
 QueryBox RID_DEFAULTSAVEQUERY
@@ -1546,7 +1539,7 @@ Menu RID_DISTANCEMENU
         MenuItem
         {
             Identifier = WORKARROUND_10 ;
-            Text [ en-US ] = "Borders";
+            Text [ en-US ] = "Borders" ;
         };
     };
 };
@@ -1594,7 +1587,7 @@ Menu RID_FONTMENU
 };
 
 #define CMDBOXWINDOW_TEXT           \
-    Text [ en-US ] = "Commands" ;              \
+    Text [ en-US ] = "Commands" ;   \
 
 DockingWindow RID_CMDBOXWINDOW\
 {
@@ -1605,7 +1598,7 @@ DockingWindow RID_CMDBOXWINDOW\
     OutputSize = TRUE ;
     HideWhenDeactivate = FALSE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 292 , 94 ) ;
+    Size = MAP_APPFONT ( 292, 94 ) ;
     Dockable = TRUE ;
     CMDBOXWINDOW_TEXT
 };
@@ -1634,7 +1627,7 @@ String STR_STATSTR_WRITING
 
 String STR_MATH_DOCUMENT_FULLTYPE_CURRENT
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula" ;
 };
 
 String RID_SYMBOLFILESSTR
@@ -1746,15 +1739,16 @@ StringArray RID_PRINTUIOPTIONS
 {
     ItemList [en-US] =
     {
-        < "%PRODUCTNAME %s"; >;
-        < "Contents"; >;
-        < "~Title"; >;
-        < "~Formula text"; >;
-        < "B~orders"; >;
-        < "Size"; >;
-        < "O~riginal size"; >;
-        < "Fit to ~page"; >;
-        < "~Scaling"; >;
+        < "%PRODUCTNAME %s" ;   > ;
+        < "Contents" ;          > ;
+        < "~Title" ;            > ;
+        < "~Formula text" ;     > ;
+        < "B~orders" ;          > ;
+        < "Size" ;              > ;
+        < "O~riginal size" ;    > ;
+        < "Fit to ~page" ;      > ;
+        < "~Scaling" ;          > ;
     };
 };
 
+// ******************************************************************* EOF
