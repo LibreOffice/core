@@ -259,85 +259,34 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Pushbutton:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                auto aStates = pPart->getStates(eState, rValue);
-                if (!aStates.empty())
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                    {
-                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
-                                          nHeight);
-                        bOK = true;
-                    }
-                }
-            }
+            /*bool bIsAction = false;
+            const PushButtonValue* pPushButtonValue = static_cast<const PushButtonValue*>(&rValue);
+            if (pPushButtonValue)
+                bIsAction = pPushButtonValue->mbIsAction;*/
+
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Radiobutton:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                std::shared_ptr<WidgetDefinitionState> pState
-                    = pPart->getStates(eState, rValue).back();
-                {
-                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
-                    bOK = true;
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Checkbox:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                auto aStates = pPart->getStates(eState, rValue);
-                if (!aStates.empty())
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
-                    bOK = true;
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Combobox:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                auto aStates = pPart->getStates(eState, rValue);
-                if (!aStates.empty())
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
-                    bOK = true;
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                std::shared_ptr<WidgetDefinitionState> pState
-                    = pPart->getStates(eState, rValue).back();
-                {
-                    munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
-                    bOK = true;
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Listbox:
@@ -348,61 +297,38 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
             {
                 const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue*>(&rValue);
 
-                ControlPart eUpButtonPart = pSpinVal->mnUpperPart;
-                ControlState eUpButtonState = pSpinVal->mnUpperState;
-
-                ControlPart eDownButtonPart = pSpinVal->mnLowerPart;
-                ControlState eDownButtonState = pSpinVal->mnLowerState;
-
                 {
-                    std::shared_ptr<WidgetDefinitionPart> pPart
-                        = m_aWidgetDefinition.getDefinition(eType, eUpButtonPart);
-                    if (pPart)
-                    {
-                        std::shared_ptr<WidgetDefinitionState> pState
-                            = pPart->getStates(eUpButtonState, ImplControlValue()).back();
-                        {
-                            munchDrawCommands(
-                                pState->mpDrawCommands, m_rGraphics, pSpinVal->maUpperRect.Left(),
-                                pSpinVal->maUpperRect.Top(), pSpinVal->maUpperRect.GetWidth() - 1,
-                                pSpinVal->maUpperRect.GetHeight() - 1);
-                            bOK = true;
-                        }
-                    }
+                    ControlPart eUpButtonPart = pSpinVal->mnUpperPart;
+                    ControlState eUpButtonState = pSpinVal->mnUpperState;
+
+                    long nUpperX = pSpinVal->maUpperRect.Left();
+                    long nUpperY = pSpinVal->maUpperRect.Top();
+                    long nUpperWidth = pSpinVal->maUpperRect.GetWidth() - 1;
+                    long nUpperHeight = pSpinVal->maUpperRect.GetHeight() - 1;
+
+                    bOK = resolveDefinition(eType, eUpButtonPart, eUpButtonState,
+                                            ImplControlValue(), nUpperX, nUpperY, nUpperWidth,
+                                            nUpperHeight);
                 }
 
                 if (bOK)
                 {
-                    std::shared_ptr<WidgetDefinitionPart> pPart
-                        = m_aWidgetDefinition.getDefinition(eType, eDownButtonPart);
-                    if (pPart)
-                    {
-                        std::shared_ptr<WidgetDefinitionState> pState
-                            = pPart->getStates(eDownButtonState, ImplControlValue()).back();
-                        {
-                            munchDrawCommands(
-                                pState->mpDrawCommands, m_rGraphics, pSpinVal->maLowerRect.Left(),
-                                pSpinVal->maLowerRect.Top(), pSpinVal->maLowerRect.GetWidth() - 1,
-                                pSpinVal->maLowerRect.GetHeight() - 1);
-                            bOK = true;
-                        }
-                    }
+                    ControlPart eDownButtonPart = pSpinVal->mnLowerPart;
+                    ControlState eDownButtonState = pSpinVal->mnLowerState;
+
+                    long nLowerX = pSpinVal->maLowerRect.Left();
+                    long nLowerY = pSpinVal->maLowerRect.Top();
+                    long nLowerWidth = pSpinVal->maLowerRect.GetWidth() - 1;
+                    long nLowerHeight = pSpinVal->maLowerRect.GetHeight() - 1;
+
+                    bOK = resolveDefinition(eType, eDownButtonPart, eDownButtonState,
+                                            ImplControlValue(), nLowerX, nLowerY, nLowerWidth,
+                                            nLowerHeight);
                 }
             }
             else
             {
-                std::shared_ptr<WidgetDefinitionPart> pPart
-                    = m_aWidgetDefinition.getDefinition(eType, ePart);
-                if (pPart)
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState
-                        = pPart->getStates(eState, ImplControlValue()).back();
-                    {
-                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
-                                          nHeight);
-                        bOK = true;
-                    }
-                }
+                bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
             }
         }
         break;
@@ -423,65 +349,26 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Slider:
         {
-            {
-                std::shared_ptr<WidgetDefinitionPart> pPart
-                    = m_aWidgetDefinition.getDefinition(eType, ePart);
-                if (pPart)
-                {
-                    auto aStates = pPart->getStates(eState, rValue);
-                    if (!aStates.empty())
-                    {
-                        std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                        {
-                            munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
-                                              nHeight);
-                            bOK = true;
-                        }
-                    }
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+
             if (bOK)
             {
                 const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
 
-                std::shared_ptr<WidgetDefinitionPart> pPart
-                    = m_aWidgetDefinition.getDefinition(eType, ControlPart::Button);
-                if (pPart)
-                {
-                    auto aStates = pPart->getStates(eState | pSliderValue->mnThumbState, rValue);
-                    if (!aStates.empty())
-                    {
-                        std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                        {
-                            munchDrawCommands(pState->mpDrawCommands, m_rGraphics,
-                                              pSliderValue->maThumbRect.Left(),
-                                              pSliderValue->maThumbRect.Top(),
-                                              pSliderValue->maThumbRect.GetWidth() - 1,
-                                              pSliderValue->maThumbRect.GetHeight() - 1);
-                            bOK = true;
-                        }
-                    }
-                }
+                long nThumbX = pSliderValue->maThumbRect.Left();
+                long nThumbY = pSliderValue->maThumbRect.Top();
+                long nThumbWidth = pSliderValue->maThumbRect.GetWidth() - 1;
+                long nThumbHeight = pSliderValue->maThumbRect.GetHeight() - 1;
+
+                bOK = resolveDefinition(eType, ControlPart::Button,
+                                        eState | pSliderValue->mnThumbState, rValue, nThumbX,
+                                        nThumbY, nThumbWidth, nThumbHeight);
             }
         }
         break;
         case ControlType::Fixedline:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                auto aStates = pPart->getStates(eState, rValue);
-                if (!aStates.empty())
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                    {
-                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
-                                          nHeight);
-                        bOK = true;
-                    }
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Toolbar:
@@ -492,21 +379,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::Progress:
         case ControlType::IntroProgress:
         {
-            std::shared_ptr<WidgetDefinitionPart> pPart
-                = m_aWidgetDefinition.getDefinition(eType, ePart);
-            if (pPart)
-            {
-                auto aStates = pPart->getStates(eState, rValue);
-                if (!aStates.empty())
-                {
-                    std::shared_ptr<WidgetDefinitionState> pState = aStates.back();
-                    {
-                        munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth,
-                                          nHeight);
-                        bOK = true;
-                    }
-                }
-            }
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::Tooltip:
