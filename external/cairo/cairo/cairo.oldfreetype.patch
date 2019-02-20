@@ -1,0 +1,78 @@
+From c0ed8ce1a111cb9472aef080ac3aa31526443f7c Mon Sep 17 00:00:00 2001
+From: suzuki toshiya <mpsuzuki@hiroshima-u.ac.jp>
+Date: Thu, 13 Dec 2018 14:36:56 +0900
+Subject: [PATCH] [cairo-ft-font.c] conditionalize the changes by 3ec4aa24 on 2018-07-16 for legacy FreeType2 without color font feature
+
+---
+ src/cairo-ft-font.c |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/src/cairo-ft-font.c b/src/cairo-ft-font.c
+index 325dd61..1841adb 100644
+--- misc/a/src/cairo-ft-font.c
++++ misc/b/src/cairo-ft-font.c
+@@ -976,10 +976,12 @@ _compute_xrender_bitmap_size(FT_Bitmap      *target,
+ 	pitch = width * 4;
+ 	break;
+ 
++#ifdef FT_PIXEL_MODE_BGRA
+     case FT_PIXEL_MODE_BGRA:
+ 	/* each pixel is replicated into a 32-bit ARGB value */
+ 	pitch = width * 4;
+ 	break;
++#endif
+ 
+     default:  /* unsupported source format */
+ 	return -1;
+@@ -1177,10 +1179,12 @@ _fill_xrender_bitmap(FT_Bitmap      *target,
+ 	}
+ 	break;
+ 
++#ifdef FT_PIXEL_MODE_BGRA
+     case FT_PIXEL_MODE_BGRA:
+ 	for (h = height; h > 0; h--, srcLine += src_pitch, dstLine += pitch)
+ 	    memcpy (dstLine, srcLine, width * 4);
+ 	break;
++#endif
+ 
+     default:
+ 	assert (0);
+@@ -1289,6 +1293,7 @@ _get_bitmap_surface (FT_Bitmap		     *bitmap,
+ 	    component_alpha = TRUE;
+ 	}
+ 	break;
++#ifdef FT_PIXEL_MODE_BGRA
+     case FT_PIXEL_MODE_BGRA:
+ 	stride = width * 4;
+ 	if (own_buffer) {
+@@ -1311,6 +1316,7 @@ _get_bitmap_surface (FT_Bitmap		     *bitmap,
+ 	}
+ 	format = CAIRO_FORMAT_ARGB32;
+ 	break;
++#endif
+     case FT_PIXEL_MODE_GRAY2:
+     case FT_PIXEL_MODE_GRAY4:
+     convert:
+@@ -2487,7 +2493,9 @@ _cairo_ft_scaled_glyph_init (void			*abstract_font,
+ 	vertical_layout = TRUE;
+     }
+ 
++#ifdef FT_LOAD_COLOR
+     load_flags |= FT_LOAD_COLOR;
++#endif
+ 
+ 
+     if (info & CAIRO_SCALED_GLYPH_INFO_METRICS) {
+@@ -2656,7 +2664,9 @@ LOAD:
+          */
+ 	scaled_glyph_loaded = FALSE;
+         info &= ~CAIRO_SCALED_GLYPH_INFO_METRICS;
++#ifdef FT_LOAD_COLOR
+         load_flags &= ~FT_LOAD_COLOR;
++#endif
+         goto LOAD;
+     }
+ 
+-- 
+1.7.1
+
