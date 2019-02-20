@@ -28,7 +28,7 @@
 ScExtDocSettings::ScExtDocSettings() :
     mfTabBarWidth( -1.0 ),
     mnLinkCnt( 0 ),
-    mnDisplTab( -1 )
+    mnDisplTab( 0 )
 {
 }
 
