@@ -190,6 +190,7 @@ public:
     void testPatternImport();
     void testPptCrop();
     void testTdf119015();
+    void testTdf123090();
     void testTdf120028();
     void testTdf120028b();
     void testTdf44223();
@@ -275,6 +276,7 @@ public:
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
     CPPUNIT_TEST(testTdf119015);
+    CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testTdf44223);
@@ -2521,6 +2523,33 @@ void SdImportTest::testTdf119015()
     uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
                                                 uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf123090()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf123090.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+
+    uno::Reference<table::XTable> xTable(pTableObj->getTable());
+
+    // Test that we actually have two cells: this threw css.lang.IndexOutOfBoundsException
+    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
+                                                uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), xTextRange->getString());
+
+    sal_Int32 nWidth;
+    const OUString sWidth("Width");
+    uno::Reference< css::table::XTableColumns > xColumns( xTable->getColumns(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xRefColumn( xColumns->getByIndex(1), uno::UNO_QUERY_THROW );
+    xRefColumn->getPropertyValue( sWidth ) >>= nWidth;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9136), nWidth);
 
     xDocShRef->DoClose();
 }
