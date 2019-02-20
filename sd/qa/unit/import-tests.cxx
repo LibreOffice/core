@@ -2518,7 +2518,7 @@ void SdImportTest::testTdf119015()
     uno::Reference<table::XTable> xTable(pTableObj->getTable());
 
     // Test that we actually have three cells: this threw css.lang.IndexOutOfBoundsException
-    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(2, 0),
+    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
                                                 uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
 
