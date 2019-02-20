@@ -1357,6 +1357,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             pDlg->Execute();
             pFieldBM->Invalidate();
             rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+            rWrtSh.UpdateCursor(); // cursor position might be invalid
         }
         else
         {

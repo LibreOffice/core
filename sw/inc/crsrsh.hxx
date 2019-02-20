@@ -162,6 +162,10 @@ public:
         READONLY    = (1 << 3)      ///< make visible in spite of Readonly
     };
 
+    SAL_DLLPRIVATE void UpdateCursor(
+        sal_uInt16 eFlags = SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE,
+        bool bIdleEnd = false );
+
 private:
 
     SwRect  m_aCharRect;          ///< Char-SRectangle on which the cursor is located
@@ -231,10 +235,6 @@ private:
     bool m_bMacroExecAllowed : 1;
 
     SwFrame* m_oldColFrame;
-
-    SAL_DLLPRIVATE void UpdateCursor(
-        sal_uInt16 eFlags = SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE,
-        bool bIdleEnd = false );
 
     SAL_DLLPRIVATE void MoveCursorToNum();
 
