@@ -98,6 +98,12 @@ public:
     bool            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
 
+    bool            IsEmpty() const
+    {
+        return GetStyle() == WallpaperStyle::NONE && GetColor() == COL_TRANSPARENT &&
+               !IsBitmap() && !IsGradient() && !IsRect();
+    }
+
     friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
