@@ -591,6 +591,60 @@ void SAL_CALL PluginProgress::reset()
         m_xProgress->reset();
 }
 
+WeldPluginProgress::WeldPluginProgress(weld::ProgressBar* pProgressBar)
+    : m_pProgressBar(pProgressBar)
+    , m_nRange(100)
+{
+}
+
+WeldPluginProgress::~WeldPluginProgress()
+{
+}
+
+void SAL_CALL WeldPluginProgress::dispose()
+{
+    m_pProgressBar = nullptr;
+}
+
+void SAL_CALL WeldPluginProgress::addEventListener(const css::uno::Reference< css::lang::XEventListener >& )
+{
+}
+
+
+void SAL_CALL WeldPluginProgress::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+{
+}
+
+void SAL_CALL WeldPluginProgress::start(const OUString&, sal_Int32 nRange)
+{
+    m_nRange = nRange;
+    if (m_pProgressBar)
+        m_pProgressBar->set_percentage(0);
+}
+
+void SAL_CALL WeldPluginProgress::end()
+{
+    if (m_pProgressBar)
+        m_pProgressBar->set_percentage(m_nRange);
+}
+
+void SAL_CALL WeldPluginProgress::setText(const OUString& rText)
+{
+    if (m_pProgressBar)
+        m_pProgressBar->set_text(rText);
+}
+
+void SAL_CALL WeldPluginProgress::setValue(sal_Int32 nValue)
+{
+    if (m_pProgressBar)
+        m_pProgressBar->set_percentage((nValue * 100) / m_nRange);
+}
+
+void SAL_CALL WeldPluginProgress::reset()
+{
+    if (m_pProgressBar)
+        m_pProgressBar->set_percentage(0);
+}
 
 SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     : Dialog(pParent, "DocRecoverySaveDialog",
@@ -637,9 +691,9 @@ void SaveDialog::dispose()
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, Button*, void)
 {
     // start crash-save with progress
-    ScopedVclPtrInstance< SaveProgressDialog > pProgress(this, m_pCore);
-    short nResult = pProgress->Execute();
-    pProgress.disposeAndClear();
+    std::unique_ptr<SaveProgressDialog> xProgress(new SaveProgressDialog(GetFrameWeld(), m_pCore));
+    short nResult = xProgress->run();
+    xProgress.reset();
 
     // if "CANCEL" => return "CANCEL"
     // if "OK"     => "AUTOLUNCH" always !
@@ -649,36 +703,28 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, Button*, void)
     EndDialog(nResult);
 }
 
-SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore)
-    : ModalDialog(pParent, "DocRecoveryProgressDialog",
-        "svx/ui/docrecoveryprogressdialog.ui")
+SaveProgressDialog::SaveProgressDialog(weld::Window* pParent, RecoveryCore* pCore)
+    : GenericDialogController(pParent, "svx/ui/docrecoveryprogressdialog.ui", "DocRecoveryProgressDialog")
     , m_pCore(pCore)
+    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
 {
-    get(m_pProgrParent, "progress");
-
-    PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
+    m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
+    WeldPluginProgress* pProgress = new WeldPluginProgress(m_xProgressBar.get());
     m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 }
 
 SaveProgressDialog::~SaveProgressDialog()
 {
-    disposeOnce();
 }
 
-void SaveProgressDialog::dispose()
-{
-    m_pProgrParent.clear();
-    ModalDialog::dispose();
-}
-
-short SaveProgressDialog::Execute()
+short SaveProgressDialog::run()
 {
     ::SolarMutexGuard aLock;
 
     m_pCore->setProgressHandler(m_xProgress);
     m_pCore->setUpdateListener(this);
     m_pCore->doEmergencySave();
-    short nRet = ModalDialog::Execute();
+    short nRet = DialogController::run();
     m_pCore->setUpdateListener(nullptr);
     return nRet;
 }
@@ -686,7 +732,6 @@ short SaveProgressDialog::Execute()
 void SaveProgressDialog::updateItems()
 {
 }
-
 
 void SaveProgressDialog::stepNext(TURLInfo* )
 {
@@ -698,23 +743,19 @@ void SaveProgressDialog::stepNext(TURLInfo* )
     */
 }
 
-
 void SaveProgressDialog::start()
 {
 }
 
-
 void SaveProgressDialog::end()
 {
-    EndDialog(DLG_RET_OK);
+    m_xDialog->response(DLG_RET_OK);
 }
-
 
 RecovDocListEntry::RecovDocListEntry( const OUString&        sText )
     : SvLBoxString( sText )
 {
 }
-
 
 void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::RenderContext& rRenderContext,
                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)

@@ -1820,6 +1820,16 @@ public:
     {
         m_xProgressBar->SetValue(value);
     }
+
+    virtual OUString get_text() const override
+    {
+        return m_xProgressBar->GetText();
+    }
+
+    virtual void set_text(const OUString& rText) override
+    {
+        m_xProgressBar->SetText(rText);
+    }
 };
 
 class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image
