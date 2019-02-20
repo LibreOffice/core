@@ -419,6 +419,24 @@ bool isRedactMode(SfxRequest& rReq)
     return false;
 }
 
+/// Returns the value of the given string param as an OUString
+/// Returns empty OUString if no param
+OUString getStringParam(const SfxRequest& rReq, const sal_uInt32& nParamId)
+{
+    OUString sStringParam;
+
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return sStringParam;
+
+    const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(nParamId);
+    if (!pStringArg)
+        return sStringParam;
+
+    sStringParam = pStringArg->GetValue();
+    return sStringParam;
+}
+
 }
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)

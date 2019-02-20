@@ -458,6 +458,8 @@ class SfxStringItem;
 
 // CAUTION! Range <413 .. 413> used by EditEngine (!)
 
+#define SID_DRAWTBX_REDACTED_EXPORT                     ( SID_SVX_START + 606 )
+
 #define SID_ATTR_3D_START                               ( SID_SVX_START + 415 )
 #define SID_RULER_PROTECT                               SID_ATTR_3D_START
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
@@ -540,7 +542,7 @@ class SfxStringItem;
 #define SID_FM_DBGRID                                   ( SID_SVX_START + 603 )
 #define SID_FM_IMAGEBUTTON                              ( SID_SVX_START + 604 )
 #define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
-//FREE
+//( SID_SVX_START + 606 ) is used by SID_DRAWTBX_REDACTED_EXPORT
 #define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
 //FREE
 //FREE
