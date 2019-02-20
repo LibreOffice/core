@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_ad24730e",
+        "filename": "compilerplugins/clang/sharedvisitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-02-20T12:56:57Z",
+      "side": 1,
+      "message": "I don\u0027t know if there would be a real scenario where this matters, but I suppose there could be 2 (or more) shared visitors each for a different setup.",
+      "parentUuid": "1f485f77_a2bfe2f9",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_6260caa6",
         "filename": "compilerplugins/clang/sharedvisitor.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_2d19a3d6",
+        "filename": "compilerplugins/clang/sharedvisitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-02-20T12:56:57Z",
+      "side": 1,
+      "message": "Probably not, but given that the code #includes all the relevant .cxx, I expect this will get optimized away, and it\u0027s a cleaner approach.",
+      "parentUuid": "1f485f77_6260caa6",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_c2477e1d",
         "filename": "compilerplugins/clang/unreffun.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-02-19T17:07:18Z",
       "side": 1,
       "message": "why drop the \"member var with trailing underline\" idiom?",
+      "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_4d797ffa",
+        "filename": "compilerplugins/clang/unreffun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-02-20T12:56:57Z",
+      "side": 1,
+      "message": "Because I consider the hard to notice underscore a poor style, but I can keep it if you insist.",
+      "parentUuid": "1f485f77_c2477e1d",
       "revId": "a9cd2d8e78a8b6c88ac47aec2c9ce57fc176cb4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
