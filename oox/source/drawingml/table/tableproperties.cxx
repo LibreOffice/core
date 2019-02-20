@@ -282,21 +282,63 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     std::unique_ptr<TableStyle> xTableStyleToDelete;
     const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, xTableStyleToDelete ) );
     sal_Int32 nRow = 0;
+
     for (auto & tableRow : mvTableRows)
     {
         sal_Int32 nColumn = 0;
-        for (auto & tableCell : tableRow.getTableCells())
+        sal_Int32 nColumnSize = tableRow.getTableCells().size();
+        sal_Int32 nRemovedColumn = 0; //
+
+        for (sal_Int32 nColIndex = 0; nColIndex < nColumnSize; nColIndex++)
         {
-            TableCell& rTableCell(tableCell);
+            TableCell& rTableCell(tableRow.getTableCells().at(nColIndex));
+
             if ( !rTableCell.getvMerge() && !rTableCell.gethMerge() )
             {
                 uno::Reference< XTable > xTable( xColumnRowRange, uno::UNO_QUERY_THROW );
+                bool bMerged = false;
+
                 if ( ( rTableCell.getRowSpan() > 1 ) || ( rTableCell.getGridSpan() > 1 ) )
+                {
                     MergeCells( xTable, nColumn, nRow, rTableCell.getGridSpan(), rTableCell.getRowSpan() );
 
+                    if(rTableCell.getGridSpan() > 1)
+                    {
+                        nRemovedColumn = (rTableCell.getGridSpan() - 1);
+                        // MergeCells removes columns. So our loop don't know that removed column and we are skip the handlingthat removed column(s).
+                        nColIndex += nRemovedColumn;
+                        bMerged = true; // it will adjust new column number after push current column's props with pushToXCell.
+                    }
+                }
+
                 Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
-                rTableCell.pushToXCell( rFilterBase, pMasterTextListStyle, xCellRange->getCellByPosition( nColumn, nRow ), *this, rTableStyle,
-                    nColumn, tableRow.getTableCells().size()-1, nRow, mvTableRows.size()-1 );
+                Reference < XCell > xCell;
+
+                if(nRemovedColumn)
+                {
+                    try
+                    {
+                        xCell = xCellRange->getCellByPosition( nColumn, nRow );
+                    }
+                    catch(Exception&) //Exception can come from TableModel::getCellByPosition when an column removed while merging columns. So adjust again here.
+                    {
+                        xCell = xCellRange->getCellByPosition( nColumn-nRemovedColumn, nRow );
+                    }
+                }
+                else
+                    xCell = xCellRange->getCellByPosition( nColumn, nRow );
+
+                rTableCell.pushToXCell( rFilterBase,
+                                        pMasterTextListStyle,
+                                        xCell,
+                                        *this,
+                                        rTableStyle,
+                                        nColumn,
+                                        tableRow.getTableCells().size()-1,
+                                        nRow,
+                                        mvTableRows.size()-1 );
+                if (bMerged)
+                    nColumn += nRemovedColumn;
             }
             ++nColumn;
         }
