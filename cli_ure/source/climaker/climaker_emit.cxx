@@ -1780,7 +1780,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 ilGen->Emit(Emit::OpCodes::Ldloc, arLocalAny[i]);
                 ilGen->Emit(Emit::OpCodes::Stobj, typeAny);
             }
-            // call createInstanceWithContextAndArguments
+            // call createInstanceWithArgumentsAndContext
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
             ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);

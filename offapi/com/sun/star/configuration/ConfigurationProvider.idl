@@ -30,7 +30,7 @@ module com { module sun { module star { module configuration {
 
  <p>An implementation is usually obtained from a
  com::sun::star::lang::ServiceManager. The arguments passed to
- com::sun::star::lang::XMultiComponentFactory::createInstanceWithContextAndArguments()
+ com::sun::star::lang::XMultiComponentFactory::createInstanceWithArgumentsAndContext()
  select the configuration data source. Arguments must be provided as
  com::sun::star::beans::NamedValue
  or com::sun::star::beans::PropertyValue.
