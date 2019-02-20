@@ -70,7 +70,13 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    OUString aText;
+    OUString aText = "";
+    // tdf#107918 on macOS without an Insert key it's hard to figure out how to switch modes
+    // so we show both Insert and Overwrite
+#ifdef MACOSX
+    if ( bInsert )
+        aText = SvxResId( RID_SVXSTR_INSERT_TEXT );
+#endif
     if ( !bInsert )
         aText = SvxResId( RID_SVXSTR_OVERWRITE_TEXT );
 
