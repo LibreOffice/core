@@ -354,6 +354,33 @@ class PluginProgress : public ::cppu::WeakImplHelper< css::task::XStatusIndicato
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
 };
 
+class WeldPluginProgress : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XComponent>
+{
+// member
+private:
+    weld::ProgressBar* m_pProgressBar;
+    int m_nRange;
+
+// native interface
+public:
+    WeldPluginProgress(weld::ProgressBar* pProgressBar);
+    virtual ~WeldPluginProgress() override;
+
+// uno interface
+public:
+    // XStatusIndicator
+    virtual void SAL_CALL start(const OUString& sText, sal_Int32 nRange) override;
+    virtual void SAL_CALL end() override;
+    virtual void SAL_CALL setText(const OUString& sText) override;
+    virtual void SAL_CALL setValue(sal_Int32 nValue) override;
+    virtual void SAL_CALL reset() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
+};
+
 class SaveDialog : public Dialog
 {
     // member
@@ -386,15 +413,15 @@ class SaveDialog : public Dialog
         DECL_LINK(OKButtonHdl, Button*, void);
 };
 
-class SaveProgressDialog : public ModalDialog
+class SaveProgressDialog : public weld::GenericDialogController
                          , public IRecoveryUpdateListener
 {
     // member
     private:
-        VclPtr<vcl::Window>       m_pProgrParent;
-
         // @short   TODO
         RecoveryCore* m_pCore;
+
+        std::unique_ptr<weld::ProgressBar> m_xProgressBar;
 
         // @short   TODO
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
@@ -413,13 +440,12 @@ class SaveProgressDialog : public ModalDialog
             @param  pCore
                     used to start emergency save.
          */
-        SaveProgressDialog(vcl::Window*       pParent,
-                           RecoveryCore* pCore  );
+        SaveProgressDialog(weld::Window* pParent,
+                           RecoveryCore* pCore);
         virtual ~SaveProgressDialog() override;
-        virtual void dispose() override;
 
         /** @short  start the emergency save operation. */
-        virtual short Execute() override;
+        virtual short run() override;
 
         // IRecoveryUpdateListener
         virtual void updateItems() override;

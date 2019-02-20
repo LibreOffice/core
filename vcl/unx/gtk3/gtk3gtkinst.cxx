@@ -4603,6 +4603,18 @@ public:
     {
         gtk_progress_bar_set_fraction(m_pProgressBar, value / 100.0);
     }
+
+    virtual OUString get_text() const override
+    {
+        const gchar* pText = gtk_progress_bar_get_text(m_pProgressBar);
+        OUString sRet(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+        return sRet;
+    }
+
+    virtual void set_text(const OUString& rText) override
+    {
+        gtk_progress_bar_set_text(m_pProgressBar, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+    }
 };
 
 class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
