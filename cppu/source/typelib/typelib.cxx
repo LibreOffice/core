@@ -2219,7 +2219,7 @@ extern "C" void typelib_typedescriptionreference_getByName(
     {
         MutexGuard aGuard( rInit.getMutex() );
         WeakMap_Impl::const_iterator aIt = rInit.pWeakMap->find( pName->buffer );
-        if( !(aIt == rInit.pWeakMap->end()) ) // != failed on msc4.2
+        if( aIt != rInit.pWeakMap->end() )
         {
             sal_Int32 n = osl_atomic_increment( &(*aIt).second->nRefCount );
             if( n > 1 )

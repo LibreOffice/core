@@ -77,7 +77,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     XMLTransformerActions::const_iterator aIter =
         GetElemActions().find( aKey );
 
-    if( !(aIter == GetElemActions().end()) )
+    if( aIter != GetElemActions().end() )
     {
         sal_uInt32 nActionType = (*aIter).second.m_nActionType;
         if( (nActionType & XML_ETACTION_USER_DEFINED) != 0 )
@@ -487,7 +487,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
             XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
             XMLTransformerActions::const_iterator aIter =
                     pActions->find( aKey );
-            if( !(aIter == pActions->end() ) )
+            if( aIter != pActions->end() )
             {
                 if( !pMutableAttrList )
                 {

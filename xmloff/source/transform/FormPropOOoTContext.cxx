@@ -165,7 +165,7 @@ void XMLFormPropOOoTransformerContext::StartElement(
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
-        if( !(aIter == pActions->end() ) )
+        if( aIter != pActions->end() )
         {
             const OUString& rAttrValue = rAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )

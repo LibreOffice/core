@@ -86,7 +86,7 @@ rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildCon
     XMLTransformerActions::const_iterator aIter =
         GetTransformer().GetElemActions().find( aKey );
 
-    if( !(aIter == GetTransformer().GetElemActions().end()) )
+    if( aIter != GetTransformer().GetElemActions().end() )
     {
         switch( (*aIter).second.m_nActionType )
         {

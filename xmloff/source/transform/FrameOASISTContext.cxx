@@ -128,7 +128,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
         XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
         XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
 
-        if( !(aIter == pActions->end()) )
+        if( aIter != pActions->end() )
         {
             switch( (*aIter).second.m_nActionType )
             {

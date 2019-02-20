@@ -111,7 +111,7 @@ OUString XMLEventOASISTransformerContext::GetEventName(
     {
         XMLTransformerOASISEventMap_Impl::const_iterator aIter =
             pMap2->find( aKey );
-        if( !(aIter == pMap2->end()) )
+        if( aIter != pMap2->end() )
             return (*aIter).second;
     }
 
@@ -185,7 +185,7 @@ void XMLEventOASISTransformerContext::StartElement(
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
-        if( !(aIter == pActions->end() ) )
+        if( aIter != pActions->end() )
         {
             if( !pMutableAttrList )
             {
