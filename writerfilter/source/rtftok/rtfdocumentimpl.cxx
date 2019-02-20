@@ -301,8 +301,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_hasRFooter(false)
     , m_hasFFooter(false)
     , m_bAfterCellBeforeRow(false)
-    , m_nCellsInRow(0)
-    , m_nActualCellInRow(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
@@ -1481,12 +1479,6 @@ void RTFDocumentImpl::text(OUString& rString)
 
     RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
 
-    if (m_nActualCellInRow > 0)
-    {
-        m_nActualCellInRow = 0;
-        m_nCellsInRow = 0;
-    }
-
     if (!pCurrentBuffer && m_aStates.top().eDestination != Destination::FOOTNOTE)
         Mapper().startCharacterGroup();
     else if (pCurrentBuffer)
@@ -1628,7 +1620,6 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         else if (std::get<0>(aTuple) == BUFFER_CELLEND)
         {
-            m_nActualCellInRow++;
             assert(pSprms && pAttributes);
             auto pValue = new RTFValue(1);
             pSprms->set(NS_ooxml::LN_tblCell, pValue);
@@ -1647,15 +1638,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         else if (std::get<0>(aTuple) == BUFFER_UTEXT)
         {
-            // ignore text outside the cell content in table rows
-            // except in the case of nested tables
-            if (m_nActualCellInRow == 0 || m_nActualCellInRow < m_nCellsInRow
-                || m_nCellsInRow == -1)
-            {
-                OUString const aString(std::get<1>(aTuple)->getString());
-                Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()),
-                               aString.getLength());
-            }
+            OUString const aString(std::get<1>(aTuple)->getString());
+            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()),
+                           aString.getLength());
         }
         else if (std::get<0>(aTuple) == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
