@@ -1168,6 +1168,14 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         pPresNode->msModelId);
     if( aNodeName != mrDgm.getData()->getPresOfNameMap().end() )
     {
+        // Calculate the depth of what is effectively the topmost element.
+        sal_Int32 nMinDepth = std::numeric_limits<sal_Int32>::max();
+        for (const auto& rPair : aNodeName->second)
+        {
+            if (rPair.second.mnDepth < nMinDepth)
+                nMinDepth = rPair.second.mnDepth;
+        }
+
         for (const auto& rPair : aNodeName->second)
         {
             const DiagramData::SourceIdAndDepth& rItem = rPair.second;
@@ -1198,6 +1206,13 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                             ->getShapePresetType())
                         << " added for layout node named \"" << msName
                         << "\"");
+            }
+            else if (rItem.mnDepth == nMinDepth)
+            {
+                // If no real topmost element, then take properties from the one that's the closest
+                // to topmost.
+                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
+                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
             }
 
             // append text with right outline level
