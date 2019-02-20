@@ -1087,14 +1087,14 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         break;
         case RTF_SHPBXPAGE:
-            m_aStates.top().aShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
-            m_aStates.top().aShape.nHoriOrientRelationToken
-                = NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page;
+            m_aStates.top().aShape.setHoriOrientRelation(text::RelOrientation::PAGE_FRAME);
+            m_aStates.top().aShape.setHoriOrientRelationToken(
+                NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page);
             break;
         case RTF_SHPBYPAGE:
-            m_aStates.top().aShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
-            m_aStates.top().aShape.nVertOrientRelationToken
-                = NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page;
+            m_aStates.top().aShape.setVertOrientRelation(text::RelOrientation::PAGE_FRAME);
+            m_aStates.top().aShape.setVertOrientRelationToken(
+                NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page);
             break;
         case RTF_DPLINEHOLLOW:
             m_aStates.top().aDrawingObject.nFLine = 0;

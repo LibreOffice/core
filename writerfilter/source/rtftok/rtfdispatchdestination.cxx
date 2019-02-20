@@ -362,7 +362,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTF_DPTXBXTEXT:
             {
                 bool bPictureFrame = false;
-                for (auto& rProperty : m_aStates.top().aShape.aProperties)
+                for (auto& rProperty : m_aStates.top().aShape.getProperties())
                 {
                     if (rProperty.first == "shapeType"
                         && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))

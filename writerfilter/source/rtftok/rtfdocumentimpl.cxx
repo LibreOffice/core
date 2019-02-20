@@ -1024,8 +1024,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (m_aStates.top().bInShape)
     {
         // Picture in shape: it looks like pib picture, so we will stretch the picture to shape size (tdf#49893)
-        nXExt = m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft;
-        nYExt = m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop;
+        nXExt = m_aStates.top().aShape.getRight() - m_aStates.top().aShape.getLeft();
+        nYExt = m_aStates.top().aShape.getBottom() - m_aStates.top().aShape.getTop();
     }
     auto pXExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nXExt));
     auto pYExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nYExt));
@@ -1058,9 +1058,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     {
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
-        m_aStates.top().aShape.aAnchorAttributes.set(
+        m_aStates.top().aShape.getAnchorAttributes().set(
             NS_ooxml::LN_CT_Anchor_behindDoc,
-            new RTFValue((m_aStates.top().aShape.bInBackground) ? 1 : 0));
+            new RTFValue((m_aStates.top().aShape.getInBackground()) ? 1 : 0));
         RTFSprms aAnchorSprms;
         for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
         {
@@ -1077,20 +1077,20 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
                 // If there is a wrap polygon prepared by RTFSdrImport, pick it up here.
                 if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight
-                    && !m_aStates.top().aShape.aWrapPolygonSprms.empty())
+                    && !m_aStates.top().aShape.getWrapPolygonSprms().empty())
                     rCharacterSprm.second->getSprms().set(
                         NS_ooxml::LN_CT_WrapTight_wrapPolygon,
-                        new RTFValue(RTFSprms(), m_aStates.top().aShape.aWrapPolygonSprms));
+                        new RTFValue(RTFSprms(), m_aStates.top().aShape.getWrapPolygonSprms()));
 
                 aAnchorSprms.set(rCharacterSprm.first, rCharacterSprm.second);
             }
         }
 
-        if (m_aStates.top().aShape.aWrapSprm.first != 0)
+        if (m_aStates.top().aShape.getWrapSprm().first != 0)
             // Replay of a buffered shape, wrap sprm there has priority over
             // character sprms of the current state.
-            aAnchorSprms.set(m_aStates.top().aShape.aWrapSprm.first,
-                             m_aStates.top().aShape.aWrapSprm.second);
+            aAnchorSprms.set(m_aStates.top().aShape.getWrapSprm().first,
+                             m_aStates.top().aShape.getWrapSprm().second);
 
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (!aAnchorWrapAttributes.empty() && nWrap == -1)
@@ -1100,13 +1100,13 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
         RTFSprms aPoshAttributes;
         RTFSprms aPoshSprms;
-        if (m_aStates.top().aShape.nHoriOrientRelationToken > 0)
+        if (m_aStates.top().aShape.getHoriOrientRelationToken() > 0)
             aPoshAttributes.set(NS_ooxml::LN_CT_PosH_relativeFrom,
-                                new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken));
-        if (m_aStates.top().aShape.nLeft != 0)
+                                new RTFValue(m_aStates.top().aShape.getHoriOrientRelationToken()));
+        if (m_aStates.top().aShape.getLeft() != 0)
         {
             Mapper().positionOffset(
-                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nLeft)),
+                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.getLeft())),
                 /*bVertical=*/false);
             aPoshSprms.set(NS_ooxml::LN_CT_PosH_posOffset, new RTFValue());
         }
@@ -1115,13 +1115,13 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
         RTFSprms aPosvAttributes;
         RTFSprms aPosvSprms;
-        if (m_aStates.top().aShape.nVertOrientRelationToken > 0)
+        if (m_aStates.top().aShape.getVertOrientRelationToken() > 0)
             aPosvAttributes.set(NS_ooxml::LN_CT_PosV_relativeFrom,
-                                new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken));
-        if (m_aStates.top().aShape.nTop != 0)
+                                new RTFValue(m_aStates.top().aShape.getVertOrientRelationToken()));
+        if (m_aStates.top().aShape.getTop() != 0)
         {
             Mapper().positionOffset(
-                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nTop)),
+                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.getTop())),
                 /*bVertical=*/true);
             aPosvSprms.set(NS_ooxml::LN_CT_PosV_posOffset, new RTFValue());
         }
@@ -1131,7 +1131,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
         // anchor sprm
-        auto pValue = new RTFValue(m_aStates.top().aShape.aAnchorAttributes, aAnchorSprms);
+        auto pValue = new RTFValue(m_aStates.top().aShape.getAnchorAttributes(), aAnchorSprms);
         aSprms.set(NS_ooxml::LN_anchor_anchor, pValue);
     }
     writerfilter::Reference<Properties>::Pointer_t pProperties
@@ -2251,23 +2251,24 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPEPROPERTYNAME:
             if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
                 break; // not for nested group
-            aState.aShape.aProperties.emplace_back(
+            aState.aShape.getProperties().emplace_back(
                 m_aStates.top().pDestinationText->makeStringAndClear(), OUString());
             break;
         case Destination::SHAPEPROPERTYVALUE:
-            if (!aState.aShape.aProperties.empty())
+            if (!aState.aShape.getProperties().empty())
             {
-                aState.aShape.aProperties.back().second
+                aState.aShape.getProperties().back().second
                     = m_aStates.top().pDestinationText->makeStringAndClear();
                 if (m_aStates.top().bHadShapeText)
-                    m_pSdrImport->append(aState.aShape.aProperties.back().first,
-                                         aState.aShape.aProperties.back().second);
+                    m_pSdrImport->append(aState.aShape.getProperties().back().first,
+                                         aState.aShape.getProperties().back().second);
                 else if (aState.bInShapeGroup && !aState.bInShape
-                         && aState.aShape.aProperties.back().first == "rotation")
+                         && aState.aShape.getProperties().back().first == "rotation")
                 {
                     // Rotation should be applied on the groupshape itself, not on each shape.
-                    aState.aShape.aGroupProperties.push_back(aState.aShape.aProperties.back());
-                    aState.aShape.aProperties.pop_back();
+                    aState.aShape.getGroupProperties().push_back(
+                        aState.aShape.getProperties().back());
+                    aState.aShape.getProperties().pop_back();
                 }
             }
             break;
@@ -2303,7 +2304,7 @@ RTFError RTFDocumentImpl::popState()
                         if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapNone
                             || rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight)
                         {
-                            m_aStates.top().aShape.aWrapSprm = rCharacterSprm;
+                            m_aStates.top().aShape.getWrapSprm() = rCharacterSprm;
                             break;
                         }
                     }
@@ -2315,9 +2316,9 @@ RTFError RTFDocumentImpl::popState()
             else if (aState.bInShapeGroup && !aState.bInShape)
             {
                 // End of a groupshape, as we're in shapegroup, but not in a real shape.
-                for (auto& rGroupProperty : aState.aShape.aGroupProperties)
+                for (auto& rGroupProperty : aState.aShape.getGroupProperties())
                     m_pSdrImport->appendGroupProperty(rGroupProperty.first, rGroupProperty.second);
-                aState.aShape.aGroupProperties.clear();
+                aState.aShape.getGroupProperties().clear();
             }
             break;
         case Destination::BOOKMARKSTART:
@@ -2656,15 +2657,15 @@ RTFError RTFDocumentImpl::popState()
                 if (bTextFrame)
                 {
                     xPropertySet->setPropertyValue("HoriOrientPosition",
-                                                   uno::makeAny(rDrawing.nLeft));
+                                                   uno::makeAny(rDrawing.getLeft()));
                     xPropertySet->setPropertyValue("VertOrientPosition",
-                                                   uno::makeAny(rDrawing.nTop));
+                                                   uno::makeAny(rDrawing.getTop()));
                 }
                 else
                 {
-                    xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
+                    xShape->setPosition(awt::Point(rDrawing.getLeft(), rDrawing.getTop()));
                 }
-                xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
+                xShape->setSize(awt::Size(rDrawing.getRight(), rDrawing.getBottom()));
 
                 if (rDrawing.bHasLineColor)
                 {
@@ -3329,14 +3330,14 @@ RTFError RTFDocumentImpl::popState()
 
                 // It's allowed to declare these inside the shape text, and they
                 // are expected to have an effect for the whole shape.
-                if (aState.aDrawingObject.nLeft)
-                    m_aStates.top().aDrawingObject.nLeft = aState.aDrawingObject.nLeft;
-                if (aState.aDrawingObject.nTop)
-                    m_aStates.top().aDrawingObject.nTop = aState.aDrawingObject.nTop;
-                if (aState.aDrawingObject.nRight)
-                    m_aStates.top().aDrawingObject.nRight = aState.aDrawingObject.nRight;
-                if (aState.aDrawingObject.nBottom)
-                    m_aStates.top().aDrawingObject.nBottom = aState.aDrawingObject.nBottom;
+                if (aState.aDrawingObject.getLeft())
+                    m_aStates.top().aDrawingObject.setLeft(aState.aDrawingObject.getLeft());
+                if (aState.aDrawingObject.getTop())
+                    m_aStates.top().aDrawingObject.setTop(aState.aDrawingObject.getTop());
+                if (aState.aDrawingObject.getRight())
+                    m_aStates.top().aDrawingObject.setRight(aState.aDrawingObject.getRight());
+                if (aState.aDrawingObject.getBottom())
+                    m_aStates.top().aDrawingObject.setBottom(aState.aDrawingObject.getBottom());
             }
             break;
         case Destination::PROPNAME:
