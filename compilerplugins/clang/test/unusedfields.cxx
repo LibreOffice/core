@@ -199,6 +199,30 @@ struct ReadOnlyAnalysis4
     }
 };
 
+template<class T>
+struct VclPtr
+{
+    VclPtr(T*);
+    void clear();
+};
+
+// Check calls to operators
+struct WriteOnlyAnalysis2
+// expected-error@-1 {{write m_vclwriteonly [loplugin:unusedfields]}}
+{
+    VclPtr<int> m_vclwriteonly;
+
+    WriteOnlyAnalysis2() : m_vclwriteonly(nullptr)
+    {
+        m_vclwriteonly = nullptr;
+    }
+
+    ~WriteOnlyAnalysis2()
+    {
+        m_vclwriteonly.clear();
+    }
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
