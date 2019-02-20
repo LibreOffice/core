@@ -653,19 +653,7 @@ namespace
             {
                 if( pRedl->GetExtraData() )
                     pRedl->GetExtraData()->Reject( *pRedl );
-
-                // tdf#52391 instead of hidden acception at the requested
-                // rejection, remove direct text formatting to get the potential
-                // original state of the text (FIXME if the original text
-                // has already contained direct text formatting: unfortunately
-                // ODF 1.2 doesn't support rejection of format-only changes)
-                if ( pRedl->GetType() == nsRedlineType_t::REDLINE_FORMAT )
-                {
-                    SwPaM aPam( *(pRedl->Start()), *(pRedl->End()) );
-                    rArr.DeleteAndDestroy( rPos-- );
-                    rDoc.ResetAttrs(aPam);
-                } else
-                    rArr.DeleteAndDestroy( rPos-- );
+                rArr.DeleteAndDestroy( rPos-- );
             }
             break;
 

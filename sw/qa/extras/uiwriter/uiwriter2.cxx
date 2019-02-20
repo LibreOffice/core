@@ -59,7 +59,6 @@ public:
     void testTdf122893();
     void testTdf122901();
     void testTdf122942();
-    void testTdf52391();
     void testTdf101873();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
@@ -81,7 +80,6 @@ public:
     CPPUNIT_TEST(testTdf122893);
     CPPUNIT_TEST(testTdf122901);
     CPPUNIT_TEST(testTdf122942);
-    CPPUNIT_TEST(testTdf52391);
     CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST_SUITE_END();
 
@@ -862,22 +860,6 @@ void SwUiWriterTest2::testTdf122942()
     // 'Expected greater than: 5000; Actual  : 2817', i.e. the shape moved up
     // after a reload(), while it's expected to not change its position (5773).
     CPPUNIT_ASSERT_GREATER(static_cast<SwTwips>(5000), rOutRect.Top());
-}
-
-void SwUiWriterTest2::testTdf52391()
-{
-    load(DATA_DIRECTORY, "tdf52391.fodt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
-
-    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
-    // this was "Portion1", because the tracked background color of Portion1 was
-    // accepted for "Reject All". Now rejection clears formatting of the text
-    // in format-only changes, concatenating the text portions in the first paragraph.
-    CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
 }
 
 void SwUiWriterTest2::testTdf101873()
