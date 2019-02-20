@@ -1036,10 +1036,9 @@ VclPtr<AbstractSvxDistributeDialog> AbstractDialogFactory_Impl::CreateSvxDistrib
     return VclPtr<AbstractSvxDistributeDialog_Impl>::Create(std::make_unique<SvxDistributeDialog>(pParent, rAttr, SvxDistributeHorizontal::NONE, SvxDistributeVertical::NONE));
 }
 
-VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(vcl::Window* pParent,
-                                                                       editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
+VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(vcl::Window* pParent)
 {
-    VclPtrInstance<HangulHanjaConversionDialog> pDlg( pParent, _ePrimaryDirection);
+    VclPtrInstance<HangulHanjaConversionDialog> pDlg(pParent);
     return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create( pDlg );
 }
 

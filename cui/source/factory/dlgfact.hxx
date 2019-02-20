@@ -730,8 +730,7 @@ public:
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
 
-    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog( vcl::Window* _pParent,
-                                            editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) override;
+    virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog( vcl::Window* _pParent ) override;
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage ) override;
 

@@ -282,7 +282,7 @@ namespace editeng
         if ( m_bIsInteractive && !m_pConversionDialog )
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
+            m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent);
 
             m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
 

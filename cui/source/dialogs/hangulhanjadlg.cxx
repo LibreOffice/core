@@ -550,7 +550,7 @@ namespace svx
 
     VCL_BUILDER_FACTORY_ARGS( SuggestionDisplay, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
 
-    HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection )
+    HangulHanjaConversionDialog::HangulHanjaConversionDialog(vcl::Window* _pParent)
         :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
         ,m_bDocumentMode( true )
     {
