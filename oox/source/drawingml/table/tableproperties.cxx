@@ -270,33 +270,76 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
     return *pTableStyle;
 }
 
-void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-    const Reference < XPropertySet >& xPropSet, const TextListStylePtr& pMasterTextListStyle )
+void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBase,
+                                    const Reference<XPropertySet>& xPropSet,
+                                    const TextListStylePtr& pMasterTextListStyle)
 {
-    uno::Reference< XColumnRowRange > xColumnRowRange(
-         xPropSet->getPropertyValue("Model"), uno::UNO_QUERY_THROW );
+    uno::Reference<XColumnRowRange> xColumnRowRange(xPropSet->getPropertyValue("Model"),
+                                                    uno::UNO_QUERY_THROW);
 
-    CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
-    CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
+    CreateTableColumns(xColumnRowRange->getColumns(), mvTableGrid);
+    CreateTableRows(xColumnRowRange->getRows(), mvTableRows);
 
     std::unique_ptr<TableStyle> xTableStyleToDelete;
-    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, xTableStyleToDelete ) );
+    const TableStyle& rTableStyle(getUsedTableStyle(rFilterBase, xTableStyleToDelete));
     sal_Int32 nRow = 0;
-    for (auto & tableRow : mvTableRows)
+
+    for (auto& tableRow : mvTableRows)
     {
         sal_Int32 nColumn = 0;
-        for (auto & tableCell : tableRow.getTableCells())
-        {
-            TableCell& rTableCell(tableCell);
-            if ( !rTableCell.getvMerge() && !rTableCell.gethMerge() )
-            {
-                uno::Reference< XTable > xTable( xColumnRowRange, uno::UNO_QUERY_THROW );
-                if ( ( rTableCell.getRowSpan() > 1 ) || ( rTableCell.getGridSpan() > 1 ) )
-                    MergeCells( xTable, nColumn, nRow, rTableCell.getGridSpan(), rTableCell.getRowSpan() );
+        sal_Int32 nColumnSize = tableRow.getTableCells().size();
+        sal_Int32 nRemovedColumn = 0; //
 
-                Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
-                rTableCell.pushToXCell( rFilterBase, pMasterTextListStyle, xCellRange->getCellByPosition( nColumn, nRow ), *this, rTableStyle,
-                    nColumn, tableRow.getTableCells().size()-1, nRow, mvTableRows.size()-1 );
+        for (sal_Int32 nColIndex = 0; nColIndex < nColumnSize; nColIndex++)
+        {
+            TableCell& rTableCell(tableRow.getTableCells().at(nColIndex));
+
+            if (!rTableCell.getvMerge() && !rTableCell.gethMerge())
+            {
+                uno::Reference<XTable> xTable(xColumnRowRange, uno::UNO_QUERY_THROW);
+                bool bMerged = false;
+
+                if ((rTableCell.getRowSpan() > 1) || (rTableCell.getGridSpan() > 1))
+                {
+                    MergeCells(xTable, nColumn, nRow, rTableCell.getGridSpan(),
+                               rTableCell.getRowSpan());
+
+                    if (rTableCell.getGridSpan() > 1)
+                    {
+                        nRemovedColumn = (rTableCell.getGridSpan() - 1);
+                        // MergeCells removes columns. Our loop does not know about those
+                        // removed columns and we skip handling those removed columns.
+                        nColIndex += nRemovedColumn;
+                        // It will adjust new column number after push current column's
+                        // props with pushToXCell.
+                        bMerged = true;
+                    }
+                }
+
+                Reference<XCellRange> xCellRange(xTable, UNO_QUERY_THROW);
+                Reference<XCell> xCell;
+
+                if (nRemovedColumn)
+                {
+                    try
+                    {
+                        xCell = xCellRange->getCellByPosition(nColumn, nRow);
+                    }
+                    // Exception can come from TableModel::getCellByPosition when a column
+                    // is removed while merging columns. So adjust again here.
+                    catch (Exception&)
+                    {
+                        xCell = xCellRange->getCellByPosition(nColumn - nRemovedColumn, nRow);
+                    }
+                }
+                else
+                    xCell = xCellRange->getCellByPosition(nColumn, nRow);
+
+                rTableCell.pushToXCell(rFilterBase, pMasterTextListStyle, xCell, *this, rTableStyle,
+                                       nColumn, tableRow.getTableCells().size() - 1, nRow,
+                                       mvTableRows.size() - 1);
+                if (bMerged)
+                    nColumn += nRemovedColumn;
             }
             ++nColumn;
         }
