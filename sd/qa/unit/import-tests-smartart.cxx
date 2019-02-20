@@ -829,6 +829,19 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT(xA1.is());
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), xA1->getString());
 
+    // Test fill color of B1, should be orange.
+    uno::Reference<text::XText> xB1(getChildShape(getChildShape(xGroup, 1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xB1.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("B1"), xB1->getString());
+
+    uno::Reference<beans::XPropertySet> xB1Props(xB1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xB1Props.is());
+    sal_Int32 nFillColor = 0;
+    xB1Props->getPropertyValue("FillColor") >>= nFillColor;
+    // Without the accompanying fix in place, this test would have failed: the background color was
+    // 0x4f81bd, i.e. blue, not orange.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xf79646), nFillColor);
+
     // Without the accompanying fix in place, this test would have failed: the
     // content of the "A2" shape was lost.
     uno::Reference<text::XText> xA2(getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 1),
@@ -849,6 +862,13 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), xB2->getString());
     uno::Reference<drawing::XShape> xB2Shape(xB2, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xB2Shape.is());
+
+    // Test line color of B2, should be orange.
+    uno::Reference<beans::XPropertySet> xB2Props(xB2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xB2Props.is());
+    sal_Int32 nLineColor = 0;
+    xB2Props->getPropertyValue("LineColor") >>= nLineColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xf79646), nLineColor);
 
     uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1),
                                     uno::UNO_QUERY);
