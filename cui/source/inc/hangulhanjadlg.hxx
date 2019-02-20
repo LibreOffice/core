@@ -136,9 +136,7 @@ namespace svx
         Link<CheckBox*,void>       m_aClickByCharacterLink;
 
     public:
-        HangulHanjaConversionDialog(
-                vcl::Window* _pParent,
-                editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+        HangulHanjaConversionDialog(vcl::Window* pParent);
         virtual ~HangulHanjaConversionDialog() override;
         virtual void dispose() override;
 
