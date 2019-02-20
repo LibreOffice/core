@@ -2044,15 +2044,12 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     }
     else
     {
-        tools::Rectangle aOldArea = SfxObjectShell::GetVisArea();
-        tools::Rectangle aNewArea = aOldArea;
+        tools::Rectangle aBoundRect = SfxObjectShell::GetVisArea();
         ScViewData aTmpData( this, nullptr );
         aTmpData.SetTabNo(nVisTab);
-        SnapVisArea( aNewArea );
-        if ( aNewArea != aOldArea && (m_aDocument.GetPosLeft() > 0 || m_aDocument.GetPosTop() > 0) )
-            SfxObjectShell::SetVisArea( aNewArea );
-        aTmpData.SetScreen( aNewArea );
-        ScPrintFunc::DrawToDev( &m_aDocument, pDev, 1.0, aNewArea, &aTmpData, true );
+        SnapVisArea( aBoundRect );
+        aTmpData.SetScreen( aBoundRect );
+        ScPrintFunc::DrawToDev( &m_aDocument, pDev, 1.0, aBoundRect, &aTmpData, true );
     }
 
     pDev->SetLayoutMode( nOldLayoutMode );
@@ -2189,25 +2186,19 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
 void ScDocShell::SnapVisArea( tools::Rectangle& rRect ) const
 {
     SCTAB nTab = m_aDocument.GetVisibleTab();
-    long nOrigTop = rRect.Top();
-    long nOrigLeft = rRect.Left();
     bool bNegativePage = m_aDocument.IsNegativePage( nTab );
     if ( bNegativePage )
         ScDrawLayer::MirrorRectRTL( rRect );        // calculate with positive (LTR) values
 
-    SCCOL nCol = m_aDocument.GetPosLeft();
-    long nSetLeft = SnapHorizontal( m_aDocument, nTab, rRect.Left(), nCol );
-    rRect.SetLeft( nSetLeft );
+    SCCOL nCol = 0;
+    rRect.SetLeft( SnapHorizontal( m_aDocument, nTab, rRect.Left(), nCol ) );
     ++nCol;                                         // at least one column
-    long nCorrectionLeft = (nOrigLeft == 0 && nCol > 0) ? nSetLeft : 0; // initial correction
-    rRect.SetRight( SnapHorizontal( m_aDocument, nTab, rRect.Right() + nCorrectionLeft, nCol ));
+    rRect.SetRight( SnapHorizontal( m_aDocument, nTab, rRect.Right(), nCol ) );
 
-    SCROW nRow = m_aDocument.GetPosTop();
-    long nSetTop = SnapVertical( m_aDocument, nTab, rRect.Top(), nRow );
-    rRect.SetTop( nSetTop );
+    SCROW nRow = 0;
+    rRect.SetTop( SnapVertical( m_aDocument, nTab, rRect.Top(), nRow ) );
     ++nRow;                                         // at least one row
-    long nCorrectionTop = (nOrigTop == 0 && nRow > 0) ? nSetTop : 0; // initial correction
-    rRect.SetBottom( SnapVertical( m_aDocument, nTab, rRect.Bottom() + nCorrectionTop, nRow ));
+    rRect.SetBottom( SnapVertical( m_aDocument, nTab, rRect.Bottom(), nRow ) );
 
     if ( bNegativePage )
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
