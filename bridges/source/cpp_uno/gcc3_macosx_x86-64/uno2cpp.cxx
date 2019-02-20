@@ -106,8 +106,8 @@ static void cpp_call(
 {
     // Maximum space for [complex ret ptr], values | ptr ...
     // (but will be used less - some of the values will be in pGPR and pFPR)
-      sal_uInt64 *pStack = static_cast<sal_uInt64 *>(__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) ));
-      sal_uInt64 *pStackStart = pStack;
+    sal_uInt64 *pStack = static_cast<sal_uInt64 *>(__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) ));
+    sal_uInt64 *pStackStart = pStack;
 
     sal_uInt64 pGPR[x86_64::MAX_GPR_REGS];
     sal_uInt32 nGPR = 0;

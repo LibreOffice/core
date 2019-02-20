@@ -400,7 +400,7 @@ Any PNGDataProvider::getOOoData()
         oOOData = mData;
     }
 
-  return oOOData;
+    return oOOData;
 }
 
 class FileListDataProvider : public DataProviderBaseImpl
@@ -483,9 +483,9 @@ DataFlavorMapper::~DataFlavorMapper()
 
 DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const
 {
-  DataFlavor oOOFlavor;
+    DataFlavor oOOFlavor;
 
-  for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
+    for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
       if ([systemDataFlavor caseInsensitiveCompare:const_cast<NSString*>(flavorMap[i].SystemFlavor)] == NSOrderedSame)
         {

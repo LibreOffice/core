@@ -73,7 +73,7 @@ void MacabTables::impl_refresh(  )
 
 void MacabTables::disposing()
 {
-m_xMetaData.clear();
+    m_xMetaData.clear();
     OCollection::disposing();
 }
 

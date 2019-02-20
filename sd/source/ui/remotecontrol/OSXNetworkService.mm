@@ -19,12 +19,12 @@
 {
     netService = [[NSNetService alloc] initWithDomain:@"local" type:@"_impressremote._tcp" name:sName port:1599];
 
-  if (netService != nil)
-  {
+    if (netService != nil)
+    {
             [netService setDelegate:self];
             [netService scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             [netService publish];
-  }
+    }
 }
 
 -(void)netService:(NSNetService *)aNetService
