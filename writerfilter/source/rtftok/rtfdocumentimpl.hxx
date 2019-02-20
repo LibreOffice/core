@@ -218,7 +218,7 @@ public:
 
     void setZ(sal_Int32 nZ) { m_oZ.reset(nZ); }
 
-    bool hasZ() const { return m_oZ.has_value(); }
+    bool hasZ() const { return bool(m_oZ); }
 
     sal_Int32 getZ() const { return *m_oZ; }
 
