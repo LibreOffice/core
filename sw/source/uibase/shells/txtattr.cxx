@@ -435,7 +435,7 @@ SET_LINESPACE:
         rWrtSh.AutoUpdatePara(pColl, aSet);
     }
     else
-        rWrtSh.SetAttrSet( aSet, SetAttrMode::DEFAULT, nullptr, true);
+        rWrtSh.SetAttrSet( aSet );
     rReq.Done();
 }
 

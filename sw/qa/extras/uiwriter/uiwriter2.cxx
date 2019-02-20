@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
@@ -56,7 +55,6 @@ public:
     void testUnfloatButton();
     void testUnfloatButtonReadOnlyMode();
     void testUnfloating();
-    void testTdf122893();
     void testTdf122942();
     void testTdf101873();
 
@@ -76,7 +74,6 @@ public:
     CPPUNIT_TEST(testUnfloatButton);
     CPPUNIT_TEST(testUnfloatButtonReadOnlyMode);
     CPPUNIT_TEST(testUnfloating);
-    CPPUNIT_TEST(testTdf122893);
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testTdf101873);
     CPPUNIT_TEST_SUITE_END();
@@ -710,58 +707,6 @@ void SwUiWriterTest2::testUnfloating()
             sFailureMessage.getStr(), SwFrameType::Tab,
             pWrtShell->GetLayout()->GetLower()->GetNext()->GetLower()->GetLower()->GetType());
     }
-}
-
-void SwUiWriterTest2::testTdf122893()
-{
-    load(DATA_DIRECTORY, "tdf105413.fodt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    // all paragraphs are left-aligned with preset single line spacing
-    for (int i = 1; i < 4; ++i)
-    {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(i), "ParaAdjust"));
-        lcl_dispatchCommand(mxComponent, ".uno:SpacePara1", {});
-    }
-
-    // turn on red-lining and show changes
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
-                                                      | RedlineFlags::ShowDelete);
-    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
-                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-    CPPUNIT_ASSERT_MESSAGE(
-        "redlines should be visible",
-        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
-
-    // Set center-aligned paragraph with preset double line spacing in the 3th paragraph.
-    // Because of the tracked deleted region between them,
-    // this sets also the same formatting in the first paragraph automatically
-    // to keep the changed paragraph formatting at hiding tracked changes or saving the document
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->EndPara(/*bSelect=*/false);
-
-    lcl_dispatchCommand(mxComponent, ".uno:CenterPara", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SpacePara2", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
-                         getProperty<sal_Int32>(getParagraph(3), "ParaAdjust")); // center-aligned
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(200),
-                         getProperty<style::LineSpacing>(getParagraph(3), "ParaLineSpacing")
-                             .Height); // double line spacing
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(2), "ParaAdjust")); // left-aligned
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
-                         getProperty<style::LineSpacing>(getParagraph(2), "ParaLineSpacing")
-                             .Height); // single line spacing
-    // first paragraph is also center-aligned with double line spacing
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(getParagraph(1), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int16(200), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Height);
 }
 
 void SwUiWriterTest2::testTdf122942()
