@@ -2844,8 +2844,15 @@ Size RadioButton::CalcMinimumSize() const
     else
     {
         aSize = maImage.GetSizePixel();
-        aSize.AdjustWidth(8 );
-        aSize.AdjustHeight(8 );
+        aSize.AdjustWidth(8);
+        aSize.AdjustHeight(8);
+    }
+
+    if (Button::HasImage() && !(ImplGetButtonState() & DrawButtonFlags::NoImage))
+    {
+        Size aImgSize = GetModeImage().GetSizePixel();
+        aSize = Size(std::max(aImgSize.Width(), aSize.Width()),
+                     std::max(aImgSize.Height(), aSize.Height()));
     }
 
     OUString aText = GetText();
