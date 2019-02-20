@@ -16,6 +16,24 @@
       "revId": "4d341228fc9988fbf22695494197ace5a342426c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_28e2b1d6",
+        "filename": "sd/source/ui/view/viewshel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2019-02-20T18:38:29Z",
+      "side": 1,
+      "message": "Are these MIME type just hypothetical? I never saw anything alike and considered the missing check on EOS or \u0027;\u0027 to not be critical. In case it is I will revert the patch.",
+      "parentUuid": "1f485f77_b90a7923",
+      "revId": "4d341228fc9988fbf22695494197ace5a342426c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
