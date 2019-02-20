@@ -2302,7 +2302,7 @@ struct DialogRunner
        , m_pLoop(nullptr)
     {
         GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
-        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pParent);
+        GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
         m_xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
     }
 
