@@ -29,7 +29,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;
 
 /**
- * This abstract class reprecents a connection to the office
+ * This abstract class represents a connection to the office
  * application.
  * @deprecated
  */
@@ -53,9 +53,9 @@ public interface OfficeConnection
     void setContainerFactory(ContainerFactory containerFactory);
 
     /**
-     * Retrives the UNO component context.
-     * Establishes a connection if necessary and initialises the
-     * UNO service manager if it has not already been initialised.
+     * Retrieves the UNO component context.
+     * Establishes a connection if necessary and initializes the
+     * UNO service manager if it has not already been initialized.
      *
      * @return The office UNO component context.
      */
@@ -66,7 +66,7 @@ public interface OfficeConnection
      * The window is either a sub-class of java.awt.Canvas (local) or
      * java.awt.Container (RVP).
      *
-     * This method does not add add the office window to its container.
+     * This method does not add the office window to its container.
      *
      * @param container This is an AWT container.
      * @return The office window instance.
