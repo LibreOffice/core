@@ -419,6 +419,24 @@ bool isRedactMode(SfxRequest& rReq)
     return false;
 }
 
+/// Returns the value of the given string param as an OUString
+/// Returns empty OUString if no param
+OUString getStringParam(const SfxRequest& rReq, const sal_uInt16& nParamId)
+{
+    OUString sStringParam;
+
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return sStringParam;
+
+    const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(nParamId);
+    if (!pStringArg)
+        return sStringParam;
+
+    sStringParam = pStringArg->GetValue();
+    return sStringParam;
+}
+
 }
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
@@ -705,6 +723,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument")
                  && isRedactMode(rReq) )
             {
+                OUString sRedactionStyle(getStringParam(rReq, SID_REDACTION_STYLE));
+
                 // Access the draw pages
                 uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
                 uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
@@ -748,14 +768,29 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                 && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
                         {
                             xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
-                            xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
+                            if (sRedactionStyle == "White")
+                            {
+                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_WHITE));
+                            }
+                            else
+                            {
+                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
+                            }
                         }
                         // Freeform redaction
                         else if (sShapeName == "FreeformRedactionShape"
                                  && xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
                         {
-                                xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+
+                            if (sRedactionStyle == "White")
+                            {
+                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_WHITE));
+                            }
+                            else
+                            {
                                 xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
+                            }
                         }
                     }
                 }
