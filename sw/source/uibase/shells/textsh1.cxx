@@ -1952,7 +1952,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 if ( !pFieldBM )
                 {
-                    --aPos.nContent;
+                    if (aPos.nContent.GetIndex() > 0)
+                        --aPos.nContent;
                     pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 }
                 if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
