@@ -550,9 +550,8 @@ namespace svx
 
     VCL_BUILDER_FACTORY_ARGS( SuggestionDisplay, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
 
-    HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
+    HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection )
         :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
-        ,m_pIgnoreNonPrimary( nullptr )
         ,m_bDocumentMode( true )
     {
         get( m_pFind, "find" );
@@ -593,15 +592,6 @@ namespace svx
         m_pHanjaOnly->SetClickHdl(  LINK( this,  HangulHanjaConversionDialog, OnConversionDirectionClicked ) );
         m_pOptions->SetClickHdl( LINK( this, HangulHanjaConversionDialog, OnOption ) );
 
-        if ( editeng::HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
-        {
-            m_pIgnoreNonPrimary = m_pHangulOnly;
-        }
-        else
-        {
-            m_pIgnoreNonPrimary = m_pHanjaOnly;
-        }
-
         // initial focus
         FocusSuggestion( );
 
@@ -637,7 +627,6 @@ namespace svx
         m_pHangulOnly.clear();
         m_pHanjaOnly.clear();
         m_pReplaceByChar.clear();
-        m_pIgnoreNonPrimary.clear();
         ModalDialog::dispose();
     }
 
