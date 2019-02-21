@@ -35,7 +35,6 @@ class HierarchyUri
     mutable OUString m_aParentUri;
     mutable OUString m_aService;
     mutable OUString m_aPath;
-    mutable OUString m_aName;
     mutable bool            m_bValid;
 
 private:

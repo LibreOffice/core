@@ -497,10 +497,8 @@ FetchResult SAL_CALL CachedContentResultSetStub
 // class CachedContentResultSetStubFactory
 
 
-CachedContentResultSetStubFactory::CachedContentResultSetStubFactory(
-        const Reference< XMultiServiceFactory > & rSMgr )
+CachedContentResultSetStubFactory::CachedContentResultSetStubFactory()
 {
-    m_xSMgr = rSMgr;
 }
 
 CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
@@ -546,10 +544,10 @@ XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
                           OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ) )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
-CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & )
 {
     css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new CachedContentResultSetStubFactory( rSMgr ));
+        static_cast<css::lang::XServiceInfo*>(new CachedContentResultSetStubFactory);
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 css::uno::Sequence< OUString >

@@ -146,12 +146,9 @@ class CachedContentResultSetStubFactory final
                 , public css::lang::XServiceInfo
                 , public css::ucb::XCachedContentResultSetStubFactory
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory >    m_xSMgr;
-
 public:
 
-    CachedContentResultSetStubFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
+    CachedContentResultSetStubFactory();
 
     virtual ~CachedContentResultSetStubFactory() override;
 

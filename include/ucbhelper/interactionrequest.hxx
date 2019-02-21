@@ -314,7 +314,6 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
     OUString m_aRealm;
     OUString m_aUserName;
     OUString m_aPassword;
-    OUString m_aAccount;
     css::ucb::RememberAuthentication m_eRememberPasswordMode;
     css::ucb::RememberAuthentication const m_eDefaultRememberPasswordMode;
     css::ucb::RememberAuthentication const m_eDefaultRememberAccountMode;

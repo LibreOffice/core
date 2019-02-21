@@ -623,13 +623,10 @@ InteractionSupplyAuthentication::canSetAccount()
 
 // virtual
 void SAL_CALL
-InteractionSupplyAuthentication::setAccount( const OUString& Account )
+InteractionSupplyAuthentication::setAccount( const OUString& /*Account*/ )
 {
     OSL_ENSURE( m_bCanSetAccount,
         "InteractionSupplyAuthentication::setAccount - Not supported!" );
-
-    if ( m_bCanSetAccount )
-        m_aAccount = Account;
 }
 
 
