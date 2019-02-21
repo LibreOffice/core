@@ -1454,12 +1454,28 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if( ( bVertText && ( !bTableCursor || bVertTable ) ) ||
                 ( bTableCursor && bVertTable ) )
             {
-                // Attempt to integrate cursor travelling for mongolian layout does not work.
-                // Thus, back to previous mapping of cursor keys to direction keys.
-                if( KEY_UP == nKey ) nKey = KEY_LEFT;
-                else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
-                else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
-                else /* KEY_RIGHT == nKey */ nKey = KEY_UP;
+                SvxFrameDirection eDirection = rSh.GetTextDirection();
+                if (eDirection == SvxFrameDirection::Vertical_LR_BT)
+                {
+                    // Map from physical to logical, so rotate clockwise.
+                    if (KEY_UP == nKey)
+                        nKey = KEY_RIGHT;
+                    else if (KEY_DOWN == nKey)
+                        nKey = KEY_LEFT;
+                    else if (KEY_LEFT == nKey)
+                        nKey = KEY_UP;
+                    else /* KEY_RIGHT == nKey */
+                        nKey = KEY_DOWN;
+                }
+                else
+                {
+                    // Attempt to integrate cursor travelling for mongolian layout does not work.
+                    // Thus, back to previous mapping of cursor keys to direction keys.
+                    if( KEY_UP == nKey ) nKey = KEY_LEFT;
+                    else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
+                    else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
+                    else /* KEY_RIGHT == nKey */ nKey = KEY_UP;
+                }
             }
 
             if ( rSh.IsInRightToLeftText() )

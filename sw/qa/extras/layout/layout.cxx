@@ -14,10 +14,13 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <vcl/scheduler.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
 #include <wrtsh.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -2836,6 +2839,16 @@ void SwLayoutWriter::testBtlrCell()
     // range was 2273 -> 2835, the good vertical position is 2730, the bad one was 1830.
     CPPUNIT_ASSERT_GREATER(nFirstParaMiddle, rCharRect.Top());
     CPPUNIT_ASSERT_LESS(nFirstParaBottom, rCharRect.Top());
+
+    // Test that pressing "up" at the start of the cell goes to the next character position.
+    sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
+    KeyEvent aKeyEvent(0, KEY_UP);
+    SwEditWin& rEditWin = pShell->GetView()->GetEditWin();
+    rEditWin.KeyInput(aKeyEvent);
+    Scheduler::ProcessEventsToIdle();
+    // Without the accompanying fix in place, this test would have failed: "up" was interpreted as
+    // logical "left", which does nothing if you're at the start of the text anyway.
+    CPPUNIT_ASSERT_EQUAL(nIndex + 1, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
 #endif
 }
 

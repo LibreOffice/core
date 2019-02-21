@@ -1993,7 +1993,9 @@ SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
     {
         if ( pFrame->IsVertical() )
         {
-            if ( pFrame->IsRightToLeft() )
+            if (pFrame->IsVertLRBT())
+                nRet = SvxFrameDirection::Vertical_LR_BT;
+            else if (pFrame->IsRightToLeft())
                 nRet = SvxFrameDirection::Vertical_LR_TB;
             else
                 nRet = SvxFrameDirection::Vertical_RL_TB;
