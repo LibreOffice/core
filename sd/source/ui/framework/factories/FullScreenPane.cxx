@@ -216,11 +216,10 @@ void FullScreenPane::ExtractArguments (
 {
     // Extract arguments from the resource URL.
     const util::URL aURL = rxPaneId->getFullResourceURL();
-    sal_Int32 nIndex = 0;
-    OUString sValue;
-    while (nIndex >= 0)
+    for (sal_Int32 nIndex{ 0 }; nIndex >= 0; )
     {
         const OUString aToken = aURL.Arguments.getToken(0, '&', nIndex);
+        OUString sValue;
         if (aToken.startsWith("ScreenNumber=", &sValue))
         {
             rnScreenNumberReturnValue = sValue.toInt32();
