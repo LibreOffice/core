@@ -159,7 +159,6 @@ void VCLXTopWindow_Base::setMenuBar( const css::uno::Reference< css::awt::XMenuB
                 pSystemWindow->SetMenuBar( static_cast<MenuBar*>( pMenu->GetMenu() ));
         }
     }
-    mxMenuBar = rxMenu;
 }
 
 
