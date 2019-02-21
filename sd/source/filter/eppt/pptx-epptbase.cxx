@@ -17,44 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "eppt.hxx"
+#include "epptbase.hxx"
 #include "epptdef.hxx"
-#include "pptexanimations.hxx"
 #include "../ppt/pptanimations.hxx"
 
 #include <o3tl/any.hxx>
-#include <tools/globname.hxx>
-#include <tools/datetime.hxx>
-#include <tools/poly.hxx>
-#include <tools/stream.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/virdev.hxx>
+#include <vcl/outdev.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-#include <vcl/fltcall.hxx>
-#include <vcl/wmf.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <com/sun/star/view/PaperOrientation.hpp>
-#include <com/sun/star/view/PaperFormat.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/office/XAnnotation.hpp>
-#include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <com/sun/star/office/XAnnotationEnumeration.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -66,12 +43,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <editeng/svxenum.hxx>
-#include <editeng/flditem.hxx>
-#include <sot/storinfo.hxx>
-#include <filter/msfilter/msoleexp.hxx>
-#include <filter/msfilter/msdffimp.hxx>
-#include <filter/msfilter/svxmsbas.hxx>
 
 
 using namespace com::sun::star;

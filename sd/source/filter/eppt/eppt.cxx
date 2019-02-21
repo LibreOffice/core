@@ -22,21 +22,11 @@
 #include "pptexanimations.hxx"
 #include <o3tl/any.hxx>
 #include <tools/globname.hxx>
-#include <tools/poly.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/gradient.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
-#include <vcl/fltcall.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <com/sun/star/view/PaperOrientation.hpp>
-#include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -49,12 +39,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <tools/zcodec.hxx>
-#include <editeng/svxenum.hxx>
-#include <sot/storinfo.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/wmf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <editeng/flditem.hxx>
@@ -64,7 +50,7 @@
 #include <rtl/math.hxx>
 #include <memory>
 
-#include <sfx2/objsh.hxx>
+class SfxObjectShell;
     // complete SfxObjectShell for SaveVBA under -fsanitize=function
 
 using namespace com::sun::star;

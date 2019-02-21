@@ -20,7 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 
-#include <oox/ppt/pptfilterhelpers.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <vector>
+#include <animations.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>

@@ -18,33 +18,23 @@
  */
 
 #include <stdio.h>
-#include <o3tl/any.hxx>
-#include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include "epptooxml.hxx"
-#include "epptdef.hxx"
 #include <oox/export/shapes.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <filter/msfilter/escherex.hxx>
-#include <tools/poly.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -58,14 +48,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <oox/export/utils.hxx>
-#include <oox/ppt/pptfilterhelpers.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include "pptexanimations.hxx"
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>

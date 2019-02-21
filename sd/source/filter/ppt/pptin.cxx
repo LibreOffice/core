@@ -17,42 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/numitem.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <filter/msfilter/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
 #include <svl/style.hxx>
-#include <svx/xflclit.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/colritem.hxx>
-#include <svl/whiter.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xlnclit.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/bulletitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/tstpitem.hxx>
+#include <svx/svdoutl.hxx>
 
 #include <sfx2/docinf.hxx>
 
 #include <strings.hrc>
 #include <strings.hxx>
 #include "pptin.hxx"
-#include <Outliner.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
@@ -61,8 +46,6 @@
 #include <anminfo.hxx>
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/itempool.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdogrp.hxx>
@@ -75,17 +58,15 @@
 
 #include <DrawDocShell.hxx>
 #include <FrameView.hxx>
-#include <optsitem.hxx>
 #include <unokywds.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/editstat.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/docfac.hxx>
+
 #define MAX_USER_MOVE       2
 
-#include <animations.hxx>
 #include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "ppt97animations.hxx"
@@ -98,7 +79,6 @@
 
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
-#include <oox/ppt/pptfilterhelpers.hxx>
 
 #include <boost/optional.hpp>
 

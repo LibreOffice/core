@@ -22,6 +22,10 @@
 
 #include "sddllapi.h"
 
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::animations { class XAnimationNode; }
+
 namespace sd
 {
 
