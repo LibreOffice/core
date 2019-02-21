@@ -3778,7 +3778,6 @@ public:
 };
 
 #include <vcl/pngwrite.hxx>
-#include <tools/stream.hxx>
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
