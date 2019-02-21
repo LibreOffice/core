@@ -923,12 +923,36 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_FLD_TITLE:
         case FN_INSERT_FLD_TOPIC:
         case FN_INSERT_DBFIELD:
+            if ( rSh.CursorInsideInputField() )
+            {
+                rSet.DisableItem(nWhich);
+            }
+            break;
+
         case FN_INSERT_TEXT_FORMFIELD:
         case FN_INSERT_CHECKBOX_FORMFIELD:
         case FN_INSERT_DROPDOWN_FORMFIELD:
             if ( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
+            }
+            else
+            {
+                // Check whether we are in a text form field
+                SwPosition aCursorPos(*rSh.GetCursor()->GetPoint());
+                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aCursorPos);
+                if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMTEXT)
+                    && aCursorPos.nContent.GetIndex() > 0)
+                {
+                    SwPosition aPos(aCursorPos);
+                    --aPos.nContent;
+                    pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                }
+                if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMTEXT &&
+                    (aCursorPos > pFieldBM->GetMarkStart() && aCursorPos < pFieldBM->GetMarkEnd() ))
+                {
+                    rSet.DisableItem(nWhich);
+                }
             }
             break;
 
