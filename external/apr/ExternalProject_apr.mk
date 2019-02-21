@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,apr,build):
 else
 $(call gb_ExternalProject_get_state_target,apr,build):
 	+$(call gb_ExternalProject_run,build,\
+		 $(if $(ENABLE_MACOSX_SANDBOX),ac_cv_func_fdatasync=no) \
 		./configure \
 			--enable-static --disable-shared \
 			--with-pic \
