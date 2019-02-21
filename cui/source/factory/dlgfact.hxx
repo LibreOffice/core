@@ -836,7 +836,7 @@ public:
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) override;
     virtual DialogGetRanges             GetDialogGetRangesFunc() override;
-    virtual VclPtr<VclAbstractDialog>   CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) override;
+    virtual VclPtr<VclAbstractDialog>   CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override;
 
     virtual VclPtr<AbstractScriptSelectorDialog>
         CreateScriptSelectorDialog(

@@ -1113,11 +1113,10 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
         pDlg->SetRunLabel();
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( vcl::Window* pParent,
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog(weld::Window* pParent,
                                             const OUString& rLanguage)
 {
-    VclPtrInstance<SvxScriptOrgDialog> pDlg( pParent, rLanguage);
-    return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxScriptOrgDialog>(pParent, rLanguage));
 }
 
 VclPtr<AbstractTitleDialog> AbstractDialogFactory_Impl::CreateTitleDialog(weld::Window* pParent,
