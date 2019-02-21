@@ -132,8 +132,6 @@ public:
     std::unique_ptr<UnoPropertyArrayHelper>
                                         mpPropHelper;
 
-    css::uno::Reference< css::awt::XPointer >
-                                        mxPointer;
     css::uno::Reference< css::accessibility::XAccessibleContext >
                                         mxAccessibleContext;
     css::uno::Reference< css::awt::XGraphics >
@@ -1147,12 +1145,8 @@ void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rx
     SolarMutexGuard aGuard;
 
     VCLXPointer* pPointer = VCLXPointer::GetImplementation( rxPointer );
-    if ( pPointer )
-    {
-        mpImpl->mxPointer = rxPointer;
-        if ( GetWindow() )
-            GetWindow()->SetPointer( pPointer->GetPointer() );
-    }
+    if ( pPointer && GetWindow() )
+        GetWindow()->SetPointer( pPointer->GetPointer() );
 }
 
 void VCLXWindow::setBackground( sal_Int32 nColor )
