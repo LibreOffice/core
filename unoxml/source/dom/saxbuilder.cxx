@@ -191,12 +191,8 @@ namespace DOM
         m_aNodeStack.top()->appendChild(aInstruction);
     }
 
-    void SAL_CALL CSAXDocumentBuilder::setDocumentLocator( const Reference< XLocator >& xLocator )
+    void SAL_CALL CSAXDocumentBuilder::setDocumentLocator( const Reference< XLocator >& )
     {
-        ::osl::MutexGuard g(m_Mutex);
-
-        // set the document locator...
-        m_aLocator = xLocator;
     }
 
     void SAL_CALL CSAXDocumentBuilder::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& xAttribs  )
