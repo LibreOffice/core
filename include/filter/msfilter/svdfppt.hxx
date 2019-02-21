@@ -34,6 +34,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <filter/msfilter/msocximex.hxx>
 #include <o3tl/enumarray.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

@@ -17,21 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-
 #include <memory>
+#include <map>
 
 #include <osl/module.hxx>
 #include <tools/svlibrary.h>
 #include <sfx2/docfile.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/progress.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
 
 #include <DrawDocShell.hxx>
 
 #include <pres.hxx>
-#include <drawdoc.hxx>
 #include <sdfilter.hxx>
 
 

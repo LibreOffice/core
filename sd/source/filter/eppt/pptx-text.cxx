@@ -46,16 +46,14 @@
 #include <filter/msfilter/util.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 #include <o3tl/any.hxx>
-#include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-#include <oox/export/drawingml.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css;
 

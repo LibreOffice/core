@@ -21,13 +21,10 @@
 
 #include <svx/svdobj.hxx>
 #include <sdpage.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
-#include <EffectMigration.hxx>
 #include <CustomAnimationPreset.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>

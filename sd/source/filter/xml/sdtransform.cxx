@@ -19,7 +19,6 @@
 
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
 #include <svl/whiter.hxx>
 
 #include <svx/svdoutl.hxx>
@@ -28,11 +27,9 @@
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/numitem.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <drawdoc.hxx>
-#include <glob.hxx>
 #include "sdtransform.hxx"
 
 using namespace ::com::sun::star::style;

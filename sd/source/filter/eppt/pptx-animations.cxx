@@ -18,11 +18,9 @@
  */
 
 #include <o3tl/any.hxx>
-#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "epptooxml.hxx"
 #include <sax/fshelper.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
@@ -46,7 +44,6 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
@@ -54,7 +51,6 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
