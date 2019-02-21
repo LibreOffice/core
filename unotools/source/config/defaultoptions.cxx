@@ -91,7 +91,6 @@ public:
     OUString         m_aUserConfigPath;
     OUString         m_aWorkPath;
     OUString         m_aClassificationPath;
-    OUString         m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
                     virtual ~SvtDefaultOptions_Impl() override;
@@ -309,7 +308,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     case DEFAULTPATH_USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
                     case DEFAULTPATH_WORK:             m_aWorkPath = aFullPath;          break;
                     case DEFAULTPATH_CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
-                    case DEFAULTPATH_USERDICTIONARY:   m_aUserDictionaryPath = aFullPath;break;
+                    case DEFAULTPATH_USERDICTIONARY:   break;
 
                     default:
                         SAL_WARN( "unotools.config", "invalid index to load a default path" );
