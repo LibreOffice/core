@@ -30,8 +30,14 @@
 
 namespace {
 
-OString getBracketedContent(const OString& text) {
-    return text.getToken(1, '[').getToken(0, ']');
+bool lcl_isNextGroup(OString &sGroup_out, const OString &sLineTrim)
+{
+    if (sLineTrim.startsWith("[") && sLineTrim.endsWith("]"))
+    {
+        sGroup_out = sLineTrim.getToken(1, '[').getToken(0, ']').trim();
+        return true;
+    }
+    return false;
 }
 
 void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
@@ -122,13 +128,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
 
 bool LngParser::isNextGroup(OString &sGroup_out, const OString &sLine_in)
 {
-    const OString sLineTrim = sLine_in.trim();
-    if (sLineTrim.startsWith("[") && sLineTrim.endsWith("]"))
-    {
-        sGroup_out = getBracketedContent(sLineTrim).trim();
-        return true;
-    }
-    return false;
+    return lcl_isNextGroup(sGroup_out, sLine_in.trim());
 }
 
 void LngParser::ReadLine(const OString &rLine_in,
@@ -162,16 +162,7 @@ void LngParser::Merge(
 
     // seek to next group
     while ( nPos < mvLines.size() && !bGroup )
-    {
-        OString sLine( mvLines[ nPos ] );
-        sLine = sLine.trim();
-        if ( sLine.startsWith("[") && sLine.endsWith("]") )
-        {
-            sGroup = getBracketedContent(sLine).trim();
-            bGroup = true;
-        }
-        nPos ++;
-    }
+        bGroup = lcl_isNextGroup(sGroup, mvLines[nPos++].trim());
 
     while ( nPos < mvLines.size()) {
         OStringHashMap Text;
@@ -188,11 +179,9 @@ void LngParser::Merge(
 
         while ( nPos < mvLines.size() && !bGroup )
         {
-            OString sLine( mvLines[ nPos ] );
-            sLine = sLine.trim();
-            if ( sLine.startsWith("[") && sLine.endsWith("]") )
+            const OString sLine{ mvLines[nPos].trim() };
+            if ( lcl_isNextGroup(sGroup, sLine) )
             {
-                sGroup = getBracketedContent(sLine).trim();
                 bGroup = true;
                 nPos ++;
                 sLanguagesDone = "";
