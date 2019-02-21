@@ -3183,6 +3183,13 @@ private:
 
     void signal_switch_page(int nNewPage)
     {
+        if (m_bOverFlowBoxIsStart)
+        {
+            auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+            // add count of overflow pages, minus the extra tab
+            nNewPage += nOverFlowLen;
+        }
+
         bool bAllow = !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
         if (!bAllow)
         {
@@ -3246,9 +3253,11 @@ private:
         std::swap(m_nStartTabCount, m_nEndTabCount);
         split_notebooks();
 
-        gtk_notebook_set_current_page(m_pNotebook, nNewPage);
-
         enable_notify_events();
+
+        // we want to call this outside enable_notify_events so that the main
+        // notebook switch-page callback is triggered
+        gtk_notebook_set_current_page(m_pNotebook, nNewPage);
     }
 
     static OString get_page_ident(GtkNotebook *pNotebook, guint nPage)
