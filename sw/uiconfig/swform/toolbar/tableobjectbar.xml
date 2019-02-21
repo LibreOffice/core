@@ -18,33 +18,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRowsBefore"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRowsAfter"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumnsBefore"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumnsAfter"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteTable"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireCell"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectTable"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
+ <toolbar:toolbaritem xlink:href=".uno:SplitTable"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OptimizeTable"/>
- <toolbar:toolbarbreak/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRowsAfter"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertColumnsAfter"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SelectTable" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:TableCellBackgroundColor"/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
- <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TableNumberFormatDialog"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:TableSort"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Protect"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnsetCellsReadOnly"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoSum"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFormula"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
 </toolbar:toolbar>

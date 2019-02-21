@@ -30,29 +30,56 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToEPUB" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintPreview"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
  <toolbar:toolbaritem xlink:href=".uno:Paste"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush"/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ControlCodes"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawText"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
+ <toolbar:toolbaritem xlink:href=".uno:EmojiControl" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Line"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ControlCodes"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
 </toolbar:toolbar>
