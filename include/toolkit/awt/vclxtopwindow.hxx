@@ -39,9 +39,6 @@ class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base  :public VCLXTopWindow_XBase
                                             ,public VCLXTopWindow_SBase
 {
 protected:
-    css::uno::Reference< css::awt::XMenuBar> mxMenuBar;
-
-
     virtual vcl::Window* GetWindowImpl() = 0;
     virtual ::comphelper::OInterfaceContainerHelper2& GetTopWindowListenersImpl() = 0;
 
