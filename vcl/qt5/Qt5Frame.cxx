@@ -111,9 +111,16 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Window;
     }
 
-    if (!pParent && (aWinFlags == Qt::Window))
+    if (aWinFlags == Qt::Window)
     {
-        m_pTopLevel = new Qt5MainWindow(*this, nullptr, aWinFlags);
+        QWidget* pParentWidget = nullptr;
+        if (m_pParent)
+        {
+            pParentWidget
+                = (m_pParent->m_pTopLevel) ? m_pParent->m_pTopLevel : m_pParent->m_pQWidget;
+        }
+
+        m_pTopLevel = new Qt5MainWindow(*this, pParentWidget, aWinFlags);
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
     }
@@ -127,8 +134,9 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = m_pQWidget->window()->windowHandle();
-        if (pParentWindow != pChildWindow)
+        QWindow* pChildWindow = (m_pTopLevel ? m_pTopLevel->window()->windowHandle()
+                                             : m_pQWidget->window()->windowHandle());
+        if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
 
@@ -377,8 +385,9 @@ void Qt5Frame::Center()
     if (m_pParent)
     {
         QWidget* pWindow = m_pParent->GetQWidget()->window();
-        m_pQWidget->move(pWindow->frameGeometry().topLeft() + pWindow->rect().center()
-                         - m_pQWidget->rect().center());
+        QWidget* const pWidget = (m_pTopLevel) ? m_pTopLevel : m_pQWidget;
+        pWidget->move(pWindow->frameGeometry().topLeft() + pWindow->rect().center()
+                      - pWidget->rect().center());
     }
 }
 
