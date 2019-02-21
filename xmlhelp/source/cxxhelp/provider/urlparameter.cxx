@@ -486,7 +486,7 @@ bool URLParameter::query()
         if( parameter == "Language" )
             m_aLanguage = value;
         else if( parameter == "Device" )
-            m_aDevice = value;
+            ;
         else if( parameter == "Program" )
             m_aProgram = value;
         else if( parameter == "Eid" )

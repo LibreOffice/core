@@ -184,7 +184,6 @@ namespace chelp {
         OUString  m_aLanguage;
 
         OUString  m_aPrefix;
-        OUString  m_aDevice;
         OUString  m_aProgram;
         OUString  m_aSystem;
         OUString  m_aActive;
