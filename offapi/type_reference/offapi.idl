@@ -4874,6 +4874,10 @@ module com {
      [property, optional] boolean AddExternalLeading;
      [property, optional] boolean EmbedFonts;
      [property, optional] boolean EmbedSystemFonts;
+     [property, optional] boolean EmbedOnlyUsedFonts;
+     [property, optional] boolean EmbedLatinScriptFonts;
+     [property, optional] boolean EmbedAsianScriptFonts;
+     [property, optional] boolean EmbedComplexScriptFonts;
     };
     published interface XTypeDetection {
      interface ::com::sun::star::uno::XInterface;
@@ -5644,6 +5648,7 @@ module com {
      [property, optional] boolean SignatureLineShowSignDate;
      [property, optional] boolean SignatureLineCanAddComment;
      [property, optional] ::com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
+     [property, optional] boolean SignatureLineIsSigned;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
@@ -8216,6 +8221,7 @@ module com {
      const long ASC_OTHER = 2048;
      const long ASC_UNDERSCORE = 8;
      const long ASC_UPALPHA = 1;
+     const long GROUP_SEPARATOR_IN_NUMBER = 134217728;
      const long IGNORE_LEADING_WS = 1073741824;
      const long TWO_DOUBLE_QUOTES_BREAK_STRING = 268435456;
      const long UNI_ALNUM = 61440;
@@ -15313,6 +15319,7 @@ module com {
      [property, optional] boolean ShowScrollBarTips;
      [property, optional] boolean HideWhitespace;
      [property, optional] boolean ShowInlineTooltips;
+     [property, optional] boolean UseHeaderFooterMenu;
     };
     published constants WritingMode2 {
      const short CONTEXT = 4;
