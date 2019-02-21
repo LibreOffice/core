@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl \
 	CppunitTest_sal_rtl \
 	CppunitTest_sal_types \
+	CppunitTest_sal_comtools \
 ))
 
 endif
