@@ -1713,6 +1713,8 @@ namespace emfio
                                 {
                                     Bitmap aMask( pSave->aBmpEx.GetBitmap() ); aMask.Invert();
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                    aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -1724,6 +1726,8 @@ namespace emfio
                                 {
                                     Bitmap aMask( pSave->aBmpEx.GetBitmap() );
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                    aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -1733,6 +1737,19 @@ namespace emfio
                                 {
                                     Bitmap aMask( pSave->aBmpEx.GetBitmap() );
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                    aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
+                                    /*
+                                    MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
+                                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                                    tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
+                                    BitmapEx                aBmpEx( pAct->GetBitmapEx() );
+
+                                    aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
+
+                                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+                                    */
+
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -1746,6 +1763,7 @@ namespace emfio
                         Push();
                         WMFRasterOp nOldRop = SetRasterOp( WMFRasterOp::CopyPen );
                         Bitmap      aBitmap( pSave->aBmpEx.GetBitmap() );
+
                         sal_uInt32  nOperation = ( nRasterOperation & 0xf );
                         switch( nOperation )
                         {
@@ -1759,11 +1777,13 @@ namespace emfio
                                 else
                                 {
                                     SetRasterOp( WMFRasterOp::XorPen );
-                                    ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
+                                    basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                    ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap).getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false) );
                                     SetRasterOp( WMFRasterOp::CopyPen );
                                     Bitmap  aMask( aBitmap );
                                     aMask.Invert();
                                     BitmapEx aBmpEx( aBitmap, aMask );
+                                    aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     if ( nOperation == 0x1 )
                                     {
@@ -1783,6 +1803,8 @@ namespace emfio
                                     aBitmap.Erase( maFillStyle.aFillColor );
                                 }
                                 BitmapEx aBmpEx( aBitmap, aMask );
+                                basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 if ( nOperation == 0x7 )
                                 {
@@ -1801,6 +1823,8 @@ namespace emfio
                                 Bitmap  aMask( aBitmap );
                                 aBitmap.Invert();
                                 BitmapEx aBmpEx( aBitmap, aMask );
+                                basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
                                 ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
@@ -1820,6 +1844,8 @@ namespace emfio
                                 BitmapEx aBmpEx( aBitmap, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
+                                basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
                                 ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                 if ( nOperation == 0xd )
                                 {
@@ -1832,7 +1858,10 @@ namespace emfio
                             case 0x9 :
                             {
                                 SetRasterOp( WMFRasterOp::XorPen );
-                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
+                                BitmapEx aBmpEx( aBitmap);
+                                basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 if ( nOperation == 0x9 )
                                 {
                                     SetRasterOp( WMFRasterOp::Not );
@@ -1855,7 +1884,10 @@ namespace emfio
                             {
                                 if ( nRasterOperation == 0x33 )
                                     aBitmap.Invert();
-                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
+                                basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+                                BitmapEx aBmpEx( aBitmap);
+                                aBmpEx = aBmpEx.getTransformed(pSave->aMatrix, aVisibleRange, 4500000.0, false);
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                             }
                             break;
 

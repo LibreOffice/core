@@ -28,6 +28,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "emfiodllapi.h"
 
@@ -439,17 +440,20 @@ namespace emfio
     struct BSaveStruct
     {
         BitmapEx            aBmpEx;
+        basegfx::B2DHomMatrix aMatrix;
         tools::Rectangle    aOutRect;
         sal_uInt32          nWinRop;
 
-        BSaveStruct(const Bitmap& rBmp, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
+        BSaveStruct(const Bitmap& rBmp, const basegfx::B2DHomMatrix& rMatrix, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
             : aBmpEx(rBmp)
+            , aMatrix(rMatrix)
             , aOutRect(rOutRect)
             , nWinRop(nRop)
         {}
 
-        BSaveStruct(const BitmapEx& rBmpEx, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
+        BSaveStruct(const BitmapEx& rBmpEx, const basegfx::B2DHomMatrix& rMatrix, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
             : aBmpEx(rBmpEx)
+            , aMatrix(rMatrix)
             , aOutRect(rOutRect)
             , nWinRop(nRop)
         {}

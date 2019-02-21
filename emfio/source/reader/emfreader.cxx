@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
@@ -1379,7 +1380,33 @@ namespace emfio
                                         aPNGWriter.Write(aNew);
                                     }
     #endif
-                                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aRect, SRCAND|SRCINVERT));
+
+                                    const basegfx::B2DHomMatrix aTransformMatrix = basegfx::B2DHomMatrix(maXForm.eM11,
+                                                                                                         maXForm.eM21,
+                                                                                                         maXForm.eDx,
+                                                                                                         maXForm.eM12,
+                                                                                                         maXForm.eM22,
+                                                                                                         maXForm.eDy)
+                                                 *
+                                            basegfx::B2DHomMatrix(
+                                                /* Row 0, Column 0 */ cxSrc,
+                                                /* Row 0, Column 1 */ 0.0,
+                                                /* Row 0, Column 2 */ xSrc,
+                                                /* Row 1, Column 0 */ 0.0,
+                                                /* Row 1, Column 1 */ cySrc,
+                                                /* Row 1, Column 2 */ ySrc);
+
+                                    /*
+                                    MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
+                                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                                    tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
+                                    BitmapEx                aBmpEx( pAct->GetBitmapEx() );
+
+                                    aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
+
+                                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+                                    */
+                                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aTransformMatrix, aRect, SRCAND|SRCINVERT));
                                 }
                             }
                         }
@@ -1443,8 +1470,22 @@ namespace emfio
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
                                 }
+                                const basegfx::B2DHomMatrix aTransformMatrix = basegfx::B2DHomMatrix(maXForm.eM11,
+                                                                                                     maXForm.eM21,
+                                                                                                     maXForm.eDx,
+                                                                                                     maXForm.eM12,
+                                                                                                     maXForm.eM22,
+                                                                                                     maXForm.eDy)
+                                             *
+                                        basegfx::B2DHomMatrix(
+                                            /* Row 0, Column 0 */ cxDest,
+                                            /* Row 0, Column 1 */ 0.0,
+                                            /* Row 0, Column 2 */ xDest,
+                                            /* Row 1, Column 0 */ 0.0,
+                                            /* Row 1, Column 1 */ cyDest,
+                                            /* Row 1, Column 2 */ yDest);
 
-                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
+                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aTransformMatrix, aRect, dwRop));
                             }
                         }
                     }
@@ -1514,7 +1555,15 @@ namespace emfio
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
                                 }
-                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
+
+                                const basegfx::B2DHomMatrix aTransformMatrix = basegfx::B2DHomMatrix(maXForm.eM11,
+                                                                                                     maXForm.eM21,
+                                                                                                     maXForm.eDx,
+                                                                                                     maXForm.eM12,
+                                                                                                     maXForm.eM22,
+                                                                                                     maXForm.eDy);
+
+                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aTransformMatrix, aRect, dwRop));
                             }
                         }
                     }
