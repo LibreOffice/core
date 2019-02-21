@@ -428,7 +428,7 @@ public:
     virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Window* pParent, const SfxItemSet& rAttr,
                                                                     const css::uno::Reference< css::frame::XFrame >& _rxFrame) = 0;
     virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, bool bPrevNext = false) = 0;
-    virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) override = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override = 0;
 
     virtual DialogGetRanges                    GetDialogGetRangesFunc() = 0;
 

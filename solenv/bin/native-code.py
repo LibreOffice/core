@@ -472,7 +472,6 @@ custom_widgets = [
     'RowEdit',
     'RubyEdit',
     'RubyPreview',
-    'SFTreeListBox',
     'SameContentListBox',
     'ScAutoFmtPreview',
     'ScCondFormatList',
