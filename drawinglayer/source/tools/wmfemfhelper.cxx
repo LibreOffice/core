@@ -515,6 +515,7 @@ namespace wmfemfhelper
             const bool bDashDotUsed(LineStyle::Dash == rLineInfo.GetStyle());
             const bool bWidthUsed(rLineInfo.GetWidth() > 1);
 
+            SAL_INFO("drawinglayer", "EMF\t createLinePrimitive, count: " << rLinePolygon.count() << " rLineInfo.GetWidth() :" << rLineInfo.GetWidth() );
             if(bDashDotUsed || bWidthUsed)
             {
                 basegfx::B2DPolygon aLinePolygon(rLinePolygon);
@@ -1694,6 +1695,7 @@ namespace wmfemfhelper
                 case MetaActionType::ARC :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::ARC");
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
@@ -1708,6 +1710,7 @@ namespace wmfemfhelper
                 case MetaActionType::PIE :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::PIE");
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
@@ -1722,6 +1725,7 @@ namespace wmfemfhelper
                 case MetaActionType::CHORD :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::CHORD");
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
@@ -1736,6 +1740,7 @@ namespace wmfemfhelper
                 case MetaActionType::POLYLINE :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::POLYLINE" << rPropertyHolders.Current().getTransformation());
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
@@ -1747,6 +1752,7 @@ namespace wmfemfhelper
                 case MetaActionType::POLYGON :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::POLYGON");
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pAction);
@@ -1768,6 +1774,7 @@ namespace wmfemfhelper
                 case MetaActionType::POLYPOLYGON :
                 {
                     /** CHECKED, WORKS WELL */
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::POLYPOLYGON");
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pAction);
@@ -1932,6 +1939,7 @@ namespace wmfemfhelper
                     const tools::Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::TEXTRECT");
                     if(!rRectangle.IsEmpty() && 0 != nStringLength)
                     {
                         // The problem with this action is that it describes unlayouted text
@@ -1990,6 +1998,7 @@ namespace wmfemfhelper
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
                     const BitmapEx aBitmapEx(pA->GetBitmap());
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMP");
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -1999,7 +2008,7 @@ namespace wmfemfhelper
                     /** CHECKED, WORKS WELL */
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     const BitmapEx aBitmapEx(pA->GetBitmap());
-
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMPSCALE" << rPropertyHolders.Current().getTransformation());
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -2010,6 +2019,7 @@ namespace wmfemfhelper
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMPSCALEPART");
                     if(!rBitmap.IsEmpty())
                     {
                         Bitmap aCroppedBitmap(rBitmap);
@@ -2032,6 +2042,7 @@ namespace wmfemfhelper
                     const MetaBmpExAction* pA = static_cast<const MetaBmpExAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMPEX");
                     createBitmapExPrimitive(rBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -2042,6 +2053,7 @@ namespace wmfemfhelper
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMPEXSCALE");
                     createBitmapExPrimitive(rBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -2052,6 +2064,7 @@ namespace wmfemfhelper
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::BMPEXSCALEPART");
                     if(!rBitmapEx.IsEmpty())
                     {
                         BitmapEx aCroppedBitmapEx(rBitmapEx);
@@ -2074,6 +2087,7 @@ namespace wmfemfhelper
                     const MetaMaskAction* pA = static_cast<const MetaMaskAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::MASK");
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -2084,6 +2098,7 @@ namespace wmfemfhelper
                     const MetaMaskScaleAction* pA = static_cast<const MetaMaskScaleAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::MASKSCALE");
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
@@ -2094,6 +2109,7 @@ namespace wmfemfhelper
                     const MetaMaskScalePartAction* pA = static_cast<const MetaMaskScalePartAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::MASKSCALEPART");
                     if(!rBitmap.IsEmpty())
                     {
                         Bitmap aCroppedBitmap(rBitmap);
@@ -2517,6 +2533,7 @@ namespace wmfemfhelper
                     const MapMode& rMapMode = pA->GetMapMode();
                     basegfx::B2DHomMatrix aMapping;
 
+                    SAL_INFO("drawinglayer", "EMF\t MetaActionType::MAPMODE");
                     if(MapUnit::MapRelative == rMapMode.GetMapUnit())
                     {
                         aMapping = getTransformFromMapMode(rMapMode);
