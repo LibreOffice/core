@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f3712ae2",
+        "filename": "sal/CppunitTest_sal_comtools.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-21T14:45:56Z",
+      "side": 1,
+      "message": "Something of a nitpick:  There should only be a single empty line here.  (For new files, this boilerplate should be copied from the file TEMPLATE.SOURCECODE.HEADER in the root of the source tree; that would also add the missing \"fill-column: 100\" to the Emacs mode line above.)",
+      "revId": "f1a79cec340e396e5eff64f674969c6bfabbda2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_93ab161c",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-21T14:45:56Z",
+      "side": 1,
+      "message": "this target must only be available on Windows, you need to wrap it in\n\n  $(if $(filter WNT,$(OS)),...)\n\n(and I would move it up directly below the line for CppunitTest_Module_DLL; that would have the benefit of keeping the list of these CppunitTest_* sorted lexicographically on Unicode code point values, and would also nicely sort the $(if\u0027ed ones together)",
+      "revId": "f1a79cec340e396e5eff64f674969c6bfabbda2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
