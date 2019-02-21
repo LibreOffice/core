@@ -34,7 +34,6 @@
 class LoginErrorInfo
 {
 private:
-    OUString m_aTitle;
     OUString m_aServer;
     OUString m_aAccount;
     OUString m_aUserName;
@@ -72,8 +71,6 @@ public:
     sal_uInt8       GetFlags() const        { return m_nFlags; }
     DialogMask   GetResult() const       { return m_nRet; }
 
-    void            SetTitle( const OUString& aTitle )
-                    { m_aTitle = aTitle; }
     void            SetServer( const OUString& aServer )
                     { m_aServer = aServer; }
     void            SetAccount( const OUString& aAccount )
