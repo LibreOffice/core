@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_targets,sal,\
 
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
+	$(if $(filter WNT,$(OS)),CppunitTest_sal_comtools) \
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl \
 	CppunitTest_sal_rtl \
