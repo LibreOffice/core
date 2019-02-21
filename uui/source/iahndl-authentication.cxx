@@ -236,7 +236,6 @@ handleAuthenticationRequest_(
     }
 
     LoginErrorInfo aInfo;
-    aInfo.SetTitle(rRequest.ServerName);
     aInfo.SetServer(rRequest.ServerName);
     if (rRequest.HasAccount)
         aInfo.SetAccount(rRequest.Account);
