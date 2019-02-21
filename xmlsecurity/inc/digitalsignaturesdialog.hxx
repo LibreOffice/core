@@ -48,8 +48,6 @@ class HeaderBar;
 class DigitalSignaturesDialog : public weld::GenericDialogController
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext >& mxCtx;
-
     DocumentSignatureManager maSignatureManager;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;

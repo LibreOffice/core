@@ -53,7 +53,6 @@ enum class UserAction
 class CertificateChooser : public weld::GenericDialogController
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxCtx;
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
@@ -81,7 +80,6 @@ private:
 
 public:
     CertificateChooser(weld::Window* pParent,
-                       css::uno::Reference< css::uno::XComponentContext> const & rxCtx,
                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
                        UserAction eAction);
     virtual ~CertificateChooser() override;

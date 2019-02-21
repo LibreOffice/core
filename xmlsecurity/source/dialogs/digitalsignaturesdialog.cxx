@@ -110,7 +110,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
     : GenericDialogController(pParent, "xmlsec/ui/digitalsignaturesdialog.ui", "DigitalSignaturesDialog")
-    , mxCtx(rxCtx)
     , maSignatureManager(rxCtx, eMode)
     , m_sODFVersion (sODFVersion)
     , m_bHasDocumentSignature(bHasDocumentSignature)
@@ -375,7 +374,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        CertificateChooser aChooser(m_xDialog.get(), mxCtx, xSecContexts, UserAction::Sign);
+        CertificateChooser aChooser(m_xDialog.get(), xSecContexts, UserAction::Sign);
         if (aChooser.run() == RET_OK)
         {
             sal_Int32 nSecurityId;

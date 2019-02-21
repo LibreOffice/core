@@ -652,7 +652,7 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
             xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    CertificateChooser aChooser(Application::GetFrameWeld(mxParentWindow), mxCtx, xSecContexts, eAction);
+    CertificateChooser aChooser(Application::GetFrameWeld(mxParentWindow), xSecContexts, eAction);
 
     uno::Sequence< Reference< css::security::XCertificate > > xCerts(1);
     xCerts[0] = Reference< css::security::XCertificate >(nullptr);
