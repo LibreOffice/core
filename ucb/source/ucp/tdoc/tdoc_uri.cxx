@@ -105,15 +105,6 @@ void Uri::init() const
             m_aDocId = m_aPath.copy( 1, nSlash - 1 );
     }
 
-    if ( !m_aDocId.isEmpty() )
-    {
-        sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
-        if ( nSlash != - 1 )
-            m_aInternalPath = m_aPath.copy( nSlash );
-        else
-            m_aInternalPath = "/";
-    }
-
     m_eState = VALID;
 
 }

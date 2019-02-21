@@ -37,7 +37,6 @@ class Uri
     mutable OUString m_aParentUri;
     mutable OUString m_aPath;
     mutable OUString m_aDocId;
-    mutable OUString m_aInternalPath;
     mutable OUString m_aName;
     mutable OUString m_aDecodedName;
     mutable State           m_eState;
@@ -86,7 +85,6 @@ inline void Uri::setUri( const OUString & rUri )
     m_aUri = rUri;
     m_aParentUri.clear();
     m_aDocId.clear();
-    m_aInternalPath.clear();
     m_aPath.clear();
     m_aName.clear();
     m_aDecodedName.clear();

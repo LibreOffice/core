@@ -46,7 +46,6 @@ void HierarchyUri::init() const
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
         m_aService.clear();
         m_aParentUri.clear();
-        m_aName.clear();
 
         // URI must match at least: <sheme>:
         if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 )
@@ -165,7 +164,6 @@ void HierarchyUri::init() const
                  ( nLastSlash != m_aUri.getLength() - 1 ) ) // root
             {
                 m_aParentUri = m_aUri.copy( 0, nLastSlash );
-                m_aName      = m_aUri.copy( nLastSlash + 1 );
             }
 
             // success
