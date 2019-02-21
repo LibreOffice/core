@@ -56,7 +56,6 @@ namespace DOM
 
         css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
         css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
-        css::uno::Reference< css::xml::sax::XLocator > m_aLocator;
 
 
     public:
