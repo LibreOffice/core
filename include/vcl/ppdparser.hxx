@@ -67,7 +67,6 @@ class VCL_DLLPUBLIC PPDKey
     value_type          m_aOrderedValues;
     const PPDValue*     m_pDefaultValue;
     bool                m_bQueryValue;
-    PPDValue            m_aQueryValue;
     OUString            m_aGroup;
 
 public:

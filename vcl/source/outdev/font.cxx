@@ -62,7 +62,6 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetAlignment( TextAlign::ALIGN_TOP );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetQuality( rData.GetQuality() );
-        aFontMetric.SetMapNames( rData.GetMapNames() );
     }
 
     return aFontMetric;
@@ -234,7 +233,6 @@ FontMetric OutputDevice::GetFontMetric() const
 
     // get miscellaneous data
     aMetric.SetQuality( xFontMetric->GetQuality() );
-    aMetric.SetMapNames( xFontMetric->GetMapNames() );
 
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 

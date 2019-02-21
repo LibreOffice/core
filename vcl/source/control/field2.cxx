@@ -791,7 +791,6 @@ void PatternFormatter::SetMask( const OString& rEditMask,
 
 void PatternFormatter::SetString( const OUString& rStr )
 {
-    maFieldString = rStr;
     if ( GetField() )
     {
         GetField()->SetText( rStr );

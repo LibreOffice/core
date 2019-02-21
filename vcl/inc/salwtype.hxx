@@ -238,7 +238,6 @@ struct SalFrameState
 struct SalInputContext
 {
     rtl::Reference<LogicalFontInstance> mpFont;
-    LanguageType           meLanguage;
     InputContextFlags      mnOptions;
 };
 

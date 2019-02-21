@@ -1743,7 +1743,6 @@ void Window::ImplNewInputContext()
         if ( pFontInstance )
             aNewContext.mpFont = pFontInstance;
     }
-    aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
@@ -1858,10 +1857,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
                 aPos = OutputToScreenPixel(Point(0, 0));
             tools::Rectangle   aRect( aPos, GetSizePixel() );
-            OUString      aHelpText;
-            if ( !rStr.isEmpty() )
-                aHelpText = GetHelpText();
-            Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QuickHelpFlags::CtrlText );
+            Help::ShowQuickHelp( this, aRect, rStr, QuickHelpFlags::CtrlText );
         }
     }
     else if (!mpWindowImpl->maHelpRequestHdl.IsSet() || mpWindowImpl->maHelpRequestHdl.Call(*this))

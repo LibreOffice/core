@@ -85,7 +85,6 @@ private:
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
-    Point           maMouseStart;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
     Size            maMaxOutSize;
@@ -217,7 +216,6 @@ private:
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
-    Point           maMouseStart;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
     long            mnTrackX;

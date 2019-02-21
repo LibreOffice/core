@@ -89,7 +89,6 @@ class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {
 private:
     OString                m_aEditMask;
-    OUString               maFieldString;
     OUString               maLiteralMask;
     bool                   mbSameMask;
     bool                   mbInPattKeyInput;

@@ -3864,17 +3864,17 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 
             // get text and display it
             OUString aStr = GetQuickHelpText( nItemId );
-            const OUString& rHelpStr = GetHelpText( nItemId );
             if (aStr.isEmpty())
                 aStr = MnemonicGenerator::EraseAllMnemonicChars( GetItemText( nItemId ) );
             if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
             {
+                const OUString& rHelpStr = GetHelpText( nItemId );
                 if (!rHelpStr.isEmpty())
                     aStr = rHelpStr;
                 Help::ShowBalloon( this, aHelpPos, aTempRect, aStr );
             }
             else
-                Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QuickHelpFlags::CtrlText );
+                Help::ShowQuickHelp( this, aTempRect, aStr, QuickHelpFlags::CtrlText );
             return;
         }
     }
