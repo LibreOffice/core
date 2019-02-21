@@ -85,6 +85,8 @@ namespace sw {
             virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
             virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
 
+            virtual void deleteFieldmarkAt(const SwPosition& rPos) override;
+
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
             // Annotation Marks
