@@ -20,17 +20,8 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/svlbitm.hxx>
 #include <svtools/svmedit2.hxx>
-#include <vcl/treelistbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -146,7 +137,6 @@ struct TURLInfo
     ERecoveryState RecoveryState;
 
     /// standard icon
-    Image StandardImage;
     OUString StandardImageId;
 
     public:
@@ -294,68 +284,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
         css::util::URL impl_getParsedURL(const OUString& sURL);
 };
 
-
-class PluginProgressWindow : public vcl::Window
-{
-    private:
-        css::uno::Reference< css::lang::XComponent > m_xProgress;
-    public:
-        PluginProgressWindow(      vcl::Window*                                       pParent  ,
-                             const css::uno::Reference< css::lang::XComponent >& xProgress);
-        virtual ~PluginProgressWindow() override;
-        virtual void dispose() override;
-};
-
-class PluginProgress : public ::cppu::WeakImplHelper< css::task::XStatusIndicator ,
-                                                       css::lang::XComponent       >
-{
-    // member
-    private:
-        /** @short  TODO */
-        css::uno::Reference< css::task::XStatusIndicatorFactory > m_xProgressFactory;
-
-        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
-
-        VclPtr<PluginProgressWindow> m_pPlugProgressWindow;
-
-
-    // native interface
-    public:
-        /** @short  TODO */
-        PluginProgress(      vcl::Window*                                             pParent,
-                       const css::uno::Reference< css::uno::XComponentContext >& xContext  );
-
-
-        /** @short  TODO */
-        virtual ~PluginProgress() override;
-
-
-    // uno interface
-    public:
-
-
-        // XStatusIndicator
-        virtual void SAL_CALL start(const OUString& sText ,
-                                          sal_Int32        nRange) override;
-
-        virtual void SAL_CALL end() override;
-
-        virtual void SAL_CALL setText(const OUString& sText) override;
-
-        virtual void SAL_CALL setValue(sal_Int32 nValue) override;
-
-        virtual void SAL_CALL reset() override;
-
-
-        // XComponent
-        virtual void SAL_CALL dispose() override;
-
-        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener) override;
-
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
-};
-
-class WeldPluginProgress : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XComponent>
+class PluginProgress : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XComponent>
 {
 // member
 private:
@@ -364,8 +293,8 @@ private:
 
 // native interface
 public:
-    WeldPluginProgress(weld::ProgressBar* pProgressBar);
-    virtual ~WeldPluginProgress() override;
+    PluginProgress(weld::ProgressBar* pProgressBar);
+    virtual ~PluginProgress() override;
 
 // uno interface
 public:
@@ -454,64 +383,11 @@ class SaveProgressDialog : public weld::GenericDialogController
         virtual void end() override;
 };
 
-
-class RecovDocListEntry : public SvLBoxString
-{
-public:
-
-    /** @short TODO */
-    RecovDocListEntry( const OUString&      sText );
-
-
-    /** @short TODO */
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-};
-
-
-class RecovDocList : public SvSimpleTable
-{
-
-    // member
-    public:
-
-        Image  m_aGreenCheckImg;
-        Image  m_aYellowCheckImg;
-        Image  m_aRedCrossImg;
-
-        OUString m_aSuccessRecovStr;
-        OUString m_aOrigDocRecovStr;
-        OUString m_aRecovFailedStr;
-        OUString m_aRecovInProgrStr;
-        OUString m_aNotRecovYetStr;
-
-
-    // interface
-    public:
-
-
-        /** @short TODO */
-        RecovDocList(SvSimpleTableContainer& rParent);
-
-        /** @short TODO */
-        virtual void InitEntry(SvTreeListEntry* pEntry,
-                               const OUString& rText,
-                               const Image& rImage1,
-                               const Image& rImage2,
-                               SvLBoxButtonKind eButtonKind) override;
-};
-
-
-class RecoveryDialog : public Dialog
+class RecoveryDialog : public weld::GenericDialogController
                      , public IRecoveryUpdateListener
 {
     // member
     private:
-        VclPtr<FixedText>      m_pDescrFT;
-        VclPtr<vcl::Window>    m_pProgrParent;
-        VclPtr<RecovDocList>   m_pFileListLB;
-        VclPtr<PushButton>     m_pNextBtn;
-        VclPtr<PushButton>     m_pCancelBtn;
         OUString const        m_aTitleRecoveryInProgress;
         OUString const        m_aRecoveryOnlyFinish;
         OUString const        m_aRecoveryOnlyFinishDescr;
@@ -533,14 +409,29 @@ class RecoveryDialog : public Dialog
         bool  m_bWaitForCore;
         bool  m_bWasRecoveryStarted;
 
+        OUString m_aGreenCheckImg;
+        OUString m_aYellowCheckImg;
+        OUString m_aRedCrossImg;
+
+        OUString m_aSuccessRecovStr;
+        OUString m_aOrigDocRecovStr;
+        OUString m_aRecovFailedStr;
+        OUString m_aRecovInProgrStr;
+        OUString m_aNotRecovYetStr;
+
+        std::unique_ptr<weld::Label> m_xDescrFT;
+        std::unique_ptr<weld::ProgressBar> m_xProgressBar;
+        std::unique_ptr<weld::TreeView> m_xFileListLB;
+        std::unique_ptr<weld::Button> m_xNextBtn;
+        std::unique_ptr<weld::Button> m_xCancelBtn;
+
     // member
     public:
         /** @short TODO */
-        RecoveryDialog(vcl::Window*       pParent,
-                       RecoveryCore* pCore  );
+        RecoveryDialog(weld::Window* pParent,
+                       RecoveryCore* pCore);
 
         virtual ~RecoveryDialog() override;
-        virtual void dispose() override;
 
         // IRecoveryUpdateListener
         virtual void updateItems() override;
@@ -552,13 +443,11 @@ class RecoveryDialog : public Dialog
 
     // helper
     private:
-        /** @short TODO */
-        DECL_LINK(NextButtonHdl, Button*, void);
-        DECL_LINK(CancelButtonHdl, Button*, void);
+        DECL_LINK(NextButtonHdl, weld::Button&, void);
+        DECL_LINK(CancelButtonHdl, weld::Button&, void);
 
-
-        /** @short TODO */
         OUString impl_getStatusString( const TURLInfo& rInfo ) const;
+        OUString impl_getStatusImage( const TURLInfo& rInfo ) const;
 };
 
 
