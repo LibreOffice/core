@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d3550e52",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-02-21T13:14:39Z",
+      "side": 1,
+      "message": "That seems a tad brittle? If indeed there\u0027s no way to fix that on import, I\u0027d much prefer a separate, explicit marker property on the SvxShape, that the import sets.",
+      "revId": "6de688331b1251d394506a73526c63ac1a8b0557",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
