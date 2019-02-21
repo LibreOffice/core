@@ -56,12 +56,13 @@ enum class SdrHitKind;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SwEditWin final : public vcl::Window,
+class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
     static  QuickHelpData* m_pQuickHlpData;
 
-    static  long    m_nDDStartPosX, m_nDDStartPosY;
+    static  long    m_nDDStartPosX;
+    static  long    m_nDDStartPosY;
 
     Color m_aWaterCanTextColor;     // text color; for the watering can
     Color m_aWaterCanTextBackColor; // text background; for the watering can

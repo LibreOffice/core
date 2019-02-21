@@ -3276,7 +3276,8 @@ SvxFrameDirection SwCursorShell::GetTextDirection( const Point* pPt ) const
 bool SwCursorShell::IsInVerticalText( const Point* pPt ) const
 {
     const SvxFrameDirection nDir = GetTextDirection( pPt );
-    return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir;
+    return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir
+           || nDir == SvxFrameDirection::Vertical_LR_BT;
 }
 
 bool SwCursorShell::IsInRightToLeftText() const
