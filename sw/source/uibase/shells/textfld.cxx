@@ -74,6 +74,7 @@
 #include <MarkManager.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentUndoRedo.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -721,6 +722,8 @@ FIELD_INSERT:
 
             case FN_INSERT_TEXT_FORMFIELD:
             {
+                rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+
                 SwPaM* pCursorPos = rSh.GetCursor();
                 if(pCursorPos)
                 {
@@ -735,26 +738,39 @@ FIELD_INSERT:
                         pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT);
                     }
                 }
+
+                rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+                rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
             }
             break;
             case FN_INSERT_CHECKBOX_FORMFIELD:
             {
+                rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+
                 SwPaM* pCursorPos = rSh.GetCursor();
                 if(pCursorPos)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                     pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMCHECKBOX);
                 }
+
+                rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+                rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
             }
             break;
             case FN_INSERT_DROPDOWN_FORMFIELD:
             {
+                rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+
                 SwPaM* pCursorPos = rSh.GetCursor();
                 if(pCursorPos)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                     pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDROPDOWN);
                 }
+
+                rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+                rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
             }
             break;
             default:
