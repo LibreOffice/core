@@ -19,18 +19,13 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/objsh.hxx>
-#include <osl/module.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/svxerr.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <sot/storage.hxx>
 
 #include <sdpptwrp.hxx>
-#include "ppt/pptin.hxx"
-#include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <tools/urlobj.hxx>
 
 
 using namespace ::com::sun::star::uno;

@@ -49,18 +49,14 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
-#include <rtl/ustrbuf.hxx>
 
-#include <vcl/vclenum.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
-#include <svx/svdotext.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
 #include "pptexanimations.hxx"
 #include "pptexsoundcollection.hxx"
 #include "../ppt/pptanimations.hxx"
 #include <filter/msfilter/escherex.hxx>
-#include <osl/endian.h>
+#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 

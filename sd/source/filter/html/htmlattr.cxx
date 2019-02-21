@@ -18,7 +18,6 @@
  */
 
 #include "htmlattr.hxx"
-#include "htmlex.hxx"
 #include <sdresid.hxx>
 #include <strings.hrc>
 #include <vcl/decoview.hxx>
