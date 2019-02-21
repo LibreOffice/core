@@ -1543,7 +1543,6 @@ void SwMailMergeConfigItem::DocumentReloaded()
 {
     m_bGreetingInserted = false;
     m_bAddressInserted = false;
-    m_rAddressBlockFrame.clear();
 }
 
 bool SwMailMergeConfigItem::IsMailAvailable() const

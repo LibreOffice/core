@@ -32,7 +32,6 @@ using namespace ::com::sun::star;
 SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) :
     SwVbaColumn_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnIndex( nIndex )
 {
-    mxTableColumns = mxTextTable->getColumns();
 }
 
 SwVbaColumn::~SwVbaColumn()

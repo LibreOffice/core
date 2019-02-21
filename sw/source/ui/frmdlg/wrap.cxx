@@ -396,7 +396,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 
         aVal.nWidth  = aSize.Width();
         aVal.nHeight = aSize.Height();
-        m_aFrameSize = aSize;
 
         aMgr.ValidateMetrics(aVal, nullptr);
 

@@ -61,7 +61,6 @@ class SW_DLLPUBLIC SwTOXMark
     OUString m_aAltText;    // Text of caption is different.
     OUString m_aPrimaryKey;
     OUString m_aSecondaryKey;
-    OUString m_aCitationKeyReading;
 
     // three more strings for phonetic sorting
     OUString m_aTextReading;
@@ -120,7 +119,6 @@ public:
     inline void             SetTextReading(const OUString& rStr);
     inline void             SetPrimaryKeyReading(const OUString& rStr );
     inline void             SetSecondaryKeyReading(const OUString& rStr);
-    inline void             SetCitationKeyReading(const OUString& rStr);
 
     inline OUString const & GetPrimaryKey() const;
     inline OUString const & GetSecondaryKey() const;
@@ -589,12 +587,6 @@ inline void SwTOXMark::SetPrimaryKeyReading( const OUString& rKey )
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     m_aPrimaryKeyReading = rKey;
-}
-
-inline void SwTOXMark::SetCitationKeyReading( const OUString& rKey )
-{
-    SAL_WARN_IF(GetTOXType()->GetType() != TOX_CITATION, "sw", "Wrong type");
-    m_aCitationKeyReading = rKey;
 }
 
 inline void SwTOXMark::SetSecondaryKeyReading( const OUString& rKey )

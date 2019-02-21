@@ -1877,11 +1877,7 @@ SwXDocumentIndexMark::attach(
             aMark.SetMainEntry(m_pImpl->m_bMainEntry);
         break;
         case TOX_CITATION:
-        if (!m_pImpl->m_sCitaitonText.isEmpty())
-        {
-            aMark.SetCitationKeyReading(m_pImpl->m_sCitaitonText);
-        }
-        aMark.SetMainEntry(m_pImpl->m_bMainEntry);
+            aMark.SetMainEntry(m_pImpl->m_bMainEntry);
         break;
         case TOX_USER:
         case TOX_CONTENT:
