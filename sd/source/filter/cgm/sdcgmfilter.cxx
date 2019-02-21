@@ -18,12 +18,9 @@
  */
 
 #include <memory>
-#include <osl/module.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
 

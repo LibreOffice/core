@@ -17,59 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/GraphicType.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
-
-#include <unotools/localfilehelper.hxx>
-#include <vcl/errinf.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/virdev.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/frame.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdpagv.hxx>
-
-#include <strings.hrc>
-#include <DrawViewShell.hxx>
-#include <DrawDocShell.hxx>
-#include <ClientView.hxx>
-#include <FrameView.hxx>
-
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <unotools/pathoptions.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <svx/xoutbmp.hxx>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
-#include <sdresid.hxx>
 #include <sdpdffilter.hxx>
-#include <ViewShellBase.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <DrawController.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
@@ -82,7 +35,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
-using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell)

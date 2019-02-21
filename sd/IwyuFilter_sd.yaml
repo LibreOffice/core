@@ -381,3 +381,22 @@ blacklist:
     sd/source/core/text/textapi.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
+    sd/source/filter/eppt/epptso.cxx:
+    # Needed for direct member access
+    - com/sun/star/table/XTable.hpp
+    sd/source/filter/eppt/pptx-epptooxml.cxx:
+    # Needed for direct member access
+    - com/sun/star/task/XStatusIndicator.hpp
+    - com/sun/star/frame/XModel.hpp
+    sd/source/filter/eppt/pptx-text.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XBitmap.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/style/TabStop.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    sd/source/filter/xml/sdxmlwrp.cxx:
+    # Needed for implicit dtor
+    - editeng/outlobj.hxx
+    sd/source/filter/xml/sdtransform.cxx:
+    # Needed for implicit dtor
+    - editeng/outlobj.hxx

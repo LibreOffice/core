@@ -19,30 +19,20 @@
 
 #include "htmlex.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/imaprect.hxx>
 #include <vcl/imapcirc.hxx>
@@ -50,11 +40,8 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svtools/htmlout.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/wghtitem.hxx>
@@ -68,10 +55,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdotable.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <svtools/sfxecode.hxx>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <unotools/resmgr.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -82,7 +66,6 @@
 #include "htmlpublishmode.hxx"
 #include <Outliner.hxx>
 #include <sdpage.hxx>
-#include <sdattr.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <anminfo.hxx>
