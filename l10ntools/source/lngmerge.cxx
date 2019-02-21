@@ -209,9 +209,7 @@ void LngParser::Merge(
                 {
                     sLang = sLang.trim();
 
-                    OString sSearch( ";" );
-                    sSearch += sLang;
-                    sSearch += ";";
+                    OString sSearch{ ";" + sLang + ";" };
 
                     if ( sLanguagesDone.indexOf( sSearch ) != -1 ) {
                         mvLines.erase( mvLines.begin() + nPos );
@@ -226,14 +224,11 @@ void LngParser::Merge(
                                 continue;
 
                             if ( !sNewText.isEmpty()) {
-                                OString & rLine = mvLines[ nPos ];
-
-                                OString sText1( sLang );
-                                sText1 += " = \"";
-                                // escape quotes, unescape double escaped quotes fdo#56648
-                                sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
-                                sText1 += "\"";
-                                rLine = sText1;
+                                mvLines[ nPos ] = sLang
+                                    + " = \""
+                                    // escape quotes, unescape double escaped quotes fdo#56648
+                                    + sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"")
+                                    + "\"";
                                 Text[ sLang ] = sNewText;
                             }
                         }
@@ -264,12 +259,11 @@ void LngParser::Merge(
                         continue;
                     if ( !sNewText.isEmpty() && sCur != "x-comment")
                     {
-                        OString sLine;
-                        sLine += sCur;
-                        sLine += " = \"";
-                        // escape quotes, unescape double escaped quotes fdo#56648
-                        sLine += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
-                        sLine += "\"";
+                        const OString sLine { sCur
+                            + " = \""
+                            // escape quotes, unescape double escaped quotes fdo#56648
+                            + sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"")
+                            + "\"" };
 
                         nLastLangPos++;
                         nPos++;
