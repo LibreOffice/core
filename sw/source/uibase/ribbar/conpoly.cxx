@@ -33,15 +33,6 @@ ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* p
 {
 }
 
-bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
-    if (bReturn)
-        aLastPos = rMEvt.GetPosPixel();
-
-    return bReturn;
-}
-
 bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     bool bReturn = SwDrawBase::MouseMove(rMEvt);

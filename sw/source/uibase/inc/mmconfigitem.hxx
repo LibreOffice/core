@@ -56,7 +56,6 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     bool m_bAddressInserted;
     bool m_bGreetingInserted;
     sal_Int32 m_nGreetingMoves;
-    OUString m_rAddressBlockFrame;
     std::set<sal_Int32> m_aExcludedRecords;
     css::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
 
@@ -207,10 +206,9 @@ public:
 
     //session information
     bool IsAddressInserted() const { return m_bAddressInserted; }
-    void SetAddressInserted(const OUString& rFrameName)
+    void SetAddressInserted()
     {
         m_bAddressInserted = true;
-        m_rAddressBlockFrame = rFrameName;
     }
 
     bool IsGreetingInserted() const

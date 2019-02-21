@@ -266,7 +266,7 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView const * p
         pAddressBlockFormat = InsertAddressFrame( pView->GetWrtShell(),
                                         rConfigItem,
                                         aAddressPosition, bAlignToBody, false);
-        rConfigItem.SetAddressInserted(pAddressBlockFormat->GetName());
+        rConfigItem.SetAddressInserted();
     }
     //now the greeting
     if(rConfigItem.IsGreetingLine(false) && !rConfigItem.IsGreetingInserted())
