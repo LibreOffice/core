@@ -48,14 +48,10 @@ class DomainMapper;
  */
 class OLEHandler : public LoggedProperties
 {
-    OUString     m_sObjectType;
     OUString     m_sProgId;
-    OUString     m_sShapeId;
     OUString     m_sDrawAspect;
     OUString     m_sVisAreaWidth;
     OUString     m_sVisAreaHeight;
-    OUString     m_sObjectId;
-    OUString     m_sr_id;
     /// The stream URL right after the import of the raw data.
     OUString     m_aURL;
 
@@ -64,7 +60,6 @@ class OLEHandler : public LoggedProperties
     css::uno::Reference<css::drawing::XShape> m_xShape;
 
     css::awt::Size m_aShapeSize;
-    css::awt::Point m_aShapePosition;
 
     css::uno::Reference<css::graphic::XGraphic> m_xReplacement;
 

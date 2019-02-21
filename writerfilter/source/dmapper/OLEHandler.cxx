@@ -74,22 +74,18 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
     switch( rName )
     {
         case NS_ooxml::LN_CT_OLEObject_Type:
-            m_sObjectType = sStringValue;
         break;
         case NS_ooxml::LN_CT_OLEObject_ProgID:
             m_sProgId = sStringValue;
         break;
         case NS_ooxml::LN_CT_OLEObject_ShapeID:
-            m_sShapeId = sStringValue;
         break;
         case NS_ooxml::LN_CT_OLEObject_DrawAspect:
             m_sDrawAspect = sStringValue;
         break;
         case NS_ooxml::LN_CT_OLEObject_ObjectID:
-            m_sObjectId = sStringValue;
         break;
         case NS_ooxml::LN_CT_OLEObject_r_id:
-            m_sr_id = sStringValue;
         break;
         case NS_ooxml::LN_inputstream:
             rVal.getAny() >>= m_xInputStream;
@@ -125,7 +121,6 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(false));
 
                     m_aShapeSize = xTempShape->getSize();
-                    m_aShapePosition = xTempShape->getPosition();
 
                     xShapeProps->getPropertyValue( getPropertyName( PROP_BITMAP ) ) >>= m_xReplacement;
                 }

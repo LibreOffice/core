@@ -272,7 +272,6 @@ void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
             fontKey = sValue;
             break;
         case NS_ooxml::LN_CT_Rel_id:
-            id = sValue;
             break;
         case NS_ooxml::LN_CT_FontRel_subsetted:
             break; // TODO? Let's just ignore this for now and hope

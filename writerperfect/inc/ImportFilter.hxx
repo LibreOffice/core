@@ -153,23 +153,9 @@ public:
     }
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override
+    virtual void SAL_CALL
+    initialize(const css::uno::Sequence<css::uno::Any>& /*aArguments*/) override
     {
-        css::uno::Sequence<css::beans::PropertyValue> aAnySeq;
-        sal_Int32 nLength = aArguments.getLength();
-        if (nLength && (aArguments[0] >>= aAnySeq))
-        {
-            const css::beans::PropertyValue* pValue = aAnySeq.getConstArray();
-            nLength = aAnySeq.getLength();
-            for (sal_Int32 i = 0; i < nLength; i++)
-            {
-                if (pValue[i].Name == "Type")
-                {
-                    pValue[i].Value >>= msFilterName;
-                    break;
-                }
-            }
-        }
     }
 
 private:
@@ -181,7 +167,6 @@ private:
 
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxDoc;
-    OUString msFilterName;
 };
 }
 

@@ -231,10 +231,6 @@ namespace dmapper
 
 struct SettingsTable_Impl
 {
-    OUString     m_sCharacterSpacing;
-    OUString     m_sDecimalSymbol;
-    OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
-
     int                 m_nDefaultTabStop;
 
     bool                m_bRecordChanges;
@@ -391,7 +387,6 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-    OUString sStringValue = pValue->getString();
 
     switch(nSprmId)
     {
@@ -424,15 +419,13 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
     break;
     case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
-    m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
+     // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
     break;
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
-    m_pImpl->m_sDecimalSymbol = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
-    m_pImpl->m_sListSeparatorForFields = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
