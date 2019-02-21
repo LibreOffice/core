@@ -56,7 +56,7 @@ enum class SdrHitKind;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SwEditWin final : public vcl::Window,
+class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
     static  QuickHelpData* m_pQuickHlpData;

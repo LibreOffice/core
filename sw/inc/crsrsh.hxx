@@ -258,8 +258,6 @@ private:
     SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
     SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
 
-    SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const Point* pPt = nullptr ) const;
-
     SAL_DLLPRIVATE bool isInHiddenTextFrame(SwShellCursor* pShellCursor);
 
     SAL_DLLPRIVATE bool GoStartWordImpl();
@@ -811,6 +809,7 @@ public:
     const SwRangeRedline* SelPrevRedline();
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect );
 
+    SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const Point* pPt = nullptr ) const;
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = nullptr ) const;
     // is cursor or the point in/over a right to left formatted text?
