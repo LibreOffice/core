@@ -604,8 +604,6 @@ std::vector<xmloff::AutoStyleEntry> SvXMLAutoStylePoolP_Impl::GetAutoStyleEntrie
             {
                 rReturnVector.emplace_back();
                 xmloff::AutoStyleEntry & rEntry = rReturnVector.back();
-                rEntry.m_aParentName = rParent->GetParent();
-                rEntry.m_aName = rProperty->GetName();
                 for (XMLPropertyState const & rPropertyState : rProperty->GetProperties())
                 {
                     if (rPropertyState.mnIndex >= 0)

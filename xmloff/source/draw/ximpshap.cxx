@@ -887,16 +887,6 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
             // draw:transform for compatibility
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
-
-        // #i68101#
-        else if( IsXMLToken( rLocalName, XML_TITLE ) )
-        {
-            maShapeTitle = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_DESC ) )
-        {
-            maShapeDescription = rValue;
-        }
     }
     else if (nPrefix == XML_NAMESPACE_STYLE)
     {

@@ -158,14 +158,12 @@ class XMLOFF_DLLPUBLIC XMLShapeExport : public salhelper::SimpleReferenceObject
 private:
 
     SvXMLExport&                                mrExport;
-    rtl::Reference< XMLPropertyHandlerFactory >   mxSdPropHdlFactory;
     rtl::Reference< SvXMLExportPropertyMapper >   mxPropertySetMapper;
     rtl::Reference< XMLAnimationsExporter >       mxAnimationsExporter;
     ShapesInfos                                 maShapesInfos;
     ShapesInfos::iterator                       maCurrentShapesIter;
     bool                                        mbExportLayer;
     ImplXMLShapeExportInfoVector                maShapeInfos;
-    ImplXMLShapeExportInfoVector::iterator      maCurrentInfo;
     OUString                                    msPresentationStylePrefix;
 
     // #88546# possibility to switch progress bar handling on/off

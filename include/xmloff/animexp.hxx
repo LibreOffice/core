@@ -35,7 +35,7 @@ class XMLAnimationsExporter : public salhelper::SimpleReferenceObject
     std::unique_ptr<AnimExpImpl> mpImpl;
 
 public:
-    XMLAnimationsExporter( XMLShapeExport* pShapeExp );
+    XMLAnimationsExporter();
     virtual ~XMLAnimationsExporter() override;
 
     static void prepare( const css::uno::Reference< css::drawing::XShape >& xShape );
