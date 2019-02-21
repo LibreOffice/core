@@ -833,13 +833,20 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
 
     // Take care of UTF-8 text here.
     OString aMimeType(pMimeType);
-    bool bConvert{ aMimeType.startsWith("text/plain;charset=utf-8") };
-    if (bConvert)
-        aMimeType = "text/plain;charset=utf-16";
+    bool bConvert = false;
+    sal_Int32 nIndex = 0;
+    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    {
+        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            bConvert = true;
+        }
+    }
 
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
-    if (bConvert || aMimeType == "text/plain;charset=utf-16")
+    if (aMimeType == "text/plain;charset=utf-16")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
