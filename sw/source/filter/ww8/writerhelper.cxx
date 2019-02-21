@@ -241,6 +241,7 @@ namespace ww8
                     else
                         meWriterType = eDrawing;
                     maSize = pObj->GetSnapRect().GetSize();
+                    maLayoutSize = maSize;
                 }
                 else
                 {
