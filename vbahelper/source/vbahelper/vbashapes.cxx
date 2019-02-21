@@ -215,7 +215,7 @@ ScVbaShapes::createShape( const OUString& service )
 }
 
 uno::Any
-ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange)
+ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight)
 {
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
@@ -241,12 +241,11 @@ ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWid
     xShape->setSize( size );
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange(rRange);
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
 uno::Any
-ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange)
+ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight)
 {
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
@@ -284,7 +283,6 @@ ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth
     xShape->setSize(size);
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange(rRange);
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
@@ -326,14 +324,13 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
 uno::Any SAL_CALL
 ScVbaShapes::AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
-    uno::Any _aAnchor;
     if (_nType == office::MsoAutoShapeType::msoShapeRectangle)
     {
-        return AddRectangle(_nLeft, _nTop, _nWidth, _nHeight, _aAnchor);
+        return AddRectangle(_nLeft, _nTop, _nWidth, _nHeight);
     }
     else if (_nType == office::MsoAutoShapeType::msoShapeOval)
     {
-        return AddEllipse(_nLeft, _nTop, _nWidth, _nHeight, _aAnchor);
+        return AddEllipse(_nLeft, _nTop, _nWidth, _nHeight);
     }
     return uno::Any();
 }

@@ -66,7 +66,6 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 const m_nType;
     css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Any m_aRange;
     void addListeners();
     /// @throws css::uno::RuntimeException
     void removeShapeListener();
@@ -79,7 +78,6 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType );
     virtual ~ScVbaShape() override;
-    void setRange( css::uno::Any aRange ) { m_aRange = aRange; };
 
     /// @throws css::uno::RuntimeException
     static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape >& rShape );
