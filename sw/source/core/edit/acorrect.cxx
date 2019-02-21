@@ -380,17 +380,15 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 pTextNd->getLayoutFrame(rEditSh.GetLayout())));
     assert(pFrame);
 
-    //JP 22.04.99: Bug 63883 - Special treatment for dots.
-    bool bLastCharIsPoint = nEndPos < pFrame->GetText().getLength() &&
-                            ('.' == pFrame->GetText()[nEndPos]);
-
+    const OUString sFrameText = pFrame->GetText();
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
-                pFrame->GetText(), rSttPos, nEndPos, *this, aLanguageTag);
+                sFrameText, rSttPos, nEndPos, *this, aLanguageTag);
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pFnd )
     {
         // replace also last colon of keywords surrounded by colons (for example, ":name:")
-        bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
+        const bool replaceLastChar = sFrameText.getLength() > nEndPos && pFnd->GetShort()[0] == ':'
+                                     && pFnd->GetShort().endsWith(":");
 
         SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(rSttPos)),
                    pFrame->MapViewToModelPos(TextFrameIndex(nEndPos + (replaceLastChar ? 1 : 0))));
@@ -398,6 +396,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         if( pFnd->IsTextOnly() )
         {
             //JP 22.04.99: Bug 63883 - Special treatment for dots.
+            const bool bLastCharIsPoint
+                = nEndPos < sFrameText.getLength() && ('.' == sFrameText[nEndPos]);
             if( !bLastCharIsPoint || pFnd->GetLong().isEmpty() ||
                 '.' != pFnd->GetLong()[ pFnd->GetLong().getLength() - 1 ] )
             {
