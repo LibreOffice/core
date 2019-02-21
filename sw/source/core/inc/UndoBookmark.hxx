@@ -24,10 +24,13 @@
 #include <undobj.hxx>
 
 class SwHistoryBookmark;
+class SwHistoryNoTextFieldmark;
+class SwHistoryTextFieldmark;
 
 namespace sw {
     namespace mark {
         class IMark;
+        class IFieldmark;
     }
 }
 
@@ -91,6 +94,30 @@ public:
 private:
     virtual SwRewriter GetRewriter() const override;
     static void Rename( ::sw::UndoRedoContext const &, const OUString& sFrom, const OUString& sTo );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+};
+
+class SwUndoInsNoTextFieldmark : public SwUndo
+{
+private:
+    const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
+
+public:
+    SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+};
+
+class SwUndoInsTextFieldmark : public SwUndo
+{
+private:
+    const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;
+
+public:
+    SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
