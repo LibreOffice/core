@@ -276,7 +276,6 @@ namespace xmloff
         // store it's instances in a map, but in a vector for faster access.
         struct AttributeAssignment
         {
-            OUString                 sAttributeName;         // the attribute name
             OUString                 sPropertyName;          // the property name
             css::uno::Type           aPropertyType;          // the property type
 

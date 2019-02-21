@@ -183,8 +183,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // #88546# init to sal_False
     mbHandleProgressBar( false )
 {
-    // construct PropertyHandlerFactory
-    mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), rExp );
     // construct PropertySetMapper
     mxPropertySetMapper = CreateShapePropMapper( mrExport );
     if( pExtMapper )
@@ -208,8 +206,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
         XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
         GetPropertySetMapper(),
         XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
-
-    maCurrentInfo = maShapeInfos.end();
 
     // create table export helper and let him add his families in time
     GetShapeTableExport();
@@ -552,7 +548,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     }
 
     maShapeInfos.push_back( aShapeInfo );
-    maCurrentInfo = maShapeInfos.begin();
 
     // check for shape collections (group shape or 3d scene)
     // and collect contained shapes style infos

@@ -226,7 +226,6 @@ class AnimExpImpl
 {
 public:
     list<XMLEffectHint> maEffects;
-    rtl::Reference< XMLShapeExport > mxShapeExp;
 
     static constexpr OUStringLiteral gsDimColor = "DimColor";
     static constexpr OUStringLiteral gsDimHide = "DimHide";
@@ -242,10 +241,9 @@ public:
     static constexpr OUStringLiteral gsAnimPath = "AnimationPath";
 };
 
-XMLAnimationsExporter::XMLAnimationsExporter( XMLShapeExport* pShapeExp )
+XMLAnimationsExporter::XMLAnimationsExporter()
     : mpImpl( new AnimExpImpl )
 {
-    mpImpl->mxShapeExp = pShapeExp;
 }
 
 XMLAnimationsExporter::~XMLAnimationsExporter()

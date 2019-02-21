@@ -261,7 +261,6 @@ namespace xmloff
         OUString sAttributeName = OUString::createFromAscii(_pAttributeName);
 
         AttributeAssignment aAssignment;
-        aAssignment.sAttributeName = sAttributeName;
         aAssignment.sPropertyName = _rPropertyName;
         aAssignment.aPropertyType = _rType;
 

@@ -161,8 +161,6 @@ public:
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
-    void SetTableNumberList( const OUString& rList )
-        { msTableNumberList = rList; }
 
     void InitRangeSegmentationProperties(
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
@@ -259,7 +257,6 @@ public:
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     bool mbRowSourceColumns;
     OUString msChartAddress;
-    OUString msTableNumberList;
     css::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     OUString const msCLSID;
@@ -3610,11 +3607,6 @@ void SchXMLExport::ExportContent_()
                             aAny >>= sChartAddress;
                             maExportHelper->m_pImpl->SetChartRangeAddress( sChartAddress );
 
-                            OUString sTableNumberList;
-                            aAny = xProp->getPropertyValue( "TableNumberList" );
-                            aAny >>= sTableNumberList;
-                            maExportHelper->m_pImpl->SetTableNumberList( sTableNumberList );
-
                             // do not include own table if there are external addresses
                             bIncludeTable = sChartAddress.isEmpty();
                         }
@@ -3669,8 +3661,6 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                     }
                     else if ( aArgs[i].Name == "SequenceMapping" )
                         aArgs[i].Value >>= maSequenceMapping;
-                    else if ( aArgs[i].Name == "TableNumberList" )
-                        aArgs[i].Value >>= msTableNumberList;
                 }
 
                 // #i79009# For Writer we have to export a broken version of the

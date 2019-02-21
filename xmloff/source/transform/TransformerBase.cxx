@@ -346,9 +346,8 @@ void SAL_CALL XMLTransformerBase::processingInstruction( const OUString& rTarget
     m_xHandler->processingInstruction( rTarget, rData );
 }
 
-void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator >& rLocator )
+void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator >& )
 {
-    m_xLocator = rLocator;
 }
 
 // XExtendedDocumentHandler

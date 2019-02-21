@@ -73,10 +73,6 @@ protected:
     OUString               maShapeId;
     OUString               maLayerName;
 
-    // #i68101#
-    OUString               maShapeTitle;
-    OUString               maShapeDescription;
-
     SdXMLImExTransform2D        mnTransform;
     css::awt::Size              maSize;
     sal_Int16                   mnRelWidth;

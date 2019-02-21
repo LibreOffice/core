@@ -377,8 +377,6 @@ void SvXMLImport::InitCtor_()
                              GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
     }
 
-    msPackageProtocol = "vnd.sun.star.Package:";
-
     if (mxNumberFormatsSupplier.is())
         mpNumImport = std::make_unique<SvXMLNumFmtHelper>(mxNumberFormatsSupplier, GetComponentContext());
 
@@ -399,7 +397,6 @@ SvXMLImport::SvXMLImport(
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
     mnImportFlags( nImportFlags ),
-    mnErrorFlags(SvXMLErrorFlags::NO),
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mbIsFormsSupported( true ),
@@ -1817,14 +1814,6 @@ void SvXMLImport::SetError(
     const OUString& rExceptionMessage,
     const Reference<xml::sax::XLocator>& rLocator )
 {
-    // maintain error flags
-    if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= SvXMLErrorFlags::ERROR_OCCURRED;
-    if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= SvXMLErrorFlags::WARNING_OCCURRED;
-    if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
-        mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
-
     // create error list on demand
     if ( !mpXMLErrors )
         mpXMLErrors = std::make_unique<XMLErrors>();

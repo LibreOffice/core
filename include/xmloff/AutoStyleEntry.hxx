@@ -22,8 +22,6 @@ namespace xmloff
 {
 struct XMLOFF_DLLPUBLIC AutoStyleEntry
 {
-    OUString m_aParentName;
-    OUString m_aName;
     std::vector<std::pair<OUString, css::uno::Any>> m_aXmlProperties;
 };
 

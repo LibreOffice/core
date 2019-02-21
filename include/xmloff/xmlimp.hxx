@@ -208,12 +208,10 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     std::unique_ptr<XMLEventImportHelper> mpEventImportHelper;
     std::unique_ptr<XMLErrors>  mpXMLErrors;
     rtl::Reference<StyleMap>    mpStyleMap;
-    OUString                    msPackageProtocol;
 
     SAL_DLLPRIVATE void InitCtor_();
 
     SvXMLImportFlags const  mnImportFlags;
-    SvXMLErrorFlags  mnErrorFlags;
     std::set< OUString > embeddedFontUrlsKnown;
     bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;

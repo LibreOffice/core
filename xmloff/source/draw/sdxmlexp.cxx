@@ -1770,7 +1770,7 @@ void SdXMLExport::ExportContent_()
                 else
                 {
                     // export old animations for ooo format
-                    rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+                    rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter();
                     GetShapeExport()->setAnimationsExporter( xAnimExport );
                 }
             }
@@ -2171,7 +2171,7 @@ void SdXMLExport::collectAutoStyles()
         // prepare animations exporter if impress
         if(IsImpress() && (!(getExportFlags() & SvXMLExportFlags::OASIS)) )
         {
-            rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+            rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter();
             GetShapeExport()->setAnimationsExporter( xAnimExport );
         }
 
