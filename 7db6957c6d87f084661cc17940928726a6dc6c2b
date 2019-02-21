@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_4ea175a9",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-21T19:15:23Z",
+      "side": 1,
+      "message": "comment no longer applies?",
+      "revId": "7db6957c6d87f084661cc17940928726a6dc6c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
