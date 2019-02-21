@@ -60,7 +60,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     get(m_pFormattingLB, "format");
     get(m_pGlobalOptionsLB, "globaloptions");
     get(m_pOptionsLB, "options");
-    get(m_pGlobalOptionsCLB, "globaloptioncheckboxs");
+    get(m_pGlobalOptionsCLB, "globaloptioncheckbox");
     get(m_pDefaultPB, "default");
 
     for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
