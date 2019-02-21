@@ -90,7 +90,6 @@ namespace DOM
                 Context::Namespace aNS;
                 aNS.maPrefix = prefix;
                 aNS.mnToken = aIter->second;
-                aNS.maNamespaceURL = val;
 
                 io_rContext.maNamespaces.back().push_back(aNS);
 

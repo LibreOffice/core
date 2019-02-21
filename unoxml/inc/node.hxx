@@ -64,7 +64,6 @@ namespace DOM
         {
             OString     maPrefix;
             sal_Int32   mnToken;
-            OUString    maNamespaceURL;
 
             const OString& getPrefix() const { return maPrefix; }
         };
