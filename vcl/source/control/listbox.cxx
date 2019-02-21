@@ -154,7 +154,6 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->Show();
 
     mpImplLB->GetDropTarget()->addDropTargetListener(xDrop);
-    mpImplLB->SetDropTraget(xDrop);
 
     if ( mpFloatWin )
     {

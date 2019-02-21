@@ -702,8 +702,6 @@ void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
 void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
 void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
 
-void Font::SetMapNames( OUString const & aMapNames ) { mpImplFont->SetMapNames(aMapNames); }
-
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
@@ -771,7 +769,6 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbTransparent( rImplFont.mbTransparent ),
     maColor( rImplFont.maColor ),
     maFillColor( rImplFont.maFillColor ),
-    maMapNames( rImplFont.maMapNames ),
     mbWordLine( rImplFont.mbWordLine ),
     mnOrientation( rImplFont.mnOrientation ),
     mnQuality( rImplFont.mnQuality )

@@ -195,8 +195,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mpPrev = nullptr;
     if ( mpNext )
         mpNext->mpPrev = this;
-    else
-        pSVData->maGDIData.mpLastVirDev = this;
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
@@ -248,8 +246,6 @@ void VirtualDevice::dispose()
 
     if( mpNext )
         mpNext->mpPrev = mpPrev;
-    else
-        pSVData->maGDIData.mpLastVirDev = mpPrev;
 
     OutputDevice::dispose();
 }

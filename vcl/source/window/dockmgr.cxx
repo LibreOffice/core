@@ -492,7 +492,6 @@ void ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
         return;
 
     maMouseOff      = rPos;
-    maMouseStart    = maMouseOff;
     mbDocking       = true;
     mbLastFloatMode = IsFloatingMode();
 

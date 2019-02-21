@@ -602,7 +602,6 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
         pPrintFile = &maPrintFile;
     mpPrinterOptions->ReadFromConfig( mbPrintFile );
 
-    maJobName               = i_rJobName;
     mbPrinting              = true;
     if( GetCapabilities( PrinterCapType::UsePullModel ) )
     {
@@ -714,10 +713,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
 
                     if ( mpPrinter )
-                    {
-                        maJobName               = i_rJobName;
                         mbPrinting              = true;
-                    }
                     else
                         bError = true;
                 }

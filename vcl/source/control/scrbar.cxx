@@ -448,8 +448,6 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
         scrValue.mnButton2State = ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? ControlState::PRESSED : ControlState::NONE) |
                             ((!(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)) ? ControlState::ENABLED : ControlState::NONE);
         scrValue.mnThumbState = nState | ((mnStateFlags & SCRBAR_STATE_THUMB_DOWN) ? ControlState::PRESSED : ControlState::NONE);
-        scrValue.mnPage1State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? ControlState::PRESSED : ControlState::NONE);
-        scrValue.mnPage2State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? ControlState::PRESSED : ControlState::NONE);
 
         if (IsMouseOver())
         {
@@ -462,10 +460,6 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
                     scrValue.mnButton1State |= ControlState::ROLLOVER;
                 else if (pRect == &maBtn2Rect)
                     scrValue.mnButton2State |= ControlState::ROLLOVER;
-                else if (pRect == &maPage1Rect)
-                    scrValue.mnPage1State |= ControlState::ROLLOVER;
-                else if (pRect == &maPage2Rect)
-                    scrValue.mnPage2State |= ControlState::ROLLOVER;
             }
         }
 

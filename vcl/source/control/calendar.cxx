@@ -144,8 +144,7 @@ Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
     maFirstDate( 0, 0, 1900 ),
     maOldFirstDate( 0, 0, 1900 ),
     maCurDate( Date::SYSTEM ),
-    maOldCurDate( 0, 0, 1900 ),
-    maAnchorDate( maCurDate )
+    maOldCurDate( 0, 0, 1900 )
 {
     ImplInit( nWinStyle );
 }
@@ -817,8 +816,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
     }
 }
 
-void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
-                                bool bMove )
+void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest )
 {
     std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
     Date    aOldDate = maCurDate;
@@ -829,8 +827,6 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
 
     if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
         aTempDate = maOldCurDate;
-    if ( !bMove )
-        maAnchorDate = aTempDate;
     if ( aTempDate != maCurDate )
     {
         maCurDate = aTempDate;
@@ -955,7 +951,7 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
         }
     }
     else
-        ImplMouseSelect( aTempDate, nHitTest, true );
+        ImplMouseSelect( aTempDate, nHitTest );
 }
 
 void Calendar::ImplEndTracking( bool bCancel )
@@ -1055,7 +1051,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                             StartTracking();
                         }
 
-                        ImplMouseSelect( aTempDate, nHitTest, false );
+                        ImplMouseSelect( aTempDate, nHitTest );
                     }
                     if (rMEvt.GetClicks() == 2)
                         maActivateHdl.Call(this);
@@ -1324,7 +1320,6 @@ void Calendar::SetCurDate( const Date& rNewDate )
     bool bUpdate    = IsVisible() && IsUpdateMode();
     Date aOldDate   = maCurDate;
     maCurDate       = rNewDate;
-    maAnchorDate    = maCurDate;
 
     ImplCalendarSelectDate( mpSelectTable.get(), aOldDate, false );
     ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );

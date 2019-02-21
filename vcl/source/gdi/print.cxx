@@ -470,8 +470,6 @@ void Printer::ImplInitData()
     mpPrev = nullptr;
     if ( mpNext )
         mpNext->mpPrev = this;
-    else
-        pSVData->maGDIData.mpLastPrinter = this;
     pSVData->maGDIData.mpFirstPrinter = this;
 }
 
@@ -936,8 +934,6 @@ void Printer::dispose()
         pSVData->maGDIData.mpFirstPrinter = mpNext;
     if ( mpNext )
         mpNext->mpPrev = mpPrev;
-    else
-        pSVData->maGDIData.mpLastPrinter = mpPrev;
 
     mpPrev.clear();
     mpNext.clear();
@@ -1566,7 +1562,6 @@ void Printer::EndJob()
         ReleaseGraphics();
 
         mbPrinting      = false;
-        maJobName.clear();
 
         mbDevOutput = false;
         mpPrinter->EndJob();
