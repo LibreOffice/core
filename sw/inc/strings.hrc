@@ -541,6 +541,7 @@
 #define STR_UNDO_TBLSTYLE_DELETE                NC_("STR_UNDO_TBLSTYLE_DELETE", "Delete table style: $1")
 #define STR_UNDO_TBLSTYLE_UPDATE                NC_("STR_UNDO_TBLSTYLE_UPDATE", "Update table style: $1")
 #define STR_UNDO_TABLE_DELETE                   NC_("STR_UNDO_TABLE_DELETE", "Delete table")
+#define STR_UNDO_INSERT_FORM_FIELD              NC_("STR_UNDO_INSERT_FORM_FIELD", "Insert form field")
 
 #define STR_ACCESS_DOC_NAME                     NC_("STR_ACCESS_DOC_NAME", "Document view")
 #define STR_ACCESS_DOC_DESC                     NC_("STR_ACCESS_DOC_DESC", "Document view")
