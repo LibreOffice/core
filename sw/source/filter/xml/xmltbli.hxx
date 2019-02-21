@@ -163,7 +163,6 @@ public:
     void InsertCell( const OUString& rStyleName,
                      sal_uInt32 nRowSpan, sal_uInt32 nColSpan,
                      const SwStartNode *pStNd,
-                     const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=nullptr,
                      bool bIsProtected = false,
                      const OUString *pFormula=nullptr,
@@ -172,8 +171,7 @@ public:
                      OUString const*const pStringValue = nullptr);
     void InsertRow( const OUString& rStyleName,
                     const OUString& rDfltCellStyleName,
-                    bool bInHead,
-                    const OUString & i_rXmlId = OUString() );
+                    bool bInHead );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );
     const SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;

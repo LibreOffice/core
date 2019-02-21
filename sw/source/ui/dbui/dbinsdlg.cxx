@@ -154,8 +154,6 @@ struct DB_Column
 struct DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
-    OUString sSource;
-    OUString sTable;
     OUString sEdit;
     OUString sTableList;
     OUString sTmplNm;
@@ -1665,8 +1663,6 @@ void SwInsertDBColAutoPilot::Load()
         if(sSource == aDBData.sDataSource && sCommand == aDBData.sCommand)
         {
             std::unique_ptr<DB_ColumnConfigData> pNewData(new DB_ColumnConfigData);
-            pNewData->sSource = sSource;
-            pNewData->sTable = sCommand;
 
             pDataSourceProps[3] >>= pNewData->sEdit;
             pDataSourceProps[4] >>= pNewData->sTableList;

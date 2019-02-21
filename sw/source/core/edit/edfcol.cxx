@@ -349,7 +349,6 @@ struct SignatureDescr
     OUString msSignature;
     OUString msUsage;
     OUString msDate;
-    OUString msId;
 
     bool isValid() const { return !msSignature.isEmpty(); }
 };
@@ -359,7 +358,6 @@ SignatureDescr lcl_getSignatureDescr(const uno::Reference<frame::XModel>& xModel
                                      const OUString& sFieldId)
 {
     SignatureDescr aDescr;
-    aDescr.msId = sFieldId;
 
     const OUString prefix = ParagraphSignatureRDFNamespace + sFieldId;
     const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, xParagraph);
