@@ -557,9 +557,7 @@ void DeInitVCL()
     pSVData->maGDIData.mpFirstPrnGraphics = nullptr;
     pSVData->maGDIData.mpLastPrnGraphics = nullptr;
     pSVData->maGDIData.mpFirstVirDev = nullptr;
-    pSVData->maGDIData.mpLastVirDev = nullptr;
     pSVData->maGDIData.mpFirstPrinter = nullptr;
-    pSVData->maGDIData.mpLastPrinter = nullptr;
     pSVData->maWinData.mpFirstFrame = nullptr;
     pSVData->maWinData.mpAppWin = nullptr;
     pSVData->maWinData.mpActiveApplicationFrame = nullptr;

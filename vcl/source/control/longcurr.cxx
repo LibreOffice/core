@@ -245,12 +245,10 @@ bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt
 
 void LongCurrencyFormatter::ImpInit()
 {
-    mnFieldValue        = 0;
     mnLastValue         = 0;
     mnMin               = 0;
     mnMax               = 0x7FFFFFFF;
     mnMax              *= 0x7FFFFFFF;
-    mnCorrectedValue    = 0;
     mnDecimalDigits     = 0;
     mbThousandSep       = true;
     SetDecimalDigits( 0 );
@@ -280,7 +278,6 @@ OUString const & LongCurrencyFormatter::GetCurrencySymbol() const
 void LongCurrencyFormatter::SetValue(const BigInt& rNewValue)
 {
     SetUserValue(rNewValue);
-    mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( false );
 }
 

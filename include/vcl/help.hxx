@@ -93,13 +93,7 @@ public:
     static void         ShowQuickHelp( vcl::Window* pParent,
                                        const tools::Rectangle& rScreenRect,
                                        const OUString& rHelpText,
-                                       const OUString& rLongHelpText,
-                                       QuickHelpFlags nStyle );
-    static void         ShowQuickHelp( vcl::Window* pParent,
-                                       const tools::Rectangle& rScreenRect,
-                                       const OUString& rHelpText,
-                                       QuickHelpFlags nStyle = QuickHelpFlags::NONE )
-                            { Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, OUString(), nStyle ); }
+                                       QuickHelpFlags nStyle = QuickHelpFlags::NONE );
 
     static void         HideBalloonAndQuickHelp();
 

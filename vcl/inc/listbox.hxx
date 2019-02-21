@@ -389,7 +389,6 @@ private:
     bool mbEdgeBlending : 1;
 
     Link<ImplListBox*,void>   maScrollHdl;    // because it is needed by ImplListBoxWindow itself
-    css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
 
 protected:
     virtual void        GetFocus() override;
@@ -499,7 +498,6 @@ public:
 
     /// pb: #106948# explicit mirroring for calc
     void     EnableMirroring()   { maLBWindow->EnableMirroring(); }
-    void     SetDropTraget(const css::uno::Reference< css::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
 
 class ImplListBoxFloatingWindow : public FloatingWindow

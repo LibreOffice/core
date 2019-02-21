@@ -161,7 +161,7 @@ void Help::ShowBalloon( vcl::Window* pParent,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, QuickHelpFlags::NONE,
-                        rHelpText, OUString(), rScreenPos, rRect );
+                        rHelpText, rScreenPos, rRect );
 }
 
 void Help::EnableQuickHelp()
@@ -182,12 +182,11 @@ bool Help::IsQuickHelpEnabled()
 void Help::ShowQuickHelp( vcl::Window* pParent,
                           const tools::Rectangle& rScreenRect,
                           const OUString& rHelpText,
-                          const OUString& rLongHelpText,
                           QuickHelpFlags nStyle )
 {
     sal_uInt16 nHelpWinStyle = ( nStyle & QuickHelpFlags::TipStyleBalloon ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
     ImplShowHelpWindow( pParent, nHelpWinStyle, nStyle,
-                        rHelpText, rLongHelpText,
+                        rHelpText,
                         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), rScreenRect );
 }
 
@@ -486,7 +485,7 @@ OUString HelpTextWindow::GetText() const
 }
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                         const OUString& rHelpText, const OUString& rStatusText,
+                         const OUString& rHelpText,
                          const Point& rScreenPos, const tools::Rectangle& rHelpArea )
 {
     if (pParent->ImplGetFrame()->ShowTooltip(rHelpText, rHelpArea))
@@ -549,7 +548,6 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
 
     pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
     pSVData->maHelpData.mpHelpWin = pHelpWin;
-    pHelpWin->SetStatusText( rStatusText );
     pHelpWin->SetHelpArea( rHelpArea );
 
     //  positioning

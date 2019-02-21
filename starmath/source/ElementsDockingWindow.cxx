@@ -443,7 +443,7 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
             Help::ShowBalloon(this, aHelpRect.Center(), aHelpRect, aStr);
         }
         else
-            Help::ShowQuickHelp(this, aHelpRect, aStr, aStr, QuickHelpFlags::CtrlText);
+            Help::ShowQuickHelp(this, aHelpRect, aStr, QuickHelpFlags::CtrlText);
         return;
     }
 

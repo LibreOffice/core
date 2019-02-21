@@ -62,8 +62,6 @@ private:
     friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
     SAL_DLLPRIVATE void        ImpInit();
 
-    BigInt                  mnFieldValue;
-    BigInt                  mnCorrectedValue;
     OUString                maCurrencySymbol;
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;

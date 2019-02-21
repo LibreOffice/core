@@ -185,7 +185,6 @@ private:
     OUString                    maPrinterName;
     OUString                    maDriver;
     OUString                    maPrintFile;
-    OUString                    maJobName;
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;

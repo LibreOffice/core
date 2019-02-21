@@ -79,7 +79,6 @@ class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 private:
     std::unique_ptr<ImpVclMEdit> pImpVclMEdit;
 
-    OUString          aSaveValue;
     Link<Edit&,void>  aModifyHdlLink;
 
     std::unique_ptr<Timer> pUpdateDataTimer;
@@ -149,8 +148,6 @@ public:
     OUString        GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( bool bRightToLeft );
-
-    void            SaveValue()                         { aSaveValue = GetText(); }
 
     void            SetModifyHdl( const Link<Edit&,void>& rLink ) override { aModifyHdlLink = rLink; }
     const Link<Edit&,void>&   GetModifyHdl() const override                { return aModifyHdlLink; }

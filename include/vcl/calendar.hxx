@@ -138,7 +138,6 @@ class VCL_DLLPUBLIC Calendar final : public Control
     Date            maOldFirstDate;
     Date            maCurDate;
     Date            maOldCurDate;
-    Date            maAnchorDate;
     Color           maSelColor;
     Color           maOtherColor;
     sal_Int32       mnDayCount;
@@ -184,8 +183,7 @@ class VCL_DLLPUBLIC Calendar final : public Control
     VCL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     VCL_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     VCL_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
-    VCL_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
-                                                 bool bMove );
+    VCL_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest );
     VCL_DLLPRIVATE void         ImplUpdate( bool bCalcNew = false );
     using Window::ImplScroll;
     VCL_DLLPRIVATE void         ImplScroll( bool bPrev );
