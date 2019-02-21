@@ -235,7 +235,7 @@ endef
 # ObjCObject class
 
 define gb_ObjCObject__command
-$(call gb_Output_announce,$(2),$(true),OC ,3)
+$(call gb_Output_announce,$(2),$(true),OC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \

@@ -80,6 +80,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     agg \
     analysis \
     animcore \
+    apple_remote \
     avmedia \
     avmediagst \
     avmediaMacAVF \
