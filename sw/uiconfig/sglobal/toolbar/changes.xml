@@ -25,6 +25,8 @@
  <toolbar:toolbaritem xlink:href=".uno:NextTrackedChange"/>
  <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChange"/>
  <toolbar:toolbaritem xlink:href=".uno:RejectTrackedChange"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptAllTrackedChanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:RejectAllTrackedChanges"/>
  <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
