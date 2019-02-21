@@ -453,7 +453,6 @@ public:
     {
         sal_uInt16 nId;    // Id of the button
         bool bHighlight;   // highlight on/off
-        VclPtr<MenuBar> pMenuBar; // menubar the button belongs to
     };
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press

@@ -228,7 +228,6 @@ void DockingWindow::ImplStartDocking( const Point& rPos )
         return;
 
     maMouseOff      = rPos;
-    maMouseStart    = maMouseOff;
     mbDocking       = true;
     mbLastFloatMode = IsFloatingMode();
     mbStartFloat    = mbLastFloatMode;

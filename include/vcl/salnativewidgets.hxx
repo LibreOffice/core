@@ -301,15 +301,13 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         ControlState    mnButton1State;
         ControlState    mnButton2State;
         ControlState    mnThumbState;
-        ControlState    mnPage1State;
-        ControlState    mnPage2State;
 
         ScrollbarValue()
         : ImplControlValue( ControlType::Scrollbar, 0 )
         {
             mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
             mnButton1State = ControlState::NONE; mnButton2State = ControlState::NONE;
-            mnThumbState = ControlState::NONE; mnPage1State = ControlState::NONE; mnPage2State = ControlState::NONE;
+            mnThumbState = ControlState::NONE;
         };
         virtual ~ScrollbarValue() override;
         virtual ScrollbarValue* clone() const override;

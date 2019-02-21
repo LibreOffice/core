@@ -1724,7 +1724,6 @@ void Window::ImplNewInputContext()
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetFamilyName();
     rtl::Reference<LogicalFontInstance> pFontInstance;
-    aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
@@ -1740,10 +1739,7 @@ void Window::ImplNewInputContext()
         }
         pFontInstance = pFocusWin->mxFontCache->GetFontInstance( pFocusWin->mxFontCollection.get(),
                          rFont, aSize, static_cast<float>(aSize.Height()) );
-        if ( pFontInstance )
-            aNewContext.mpFont = pFontInstance;
     }
-    aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
@@ -1858,10 +1854,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
                 aPos = OutputToScreenPixel(Point(0, 0));
             tools::Rectangle   aRect( aPos, GetSizePixel() );
-            OUString      aHelpText;
-            if ( !rStr.isEmpty() )
-                aHelpText = GetHelpText();
-            Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QuickHelpFlags::CtrlText );
+            Help::ShowQuickHelp( this, aRect, rStr, QuickHelpFlags::CtrlText );
         }
     }
     else if (!mpWindowImpl->maHelpRequestHdl.IsSet() || mpWindowImpl->maHelpRequestHdl.Call(*this))

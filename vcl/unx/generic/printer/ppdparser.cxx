@@ -1218,7 +1218,6 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         // eventually update query and remove from option list
         if( bQuery && !pKey->m_bQueryValue )
         {
-            pKey->m_aQueryValue = *pValue;
             pKey->m_bQueryValue = true;
             pKey->eraseValue( pValue->m_aOption );
         }
