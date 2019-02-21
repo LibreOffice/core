@@ -102,7 +102,6 @@ protected:
         sal_Int32 mnModuleType;
         OUString maMacroName;
         sal_Int32 mnCancelIndex;
-        css::uno::Any maUserData;
     };
 
     /** Registers a supported event handler.
@@ -110,14 +109,12 @@ protected:
         @param nEventId  Event identifier from com.sun.star.script.vba.VBAEventId.
         @param nModuleType  Type of the module containing the event handler.
         @param pcMacroName  Name of the associated VBA event handler macro.
-        @param nCancelIndex  0-based index of Cancel parameter, or -1.
-        @param rUserData  User data for free usage in derived implementations. */
+        @param nCancelIndex  0-based index of Cancel parameter, or -1. */
     void registerEventHandler(
             sal_Int32 nEventId,
             sal_Int32 nModuleType,
             const sal_Char* pcMacroName,
-            sal_Int32 nCancelIndex = -1,
-            const css::uno::Any& rUserData = css::uno::Any() );
+            sal_Int32 nCancelIndex = -1);
 
 
     struct EventQueueEntry

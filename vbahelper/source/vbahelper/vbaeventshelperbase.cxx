@@ -204,14 +204,13 @@ void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno:
 // protected ------------------------------------------------------------------
 
 void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId, sal_Int32 nModuleType,
-        const sal_Char* pcMacroName, sal_Int32 nCancelIndex, const uno::Any& rUserData )
+        const sal_Char* pcMacroName, sal_Int32 nCancelIndex )
 {
     EventHandlerInfo& rInfo = maEventInfos[ nEventId ];
     rInfo.mnEventId = nEventId;
     rInfo.mnModuleType = nModuleType;
     rInfo.maMacroName = OUString::createFromAscii( pcMacroName );
     rInfo.mnCancelIndex = nCancelIndex;
-    rInfo.maUserData = rUserData;
 }
 
 // private --------------------------------------------------------------------
