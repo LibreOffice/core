@@ -65,13 +65,13 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short TODO */
-        VclPtr<vcl::Window> m_pParentWindow;
+        weld::Window* m_pParentWindow;
 
         /** @short TODO */
         RecoveryUI::EJob m_eJob;
 
         // Active dialog
-        VclPtr<Dialog> m_pDialog;
+        weld::Dialog* m_pDialog;
 
     // interface
     public:
@@ -92,6 +92,10 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
         virtual css::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
+        void SetActiveDialog(weld::Dialog* pDialog)
+        {
+            m_pDialog = pDialog;
+        }
 
     // helper
     private:
@@ -108,9 +112,10 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
 };
 
 RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext     (xContext                 )
-    , m_pParentWindow(nullptr                        )
-    , m_eJob         (RecoveryUI::E_JOB_UNKNOWN)
+    : m_xContext(xContext)
+    , m_pParentWindow(nullptr)
+    , m_eJob(RecoveryUI::E_JOB_UNKNOWN)
+    , m_pDialog(nullptr)
 {
 }
 
@@ -231,14 +236,17 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 
 struct DialogReleaseGuard
 {
-    VclPtr<Dialog>& m_rDialog;
-    template <class DialogPtrClass>
-    DialogReleaseGuard(VclPtr<Dialog>& rDialog, DialogPtrClass& p)
-        : m_rDialog(rDialog)
+    RecoveryUI& m_rRecoveryUI;
+
+    DialogReleaseGuard(RecoveryUI& rRecoveryUI, weld::Dialog* p)
+        : m_rRecoveryUI(rRecoveryUI)
     {
-        m_rDialog.set(p.get());
+        m_rRecoveryUI.SetActiveDialog(p);
     }
-    ~DialogReleaseGuard() { m_rDialog.reset(); }
+    ~DialogReleaseGuard()
+    {
+        m_rRecoveryUI.SetActiveDialog(nullptr);
+    }
 };
 
 bool RecoveryUI::impl_doEmergencySave()
@@ -247,10 +255,11 @@ bool RecoveryUI::impl_doEmergencySave()
     rtl::Reference<svxdr::RecoveryCore> pCore = new svxdr::RecoveryCore(m_xContext, true);
 
     // create dialog for this operation and bind it to the used core service
-    svxdr::SaveDialog aDialog(m_pParentWindow ? m_pParentWindow->GetFrameWeld() : nullptr, pCore.get());
+    std::unique_ptr<svxdr::SaveDialog> xDialog(new svxdr::SaveDialog(m_pParentWindow, pCore.get()));
+    DialogReleaseGuard dialogReleaseGuard(*this, xDialog->getDialog());
 
     // start the dialog
-    short nRet = aDialog.run();
+    short nRet = xDialog->run();
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
 
@@ -261,11 +270,11 @@ bool RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    ScopedVclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore.get());
-    DialogReleaseGuard dialogReleaseGuard(m_pDialog, xDialog);
+    std::unique_ptr<svxdr::RecoveryDialog> xDialog(new svxdr::RecoveryDialog(m_pParentWindow, pCore.get()));
+    DialogReleaseGuard dialogReleaseGuard(*this, xDialog->getDialog());
 
     // start the dialog
-    short nRet = xDialog->Execute();
+    short nRet = xDialog->run();
 
     impl_showAllRecoveredDocs();
 
@@ -308,11 +317,9 @@ void RecoveryUI::impl_showAllRecoveredDocs()
 
 bool RecoveryUI::impl_doBringToFront()
 {
-    VclPtr<Dialog> pDialog(m_pDialog);
-    if (!pDialog || !pDialog->IsVisible())
+    if (!m_pDialog || !m_pDialog->get_visible())
         return false;
-
-    pDialog->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
+    m_pDialog->present();
     return true;
 }
 

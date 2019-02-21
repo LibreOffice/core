@@ -639,6 +639,8 @@ namespace
 {
     Image createImage(const OUString& rImage)
     {
+        if (rImage.isEmpty())
+            return Image();
         if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
         {
             assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
@@ -896,6 +898,11 @@ public:
     virtual bool has_toplevel_focus() const override
     {
         return m_xWindow->HasChildPathFocus();
+    }
+
+    virtual void present() override
+    {
+        m_xWindow->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
     }
 
     virtual void set_window_state(const OString& rStr) override
@@ -2482,6 +2489,36 @@ public:
             static_cast<SvLBoxButton&>(rItem).SetStateUnchecked();
 
         m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    }
+
+    virtual void set_image(int pos, const OUString& rImage, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+
+        ++col; //skip dummy/expander column
+
+        // blank out missing entries
+        for (int i = pEntry->ItemCount(); i < col ; ++i)
+            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+
+        Image aImage(createImage(rImage));
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+        {
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
+            m_xTreeView->InitViewData(pViewData, pEntry);
+        }
+        else
+        {
+            assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+            SvLBoxItem& rItem = pEntry->GetItem(col);
+            assert(dynamic_cast<SvLBoxContextBmp*>(&rItem));
+            static_cast<SvLBoxContextBmp&>(rItem).SetBitmap1(aImage);
+            static_cast<SvLBoxContextBmp&>(rItem).SetBitmap2(aImage);
+        }
+
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+
     }
 
     const OUString* getEntryData(int index) const

@@ -281,6 +281,7 @@ public:
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
     virtual bool has_toplevel_focus() const = 0;
+    virtual void present() = 0;
     virtual void set_window_state(const OString& rStr) = 0;
     virtual OString get_window_state(WindowStateMask nMask) const = 0;
 
@@ -553,6 +554,7 @@ public:
     virtual void set_id(int row, const OUString& rId) = 0;
     virtual void set_toggle(int row, bool bOn, int col) = 0;
     virtual bool get_toggle(int row, int col) const = 0;
+    virtual void set_image(int row, const OUString& rImage, int col) = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;

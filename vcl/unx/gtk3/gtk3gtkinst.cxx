@@ -2152,6 +2152,11 @@ public:
         return gtk_window_has_toplevel_focus(m_pWindow);
     }
 
+    virtual void present() override
+    {
+        gtk_window_present(m_pWindow);
+    }
+
     virtual void set_window_state(const OString& rStr) override
     {
         WindowStateData aData;
@@ -5016,6 +5021,34 @@ namespace
         return found;
     }
 
+    GdkPixbuf* getPixbuf(const OUString& rIconName)
+    {
+        if (rIconName.isEmpty())
+            return nullptr;
+
+        GdkPixbuf* pixbuf = nullptr;
+
+        if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
+        {
+            assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
+                   "unknown stock image");
+
+            GError *error = nullptr;
+            GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+            pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
+                                              16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+        }
+        else
+        {
+            const AllSettings& rSettings = Application::GetSettings();
+            pixbuf = load_icon_by_name(rIconName,
+                                       rSettings.GetStyleSettings().DetermineIconTheme(),
+                                       rSettings.GetUILanguageTag().getBcp47());
+        }
+
+        return pixbuf;
+    }
+
     void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, const VirtualDevice* pDevice)
     {
         if (!pIconName && !pDevice)
@@ -5029,25 +5062,7 @@ namespace
         {
             if (pIconName)
             {
-                GdkPixbuf* pixbuf = nullptr;
-
-                if (pIconName->lastIndexOf('.') != pIconName->getLength() - 4)
-                {
-                    assert((*pIconName== "dialog-warning" || *pIconName== "dialog-error" ||*pIconName== "dialog-information") &&
-                           "unknown stock image");
-
-                    GError *error = nullptr;
-                    GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-                    pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(*pIconName, RTL_TEXTENCODING_UTF8).getStr(),
-                                                      16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
-                }
-                else
-                {
-                    const AllSettings& rSettings = Application::GetSettings();
-                    pixbuf = load_icon_by_name(*pIconName,
-                                               rSettings.GetStyleSettings().DetermineIconTheme(),
-                                               rSettings.GetUILanguageTag().getBcp47());
-                }
+                GdkPixbuf* pixbuf = getPixbuf(*pIconName);
 
                 gtk_list_store_insert_with_values(pListStore, &iter, pos,
                                                   0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -5082,32 +5097,6 @@ namespace
             }
         }
     }
-
-    GdkPixbuf* getPixbuf(const OUString& rIconName)
-    {
-        GdkPixbuf* pixbuf = nullptr;
-
-        if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
-        {
-            assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
-                   "unknown stock image");
-
-            GError *error = nullptr;
-            GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-            pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
-                                              16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
-        }
-        else
-        {
-            const AllSettings& rSettings = Application::GetSettings();
-            pixbuf = load_icon_by_name(rIconName,
-                                       rSettings.GetStyleSettings().DetermineIconTheme(),
-                                       rSettings.GetUILanguageTag().getBcp47());
-        }
-
-        return pixbuf;
-    }
-
 }
 
 namespace
@@ -5814,6 +5803,23 @@ public:
         // checkbuttons are invisible until toggled on or off
         set(pos, m_aToggleVisMap[col], true);
         return set(pos, col, bOn);
+    }
+
+    virtual void set_image(int pos, const OUString& rImage, int col) override
+    {
+        col = get_model_col(col);
+
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            gtk_tree_store_set(m_pTreeStore, &iter, col, pixbuf, -1);
+        }
+
+        if (pixbuf)
+            g_object_unref(pixbuf);
     }
 
     virtual OUString get_id(int pos) const override
