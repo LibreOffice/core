@@ -534,10 +534,17 @@ OString ViewShell::GetTextSelection(const OString& _aMimeType, OString& rUsedMim
     uno::Reference<datatransfer::XTransferable> xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
 
     // Take care of UTF-8 text here.
+    bool bConvert = false;
+    sal_Int32 nIndex = 0;
     OString aMimeType = _aMimeType;
-    const bool bConvert{ aMimeType.startsWith("text/plain;charset=utf-8") };
-    if (bConvert)
-        aMimeType = "text/plain;charset=utf-16";
+    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    {
+        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            bConvert = true;
+        }
+    }
 
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
