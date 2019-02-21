@@ -105,10 +105,7 @@ struct FactoryInfo
         {
             bInstalled                  = false;
             sFactory.clear();
-            sShortName.clear();
             sTemplateFile.clear();
-            sWindowAttributes.clear();
-            sEmptyDocumentURL.clear();
             sDefaultFilter.clear();
             nIcon                       = 0;
             bChangedTemplateFile        = false;
@@ -173,9 +170,6 @@ struct FactoryInfo
         // But if you wish to set it without that... you must initialize it!
         void initInstalled        ()                                       { bInstalled        = true; }
         void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory; }
-        void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName; }
-        void initWindowAttributes ( const OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes; }
-        void initEmptyDocumentURL ( const OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL; }
         void initDefaultFilter    ( const OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter; }
         void setDefaultFilterReadonly( const bool bVal){bDefaultFilterReadonly = bVal;}
         void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon; }
@@ -222,10 +216,7 @@ struct FactoryInfo
 
         bool         bInstalled;
         OUString     sFactory;
-        OUString     sShortName;
         OUString     sTemplateFile;
-        OUString     sWindowAttributes;
-        OUString     sEmptyDocumentURL;
         OUString     sDefaultFilter;
         sal_Int32    nIcon;
 
@@ -727,14 +718,8 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
             pInfo->initInstalled();
             pInfo->initFactory  ( sFactoryName );
 
-            if (lValues[nPropertyStart+PROPERTYHANDLE_SHORTNAME] >>= sTemp)
-                pInfo->initShortName( sTemp );
             if (lValues[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE] >>= sTemp)
                 pInfo->initTemplateFile( sTemp );
-            if (lValues[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES] >>= sTemp)
-                pInfo->initWindowAttributes( sTemp );
-            if (lValues[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] >>= sTemp)
-                pInfo->initEmptyDocumentURL( sTemp );
             if (lValues[nPropertyStart+PROPERTYHANDLE_DEFAULTFILTER   ] >>= sTemp)
                 pInfo->initDefaultFilter( sTemp );
             if (lValues[nPropertyStart+PROPERTYHANDLE_ICON] >>= nTemp)

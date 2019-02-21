@@ -73,10 +73,6 @@ class UcbLockBytes : public virtual SvLockBytes
     osl::Condition          m_aTerminated;
     osl::Mutex              m_aMutex;
 
-    OUString                m_aContentType;
-    OUString                m_aRealURL;
-    DateTime                m_aExpireDate;
-
     css::uno::Reference < css::io::XInputStream >  m_xInputStream;
     css::uno::Reference < css::io::XOutputStream > m_xOutputStream;
     css::uno::Reference < css::io::XSeekable >     m_xSeekable;
@@ -143,9 +139,6 @@ public:
     void                    setDontClose_Impl()
                             { m_bDontClose = true; }
 
-    void                    SetContentType_Impl( const OUString& rType ) { m_aContentType = rType; }
-    void                    SetRealURL_Impl( const OUString& rURL )  { m_aRealURL = rURL; }
-    void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
     void                    SetStreamValid_Impl();
 };
 
