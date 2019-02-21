@@ -742,7 +742,14 @@ namespace emfio
                         aBitmap.Crop( aCropRect );
                     }
                     tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nWinROP));
+
+                    const basegfx::B2DHomMatrix aTransformMatrix = basegfx::B2DHomMatrix(maXForm.eM11,
+                                                                                         maXForm.eM21,
+                                                                                         maXForm.eDx,
+                                                                                         maXForm.eM12,
+                                                                                         maXForm.eM22,
+                                                                                         maXForm.eDy);
+                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aTransformMatrix, aDestRect, nWinROP));
                 }
             }
             break;
@@ -791,7 +798,14 @@ namespace emfio
                             tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                             aBmp.Crop( aCropRect );
                         }
-                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
+
+                        const basegfx::B2DHomMatrix aTransformMatrix = basegfx::B2DHomMatrix(maXForm.eM11,
+                                                                                             maXForm.eM21,
+                                                                                             maXForm.eDx,
+                                                                                             maXForm.eM12,
+                                                                                             maXForm.eM22,
+                                                                                             maXForm.eDy);
+                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aTransformMatrix, aDestRect, nWinROP));
                     }
                 }
             }
