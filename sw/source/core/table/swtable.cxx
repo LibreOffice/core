@@ -1291,6 +1291,8 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
         sal_Int32 nPos = 0;
         // the first one uses letters for addressing!
         bool bFirst = true;
+        sal_uInt32 num = 0;
+        bool overflow = false;
         while (nPos<rStr.getLength())
         {
             sal_Unicode cChar = rStr[nPos];
@@ -1301,10 +1303,14 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
             if( bFirst )
                 bFirst = false;
             else
-                ++nRet;
-            nRet = nRet * 52 + cChar;
+                ++num;
+            num = num * 52 + cChar;
+            if (num > SAL_MAX_UINT16) {
+                overflow = true;
+            }
             ++nPos;
         }
+        nRet = overflow ? SAL_MAX_UINT16 : num;
         rStr = rStr.copy( nPos );      // Remove char from String
     }
     else
