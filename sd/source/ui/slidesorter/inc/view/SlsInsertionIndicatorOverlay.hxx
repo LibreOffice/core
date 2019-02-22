@@ -79,7 +79,6 @@ private:
     // Center of the insertion indicator.
     Point maLocation;
     BitmapEx maIcon;
-    Point maIconOffset;
     std::unique_ptr<FramePainter> mpShadowPainter;
 
     Point PaintRepresentatives (

@@ -58,7 +58,6 @@ public:
     const Color&        GetBlankColor() const { return maShowBackground.GetColor(); }
 
     void            SetPreviewMode();
-    void            SetPresentationArea( const ::tools::Rectangle& rPresArea );
 
     void            SetMouseAutoHide( bool bMouseAutoHide ) { mbMouseAutoHide = bMouseAutoHide; }
 
@@ -96,7 +95,6 @@ private:
     sal_Int32       mnRestartPageIndex;
     ShowWindowMode  meShowWindowMode;
     bool            mbShowNavigatorAfterSpecialMode;
-    ::tools::Rectangle       maPresArea;
     bool            mbMouseAutoHide;
     bool            mbMouseCursorHidden;
     sal_uInt64      mnFirstMouseMove;

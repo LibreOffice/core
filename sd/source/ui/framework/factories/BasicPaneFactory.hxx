@@ -93,7 +93,6 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
-    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;
     class PaneContainer;

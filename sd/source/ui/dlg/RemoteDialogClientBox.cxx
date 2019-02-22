@@ -52,13 +52,6 @@ ClientBoxEntry::ClientBoxEntry(const std::shared_ptr<ClientInfo>& pClientInfo)
 ClientBoxEntry::~ClientBoxEntry()
 {}
 
-void ClientRemovedListener::disposing( lang::EventObject const & )
-{}
-
-ClientRemovedListener::~ClientRemovedListener()
-{
-}
-
 // ClientBox
 
 ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
@@ -98,8 +91,6 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     else
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    m_xRemoveListener = new ClientRemovedListener( this );
-
     populateEntries();
 
     Show();
@@ -120,8 +111,6 @@ ClientBox::~ClientBox()
 void ClientBox::dispose()
 {
     m_vEntries.clear();
-
-    m_xRemoveListener.clear();
 
     m_aPinBox.disposeAndClear();
     m_aDeauthoriseButton.disposeAndClear();

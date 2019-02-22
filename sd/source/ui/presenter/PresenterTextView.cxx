@@ -86,8 +86,6 @@ private:
     std::unique_ptr<EditEngine> mpEditEngine;
     SfxItemPool* mpEditEngineItemPool;
     Size maSize;
-    Color maBackgroundColor;
-    Color maTextColor;
     OUString msText;
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
@@ -218,8 +216,6 @@ PresenterTextView::Implementation::Implementation()
       mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
-      maBackgroundColor(0xffffffff),
-      maTextColor(0x00000000),
       msText(),
       mnTop(0),
       mnTotalHeight(-1)
@@ -310,7 +306,6 @@ void PresenterTextView::Implementation::SetSize (const Size aSize)
 
 void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
 {
-    maBackgroundColor = aColor;
     mxBitmap = nullptr;
 
     DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
@@ -322,7 +317,6 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
 
 void PresenterTextView::Implementation::SetTextColor (const Color aColor)
 {
-    maTextColor = aColor;
     mxBitmap = nullptr;
 
     DBG_ASSERT(mpEditEngineItemPool!=nullptr, "EditEngineItemPool missing");

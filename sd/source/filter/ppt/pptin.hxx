@@ -52,7 +52,6 @@ class ImplSdPPTImport : public SdrPowerPointImport
     sal_uInt32      mnFilterOptions;
     SdDrawDocument* mpDoc;
     PresChange      mePresChange;
-    SdrLayerID      mnBackgroundLayerID;
     SdrLayerID      mnBackgroundObjectsLayerID;
 
     tAnimationMap   maAnimations;

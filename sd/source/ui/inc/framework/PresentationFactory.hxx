@@ -72,8 +72,6 @@ public:
         const css::lang::EventObject& rEventObject) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
     css::uno::Reference<css::frame::XController> mxController;
 
     /// @throws css::lang::DisposedException
