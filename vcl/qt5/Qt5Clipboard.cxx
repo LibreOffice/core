@@ -17,8 +17,10 @@
 #include <QtWidgets/QApplication>
 #include <QtCore/QBuffer>
 #include <QtCore/QMimeData>
+#include <QtCore/QUuid>
 
 #include <Qt5Clipboard.hxx>
+#include <Qt5Clipboard.moc>
 #include <Qt5Tools.hxx>
 
 #include <map>
@@ -169,7 +171,10 @@ VclQt5Clipboard::VclQt5Clipboard(const OUString& aModeString)
           m_aMutex)
     , m_aClipboardName(aModeString)
     , m_aClipboardMode(getClipboardTypeFromName(aModeString))
+    , m_aUuid(QUuid::createUuid().toByteArray())
 {
+    connect(QApplication::clipboard(), &QClipboard::changed, this,
+            &VclQt5Clipboard::handleClipboardChange, Qt::DirectConnection);
 }
 
 void VclQt5Clipboard::flushClipboard()
@@ -301,6 +306,9 @@ void VclQt5Clipboard::setContents(
             }
         }
 
+        // set value for custom MIME type to indicate that content was added by this clipboard
+        pMimeData->setData(m_sMimeTypeUuid, m_aUuid);
+
         clipboard->setMimeData(pMimeData.release(), m_aClipboardMode);
     }
 
@@ -335,6 +343,18 @@ void VclQt5Clipboard::removeClipboardListener(
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
                        m_aListeners.end());
+}
+
+void VclQt5Clipboard::handleClipboardChange(QClipboard::Mode aMode)
+{
+    // if system clipboard content has changed and current content was not created by
+    // this clipboard itself, clear the own current content
+    // (e.g. to take into account clipboard updates from other applications)
+    if (aMode == m_aClipboardMode
+        && QApplication::clipboard()->mimeData(aMode)->data(m_sMimeTypeUuid) != m_aUuid)
+    {
+        m_aContents.clear();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
