@@ -299,8 +299,8 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_SHOW_LICENSE:
                 {
-                    ScopedVclPtrInstance< ShowLicenseDialog > aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
-                    aLicenseDlg->Execute();
+                    ShowLicenseDialog aLicenseDlg(m_pParent->GetFrameWeld(), GetEntryData(nPos)->m_xPackage);
+                    aLicenseDlg.run();
                     break;
                 }
         }
@@ -1448,29 +1448,19 @@ void UpdateRequiredDialog::disableAllEntries()
         m_pCloseBtn->SetText( m_sCloseText );
 }
 
-
 //                             ShowLicenseDialog
-
-ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
-                                      const uno::Reference< deployment::XPackage > &xPackage )
-    : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
+ShowLicenseDialog::ShowLicenseDialog(weld::Window* pParent,
+                                     const uno::Reference< deployment::XPackage> &xPackage)
+    : GenericDialogController(pParent, "desktop/ui/showlicensedialog.ui", "ShowLicenseDialog")
+    , m_xLicenseText(m_xBuilder->weld_text_view("textview"))
 {
-    get(m_pLicenseText, "textview");
-    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MapMode(MapUnit::MapAppFont)));
-    m_pLicenseText->set_width_request(aSize.Width());
-    m_pLicenseText->set_height_request(aSize.Height());
-    m_pLicenseText->SetText(xPackage->getLicenseText());
+    m_xLicenseText->set_size_request(m_xLicenseText->get_approximate_digit_width() * 72,
+                                     m_xLicenseText->get_height_rows(21));
+    m_xLicenseText->set_text(xPackage->getLicenseText());
 }
 
 ShowLicenseDialog::~ShowLicenseDialog()
 {
-    disposeOnce();
-}
-
-void ShowLicenseDialog::dispose()
-{
-    m_pLicenseText.clear();
-    ModalDialog::dispose();
 }
 
 // UpdateRequiredDialogService
