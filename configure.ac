@@ -3200,6 +3200,8 @@ map_vs_year_to_version()
     case $1 in
     2017)
         vsversion=15.0;;
+    2019)
+        vsversion=16.0;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3297,9 +3299,14 @@ find_msvc()
         15.0)
             vcyear=2017
             vcnum=150
-            vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+            ;;
+        16.0)
+            vcyear=2019
+            vcnum=160
             ;;
         esac
+        vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+
     fi
 }
 
@@ -3307,8 +3314,15 @@ SOLARINC=
 MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
+    if test "$with_visual_studio" = "2019"; then
+        AC_MSG_WARN([For the detection of VS 2019, a registry entry similar to VS 2017 is used.
+           However, this entry did not exist at least for Preview versions, which has been released at the time of initial support.
+           Developers who want to build with VS 2019 may need to manually add this entry.])
+        add_warning "For the detection of VS 2019, a registry entry similar to VS 2017 is used."
+        add_warning "However, this entry did not exist at least for Preview versions, which has been released at the time of initial support."
+        add_warning "Developers who want to build with VS 2019 may need to manually add this entry."
+    fi
     AC_MSG_CHECKING([Visual C++])
-
     find_msvc "$with_visual_studio"
     if test -z "$vctest"; then
         if test -n "$with_visual_studio"; then
@@ -3367,10 +3381,18 @@ if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
     else
-        if test "$BITNESS_OVERRIDE" = ""; then
-            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
+        if test "$vcnumwithdot" = "16.0"; then
+            if test "$BITNESS_OVERRIDE" = ""; then
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin"
+            else
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin/amd64"
+            fi
         else
-            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
+            if test "$BITNESS_OVERRIDE" = ""; then
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
+            else
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
+            fi
         fi
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
 	AC_MSG_RESULT([$regvalue])
@@ -3466,9 +3488,8 @@ if test "$_os" = "WINNT"; then
         # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
         # are always "better", we list them in reverse chronological order.
 
-        case $vcnum in
-        150)
-            COMEX=19
+        case "$vcnum" in
+        150|160)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
             ;;
         esac
@@ -5433,9 +5454,11 @@ find_winsdk()
 find_msms()
 {
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
-    if test $VCVER = 150; then
+    case "$VCVER" in
+        150|160)
         my_msm_files="Microsoft_VC141_CRT_x86.msm ${my_msm_files}"
-    fi
+        ;;
+    esac
     AC_MSG_CHECKING([for ${my_msm_files}])
     msmdir=
     for ver in 14.0 15.0; do
@@ -5468,7 +5491,8 @@ find_msms()
     fi
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
-    if test $VCVER = 150; then
+    case "$VCVER" in
+    150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
@@ -5479,7 +5503,8 @@ find_msms()
                 fi
             done
         done
-    fi
+        ;;
+    esac
 
     if test -n "$msmdir"; then
         msmdir=`cygpath -m "$msmdir"`
@@ -5497,7 +5522,8 @@ find_msms()
 find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    if test "$VCVER" = 150; then
+    case "$VCVER" in
+    150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
@@ -5509,7 +5535,8 @@ find_msvc_x64_dlls()
                 break
             fi
         done
-    fi
+        ;;
+    esac
     msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
@@ -12591,15 +12618,20 @@ if test "$build_os" = "cygwin"; then
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
-        if test $VCVER = "150"; then
+        case "$VCVER" in
+        150|160)
             ATL_LIB="$ATL_LIB/x64"
-        else
+            ;;
+        *)
             ATL_LIB="$ATL_LIB/amd64"
-        fi
+            ;;
+        esac
     else
-        if test $VCVER = "150"; then
+        case "$VCVER" in
+        150|160)
             ATL_LIB="$ATL_LIB/x86"
-        fi
+            ;;
+        esac
     fi
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
