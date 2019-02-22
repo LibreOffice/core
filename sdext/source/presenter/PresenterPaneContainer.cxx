@@ -85,9 +85,7 @@ void PresenterPaneContainer::PreparePane (
     pDescriptor->maViewInitialization = rViewInitialization;
     pDescriptor->mbIsActive = true;
     pDescriptor->mbIsOpaque = bIsOpaque;
-    pDescriptor->maSpriteProvider = PaneDescriptor::SpriteProvider();
     pDescriptor->mbIsSprite = false;
-    pDescriptor->maCalloutAnchorLocation = awt::Point(-1,-1);
 
     maPanes.push_back(pDescriptor);
 }
@@ -155,8 +153,7 @@ PresenterPaneContainer::SharedPaneDescriptor
 
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StoreView (
-        const Reference<XView>& rxView,
-        const SharedBitmapDescriptor& rpViewBackground)
+        const Reference<XView>& rxView)
 {
     SharedPaneDescriptor pDescriptor;
 
@@ -175,9 +172,6 @@ PresenterPaneContainer::SharedPaneDescriptor
         if (pDescriptor.get() != nullptr)
         {
             pDescriptor->mxView = rxView;
-            pDescriptor->mpViewBackground = rpViewBackground;
-            if (pDescriptor->mxPane.is())
-                pDescriptor->mxPane->SetBackground(rpViewBackground);
             try
             {
                 if (pDescriptor->maViewInitialization)
@@ -230,7 +224,6 @@ PresenterPaneContainer::SharedPaneDescriptor
         if (pDescriptor.get() != nullptr)
         {
             pDescriptor->mxView = nullptr;
-            pDescriptor->mpViewBackground = SharedBitmapDescriptor();
         }
     }
 

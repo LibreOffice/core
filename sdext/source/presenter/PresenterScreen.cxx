@@ -254,7 +254,6 @@ PresenterScreen::PresenterScreen (
       mxController(),
       mxConfigurationControllerWeak(),
       mxContextWeak(rxContext),
-      mxSlideShowControllerWeak(),
       mpPresenterController(),
       mxSavedConfiguration(),
       mpPaneContainer(),
@@ -302,7 +301,6 @@ void SAL_CALL PresenterScreen::disposing()
 
 void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
 {
-    mxSlideShowControllerWeak = WeakReference<presentation::XSlideShowController>();
     RequestShutdownPresenterScreen();
 }
 
@@ -317,7 +315,6 @@ void PresenterScreen::InitializePresenterScreen()
         Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
         Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
         Reference<presentation::XSlideShowController> xSlideShowController( xPresentation->getController() );
-        mxSlideShowControllerWeak = xSlideShowController;
 
         if( !xSlideShowController.is() || !xSlideShowController->isFullScreen() )
             return;

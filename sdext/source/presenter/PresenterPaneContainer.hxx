@@ -89,12 +89,9 @@ public:
         OUString msAccessibleTitleTemplate;
         OUString msTitle;
         ViewInitializationFunction maViewInitialization;
-        SharedBitmapDescriptor mpViewBackground;
         bool mbIsActive;
         bool mbIsOpaque;
-        SpriteProvider maSpriteProvider;
         bool mbIsSprite;
-        css::awt::Point maCalloutAnchorLocation;
 
         void SetActivationState (const bool bIsActive);
     };
@@ -118,8 +115,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
 
     SharedPaneDescriptor StoreView (
-        const css::uno::Reference<css::drawing::framework::XView>& rxView,
-        const SharedBitmapDescriptor& rpViewBackground);
+        const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
     SharedPaneDescriptor RemovePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);

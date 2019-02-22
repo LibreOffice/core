@@ -53,8 +53,7 @@ PresenterPaneBase::PresenterPaneBase (
       mxBorderPainter(),
       mxPresenterHelper(),
       msTitle(),
-      mxComponentContext(rxContext),
-      mpViewBackground()
+      mxComponentContext(rxContext)
 {
     if (mpPresenterController.get() != nullptr)
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
@@ -293,11 +292,6 @@ void PresenterPaneBase::ToTop()
 {
     if (mxPresenterHelper.is())
         mxPresenterHelper->toTop(mxContentWindow);
-}
-
-void PresenterPaneBase::SetBackground (const SharedBitmapDescriptor& rpBackground)
-{
-    mpViewBackground = rpBackground;
 }
 
 void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
