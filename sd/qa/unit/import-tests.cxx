@@ -197,6 +197,7 @@ public:
     void testTdf44223();
     void testDescriptionImport();
     void testTdf83247();
+    void testTdf47365();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testTdf44223);
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
+    CPPUNIT_TEST(testTdf47365);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2692,6 +2694,25 @@ void SdImportTest::testTdf83247()
 
     // 3. Import PPT: pause should be 0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("/sd/qa/unit/data/ppt/loopNoPause.ppt", PPT));
+}
+
+void SdImportTest::testTdf47365()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/loopNoPause.pptx"), PPTX);
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
+
+    const bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+    const sal_Int32 nPauseVal = xPresentationProps->getPropertyValue("Pause").get<sal_Int32>();
+
+    // Check that we import "loop" attribute of the presentation, and don't introduce any pauses
+    CPPUNIT_ASSERT(bEndlessVal);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPauseVal);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
