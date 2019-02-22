@@ -116,7 +116,6 @@ class ProgressCmdEnv
 {
     uno::Reference< task::XInteractionHandler2> m_xHandler;
     uno::Reference< uno::XComponentContext > m_xContext;
-    uno::Reference< task::XAbortChannel> m_xAbortChannel;
 
     DialogHelper*   m_pDialogHelper;
     OUString        m_sTitle;
@@ -282,7 +281,6 @@ void ProgressCmdEnv::stopProgress()
 void ProgressCmdEnv::progressSection( const OUString &rText,
                                       const uno::Reference< task::XAbortChannel > &xAbortChannel )
 {
-    m_xAbortChannel = xAbortChannel;
     m_nCurrentProgress = 0;
     if ( m_pDialogHelper )
     {

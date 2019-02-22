@@ -92,11 +92,9 @@ class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstance
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> m_rContext;
-    css::uno::Reference<css::connection::XConnection> m_rConnection;
 
 public:
-    AccInstanceProvider(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                        const css::uno::Reference< css::connection::XConnection >& rConnection);
+    AccInstanceProvider(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider

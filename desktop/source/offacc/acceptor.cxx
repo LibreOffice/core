@@ -113,8 +113,7 @@ void Acceptor::run()
             SAL_INFO( "desktop.offacc", "Acceptor::run connection " << aDescription );
 
             // create instanceprovider for this connection
-            Reference< XInstanceProvider > rInstanceProvider(
-                new AccInstanceProvider(m_rContext, rConnection));
+            Reference< XInstanceProvider > rInstanceProvider(new AccInstanceProvider(m_rContext));
             // create the bridge. The remote end will have a reference to this bridge
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
@@ -217,10 +216,9 @@ Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServi
 }
 
 // InstanceProvider
-AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext, const Reference<XConnection>& rConnection)
+AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext)
 {
     m_rContext = rxContext;
-    m_rConnection = rConnection;
 }
 
 AccInstanceProvider::~AccInstanceProvider()
