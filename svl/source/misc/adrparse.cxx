@@ -662,14 +662,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                         else
                             aTheRealName = rInput.copy( (m_pRealNameContentBegin - rInput.getStr()), nLen);
                     }
-                    if (pParser->m_bHasFirst)
-                        pParser->m_aRest.emplace_back( aTheAddrSpec, aTheRealName );
-                    else
-                    {
-                        pParser->m_bHasFirst = true;
-                        pParser->m_aFirst.m_aAddrSpec = aTheAddrSpec;
-                        pParser->m_aFirst.m_aRealName = aTheRealName;
-                    }
+                    pParser->m_vAddresses.emplace_back( aTheAddrSpec );
                 }
                 if (bDone)
                     return;
@@ -721,7 +714,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 }
 
 SvAddressParser::SvAddressParser(const OUString& rInput)
-    : m_bHasFirst(false)
 {
     SvAddressParser_Impl aDoParse(this, rInput);
 }
