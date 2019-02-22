@@ -635,7 +635,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
-                        && u.getLength() < SAL_N_ELEMENTS(LocalHostname))
+                        && sal_uInt32(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
                     {
                         memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof (sal_Unicode));
                     }
