@@ -24,44 +24,23 @@
 #include <vector>
 
 
-struct SvAddressEntry_Impl
-{
-    OUString m_aAddrSpec;
-    OUString m_aRealName;
-
-    SvAddressEntry_Impl()
-    {
-    }
-
-    SvAddressEntry_Impl(const OUString& rTheAddrSpec,
-                        const OUString& rTheRealName)
-        : m_aAddrSpec(rTheAddrSpec)
-        , m_aRealName(rTheRealName)
-    {
-    }
-};
-
-
 class SVL_DLLPUBLIC SvAddressParser
 {
     friend class SvAddressParser_Impl;
 
-    SvAddressEntry_Impl m_aFirst;
-    ::std::vector< SvAddressEntry_Impl >
-                        m_aRest;
-    bool                m_bHasFirst;
+    ::std::vector< OUString >
+                        m_vAddresses;
 
 public:
     SvAddressParser(const OUString& rInput);
 
     ~SvAddressParser();
 
-    sal_Int32 Count() const { return m_bHasFirst ? m_aRest.size() + 1 : 0; }
+    sal_Int32 Count() const { return m_vAddresses.size(); }
 
     const OUString& GetEmailAddress(sal_Int32 nIndex) const
     {
-        return nIndex == 0 ? m_aFirst.m_aAddrSpec :
-                             m_aRest[ nIndex - 1 ].m_aAddrSpec;
+        return m_vAddresses[nIndex];
     }
 };
 
