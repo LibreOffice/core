@@ -3199,7 +3199,9 @@ map_vs_year_to_version()
 
     case $1 in
     2017)
-        vsversion=15.0;;
+        vsversion=15;;
+    2019)
+        vsversion=16;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3217,7 +3219,7 @@ vs_versions_to_check()
         vsversions=$vsversion
     else
         # We accept only 2017
-        vsversions="15.0"
+        vsversions="15"
     fi
 }
 
@@ -3269,37 +3271,41 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2017
+    # Find Visual C++ 2017/2019
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
 
     unset vctest vcnum vcnumwithdot vcbuildnumber
 
     vs_versions_to_check "$1"
-
+    PathFormat "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe"
+    vswhere=`env | grep -oP '(?<=^ProgramFiles\(x86\)\=).+'`
+    vswhere+="\\Microsoft Visual Studio\\Installer\\vswhere.exe"
+    PathFormat "$vswhere"
+    vswhere=$formatted_path
     for ver in $vsversions; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
-        if test -n "$regvalue"; then
-            vctest=$regvalue
-            break
-        fi
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver
-        if test -n "$regvalue"; then
-            AC_MSG_RESULT([found: $regvalue])
-            PathFormat "$regvalue"
+        vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        if test -n "$vswhereoutput"; then
+            PathFormat "$vswhereoutput"
             vctest=$formatted_path
             break
         fi
     done
+    
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
         15.0)
             vcyear=2017
             vcnum=150
-            vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+            ;;
+        16.0)
+            vcyear=2019
+            vcnum=160
             ;;
         esac
+        vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+
     fi
 }
 
@@ -3308,7 +3314,6 @@ MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([Visual C++])
-
     find_msvc "$with_visual_studio"
     if test -z "$vctest"; then
         if test -n "$with_visual_studio"; then
@@ -3367,10 +3372,18 @@ if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
     else
-        if test "$BITNESS_OVERRIDE" = ""; then
-            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
+        if test "$vcnumwithdot" = "16.0"; then
+            if test "$BITNESS_OVERRIDE" = ""; then
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin"
+            else
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin/amd64"
+            fi
         else
-            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
+            if test "$BITNESS_OVERRIDE" = ""; then
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
+            else
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
+            fi
         fi
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
 	AC_MSG_RESULT([$regvalue])
@@ -3466,9 +3479,8 @@ if test "$_os" = "WINNT"; then
         # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
         # are always "better", we list them in reverse chronological order.
 
-        case $vcnum in
-        150)
-            COMEX=19
+        case "$vcnum" in
+        150|160)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
             ;;
         esac
@@ -5422,9 +5434,11 @@ find_winsdk()
 find_msms()
 {
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
-    if test $VCVER = 150; then
+    case "$VCVER" in
+        150|160)
         my_msm_files="Microsoft_VC141_CRT_x86.msm ${my_msm_files}"
-    fi
+        ;;
+    esac
     AC_MSG_CHECKING([for ${my_msm_files}])
     msmdir=
     for ver in 14.0 15.0; do
@@ -5457,7 +5471,8 @@ find_msms()
     fi
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
-    if test $VCVER = 150; then
+    case "$VCVER" in
+    150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
@@ -5468,7 +5483,8 @@ find_msms()
                 fi
             done
         done
-    fi
+        ;;
+    esac
 
     if test -n "$msmdir"; then
         msmdir=`cygpath -m "$msmdir"`
@@ -5486,7 +5502,8 @@ find_msms()
 find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    if test "$VCVER" = 150; then
+    case "$VCVER" in
+    150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
@@ -5498,7 +5515,8 @@ find_msvc_x64_dlls()
                 break
             fi
         done
-    fi
+        ;;
+    esac
     msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
@@ -12617,15 +12635,9 @@ if test "$build_os" = "cygwin"; then
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
-        if test $VCVER = "150"; then
-            ATL_LIB="$ATL_LIB/x64"
-        else
-            ATL_LIB="$ATL_LIB/amd64"
-        fi
+        ATL_LIB="$ATL_LIB/x64"
     else
-        if test $VCVER = "150"; then
-            ATL_LIB="$ATL_LIB/x86"
-        fi
+        ATL_LIB="$ATL_LIB/x86"
     fi
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
