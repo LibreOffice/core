@@ -53,11 +53,12 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
-    std::unique_ptr<SalMenu> createMenuSignal(bool, Menu*);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
     virtual ~Qt5Instance() override;
+
+    void RunInMainThread(std::function<void()> func);
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
