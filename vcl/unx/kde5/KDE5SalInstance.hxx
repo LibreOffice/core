@@ -42,13 +42,7 @@ public:
 
     virtual bool IsMainThread() const override;
 
-Q_SIGNALS:
-    SalFrame* createFrameSignal(SalFrame* pParent, SalFrameStyleFlags nStyle);
-
-    css::uno::Reference<css::ui::dialogs::XFilePicker2>
-    createFilePickerSignal(const css::uno::Reference<css::uno::XComponentContext>&);
-
-private Q_SLOTS:
+private:
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
     virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>

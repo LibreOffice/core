@@ -27,6 +27,8 @@
 
 #include <QtCore/QObject>
 
+#include <functional>
+
 class QApplication;
 class SalYieldMutex;
 class SalFrame;
@@ -51,15 +53,18 @@ public:
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     static void deleteObjectLater(QObject* pObject);
+    void ImplRunInMain();
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
-    std::unique_ptr<SalMenu> createMenuSignal(bool, Menu*);
+    void ImplRunInMainSignal();
     void deleteObjectLaterSignal(QObject* pObject);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
     virtual ~Qt5Instance() override;
+
+    void RunInMainThread(std::function<void()> func);
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
