@@ -387,7 +387,6 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
         // get current migration step
         theNameAccess->getByName(rMigrationStep) >>= tmpAccess;
         migration_step tmpStep;
-        tmpStep.name = rMigrationStep;
 
         // read included files from current step description
         if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq) {
