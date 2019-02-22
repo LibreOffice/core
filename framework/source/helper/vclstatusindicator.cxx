@@ -60,7 +60,6 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     pParentWindow->Invalidate(InvalidateFlags::Children);
     pParentWindow->Flush();
 
-    m_sText  = sText;
     m_nRange = nRange;
     m_nValue = 0;
 }
@@ -79,7 +78,6 @@ void SAL_CALL VCLStatusIndicator::end()
 {
     SolarMutexGuard aSolarGuard;
 
-    m_sText.clear();
     m_nRange = 0;
     m_nValue = 0;
 
@@ -95,7 +93,6 @@ void SAL_CALL VCLStatusIndicator::end()
 void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
 {
     SolarMutexGuard aSolarGuard;
-    m_sText = sText;
     if (m_pStatusBar)
         m_pStatusBar->SetText(sText);
 }

@@ -399,7 +399,6 @@ class Desktop : private cppu::BaseMutex,
         css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
         css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper;        /// helper to dispatch something for new tasks, created by "_blank"!
         ELoadState                                                      m_eLoadState;             /// hold information about state of asynchron loading of component for loadComponentFromURL()!
-        css::uno::Any                                                   m_aInteractionRequest;
         bool                                                            m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
         std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
         OUString                                                        m_sName;

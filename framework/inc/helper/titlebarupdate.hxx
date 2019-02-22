@@ -54,8 +54,6 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper<
         {
             /// internal id of this module
             OUString sID;
-            /// localized name for this module
-            OUString sUIName;
             /// configured icon for this module
             ::sal_Int32 nIcon;
         };

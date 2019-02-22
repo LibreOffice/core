@@ -271,7 +271,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         UIElementVector                                                      m_aUIElements;
         UIElement                                                            m_aDockUIElement;
-        Point                                                                m_aStartDockMousePos;
         tools::Rectangle                                                            m_aDockingArea;
         tools::Rectangle                                                            m_aDockingAreaOffsets;
         DockingOperation                                                     m_eDockOperation;
