@@ -47,7 +47,6 @@ public:
                                          bool bWait = true);
     virtual                 ~SfxProgress();
 
-    void                    SetStateText( sal_uInt32 nVal, const OUString &rVal );
     void                    SetState( sal_uInt32 nVal, sal_uInt32 nNewRange = 0 );
     sal_uInt32              GetState() const { return nVal; }
 

@@ -170,17 +170,6 @@ void SfxProgress::Stop()
         SfxGetpApp()->SetProgress_Impl(nullptr);
 }
 
-void SfxProgress::SetStateText
-(
-    sal_uInt32       nNewVal,     /* New value for the progress-bar */
-    const OUString& rNewVal     /* Status as Text */
-)
-
-{
-    pImpl->aStateText = rNewVal;
-    SetState( nNewVal );
-}
-
 void SfxProgress::SetState
 (
     sal_uInt32   nNewVal,    /* new value for the progress bar */

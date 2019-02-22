@@ -44,7 +44,6 @@ extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 SW_DLLPUBLIC void StartProgress(const char* pMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = nullptr);
 SW_DLLPUBLIC void EndProgress      ( SwDocShell const *pDocSh );
 SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell const *pDocShell );
-void SetProgressText(const char* pMessId, SwDocShell const *pDocShell);
 void RescheduleProgress( SwDocShell const *pDocShell );
 
 void RepaintPagePreview( SwViewShell const * pVwSh, const SwRect& rRect );

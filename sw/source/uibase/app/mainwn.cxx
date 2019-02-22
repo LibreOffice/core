@@ -116,16 +116,6 @@ void EndProgress( SwDocShell const *pDocShell )
     }
 }
 
-void SetProgressText(const char* pId, SwDocShell const *pDocShell)
-{
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
-    {
-        SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
-        if ( pProgress )
-            pProgress->pProgress->SetStateText(0, SwResId(pId));
-    }
-}
-
 void RescheduleProgress( SwDocShell const *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
