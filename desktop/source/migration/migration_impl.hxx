@@ -55,7 +55,6 @@ typedef std::unique_ptr< strings_v > strings_vr;
 
 struct migration_step
 {
-    OUString name;
     strings_v includeFiles;
     strings_v excludeFiles;
     strings_v includeConfig;
