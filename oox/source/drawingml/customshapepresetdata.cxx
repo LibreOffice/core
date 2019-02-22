@@ -275,32 +275,29 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
         }
         else if (rValue[i] == ',' && !bIgnore)
         {
-            OString aToken = rValue.copy(nStart, i - nStart);
             static const char aExpectedPrefix[] = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameter) { ";
-            if (aToken.startsWith(aExpectedPrefix))
+            if (rValue.match(aExpectedPrefix, nStart))
             {
                 drawing::EnhancedCustomShapeParameter aParameter;
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                sal_Int32 nIndex{ nStart + static_cast<sal_Int32>(strlen(aExpectedPrefix)) };
                 // We expect the following here: Value and Type
                 static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
-                assert(aToken.startsWith(aExpectedVPrefix));
-                sal_Int32 nIndex = strlen(aExpectedVPrefix);
-                aParameter.Value <<= aToken.getToken(0, '}', nIndex).toInt32();
+                assert(rValue.match(aExpectedVPrefix, nIndex));
+                nIndex += strlen(aExpectedVPrefix);
+                aParameter.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
 
                 static const char aExpectedTPrefix[] = ", Type = (short) ";
-                aToken = aToken.copy(nIndex);
-                assert(aToken.startsWith(aExpectedTPrefix));
-                nIndex = strlen(aExpectedTPrefix);
-                aParameter.Type = static_cast<sal_Int16>(aToken.getToken(0, '}', nIndex).toInt32());
+                assert(nIndex>=0 && rValue.match(aExpectedTPrefix, nIndex));
+                nIndex += strlen(aExpectedTPrefix);
+                aParameter.Type = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = rName;
                 aPropertyValue.Value <<= aParameter;
                 rHandle.push_back(aPropertyValue);
-
             }
-            else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
-                SAL_WARN("oox", "lcl_parseHandleRange: unexpected token: " << aToken);
+            else if (!rValue.match("Name =", nStart) && !rValue.match("Handle =", nStart))
+                SAL_WARN("oox", "lcl_parseHandleRange: unexpected token: " << rValue.copy(nStart, i - nStart));
             nStart = i + strlen(", ");
         }
     }
