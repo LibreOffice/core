@@ -16,7 +16,7 @@ endef
 
 else
 define fetch_Download__wget_command
-&& echo fetching $2 && bash -c '$(CURL) -O $1/$2 2>&1 | tee -a $(fetch_LOGFILE) && [ $$PIPESTATUS -eq 0 ]'
+&& echo fetching $2 && bash -c '$(CURL) -L -O $1/$2 2>&1 | tee -a $(fetch_LOGFILE) && [ $$PIPESTATUS -eq 0 ]'
 endef
 
 endif
