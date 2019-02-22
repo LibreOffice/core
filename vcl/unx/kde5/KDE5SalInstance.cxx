@@ -44,21 +44,16 @@ KDE5SalInstance::KDE5SalInstance()
     pSVData->maAppData.mxToolkitName = OUString("kde5");
 
     KDE5SalData::initNWF();
-
-    connect(this, &KDE5SalInstance::createFrameSignal, this, &KDE5SalInstance::CreateFrame,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5SalInstance::createFilePickerSignal, this,
-            &KDE5SalInstance::createFilePicker, Qt::BlockingQueuedConnection);
 }
 
 SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
-    if (!IsMainThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT createFrameSignal(pParent, nState);
-    }
-    return new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
+    SalFrame* pRet(nullptr);
+    RunInMainThread(std::function([&pRet, pParent, nState]() {
+        pRet = new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
+    }));
+    assert(pRet);
+    return pRet;
 }
 
 uno::Reference<ui::dialogs::XFilePicker2>
@@ -66,7 +61,11 @@ KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& 
 {
     if (!IsMainThread())
     {
-        return Q_EMIT createFilePickerSignal(xMSF);
+        uno::Reference<ui::dialogs::XFilePicker2> xRet;
+        RunInMainThread(
+            std::function([&xRet, this, xMSF]() { xRet = this->createFilePicker(xMSF); }));
+        assert(xRet);
+        return xRet;
     }
 
     // In order to insert custom controls, KDE5FilePicker currently relies on KFileWidget
