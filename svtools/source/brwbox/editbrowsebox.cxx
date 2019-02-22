@@ -109,7 +109,6 @@ namespace svt
         m_aImpl.reset(new EditBrowseBoxImpl);
 
         SetCompoundControl(true);
-        SetGridLineColor( COL_LIGHTGRAY );
 
         ImplInitSettings(true, true, true);
 

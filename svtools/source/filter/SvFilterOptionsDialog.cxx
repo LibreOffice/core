@@ -72,7 +72,6 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
         mxSourceDocument;
 
     css::uno::Reference<css::awt::XWindow> mxParent;
-    OUString        maDialogTitle;
     FieldUnit       meFieldUnit;
     bool            mbExportSelection;
     bool            mbGraphicsSource;
@@ -193,9 +192,8 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
 }
 
 // XExecutableDialog
-void SvFilterOptionsDialog::setTitle( const OUString& aTitle )
+void SvFilterOptionsDialog::setTitle( const OUString& )
 {
-    maDialogTitle = aTitle;
 }
 
 sal_Int16 SvFilterOptionsDialog::execute()

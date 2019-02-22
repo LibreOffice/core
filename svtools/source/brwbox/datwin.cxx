@@ -179,7 +179,6 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,pHeaderBar( nullptr )
-    ,pEventWin( pParent )
     ,pCornerWin( nullptr )
     ,bInDtor( false )
     ,bInPaint( false )
@@ -216,7 +215,6 @@ void BrowserDataWin::dispose()
 
     aInvalidRegion.clear();
     pHeaderBar.clear();
-    pEventWin.clear();
     pCornerWin.clear();
     DragSourceHelper::dispose();
     DropTargetHelper::dispose();
@@ -569,9 +567,7 @@ void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
 
 void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 {
-    pEventWin = this;
     GetParent()->RequestHelp( rHEvt );
-    pEventWin = GetParent();
 }
 
 

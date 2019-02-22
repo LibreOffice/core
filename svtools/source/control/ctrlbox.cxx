@@ -1046,20 +1046,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeFontStyleBox(VclPtr<vcl::Window> & rRet
     rRet = pListBox;
 }
 
-void FontStyleBox::Select()
-{
-    // keep text over fill operation
-    aLastStyle = GetText();
-    ComboBox::Select();
-}
-
-void FontStyleBox::LoseFocus()
-{
-    // keep text over fill operation
-    aLastStyle = GetText();
-    ComboBox::LoseFocus();
-}
-
 void FontStyleBox::Modify()
 {
     CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
@@ -1294,7 +1280,6 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 
     if( pFontMetric )
     {
-        aFontMetric = *pFontMetric;
         pAry = pList->GetSizeAry( *pFontMetric );
     }
     else

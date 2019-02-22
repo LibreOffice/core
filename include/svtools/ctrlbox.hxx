@@ -366,25 +366,13 @@ private:
 
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
-    OUString        aLastStyle;
-
     Size            aOptimalSize;
 
-private:
-    using ComboBox::SetText;
 public:
     FontStyleBox( vcl::Window* pParent, WinBits nBits );
 
-    virtual void    Select() override;
-    virtual void    LoseFocus() override;
     virtual void    Modify() override;
     virtual Size    GetOptimalSize() const override;
-
-    void            SetText( const OUString& rText ) override
-    {
-        aLastStyle = rText;
-        ComboBox::SetText( rText );
-    }
 
 private:
                     FontStyleBox( const FontStyleBox& ) = delete;
@@ -415,7 +403,6 @@ private:
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
-    FontMetric       aFontMetric;
     bool             bStdSize:1;
 
     using Window::ImplInit;

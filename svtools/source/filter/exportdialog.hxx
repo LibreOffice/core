@@ -70,7 +70,6 @@ private:
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 
     std::unique_ptr<SvMemoryStream> mpTempStream;
-    BitmapEx            maBitmap;
 
     css::awt::Size      maOriginalSize;     // the original graphic size in 1/100mm
     css::awt::Size      maSize;             // for vector graphics it always contains the logical size in 1/100mm
@@ -158,7 +157,6 @@ private:
 
     void GetGraphicSource();
     void GetGraphicStream();
-    static BitmapEx GetGraphicBitmap( SvStream& rStream );
     css::uno::Sequence< css::beans::PropertyValue >
         GetFilterData( bool bUpdateConfig );
 

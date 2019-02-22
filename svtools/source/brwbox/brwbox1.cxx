@@ -66,7 +66,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
     m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
-    aGridLineColor = COL_LIGHTGRAY;
     InitSettings_Impl( this );
     InitSettings_Impl( pDataWin );
 
