@@ -70,7 +70,6 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
       mpLayerInvalidator(),
       maLocation(),
       maIcon(),
-      maIconOffset(),
       mpShadowPainter(
           new FramePainter(mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_RawInsertShadow)))
 {
@@ -130,7 +129,6 @@ void InsertionIndicatorOverlay::Create (
     Size aIconSize(
         aPreviewSize.Width() + 2 * gnShadowBorder + nCount*nOffset,
         aPreviewSize.Height() + 2 * gnShadowBorder + nCount*nOffset);
-    maIconOffset = Point(gnShadowBorder, gnShadowBorder);
 
     // Create virtual devices for bitmap and mask whose bitmaps later be
     // combined to form the BitmapEx of the icon.

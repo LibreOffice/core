@@ -580,11 +580,6 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
     }
 }
 
-void ShowWindow::SetPresentationArea( const ::tools::Rectangle& rPresArea )
-{
-    maPresArea = rPresArea;
-}
-
 void ShowWindow::DeleteWindowFromPaintView()
 {
     if( mpViewShell->GetView() )

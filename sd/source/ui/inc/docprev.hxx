@@ -34,7 +34,6 @@ namespace sd {
 
 class SD_DLLPUBLIC SdDocPreviewWin final : public Control, public SfxListener
 {
-    Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
@@ -44,8 +43,6 @@ class SD_DLLPUBLIC SdDocPreviewWin final : public Control, public SfxListener
     static const int FRAME;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-
-    void updateViewSettings();
 
 public:
                     SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle );

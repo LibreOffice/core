@@ -49,7 +49,6 @@ class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 {
     Sequence< PropertyValue > maMediaDescriptor;
     Sequence< PropertyValue > maFilterDataSequence;
-    OUString aDialogTitle;
     DocumentType meDocType;
 
 public:
@@ -152,9 +151,8 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
 }
 
 // XExecutableDialog
-void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
+void SdHtmlOptionsDialog::setTitle( const OUString& )
 {
-    aDialogTitle = aTitle;
 }
 
 sal_Int16 SdHtmlOptionsDialog::execute()
