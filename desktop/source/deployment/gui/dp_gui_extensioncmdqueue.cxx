@@ -375,7 +375,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         {
             SolarMutexGuard guard;
-            short n = ScopedVclPtrInstance<DependencyDialog>( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, deps )->Execute();
+            DependencyDialog aDlg(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, deps);
+            short n = aDlg.run();
             // Distinguish between closing the dialog and programmatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK

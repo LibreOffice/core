@@ -22,29 +22,27 @@
 
 #include <sal/config.h>
 
-#include <vector>
 #include <tools/gen.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
+
+#include <vector>
 
 namespace vcl { class Window; }
 
 namespace dp_gui {
 
-class DependencyDialog: public ModalDialog {
+class DependencyDialog : public weld::GenericDialogController
+{
 public:
     DependencyDialog(
-        vcl::Window * parent, std::vector< OUString > const & dependencies);
+        weld::Window* parent, std::vector< OUString > const & dependencies);
     virtual ~DependencyDialog() override;
-    virtual void dispose() override;
 
 private:
     DependencyDialog(DependencyDialog const &) = delete;
     DependencyDialog& operator =(DependencyDialog const &) = delete;
 
-    VclPtr<ListBox>  m_list;
+    std::unique_ptr<weld::TreeView> m_xList;
 };
 
 }

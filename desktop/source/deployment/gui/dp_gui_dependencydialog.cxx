@@ -33,27 +33,19 @@ namespace vcl { class Window; }
 using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(
-    vcl::Window * parent, std::vector< OUString > const & dependencies):
-    ModalDialog(parent, "Dependencies", "desktop/ui/dependenciesdialog.ui")
+    weld::Window * parent, std::vector< OUString > const & dependencies)
+    : GenericDialogController(parent, "desktop/ui/dependenciesdialog.ui", "Dependencies")
+    , m_xList(m_xBuilder->weld_tree_view("depListTreeview"))
 {
-    get(m_list, "depListTreeview");
-    set_height_request(200);
-    SetMinOutputSizePixel(GetOutputSizePixel());
-    m_list->SetReadOnly();
+    m_xList->set_size_request(-1, m_xList->get_height_rows(10));
     for (auto const& dependency : dependencies)
     {
-        m_list->InsertEntry(dependency);
+        m_xList->append_text(dependency);
     }
 }
 
 DependencyDialog::~DependencyDialog()
 {
-    disposeOnce();
 }
 
-void DependencyDialog::dispose()
-{
-    m_list.clear();
-    ModalDialog::dispose();
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
