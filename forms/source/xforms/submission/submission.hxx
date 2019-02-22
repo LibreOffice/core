@@ -110,7 +110,6 @@ protected:
     css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
     css::uno::Reference< css::io::XInputStream >            m_aResultStream;
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
-    OUString m_aEncoding;
 
     ::std::unique_ptr< CSerialization > createSerialization(const css::uno::Reference< css::task::XInteractionHandler >& aHandler
                                                   ,css::uno::Reference<css::ucb::XCommandEnvironment>& _rOutEnv);
@@ -129,10 +128,6 @@ public:
 
     virtual ~CSubmission() {}
 
-    void setEncoding(const OUString& aEncoding)
-    {
-        m_aEncoding = aEncoding;
-    }
     virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
 
     SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);

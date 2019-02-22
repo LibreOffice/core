@@ -54,9 +54,6 @@ class OComboBoxModel final
     css::uno::Any              m_aLastKnownValue;
 
     css::uno::Sequence<OUString>                          m_aDesignModeStringItems;
-    // upon loading, in some cases we reset fill our string item list ourself. We don't want
-    // to lose the user's items then, so we remember them here.
-    css::uno::Reference< css::util::XNumberFormatter> m_xFormatter;
 
     css::form::ListSourceType  m_eListSourceType;      // ListSource's type
     bool                       m_bEmptyIsNull;         // Empty string is interpreted as NULL
