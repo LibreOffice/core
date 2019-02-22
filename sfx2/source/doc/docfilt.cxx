@@ -97,11 +97,6 @@ OUString SfxFilter::GetDefaultExtension() const
 }
 
 
-void SfxFilter::SetURLPattern( const OUString& rStr )
-{
-    aPattern = rStr.toAsciiLowerCase();
-}
-
 OUString SfxFilter::GetSuffixes() const
 {
     OUString aRet = GetWildcard().getGlob();

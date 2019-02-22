@@ -173,7 +173,6 @@ protected:
 
 protected:
     sal_uInt16 mnCurRegionId;
-    OUString maCurRegionName;
 
     TemplateViewItem *maSelectedItem;
 

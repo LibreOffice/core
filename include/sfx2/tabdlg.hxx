@@ -69,7 +69,6 @@ friend class SfxTabDialogUIObject;
     VclPtr<TabControl> m_pTabCtrl;
 
     VclPtr<PushButton> m_pOKBtn;
-    VclPtr<PushButton> m_pApplyBtn;
     VclPtr<PushButton> m_pUserBtn;
     VclPtr<CancelButton> m_pCancelBtn;
     VclPtr<HelpButton> m_pHelpBtn;

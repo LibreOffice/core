@@ -183,7 +183,6 @@ void TemplateLocalView::reload ()
 void TemplateLocalView::showAllTemplates()
 {
     mnCurRegionId = 0;
-    maCurRegionName.clear();
 
     insertItems(maAllTemplates, false, true);
 
@@ -193,7 +192,6 @@ void TemplateLocalView::showAllTemplates()
 void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
 {
     mnCurRegionId = pItem->mnRegionId+1;
-    maCurRegionName = pItem->maTitle;
 
     insertItems(pItem->maTemplates);
 

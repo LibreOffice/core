@@ -1079,7 +1079,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     {
         pFilt->SetVersion( nFormatVersion );
     }
-    pFilt->SetURLPattern(sPattern);
 }
 
 void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )

@@ -268,7 +268,6 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.msHighContrastIconURL = getString(aDeckNode, "HighContrastIconURL");
         rDeckDescriptor.msTitleBarIconURL = getString(aDeckNode, "TitleBarIconURL");
         rDeckDescriptor.msHighContrastTitleBarIconURL = getString(aDeckNode, "HighContrastTitleBarIconURL");
-        rDeckDescriptor.msHelpURL = getString(aDeckNode, "HelpURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, "OrderIndex");
         rDeckDescriptor.mbExperimental = getBool(aDeckNode, "IsExperimental");
@@ -429,7 +428,6 @@ void ResourceManager::ReadPanelList()
         rPanelDescriptor.msDeckId = getString(aPanelNode, "DeckId");
         rPanelDescriptor.msTitleBarIconURL = getString(aPanelNode, "TitleBarIconURL");
         rPanelDescriptor.msHighContrastTitleBarIconURL = getString(aPanelNode, "HighContrastTitleBarIconURL");
-        rPanelDescriptor.msHelpURL = getString(aPanelNode, "HelpURL");
         rPanelDescriptor.msImplementationURL = getString(aPanelNode, "ImplementationURL");
         rPanelDescriptor.mnOrderIndex = getInt32(aPanelNode, "OrderIndex");
         rPanelDescriptor.mbShowForReadOnlyDocuments = getBool(aPanelNode, "ShowForReadOnlyDocument");
@@ -663,7 +661,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rDeckDescriptor.msHighContrastIconURL = rDeckDescriptor.msIconURL;
         rDeckDescriptor.msTitleBarIconURL.clear();
         rDeckDescriptor.msHighContrastTitleBarIconURL.clear();
-        rDeckDescriptor.msHelpURL = getString(aChildNode, "HelpURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
@@ -677,7 +674,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.msDeckId = rsNodeName;
         rPanelDescriptor.msTitleBarIconURL.clear();
         rPanelDescriptor.msHighContrastTitleBarIconURL.clear();
-        rPanelDescriptor.msHelpURL = getString(aChildNode, "HelpURL");
         rPanelDescriptor.msImplementationURL = rsNodeName;
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;

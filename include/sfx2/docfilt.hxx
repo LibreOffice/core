@@ -47,7 +47,6 @@ class SFX2_DLLPUBLIC SfxFilter
     OUString aServiceName;
     OUString aMimeType;
     OUString maFilterName;
-    OUString aPattern;
     OUString aUIName;
     OUString aDefaultTemplate;
 
@@ -101,7 +100,6 @@ public:
     const OUString& GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const OUString& rStr ) { aDefaultTemplate = rStr; }
     bool            UsesStorage() const { return GetFormat() != SotClipboardFormatId::NONE; }
-    void SetURLPattern( const OUString& rStr );
     void            SetUIName( const OUString& rName ) { aUIName = rName; }
     void            SetVersion( sal_Int32 nVersionP ) { nVersion = nVersionP; }
     sal_Int32       GetVersion() const { return nVersion; }
