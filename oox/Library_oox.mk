@@ -266,6 +266,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/pptshapegroupcontext \
     oox/source/ppt/pptshapepropertiescontext \
     oox/source/ppt/presentationfragmenthandler \
+    oox/source/ppt/presPropsfragmenthandler \
     oox/source/ppt/slidefragmenthandler \
     oox/source/ppt/slidemastertextstylescontext \
     oox/source/ppt/slidepersist \
