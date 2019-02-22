@@ -284,16 +284,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     pContainer->StorePane(xPane);
     if (pDescriptor.get() != nullptr)
     {
-        if (bIsSpritePane)
-        {
-            auto const pPane(dynamic_cast<PresenterSpritePane*>(xPane.get()));
-            pDescriptor->maSpriteProvider = [pPane](){ return pPane->GetSprite(); };
-            pDescriptor->mbIsSprite = true;
-        }
-        else
-        {
-            pDescriptor->mbIsSprite = false;
-        }
+        pDescriptor->mbIsSprite = bIsSpritePane;
 
         // Get the window of the frame and make that visible.
         Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_QUERY_THROW);

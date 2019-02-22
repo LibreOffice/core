@@ -753,9 +753,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                 Reference<XView> xView (rEvent.ResourceObject,UNO_QUERY);
                 if (xView.is())
                 {
-                    SharedBitmapDescriptor pViewBackground(
-                        GetViewBackground(xView->getResourceId()->getResourceURL()));
-                    mpPaneContainer->StoreView(xView, pViewBackground);
+                    mpPaneContainer->StoreView(xView);
                     UpdateViews();
                     mpWindowManager->NotifyViewCreation(xView);
                 }

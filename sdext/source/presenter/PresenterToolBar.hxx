@@ -247,7 +247,6 @@ private:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     ::rtl::Reference<PresenterToolBar> mpToolBar;
 
 };

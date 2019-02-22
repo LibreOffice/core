@@ -70,7 +70,6 @@ public:
     virtual void SAL_CALL disposing() override;
 
     const css::uno::Reference<css::awt::XWindow>& GetBorderWindow() const;
-    void SetBackground (const SharedBitmapDescriptor& rpBackground);
     void SetTitle (const OUString& rsTitle);
     const OUString& GetTitle() const;
     const css::uno::Reference<css::drawing::framework::XPaneBorderPainter>& GetPaneBorderPainter() const;
@@ -111,7 +110,6 @@ protected:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    SharedBitmapDescriptor mpViewBackground;
 
     virtual void CreateCanvases (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) = 0;

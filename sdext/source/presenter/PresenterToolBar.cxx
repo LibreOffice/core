@@ -1016,7 +1016,6 @@ PresenterToolBarView::PresenterToolBarView (
       mxWindow(),
       mxCanvas(),
       mpPresenterController(rpPresenterController),
-      mxSlideShowController(rpPresenterController->GetSlideShowController()),
       mpToolBar()
 {
     try
@@ -1074,8 +1073,6 @@ void SAL_CALL PresenterToolBarView::disposing()
     mxViewId = nullptr;
     mxPane = nullptr;
     mpPresenterController = nullptr;
-    mxSlideShowController = nullptr;
-
 }
 
 const ::rtl::Reference<PresenterToolBar>& PresenterToolBarView::GetPresenterToolBar() const
