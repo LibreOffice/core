@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_22c3edef",
+        "filename": "desktop/inc/lib/init.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-02-22T16:03:36Z",
+      "side": 1,
+      "message": "A nitpick: no other part of the codebase uses FooBar style names for class members. Even within this class, other members below use the m_ prefix. Perhaps it would make sense to rename these to have some minimal consistency. :-)",
+      "revId": "8410ce037ab27a38b0449c7666f1676374803496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
