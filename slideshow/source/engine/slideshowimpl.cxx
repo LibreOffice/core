@@ -430,8 +430,6 @@ private:
 
     //changed for the eraser project
     boost::optional<bool>           maEraseAllInk;
-    boost::optional<bool>           maSwitchPenMode;
-    boost::optional<bool>           maSwitchEraserMode;
     boost::optional<sal_Int32>          maEraseInk;
     //end changed
 
@@ -1582,9 +1580,8 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                         "setProperty(): User paint overrides invisible mouse" );
 
             if(bSwitchPenMode){
-            // Switch to Pen Mode
-            maSwitchPenMode = bSwitchPenMode;
-            maEventMultiplexer.notifySwitchPenMode();
+                // Switch to Pen Mode
+                maEventMultiplexer.notifySwitchPenMode();
             }
         }
         return true;
@@ -1598,9 +1595,8 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
             if(bSwitchEraserMode){
-            // switch to Eraser mode
-            maSwitchEraserMode = bSwitchEraserMode;
-            maEventMultiplexer.notifySwitchEraserMode();
+                // switch to Eraser mode
+                maEventMultiplexer.notifySwitchEraserMode();
             }
         }
 
