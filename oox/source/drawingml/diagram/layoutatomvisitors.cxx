@@ -133,6 +133,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         if (rAtom.setupShape(pShape, pNewNode))
         {
             pShape->setInternalName(rAtom.getName());
+            if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
+                pShape->setAspectRatio(pAlgAtom->getAspectRatio());
             rAtom.addNodeShape(pShape);
         }
     }
@@ -153,6 +155,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             if (rAtom.setupShape(pShape, pNewNode))
             {
                 pShape->setInternalName(rAtom.getName());
+                if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
+                    pShape->setAspectRatio(pAlgAtom->getAspectRatio());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
@@ -272,6 +276,9 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     // TODO(F3): cloned shape shares all properties by reference,
     // don't change them!
     mpShape.reset(new Shape(pCurrShape));
+    // Fill properties have to be changed as sometimes only the presentation node contains the blip
+    // fill, unshare those.
+    mpShape->cloneFillProperties();
 }
 
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom const & rAtom)
