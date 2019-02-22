@@ -342,12 +342,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             ++nInserted;
                             if (!(nInserted & 15))
                             {
-                                OUString aPict = ScResId( STR_PROGRESS_IMPORT );
-                                OUString aText = aPict.getToken(0, '#')
-                                    + OUString::number( nInserted )
-                                    + aPict.getToken(1, '#');
-
-                                aProgress.SetStateText( 0, aText );
+                                aProgress.SetState( 0 );
                             }
                         }
                         else        // past the end of the spreadsheet

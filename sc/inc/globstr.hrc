@@ -125,7 +125,6 @@
 #define STR_MSSG_REPEATDB_0                     NC_("STR_MSSG_REPEATDB_0", "No operations to execute")
 #define STR_MSSG_MAKEAUTOFILTER_0               NC_("STR_MSSG_MAKEAUTOFILTER_0", "The range does not contain column headers.\nDo you want the first line to be used as column header?")
 #define STR_MSSG_IMPORTDATA_0                   NC_("STR_MSSG_IMPORTDATA_0", "Error while importing data!")
-#define STR_PROGRESS_IMPORT                     NC_("STR_PROGRESS_IMPORT", "# records imported...")
 #define STR_MSSG_MAKEOUTLINE_0                  NC_("STR_MSSG_MAKEOUTLINE_0", "Grouping not possible")
 #define STR_MSSG_REMOVEOUTLINE_0                NC_("STR_MSSG_REMOVEOUTLINE_0", "Ungrouping not possible")
 #define STR_MSSG_PASTEFROMCLIP_0                NC_("STR_MSSG_PASTEFROMCLIP_0", "Insert into multiple selection not possible")

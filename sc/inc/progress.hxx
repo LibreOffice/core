@@ -76,15 +76,6 @@ public:
                             /// for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-
-            void            SetStateText( sal_uLong nVal, const OUString &rVal )
-                                {
-                                    if ( pProgress )
-                                    {
-                                        CalcGlobalPercent( nVal );
-                                        pProgress->SetStateText( nVal, rVal );
-                                    }
-                                }
             void            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
                                 {
                                     if ( pProgress )

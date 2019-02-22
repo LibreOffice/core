@@ -133,7 +133,6 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
     SwDocShell* pDocSh = GetDoc()->GetDocShell();
     ::StartProgress( STR_STATSTR_TOX_INSERT, 0, 0, pDocSh );
-    ::SetProgressText( STR_STATSTR_TOX_INSERT, pDocSh );
 
     // Insert listing
     const SwTOXBaseSection* pTOX = mxDoc->InsertTableOf(
@@ -169,7 +168,6 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         StartAllAction();
 
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
-        ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
         pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
 
