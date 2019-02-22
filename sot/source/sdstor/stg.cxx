@@ -880,9 +880,7 @@ OUString Storage::GetUserName()
 
 bool Storage::ValidateFAT()
 {
-    Link<StgLinkArg&,void> aLink = StgIo::GetErrorLink();
     FatError nErr = pIo->ValidateFATs();
-    StgIo::SetErrorLink( aLink );
     return nErr == FatError::Ok;
 }
 
