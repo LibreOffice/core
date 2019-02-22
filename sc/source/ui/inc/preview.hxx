@@ -49,7 +49,6 @@ private:
     long            nDisplayStart;      // same as above, relative to the start of counting
     DateTime        aDateTime;
     long            nTotalPages;
-    Size            aPageSize;          // for GetOptimalZoom
     ScPrintState    aState;
     std::unique_ptr<ScPreviewLocationData> pLocationData;   // stores table layout for accessibility API
     std::unique_ptr<FmFormView> pDrawView;

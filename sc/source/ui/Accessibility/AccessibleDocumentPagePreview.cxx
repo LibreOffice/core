@@ -584,8 +584,6 @@ struct ScShapeRange
     ScShapeChildVec maBackShapes;
     ScShapeChildVec maForeShapes; // inclusive internal shapes
     ScShapeChildVec maControls;
-    tools::Rectangle       maPixelRect;
-    MapMode         maMapMode;
     ScIAccessibleViewForwarder maViewForwarder;
 };
 
@@ -1010,8 +1008,6 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
             tools::Rectangle aRect2(Point(0,0), mpAccDoc->GetBoundingBoxOnScreen().GetSize());
             aClippedPixelPaintRect = aPixelPaintRect.GetIntersection(aRect2);
         }
-        maShapeRanges[nRangeId].maPixelRect = aClippedPixelPaintRect;
-        maShapeRanges[nRangeId].maMapMode = aMapMode;
         ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
         maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
         const size_t nCount(pPage->GetObjCount());

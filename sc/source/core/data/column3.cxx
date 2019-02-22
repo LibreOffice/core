@@ -788,7 +788,6 @@ void ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
 
 void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
 {
-    rBlockPos.miBroadcasterPos = maBroadcasters.begin();
     rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();

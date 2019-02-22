@@ -31,7 +31,6 @@ typedef ScVbaCondition< ov::excel::XFormatCondition >  ScVbaFormatCondition_BASE
 class ScVbaFormatCondition final : public ScVbaFormatCondition_BASE
 {
     OUString msStyleName;
-    css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XFormatConditions> moFormatConditions;
     css::uno::Reference< ov::excel::XStyle > mxStyle;

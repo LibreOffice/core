@@ -59,8 +59,6 @@ struct ScPageAreaParam
     bool    bRepeatRow;
     bool    bRepeatCol;
     ScRange aPrintArea;
-    ScRange aRepeatRow;
-    ScRange aRepeatCol;
 
     ScPageAreaParam();
     ~ScPageAreaParam();

@@ -612,7 +612,6 @@ private:
     Reference< frame::XModel > m_xModel;
     bool m_bDocClosed;
     SfxObjectShell* mpShell;
-    OUString msProject;
 };
 
 EventListener::EventListener() :
@@ -620,7 +619,6 @@ OPropertyContainer(GetBroadcastHelper()), m_bDocClosed(false), mpShell( nullptr 
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, cppu::UnoType<decltype(m_xModel)>::get() );
-    msProject = "Standard";
 }
 
 void
@@ -638,14 +636,6 @@ EventListener::setShellFromModel()
         }
         pShell = SfxObjectShell::GetNext( *pShell );
     }
-    // set ProjectName from model
-    try
-    {
-        uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
-        msProject = xVBAMode->getProjectName();
-    }
-    catch ( uno::Exception& ) {}
 }
 
 //XEventListener

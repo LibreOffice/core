@@ -1032,7 +1032,6 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( pRepeatCol )
     {
         aAreaParam.bRepeatCol = true;
-        aAreaParam.aRepeatCol = *pRepeatCol;
         nRepeatStartCol = pRepeatCol->aStart.Col();
         nRepeatEndCol   = pRepeatCol->aEnd  .Col();
     }
@@ -1045,7 +1044,6 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( pRepeatRow )
     {
         aAreaParam.bRepeatRow = true;
-        aAreaParam.aRepeatRow = *pRepeatRow;
         nRepeatStartRow = pRepeatRow->aStart.Row();
         nRepeatEndRow   = pRepeatRow->aEnd  .Row();
     }

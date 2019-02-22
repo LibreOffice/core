@@ -30,7 +30,6 @@ namespace sax_fastparser { class FastAttributeList; }
 
 struct ScXMLExternalTabData
 {
-    OUString maFileUrl;
     ScExternalRefCache::TableTypeRef mpCacheTable;
     sal_Int32 mnRow;
     sal_Int32 mnCol;

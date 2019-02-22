@@ -187,7 +187,6 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     {
         // This is an external ref cache table.
         pExternalRefInfo.reset(new ScXMLExternalTabData);
-        pExternalRefInfo->maFileUrl = aExtUrl;
         ScDocument* pDoc = GetScImport().GetDocument();
         if (pDoc)
         {

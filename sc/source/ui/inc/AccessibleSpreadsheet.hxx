@@ -216,7 +216,6 @@ private:
     std::unique_ptr<ScRangeList>  mpMarkedRanges;
     ScAccessibleDocument* mpAccDoc;
     rtl::Reference<ScAccessibleCell> mpAccCell;
-    tools::Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     SCTAB           mnTab;
