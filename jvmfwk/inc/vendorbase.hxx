@@ -173,7 +173,6 @@ protected:
     OUString m_sHome;
     OUString m_sRuntimeLibrary;
     OUString m_sLD_LIBRARY_PATH;
-    OUString m_sArch;
     bool m_bAccessibility;
 
 

@@ -117,15 +117,11 @@ public:
 
     OString toString();
 private:
-    // Fill out the lineno, filename and definition scope details
-    void    fillDefinitionDetails();
     // Evaluate different sets of operators
     std::unique_ptr<AstExprValue> eval_bin_op();
     std::unique_ptr<AstExprValue> eval_bit_op();
     std::unique_ptr<AstExprValue> eval_un_op();
     std::unique_ptr<AstExprValue> eval_symbol();
-
-    OString  m_fileName;     // fileName defined in
 
     ExprComb        m_combOperator;
     std::unique_ptr<AstExpression>

@@ -40,8 +40,7 @@ public:
 #endif
 
 SunVersion::SunVersion(const OUString &usVer):
-    m_nUpdateSpecial(0), m_preRelease(Rel_NONE),
-    usVersion(usVer)
+    m_nUpdateSpecial(0), m_preRelease(Rel_NONE)
 {
     memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
     OString sVersion= OUStringToOString(usVer, osl_getThreadTextEncoding());
@@ -52,7 +51,6 @@ SunVersion::SunVersion(const char * szVer):
 {
     memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
     m_bValid = init(szVer);
-    usVersion= OUString(szVer,strlen(szVer),osl_getThreadTextEncoding());
 }
 
 

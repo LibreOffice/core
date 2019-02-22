@@ -83,7 +83,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         }
         else if (!bArch && prop.first == "os.arch")
         {
-            m_sArch = prop.second;
             bArch = true;
         }
         else if (!bAccess

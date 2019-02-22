@@ -158,7 +158,6 @@ typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 class StreamTable
 {
 public:
-    std::string document_id;
     std::string document_path;
     std::string document_module;
     std::string document_title;
