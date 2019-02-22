@@ -176,8 +176,6 @@ public: // module scope
     bool                bExceptionWasThrown;
     bool                bRTExceptionWasThrown;
 
-    Locale              locale;
-
 public:
     SaxExpatParser_Impl()
         : m_bEnableDoS(false)
@@ -512,9 +510,9 @@ void SaxExpatParser::setEntityResolver(const css::uno::Reference < XEntityResolv
 }
 
 
-void SaxExpatParser::setLocale( const Locale & locale )
+void SaxExpatParser::setLocale( const Locale & )
 {
-    m_pImpl->locale = locale;
+    // not implemented
 }
 
 // XServiceInfo

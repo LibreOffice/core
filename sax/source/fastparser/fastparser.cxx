@@ -124,9 +124,7 @@ struct ParserData
     css::uno::Reference< css::xml::sax::XFastTokenHandler >    mxTokenHandler;
     FastTokenHandlerBase*                                      mpTokenHandler;
     css::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
-    css::uno::Reference< css::xml::sax::XEntityResolver >      mxEntityResolver;
     css::uno::Reference< css::xml::sax::XFastNamespaceHandler >mxNamespaceHandler;
-    css::lang::Locale                                          maLocale;
 
     ParserData();
 };
@@ -228,11 +226,7 @@ public:
     /// @throws css::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
-    void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver );
-    /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
-    /// @throws css::uno::RuntimeException
-    void setLocale( const css::lang::Locale& rLocale );
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -917,16 +911,6 @@ void FastSaxParserImpl::setErrorHandler(const Reference< XErrorHandler > & Handl
     maData.mxErrorHandler = Handler;
 }
 
-void FastSaxParserImpl::setEntityResolver(const Reference < XEntityResolver > & Resolver)
-{
-    maData.mxEntityResolver = Resolver;
-}
-
-void FastSaxParserImpl::setLocale( const lang::Locale & Locale )
-{
-    maData.maLocale = Locale;
-}
-
 void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHandler >& Handler )
 {
     maData.mxNamespaceHandler = Handler;
@@ -1400,14 +1384,14 @@ void FastSaxParser::setErrorHandler( const uno::Reference< xml::sax::XErrorHandl
     mpImpl->setErrorHandler(Handler);
 }
 
-void FastSaxParser::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
+void FastSaxParser::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& )
 {
-    mpImpl->setEntityResolver(Resolver);
+    // not implemented
 }
 
-void FastSaxParser::setLocale( const lang::Locale& rLocale )
+void FastSaxParser::setLocale( const lang::Locale& )
 {
-    mpImpl->setLocale(rLocale);
+    // not implemented
 }
 
 void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler)

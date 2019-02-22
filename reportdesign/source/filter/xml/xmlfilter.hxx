@@ -85,7 +85,6 @@ private:
     rtl::Reference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >           m_xColumnStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >           m_xRowStylesPropertySetMapper;
-    rtl::Reference < XMLPropertySetMapper >           m_xTableStylesPropertySetMapper;
 
     Reference<XReportDefinition>                    m_xReportDefinition;
     std::shared_ptr<rptui::OReportModel>        m_pReportModel;

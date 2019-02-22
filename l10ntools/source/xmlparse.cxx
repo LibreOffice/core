@@ -472,8 +472,6 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur )
                             sLanguage=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                     }
-                    pElement->SetLanguageId( sLanguage );
-                    pElement->SetId( sTmpStrVal );
                 }
 
                 if ( bInsert && ( m_aNodes_localize.find( sName ) != m_aNodes_localize.end() ) )
@@ -555,16 +553,12 @@ XMLElement::XMLElement(
 )
     : XMLParentNode( pParent )
     , m_sElementName( rName )
-    , m_sId(OString())
-    , m_sLanguageId(OString())
 {
 }
 
 XMLElement::XMLElement(const XMLElement& rObj)
     : XMLParentNode( rObj )
     , m_sElementName( rObj.m_sElementName )
-    , m_sId( rObj.m_sId )
-    , m_sLanguageId( rObj.m_sLanguageId )
 {
     if ( rObj.m_pAttributes )
     {
@@ -580,8 +574,6 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
     {
         XMLParentNode::operator=(rObj);
         m_sElementName = rObj.m_sElementName;
-        m_sId = rObj.m_sId;
-        m_sLanguageId = rObj.m_sLanguageId;
 
         if ( m_pAttributes )
         {
@@ -608,7 +600,6 @@ void XMLElement::AddAttribute( const OString &rAttribute, const OString &rValue 
 
 void XMLElement::ChangeLanguageTag( const OString &rValue )
 {
-    SetLanguageId(rValue);
     if ( m_pAttributes )
     {
         bool bWasSet = false;
@@ -635,7 +626,6 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
             {
                 XMLElement* pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
-                pElem->SetLanguageId(rValue);
                 pElem  = nullptr;
                 pNode  = nullptr;
             }
