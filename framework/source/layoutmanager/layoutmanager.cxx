@@ -435,7 +435,6 @@ void LayoutManager::implts_reset( bool bAttached )
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         SolarMutexClearableGuard aWriteLock;
-        m_xModel = xModel;
         m_aDockingArea = awt::Rectangle();
         m_aModuleIdentifier = aModuleIdentifier;
         m_xModuleCfgMgr = xModCfgMgr;

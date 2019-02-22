@@ -77,25 +77,18 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentCont
     : m_xContext(xContext)
     , m_eConfigType(E_GLOBAL)
     , m_lDocumentStorages()
-    , m_aLanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)
 {
 }
 
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
-    : m_aLanguageTag( rCopy.m_aLanguageTag)
 {
     m_xContext              = rCopy.m_xContext;
     m_eConfigType           = rCopy.m_eConfigType;
-    m_sResourceType         = rCopy.m_sResourceType;
-    m_sModule               = rCopy.m_sModule;
     m_xWorkingStorageShare  = rCopy.m_xWorkingStorageShare;
     m_xWorkingStorageNoLang = rCopy.m_xWorkingStorageNoLang;
     m_xWorkingStorageUser   = rCopy.m_xWorkingStorageUser;
-    m_lPresets              = rCopy.m_lPresets;
-    m_lTargets              = rCopy.m_lTargets;
     m_lDocumentStorages     = rCopy.m_lDocumentStorages;
     m_sRelPathShare         = rCopy.m_sRelPathShare;
-    m_sRelPathNoLang        = rCopy.m_sRelPathNoLang;
     m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
 
@@ -324,9 +317,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         SolarMutexGuard g;
         m_eConfigType   = eConfigType;
-        m_sResourceType = sResource;
-        m_sModule       = sModule;
-        m_aLanguageTag  = rLanguageTag;
     }
 
     css::uno::Reference< css::embed::XStorage > xShare;
@@ -496,10 +486,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         m_xWorkingStorageShare = xShare;
         m_xWorkingStorageNoLang= xNoLang;
         m_xWorkingStorageUser  = xUser;
-        m_lPresets             = lPresets;
-        m_lTargets             = lTargets;
         m_sRelPathShare        = sRelPathShare;
-        m_sRelPathNoLang       = sRelPathNoLang;
         m_sRelPathUser         = sRelPathUser;
     }
 

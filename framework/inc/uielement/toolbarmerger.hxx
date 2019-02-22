@@ -42,7 +42,6 @@ namespace framework
 struct AddonsParams
 {
     OUString aImageId;
-    OUString aTarget;
     OUString aControlType;
     sal_uInt16 nWidth;
 };
@@ -62,7 +61,6 @@ typedef ::std::vector< AddonToolbarItem > AddonToolbarItemContainer;
 
 struct ReferenceToolbarPathInfo
 {
-    VclPtr<ToolBox>    pToolbar;
     ToolBox::ImplToolItems::size_type nPos;
     bool               bResult;
 };

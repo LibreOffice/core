@@ -246,7 +246,6 @@ namespace framework
             css::uno::Reference< css::frame::XFrame >                      m_xFrame;
             css::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
             css::uno::Reference< css::ui::XUIConfigurationManager >        m_xDocCfgMgr;
-            css::uno::WeakReference< css::frame::XModel >                  m_xModel;
             css::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
             css::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
             sal_Int32                                                      m_nLockCount;

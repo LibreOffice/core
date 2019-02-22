@@ -186,7 +186,6 @@ bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame:
         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xModuleManager->getByName (rInfo.sID);
 
-        rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ASCII_UINAME, OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ASCII_ICON  , INVALID_ICON_ID  );
 
         // Note: If we could retrieve a module id ... everything is OK.
