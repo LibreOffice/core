@@ -546,7 +546,6 @@ struct EBulletInfo
     sal_uInt16  nType;          // see SvxNumberType
     OUString    aText;
     SvxFont     aFont;
-    Graphic     aGraphic;
     sal_Int32   nParagraph;
     tools::Rectangle   aBounds;
 

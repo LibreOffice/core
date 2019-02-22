@@ -248,7 +248,6 @@ void EditRTFParser::InsertText()
     if (mpEditEngine->IsRtfImportHandlerSet())
     {
         RtfImportInfo aImportInfo(RtfImportState::InsertText, this, mpEditEngine->CreateESelection(aCurSel));
-        aImportInfo.aText = aText;
         mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertText(aCurSel, aText);

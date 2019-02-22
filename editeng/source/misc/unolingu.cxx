@@ -711,7 +711,6 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         aRes.nChangedPos        = nL;
         aRes.nChangedLength     = nLen - nL - nR;
         aRes.bIsAltSpelling     = true;
-        aRes.xHyphWord          = rHyphWord;
     }
     return aRes;
 }
