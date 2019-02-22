@@ -37,6 +37,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
 {
     Q_OBJECT
 
+    friend class Qt5YieldMutex;
+
     osl::Condition m_aWaitingYieldCond;
     int m_postUserEventId;
     const bool m_bUseCairo;
@@ -53,11 +55,12 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
-    std::unique_ptr<SalMenu> createMenuSignal(bool, Menu*);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
     virtual ~Qt5Instance() override;
+
+    void RunInMainThread(std::function<void()> func);
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     virtual SalFrame* CreateChildFrame(SystemParentData* pParent,

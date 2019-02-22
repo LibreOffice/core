@@ -42,6 +42,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
+#include <tools/debug.hxx>
+#include <comphelper/flagguard.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
@@ -49,8 +51,144 @@
 
 #include <headless/svpbmp.hxx>
 
+/// not much Qt5 specific here?
+/// transfer closure to main thread and run it...
+class Qt5YieldMutex : public SalYieldMutex
+{
+public:
+    /// flag only accessed on main thread
+    bool m_bNoYieldLock = false;
+    /// members for communication from non-main thread to main thread
+    std::mutex m_RunInMainMutex;
+    std::condition_variable m_InMainCondition;
+    bool m_isWakeUpMain = false;
+    std::function<void()> m_Closure;
+    /// members for communication from main thread to non-main thread
+    std::condition_variable m_ResultCondition;
+    bool m_isResultReady = false;
+
+    virtual bool IsCurrentThread() const override;
+    virtual void doAcquire(sal_uInt32 nLockCount) override;
+    virtual sal_uInt32 doRelease(bool const bUnlockAll) override;
+};
+
+bool Qt5YieldMutex::IsCurrentThread() const
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return true;
+    }
+    else
+    {
+        return SalYieldMutex::IsCurrentThread();
+    }
+}
+
+void Qt5YieldMutex::doAcquire(sal_uInt32 nLockCount)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread())
+    {
+        if (m_bNoYieldLock)
+        {
+            return;
+        }
+        else
+        {
+            do
+            {
+                std::function<void()> func;
+                {
+                    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+                    if (m_aMutex.tryToAcquire())
+                    {
+                        // if there's a closure, the other thread holds m_aMutex
+                        assert(!m_Closure);
+                        m_isWakeUpMain = false;
+                        --nLockCount;
+                        ++m_nCount;
+                        break;
+                    }
+                    m_InMainCondition.wait(g, [this]() { return m_isWakeUpMain; });
+                    m_isWakeUpMain = false;
+                    std::swap(func, m_Closure);
+                }
+                if (func)
+                {
+                    assert(!m_bNoYieldLock);
+                    m_bNoYieldLock = true;
+                    func();
+                    m_bNoYieldLock = false;
+                    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+                    assert(!m_isResultReady);
+                    m_isResultReady = true;
+                    m_ResultCondition.notify_all();
+                }
+            } while (true);
+        }
+    }
+    return SalYieldMutex::doAcquire(nLockCount);
+}
+
+sal_uInt32 Qt5YieldMutex::doRelease(bool const bUnlockAll)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return 1;
+    }
+    else
+    {
+        std::unique_lock<std::mutex> g(m_RunInMainMutex);
+        // read m_nCount before doRelease
+        bool const isReleased(bUnlockAll || m_nCount == 1);
+        sal_uInt32 nCount = SalYieldMutex::doRelease(bUnlockAll);
+        if (isReleased && !pSalInst->IsMainThread())
+        {
+            m_isWakeUpMain = true;
+            m_InMainCondition.notify_all();
+        }
+        return nCount;
+    }
+}
+
+// this could be abstracted to be independent of Qt5 by passing in the
+// event-trigger as another function parameter...
+// it could also be a template of the return type, then it could return the
+// result of func... but then how to handle the result in doAcquire?
+void Qt5Instance::RunInMainThread(std::function<void()> func)
+{
+    DBG_TESTSOLARMUTEX();
+    if (IsMainThread())
+    {
+        func();
+    }
+    else
+    {
+        Qt5YieldMutex* const pMutex(static_cast<Qt5YieldMutex*>(GetYieldMutex()));
+        {
+            std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+            assert(!pMutex->m_Closure);
+            pMutex->m_Closure = func;
+            pMutex->m_isWakeUpMain = true;
+            pMutex->m_InMainCondition.notify_all();
+        }
+        // wake up main thread if it is blocked on event queue
+        TriggerUserEventProcessing(); // TODO sufficient or need extra event type?
+        {
+            std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+            pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
+            pMutex->m_isResultReady = false;
+        }
+    }
+}
+
 Qt5Instance::Qt5Instance(bool bUseCairo)
-    : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
+    : SalGenericInstance(o3tl::make_unique<Qt5YieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
@@ -65,8 +203,6 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
     // this one needs to be blocking, so that the handling in main thread
     // is processed before the thread emitting the signal continues
     connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
-            Qt::BlockingQueuedConnection);
-    connect(this, &Qt5Instance::createMenuSignal, this, &Qt5Instance::CreateMenu,
             Qt::BlockingQueuedConnection);
 }
 
@@ -123,15 +259,14 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
 
 std::unique_ptr<SalMenu> Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT createMenuSignal(bMenuBar, pVCLMenu);
-    }
-
-    Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
-    pSalMenu->SetMenu(pVCLMenu);
-    return std::unique_ptr<SalMenu>(pSalMenu);
+    std::unique_ptr<SalMenu> pRet;
+    RunInMainThread([&pRet, bMenuBar, pVCLMenu]() {
+        Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
+        pRet.reset(pSalMenu);
+        pSalMenu->SetMenu(pVCLMenu);
+    });
+    assert(pRet);
+    return pRet;
 }
 
 std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rItemData)
