@@ -420,15 +420,18 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
             }
             else // F6
             {
-                if(mpAllRecentThumbnails->IsVisible())
+                if( mpAllButtonsBox->HasChildPathFocus() )
                 {
-                    mpAllRecentThumbnails->GrabFocus();
-                    return true;
-                }
-                else if(mpLocalView->IsVisible())
-                {
-                    mpLocalView->GrabFocus();
-                    return true;
+                    if(mpAllRecentThumbnails->IsVisible())
+                    {
+                        mpAllRecentThumbnails->GrabFocus();
+                        return true;
+                    }
+                    else if(mpLocalView->IsVisible())
+                    {
+                        mpLocalView->GrabFocus();
+                        return true;
+                    }
                 }
             }
         }
