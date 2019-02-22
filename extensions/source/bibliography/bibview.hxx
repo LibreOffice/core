@@ -58,7 +58,6 @@ namespace bib
     private:
         BibDataManager*                                   m_pDatMan;
         css::uno::Reference< css::form::XLoadable>        m_xDatMan;
-        css::uno::Reference< css::awt::XFocusListener>    m_xGeneralPage;
         VclPtr<BibGeneralPage>                            m_pGeneralPage;
         BibViewFormControlContainer                       m_aFormControlContainer;
 

@@ -73,8 +73,7 @@ public:
     virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
 };
 
-typedef cppu::WeakComponentImplHelper  <   css::beans::XPropertyChangeListener
-                                        ,   css::form::XLoadable
+typedef cppu::WeakComponentImplHelper  <   css::form::XLoadable
                                         >   BibDataManager_Base;
 class BibDataManager final
             :public ::comphelper::OMutexAndBroadcastHelper
@@ -91,7 +90,6 @@ private:
         OUString                     aActiveDataTable;
         OUString                     aDataSourceURL;
         OUString                     aQuoteChar;
-        css::uno::Any                aUID;
 
         ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
 
@@ -101,8 +99,6 @@ private:
         OUString                     sIdentifierMapping;
 
         void                        InsertFields(const css::uno::Reference< css::form::XFormComponent > & xGrid);
-        void                        SetMeAsUidListener();
-        void                        RemoveMeAsUidListener();
 
         css::uno::Reference< css::awt::XControlModel > const &
                                     updateGridModel(const css::uno::Reference< css::form::XForm > & xDbForm);
@@ -123,10 +119,6 @@ public:
 
         BibDataManager();
         virtual ~BibDataManager() override;
-
-        virtual void                SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
-        virtual void                SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
 
         css::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 
