@@ -80,78 +80,68 @@ void lcl_parseAdjustmentValues(std::vector<drawing::EnhancedCustomShapeAdjustmen
 drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterPair(const OString& rValue)
 {
     drawing::EnhancedCustomShapeParameterPair aPair;
-    OString aToken = rValue;
     // We expect the following here: First.Value, First.Type, Second.Value, Second.Type
     static const char aExpectedFVPrefix[] = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
-    assert(aToken.startsWith(aExpectedFVPrefix));
+    assert(rValue.startsWith(aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
-    aPair.First.Value <<= static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32());
+    aPair.First.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedFTPrefix[] = ", Type = (short) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedFTPrefix));
-    nIndex = strlen(aExpectedFTPrefix);
-    aPair.First.Type = static_cast<sal_uInt16>(aToken.getToken(0, '}', nIndex).toInt32());
+    assert(nIndex>=0 && rValue.match(aExpectedFTPrefix, nIndex));
+    nIndex += strlen(aExpectedFTPrefix);
+    aPair.First.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedSVPrefix[] = ", Second = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedSVPrefix));
-    nIndex = strlen(aExpectedSVPrefix);
-    aPair.Second.Value <<= static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32());
+    assert(nIndex>=0 && rValue.match(aExpectedSVPrefix, nIndex));
+    nIndex += strlen(aExpectedSVPrefix);
+    aPair.Second.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedSTPrefix[] = ", Type = (short) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedSTPrefix));
-    nIndex = strlen(aExpectedSTPrefix);
-    aPair.Second.Type = static_cast<sal_uInt16>(aToken.getToken(0, '}', nIndex).toInt32());
+    assert(nIndex>=0 && rValue.match(aExpectedSTPrefix, nIndex));
+    nIndex += strlen(aExpectedSTPrefix);
+    aPair.Second.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
     return aPair;
 }
 
 drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OString& rValue)
 {
     drawing::EnhancedCustomShapeSegment aSegment;
-    OString aToken = rValue;
     // We expect the following here: Command, Count
     static const char aExpectedCommandPrefix[] = "Command = (short) ";
-    assert(aToken.startsWith(aExpectedCommandPrefix));
+    assert(rValue.startsWith(aExpectedCommandPrefix));
     sal_Int32 nIndex = strlen(aExpectedCommandPrefix);
-    aSegment.Command = static_cast<sal_Int16>(aToken.getToken(0, ',', nIndex).toInt32());
+    aSegment.Command = static_cast<sal_Int16>(rValue.getToken(0, ',', nIndex).toInt32());
 
     static const char aExpectedCountPrefix[] = " Count = (short) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedCountPrefix));
-    nIndex = strlen(aExpectedCountPrefix);
-    aSegment.Count = static_cast<sal_Int16>(aToken.getToken(0, '}', nIndex).toInt32());
+    assert(nIndex>=0 && rValue.match(aExpectedCountPrefix, nIndex));
+    nIndex += strlen(aExpectedCountPrefix);
+    aSegment.Count = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
     return aSegment;
 }
 
 awt::Rectangle lcl_parseRectangle(const OString& rValue)
 {
     awt::Rectangle aRectangle;
-    OString aToken = rValue;
     // We expect the following here: X, Y, Width, Height
     static const char aExpectedXPrefix[] = "X = (long) ";
-    assert(aToken.startsWith(aExpectedXPrefix));
+    assert(rValue.startsWith(aExpectedXPrefix));
     sal_Int32 nIndex = strlen(aExpectedXPrefix);
-    aRectangle.X = aToken.getToken(0, ',', nIndex).toInt32();
+    aRectangle.X = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedYPrefix[] = " Y = (long) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedYPrefix));
-    nIndex = strlen(aExpectedYPrefix);
-    aRectangle.Y = aToken.getToken(0, ',', nIndex).toInt32();
+    assert(nIndex>=0 && rValue.match(aExpectedYPrefix, nIndex));
+    nIndex += strlen(aExpectedYPrefix);
+    aRectangle.Y = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedWidthPrefix[] = " Width = (long) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedWidthPrefix));
-    nIndex = strlen(aExpectedWidthPrefix);
-    aRectangle.Width = aToken.getToken(0, ',', nIndex).toInt32();
+    assert(nIndex>=0 && rValue.match(aExpectedWidthPrefix, nIndex));
+    nIndex += strlen(aExpectedWidthPrefix);
+    aRectangle.Width = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedHeightPrefix));
-    nIndex = strlen(aExpectedHeightPrefix);
-    aRectangle.Height = aToken.copy(nIndex).toInt32();
+    assert(nIndex>=0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    nIndex += strlen(aExpectedHeightPrefix);
+    aRectangle.Height = rValue.copy(nIndex).toInt32();
 
     return aRectangle;
 }
@@ -159,18 +149,16 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
 awt::Size lcl_parseSize(const OString& rValue)
 {
     awt::Size aSize;
-    OString aToken = rValue;
     // We expect the following here: Width, Height
     static const char aExpectedWidthPrefix[] = "Width = (long) ";
-    assert(aToken.startsWith(aExpectedWidthPrefix));
+    assert(rValue.startsWith(aExpectedWidthPrefix));
     sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
-    aSize.Width = aToken.getToken(0, ',', nIndex).toInt32();
+    aSize.Width = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    aToken = aToken.copy(nIndex);
-    assert(aToken.startsWith(aExpectedHeightPrefix));
-    nIndex = strlen(aExpectedHeightPrefix);
-    aSize.Height = aToken.copy(nIndex).toInt32();
+    assert(nIndex>=0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    nIndex += strlen(aExpectedHeightPrefix);
+    aSize.Height = rValue.copy(nIndex).toInt32();
 
     return aSize;
 }
