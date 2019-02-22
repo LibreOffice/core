@@ -91,8 +91,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 struct SvxAlternativeSpelling
 {
     OUString         aReplacement;
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >
-                    xHyphWord;
     sal_Int16       nChangedPos,
                     nChangedLength;
     bool            bIsAltSpelling;
