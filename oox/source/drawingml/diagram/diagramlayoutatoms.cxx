@@ -1258,6 +1258,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
+        if (pPresNode->mpShape)
+            rShape->getFillProperties().assignUsed(pPresNode->mpShape->getFillProperties());
     }
 
     // TODO(Q1): apply styling & coloring - take presentation

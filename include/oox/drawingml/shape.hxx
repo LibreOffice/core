@@ -220,6 +220,9 @@ public:
 
     sal_Int32 getDataNodeType() const { return mnDataNodeType; }
 
+    /// Changes reference semantics to value semantics for fill properties.
+    void cloneFillProperties();
+
 protected:
 
     css::uno::Reference< css::drawing::XShape > const &
