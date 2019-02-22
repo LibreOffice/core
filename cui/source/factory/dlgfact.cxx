@@ -144,7 +144,10 @@ short AbstractTitleDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
+short AbstractScriptSelectorDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractGalleryIdDialog_Impl::Execute()
 {
@@ -1093,24 +1096,20 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateScriptErrorDialog(co
     return VclPtr<SvxScriptErrorDialog>::Create(rException);
 }
 
-VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
-    vcl::Window* pParent, const Reference< frame::XFrame >& _rxFrame )
+VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(weld::Window* pParent,
+        const Reference<frame::XFrame>& rxFrame)
 {
-    VclPtrInstance<SvxScriptSelectorDialog> pDlg(pParent, false/*bShowSlots*/, _rxFrame);
-    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_unique<SvxScriptSelectorDialog>(pParent, false/*bShowSlots*/, rxFrame));
 }
 
 OUString AbstractScriptSelectorDialog_Impl::GetScriptURL() const
 {
-    if (pDlg)
-        return pDlg->GetScriptURL();
-    return OUString();
+    return m_xDlg->GetScriptURL();
 }
 
 void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 {
-    if (pDlg)
-        pDlg->SetRunLabel();
+    m_xDlg->SetRunLabel();
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog(weld::Window* pParent,

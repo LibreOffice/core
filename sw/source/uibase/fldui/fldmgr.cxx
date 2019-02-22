@@ -1782,12 +1782,12 @@ void SwFieldType::GetFieldName_()
     }
 }
 
-bool SwFieldMgr::ChooseMacro()
+bool SwFieldMgr::ChooseMacro(weld::Window* pDialogParent)
 {
     bool bRet = false;
 
     // choose script dialog
-    OUString aScriptURL = SfxApplication::ChooseScript();
+    OUString aScriptURL = SfxApplication::ChooseScript(pDialogParent);
 
     // the script selector dialog returns a valid script URL
     if ( !aScriptURL.isEmpty() )

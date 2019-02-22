@@ -424,7 +424,7 @@ void SdTPAction::OpenFileDialog()
         else if (bMacro)
         {
             // choose macro dialog
-            OUString aScriptURL = SfxApplication::ChooseScript();
+            OUString aScriptURL = SfxApplication::ChooseScript(GetFrameWeld());
 
             if ( !aScriptURL.isEmpty() )
             {

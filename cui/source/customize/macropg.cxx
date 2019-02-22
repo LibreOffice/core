@@ -645,17 +645,14 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        ScopedVclPtrInstance< SvxScriptSelectorDialog > pDlg( pThis, false, pThis->GetFrame() );
-        if( pDlg )
+        SvxScriptSelectorDialog aDlg(pThis->GetDialogFrameWeld(), false, pThis->GetFrame());
+        short ret = aDlg.run();
+        if ( ret )
         {
-            short ret = pDlg->Execute();
-            if ( ret )
-            {
-                sEventType = "Script";
-                sEventURL = pDlg->GetScriptURL();
-                if(!pThis->bAppEvents)
-                    pThis->bDocModified = true;
-            }
+            sEventType = "Script";
+            sEventURL = aDlg.GetScriptURL();
+            if(!pThis->bAppEvents)
+                pThis->bDocModified = true;
         }
     }
 

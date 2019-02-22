@@ -1273,25 +1273,12 @@ static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLi
 namespace
 {
 #if HAVE_FEATURE_SCRIPTING
-    vcl::Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, vcl::Window* _pFallback )
+    weld::Window* lcl_getDialogParent(const Reference<XFrame>& rxFrame)
     {
-        if ( !_rxFrame.is() )
-            return _pFallback;
-
-        try
-        {
-            Reference< awt::XWindow > xContainerWindow( _rxFrame->getContainerWindow(), UNO_SET_THROW );
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-            OSL_ENSURE( pWindow, "lcl_getDialogParent: cool, somebody implemented a VCL-less toolkit!" );
-
-            if ( pWindow )
-                return pWindow->GetSystemWindow();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("sfx.appl");
-        }
-        return _pFallback;
+        Reference<awt::XWindow> xContainerWindow;
+        if (rxFrame.is())
+            xContainerWindow = rxFrame->getContainerWindow();
+        return Application::GetFrameWeld(xContainerWindow);
     }
 
     SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell const * i_pBasicIDE )
@@ -1529,8 +1516,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             do  // artificial loop for flow control
             {
-                ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
-                    lcl_getDialogParent( xFrame, GetTopWindow() ), xFrame ));
+                ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(lcl_getDialogParent(xFrame), xFrame));
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
                     break;

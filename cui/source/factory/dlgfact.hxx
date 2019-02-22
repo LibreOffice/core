@@ -282,11 +282,15 @@ public:
 class SvxScriptSelectorDialog;
 class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 {
-    DECL_ABSTDLG_BASE(
-        AbstractScriptSelectorDialog_Impl, SvxScriptSelectorDialog)
-
+protected:
+    std::unique_ptr<SvxScriptSelectorDialog> m_xDlg;
+public:
+    explicit AbstractScriptSelectorDialog_Impl(std::unique_ptr<SvxScriptSelectorDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual OUString GetScriptURL() const override;
-
     virtual void SetRunLabel() override;
 };
 
@@ -838,11 +842,8 @@ public:
     virtual DialogGetRanges             GetDialogGetRangesFunc() override;
     virtual VclPtr<VclAbstractDialog>   CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override;
 
-    virtual VclPtr<AbstractScriptSelectorDialog>
-        CreateScriptSelectorDialog(
-            vcl::Window* pParent,
-            const css::uno::Reference< css::frame::XFrame >& _rxFrame
-        ) override;
+    virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
+            const css::uno::Reference< css::frame::XFrame >& rxFrame) override;
 
     virtual VclPtr<VclAbstractDialog> CreateScriptErrorDialog(const css::uno::Any& rException) override;
 

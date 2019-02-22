@@ -44,6 +44,7 @@ class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
 namespace vcl { class Window; }
+namespace weld { class Window; }
 enum class SwFieldIds : sal_uInt16;
 
 // the groups of fields
@@ -137,7 +138,7 @@ public:
 
     void            InsertFieldType(SwFieldType const & rType);
 
-    bool            ChooseMacro();
+    bool            ChooseMacro(weld::Window* pDialogParent);
     void            SetMacroPath(const OUString& rPath);
     const OUString& GetMacroPath() const         { return m_sMacroPath; }
     const OUString& GetMacroName() const         { return m_sMacroName; }

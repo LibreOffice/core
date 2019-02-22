@@ -162,7 +162,7 @@ public:
 
     // Basic/Scripting
     static bool                 IsXScriptURL( const OUString& rScriptURL );
-    static OUString             ChooseScript();
+    static OUString             ChooseScript(weld::Window *pParent);
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const OUString& i_macroName )
