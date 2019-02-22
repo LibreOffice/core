@@ -44,7 +44,6 @@ namespace svx
         typedef ::std::map< DataAccessDescriptorProperty, Any >     DescriptorValues;
         DescriptorValues            m_aValues;
         Sequence< PropertyValue >   m_aAsSequence;
-        Reference< XPropertySet >   m_xAsSet;
 
         typedef ::std::map< OUString, DataAccessDescriptorProperty >    MapString2PropertyEntry;
 
@@ -85,8 +84,6 @@ namespace svx
         ,m_bSequenceOutOfDate( _rSource.m_bSequenceOutOfDate )
         ,m_aValues( _rSource.m_aValues )
     {
-        if (!m_bSetOutOfDate)
-            m_xAsSet = _rSource.m_xAsSet;
         if (!m_bSequenceOutOfDate)
             m_aAsSequence = _rSource.m_aAsSequence;
     }
@@ -150,13 +147,7 @@ namespace svx
         }
 
         bool bValidPropsOnly = buildFrom(aValues);
-        if (bValidPropsOnly)
-        {
-            m_xAsSet = _rxValues;
-            m_bSetOutOfDate = false;
-        }
-        else
-            m_bSetOutOfDate = true;
+        m_bSetOutOfDate = !bValidPropsOnly;
 
         return bValidPropsOnly;
     }

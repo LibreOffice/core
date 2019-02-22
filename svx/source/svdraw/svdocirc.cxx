@@ -378,7 +378,6 @@ struct ImpCircUser : public SdrDragStatUserData
     tools::Rectangle                   aR;
     Point                       aCenter;
     Point                       aP1;
-    Point                       aP2;
     long                        nHgt;
     long                        nWdt;
     long                        nStart;
@@ -654,7 +653,6 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
         }
         aP1 = GetAnglePnt(aR,nStart);
         nEnd=nStart;
-        aP2=aP1;
     } else aP1=aCenter;
     if (rStat.GetPointCount()>3) {
         Point aP(rStat.GetPoint(3)-aCenter);
@@ -673,8 +671,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
                 nEnd=NormAngle36000(nEnd);
             }
         }
-        aP2 = GetAnglePnt(aR,nEnd);
-    } else aP2=aCenter;
+    }
 }
 
 void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat)

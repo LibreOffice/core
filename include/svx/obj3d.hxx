@@ -175,12 +175,7 @@ private:
 protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
-    // material of the object
-    Color                   aMaterialAmbientColor;
-
 protected:
-    void SetDefaultAttributes();
-
     // convert given basegfx::B3DPolyPolygon to screen coor
     basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
 

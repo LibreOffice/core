@@ -194,7 +194,6 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         tools::Rectangle aRect(aPnt, aSiz);
 
         rRenderContext.DrawRect( aRect );
-        Lines[i] = aRect;
 
         if (5 == i)
         {

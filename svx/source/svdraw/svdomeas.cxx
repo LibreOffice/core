@@ -266,8 +266,6 @@ struct ImpMeasureRec : public SdrDragStatUserData
     bool                        bBelowRefEdge;
     bool                        bTextRota90;
     bool                        bTextUpsideDown;
-    Fraction                    aMeasureScale;
-    OUString                    aFormatString;
     bool                        bTextAutoAngle;
     long                        nTextAutoAngleView;
 };
@@ -321,8 +319,6 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.bBelowRefEdge     =rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    ).GetValue();
     rRec.bTextRota90       =rSet.Get(SDRATTR_MEASURETEXTROTA90      ).GetValue();
     rRec.bTextUpsideDown   =static_cast<const SdrMeasureTextUpsideDownItem&   >(rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
-    rRec.aMeasureScale     =rSet.Get(SDRATTR_MEASURESCALE           ).GetValue();
-    rRec.aFormatString     =rSet.Get(SDRATTR_MEASUREFORMATSTRING    ).GetValue();
     rRec.bTextAutoAngle    =rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    ).GetValue();
     rRec.nTextAutoAngleView=static_cast<const SdrMeasureTextAutoAngleViewItem&>(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
 }

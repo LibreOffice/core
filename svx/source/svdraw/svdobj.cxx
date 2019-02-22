@@ -149,7 +149,6 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 }
 
 SdrObjMacroHitRec::SdrObjMacroHitRec() :
-    pOut(nullptr),
     pVisiLayer(nullptr),
     pPageView(nullptr),
     nTol(0) {}

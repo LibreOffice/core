@@ -403,7 +403,6 @@ SdrObjectUniquePtr FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID
     ::basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
     aCam.SetPosAndLookAt(aCamPos, aLookAt);
     aCam.SetFocalLength(mpView->GetDefaultCamFocal());
-    aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
     pScene->SetCamera(aCam);
     pScene->InsertObject(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);

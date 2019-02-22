@@ -492,17 +492,8 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dCompoundObject::CreateObject
 }
 
 E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)
-:   E3dObject(rSdrModel),
-    aMaterialAmbientColor()
+:   E3dObject(rSdrModel)
 {
-    // Set defaults
-    SetDefaultAttributes();
-}
-
-void E3dCompoundObject::SetDefaultAttributes()
-{
-    // Set defaults
-    aMaterialAmbientColor = COL_BLACK;
 }
 
 E3dCompoundObject::~E3dCompoundObject ()
@@ -644,9 +635,6 @@ E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)
     if( this == &rObj )
         return *this;
     E3dObject::operator=(rObj);
-
-    aMaterialAmbientColor = rObj.aMaterialAmbientColor;
-
     return *this;
 }
 

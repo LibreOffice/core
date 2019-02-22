@@ -48,7 +48,6 @@ GalleryControl::GalleryControl (
               [this] ()
                   { return mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme()); })),
       mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
-      maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)
 {
     mpBrowser1->SelectTheme(0);
@@ -171,8 +170,6 @@ void GalleryControl::Resize()
             Point( nFrameLen, nSplitPos + nSplitSize ),
             Size( aNewSize.Width() - nFrameLen2, aNewSize.Height() - nSplitSize - nSplitPos - nFrameLen ));
     }
-
-    maLastSize = aNewSize;
 }
 
 bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt )

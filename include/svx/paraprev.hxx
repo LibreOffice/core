@@ -53,8 +53,6 @@ class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetControlle
     // line distance
     SvxPrevLineSpace    eLine;
 
-    tools::Rectangle    Lines[9];
-
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void DrawParagraph(vcl::RenderContext& rRenderContext);

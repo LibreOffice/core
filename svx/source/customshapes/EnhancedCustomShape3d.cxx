@@ -595,7 +595,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt( 0.0, 0.0, 0.0 );
             basegfx::B3DPoint aCamPos( 0.0, 0.0, 100.0 );
-            rCamera.SetDefaults( basegfx::B3DPoint( 0.0, 0.0, 100.0 ), aLookAt );
             rCamera.SetPosAndLookAt( aCamPos, aLookAt );
             rCamera.SetFocalLength( 1.0 );
             rCamera.SetProjection( eProjectionType );
