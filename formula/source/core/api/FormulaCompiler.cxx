@@ -2700,11 +2700,20 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         // CheckSetForceArrayParameter() and later PutCode().
         return;
 
-    if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
-        return;
-
     if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
         return;
+
+    if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
+    {
+        if (!pCurrentFactorToken && mbMatrixFlag)
+        {
+            // An array/matrix formula acts as ForceArray on all top level
+            // operators and function calls, so that can be inherited properly
+            // below.
+            rCurr->SetInForceArray( ParamClass::ForceArray);
+        }
+        return;
+    }
 
     // Inherited parameter class.
     const formula::ParamClass eForceType = pCurrentFactorToken->GetInForceArray();
