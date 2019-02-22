@@ -48,6 +48,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -195,6 +196,7 @@ public:
     void testTdf120028b();
     void testTdf44223();
     void testDescriptionImport();
+    void testTdf83247();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -281,6 +283,7 @@ public:
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testTdf44223);
     CPPUNIT_TEST(testDescriptionImport);
+    CPPUNIT_TEST(testTdf83247);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2664,6 +2667,31 @@ void SdImportTest::testDescriptionImport()
     CPPUNIT_ASSERT_EQUAL(OUString("We Can Do It!"), sDesc);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf83247()
+{
+    auto GetPause = [this](const OUString& sSrc, sal_Int32 nFormat) {
+        sd::DrawDocShellRef xDocShRef
+            = loadURL(m_directories.getURLFromSrc(sSrc), nFormat);
+        uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+            xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPresentationProps(
+            xPresentationSupplier->getPresentation(), uno::UNO_QUERY_THROW);
+
+        auto retVal = xPresentationProps->getPropertyValue("Pause");
+        xDocShRef->DoClose();
+        return retVal.get<sal_Int32>();
+    };
+
+    // 1. Check that presentation:pause attribute is imported correctly
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), GetPause("/sd/qa/unit/data/odp/loopPause10.odp", ODP));
+
+    // 2. ODF compliance: if presentation:pause attribute is absent, it must be treated as 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("/sd/qa/unit/data/odp/loopNoPause.odp", ODP));
+
+    // 3. Import PPT: pause should be 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("/sd/qa/unit/data/ppt/loopNoPause.ppt", PPT));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

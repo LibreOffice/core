@@ -105,7 +105,7 @@ PresentationSettings::PresentationSettings()
     mbAlwaysOnTop( false ),
     mbFullScreen( true ),
     mbAnimationAllowed( true ),
-    mnPauseTimeout( 10 ),
+    mnPauseTimeout( 0 ),
     mbShowPauseLogo( false )
 {
 }
