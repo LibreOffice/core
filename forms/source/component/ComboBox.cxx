@@ -163,7 +163,6 @@ void OComboBoxModel::disposing()
     OBoundControlModel::disposing();
     OEntryListHelper::disposing();
     OErrorBroadcaster::disposing();
-    m_xFormatter = nullptr;
 }
 
 

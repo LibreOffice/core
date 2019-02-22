@@ -144,8 +144,6 @@ public:
     mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
     mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
-    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aUnaryOpCodes;
-    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
     ::std::map<const FormulaToken*, sheet::FormulaToken>    m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     VclPtr<Dialog>          m_pParent;
@@ -402,10 +400,6 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_xOpCodeMapper = m_pHelper->getFormulaOpCodeMapper();
     m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::FUNCTIONS);
     m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
-
-    m_aUnaryOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::UNARY_OPERATORS);
-
-    m_aBinaryOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::BINARY_OPERATORS);
 
     uno::Sequence< OUString > aArgs(3);
     aArgs[TOKEN_OPEN]   = "(";

@@ -40,8 +40,6 @@ typedef
 class SvtFolderPicker: public SvtFolderPicker_Base
 {
 private:
-    OUString         m_aDescription;
-
     css::uno::Reference< css::ui::dialogs::XDialogClosedListener >
                             m_xListener;
 
@@ -54,7 +52,6 @@ public:
 
 
     // XFolderPicker2 functions
-
 
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) override;
     virtual OUString SAL_CALL       getDisplayDirectory() override;

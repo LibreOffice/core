@@ -141,9 +141,8 @@ OUString SAL_CALL SvtFolderPicker::getDirectory()
     return OUString();
 }
 
-void SAL_CALL SvtFolderPicker::setDescription( const OUString& aDescription )
+void SAL_CALL SvtFolderPicker::setDescription( const OUString& )
 {
-    m_aDescription = aDescription;
 }
 
 void SvtFolderPicker::cancel()
