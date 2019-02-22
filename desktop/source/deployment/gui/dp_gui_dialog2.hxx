@@ -252,15 +252,13 @@ public:
 };
 
 
-class ShowLicenseDialog : public ModalDialog
+class ShowLicenseDialog : public weld::GenericDialogController
 {
-    VclPtr<VclMultiLineEdit> m_pLicenseText;
+    std::unique_ptr<weld::TextView> m_xLicenseText;
 public:
-    ShowLicenseDialog(vcl::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
+    ShowLicenseDialog(weld::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
     virtual ~ShowLicenseDialog() override;
-    virtual void dispose() override;
 };
-
 
 class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog >
 {
