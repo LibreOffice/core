@@ -255,7 +255,6 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         return false;
     }
 
-    xSubmission->setEncoding(getEncoding());
     CSubmission::SubmissionResult aResult = xSubmission->submit( xHandler );
 
     if (aResult == CSubmission::SUCCESS)
