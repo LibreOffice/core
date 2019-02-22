@@ -52,9 +52,6 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusInd
             */
         VclPtr<StatusBar> m_pStatusBar;
 
-        /** knows the current info text of the progress. */
-        OUString m_sText;
-
         /** knows the current range of the progress. */
         sal_Int32 m_nRange;
 

@@ -164,15 +164,6 @@ class JobData final
          */
         std::vector< css::beans::NamedValue > m_lArguments;
 
-        /**
-            after a job was successfully executed (by any outside code using our
-            information) it can return a result. This member make it part of this
-            container too. So it can be used for further things.
-            We use it also to update our internal state and the configuration
-            of the job. But note: only the last result will be saved here!
-         */
-        JobResult m_aLastExecutionResult;
-
     // native interface
 
     public:
@@ -200,7 +191,6 @@ class JobData final
         void                                         setEvent       ( const OUString&                              sEvent       ,
                                                                       const OUString&                              sAlias       );
         void                                         setJobConfig   ( const std::vector< css::beans::NamedValue >& lArguments   );
-        void                                         setResult      ( const JobResult&                                    aResult      );
         void                                         disableJob     (                                                                  );
 
         static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

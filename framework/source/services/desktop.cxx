@@ -167,7 +167,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_xFramesHelper         (                                               )
         ,   m_xDispatchHelper       (                                               )
         ,   m_eLoadState            ( E_NOTSET                                      )
-        ,   m_aInteractionRequest   (                                               )
         ,   m_bSuspendQuickstartVeto( false                                     )
         ,   m_sName                 (                                               )
         ,   m_sTitle                (                                               )
@@ -1293,7 +1292,6 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     {
         SolarMutexGuard g;
         m_eLoadState          = E_INTERACTION;
-        m_aInteractionRequest = aRequest;
     }
 }
 

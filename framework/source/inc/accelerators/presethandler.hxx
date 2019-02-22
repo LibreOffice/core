@@ -76,22 +76,6 @@ class PresetHandler
          */
         EConfigType m_eConfigType;
 
-        /** @short  specify the type of resource, which configuration sets
-                    must be provided here.
-
-            @descr  e.g. menubars, toolbars, accelerators
-         */
-        OUString m_sResourceType;
-
-        /** @short  specify the application module for a module
-                    dependent configuration.
-
-            @descr  Will be used only, if m_sResourceType is set to
-                    "module". Further it must be a valid module identifier
-                    then ...
-         */
-        OUString m_sModule;
-
         /** @short  if we run in document mode, we can't use the global root storages!
                     We have to use a special document storage explicitly. */
         StorageHolder m_lDocumentStorages;
@@ -124,24 +108,8 @@ class PresetHandler
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageUser;
 
-        /** @short  knows the names of all presets inside the current
-                    working storage of the share layer. */
-        std::vector<OUString> m_lPresets;
-
-        /** @short  knows the names of all targets inside the current
-                    working storage of the user layer. */
-        std::vector<OUString> m_lTargets;
-
-        /** @short  it's the current office locale and will be used
-                    to handle localized presets.
-
-            @descr  Default is "x-no-translate" which disable any
-                    localized handling inside this class! */
-        LanguageTag m_aLanguageTag;
-
         /** @short  knows the relative path from the root. */
         OUString m_sRelPathShare;
-        OUString m_sRelPathNoLang;
         OUString m_sRelPathUser;
 
     // native interface

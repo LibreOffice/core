@@ -83,7 +83,6 @@ JobData& JobData::operator=( const JobData& rCopy )
     m_sContext             = rCopy.m_sContext;
     m_sEvent               = rCopy.m_sEvent;
     m_lArguments           = rCopy.m_lArguments;
-    m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
     return *this;
 }
 
@@ -261,30 +260,6 @@ void JobData::setJobConfig( const std::vector< css::beans::NamedValue >& lArgume
         }
         aConfig.close();
     }
-}
-
-/**
-    @short      set a new execution result
-    @descr      Every executed job can have returned a result.
-                We set it here, so our user can use it may be later.
-                But the outside code can use it too, to analyze it and
-                adopt the configuration of this job too. Because the
-                result uses a protocol, which allow that. And we provide
-                right functionality to save it.
-
-    @param      aResult
-                    the result of last execution
- */
-void JobData::setResult( const JobResult& aResult )
-{
-    SolarMutexGuard g;
-
-    // overwrite the last saved result
-    m_aLastExecutionResult = aResult;
-
-    // Don't use his information to update
-    // e.g. the arguments of this job. It must be done
-    // from outside! Here we save this information only.
 }
 
 /**
