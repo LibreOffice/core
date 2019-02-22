@@ -420,7 +420,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         {
             SdrObjMacroHitRec aHitRec;
             aHitRec.aPos=aLocalLogicPosition;
-            aHitRec.aDownPos=aLocalLogicPosition;
             aHitRec.nTol=mnHitTolLog;
             aHitRec.pVisiLayer=&pPV->GetVisibleLayers();
             aHitRec.pPageView=pPV;
@@ -961,11 +960,9 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     if (IsMacroObj()) {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos=pOut->LogicToPixel(rMousePos);
-        aHitRec.aDownPos=aMacroDownPos;
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.pOut=pMacroWin.get();
         return pMacroObj->GetMacroPointer(aHitRec);
     }
 
@@ -1020,11 +1017,9 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
         {
             SdrObjMacroHitRec aHitRec;
             aHitRec.aPos=aVEvt.aLogicPos;
-            aHitRec.aDownPos=aHitRec.aPos;
             aHitRec.nTol=mnHitTolLog;
             aHitRec.pVisiLayer=&aVEvt.pPV->GetVisibleLayers();
             aHitRec.pPageView=aVEvt.pPV;
-            aHitRec.pOut=const_cast<OutputDevice*>(pOut);
             return aVEvt.pObj->GetMacroPointer(aHitRec);
         }
         default: break;

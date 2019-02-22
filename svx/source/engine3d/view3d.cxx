@@ -1308,7 +1308,6 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 
     aCam.SetPosAndLookAt(aCamPos, aLookAt);
     aCam.SetFocalLength(GetDefaultCamFocal());
-    aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
     pScene->SetCamera(aCam);
 }
 
@@ -1493,8 +1492,6 @@ void E3dView::ResetCreationActive ()
 
 void E3dView::InitView ()
 {
-    aDefaultLightColor       = COL_WHITE;
-    aDefaultAmbientColor     = COL_BLACK;
     mpMirrorOverlay          = nullptr;
 }
 

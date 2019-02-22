@@ -3374,7 +3374,6 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
         if (bDoCrook)
         {
             getSdrDragView().CrookMarkedObj(aCenter,aRad,eMode,bVertical,!bContortion,bCopy);
-            getSdrDragView().SetLastCrookCenter(aCenter);
         }
 
         if (bResize && bUndo)

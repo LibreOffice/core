@@ -529,7 +529,6 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         basegfx::B3DPoint aCamPos(0.0, 0.0, 10000.0);
         aCam.SetPosAndLookAt(aCamPos, aLookAt);
         aCam.SetFocalLength(100.0);
-        aCam.SetDefaults(aCamPos, aLookAt);
         pScene->SetCamera(aCam);
 
         pScene->SetRectsDirty();

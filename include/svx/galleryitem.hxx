@@ -40,7 +40,6 @@ class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
 {
     sal_Int8 m_nType;
     OUString m_aURL;
-    OUString m_aFilterName;
     css::uno::Reference< css::lang::XComponent > m_xDrawing;
     css::uno::Reference< css::graphic::XGraphic > m_xGraphic;
 

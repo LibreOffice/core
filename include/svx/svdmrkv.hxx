@@ -100,7 +100,6 @@ protected:
 
     Point                       maRef1;            // Persistent - Rotation center / axis of reflection
     Point                       maRef2;            // Persistent
-    Point                       maLastCrookCenter; // Persistent
     SdrHdlList                  maHdlList;
     sdr::ViewSelection          maSdrViewSelection;
 
@@ -423,9 +422,6 @@ public:
     // LeaveGroup()). With markings which overlaps pages, every page is processed
     // separately. The method returns sal_True, if at least one group was entered.
     void EnterMarkedGroup();
-
-    // Is set by DragView automatically when finishing a Crook-Drag.
-    void SetLastCrookCenter(const Point& rPt) { maLastCrookCenter=rPt; }
 
     // Rotation center point and start point of the axis of reflextion, respectively
     const Point& GetRef1() const { return maRef1; }

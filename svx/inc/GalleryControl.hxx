@@ -48,7 +48,6 @@ private:
     VclPtr<GallerySplitter> mpSplitter;
     VclPtr<GalleryBrowser1> mpBrowser1;
     VclPtr<GalleryBrowser2> mpBrowser2;
-    Size maLastSize;
     bool mbIsInitialResize;
 
     void InitSettings();

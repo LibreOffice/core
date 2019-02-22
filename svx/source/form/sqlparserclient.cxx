@@ -34,7 +34,6 @@ namespace svxform
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
         : m_pParser(new OSQLParser(rxContext, getParseContext()))
     {
-        m_xContext = rxContext;
     }
 
     std::unique_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(

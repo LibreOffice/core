@@ -184,8 +184,6 @@ class SVX_DLLPUBLIC SdrObjMacroHitRec
 {
 public:
     Point                       aPos;
-    Point                       aDownPos;
-    VclPtr<OutputDevice>        pOut;
     const SdrLayerIDSet*        pVisiLayer;
     const SdrPageView*          pPageView;
     sal_uInt16                  nTol;

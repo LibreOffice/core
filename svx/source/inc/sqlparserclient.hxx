@@ -41,9 +41,6 @@ namespace svxform
 
     class SVX_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
     {
-    private:
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     protected:
         mutable std::shared_ptr< ::connectivity::OSQLParser > m_pParser;
 
