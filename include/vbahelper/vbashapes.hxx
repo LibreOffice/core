@@ -66,9 +66,9 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShape > createShape( const OUString& service );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange );
+    css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange );
+    css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
     /// @throws css::uno::RuntimeException
     css::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
     OUString createName( const OUString& sName );
