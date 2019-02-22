@@ -136,7 +136,7 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
         m_sDataStyleName = rValue;
     else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
-        sPageStyle = rValue;
+        ;
     else
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }

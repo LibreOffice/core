@@ -39,7 +39,6 @@ namespace rptxml
     class OControlStyleContext : public XMLPropStyleContext
     {
         OUString             m_sDataStyleName;
-        OUString             sPageStyle;
         SvXMLStylesContext*         pStyles;
         //  std::vector<ScXMLMapContent>    aMaps;
         sal_Int32                   m_nNumberFormat;

@@ -654,8 +654,7 @@ PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
-    pInst = new PropertyHelper_Thes( rxSource, rxPropSet );
-    xPropHelper = pInst;
+    mxPropHelper = new PropertyHelper_Thes( rxSource, rxPropSet );
 }
 
 PropertyHelper_Thesaurus::~PropertyHelper_Thesaurus()
@@ -664,25 +663,24 @@ PropertyHelper_Thesaurus::~PropertyHelper_Thesaurus()
 
 void PropertyHelper_Thesaurus::AddAsPropListener()
 {
-    pInst->AddAsPropListener();
+    mxPropHelper->AddAsPropListener();
 }
 
 void PropertyHelper_Thesaurus::RemoveAsPropListener()
 {
-    pInst->RemoveAsPropListener();
+    mxPropHelper->RemoveAsPropListener();
 }
 
 void PropertyHelper_Thesaurus::SetTmpPropVals( const css::beans::PropertyValues &rPropVals )
 {
-    pInst->SetTmpPropVals( rPropVals );
+    mxPropHelper->SetTmpPropVals( rPropVals );
 }
 
 PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet)
 {
-    pInst = new PropertyHelper_Hyphen( rxSource, rxPropSet );
-    xPropHelper = pInst;
+    mxPropHelper = new PropertyHelper_Hyphen( rxSource, rxPropSet );
 }
 
 PropertyHelper_Hyphenation::~PropertyHelper_Hyphenation()
@@ -691,52 +689,51 @@ PropertyHelper_Hyphenation::~PropertyHelper_Hyphenation()
 
 void PropertyHelper_Hyphenation::AddAsPropListener()
 {
-    pInst->AddAsPropListener();
+    mxPropHelper->AddAsPropListener();
 }
 
 void PropertyHelper_Hyphenation::RemoveAsPropListener()
 {
-    pInst->RemoveAsPropListener();
+    mxPropHelper->RemoveAsPropListener();
 }
 
 void PropertyHelper_Hyphenation::SetTmpPropVals( const css::beans::PropertyValues &rPropVals )
 {
-    pInst->SetTmpPropVals( rPropVals );
+    mxPropHelper->SetTmpPropVals( rPropVals );
 }
 
 sal_Int16 PropertyHelper_Hyphenation::GetMinLeading() const
 {
-    return pInst->GetMinLeading();
+    return mxPropHelper->GetMinLeading();
 }
 
 sal_Int16 PropertyHelper_Hyphenation::GetMinTrailing() const
 {
-    return pInst->GetMinTrailing();
+    return mxPropHelper->GetMinTrailing();
 }
 
 sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
 {
-    return pInst->GetMinWordLength();
+    return mxPropHelper->GetMinWordLength();
 }
 
 bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
-    return pInst->addLinguServiceEventListener( rxListener );
+    return mxPropHelper->addLinguServiceEventListener( rxListener );
 }
 
 bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
-    return pInst->removeLinguServiceEventListener( rxListener );
+    return mxPropHelper->removeLinguServiceEventListener( rxListener );
 }
 
 PropertyHelper_Spelling::PropertyHelper_Spelling(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
-    pInst = new PropertyHelper_Spell( rxSource, rxPropSet );
-    xPropHelper = pInst;
+    mxPropHelper = new PropertyHelper_Spell( rxSource, rxPropSet );
 }
 
 PropertyHelper_Spelling::~PropertyHelper_Spelling()
@@ -745,46 +742,46 @@ PropertyHelper_Spelling::~PropertyHelper_Spelling()
 
 void PropertyHelper_Spelling::AddAsPropListener()
 {
-    pInst->AddAsPropListener();
+    mxPropHelper->AddAsPropListener();
 }
 
 void PropertyHelper_Spelling::RemoveAsPropListener()
 {
-    pInst->RemoveAsPropListener();
+    mxPropHelper->RemoveAsPropListener();
 }
 
 void PropertyHelper_Spelling::SetTmpPropVals( const css::beans::PropertyValues &rPropVals )
 {
-    pInst->SetTmpPropVals( rPropVals );
+    mxPropHelper->SetTmpPropVals( rPropVals );
 }
 
 bool PropertyHelper_Spelling::IsSpellUpperCase() const
 {
-    return pInst->IsSpellUpperCase();
+    return mxPropHelper->IsSpellUpperCase();
 }
 
 bool PropertyHelper_Spelling::IsSpellWithDigits() const
 {
-    return pInst->IsSpellWithDigits();
+    return mxPropHelper->IsSpellWithDigits();
 }
 
 bool PropertyHelper_Spelling::IsSpellCapitalization() const
 {
-    return pInst->IsSpellCapitalization();
+    return mxPropHelper->IsSpellCapitalization();
 }
 
 bool PropertyHelper_Spelling::addLinguServiceEventListener(
                 const css::uno::Reference<
                     css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
-    return pInst->addLinguServiceEventListener( rxListener );
+    return mxPropHelper->addLinguServiceEventListener( rxListener );
 }
 
 bool PropertyHelper_Spelling::removeLinguServiceEventListener(
                 const css::uno::Reference<
                     css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
-    return pInst->removeLinguServiceEventListener( rxListener );
+    return mxPropHelper->removeLinguServiceEventListener( rxListener );
 }
 
 }   // namespace linguistic

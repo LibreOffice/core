@@ -206,8 +206,6 @@ class XMLElement : public XMLParentNode
 private:
     OString m_sElementName;
     std::unique_ptr<XMLAttributeList> m_pAttributes;
-    OString m_sId;
-    OString m_sLanguageId;
 
 protected:
     void Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement) const;
@@ -237,9 +235,6 @@ public:
 
     /// Return a Unicode String representation of this object
     OString ToOString();
-
-    void SetId              ( OString const & sTheId )      { m_sId = sTheId; }
-    void SetLanguageId      ( OString const & sLangId )     { m_sLanguageId = sLangId; }
 };
 
 /** Holds character data
