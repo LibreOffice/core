@@ -571,7 +571,6 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
 }
 
 
-#define STR_UID "uid"
 OUString const gGridName("theGrid");
 OUString const gViewName("theView");
 OUString const gGlobalName("theGlobals");
@@ -596,7 +595,6 @@ BibDataManager::~BibDataManager()
     {
         Reference< XComponent >  xConnection;
         xPrSet->getPropertyValue("ActiveConnection") >>= xConnection;
-        RemoveMeAsUidListener();
         if (xLoad.is())
             xLoad->unload();
         if (xComp.is())
@@ -1068,7 +1066,6 @@ void SAL_CALL BibDataManager::load(  )
     if ( xFormAsLoadable.is() )
     {
         xFormAsLoadable->load();
-        SetMeAsUidListener();
 
         EventObject aEvt( static_cast< XWeak* >( this ) );
         m_aLoadListeners.notifyEach( &XLoadListener::loaded, aEvt );
@@ -1092,7 +1089,6 @@ void SAL_CALL BibDataManager::unload(  )
             m_aLoadListeners.notifyEach( &XLoadListener::unloading, aEvt );
         }
 
-        RemoveMeAsUidListener();
         xFormAsLoadable->unload();
 
         {
@@ -1355,106 +1351,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
         OSL_FAIL("::loadControlModel: something went wrong !");
     }
     return xModel;
-}
-
-void BibDataManager::disposing( const EventObject& /*Source*/ )
-{
-    // not interested in
-}
-
-
-void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt)
-{
-    try
-    {
-        if(evt.PropertyName == FM_PROP_VALUE)
-        {
-            if( evt.NewValue.getValueType() == cppu::UnoType<io::XInputStream>::get())
-            {
-                Reference< io::XDataInputStream >  xStream(
-                    evt.NewValue, UNO_QUERY );
-                aUID <<= xStream->readUTF();
-            }
-            else
-                aUID = evt.NewValue;
-        }
-    }
-    catch (const Exception&)
-    {
-        OSL_FAIL("::propertyChange: something went wrong !");
-    }
-}
-
-
-void BibDataManager::SetMeAsUidListener()
-{
-    try
-    {
-        Reference< XNameAccess >  xFields = getColumns( m_xForm );
-        if (!xFields.is())
-            return;
-
-        OUString theFieldName;
-        for( const OUString& rName : xFields->getElementNames() )
-        {
-            if (rName.equalsIgnoreAsciiCase(STR_UID))
-            {
-                theFieldName=rName;
-                break;
-            }
-        }
-
-        if(!theFieldName.isEmpty())
-        {
-            Any aElement;
-
-            aElement = xFields->getByName(theFieldName);
-            auto xPropSet = o3tl::doAccess<Reference<XPropertySet>>(aElement);
-
-            (*xPropSet)->addPropertyChangeListener(FM_PROP_VALUE, this);
-        }
-
-    }
-    catch (const Exception&)
-    {
-        OSL_FAIL("Exception in BibDataManager::SetMeAsUidListener");
-    }
-}
-
-
-void BibDataManager::RemoveMeAsUidListener()
-{
-    try
-    {
-        Reference< XNameAccess >  xFields = getColumns( m_xForm );
-        if (!xFields.is())
-            return;
-
-        OUString theFieldName;
-        for(const OUString& rName : xFields->getElementNames() )
-        {
-            if (rName.equalsIgnoreAsciiCase(STR_UID))
-            {
-                theFieldName=rName;
-                break;
-            }
-        }
-
-        if(!theFieldName.isEmpty())
-        {
-            Any aElement;
-
-            aElement = xFields->getByName(theFieldName);
-            auto xPropSet = o3tl::doAccess<Reference<XPropertySet>>(aElement);
-
-            (*xPropSet)->removePropertyChangeListener(FM_PROP_VALUE, this);
-        }
-
-    }
-    catch (const Exception&)
-    {
-        OSL_FAIL("Exception in BibDataManager::RemoveMeAsUidListener");
-    }
 }
 
 void BibDataManager::CreateMappingDialog(vcl::Window* pParent)

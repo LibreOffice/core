@@ -628,11 +628,8 @@ void UpdateHandler::loadStrings()
     msDownloadNotAvail = loadString( loc, RID_UPDATE_STR_DOWNLOAD_UNAVAIL );
     msDownloading   = loadString( loc, RID_UPDATE_STR_DOWNLOADING );
     msReady2Install = loadString( loc, RID_UPDATE_STR_READY_INSTALL );
-    msCancelTitle   = loadString( loc, RID_UPDATE_STR_CANCEL_TITLE );
     msCancelMessage = loadString( loc, RID_UPDATE_STR_CANCEL_DOWNLOAD );
     msInstallMessage = loadString( loc, RID_UPDATE_STR_BEGIN_INSTALL );
-    msInstallNow    = loadString( loc, RID_UPDATE_STR_INSTALL_NOW );
-    msInstallLater  = loadString( loc, RID_UPDATE_STR_INSTALL_LATER );
     msInstallError  = loadString( loc, RID_UPDATE_STR_INSTALL_ERROR );
     msOverwriteWarning = loadString( loc, RID_UPDATE_STR_OVERWRITE_WARNING );
     msPercent       = loadString( loc, RID_UPDATE_STR_PERCENT );
