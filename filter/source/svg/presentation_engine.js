@@ -190,6 +190,11 @@ function getDefaultKeyCodeDictionary()
         = function() { return aSlideShow.displaySlide( theMetaDoc.nNumberOfSlides - 1, true ); };
     keyCodeDict[SLIDE_MODE][SPACE_KEY]
         = function() { return dispatchEffects(1); };
+    // The ESC key can't actually be handled on iOS, it seems to be hardcoded to work like the home button? But try anyway.
+    keyCodeDict[SLIDE_MODE][ESCAPE_KEY]
+        = function() { return aSlideShow.exitSlideShowInApp(); };
+    keyCodeDict[SLIDE_MODE][Q_KEY]
+        = function() { return aSlideShow.exitSlideShowInApp(); };
 
     // index mode
     keyCodeDict[INDEX_MODE][LEFT_KEY]
@@ -1833,6 +1838,7 @@ var END_KEY = 35;           // end keycode
 var ENTER_KEY = 13;
 var SPACE_KEY = 32;
 var ESCAPE_KEY = 27;
+var Q_KEY = 81;
 
 // Visibility Values
 var HIDDEN = 0;
@@ -15671,14 +15677,28 @@ SlideShow.prototype.rewindAllEffects = function()
     }
 };
 
+SlideShow.prototype.exitSlideShowInApp = function()
+{
+    var ua = navigator.userAgent;
+    if (ua.indexOf(' AppleWebKit/') !== -1 &&
+        ua.indexOf(' Mobile/') !== -1 &&
+        window.webkit !== undefined &&
+        window.webkit.messageHandlers !== undefined &&
+        window.webkit.messageHandlers.lool !== undefined)
+        window.webkit.messageHandlers.lool.postMessage('EXITSLIDESHOW', '*');
+}
+
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 {
     var aMetaDoc = theMetaDoc;
     var nSlides = aMetaDoc.nNumberOfSlides;
     if( nNewSlide < 0 && nSlides > 0 )
         nNewSlide = nSlides - 1;
-    else if( nNewSlide >= nSlides )
+    else if( nNewSlide >= nSlides ) {
         nNewSlide = 0;
+        // In the iOS app, exit the slideshow when going past the end.
+        this.exitSlideShowInApp();
+    }
 
     if( ( currentMode === INDEX_MODE ) && ( nNewSlide === nCurSlide ) )
     {
