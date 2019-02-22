@@ -830,7 +830,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, weld::Button&, void)
 {
     // Use static SfxApplication method to bring up selector dialog for
     // choosing a script
-    OUString aScriptURL = SfxApplication::ChooseScript();
+    OUString aScriptURL = SfxApplication::ChooseScript(GetDialogFrameWeld());
 
     if ( !aScriptURL.isEmpty() )
     {

@@ -148,7 +148,10 @@ public:
     bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
     // set iter to point to next node, depth first, then sibling
     bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
+    bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
     OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
+    OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
+    bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
     void scroll_to_row(const weld::TreeIter& rIter) { return m_xTreeView->scroll_to_row(rIter); }
     void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
 
@@ -156,6 +159,7 @@ public:
 
     void          ClearAll();
     OUString      GetSelectedScriptURI();
+    OUString      GetHelpText( bool bConsiderParent = true );
 };
 
 struct SvxConfigGroupBoxResource_Impl;
@@ -250,6 +254,7 @@ public:
     CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    const weld::TreeView& get_widget() const { return *m_xTreeView; }
     ~CuiConfigGroupListBox();
     void                ClearAll();
 
@@ -260,35 +265,36 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
+    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
-class SvxScriptSelectorDialog : public ModalDialog
+class SvxScriptSelectorDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>                      m_pDialogDescription;
-    VclPtr<SfxConfigGroupListBox>          m_pCategories;
-    VclPtr<SfxConfigFunctionListBox>       m_pCommands;
-    VclPtr<PushButton>                     m_pOKButton;
-    VclPtr<PushButton>                     m_pCancelButton;
-    VclPtr<VclMultiLineEdit>               m_pDescriptionText;
     OUString                               m_sDefaultDesc;
     SfxStylesInfo_Impl                     m_aStylesInfo;
     bool                                   m_bShowSlots;
 
-    DECL_LINK( ClickHdl, Button *, void );
-    DECL_LINK( SelectHdl, SvTreeListBox*, void );
-    DECL_LINK( FunctionDoubleClickHdl, SvTreeListBox*, bool );
+    std::unique_ptr<weld::Label> m_xDialogDescription;
+    std::unique_ptr<CuiConfigGroupListBox> m_xCategories;
+    std::unique_ptr<CuiConfigFunctionListBox> m_xCommands;
+    std::unique_ptr<weld::Label> m_xLibraryFT;
+    std::unique_ptr<weld::Label> m_xCategoryFT;
+    std::unique_ptr<weld::Label> m_xMacronameFT;
+    std::unique_ptr<weld::Label> m_xCommandsFT;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::Button> m_xCancelButton;
+    std::unique_ptr<weld::TextView> m_xDescriptionText;
+
+    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, void);
 
     void                            UpdateUI();
 
 public:
-
-    SvxScriptSelectorDialog (
-        vcl::Window* pParent,
-        bool bShowSlots,
-        const css::uno::Reference< css::frame::XFrame >& xFrame
-    );
+    SvxScriptSelectorDialog(weld::Window* pParent, bool bShowSlots,
+                            const css::uno::Reference< css::frame::XFrame >& xFrame);
     virtual ~SvxScriptSelectorDialog() override;
-    virtual void dispose() override;
 
     OUString    GetScriptURL() const;
     void        SetRunLabel();

@@ -327,6 +327,31 @@ OUString SfxConfigFunctionListBox::GetHelpText( bool bConsiderParent )
     return OUString();
 }
 
+OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
+{
+    int nSelected = m_xTreeView->get_selected_index();
+    if (nSelected != -1)
+    {
+        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
+        if (pData)
+        {
+            if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
+            {
+                if (bConsiderParent)
+                    return Application::GetHelp()->GetHelpText(pData->sCommand, m_xTreeView.get());
+                else
+                    return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
+            }
+            else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
+            {
+                return pData->sHelpText;
+            }
+        }
+    }
+    return OUString();
+}
+
+
 OUString SfxConfigFunctionListBox::GetCurCommand()
 {
     SvTreeListEntry *pEntry = FirstSelected();
@@ -505,6 +530,10 @@ void SfxConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
     pStylesInfo = pStyles;
 }
 
+void CuiConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    m_pStylesInfo = pStyles;
+}
 
 void SfxConfigGroupListBox::InitModule()
 {
@@ -1782,48 +1811,47 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, weld::TreeIter&, rIter, bool)
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-    vcl::Window* pParent, bool bShowSlots, const css::uno::Reference< css::frame::XFrame >& xFrame)
-    : ModalDialog(pParent, "MacroSelectorDialog", "cui/ui/macroselectordialog.ui")
+    weld::Window* pParent, bool bShowSlots, const css::uno::Reference< css::frame::XFrame >& xFrame)
+    : GenericDialogController(pParent, "cui/ui/macroselectordialog.ui", "MacroSelectorDialog")
     , m_bShowSlots(bShowSlots)
+    , m_xDialogDescription(m_xBuilder->weld_label(bShowSlots ? "helptoolbar" : "helpmacro"))
+    , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("categories")))
+    , m_xCommands(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("commands")))
+    , m_xLibraryFT(m_xBuilder->weld_label("libraryft"))
+    , m_xCategoryFT(m_xBuilder->weld_label("categoryft"))
+    , m_xMacronameFT(m_xBuilder->weld_label("macronameft"))
+    , m_xCommandsFT(m_xBuilder->weld_label("commandsft"))
+    , m_xOKButton(m_xBuilder->weld_button(bShowSlots ? "add" : "ok"))
+    , m_xCancelButton(m_xBuilder->weld_button(bShowSlots ? "close" : "cancel"))
+    , m_xDescriptionText(m_xBuilder->weld_text_view("description"))
 {
-    get<FixedText>("libraryft")->Show(!m_bShowSlots);
-    get<FixedText>("categoryft")->Show(m_bShowSlots);
-    get<FixedText>("macronameft")->Show(!m_bShowSlots);
-    get<FixedText>("commandsft")->Show(m_bShowSlots);
-    get(m_pDescriptionText, "description");
-    get(m_pCommands, "commands");
     if (m_bShowSlots)
     {
         // If we are showing Slot API commands update labels in the UI
-        SetText(CuiResId(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
-        get(m_pCancelButton, "close");
-        get(m_pDialogDescription, "helptoolbar");
-        get(m_pOKButton, "add");
+        m_xDialog->set_title(CuiResId(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
     }
-    else
-    {
-        get(m_pCancelButton, "cancel");
-        get(m_pDialogDescription, "helpmacro");
-        get(m_pOKButton, "ok");
-    }
-    m_pCancelButton->Show();
-    m_pDialogDescription->Show();
-    m_pOKButton->Show();
+    m_xCancelButton->show();
+    m_xDialogDescription->show();
+    m_xOKButton->show();
 
-    get(m_pCategories, "categories");
+    m_xLibraryFT->show(!m_bShowSlots);
+    m_xCategoryFT->show(m_bShowSlots);
+    m_xMacronameFT->show(!m_bShowSlots);
+    m_xCommandsFT->show(m_bShowSlots);
+
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
-    m_pCategories->SetFunctionListBox(m_pCommands);
-    m_pCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, bShowSlots);
+    m_xCategories->SetFunctionListBox(m_xCommands.get());
+    m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, bShowSlots);
 
-    m_pCategories->SetSelectHdl(
+    m_xCategories->connect_changed(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
-    m_pCommands->SetSelectHdl( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
-    m_pCommands->SetDoubleClickHdl( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
+    m_xCommands->connect_changed( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
+    m_xCommands->connect_row_activated( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
 
-    m_pOKButton->SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
-    m_pCancelButton->SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
+    m_xOKButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
+    m_xCancelButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
 
-    m_sDefaultDesc = m_pDescriptionText->GetText();
+    m_sDefaultDesc = m_xDescriptionText->get_text();
 
     // Support style commands
     uno::Reference<frame::XController> xController;
@@ -1834,41 +1862,28 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
         xModel = xController->getModel();
 
     m_aStylesInfo.init(aModuleName, xModel);
-    m_pCategories->SetStylesInfo(&m_aStylesInfo);
+    m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
     UpdateUI();
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
 {
-    disposeOnce();
 }
 
-void SvxScriptSelectorDialog::dispose()
+IMPL_LINK(SvxScriptSelectorDialog, SelectHdl, weld::TreeView&, rCtrl, void)
 {
-    m_pDialogDescription.clear();
-    m_pCategories.clear();
-    m_pCommands.clear();
-    m_pOKButton.clear();
-    m_pCancelButton.clear();
-    m_pDescriptionText.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void )
-{
-    if (pCtrl == m_pCategories)
+    if (&rCtrl == &m_xCategories->get_widget())
     {
-        m_pCategories->GroupSelected();
+        m_xCategories->GroupSelected();
     }
     UpdateUI();
 }
 
-IMPL_LINK_NOARG( SvxScriptSelectorDialog, FunctionDoubleClickHdl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG(SvxScriptSelectorDialog, FunctionDoubleClickHdl, weld::TreeView&, void)
 {
-    if (m_pOKButton->IsEnabled())
-        ClickHdl(m_pOKButton);
-    return false;
+    if (m_xOKButton->get_sensitive())
+        ClickHdl(*m_xOKButton);
 }
 
 // Check if command is selected and enable the OK button accordingly
@@ -1879,42 +1894,38 @@ SvxScriptSelectorDialog::UpdateUI()
     OUString url = GetScriptURL();
     if ( !url.isEmpty() )
     {
-        OUString sMessage = m_pCommands->GetHelpText();
-        m_pDescriptionText->SetText(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
+        OUString sMessage = m_xCommands->GetHelpText();
+        m_xDescriptionText->set_text(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
 
-        m_pOKButton->Enable();
+        m_xOKButton->set_sensitive(true);
     }
     else
     {
-        m_pDescriptionText->SetText(m_sDefaultDesc);
-        m_pOKButton->Enable( false );
+        m_xDescriptionText->set_text(m_sDefaultDesc);
+        m_xOKButton->set_sensitive(false);
     }
 }
 
-IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
+IMPL_LINK(SvxScriptSelectorDialog, ClickHdl, weld::Button&, rButton, void)
 {
-    if (pButton == m_pCancelButton)
+    if (&rButton == m_xCancelButton.get())
     {
-        EndDialog();
+        m_xDialog->response(RET_CANCEL);
     }
-    else if (pButton == m_pOKButton)
+    else if (&rButton == m_xOKButton.get())
     {
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
         if ( !m_bShowSlots )
         {
-            EndDialog( RET_OK );
+            m_xDialog->response(RET_OK);
         }
         else
         {
             // Select the next entry in the list if possible
-            SvTreeListEntry* current = m_pCommands->FirstSelected();
-            SvTreeListEntry* next = current->NextSibling();
-
-            if ( next != nullptr )
-            {
-                m_pCommands->Select( next );
-            }
+            std::unique_ptr<weld::TreeIter> xIter = m_xCommands->make_iterator();
+            if (m_xCommands->get_selected(xIter.get()) && m_xCommands->iter_next_sibling(*xIter))
+                m_xCommands->select(*xIter);
         }
     }
 }
@@ -1922,7 +1933,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    m_pOKButton->SetText(CuiResId(RID_SVXSTR_SELECTOR_RUN));
+    m_xOKButton->set_label(CuiResId(RID_SVXSTR_SELECTOR_RUN));
 }
 
 OUString
@@ -1930,10 +1941,10 @@ SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
 
-    SvTreeListEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->m_pCommands->FirstSelected();
-    if ( pEntry )
+    std::unique_ptr<weld::TreeIter> xIter = m_xCommands->make_iterator();
+    if (m_xCommands->get_selected(xIter.get()))
     {
-        SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
+        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter).toInt64());
         if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
             ||  ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
             ||  ( pData->nKind == SfxCfgKind::GROUP_STYLES )
