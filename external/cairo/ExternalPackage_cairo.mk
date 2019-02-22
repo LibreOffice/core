@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
 ifneq ($(OS),ANDROID)
 
-$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11400.6))
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11600.0))
 
 endif
 
