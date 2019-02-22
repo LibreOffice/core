@@ -37,10 +37,6 @@ class ScDataProviderBaseControl : public VclContainer,
     VclPtr<Edit> maEditID;
     VclPtr<PushButton> mpApplyBtn;
 
-    OUString maOldProvider;
-    OUString maURL;
-    OUString maID;
-
     Link<Window*, void> const maImportCallback;
 
     DECL_LINK(ProviderSelectHdl, ListBox&, void);
@@ -163,19 +159,16 @@ void ScDataProviderBaseControl::updateApplyBtn(bool bValidConfig)
 IMPL_LINK_NOARG(ScDataProviderBaseControl, ProviderSelectHdl, ListBox&, void)
 {
     isValid();
-    maOldProvider = maProviderList->GetSelectedEntry();
 }
 
 IMPL_LINK_NOARG(ScDataProviderBaseControl, IDEditHdl, Edit&, void)
 {
     isValid();
-    maID = maEditID->GetText();
 }
 
 IMPL_LINK_NOARG(ScDataProviderBaseControl, URLEditHdl, Edit&, void)
 {
     isValid();
-    maURL = maEditURL->GetText();
 }
 
 IMPL_LINK_NOARG(ScDataProviderBaseControl, ApplyBtnHdl, Button*, void)

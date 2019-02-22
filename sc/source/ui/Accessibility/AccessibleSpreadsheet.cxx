@@ -284,7 +284,6 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     mnTab = nTab;
     mbDelIns = false;
     mbIsFocusSend = false;
-    maVisCells = GetVisCells(GetVisArea(mpViewShell, meSplitPos));
     if (mpViewShell)
     {
         mpViewShell->AddAccessibilityObject(*this);

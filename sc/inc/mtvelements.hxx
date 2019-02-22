@@ -130,7 +130,6 @@ struct ColumnBlockPosition
 struct ColumnBlockConstPosition
 {
     CellNoteStoreType::const_iterator miCellNotePos;
-    BroadcasterStoreType::const_iterator miBroadcasterPos;
     CellTextAttrStoreType::const_iterator miCellTextAttrPos;
     CellStoreType::const_iterator miCellPos;
 

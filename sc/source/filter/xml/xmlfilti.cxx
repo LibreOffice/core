@@ -575,12 +575,8 @@ void SAL_CALL ScXMLDPFilterContext::endFastElement( sal_Int32 /*nElement*/ )
     aFilterFields.eSearchType = eSearchType;
     aFilterFields.bCaseSens = bIsCaseSensitive;
     aFilterFields.bDuplicate = !bSkipDuplicates;
-    if (bCopyOutputData)
-        pDataPilotTable->SetFilterOutputPosition(aOutputPosition);
 
     pDataPilotTable->SetSourceQueryParam(aFilterFields);
-    if (bConditionSourceRange)
-        pDataPilotTable->SetFilterSourceRange(aConditionSourceRangeAddress);
 }
 
 void ScXMLDPFilterContext::AddFilterField (const ScQueryEntry& aFilterField)

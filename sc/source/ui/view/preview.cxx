@@ -278,7 +278,6 @@ void ScPreview::CalcPages()
             nTabStart = nThisStart;
 
             aPrintFunc.GetPrintState( aState );
-            aPageSize = aPrintFunc.GetPageSize();
         }
     }
 

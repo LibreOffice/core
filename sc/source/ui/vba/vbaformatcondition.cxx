@@ -47,7 +47,6 @@ ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterfa
 {
         mxSheetConditionalEntries = lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getSheetConditionalEntries();
 
-        mxSheetConditionalEntry = _xSheetConditionalEntry;
         msStyleName = mxStyle->getName();
 }
 

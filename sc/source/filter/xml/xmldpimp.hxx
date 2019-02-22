@@ -87,8 +87,6 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     OUString   sSourceRangeName;
     ScRange         aSourceCellRangeAddress;
     ScRange         aTargetRangeAddress;
-    ScRange         aFilterSourceRange;
-    ScAddress       aFilterOutputPosition;
     ScQueryParam    aSourceQueryParam;
     ScMySourceType  nSourceType;
     sal_uInt32      mnRowFieldCount;
@@ -132,8 +130,6 @@ public:
     void SetSourceRangeName(const OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = true; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
-    void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
-    void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
     void AddDimension(ScDPSaveDimension* pDim);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);

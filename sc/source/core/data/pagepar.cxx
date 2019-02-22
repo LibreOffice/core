@@ -58,8 +58,6 @@ void ScPageAreaParam::Reset()
     bPrintArea = bRepeatRow = bRepeatCol = false;
 
     aPrintArea = ScRange();
-    aRepeatRow = ScRange();
-    aRepeatCol = ScRange();
 }
 
 
