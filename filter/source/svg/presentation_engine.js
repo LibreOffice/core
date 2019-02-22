@@ -106,6 +106,28 @@ function onKeyDown( aEvt )
 
     var code = aEvt.keyCode || aEvt.charCode;
 
+    // console.log('===> onKeyDown: ' + code);
+
+    // Handle arrow keys in iOS WebKit (including Mobile Safari)
+    if (code == 0 && aEvt.key != undefined) {
+        switch (aEvt.key) {
+        case 'UIKeyInputLeftArrow':
+            code = LEFT_KEY;
+            break;
+        case 'UIKeyInputUpArrow':
+            code = UP_KEY;
+            break;
+        case 'UIKeyInputRightArrow':
+            code = RIGHT_KEY;
+            break;
+        case 'UIKeyInputDownArrow':
+            code = DOWN_KEY;
+            break;
+        }
+
+        // console.log('     now: ' + code);
+    }
+
     if( !processingEffect && keyCodeDictionary[currentMode] && keyCodeDictionary[currentMode][code] )
     {
         return keyCodeDictionary[currentMode][code]();
