@@ -40,6 +40,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ppt/presentationfragmenthandler.hxx>
+#include <oox/ppt/presPropsfragmenthandler.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;
@@ -125,6 +126,8 @@ bool PowerPointImport::importDocument()
     OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
+    const OUString sPresPropsPath
+        = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc("presProps");
 
     // importRelations() is cheap, it will do an actual import for the first time only.
     if (core::RelationsRef pFragmentRelations = importRelations(aFragmentPath))
@@ -137,6 +140,12 @@ bool PowerPointImport::importDocument()
     }
 
     bool bRet = importFragment(xPresentationFragmentHandler);
+    if (bRet && !sPresPropsPath.isEmpty())
+    {
+        FragmentHandlerRef xPresPropsFragmentHandler(
+            new PresPropsFragmentHandler(*this, sPresPropsPath));
+        importFragment(xPresPropsFragmentHandler);
+    }
 
     static bool bNoSmartartWarning = getenv("OOX_NO_SMARTART_WARNING");
     if (!bNoSmartartWarning && mbMissingExtDrawing)
