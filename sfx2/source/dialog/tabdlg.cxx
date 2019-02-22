@@ -455,7 +455,6 @@ void SfxTabDialog::dispose()
     m_pBox.clear();
     m_pTabCtrl.clear();
     m_pOKBtn.clear();
-    m_pApplyBtn.clear();
     m_pUserBtn.clear();
     m_pCancelBtn.clear();
     m_pHelpBtn.clear();
@@ -486,8 +485,6 @@ void SfxTabDialog::Init_Impl()
     if (m_bOwnsOKBtn)
         m_pOKBtn = VclPtr<OKButton>::Create(m_pActionArea);
 
-    m_pApplyBtn = m_pUIBuilder->get<PushButton>("apply");
-    m_pUserBtn = m_pUIBuilder->get<PushButton>("user");
     m_pCancelBtn = m_pUIBuilder->get<CancelButton>("cancel");
     m_bOwnsCancelBtn = m_pCancelBtn == nullptr;
     if (m_bOwnsCancelBtn)

@@ -51,7 +51,6 @@ class SfxItemSet;
 class SFX2_DLLPUBLIC SfxFrameDescriptor
 {
     INetURLObject           aURL;
-    INetURLObject           aActualURL;
     OUString                aName;
     Size                    aMargin;
     ScrollingMode           eScroll;

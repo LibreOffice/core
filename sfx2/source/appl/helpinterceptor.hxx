@@ -31,15 +31,6 @@
 #include <vector>
 #include <memory>
 
-struct HelpHistoryEntry_Impl
-{
-    OUString const  aURL;
-    css::uno::Any    aViewData;
-
-    HelpHistoryEntry_Impl( const OUString& rURL, const css::uno::Any& rViewData ) :
-        aURL( rURL ), aViewData(rViewData) {}
-};
-
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper<
         css::frame::XDispatchProviderInterceptor,
@@ -60,7 +51,7 @@ friend class SfxHelpWindow_Impl;
 
     css::uno::Reference< css::frame::XStatusListener > m_xListener;
 
-    std::unique_ptr<std::vector<std::unique_ptr<HelpHistoryEntry_Impl>>> m_pHistory;
+    std::vector<OUString>       m_vHistoryUrls;
     VclPtr<SfxHelpWindow_Impl>  m_pWindow;
     sal_uIntPtr                 m_nCurPos;
     OUString                    m_aCurrentURL;

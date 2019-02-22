@@ -33,7 +33,6 @@ public:
     OUString msDeckId;
     OUString msTitleBarIconURL;
     OUString msHighContrastTitleBarIconURL;
-    OUString msHelpURL;
     ContextList maContextList;
     OUString msImplementationURL;
     sal_Int32 mnOrderIndex;

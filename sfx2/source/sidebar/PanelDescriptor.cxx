@@ -28,7 +28,6 @@ PanelDescriptor::PanelDescriptor()
       msDeckId(),
       msTitleBarIconURL(),
       msHighContrastTitleBarIconURL(),
-      msHelpURL(),
       maContextList(),
       msImplementationURL(),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
@@ -45,7 +44,6 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       msDeckId(rOther.msDeckId),
       msTitleBarIconURL(rOther.msTitleBarIconURL),
       msHighContrastTitleBarIconURL(rOther.msHighContrastTitleBarIconURL),
-      msHelpURL(rOther.msHelpURL),
       maContextList(rOther.maContextList),
       msImplementationURL(rOther.msImplementationURL),
       mnOrderIndex(rOther.mnOrderIndex),

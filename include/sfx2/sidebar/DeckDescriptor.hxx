@@ -35,7 +35,6 @@ public:
     OUString msHighContrastIconURL;
     OUString msTitleBarIconURL;
     OUString msHighContrastTitleBarIconURL;
-    OUString msHelpURL;
     OUString msHelpText;
     ContextList maContextList;
     bool mbIsEnabled;

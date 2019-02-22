@@ -53,7 +53,6 @@ void TemplateDefaultView::reload()
 void TemplateDefaultView::showAllTemplates()
 {
     mnCurRegionId = 0;
-    maCurRegionName.clear();
 
     insertItems(maAllTemplates, false);
     maOpenRegionHdl.Call(nullptr);

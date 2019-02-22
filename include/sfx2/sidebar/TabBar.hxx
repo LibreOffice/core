@@ -50,7 +50,7 @@ class SFX2_DLLPUBLIC TabBar
     : public vcl::Window
 {
 public:
-    /** DeckMenuData has entries for display name, deck id, and a flag:
+    /** DeckMenuData has entries for display name, and a flag:
          - isCurrentDeck for the deck selection data
          - isEnabled     for the show/hide menu
     */
@@ -58,7 +58,6 @@ public:
     {
     public:
         OUString msDisplayName;
-        OUString msDeckId;
         bool mbIsCurrentDeck;
         bool mbIsActive;
         bool mbIsEnabled;

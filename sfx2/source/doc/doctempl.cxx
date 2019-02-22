@@ -148,7 +148,6 @@ class RegionData_Impl
     std::vector<std::unique_ptr<DocTempl_EntryData_Impl>> maEntries;
     OUString                    maTitle;
     OUString                    maOwnURL;
-    OUString                    maTargetURL;
 
 private:
     size_t                      GetEntryPos( const OUString& rTitle,
@@ -159,7 +158,6 @@ public:
                         RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                          const OUString& rTitle );
 
-    void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
     DocTempl_EntryData_Impl*     GetEntry( size_t nIndex ) const;
@@ -1069,7 +1067,6 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
         if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
         {
             pRegion->SetTitle( rName );
-            pRegion->SetTargetURL( "" );
             pRegion->SetHierarchyURL( "" );
             return true;
         }

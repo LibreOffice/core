@@ -452,10 +452,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel  aModel;
             OUString aDocType;
 
-            const SfxStringItem* pMailSubject = rReq.GetArg<SfxStringItem>(SID_MAIL_SUBJECT);
-            if ( pMailSubject )
-                aModel.SetSubject( pMailSubject->GetValue() );
-
             const SfxStringItem* pMailRecipient = rReq.GetArg<SfxStringItem>(SID_MAIL_RECIPIENT);
             if ( pMailRecipient )
             {

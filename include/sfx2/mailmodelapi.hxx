@@ -51,7 +51,6 @@ protected:
 private:
     std::unique_ptr<AddressList_Impl>   mpToList;
     OUString            maFromAddress;
-    OUString            maSubject;
 
     static SaveResult   ShowFilterOptionsDialog( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
                                                  const css::uno::Reference< css::frame::XModel >& xModel,
@@ -73,7 +72,6 @@ public:
     ~SfxMailModel();
 
     void                AddToAddress( const OUString& rAddress );
-    void                SetSubject( const OUString& rSubject )        { maSubject = rSubject; }
 
     /** attaches a document to the current attachment list, can be called more than once.
     *   at the moment there will be a dialog for export executed for every model which is going to be attached.
