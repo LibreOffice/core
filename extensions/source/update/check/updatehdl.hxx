@@ -105,11 +105,8 @@ private:
     OUString           msDownloadNotAvail; // RID_UPDATE_STR_DOWNLOAD_UNAVAIL
     OUString           msDownloading;      // RID_UPDATE_STR_DOWNLOADING
     OUString           msReady2Install;    // RID_UPDATE_STR_READY_INSTALL
-    OUString           msCancelTitle;      // RID_UPDATE_STR_CANCEL_TITLE
     OUString           msCancelMessage;    // RID_UPDATE_STR_CANCEL_DOWNLOAD
     OUString           msInstallMessage;   // RID_UPDATE_STR_BEGIN_INSTALL
-    OUString           msInstallNow;       // RID_UPDATE_STR_INSTALL_NOW
-    OUString           msInstallLater;     // RID_UPDATE_STR_INSTALL_LATER
     OUString           msInstallError;     // RID_UPDATE_STR_INSTALL_ERROR
     OUString           msOverwriteWarning; // RID_UPDATE_STR_OVERWRITE_WARNING
     OUString           msPercent;          // RID_UPDATE_STR_PERCENT

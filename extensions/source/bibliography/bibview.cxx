@@ -114,7 +114,6 @@ namespace bib
 
         pGeneralPage->RemoveListeners();
         pGeneralPage.disposeAndClear();
-        m_xGeneralPage = nullptr;
         BibWindow::dispose();
     }
 
@@ -128,11 +127,9 @@ namespace bib
             m_pGeneralPage->Hide();
             m_pGeneralPage->RemoveListeners();
             m_pGeneralPage.disposeAndClear();
-            m_xGeneralPage = nullptr;
         }
 
         m_pGeneralPage = VclPtr<BibGeneralPage>::Create( this, m_pDatMan );
-        m_xGeneralPage = m_pGeneralPage->GetFocusListener().get();
         m_pGeneralPage->Show();
 
         if( HasFocus() )
