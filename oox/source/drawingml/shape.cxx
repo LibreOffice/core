@@ -1796,6 +1796,12 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
     return xRelListTemp;
 }
 
+void Shape::cloneFillProperties()
+{
+    auto pFillProperties = std::make_shared<FillProperties>();
+    pFillProperties->assignUsed(*mpFillPropertiesPtr);
+    mpFillPropertiesPtr = pFillProperties;
+}
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

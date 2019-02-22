@@ -67,6 +67,7 @@ public:
     void testContinuousBlockProcess();
     void testOrgChart();
     void testCycleMatrix();
+    void testPictureStrip();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testContinuousBlockProcess);
     CPPUNIT_TEST(testOrgChart);
     CPPUNIT_TEST(testCycleMatrix);
+    CPPUNIT_TEST(testPictureStrip);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -901,6 +903,42 @@ void SdImportTestSmartArt::testCycleMatrix()
     uno::Reference<drawing::XShape> xA1Shape(xA1, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xA1Shape.is());
     CPPUNIT_ASSERT_EQUAL(xA1Shape->getSize().Height, xA1Shape->getSize().Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testPictureStrip()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-picture-strip.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<beans::XPropertySet> xFirstImage(getChildShape(getChildShape(xGroup, 0), 1),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstImage.is());
+    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+    xFirstImage->getPropertyValue("FillStyle") >>= eFillStyle;
+    // Without the accompanying fix in place, this test would have failed: fill style was solid, not
+    // bitmap.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, eFillStyle);
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xFirstImage->getPropertyValue("FillBitmap") >>= xGraphic;
+    Graphic aFirstGraphic(xGraphic);
+
+    uno::Reference<beans::XPropertySet> xSecondImage(getChildShape(getChildShape(xGroup, 1), 1),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondImage.is());
+    eFillStyle = drawing::FillStyle_NONE;
+    xSecondImage->getPropertyValue("FillStyle") >>= eFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, eFillStyle);
+
+    xSecondImage->getPropertyValue("FillBitmap") >>= xGraphic;
+    Graphic aSecondGraphic(xGraphic);
+    // Without the accompanying fix in place, this test would have failed: both xFirstImage and
+    // xSecondImage had the bitmap fill from the second shape.
+    CPPUNIT_ASSERT(aFirstGraphic.GetChecksum() != aSecondGraphic.GetChecksum());
 
     xDocShRef->DoClose();
 }
