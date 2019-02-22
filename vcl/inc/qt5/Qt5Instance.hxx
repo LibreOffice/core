@@ -37,6 +37,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
 {
     Q_OBJECT
 
+    friend class Qt5YieldMutex;
+
     osl::Condition m_aWaitingYieldCond;
     int m_postUserEventId;
     const bool m_bUseCairo;
@@ -54,6 +56,16 @@ private Q_SLOTS:
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
     std::unique_ptr<SalMenu> createMenuSignal(bool, Menu*);
+    weld::Builder* CreateBuilderSignal(weld::Widget* pParent, const OUString& rUIRoot,
+                                       const OUString& rUIFile);
+
+private:
+#if 0
+    weld::Builder* CreateBuilderSignalImpl(weld::Widget* pParent,
+        const OUString& rUIRoot, const OUString& rUIFile);
+#endif
+protected:
+    void RunInMainThread(std::function<void()> func);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
@@ -115,6 +127,9 @@ public:
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::uno::XInterface> CreateDragSource() override;
     virtual css::uno::Reference<css::uno::XInterface> CreateDropTarget() override;
+#if 0
+    virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

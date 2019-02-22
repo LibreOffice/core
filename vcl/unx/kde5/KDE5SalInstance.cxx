@@ -46,8 +46,10 @@ KDE5SalInstance::KDE5SalInstance()
 
     KDE5SalData::initNWF();
 
+#if 0
     connect(this, &KDE5SalInstance::createFrameSignal, this, &KDE5SalInstance::CreateFrame,
             Qt::BlockingQueuedConnection);
+#endif
     connect(this, &KDE5SalInstance::createFilePickerSignal, this,
             &KDE5SalInstance::createFilePicker, Qt::BlockingQueuedConnection);
 }
@@ -56,8 +58,14 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
 {
     if (!IsMainThread())
     {
+#if 0
         SolarMutexReleaser aReleaser;
         return Q_EMIT createFrameSignal(pParent, nState);
+#endif
+        SalFrame* pRet(nullptr);
+        RunInMainThread(std::function(
+            [&pRet, this, pParent, nState]() { pRet = this->CreateFrame(pParent, nState); }));
+        return pRet;
     }
     return new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
 }

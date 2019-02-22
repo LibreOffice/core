@@ -42,6 +42,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
+#include <tools/debug.hxx>
+#include <comphelper/flagguard.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
@@ -49,8 +51,183 @@
 
 #include <headless/svpbmp.hxx>
 
+#if 0
+class Qt5YieldMutex : public SalYieldMutex
+{
+    virtual bool IsCurrentThread() const override
+    {
+        auto const* pSalInstance(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+        assert(pSalInstance);
+        if (pSalInstance->IsMainThread() && pSalInstance->m_bNoYieldLock)
+        {
+            return true;
+        }
+        else
+        {
+            return SalYieldMutex::IsCurrentThread();
+        }
+    }
+    virtual void doAcquire(sal_uInt32 const nLockCount) override
+    {
+        auto const* pSalInstance(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+        assert(pSalInstance);
+        if (pSalInstance->IsMainThread() && pSalInstance->m_bNoYieldLock)
+        {
+            return;
+        }
+        else
+        {
+            return SalYieldMutex::doAcquire(nLockCount);
+        }
+    }
+    virtual sal_uInt32 doRelease(bool const bUnlockAll) override
+    {
+        auto const* pSalInstance(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+        assert(pSalInstance);
+        if (pSalInstance->IsMainThread() && pSalInstance->m_bNoYieldLock)
+        {
+            return 1;
+        }
+        else
+        {
+            return SalYieldMutex::doRelease(bUnlockAll);
+        }
+    }
+};
+#endif
+
+/// nothing Qt5 specific here? transfer closure to main thread...
+class Qt5YieldMutex : public SalYieldMutex
+{
+public:
+    /// flag only accessed on main thread
+    bool m_bNoYieldLock = false;
+    std::mutex m_RunInMainMutex;
+    std::condition_variable m_InMainCondition;
+    bool m_isWakeUpMain = false;
+    std::condition_variable m_ResultCondition;
+    bool m_isResultReady = false;
+    std::function<void()> m_Closure;
+
+    virtual bool IsCurrentThread() const override;
+    virtual void doAcquire(sal_uInt32 nLockCount) override;
+    virtual sal_uInt32 doRelease(bool const bUnlockAll) override;
+};
+
+bool Qt5YieldMutex::IsCurrentThread() const
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return true;
+    }
+    else
+    {
+        return SalYieldMutex::IsCurrentThread();
+    }
+}
+
+void Qt5YieldMutex::doAcquire(sal_uInt32 nLockCount)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread())
+    {
+        if (m_bNoYieldLock)
+        {
+            return;
+        }
+        else
+        {
+            do
+            {
+                // closure
+                std::function<void()> func;
+                {
+                    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+                    if (m_aMutex.tryToAcquire())
+                    {
+                        assert(!m_Closure);
+                        m_isWakeUpMain = false;
+                        --nLockCount;
+                        ++m_nCount;
+                        break;
+                    }
+                    m_InMainCondition.wait(g, [this]() { return m_isWakeUpMain; });
+                    m_isWakeUpMain = false;
+                    std::swap(func, m_Closure);
+                }
+                if (func)
+                {
+                    assert(!m_bNoYieldLock);
+                    m_bNoYieldLock = true;
+                    func();
+                    m_bNoYieldLock = false;
+                    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+                    assert(!m_isResultReady);
+                    m_isResultReady = true;
+                    m_ResultCondition.notify_all();
+                }
+            } while (true);
+        }
+    }
+    return SalYieldMutex::doAcquire(nLockCount);
+}
+
+sal_uInt32 Qt5YieldMutex::doRelease(bool const bUnlockAll)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return 1;
+    }
+    else
+    {
+        std::unique_lock<std::mutex> g(m_RunInMainMutex);
+        // read m_nCount before doRelease
+        bool const isReleased(bUnlockAll || m_nCount == 1);
+        sal_uInt32 nCount = SalYieldMutex::doRelease(bUnlockAll);
+        if (isReleased && !pSalInst->IsMainThread())
+        {
+            m_isWakeUpMain = true;
+            m_InMainCondition.notify_all();
+        }
+        return nCount;
+    }
+}
+
+void Qt5Instance::RunInMainThread(std::function<void()> func)
+{
+    DBG_TESTSOLARMUTEX();
+    if (IsMainThread())
+    {
+        func();
+    }
+    else
+    {
+        Qt5YieldMutex* const pMutex(static_cast<Qt5YieldMutex*>(GetYieldMutex()));
+        {
+            std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+            assert(!pMutex->m_Closure);
+            pMutex->m_Closure = func;
+            pMutex->m_isWakeUpMain = true;
+            pMutex->m_InMainCondition.notify_all();
+        }
+        // wake up main thread if it is blocked on event queue
+        TriggerUserEventProcessing(); // TODO sufficient or need extra event type?
+        {
+            std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+            pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
+            pMutex->m_isResultReady = false;
+        }
+    }
+}
+
 Qt5Instance::Qt5Instance(bool bUseCairo)
-    : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
+    : SalGenericInstance(o3tl::make_unique<Qt5YieldMutex>())
+    //    , m_bNoYieldLock(false)
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
@@ -68,6 +245,10 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
             Qt::BlockingQueuedConnection);
     connect(this, &Qt5Instance::createMenuSignal, this, &Qt5Instance::CreateMenu,
             Qt::BlockingQueuedConnection);
+#if 0
+    connect(this, &Qt5Instance::CreateBuilderSignal, this, &Qt5Instance::CreateBuilderSignalImpl,
+            Qt::BlockingQueuedConnection);
+#endif
 }
 
 Qt5Instance::~Qt5Instance()
@@ -268,6 +449,28 @@ Reference<XInterface> Qt5Instance::CreateDropTarget()
 {
     return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
 }
+
+#if 0
+weld::Builder* Qt5Instance::CreateBuilderSignalImpl(weld::Widget* pParent,
+        const OUString& rUIRoot, const OUString& rUIFile)
+{
+    assert(!m_bNoYieldLock); // can't be nested?
+    ::comphelper::FlagGuard g(m_bNoYieldLock);
+    return CreateBuilder(pParent, rUIRoot, rUIFile);
+}
+
+weld::Builder* Qt5Instance::CreateBuilder(weld::Widget* pParent,
+        const OUString& rUIRoot, const OUString& rUIFile)
+{
+    if (!IsMainThread())
+    {
+//        SolarMutexReleaser aReleaser; // FIXME ???
+        return Q_EMIT CreateBuilderSignal(pParent, rUIRoot, rUIFile);
+    }
+//    SolarMutexGuard g; // FIXME this is nonsense
+    return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
+}
+#endif
 
 extern "C" {
 VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
