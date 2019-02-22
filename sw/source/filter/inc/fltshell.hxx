@@ -290,7 +290,7 @@ public:
 
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
-    SwTOXBase* const pTOXBase;
+    std::shared_ptr<SwTOXBase> m_xTOXBase;
     bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
     bool bHadPageDescItem;
 public:
@@ -298,7 +298,7 @@ public:
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
-    SwTOXBase* GetBase()            { return pTOXBase; }
+    const SwTOXBase& GetBase() { return *m_xTOXBase; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }
     bool HadBreakItem()    const { return bHadBreakItem; }

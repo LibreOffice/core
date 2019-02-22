@@ -3395,7 +3395,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     // Set start in stack
     m_xReffedStck->NewAttr( *pPos, aFltTOX );
 
-    m_rDoc.InsertTableOf(*m_pPaM->GetPoint(), *aFltTOX.GetBase());
+    m_rDoc.InsertTableOf(*m_pPaM->GetPoint(), aFltTOX.GetBase());
 
     //The TOC field representation contents should be inserted into TOC section, but not after TOC section.
     //So we need update the document position when loading TOC representation and after loading TOC;
