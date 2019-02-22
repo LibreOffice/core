@@ -41,11 +41,6 @@ enum class FatError
     BothError
 };
 
-struct StgLinkArg
-{
-    OUString aFile;
-};
-
 class StgIo : public StgCache {
     void SetupStreams();            // load all internal streams
     bool         m_bCopied;
@@ -62,8 +57,6 @@ public:
     bool Init();                    // set up an empty file
     bool CommitAll();               // commit everything (root commit)
 
-    static void SetErrorLink( const Link<StgLinkArg&,void>& );
-    static const Link<StgLinkArg&,void>& GetErrorLink();
     FatError ValidateFATs( );
 };
 

@@ -355,18 +355,6 @@ FatError Validator::FindUnrefedChains() const
         return FatError::Ok;
 }
 
-namespace { struct ErrorLink : public rtl::Static<Link<StgLinkArg&,void>, ErrorLink > {}; }
-
-void StgIo::SetErrorLink( const Link<StgLinkArg&,void>& rLink )
-{
-    ErrorLink::get() = rLink;
-}
-
-const Link<StgLinkArg&,void>& StgIo::GetErrorLink()
-{
-    return ErrorLink::get();
-}
-
 FatError StgIo::ValidateFATs()
 {
     if( m_bFile )
@@ -395,9 +383,6 @@ FatError StgIo::ValidateFATs()
         else nErr = bRet1 ? FatError::Ok : FatError::BothError;
         if( nErr != FatError::Ok && !m_bCopied )
         {
-            StgLinkArg aArg;
-            aArg.aFile = pFileStrm->GetFileName();
-            ErrorLink::get().Call( aArg );
             m_bCopied = true;
         }
 //      DBG_ASSERT( nErr == FatError::Ok ,"Storage broken");

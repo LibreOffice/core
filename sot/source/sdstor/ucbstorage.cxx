@@ -450,7 +450,6 @@ class UCBStorage_Impl : public SvRefBase
 public:
     UCBStorage*                 m_pAntiImpl;    // only valid if external references exists
 
-    OUString                    m_aOriginalName;// the original name before accessing the storage
     OUString                    m_aName;        // the actual name ( changed with a Rename command at the parent )
     OUString                    m_aURL;         // the full path name to create the content
     OUString                    m_aContentType;
@@ -1463,7 +1462,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile.reset(new ::utl::TempFile);
         m_pTempFile->EnableKillingFile();
-        m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
+        m_aName = aName = m_pTempFile->GetURL();
     }
 
     m_aURL = rName;
@@ -1492,7 +1491,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile.reset(new ::utl::TempFile);
         m_pTempFile->EnableKillingFile();
-        m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
+        m_aName = aName = m_pTempFile->GetURL();
     }
 
     if ( m_bIsRoot )
@@ -1568,7 +1567,7 @@ void UCBStorage_Impl::Init()
     INetURLObject aObj( m_aURL );
     if ( m_aName.isEmpty() )
         // if the name was not already set to a temp name
-        m_aName = m_aOriginalName = aObj.GetLastName();
+        m_aName = aObj.GetLastName();
 
     if ( !m_pContent )
         CreateContent();
