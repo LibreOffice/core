@@ -43,13 +43,165 @@
 #include <QtWidgets/QWidget>
 
 #include <vclpluginapi.h>
+#include <tools/debug.hxx>
+#include <comphelper/flagguard.hxx>
 #include <sal/log.hxx>
 #include <osl/process.h>
 
 #include <headless/svpbmp.hxx>
 
+#include <mutex>
+#include <condition_variable>
+
+/// TODO: not much Qt5 specific here? could be generalised, esp. for OSX...
+/// this subclass allows for the transfer of a closure for running on the main
+/// thread, to handle all the thread affine stuff in Qt5; the SolarMutex is
+/// "loaned" to the main thread for the execution of the closure.
+/// @note it doesn't work to just use "emit" and signals/slots to move calls to
+/// the main thread, because the other thread has the SolarMutex; the other
+/// thread (typically) cannot release SolarMutex, because then the main thread
+/// will handle all sorts of events and whatnot; this design ensures that the
+/// main thread only runs the passed closure (unless the closure releases
+/// SolarMutex itself, which should probably be avoided).
+class Qt5YieldMutex : public SalYieldMutex
+{
+public:
+    /// flag only accessed on main thread:
+    /// main thread has "borrowed" SolarMutex from another thread
+    bool m_bNoYieldLock = false;
+    /// members for communication from non-main thread to main thread
+    std::mutex m_RunInMainMutex;
+    std::condition_variable m_InMainCondition;
+    bool m_isWakeUpMain = false;
+    std::function<void()> m_Closure; ///< code for main thread to run
+    /// members for communication from main thread to non-main thread
+    std::condition_variable m_ResultCondition;
+    bool m_isResultReady = false;
+
+    virtual bool IsCurrentThread() const override;
+    virtual void doAcquire(sal_uInt32 nLockCount) override;
+    virtual sal_uInt32 doRelease(bool const bUnlockAll) override;
+};
+
+bool Qt5YieldMutex::IsCurrentThread() const
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return true; // main thread has borrowed SolarMutex
+    }
+    return SalYieldMutex::IsCurrentThread();
+}
+
+void Qt5YieldMutex::doAcquire(sal_uInt32 nLockCount)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
+    {
+        SalYieldMutex::doAcquire(nLockCount);
+        return;
+    }
+    if (m_bNoYieldLock)
+    {
+        return; // special case for main thread: borrowed from other thread
+    }
+    do // main thread acquire...
+    {
+        std::function<void()> func; // copy of closure on thread stack
+        {
+            std::unique_lock<std::mutex> g(m_RunInMainMutex);
+            if (m_aMutex.tryToAcquire())
+            {
+                // if there's a closure, the other thread holds m_aMutex
+                assert(!m_Closure);
+                m_isWakeUpMain = false;
+                --nLockCount; // have acquired once!
+                ++m_nCount;
+                break;
+            }
+            m_InMainCondition.wait(g, [this]() { return m_isWakeUpMain; });
+            m_isWakeUpMain = false;
+            std::swap(func, m_Closure);
+        }
+        if (func)
+        {
+            assert(!m_bNoYieldLock);
+            m_bNoYieldLock = true; // execute closure with borrowed SolarMutex
+            func();
+            m_bNoYieldLock = false;
+            std::unique_lock<std::mutex> g(m_RunInMainMutex);
+            assert(!m_isResultReady);
+            m_isResultReady = true;
+            m_ResultCondition.notify_all(); // unblock other thread
+        }
+    } while (true);
+    SalYieldMutex::doAcquire(nLockCount);
+}
+
+sal_uInt32 Qt5YieldMutex::doRelease(bool const bUnlockAll)
+{
+    auto const* pSalInst(static_cast<Qt5Instance const*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    {
+        return 1; // dummy value
+    }
+
+    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+    // read m_nCount before doRelease (it's guarded by m_aMutex)
+    bool const isReleased(bUnlockAll || m_nCount == 1);
+    sal_uInt32 nCount = SalYieldMutex::doRelease(bUnlockAll);
+    if (isReleased && !pSalInst->IsMainThread())
+    {
+        m_isWakeUpMain = true;
+        m_InMainCondition.notify_all(); // unblock main thread
+    }
+    return nCount;
+}
+
+// this could be abstracted to be independent of Qt5 by passing in the
+// event-trigger as another function parameter...
+// it could also be a template of the return type, then it could return the
+// result of func... but then how to handle the result in doAcquire?
+void Qt5Instance::RunInMainThread(std::function<void()> func)
+{
+    DBG_TESTSOLARMUTEX();
+    if (IsMainThread())
+    {
+        func();
+        return;
+    }
+
+    Qt5YieldMutex* const pMutex(static_cast<Qt5YieldMutex*>(GetYieldMutex()));
+    {
+        std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+        assert(!pMutex->m_Closure);
+        pMutex->m_Closure = func;
+        // unblock main thread in case it is blocked on condition
+        pMutex->m_isWakeUpMain = true;
+        pMutex->m_InMainCondition.notify_all();
+    }
+    // wake up main thread in case it is blocked on event queue
+    // TriggerUserEventProcessing() appears to be insufficient in case the
+    // main thread does QEventLoop::WaitForMoreEvents
+    Q_EMIT ImplRunInMainSignal();
+    {
+        std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+        pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
+        pMutex->m_isResultReady = false;
+    }
+}
+
+void Qt5Instance::ImplRunInMain()
+{
+    SolarMutexGuard g; // trigger the dispatch code in Qt5YieldMutex::doAcquire
+    (void)this; // suppress unhelpful [loplugin:staticmethods]; can't be static
+}
+
 Qt5Instance::Qt5Instance(bool bUseCairo)
-    : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
+    : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
@@ -65,8 +217,8 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
     // is processed before the thread emitting the signal continues
     connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
             Qt::BlockingQueuedConnection);
-    connect(this, &Qt5Instance::createMenuSignal, this, &Qt5Instance::CreateMenu,
-            Qt::BlockingQueuedConnection);
+    connect(this, &Qt5Instance::ImplRunInMainSignal, this, &Qt5Instance::ImplRunInMain,
+            Qt::QueuedConnection); // no Blocking!
 
     // this one needs to be queued non-blocking
     // in order to have this event arriving to correct event processing loop
@@ -144,15 +296,14 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
 
 std::unique_ptr<SalMenu> Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT createMenuSignal(bMenuBar, pVCLMenu);
-    }
-
-    Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
-    pSalMenu->SetMenu(pVCLMenu);
-    return std::unique_ptr<SalMenu>(pSalMenu);
+    std::unique_ptr<SalMenu> pRet;
+    RunInMainThread([&pRet, bMenuBar, pVCLMenu]() {
+        Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
+        pRet.reset(pSalMenu);
+        pSalMenu->SetMenu(pVCLMenu);
+    });
+    assert(pRet);
+    return pRet;
 }
 
 std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rItemData)
