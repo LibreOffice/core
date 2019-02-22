@@ -1611,10 +1611,6 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
             if( pFmt->GetBulletFont() )
                 aInfo.aFont = *pFmt->GetBulletFont();
         }
-        else if ( pFmt->GetBrush()->GetGraphicObject() )
-        {
-            aInfo.aGraphic = pFmt->GetBrush()->GetGraphicObject()->GetGraphic();
-        }
     }
 
     if ( aInfo.bVisible )

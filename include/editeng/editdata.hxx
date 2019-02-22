@@ -255,8 +255,6 @@ struct RtfImportInfo
     int                     nToken;
     short                   nTokenValue;
 
-    OUString                aText;
-
     RtfImportInfo( RtfImportState eState, SvParser<int>* pPrsrs, const ESelection& rSel );
     ~RtfImportInfo();
 };

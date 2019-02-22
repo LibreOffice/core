@@ -173,10 +173,6 @@ namespace accessibility
 
         // guard for maOffset
         mutable ::osl::Mutex maMutex;
-
-        /// our current offset to the containing shape/cell (guarded by maMutex)
-        Point maOffset;
-
     };
 
 
@@ -186,8 +182,7 @@ namespace accessibility
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxTextParagraph( new AccessibleEditableTextPara(nullptr) ),
         maEditSource(),
-        maMutex(),
-        maOffset(0,0)
+        maMutex()
     {
 
         // TODO: this is still somewhat of a hack, all the more since
@@ -204,13 +199,6 @@ namespace accessibility
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
-
-        // guard against non-atomic access to maOffset data structure
-        {
-            ::osl::MutexGuard aGuard( maMutex );
-            maOffset = rPoint;
-        }
-
         if( mxTextParagraph.is() )
             mxTextParagraph->SetEEOffset( rPoint );
     }
