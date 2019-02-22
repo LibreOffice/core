@@ -137,7 +137,6 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
 
                             if( xGroupNode.is() )
                             {
-                                pPreset->maGroupId = sGroup;
                                 xGroupNode->getByName( "Label" ) >>= sGroup;
                                 if( !sVariant.isEmpty() )
                                 {

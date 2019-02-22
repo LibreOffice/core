@@ -133,7 +133,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
     {
         // Get the XController from the first argument.
         Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
-        mxControllerWeak = xController;
 
         // Tunnel through the controller to obtain access to the ViewShellBase.
         try

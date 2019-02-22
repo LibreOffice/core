@@ -90,19 +90,8 @@ static const char gsPresentationViewURL[] = "private:resource/view/Presentation"
 PresentationFactory::PresentationFactory (
     const Reference<frame::XController>& rxController)
     : PresentationFactoryInterfaceBase(MutexOwner::maMutex),
-      mxConfigurationController(),
       mxController(rxController)
 {
-    try
-    {
-        // Get the XController from the first argument.
-        Reference<XControllerManager> xControllerManager(rxController, UNO_QUERY_THROW);
-        mxConfigurationController = xControllerManager->getConfigurationController();
-    }
-    catch (RuntimeException&)
-    {
-        DBG_UNHANDLED_EXCEPTION("sd");
-    }
 }
 
 PresentationFactory::~PresentationFactory()

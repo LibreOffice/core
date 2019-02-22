@@ -159,7 +159,6 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     , mnFilterOptions(0)
     , mpDoc(pDocument)
     , mePresChange(PRESCHANGE_MANUAL)
-    , mnBackgroundLayerID(0)
     , mnBackgroundObjectsLayerID(0)
 {
     if ( !bOk )
@@ -230,7 +229,6 @@ bool ImplSdPPTImport::Import()
     const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( sUNO_LayerName_background );
     mnBackgroundObjectsLayerID = rAdmin.GetLayerID( sUNO_LayerName_background_objects );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();

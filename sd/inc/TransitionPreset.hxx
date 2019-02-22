@@ -62,7 +62,6 @@ private:
     bool mbDirection;
     sal_Int32 mnFadeColor;
     OUString maPresetId;
-    OUString maGroupId;
     OUString maSetId;
     OUString maSetLabel;
     OUString maVariantLabel;

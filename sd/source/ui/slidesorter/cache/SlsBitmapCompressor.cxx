@@ -144,11 +144,9 @@ class PngCompression::PngReplacement : public BitmapReplacement
 public:
     void* mpData;
     sal_Int32 mnDataSize;
-    Size maImageSize;
     PngReplacement()
         : mpData(nullptr),
-          mnDataSize(0),
-          maImageSize(0,0)
+          mnDataSize(0)
     {}
     virtual ~PngReplacement()
     {
@@ -167,7 +165,6 @@ std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBi
     aWriter.Write(aStream);
 
     PngReplacement* pResult = new PngReplacement();
-    pResult->maImageSize = rBitmap.GetSizePixel();
     pResult->mnDataSize = aStream.Tell();
     pResult->mpData = new char[pResult->mnDataSize];
     memcpy(pResult->mpData, aStream.GetData(), pResult->mnDataSize);

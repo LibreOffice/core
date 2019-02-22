@@ -114,28 +114,11 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::too
     }
 }
 
-void SdDocPreviewWin::updateViewSettings()
-{
-    SvtAccessibilityOptions aAccOptions;
-    bool bUseWhiteColor = !aAccOptions.GetIsForPagePreviews() && GetSettings().GetStyleSettings().GetHighContrastMode();
-    if( bUseWhiteColor )
-    {
-        maDocumentColor = COL_WHITE;
-    }
-    else
-    {
-        svtools::ColorConfig aColorConfig;
-        maDocumentColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
-    }
-
-    Invalidate();
-}
-
 void SdDocPreviewWin::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if( rHint.GetId() == SfxHintId::ColorsChanged )
     {
-        updateViewSettings();
+        Invalidate();
     }
 }
 void SdDocPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
@@ -144,7 +127,7 @@ void SdDocPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        updateViewSettings();
+        Invalidate();
     }
 }
 
