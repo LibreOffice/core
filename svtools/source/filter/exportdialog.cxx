@@ -402,7 +402,6 @@ void ExportDialog::GetGraphicStream()
     if ( !IsTempExportAvailable() )
     {
         mpTempStream.reset(new SvMemoryStream());
-        maBitmap = Bitmap();
         return;
     }
 
@@ -420,7 +419,6 @@ void ExportDialog::GetGraphicStream()
         if ( bRecreateOutputStream )
         {
             mpTempStream.reset(new SvMemoryStream());
-            maBitmap = Bitmap();
 
             uno::Reference< graphic::XGraphic > xGraphic;
             if (!mbGraphicsSource && !mxGraphic.is())
@@ -464,13 +462,6 @@ void ExportDialog::GetGraphicStream()
                     mpTempStream->SetResizeOffset(1024);
                     mpTempStream->SetStreamSize(1024);
                     rFilter.ExportGraphic( aGraphic, "", *mpTempStream, nFilter, &aNewFilterData );
-
-                    if ( mnFormat == FORMAT_JPG )
-                    {
-                        mpTempStream->Seek( STREAM_SEEK_TO_BEGIN );
-                        maBitmap = GetGraphicBitmap( *mpTempStream );
-                        mpTempStream->Seek( STREAM_SEEK_TO_END );
-                    }
                 }
             }
             else
@@ -501,13 +492,6 @@ void ExportDialog::GetGraphicStream()
 
                     xGraphicExporter->setSourceDocument( xSourceDoc );
                     xGraphicExporter->filter( aDescriptor );
-
-                    if ( mnFormat == FORMAT_JPG )
-                    {
-                        mpTempStream->Seek( STREAM_SEEK_TO_BEGIN );
-                        maBitmap = GetGraphicBitmap( *mpTempStream );
-                        mpTempStream->Seek( STREAM_SEEK_TO_END );
-                    }
                 }
             }
         }
@@ -518,18 +502,6 @@ void ExportDialog::GetGraphicStream()
         // ups
 
     }
-}
-
-BitmapEx ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
-{
-    BitmapEx aRet;
-    Graphic aGraphic;
-    GraphicFilter aFilter( false );
-    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast<css::uno::Sequence< css::beans::PropertyValue >*>(nullptr) ) == ERRCODE_NONE )
-    {
-        aRet = aGraphic.GetBitmapEx();
-    }
-    return aRet;
 }
 
 sal_uInt32 ExportDialog::GetRawFileSize() const

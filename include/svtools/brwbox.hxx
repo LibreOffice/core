@@ -206,7 +206,6 @@ private:
 
     bool            bHLines;        // draw lines between rows
     bool            bVLines;        // draw lines between columns
-    Color           aGridLineColor;     // color for lines, default dark grey
     bool            bBootstrapped;  // child windows resized etc.
     long            nTopRow;        // no. of first visible row (0...)
     long            nCurRow;        // no. of row with cursor
@@ -218,8 +217,6 @@ private:
     bool            bRowDividerDrag;
     bool            bHit;
     bool            mbInteractiveRowHeight;
-    Point           a1stPoint;
-    Point           a2ndPoint;
 
     long            nResizeX;       // mouse position at start of resizing
     long            nMinResizeX;    // never drag more left
@@ -428,9 +425,6 @@ public:
     const vcl::Font& GetFont() const;
     void            SetTitleFont( const vcl::Font& rNewFont )
                         { Control::SetFont( rNewFont ); }
-
-    // color for line painting
-    void            SetGridLineColor(const Color& rColor) {aGridLineColor = rColor;}
 
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( sal_uLong nWidth );

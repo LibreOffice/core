@@ -1471,8 +1471,6 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
         {
             // initialise flags
             bHit            = false;
-            a1stPoint       =
-            a2ndPoint       = PixelToLogic( rEvt.GetPosPixel() );
 
             // selection out of range?
             if ( rEvt.GetRow() >= nRowCount ||

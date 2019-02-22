@@ -91,7 +91,6 @@ class BrowserDataWin
 {
 public:
     VclPtr<BrowserHeader> pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
-    VclPtr<vcl::Window>   pEventWin;      // Window of forwarded events
     VclPtr<ScrollBarBox>  pCornerWin;     // Window in the corner btw the ScrollBars
     bool            bInDtor;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
