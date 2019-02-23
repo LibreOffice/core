@@ -227,7 +227,7 @@ void SAL_CALL Player::start(  )
 
                 memset( mpWndClass, 0, sizeof( *mpWndClass ) );
                 mpWndClass->hInstance = GetModuleHandleW( nullptr );
-                mpWndClass->cbWndExtra = sizeof( DWORD );
+                mpWndClass->cbWndExtra = sizeof( DWORD_PTR );
                 mpWndClass->lpfnWndProc = MediaPlayerWndProc_2;
                 mpWndClass->lpszClassName = L"com_sun_star_media_Sound_Player";
                 mpWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
