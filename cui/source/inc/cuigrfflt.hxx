@@ -157,7 +157,7 @@ class EmbossControl : public SvxRectCtl
 {
 private:
     Link<LinkParamNone*, void> maModifyHdl;
-    virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rEvt ) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 public:
     EmbossControl()

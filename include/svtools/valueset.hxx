@@ -478,8 +478,8 @@ public:
 
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;

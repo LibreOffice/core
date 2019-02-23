@@ -42,7 +42,7 @@ private:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
-    virtual void MouseButtonDown(const MouseEvent&) override;
+    virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual bool KeyInput(const KeyEvent&) override;

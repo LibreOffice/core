@@ -119,7 +119,7 @@ class SW_DLLPUBLIC AddressPreview : public weld::CustomWidgetController
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     void UpdateScrollBar();
 

@@ -253,7 +253,7 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount()
     return nCount;
 }
 
-void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
+bool SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
     bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
@@ -305,6 +305,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             Invalidate();
         }
     }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

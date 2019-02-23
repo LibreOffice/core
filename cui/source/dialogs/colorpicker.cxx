@@ -208,9 +208,9 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove(const MouseEvent& rMEvt) override;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
 
     void UpdateBitmap();
     void ShowPosition( const Point& rPos, bool bUpdate );
@@ -418,27 +418,30 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     }
 }
 
-void ColorFieldControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool ColorFieldControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     CaptureMouse();
     mbMouseCaptured = true;
     ShowPosition(rMEvt.GetPosPixel(), true);
     Modify();
+    return true;
 }
 
-void ColorFieldControl::MouseMove(const MouseEvent& rMEvt)
+bool ColorFieldControl::MouseMove(const MouseEvent& rMEvt)
 {
     if (mbMouseCaptured)
     {
         ShowPosition(rMEvt.GetPosPixel(), true);
         Modify();
     }
+    return true;
 }
 
-void ColorFieldControl::MouseButtonUp(const MouseEvent&)
+bool ColorFieldControl::MouseButtonUp(const MouseEvent&)
 {
     ReleaseMouse();
     mbMouseCaptured = false;
+    return true;
 }
 
 void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -507,9 +510,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove(const MouseEvent& rMEvt) override;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
 
@@ -641,25 +644,28 @@ void ColorSliderControl::ChangePosition(long nY)
     mdValue = double(nHeight - nY) / double(nHeight);
 }
 
-void ColorSliderControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool ColorSliderControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     CaptureMouse();
     ChangePosition(rMEvt.GetPosPixel().Y());
     Modify();
+    return true;
 }
 
-void ColorSliderControl::MouseMove(const MouseEvent& rMEvt)
+bool ColorSliderControl::MouseMove(const MouseEvent& rMEvt)
 {
     if (IsMouseCaptured())
     {
         ChangePosition(rMEvt.GetPosPixel().Y());
         Modify();
     }
+    return true;
 }
 
-void ColorSliderControl::MouseButtonUp(const MouseEvent&)
+bool ColorSliderControl::MouseButtonUp(const MouseEvent&)
 {
     ReleaseMouse();
+    return true;
 }
 
 void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
