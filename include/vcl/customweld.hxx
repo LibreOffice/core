@@ -27,9 +27,9 @@ public:
     }
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) = 0;
     virtual void Resize() {}
-    virtual void MouseButtonDown(const MouseEvent&) {}
-    virtual void MouseMove(const MouseEvent&) {}
-    virtual void MouseButtonUp(const MouseEvent&) {}
+    virtual bool MouseButtonDown(const MouseEvent&) { return false; }
+    virtual bool MouseMove(const MouseEvent&) { return false; }
+    virtual bool MouseButtonUp(const MouseEvent&) { return false; }
     virtual void GetFocus() {}
     virtual void LoseFocus() {}
     virtual void StyleUpdated() { Invalidate(); }
@@ -94,9 +94,9 @@ private:
 
     DECL_LINK(DoResize, const Size& rSize, void);
     DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent&, void);
-    DECL_LINK(DoMouseMove, const MouseEvent&, void);
-    DECL_LINK(DoMouseButtonUp, const MouseEvent&, void);
+    DECL_LINK(DoMouseButtonDown, const MouseEvent&, bool);
+    DECL_LINK(DoMouseMove, const MouseEvent&, bool);
+    DECL_LINK(DoMouseButtonUp, const MouseEvent&, bool);
     DECL_LINK(DoGetFocus, weld::Widget&, void);
     DECL_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
