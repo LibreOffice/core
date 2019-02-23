@@ -172,9 +172,6 @@
     <glade-widget-class title="Cui Custom MultiLine Edit" name="cuilo-CuiCustomMultilineEdit"
                         generic-name="CuiCustomMultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="LicenseView" name="deploymentgui-LicenseView"
-                        generic-name="LicenseView" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

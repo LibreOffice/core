@@ -97,7 +97,6 @@ protected:
 
     TextView*       GetTextView() const;
     ExtTextEngine*  GetTextEngine() const;
-    ScrollBar*      GetVScrollBar() const;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
@@ -170,7 +169,10 @@ public:
 
     void            EnableCursor( bool bEnable );
 
+    ScrollBar&      GetVScrollBar() const;
+
     TextWindow*     GetTextWindow();
+
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
