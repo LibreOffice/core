@@ -6501,7 +6501,6 @@ include/o3tl/functional.hxx
 include/o3tl/lazy_update.hxx
 include/o3tl/lru_map.hxx
 include/o3tl/make_shared.hxx
-include/o3tl/make_unique.hxx
 include/o3tl/numeric.hxx
 include/o3tl/runtimetooustring.hxx
 include/o3tl/safeint.hxx
