@@ -96,11 +96,6 @@ public:
      */
     operator bool () { return m_bValid;}
 
-    /** Will always contain a value if the object has been constructed with
-        a version string.
-     */
-    OUString usVersion;
-
 private:
     bool init(const char * szVer);
 

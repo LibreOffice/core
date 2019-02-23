@@ -62,7 +62,6 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     Reference< XInputStream > mxStream;
 
     // Encoding
-    OUString mEncoding;
     bool mbEncodingInitialized;
     rtl_TextToUnicodeConverter  mConvText2Unicode;
     rtl_TextToUnicodeContext    mContextText2Unicode;
@@ -344,7 +343,6 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
     mbEncodingInitialized = true;
     mConvText2Unicode = rtl_createTextToUnicodeConverter( encoding );
     mContextText2Unicode = rtl_createTextToUnicodeContext( mConvText2Unicode );
-    mEncoding = Encoding;
 }
 
 
