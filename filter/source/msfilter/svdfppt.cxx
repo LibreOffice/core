@@ -2152,7 +2152,7 @@ bool SdrPowerPointImport::ReadFontCollection()
     DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
     if ( pEnvHd )
     {
-        sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
+        sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
         pEnvHd->SeekToContent( rStCtrl );
         DffRecordHeader aListHd;
         if ( SeekToRec( rStCtrl, PPT_PST_FontCollection, pEnvHd->GetRecEndFilePos(), &aListHd ) )
@@ -2190,7 +2190,7 @@ bool SdrPowerPointImport::ReadFontCollection()
                 m_pFonts->insert(m_pFonts->begin() + nCount2++, std::move(pFont));
             }
         }
-        rStCtrl.Seek( nFPosMerk ); // restore FilePos
+        rStCtrl.Seek( nOldFPos ); // restore FilePos
     }
     return bRet;
 }
@@ -2360,7 +2360,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 bool SdrPowerPointImport::SeekToDocument( DffRecordHeader* pRecHd ) const
 {
     bool bRet;
-    sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it should the situation arise
+    sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it should the situation arise
     rStCtrl.Seek( nDocStreamPos );
     DffRecordHeader aDocHd;
     ReadDffRecordHeader( rStCtrl, aDocHd );
@@ -2373,7 +2373,7 @@ bool SdrPowerPointImport::SeekToDocument( DffRecordHeader* pRecHd ) const
             aDocHd.SeekToBegOfRecord( rStCtrl );
     }
     if ( !bRet )
-        rStCtrl.Seek( nFPosMerk ); // restore FilePos
+        rStCtrl.Seek( nOldFPos ); // restore FilePos
     return bRet;
 }
 
@@ -2745,7 +2745,7 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
 // be sure not to import masterpages with this method
 void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
 {
-    sal_uInt32 nMerk = rStCtrl.Tell();
+    sal_uInt32 nOldPos = rStCtrl.Tell();
     PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
     if ( ( !pList ) || ( pList->size() <= nCurrentPageNum ) )
         return;
@@ -2966,7 +2966,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         if (rSlidePersist.xSolverContainer)
             SolveSolver(*rSlidePersist.xSolverContainer);
     }
-    rStCtrl.Seek( nMerk );
+    rStCtrl.Seek( nOldPos );
 }
 
 const PptSlideLayoutAtom* SdrPowerPointImport::GetSlideLayoutAtom() const
@@ -3032,7 +3032,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 {
     SdrObject* pRet = nullptr;
     std::unique_ptr<SfxItemSet> pSet;
-    sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
+    sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
     if ( SeekToCurrentPage( &aPageHd ) )
     {   // and now search for the background attributes of the Page
@@ -3066,7 +3066,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
             }
         }
     }
-    rStCtrl.Seek( nFPosMerk ); // restore FilePos
+    rStCtrl.Seek( nOldFPos ); // restore FilePos
     if ( !pSet )
     {
         pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
@@ -5185,7 +5185,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
 void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHeader,
                                    PPTTextRulerInterpreter const & rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
 {
-    sal_uInt32 nMerk = rIn.Tell();
+    sal_uInt32 nOldPos = rIn.Tell();
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
 
     std::vector< StyleTextProp9 > aStyleTextProp9;
@@ -5199,7 +5199,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             aStyleTextProp9.emplace_back();
             aStyleTextProp9.back().Read( rIn );
         }
-        rIn.Seek( nMerk );
+        rIn.Seek( nOldPos );
     }
 
     OUString aString;
@@ -5409,7 +5409,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             aCharPropList.emplace_back( pCharPropSet );
         }
     }
-    rIn.Seek( nMerk );
+    rIn.Seek( nOldPos );
 }
 
 PPTStyleTextPropReader::~PPTStyleTextPropReader()
