@@ -3,12 +3,8 @@
   <office:scripts/>
   <office:font-face-decls>
     <style:font-face style:name="Source Sans Pro" svg:font-family="'Source Sans Pro'" style:font-pitch="variable"/>
-    <style:font-face style:name="Source Sans Pro2" svg:font-family="'Source Sans Pro'" style:font-adornments="Negrita" style:font-pitch="variable"/>
-    <style:font-face style:name="Source Sans Pro1" svg:font-family="'Source Sans Pro'" style:font-adornments="Normal" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Black" svg:font-family="'Source Sans Pro Black'" style:font-adornments="Negra" style:font-pitch="variable"/>
-    <style:font-face style:name="Source Sans Pro Light1" svg:font-family="'Source Sans Pro Light'" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Light" svg:font-family="'Source Sans Pro Light'" style:font-adornments="Ligera" style:font-pitch="variable"/>
-    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Noto Sans Regular" svg:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable"/>
   </office:font-face-decls>
   <office:automatic-styles>
