@@ -2588,7 +2588,7 @@ void SvtValueSet::ImplTracking(const Point& rPos)
     }
 }
 
-void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
+bool SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     if ( rMouseEvent.IsLeft() )
     {
@@ -2605,19 +2605,19 @@ void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
             else if ( rMouseEvent.GetClicks() == 2 )
                 maDoubleClickHdl.Call( this );
 
-            return;
+            return true;
         }
     }
 
-    CustomWidgetController::MouseButtonDown( rMouseEvent );
+    return CustomWidgetController::MouseButtonDown( rMouseEvent );
 }
 
-void SvtValueSet::MouseMove(const MouseEvent& rMouseEvent)
+bool SvtValueSet::MouseMove(const MouseEvent& rMouseEvent)
 {
     // because of SelectionMode
     if ((GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
         ImplTracking(rMouseEvent.GetPosPixel());
-    CustomWidgetController::MouseMove(rMouseEvent);
+    return CustomWidgetController::MouseMove(rMouseEvent);
 }
 
 void SvtValueSet::RemoveItem( sal_uInt16 nItemId )

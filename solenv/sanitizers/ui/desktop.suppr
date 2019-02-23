@@ -10,7 +10,6 @@ desktop/uiconfig/ui/licensedialog.ui://GtkImage[@id='arrow1'] no-labelled-by
 desktop/uiconfig/ui/licensedialog.ui://GtkImage[@id='arrow2'] no-labelled-by
 desktop/uiconfig/ui/licensedialog.ui://GtkLabel[@id='label4'] orphan-label
 desktop/uiconfig/ui/licensedialog.ui://GtkLabel[@id='label5'] orphan-label
-desktop/uiconfig/ui/licensedialog.ui://deploymentgui-LicenseView[@id='textview:border'] no-labelled-by
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_LABEL'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_CHECKING'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkSpinner[@id='THROBBER'] no-labelled-by
