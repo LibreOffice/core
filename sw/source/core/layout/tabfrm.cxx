@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -2850,7 +2854,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         //the value applies to the screen width in the BrowseView.
         const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
-        const SwTwips nWishedTableWidth = CalcRel( rSz );
+        const SwTwips nWishedTableWidth = std::min(CalcRel( rSz ), nMax);
 
         bool bCheckBrowseWidth = false;
 
