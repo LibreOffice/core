@@ -3,7 +3,6 @@
   <office:scripts/>
   <office:font-face-decls>
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
-    <style:font-face style:name="Liberation Sans1" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
   </office:font-face-decls>
   <office:automatic-styles>
     <style:style style:name="dp1" style:family="drawing-page">
