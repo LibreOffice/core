@@ -93,6 +93,7 @@ public:
     void fireKeyPressedEvent( const css::awt::KeyEvent& rEvt );
     void fireKeyReleasedEvent( const css::awt::KeyEvent& rEvt );
     void fireSetFocusEvent( const css::awt::FocusEvent& rEvt );
+    HWND getParentWnd() const { return mnParentWnd; }
 
 private:
 
