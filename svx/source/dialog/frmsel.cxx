@@ -1065,7 +1065,7 @@ void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         mxImpl->DrawAllTrackingRects(rRenderContext);
 }
 
-void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
+bool FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
 {
     /*  Mouse handling:
         * Click on an unselected frame border:
@@ -1149,6 +1149,8 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
             GetSelectHdl().Call( nullptr );
         }
     }
+
+    return true;
 }
 
 bool FrameSelector::KeyInput( const KeyEvent& rKEvt )

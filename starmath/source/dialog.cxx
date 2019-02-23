@@ -1001,7 +1001,7 @@ void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     rRenderContext.Pop();
 }
 
-void SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
+bool SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
 {
     GrabFocus();
 
@@ -1023,6 +1023,8 @@ void SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
         if (rMEvt.GetClicks() > 1)
             aDblClickHdlLink.Call(*this);
     }
+
+    return true;
 }
 
 bool SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
@@ -1159,10 +1161,11 @@ void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
                                   (rRenderContext.GetOutputSize().Height() * 7 / 10)), rText);
 }
 
-void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
+bool SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.GetClicks() > 1)
         aDblClickHdlLink.Call(*this);
+    return true;
 }
 
 void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
