@@ -149,9 +149,9 @@ public:
 
     virtual void        StyleUpdated() override;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual bool        KeyInput(const KeyEvent& rKEvt) override;
     virtual void        LoseFocus() override;
 

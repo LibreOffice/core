@@ -123,7 +123,7 @@ void SvxShowCharSet::LoseFocus()
     SelectIndex(nSelectedIndex);
 }
 
-void SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
+bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if ( rMEvt.IsLeft() )
     {
@@ -151,9 +151,11 @@ void SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
         SelectIndex( nIndex, true);
         createContextMenu();
     }
+
+    return true;
 }
 
-void SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
+bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if ( bDrag && rMEvt.IsLeft() )
     {
@@ -163,9 +165,11 @@ void SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
         ReleaseMouse();
         bDrag = false;
     }
+
+    return true;
 }
 
-void SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
+bool SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
 {
     if ( rMEvt.IsLeft() && bDrag )
     {
@@ -185,6 +189,8 @@ void SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
     // Fire the focus event.
         SelectIndex( nIndex, true );
     }
+
+    return true;
 }
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)

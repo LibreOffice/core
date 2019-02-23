@@ -1219,6 +1219,34 @@ namespace
     }
 }
 
+static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16 nCode)
+{
+    MouseEventModifiers nMode = MouseEventModifiers::NONE;
+    if ( nButton == MOUSE_LEFT )
+        nMode |= MouseEventModifiers::SIMPLECLICK;
+    if ( (nButton == MOUSE_LEFT) && !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT)) )
+        nMode |= MouseEventModifiers::SELECT;
+    if ( (nButton == MOUSE_LEFT) && (nCode & KEY_MOD1) &&
+         !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_SHIFT)) )
+        nMode |= MouseEventModifiers::MULTISELECT;
+    if ( (nButton == MOUSE_LEFT) && (nCode & KEY_SHIFT) &&
+         !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_MOD1)) )
+        nMode |= MouseEventModifiers::RANGESELECT;
+    return nMode;
+}
+
+static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
+{
+    MouseEventModifiers nMode = MouseEventModifiers::NONE;
+    if ( !nCode )
+        nMode |= MouseEventModifiers::SIMPLEMOVE;
+    if ( (nCode & MOUSE_LEFT) && !(nCode & KEY_MOD1) )
+        nMode |= MouseEventModifiers::DRAGMOVE;
+    if ( (nCode & MOUSE_LEFT) && (nCode & KEY_MOD1) )
+        nMode |= MouseEventModifiers::DRAGCOPY;
+    return nMode;
+}
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -1252,11 +1280,15 @@ protected:
 private:
     bool m_bTakeOwnership;
     bool m_bFrozen;
+    sal_uInt16 m_nLastMouseButton;
     gulong m_nFocusInSignalId;
     gulong m_nFocusOutSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
     gulong m_nSizeAllocateSignalId;
+    gulong m_nButtonPressSignalId;
+    gulong m_nMotionSignalId;
+    gulong m_nButtonReleaseSignalId;
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -1278,25 +1310,164 @@ private:
         return pThis->signal_key(pEvent);
     }
 
+    virtual bool signal_popup_menu(const Point&)
+    {
+        return false;
+    }
+
+    static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_button(pEvent);
+    }
+
+    bool signal_button(GdkEventButton* pEvent)
+    {
+        int nClicks = 1;
+
+        SalEvent nEventType = SalEvent::NONE;
+        switch (pEvent->type)
+        {
+            case GDK_BUTTON_PRESS:
+                if (GdkEvent* pPeekEvent = gdk_event_peek())
+                {
+                    bool bSkip = pPeekEvent->type == GDK_2BUTTON_PRESS ||
+                                 pPeekEvent->type == GDK_3BUTTON_PRESS;
+                    gdk_event_free(pPeekEvent);
+                    if (bSkip)
+                    {
+                        return true;
+                    }
+                }
+                nEventType = SalEvent::MouseButtonDown;
+                break;
+            case GDK_2BUTTON_PRESS:
+                nClicks = 2;
+                nEventType = SalEvent::MouseButtonDown;
+                break;
+            case GDK_3BUTTON_PRESS:
+                nClicks = 3;
+                nEventType = SalEvent::MouseButtonDown;
+                break;
+            case GDK_BUTTON_RELEASE:
+                nEventType = SalEvent::MouseButtonUp;
+                break;
+            default:
+                return false;
+        }
+
+        switch (pEvent->button)
+        {
+            case 1:
+                m_nLastMouseButton = MOUSE_LEFT;
+                break;
+            case 2:
+                m_nLastMouseButton = MOUSE_MIDDLE;
+                break;
+            case 3:
+                m_nLastMouseButton = MOUSE_RIGHT;
+                break;
+            default:
+                return false;
+        }
+
+        Point aPos(pEvent->x, pEvent->y);
+        if (AllSettings::GetLayoutRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            if (signal_popup_menu(aPos))
+                return true;
+        }
+
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
+
+        if (nEventType == SalEvent::MouseButtonDown)
+        {
+            if (!m_aMousePressHdl.IsSet())
+                return false;
+            return m_aMousePressHdl.Call(aMEvt);
+        }
+
+        if (!m_aMouseReleaseHdl.IsSet())
+            return false;
+        return m_aMouseReleaseHdl.Call(aMEvt);
+    }
+
+    static gboolean signalMotion(GtkWidget*, GdkEventMotion* pEvent, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_motion(pEvent);
+    }
+
+    bool signal_motion(const GdkEventMotion* pEvent)
+    {
+        if (!m_aMouseMotionHdl.IsSet())
+            return false;
+
+        Point aPos(pEvent->x, pEvent->y);
+        if (AllSettings::GetLayoutRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nCode, nCode);
+
+        m_aMouseMotionHdl.Call(aMEvt);
+        return true;
+    }
+
 public:
     GtkInstanceWidget(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_pWidget(pWidget)
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bFrozen(false)
+        , m_nLastMouseButton(0)
         , m_nFocusInSignalId(0)
         , m_nFocusOutSignalId(0)
+        , m_nKeyPressSignalId(0)
+        , m_nKeyReleaseSignalId(0)
         , m_nSizeAllocateSignalId(0)
+        , m_nButtonPressSignalId(0)
+        , m_nMotionSignalId(0)
+        , m_nButtonReleaseSignalId(0)
     {
-        GdkEventMask eEventMask(static_cast<GdkEventMask>(gtk_widget_get_events(pWidget)));
-        if (eEventMask & GDK_BUTTON_PRESS_MASK)
-            m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKey), this);
-        else
-            m_nKeyPressSignalId = 0;
-        if (eEventMask & GDK_BUTTON_RELEASE_MASK)
-            m_nKeyReleaseSignalId = g_signal_connect(pWidget, "key-release-event", G_CALLBACK(signalKey), this);
-        else
-            m_nKeyReleaseSignalId = 0;
+    }
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
+        weld::Widget::connect_key_press(rLink);
+    }
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        m_nKeyReleaseSignalId = g_signal_connect(m_pWidget, "key-release-event", G_CALLBACK(signalKey), this);
+        weld::Widget::connect_key_release(rLink);
+    }
+
+    virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        m_nButtonPressSignalId = g_signal_connect(m_pWidget, "button-press-event", G_CALLBACK(signalButton), this);
+        weld::Widget::connect_mouse_press(rLink);
+    }
+
+    virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        m_nMotionSignalId = g_signal_connect(m_pWidget, "motion-notify-event", G_CALLBACK(signalMotion), this);
+        weld::Widget::connect_mouse_move(rLink);
+    }
+
+    virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        m_nButtonReleaseSignalId = g_signal_connect(m_pWidget, "button-release-event", G_CALLBACK(signalButton), this);
+        weld::Widget::connect_mouse_release(rLink);
     }
 
     virtual void set_sensitive(bool sensitive) override
@@ -1650,6 +1821,12 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
         if (m_nKeyReleaseSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
+        if (m_nButtonPressSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nButtonPressSignalId);
+        if (m_nMotionSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nMotionSignalId);
+        if (m_nButtonReleaseSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nButtonReleaseSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
@@ -6626,7 +6803,9 @@ class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::Te
 private:
     GtkTextView* m_pTextView;
     GtkTextBuffer* m_pTextBuffer;
+    GtkAdjustment* m_pVAdjustment;
     gulong m_nChangedSignalId;
+    gulong m_nVAdjustChangedSignalId;
 
     static void signalChanged(GtkTextView*, gpointer widget)
     {
@@ -6635,12 +6814,21 @@ private:
         pThis->signal_changed();
     }
 
+    static void signalVAdjustValueChanged(GtkAdjustment*, gpointer widget)
+    {
+        GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_vadjustment_changed();
+    }
+
 public:
     GtkInstanceTextView(GtkTextView* pTextView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTextView), pBuilder, bTakeOwnership)
         , m_pTextView(pTextView)
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
+        , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
+        , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
     {
     }
 
@@ -6715,6 +6903,7 @@ public:
 
     virtual void disable_notify_events() override
     {
+        g_signal_handler_block(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_block(m_pTextBuffer, m_nChangedSignalId);
         GtkInstanceContainer::disable_notify_events();
     }
@@ -6723,41 +6912,42 @@ public:
     {
         GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pTextBuffer, m_nChangedSignalId);
+        g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);
+    }
+
+    virtual int vadjustment_get_value() const override
+    {
+        return gtk_adjustment_get_value(m_pVAdjustment);
+    }
+
+    virtual void vadjustment_set_value(int value) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pVAdjustment, value);
+        enable_notify_events();
+    }
+
+    virtual int vadjustment_get_upper() const override
+    {
+         return gtk_adjustment_get_upper(m_pVAdjustment);
+    }
+
+    virtual int vadjustment_get_lower() const override
+    {
+         return gtk_adjustment_get_lower(m_pVAdjustment);
+    }
+
+    virtual int vadjustment_get_page_size() const override
+    {
+        return gtk_adjustment_get_page_size(m_pVAdjustment);
     }
 
     virtual ~GtkInstanceTextView() override
     {
+        g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
     }
 };
-
-static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16 nCode)
-{
-    MouseEventModifiers nMode = MouseEventModifiers::NONE;
-    if ( nButton == MOUSE_LEFT )
-        nMode |= MouseEventModifiers::SIMPLECLICK;
-    if ( (nButton == MOUSE_LEFT) && !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT)) )
-        nMode |= MouseEventModifiers::SELECT;
-    if ( (nButton == MOUSE_LEFT) && (nCode & KEY_MOD1) &&
-         !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_SHIFT)) )
-        nMode |= MouseEventModifiers::MULTISELECT;
-    if ( (nButton == MOUSE_LEFT) && (nCode & KEY_SHIFT) &&
-         !(nCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_MOD1)) )
-        nMode |= MouseEventModifiers::RANGESELECT;
-    return nMode;
-}
-
-static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
-{
-    MouseEventModifiers nMode = MouseEventModifiers::NONE;
-    if ( !nCode )
-        nMode |= MouseEventModifiers::SIMPLEMOVE;
-    if ( (nCode & MOUSE_LEFT) && !(nCode & KEY_MOD1) )
-        nMode |= MouseEventModifiers::DRAGMOVE;
-    if ( (nCode & MOUSE_LEFT) && (nCode & KEY_MOD1) )
-        nMode |= MouseEventModifiers::DRAGCOPY;
-    return nMode;
-}
 
 namespace
 {
@@ -6772,11 +6962,7 @@ private:
     AtkObject *m_pAccessible;
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
     cairo_surface_t* m_pSurface;
-    sal_uInt16 m_nLastMouseButton;
     gulong m_nDrawSignalId;
-    gulong m_nButtonPressSignalId;
-    gulong m_nMotionSignalId;
-    gulong m_nButtonReleaseSignalId;
     gulong m_nStyleUpdatedSignalId;
     gulong m_nQueryTooltip;
     gulong m_nPopupMenu;
@@ -6844,7 +7030,7 @@ private:
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
-    bool signal_popup_menu(const Point& rPos)
+    virtual bool signal_popup_menu(const Point& rPos) override
     {
         return m_aPopupMenuHdl.Call(rPos);
     }
@@ -6857,102 +7043,6 @@ private:
                    gtk_widget_get_allocated_height(pWidget) / 2);
         return pThis->signal_popup_menu(aPos);
     }
-    static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
-    {
-        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
-        SolarMutexGuard aGuard;
-        return pThis->signal_button(pEvent);
-    }
-    bool signal_button(GdkEventButton* pEvent)
-    {
-        int nClicks = 1;
-
-        SalEvent nEventType = SalEvent::NONE;
-        switch (pEvent->type)
-        {
-            case GDK_BUTTON_PRESS:
-                if (GdkEvent* pPeekEvent = gdk_event_peek())
-                {
-                    bool bSkip = pPeekEvent->type == GDK_2BUTTON_PRESS ||
-                                 pPeekEvent->type == GDK_3BUTTON_PRESS;
-                    gdk_event_free(pPeekEvent);
-                    if (bSkip)
-                    {
-                        return true;
-                    }
-                }
-                nEventType = SalEvent::MouseButtonDown;
-                break;
-            case GDK_2BUTTON_PRESS:
-                nClicks = 2;
-                nEventType = SalEvent::MouseButtonDown;
-                break;
-            case GDK_3BUTTON_PRESS:
-                nClicks = 3;
-                nEventType = SalEvent::MouseButtonDown;
-                break;
-            case GDK_BUTTON_RELEASE:
-                nEventType = SalEvent::MouseButtonUp;
-                break;
-            default:
-                return false;
-        }
-
-        switch (pEvent->button)
-        {
-            case 1:
-                m_nLastMouseButton = MOUSE_LEFT;
-                break;
-            case 2:
-                m_nLastMouseButton = MOUSE_MIDDLE;
-                break;
-            case 3:
-                m_nLastMouseButton = MOUSE_RIGHT;
-                break;
-            default:
-                return false;
-        }
-
-        Point aPos(pEvent->x, pEvent->y);
-        if (AllSettings::GetLayoutRTL())
-            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-
-        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
-        {
-            //if handled for context menu, stop processing
-            if (signal_popup_menu(aPos))
-                return true;
-        }
-
-        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
-
-        if (nEventType == SalEvent::MouseButtonDown)
-            m_aMousePressHdl.Call(aMEvt);
-        else
-            m_aMouseReleaseHdl.Call(aMEvt);
-
-        return true;
-    }
-    static gboolean signalMotion(GtkWidget*, GdkEventMotion* pEvent, gpointer widget)
-    {
-        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
-        SolarMutexGuard aGuard;
-        return pThis->signal_motion(pEvent);
-    }
-    bool signal_motion(const GdkEventMotion* pEvent)
-    {
-        Point aPos(pEvent->x, pEvent->y);
-        if (AllSettings::GetLayoutRTL())
-            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nCode, nCode);
-
-        m_aMouseMotionHdl.Call(aMEvt);
-        return true;
-    }
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
@@ -6961,11 +7051,7 @@ public:
         , m_pAccessible(nullptr)
         , m_xDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
-        , m_nLastMouseButton(0)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
-        , m_nButtonPressSignalId(g_signal_connect(m_pDrawingArea, "button-press-event", G_CALLBACK(signalButton), this))
-        , m_nMotionSignalId(g_signal_connect(m_pDrawingArea, "motion-notify-event", G_CALLBACK(signalMotion), this))
-        , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
         , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
@@ -7060,9 +7146,6 @@ public:
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nMotionSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nButtonReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
     }
 

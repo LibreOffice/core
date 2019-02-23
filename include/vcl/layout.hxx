@@ -614,9 +614,9 @@ private:
     void* m_pUserData;
     Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
     Link<const Size&, void> m_aResizeHdl;
-    Link<const MouseEvent&, void> m_aMousePressHdl;
-    Link<const MouseEvent&, void> m_aMouseMotionHdl;
-    Link<const MouseEvent&, void> m_aMouseReleaseHdl;
+    Link<const MouseEvent&, bool> m_aMousePressHdl;
+    Link<const MouseEvent&, bool> m_aMouseMotionHdl;
+    Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
@@ -633,15 +633,18 @@ private:
     }
     virtual void MouseMove(const MouseEvent& rMEvt) override
     {
-        m_aMouseMotionHdl.Call(rMEvt);
+        if (!m_aMouseMotionHdl.Call(rMEvt))
+            Control::MouseMove(rMEvt);
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override
     {
-        m_aMousePressHdl.Call(rMEvt);
+        if (!m_aMousePressHdl.Call(rMEvt))
+            Control::MouseButtonDown(rMEvt);
     }
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override
     {
-        m_aMouseReleaseHdl.Call(rMEvt);
+        if (!m_aMouseReleaseHdl.Call(rMEvt))
+            Control::MouseButtonUp(rMEvt);
     }
     virtual void KeyInput(const KeyEvent& rKEvt) override
     {
@@ -728,15 +731,15 @@ public:
     {
         m_aResizeHdl = rLink;
     }
-    void SetMousePressHdl(const Link<const MouseEvent&, void>& rLink)
+    void SetMousePressHdl(const Link<const MouseEvent&, bool>& rLink)
     {
         m_aMousePressHdl = rLink;
     }
-    void SetMouseMoveHdl(const Link<const MouseEvent&, void>& rLink)
+    void SetMouseMoveHdl(const Link<const MouseEvent&, bool>& rLink)
     {
         m_aMouseMotionHdl = rLink;
     }
-    void SetMouseReleaseHdl(const Link<const MouseEvent&, void>& rLink)
+    void SetMouseReleaseHdl(const Link<const MouseEvent&, bool>& rLink)
     {
         m_aMouseReleaseHdl = rLink;
     }
