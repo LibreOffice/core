@@ -660,7 +660,7 @@ void AddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.SetClipRegion();
 }
 
-void AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
+bool AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
     {
@@ -683,6 +683,7 @@ void AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         }
         Invalidate();
     }
+    return true;
 }
 
 bool AddressPreview::KeyInput( const KeyEvent& rKEvt )

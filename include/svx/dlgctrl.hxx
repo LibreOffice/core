@@ -113,7 +113,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
-    virtual void MouseButtonDown(const MouseEvent&) override;
+    virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual bool KeyInput(const KeyEvent&) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
@@ -178,7 +178,7 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Resize() override;
     virtual tools::Rectangle GetFocusRect() override;
 

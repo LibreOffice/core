@@ -94,7 +94,7 @@ void SvxXMeasurePreview::SetAttributes(const SfxItemSet& rInAttrs)
     Invalidate();
 }
 
-void SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
+bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
     bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
@@ -147,6 +147,8 @@ void SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
             Invalidate();
         }
     }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -499,6 +499,24 @@ public:
         weld::Widget::connect_size_allocate(rLink);
     }
 
+    virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Widget::connect_mouse_press(rLink);
+    }
+
+    virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Widget::connect_mouse_move(rLink);
+    }
+
+    virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Widget::connect_mouse_release(rLink);
+    }
+
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
     {
         ensure_key_listener();
@@ -604,6 +622,21 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
         m_aFocusOutHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
+    else if (rEvent.GetId() == VclEventId::WindowMouseButtonDown)
+    {
+        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
+        m_aMousePressHdl.Call(*pMouseEvent);
+    }
+    else if (rEvent.GetId() == VclEventId::WindowMouseButtonUp)
+    {
+        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
+        m_aMouseReleaseHdl.Call(*pMouseEvent);
+    }
+    else if (rEvent.GetId() == VclEventId::WindowMouseMove)
+    {
+        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
+        m_aMouseMotionHdl.Call(*pMouseEvent);
+    }
 }
 
 bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
@@ -623,7 +656,6 @@ bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
     }
     return false;
 }
-
 
 IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 {
@@ -1256,11 +1288,11 @@ public:
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, void)
+IMPL_LINK(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
     signal_vadjustment_changed();
     if (!m_bUserManagedScrolling)
-        m_aOrigVScrollHdl.Call(&m_xScrolledWindow->getVertScrollBar());
+        m_aOrigVScrollHdl.Call(pScrollBar);
 }
 
 IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
@@ -3241,14 +3273,19 @@ class SalInstanceTextView : public SalInstanceContainer, public virtual weld::Te
 {
 private:
     VclPtr<VclMultiLineEdit> m_xTextView;
+    Link<ScrollBar*,void> m_aOrigVScrollHdl;
 
     DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(VscrollHdl, ScrollBar*, void);
 public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
         , m_xTextView(pTextView)
     {
         m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
+        rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
     }
 
     virtual void set_text(const OUString& rText) override
@@ -3299,11 +3336,53 @@ public:
         m_xTextView->SetControlFont(aFont);
     }
 
+    virtual int vadjustment_get_value() const override
+    {
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        return rVertScrollBar.GetThumbPos();
+    }
+
+    virtual void vadjustment_set_value(int value) override
+    {
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        rVertScrollBar.SetThumbPos(value);
+        m_aOrigVScrollHdl.Call(&rVertScrollBar);
+    }
+
+    virtual int vadjustment_get_upper() const override
+    {
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        return rVertScrollBar.GetRangeMax();
+    }
+
+    virtual int vadjustment_get_lower() const override
+    {
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        return rVertScrollBar.GetRangeMin();
+    }
+
+    virtual int vadjustment_get_page_size() const override
+    {
+        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+        return rVertScrollBar.GetVisibleSize();
+    }
+
     virtual ~SalInstanceTextView() override
     {
-        m_xTextView->SetModifyHdl(Link<Edit&, void>());
+        if (!m_xTextView->IsDisposed())
+        {
+            m_xTextView->SetModifyHdl(Link<Edit&, void>());
+            ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+            rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
+        }
     }
 };
+
+IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
+{
+    signal_vadjustment_changed();
+    m_aOrigVScrollHdl.Call(pScrollBar);
+}
 
 IMPL_LINK_NOARG(SalInstanceTextView, ChangeHdl, Edit&, void)
 {
@@ -3354,9 +3433,9 @@ private:
     typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
     DECL_LINK(PaintHdl, target_and_area, void);
     DECL_LINK(ResizeHdl, const Size&, void);
-    DECL_LINK(MousePressHdl, const MouseEvent&, void);
-    DECL_LINK(MouseMoveHdl, const MouseEvent&, void);
-    DECL_LINK(MouseReleaseHdl, const MouseEvent&, void);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
@@ -3368,7 +3447,10 @@ private:
     // in VclDrawingArea
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
-        if (rEvent.GetId() == VclEventId::WindowResize)
+        if (rEvent.GetId() == VclEventId::WindowResize ||
+            rEvent.GetId() == VclEventId::WindowMouseButtonDown ||
+            rEvent.GetId() == VclEventId::WindowMouseButtonUp ||
+            rEvent.GetId() == VclEventId::WindowMouseMove)
         {
             return;
         }
@@ -3471,9 +3553,9 @@ public:
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
         m_xDrawingArea->SetPopupMenuHdl(Link<const Point&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
-        m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
-        m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
-        m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, void>());
+        m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
+        m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
+        m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, bool>());
         m_xDrawingArea->SetKeyPressHdl(Link<const KeyEvent&, bool>());
         m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
         m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
@@ -3499,19 +3581,19 @@ IMPL_LINK(SalInstanceDrawingArea, ResizeHdl, const Size&, rSize, void)
     m_aSizeAllocateHdl.Call(rSize);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MousePressHdl, const MouseEvent&, rEvent, void)
+IMPL_LINK(SalInstanceDrawingArea, MousePressHdl, const MouseEvent&, rEvent, bool)
 {
-    m_aMousePressHdl.Call(rEvent);
+    return m_aMousePressHdl.Call(rEvent);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MouseMoveHdl, const MouseEvent&, rEvent, void)
+IMPL_LINK(SalInstanceDrawingArea, MouseMoveHdl, const MouseEvent&, rEvent, bool)
 {
-    m_aMouseMotionHdl.Call(rEvent);
+    return m_aMouseMotionHdl.Call(rEvent);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const MouseEvent&, rEvent, void)
+IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const MouseEvent&, rEvent, bool)
 {
-    m_aMouseReleaseHdl.Call(rEvent);
+    return m_aMouseReleaseHdl.Call(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, KeyPressHdl, const KeyEvent&, rEvent, bool)
