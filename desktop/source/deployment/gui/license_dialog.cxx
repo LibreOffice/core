@@ -22,6 +22,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,6 +33,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/threadex.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 
 #include "license_dialog.hxx"
 
@@ -43,234 +45,161 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_gui {
 
-class LicenseView : public MultiLineEdit, public SfxListener
+struct LicenseDialogImpl : public weld::GenericDialogController
 {
-    bool            mbEndReached;
-    Link<LicenseView&,void> maEndReachedHdl;
-    Link<LicenseView&,void> maScrolledHdl;
+    bool m_bLicenseRead;
+    Idle m_aResized;
+    AutoTimer m_aRepeat;
 
-public:
-    LicenseView( vcl::Window* pParent, WinBits nStyle );
-    virtual ~LicenseView() override;
-    virtual void dispose() override;
+    std::unique_ptr<weld::Label> m_xFtHead;
+    std::unique_ptr<weld::Widget> m_xArrow1;
+    std::unique_ptr<weld::Widget> m_xArrow2;
+    std::unique_ptr<weld::TextView> m_xLicense;
+    std::unique_ptr<weld::Button> m_xDown;
+    std::unique_ptr<weld::Button> m_xAcceptButton;
+    std::unique_ptr<weld::Button> m_xDeclineButton;
 
-    void ScrollDown( ScrollType eScroll );
+    void PageDown();
+    DECL_LINK(ScrollTimerHdl, Timer*, void);
+    DECL_LINK(ScrolledHdl, weld::TextView&, void);
+    DECL_LINK(ResizedHdl, Timer*, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(AcceptHdl, weld::Button&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_STATIC_LINK(LicenseDialogImpl, KeyReleaseHdl, const KeyEvent&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(SizeAllocHdl, const Size&, void);
+
+    LicenseDialogImpl(weld::Window * pParent,
+                      const OUString & sExtensionName,
+                      const OUString & sLicenseText);
 
     bool IsEndReached() const;
-    bool EndReached() const { return mbEndReached; }
-
-    void SetEndReachedHdl( const Link<LicenseView&,void>& rHdl ) { maEndReachedHdl = rHdl; }
-
-    void SetScrolledHdl( const Link<LicenseView&,void>& rHdl ) { maScrolledHdl = rHdl; }
-
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
-
-struct LicenseDialogImpl : public ModalDialog
-{
-    VclPtr<FixedText> m_pFtHead;
-    VclPtr<FixedImage> m_pArrow1;
-    VclPtr<FixedImage> m_pArrow2;
-    VclPtr<LicenseView> m_pLicense;
-    VclPtr<PushButton> m_pDown;
-
-    VclPtr<PushButton> m_pAcceptButton;
-    VclPtr<PushButton> m_pDeclineButton;
-
-    DECL_LINK(PageDownHdl, Button*, void);
-    DECL_LINK(ScrolledHdl, LicenseView&, void);
-    DECL_LINK(EndReachedHdl, LicenseView&, void);
-    DECL_LINK(CancelHdl, Button*, void);
-    DECL_LINK(AcceptHdl, Button*, void);
-
-    bool m_bLicenseRead;
-
-    LicenseDialogImpl(
-        vcl::Window * pParent,
-        const OUString & sExtensionName,
-        const OUString & sLicenseText);
-    virtual ~LicenseDialogImpl() override { disposeOnce(); }
-    virtual void dispose() override;
-
-    virtual void Activate() override;
-
-};
-
-void LicenseDialogImpl::dispose()
-{
-    m_pFtHead.clear();
-    m_pArrow1.clear();
-    m_pArrow2.clear();
-    m_pLicense.clear();
-    m_pDown.clear();
-    m_pAcceptButton.clear();
-    m_pDeclineButton.clear();
-    ModalDialog::dispose();
-}
-
-
-LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
-    : MultiLineEdit( pParent, nStyle )
-{
-    SetLeftMargin( 5 );
-    mbEndReached = IsEndReached();
-    StartListening( *GetTextEngine() );
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(LicenseView, WB_CLIPCHILDREN|WB_LEFT|WB_VSCROLL)
-
-LicenseView::~LicenseView()
-{
-    disposeOnce();
-}
-
-void LicenseView::dispose()
-{
-    maEndReachedHdl = Link<LicenseView&,void>();
-    maScrolledHdl   = Link<LicenseView&,void>();
-    EndListeningAll();
-    MultiLineEdit::dispose();
-}
-
-void LicenseView::ScrollDown( ScrollType eScroll )
-{
-    ScrollBar*  pScroll = GetVScrollBar();
-    if ( pScroll )
-        pScroll->DoScrollAction( eScroll );
-}
-
-bool LicenseView::IsEndReached() const
-{
-    bool bEndReached;
-
-    TextView*       pView = GetTextView();
-    ExtTextEngine*  pEdit = GetTextEngine();
-    const long      nHeight = pEdit->GetTextHeight();
-    Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
-    Point           aBottom( 0, aOutSize.Height() );
-
-    bEndReached = pView->GetDocPos( aBottom ).Y() >= nHeight - 1;
-
-    return bEndReached;
-}
-
-void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if ( pTextHint )
-    {
-        bool    bLastVal = EndReached();
-        const SfxHintId nId = pTextHint->GetId();
-
-        if ( nId == SfxHintId::TextParaInserted )
-        {
-            if ( bLastVal )
-                mbEndReached = IsEndReached();
-        }
-        else if ( nId == SfxHintId::TextViewScrolled )
-        {
-            if ( ! mbEndReached )
-                mbEndReached = IsEndReached();
-            maScrolledHdl.Call( *this );
-        }
-
-        if ( EndReached() && !bLastVal )
-        {
-            maEndReachedHdl.Call( *this );
-        }
-    }
-}
-
 
 LicenseDialogImpl::LicenseDialogImpl(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     const OUString & sExtensionName,
     const OUString & sLicenseText)
-    : ModalDialog(pParent, "LicenseDialog", "desktop/ui/licensedialog.ui")
+    : GenericDialogController(pParent, "desktop/ui/licensedialog.ui", "LicenseDialog")
     , m_bLicenseRead(false)
+    , m_xFtHead(m_xBuilder->weld_label("head"))
+    , m_xArrow1(m_xBuilder->weld_widget("arrow1"))
+    , m_xArrow2(m_xBuilder->weld_widget("arrow2"))
+    , m_xLicense(m_xBuilder->weld_text_view("textview"))
+    , m_xDown(m_xBuilder->weld_button("down"))
+    , m_xAcceptButton(m_xBuilder->weld_button("ok"))
+    , m_xDeclineButton(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtHead, "head");
-    get(m_pArrow1, "arrow1");
-    get(m_pArrow2, "arrow2");
-    get(m_pDown, "down");
-    get(m_pAcceptButton, "accept");
-    get(m_pDeclineButton, "decline");
-    m_pArrow1->Show();
-    m_pArrow2->Show(false);
-    get(m_pLicense, "textview");
+    m_xArrow1->show();
+    m_xArrow2->hide();
 
-    Size aSize(m_pLicense->LogicToPixel(Size(290, 170), MapMode(MapUnit::MapAppFont)));
-    m_pLicense->set_width_request(aSize.Width());
-    m_pLicense->set_height_request(aSize.Height());
+    m_xLicense->connect_size_allocate(LINK(this, LicenseDialogImpl, SizeAllocHdl));
+    m_xLicense->set_size_request(m_xLicense->get_approximate_digit_width() * 72,
+                                     m_xLicense->get_height_rows(21));
 
-    m_pLicense->SetText(sLicenseText);
-    m_pFtHead->SetText(m_pFtHead->GetText() + "\n" + sExtensionName);
+    m_xLicense->set_text(sLicenseText);
+    m_xFtHead->set_label(m_xFtHead->get_label() + "\n" + sExtensionName);
 
-    m_pAcceptButton->SetClickHdl( LINK(this, LicenseDialogImpl, AcceptHdl) );
-    m_pDeclineButton->SetClickHdl( LINK(this, LicenseDialogImpl, CancelHdl) );
+    m_xAcceptButton->connect_clicked( LINK(this, LicenseDialogImpl, AcceptHdl) );
+    m_xDeclineButton->connect_clicked( LINK(this, LicenseDialogImpl, CancelHdl) );
 
-    m_pLicense->SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
-    m_pLicense->SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
-    m_pDown->SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
+    m_xLicense->connect_vadjustment_changed(LINK(this, LicenseDialogImpl, ScrolledHdl));
+    m_xDown->connect_mouse_press(LINK(this, LicenseDialogImpl, MousePressHdl));
+    m_xDown->connect_mouse_release(LINK(this, LicenseDialogImpl, MouseReleaseHdl));
+    m_xDown->connect_key_press(LINK(this, LicenseDialogImpl, KeyInputHdl));
+    m_xDown->connect_key_release(LINK(this, LicenseDialogImpl, KeyReleaseHdl));
 
-    // We want a automatic repeating page down button
-    WinBits aStyle = m_pDown->GetStyle();
-    aStyle |= WB_REPEAT;
-    m_pDown->SetStyle( aStyle );
+    m_aRepeat.SetTimeout(Application::GetSettings().GetMouseSettings().GetButtonRepeat());
+    m_aRepeat.SetInvokeHandler(LINK(this, LicenseDialogImpl, ScrollTimerHdl));
+
+    m_aResized.SetPriority(TaskPriority::LOWEST);
+    m_aResized.SetInvokeHandler(LINK(this, LicenseDialogImpl, ResizedHdl));
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl, Button*, void)
+IMPL_LINK_NOARG(LicenseDialogImpl, SizeAllocHdl, const Size&, void)
 {
-    EndDialog(RET_OK);
+    m_aResized.Start();
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl, weld::Button&, void)
 {
-    EndDialog();
+    m_xDialog->response(RET_OK);
 }
 
-void LicenseDialogImpl::Activate()
+IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl, weld::Button&, void)
 {
-    if (!m_bLicenseRead)
+    m_xDialog->response(RET_CANCEL);
+}
+
+bool LicenseDialogImpl::IsEndReached() const
+{
+    return m_xLicense->vadjustment_get_value() + m_xLicense->vadjustment_get_page_size() >= m_xLicense->vadjustment_get_upper();
+}
+
+IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl, weld::TextView&, void)
+{
+    if (IsEndReached())
     {
-        //Only enable the scroll down button if the license text does not fit into the window
-        if (m_pLicense->IsEndReached())
+        m_xDown->set_sensitive(false);
+        m_aRepeat.Stop();
+
+        if (!m_bLicenseRead)
         {
-            m_pDown->Disable();
-            m_pAcceptButton->Enable();
-            m_pAcceptButton->GrabFocus();
-        }
-        else
-        {
-            m_pDown->Enable();
-            m_pDown->GrabFocus();
-            m_pAcceptButton->Disable();
+            m_xAcceptButton->set_sensitive(true);
+            m_xAcceptButton->grab_focus();
+            m_xArrow1->hide();
+            m_xArrow2->show();
+            m_bLicenseRead = true;
         }
     }
-}
-
-IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl, LicenseView&, void)
-{
-    if (m_pLicense->IsEndReached())
-        m_pDown->Disable();
     else
-        m_pDown->Enable();
+        m_xDown->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, PageDownHdl, Button*, void)
+void LicenseDialogImpl::PageDown()
 {
-    m_pLicense->ScrollDown( ScrollType::PageDown );
+    m_xLicense->vadjustment_set_value(m_xLicense->vadjustment_get_value() +
+                                      m_xLicense->vadjustment_get_page_size());
+    ScrolledHdl(*m_xLicense);
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)
+IMPL_LINK(LicenseDialogImpl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    m_pAcceptButton->Enable();
-    m_pAcceptButton->GrabFocus();
-    m_pArrow1->Show(false);
-    m_pArrow2->Show();
-    m_bLicenseRead = true;
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+    if (aKeyCode.GetCode() == KEY_RETURN || aKeyCode.GetCode() == KEY_SPACE)
+        PageDown();
+    return false;
 }
 
+IMPL_LINK_NOARG(LicenseDialogImpl, ResizedHdl, Timer*, void)
+{
+    ScrolledHdl(*m_xLicense);
+}
+
+IMPL_LINK_NOARG(LicenseDialogImpl, ScrollTimerHdl, Timer*, void)
+{
+    PageDown();
+}
+
+IMPL_STATIC_LINK_NOARG(LicenseDialogImpl, KeyReleaseHdl, const KeyEvent&, bool)
+{
+    return false;
+}
+
+IMPL_LINK_NOARG(LicenseDialogImpl, MousePressHdl, const MouseEvent&, bool)
+{
+    PageDown();
+    m_aRepeat.Start();
+    return false;
+}
+
+IMPL_LINK_NOARG(LicenseDialogImpl, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    m_aRepeat.Stop();
+    return false;
+}
 
 LicenseDialog::LicenseDialog( Sequence<Any> const& args,
                           Reference<XComponentContext> const& )
@@ -282,9 +211,7 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 
 void LicenseDialog::setTitle( OUString const & )
 {
-
 }
-
 
 sal_Int16 LicenseDialog::execute()
 {
@@ -294,10 +221,8 @@ sal_Int16 LicenseDialog::execute()
 
 sal_Int16 LicenseDialog::solar_execute()
 {
-    ScopedVclPtrInstance<LicenseDialogImpl> dlg(
-            VCLUnoHelper::GetWindow(m_parent), m_sExtensionName, m_sLicenseText);
-
-    return dlg->Execute();
+    LicenseDialogImpl dlg(Application::GetFrameWeld(m_parent), m_sExtensionName, m_sLicenseText);
+    return dlg.run();
 }
 
 } // namespace dp_gui

@@ -531,7 +531,7 @@ void SvxDialControl::StyleUpdated()
     InvalidateControl();
 }
 
-void SvxDialControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool SvxDialControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if( rMEvt.IsLeft() )
     {
@@ -540,15 +540,17 @@ void SvxDialControl::MouseButtonDown(const MouseEvent& rMEvt)
         mpImpl->mnOldAngle = mpImpl->mnAngle;
         HandleMouseEvent( rMEvt.GetPosPixel(), true );
     }
+    return true;
 }
 
-void SvxDialControl::MouseMove( const MouseEvent& rMEvt )
+bool SvxDialControl::MouseMove( const MouseEvent& rMEvt )
 {
     if( IsMouseCaptured() && rMEvt.IsLeft() )
         HandleMouseEvent( rMEvt.GetPosPixel(), false );
+    return true;
 }
 
-void SvxDialControl::MouseButtonUp(const MouseEvent&)
+bool SvxDialControl::MouseButtonUp(const MouseEvent&)
 {
     if( IsMouseCaptured() )
     {
@@ -556,6 +558,7 @@ void SvxDialControl::MouseButtonUp(const MouseEvent&)
         if( mpImpl->mpLinkField )
             mpImpl->mpLinkField->grab_focus();
     }
+    return true;
 }
 
 bool SvxDialControl::KeyInput( const KeyEvent& rKEvt )

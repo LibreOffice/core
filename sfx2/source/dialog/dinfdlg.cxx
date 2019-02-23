@@ -621,6 +621,12 @@ SfxDocumentDescPage::SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet
                                    m_xCommentEd->get_height_rows(16));
 }
 
+void SfxDocumentDescPage::dispose()
+{
+    m_xCommentEd.reset();
+    SfxTabPage::dispose();
+}
+
 SfxDocumentDescPage::~SfxDocumentDescPage()
 {
 }

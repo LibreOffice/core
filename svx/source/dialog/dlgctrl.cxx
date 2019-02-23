@@ -188,7 +188,7 @@ void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 
 // The clicked rectangle (3 x 3) is determined and the parent (dialog)
 // is notified that the item was changed
-void SvxRectCtl::MouseButtonDown(const MouseEvent& rMEvt)
+bool SvxRectCtl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if(!IsCompletelyDisabled())
@@ -200,6 +200,7 @@ void SvxRectCtl::MouseButtonDown(const MouseEvent& rMEvt)
         if (m_pPage)
             m_pPage->PointChanged(GetDrawingArea(), eRP);
     }
+    return true;
 }
 
 bool SvxRectCtl::KeyInput(const KeyEvent& rKeyEvt)
@@ -668,10 +669,10 @@ void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 
 // The clicked rectangle is identified, to change its color
 
-void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
+bool SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
-        return;
+        return true;
 
     //Grab focus when click in window
     if (!HasFocus())
@@ -685,6 +686,8 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         m_xAccess->NotifyChild(nIndex,true, true);
     }
+
+    return true;
 }
 
 tools::Rectangle SvxPixelCtl::GetFocusRect()
