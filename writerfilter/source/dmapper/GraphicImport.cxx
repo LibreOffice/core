@@ -225,6 +225,7 @@ public:
 
     bool            bSizeProtected;
     bool            bPositionProtected;
+    bool            bHidden;
 
     sal_Int32       nShapeOptionType;
 
@@ -277,6 +278,7 @@ public:
         ,bIsGraphic(false)
         ,bSizeProtected(false)
         ,bPositionProtected(false)
+        ,bHidden(false)
         ,nShapeOptionType(0)
         ,m_rPositionOffsets(rPositionOffsets)
         ,m_rAligns(rAligns)
@@ -559,6 +561,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             //alternative text
             m_pImpl->title = rValue.getString();
         break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_hidden:
+            m_pImpl->bHidden = (nIntValue == 1);
+        break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
             //disallow aspect ratio change - ignored
         break;
@@ -717,7 +722,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                     if ( bUseShape )
                         m_xShape = xShape;
 
-
                     if ( m_xShape.is( ) )
                     {
                         uno::Reference< beans::XPropertySet > xShapeProps
@@ -784,6 +788,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // This needs to be AT_PARAGRAPH by default and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
+
+                        if (m_pImpl->bHidden)
+                        {
+                            xShapeProps->setPropertyValue("Visible", uno::makeAny(false));
+                            xShapeProps->setPropertyValue("Printable", uno::makeAny(false));
+                        }
 
                         // Avoid setting AnchorType for TextBoxes till SwTextBoxHelper::syncProperty() doesn't handle transition.
                         bool bTextBox = false;

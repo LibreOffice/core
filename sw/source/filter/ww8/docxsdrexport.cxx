@@ -892,6 +892,10 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     if (!pSdrObject->GetDescription().isEmpty())
         pDocPrAttrList->add(XML_descr,
                             OUStringToOString(pSdrObject->GetDescription(), RTL_TEXTENCODING_UTF8));
+    if (!pSdrObject->IsVisible()
+        && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+
+        pDocPrAttrList->add(XML_hidden, OString::number(1).getStr());
     sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
