@@ -259,10 +259,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             }
             else
             {
-                OString sError( "Misplaced close tag: " );
-                sError += sToken;
-                sError += " in file ";
-                sError += global::inputPathname;
+                const OString sError{ "Misplaced close tag: " + sToken + " in file " + global::inputPathname };
                 yyerror(sError.getStr());
                 std::exit(EXIT_FAILURE);
             }
@@ -470,34 +467,16 @@ void CfgMerge::WorkOnResourceEnd()
                 if (
                     ( !sCur.equalsIgnoreAsciiCase("en-US") ) && !sContent.isEmpty())
                 {
-
-                    OString sText = helper::QuotHTML( sContent);
-
-                    OString sAdditionalLine( "\t" );
-
                     OString sTextTag = pStackData->sTextTag;
-                    OString sTemp = sTextTag.copy( sTextTag.indexOf( "xml:lang=" ));
-
-                    sal_Int32 n = 0;
-                    OString sSearch = sTemp.getToken(0, '"', n);
-                    sSearch += "\"";
-                    sSearch += sTemp.getToken(0, '"', n);
-                    sSearch += "\"";
-
-                    OString sReplace = sTemp.getToken(0, '"');
-                    sReplace += "\"";
-                    sReplace += sCur;
-                    sReplace += "\"";
-
-                    sTextTag = sTextTag.replaceFirst(sSearch, sReplace);
-
-                    sAdditionalLine += sTextTag;
-                    sAdditionalLine += sText;
-                    sAdditionalLine += pStackData->sEndTextTag;
-
-                    sAdditionalLine += "\n";
-                    sAdditionalLine += sLastWhitespace;
-
+                    const sal_Int32 nLangAttributeStart{ sTextTag.indexOf( "xml:lang=" ) };
+                    const sal_Int32 nLangStart{ sTextTag.indexOf( '"', nLangAttributeStart )+1 };
+                    const sal_Int32 nLangEnd{ sTextTag.indexOf( '"', nLangStart ) };
+                    OString sAdditionalLine{ "\t"
+                        + sTextTag.replaceAt(nLangStart, nLangEnd-nLangStart, sCur)
+                        + helper::QuotHTML(sContent)
+                        + pStackData->sEndTextTag
+                        + "\n"
+                        + sLastWhitespace };
                     Output( sAdditionalLine );
                 }
             }
