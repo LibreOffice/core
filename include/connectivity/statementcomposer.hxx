@@ -20,11 +20,14 @@
 #ifndef INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 #define INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
+
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::sdb { class XSingleSelectQueryComposer; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 
 namespace dbtools

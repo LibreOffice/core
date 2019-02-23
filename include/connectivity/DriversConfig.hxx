@@ -23,7 +23,6 @@
 
 #include <map>
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <salhelper/singletonref.hxx>

@@ -31,6 +31,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/util/XRefreshListener.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

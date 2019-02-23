@@ -27,11 +27,13 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
-#include <connectivity/sdbcx/VKey.hxx>
-#include <com/sun/star/sdb/tools/XTableRename.hpp>
-#include <com/sun/star/sdb/tools/XTableAlteration.hpp>
-#include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
-#include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
+
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::sdb::tools { class XIndexAlteration; }
+namespace com::sun::star::sdb::tools { class XKeyAlteration; }
+namespace com::sun::star::sdb::tools { class XTableAlteration; }
+namespace com::sun::star::sdb::tools { class XTableRename; }
+namespace connectivity::sdbcx { struct KeyProperties; }
 
 namespace connectivity
 {

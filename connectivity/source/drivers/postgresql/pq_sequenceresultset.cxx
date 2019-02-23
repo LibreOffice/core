@@ -40,6 +40,8 @@
 
 #include <connectivity/dbexception.hxx>
 
+#include <com/sun/star/sdbc/SQLException.hpp>
+
 using com::sun::star::sdbc::XResultSetMetaData;
 
 using com::sun::star::uno::Reference;

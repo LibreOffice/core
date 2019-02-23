@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>

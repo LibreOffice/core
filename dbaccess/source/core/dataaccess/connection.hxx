@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 
 #include <cppuhelper/implbase13.hxx>
 #include <connectivity/ConnectionWrapper.hxx>

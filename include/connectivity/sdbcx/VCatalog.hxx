@@ -20,19 +20,21 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VCATALOG_HXX
 
-#include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
+
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::sdbc { class XDatabaseMetaData; }
+namespace com::sun::star::sdbc { class XResultSet; }
+namespace com::sun::star::sdbc { class XRow; }
 
 namespace connectivity
 {

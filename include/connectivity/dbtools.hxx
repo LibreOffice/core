@@ -20,20 +20,16 @@
 #ifndef INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <connectivity/dbexception.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
-#include <tools/stream.hxx>
 
 namespace com { namespace sun { namespace star {
 
 namespace sdb {
     class XSingleSelectQueryComposer;
-    class SQLContext;
 }
 namespace sdbcx {
     class XTablesSupplier;
@@ -55,8 +51,6 @@ namespace awt {
 }
 namespace lang {
     struct Locale;
-    class XMultiServiceFactory;
-    class WrappedTargetException;
 }
 namespace container {
     class XNameAccess;
@@ -74,6 +68,7 @@ namespace task {
 
 } } }
 
+class SvStream;
 
 namespace dbtools
 {

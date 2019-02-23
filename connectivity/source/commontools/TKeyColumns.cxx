@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/TKeyColumns.hxx>
+#include <connectivity/TKey.hxx>
 #include <connectivity/sdbcx/VKeyColumn.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

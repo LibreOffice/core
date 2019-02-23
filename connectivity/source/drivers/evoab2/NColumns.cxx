@@ -23,6 +23,7 @@
 #include "NTables.hxx"
 #include "NCatalog.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;

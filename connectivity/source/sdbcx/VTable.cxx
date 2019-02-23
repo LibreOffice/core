@@ -19,6 +19,7 @@
 
 #include <connectivity/sdbcx/VTable.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/sdbcx/VIndex.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>

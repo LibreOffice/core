@@ -24,6 +24,7 @@
 #include <stringconstants.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <tools/debug.hxx>
 #include <connectivity/sqliterator.hxx>

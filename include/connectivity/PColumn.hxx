@@ -27,10 +27,11 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/proparrhlp.hxx>
+
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::sdbc { class XDatabaseMetaData; }
+namespace com::sun::star::sdbc { class XResultSetMetaData; }
 
 namespace connectivity
 {

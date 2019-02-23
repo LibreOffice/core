@@ -22,8 +22,6 @@
 
 #include <memory>
 #include <connectivity/sdbcx/VCollection.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity

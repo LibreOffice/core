@@ -42,6 +42,7 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <svx/fmtools.hxx>
 #include <svl/macitem.hxx>

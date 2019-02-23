@@ -23,10 +23,8 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 
-#include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -36,6 +34,9 @@
 
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::sdbc { class XParameters; }
+namespace com::sun::star::sdb { class XSingleSelectQueryAnalyzer; }
 
 
 namespace dbtools

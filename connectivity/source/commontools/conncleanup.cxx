@@ -20,6 +20,8 @@
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <osl/diagnose.h>
 
 

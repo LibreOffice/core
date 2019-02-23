@@ -23,6 +23,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <TSortIndex.hxx>
 #include "MTable.hxx"
 

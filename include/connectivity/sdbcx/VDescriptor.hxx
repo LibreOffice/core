@@ -21,9 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
 
 #include <comphelper/propertycontainer.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

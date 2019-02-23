@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 #define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/standardsqlstate.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com
 {
@@ -38,6 +38,7 @@ namespace com
             namespace sdbc
             {
                 class SQLWarning;
+                class SQLException;
             }
         }
     }

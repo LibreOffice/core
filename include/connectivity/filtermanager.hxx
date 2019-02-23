@@ -19,14 +19,13 @@
 #ifndef INCLUDED_CONNECTIVITY_FILTERMANAGER_HXX
 #define INCLUDED_CONNECTIVITY_FILTERMANAGER_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
-#include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
+
+namespace com::sun::star::beans { class XPropertySet; }
 
 
 namespace dbtools
