@@ -59,60 +59,7 @@ static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, L
             case WM_LBUTTONUP:
             case WM_MBUTTONUP:
             case WM_RBUTTONUP:
-            {
-                awt::MouseEvent aUNOEvt;
-                POINT           aWinPoint;
-
-                if( !::GetCursorPos( &aWinPoint ) || !::ScreenToClient( hWnd, &aWinPoint ) )
-                {
-                    aWinPoint.x = GET_X_LPARAM( nPar2 );
-                    aWinPoint.y = GET_Y_LPARAM( nPar2 );
-                }
-                aUNOEvt.Modifiers = 0;
-                aUNOEvt.Buttons = 0;
-                aUNOEvt.X = aWinPoint.x;
-                aUNOEvt.Y = aWinPoint.y;
-                aUNOEvt.PopupTrigger = false;
-
-                // Modifiers
-                if( nPar1 & MK_SHIFT )
-                    aUNOEvt.Modifiers |= awt::KeyModifier::SHIFT;
-
-                if( nPar1 & MK_CONTROL )
-                    aUNOEvt.Modifiers |= awt::KeyModifier::MOD1;
-
-                // Buttons
-                if( WM_LBUTTONDOWN == nMsg || WM_LBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::LEFT;
-
-                if( WM_MBUTTONDOWN == nMsg || WM_MBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::MIDDLE;
-
-                if( WM_RBUTTONDOWN == nMsg || WM_RBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::RIGHT;
-
-                // event type
-                if( WM_LBUTTONDOWN == nMsg ||
-                    WM_MBUTTONDOWN == nMsg ||
-                    WM_RBUTTONDOWN == nMsg )
-                {
-                    aUNOEvt.ClickCount = 1;
-                    pWindow->fireMousePressedEvent( aUNOEvt );
-                }
-                else if( WM_LBUTTONUP == nMsg ||
-                         WM_MBUTTONUP == nMsg ||
-                         WM_RBUTTONUP == nMsg )
-                {
-                    aUNOEvt.ClickCount = 1;
-                    pWindow->fireMouseReleasedEvent( aUNOEvt );
-                }
-                else if( WM_MOUSEMOVE == nMsg )
-                {
-                    aUNOEvt.ClickCount = 0;
-                    pWindow->fireMouseMovedEvent( aUNOEvt );
-                    pWindow->updatePointer();
-                }
-            }
+                PostMessage(pWindow->getParentWnd(), nMsg, nPar1, nPar2);
             break;
 
             case WM_SETFOCUS:
@@ -139,7 +86,7 @@ static WNDCLASSW* lcl_getWndClass()
 
     memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
     s_pWndClass->hInstance = GetModuleHandleW( nullptr );
-    s_pWndClass->cbWndExtra = sizeof( DWORD );
+    s_pWndClass->cbWndExtra = sizeof( DWORD_PTR );
     s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
     s_pWndClass->lpszClassName = L"com_sun_star_media_PlayerWnd";
     s_pWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
