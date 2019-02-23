@@ -225,7 +225,7 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
 {
     const_cast<DffPropertyReader*>(this)->pDefaultPropSet.reset();
-    sal_uInt32 nMerk = rStCtrl.Tell();
+    sal_uInt32 nOldPos = rStCtrl.Tell();
     bool bOk = checkSeek(rStCtrl, nOffsDgg);
     DffRecordHeader aRecHd;
     if (bOk)
@@ -238,7 +238,7 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
             ReadDffPropSet( rStCtrl, *pDefaultPropSet );
         }
     }
-    rStCtrl.Seek( nMerk );
+    rStCtrl.Seek( nOldPos );
 }
 
 #ifdef DBG_CUSTOMSHAPE
@@ -3178,7 +3178,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
     bool bRet = false;
     if ( !maFidcls.empty() )
     {
-        sal_uInt32 nMerk = rSt.Tell();
+        sal_uInt32 nOldPos = rSt.Tell();
         sal_uInt32 nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
@@ -3223,7 +3223,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
             }
         }
         if ( !bRet )
-            rSt.Seek( nMerk );
+            rSt.Seek( nOldPos );
     }
     return bRet;
 }
@@ -3231,7 +3231,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
 bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount )
 {
     bool bRet = false;
-    sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
+    sal_uLong nOldFPos = rSt.Tell(); // store FilePos to restore it later if necessary
     do
     {
         DffRecordHeader aHd;
@@ -3268,14 +3268,14 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     }
     while ( rSt.good() && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // restore original FilePos
+        rSt.Seek( nOldFPos );  // restore original FilePos
     return bRet;
 }
 
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos ) const
 {
     bool bRet = false;
-    sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
+    sal_uLong nOldFPos = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
     do
     {
         DffRecordHeader aHd;
@@ -3300,7 +3300,7 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
     }
     while ( rStCtrl.good() && rStCtrl.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rStCtrl.Seek( nFPosMerk ); // restore FilePos
+        rStCtrl.Seek( nOldFPos ); // restore FilePos
     return bRet;
 }
 
@@ -5782,7 +5782,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
     if (!nOffsDggL)
         return;
 
-    sal_uInt32 nDummy, nMerk = rStCtrl.Tell();
+    sal_uInt32 nDummy, nOldPos = rStCtrl.Tell();
 
     if (nOffsDggL == rStCtrl.Seek(nOffsDggL))
     {
@@ -5820,7 +5820,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
             }
         }
     }
-    rStCtrl.Seek( nMerk );
+    rStCtrl.Seek( nOldPos );
 }
 
 void SvxMSDffManager::CheckTxBxStoryChain()
