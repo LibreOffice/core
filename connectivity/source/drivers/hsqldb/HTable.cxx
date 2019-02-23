@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

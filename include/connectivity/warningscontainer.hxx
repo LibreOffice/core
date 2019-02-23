@@ -20,11 +20,15 @@
 #ifndef INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
 #define INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
 
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-
 #include <connectivity/dbtoolsdllapi.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::sdbc { class SQLException; }
+namespace com::sun::star::sdbc { class SQLWarning; }
+namespace com::sun::star::sdbc { class XWarningsSupplier; }
+namespace com::sun::star::sdb { class SQLContext; }
+namespace com::sun::star::uno { class XInterface; }
 
 namespace dbtools
 {

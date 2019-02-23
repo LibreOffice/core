@@ -21,9 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <connectivity/dbtoolsdllapi.hxx>
-
-namespace connectivity { class OSQLParseNode; }
 
 namespace connectivity
 {

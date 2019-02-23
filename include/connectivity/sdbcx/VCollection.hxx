@@ -24,10 +24,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
@@ -38,6 +36,8 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
+
+namespace com::sun::star::container { class XEnumeration; }
 
 
 namespace connectivity

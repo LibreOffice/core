@@ -32,6 +32,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

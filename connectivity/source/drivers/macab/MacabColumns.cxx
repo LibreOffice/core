@@ -23,6 +23,7 @@
 #include "MacabTables.hxx"
 #include "MacabCatalog.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::macab;
 using namespace connectivity::sdbcx;

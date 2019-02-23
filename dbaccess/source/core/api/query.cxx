@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
 
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

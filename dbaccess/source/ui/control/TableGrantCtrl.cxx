@@ -19,12 +19,14 @@
 
 #include <TableGrantCtrl.hxx>
 #include <core_resource.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 #include <strings.hrc>
 #include <UITools.hxx>
 

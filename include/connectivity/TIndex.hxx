@@ -22,7 +22,6 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VIndex.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity
 {

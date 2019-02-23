@@ -21,6 +21,7 @@
 
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <osl/diagnose.h>
 
 namespace connectivity
 {

@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/sdbcx/VKeyColumn.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -35,8 +36,8 @@
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <memory>
+
+namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 
 namespace connectivity
 {

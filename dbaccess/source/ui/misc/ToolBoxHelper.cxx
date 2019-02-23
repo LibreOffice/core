@@ -25,6 +25,7 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 namespace dbaui
 {
