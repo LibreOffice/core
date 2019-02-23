@@ -71,6 +71,9 @@ protected:
     Link<const Size&, void> m_aSizeAllocateHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
+    Link<const MouseEvent&, bool> m_aMousePressHdl;
+    Link<const MouseEvent&, bool> m_aMouseMotionHdl;
+    Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
 
 public:
     virtual void set_sensitive(bool sensitive) = 0;
@@ -154,6 +157,24 @@ public:
     {
         assert(!m_aKeyReleaseHdl.IsSet() || !rLink.IsSet());
         m_aKeyReleaseHdl = rLink;
+    }
+
+    virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink)
+    {
+        assert(!m_aMousePressHdl.IsSet() || !rLink.IsSet());
+        m_aMousePressHdl = rLink;
+    }
+
+    virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink)
+    {
+        assert(!m_aMouseMotionHdl.IsSet() || !rLink.IsSet());
+        m_aMouseMotionHdl = rLink;
+    }
+
+    virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink)
+    {
+        assert(!m_aMouseReleaseHdl.IsSet() || !rLink.IsSet());
+        m_aMouseReleaseHdl = rLink;
     }
 
     virtual void grab_add() = 0;
@@ -1318,8 +1339,10 @@ private:
 
 protected:
     Link<TextView&, void> m_aChangeHdl;
+    Link<TextView&, void> m_aVChangeHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
+    void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
 
 public:
     virtual void set_text(const OUString& rText) = 0;
@@ -1339,6 +1362,13 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
 
     void connect_changed(const Link<TextView&, void>& rLink) { m_aChangeHdl = rLink; }
+
+    virtual int vadjustment_get_value() const = 0;
+    virtual int vadjustment_get_upper() const = 0;
+    virtual int vadjustment_get_lower() const = 0;
+    virtual int vadjustment_get_page_size() const = 0;
+    virtual void vadjustment_set_value(int value) = 0;
+    void connect_vadjustment_changed(const Link<TextView&, void>& rLink) { m_aVChangeHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container
@@ -1362,9 +1392,6 @@ public:
 
 protected:
     Link<draw_args, void> m_aDrawHdl;
-    Link<const MouseEvent&, void> m_aMousePressHdl;
-    Link<const MouseEvent&, void> m_aMouseMotionHdl;
-    Link<const MouseEvent&, void> m_aMouseReleaseHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
     Link<const Point&, bool> m_aPopupMenuHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
@@ -1377,18 +1404,6 @@ protected:
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
-    void connect_mouse_press(const Link<const MouseEvent&, void>& rLink)
-    {
-        m_aMousePressHdl = rLink;
-    }
-    void connect_mouse_move(const Link<const MouseEvent&, void>& rLink)
-    {
-        m_aMouseMotionHdl = rLink;
-    }
-    void connect_mouse_release(const Link<const MouseEvent&, void>& rLink)
-    {
-        m_aMouseReleaseHdl = rLink;
-    }
     void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
     void connect_popup_menu(const Link<const Point&, bool>& rLink) { m_aPopupMenuHdl = rLink; }
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)

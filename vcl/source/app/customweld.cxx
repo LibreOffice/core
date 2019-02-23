@@ -46,19 +46,19 @@ IMPL_LINK(CustomWeld, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     m_rWidgetController.Paint(aPayload.first, aPayload.second);
 }
 
-IMPL_LINK(CustomWeld, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+IMPL_LINK(CustomWeld, DoMouseButtonDown, const MouseEvent&, rMEvt, bool)
 {
-    m_rWidgetController.MouseButtonDown(rMEvt);
+    return m_rWidgetController.MouseButtonDown(rMEvt);
 }
 
-IMPL_LINK(CustomWeld, DoMouseMove, const MouseEvent&, rMEvt, void)
+IMPL_LINK(CustomWeld, DoMouseMove, const MouseEvent&, rMEvt, bool)
 {
-    m_rWidgetController.MouseMove(rMEvt);
+    return m_rWidgetController.MouseMove(rMEvt);
 }
 
-IMPL_LINK(CustomWeld, DoMouseButtonUp, const MouseEvent&, rMEvt, void)
+IMPL_LINK(CustomWeld, DoMouseButtonUp, const MouseEvent&, rMEvt, bool)
 {
-    m_rWidgetController.MouseButtonUp(rMEvt);
+    return m_rWidgetController.MouseButtonUp(rMEvt);
 }
 
 IMPL_LINK_NOARG(CustomWeld, DoGetFocus, weld::Widget&, void) { m_rWidgetController.GetFocus(); }

@@ -62,7 +62,7 @@ void SvxCharView::LoseFocus()
     Invalidate();
 }
 
-void SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
+bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if ( rMEvt.IsLeft() )
     {
@@ -82,6 +82,8 @@ void SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
         Invalidate();
         createContextMenu();
     }
+
+    return true;
 }
 
 bool SvxCharView::KeyInput(const KeyEvent& rKEvt)

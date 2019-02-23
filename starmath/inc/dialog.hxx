@@ -257,7 +257,7 @@ class SmShowSymbolSet : public weld::CustomWidgetController
     Point OffsetPoint(const Point &rPoint) const;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
@@ -289,7 +289,7 @@ private:
     Link<SmShowSymbol&,void> aDblClickHdlLink;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void setFontSize(vcl::Font &rFont) const;
 

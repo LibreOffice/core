@@ -233,6 +233,7 @@ private:
 
 protected:
     virtual ~SfxDocumentDescPage() override;
+    virtual void dispose() override;
 
     virtual bool            FillItemSet( SfxItemSet* ) override;
     virtual void            Reset( const SfxItemSet* ) override;

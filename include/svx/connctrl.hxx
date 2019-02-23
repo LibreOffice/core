@@ -60,7 +60,7 @@ public:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
     sal_uInt16   GetLineDeltaCount();
