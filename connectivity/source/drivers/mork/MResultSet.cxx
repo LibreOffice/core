@@ -21,8 +21,10 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <sal/log.hxx>
 
 #include <vector>

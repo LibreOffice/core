@@ -20,12 +20,13 @@
 #ifndef INCLUDED_CONNECTIVITY_DBMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_DBMETADATA_HXX
 
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace dbtools
 {

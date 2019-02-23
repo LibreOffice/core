@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTCOLUMN_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <column.hxx>
 #include <boost/optional.hpp>
 #include <comphelper/proparrhlp.hxx>

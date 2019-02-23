@@ -20,6 +20,7 @@
 #include "UserAdmin.hxx"
 #include <UITools.hxx>
 #include <dbu_dlg.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>

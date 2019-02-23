@@ -25,6 +25,7 @@
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/IdPropArrayHelper.hxx>

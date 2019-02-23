@@ -26,24 +26,16 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <vector>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <osl/interlck.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com { namespace sun { namespace star { namespace util {
-    struct Date;
-    struct DateTime;
-    struct Time;
-}
-}}}
+namespace com::sun::star::uno { class XComponentContext; }
 
 #if HAVE_FEATURE_JAVA
 namespace jvmaccess { class VirtualMachine; }

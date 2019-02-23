@@ -21,11 +21,14 @@
 #define INCLUDED_CONNECTIVITY_CONNCLEANUP_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::sdbc { class XRowSet; }
+namespace com::sun::star::sdbc { class XConnection; }
 
 namespace dbtools
 {

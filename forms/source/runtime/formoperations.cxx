@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/OrderDialog.hpp>
 #include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

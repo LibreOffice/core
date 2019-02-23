@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <dbu_dlg.hxx>
 #include <com/sun/star/sdbc/KeyRule.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

@@ -25,9 +25,11 @@
 #include <stringconstants.hxx>
 #include <sdbcoretools.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdb/tools/XTableAlteration.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

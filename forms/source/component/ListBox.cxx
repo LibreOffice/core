@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

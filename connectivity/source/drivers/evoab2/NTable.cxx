@@ -23,6 +23,8 @@
 #include "NColumns.hxx"
 #include "NCatalog.hxx"
 
+#include <com/sun/star/sdbc/XRow.hpp>
+
 using namespace connectivity;
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;

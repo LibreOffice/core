@@ -22,6 +22,7 @@
 #include "MacabTables.hxx"
 #include "MacabColumns.hxx"
 #include "MacabCatalog.hxx"
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::macab;
 using namespace connectivity;
