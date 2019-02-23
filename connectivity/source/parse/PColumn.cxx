@@ -25,6 +25,9 @@
 #include <comphelper/types.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace dbtools;

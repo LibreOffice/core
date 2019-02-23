@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SQLERROR_HXX
 
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <boost/optional.hpp>
 #include <memory>

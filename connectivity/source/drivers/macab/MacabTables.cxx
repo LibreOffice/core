@@ -23,6 +23,7 @@
 #include "MacabCatalog.hxx"
 #include "MacabConnection.hxx"
 #include <comphelper/types.hxx>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::macab;
 using namespace connectivity;

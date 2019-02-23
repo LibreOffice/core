@@ -18,6 +18,7 @@
  */
 
 #include "MColumns.hxx"
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/dbtools.hxx>
 

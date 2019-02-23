@@ -21,6 +21,11 @@
 #include <sal/log.hxx>
 
 #include <connectivity/TTableHelper.hxx>
+#include <com/sun/star/sdb/tools/XTableRename.hpp>
+#include <com/sun/star/sdb/tools/XTableAlteration.hpp>
+#include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
+#include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
+#include <connectivity/sdbcx/VKey.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>

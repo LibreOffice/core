@@ -584,3 +584,89 @@ blacklist:
     include/basic/sberrors.hxx:
     # Needed for macro defines
     - vcl/errcode.hxx
+    include/connectivity/BlobHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdbc/XBlob.hpp
+    include/connectivity/CommonTools.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/sdbcx/XColumnsSupplier.hpp
+    # Needed for macro defines
+    - cppuhelper/supportsservice.hxx
+    include/connectivity/ConnectionWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/connectivity/conncleanup.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/sdbc/XRowSetListener.hpp
+    include/connectivity/parameters.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
+    include/connectivity/paramwrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    include/connectivity/sdbcx/VCollection.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/sdbc/XColumnLocate.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    - com/sun/star/sdbcx/XAppend.hpp
+    - com/sun/star/sdbcx/XDrop.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    include/connectivity/sdbcx/VCatalog.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdbcx/XTablesSupplier.hpp
+    - com/sun/star/sdbcx/XViewsSupplier.hpp
+    - com/sun/star/sdbcx/XUsersSupplier.hpp
+    - com/sun/star/sdbcx/XGroupsSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/connectivity/sdbcx/VColumn.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    include/connectivity/sdbcx/VGroup.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sdbcx/XAuthorizable.hpp
+    - com/sun/star/sdbcx/XUsersSupplier.hpp
+    include/connectivity/sdbcx/VIndex.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    include/connectivity/sdbcx/VKey.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    include/connectivity/sdbcx/VTypeDef.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sdbcx/XColumnsSupplier.hpp
+    include/connectivity/sdbcx/VTable.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sdbcx/XAlterTable.hpp
+    - com/sun/star/sdbcx/XColumnsSupplier.hpp
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    - com/sun/star/sdbcx/XIndexesSupplier.hpp
+    - com/sun/star/sdbcx/XKeysSupplier.hpp
+    - com/sun/star/sdbcx/XRename.hpp
+    include/connectivity/sdbcx/VUser.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/sdbcx/XGroupsSupplier.hpp
+    - com/sun/star/sdbcx/XUser.hpp
+    include/connectivity/sdbcx/VView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VUSER_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VUSER_HXX
 
-#include <memory>
-#include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>

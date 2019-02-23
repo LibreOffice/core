@@ -20,20 +20,19 @@
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
 #include <memory>
-#include <config_features.h>
 
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 #include <connectivity/sqlnode.hxx>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <salhelper/singletonref.hxx>
 
 #include <map>
+
+namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace com::sun::star::i18n { class XLocaleData4; }
 
 namespace com
 {
@@ -49,10 +48,6 @@ namespace com
             {
                 class XNumberFormatter;
             }
-            namespace lang
-            {
-                struct Locale;
-            }
         }
     }
 }
@@ -60,7 +55,6 @@ namespace com
 namespace connectivity
 {
     class OSQLScanner;
-    class SQLError;
 
     //= OParseContext
 

@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <set>
 
 #include <rtl/textenc.h>

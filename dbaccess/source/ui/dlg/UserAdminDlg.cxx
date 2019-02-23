@@ -28,6 +28,8 @@
 #include "UserAdmin.hxx"
 #include <UserAdminDlg.hxx>
 
+#include <com/sun/star/sdbc/SQLException.hpp>
+
 #include <connectivity/dbmetadata.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>

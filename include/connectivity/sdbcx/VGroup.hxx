@@ -20,10 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 
-#include <memory>
-#include <osl/diagnose.h>
-
-
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/container/XNamed.hpp>

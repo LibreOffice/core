@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 #define INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace com
 {
@@ -39,10 +39,6 @@ namespace com
             {
                 class XColumn;
                 class XColumnUpdate;
-            }
-            namespace sdbc
-            {
-                class SQLException;
             }
             namespace beans
             {

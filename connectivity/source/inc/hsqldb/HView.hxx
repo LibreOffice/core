@@ -23,6 +23,7 @@
 #include <connectivity/sdbcx/VView.hxx>
 
 #include <com/sun/star/sdbcx/XAlterView.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>

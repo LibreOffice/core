@@ -33,6 +33,7 @@
 #include <core_resource.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <osl/diagnose.h>
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
