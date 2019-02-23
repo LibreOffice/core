@@ -11,6 +11,8 @@
 #include "Tables.hxx"
 #include "Users.hxx"
 
+#include <com/sun/star/sdbc/XRow.hpp>
+
 using namespace ::connectivity::firebird;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;

@@ -79,6 +79,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/stream.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>

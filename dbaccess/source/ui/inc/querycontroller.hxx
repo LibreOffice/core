@@ -26,6 +26,7 @@
 #include <svx/ParseContext.hxx>
 #include "TableFieldDescription.hxx"
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

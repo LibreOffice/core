@@ -97,6 +97,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/mail/MailAttachment.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>

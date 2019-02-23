@@ -21,11 +21,11 @@
 #define INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include <connectivity/TKey.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {
+    class OTableKeyHelper;
     class OOO_DLLPUBLIC_DBTOOLS OKeyColumnsHelper : public connectivity::sdbcx::OCollection
     {
         OTableKeyHelper* m_pKey;

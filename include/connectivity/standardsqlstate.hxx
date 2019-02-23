@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 #define INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 
+#include <sal/types.h>
 
 namespace dbtools
 {

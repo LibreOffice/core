@@ -19,10 +19,13 @@
 
 #include <connectivity/TKeys.hxx>
 #include <connectivity/TKey.hxx>
+#include <connectivity/TTableHelper.hxx>
+#include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <TConnection.hxx>

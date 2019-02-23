@@ -19,9 +19,12 @@
 
 #include <connectivity/TIndexes.hxx>
 #include <connectivity/TIndex.hxx>
+#include <connectivity/TTableHelper.hxx>
+#include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <TConnection.hxx>

@@ -40,6 +40,7 @@
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace comphelper;
 

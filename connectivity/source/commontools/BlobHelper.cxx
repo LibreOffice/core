@@ -19,6 +19,7 @@
 #include <connectivity/BlobHelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 using namespace connectivity;
 using namespace dbtools;

@@ -33,6 +33,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <dbase/DResultSet.hxx>
 #include <strings.hrc>

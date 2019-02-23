@@ -14,6 +14,7 @@
 #include <MConnection.hxx>
 
 #include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;

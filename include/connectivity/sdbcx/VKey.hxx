@@ -24,7 +24,6 @@
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
-#include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

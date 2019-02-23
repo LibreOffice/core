@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 using namespace dbaui;
 using namespace dbtools;

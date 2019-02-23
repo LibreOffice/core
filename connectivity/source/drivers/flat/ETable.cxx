@@ -20,6 +20,7 @@
 #include <flat/ETable.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <svl/converter.hxx>
 #include <flat/EConnection.hxx>
@@ -30,6 +31,7 @@
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

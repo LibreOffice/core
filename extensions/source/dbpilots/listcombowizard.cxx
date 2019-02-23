@@ -29,6 +29,7 @@
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 namespace dbp

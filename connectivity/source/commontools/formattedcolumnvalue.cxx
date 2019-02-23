@@ -28,6 +28,8 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <i18nlangtag/mslangid.hxx>
