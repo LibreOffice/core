@@ -19,6 +19,7 @@
 
 #include <connectivity/sdbcx/VIndex.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>

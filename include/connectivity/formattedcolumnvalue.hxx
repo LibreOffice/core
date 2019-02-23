@@ -20,14 +20,16 @@
 #ifndef INCLUDED_CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 #define INCLUDED_CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::sdbc { class XRowSet; }
+namespace com::sun::star::sdb { class XColumn; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::util { class XNumberFormatter; }
 
 namespace dbtools
 {

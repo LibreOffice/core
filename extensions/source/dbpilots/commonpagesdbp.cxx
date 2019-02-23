@@ -40,6 +40,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/filenotation.hxx>
+#include <osl/diagnose.h>
 
 namespace dbp
 {

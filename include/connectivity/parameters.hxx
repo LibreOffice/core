@@ -22,14 +22,6 @@
 #include <map>
 #include <vector>
 
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/form/XDatabaseParameterListener.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -37,6 +29,20 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::form { class XDatabaseParameterListener; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::sdbc { class XArray; }
+namespace com::sun::star::sdbc { class XBlob; }
+namespace com::sun::star::sdbc { class XClob; }
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::sdbc { class XDatabaseMetaData; }
+namespace com::sun::star::sdbc { class XParameters; }
+namespace com::sun::star::sdbc { class XRef; }
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::uno { class XAggregation; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace dbtools
 {

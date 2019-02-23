@@ -21,8 +21,10 @@
 #define INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
 
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ustrbuf.hxx>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace dbtools
 {

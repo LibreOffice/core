@@ -20,8 +20,10 @@
 #include <comphelper/types.hxx>
 #include <connectivity/sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/sdbcx/VDescriptor.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <TConnection.hxx>
 #include <connectivity/dbtools.hxx>
 

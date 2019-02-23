@@ -22,6 +22,7 @@
 #include <FilteredContainer.hxx>
 #include <RefreshListener.hxx>
 #include <sdbcoretools.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>

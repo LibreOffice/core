@@ -24,8 +24,13 @@
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;

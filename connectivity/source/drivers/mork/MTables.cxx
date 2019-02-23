@@ -22,6 +22,8 @@
 #include "MCatalog.hxx"
 #include <comphelper/types.hxx>
 
+#include <com/sun/star/sdbc/XRow.hpp>
+
 using namespace connectivity;
 using namespace connectivity::mork;
 using namespace ::com::sun::star::uno;

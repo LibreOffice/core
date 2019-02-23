@@ -39,6 +39,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/XLoadable.hpp>

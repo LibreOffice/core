@@ -29,6 +29,7 @@
 #include <writer/WConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <sal/log.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 namespace com
 {

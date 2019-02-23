@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLSCAN_HXX
 #define INCLUDED_CONNECTIVITY_SQLSCAN_HXX
 
-#include <stdarg.h>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 

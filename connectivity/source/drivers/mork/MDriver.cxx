@@ -11,6 +11,7 @@
 #include "MConnection.hxx"
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <sal/log.hxx>
 

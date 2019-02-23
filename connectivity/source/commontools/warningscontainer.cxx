@@ -21,6 +21,9 @@
 #include <connectivity/warningscontainer.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 

@@ -21,6 +21,7 @@
 #include "MacabCatalog.hxx"
 #include "MacabConnection.hxx"
 #include "MacabTables.hxx"
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::macab;
 using namespace ::com::sun::star::uno;

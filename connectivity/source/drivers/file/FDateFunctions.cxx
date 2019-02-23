@@ -22,6 +22,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
+#include <osl/diagnose.h>
 
 using namespace connectivity;
 using namespace connectivity::file;

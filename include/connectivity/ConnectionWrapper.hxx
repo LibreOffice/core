@@ -22,12 +22,13 @@
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace connectivity
 {

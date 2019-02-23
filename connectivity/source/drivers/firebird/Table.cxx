@@ -20,6 +20,7 @@
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;

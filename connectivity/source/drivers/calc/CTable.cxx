@@ -47,6 +47,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;

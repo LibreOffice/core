@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -32,8 +31,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
+
+namespace com::sun::star::sdb { class XColumn; }
+namespace com::sun::star::sdbc { class XRow; }
 
 namespace connectivity
 {

@@ -20,14 +20,16 @@
 #ifndef INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 #define INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/uno/Any.hxx>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::i18n { class XLocaleData4; }
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatter; }
+
 
 
 namespace dbtools
