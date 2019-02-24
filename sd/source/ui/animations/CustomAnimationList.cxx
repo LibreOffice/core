@@ -253,6 +253,8 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDes
         msEffectName = SdResId(STR_CUSTOMANIMATION_EMPHASIS); break;
     case EffectPresetClass::MOTIONPATH:
         msEffectName = SdResId(STR_CUSTOMANIMATION_MOTION_PATHS); break;
+    default:
+        msEffectName = SdResId(STR_CUSTOMANIMATION_MISC); break;
     }
     msEffectName = msEffectName.replaceFirst( "%1" , CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId(mpEffect->getPresetId()));
 }
