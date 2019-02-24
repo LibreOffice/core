@@ -900,18 +900,18 @@ bool OTableController::checkColumns(bool _bNew)
         {
             bFoundPKey |=  (*aIter)->IsPrimaryKey();
             // first check for duplicate names
-            std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter2 = aIter+1;
-            for(;aIter2 != aEnd;++aIter2)
+            bool bDuplicateNameFound = std::any_of(aIter+1, aEnd,
+                [&bCase, &pFieldDesc](const std::shared_ptr<OTableRow>& rxRow) {
+                    OFieldDescription* pCompareDesc = rxRow->GetActFieldDescr();
+                    return pCompareDesc && bCase(pCompareDesc->GetName(),pFieldDesc->GetName());
+                });
+            if (bDuplicateNameFound)
             {
-                OFieldDescription* pCompareDesc = (*aIter2)->GetActFieldDescr();
-                if (pCompareDesc && bCase(pCompareDesc->GetName(),pFieldDesc->GetName()))
-                {
-                    OUString strMessage = DBA_RES(STR_TABLEDESIGN_DUPLICATE_NAME);
-                    strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
-                    OSQLWarningBox aWarning(getFrameWeld(), strMessage);
-                    aWarning.run();
-                    return false;
-                }
+                OUString strMessage = DBA_RES(STR_TABLEDESIGN_DUPLICATE_NAME);
+                strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
+                OSQLWarningBox aWarning(getFrameWeld(), strMessage);
+                aWarning.run();
+                return false;
             }
         }
     }
@@ -1202,12 +1202,11 @@ void OTableController::alterColumns()
     }
 
     // third append the new columns
-    aIter = m_vRowList.begin();
-    for(;aIter != aEnd;++aIter)
+    for(const auto& rxRow : m_vRowList)
     {
-        OSL_ENSURE(*aIter,"OTableRow is null!");
-        OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-        if ( !pField || (*aIter)->IsReadOnly() || aColumns.find(pField->GetName()) != aColumns.end() )
+        OSL_ENSURE(rxRow,"OTableRow is null!");
+        OFieldDescription* pField = rxRow->GetActFieldDescr();
+        if ( !pField || rxRow->IsReadOnly() || aColumns.find(pField->GetName()) != aColumns.end() )
             continue;
 
         Reference<XPropertySet> xColumn;
@@ -1239,11 +1238,10 @@ void OTableController::alterColumns()
     bool bNeedAppendKey = false;
     if ( xKeyColumns.is() )
     {
-        aIter = m_vRowList.begin();
-        for(;aIter != aEnd;++aIter)
+        for(const auto& rxRow : m_vRowList)
         {
-            OSL_ENSURE(*aIter,"OTableRow is null!");
-            OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+            OSL_ENSURE(rxRow,"OTableRow is null!");
+            OFieldDescription* pField = rxRow->GetActFieldDescr();
             if ( !pField )
                 continue;
 
@@ -1439,16 +1437,16 @@ OUString OTableController::createUniqueName(const OUString& _rName)
 
     ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
-    for(sal_Int32 i=0;aIter != aEnd;++aIter)
+    auto lHasName = [&bCase, &sName](const std::shared_ptr<OTableRow>& rxRow) {
+        OFieldDescription* pFieldDesc = rxRow->GetActFieldDescr();
+        return pFieldDesc && !pFieldDesc->GetName().isEmpty() && bCase(sName, pFieldDesc->GetName());
+    };
+
+    sal_Int32 i = 0;
+    while(std::any_of(m_vRowList.begin(), m_vRowList.end(), lHasName))
     {
-        OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
-        if (pFieldDesc && !pFieldDesc->GetName().isEmpty() && bCase(sName,pFieldDesc->GetName()))
-        { // found a second name of _rName so we need another
-            sName = _rName + OUString::number(++i);
-            aIter = m_vRowList.begin(); // and retry
-        }
+        // found a second name of _rName so we need another
+        sName = _rName + OUString::number(++i);
     }
     return sName;
 }

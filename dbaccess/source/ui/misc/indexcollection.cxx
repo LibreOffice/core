@@ -68,49 +68,29 @@ namespace dbaui
     Indexes::const_iterator OIndexCollection::find(const OUString& _rName) const
     {
         // loop'n'compare
-        Indexes::const_iterator aSearch = m_aIndexes.begin();
-        Indexes::const_iterator aEnd = m_aIndexes.end();
-        for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->sName == _rName)
-                break;
-
-        return aSearch;
+        return std::find_if(m_aIndexes.cbegin(), m_aIndexes.cend(),
+            [&_rName](const OIndex& rIndex) { return rIndex.sName == _rName; });
     }
 
     Indexes::iterator OIndexCollection::find(const OUString& _rName)
     {
         // loop'n'compare
-        Indexes::iterator aSearch = m_aIndexes.begin();
-        Indexes::const_iterator aEnd = m_aIndexes.end();
-        for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->sName == _rName)
-                break;
-
-        return aSearch;
+        return std::find_if(m_aIndexes.begin(), m_aIndexes.end(),
+            [&_rName](const OIndex& rIndex) { return rIndex.sName == _rName; });
     }
 
     Indexes::const_iterator OIndexCollection::findOriginal(const OUString& _rName) const
     {
         // loop'n'compare
-        Indexes::const_iterator aSearch = m_aIndexes.begin();
-        Indexes::const_iterator aEnd = m_aIndexes.end();
-        for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->getOriginalName() == _rName)
-                break;
-
-        return aSearch;
+        return std::find_if(m_aIndexes.cbegin(), m_aIndexes.cend(),
+            [&_rName](const OIndex& rIndex) { return rIndex.getOriginalName() == _rName; });
     }
 
     Indexes::iterator OIndexCollection::findOriginal(const OUString& _rName)
     {
         // loop'n'compare
-        Indexes::iterator aSearch = m_aIndexes.begin();
-        Indexes::const_iterator aEnd = m_aIndexes.end();
-        for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->getOriginalName() == _rName)
-                break;
-
-        return aSearch;
+        return std::find_if(m_aIndexes.begin(), m_aIndexes.end(),
+            [&_rName](const OIndex& rIndex) { return rIndex.getOriginalName() == _rName; });
     }
 
     void OIndexCollection::commitNewIndex(const Indexes::iterator& _rPos)

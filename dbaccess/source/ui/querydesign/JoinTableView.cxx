@@ -1251,11 +1251,8 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 
                         bool bForward = !pKeyEvent->GetKeyCode().IsShift();
                         // is there an active tab win ?
-                        OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
-                        OTableWindowMap::const_iterator aEnd = m_aTableMap.end();
-                        for(;aIter != aEnd;++aIter)
-                            if (aIter->second && aIter->second->HasChildPathFocus())
-                                break;
+                        OTableWindowMap::const_iterator aIter = std::find_if(m_aTableMap.begin(), m_aTableMap.end(),
+                            [](const OTableWindowMap::value_type& rEntry) { return rEntry.second && rEntry.second->HasChildPathFocus(); });
 
                         OTableWindow* pNextWin = nullptr;
                         OTableConnection* pNextConn = nullptr;

@@ -671,25 +671,20 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
 
 void OGenericUnoController::removeStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL)
 {
-    Dispatch::iterator iterSearch = m_arrStatusListener.begin();
-
-    bool bRemoveForAll = _rURL.Complete.isEmpty();
-    while ( iterSearch != m_arrStatusListener.end() )
+    if (_rURL.Complete.isEmpty())
     {
-        DispatchTarget& rCurrent = *iterSearch;
-        if  (   (rCurrent.xListener == aListener)
-            &&  (   bRemoveForAll
-                ||  (rCurrent.aURL.Complete == _rURL.Complete)
-                )
-            )
-        {
-            iterSearch = m_arrStatusListener.erase(iterSearch);
-            if (!bRemoveForAll)
-                // remove the listener only for the given URL, so we can exit the loop after deletion
-                break;
-        }
-        else
-            ++iterSearch;
+        m_arrStatusListener.erase(std::remove_if(m_arrStatusListener.begin(), m_arrStatusListener.end(),
+            [&aListener](const DispatchTarget& rCurrent) { return rCurrent.xListener == aListener; }),
+            m_arrStatusListener.end());
+    }
+    else
+    {
+        // remove the listener only for the given URL
+        Dispatch::iterator iterSearch = std::find_if(m_arrStatusListener.begin(), m_arrStatusListener.end(),
+            [&aListener, &_rURL](const DispatchTarget& rCurrent) {
+                return (rCurrent.xListener == aListener) && (rCurrent.aURL.Complete == _rURL.Complete); });
+        if (iterSearch != m_arrStatusListener.end())
+            m_arrStatusListener.erase(iterSearch);
     }
 
     OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::removeStatusListener: shouldn't this be filled at construction time?" );

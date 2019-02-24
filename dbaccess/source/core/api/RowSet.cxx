@@ -103,24 +103,18 @@ com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* co
 #define NOTIFY_LISTENERS_CHECK(_rListeners,T,method)                             \
     std::vector< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
                                                                                   \
-    auto it = aListenerSeq.rbegin();                                              \
-    const auto itEnd = aListenerSeq.rend();                                       \
-                                                                                  \
     _rGuard.clear();                                                              \
-    bool bCheck = true;                                                           \
-    for ( ; it != itEnd; )                                                        \
-    {                                                                             \
-        try                                                                       \
-        {                                                                         \
-            bCheck = static_cast< T* >( it->get() )->method(aEvt);                \
-            if (!bCheck)                                                          \
-                break;                                                            \
-        }                                                                         \
-        catch( RuntimeException& )                                                \
-        {                                                                         \
-        }                                                                         \
-        ++it;                                                                     \
-    }                                                                             \
+    bool bCheck = std::all_of(aListenerSeq.rbegin(), aListenerSeq.rend(),         \
+        [&aEvt](Reference<XInterface>& rxItem) {                                  \
+            try                                                                   \
+            {                                                                     \
+                return static_cast<bool>(static_cast<T*>(rxItem.get())->method(aEvt)); \
+            }                                                                     \
+            catch( RuntimeException& )                                            \
+            {                                                                     \
+                return true;                                                      \
+            }                                                                     \
+        });                                                                       \
     _rGuard.reset();
 
 
@@ -913,7 +907,7 @@ void SAL_CALL ORowSet::insertRow()
 
     if ( !aBookmarks.empty() )
     {
-        RowsChangeEvent aUpEvt(*this,RowChangeAction::UPDATE,aBookmarks.size(),Sequence<Any>(&(*aBookmarks.begin()),aBookmarks.size()));
+        RowsChangeEvent aUpEvt(*this,RowChangeAction::UPDATE,aBookmarks.size(),comphelper::containerToSequence(aBookmarks));
         notifyAllListenersRowChanged(aGuard,aUpEvt);
     }
 
@@ -952,7 +946,7 @@ void SAL_CALL ORowSet::updateRow(  )
         std::vector< Any > aBookmarks;
         m_pCache->updateRow(m_aCurrentRow.operator ->(),aBookmarks);
         if ( !aBookmarks.empty() )
-            aEvt.Bookmarks = Sequence<Any>(&(*aBookmarks.begin()),aBookmarks.size());
+            aEvt.Bookmarks = comphelper::containerToSequence(aBookmarks);
         aEvt.Rows += aBookmarks.size();
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;

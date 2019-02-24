@@ -27,6 +27,7 @@
 #include <stringconstants.hxx>
 #include <strings.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/sequence.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlfilter.hxx"
 
@@ -82,9 +83,9 @@ void OXMLTableFilterList::EndElement()
     if ( xDataSource.is() )
     {
         if ( !m_aPatterns.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(Sequence< OUString>(&(*m_aPatterns.begin()),m_aPatterns.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(comphelper::containerToSequence(m_aPatterns)));
         if ( !m_aTypes.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< OUString>(&(*m_aTypes.begin()),m_aTypes.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(comphelper::containerToSequence(m_aTypes)));
     }
 }
 

@@ -306,7 +306,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     }
 
     if ( !aReturn.empty() )
-        _rDriverParam = Sequence< PropertyValue >(&(*aReturn.begin()), aReturn.size());
+        _rDriverParam = comphelper::containerToSequence(aReturn);
 
     // append all the other stuff (charset etc.)
     fillDatasourceInfo(*m_pItemSetHelper->getOutputSet(), _rDriverParam);

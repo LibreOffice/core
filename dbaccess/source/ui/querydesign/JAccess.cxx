@@ -68,9 +68,7 @@ namespace dbaui
         sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
         if( i < nTableWindowCount )
         {
-            OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableView->GetTabWinMap().begin();
-            for (sal_Int32 j=i; j; ++aIter,--j)
-                ;
+            OJoinTableView::OTableWindowMap::const_iterator aIter = std::next(m_pTableView->GetTabWinMap().begin(), i);
             aRet = aIter->second->GetAccessible();
         }
         else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )

@@ -166,13 +166,8 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
     {
         // do not just copy the array, we may have empty field names (which should not be copied)
         _rFields.resize(m_aFields.size());
-        IndexFields::iterator aDest = _rFields.begin();
-        for (auto const& source : m_aFields)
-            if (!source.sFieldName.isEmpty())
-            {
-                *aDest = source;
-                ++aDest;
-            }
+        IndexFields::iterator aDest = std::copy_if(m_aFields.begin(), m_aFields.end(), _rFields.begin(),
+            [](const OIndexField& source) { return !source.sFieldName.isEmpty(); });
 
         _rFields.resize(aDest - _rFields.begin());
     }

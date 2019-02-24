@@ -802,7 +802,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     }
 
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
-    xData->setRowDescriptions(uno::Sequence< OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
+    xData->setRowDescriptions(comphelper::containerToSequence(aRowLabels));
 
     const size_t nOffset = bFirstColumnIsCategory ? 1 : 0;
     uno::Sequence< OUString > aColumnDescriptions( aColumns.size() - nOffset );
@@ -820,7 +820,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     for(sal_Int32 i= 0;pDataIter != pDataEnd; ++pDataIter,++i )
     {
         if ( !aDataValues[i].empty() )
-            *pDataIter = uno::Sequence< double >(&(*(aDataValues[i]).begin()),(aDataValues[i]).size());
+            *pDataIter = comphelper::containerToSequence(aDataValues[i]);
     }
     xData->setData(aData);
 }

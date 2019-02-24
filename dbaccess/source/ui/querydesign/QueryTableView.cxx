@@ -738,14 +738,10 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
     getDesignView()->SaveTabWinUIConfig(pTabWin);
     // (I need to go via the parent, as only the parent knows the position of the scrollbars)
     // and then out of the TabWins list and hide
-    OTableWindowMap::const_iterator aIter = rTabWins.begin();
-    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
-    for ( ;aIter != aEnd ; ++aIter )
-        if ( aIter->second == pTabWin )
-        {
-            rTabWins.erase( aIter );
-            break;
-        }
+    OTableWindowMap::const_iterator aIter = std::find_if(rTabWins.begin(), rTabWins.end(),
+        [&pTabWin](const OTableWindowMap::value_type& rEntry) { return rEntry.second == pTabWin; });
+    if (aIter != rTabWins.end())
+        rTabWins.erase( aIter );
 
     pTabWin->Hide();    // do not destroy it, as it is still in the undo list!!
 

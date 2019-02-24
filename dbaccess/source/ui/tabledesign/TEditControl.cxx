@@ -1432,12 +1432,9 @@ IMPL_LINK_NOARG( OTableEditorCtrl, DelayedPaste, void*, void )
     if (!IsInsertNewAllowed(nPastePosition))
     {   // Insertion is not allowed, only appending, so test if there are full cells after the PastePosition
 
-        sal_Int32 nFreeFromPos; // from here on there are only empty rows
-        std::vector< std::shared_ptr<OTableRow> >::const_reverse_iterator aIter = m_pRowList->rbegin();
-        for(nFreeFromPos = m_pRowList->size();
-            aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty());
-            --nFreeFromPos, ++aIter)
-            ;
+        auto aIter = std::find_if(m_pRowList->rbegin(), m_pRowList->rend(), [](const std::shared_ptr<OTableRow>& rxRow) {
+            return rxRow && rxRow->GetActFieldDescr() && !rxRow->GetActFieldDescr()->GetName().isEmpty(); });
+        auto nFreeFromPos = static_cast<sal_Int32>(std::distance(aIter, m_pRowList->rend())); // from here on there are only empty rows
         if (nPastePosition < nFreeFromPos)  // if at least one PastePosition is full, go right to the end
             nPastePosition = nFreeFromPos;
     }

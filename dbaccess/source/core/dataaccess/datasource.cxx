@@ -439,7 +439,7 @@ namespace
                 }
             }
             if ( !aRet.empty() )
-                return Sequence< PropertyValue >(&(*aRet.begin()),aRet.size());
+                return comphelper::containerToSequence(aRet);
         }
         return Sequence< PropertyValue >();
     }
