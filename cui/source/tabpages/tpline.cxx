@@ -338,10 +338,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             // ColorList
         if( *m_pnColorListState != ChangeType::NONE )
         {
-                if( *m_pnColorListState & ChangeType::CHANGED )
-                    m_pColorList = static_cast<SvxLineTabDialog*>(GetDialogController())->GetNewColorList();
-
-                ChangePreviewHdl_Impl( nullptr );
+            ChangePreviewHdl_Impl( nullptr );
         }
 
         m_nPageType = PageType::Area;
@@ -1664,7 +1661,6 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    const SvxColorListItem* pColorListItem = aSet.GetItem<SvxColorListItem>(SID_COLOR_TABLE, false);
     const SvxDashListItem* pDashListItem = aSet.GetItem<SvxDashListItem>(SID_DASH_LIST, false);
     const SvxLineEndListItem* pLineEndListItem = aSet.GetItem<SvxLineEndListItem>(SID_LINEEND_LIST, false);
     const SfxUInt16Item* pPageTypeItem = aSet.GetItem<SfxUInt16Item>(SID_PAGE_TYPE, false);
@@ -1673,8 +1669,6 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxTabDialogItem* pSymbolAttrItem = aSet.GetItem<SfxTabDialogItem>(SID_ATTR_SET, false);
     const SvxGraphicItem* pGraphicItem = aSet.GetItem<SvxGraphicItem>(SID_GRAPHIC, false);
 
-    if (pColorListItem)
-        SetColorList(pColorListItem->GetColorList());
     if (pDashListItem)
         SetDashList(pDashListItem->GetDashList());
     if (pLineEndListItem)

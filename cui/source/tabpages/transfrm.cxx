@@ -477,7 +477,6 @@ void SvxSlantTabPage::Construct()
     { // #i75273#
         ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
 }
 
@@ -743,14 +742,6 @@ VclPtr<SfxTabPage> SvxSlantTabPage::Create(TabPageParent pParent, const SfxItemS
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem const * pRectItem = nullptr;
-
-    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
-    {
-        const ::tools::Rectangle aTempRect(pRectItem->GetValue());
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
-    }
-
     SfxBoolItem const * bPosProtect = nullptr;
     if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_POS  ) , false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
     {

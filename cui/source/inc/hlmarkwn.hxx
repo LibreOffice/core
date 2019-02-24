@@ -72,8 +72,6 @@ private:
 
     VclPtr<SvxHyperlinkTabPageBase> mpParent;
 
-    OUString        maStrLastURL;
-
     sal_uInt16          mnError;
 
 protected:

@@ -113,7 +113,6 @@ private:
     XLineAttrSetItem    m_aXLineAttr;
     SfxItemSet&         m_rXLSet;
 
-    XColorListRef         m_pColorList;
     XDashListRef          m_pDashList;
     XLineEndListRef       m_pLineEndList;
 
@@ -214,7 +213,6 @@ public:
 
     virtual void FillUserData() override;
 
-    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetDashList( XDashListRef const & pDshLst ) { m_pDashList = pDshLst; }
     void    SetLineEndList( XLineEndListRef const & pLneEndLst) { m_pLineEndList = pLneEndLst; }
     void    SetObjSelected( bool bHasObj ) { m_bObjSelected = bHasObj; }

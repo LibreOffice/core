@@ -166,7 +166,6 @@ void SvxLineTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     if (rId == "RID_SVXPAGE_LINE")
     {
-        static_cast<SvxLineTabPage&>(rPage).SetColorList( pColorList );
         static_cast<SvxLineTabPage&>(rPage).SetDashList( pDashList );
         static_cast<SvxLineTabPage&>(rPage).SetLineEndList( pLineEndList );
         static_cast<SvxLineTabPage&>(rPage).SetDlgType( 0 );

@@ -832,12 +832,6 @@ SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
     disposeOnce();
 }
 
-void SfxAccCfgTabListBox_Impl::dispose()
-{
-    m_pAccelConfigPage.clear();
-    SvTabListBox::dispose();
-}
-
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
   */
@@ -904,7 +898,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     Size aSize(LogicToPixel(Size(174, 100), MapMode(MapUnit::MapAppFont)));
     m_pEntriesBox->set_width_request(aSize.Width());
     m_pEntriesBox->set_height_request(aSize.Height());
-    m_pEntriesBox->SetAccelConfigPage(this);
     get(m_pGroupLBox, "category");
     aSize = LogicToPixel(Size(78 , 91), MapMode(MapUnit::MapAppFont));
     m_pGroupLBox->set_width_request(aSize.Width());
@@ -1041,7 +1034,6 @@ void SfxAcceleratorConfigPage::InitAccCfg()
                  frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
-        m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryShortName", OUString());
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
 
         // get global accelerator configuration

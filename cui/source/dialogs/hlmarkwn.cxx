@@ -287,8 +287,6 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
         RestoreLastSelection();
 
     LeaveWait();
-
-    maStrLastURL = aStrURL;
 }
 
 // get links from document
