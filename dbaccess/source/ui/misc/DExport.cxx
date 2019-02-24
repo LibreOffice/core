@@ -221,11 +221,9 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nPrecision     = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLiteralPrefix = aValue;
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralPrefix
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLiteralSuffix = aValue;
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralSuffix
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aCreateParams  = aValue;
@@ -781,7 +779,6 @@ void ODatabaseExport::eraseTokens()
 {
     m_sTextToken.clear();
     m_sNumToken.clear();
-    m_sValToken.clear();
 }
 
 void ODatabaseExport::ensureFormatter()

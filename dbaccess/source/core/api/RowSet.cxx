@@ -1067,7 +1067,6 @@ void ORowSet::implCancelRowUpdates( bool _bNotifyModified )
     m_aBookmark     = m_pCache->getBookmark();
     m_aCurrentRow   = m_pCache->m_aMatrixIter;
     m_bIsInsertRow  = false;
-    m_aCurrentRow.setBookmark(m_aBookmark);
 
     // notification order
     // IsModified

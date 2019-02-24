@@ -63,8 +63,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     get(m_pRB_CascDelDefault, "deldefault");
     get(m_pPB_OK, "ok");
 
-    m_xConnection = pParent->getDesignView()->getController().getConnection();
-
     // Copy connection
     m_pConnData.reset( static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance()) );
     m_pConnData->CopyFrom( *pConnectionData );

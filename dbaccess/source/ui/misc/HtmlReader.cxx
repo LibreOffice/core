@@ -286,9 +286,6 @@ void OHTMLReader::fetchOptions()
     {
         switch( rOption.GetToken() )
         {
-            case HtmlOptionId::SDVAL:
-                m_sValToken = rOption.GetString();
-            break;
             case HtmlOptionId::SDNUM:
                 m_sNumToken = rOption.GetString();
             break;

@@ -65,10 +65,8 @@ using namespace dbaui;
 class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInfo>
 {
 private:
-    OUString                     m_aURL;
     Sequence< PropertyValue>            m_aArgs;
     Reference< XLoadEventListener >     m_xListener;
-    Reference< XFrame >                 m_xFrame;
     Reference< XComponentContext >      m_xContext;
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
@@ -142,9 +140,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
 {
-    m_xFrame    = rFrame;
     m_xListener = rListener;
-    m_aURL      = rURL;
     m_aArgs     = rArgs;
 
     static const struct ServiceNameToImplName

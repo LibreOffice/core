@@ -56,8 +56,7 @@ OFieldDescription::OFieldDescription()
 }
 
 OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
-    :m_aDefaultValue(rDescr.m_aDefaultValue)
-    ,m_aControlDefault(rDescr.m_aControlDefault)
+    :m_aControlDefault(rDescr.m_aControlDefault)
     ,m_aWidth(rDescr.m_aWidth)
     ,m_aRelativePosition(rDescr.m_aRelativePosition)
     ,m_pType(rDescr.m_pType)
@@ -287,8 +286,6 @@ void OFieldDescription::SetDefaultValue(const Any& _rDefaultValue)
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
             m_xDest->setPropertyValue(PROPERTY_DEFAULTVALUE, _rDefaultValue);
-        else
-            m_aDefaultValue = _rDefaultValue;
     }
     catch( const Exception& )
     {

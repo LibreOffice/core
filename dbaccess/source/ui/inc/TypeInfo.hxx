@@ -67,8 +67,6 @@ const sal_uInt16 TYPE_BIT       = 31;
     public:
         OUString aUIName;        // the name which is the user see (a combination of resource text and aTypeName)
         OUString aTypeName;      // name of type in database
-        OUString aLiteralPrefix; // prefix for quoting
-        OUString aLiteralSuffix; // suffix for quoting
         OUString aCreateParams;  // parameter for creation
         OUString aLocalTypeName;
 

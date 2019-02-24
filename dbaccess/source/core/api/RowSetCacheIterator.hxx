@@ -31,7 +31,6 @@ namespace dbaccess
     typedef struct
     {
         ORowSetMatrix::iterator     aIterator;
-        css::uno::Any               aBookmark;
         ORowSetBase*                pRowSet;
     } ORowSetCacheIterator_Helper;
 
@@ -66,8 +65,6 @@ namespace dbaccess
 
         bool operator <(const ORowSetMatrix::iterator& _rRH) const;
         bool operator !=(const ORowSetMatrix::iterator& _rRH) const;
-
-        void setBookmark(const css::uno::Any&  _rBookmark);
 
         const ORowSetCacheMap::iterator& getIter() const { return m_aIter; }
     };
