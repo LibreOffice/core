@@ -310,6 +310,7 @@ private:
     bool m_bShowAllShapes;
     OUString m_aDocName;
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
+    Link<weld::TreeView&, void> m_aChangeHdl;
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created
@@ -331,6 +332,7 @@ private:
     void CloseBookmarkDoc();
 
     DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
 
@@ -364,7 +366,7 @@ public:
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink)
     {
-        m_xTreeView->connect_changed(rLink);
+        m_aChangeHdl = rLink;
     }
 
     bool is_selected(const weld::TreeIter& rIter) const

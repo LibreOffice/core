@@ -1434,6 +1434,19 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_bShowAllShapes(false)
 {
     m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
+    m_xTreeView->connect_changed(LINK(this, SdPageObjsTLV, SelectHdl));
+}
+
+IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
+{
+    m_bLinkableSelected = true;
+
+    m_xTreeView->selected_foreach([this](weld::TreeIter& rEntry){
+        if (m_xTreeView->get_id(rEntry).toInt64() == 0)
+            m_bLinkableSelected = false;
+    });
+
+    m_aChangeHdl.Call(*m_xTreeView);
 }
 
 OUString SdPageObjsTLV::GetObjectName(
