@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <path
+     style="fill:#555753"
+     d="M 8 2 A 8 4.5 0 0 0 0 6.5 A 8 8.5 0 0 0 8 15 A 8 8.5 0 0 0 16 6.5 A 8 4.5 0 0 0 8 2 z M 8 4 A 6 2.5 0 0 1 14 6.5 A 6 2.5 0 0 1 8 9 A 6 2.5 0 0 1 2 6.5 A 6 2.5 0 0 1 8 4 z "
+     />
+  <ellipse
+     cx="8"
+     cy="6.5"
+     rx="6"
+     ry="2.5"
+     style="fill:#555753;opacity:0.35" />
+</svg>
