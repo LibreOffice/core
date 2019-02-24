@@ -129,12 +129,6 @@ namespace dbaui
             eOpenExisting
         };
 
-        struct DocumentDescriptor
-        {
-            OUString  sURL;
-            OUString  sFilter;
-        };
-
     private:
         // dialog controls
         VclPtr<RadioButton>            m_pRB_CreateDatabase;
@@ -149,7 +143,7 @@ namespace dbaui
         VclPtr<OpenDocumentButton>     m_pPB_OpenDatabase;
 
         // state
-        DocumentDescriptor             m_aBrowsedDocument;
+        OUString                       m_aBrowsedDocumentURL;
         CreationMode                   m_eOriginalCreationMode;
 
         Link<OGeneralPageWizard&,void> m_aCreationModeHandler; /// to be called if a new type is selected
@@ -165,7 +159,7 @@ namespace dbaui
 
         void                    SetDocumentSelectionHandler( const Link<OGeneralPageWizard&,void>& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
         void                    SetChooseDocumentHandler( const Link<OGeneralPageWizard&,void>& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
-        DocumentDescriptor      GetSelectedDocument() const;
+        OUString                GetSelectedDocumentURL() const;
 
     private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;

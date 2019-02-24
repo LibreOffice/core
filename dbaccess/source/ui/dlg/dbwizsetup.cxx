@@ -338,7 +338,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPageWizard::eOpenExisting:
     {
         activatePath( static_cast<PathId>(m_pCollection->size() + 1), true );
-        enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
+        enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocumentURL().isEmpty() );
     }
     break;
     default:
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard&
 
 IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard&, void)
 {
-    enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
+    enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocumentURL().isEmpty() );
 }
 
 IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
@@ -974,7 +974,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
             try
             {
-                AsyncLoader* pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocument().sURL );
+                AsyncLoader* pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocumentURL() );
                 ::rtl::Reference< AsyncLoader > xKeepAlive( pAsyncLoader );
                 pAsyncLoader->doLoadAsync();
             }

@@ -89,7 +89,6 @@ namespace dbaui
 
         OUString            m_sTextToken;   ///< cell content
         OUString            m_sNumToken;    ///< SDNUM value
-        OUString            m_sValToken;    ///< SDVAL value
         TOTypeInfoSP        m_pTypeInfo;    ///< contains the default type
         const TColumnVector* m_pColumnList;
         const OTypeInfoMap* m_pInfoMap;

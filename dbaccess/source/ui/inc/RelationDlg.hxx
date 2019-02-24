@@ -48,7 +48,6 @@ namespace dbaui
 
         TTableConnectionData::value_type                 m_pConnData;
         TTableConnectionData::value_type                 m_pOrigConnData;
-        css::uno::Reference< css::sdbc::XConnection >    m_xConnection;
 
         bool                                             m_bTriedOneUpdate;
 

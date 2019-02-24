@@ -73,11 +73,6 @@ bool ORowSetCacheIterator::operator !=(const ORowSetMatrix::iterator& _rRH) cons
     return m_aIter->second.aIterator != _rRH;
 }
 
-void ORowSetCacheIterator::setBookmark(const css::uno::Any&    _rBookmark)
-{
-    m_aIter->second.aBookmark = _rBookmark;
-}
-
 bool ORowSetCacheIterator::isNull() const
 {
     bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();

@@ -104,7 +104,6 @@ class OOO_DLLPUBLIC_DBA ODsnTypeCollection final
     std::vector<OUString> m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     std::vector<OUString> m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
     ::connectivity::DriversConfig m_aDriverConfig;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 #if OSL_DEBUG_LEVEL > 0
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators

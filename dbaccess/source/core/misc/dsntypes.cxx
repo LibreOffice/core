@@ -49,7 +49,6 @@ namespace dbaccess
 // ODsnTypeCollection
 ODsnTypeCollection::ODsnTypeCollection(const css::uno::Reference< css::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
-,m_xContext(_xContext)
 #if OSL_DEBUG_LEVEL > 0
 ,m_nLivingIterators(0)
 #endif
