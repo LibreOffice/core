@@ -86,6 +86,7 @@ protected:
 
 private:
     const bool          mbRepeatIndefinite;
+    const bool          mbRestart;
     const bool          mbDurationIndefinite;
 };
 
