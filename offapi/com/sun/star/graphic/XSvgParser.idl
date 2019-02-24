@@ -45,6 +45,10 @@ interface XSvgParser : ::com::sun::star::uno::XInterface
     sequence< XPrimitive2D > getDecomposition(
         [in] io::XInputStream xSvgStream,
         [in] string aAbsolutePath);
+
+    any getDrawCommands(
+        [in] io::XInputStream xSvgStream,
+        [in] string aAbsolutePath);
 };
 
 }; }; }; };
