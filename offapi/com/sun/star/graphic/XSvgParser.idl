@@ -45,6 +45,20 @@ interface XSvgParser : ::com::sun::star::uno::XInterface
     sequence< XPrimitive2D > getDecomposition(
         [in] io::XInputStream xSvgStream,
         [in] string aAbsolutePath);
+
+    /** Get the "draw command" graph that is created from the SVG content
+
+        @param xSvgStream
+        The file containing the SVG XML data
+
+        @param aAbsolutePath
+        The path containing the SVG XML data
+
+        @since LibreOffice 6.3
+     */
+    any getDrawCommands(
+        [in] io::XInputStream xSvgStream,
+        [in] string aAbsolutePath);
 };
 
 }; }; }; };

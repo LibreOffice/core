@@ -682,6 +682,10 @@ namespace svgio
             return XmlSpace_default;
         }
 
+        void SvgNode::accept(Visitor & rVisitor)
+        {
+            rVisitor.visit(*this);
+        }
     } // end of namespace svgreader
 } // end of namespace svgio
 

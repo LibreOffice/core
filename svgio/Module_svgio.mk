@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,svgio,\
 
 $(eval $(call gb_Module_add_check_targets,svgio,\
     CppunitTest_svgio \
+    CppunitTest_svgio_read \
 ))
 
 # vim: set noet ts=4 sw=4:
