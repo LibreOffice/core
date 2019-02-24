@@ -19,6 +19,7 @@
 
 
 #include <basecontainernode.hxx>
+#include <com/sun/star/animations/AnimationRestart.hpp>
 #include <eventqueue.hxx>
 #include <tools.hxx>
 #include "nodetools.hxx"
@@ -33,6 +34,18 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
+bool isRepeatIndefinite(const uno::Reference<animations::XAnimationNode>& xNode)
+{
+    return xNode->getRepeatCount().hasValue() && isIndefiniteTiming(xNode->getRepeatCount());
+}
+
+bool isRestart(const uno::Reference<animations::XAnimationNode>& xNode)
+{
+    sal_Int16 nRestart = xNode->getRestart();
+    return nRestart == animations::AnimationRestart::WHEN_NOT_ACTIVE ||
+        nRestart == animations::AnimationRestart::ALWAYS;
+}
+
 BaseContainerNode::BaseContainerNode(
     const uno::Reference< animations::XAnimationNode >&     xNode,
     const BaseContainerNodeSharedPtr&                       rParent,
@@ -41,7 +54,8 @@ BaseContainerNode::BaseContainerNode(
       maChildren(),
       mnFinishedChildren(0),
       mnLeftIterations(0),
-      mbRepeatIndefinite(xNode->getRepeatCount().hasValue() && isIndefiniteTiming(xNode->getRepeatCount())),
+      mbRepeatIndefinite(isRepeatIndefinite(xNode)),
+      mbRestart(isRestart(xNode)),
       mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) &&
                             isIndefiniteTiming( xNode->getDuration() ) )
 {
@@ -144,9 +158,11 @@ bool BaseContainerNode::notifyDeactivatedChild(
         {
             mnLeftIterations -= 1.0;
         }
-        if( mnLeftIterations >= 1.0 )
+        if(mnLeftIterations >= 1.0 || mbRestart)
         {
-            bFinished = false;
+            if (mnLeftIterations >= 1.0)
+                bFinished = false;
+
             EventSharedPtr aRepetitionEvent =
                     makeDelay( [this] () { this->repeat(); },
                                0.0,
