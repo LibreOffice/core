@@ -36,6 +36,7 @@
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -3099,6 +3100,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     uno::Sequence< css::beans::NamedValue > aUserData
         { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
+    xISRoot->setRestart( css::animations::AnimationRestart::WHEN_NOT_ACTIVE );
 
     Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
     Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
