@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
-#include <calbck.hxx>
+#include <svl/listener.hxx>
 #include <modeltoviewhelper.hxx>
 #include "unotextmarkup.hxx"
 
@@ -117,7 +117,7 @@ class SwXFlatParagraphIterator:
     <
         css::text::XFlatParagraphIterator
     >,
-    public SwClient     // to get notified when doc is closed...
+    public SvtListener
 {
 public:
     SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic );
@@ -130,9 +130,7 @@ public:
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) override;
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) override;
 
-protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void Notify( const SfxHint& ) override;
 
 private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ) = delete;
