@@ -137,8 +137,6 @@ protected:
     virtual void OnFirstSize (long nWidth, long nHeight) override;
 
 private:
-    // child window
-    VclPtr<DialogWindow> pChild;
     // dockable windows:
     // object catalog (owned by Shell)
     ObjectCatalog& rObjectCatalog;

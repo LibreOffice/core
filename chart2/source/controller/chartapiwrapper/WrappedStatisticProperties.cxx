@@ -657,9 +657,6 @@ public:
 
     explicit WrappedErrorBarRangePositiveProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
-
-private:
-    mutable Any m_aOuterValue;
 };
 
 WrappedErrorBarRangePositiveProperty::WrappedErrorBarRangePositiveProperty(
@@ -720,9 +717,6 @@ public:
 
     explicit WrappedErrorBarRangeNegativeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
-
-private:
-    mutable Any m_aOuterValue;
 };
 
 WrappedErrorBarRangeNegativeProperty::WrappedErrorBarRangeNegativeProperty(

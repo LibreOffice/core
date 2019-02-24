@@ -66,7 +66,6 @@ private:
     sal_uInt32                          m_nClientId;
 
     rtl::Reference< VCLXAccessibleList >                     m_xParent;
-    css::uno::Reference< css::accessibility::XAccessibleContext > m_xParentContext;
 
     virtual ~VCLXAccessibleListItem() override = default;
     /** this function is called upon disposing the component

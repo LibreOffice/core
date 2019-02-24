@@ -50,7 +50,6 @@ DictionaryList::DictionaryList(std::unique_ptr<weld::TreeView> xControl)
     , m_pED_Mapping(nullptr)
     , m_pLB_Property(nullptr)
     , m_aToBeDeleted()
-    , m_nSortColumnIndex(0)
 {
     m_xControl->make_sorted();
 }

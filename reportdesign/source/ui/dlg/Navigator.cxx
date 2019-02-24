@@ -207,7 +207,7 @@ private:
 
 NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rController )
         :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
-        ,comphelper::OSelectionChangeListener(m_aMutex)
+        ,comphelper::OSelectionChangeListener()
         ,OPropertyChangeListener(m_aMutex)
         ,m_aTimerTriggered(-1,-1)
         ,m_aDropActionType( DA_SCROLLUP )

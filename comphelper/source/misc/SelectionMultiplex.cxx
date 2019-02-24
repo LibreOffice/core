@@ -40,18 +40,11 @@ void OSelectionChangeListener::_disposing(const EventObject&)
 }
 
 
-void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    m_xAdapter = pAdapter;
-}
-
 OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
             ,m_nLockCount(0)
 {
-    m_pListener->setAdapter(this);
     osl_atomic_increment(&m_refCount);
     {
         Reference< XSelectionChangeListener> xPreventDelete(this);
@@ -87,9 +80,6 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
          // tell the listener
         if (!locked())
             m_pListener->_disposing(_rSource);
-        // disconnect the listener
-        if (m_pListener)    // may have been reset whilst calling into _disposing
-            m_pListener->setAdapter(nullptr);
     }
 
     m_pListener = nullptr;
