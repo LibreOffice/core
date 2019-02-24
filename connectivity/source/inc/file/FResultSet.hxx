@@ -76,7 +76,6 @@ namespace connectivity
             OValueRefRow                            m_aSelectRow;
             OValueRefRow                            m_aRow;
             OValueRefRow                            m_aEvaluateRow; // contains all values of a row
-            OValueRefRow                            m_aParameterRow;
             OValueRefRow                            m_aInsertRow;   // needed for insert by cursor
             ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
@@ -88,7 +87,6 @@ namespace connectivity
 
             std::unique_ptr<OSortIndex>             m_pSortIndex;
             ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
-            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;
             rtl::Reference<OFileTable>              m_pTable;
             connectivity::OSQLParseNode*            m_pParseTree;
 
@@ -262,9 +260,7 @@ namespace connectivity
             void doTableSpecials(const OSQLTable& _xTable);
 
             sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
-            void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
             void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
-            void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
             void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
             void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
             void setSelectRow(const OValueRefRow& _rRow)

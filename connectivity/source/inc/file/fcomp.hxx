@@ -41,7 +41,6 @@ namespace connectivity
             OCodeList                               m_aCodeList;
             css::uno::Reference< css::container::XNameAccess> m_orgColumns; // in filecurs this are the filecolumns
             OSQLAnalyzer*                           m_pAnalyzer;
-            css::uno::Reference< css::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);

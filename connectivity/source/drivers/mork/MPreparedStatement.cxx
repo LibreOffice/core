@@ -78,7 +78,6 @@ OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sq
 void OPreparedStatement::initializeResultSet( OResultSet* _pResult )
 {
     OCommonStatement::initializeResultSet( _pResult );
-    _pResult->setParameterColumns( m_xParamColumns );
     _pResult->setParameterRow( m_aParameterRow );
 }
 

@@ -429,10 +429,6 @@ void OStatement_Base::construct(const OUString& sql)
 
     m_pSQLAnalyzer.reset( new OSQLAnalyzer(m_pConnection.get()) );
 
-    Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
-    if(xIndexSup.is())
-        m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
-
     anylizeSQL();
 }
 

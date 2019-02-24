@@ -47,11 +47,6 @@ OSQLAnalyzer::~OSQLAnalyzer()
 }
 
 
-void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
-{
-    m_aCompiler->m_xIndexes = _xIndexes;
-}
-
 void OSQLAnalyzer::start(OSQLParseNode const * pSQLParseNode)
 {
     if (SQL_ISRULE(pSQLParseNode,select_statement))

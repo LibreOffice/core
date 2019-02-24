@@ -77,9 +77,6 @@ IniParser::IniParser(OUString const & rIniName)
                         line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                     if (sectionName.isEmpty())
                         sectionName = "no name section";
-
-                    ini_Section *aSection = &mAllSection[sectionName];
-                    aSection->sName = sectionName;
                 }
             }
         }
