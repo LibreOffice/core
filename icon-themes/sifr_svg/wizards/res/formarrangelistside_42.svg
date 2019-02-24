@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42">
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#555753"
+     d="m 2,11 v 2 h 6 v -2 z m 20,0 v 2 h 6 V 11 Z M 2,24 v 2 h 6 v -2 z m 20,0 v 2 h 6 V 24 Z M 2,37 v 2 h 6 v -2 z m 20,0 v 2 h 6 v -2 z"
+     />
+  <path
+     inkscape:connector-curvature="0"
+     style="opacity:0.35;fill:#555753"
+     d="m 9,6 v 7 H 19 V 6 Z m 20,0 v 7 H 39 V 6 Z M 11,8 h 6 v 3 h -6 z m 20,0 h 6 v 3 H 31 Z M 9,19 v 7 h 10 v -7 z m 20,0 v 7 h 10 v -7 z m -18,2 h 6 v 3 h -6 z m 20,0 h 6 v 3 H 31 Z M 9,32 v 7 h 10 v -7 z m 20,0 v 7 h 10 v -7 z m -18,2 h 6 v 3 h -6 z m 20,0 h 6 v 3 h -6 z"
+     />
+</svg>
