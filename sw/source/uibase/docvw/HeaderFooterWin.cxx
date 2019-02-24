@@ -11,6 +11,8 @@
 #include <strings.hrc>
 #include <globals.hrc>
 
+#include <doc.hxx>
+#include <drawdoc.hxx>
 #include <cmdid.h>
 #include <DashedLine.hxx>
 #include <docsh.hxx>
@@ -423,50 +425,19 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
         SwFrameFormat* pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetFooter().GetFooterFormat() );
         if ( m_bIsHeader )
             pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
+        SfxItemSet aSet( pHFFormat->GetAttrSet() );
 
-        SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
-        SfxItemSet aSet(
-            *pPool,
-            svl::Items<
-                RES_BACKGROUND, RES_SHADOW,
-                XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+        // Items to hand over XPropertyList things like XColorList,
+        // XHatchList, XGradientList, and XBitmapList to the Area TabPage:
+        aSet.MergeRange( SID_COLOR_TABLE, SID_PATTERN_LIST );
+        // create needed items for XPropertyList entries from the DrawModel so that
+        // the Area TabPage can access them
+        rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems( aSet );
 
-        aSet.Put( pHFFormat->GetAttrSet() );
-
-        aSet.Put( pHFFormat->makeBackgroundBrushItem() );
-
-        // Create a box info item... needed by the dialog
-        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-        const SfxPoolItem *pBoxInfo;
-        if ( SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
-                                                true, &pBoxInfo) )
-            aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
-
-        aBoxInfo.SetTable( false );
-        aBoxInfo.SetDist( true);
-        aBoxInfo.SetMinDist( false );
-        aBoxInfo.SetDefDist( MIN_BORDER_DIST );
-        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
-        aSet.Put( aBoxInfo );
-
-        if (svx::ShowBorderBackgroundDlg(GetFrameWeld(), &aSet))
+        if (svx::ShowBorderBackgroundDlg( GetFrameWeld(), &aSet ) )
         {
-            const SfxPoolItem* pItem;
-            if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
-
-            if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
-
-            if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
-                pHFFormat->SetFormatAttr( *pItem );
-                rView.GetDocShell()->SetModified();
-            }
+            pHFFormat->SetFormatAttr( aSet );
+            rView.GetDocShell()->SetModified();
         }
     }
     else if (rIdent == "delete")
