@@ -48,23 +48,14 @@ class SfxStringItem;
 
 class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
-    VclPtr<SfxAcceleratorConfigPage>   m_pAccelConfigPage;
-
     void                        KeyInput( const KeyEvent &rKEvt ) override;
 
 public:
     SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
         : SvTabListBox(pParent, nStyle)
-        , m_pAccelConfigPage(nullptr)
     {
     }
     virtual ~SfxAccCfgTabListBox_Impl() override;
-    virtual void dispose() override;
-
-    void SetAccelConfigPage(SfxAcceleratorConfigPage* pAccelConfigPage)
-    {
-        m_pAccelConfigPage = pAccelConfigPage;
-    }
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -136,7 +127,6 @@ private:
     css::uno::Reference< css::frame::XFrame >                   m_xFrame;
 
     OUString m_sModuleLongName;
-    OUString m_sModuleShortName;
     OUString m_sModuleUIName;
 
     // For search

@@ -1205,7 +1205,6 @@ public:
     virtual sal_Int16 SAL_CALL execute(  ) override;
 
 private:
-    OUString msTitle;
     Color mnColor;
     sal_Int16 mnMode;
     Reference<css::awt::XWindow> mxParent;
@@ -1287,9 +1286,8 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
 }
 
 // XExecutableDialog
-void SAL_CALL ColorPicker::setTitle( const OUString& sTitle )
+void SAL_CALL ColorPicker::setTitle( const OUString& )
 {
-    msTitle = sTitle;
 }
 
 sal_Int16 SAL_CALL ColorPicker::execute()

@@ -33,19 +33,15 @@ class SvxTabulatorTabPage;
 class TabWin_Impl : public weld::CustomWidgetController
 {
 private:
-    VclPtr<SvxTabulatorTabPage> mpPage;
     sal_uInt16  nTabStyle;
 
 public:
 
-    TabWin_Impl()
-        : mpPage(nullptr)
-        , nTabStyle(0)
+    TabWin_Impl() : nTabStyle(0)
     {
     }
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
-    void SetTabulatorTabPage(SvxTabulatorTabPage* pPage);
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
 
