@@ -55,6 +55,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>
+#if OSL_DEBUG_LEVEL > 1
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#endif
 
 // presentation namespaces
 #define PNMSS         FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
