@@ -514,6 +514,8 @@ SfxApplication::ChooseScript(weld::Window *pParent)
     {
         aScriptURL = pDlg->GetScriptURL();
     }
+#else
+    (void) pParent;
 #endif
     return aScriptURL;
 }
