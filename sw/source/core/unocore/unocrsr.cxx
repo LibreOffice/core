@@ -23,7 +23,6 @@
 #include <swtable.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
-#include <calbck.hxx>
 
 sw::UnoCursorHint::~UnoCursorHint() {}
 
