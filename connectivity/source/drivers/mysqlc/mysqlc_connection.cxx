@@ -189,8 +189,6 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql),
                                                      *this, getConnectionEncoding());
 
-    m_settings.schema = aDbName;
-
     // Check if the server is 4.1 or above
     if (getMysqlVersion() < 40100)
     {

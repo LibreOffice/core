@@ -100,7 +100,6 @@ void OResultSet::disposing()
     m_xMetaData.clear();
     m_pParseTree    = nullptr;
     m_xColumns = nullptr;
-    m_xParamColumns = nullptr;
     m_pKeySet       = nullptr;
     m_xTable.clear();
 }

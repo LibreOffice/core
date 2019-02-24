@@ -137,7 +137,6 @@ void OResultSet::disposing()
     m_pParseTree    = nullptr;
     m_xColNames.clear();
     m_xColumns = nullptr;
-    m_xParamColumns = nullptr;
     m_xColsIdx.clear();
 
     Reference<XComponent> xComp = m_pTable.get();

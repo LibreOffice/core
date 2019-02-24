@@ -38,7 +38,6 @@ typedef std::vector<
 
 struct ini_Section
 {
-    OUString sName;
     NameValueVector vVector;
 };
 typedef std::map<OUString,

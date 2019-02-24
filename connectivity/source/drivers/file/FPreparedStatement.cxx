@@ -502,9 +502,6 @@ void OPreparedStatement::initializeResultSet(OResultSet* pRS)
 {
     OStatement_Base::initializeResultSet(pRS);
 
-    pRS->setParameterColumns(m_xParamColumns);
-    pRS->setParameterRow(m_aParameterRow);
-
     // Substitute parameter (AssignValues and criteria):
     if (!m_xParamColumns->get().empty())
     {

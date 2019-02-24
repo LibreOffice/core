@@ -69,7 +69,6 @@ typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XConnection, css::sdbc::XWar
 struct ConnectionSettings
 {
     rtl_TextEncoding encoding;
-    OUString schema;
     OUString connectionURL;
     bool readOnly;
     ConnectionSettings()

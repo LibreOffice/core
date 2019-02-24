@@ -205,10 +205,6 @@ void OWriterTable::construct()
                 m_bHasHeaders = true;
             }
         }
-
-        uno::Reference<util::XNumberFormatsSupplier> xSupp(xDoc, uno::UNO_QUERY);
-        if (xSupp.is())
-            m_xFormats = xSupp->getNumberFormats();
     }
 
     fillColumns();

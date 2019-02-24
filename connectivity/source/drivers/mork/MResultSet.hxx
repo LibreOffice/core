@@ -231,7 +231,6 @@ protected:
             void resetParameters() { m_nParamIndex = 0; }
 
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
-            ::rtl::Reference<connectivity::OSQLColumns>  m_xParamColumns;
 
             void parseParameter( const OSQLParseNode* pNode, OUString& rMatchString );
             /// @throws css::sdbc::SQLException
@@ -284,9 +283,6 @@ public:
 
             void setParameterRow(const OValueRow& _rParaRow)
                       { m_aParameterRow = _rParaRow; }
-
-            void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>& _xParamColumns)
-                      { m_xParamColumns = _xParamColumns; }
 
             void setBindingRow(const OValueRow& _aRow)
                       { m_aRow = _aRow; }

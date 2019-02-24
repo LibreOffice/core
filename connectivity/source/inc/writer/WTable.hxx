@@ -65,7 +65,6 @@ private:
     sal_Int32 m_nStartCol;
     sal_Int32 m_nDataCols;
     bool m_bHasHeaders;
-    css::uno::Reference<css::util::XNumberFormats> m_xFormats;
 
     void fillColumns();
 

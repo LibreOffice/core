@@ -58,8 +58,6 @@ namespace connectivity
             */
             void bindParameterRow(OValueRefRow const & _pRow);
 
-            void setIndexes(const css::uno::Reference< css::container::XNameAccess>& _xIndexes);
-
             void dispose();
             void start(OSQLParseNode const * pSQLParseNode);
             bool hasRestriction() const;
