@@ -67,7 +67,6 @@ public:
     DictionaryEntry* getFirstSelectedEntry() const;
 
     void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
-    sal_uInt16 getSortColumn() const { return m_nSortColumnIndex;}
 
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     void hide() { m_xControl->hide(); }
@@ -100,8 +99,6 @@ private:
     weld::ComboBox* m_pLB_Property;
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
-
-    sal_uInt16      m_nSortColumnIndex;
 };
 
 class ChineseDictionaryDialog : public weld::GenericDialogController

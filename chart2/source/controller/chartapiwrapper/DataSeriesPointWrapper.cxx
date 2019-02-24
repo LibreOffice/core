@@ -348,7 +348,6 @@ public:
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
     mutable Any             m_aDefaultValue;
-    mutable Any             m_aOuterValue;
 };
 
 WrappedLineColorProperty::WrappedLineColorProperty(
@@ -356,23 +355,18 @@ WrappedLineColorProperty::WrappedLineColorProperty(
                 : WrappedSeriesAreaOrLineProperty("LineColor","BorderColor","Color", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
                 , m_aDefaultValue(uno::Any(sal_Int32( 0x0099ccff )))  // blue 8
-                , m_aOuterValue(m_aDefaultValue)
 {
 }
 
 void WrappedLineColorProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        m_aOuterValue = rOuterValue;
-    else
+    if( !m_pDataSeriesPointWrapper || !m_pDataSeriesPointWrapper->isLinesForbidden() )
         WrappedSeriesAreaOrLineProperty::setPropertyValue( rOuterValue, xInnerPropertySet );
 }
 
 void WrappedLineColorProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
 {
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        m_aOuterValue = m_aDefaultValue;
-    else
+    if( !m_pDataSeriesPointWrapper || !m_pDataSeriesPointWrapper->isLinesForbidden() )
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 
@@ -396,7 +390,6 @@ public:
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
     mutable Any             m_aDefaultValue;
-    mutable Any             m_aOuterValue;
 };
 
 WrappedLineStyleProperty::WrappedLineStyleProperty(
@@ -404,7 +397,6 @@ WrappedLineStyleProperty::WrappedLineStyleProperty(
                 : WrappedSeriesAreaOrLineProperty("LineStyle","BorderStyle", "LineStyle", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
                 , m_aDefaultValue(uno::Any(drawing::LineStyle_SOLID))
-                , m_aOuterValue(m_aDefaultValue)
 {
 }
 
@@ -413,7 +405,6 @@ void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const R
     Any aNewValue(rOuterValue);
     if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
     {
-        m_aOuterValue = rOuterValue;
         aNewValue <<= drawing::LineStyle_NONE;
     }
     WrappedSeriesAreaOrLineProperty::setPropertyValue( aNewValue, xInnerPropertySet );
@@ -421,9 +412,7 @@ void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const R
 
 void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
 {
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        m_aOuterValue = m_aDefaultValue;
-    else
+    if( !m_pDataSeriesPointWrapper || !m_pDataSeriesPointWrapper->isLinesForbidden() )
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 

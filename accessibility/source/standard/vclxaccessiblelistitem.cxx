@@ -72,7 +72,6 @@ VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const 
     , m_xParent(_xParent)
 {
     assert(m_xParent.is());
-    m_xParentContext = m_xParent->getAccessibleContext();
     ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
     if (pListBoxHelper)
         m_sEntryText = pListBoxHelper->GetEntry(static_cast<sal_uInt16>(_nIndexInParent));
@@ -157,7 +156,6 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
         VCLXAccessibleListItem_BASE::disposing();
         m_sEntryText.clear();
         m_xParent           = nullptr;
-        m_xParentContext    = nullptr;
 
         nId = m_nClientId;
         m_nClientId =  0;
