@@ -32,6 +32,8 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svgdocumenthandler.hxx>
 
+#include <svgvisitor.hxx>
+
 #include "xsvgparser.hxx"
 
 using namespace ::com::sun::star;
@@ -43,9 +45,11 @@ namespace svgio
         class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >
         {
         private:
-            uno::Reference< uno::XComponentContext > context_;
+            std::shared_ptr<SvgDrawVisitor> mpVisitor;
 
-        protected:
+            uno::Reference< uno::XComponentContext > context_;
+            bool parseSvgXML(uno::Reference<io::XInputStream> const & xSVGStream,
+                             uno::Reference<xml::sax::XDocumentHandler> const & xSvgDocHdl);
         public:
             explicit XSvgParser(
                 uno::Reference< uno::XComponentContext > const & context);
@@ -55,6 +59,10 @@ namespace svgio
             // XSvgParser
             virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
+                const OUString& aAbsolutePath) override;
+
+            virtual uno::Any SAL_CALL getDrawCommands(
+                uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath) override;
 
             // XServiceInfo
@@ -97,6 +105,45 @@ namespace svgio
         {
         }
 
+        bool XSvgParser::parseSvgXML(uno::Reference<io::XInputStream> const & xSVGStream, uno::Reference<xml::sax::XDocumentHandler> const & xSvgDocHdl)
+        {
+            try
+            {
+                // prepare ParserInputSrouce
+                xml::sax::InputSource myInputSource;
+                myInputSource.aInputStream = xSVGStream;
+
+                // get parser
+                uno::Reference< xml::sax::XParser > xParser(
+                    xml::sax::Parser::create(context_));
+                // fdo#60471 need to enable internal entities because
+                // certain ... popular proprietary products write SVG files
+                // that use entities to define XML namespaces.
+                uno::Reference<lang::XInitialization> const xInit(xParser,
+                        uno::UNO_QUERY_THROW);
+                uno::Sequence<uno::Any> args(1);
+                args[0] <<= OUString("DoSmeplease");
+                xInit->initialize(args);
+
+                // connect parser and filter
+                xParser->setDocumentHandler(xSvgDocHdl);
+
+                // finally, parse the stream to a hierarchy of
+                // SVGGraphicPrimitive2D which will be embedded to the
+                // primitive sequence. Their decompositions will in the
+                // end create local low-level primitives, thus SVG will
+                // be processable from all our processors
+                xParser->parseStream(myInputSource);
+            }
+            catch(const uno::Exception& e)
+            {
+                SAL_WARN( "svg", "Parse error! : " << e);
+                return false;
+            }
+
+            return true;
+        }
+
         uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XSvgParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xSVGStream,
             const OUString& aAbsolutePath )
@@ -107,40 +154,8 @@ namespace svgio
             {
                 // local document handler
                 SvgDocHdl* pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
-                uno::Reference< xml::sax::XDocumentHandler > xSvgDocHdl(pSvgDocHdl);
-
-                try
-                {
-                    // prepare ParserInputSrouce
-                    xml::sax::InputSource myInputSource;
-                    myInputSource.aInputStream = xSVGStream;
-
-                    // get parser
-                    uno::Reference< xml::sax::XParser > xParser(
-                        xml::sax::Parser::create(context_));
-                    // fdo#60471 need to enable internal entities because
-                    // certain ... popular proprietary products write SVG files
-                    // that use entities to define XML namespaces.
-                    uno::Reference<lang::XInitialization> const xInit(xParser,
-                            uno::UNO_QUERY_THROW);
-                    uno::Sequence<uno::Any> args(1);
-                    args[0] <<= OUString("DoSmeplease");
-                    xInit->initialize(args);
-
-                    // connect parser and filter
-                    xParser->setDocumentHandler(xSvgDocHdl);
-
-                    // finally, parse the stream to a hierarchy of
-                    // SVGGraphicPrimitive2D which will be embedded to the
-                    // primitive sequence. Their decompositions will in the
-                    // end create local low-level primitives, thus SVG will
-                    // be processable from all our processors
-                    xParser->parseStream(myInputSource);
-                }
-                catch(const uno::Exception& e)
-                {
-                    SAL_WARN( "svg", "Parse error! : " << e);
-                }
+                uno::Reference<xml::sax::XDocumentHandler> xSvgDocHdl(pSvgDocHdl);
+                parseSvgXML(xSVGStream, xSvgDocHdl);
 
                 // decompose to primitives
                 for(std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
@@ -157,6 +172,35 @@ namespace svgio
             }
 
             return comphelper::containerToSequence(aRetval);
+        }
+
+        uno::Any SAL_CALL XSvgParser::getDrawCommands(
+                uno::Reference<io::XInputStream> const & xSvgStream,
+                const OUString& aAbsolutePath)
+        {
+            uno::Any aAnyResult;
+
+            if (!xSvgStream.is())
+                return aAnyResult;
+
+            SvgDocHdl* pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
+            uno::Reference<xml::sax::XDocumentHandler> xSvgDocHdl(pSvgDocHdl);
+            parseSvgXML(xSvgStream, xSvgDocHdl);
+
+            // decompose to primitives
+            for (std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
+            {
+                if (Display_none != pCandidate->getDisplay())
+                {
+                    mpVisitor = std::make_shared<SvgDrawVisitor>();
+                    pCandidate->accept(*mpVisitor);
+                    std::shared_ptr<DrawRoot> pDrawRoot(mpVisitor->getDrawRoot());
+                    sal_uInt64 nPointer = reinterpret_cast<sal_uInt64>(pDrawRoot.get());
+                    aAnyResult <<= sal_uInt64(nPointer);
+                }
+            }
+
+            return aAnyResult;
         }
 
         OUString SAL_CALL XSvgParser::getImplementationName()
