@@ -1028,7 +1028,6 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_bIsInsertRow  = false;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is null!");
-        m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
         OSL_ENSURE(m_aCurrentRow->is(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
@@ -1052,7 +1051,6 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         m_aOldRow->clearRow();
         m_aCurrentRow   = m_pCache->getEnd();
         m_aBookmark     = Any();
-        m_aCurrentRow.setBookmark(m_aBookmark);
     }
 
     // TODO: can this be done before the notifications?
@@ -1290,7 +1288,6 @@ void ORowSetBase::movementFailed()
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
     m_aBookmark     = Any();
-    m_aCurrentRow.setBookmark(m_aBookmark);
     OSL_ENSURE(m_bBeforeFirst || m_bAfterLast,"BeforeFirst or AfterLast is wrong!");
     SAL_INFO("dbaccess", "ORowSetBase::movementFailed() Clone = " << m_bClone);
 }
@@ -1342,7 +1339,6 @@ void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
         m_aOldRow->clearRow();
         m_aCurrentRow   = m_pCache->getEnd();
         m_aBookmark     = Any();
-        m_aCurrentRow.setBookmark( m_aBookmark );
     }
 }
 

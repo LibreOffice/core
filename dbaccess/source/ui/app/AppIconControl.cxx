@@ -91,7 +91,6 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
         {
             SetCursor(pEntry);
             nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
-            m_aMousePos = _rEvt.maPosPixel;
         }
     }
 

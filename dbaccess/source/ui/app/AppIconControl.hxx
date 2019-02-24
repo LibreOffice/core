@@ -28,7 +28,6 @@ namespace dbaui
     class OApplicationIconControl   :public SvtIconChoiceCtrl
                                     ,public DropTargetHelper
     {
-        Point                       m_aMousePos;
         IControlActionListener*     m_pActionListener;
 
     public:

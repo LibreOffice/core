@@ -108,14 +108,6 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_bCheckOnly(false)
 {
     m_eDestEnc = osl_getThreadTextEncoding();
-    try
-    {
-        SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
-    }
-    catch(Exception&)
-    {
-    }
 }
 
 ODatabaseImportExport::~ODatabaseImportExport()
@@ -211,15 +203,6 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
     }
     else
         initialize();
-
-    try
-    {
-        SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
-    }
-    catch(Exception&)
-    {
-    }
 }
 
 void ODatabaseImportExport::initialize()

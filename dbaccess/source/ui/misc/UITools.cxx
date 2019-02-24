@@ -460,11 +460,9 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nPrecision       = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aLiteralPrefix   = aValue;
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); // LiteralPrefix
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aLiteralSuffix   = aValue;
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralSuffix
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aCreateParams    = aValue;

@@ -50,7 +50,6 @@ namespace dbaui
     class ODatabaseImportExport : public ::cppu::WeakImplHelper< css::lang::XEventListener>
     {
     protected:
-        css::lang::Locale                                     m_aLocale;
         css::uno::Sequence< css::uno::Any>                    m_aSelection;
         bool                                                  m_bBookmarkSelection;
         SvStream*                                             m_pStream;

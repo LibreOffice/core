@@ -651,17 +651,12 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    OGeneralPageWizard::DocumentDescriptor OGeneralPageWizard::GetSelectedDocument() const
+    OUString OGeneralPageWizard::GetSelectedDocumentURL() const
     {
-        DocumentDescriptor aDocument;
-        if ( !m_aBrowsedDocument.sURL.isEmpty() )
-            aDocument = m_aBrowsedDocument;
+        if ( !m_aBrowsedDocumentURL.isEmpty() )
+            return m_aBrowsedDocumentURL;
         else
-        {
-            aDocument.sURL = m_pLB_DocumentList->GetSelectedDocumentURL();
-            aDocument.sFilter = m_pLB_DocumentList->GetSelectedDocumentFilter();
-        }
-        return aDocument;
+            return m_pLB_DocumentList->GetSelectedDocumentURL();
     }
 
     IMPL_LINK_NOARG( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
@@ -728,8 +723,7 @@ namespace dbaui
                 OnSetupModeSelected( m_pRB_ConnectDatabase );
                 return;
             }
-            m_aBrowsedDocument.sURL = sPath;
-            m_aBrowsedDocument.sFilter.clear();
+            m_aBrowsedDocumentURL = sPath;
             m_aChooseDocumentHandler.Call( *this );
         }
     }
