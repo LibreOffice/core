@@ -939,9 +939,6 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( *pVDev, aSize, CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed)) );
     pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( *pVDev, aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
     pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( *pVDev, aSize, Image() ) );
-
-    // Get image size
-    m_aCheckBoxImageSizePixel = aImage.GetSizePixel();
 }
 
 Image SvxToolbarEntriesListBox::GetSizedImage(

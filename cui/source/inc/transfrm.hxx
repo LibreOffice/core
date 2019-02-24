@@ -224,9 +224,6 @@ private:
 
     const SdrView*      pView;
 
-    // #i75273#
-    basegfx::B2DRange   maRange;
-
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 

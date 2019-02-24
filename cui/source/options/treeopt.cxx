@@ -468,12 +468,10 @@ struct OptionsGroupInfo
     SfxShell*           m_pShell;       // used to create the page
     SfxModule*          m_pModule;      // used to create the ItemSet
     sal_uInt16          m_nDialogId;    // Id of the former dialog
-    OUString       m_sPageURL;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
         m_pShell( pSh ),
-        m_pModule( pMod ), m_nDialogId( nId ),
-        m_sPageURL( OUString() ) {}
+        m_pModule( pMod ), m_nDialogId( nId ) {}
 };
 
 #define INI_LIST() \
@@ -1985,17 +1983,6 @@ static void lcl_insertLeaf(
     {
         sal_uInt16 nNodeGrpId = getGroupNodeId( pNode->m_sId );
         nGrpId = pDlg->AddGroup( pNode->m_sLabel, nullptr, nullptr, nNodeGrpId );
-        if ( !pNode->m_sPageURL.isEmpty() )
-        {
-            SvTreeListEntry* pGrpEntry = rTreeLB.GetEntry( nullptr, nGrpId );
-            DBG_ASSERT( pGrpEntry, "OfaTreeOptionsDialog::InsertNodes(): no group" );
-            if ( pGrpEntry )
-            {
-                OptionsGroupInfo* pGrpInfo =
-                    static_cast<OptionsGroupInfo*>(pGrpEntry->GetUserData());
-                pGrpInfo->m_sPageURL = pNode->m_sPageURL;
-            }
-        }
     }
     OptionsPageInfo* pInfo = pDlg->AddTabPage( 0, pLeaf->m_sLabel, nGrpId );
     pInfo->m_sPageURL = pLeaf->m_sPageURL;

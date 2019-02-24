@@ -90,7 +90,6 @@ public:
 
 class SvxToolbarEntriesListBox final : public SvxMenuEntriesListBox
 {
-    Size            m_aCheckBoxImageSizePixel;
     std::unique_ptr<SvLBoxButtonData> m_pButtonData;
     VclPtr<SvxConfigPage>  pPage;
 

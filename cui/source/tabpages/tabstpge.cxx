@@ -51,11 +51,6 @@ static void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
     }
 }
 
-void TabWin_Impl::SetTabulatorTabPage(SvxTabulatorTabPage* pPage)
-{
-    mpPage = pPage;
-}
-
 void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     // Paint tabulators
@@ -96,10 +91,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet
     , m_xCenterWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABCENTER", m_aCenterWin))
     , m_xDezWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWIN_TABDECIMAL", m_aDezWin))
 {
-    m_aLeftWin.SetTabulatorTabPage(this);
-    m_aRightWin.SetTabulatorTabPage(this);
-    m_aCenterWin.SetTabulatorTabPage(this);
-    m_aDezWin.SetTabulatorTabPage(this);
     m_aLeftWin.SetTabStyle(sal_uInt16(RULER_TAB_LEFT|WB_HORZ));
     m_aRightWin.SetTabStyle(sal_uInt16(RULER_TAB_RIGHT|WB_HORZ));
     m_aCenterWin.SetTabStyle(sal_uInt16(RULER_TAB_CENTER|WB_HORZ));
