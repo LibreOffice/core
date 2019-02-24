@@ -342,7 +342,7 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
 
     // register as listener and get notified when document is closed
-    mpDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD )->Add(this);
+    StartListening(mpDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD )->GetNotifier());
 }
 
 SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
@@ -351,11 +351,9 @@ SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
     EndListeningAll();
 }
 
-void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwXFlatParagraphIterator::Notify( const SfxHint& rHint )
 {
-    ClientModify( this, pOld, pNew );
-    // check if document gets closed...
-    if(!GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
         SolarMutexGuard aGuard;
         mpDoc = nullptr;
