@@ -2641,21 +2641,21 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
         <anim:par smil:begin="0" smil:fill="hold">
-            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-media-start">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="media-call" pres:preset-id="ooo-media-start">
                 <anim:command smil:begin="0" smil:dur="0.001" smil:fill="hold" anim:command="play"/>
             </anim:par>
         </anim:par>
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
         <anim:par smil:begin="0" smil:fill="hold">
-            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-media-stop">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="media-call" pres:preset-id="ooo-media-stop">
                 <anim:command smil:begin="0" smil:dur="0.001" smil:fill="hold" anim:command="stop"/>
             </anim:par>
         </anim:par>
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
         <anim:par smil:begin="0" smil:fill="hold">
-            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-media-toggle-pause">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="media-call" pres:preset-id="ooo-media-toggle-pause">
                 <anim:command smil:begin="0" smil:dur="0.001" smil:fill="hold" anim:command="toggle-pause"/>
             </anim:par>
         </anim:par>
