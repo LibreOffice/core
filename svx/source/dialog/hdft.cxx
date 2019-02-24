@@ -88,7 +88,7 @@ namespace svx {
     {
         bool bRes = false;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(pParent, *pBBSet, false /*bEnableDrawingLayerFillStyles*/));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(pParent, *pBBSet, true /*bEnableDrawingLayerFillStyles*/));
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
             SfxItemIter aIter( *pDlg->GetOutputItemSet() );
