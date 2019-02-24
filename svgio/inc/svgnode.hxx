@@ -80,6 +80,8 @@ namespace svgio
         // which members should be initialized
         Display getDisplayFromContent(const OUString& aContent);
 
+      class Visitor;
+
         class SvgNode : public InfoProvider
         {
         private:
@@ -137,6 +139,8 @@ namespace svgio
             SvgNode(const SvgNode&) = delete;
             SvgNode& operator=(const SvgNode&) = delete;
 
+            void accept(Visitor& rVisitor);
+
             /// scan helper to read and interpret a local CssStyle to mpLocalCssStyle
             void readLocalCssStyle(const OUString& aContent);
 
@@ -182,6 +186,14 @@ namespace svgio
             /// alternative parent
             void setAlternativeParent(const SvgNode* pAlternativeParent = nullptr) { mpAlternativeParent = pAlternativeParent; }
         };
+
+      class Visitor
+      {
+      public:
+            virtual ~Visitor() = default;
+            virtual void visit(SvgNode const & pNode) = 0;
+      };
+
     } // end of namespace svgreader
 } // end of namespace svgio
 
