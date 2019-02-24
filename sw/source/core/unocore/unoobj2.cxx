@@ -112,7 +112,6 @@
 #include <sortopt.hxx>
 #include <algorithm>
 #include <iterator>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 
