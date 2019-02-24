@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_784f52bd",
+        "filename": "dbaccess/source/ui/dlg/indexdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-02-24T20:23:28Z",
+      "side": 1,
+      "message": "you removed the !\u003d operator ?",
+      "revId": "f3910ca4df0997fb58fe6d1719f188a60a062241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
