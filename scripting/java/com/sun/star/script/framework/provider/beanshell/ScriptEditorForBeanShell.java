@@ -272,7 +272,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         }
         );
 
-        String[] labels = {"Run", "Clear", "Save", "Close","Undo","Redo"};
+        String[] labels = {"Run", "Clear", "Save","Undo","Redo"};
         JToolBar toolbar = new JToolBar();
         toolbar.setRollover(true);
         for (String label : labels) {
@@ -373,8 +373,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             } catch (Exception invokeException) {
                 showErrorMessage(invokeException.getMessage());
             }
-        } else if (actionCommand.equals("Close")) {
-            doClose();
         } else if (actionCommand.equals("Save")) {
             saveTextArea();
         } else if (actionCommand.equals("Clear")) {
