@@ -89,29 +89,22 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
 {
     OTableIndex aReturn;
 
-    sal_Int32 nPos = 0;
-
-    TableIndexList::iterator aSearch;
-    for (   aSearch = _rList.begin();
-            aSearch != _rList.end();
-            ++aSearch, ++nPos
-        )
+    TableIndexList::iterator aSearch = std::find_if(_rList.begin(), _rList.end(),
+        [&_rName](const OTableIndex& rIndex) { return rIndex.GetIndexFileName() == _rName; });
+    if (aSearch != _rList.end())
     {
-        if ( aSearch->GetIndexFileName() == _rName )
-        {
-            aReturn = *aSearch;
+        sal_Int32 nPos = static_cast<sal_Int32>(std::distance(_rList.begin(), aSearch));
 
-            _rList.erase(aSearch);
-            _rDisplay.remove_text(_rName);
+        aReturn = *aSearch;
 
-            // adjust selection if necessary
-            if (static_cast<sal_uInt32>(nPos) == _rList.size())
-                _rDisplay.select(static_cast<sal_uInt16>(nPos)-1);
-            else
-                _rDisplay.select(static_cast<sal_uInt16>(nPos));
+        _rList.erase(aSearch);
+        _rDisplay.remove_text(_rName);
 
-            break;
-        }
+        // adjust selection if necessary
+        if (static_cast<sal_uInt32>(nPos) == _rList.size())
+            _rDisplay.select(static_cast<sal_uInt16>(nPos)-1);
+        else
+            _rDisplay.select(static_cast<sal_uInt16>(nPos));
     }
 
     OSL_ENSURE(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");

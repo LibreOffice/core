@@ -1425,16 +1425,12 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
         if (bWasEditing)
             DeactivateCell();
 
-        OTableFields::const_reverse_iterator aIter = getFields().rbegin();
-        OTableFieldDescRef pEntry;
-        for(sal_uInt16 nPos=sal::static_int_cast< sal_uInt16 >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
+        auto aIter = std::find_if(getFields().rbegin(), getFields().rend(),
+            [&rAliasName](const OTableFieldDescRef pEntry) { return pEntry->GetAlias() == rAliasName; });
+        if (aIter != getFields().rend())
         {
-            pEntry = *aIter;
-            if ( pEntry->GetAlias() == rAliasName )
-            {
-                RemoveField( GetColumnId( nPos ) );
-                break;
-            }
+            sal_uInt16 nPos = sal::static_int_cast<sal_uInt16>(std::distance(aIter, getFields().rend()));
+            RemoveField( GetColumnId( nPos ) );
         }
 
         if (bWasEditing)

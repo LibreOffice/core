@@ -138,12 +138,8 @@ namespace dbaui
                     }
                 }
                 std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
-                DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
-                for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
-                        loop != aDisplayEnd;
-                        ++loop
-                    )
-                    insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
+                for ( const auto& rDisplayedType : aDisplayedTypes )
+                    insertDatasourceTypeEntryData( rDisplayedType.eType, rDisplayedType.sDisplayName );
             }
         }
     }

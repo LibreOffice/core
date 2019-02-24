@@ -1080,8 +1080,8 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
         if(!m_bRowCountFinal)
             bFetchedRow = fillAllRows();
 
-        for(;row < 0 && m_aKeyIter != m_aKeyMap.begin();++row)
-            --m_aKeyIter;
+        row = std::min(std::abs(row), static_cast<sal_Int32>(std::distance(m_aKeyMap.begin(), m_aKeyIter)));
+        m_aKeyIter = std::prev(m_aKeyIter, row);
     }
     else
     {
@@ -1116,9 +1116,7 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
         }
         else
         {
-            m_aKeyIter = m_aKeyMap.begin();
-            for(;row > 0 && m_aKeyIter != m_aKeyMap.end();--row)
-                ++m_aKeyIter;
+            m_aKeyIter = std::next(m_aKeyMap.begin(), row);
         }
     }
     if ( !bFetchedRow )

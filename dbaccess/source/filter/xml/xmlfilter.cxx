@@ -59,6 +59,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -941,7 +942,7 @@ void ODBFilter::setPropertyInfo()
 
     Sequence<PropertyValue> aInfo;
     if ( !m_aInfoSequence.empty() )
-        aInfo = Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size());
+        aInfo = comphelper::containerToSequence(m_aInfoSequence);
     aDataSourceSettings.merge( ::comphelper::NamedValueCollection( aInfo ), true );
 
     aDataSourceSettings >>= aInfo;

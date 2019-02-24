@@ -264,17 +264,12 @@ void OBookmarkContainer::implRemove(const OUString& _rName)
 
     // look for the name in the index access vector
     MapString2String::const_iterator aMapPos = m_aBookmarks.end();
-    for (   MapIteratorVector::iterator aSearch = m_aBookmarksIndexed.begin();
-            aSearch != m_aBookmarksIndexed.end();
-            ++aSearch
-        )
+    auto aSearch = std::find_if(m_aBookmarksIndexed.begin(), m_aBookmarksIndexed.end(),
+        [&_rName](const MapString2String::iterator& rIter) { return rIter->first == _rName; });
+    if (aSearch != m_aBookmarksIndexed.end())
     {
-        if ((*aSearch)->first == _rName)
-        {
-            aMapPos = *aSearch;
-            m_aBookmarksIndexed.erase(aSearch);
-            break;
-        }
+        aMapPos = *aSearch;
+        m_aBookmarksIndexed.erase(aSearch);
     }
 
     if (m_aBookmarks.end() == aMapPos)
