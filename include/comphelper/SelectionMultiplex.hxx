@@ -45,22 +45,14 @@ namespace comphelper
     {
         friend class OSelectionChangeMultiplexer;
 
-        rtl::Reference<OSelectionChangeMultiplexer>  m_xAdapter;
-        ::osl::Mutex&                                m_rMutex;
-
     public:
-        OSelectionChangeListener(::osl::Mutex& _rMutex)
-            : m_rMutex(_rMutex) { }
+        OSelectionChangeListener() {}
         virtual ~OSelectionChangeListener();
 
         /// @throws css::uno::RuntimeException
         virtual void _selectionChanged( const css::lang::EventObject& aEvent ) = 0;
         /// @throws css::uno::RuntimeException
         virtual void _disposing(const css::lang::EventObject& _rSource);
-
-    protected:
-        // pseudo-private. Making it private now could break compatibility
-        void    setAdapter( OSelectionChangeMultiplexer* _pAdapter );
     };
 
 

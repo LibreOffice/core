@@ -43,18 +43,11 @@ namespace cppcanvas
     {
         CanvasGraphicHelper::CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas ) :
             maClipPolyPolygon(),
-            mpCanvas( rParentCanvas ),
-            mxGraphicDevice()
+            mpCanvas( rParentCanvas )
         {
             OSL_ENSURE( mpCanvas.get() != nullptr &&
                         mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );
-
-            if( mpCanvas.get() != nullptr &&
-                mpCanvas->getUNOCanvas().is() )
-            {
-                mxGraphicDevice = mpCanvas->getUNOCanvas()->getDevice();
-            }
 
             ::canvas::tools::initRenderState( maRenderState );
         }

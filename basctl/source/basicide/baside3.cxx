@@ -1261,7 +1261,6 @@ ItemType DialogWindow::GetType () const
 
 DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
-    pChild(nullptr),
     rObjectCatalog(rObjectCatalog_),
     pPropertyBrowser(nullptr)
 {
@@ -1278,7 +1277,6 @@ void DialogWindowLayout::dispose()
     if (pPropertyBrowser)
         Remove(pPropertyBrowser);
     pPropertyBrowser.disposeAndClear();
-    pChild.clear();
     Layout::dispose();
 }
 
@@ -1321,7 +1319,6 @@ void DialogWindowLayout::UpdatePropertyBrowser ()
 void DialogWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<DialogWindow*>(&rChild));
-    pChild = &static_cast<DialogWindow&>(rChild);
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
     rObjectCatalog.Show();
@@ -1336,7 +1333,6 @@ void DialogWindowLayout::Deactivating ()
     rObjectCatalog.Hide();
     if (pPropertyBrowser)
         pPropertyBrowser->Hide();
-    pChild = nullptr;
 }
 
 void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
