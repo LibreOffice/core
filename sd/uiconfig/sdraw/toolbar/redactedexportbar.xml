@@ -18,6 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF?IsRedactMode:bool=true"/>
- <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
+ <toolbar:toolbaritem xlink:href=".uno:RedactedExportBlack"/>
+ <toolbar:toolbaritem xlink:href=".uno:RedactedExportWhite"/>
 </toolbar:toolbar>
