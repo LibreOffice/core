@@ -204,7 +204,10 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
+    PresumedLoc presumedLoc = compiler.getSourceManager().getPresumedLoc( expansionLoc );
+    if( presumedLoc.isInvalid())
+        return true;
+    const char* bufferName = presumedLoc.getFilename();
     if (bufferName == NULL
         || hasPathnamePrefix(bufferName, SRCDIR "/external/")
         || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
