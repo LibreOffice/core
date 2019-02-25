@@ -37,6 +37,7 @@
 
 #include <unx/geninst.h>
 #include <qt5/Qt5Tools.hxx>
+#include <qt5/Qt5Instance.hxx>
 
 #include <QtCore/QDebug>
 #include <QtCore/QThread>
@@ -109,50 +110,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
-    connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
-            Qt::BlockingQueuedConnection);
-
-    // XExecutableDialog
-    connect(this, &KDE5FilePicker::setTitleSignal, this, &KDE5FilePicker::setTitleSlot,
-            Qt::BlockingQueuedConnection);
-    // XFilePicker
-    connect(this, &KDE5FilePicker::setMultiSelectionSignal, this,
-            &KDE5FilePicker::setMultiSelectionSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setDisplayDirectorySignal, this,
-            &KDE5FilePicker::setDisplayDirectorySlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
-            &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
-    // XFolderPicker
-    connect(this, &KDE5FilePicker::getDirectorySignal, this, &KDE5FilePicker::getDirectorySlot,
-            Qt::BlockingQueuedConnection);
-    // XFilterManager
-    connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setCurrentFilterSignal, this,
-            &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
-            &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
-    // XFilterGroupManager
-    connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
-            &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
-    // XFilePickerControlAccess
-    connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setLabelSignal, this, &KDE5FilePicker::setLabelSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getLabelSignal, this, &KDE5FilePicker::getLabelSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
-            Qt::BlockingQueuedConnection);
-    // XFilePicker2
-    connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
-            &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getFilesSignal, this, &KDE5FilePicker::getFiles,
-            Qt::BlockingQueuedConnection);
 
     // used to set the custom controls
     qApp->installEventFilter(this);
@@ -180,21 +137,20 @@ void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFil
 // XExecutableDialog
 void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setTitleSignal(title);
-    }
-
-    _dialog->setWindowTitle(toQString(title));
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &title]() { _dialog->setWindowTitle(toQString(title)); });
 }
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        //SolarMutexReleaser aReleaser;
-        return Q_EMIT executeSignal();
+        sal_Int16 ret;
+        pSalInst->RunInMainThread([&ret, this] { ret = execute(); });
+        return ret;
     }
 
     if (!_filters.isEmpty())
@@ -210,10 +166,12 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
 // XFilePicker
 void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setMultiSelectionSignal(multiSelect);
+        pSalInst->RunInMainThread([this, multiSelect] { setMultiSelectionMode(multiSelect); });
+        return;
     }
 
     if (mbIsFolderPicker || _dialog->acceptMode() == QFileDialog::AcceptSave)
@@ -224,46 +182,32 @@ void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 
 void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDefaultNameSignal(name);
-    }
-
-    _dialog->selectFile(toQString(name));
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &name]() { _dialog->selectFile(toQString(name)); });
 }
 
 void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDisplayDirectorySignal(dir);
-    }
-
-    QString qDir(toQString(dir));
-    _dialog->setDirectoryUrl(QUrl(qDir));
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &dir]() {
+        QString qDir(toQString(dir));
+        _dialog->setDirectoryUrl(QUrl(qDir));
+    });
 }
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getDisplayDirectorySignal();
-    }
-
-    return implGetDirectory();
+    OUString ret;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&ret, this]() { ret = implGetDirectory(); });
+    return ret;
 }
 
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        //SolarMutexReleaser aReleaser;
-        return Q_EMIT getFilesSignal();
-    }
-
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
@@ -273,13 +217,11 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
 // XFilePicker2
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getSelectedFilesSignal();
-    }
+    QList<QUrl> aURLs;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&aURLs, this]() { aURLs = _dialog->selectedUrls(); });
 
-    QList<QUrl> aURLs = _dialog->selectedUrls();
     uno::Sequence<OUString> seq(aURLs.size());
 
     size_t i = 0;
@@ -294,10 +236,12 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
 // XFilterManager
 void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterSignal(title, filter);
+        pSalInst->RunInMainThread([this, &title, &filter]() { appendFilter(title, filter); });
+        return;
     }
 
     QString t(toQString(title));
@@ -318,24 +262,20 @@ void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString
 
 void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setCurrentFilterSignal(title);
-    }
-
-    _currentFilter = _titleToFilters.value(toQString(title));
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread(
+        [this, &title]() { _currentFilter = _titleToFilters.value(toQString(title)); });
 }
 
 OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getCurrentFilterSignal();
-    }
-
-    OUString filter = toOUString(_titleToFilters.key(_dialog->selectedNameFilter()));
+    OUString filter;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&filter, this]() {
+        filter = toOUString(_titleToFilters.key(_dialog->selectedNameFilter()));
+    });
 
     //default if not found
     if (filter.isEmpty())
@@ -348,10 +288,13 @@ OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
 void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
                                                 const uno::Sequence<beans::StringPair>& filters)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterGroupSignal(rGroupTitle, filters);
+        pSalInst->RunInMainThread(
+            [this, &rGroupTitle, &filters]() { appendFilterGroup(rGroupTitle, filters); });
+        return;
     }
 
     const sal_uInt16 length = filters.getLength();
@@ -366,10 +309,14 @@ void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
 void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                        const uno::Any& value)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setValueSignal(controlId, nControlAction, value);
+        pSalInst->RunInMainThread([this, controlId, nControlAction, &value]() {
+            setValue(controlId, nControlAction, value);
+        });
+        return;
     }
 
     if (_customWidgets.contains(controlId))
@@ -393,10 +340,15 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
 
 uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getValueSignal(controlId, nControlAction);
+        uno::Any ret;
+        pSalInst->RunInMainThread([&ret, this, controlId, nControlAction]() {
+            ret = getValue(controlId, nControlAction);
+        });
+        return ret;
     }
 
     if (CHECKBOX_AUTOEXTENSION == controlId)
@@ -428,24 +380,24 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
 
 void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT enableControlSignal(controlId, enable);
-    }
-
-    if (_customWidgets.contains(controlId))
-        _customWidgets.value(controlId)->setEnabled(enable);
-    else
-        SAL_WARN("vcl.kde5", "enable on unknown control " << controlId);
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, controlId, enable]() {
+        if (_customWidgets.contains(controlId))
+            _customWidgets.value(controlId)->setEnabled(enable);
+        else
+            SAL_WARN("vcl.kde5", "enable on unknown control " << controlId);
+    });
 }
 
 void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setLabelSignal(controlId, label);
+        pSalInst->RunInMainThread([this, controlId, label]() { setLabel(controlId, label); });
+        return;
     }
 
     if (_customWidgets.contains(controlId))
@@ -460,10 +412,13 @@ void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& labe
 
 OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getLabelSignal(controlId);
+        OUString ret;
+        pSalInst->RunInMainThread([&ret, this, controlId]() { ret = getLabel(controlId); });
+        return ret;
     }
 
     OUString label;
@@ -482,13 +437,11 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 // XFolderPicker
 OUString SAL_CALL KDE5FilePicker::getDirectory()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getDirectorySignal();
-    }
-
-    return implGetDirectory();
+    OUString ret;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&ret, this]() { ret = implGetDirectory(); });
+    return ret;
 }
 
 void SAL_CALL KDE5FilePicker::setDescription(const OUString&) {}
