@@ -39,7 +39,6 @@ extern "C" SdAbstractDialogFactory* SdCreateDialogFactory();
 SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
     SdFuncPtrCreateDialogFactory fp = nullptr;
-#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     static const OUString sLibName(SDUI_DLL_NAME);
@@ -48,7 +47,6 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
             aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" ));
 #else
     fp = SdCreateDialogFactory;
-#endif
 #endif
     if ( fp )
         return fp();
