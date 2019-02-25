@@ -157,13 +157,17 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                     pAction->setChecked(bChecked);
                 }
 
-                pAction->setEnabled(pSalMenuItem->mbEnabled);
-                pAction->setVisible(pSalMenuItem->mbVisible);
-
                 connect(pAction, &QAction::triggered, this,
                         [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
             }
         }
+    }
+
+    QAction* pAction = pSalMenuItem->getAction();
+    if (pAction)
+    {
+        pAction->setEnabled(pSalMenuItem->mbEnabled);
+        pAction->setVisible(pSalMenuItem->mbVisible);
     }
 
     return pQMenu;
