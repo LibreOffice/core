@@ -493,13 +493,21 @@ void Qt5Frame::SetModal(bool bModal)
 {
     if (isWindow())
     {
-        if (m_pTopLevel)
-            m_pTopLevel->setVisible(true);
+        bool wasVisible = windowHandle()->isVisible();
+
         // modality change is only effective if the window is hidden
-        windowHandle()->hide();
+        if (wasVisible)
+        {
+            windowHandle()->hide();
+        }
+
         windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
-        // and shown again
-        windowHandle()->show();
+
+        // and shown again if it was visible
+        if (wasVisible)
+        {
+            windowHandle()->show();
+        }
     }
 }
 
