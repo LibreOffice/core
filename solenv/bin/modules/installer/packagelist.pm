@@ -239,47 +239,43 @@ sub find_files_for_package
 {
     my ($filelist, $onepackage) = @_;
 
-    my @newfilelist = ();
+    my @newfilelist;
+    my $lastmodules = '';
+    my $lastincludefile = 0;
 
-    for ( my $i = 0; $i <= $#{$filelist}; $i++ )
+    my %packagemodules = map {$_ => 1} @{$onepackage->{'allmodules'}};
+
+    for my $onefile (@$filelist)
     {
-        my $onefile = ${$filelist}[$i];
         my $modulesstring = $onefile->{'modules'};   # comma separated modules list
+
+        # check if the modules string is the same as in the last file
+        if ($modulesstring eq $lastmodules)
+        {
+            push(@newfilelist, $onefile) if $lastincludefile;
+            next;
+        }
+
         my $moduleslist = installer::converter::convert_stringlist_into_array(\$modulesstring, ",");
 
         my $includefile = 0;
 
         # iterating over all modules of this file
-
-        for ( my $j = 0; $j <= $#{$moduleslist}; $j++ )
-        {
-            if ( $includefile ) { next; }
-            my $filemodule = ${$moduleslist}[$j];
+        for my $filemodule (@$moduleslist) {
             installer::remover::remove_leading_and_ending_whitespaces(\$filemodule);
-
-            # iterating over all modules of the package
-
-            my $packagemodules = $onepackage->{'allmodules'};
-
-            for ( my $k = 0; $k <= $#{$packagemodules}; $k++ )
-            {
-                if ( $includefile ) { next; }
-                my $packagemodule = ${$packagemodules}[$k];
-
-                if ( $filemodule eq $packagemodule )
-                {
-                    $includefile = 1;
-                    last;
-                }
+            if ($packagemodules{$filemodule}) {
+                $includefile = 1;
+                last;
             }
         }
 
-        if ( $includefile )
-        {
-            push(@newfilelist, $onefile);
-        }
-    }
+        push(@newfilelist, $onefile) if $includefile;
 
+        # cache last result for this modules list
+        $lastmodules = $modulesstring;
+        $lastincludefile = $includefile;
+
+    }
     return \@newfilelist;
 }
 
