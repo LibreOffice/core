@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNOREDLINE_HXX
 #define INCLUDED_SW_INC_UNOREDLINE_HXX
 
+#include <svl/listener.hxx>
 #include "unotext.hxx"
 #include "ndindex.hxx"
 
@@ -59,16 +60,12 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
 
-typedef
-cppu::WeakImplHelper
-<
-    css::container::XEnumerationAccess
->
-SwXRedlineBaseClass;
-class SwXRedline :
-        public SwXRedlineBaseClass,
-        public SwXText,
-        public SwClient
+typedef cppu::WeakImplHelper<css::container::XEnumerationAccess> SwXRedlineBaseClass;
+
+class SwXRedline
+    : public SwXRedlineBaseClass
+    , public SwXText
+    , public SvtListener
 {
     SwDoc*      pDoc;
     SwRangeRedline*  pRedline;
@@ -105,10 +102,19 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     const SwRangeRedline*    GetRedline() const {return pRedline;}
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify( const SfxHint& ) override;
 };
+
+namespace sw
+{
+    struct SW_DLLPUBLIC FindRedlineHint final: SfxHint
+    {
+        const SwRangeRedline& m_rRedline;
+        SwXRedline** m_ppXRedline;
+        FindRedlineHint(const SwRangeRedline& rRedline, SwXRedline** ppXRedline) : m_rRedline(rRedline), m_ppXRedline(ppXRedline) {}
+    };
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
