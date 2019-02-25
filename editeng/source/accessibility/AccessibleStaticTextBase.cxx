@@ -27,7 +27,6 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -170,9 +169,6 @@ namespace accessibility
 
         // a wrapper for the text forwarders (guarded by solar mutex)
         mutable SvxEditSourceAdapter maEditSource;
-
-        // guard for maOffset
-        mutable ::osl::Mutex maMutex;
     };
 
 
@@ -181,8 +177,7 @@ namespace accessibility
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxTextParagraph( new AccessibleEditableTextPara(nullptr) ),
-        maEditSource(),
-        maMutex()
+        maEditSource()
     {
 
         // TODO: this is still somewhat of a hack, all the more since
