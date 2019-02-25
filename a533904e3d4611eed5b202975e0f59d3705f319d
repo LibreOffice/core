@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_1bd85851",
+        "filename": "sc/qa/uitest/calc_tests/tdf120161.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-02-25T11:42:52Z",
+      "side": 1,
+      "message": "those lines can probably go?",
+      "revId": "a533904e3d4611eed5b202975e0f59d3705f319d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_fbdc5c47",
+        "filename": "sc/qa/uitest/calc_tests/tdf120161.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-02-25T11:42:52Z",
+      "side": 1,
+      "message": "probably needs deleting the exported file here, otherwise CI builders tend to fill their disk with them ..",
+      "revId": "a533904e3d4611eed5b202975e0f59d3705f319d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
