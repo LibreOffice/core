@@ -37,7 +37,6 @@ class ScInterpreterContextPool;
 struct ScInterpreterContext
 {
     const ScDocument* mpDoc;
-    SvNumberFormatter* mpFormatter;
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
@@ -48,10 +47,10 @@ struct ScInterpreterContext
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
         : mpDoc(&rDoc)
-        , mpFormatter(pFormatter)
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
         , mScLookupCache(nullptr)
+        , mpFormatter(pFormatter)
     {
     }
 
@@ -59,7 +58,12 @@ struct ScInterpreterContext
 
     ~ScInterpreterContext();
 
-    SvNumberFormatter* GetFormatTable() const { return mpFormatter; }
+    SvNumberFormatter* GetFormatTable() const
+    {
+        if (mpFormatter == nullptr)
+            const_cast<ScInterpreterContext*>(this)->initFormatTable();
+        return mpFormatter;
+    }
 
 private:
     friend class ScInterpreterContextPool;
@@ -67,6 +71,8 @@ private:
     void SetDocAndFormatter(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
     void Cleanup();
     void ClearLookupCache();
+    void initFormatTable();
+    SvNumberFormatter* mpFormatter;
 };
 
 class ScThreadedInterpreterContextGetterGuard;

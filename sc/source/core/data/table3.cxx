@@ -2360,7 +2360,7 @@ public:
         {
             sal_uInt32 nNumFmt = pContext ? mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
                 mrTab.GetNumberFormat(nCol, nRow);
-            SvNumberFormatter* pFormatter = pContext ? pContext->mpFormatter : mrDoc.GetFormatTable();
+            SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
             const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
             if (pEntry)
             {
@@ -2434,7 +2434,7 @@ public:
                 sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
                     mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 OUString aStr;
-                SvNumberFormatter* pFormatter = pContext ? pContext->mpFormatter : mrDoc.GetFormatTable();
+                SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
                 ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrDoc);
                 return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
             }
