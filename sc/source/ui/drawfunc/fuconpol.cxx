@@ -19,7 +19,6 @@
 
 #include <fuconpol.hxx>
 #include <tabvwsh.hxx>
-#include <sc.hrc>
 #include <drawview.hxx>
 
 // Create default drawing objects via keyboard

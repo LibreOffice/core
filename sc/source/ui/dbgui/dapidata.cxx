@@ -19,12 +19,10 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -34,7 +32,6 @@
 using namespace com::sun::star;
 
 #include <dapidata.hxx>
-#include <sc.hrc>
 #include <miscuno.hxx>
 #include <dpsdbtab.hxx>
 

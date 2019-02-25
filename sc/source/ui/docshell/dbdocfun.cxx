@@ -27,7 +27,6 @@
 #include <unotools/charclass.hxx>
 
 #include <dbdocfun.hxx>
-#include <sc.hrc>
 #include <dbdata.hxx>
 #include <undodat.hxx>
 #include <docsh.hxx>

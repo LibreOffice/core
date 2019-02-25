@@ -21,10 +21,11 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
 
 #include <vcl/weld.hxx>
-#include <svx/txencbox.hxx>
 
 class ScDelimiterTable;
 class ScImportOptions;
+class TextEncodingBox;
+class TextEncodingTreeView;
 
 class ScImportOptionsDlg : public weld::GenericDialogController
 {

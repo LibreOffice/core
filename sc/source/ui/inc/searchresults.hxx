@@ -12,10 +12,10 @@
 
 #include <vcl/dialog.hxx>
 #include <sfx2/childwin.hxx>
+#include <svtools/simptabl.hxx>
 
 class ScDocument;
 class ScRangeList;
-class SvSimpleTable;
 class SvTreeListBox;
 
 namespace sc {

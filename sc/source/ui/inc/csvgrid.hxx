@@ -21,20 +21,20 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CSVGRID_HXX
 
 #include <vcl/menu.hxx>
+#include <vcl/virdev.hxx>
 #include <unotools/options.hxx>
 
 #include <vector>
 #include <memory>
 #include <scdllapi.h>
+#include <editutil.hxx>
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
 
 namespace svtools { class ColorConfig; }
 class EditEngine;
-class ScEditEngineDefaulter;
 class ScAsciiOptions;
 class ScAccessibleCsvControl;
-class VirtualDevice;
 
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
 
