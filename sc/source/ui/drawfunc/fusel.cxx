@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedStates.hpp>
-
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoole2.hxx>
@@ -30,8 +27,8 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/outlobj.hxx>
-#include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/ipclient.hxx>
 
 #include <fusel.hxx>
 #include <sc.hrc>
@@ -39,11 +36,9 @@
 #include <futext.hxx>
 #include <drawview.hxx>
 #include <tabvwsh.hxx>
-#include <drawpage.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <scmod.hxx>
-#include <client.hxx>
 #include <charthelper.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>

@@ -19,14 +19,12 @@
 
 #include <fuconrec.hxx>
 #include <tabvwsh.hxx>
-#include <sc.hrc>
 #include <drawview.hxx>
 
 #include <editeng/outlobj.hxx>
 // Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>

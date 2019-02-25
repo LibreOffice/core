@@ -37,7 +37,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
@@ -52,17 +51,13 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 
 #include <scerrors.hxx>
 #include <docsh.hxx>
-#include <filter.hxx>
 #include <progress.hxx>
-#include <formulacell.hxx>
 #include <editutil.hxx>
 #include <cellform.hxx>
 #include <dbdocutl.hxx>

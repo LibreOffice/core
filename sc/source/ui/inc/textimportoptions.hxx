@@ -22,7 +22,8 @@
 
 #include <vcl/weld.hxx>
 #include <i18nlangtag/lang.h>
-#include <svx/langbox.hxx>
+
+class LanguageBox;
 
 class ScTextImportOptionsDlg : public weld::GenericDialogController
 {

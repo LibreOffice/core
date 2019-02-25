@@ -12,9 +12,7 @@
 #include <document.hxx>
 #include <rtl/math.hxx>
 #include <cmath>
-#include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
-#include <globalnames.hxx>
 #include <unotools/charclass.hxx>
 
 namespace {

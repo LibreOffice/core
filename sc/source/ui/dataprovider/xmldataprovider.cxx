@@ -10,7 +10,6 @@
 #include "xmldataprovider.hxx"
 #include <datatransformation.hxx>
 #include <salhelper/thread.hxx>
-#include <comphelper/string.hxx>
 #include <filter.hxx>
 #include <document.hxx>
 #include <datamapper.hxx>

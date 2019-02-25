@@ -24,7 +24,6 @@
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/unolingu.hxx>
-#include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -37,9 +36,6 @@
 #include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <drawview.hxx>
-
-// Create default drawing objects via keyboard
-#include <scresid.hxx>
 
 // maximum of mouse movement which allows to start Drag&Drop
 //! fusel,fuconstr,futext - combined!

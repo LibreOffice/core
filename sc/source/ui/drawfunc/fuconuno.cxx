@@ -19,7 +19,6 @@
 
 #include <fuconuno.hxx>
 #include <tabvwsh.hxx>
-#include <sc.hrc>
 #include <drawview.hxx>
 
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,

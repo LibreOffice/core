@@ -30,7 +30,6 @@
 #include <strings.hrc>
 #include <subtotals.hrc>
 
-#include <subtdlg.hxx>
 #include <tpsubt.hxx>
 #include <memory>
 

@@ -18,17 +18,12 @@
  */
 
 #include <svx/svditer.hxx>
-#include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include <sfx2/dispatch.hxx>
-#include <editeng/outliner.hxx>
 
 #include <fusel.hxx>
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <detfunc.hxx>
-#include <futext.hxx>
-#include <sc.hrc>
 #include <attrib.hxx>
 #include <scitems.hxx>
 #include <userdat.hxx>

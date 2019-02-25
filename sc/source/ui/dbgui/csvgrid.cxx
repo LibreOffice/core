@@ -31,7 +31,6 @@
 #include <AccessibleCsvControl.hxx>
 
 // *** edit engine ***
-#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

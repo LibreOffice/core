@@ -25,7 +25,6 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
@@ -55,7 +54,6 @@
 #include <chgviset.hxx>
 #include <progress.hxx>
 #include <redcom.hxx>
-#include <sc.hrc>
 #include <inputopt.hxx>
 #include <drwlayer.hxx>
 #include <inputhdl.hxx>

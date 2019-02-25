@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <scuiimoptdlg.hxx>
-#include <tabvwsh.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
@@ -28,8 +27,7 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <imoptdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
+#include <svx/txencbox.hxx>
 
 // ScDelimiterTable
 

@@ -36,15 +36,12 @@
 #include <strings.hxx>
 #include <csvtablebox.hxx>
 #include <osl/thread.h>
-#include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
-#include <editutil.hxx>
 
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <miscuno.hxx>
-#include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 
 //! TODO make dynamic

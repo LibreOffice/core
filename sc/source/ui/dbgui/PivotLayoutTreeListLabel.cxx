@@ -16,7 +16,6 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/treelistentry.hxx>
 #include <pivot.hxx>
-#include <scabstdlg.hxx>
 
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListLabel,
                          WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN);
