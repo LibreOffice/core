@@ -159,7 +159,7 @@
       </node>
       <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,2</value>
+          <value>0,3</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
           <value>1</value>
@@ -179,7 +179,7 @@
       </node>
       <node oor:name="private:resource/toolbar/numobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,3</value>
+          <value>0,4</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
           <value>1</value>
@@ -776,7 +776,7 @@
       </node>
       <node oor:name="private:resource/toolbar/changes" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>1,2</value>
+          <value>0,2</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
           <value>1</value>
