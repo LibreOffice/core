@@ -119,6 +119,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         OUString aUrl( GetPath() );
         if ( !aUrl.isEmpty() )
         {
+#if HAVE_FEATURE_AVMEDIA
             try
             {
                 mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_QUERY_THROW );
@@ -129,7 +130,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
             {
                 mxPlayer.clear();
             }
-
+#endif
             if (mxPlayer.is())
             {
                 try
