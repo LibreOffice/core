@@ -1992,7 +1992,7 @@ bool lcl_TCalculateQRdecomposition(const ScMatrixRef& pMatA,
 }
 
 /* Applies a Householder transformation to a column vector Y with is given as
- * Nx1 Matrix. The Vektor u, from which the Householder transformation is build,
+ * Nx1 Matrix. The vector u, from which the Householder transformation is build,
  * is the column part in matrix A, with column index C, starting with row
  * index C. A is the result of the QR decomposition as obtained from
  * lcl_CaluclateQRdecomposition.
