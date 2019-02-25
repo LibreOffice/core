@@ -657,6 +657,19 @@ DECLARE_RTFEXPORT_TEST(testFdo84679, "fdo84679.rtf")
         getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf123393, "tdf123393.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 7; Actual  : 10', i.e. font size was too large.
+    CPPUNIT_ASSERT_EQUAL(
+        7.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
+}
+
 DECLARE_RTFEXPORT_TEST(testFdo83464, "fdo83464.rtf")
 {
     // Problem was that the text in the textframe had wrong font.
