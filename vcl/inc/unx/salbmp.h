@@ -62,7 +62,7 @@ private:
 public:
 
     static ImplSalBitmapCache*  mpCache;
-    static sal_uIntPtr          mnCacheInstCount;
+    static unsigned int         mnCacheInstCount;
 
     static void                 ImplCreateCache();
     static void                 ImplDestroyCache();
