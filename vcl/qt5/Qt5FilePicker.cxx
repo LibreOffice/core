@@ -23,6 +23,7 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
+#include <Qt5Instance.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -167,7 +168,16 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensio
             SLOT(updateAutomaticFileExtension()));
 }
 
-Qt5FilePicker::~Qt5FilePicker() {}
+Qt5FilePicker::~Qt5FilePicker()
+{
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this]() {
+        // must delete it in main thread, otherwise
+        // QSocketNotifier::setEnabled() will crash us
+        m_pFileDialog.reset();
+    });
+}
 
 void SAL_CALL
 Qt5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
