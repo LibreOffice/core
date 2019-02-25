@@ -66,8 +66,6 @@ public:
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;
     DictionaryEntry* getFirstSelectedEntry() const;
 
-    void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
-
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     void hide() { m_xControl->hide(); }
     void show() { m_xControl->show(); }

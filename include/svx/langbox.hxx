@@ -68,7 +68,6 @@ public:
     void            InsertSystemLanguage();
     void            InsertLanguage( const LanguageType eLangType,
                                     bool bCheckEntry );
-    void            RemoveLanguage( const LanguageType eLangType );
     void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectedLanguage() const;
     bool            IsLanguageSelected( const LanguageType eLangType ) const;

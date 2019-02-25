@@ -402,15 +402,6 @@ void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
 }
 
 
-void SvxLanguageBoxBase::RemoveLanguage( const LanguageType eLangType )
-{
-    sal_Int32 nAt = ImplTypeToPos( eLangType );
-
-    if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        ImplRemoveEntryAt( nAt );
-}
-
-
 LanguageType SvxLanguageBoxBase::GetSelectedLanguage() const
 {
     sal_Int32     nPos   = ImplGetSelectedEntryPos();

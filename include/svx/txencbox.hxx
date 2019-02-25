@@ -59,8 +59,6 @@ public:
      */
     void                FillWithMimeAndSelectBest();
 
-    void                InsertTextEncoding( const rtl_TextEncoding nEnc );
-
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const OUString& rEntry );
 

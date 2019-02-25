@@ -20,7 +20,7 @@ extensions/source/scanner/sanedlg.hxx:103
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
 filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
-i18nlangtag/source/languagetag/languagetag.cxx:275
+i18nlangtag/source/languagetag/languagetag.cxx:276
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
 idlc/inc/aststack.hxx:38
     class AstStack * AstStack::push(class AstScope *)
@@ -162,7 +162,7 @@ include/svl/poolitem.hxx:169
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
 include/svx/checklbx.hxx:76
     void * SvxCheckListBox::SetEntryData(unsigned long,void *)
-include/svx/dlgctrl.hxx:105
+include/svx/dlgctrl.hxx:106
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
@@ -192,6 +192,8 @@ include/vcl/bitmap.hxx:171
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
+include/vcl/filter/PngImageReader.hxx:31
+    _Bool vcl::PngImageReader::read(class BitmapEx &)
 include/vcl/fontcharmap.hxx:49
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
@@ -208,7 +210,11 @@ include/vcl/texteng.hxx:275
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:513
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:1219
+include/vcl/weld.hxx:320
+    _Bool weld::Dialog::runAsync(const class std::function<void (int)> &)
+include/vcl/weld.hxx:596
+    _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
+include/vcl/weld.hxx:1321
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -216,15 +222,15 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:1404
+sc/inc/document.hxx:1412
     _Bool ScDocument::GetDataAreaSubrange(class ScRange &) const
-sc/inc/document.hxx:2126
+sc/inc/document.hxx:2134
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/source/core/opencl/formulagroupcl.cxx:1084
+sc/source/core/opencl/formulagroupcl.cxx:1086
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1529
+sc/source/core/opencl/formulagroupcl.cxx:1531
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
@@ -278,11 +284,11 @@ sw/inc/authfld.hxx:98
     unsigned short SwAuthorityFieldType::AppendField(const class SwAuthEntry &)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1077
+sw/inc/doc.hxx:1080
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1238
+sw/inc/doc.hxx:1241
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1263
+sw/inc/doc.hxx:1266
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -308,7 +314,7 @@ ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
 ucb/source/ucp/webdav-neon/NeonSession.hxx:240
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
-vcl/inc/font/FeatureCollector.hxx:48
+vcl/inc/font/FeatureCollector.hxx:47
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/opengl/salbmp.hxx:100
     _Bool OpenGLSalBitmap::ImplScaleFilter(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,unsigned int)

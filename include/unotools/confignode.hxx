@@ -149,7 +149,6 @@ namespace utl
 
         /// checks whether or not a direct child with a given name exists
         bool hasByName(const OUString& _rName) const throw();
-        bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
         bool hasByHierarchicalName( const OUString& _rName ) const throw();

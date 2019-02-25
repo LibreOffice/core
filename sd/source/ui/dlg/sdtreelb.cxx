@@ -712,24 +712,6 @@ OUString SdPageObjsTLB::GetSelectedEntry()
     return GetEntryText( GetCurEntry() );
 }
 
-std::vector<OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
-{
-    std::vector<OUString> aEntries;
-    SvTreeListEntry* pEntry = FirstSelected();
-
-    while( pEntry )
-    {
-        sal_uInt16 nListDepth = GetModel()->GetDepth( pEntry );
-
-        if( nListDepth == nDepth )
-            aEntries.push_back(GetEntryText(pEntry));
-
-        pEntry = NextSelected( pEntry );
-    }
-
-    return aEntries;
-}
-
 /**
  * Entries are inserted only by request (double click)
  */

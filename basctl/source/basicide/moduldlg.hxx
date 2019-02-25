@@ -123,9 +123,6 @@ public:
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvTreeListEntry*    FindEntry( const OUString& rName );
 
-    void            CheckEntryPos( sal_uLong nPos );
-    bool            IsChecked( sal_uLong nPos ) const;
-
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind) override;
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel ) override;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;

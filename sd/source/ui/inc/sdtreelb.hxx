@@ -212,12 +212,6 @@ public:
     void                    SetSaveTreeItemStateFlag(bool bState){mbSaveTreeItemState = bState;}
     void                    SaveExpandedTreeItemState(SvTreeListEntry* pEntry, std::vector<OUString>& vectTreeItem);
 
-    /** return selected entries
-          nDepth == 0 -> pages
-          nDepth == 1 -> objects  */
-
-    std::vector<OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
-
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = nullptr);
 
     bool                    IsLinkableSelected() const { return mbLinkableSelected; }
