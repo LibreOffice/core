@@ -998,14 +998,23 @@ sub run {
                     $packagerootpath = $installer::globals::rootpath;
                 }
 
+                #################################
+                # collecting items for package
+                #################################
+
+                my $filesinpackage = installer::packagelist::find_files_for_package($filesinproductlanguageresolvedarrayref, $onepackage);
+                my $unixlinksinpackage = installer::packagelist::find_files_for_package($unixlinksinproductlanguageresolvedarrayref, $onepackage);
+                my $linksinpackage = installer::packagelist::find_links_for_package($linksinproductlanguageresolvedarrayref, $onepackage);
+                my $dirsinpackage = installer::packagelist::find_dirs_for_package($directoriesforepmarrayref, $onepackage);
+
                 #############################################
                 # copying the collectors for each package
                 #############################################
 
-                my $filesinpackage = installer::converter::copy_collector($filesinproductlanguageresolvedarrayref);
-                my $linksinpackage = installer::converter::copy_collector($linksinproductlanguageresolvedarrayref);
-                my $unixlinksinpackage = installer::converter::copy_collector($unixlinksinproductlanguageresolvedarrayref);
-                my $dirsinpackage = installer::converter::copy_collector($directoriesforepmarrayref);
+                $filesinpackage = installer::converter::copy_collector($filesinpackage);
+                $linksinpackage = installer::converter::copy_collector($linksinpackage);
+                $unixlinksinpackage = installer::converter::copy_collector($unixlinksinpackage);
+                $dirsinpackage = installer::converter::copy_collector($dirsinpackage);
 
                 ###########################################
                 # setting the root path for the packages
@@ -1015,15 +1024,6 @@ sub run {
                 installer::scriptitems::add_rootpath_to_files($filesinpackage, $packagerootpath);
                 installer::scriptitems::add_rootpath_to_links($linksinpackage, $packagerootpath);
                 installer::scriptitems::add_rootpath_to_files($unixlinksinpackage, $packagerootpath);
-
-                #################################
-                # collecting items for package
-                #################################
-
-                $filesinpackage = installer::packagelist::find_files_for_package($filesinpackage, $onepackage);
-                $unixlinksinpackage = installer::packagelist::find_files_for_package($unixlinksinpackage, $onepackage);
-                $linksinpackage = installer::packagelist::find_links_for_package($linksinpackage, $filesinpackage);
-                $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $onepackage);
 
                 ###############################################
                 # nothing to do, if $filesinpackage is empty
