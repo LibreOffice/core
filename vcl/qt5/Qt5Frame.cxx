@@ -128,7 +128,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
 
-    connect(this, SIGNAL(setVisibleSignal(bool)), SLOT(setVisible(bool)));
     connect(this, &Qt5Frame::tooltipRequest, static_cast<Qt5Widget*>(m_pQWidget),
             &Qt5Widget::showTooltip);
 
@@ -358,7 +357,9 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
     if (m_bDefaultSize)
         SetDefaultSize();
 
-    Q_EMIT setVisibleSignal(bVisible);
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, bVisible]() { setVisible(bVisible); });
 }
 
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)

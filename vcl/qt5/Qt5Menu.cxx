@@ -12,6 +12,7 @@
 #include <Qt5Bitmap.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
+#include <Qt5Instance.hxx>
 
 #include <QtWidgets/QtWidgets>
 
@@ -390,10 +391,12 @@ void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned 
 
 void Qt5Menu::SetFrame(const SalFrame* pFrame)
 {
-    if (qApp->thread() != QThread::currentThread())
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setFrameSignal(pFrame);
+        pSalInst->RunInMainThread([this, pFrame]() { SetFrame(pFrame); });
+        return;
     }
 
     SolarMutexGuard aGuard;

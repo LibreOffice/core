@@ -92,9 +92,6 @@ private:
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
-
-Q_SIGNALS:
-    sal_Int16 executeSignal();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

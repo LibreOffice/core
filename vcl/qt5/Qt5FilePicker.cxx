@@ -101,62 +101,6 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensio
 
     setMultiSelectionMode(false);
 
-    // XExecutableDialog functions
-    connect(this, SIGNAL(setTitleSignal(const OUString&)), this,
-            SLOT(setTitleSlot(const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(executeSignal()), this, SLOT(executeSlot()), Qt::BlockingQueuedConnection);
-
-    // XFilePicker functions
-    connect(this, SIGNAL(setMultiSelectionModeSignal(bool)), this,
-            SLOT(setMultiSelectionModeSlot(bool)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(setDefaultNameSignal(const OUString&)), this,
-            SLOT(setDefaultNameSlot(const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(setDisplayDirectorySignal(const OUString&)), this,
-            SLOT(setDisplayDirectorySlot(const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(getDisplayDirectorySignal()), this, SLOT(getDisplayDirectorySlot()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(getFilesSignal()), this, SLOT(getFilesSlot()),
-            Qt::BlockingQueuedConnection);
-
-    // XFilterManager functions
-    connect(this, SIGNAL(appendFilterSignal(const OUString&, const OUString&)), this,
-            SLOT(appendFilterSlot(const OUString&, const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(setCurrentFilterSignal(const OUString&)), this,
-            SLOT(setCurrentFilterSlot(const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(getCurrentFilterSignal()), this, SLOT(getCurrentFilterSlot()),
-            Qt::BlockingQueuedConnection);
-
-    // XFilterGroupManager functions
-    connect(this,
-            SIGNAL(appendFilterGroupSignal(const OUString&,
-                                           const css::uno::Sequence<css::beans::StringPair>&)),
-            this,
-            SLOT(appendFilterGroupSlot(const OUString&,
-                                       const css::uno::Sequence<css::beans::StringPair>&)),
-            Qt::BlockingQueuedConnection);
-
-    // XFilePickerControlAccess functions
-    connect(this, SIGNAL(setValueSignal(sal_Int16, sal_Int16, const css::uno::Any&)), this,
-            SLOT(setValueSlot(sal_Int16, sal_Int16, const css::uno::Any&)),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(getValueSignal(sal_Int16, sal_Int16)), this,
-            SLOT(getValueSlot(sal_Int16, sal_Int16)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(enableControlSignal(sal_Int16, bool)), this,
-            SLOT(enableControlSlot(sal_Int16, bool)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(setLabelSignal(sal_Int16, const OUString&)), this,
-            SLOT(setLabelSlot(sal_Int16, const OUString&)), Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(getLabelSignal(sal_Int16)), this, SLOT(getLabelSlot(sal_Int16)),
-            Qt::BlockingQueuedConnection);
-
-    // XFilePicker2 functions
-    connect(this, SIGNAL(getSelectedFilesSignal()), this, SLOT(getSelectedFilesSlot()),
-            Qt::BlockingQueuedConnection);
-
-    // XInitialization
-    connect(this, SIGNAL(initializeSignal(const css::uno::Sequence<css::uno::Any>&)), this,
-            SLOT(initializeSlot(const css::uno::Sequence<css::uno::Any>&)),
-            Qt::BlockingQueuedConnection);
-
     // XFilePickerListener notifications
     connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
             SLOT(filterSelected(const QString&)));
@@ -170,6 +114,7 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensio
 
 Qt5FilePicker::~Qt5FilePicker()
 {
+    SolarMutexGuard g;
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
     pSalInst->RunInMainThread([this]() {
@@ -194,21 +139,23 @@ void SAL_CALL Qt5FilePicker::removeFilePickerListener(const uno::Reference<XFile
 
 void SAL_CALL Qt5FilePicker::setTitle(const OUString& title)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setTitleSignal(title);
-    }
-
-    m_pFileDialog->setWindowTitle(toQString(title));
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread(
+        [this, &title]() { m_pFileDialog->setWindowTitle(toQString(title)); });
 }
 
 sal_Int16 SAL_CALL Qt5FilePicker::execute()
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT executeSignal();
+        sal_uInt16 ret;
+        pSalInst->RunInMainThread([&ret, this]() { ret = execute(); });
+        return ret;
     }
 
     vcl::Window* pWindow = ::Application::GetActiveTopWindow();
@@ -247,58 +194,50 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
 
 void SAL_CALL Qt5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setMultiSelectionModeSignal(multiSelect);
-    }
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, multiSelect]() {
+        if (m_bIsFolderPicker || m_pFileDialog->acceptMode() == QFileDialog::AcceptSave)
+            return;
 
-    if (m_bIsFolderPicker || m_pFileDialog->acceptMode() == QFileDialog::AcceptSave)
-        return;
-
-    m_pFileDialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles
-                                           : QFileDialog::ExistingFile);
+        m_pFileDialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles
+                                               : QFileDialog::ExistingFile);
+    });
 }
 
 void SAL_CALL Qt5FilePicker::setDefaultName(const OUString& name)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDefaultNameSignal(name);
-    }
-    m_pFileDialog->selectFile(toQString(name));
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &name]() { m_pFileDialog->selectFile(toQString(name)); });
 }
 
 void SAL_CALL Qt5FilePicker::setDisplayDirectory(const OUString& dir)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setDisplayDirectorySignal(dir);
-    }
-
-    QString qDir(toQString(dir));
-    m_pFileDialog->setDirectoryUrl(QUrl(qDir));
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &dir]() {
+        QString qDir(toQString(dir));
+        m_pFileDialog->setDirectoryUrl(QUrl(qDir));
+    });
 }
 
 OUString SAL_CALL Qt5FilePicker::getDisplayDirectory()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getDisplayDirectorySignal();
-    }
-    return toOUString(m_pFileDialog->directoryUrl().toString());
+    SolarMutexGuard g;
+    OUString ret;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread(
+        [&ret, this]() { ret = toOUString(m_pFileDialog->directoryUrl().toString()); });
+    return ret;
 }
 
 uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getFiles()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getFilesSignal();
-    }
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
@@ -307,12 +246,12 @@ uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getFiles()
 
 uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getSelectedFiles()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getSelectedFilesSignal();
-    }
-    QList<QUrl> urls = m_pFileDialog->selectedUrls();
+    SolarMutexGuard g;
+    QList<QUrl> urls;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&urls, this]() { urls = m_pFileDialog->selectedUrls(); });
+
     uno::Sequence<OUString> seq(urls.size());
 
     size_t i = 0;
@@ -324,10 +263,13 @@ uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getSelectedFiles()
 
 void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString& filter)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterSignal(title, filter);
+        pSalInst->RunInMainThread([this, &title, &filter]() { appendFilter(title, filter); });
+        return;
     }
 
     // '/' need to be escaped else they are assumed to be mime types
@@ -357,24 +299,24 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
 
 void SAL_CALL Qt5FilePicker::setCurrentFilter(const OUString& title)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setCurrentFilterSignal(title);
-    }
-
-    m_aCurrentFilter = m_aTitleToFilterMap.value(toQString(title).replace("/", "\\/"));
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, &title]() {
+        m_aCurrentFilter = m_aTitleToFilterMap.value(toQString(title).replace("/", "\\/"));
+    });
 }
 
 OUString SAL_CALL Qt5FilePicker::getCurrentFilter()
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getCurrentFilterSignal();
-    }
+    SolarMutexGuard g;
+    QString filter;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([&filter, this]() {
+        filter = m_aTitleToFilterMap.key(m_pFileDialog->selectedNameFilter());
+    });
 
-    QString filter = m_aTitleToFilterMap.key(m_pFileDialog->selectedNameFilter());
     if (filter.isEmpty())
         filter = "ODF Text Document (.odt)";
     return toOUString(filter);
@@ -383,10 +325,14 @@ OUString SAL_CALL Qt5FilePicker::getCurrentFilter()
 void SAL_CALL Qt5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
                                                const uno::Sequence<beans::StringPair>& filters)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT appendFilterGroupSignal(rGroupTitle, filters);
+        pSalInst->RunInMainThread(
+            [this, &rGroupTitle, &filters]() { appendFilterGroup(rGroupTitle, filters); });
+        return;
     }
 
     const sal_uInt16 length = filters.getLength();
@@ -476,10 +422,15 @@ void Qt5FilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlAct
 void SAL_CALL Qt5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                       const uno::Any& value)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setValueSignal(controlId, nControlAction, value);
+        pSalInst->RunInMainThread([this, controlId, nControlAction, &value]() {
+            setValue(controlId, nControlAction, value);
+        });
+        return;
     }
 
     if (m_aCustomWidgetsMap.contains(controlId))
@@ -501,10 +452,16 @@ void SAL_CALL Qt5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
 
 uno::Any SAL_CALL Qt5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getValueSignal(controlId, nControlAction);
+        uno::Any ret;
+        pSalInst->RunInMainThread([&ret, this, controlId, nControlAction]() {
+            ret = getValue(controlId, nControlAction);
+        });
+        return ret;
     }
 
     uno::Any res(false);
@@ -529,24 +486,26 @@ uno::Any SAL_CALL Qt5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContro
 
 void SAL_CALL Qt5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT enableControlSignal(controlId, enable);
-    }
-
-    if (m_aCustomWidgetsMap.contains(controlId))
-        m_aCustomWidgetsMap.value(controlId)->setEnabled(enable);
-    else
-        SAL_WARN("vcl.qt5", "enable unknown control " << controlId);
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, controlId, enable]() {
+        if (m_aCustomWidgetsMap.contains(controlId))
+            m_aCustomWidgetsMap.value(controlId)->setEnabled(enable);
+        else
+            SAL_WARN("vcl.qt5", "enable unknown control " << controlId);
+    });
 }
 
 void SAL_CALL Qt5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT setLabelSignal(controlId, label);
+        pSalInst->RunInMainThread([this, controlId, label]() { setLabel(controlId, label); });
+        return;
     }
 
     if (m_aCustomWidgetsMap.contains(controlId))
@@ -561,10 +520,14 @@ void SAL_CALL Qt5FilePicker::setLabel(sal_Int16 controlId, const OUString& label
 
 OUString SAL_CALL Qt5FilePicker::getLabel(sal_Int16 controlId)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getLabelSignal(controlId);
+        OUString ret;
+        pSalInst->RunInMainThread([&ret, this, controlId]() { ret = getLabel(controlId); });
+        return ret;
     }
 
     QString label;
@@ -696,16 +659,6 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
 
 void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 {
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT initializeSignal(args);
-    }
-
-    m_aNamedFilterList.clear();
-    m_aTitleToFilterMap.clear();
-    m_aCurrentFilter.clear();
-
     // parameter checking
     uno::Any arg;
     if (args.getLength() == 0)
@@ -721,6 +674,19 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
         throw lang::IllegalArgumentException("invalid argument type",
                                              static_cast<XFilePicker2*>(this), 1);
     }
+
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
+    {
+        pSalInst->RunInMainThread([this, args]() { initialize(args); });
+        return;
+    }
+
+    m_aNamedFilterList.clear();
+    m_aTitleToFilterMap.clear();
+    m_aCurrentFilter.clear();
 
     sal_Int16 templateId = -1;
     arg >>= templateId;
