@@ -17,6 +17,7 @@
 #endif
 
 #include <swmodeltestbase.hxx>
+#include <wrtsh.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -304,6 +305,22 @@ DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW);
     // This was "** Expression is faulty **", because of the unnecessary DOCX number format string
     CPPUNIT_ASSERT_EQUAL(OUString("2000"), xCell->getString());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf121440, "tdf121440.docx")
+{
+    // Insert some text in front of footnote
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pLayout(pWrtShell->GetLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    pWrtShell->Insert("test");
+
+    // Ensure that inserted text is not superscripted
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Inserted text should be not a superscript!", static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapement"));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
