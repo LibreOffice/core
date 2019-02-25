@@ -105,20 +105,12 @@ uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames()
     return uno::Sequence< OUString >();
 }
 
-beans::XPropertySet*    SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rDoc )
+beans::XPropertySet* SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rDoc )
 {
-    SwPageDesc* pStdDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-    SwIterator<SwXRedline,SwPageDesc> aIter(*pStdDesc);
-    SwXRedline* pxRedline = aIter.First();
-    while(pxRedline)
-    {
-        if(pxRedline->GetRedline() == &rRedline)
-            break;
-        pxRedline = aIter.Next();
-    }
-    if( !pxRedline )
-        pxRedline = new SwXRedline(rRedline, rDoc);
-    return pxRedline;
+    SwXRedline* pXRedline(nullptr);
+    sw::FindRedlineHint aHint(rRedline, &pXRedline);
+    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier().Broadcast(aHint);
+    return pXRedline ? pXRedline : new SwXRedline(rRedline, rDoc);
 }
 
 SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
