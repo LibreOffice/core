@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <textimportoptions.hxx>
+#include <svx/langbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>

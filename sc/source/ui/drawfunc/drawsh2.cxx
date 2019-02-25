@@ -19,16 +19,13 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/ptitem.hxx>
-#include <svl/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
@@ -48,7 +45,6 @@
 #include <drtxtob.hxx>
 #include <gridwin.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdocapt.hxx>
 
 using namespace com::sun::star;
 

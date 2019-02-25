@@ -11,16 +11,15 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <officecfg/Office/Calc.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
 #include "sqldataprovider.hxx"
-#include <datatransformation.hxx>
 #include <datamapper.hxx>
 #include <dbdata.hxx>
 #include <docsh.hxx>

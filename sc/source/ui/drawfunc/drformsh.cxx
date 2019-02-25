@@ -17,22 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-#include <svx/fontwork.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/request.hxx>
-#include <svl/whiter.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/toolbarids.hxx>
+#include <sfx2/shell.hxx>
 
+#include <drawsh.hxx>
 #include <drformsh.hxx>
-#include <drwlayer.hxx>
-#include <sc.hrc>
-#include <viewdata.hxx>
-#include <document.hxx>
-#include <docpool.hxx>
-#include <drawview.hxx>
-#include <svx/svdobj.hxx>
 #include <vcl/EnumContext.hxx>
 
 #define ShellClass_ScDrawFormShell

@@ -19,7 +19,6 @@
 
 #include <docfuncutil.hxx>
 #include <document.hxx>
-#include <markdata.hxx>
 #include <undobase.hxx>
 #include <global.hxx>
 #include <undoblk.hxx>

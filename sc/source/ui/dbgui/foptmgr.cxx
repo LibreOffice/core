@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <anyrefdg.hxx>
 #include <rangeutl.hxx>
 #include <dbdata.hxx>
 #include <viewdata.hxx>
@@ -26,6 +25,7 @@
 #include <globalnames.hxx>
 
 #include <foptmgr.hxx>
+#include <formula/funcutl.hxx>
 
 // ScFilterOptionsMgr (.ui's option helper)
 

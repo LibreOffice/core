@@ -15,10 +15,8 @@
 #include <tools/stream.hxx>
 
 #include <libxml/HTMLparser.h>
-#include <libxml/HTMLtree.h>
 
 #include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
 
 #include <comphelper/string.hxx>
 #include <utility>

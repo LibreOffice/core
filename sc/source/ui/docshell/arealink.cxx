@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 
@@ -43,7 +40,6 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 
-#include <sc.hrc>
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
 

@@ -38,7 +38,7 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/documentlockfile.hxx>
@@ -61,16 +61,6 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/util/VetoException.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/table/XTableChartsSupplier.hpp>
-#include <com/sun/star/table/XTableCharts.hpp>
-#include <com/sun/star/table/XTableChart.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
-#include <com/sun/star/frame/XStorable2.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 
@@ -81,7 +71,6 @@
 #include <svx/dialogs.hrc>
 
 #include <formulacell.hxx>
-#include <postit.hxx>
 #include <global.hxx>
 #include <filter.hxx>
 #include <scmod.hxx>
@@ -98,8 +87,6 @@
 #include <autostyl.hxx>
 #include <attrib.hxx>
 #include <asciiopt.hxx>
-#include <waitoff.hxx>
-#include <docpool.hxx>
 #include <progress.hxx>
 #include <pntlock.hxx>
 #include <docuno.hxx>
@@ -114,7 +101,6 @@
 #include <hints.hxx>
 #include <xmlwrap.hxx>
 #include <drwlayer.hxx>
-#include <refreshtimer.hxx>
 #include <dbdata.hxx>
 #include <scextopt.hxx>
 #include <compiler.hxx>
@@ -127,18 +113,15 @@
 #include "docshimp.hxx"
 #include <sizedev.hxx>
 #include <refreshtimerprotector.hxx>
-#include <orcus/orcus_import_ods.hpp>
-#include <orcusfiltersimpl.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
 #include <uiitems.hxx>
-#include <cellsuno.hxx>
 #include <dpobject.hxx>
 #include <markdata.hxx>
-#include <optuno.hxx>
+#include <docoptio.hxx>
 #include <orcusfilters.hxx>
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>

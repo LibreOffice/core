@@ -29,7 +29,6 @@
 namespace vcl { class Window; }
 
 class SdrModel;
-class ScDrawView;
 class SdrCaptionObj;
 
 class ScNoteMarker

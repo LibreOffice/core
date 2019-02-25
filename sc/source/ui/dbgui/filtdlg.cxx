@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rangelst.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/waitobj.hxx>
 #include <sal/log.hxx>
 
 #include <uiitems.hxx>
-#include <dbdata.hxx>
 #include <reffact.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>

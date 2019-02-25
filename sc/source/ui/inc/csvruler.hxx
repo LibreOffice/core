@@ -24,8 +24,9 @@
 #include "csvsplits.hxx"
 #include <scdllapi.h>
 
+#include <vcl/virdev.hxx>
+
 class ScAccessibleCsvControl;
-class VirtualDevice;
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
     splits (which divide lines of data into several columns). */

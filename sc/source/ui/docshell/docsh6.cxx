@@ -24,7 +24,6 @@
 
 #include <docsh.hxx>
 
-#include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <global.hxx>
 #include <viewdata.hxx>
@@ -35,7 +34,6 @@
 #include <scmod.hxx>
 #include <compiler.hxx>
 #include <interpre.hxx>
-#include <calcconfig.hxx>
 #include <formulaopt.hxx>
 
 #include <vcl/svapp.hxx>
