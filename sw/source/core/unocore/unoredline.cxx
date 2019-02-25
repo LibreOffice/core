@@ -348,7 +348,7 @@ SwXRedline::SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc) :
     pDoc(&rDoc),
     pRedline(&rRedline)
 {
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXRedline::~SwXRedline()
@@ -491,13 +491,15 @@ void SwXRedline::removeVetoableChangeListener(
 {
 }
 
-void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXRedline::Notify( const SfxHint& rHint )
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-      {
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
         pDoc = nullptr;
         pRedline = nullptr;
+    } else if(auto pHint = dynamic_cast<const sw::FindRedlineHint*>(&rHint)) {
+        if(!*pHint->m_ppXRedline && &pHint->m_rRedline == GetRedline())
+            *pHint->m_ppXRedline = this;
     }
 }
 
