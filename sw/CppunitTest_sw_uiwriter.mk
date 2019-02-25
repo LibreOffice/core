@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     cppu \
     cppuhelper \
     editeng \
+    i18nlangtag \
     msword \
     sal \
     sfx \

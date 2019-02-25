@@ -13,6 +13,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/scheduler.hxx>
@@ -61,6 +62,7 @@ public:
     void testTdf122942();
     void testTdf52391();
     void testTdf101873();
+    void testRTLparaStyle_LocaleArabic();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -83,7 +85,26 @@ public:
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testTdf52391);
     CPPUNIT_TEST(testTdf101873);
+    CPPUNIT_TEST(testRTLparaStyle_LocaleArabic);
     CPPUNIT_TEST_SUITE_END();
+
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
+    {
+        m_aSavedSettings = Application::GetSettings();
+        if (OString(filename).indexOf("LocaleArabic") != -1)
+        {
+            std::unique_ptr<Resetter> pResetter(
+                new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
+            AllSettings aSettings(m_aSavedSettings);
+            aSettings.SetLanguageTag(LanguageTag("ar"));
+            Application::SetSettings(aSettings);
+            return pResetter;
+        }
+        return nullptr;
+    }
+
+protected:
+    AllSettings m_aSavedSettings;
 
 private:
     SwDoc* createDoc(const char* pName = nullptr);
@@ -912,6 +933,24 @@ void SwUiWriterTest2::testTdf101873()
     // Actual:", i.e. searching for "something" failed, even if it was inserted above.
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("something"), pShellCursor->GetText());
+}
+
+void SwUiWriterTest2::testRTLparaStyle_LocaleArabic()
+{
+    // New documents, created in RTL locales, were not round-tripping the paragraph style as RTL.
+    // Set the locale to "ar" for this test - see preTest() at the top of this file.
+    std::unique_ptr<Resetter> const pChanges(preTest("LocaleArabic"));
+
+    createDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
+
+    // Save it and load it back.
+    reload("Office Open XML Text", "tdf116404_paraStyleFrameDir.docx");
+
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles("ParagraphStyles")->getByName("Default Style"), uno::UNO_QUERY_THROW);
+    // Test the text Direction value for the -none- based paragraph styles
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("RTL Writing Mode", sal_Int32(1),
+                                 getProperty<sal_Int32>(xPageStyle, "WritingMode"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
