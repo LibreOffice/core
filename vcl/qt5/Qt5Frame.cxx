@@ -473,13 +473,17 @@ void Qt5Frame::SetModal(bool bModal)
 {
     if (isWindow())
     {
-        if (m_pTopLevel)
-            m_pTopLevel->setVisible(true);
-        // modality change is only effective if the window is hidden
-        windowHandle()->hide();
-        windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
-        // and shown again
-        windowHandle()->show();
+        auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+        assert(pSalInst);
+        pSalInst->RunInMainThread([this, bModal]() {
+            if (m_pTopLevel)
+                m_pTopLevel->setVisible(true);
+            // modality change is only effective if the window is hidden
+            windowHandle()->hide();
+            windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+            // and shown again
+            windowHandle()->show();
+        });
     }
 }
 
