@@ -572,7 +572,7 @@ void RTFDocumentImpl::checkNeedPap()
         {
             auto pValue = new RTFValue(m_aStates.top().aParagraphAttributes,
                                        m_aStates.top().aParagraphSprms);
-            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue, nullptr));
+            bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
         }
     }
 }
@@ -590,7 +590,7 @@ void RTFDocumentImpl::runProps()
     {
         auto pValue
             = new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
-        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue, nullptr));
+        bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
     }
 
     // Delete the sprm, so the trackchange range will be started only once.
@@ -1145,7 +1145,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     else
     {
         auto pValue = new RTFValue(aAttributes, aSprms);
-        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue, nullptr));
+        bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
     }
 }
 
@@ -1674,6 +1674,11 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         else if (std::get<0>(aTuple) == BUFFER_PICTURE)
             m_aStates.top().aPicture = std::get<1>(aTuple)->getPicture();
+        else if (std::get<0>(aTuple) == BUFFER_SETSTYLE)
+        {
+            if (!m_aStates.empty())
+                m_aStates.top().nCurrentStyleIndex = std::get<1>(aTuple)->getInt();
+        }
         else
             assert(false);
     }
@@ -2123,7 +2128,7 @@ RTFError RTFDocumentImpl::popState()
             else
             {
                 auto pFFValue = new RTFValue(aFFAttributes, aFFSprms);
-                m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pFFValue, nullptr));
+                bufferProperties(*m_aStates.top().pCurrentBuffer, pFFValue, nullptr);
             }
             m_aFormfieldAttributes.clear();
             m_aFormfieldSprms.clear();
@@ -2316,8 +2321,8 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.top().pCurrentBuffer)
                 Mapper().props(new RTFReferenceProperties(lcl_getBookmarkProperties(nPos, aStr)));
             else
-                m_aStates.top().pCurrentBuffer->push_back(Buf_t(
-                    BUFFER_PROPS, new RTFValue(lcl_getBookmarkProperties(nPos, aStr)), nullptr));
+                bufferProperties(*m_aStates.top().pCurrentBuffer,
+                                 new RTFValue(lcl_getBookmarkProperties(nPos, aStr)), nullptr);
         }
         break;
         case Destination::BOOKMARKEND:
@@ -2329,9 +2334,9 @@ RTFError RTFDocumentImpl::popState()
                 Mapper().props(new RTFReferenceProperties(
                     lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)));
             else
-                m_aStates.top().pCurrentBuffer->push_back(Buf_t(
-                    BUFFER_PROPS, new RTFValue(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)),
-                    nullptr));
+                bufferProperties(*m_aStates.top().pCurrentBuffer,
+                                 new RTFValue(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)),
+                                 nullptr);
         }
         break;
         case Destination::INDEXENTRY:
@@ -3033,8 +3038,8 @@ RTFError RTFDocumentImpl::popState()
         if (!m_aStates.top().pCurrentBuffer)
             Mapper().props(new RTFReferenceProperties(RTFSprms(), aTCSprms));
         else
-            m_aStates.top().pCurrentBuffer->push_back(
-                Buf_t(BUFFER_PROPS, new RTFValue(RTFSprms(), aTCSprms), nullptr));
+            bufferProperties(*m_aStates.top().pCurrentBuffer, new RTFValue(RTFSprms(), aTCSprms),
+                             nullptr);
     }
 
     // This is the end of the doc, see if we need to close the last section.
@@ -3461,6 +3466,14 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 }
 
 void RTFDocumentImpl::resetFrame() { m_aStates.top().aFrame = RTFFrame(&m_aStates.top()); }
+
+void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
+                                       const tools::SvRef<TableRowBuffer>& pTableProperties)
+{
+    rBuffer.emplace_back(
+        Buf_t(BUFFER_SETSTYLE, new RTFValue(m_aStates.top().nCurrentStyleIndex), nullptr));
+    rBuffer.emplace_back(Buf_t(BUFFER_PROPS, pValue, pTableProperties));
+}
 
 RTFPicture::RTFPicture() = default;
 

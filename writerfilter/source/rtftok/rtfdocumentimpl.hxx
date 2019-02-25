@@ -76,6 +76,8 @@ enum class RTFBorderState
 /// Different kind of buffers for table cell contents.
 enum RTFBufferTypes
 {
+    BUFFER_SETSTYLE,
+    /// Stores properties, should be created only in bufferProperties().
     BUFFER_PROPS,
     BUFFER_NESTROW,
     BUFFER_CELLEND,
@@ -590,6 +592,9 @@ public:
     bool isStyleSheetImport();
     /// Resets m_aStates.top().aFrame.
     void resetFrame();
+    /// Buffers properties to be sent later.
+    void bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
+                          const tools::SvRef<TableRowBuffer>& pTableProperties);
 
 private:
     SvStream& Strm();
