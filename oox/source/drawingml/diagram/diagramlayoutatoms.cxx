@@ -931,8 +931,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             sal_Int32 nStartX = aCurrPos.X;
             sal_Int32 nColIdx = 0,index = 0;
 
-            sal_Int32 num = rShape->getChildren().size();
-
             const sal_Int32 aContDir = maMap.count(XML_contDir) ? maMap.find(XML_contDir)->second : XML_sameDir;
 
             switch(aContDir)
@@ -952,7 +950,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if(++nColIdx == nCol) // condition for next row
                     {
                         // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol)
+                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol)
                             // position first child of last row
                             aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
                         else
@@ -991,10 +989,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if(++nColIdx == nCol) // condition for next row
                     {
                         // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2==0)
+                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2==0)
                             // position first child of last row
                             aCurrPos.X -= aChildSize.Width*3/2;
-                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2!=0)
+                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2!=0)
                             aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
                         else if(((index/nCol)+1)%2!=0)
                             aCurrPos.X = nStartX;
