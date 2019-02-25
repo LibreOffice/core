@@ -47,7 +47,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
         fp = reinterpret_cast<SdAbstractDialogFactory* (SAL_CALL*)()>(
             aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" ));
 #else
-    fp = SdCreateDialogFactory();
+    fp = SdCreateDialogFactory;
 #endif
 #endif
     if ( fp )
