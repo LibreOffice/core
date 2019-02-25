@@ -21,19 +21,14 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
 using namespace ::com::sun::star;
 
-#include <math.h>
-
 #include <scitems.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/langitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/infobar.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/ehdl.hxx>
@@ -48,7 +43,6 @@ using namespace ::com::sun::star;
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svx/svdoole2.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -56,7 +50,6 @@ using namespace ::com::sun::star;
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <svl/slstitm.hxx>
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
@@ -66,7 +59,6 @@ using namespace ::com::sun::star;
 #include <comphelper/processfactory.hxx>
 #include <docuno.hxx>
 
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <docsh.hxx>
 #include "docshimp.hxx"
 #include <docfunc.hxx>
@@ -82,11 +74,8 @@ using namespace ::com::sun::star;
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
-#include <attrib.hxx>
 #include <undodat.hxx>
-#include <autostyl.hxx>
 #include <undocell.hxx>
-#include <undotab.hxx>
 #include <inputhdl.hxx>
 #include <dbdata.hxx>
 #include <servobj.hxx>
@@ -103,11 +92,9 @@ using namespace ::com::sun::star;
 #include <undostyl.hxx>
 #include <rangeseq.hxx>
 #include <chgtrack.hxx>
-#include <printopt.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <scresid.hxx>
 #include <scabstdlg.hxx>
-#include <externalrefmgr.hxx>
 #include <sharedocdlg.hxx>
 #include <conditio.hxx>
 #include <sheetevents.hxx>

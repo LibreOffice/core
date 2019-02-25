@@ -12,9 +12,7 @@
 #include <PivotLayoutTreeListBase.hxx>
 #include <PivotLayoutDialog.hxx>
 
-#include <reffact.hxx>
 #include <vcl/treelistentry.hxx>
-#include <scabstdlg.hxx>
 
 ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
     : SvTreeListBox(pParent, nBits)

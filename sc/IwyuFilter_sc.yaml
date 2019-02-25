@@ -474,6 +474,14 @@ blacklist:
     - com/sun/star/sheet/XConditionEntry.hpp
     - com/sun/star/sheet/XDataBarEntry.hpp
     - com/sun/star/sheet/XIconSetEntry.hpp
+    sc/source/ui/inc/csvgrid.hxx:
+    # Needed for typedef
+    - editutil.hxx
+    # Needed for VclPtr type
+    - vcl/virdev.hxx
+    sc/source/ui/inc/csvruler.hxx:
+    # Needed for ScopedVclPtrInstance type
+    - vcl/virdev.hxx
     sc/source/ui/inc/dataprovider.hxx:
     # Don't replace with an implementation detail
     - orcus/csv_parser.hpp
@@ -492,12 +500,18 @@ blacklist:
     sc/source/ui/inc/MovingAverageDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+    sc/source/ui/inc/namepast.hxx:
+    # Needed for unique_ptr type
+    - namemgrtable.hxx
     sc/source/ui/inc/PivotLayoutDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
     sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+    sc/source/ui/inc/searchresults.hxx:
+    # Needed for VclPtr type
+    - svtools/simptabl.hxx
     sc/source/ui/inc/StatisticsInputOutputDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
@@ -820,3 +834,29 @@ blacklist:
     - attrib.hxx
     - svx/sdprcitm.hxx
     - svx/sdmetitm.hxx
+    sc/source/ui/dataprovider/csvdataprovider.cxx:
+    # Needed for unique_ptr type
+    - tools/stream.hxx
+    sc/source/ui/dataprovider/htmldataprovider.cxx:
+    # Needed for unique_ptr type
+    - tools/stream.hxx
+    sc/source/ui/docshell/docfunc.cxx:
+    # Needed for direct member access
+    - svx/svdocapt.hxx
+    sc/source/ui/docshell/docsh.cxx:
+    # Needed for method parameter
+    - ooo/vba/excel/XWorkbook.hpp
+    sc/source/ui/docshell/docsh4.cxx:
+    # Needed on WIN32
+    - impex.hxx
+    - rangeseq.hxx
+    sc/source/ui/docshell/impex.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    # Needed for unique_ptr type
+    - tokenarray.hxx
+    - refundo.hxx
+    - editeng/editobj.hxx
+    sc/source/ui/drawfunc/futext3.cxx:
+    # Needed for direct member access
+    - svx/svdocapt.hxx

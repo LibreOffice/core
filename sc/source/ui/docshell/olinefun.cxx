@@ -24,12 +24,10 @@
 #include <docsh.hxx>
 #include <olinetab.hxx>
 #include <tabvwsh.hxx>
-#include <inputhdl.hxx>
 #include <undodat.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
 
-#include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
 
 

@@ -24,14 +24,10 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbmod.hxx>
 #include <sfx2/app.hxx>
 
 #include <scresid.hxx>

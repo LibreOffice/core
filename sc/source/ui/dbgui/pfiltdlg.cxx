@@ -35,7 +35,6 @@
 #include <strings.hrc>
 
 #include <pfiltdlg.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 
 ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgSet,

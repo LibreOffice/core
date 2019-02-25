@@ -23,7 +23,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <scitems.hxx>
@@ -31,7 +30,6 @@
 #include <viewdata.hxx>
 #include <document.hxx>
 #include <global.hxx>
-#include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <userlist.hxx>
 #include <rangeutl.hxx>

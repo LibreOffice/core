@@ -25,16 +25,9 @@
 #include <tools/urlobj.hxx>
 #include <cliputil.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/fontwork.hxx>
-#include <svx/svdocapt.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdundo.hxx>
-#include <svx/xdef.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <sfx2/docfile.hxx>
@@ -42,7 +35,6 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 
 #include <drawsh.hxx>
 #include <drawview.hxx>
@@ -52,7 +44,6 @@
 #include <undotab.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
-#include <postit.hxx>
 #include <drtxtob.hxx>
 #include <memory>
 

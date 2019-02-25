@@ -18,7 +18,6 @@
  */
 
 #include <fuconarc.hxx>
-#include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <drawview.hxx>
 

@@ -11,16 +11,11 @@
 #include <datastreamgettime.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
-#include <officecfg/Office/Common.hxx>
 #include <osl/conditn.hxx>
 #include <osl/time.h>
-#include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <datastreamdlg.hxx>
 #include <docsh.hxx>
-#include <rangelst.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <stringutil.hxx>
@@ -32,6 +27,8 @@
 #include <orcus/csv_parser.hpp>
 
 #include <queue>
+
+namespace com::sun::star::ui { class XUIElement; }
 
 namespace sc {
 

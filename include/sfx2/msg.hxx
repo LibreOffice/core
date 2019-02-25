@@ -22,10 +22,13 @@
 #include <sfx2/shell.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/groupid.hxx>
 #include <functional>
+
+#include <climits>
 
 class SfxItemPool;
 class SfxItemSet;

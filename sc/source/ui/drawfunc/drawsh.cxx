@@ -21,11 +21,8 @@
 #include <svx/dialogs.hrc>
 #include <sc.hrc>
 
-#include <scitems.hxx>
-
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
@@ -39,12 +36,9 @@
 #include <strings.hrc>
 #include <viewdata.hxx>
 #include <document.hxx>
-#include <docpool.hxx>
 #include <drawview.hxx>
 #include <scresid.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -57,7 +51,6 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
 
 
