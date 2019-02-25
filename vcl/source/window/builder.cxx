@@ -851,6 +851,7 @@ namespace
         return bResizable;
     }
 
+#if HAVE_FEATURE_DESKTOP
     bool extractModal(VclBuilder::stringmap &rMap)
     {
         bool bModal = false;
@@ -862,6 +863,7 @@ namespace
         }
         return bModal;
     }
+#endif
 
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
@@ -1627,8 +1629,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+#if HAVE_FEATURE_DESKTOP
         if (!m_bLegacy && !extractModal(rMap))
             xWindow->SetType(WindowType::MODELESSDIALOG);
+#endif
     }
     else if (name == "GtkMessageDialog")
     {
