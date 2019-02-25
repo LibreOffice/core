@@ -143,13 +143,6 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
     }
 }
 
-void CertificateViewerDetailsTP::Clear()
-{
-    m_xValueDetails->set_text(OUString());
-    m_aUserData.clear();
-    m_xElementsLB->clear();
-}
-
 void CertificateViewerDetailsTP::InsertElement(const OUString& rField, const OUString& rValue,
                                                const OUString& rDetails, bool bFixedWidthFont)
 {
@@ -358,13 +351,6 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
             bSensitive = true;
     }
     mxViewCertPB->set_sensitive(bSensitive);
-}
-
-void CertificateViewerCertPathTP::Clear()
-{
-    mxCertStatusML->set_text(OUString());
-    maUserData.clear();
-    mxCertPathLB->clear();
 }
 
 void CertificateViewerCertPathTP::InsertCert(weld::TreeIter* pParent, const OUString& rName,

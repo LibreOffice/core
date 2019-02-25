@@ -267,11 +267,6 @@ bool SvSimpleTable::IsEnabled() const
     return m_rParentTableContainer.IsEnabled();
 }
 
-sal_uInt16 SvSimpleTable::GetSelectedCol()
-{
-    return (aHeaderBar->GetCurItemId()-1);
-}
-
 void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
 {
     if(nSortCol!=0xFFFF)
@@ -326,8 +321,6 @@ void SvSimpleTable::HBarClick()
     {
         SortByCol(nId-1,bSortDirection);
     }
-
-    aHeaderBarClickLink.Call(this);
 }
 
 void SvSimpleTable::HBarDrag()

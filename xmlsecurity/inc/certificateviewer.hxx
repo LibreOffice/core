@@ -113,7 +113,6 @@ private:
     std::unique_ptr<weld::TextView> m_xValueDetails;
 
     DECL_LINK(ElementSelectHdl, weld::TreeView&, void);
-    void                Clear();
     void                InsertElement(const OUString& rField, const OUString& rValue,
                                       const OUString& rDetails, bool bFixedWidthFont = false);
 public:
@@ -148,7 +147,6 @@ private:
 
     DECL_LINK(ViewCertHdl, weld::Button&, void);
     DECL_LINK(CertSelectHdl, weld::TreeView&, void);
-    void                Clear();
     void                InsertCert(weld::TreeIter* pParent, const OUString& _rName,
                                    const css::uno::Reference< css::security::XCertificate >& rxCert,
                                    bool bValid);

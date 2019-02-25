@@ -217,16 +217,6 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
 }
 
 
-void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
-{
-    const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
-    if ( !rEntry.isEmpty() )
-        InsertTextEncoding( nEnc, rEntry );
-    else
-        SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
-}
-
-
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
     sal_Int32 nPos = GetSelectedEntryPos();
