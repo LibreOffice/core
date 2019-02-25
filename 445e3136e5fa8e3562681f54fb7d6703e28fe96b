@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5b8ff0cb",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-25T15:23:43Z",
+      "side": 1,
+      "message": "grammar nitpicking and clarity: \u0027wasVisible\u0027 describes the context better",
+      "range": {
+        "startLine": 496,
+        "startChar": 13,
+        "endLine": 496,
+        "endChar": 22
+      },
+      "revId": "445e3136e5fa8e3562681f54fb7d6703e28fe96b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_7b92acf8",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-02-25T15:23:43Z",
+      "side": 1,
+      "message": "Ummm, isn\u0027t this supposed to be \u0027show\u0027? Why hide window 2nd time, it has already been hidden once? It contradicts the comment above, at the very least ...",
+      "range": {
+        "startLine": 509,
+        "startChar": 28,
+        "endLine": 509,
+        "endChar": 32
+      },
+      "revId": "445e3136e5fa8e3562681f54fb7d6703e28fe96b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
