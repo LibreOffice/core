@@ -22,7 +22,6 @@
 
 #include <uiitems.hxx>
 #include <rangenam.hxx>
-#include <dbdata.hxx>
 #include <reffact.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>

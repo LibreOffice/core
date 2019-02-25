@@ -33,6 +33,8 @@ class SdrMarkList;
 class SfxModule;
 class SdrObject;
 
+namespace weld { class Window; }
+
 namespace svx { namespace sidebar {
 class SelectionChangeHandler;
 } }

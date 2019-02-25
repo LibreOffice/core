@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <editeng/unolingu.hxx>
-#include <orcus/orcus_import_ods.hpp>
-#include <orcusfiltersimpl.hxx>
+#include <orcusfilters.hxx>
 #include <config_folders.h>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -33,9 +30,8 @@
 #include <drwlayer.hxx>
 #include <stlpool.hxx>
 #include <docsh.hxx>
-#include "docshimp.hxx"
 #include <docfunc.hxx>
-#include <sc.hrc>
+#include <svx/svxids.hrc>
 #include <filter.hxx>
 #include <functional>
 

@@ -9,8 +9,7 @@
 
 #include <memory>
 #include <sortkeydlg.hxx>
-#include <sortdlg.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 
 ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/sortkey.ui"))

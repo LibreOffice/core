@@ -41,7 +41,6 @@
 #include <drawview.hxx>
 #include <document.hxx>
 #include <scresid.hxx>
-#include <progress.hxx>
 #include <strings.hrc>
 #include <globstr.hrc>
 

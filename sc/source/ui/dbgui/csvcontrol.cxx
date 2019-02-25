@@ -18,7 +18,6 @@
  */
 
 #include <csvcontrol.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <AccessibleCsvControl.hxx>
 

@@ -22,11 +22,12 @@
 #endif
 
 #include <dpgroupdlg.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <editfield.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <svtools/ctrlbox.hxx>
 
 namespace {
 

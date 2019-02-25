@@ -23,7 +23,6 @@
 #include <vcl/weld.hxx>
 #include <scdllapi.h>
 
-namespace vcl { class Window; }
 class ScTableProtection;
 
 class ScTableProtectionDlg : public weld::GenericDialogController

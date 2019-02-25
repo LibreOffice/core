@@ -22,7 +22,6 @@
 #include <vcl/event.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
-#include <editutil.hxx>
 #include <AccessibleCsvControl.hxx>
 
 ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :

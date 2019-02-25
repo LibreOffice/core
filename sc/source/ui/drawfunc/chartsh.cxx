@@ -21,19 +21,12 @@
 #include <svx/svdobj.hxx>
 #include <svx/graphichelper.hxx>
 
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svl/whiter.hxx>
 
 #include <chartsh.hxx>
-#include <drwlayer.hxx>
 #include <sc.hrc>
 #include <viewdata.hxx>
-#include <document.hxx>
-#include <docpool.hxx>
 #include <drawview.hxx>
 #include <gridwin.hxx>
 

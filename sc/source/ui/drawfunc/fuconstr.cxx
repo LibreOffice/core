@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
@@ -27,10 +26,7 @@
 #include <fudraw.hxx>
 #include <tabvwsh.hxx>
 #include <futext.hxx>
-#include <sc.hrc>
 #include <drawview.hxx>
-#include <document.hxx>
-#include <gridwin.hxx>
 
 //  maximal permitted mouse movement to start Drag&Drop
 //! fusel,fuconstr,futext - combine them!

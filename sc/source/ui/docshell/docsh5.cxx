@@ -22,7 +22,6 @@
 
 #include <cassert>
 
-#include <scitems.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>

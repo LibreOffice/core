@@ -22,10 +22,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -36,7 +32,6 @@
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <docsh.hxx>
-#include <postit.hxx>
 #include <drawview.hxx>
 
 // base class for draw module specific functions

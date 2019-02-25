@@ -20,13 +20,11 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DPGROUPDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DPGROUPDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/ctrlbox.hxx>
-#include "editfield.hxx"
 #include <dpnumgroupinfo.hxx>
+
+class DoubleField;
+class SvtCalendarBox;
 
 class ScDPGroupEditHelper
 {

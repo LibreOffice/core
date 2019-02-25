@@ -17,25 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/opengrf.hxx>
-#include <svl/whiter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/graphichelper.hxx>
+#include <svx/svxids.hrc>
 
 #include <graphsh.hxx>
 #include <strings.hrc>
 #include <viewdata.hxx>
 #include <drawview.hxx>
+#include <gridwin.hxx>
 #include <scresid.hxx>
 #include <svx/extedit.hxx>
-#include <tabvwsh.hxx>
 
 #define ShellClass_ScGraphicShell
 #include <scslots.hxx>

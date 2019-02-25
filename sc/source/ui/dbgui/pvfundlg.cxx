@@ -27,15 +27,12 @@
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
-#include <vcl/builderfactory.hxx>
 #include <osl/diagnose.h>
 
 #include <scresid.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <pvfundlg.hrc>
-#include <strings.hrc>
-#include <scmod.hxx>
 #include <globstr.hrc>
 #include <dputil.hxx>
 

@@ -10,13 +10,11 @@
 #include <searchresults.hxx>
 
 #include <svtools/simptabl.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <dociter.hxx>
 #include <document.hxx>
-#include <rangeutl.hxx>
 #include <tabvwsh.hxx>
 #include <strings.hrc>
 #include <sc.hrc>
