@@ -51,7 +51,7 @@ public:
     WinSalTimer();
     virtual ~WinSalTimer() override;
 
-    virtual void Start(sal_uIntPtr nMS) override;
+    virtual void Start(sal_uInt64 nMS) override;
     virtual void Stop() override;
 
     inline bool IsDirectTimeout() const;
