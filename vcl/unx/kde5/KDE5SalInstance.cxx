@@ -63,6 +63,7 @@ KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& 
 {
     if (!IsMainThread())
     {
+        SolarMutexGuard g;
         uno::Reference<ui::dialogs::XFilePicker2> xRet;
         RunInMainThread(
             std::function([&xRet, this, xMSF]() { xRet = this->createFilePicker(xMSF); }));
