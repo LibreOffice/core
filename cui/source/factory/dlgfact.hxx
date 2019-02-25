@@ -87,7 +87,6 @@ class CuiVclAbstractDialog_Impl : public VclAbstractDialog
 
 class CuiAbstractController_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<weld::DialogController> m_xDlg;
 public:
     explicit CuiAbstractController_Impl(std::unique_ptr<weld::DialogController> p)
@@ -108,7 +107,6 @@ class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
 
 class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
 {
-protected:
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
 public:
     explicit CuiAbstractSingleTabController_Impl(std::unique_ptr<SfxSingleTabDialogController> p)
@@ -135,7 +133,6 @@ class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
 
 class CuiAbstractTabController_Impl : public SfxAbstractTabDialog
 {
-protected:
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
     explicit CuiAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
@@ -155,7 +152,6 @@ public:
 class SvxDistributeDialog;
 class AbstractSvxDistributeDialog_Impl: public AbstractSvxDistributeDialog
 {
-protected:
     std::unique_ptr<SvxDistributeDialog> m_xDlg;
 public:
     explicit AbstractSvxDistributeDialog_Impl(std::unique_ptr<SvxDistributeDialog> p)
@@ -214,7 +210,6 @@ class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
 
 class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
 {
-protected:
     std::unique_ptr<SvxHyphenWordDialog> m_xDlg;
 public:
     explicit AbstractHyphenWordDialog_Impl(std::unique_ptr<SvxHyphenWordDialog> p)
@@ -227,7 +222,6 @@ public:
 class FmShowColsDialog;
 class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 {
-protected:
     std::unique_ptr<FmShowColsDialog> m_xDlg;
 public:
     explicit AbstractFmShowColsDialog_Impl(std::unique_ptr<FmShowColsDialog> p)
@@ -241,7 +235,6 @@ public:
 class SvxZoomDialog;
 class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 {
-protected:
     std::unique_ptr<SvxZoomDialog> m_xDlg;
 public:
     explicit AbstractSvxZoomDialog_Impl(std::unique_ptr<SvxZoomDialog> p)
@@ -282,7 +275,6 @@ public:
 class SvxScriptSelectorDialog;
 class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 {
-protected:
     std::unique_ptr<SvxScriptSelectorDialog> m_xDlg;
 public:
     explicit AbstractScriptSelectorDialog_Impl(std::unique_ptr<SvxScriptSelectorDialog> p)
@@ -322,7 +314,6 @@ class AbstractURLDlg_Impl :public AbstractURLDlg
 class SvxSearchSimilarityDialog;
 class AbstractSvxSearchSimilarityDialog_Impl :public AbstractSvxSearchSimilarityDialog
 {
-protected:
     std::unique_ptr<SvxSearchSimilarityDialog> m_xDlg;
 public:
     explicit AbstractSvxSearchSimilarityDialog_Impl(std::unique_ptr<SvxSearchSimilarityDialog> p)
@@ -339,7 +330,6 @@ public:
 class SvxJSearchOptionsDialog;
 class AbstractSvxJSearchOptionsDialog_Impl : public AbstractSvxJSearchOptionsDialog
 {
-protected:
     std::unique_ptr<SvxJSearchOptionsDialog> m_xDlg;
 public:
     explicit AbstractSvxJSearchOptionsDialog_Impl(std::unique_ptr<SvxJSearchOptionsDialog> p)
@@ -352,7 +342,6 @@ public:
 
 class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 {
-protected:
     std::shared_ptr<SvxTransformTabDialog> m_xDlg;
 public:
     explicit AbstractSvxTransformTabDialog_Impl(SvxTransformTabDialog* p)
@@ -371,7 +360,6 @@ public:
 
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
-protected:
     std::shared_ptr<SvxCaptionTabDialog> m_xDlg;
 public:
     explicit AbstractSvxCaptionDialog_Impl(std::unique_ptr<SvxCaptionTabDialog> p)
@@ -391,7 +379,6 @@ public:
 class FmInputRecordNoDialog;
 class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 {
-protected:
     std::unique_ptr<FmInputRecordNoDialog> m_xDlg;
 public:
     explicit AbstractFmInputRecordNoDialog_Impl(std::unique_ptr<FmInputRecordNoDialog> p)
@@ -406,7 +393,6 @@ public:
 class SvxNewDictionaryDialog;
 class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 {
-protected:
     std::unique_ptr<SvxNewDictionaryDialog> m_xDlg;
 public:
     explicit AbstractSvxNewDictionaryDialog_Impl(std::unique_ptr<SvxNewDictionaryDialog> p)
@@ -420,8 +406,6 @@ public:
 class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
-protected:
-    std::unique_ptr<SvxNameDialog> m_xDlg;
 public:
     explicit AbstractSvxNameDialog_Impl(std::unique_ptr<SvxNameDialog> p)
         : m_xDlg(std::move(p))
@@ -435,6 +419,7 @@ public:
     virtual void    SetHelpId( const OString& ) override ;
     virtual void    SetText( const OUString& rStr ) override ;
 private:
+    std::unique_ptr<SvxNameDialog> m_xDlg;
     Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
     DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
 };
@@ -444,8 +429,6 @@ class SvxObjectTitleDescDialog;
 
 class AbstractSvxObjectNameDialog_Impl : public AbstractSvxObjectNameDialog
 {
-protected:
-    std::unique_ptr<SvxObjectNameDialog> m_xDlg;
 public:
     explicit AbstractSvxObjectNameDialog_Impl(std::unique_ptr<SvxObjectNameDialog> p)
         : m_xDlg(std::move(p))
@@ -456,13 +439,13 @@ public:
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
 private:
+    std::unique_ptr<SvxObjectNameDialog> m_xDlg;
     Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
     DECL_LINK(CheckNameHdl, SvxObjectNameDialog&, bool);
 };
 
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
 {
-protected:
     std::unique_ptr<SvxObjectTitleDescDialog> m_xDlg;
 public:
     explicit AbstractSvxObjectTitleDescDialog_Impl(std::unique_ptr<SvxObjectTitleDescDialog> p)
@@ -476,7 +459,6 @@ public:
 
 class AbstractSvxMultiPathDialog_Impl : public AbstractSvxMultiPathDialog
 {
-protected:
     std::unique_ptr<SvxMultiPathDialog> m_xDlg;
 public:
     explicit AbstractSvxMultiPathDialog_Impl(std::unique_ptr<SvxMultiPathDialog> p)
@@ -517,7 +499,6 @@ class FmSearchDialog;
 struct FmFoundRecordInformation;
 class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 {
-protected:
     std::unique_ptr<FmSearchDialog> m_xDlg;
 public:
     explicit AbstractFmSearchDialog_Impl(std::unique_ptr<FmSearchDialog> p)
@@ -532,7 +513,6 @@ public:
 
 class AbstractGraphicFilterDialog_Impl : public AbstractGraphicFilterDialog
 {
-protected:
     std::unique_ptr<GraphicFilterDialog> m_xDlg;
 public:
     explicit AbstractGraphicFilterDialog_Impl(std::unique_ptr<GraphicFilterDialog> p)
@@ -546,7 +526,6 @@ public:
 class SvxAreaTabDialog;
 class AbstractSvxAreaTabDialog_Impl : public AbstractSvxAreaTabDialog
 {
-protected:
     std::shared_ptr<SvxAreaTabDialog> m_xDlg;
 public:
     explicit AbstractSvxAreaTabDialog_Impl(std::unique_ptr<SvxAreaTabDialog> p)
@@ -564,7 +543,6 @@ public:
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
-protected:
     std::unique_ptr<InsertObjectDialog_Impl> m_xDlg;
 public:
     explicit AbstractInsertObjectDialog_Impl(std::unique_ptr<InsertObjectDialog_Impl> p)
@@ -579,7 +557,6 @@ public:
 
 class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
-protected:
     std::unique_ptr<SvPasteObjectDialog> m_xDlg;
 public:
     explicit AbstractPasteDialog_Impl(std::unique_ptr<SvPasteObjectDialog> p)
@@ -608,8 +585,6 @@ public:
 class SvxPostItDialog;
 class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 {
-private:
-    std::unique_ptr<SvxPostItDialog> m_xDlg;
 public:
     AbstractSvxPostItDialog_Impl(std::unique_ptr<SvxPostItDialog> pDlg)
         : m_xDlg(std::move(pDlg))
@@ -628,6 +603,7 @@ public:
     virtual void                HideAuthor() override;
     virtual std::shared_ptr<weld::Dialog> GetDialog() override;
 private:
+    std::unique_ptr<SvxPostItDialog> m_xDlg;
     Link<AbstractSvxPostItDialog&,void> aNextHdl;
     Link<AbstractSvxPostItDialog&,void> aPrevHdl;
     DECL_LINK(NextHdl, SvxPostItDialog&, void);
@@ -637,7 +613,6 @@ private:
 class PasswordToOpenModifyDialog;
 class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenModifyDialog
 {
-protected:
     std::unique_ptr<PasswordToOpenModifyDialog> m_xDlg;
 public:
     explicit AbstractPasswordToOpenModifyDialog_Impl(std::unique_ptr<PasswordToOpenModifyDialog> p)
@@ -653,7 +628,6 @@ public:
 class SvxCharacterMap;
 class AbstractSvxCharacterMapDialog_Impl : public SfxAbstractDialog
 {
-protected:
     std::unique_ptr<SvxCharacterMap> m_xDlg;
 public:
     explicit AbstractSvxCharacterMapDialog_Impl(std::unique_ptr<SvxCharacterMap> p)
@@ -674,7 +648,6 @@ class AbstractScreenshotAnnotationDlg_Impl : public AbstractScreenshotAnnotation
 class SignatureLineDialog;
 class AbstractSignatureLineDialog_Impl : public AbstractSignatureLineDialog
 {
-protected:
     std::unique_ptr<SignatureLineDialog> m_xDlg;
 
 public:

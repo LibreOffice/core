@@ -76,9 +76,9 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
         {
             sal_uInt16  m_nRowPos;
-        protected:
             OValueRefRow    m_pRow;
 
+        protected:
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
             virtual const ORowSetValue& getValue() const override;
@@ -230,8 +230,6 @@ namespace connectivity
 
         class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator
         {
-        public:
-        protected:
             const sal_Unicode cEscape;
 
         public:

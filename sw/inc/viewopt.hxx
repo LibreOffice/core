@@ -142,7 +142,6 @@ class SW_DLLPUBLIC SwViewOption
     static Color    s_aHeaderFooterMarkColor;
 
     static ViewOptFlags s_nAppearanceFlags;
-protected:
     static sal_uInt16   s_nPixelTwips;// 1 Pixel == ? Twips
 
     OUString        m_sSymbolFont;        // Symbolfont.

@@ -70,6 +70,10 @@ const int AFTEREFFECT_SET = 2;
 class AnimationExporter
 {
     css::uno::Any aTarget;
+    const EscherSolverContainer& mrSolverContainer;
+    ppt::ExSoundCollection& mrExSoundCollection;
+    std::vector< AfterEffectNodePtr > maAfterEffectNodes;
+    sal_Int32 mnCurrentGroup;
 
     static void writeZString( SvStream& rStrm, const OUString& rVal );
     static bool getColorAny( const css::uno::Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC );
@@ -101,8 +105,6 @@ class AnimationExporter
     void exportAnimateColor( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, int nAfterEffectType );
     void exportIterate( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    const EscherSolverContainer& mrSolverContainer;
-    ppt::ExSoundCollection& mrExSoundCollection;
     void processAfterEffectNodes( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     bool isAfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
@@ -111,14 +113,10 @@ class AnimationExporter
 
     static css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNodeClone( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    std::vector< AfterEffectNodePtr > maAfterEffectNodes;
-
 public:
     AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection );
 
     void doexport( const css::uno::Reference< css::drawing::XDrawPage >& xPage, SvStream& rStrm );
-
-    sal_Int32 mnCurrentGroup;
 
         // helper methods also used in ooxml export
     static css::uno::Any convertAnimateValue( const css::uno::Any& rSource, const OUString& rAttributeName );

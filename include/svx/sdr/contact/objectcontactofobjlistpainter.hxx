@@ -82,13 +82,13 @@ public:
 
 class ObjectContactOfPagePainter : public ObjectContactPainter
 {
-protected:
     // the original ObjectContact this painter is working on
     ObjectContact&                                  mrOriginalObjectContact;
 
     // Set StartPoint for next run, also given in constructor
     tools::WeakReference<SdrPage>                   mxStartPage;
 
+protected:
     // Hierarchy access methods
     virtual sal_uInt32 GetPaintObjectCount() const override;
     virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) override;

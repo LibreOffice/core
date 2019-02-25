@@ -29,7 +29,6 @@ namespace dbaui
 
     class OCommentUndoAction : public SfxUndoAction
     {
-    protected:
         OUString         m_strComment; // undo, redo comment
 
     public:

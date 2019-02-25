@@ -194,7 +194,6 @@ private:
 
 class XclMacroHelper : public XclExpControlHelper
 {
-protected:
     XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
 
 public:

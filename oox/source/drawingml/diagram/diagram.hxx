@@ -155,7 +155,6 @@ typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > Diag
 class DiagramData
 {
 public:
-    ::std::vector<OUString>  maExtDrawings;
     typedef std::map< OUString, dgm::Point* > PointNameMap;
     typedef std::map< OUString,
                       std::vector<dgm::Point*> >   PointsNameMap;
@@ -193,6 +192,7 @@ public:
         { mnMaxDepth = nDepth; }
     void dump() const;
 private:
+    ::std::vector<OUString>  maExtDrawings;
     FillPropertiesPtr mpFillProperties;
     dgm::Connections  maConnections;
     dgm::Points       maPoints;

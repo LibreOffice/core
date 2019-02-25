@@ -74,7 +74,7 @@ class LwpContent : public LwpDLNFVList
 {
 public:
     LwpContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
-protected:
+private:
     LwpAssociatedLayouts m_LayoutsWithMe;
     sal_uInt16 m_nFlags;
     LwpAtomHolder m_ClassName;

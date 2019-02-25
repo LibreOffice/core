@@ -121,7 +121,7 @@ public:
         the passed container element. */
     virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) = 0;
 
-protected:
+private:
     css::uno::Reference< css::container::XEnumeration > mxEnumeration;
 };
 

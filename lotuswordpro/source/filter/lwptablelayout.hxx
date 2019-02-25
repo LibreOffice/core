@@ -203,6 +203,7 @@ public:
     bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
     void Read() override;
+private:
     sal_uInt8 ccolid;
     sal_Int32 cwidth;
 
@@ -220,6 +221,7 @@ public:
     void GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nEndRow);
 protected:
     void Read() override;
+private:
     sal_uInt16 cStartRow;
     sal_uInt16 cEndRow;
 };

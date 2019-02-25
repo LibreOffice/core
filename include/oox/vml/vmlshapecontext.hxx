@@ -141,10 +141,8 @@ private:
     /** Processes the 'path' attribute. */
     void                setVmlPath( const OUString& rPath );
 
-protected:
-    ShapeBase&          mrShape;
-
 private:
+    ShapeBase&          mrShape;
     ShapeModel&         mrShapeModel;
 };
 

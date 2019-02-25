@@ -115,7 +115,7 @@ public:
      */
     virtual IXFAttrList*    GetAttrList() override;
 
-public:
+private:
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_aHandler;
     std::unique_ptr<XFSaxAttrList>                       m_pAttrList;
 };

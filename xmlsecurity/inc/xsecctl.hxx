@@ -221,7 +221,6 @@ private:
      */
     bool m_bVerifyCurrentSignature;
 
-public:
     /*
      * An xUriBinding is provided to map Uris to XInputStream interfaces.
      */

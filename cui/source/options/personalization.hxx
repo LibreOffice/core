@@ -108,12 +108,12 @@ private:
     std::unique_ptr<weld::Button> m_xOkButton;                         ///< The OK button
     std::unique_ptr<weld::Button> m_xCancelButton;                     ///< The Cancel button
     std::unique_ptr<weld::Button> m_vResultList[MAX_RESULTS];          ///< List of buttons to show search results
+    ::rtl::Reference< SearchAndParseThread >    m_pSearchThread;
+    ::rtl::Reference< GetPersonaThread >        m_pGetPersonaThread;
 
 public:
     explicit SelectPersonaDialog(weld::Window *pParent);
     virtual ~SelectPersonaDialog() override;
-    ::rtl::Reference< SearchAndParseThread >    m_pSearchThread;
-    ::rtl::Reference< GetPersonaThread >        m_pGetPersonaThread;
 
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );

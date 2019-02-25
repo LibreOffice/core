@@ -260,7 +260,6 @@ typedef ::cppu::ImplHelper1 <   css::form::XBoundControl
 class OBoundControl :public OControl
                     ,public OBoundControl_BASE
 {
-protected:
     bool            m_bLocked : 1;
 
 public:

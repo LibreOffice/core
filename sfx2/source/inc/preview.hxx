@@ -29,7 +29,6 @@ class SfxPreviewWin_Impl : public weld::CustomWidgetController
 {
 private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-protected:
     std::shared_ptr<GDIMetaFile> xMetaFile;
 public:
     SfxPreviewWin_Impl();

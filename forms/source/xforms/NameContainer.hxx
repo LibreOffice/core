@@ -40,10 +40,10 @@ typedef cppu::WeakImplHelper<
 template<class T>
 class NameContainer : public NameContainer_t
 {
-protected:
     typedef std::map<OUString,T> map_t;
     map_t maItems;
 
+protected:
     typename map_t::const_iterator findItem( const OUString& rName )
     {
         return maItems.find( rName );

@@ -414,7 +414,6 @@ public:
 
 class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
 {
-protected:
     std::unique_ptr<ScDPNumGroupDlg> m_xDlg;
 public:
     explicit AbstractScDPNumGroupDlg_Impl(ScDPNumGroupDlg* p)
@@ -427,7 +426,6 @@ public:
 
 class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 {
-protected:
     std::unique_ptr<ScDPDateGroupDlg> m_xDlg;
 public:
     explicit AbstractScDPDateGroupDlg_Impl(ScDPDateGroupDlg* p)
@@ -441,7 +439,6 @@ public:
 
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
-protected:
     std::shared_ptr<ScDPShowDetailDlg> m_xDlg;
 public:
     explicit AbstractScDPShowDetailDlg_Impl(ScDPShowDetailDlg* p)
@@ -471,7 +468,6 @@ public:
 
 class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
-protected:
     std::shared_ptr<ScShowTabDlg> m_xDlg;
 public:
     explicit AbstractScShowTabDlg_Impl(ScShowTabDlg* p)
@@ -488,7 +484,6 @@ public:
 
 class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
 {
-protected:
     std::unique_ptr<ScSortWarningDlg> m_xDlg;
 public:
     explicit AbstractScSortWarningDlg_Impl(std::unique_ptr<ScSortWarningDlg> p)
@@ -500,7 +495,6 @@ public:
 
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
 {
-protected:
     std::unique_ptr<ScStringInputDlg> m_xDlg;
 public:
     explicit AbstractScStringInputDlg_Impl(std::unique_ptr<ScStringInputDlg> p)
@@ -513,7 +507,6 @@ public:
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
 {
-protected:
     std::unique_ptr<ScTabBgColorDlg> m_xDlg;
 public:
     explicit AbstractScTabBgColorDlg_Impl(std::unique_ptr<ScTabBgColorDlg> p)
@@ -526,7 +519,6 @@ public:
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
 {
-protected:
     std::unique_ptr<ScImportOptionsDlg> m_xDlg;
 public:
     explicit AbstractScImportOptionsDlg_Impl(std::unique_ptr<ScImportOptionsDlg> p)
@@ -540,7 +532,6 @@ public:
 
 class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDlg
 {
-protected:
     std::unique_ptr<ScTextImportOptionsDlg> m_xDlg;
 public:
     explicit AbstractScTextImportOptionsDlg_Impl(std::unique_ptr<ScTextImportOptionsDlg> p)
@@ -565,7 +556,6 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
 
 class ScAbstractTabController_Impl : public SfxAbstractTabDialog
 {
-protected:
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
     explicit ScAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)

@@ -72,16 +72,14 @@ class LwpDLVList : public LwpObject
 {
 public:
     LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
-protected:
-    virtual ~LwpDLVList() override {}
-
-    LwpObjectID m_ListPrevious;
-    LwpObjectID m_ListNext;
-protected:
-    void Read() override;
-public:
     LwpObjectID& GetNext() { return m_ListNext; }
     LwpObjectID& GetPrevious() { return m_ListPrevious; }
+protected:
+    virtual ~LwpDLVList() override {}
+    void Read() override;
+private:
+    LwpObjectID m_ListPrevious;
+    LwpObjectID m_ListNext;
 };
 
 /**
@@ -118,14 +116,13 @@ class LwpDLNFPVList : public LwpDLNFVList
 public:
     LwpDLNFPVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDLNFPVList() override;
-protected:
-    bool m_bHasProperties;
-    std::unique_ptr<LwpPropList> m_pPropList;
+    LwpPropList* GetPropList() { return m_pPropList.get(); }
 protected:
     void Read() override;
     void ReadPropertyList(LwpObjectStream* pObjStrm);
-public:
-    LwpPropList* GetPropList() { return m_pPropList.get(); }
+private:
+    bool m_bHasProperties;
+    std::unique_ptr<LwpPropList> m_pPropList;
 };
 
 /**
@@ -153,7 +150,7 @@ public:
     LwpDLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
     LwpObjectID& GetFirst() { return m_objHead; }
-protected:
+private:
     LwpObjectID m_objHead;//LwpDLVList
 };
 

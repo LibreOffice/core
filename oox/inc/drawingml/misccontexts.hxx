@@ -215,7 +215,7 @@ public:
                             const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
 
-protected:
+private:
     FillProperties&     mrFillProps;
 };
 

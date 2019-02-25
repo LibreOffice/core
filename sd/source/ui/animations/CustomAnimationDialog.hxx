@@ -109,7 +109,7 @@ public:
 
     sal_Int32 getControlType() const { return mnType; }
 
-protected:
+private:
     sal_Int32 const  mnType;
 };
 

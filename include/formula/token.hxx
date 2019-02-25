@@ -123,12 +123,10 @@ inline std::string StackVarEnumToString(StackVar const e)
 class FORMULA_DLLPUBLIC FormulaToken
 {
     OpCode                      eOp;
-            FormulaToken&            operator=( const FormulaToken& ) = delete;
-protected:
+    const StackVar              eType;          // type of data
+    mutable oslInterlockedCount mnRefCnt;        // reference count
 
-            const StackVar      eType;          // type of data
-            mutable oslInterlockedCount mnRefCnt;        // reference count
-
+    FormulaToken&            operator=( const FormulaToken& ) = delete;
 public:
     FormulaToken( StackVar eTypeP,OpCode e = ocPush );
     FormulaToken( const FormulaToken& r );

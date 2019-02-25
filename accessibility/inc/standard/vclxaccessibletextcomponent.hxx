@@ -34,9 +34,9 @@ class VCLXAccessibleTextComponent : public VCLXAccessibleComponent,
                                     public ::comphelper::OCommonAccessibleText,
                                     public VCLXAccessibleTextComponent_BASE
 {
-protected:
     OUString                                m_sText;
 
+protected:
     void                                    SetText( const OUString& sText );
 
     virtual void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;

@@ -117,11 +117,10 @@ protected:
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& Source ) override;
 
-protected:
+private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
-private:
     typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >
         tListenerMap;
 

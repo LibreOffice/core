@@ -130,8 +130,6 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) override;
 
-    OUString m_StrOldPageName;
-
     /** Update the preview to show the specified page.
     */
     virtual void UpdatePreview (SdPage* pPage, bool bInit = false) override;
@@ -150,6 +148,7 @@ public:
     void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:
+    OUString m_StrOldPageName;
     std::unique_ptr<OutlineView> pOlView;
     SdPage*         pLastPage; // For efficient processing of the preview
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;

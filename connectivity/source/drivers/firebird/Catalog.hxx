@@ -18,7 +18,6 @@ namespace connectivity
     {
         class Catalog: public ::connectivity::sdbcx::OCatalog
         {
-        protected:
             css::uno::Reference< css::sdbc::XConnection >
                 m_xConnection;
 
