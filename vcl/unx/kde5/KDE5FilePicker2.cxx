@@ -36,6 +36,7 @@
 
 #include <unx/geninst.h>
 #include <qt5/Qt5Tools.hxx>
+#include <qt5/Qt5Instance.hxx>
 
 #include <QtCore/QDebug>
 #include <QtCore/QThread>
@@ -107,19 +108,20 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
         QStringLiteral("smb"),
     });
 
-    connect(this, &KDE5FilePicker::executeSignal, this, &KDE5FilePicker::execute,
-            Qt::BlockingQueuedConnection);
-
     // used to set the custom controls
     qApp->installEventFilter(this);
 }
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        //SolarMutexReleaser aReleaser;
-        return Q_EMIT executeSignal();
+        sal_Int16 ret;
+        pSalInst->RunInMainThread([&ret, this] { ret = execute(); });
+        return ret;
     }
 
     if (!m_aNamedFilterList.isEmpty())
@@ -145,10 +147,16 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
 
 uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    if (qApp->thread() != QThread::currentThread())
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
     {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT getValueSignal(controlId, nControlAction);
+        uno::Any ret;
+        pSalInst->RunInMainThread([&ret, this, controlId, nControlAction]() {
+            ret = getValue(controlId, nControlAction);
+        });
+        return ret;
     }
 
     if (CHECKBOX_AUTOEXTENSION == controlId)
