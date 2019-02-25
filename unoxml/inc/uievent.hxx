@@ -37,7 +37,6 @@ typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XUIEvent >
 class CUIEvent
     : public CUIEvent_Base
 {
-protected:
     sal_Int32 m_detail;
     css::uno::Reference< css::xml::dom::views::XAbstractView > m_view;
 

@@ -176,10 +176,9 @@ class MergeData
 {
     friend class MergeDataHashMap;
 
-public:
     std::unique_ptr<MergeEntrys> pMergeEntrys;
-private:
     MergeDataHashMap::iterator m_aNextData;
+
 public:
     MergeData();
     ~MergeData();

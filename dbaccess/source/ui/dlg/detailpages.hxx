@@ -51,8 +51,6 @@ namespace dbaui
     */
     class OCommonBehaviourTabPage : public OGenericAdministrationPage
     {
-    protected:
-
         OCommonBehaviourTabPageFlags m_nControlFlags;
 
         std::unique_ptr<weld::Label> m_xOptionsLabel;
@@ -244,8 +242,6 @@ namespace dbaui
 
         OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 
-        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
-
     protected:
         virtual ~OTextDetailsPage() override;
         virtual void dispose() override;
@@ -256,6 +252,7 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
     private:
+        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
     };
 
 }   // namespace dbaui

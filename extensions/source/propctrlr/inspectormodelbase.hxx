@@ -53,7 +53,6 @@ namespace pcr
             ,public ImplInspectorModel_Base
             ,public ImplInspectorModel_PBase
     {
-    protected:
         std::unique_ptr< InspectorModelProperties >                     m_pProperties;
 
     protected:

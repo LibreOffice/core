@@ -31,7 +31,6 @@ class ViewContactOfSdrPage;
 
 class ViewContactOfPageSubObject : public ViewContact
 {
-protected:
     ViewContactOfSdrPage&                       mrParentViewContactOfSdrPage;
 
 public:
@@ -159,7 +158,6 @@ public:
 
 class ViewContactOfSdrPage : public ViewContact
 {
-protected:
     // the owner of this ViewContact. Set from constructor and not
     // to be changed in any way.
     SdrPage&                                        mrPage;
@@ -177,6 +175,7 @@ protected:
     ViewContactOfGrid                               maViewContactOfGridFront;
     ViewContactOfHelplines                          maViewContactOfHelplinesFront;
 
+protected:
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this

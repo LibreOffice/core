@@ -129,7 +129,6 @@ class Meta
     , public SwModify
     , public sw::BroadcasterMixin
 {
-protected:
     friend class ::SwFormatMeta; ///< SetFormatMeta, NotifyChangeTextNode
     friend class ::SwXMeta;   ///< GetTextNode, GetTextAttr, Get/SetXMeta
 
@@ -138,6 +137,8 @@ protected:
 
     SwFormatMeta * m_pFormat;
     SwTextNode * m_pTextNode;
+
+protected:
 
     SwTextMeta * GetTextAttr() const;
     SwTextNode * GetTextNode() const { return m_pTextNode;} ///< @return 0 if not in document (undo)

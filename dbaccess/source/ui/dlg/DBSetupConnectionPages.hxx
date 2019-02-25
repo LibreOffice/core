@@ -55,9 +55,6 @@ namespace dbaui
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        std::unique_ptr<weld::Widget> m_xSubContainer;
-        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
-
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
@@ -69,9 +66,10 @@ namespace dbaui
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         bool    checkTestConnection() override;
-
     private:
         DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*, void);
+        std::unique_ptr<weld::Widget> m_xSubContainer;
+        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
     };
 
     // OLDAPConnectionPageSetup
@@ -255,15 +253,6 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
-        VclPtr<FixedText>   m_pFTFinalHeader;
-        VclPtr<FixedText>   m_pFTFinalHelpText;
-        VclPtr<RadioButton> m_pRBRegisterDataSource;
-        VclPtr<RadioButton> m_pRBDontregisterDataSource;
-        VclPtr<FixedText>   m_pFTAdditionalSettings;
-        VclPtr<CheckBox>    m_pCBOpenAfterwards;
-        VclPtr<CheckBox>    m_pCBStartTableWizard;
-        VclPtr<FixedText>   m_pFTFinalText;
-
         OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
         virtual void dispose() override;
@@ -277,6 +266,15 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+    private:
+        VclPtr<FixedText>   m_pFTFinalHeader;
+        VclPtr<FixedText>   m_pFTFinalHelpText;
+        VclPtr<RadioButton> m_pRBRegisterDataSource;
+        VclPtr<RadioButton> m_pRBDontregisterDataSource;
+        VclPtr<FixedText>   m_pFTAdditionalSettings;
+        VclPtr<CheckBox>    m_pCBOpenAfterwards;
+        VclPtr<CheckBox>    m_pCBStartTableWizard;
+        VclPtr<FixedText>   m_pFTFinalText;
     };
 
 }   // namespace dbaui

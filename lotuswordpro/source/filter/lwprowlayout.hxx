@@ -122,6 +122,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_HEADING_LAYOUT;}
 protected:
     void Read() override;
+private:
     LwpObjectID cRowLayout;
 };
 

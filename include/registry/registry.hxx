@@ -217,7 +217,7 @@ protected:
         @param length specifies the length of the array specified by phKeys.
      */
     inline void setKeyHandles(Registry const & registry, RegKeyHandle* phKeys, sal_uInt32 length);
-
+private:
     /// stores the number of open subkeys, the number of elements.
     sal_uInt32      m_length;
     /// stores an array of open subkeys.
@@ -255,7 +255,7 @@ protected:
         @param length specifies the length of the array specified by pKeyNames.
      */
     inline void setKeyNames(Registry const & registry, rtl_uString** pKeyNames, sal_uInt32 length);
-
+private:
     /// stores the number of key names, the number of elements.
     sal_uInt32      m_length;
     /// stores an array of key names.

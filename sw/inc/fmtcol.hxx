@@ -61,11 +61,11 @@ class SW_DLLPUBLIC SwTextFormatColl: public SwFormatColl
 
     bool mbStayAssignedToListLevelOfOutlineStyle;
 
-protected:
-
     bool mbAssignedToOutlineStyle;
 
     SwTextFormatColl *mpNextTextFormatColl;
+
+protected:
 
     SwTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,

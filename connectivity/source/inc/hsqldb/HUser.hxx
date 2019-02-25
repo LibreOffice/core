@@ -59,8 +59,8 @@ namespace connectivity
         class OUserExtend : public OHSQLUser,
                             public OUserExtend_PROP
         {
-        protected:
             OUString m_Password;
+        protected:
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             // OPropertySetHelper

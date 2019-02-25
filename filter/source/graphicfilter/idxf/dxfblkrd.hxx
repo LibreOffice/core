@@ -54,10 +54,10 @@ public:
 
 class DXFBlocks {
 
-public:
-
     DXFBlock * pFirst;
         // list of blocks, READ ONLY!
+
+public:
 
     DXFBlocks();
     ~DXFBlocks();

@@ -37,10 +37,9 @@ namespace connectivity
                             public css::sdbc::XBatchExecution,
                             public css::lang::XServiceInfo
         {
+            XSQLDA* m_pSqlda;
         protected:
             virtual ~OStatement() override {}
-
-            XSQLDA* m_pSqlda;
 
         public:
             // a constructor, which is required for returning objects:

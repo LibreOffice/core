@@ -198,11 +198,9 @@ public:
  */
 class SVX_DLLPUBLIC SdrObjUserData
 {
-protected:
     SdrInventor const                     nInventor;
     sal_uInt16 const                      nIdentifier;
 
-private:
     void operator=(const SdrObjUserData& rData) = delete;
     bool operator==(const SdrObjUserData& rData) const = delete;
     bool operator!=(const SdrObjUserData& rData) const = delete;

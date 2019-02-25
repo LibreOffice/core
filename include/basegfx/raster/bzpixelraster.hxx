@@ -32,7 +32,7 @@ namespace basegfx
     private:
         BZPixelRaster(const BZPixelRaster&) = delete;
         BZPixelRaster& operator=(const BZPixelRaster&) = delete;
-    protected:
+
         sal_uInt32                  mnWidth;
         sal_uInt32                  mnHeight;
         sal_uInt32                  mnCount;

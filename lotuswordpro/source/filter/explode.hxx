@@ -63,11 +63,10 @@ class SvStream;
 
 class HuffmanTreeNode
 {
-public:
     std::unique_ptr<HuffmanTreeNode> left;
     std::unique_ptr<HuffmanTreeNode> right;
     sal_uInt32 value;
-
+public:
     explicit HuffmanTreeNode(sal_uInt32 value = 0xffffffff) ;
     ~HuffmanTreeNode() ;
     HuffmanTreeNode * InsertNode(sal_uInt32 nValue, const sal_Char * pInCode);

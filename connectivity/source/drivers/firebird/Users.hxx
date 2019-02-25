@@ -24,9 +24,9 @@ namespace connectivity
          */
         class Users: public ::connectivity::sdbcx::OCollection
         {
-        protected:
             css::uno::Reference< css::sdbc::XDatabaseMetaData >
                 m_xMetaData;
+        protected:
 
             // OCollection
             virtual void impl_refresh() override;

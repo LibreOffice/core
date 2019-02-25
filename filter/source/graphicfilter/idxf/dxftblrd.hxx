@@ -142,12 +142,12 @@ public:
 
 class DXFTables {
 
-public:
-
     DXFLType * pLTypes; // list of line types
     DXFLayer * pLayers; // list of layers
     DXFStyle * pStyles; // list of styles
     DXFVPort * pVPorts; // list of viewports
+
+public:
 
     DXFTables();
     ~DXFTables();
