@@ -1299,7 +1299,7 @@ SCROW ScColumn::GetLastDataPos() const
 SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
                                 bool bConsiderCellDrawObjects ) const
 {
-    sc::CellStoreType::const_position_type aPos = maCells.position(nLastRow);
+    sc::CellStoreType::const_position_type aPos = maCells.position(std::min(nLastRow,MAXROW));
 
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nLastRow, nLastRow))
         return nLastRow;
