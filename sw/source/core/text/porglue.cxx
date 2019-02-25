@@ -107,13 +107,13 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
+void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const long nPrtGlue )
 {
-    short nPrt = std::min( nPrtGlue, GetPrtGlue() );
+    auto nPrt = std::min( nPrtGlue, GetPrtGlue() );
     if( 0 < nPrt )
     {
-        pTarget->AddPrtWidth( nPrt );
-        SubPrtWidth( nPrt );
+        pTarget->AddPrtWidth( nPrt ); //TODO: overflow
+        SubPrtWidth( nPrt ); //TODO: overflow
     }
 }
 
@@ -187,8 +187,8 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             pRight->MoveAllGlue( pLeft );
             pRight = nullptr;
         }
-        sal_uInt16 nRightGlue = pRight && 0 < pRight->GetPrtGlue()
-                          ? sal_uInt16(pRight->GetPrtGlue()) : 0;
+        auto nRightGlue = pRight && 0 < pRight->GetPrtGlue()
+                          ? pRight->GetPrtGlue() : 0;
         // 2) balance left and right Glue
         //    But not for tabs ...
         if( pLeft && nRightGlue && !pRight->InTabGrp() )
@@ -230,7 +230,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                     nRightGlue = nRightGlue - pPrev->PrtWidth();
                     // pPrev is moved behind pRight. For this the
                     // Glue value between pRight and pLeft gets balanced.
-                    pRight->MoveGlue( pLeft, short( pPrev->PrtWidth() ) );
+                    pRight->MoveGlue( pLeft, pPrev->PrtWidth() );
                     // Now fix the linking of our portions.
                     SwLinePortion *pPrevPrev = pPrev->FindPrevPortion( pLeft );
                     pPrevPrev->SetNextPortion( pRight );
