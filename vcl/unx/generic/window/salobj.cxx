@@ -188,7 +188,7 @@ SalClipRegion::~SalClipRegion()
 }
 
 void
-SalClipRegion::BeginSetClipRegion( sal_uLong nRects )
+SalClipRegion::BeginSetClipRegion( sal_uInt32 nRects )
 {
     ClipRectangleList.reset( new XRectangle[nRects] );
     numClipRectangles = 0;
@@ -283,7 +283,7 @@ X11SalObject::ResetClipRegion()
 }
 
 void
-X11SalObject::BeginSetClipRegion( sal_uLong nRectCount )
+X11SalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
 {
     maClipRegion.BeginSetClipRegion ( nRectCount );
 }

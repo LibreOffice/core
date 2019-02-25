@@ -2854,7 +2854,7 @@ void WinSalFrame::ResetClipRegion()
     SetWindowRgn( mhWnd, nullptr, TRUE );
 }
 
-void WinSalFrame::BeginSetClipRegion( sal_uLong nRects )
+void WinSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
 {
     if( mpClipRgnData )
         delete [] reinterpret_cast<BYTE*>(mpClipRgnData);

@@ -134,7 +134,7 @@ public:
     virtual void                SetScreenNumber( unsigned int ) override;
     virtual void                SetApplicationID( const OUString &rApplicationID ) override;
     virtual void                ResetClipRegion() override;
-    virtual void                BeginSetClipRegion( sal_uIntPtr nRects ) override;
+    virtual void                BeginSetClipRegion( sal_uInt32 nRects ) override;
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
     virtual void                EndSetClipRegion() override;
 };

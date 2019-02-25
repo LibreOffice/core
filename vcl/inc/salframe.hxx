@@ -230,7 +230,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void            ResetClipRegion() = 0;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void            BeginSetClipRegion( sal_uLong nRects ) = 0;
+    virtual void            BeginSetClipRegion( sal_uInt32 nRects ) = 0;
     // add a rectangle to the clip region
     virtual void            UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     // done setting up the clipregion

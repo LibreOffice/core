@@ -1722,7 +1722,7 @@ void AquaSalFrame::ResetClipRegion()
     [mpNSWindow invalidateShadow];
 }
 
-void AquaSalFrame::BeginSetClipRegion( sal_uLong nRects )
+void AquaSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
 {
     if ( !mpNSWindow )
         return;

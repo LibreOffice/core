@@ -39,7 +39,7 @@ public:
             virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;
-    virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
+    virtual void                    BeginSetClipRegion( sal_uInt32 nRects ) = 0;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    EndSetClipRegion() = 0;
 
