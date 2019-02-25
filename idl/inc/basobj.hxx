@@ -83,9 +83,9 @@ public:
 
 class SvMetaObject : public SvRefBase
 {
-protected:
     OString      aName;
 
+protected:
     bool         ReadNameSvIdl( SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -106,7 +106,6 @@ public:
 
 class SvMetaReference : public SvMetaObject
 {
-protected:
     tools::SvRef<SvMetaReference>  aRef;
 public:
             SvMetaReference();

@@ -24,8 +24,8 @@ class AbstractSwFieldDlg;
 
 class SwFieldDlgWrapper : public SwChildWinWrapper
 {
-public:
     ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
+public:
     SwFieldDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
@@ -38,8 +38,8 @@ public:
 // field dialog only showing database page to support mail merge
 class SwFieldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
-public:
     ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
+public:
     SwFieldDataOnlyDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 

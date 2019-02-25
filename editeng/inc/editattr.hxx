@@ -67,7 +67,6 @@ class SfxGrabBagItem;
 // bEdge: Attribute will not expand, if you want to expand just on the edge
 class EditCharAttrib
 {
-protected:
     const SfxPoolItem*  pItem;
 
     sal_Int32               nStart;

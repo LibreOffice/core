@@ -36,8 +36,8 @@ private:
     SfxUndoAction*  mpLastUndoActionBeforeTextEdit;
     bool            mbEndTextEditTriggeredFromUndo;
 
-protected:
     SfxObjectShell* m_pDocSh;
+protected:
     // call to check for TextEdit active
     bool isTextEditActive() const;
     virtual void EmptyActionsChanged() override;

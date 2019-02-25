@@ -62,13 +62,13 @@ public:
 
     // primitive stuff
 
-protected:
     // Primitive3DContainer of the ViewContact. This contains all necessary information
     // for the graphical visualisation and needs to be supported by all 3D VCs which
     // can be visualized. It does NOT contain the object transformation to be able to
     // buffer for all possible usages
     drawinglayer::primitive3d::Primitive3DContainer              mxViewIndependentPrimitive3DContainer;
 
+protected:
     // This method is responsible for creating the graphical visualisation data which is
     // stored in mxViewIndependentPrimitive3DContainer, but without object transformation
     virtual drawinglayer::primitive3d::Primitive3DContainer createViewIndependentPrimitive3DContainer() const = 0;

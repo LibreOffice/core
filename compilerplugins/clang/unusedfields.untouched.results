@@ -193,9 +193,9 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:136
     SfxType5 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
-    SfxType6 nAttribs sal_uInt16
-include/sfx2/msg.hxx:137
     SfxType6 pType const std::type_info *
+include/sfx2/msg.hxx:137
+    SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
     SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:137
@@ -225,27 +225,27 @@ include/sfx2/msg.hxx:140
 include/sfx2/msg.hxx:140
     SfxType10 aAttrib struct SfxTypeAttrib [10]
 include/sfx2/msg.hxx:141
-    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:141
     SfxType11 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
+    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:141
     SfxType11 pType const std::type_info *
 include/sfx2/msg.hxx:141
     SfxType11 aAttrib struct SfxTypeAttrib [11]
 include/sfx2/msg.hxx:143
-    SfxType13 aAttrib struct SfxTypeAttrib [13]
+    SfxType13 pType const std::type_info *
 include/sfx2/msg.hxx:143
     SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:143
-    SfxType13 nAttribs sal_uInt16
+    SfxType13 aAttrib struct SfxTypeAttrib [13]
 include/sfx2/msg.hxx:143
-    SfxType13 pType const std::type_info *
+    SfxType13 nAttribs sal_uInt16
 include/sfx2/msg.hxx:144
     SfxType14 pType const std::type_info *
 include/sfx2/msg.hxx:144
-    SfxType14 aAttrib struct SfxTypeAttrib [14]
-include/sfx2/msg.hxx:144
     SfxType14 nAttribs sal_uInt16
+include/sfx2/msg.hxx:144
+    SfxType14 aAttrib struct SfxTypeAttrib [14]
 include/sfx2/msg.hxx:144
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
@@ -257,11 +257,11 @@ include/sfx2/msg.hxx:145
 include/sfx2/msg.hxx:145
     SfxType16 aAttrib struct SfxTypeAttrib [16]
 include/sfx2/msg.hxx:146
-    SfxType17 nAttribs sal_uInt16
-include/sfx2/msg.hxx:146
     SfxType17 pType const std::type_info *
 include/sfx2/msg.hxx:146
     SfxType17 aAttrib struct SfxTypeAttrib [17]
+include/sfx2/msg.hxx:146
+    SfxType17 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
     SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:147
@@ -391,9 +391,9 @@ sal/qa/osl/pipe/osl_Pipe.cxx:846
 sal/qa/osl/pipe/osl_Pipe.cxx:846
     osl_StreamPipe::recv bRes _Bool
 sal/qa/osl/security/osl_Security.cxx:61
-    osl_Security::ctors bRes _Bool
-sal/qa/osl/security/osl_Security.cxx:61
     osl_Security::ctors bRes1 _Bool
+sal/qa/osl/security/osl_Security.cxx:61
+    osl_Security::ctors bRes _Bool
 sal/qa/osl/security/osl_Security.cxx:126
     osl_Security::getUserIdent bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:157

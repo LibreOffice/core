@@ -168,8 +168,8 @@ public:
       For this we need the current outputdevice */
 class SwRefMarkFieldUpdate : public SwMsgPoolItem
 {
-public:
     VclPtr<OutputDevice> pOut; ///< pointer to the current output device
+public:
     /** Is sent if reference marks should be updated.
 
         To get the page/chapter number, the frame has to be asked. For that we need

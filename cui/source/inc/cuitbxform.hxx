@@ -23,7 +23,6 @@
 
 class FmInputRecordNoDialog : public weld::GenericDialogController
 {
-public:
     std::unique_ptr<weld::SpinButton> m_xRecordNo;
 
 public:

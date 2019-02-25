@@ -74,10 +74,10 @@ private:
     DECL_LINK( ImplPreviewTimeoutHdl, Timer *, void );
     DECL_LINK( ImplModifyHdl, LinkParamNone*, void);
 
-protected:
     CuiGraphicPreviewWindow  maPreview;
     std::unique_ptr<weld::CustomWeld> mxPreview;
 
+protected:
     const Link<LinkParamNone*,void>&   GetModifyHdl() const { return maModifyHdl; }
     const Size& GetGraphicSizePixel() const { return maPreview.GetGraphicSizePixel(); }
 

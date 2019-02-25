@@ -39,7 +39,6 @@ namespace dbaccess
                                public css::sdbcx::XColumnsSupplier,
                                public css::lang::XServiceInfo
     {
-    protected:
         std::unique_ptr<OColumns>  m_pColumns;
         css::uno::Reference< css::sdbc::XParameters > m_xAggregateAsParameters;
 

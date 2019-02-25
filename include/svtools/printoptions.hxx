@@ -32,9 +32,10 @@ class PrinterOptions;
 
 class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
 {
-protected:
 
     SvtPrintOptions_Impl* m_pDataContainer;
+
+protected:
 
     void        SetDataContainer( SvtPrintOptions_Impl* pDataContainer ) { m_pDataContainer = pDataContainer; }
 

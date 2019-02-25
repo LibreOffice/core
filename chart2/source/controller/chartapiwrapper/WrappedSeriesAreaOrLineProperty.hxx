@@ -37,7 +37,7 @@ public:
 
     virtual OUString getInnerName() const override;
 
-protected:
+private:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
     OUString m_aInnerAreaTypeName;
     OUString m_aInnerLineTypeName;

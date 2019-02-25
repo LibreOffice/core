@@ -52,9 +52,8 @@ namespace connectivity
                         public ::comphelper::OPropertyArrayUsageHelper<OUser>,
                         public ODescriptor
         {
-        protected:
             rtl::Reference<OGroups>  m_pGroups;
-
+        protected:
             using OUser_BASE::rBHelper;
 
             // OPropertyArrayUsageHelper

@@ -49,7 +49,7 @@ public:
     void dump() const;
 #endif
 
-protected:
+private:
 
     TextParagraphPropertiesVector maListStyle;
     TextParagraphPropertiesVector maAggregationListStyle;

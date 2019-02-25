@@ -118,8 +118,8 @@ public:
     // css::presentation::XShapeEventListener:
     virtual void SAL_CALL click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent) override;
 
+private:
     ::comphelper::OInterfaceContainerHelper2 maListeners;
-
     rtl::Reference< SlideshowImpl > mxController;
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };

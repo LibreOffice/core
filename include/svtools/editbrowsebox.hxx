@@ -82,7 +82,6 @@ namespace svt
         friend class EditBrowseBox;
         Link<LinkParamNone*, void> maModifyHdl;
 
-    protected:
         VclPtr<Control>            pWindow;
         bool                       bSuspended;     // <true> if the window is hidden and disabled
 

@@ -43,7 +43,6 @@ namespace scripting_helper
 
     class OBroadcastHelperHolder
     {
-    protected:
         ::cppu::OBroadcastHelper    m_aBHelper;
 
     public:

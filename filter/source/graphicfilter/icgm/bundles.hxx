@@ -160,13 +160,14 @@ class CGMFList
     sal_uInt32      nCharSetCount;
     ::std::vector< std::unique_ptr<FontEntry> >
                     aFontEntryList;
+    sal_uInt32      nFontsAvailable;
+
     void            ImplDeleteList();
 
 public:
                     CGMFList();
                     ~CGMFList();
 
-    sal_uInt32      nFontsAvailable;
     FontEntry*      GetFontEntry( sal_uInt32 );
     void            InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize );
     void            InsertCharSet( CharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize );

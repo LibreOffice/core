@@ -53,14 +53,14 @@ public:
     WrapHandler( );
     virtual ~WrapHandler( ) override;
 
-    sal_Int32 m_nType;
-    sal_Int32 m_nSide;
-
     css::text::WrapTextMode getWrapMode( );
 
  private:
     virtual void lcl_attribute( Id aName, Value& rVal ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
+
+    sal_Int32 m_nType;
+    sal_Int32 m_nSide;
 };
 
 /// Keeps track of the next available unique automatic name.

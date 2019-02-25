@@ -49,7 +49,6 @@ class OGridColumn   :public ::cppu::BaseMutex
                     ,public OPropertySetAggregationHelper
                     ,public OCloneableAggregation
 {
-protected:
 // [properties]
     css::uno::Any  m_aWidth;  // column width
     css::uno::Any  m_aAlign;  // column alignment
