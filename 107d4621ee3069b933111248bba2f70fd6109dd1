@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_96709f74",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Nitpicking",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d6e17700",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "if (!pSalInst-\u003eIsMainThread())\n{\n    SalYieldMutex::doAcquire(nLockCount);\n    return;\n}\n\nThen all the IsMainThread() handling.",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f65913fe",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Nitpicking",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f6dc7347",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "No return value",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_d65e17e5",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Nitpicking",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_766d2397",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Drop comment or add a better one.",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b6739b80",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Nitpicking - add return",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_96477f1e",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-02-25T23:58:53Z",
+      "side": 1,
+      "message": "Seems we now can use std::make_unique.",
+      "revId": "107d4621ee3069b933111248bba2f70fd6109dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
