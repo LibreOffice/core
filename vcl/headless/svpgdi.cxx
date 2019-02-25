@@ -1885,7 +1885,7 @@ void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInver
     invert(aPoly, nFlags);
 }
 
-bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
+bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uInt32 )
 {
     return false;
 }

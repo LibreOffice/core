@@ -176,7 +176,7 @@ public:
                                     SalInvert nFlags ) override;
 
     virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight,
-                                     void* pPtr, sal_uIntPtr nSize ) override;
+                                     void* pPtr, sal_uInt32 nSize ) override;
     virtual bool            blendBitmap( const SalTwoRect&,
                                          const SalBitmap& rBitmap ) override;
     virtual bool            blendAlphaBitmap( const SalTwoRect&,

@@ -171,7 +171,7 @@ public:
                 long nX, long nY,
                 long nWidth, long nHeight,
                 void* pPtr,
-                sal_uLong nSize ) = 0;
+                sal_uInt32 nSize ) = 0;
 
     virtual bool blendBitmap(
                 const SalTwoRect&,

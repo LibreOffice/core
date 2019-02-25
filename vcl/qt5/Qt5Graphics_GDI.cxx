@@ -512,7 +512,7 @@ void Qt5Graphics::invert(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/, Sal
 }
 
 bool Qt5Graphics::drawEPS(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
-                          void* /*pPtr*/, sal_uLong /*nSize*/)
+                          void* /*pPtr*/, sal_uInt32 /*nSize*/)
 {
     return false;
 }

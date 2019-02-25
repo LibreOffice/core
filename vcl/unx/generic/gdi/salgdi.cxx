@@ -477,7 +477,7 @@ void X11SalGraphics::invert( sal_uInt32 nPoints,
 }
 
 bool X11SalGraphics::drawEPS( long nX, long nY, long nWidth,
-        long nHeight, void* pPtr, sal_uLong nSize )
+        long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     return mxImpl->drawEPS( nX, nY, nWidth, nHeight, pPtr, nSize );
 }
