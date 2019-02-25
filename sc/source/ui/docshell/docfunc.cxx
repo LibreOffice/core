@@ -25,9 +25,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svl/PasswordHelper.hxx>
 #include <svx/svdocapt.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
@@ -55,11 +53,9 @@
 #include <drwlayer.hxx>
 #include <editutil.hxx>
 #include <globstr.hrc>
-#include <globalnames.hxx>
 #include <olinetab.hxx>
 #include <patattr.hxx>
 #include <rangenam.hxx>
-#include <rangeutl.hxx>
 #include <refundo.hxx>
 #include <scresid.hxx>
 #include <stlpool.hxx>
@@ -71,11 +67,9 @@
 #include <undocell.hxx>
 #include <undodraw.hxx>
 #include <undotab.hxx>
-#include <waitoff.hxx>
 #include <sizedev.hxx>
 #include <scmod.hxx>
 #include <inputhdl.hxx>
-#include <inputwin.hxx>
 #include <editable.hxx>
 #include <compiler.hxx>
 #include <scui_def.hxx>

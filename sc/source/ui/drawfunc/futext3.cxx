@@ -17,30 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/editeng.hxx>
-#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdview.hxx>
-#include <editeng/editobj.hxx>
 #include <vcl/cursor.hxx>
-#include <sfx2/objsh.hxx>
-#include <editeng/writingmodeitem.hxx>
 
 #include <global.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <tabvwsh.hxx>
 #include <document.hxx>
-#include <editutil.hxx>
 #include <futext.hxx>
 #include <docsh.hxx>
 #include <postit.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <attrib.hxx>
-#include <scitems.hxx>
 #include <drawview.hxx>
 #include <undocell.hxx>
 

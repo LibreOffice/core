@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <dapitype.hxx>
-#include <sc.hrc>
 
 using namespace com::sun::star;
 

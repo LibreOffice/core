@@ -39,7 +39,6 @@
 #include <tablink.hxx>
 
 #include <scextopt.hxx>
-#include <table.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <globstr.hrc>
@@ -50,7 +49,6 @@
 #include <hints.hxx>
 #include <dociter.hxx>
 #include <formula/opcode.hxx>
-#include <formulacell.hxx>
 #include <formulaiter.hxx>
 #include <tokenarray.hxx>
 

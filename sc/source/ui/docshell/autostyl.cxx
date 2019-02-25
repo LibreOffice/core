@@ -19,10 +19,9 @@
 
 #include <time.h>
 
-#include <attrib.hxx>
+#include <address.hxx>
 #include <autostyl.hxx>
 #include <docsh.hxx>
-#include <sc.hrc>
 
 static sal_uLong TimeNow()          // seconds
 {

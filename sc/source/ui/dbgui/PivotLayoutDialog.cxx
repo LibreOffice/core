@@ -12,7 +12,6 @@
 #include <PivotLayoutTreeList.hxx>
 #include <PivotLayoutDialog.hxx>
 #include <reffact.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <rangeutl.hxx>
 #include <uiitems.hxx>
