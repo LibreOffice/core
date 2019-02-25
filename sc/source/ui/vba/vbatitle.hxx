@@ -34,7 +34,6 @@ class TitleImpl : public InheritedHelperInterfaceImpl< Ifc... >
 {
 typedef InheritedHelperInterfaceImpl< Ifc... > BaseClass;
 
-protected:
     css::uno::Reference< css::drawing::XShape > xTitleShape;
     css::uno::Reference< css::beans::XPropertySet > xShapePropertySet;
     std::unique_ptr<ov::ShapeHelper> oShapeHelper;

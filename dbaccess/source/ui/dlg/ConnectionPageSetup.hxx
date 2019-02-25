@@ -37,7 +37,6 @@ namespace dbaui
     class OConnectionTabPageSetup : public OConnectionHelper
     {
         friend class VclPtr<OConnectionTabPageSetup>;
-    protected:
 
         std::unique_ptr<weld::Label> m_xHelpText;
         std::unique_ptr<weld::Label> m_xHeaderText;

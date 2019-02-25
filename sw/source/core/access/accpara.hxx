@@ -88,6 +88,9 @@ class SwAccessibleParagraph :
 
     std::unique_ptr<SwParaChangeTrackingInfo> mpParaChangeTrackInfo; // #i108125#
 
+    // XAccessibleComponent
+    bool m_bLastHasSelection;
+
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
 
@@ -368,8 +371,6 @@ public:
     // XAccessibleExtendedAttributes
     virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
     sal_Int32 GetRealHeadingLevel();
-    // XAccessibleComponent
-    bool m_bLastHasSelection;
 
     // #i89175#
     // XAccessibleMultiLineText

@@ -100,7 +100,7 @@ public:
     inline LeaderType GetLeaderType();
     inline sal_uInt16 GetAlignChar();
 
-protected:
+private:
     sal_uInt32      m_nX;
     sal_uInt8       m_nType;
     sal_uInt8       m_nLeader;

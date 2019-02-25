@@ -62,16 +62,14 @@ class SvxUnoDrawPagesAccess;
 // class SdrObjList
 class SVX_DLLPUBLIC SdrObjList
 {
+friend class SdrObjListIter;
+friend class SdrEditView;
+
 private:
     SdrObjList(const SdrObjList& rSrcList) = delete;
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
-private:
     ::std::vector<SdrObject*>   maList;
-
-protected:
-friend class SdrObjListIter;
-friend class SdrEditView;
 
     tools::Rectangle    maSdrObjListOutRect;
     tools::Rectangle    maSdrObjListSnapRect;

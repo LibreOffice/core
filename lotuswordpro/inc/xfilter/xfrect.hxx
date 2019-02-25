@@ -128,7 +128,7 @@ public:
         m_fHeight = height;
     }
 
-public:
+private:
     XFPoint m_aPoint;
     double  m_fWidth;
     double  m_fHeight;

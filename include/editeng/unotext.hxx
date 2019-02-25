@@ -420,9 +420,9 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
                         public css::text::XTextRangeMover,
                         public css::lang::XTypeProvider
 {
-protected:
     css::uno::Reference< css::text::XText >   xParentText;
 
+protected:
     SvxUnoTextBase(const SvxItemPropertySet* _pSet);
     SvxUnoTextBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent);
     SvxUnoTextBase(const SvxUnoTextBase& rText);

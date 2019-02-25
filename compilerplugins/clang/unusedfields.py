@@ -211,6 +211,29 @@ for d in protectedAndPublicDefinitionSet:
 
     canBePrivateSet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 
+
+# --------------------------------------------------------------------------------------------
+# "all fields in class can be made private" analysis
+# --------------------------------------------------------------------------------------------
+
+potentialClasses = set()
+excludedClasses = set()
+potentialClassesSourceLocationMap = dict()
+matchClassName = re.compile(r"(\w+)::")
+for d in protectedAndPublicDefinitionSet:
+    clazz = d[0]
+    if d in touchedFromOutsideSet:
+        excludedClasses.add(clazz)
+    else:
+        potentialClasses.add(clazz)
+        potentialClassesSourceLocationMap[clazz] = definitionToSourceLocationMap[d]
+allFieldsCanBePrivateSet = set()
+for d in (potentialClasses - excludedClasses):
+    sourceLoc = potentialClassesSourceLocationMap[d]
+    # when the class is inside a compile unit, assume that the compiler can figure this out for itself, much less interesting to me
+    if not ".cxx" in sourceLoc:
+        allFieldsCanBePrivateSet.add((d, sourceLoc))
+
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
@@ -222,6 +245,7 @@ tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp3list = sorted(canBePrivateSet, key=lambda v: natural_sort_key(v[1]))
 tmp4list = sorted(readonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp5list = sorted(onlyUsedInConstructorSet, key=lambda v: natural_sort_key(v[1]))
+tmp6list = sorted(allFieldsCanBePrivateSet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
 with open("compilerplugins/clang/unusedfields.untouched.results", "wt") as f:
@@ -243,6 +267,10 @@ with open("compilerplugins/clang/unusedfields.readonly.results", "wt") as f:
         f.write( "    " + t[0] + "\n" )
 with open("compilerplugins/clang/unusedfields.only-used-in-constructor.results", "wt") as f:
     for t in tmp5list:
+        f.write( t[1] + "\n" )
+        f.write( "    " + t[0] + "\n" )
+with open("compilerplugins/clang/unusedfields.report-all-can-be-private", "wt") as f:
+    for t in tmp6list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
 

@@ -213,14 +213,13 @@ public:
 
     OKButton*           GetOKButton() const { return pOKBtn; }
 
-protected:
+private:
     VclPtr<OKButton>      pOKBtn;
     VclPtr<CancelButton>  pCancelBtn;
     VclPtr<HelpButton>    pHelpBtn;
 
     DECL_DLLPRIVATE_LINK(OKHdl_Impl, Button*, void);
 
-private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;
 };
 

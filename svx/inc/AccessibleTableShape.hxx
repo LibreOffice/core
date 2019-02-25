@@ -49,6 +49,7 @@ namespace accessibility
                                           > AccessibleTableShape_Base;
 class AccessibleTableShape final : public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
 {
+    sal_Int32 mnPreviousSelectionCount;
 public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
     virtual ~AccessibleTableShape( ) override;
@@ -113,7 +114,6 @@ public:
         disposing (const css::lang::EventObject& Source) override;
     virtual void  SAL_CALL
         selectionChanged (const css::lang::EventObject& rEvent) override;
-    sal_Int32 mnPreviousSelectionCount;
     using AccessibleShape::disposing;
     friend class AccessibleTableHeaderShape;
 

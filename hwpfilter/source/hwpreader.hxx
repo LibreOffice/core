@@ -178,7 +178,7 @@ public:
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
-public:
+private:
     Reference< XFilter > rFilter;
     Reference< XImporter > rImporter;
 };

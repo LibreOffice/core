@@ -33,7 +33,6 @@
 
 class SdXML3DObjectContext : public SdXMLShapeContext
 {
-protected:
     // the shape group this object should be created inside
 
     css::drawing::HomogenMatrix mxHomMat;

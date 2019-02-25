@@ -53,7 +53,7 @@ class DropDownFormFieldDialog;
 }
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-protected:                                          \
+private:                                          \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
     explicit        Class( DialogClass* p)          \
@@ -75,7 +75,6 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
 class SwWordCountFloatDlg;
 class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
-protected:
     std::shared_ptr<SwWordCountFloatDlg> m_xDlg;
 public:
     explicit AbstractSwWordCountFloatDlg_Impl(std::unique_ptr<SwWordCountFloatDlg> p)
@@ -104,7 +103,6 @@ class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 
 class SwAbstractSfxController_Impl : public SfxAbstractDialog
 {
-protected:
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
 public:
     explicit SwAbstractSfxController_Impl(std::unique_ptr<SfxSingleTabDialogController> p)
@@ -118,7 +116,6 @@ public:
 
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 {
-protected:
     std::unique_ptr<SwAsciiFilterDlg> m_xDlg;
 public:
     explicit AbstractSwAsciiFilterDlg_Impl(std::unique_ptr<SwAsciiFilterDlg> p)
@@ -136,7 +133,6 @@ class VclAbstractDialog_Impl : public VclAbstractDialog
 
 class AbstractGenericDialog_Impl : public VclAbstractDialog
 {
-protected:
     std::shared_ptr<weld::GenericDialogController> m_xDlg;
 public:
     explicit AbstractGenericDialog_Impl(std::unique_ptr<weld::GenericDialogController> p)
@@ -149,7 +145,6 @@ public:
 
 class AbstractSwSortDlg_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<SwSortDlg> m_xDlg;
 public:
     explicit AbstractSwSortDlg_Impl(std::unique_ptr<SwSortDlg> p)
@@ -161,7 +156,6 @@ public:
 
 class AbstractMultiTOXMarkDlg_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<SwMultiTOXMarkDlg> m_xDlg;
 public:
     explicit AbstractMultiTOXMarkDlg_Impl(std::unique_ptr<SwMultiTOXMarkDlg> p)
@@ -173,7 +167,6 @@ public:
 
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 {
-protected:
     std::unique_ptr<SwBreakDlg> m_xDlg;
 public:
     explicit AbstractSwBreakDlg_Impl(std::unique_ptr<SwBreakDlg> p)
@@ -188,7 +181,6 @@ public:
 
 class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<SwTableWidthDlg> m_xDlg;
 public:
     explicit AbstractSwTableWidthDlg_Impl(std::unique_ptr<SwTableWidthDlg> p)
@@ -200,7 +192,6 @@ public:
 
 class AbstractSwTableHeightDlg_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<SwTableHeightDlg> m_xDlg;
 public:
     explicit AbstractSwTableHeightDlg_Impl(std::unique_ptr<SwTableHeightDlg> p)
@@ -212,7 +203,6 @@ public:
 
 class AbstractSwMergeTableDlg_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<SwMergeTableDlg> m_xDlg;
 public:
     explicit AbstractSwMergeTableDlg_Impl(std::unique_ptr<SwMergeTableDlg> p)
@@ -224,7 +214,6 @@ public:
 
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 {
-protected:
     std::unique_ptr<SwSplitTableDlg> m_xDlg;
 public:
     explicit AbstractSplitTableDialog_Impl(std::unique_ptr<SwSplitTableDlg> p)
@@ -269,7 +258,6 @@ private:
 
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
 {
-protected:
     std::unique_ptr<SwConvertTableDlg> m_xDlg;
 public:
     explicit AbstractSwConvertTableDlg_Impl(std::unique_ptr<SwConvertTableDlg> p)
@@ -292,7 +280,6 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 {
-protected:
     std::unique_ptr<sw::DropDownFieldDialog> m_xDlg;
 public:
     explicit AbstractDropDownFieldDialog_Impl(std::unique_ptr<sw::DropDownFieldDialog> p)
@@ -306,7 +293,6 @@ public:
 
 class AbstractDropDownFormFieldDialog_Impl : public VclAbstractDialog
 {
-protected:
     std::unique_ptr<sw::DropDownFormFieldDialog> m_xDlg;
 public:
     explicit AbstractDropDownFormFieldDialog_Impl(std::unique_ptr<sw::DropDownFormFieldDialog> p)
@@ -318,7 +304,6 @@ public:
 
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 {
-protected:
     std::unique_ptr<SwLabDlg> m_xDlg;
 public:
     explicit AbstractSwLabDlg_Impl(std::unique_ptr<SwLabDlg> p)
@@ -338,7 +323,6 @@ public:
 
 class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 {
-protected:
     std::unique_ptr<SwSelGlossaryDlg> m_xDlg;
 public:
     explicit AbstractSwSelGlossaryDlg_Impl(std::unique_ptr<SwSelGlossaryDlg> p)
@@ -353,7 +337,6 @@ public:
 
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
-protected:
     std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> m_xDlg;
 public:
     explicit AbstractSwAutoFormatDlg_Impl(std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> p)
@@ -383,7 +366,6 @@ class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
 
 class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 {
-protected:
     std::unique_ptr<SwRenameXNamedDlg> m_xDlg;
 public:
     explicit AbstractSwRenameXNamedDlg_Impl(std::unique_ptr<SwRenameXNamedDlg> p)
@@ -414,7 +396,6 @@ class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 class SwFieldInputDlg;
 class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 {
-protected:
     std::unique_ptr<SwFieldInputDlg> m_xDlg;
 public:
     explicit AbstractFieldInputDlg_Impl(std::unique_ptr<SwFieldInputDlg> p)
@@ -430,7 +411,6 @@ public:
 class SwInsFootNoteDlg;
 class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 {
-protected:
     std::unique_ptr<SwInsFootNoteDlg> m_xDlg;
 public:
     explicit AbstractInsFootNoteDlg_Impl(std::unique_ptr<SwInsFootNoteDlg> p)
@@ -449,7 +429,6 @@ public:
 class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
-protected:
     std::unique_ptr<SwInsTableDlg> m_xDlg;
 public:
     explicit AbstractInsTableDlg_Impl(std::unique_ptr<SwInsTableDlg> p)
@@ -465,7 +444,6 @@ public:
 class SwJavaEditDialog;
 class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 {
-protected:
     std::unique_ptr<SwJavaEditDialog> m_xDlg;
 public:
     explicit AbstractJavaEditDialog_Impl(std::unique_ptr<SwJavaEditDialog> p)
@@ -497,7 +475,6 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 class SwMailMergeCreateFromDlg;
 class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDlg
 {
-protected:
     std::unique_ptr<SwMailMergeCreateFromDlg> m_xDlg;
 public:
     explicit AbstractMailMergeCreateFromDlg_Impl(std::unique_ptr<SwMailMergeCreateFromDlg> p)
@@ -511,7 +488,6 @@ public:
 class SwMailMergeFieldConnectionsDlg;
 class AbstractMailMergeFieldConnectionsDlg_Impl : public AbstractMailMergeFieldConnectionsDlg
 {
-protected:
     std::unique_ptr<SwMailMergeFieldConnectionsDlg> m_xDlg;
 public:
     explicit AbstractMailMergeFieldConnectionsDlg_Impl(std::unique_ptr<SwMailMergeFieldConnectionsDlg> p)
@@ -549,7 +525,6 @@ class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialo
 class SwIndexMarkFloatDlg;
 class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-protected:
     std::shared_ptr<SwIndexMarkFloatDlg> m_xDlg;
 public:
     explicit AbstractIndexMarkFloatDlg_Impl(std::unique_ptr<SwIndexMarkFloatDlg> p)
@@ -564,7 +539,6 @@ public:
 class SwAuthMarkFloatDlg;
 class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-protected:
     std::shared_ptr<SwAuthMarkFloatDlg> m_xDlg;
 public:
     explicit AbstractAuthMarkFloatDlg_Impl(std::unique_ptr<SwAuthMarkFloatDlg> p)

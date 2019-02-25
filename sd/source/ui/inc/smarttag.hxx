@@ -169,7 +169,7 @@ public:
     const SmartTagReference& getTag() const { return mxSmartTag; }
 
     virtual bool isMarkable() const;
-protected:
+private:
     SmartTagReference const mxSmartTag;
 };
 

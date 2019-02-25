@@ -257,7 +257,6 @@ namespace xforms
     typedef ODerivedDataType< OStringType > OStringType_Base;
     class OStringType   :public OStringType_Base
     {
-    protected:
         // <properties>
         css::uno::Any m_aLength;
         css::uno::Any m_aMinLength;
@@ -282,7 +281,6 @@ namespace xforms
     typedef ODerivedDataType< ODecimalType, OValueLimitedType< double > > ODecimalType_Base;
     class ODecimalType : public ODecimalType_Base
     {
-    protected:
         css::uno::Any m_aTotalDigits;
         css::uno::Any m_aFractionDigits;
 

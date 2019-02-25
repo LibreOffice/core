@@ -33,8 +33,8 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OIndexColumn :
             public OColumn, public OIndexColumn_PROP
         {
-        protected:
             bool    m_IsAscending;
+        protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:

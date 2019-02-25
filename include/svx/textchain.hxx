@@ -142,9 +142,10 @@ public:
 
 protected:
     TextChain();
-    std::map< ChainLinkId, ImpChainLinkProperties *> maLinkPropertiesMap;
 
 private:
+    std::map< ChainLinkId, ImpChainLinkProperties *> maLinkPropertiesMap;
+
     friend class SdrModel;
     //SdrTextObj *impGetNextLink(const SdrTextObj *) const;
     //SdrTextObj *impGetPrevLink(const SdrTextObj *) const;

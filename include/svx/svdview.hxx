@@ -154,7 +154,6 @@ class SVX_DLLPUBLIC SdrView : public SdrCreateView, public virtual tools::WeakBa
     bool                        bNoExtendedKeyDispatcher : 1;
     bool                        mbMasterPagePaintCaching : 1;
 
-protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
 public:

@@ -56,7 +56,7 @@ protected:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-
+private:
     bool bSelectionChanged;
 };
 

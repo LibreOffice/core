@@ -84,11 +84,11 @@ class OComponentDefinition  :public OContentHelper
                             ,public OComponentDefinition_BASE
                             ,public ::comphelper::OPropertyArrayUsageHelper< OComponentDefinition >
 {
-protected:
     rtl::Reference< OColumns >     m_xColumns;
     rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
     bool                        m_bTable;
 
+protected:
     virtual ~OComponentDefinition() override;
     virtual void SAL_CALL disposing() override;
 
