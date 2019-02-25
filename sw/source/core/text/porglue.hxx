@@ -33,10 +33,10 @@ public:
 
     void Join( SwGluePortion *pVictim );
 
-    inline short GetPrtGlue() const;
+    inline long GetPrtGlue() const;
     sal_uInt16 GetFixWidth() const { return nFixWidth; }
     void SetFixWidth( const sal_uInt16 nNew ) { nFixWidth = nNew; }
-    void MoveGlue( SwGluePortion *pTarget, const short nPrtGlue );
+    void MoveGlue( SwGluePortion *pTarget, const long nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
@@ -63,7 +63,7 @@ public:
     void AdjustRight( const SwLineLayout* pCurr );
 };
 
-inline short SwGluePortion::GetPrtGlue() const
+inline long SwGluePortion::GetPrtGlue() const
 { return Width() - nFixWidth; }
 
 // The FixWidth MUST NEVER be larger than the accumulated width!

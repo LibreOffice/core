@@ -435,7 +435,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             if ( nKanaIdx == pCurrent->GetKanaComp().size() )
                 pCurrent->GetKanaComp().push_back( nNull );
 
-            sal_uInt16 nRest;
+            long nRest;
 
             if ( pPos->InTabGrp() )
             {
@@ -759,9 +759,9 @@ void SwTextAdjuster::CalcDropAdjust()
             if( pRight && pRight != pLeft )
             {
                 // 5) Calculate nMinLeft. Who is the most to left?
-                const sal_uInt16 nDropLineStart =
-                    sal_uInt16(GetLineStart()) + pLeft->Width() + pDropPor->Width();
-                sal_uInt16 nMinLeft = nDropLineStart;
+                const auto nDropLineStart =
+                    GetLineStart() + pLeft->Width() + pDropPor->Width();
+                auto nMinLeft = nDropLineStart;
                 for( sal_uInt16 i = 1; i < GetDropLines(); ++i )
                 {
                     if( NextLine() )
@@ -776,8 +776,8 @@ void SwTextAdjuster::CalcDropAdjust()
                             nMinLeft = 0;
                         else
                         {
-                            const sal_uInt16 nLineStart =
-                                sal_uInt16(GetLineStart()) + pMar->Width();
+                            const auto nLineStart =
+                                GetLineStart() + pMar->Width();
                             if( nMinLeft > nLineStart )
                                 nMinLeft = nLineStart;
                         }
@@ -789,7 +789,7 @@ void SwTextAdjuster::CalcDropAdjust()
                 {
                     // The Glue is always passed from pLeft to pRight, so that
                     // the text moves to the left.
-                    const short nGlue = nDropLineStart - nMinLeft;
+                    const auto nGlue = nDropLineStart - nMinLeft;
                     if( !nMinLeft )
                         pLeft->MoveAllGlue( pRight );
                     else
