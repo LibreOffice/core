@@ -245,7 +245,7 @@ void LayoutAtom::dump(int level)
         pAtom->dump(level + 1);
 }
 
-ForEachAtom::ForEachAtom(const LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
+ForEachAtom::ForEachAtom(LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode)
 {
     maIter.loadFromXAttr(xAttributes);
@@ -272,7 +272,7 @@ const std::vector<LayoutAtomPtr>& ChooseAtom::getChildren() const
     return maEmptyChildren;
 }
 
-ConditionAtom::ConditionAtom(const LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
+ConditionAtom::ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode),
     mIsElse(isElse)
 {
@@ -463,7 +463,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rOwnConstraints ) const
+                           const std::vector<Constraint>& rOwnConstraints )
 {
     // Algorithm result may depend on the parent constraints as well.
     std::vector<Constraint> aMergedConstraints;

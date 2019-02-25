@@ -179,6 +179,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnZOrder(pSourceShape->mnZOrder)
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
+, mfAspectRatio(pSourceShape->mfAspectRatio)
 {}
 
 Shape::~Shape()
