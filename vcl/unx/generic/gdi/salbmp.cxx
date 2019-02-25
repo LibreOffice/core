@@ -64,7 +64,7 @@ std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = nullptr;
-sal_uLong           X11SalBitmap::mnCacheInstCount = 0;
+unsigned int        X11SalBitmap::mnCacheInstCount = 0;
 
 X11SalBitmap::X11SalBitmap()
     : mbGrey( false )
