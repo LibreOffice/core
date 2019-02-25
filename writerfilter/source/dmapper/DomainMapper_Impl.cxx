@@ -2015,6 +2015,12 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         m_aRedlines.push(std::vector< RedlineParamsPtr >());
 
         PropertyMapPtr pTopContext = GetTopContext();
+
+        // Remove style reference, if any. This reference did appear here as a side effect of tdf#43017
+        // Seems it is not required by LO, but causes side effects during editing. So remove it
+        // for footnotes/endnotes to restore original LO behavior here.
+        pTopContext->Erase(PROP_CHAR_STYLE_NAME);
+
         uno::Reference< text::XText > xFootnoteText;
         if (GetTextFactory().is())
             xFootnoteText.set( GetTextFactory()->createInstance(
