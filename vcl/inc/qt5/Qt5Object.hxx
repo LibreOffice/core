@@ -22,14 +22,17 @@
 #include <salobj.hxx>
 #include <vcl/sysdata.hxx>
 
+#include <QtCore/QObject>
 #include <QtGui/QRegion>
 
 class Qt5Frame;
 class QWidget;
 class QWindow;
 
-class Qt5Object : public SalObject
+class Qt5Object : public QObject, public SalObject
 {
+    Q_OBJECT
+
     friend class Qt5OpenGLContext;
 
     SystemEnvData m_aSystemData;
