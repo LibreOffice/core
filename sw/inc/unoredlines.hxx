@@ -24,6 +24,7 @@
 #include "docary.hxx"
 #include "unocoll.hxx"
 #include "unobaseclass.hxx"
+#include <svl/listener.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 class SwRangeRedline;
@@ -69,7 +70,7 @@ public:
 
 class SwXRedlineEnumeration
     : public SwSimpleEnumeration_Base
-    , public SwClient
+    , public SvtListener
 {
     SwDoc* pDoc;
     SwRedlineTable::size_type nCurrentIndex;
@@ -86,9 +87,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+
+    virtual void Notify( const SfxHint& ) override;
 };
 
 #endif
