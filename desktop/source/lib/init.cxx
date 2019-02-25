@@ -95,6 +95,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokcharthelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -2787,6 +2788,11 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
+
+    LokChartHelper aChartHelper(SfxViewShell::Current());
+
+    if (aChartHelper.GetWindow())
+        return 0;
 
     try
     {
