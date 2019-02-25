@@ -18,6 +18,8 @@
  */
 
 #include <interpretercontext.hxx>
+
+#include <document.hxx>
 #include <formula/token.hxx>
 #include <lookupcache.hxx>
 #include <algorithm>
@@ -45,6 +47,11 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
 {
     mpDoc = &rDoc;
     mpFormatter = pFormatter;
+}
+
+void ScInterpreterContext::initFormatTable()
+{
+    mpFormatter = mpDoc->GetFormatTable(); // will assert if not main thread
 }
 
 void ScInterpreterContext::Cleanup()
