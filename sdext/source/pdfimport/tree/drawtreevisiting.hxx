@@ -35,11 +35,12 @@ namespace pdfi
     {
     private:
         PDFIProcessor& m_rProcessor;
+        css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+
         void optimizeTextElements(Element& rParent);
 
     public:
-    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
-    const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
+        const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
         explicit DrawXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}

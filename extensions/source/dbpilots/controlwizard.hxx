@@ -49,7 +49,6 @@ namespace dbp
     typedef ::svt::OWizardPage OControlWizardPage_Base;
     class OControlWizardPage : public OControlWizardPage_Base
     {
-    protected:
         VclPtr<FixedText>      m_pFormDatasourceLabel;
         VclPtr<FixedText>      m_pFormDatasource;
         VclPtr<FixedText>      m_pFormContentTypeLabel;

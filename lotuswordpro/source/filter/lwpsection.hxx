@@ -74,7 +74,7 @@ public:
     void Read() override;
     LwpObjectID& GetPosition(){ return m_Para;}
     LwpObjectID& GetListList(){ return m_ListList;}
-protected:
+private:
     LwpObjectID m_ListList;//lwplistlist object,
     LwpObjectID m_Para;
 };

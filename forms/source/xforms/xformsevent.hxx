@@ -60,7 +60,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
             sal_Bool canBubbleArg,
             sal_Bool cancelableArg) override;
 
-    protected:
+    private:
 
         OUString m_eventType;
         bool m_bubbles;

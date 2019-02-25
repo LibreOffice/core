@@ -106,7 +106,7 @@ public:
     LwpObjectID& GetObject() { return m_Object; }
 protected:
     virtual ~LwpObjectHolder() override {}
-
+private:
     LwpObjectID m_Object;
 };
 

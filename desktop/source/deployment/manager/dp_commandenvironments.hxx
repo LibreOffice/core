@@ -34,9 +34,8 @@ class BaseCommandEnv
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {
-protected:
     css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
-
+protected:
     void handle_(bool approve,
                  css::uno::Reference< css::task::XInteractionRequest> const & xRequest );
 public:

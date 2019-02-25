@@ -1602,7 +1602,6 @@ protected:
 private:
     void                constructTextStrmObj( rtl_TextEncoding eTextEnc );
 
-protected:
     std::shared_ptr< TextInputStream > mxTextStrm;
 };
 

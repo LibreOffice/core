@@ -141,7 +141,6 @@ public:
     // change the parameter to int
     //void fireSwitchCurrentPage( String pageName) throw();
     void fireSwitchCurrentPage( sal_Int32 pageIndex) throw();
-    css::uno::Reference< css::drawing::XLayer>* mpCurrentLayer;
     bool IsDisposing() const { return mbDisposing; }
 
     /** Return a pointer to the ViewShellBase object that the DrawController
@@ -277,6 +276,8 @@ private:
 
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
+
+    css::uno::Reference< css::drawing::XLayer>* mpCurrentLayer;
 
     const css::uno::Type m_aSelectionTypeIdentifier;
 

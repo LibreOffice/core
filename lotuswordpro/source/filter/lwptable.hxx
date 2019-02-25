@@ -167,6 +167,7 @@ public:
     virtual ~LwpParallelColumns() override;
 protected:
     void Read() override;
+private:
     LwpObjectID     cDefaultLeftColumnStyle;
     LwpObjectID cDefaultRightColumnStyle;
 };

@@ -407,9 +407,9 @@ include/vcl/ppdparser.hxx:128
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
 io/source/stm/odata.cxx:586
-    io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-io/source/stm/odata.cxx:586
     io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
+io/source/stm/odata.cxx:586
+    io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:51
     GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:84
@@ -952,8 +952,8 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:1165
      out gpointer *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

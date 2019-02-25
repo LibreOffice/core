@@ -27,7 +27,7 @@ public:
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
-protected:
+private:
     const long (&mrMatrix)[9];
 };
 

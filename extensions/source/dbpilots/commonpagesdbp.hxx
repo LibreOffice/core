@@ -65,7 +65,6 @@ namespace dbp
 
     class OMaybeListSelectionPage : public OControlWizardPage
     {
-    protected:
         VclPtr<RadioButton>    m_pYes;
         VclPtr<RadioButton>    m_pNo;
         VclPtr<ListBox>        m_pList;

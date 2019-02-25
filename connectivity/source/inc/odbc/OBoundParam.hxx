@@ -102,7 +102,7 @@ namespace connectivity
             }
 
 
-        protected:
+        private:
 
             // Data attributes
 

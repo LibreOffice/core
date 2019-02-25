@@ -455,7 +455,6 @@ namespace dbaccess
                          ,public ORowSetBase
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
-    protected:
         ORowSet*                    m_pParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;

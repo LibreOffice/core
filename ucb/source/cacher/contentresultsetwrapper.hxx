@@ -344,7 +344,6 @@ class ContentResultSetWrapperListener
         , public css::beans::XPropertyChangeListener
         , public css::beans::XVetoableChangeListener
 {
-protected:
     ContentResultSetWrapper*    m_pOwner;
 
 public:

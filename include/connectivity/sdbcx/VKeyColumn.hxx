@@ -33,8 +33,8 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OKeyColumn :
             public OColumn, public OKeyColumn_PROP
         {
-        protected:
             OUString m_ReferencedColumn;
+        protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:

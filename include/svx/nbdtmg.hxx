@@ -115,6 +115,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         // store the attributes passed from pSet
         OUString        aBulletCharFmtName;
         OUString        aNumCharFmtName;
+        bool    bIsLoading;
+
         NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
     public:
@@ -138,7 +140,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         const OUString& GetNumCharFmtName() { return aNumCharFmtName;}
         MapUnit GetMapUnit() { return eCoreUnit;}
     protected:
-        bool    bIsLoading;
         void    ImplLoad(const OUString& filename);
         void    ImplStore(const OUString& filename);
 

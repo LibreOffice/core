@@ -31,8 +31,8 @@ typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > 
 class VCLXAccessibleHeaderBar : public VCLXAccessibleComponent
 {
 
-public:
     VclPtr<HeaderBar>  m_pHeadBar;
+public:
     virtual ~VCLXAccessibleHeaderBar() override;
 
     VCLXAccessibleHeaderBar( VCLXWindow* pVCLXindow );

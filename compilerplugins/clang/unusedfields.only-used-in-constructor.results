@@ -265,9 +265,9 @@ include/sfx2/msg.hxx:137
 include/sfx2/msg.hxx:137
     SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:138
-    SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:138
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:138
+    SfxType7 pType const std::type_info *
 include/sfx2/msg.hxx:138
     SfxType7 nAttribs sal_uInt16
 include/sfx2/msg.hxx:138
@@ -293,9 +293,9 @@ include/sfx2/msg.hxx:141
 include/sfx2/msg.hxx:141
     SfxType11 pType const std::type_info *
 include/sfx2/msg.hxx:141
-    SfxType11 aAttrib struct SfxTypeAttrib [11]
-include/sfx2/msg.hxx:141
     SfxType11 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
+    SfxType11 aAttrib struct SfxTypeAttrib [11]
 include/sfx2/msg.hxx:143
     SfxType13 pType const std::type_info *
 include/sfx2/msg.hxx:143
@@ -313,9 +313,9 @@ include/sfx2/msg.hxx:144
 include/sfx2/msg.hxx:144
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
-    SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
     SfxType16 aAttrib struct SfxTypeAttrib [16]
+include/sfx2/msg.hxx:145
+    SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
     SfxType16 nAttribs sal_uInt16
 include/sfx2/msg.hxx:145
@@ -589,10 +589,6 @@ sd/source/ui/view/viewshel.cxx:1204
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition comment rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
-    PDFGrammar::definition simple_type rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
-    PDFGrammar::definition null_object rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition stringtype rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition boolean rule<ScannerT>
@@ -600,6 +596,10 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition stream rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
+    PDFGrammar::definition null_object rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
+    PDFGrammar::definition simple_type rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition dict_element rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
@@ -812,8 +812,8 @@ vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

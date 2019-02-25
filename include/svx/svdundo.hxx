@@ -206,7 +206,6 @@ public:
 
 class SVX_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
-protected:
     std::unique_ptr<SdrObjGeoData>  pUndoGeo;
     std::unique_ptr<SdrObjGeoData>  pRedoGeo;
     // If we have a group object:
@@ -333,7 +332,6 @@ class SVX_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
     bool                        bOldOwner;
     bool                        bNewOwner;
 
-protected:
     SdrObjList*                 pObjList;
     sal_uInt32                      nOrdNum;
     SdrObject*                  pNewObj;

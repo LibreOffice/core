@@ -49,7 +49,6 @@ namespace xmloff
     //= ODefaultEventAttacherManager
     class ODefaultEventAttacherManager : public IEventAttacherManager
     {
-    protected:
         typedef std::map<
             css::uno::Reference< css::beans::XPropertySet >,
             css::uno::Sequence< css::script::ScriptEventDescriptor >,
