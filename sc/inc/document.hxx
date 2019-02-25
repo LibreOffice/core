@@ -582,8 +582,7 @@ public:
 
     ScInterpreterContext& GetNonThreadedContext() const
     {
-        // GetFormatTable() asserts that we are not in a threaded calculation
-        maInterpreterContext.mpFormatter = GetFormatTable();
+        assert(!IsThreadedGroupCalcInProgress());
         return maInterpreterContext;
     }
     // Uses thread_local.
