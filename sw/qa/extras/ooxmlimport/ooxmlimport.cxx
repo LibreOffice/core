@@ -17,6 +17,7 @@
 #endif
 
 #include <swmodeltestbase.hxx>
+#include <wrtsh.hxx>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -3299,6 +3300,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
     // Ensure that hyperlink text color is not blue (0x0000ff), but default (-1)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hyperlink color should be black!",
         sal_Int32(-1), getProperty<sal_Int32>(xText, "CharColor"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf121440, "tdf121440.docx")
+{
+    // Insert some text in front of footnote
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Insert("test");
+
+    // Ensure that inserted text is not superscripted
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Inserted text should be not a superscript!", static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapement"));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
