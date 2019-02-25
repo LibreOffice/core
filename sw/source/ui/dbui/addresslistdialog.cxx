@@ -346,18 +346,14 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, Button*, void)
 {
     OUString sInputURL;
-    ScopedVclPtr<SwCreateAddressListDialog> pDlg(
-        VclPtr<SwCreateAddressListDialog>::Create(
-                    pButton,
-                    sInputURL,
-                    m_pAddressPage->GetWizard()->GetConfigItem()));
-    if(RET_OK == pDlg->Execute())
+    SwCreateAddressListDialog aDlg(GetFrameWeld(), sInputURL, m_pAddressPage->GetWizard()->GetConfigItem());
+    if (RET_OK == aDlg.run())
     {
         //register the URL a new datasource
-        const OUString sURL = pDlg->GetURL();
+        const OUString sURL = aDlg.GetURL();
         try
         {
             uno::Reference<XSingleServiceFactory> xFact( m_xDBContext, UNO_QUERY);
@@ -424,7 +420,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pListLB->FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : nullptr;
@@ -443,12 +439,9 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
-        VclPtr<SwCreateAddressListDialog> pDlg(
-                VclPtr<SwCreateAddressListDialog>::Create(
-                        pButton,
-                        pUserData->sURL,
-                        m_pAddressPage->GetWizard()->GetConfigItem()));
-        pDlg->Execute();
+        SwCreateAddressListDialog aDlg(GetFrameWeld(), pUserData->sURL,
+                                       m_pAddressPage->GetWizard()->GetConfigItem());
+        aDlg.run();
     }
 };
 
