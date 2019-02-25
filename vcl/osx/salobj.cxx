@@ -195,7 +195,7 @@ void AquaSalObject::ResetClipRegion()
     setClippedPosSize();
 }
 
-void AquaSalObject::BeginSetClipRegion( sal_uLong )
+void AquaSalObject::BeginSetClipRegion( sal_uInt32 )
 {
     mbClip = false;
 }

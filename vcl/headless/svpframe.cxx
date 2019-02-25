@@ -491,7 +491,7 @@ void SvpSalFrame::ResetClipRegion()
 {
 }
 
-void SvpSalFrame::BeginSetClipRegion( sal_uLong )
+void SvpSalFrame::BeginSetClipRegion( sal_uInt32 )
 {
 }
 

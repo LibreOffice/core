@@ -2494,7 +2494,7 @@ void GtkSalFrame::ResetClipRegion()
         gdk_window_shape_combine_region( widget_get_window( m_pWindow ), nullptr, 0, 0 );
 }
 
-void GtkSalFrame::BeginSetClipRegion( sal_uLong )
+void GtkSalFrame::BeginSetClipRegion( sal_uInt32 )
 {
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
