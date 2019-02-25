@@ -220,6 +220,10 @@ public:
 
     sal_Int32 getDataNodeType() const { return mnDataNodeType; }
 
+    void setAspectRatio(double fAspectRatio) { mfAspectRatio = fAspectRatio; }
+
+    double getAspectRatio() const { return mfAspectRatio; }
+
     /// Changes reference semantics to value semantics for fill properties.
     void cloneFillProperties();
 
@@ -347,6 +351,9 @@ private:
 
     /// Type of data node for an in-diagram shape.
     sal_Int32 mnDataNodeType = 0;
+
+    /// Aspect ratio for an in-diagram shape.
+    double mfAspectRatio = 0;
 };
 
 } }

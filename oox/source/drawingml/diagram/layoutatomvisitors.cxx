@@ -133,6 +133,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         if (rAtom.setupShape(pShape, pNewNode))
         {
             pShape->setInternalName(rAtom.getName());
+            if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
+                pShape->setAspectRatio(pAlgAtom->getAspectRatio());
             rAtom.addNodeShape(pShape);
         }
     }
@@ -153,6 +155,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             if (rAtom.setupShape(pShape, pNewNode))
             {
                 pShape->setInternalName(rAtom.getName());
+                if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
+                    pShape->setAspectRatio(pAlgAtom->getAspectRatio());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
