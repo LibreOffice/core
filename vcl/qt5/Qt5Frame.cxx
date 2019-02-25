@@ -496,21 +496,25 @@ void Qt5Frame::SetModal(bool bModal)
 {
     if (isWindow())
     {
-        bool wasVisible = windowHandle()->isVisible();
+        auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+        assert(pSalInst);
+        pSalInst->RunInMainThread([this, bModal]() {
+            bool wasVisible = windowHandle()->isVisible();
 
-        // modality change is only effective if the window is hidden
-        if (wasVisible)
-        {
-            windowHandle()->hide();
-        }
+            // modality change is only effective if the window is hidden
+            if (wasVisible)
+            {
+                windowHandle()->hide();
+            }
 
-        windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+            windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
 
-        // and shown again if it was visible
-        if (wasVisible)
-        {
-            windowHandle()->show();
-        }
+            // and shown again if it was visible
+            if (wasVisible)
+            {
+                windowHandle()->show();
+            }
+        });
     }
 }
 
