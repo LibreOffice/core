@@ -336,7 +336,7 @@ public:
                                     long nX, long nY,
                                     long nWidth, long nHeight,
                                     void* pPtr,
-                                    sal_uLong nSize,
+                                    sal_uInt32 nSize,
                                     const OutputDevice *pOutDev );
 
     //  native widget rendering functions
@@ -534,7 +534,7 @@ protected:
                                     long nX, long nY,
                                     long nWidth, long nHeight,
                                     void* pPtr,
-                                    sal_uLong nSize ) = 0;
+                                    sal_uInt32 nSize ) = 0;
 
     /**
      * Query if a position is inside the native widget part.

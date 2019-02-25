@@ -1872,7 +1872,7 @@ bool OpenGLSalGraphicsImpl::drawEPS(
             long /*nX*/, long /*nY*/,
             long /*nWidth*/, long /*nHeight*/,
             void* /*pPtr*/,
-            sal_uLong /*nSize*/ )
+            sal_uInt32 /*nSize*/ )
 {
     return false;
 }

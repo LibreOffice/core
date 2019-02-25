@@ -889,7 +889,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
-bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     bool bRetValue = false;
 

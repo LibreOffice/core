@@ -233,7 +233,7 @@ public:
                 long nX, long nY,
                 long nWidth, long nHeight,
                 void* pPtr,
-                sal_uLong nSize ) override;
+                sal_uInt32 nSize ) override;
 
     /** Blend bitmap with color channels */
     virtual bool blendBitmap(

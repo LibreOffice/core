@@ -456,7 +456,7 @@ void GenPspGraphics::invert( sal_uInt32,
     SAL_WARN( "vcl", "Error: PrinterGfx::Invert() not implemented" );
 }
 
-bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     return m_pPrinterGfx->DrawEPS( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }

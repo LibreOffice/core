@@ -1437,7 +1437,7 @@ void X11SalGraphicsImpl::invert( sal_uInt32 nPoints,
                       Complex, CoordModeOrigin );
 }
 
-bool X11SalGraphicsImpl::drawEPS( long,long,long,long,void*,sal_uLong )
+bool X11SalGraphicsImpl::drawEPS( long,long,long,long,void*,sal_uInt32 )
 {
     return false;
 }
