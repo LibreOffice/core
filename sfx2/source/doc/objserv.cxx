@@ -97,6 +97,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>
 #include <sfx2/infobar.hxx>
+#include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -403,42 +404,6 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     return uno::Sequence< document::CmisVersion > ( );
 }
 
-namespace{
-
-/// Checks to see if the request has a parameter of IsRedactMode:bool=true
-bool isRedactMode(SfxRequest& rReq)
-{
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    if (pArgs)
-    {
-        const SfxBoolItem* pIsRedactMode = rReq.GetArg<SfxBoolItem>(SID_IS_REDACT_MODE);
-        if (pIsRedactMode && pIsRedactMode->GetValue())
-            return true;
-    }
-
-    return false;
-}
-
-/// Returns the value of the given string param as an OUString
-/// Returns empty OUString if no param
-OUString getStringParam(const SfxRequest& rReq, const sal_uInt16& nParamId)
-{
-    OUString sStringParam;
-
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    if (!pArgs)
-        return sStringParam;
-
-    const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(nParamId);
-    if (!pStringArg)
-        return sStringParam;
-
-    sStringParam = pStringArg->GetValue();
-    return sStringParam;
-}
-
-}
-
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
@@ -598,114 +563,24 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             sal_Int32 nPages = aRenderer.getPageCount();
-
             std::vector< GDIMetaFile > aMetaFiles;
 
-            for (sal_Int32 nPage = 1; nPage <= nPages; ++nPage)
-            {
-                ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
-                ::Point aLogicPos;
-                ::Point aCalcPageLogicPos;
-                ::Size aCalcPageContentSize;
-                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos, &aCalcPageLogicPos, &aCalcPageContentSize);
-                // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
-                ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
-
-                Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aTargetSize, COL_TRANSPARENT,
-                                                             true);
-                auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
-
-                // Set preferred map unit and size on the metafile, so the Shape size
-                // will be correct in MM.
-                MapMode aMapMode;
-                aMapMode.SetMapUnit(MapUnit::Map100thMM);
-                // FIXME: This is a temporary hack. Need to figure out a proper way to derive these magic numbers.
-                if (bIsWriter)
-                    aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
-                else if (bIsCalc)
-                    rGDIMetaFile.Scale(0.566, 0.566);
-
-                rGDIMetaFile.SetPrefMapMode(aMapMode);
-
-                if (bIsCalc)
-                {
-                    double aWidthRatio = static_cast<double>(aCalcPageContentSize.Width()) / aLogic.Width();
-                    // FIXME: Get rid of these magic numbers. Also watch for floating point rounding errors
-                    rGDIMetaFile.Move(-2400 + aCalcPageLogicPos.X() * (aWidthRatio - 0.0887), -3300 + aCalcPageLogicPos.Y() * 0.64175);
-                }
-
-                rGDIMetaFile.SetPrefSize( bIsCalc ? aCalcPageContentSize : aLogic );
-
-                aMetaFiles.push_back(rGDIMetaFile);
-            }
+            // Convert the pages of the document to gdimetafiles
+            SfxRedactionHelper::getPageMetaFilesFromDoc(aMetaFiles, nPages, aRenderer, bIsWriter, bIsCalc);
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
             uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
             uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
-            // Access the draw pages
-            uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
-            uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-
-            uno::Reference<css::lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
-
-            for (sal_Int32 nPage = 0; nPage < nPages; ++nPage)
-            {
-                GDIMetaFile rGDIMetaFile = aMetaFiles[nPage];
-                Graphic aGraphic(rGDIMetaFile);
-
-                uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
-                uno::Reference< drawing::XDrawPage > xPage = xDrawPages->insertNewByIndex(nPage);
-
-                // Create and insert the shape
-                uno::Reference<drawing::XShape> xShape(
-                        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
-                xShapeProperySet->setPropertyValue("Graphic", uno::Any( xGraph ));
-
-                // Set size and position
-                xShape->setSize(awt::Size(rGDIMetaFile.GetPrefSize().Width(),rGDIMetaFile.GetPrefSize().Height()) );
-
-                xPage->add(xShape);
-
-                // Shapes from Calc have the size of the content instead of the whole standard page (like A4)
-                // so it needs positioning on the draw page
-                if (bIsCalc)
-                    xShape->setPosition(awt::Point(1000,1000));
-            }
-
-            // Remove the extra page at the beginning
-            uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
-            xDrawPages->remove( xPage );
+            // Add the doc pages to the new draw document
+            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, bIsCalc);
 
             // Show the Redaction toolbar
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            if (pViewFrame)
-            {
-                Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
-                Reference<css::beans::XPropertySet> xPropSet( xFrame, UNO_QUERY );
-                Reference<css::frame::XLayoutManager> xLayoutManager;
-
-                if ( xPropSet.is() )
-                {
-                    try
-                    {
-                        Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
-                        aValue >>= xLayoutManager;
-                        xLayoutManager->createElement( "private:resource/toolbar/redactionbar" );
-                        xLayoutManager->showElement("private:resource/toolbar/redactionbar");
-                    }
-                    catch ( const css::uno::RuntimeException& )
-                    {
-                        throw;
-                    }
-                    catch ( css::uno::Exception& )
-                    {
-                         SAL_WARN( "sfx.doc", "Exception while trying to show the Redaction Toolbar!");
-                    }
-                }
-            }
+            if (!pViewFrame)
+                return;
+            SfxRedactionHelper::showRedactionToolbar(pViewFrame);
 
             return;
         }
@@ -721,9 +596,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Redaction finalization takes place in Draw
             if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument")
-                 && isRedactMode(rReq) )
+                 && SfxRedactionHelper::isRedactMode(rReq) )
             {
-                OUString sRedactionStyle(getStringParam(rReq, SID_REDACTION_STYLE));
+                OUString sRedactionStyle(SfxRedactionHelper::getStringParam(rReq, SID_REDACTION_STYLE));
 
                 // Access the draw pages
                 uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -996,7 +871,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             if (nId == SID_DIRECTEXPORTDOCASPDF &&
-                    isRedactMode(rReq))
+                    SfxRedactionHelper::isRedactMode(rReq))
             {
                 // Return the finalized redaction shapes back to normal (gray & transparent)
                 uno::Reference< lang::XComponent > xComponent( GetCurrentComponent(), uno::UNO_QUERY );
