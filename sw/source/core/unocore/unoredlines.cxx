@@ -33,7 +33,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 
@@ -126,7 +125,7 @@ SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
     pDoc(&rDoc),
     nCurrentIndex(0)
 {
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXRedlineEnumeration::~SwXRedlineEnumeration()
@@ -168,10 +167,9 @@ uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames()
     return uno::Sequence< OUString >();
 }
 
-void SwXRedlineEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXRedlineEnumeration::Notify( const SfxHint& rHint )
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
         pDoc = nullptr;
 }
 
