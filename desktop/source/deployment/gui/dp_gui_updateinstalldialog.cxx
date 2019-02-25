@@ -191,80 +191,62 @@ void UpdateInstallDialog::Thread::execute()
 }
 
 UpdateInstallDialog::UpdateInstallDialog(
-    vcl::Window * parent,
+    weld::Window* pParent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
-    cssu::Reference< cssu::XComponentContext > const & xCtx):
-    ModalDialog(
-        parent,
-        "UpdateInstallDialog","desktop/ui/updateinstalldialog.ui"),
-
-        m_thread(new Thread(xCtx, *this, aVecUpdateData)),
-        m_bError(false),
-        m_bNoEntry(true),
-        m_sInstalling(DpResId(RID_DLG_UPDATE_INSTALL_INSTALLING)),
-        m_sFinished(DpResId(RID_DLG_UPDATE_INSTALL_FINISHED)),
-        m_sNoErrors(DpResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),
-        m_sErrorDownload(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD)),
-        m_sErrorInstallation(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
-        m_sErrorLicenseDeclined(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
-        m_sNoInstall(DpResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
-        m_sThisErrorOccurred(DpResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
+    cssu::Reference< cssu::XComponentContext > const & xCtx)
+    : GenericDialogController(pParent, "desktop/ui/updateinstalldialog.ui",
+                              "UpdateInstallDialog")
+    , m_thread(new Thread(xCtx, *this, aVecUpdateData))
+    , m_bError(false)
+    , m_bNoEntry(true)
+    , m_sInstalling(DpResId(RID_DLG_UPDATE_INSTALL_INSTALLING))
+    , m_sFinished(DpResId(RID_DLG_UPDATE_INSTALL_FINISHED))
+    , m_sNoErrors(DpResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))
+    , m_sErrorDownload(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))
+    , m_sErrorInstallation(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))
+    , m_sErrorLicenseDeclined(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))
+    , m_sNoInstall(DpResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))
+    , m_sThisErrorOccurred(DpResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
+    , m_xFt_action(m_xBuilder->weld_label("DOWNLOADING"))
+    , m_xStatusbar(m_xBuilder->weld_progress_bar("STATUSBAR"))
+    , m_xFt_extension_name(m_xBuilder->weld_label("EXTENSION_NAME"))
+    , m_xMle_info(m_xBuilder->weld_text_view("INFO"))
+    , m_xHelp(m_xBuilder->weld_button("help"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFt_action, "DOWNLOADING");
-    get(m_pStatusbar, "STATUSBAR");
-    get(m_pFt_extension_name, "EXTENSION_NAME");
-    get(m_pMle_info, "INFO");
-    m_pMle_info->set_height_request(m_pMle_info->GetTextHeight() * 5);
-    m_pMle_info->set_width_request(m_pMle_info->approximate_char_width() * 56);
-    get(m_pHelp, "help");
-    get(m_pOk, "ok");
-    get(m_pCancel, "cancel");
+    m_xMle_info->set_size_request(m_xMle_info->get_approximate_digit_width() * 52,
+                                  m_xMle_info->get_height_rows(5));
 
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
-    m_pCancel->SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
+    m_xCancel->connect_clicked(LINK(this, UpdateInstallDialog, cancelHandler));
     if ( ! dp_misc::office_is_running())
-        m_pHelp->Disable();
+        m_xHelp->set_sensitive(false);
 }
 
 UpdateInstallDialog::~UpdateInstallDialog()
 {
-    disposeOnce();
 }
 
-void UpdateInstallDialog::dispose()
-{
-    m_pFt_action.clear();
-    m_pStatusbar.clear();
-    m_pFt_extension_name.clear();
-    m_pMle_info.clear();
-    m_pHelp.clear();
-    m_pOk.clear();
-    m_pCancel.clear();
-    ModalDialog::dispose();
-}
-
-bool UpdateInstallDialog::Close()
-{
-    m_thread->stop();
-    return ModalDialog::Close();
-}
-
-short UpdateInstallDialog::Execute()
+short UpdateInstallDialog::run()
 {
     m_thread->launch();
-    return ModalDialog::Execute();
+    short nRet = GenericDialogController::run();
+    m_thread->stop();
+    return nRet;
 }
 
 // make sure the solar mutex is locked before calling
 void UpdateInstallDialog::updateDone()
 {
     if (!m_bError)
-        m_pMle_info->SetText(m_pMle_info->GetText() + m_sNoErrors);
-    m_pOk->Enable();
-    m_pOk->GrabFocus();
-    m_pCancel->Disable();
+        m_xMle_info->set_text(m_xMle_info->get_text() + m_sNoErrors);
+    m_xOk->set_sensitive(true);
+    m_xOk->grab_focus();
+    m_xCancel->set_sensitive(false);
 }
+
 // make sure the solar mutex is locked before calling
 //sets an error message in the text area
 void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtension,
@@ -289,7 +271,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
         OSL_ASSERT(false);
     }
 
-    OUString sMsg(m_pMle_info->GetText());
+    OUString sMsg(m_xMle_info->get_text());
     sError = sError.replaceFirst("%NAME", sExtension);
     //We want to have an empty line between the error messages. However,
     //there shall be no empty line after the last entry.
@@ -304,19 +286,18 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
 
     sMsg += m_sNoInstall + "\n";
 
-    m_pMle_info->SetText(sMsg);
+    m_xMle_info->set_text(sMsg);
 }
 
 void UpdateInstallDialog::setError(OUString const & exceptionMessage)
 {
     m_bError = true;
-    m_pMle_info->SetText(m_pMle_info->GetText() + exceptionMessage + "\n");
+    m_xMle_info->set_text(m_xMle_info->get_text() + exceptionMessage + "\n");
 }
 
-IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler, Button*, void)
+IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler, weld::Button&, void)
 {
-    m_thread->stop();
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
 void UpdateInstallDialog::Thread::downloadExtensions()
@@ -365,10 +346,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                m_dialog.m_pFt_extension_name->SetText(updateData.aInstalledPackage->getDisplayName());
+                m_dialog.m_xFt_extension_name->set_label(updateData.aInstalledPackage->getDisplayName());
                 sal_uInt16 prog = (sal::static_int_cast<sal_uInt16>(100) * ++count) /
                     sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size());
-                m_dialog.m_pStatusbar->SetValue(prog);
+                m_dialog.m_xStatusbar->set_percentage(prog);
             }
             dp_misc::DescriptionInfoset info(m_xComponentContext, updateData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
@@ -439,8 +420,8 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_pFt_action->SetText(m_dialog.m_sInstalling);
-        m_dialog.m_pStatusbar->SetValue(0);
+        m_dialog.m_xFt_action->set_label(m_dialog.m_sInstalling);
+        m_dialog.m_xStatusbar->set_percentage(0);
     }
 
     sal_uInt16 count = 0;
@@ -454,11 +435,11 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             //we only show progress after an extension has been installed.
             if (count > 0) {
-                m_dialog.m_pStatusbar->SetValue(
+                m_dialog.m_xStatusbar->set_percentage(
                 (sal::static_int_cast<sal_uInt16>(100) * count) /
                 sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
              }
-            m_dialog.m_pFt_extension_name->SetText(updateData.aInstalledPackage->getDisplayName());
+            m_dialog.m_xFt_extension_name->set_label(updateData.aInstalledPackage->getDisplayName());
         }
         bool bError = false;
         bool bLicenseDeclined = false;
@@ -548,9 +529,9 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_pStatusbar->SetValue(100);
-        m_dialog.m_pFt_extension_name->SetText(OUString());
-        m_dialog.m_pFt_action->SetText(m_dialog.m_sFinished);
+        m_dialog.m_xStatusbar->set_percentage(100);
+        m_dialog.m_xFt_extension_name->set_label(OUString());
+        m_dialog.m_xFt_action->set_label(m_dialog.m_sFinished);
     }
 }
 
