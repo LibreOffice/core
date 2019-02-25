@@ -596,7 +596,6 @@ namespace xmloff
     template <class BASE>
     class OColumnImport : public BASE
     {
-    protected:
         css::uno::Reference< css::form::XGridColumnFactory >
                     m_xColumnFactory;
 
