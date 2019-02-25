@@ -4107,7 +4107,7 @@ void X11SalFrame::ResetClipRegion()
                               op, ordering );
 }
 
-void X11SalFrame::BeginSetClipRegion( sal_uIntPtr /*nRects*/ )
+void X11SalFrame::BeginSetClipRegion( sal_uInt32 /*nRects*/ )
 {
     m_vClipRectangles.clear();
 }

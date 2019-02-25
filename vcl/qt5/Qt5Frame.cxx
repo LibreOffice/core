@@ -1011,7 +1011,7 @@ bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
 
 void Qt5Frame::ResetClipRegion() { m_bNullRegion = true; }
 
-void Qt5Frame::BeginSetClipRegion(sal_uLong)
+void Qt5Frame::BeginSetClipRegion(sal_uInt32)
 {
     m_aRegion = QRegion(QRect(QPoint(0, 0), m_pQWidget->size()));
 }

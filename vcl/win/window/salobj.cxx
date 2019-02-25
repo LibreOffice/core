@@ -603,7 +603,7 @@ void WinSalObject::ResetClipRegion()
     SetWindowRgn( mhWnd, nullptr, TRUE );
 }
 
-void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
+void WinSalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
 {
     sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
