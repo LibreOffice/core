@@ -40,7 +40,7 @@ Q_SIGNALS:
 public:
     Qt5Timer();
 
-    virtual void Start(sal_uIntPtr nMS) override;
+    virtual void Start(sal_uInt64 nMS) override;
     virtual void Stop() override;
 };
 

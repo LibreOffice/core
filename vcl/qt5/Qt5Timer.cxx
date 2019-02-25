@@ -42,7 +42,7 @@ void Qt5Timer::timeoutActivated()
 
 void Qt5Timer::startTimer(int nMS) { m_aTimer.start(nMS); }
 
-void Qt5Timer::Start(sal_uIntPtr nMS) { Q_EMIT startTimerSignal(nMS); }
+void Qt5Timer::Start(sal_uInt64 nMS) { Q_EMIT startTimerSignal(nMS); }
 
 void Qt5Timer::stopTimer() { m_aTimer.stop(); }
 
