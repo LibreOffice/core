@@ -89,7 +89,14 @@ SalFrame* Qt5Instance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
     return new Qt5Frame(static_cast<Qt5Frame*>(pParent), nStyle, m_bUseCairo);
 }
 
-void Qt5Instance::DestroyFrame(SalFrame* pFrame) { delete pFrame; }
+void Qt5Instance::DestroyFrame(SalFrame* pFrame)
+{
+    if (pFrame)
+    {
+        assert(dynamic_cast<Qt5Frame*>(pFrame));
+        static_cast<Qt5Frame*>(pFrame)->deleteLater();
+    }
+}
 
 SalObject* Qt5Instance::CreateObject(SalFrame* pParent, SystemWindowData*, bool bShow)
 {
@@ -97,7 +104,14 @@ SalObject* Qt5Instance::CreateObject(SalFrame* pParent, SystemWindowData*, bool 
     return new Qt5Object(static_cast<Qt5Frame*>(pParent), bShow);
 }
 
-void Qt5Instance::DestroyObject(SalObject* pObject) { delete pObject; }
+void Qt5Instance::DestroyObject(SalObject* pObject)
+{
+    if (pObject)
+    {
+        assert(dynamic_cast<Qt5Object*>(pObject));
+        static_cast<Qt5Object*>(pObject)->deleteLater();
+    }
+}
 
 std::unique_ptr<SalVirtualDevice>
 Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, DeviceFormat eFormat,
