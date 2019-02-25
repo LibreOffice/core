@@ -118,7 +118,7 @@ namespace connectivity { namespace hsqldb
         {
             if ( bDropSucceeded )
                 // drop succeeded, but creation failed -> re-create the view with the original
-                // statemnet
+                // statement
                 xStatement->execute( sRestoreCommand );
             throw;
         }
