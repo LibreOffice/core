@@ -201,6 +201,8 @@ public:
                     .Class("ScDocument").GlobalNamespace()) // not owning
                 || name == "s_pLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
+                || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
+                || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning
                ) // these variables appear unproblematic
             {
                 return true;

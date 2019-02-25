@@ -810,7 +810,7 @@ public:
             SvNumberFormatter* pFormatter, SvNumFormatType & rCurFmtType );
 
     /// Calc's threaded group calculation is in progress.
-    static bool bThreadedGroupCalcInProgress;
+    SC_DLLPUBLIC static bool bThreadedGroupCalcInProgress;
 };
 
 // maybe move to dbdata.hxx (?):
