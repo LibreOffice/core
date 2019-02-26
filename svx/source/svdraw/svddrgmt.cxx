@@ -3187,7 +3187,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             nPntWink = std::abs(nPntWink);
         }
 
-        double nUmfang = 2 * std::abs(nNewRad)*nPi;
+        double nUmfang = 2 * std::abs(nNewRad)*M_PI;
 
         if (bResize)
         {
