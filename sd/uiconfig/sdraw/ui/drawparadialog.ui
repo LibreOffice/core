@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="drawparadialog|DrawParagraphPropertiesDialog">Paragraph</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
