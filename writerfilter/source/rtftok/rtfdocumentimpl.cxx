@@ -897,7 +897,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         std::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
-    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape,
+    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.getShape(),
                                                     uno::UNO_QUERY);
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         pExtHeader = nullptr;
@@ -2631,11 +2631,11 @@ RTFError RTFDocumentImpl::popState()
         }
         break;
         case Destination::DRAWINGOBJECT:
-            if (m_aStates.top().aDrawingObject.xShape.is())
+            if (m_aStates.top().aDrawingObject.getShape().is())
             {
                 RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
-                uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
-                uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.xPropertySet);
+                uno::Reference<drawing::XShape> xShape(rDrawing.getShape());
+                uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.getPropertySet());
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
@@ -2657,28 +2657,28 @@ RTFError RTFDocumentImpl::popState()
                 }
                 xShape->setSize(awt::Size(rDrawing.getRight(), rDrawing.getBottom()));
 
-                if (rDrawing.bHasLineColor)
+                if (rDrawing.getHasLineColor())
                 {
-                    uno::Any aLineColor = uno::makeAny(sal_uInt32((rDrawing.nLineColorR << 16)
-                                                                  + (rDrawing.nLineColorG << 8)
-                                                                  + rDrawing.nLineColorB));
+                    uno::Any aLineColor = uno::makeAny(sal_uInt32((rDrawing.getLineColorR() << 16)
+                                                                  + (rDrawing.getLineColorG() << 8)
+                                                                  + rDrawing.getLineColorB()));
                     uno::Any aLineWidth;
                     RTFSdrImport::resolveLineColorAndWidth(bTextFrame, xPropertySet, aLineColor,
                                                            aLineWidth);
                 }
-                if (rDrawing.bHasFillColor)
+                if (rDrawing.getHasFillColor())
                     xPropertySet->setPropertyValue(
-                        "FillColor", uno::makeAny(sal_uInt32((rDrawing.nFillColorR << 16)
-                                                             + (rDrawing.nFillColorG << 8)
-                                                             + rDrawing.nFillColorB)));
+                        "FillColor", uno::makeAny(sal_uInt32((rDrawing.getFillColorR() << 16)
+                                                             + (rDrawing.getFillColorG() << 8)
+                                                             + rDrawing.getFillColorB())));
                 else if (!bTextFrame)
                     // If there is no fill, the Word default is 100% transparency.
                     xPropertySet->setPropertyValue("FillTransparence",
                                                    uno::makeAny(sal_Int32(100)));
 
-                RTFSdrImport::resolveFLine(xPropertySet, rDrawing.nFLine);
+                RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 
-                if (!m_aStates.top().aDrawingObject.bHadShapeText)
+                if (!m_aStates.top().aDrawingObject.getHadShapeText())
                 {
                     Mapper().startShape(xShape);
                 }
@@ -3308,7 +3308,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 // If we're leaving the shapetext group (it may have nested ones) and this is a shape, not an old drawingobject.
                 if (m_aStates.top().eDestination != Destination::SHAPETEXT
-                    && !m_aStates.top().aDrawingObject.bHadShapeText)
+                    && !m_aStates.top().aDrawingObject.getHadShapeText())
                 {
                     m_aStates.top().bHadShapeText = true;
                     if (!m_aStates.top().pCurrentBuffer)
