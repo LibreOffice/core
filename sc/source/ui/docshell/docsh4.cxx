@@ -470,7 +470,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     && !(SvtSecurityOptions()
                          .isTrustedLocationUriForUpdatingLinks(
                              GetMedium() == nullptr
-                             ? OUString() : GetMedium()->GetName())))
+                             ? OUString() : GetMedium()->GetName())
+                         || (IsDocShared()
+                             && SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                                 GetSharedFileURL()))))
                 {
                     nSet = LM_ON_DEMAND;
                 }
