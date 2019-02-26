@@ -202,7 +202,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
         if ( !IsInFly() && GetNext() )
         {
             pPage = FindPageFrame();
-            // Minimize = that is set back if needed - for invalidation see below
+            // Minimize (reset if possible) invalidations: see below
             bOldInvaContent  = pPage->IsInvalidContent();
         }
 
@@ -291,8 +291,8 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             }
 
             pPara = GetPara();
-            // As long as the Follow is requested due to orphan lines, it is passed these
-            // and is reformatted if possible
+            // As long as the Follow requests lines due to Orphans, it is
+            // passed these and is formatted again if possible
             if( pPara && pPara->IsPrepWidows() )
                 CalcPreps();
             else
@@ -893,7 +893,7 @@ bool SwTextFrame::CalcPreps()
 
                 WidowsAndOrphans aFrameBreak( this );
                 // Whatever the attributes say: we split the paragraph in
-                // MustFit in any case
+                // MustFit case if necessary
                 if( bPrepMustFit )
                 {
                     aFrameBreak.SetKeep( false );
@@ -910,10 +910,10 @@ bool SwTextFrame::CalcPreps()
                 }
                 if( bBreak )
                 {
-                    // We run into troubles: when TruncLines get called, the
+                    // We run into troubles: when TruncLines is called, the
                     // conditions in IsInside change immediately such that
                     // IsBreakNow can return different results.
-                    // For this reason, we make it clear to rFrameBreak, that the
+                    // For this reason, we tell rFrameBreak that the
                     // end is reached at the location of rLine.
                     // Let's see if it works ...
                     aLine.TruncLines();
@@ -1328,19 +1328,19 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         nOldBottom = 0;
     rLine.CharToLine( rReformat.Start() );
 
-    // Words can be swapped-out when inserting a space into the
-    // line that comes before the edited one. That's why we also
-    // need to format that.
-    // Optimization: If rReformat starts after the first word of the line
+    // When inserting or removing a Space, words can be moved out of the edited
+    // line and into the preceding line, hence the preceding line must be
+    // formatted as well.
+    // Optimization: If rReformat starts after the first word of the line,
     // this line cannot possibly influence the previous one.
-    // Unfortunately it can: Text size changes + FlyFrames.
-    // The backlash can affect multiple lines (Frame!)!
+    // ...Turns out that unfortunately it can: Text size changes + FlyFrames;
+    // the feedback can affect multiple lines (Frames!)!
 
     // i#46560
-    // FME: Yes, consider this case: (word) has to go to the next line
-    // because) is a forbidden character at the beginning of a line although
-    // (word would still fit on the previous line. Adding text right in front
-    // of) would not trigger a reformatting of the previous line. Adding 1
+    // FME: Yes, consider this case: "(word )" has to go to the next line
+    // because ")" is a forbidden character at the beginning of a line although
+    // "(word" would still fit on the previous line. Adding text right in front
+    // of ")" would not trigger a reformatting of the previous line. Adding 1
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
     bool bPrev = rLine.GetPrev() &&

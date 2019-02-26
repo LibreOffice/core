@@ -3719,7 +3719,7 @@ sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 
 void SwTextFrame::ChgThisLines()
 {
-    // not necessary to format here (GerFormatted etc.), because we have to come from there!
+    // not necessary to format here (GetFormatted etc.), because we have to come from there!
     sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetDoc().GetLineNumberInfo();
     if ( !GetText().isEmpty() && HasPara() )
