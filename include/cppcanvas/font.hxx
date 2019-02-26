@@ -22,11 +22,6 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class  XCanvasFont;
-} } } }
-
 /* Definition of Font class */
 
 namespace cppcanvas

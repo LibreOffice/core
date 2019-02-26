@@ -21,8 +21,6 @@
 #define INCLUDED_CPPCANVAS_CANVASGRAPHIC_HXX
 
 #include <sal/types.h>
-#include <cppcanvas/color.hxx>
-#include <cppcanvas/canvas.hxx>
 #include <memory>
 
 namespace basegfx

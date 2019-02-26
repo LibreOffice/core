@@ -26,6 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/customsprite.hxx>
 
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
