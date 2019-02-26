@@ -1572,7 +1572,11 @@ void TopLevelWindowLocker::decBusy()
 {
     // unlock locked toplevel windows from being closed now busy is over
     for (auto& a : m_aBusyStack.top())
+    {
+        if (a->IsDisposed())
+            continue;
         a->DecModalCount();
+    }
     m_aBusyStack.pop();
 }
 
