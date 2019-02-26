@@ -940,6 +940,21 @@ void SdImportTestSmartArt::testPictureStrip()
     // xSecondImage had the bitmap fill from the second shape.
     CPPUNIT_ASSERT(aFirstGraphic.GetChecksum() != aSecondGraphic.GetChecksum());
 
+    // Test that the 3 images are in a single column, in 3 rows.
+    uno::Reference<drawing::XShape> xFirstImageShape(xFirstImage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstImage.is());
+    uno::Reference<drawing::XShape> xSecondImageShape(xSecondImage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondImage.is());
+    uno::Reference<drawing::XShape> xThirdImageShape(getChildShape(getChildShape(xGroup, 2), 1),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xThirdImageShape.is());
+    // Without the accompanying fix in place, this test would have failed: the first and the second
+    // image were in the same row.
+    CPPUNIT_ASSERT_EQUAL(xFirstImageShape->getPosition().X, xSecondImageShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xSecondImageShape->getPosition().X, xThirdImageShape->getPosition().X);
+    CPPUNIT_ASSERT_GREATER(xFirstImageShape->getPosition().Y, xSecondImageShape->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(xSecondImageShape->getPosition().Y, xThirdImageShape->getPosition().Y);
+
     xDocShRef->DoClose();
 }
 
