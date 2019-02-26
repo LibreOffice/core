@@ -141,66 +141,43 @@ namespace
             throw uno::RuntimeException("Table too complex", pObject);
         return pTable;
     }
-}
 
-#define UNO_TABLE_COLUMN_SUM    10000
-
-static void lcl_SendChartEvent(uno::Reference<uno::XInterface> const& xSource,
-                               ::cppu::OInterfaceContainerHelper & rListeners)
-{
-    if (!rListeners.getLength())
-        return;
-    //TODO: find appropriate settings of the Event
-    chart::ChartDataChangeEvent event;
-    event.Source = xSource;
-    event.Type = chart::ChartDataChangeType_ALL;
-    event.StartColumn = 0;
-    event.EndColumn = 1;
-    event.StartRow = 0;
-    event.EndRow = 1;
-    rListeners.notifyEach(
-            & chart::XChartDataChangeEventListener::chartDataChanged, event);
-}
-
-static void lcl_SendChartEvent(uno::Reference<uno::XInterface> const& xSource,
-                               ::comphelper::OInterfaceContainerHelper2 & rListeners)
-{
-    if (!rListeners.getLength())
-        return;
-    //TODO: find appropriate settings of the Event
-    chart::ChartDataChangeEvent event;
-    event.Source = xSource;
-    event.Type = chart::ChartDataChangeType_ALL;
-    event.StartColumn = 0;
-    event.EndColumn = 1;
-    event.StartRow = 0;
-    event.EndRow = 1;
-    rListeners.notifyEach(
-            & chart::XChartDataChangeEventListener::chartDataChanged, event);
-}
-
-static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
-                               ::comphelper::OInterfaceContainerHelper2 & rListeners)
-{
-    return lcl_SendChartEvent(&rSource, rListeners);
-}
-
-static void lcl_SendChartEvent(uno::Reference<uno::XInterface> const& xSource,
-                               ::cppu::OMultiTypeInterfaceContainerHelper const & rListeners)
-{
-    ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
-            cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
-    if (pContainer)
+    chart::ChartDataChangeEvent createChartEvent(uno::Reference<uno::XInterface> const& xSource)
     {
-        lcl_SendChartEvent(xSource, *pContainer);
+        //TODO: find appropriate settings of the Event
+        chart::ChartDataChangeEvent event;
+        event.Source = xSource;
+        event.Type = chart::ChartDataChangeType_ALL;
+        event.StartColumn = 0;
+        event.EndColumn = 1;
+        event.StartRow = 0;
+        event.EndRow = 1;
+        return event;
+    }
+
+    void lcl_SendChartEvent(
+            uno::Reference<uno::XInterface> const& xSource,
+            ::comphelper::OInterfaceContainerHelper2& rListeners)
+    {
+        rListeners.notifyEach(
+                &chart::XChartDataChangeEventListener::chartDataChanged,
+                createChartEvent(xSource));
+    }
+
+    void lcl_SendChartEvent(
+            uno::Reference<uno::XInterface> const& xSource,
+            ::cppu::OMultiTypeInterfaceContainerHelper const& rListeners)
+    {
+        auto pContainer(rListeners.getContainer(cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
+        if (pContainer)
+            pContainer->notifyEach(
+                    &chart::XChartDataChangeEventListener::chartDataChanged,
+                    createChartEvent(xSource));
     }
 }
 
-static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
-                               ::cppu::OMultiTypeInterfaceContainerHelper const & rListeners)
-{
-    return lcl_SendChartEvent(&rSource, rListeners);
-}
+#define UNO_TABLE_COLUMN_SUM 10000
+
 
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
