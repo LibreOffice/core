@@ -532,8 +532,6 @@ sd/source/core/CustomAnimationCloner.cxx:72
     sd::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/ui/inc/sdtreelb.hxx:309
     SdPageObjsTLV m_bLinkableSelected _Bool
-sd/source/ui/inc/sdtreelb.hxx:310
-    SdPageObjsTLV m_bShowAllShapes _Bool
 sd/source/ui/sidebar/MasterPageContainer.cxx:152
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:153
