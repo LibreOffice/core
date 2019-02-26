@@ -2931,6 +2931,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // we are done exporting the redline attributes.
                     rtl::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
                     m_pFontsAttrList.clear();
+                    rtl::Reference<sax_fastparser::FastAttributeList> pColorAttrList_Original(m_pColorAttrList);
+                    m_pColorAttrList.clear();
                     rtl::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
                     m_pEastAsianLayoutAttrList.clear();
                     rtl::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
@@ -2944,6 +2946,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
                     m_pFontsAttrList = pFontsAttrList_Original;
+                    m_pColorAttrList = pColorAttrList_Original;
                     m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
                     m_pCharLangAttrList = pCharLangAttrList_Original;
 

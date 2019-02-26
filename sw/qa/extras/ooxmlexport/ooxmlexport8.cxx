@@ -1009,6 +1009,10 @@ DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
     getParagraph(1, "XXX");
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf123705, "tdf123705.docx")
+{
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-size.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
