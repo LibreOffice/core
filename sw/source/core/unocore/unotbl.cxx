@@ -3141,10 +3141,11 @@ uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames()
 
 
 class SwXCellRange::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    SwFrameFormat* m_pFrameFormat;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
@@ -3158,9 +3159,8 @@ public:
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
 
-    Impl(sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
-            SwRangeDescriptor const & rDesc)
-        : SwClient(&rFrameFormat)
+    Impl(sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor const& rDesc)
+        : m_pFrameFormat(&rFrameFormat)
         , m_ChartListeners(m_Mutex)
         , m_pTableCursor(pCursor)
         , m_RangeDescriptor(rDesc)
@@ -3168,12 +3168,13 @@ public:
         , m_bFirstRowAsLabel(false)
         , m_bFirstColumnAsLabel(false)
     {
+        StartListening(rFrameFormat.GetNotifier());
         m_RangeDescriptor.Normalize();
     }
 
     SwFrameFormat* GetFrameFormat()
     {
-        return static_cast<SwFrameFormat*>(GetRegisteredIn());
+        return m_pFrameFormat;
     }
 
     std::tuple<sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32> GetLabelCoordinates(bool bRow);
@@ -3186,8 +3187,7 @@ public:
     sal_Int32 GetRowCount();
     sal_Int32 GetColumnCount();
 
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint& ) override;
 
 };
 
@@ -3853,24 +3853,20 @@ const SwUnoCursor* SwXCellRange::GetTableCursor() const
     return pFormat ? &(*m_pImpl->m_pTableCursor) : nullptr;
 }
 
-void SwXCellRange::Impl::Modify(
-        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
+void SwXCellRange::Impl::Notify( const SfxHint& rHint )
 {
-    ClientModify(this, pOld, pNew);
     uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
-    }
-    if(!GetRegisteredIn() || !m_pTableCursor)
+    if(rHint.GetId() == SfxHintId::Dying)
     {
+        m_pFrameFormat = nullptr;
         m_pTableCursor.reset(nullptr);
-        lang::EventObject const ev(xThis);
-        m_ChartListeners.disposeAndClear(ev);
     }
-    else
-    {
-        lcl_SendChartEvent(xThis.get(), m_ChartListeners);
+    if (xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        if(m_pFrameFormat)
+            lcl_SendChartEvent(xThis.get(), m_ChartListeners);
+        else
+            m_ChartListeners.disposeAndClear(lang::EventObject(xThis));
     }
 }
 
