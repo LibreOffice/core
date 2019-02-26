@@ -186,7 +186,7 @@ public:
                 long nX, long nY,
                 long nWidth, long nHeight,
                 void* pPtr,
-                sal_uLong nSize ) override;
+                sal_uInt32 nSize ) override;
 
     virtual bool blendBitmap(
                 const SalTwoRect&,
