@@ -638,7 +638,7 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                             if (_waccess(o3tl::toW(PathW), 0) < 0)
                                 CreateDirectoryW(o3tl::toW(PathW), nullptr);
 
-                               hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
+                            hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
                         }
 
                         RegCloseKey(hRegKey);

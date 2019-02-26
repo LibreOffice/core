@@ -846,7 +846,7 @@ extern "C" BOOL WINAPI DllMain(
     LPVOID    /*lpvReserved*/
 )
 {
-   if ( DLL_PROCESS_ATTACH == fdwReason )
+    if ( DLL_PROCESS_ATTACH == fdwReason )
         DisableThreadLibraryCalls( hInstance );
     return TRUE;
 }

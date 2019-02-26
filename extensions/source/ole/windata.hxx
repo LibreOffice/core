@@ -151,7 +151,7 @@ public:
    }
    ~ExcepInfo()
    {
-         if (bstrSource != nullptr)
+      if (bstrSource != nullptr)
          ::SysFreeString(bstrSource);
       if (bstrDescription != nullptr)
         ::SysFreeString(bstrDescription);

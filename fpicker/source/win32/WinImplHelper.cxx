@@ -82,23 +82,23 @@ static void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode Ne
                 // by NexChar
                 aBuffer.insert( i, NewChar );
             }
-         }
-         else if ( *pCurrent == NewChar )
-         {
+        }
+        else if ( *pCurrent == NewChar )
+        {
             // a NewChar will be replaced by
              // two NewChars
              // e.g. & -> &&
             aBuffer.insert( i++, *pCurrent );
             aBuffer.insert( i, *pCurrent );
-         }
-         else
-         {
+        }
+        else
+        {
             aBuffer.insert( i, *pCurrent );
-         }
+        }
 
-         pCurrent++;
-         pNext++;
-         i++;
+        pCurrent++;
+        pNext++;
+        i++;
     }
 }
 

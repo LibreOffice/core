@@ -122,7 +122,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder( );
+    setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
@@ -209,7 +209,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder( );
+    setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {

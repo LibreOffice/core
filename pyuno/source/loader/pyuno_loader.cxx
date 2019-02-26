@@ -200,18 +200,18 @@ PythonInit() {
             prependPythonPath( pythonPath );
 
 #ifdef _WIN32
-    //extend PATH under windows to include the branddir/program so ssl libs will be found
-    //for use by terminal mailmerge dependency _ssl.pyd
-    OUString sEnvName("PATH");
-    OUString sPath;
-    osl_getEnvironment(sEnvName.pData, &sPath.pData);
-    OUString sBrandLocation("$BRAND_BASE_DIR/program");
-    rtl::Bootstrap::expandMacros(sBrandLocation);
-    osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
-    sPath = OUStringBuffer(sPath).
-        append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
-        append(sBrandLocation).makeStringAndClear();
-    osl_setEnvironment(sEnvName.pData, sPath.pData);
+        //extend PATH under windows to include the branddir/program so ssl libs will be found
+        //for use by terminal mailmerge dependency _ssl.pyd
+        OUString sEnvName("PATH");
+        OUString sPath;
+        osl_getEnvironment(sEnvName.pData, &sPath.pData);
+        OUString sBrandLocation("$BRAND_BASE_DIR/program");
+        rtl::Bootstrap::expandMacros(sBrandLocation);
+        osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
+        sPath = OUStringBuffer(sPath).
+            append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
+            append(sBrandLocation).makeStringAndClear();
+        osl_setEnvironment(sEnvName.pData, sPath.pData);
 #endif
 
 #if PY_MAJOR_VERSION >= 3

@@ -202,18 +202,18 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD 
         case STREAM_SEEK_END:
             p = size - 1;
             break;
-   }
+    }
 
-   HRESULT hr = STG_E_INVALIDFUNCTION;
+    HRESULT hr = STG_E_INVALIDFUNCTION;
 
-   p += dlibMove.QuadPart;
+    p += dlibMove.QuadPart;
 
-   if ( ( p >= 0 ) && (p < size) )
-   {
+    if ( ( p >= 0 ) && (p < size) )
+    {
         pos_ = static_cast<size_t>(p);
         hr = S_OK;
-   }
-   return hr;
+    }
+    return hr;
 }
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Stat(STATSTG *pstatstg, DWORD grfStatFlag)

@@ -232,7 +232,7 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(ppdispParent == nullptr)
@@ -257,7 +257,7 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -269,7 +269,7 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pcountChildren == nullptr)
@@ -289,7 +289,7 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -303,7 +303,7 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(ppdispChild == nullptr)
@@ -327,7 +327,7 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -341,7 +341,7 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pszName == nullptr)
@@ -366,7 +366,7 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -380,7 +380,7 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if( pszValue == nullptr )
@@ -411,7 +411,7 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -425,7 +425,7 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pszDescription == nullptr)
@@ -450,7 +450,7 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -464,7 +464,7 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarRole == nullptr)
@@ -501,7 +501,7 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -515,7 +515,7 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarState == nullptr)
@@ -561,7 +561,7 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -616,7 +616,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
 
         ISDESTROY()
         // #CHECK#
@@ -756,7 +756,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -769,7 +769,7 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarChild == nullptr)
@@ -793,7 +793,7 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -808,7 +808,7 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarChildren == nullptr)
@@ -840,7 +840,7 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -857,7 +857,7 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pxLeft == nullptr || pyTop == nullptr || pcxWidth == nullptr || pcyHeight == nullptr)
@@ -901,7 +901,7 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -915,7 +915,7 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarEndUpAt == nullptr)
@@ -950,14 +950,14 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
         }
         return ret;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(pvarChild == nullptr)
@@ -1005,7 +1005,7 @@ STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -1233,7 +1233,7 @@ STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
         m_hwnd = hwnd;
-    return S_OK;
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -1648,7 +1648,7 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
         // #CHECK#
@@ -1672,14 +1672,14 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
         *nRelations = pRrelationSet->getRelationCount();
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(relation == nullptr)
@@ -1734,14 +1734,14 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
         // #CHECK#
@@ -1795,7 +1795,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
         *nRelations = nCount;
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
@@ -1806,7 +1806,7 @@ STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 
         (*role) = m_iRole;
 
-    return S_OK;
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -1819,21 +1819,21 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
     try
     {
         ISDESTROY()
-            // #CHECK#
-            if(nActions == nullptr)
-            {
-                return E_INVALIDARG;
-            }
-            *nActions = 0;
-            IAccessibleAction* pAcc = nullptr;
-            HRESULT hr = QueryInterface(IID_IAccessibleAction, reinterpret_cast<void**>(&pAcc));
-            if( hr == S_OK )
-            {
-                pAcc->nActions(nActions);
-                pAcc->Release();
-            }
+        // #CHECK#
+        if(nActions == nullptr)
+        {
+            return E_INVALIDARG;
+        }
+        *nActions = 0;
+        IAccessibleAction* pAcc = nullptr;
+        HRESULT hr = QueryInterface(IID_IAccessibleAction, reinterpret_cast<void**>(&pAcc));
+        if( hr == S_OK )
+        {
+            pAcc->nActions(nActions);
+            pAcc->Release();
+        }
 
-            return S_OK;
+        return S_OK;
     }
     catch(...)
     {
@@ -1879,7 +1879,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(groupLevel == nullptr || similarItemsInGroup == nullptr || positionInGroup == nullptr)
@@ -2048,7 +2048,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
@@ -2154,16 +2154,16 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
         XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
-    XAccessibleContext* pContext = GetContextByXAcc( pItem );
-    if( pParentContext == nullptr || pContext == nullptr )
-        return E_FAIL;
+        XAccessibleContext* pContext = GetContextByXAcc( pItem );
+        if( pParentContext == nullptr || pContext == nullptr )
+            return E_FAIL;
 
-    Reference< XAccessibleSelection > pRSelection = GetSelection();
-    if( !pRSelection.is() )
-        return E_FAIL;
-    long Index = pContext->getAccessibleIndexInParent();
-    pRSelection->selectAccessibleChild( Index );
-    return S_OK;
+        Reference< XAccessibleSelection > pRSelection = GetSelection();
+        if( !pRSelection.is() )
+            return E_FAIL;
+        long Index = pContext->getAccessibleIndexInParent();
+        pRSelection->selectAccessibleChild( Index );
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -2179,18 +2179,18 @@ HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
         XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
-    ;
-    XAccessibleContext* pContext = GetContextByXAcc( pItem );
-    if( pParentContext == nullptr || pContext == nullptr )
-        return E_INVALIDARG;
+        ;
+        XAccessibleContext* pContext = GetContextByXAcc( pItem );
+        if( pParentContext == nullptr || pContext == nullptr )
+            return E_INVALIDARG;
 
-    Reference< XAccessibleSelection > pRSelection = GetSelection();
-    if( !pRSelection.is() )
-        return E_FAIL;
-    long Index = pContext->getAccessibleIndexInParent();
-    pRSelection->deselectAccessibleChild( Index );
+        Reference< XAccessibleSelection > pRSelection = GetSelection();
+        if( !pRSelection.is() )
+            return E_FAIL;
+        long Index = pContext->getAccessibleIndexInParent();
+        pRSelection->deselectAccessibleChild( Index );
 
-    return S_OK;
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -2277,90 +2277,90 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 {
     SolarMutexGuard g;
 
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         if( (flagsSelect&SELFLAG_ADDSELECTION) &&
             (SELFLAG_REMOVESELECTION&flagsSelect) )
             return E_INVALIDARG;
 
-    if ( (flagsSelect&SELFLAG_TAKESELECTION) &&
-        (
-        (flagsSelect&SELFLAG_ADDSELECTION) ||
-        (flagsSelect&SELFLAG_REMOVESELECTION) ||
-        (flagsSelect&SELFLAG_EXTENDSELECTION )
-        )
-        )
-        return E_INVALIDARG;
+        if ( (flagsSelect&SELFLAG_TAKESELECTION) &&
+             (
+                 (flagsSelect&SELFLAG_ADDSELECTION) ||
+                 (flagsSelect&SELFLAG_REMOVESELECTION) ||
+                 (flagsSelect&SELFLAG_EXTENDSELECTION )
+             )
+            )
+            return E_INVALIDARG;
 
-    if ( varChild.vt != VT_I4 )
-        return E_INVALIDARG;
+        if ( varChild.vt != VT_I4 )
+            return E_INVALIDARG;
 
-    IMAccessible* pSelectAcc;
-    if( varChild.lVal == CHILDID_SELF )
-    {
-        pSelectAcc = this;
-        pSelectAcc->AddRef();
-    }
-    else
-    {
-        pSelectAcc = GetChildInterface(varChild.lVal);
-    }
-
-    if( pSelectAcc == nullptr )
-        return E_INVALIDARG;
-
-    if( flagsSelect&SELFLAG_TAKEFOCUS )
-    {
-        union {
-            XAccessible* pTempUNO;
-            hyper nHyper = 0;
-        };
-        pSelectAcc->GetUNOInterface(&nHyper);
-
-        if( pTempUNO == nullptr )
-            return NULL;
-
-        Reference<XAccessibleContext> pRContext = pTempUNO->getAccessibleContext();
-        Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
-        Reference< XAccessible > pRParentXAcc = pRContext->getAccessibleParent();
-        Reference< XAccessibleContext > pRParentContext = pRParentXAcc->getAccessibleContext();
-        Reference< XAccessibleComponent > pRParentComponent(pRParentContext,UNO_QUERY);
-        Reference< XAccessibleSelection > pRParentSelection(pRParentContext,UNO_QUERY);
-
-
-        pRComponent->grabFocus();
-
-        if( flagsSelect & SELFLAG_TAKESELECTION )
+        IMAccessible* pSelectAcc;
+        if( varChild.lVal == CHILDID_SELF )
         {
-            pRParentSelection->clearAccessibleSelection();
-            pRParentSelection->selectAccessibleChild( pRContext->getAccessibleIndexInParent() );
+            pSelectAcc = this;
+            pSelectAcc->AddRef();
+        }
+        else
+        {
+            pSelectAcc = GetChildInterface(varChild.lVal);
         }
 
-        if( flagsSelect & SELFLAG_ADDSELECTION  )
-        {
-            pRParentSelection->selectAccessibleChild( pRContext->getAccessibleIndexInParent() );
-        }
+        if( pSelectAcc == nullptr )
+            return E_INVALIDARG;
 
-        if( flagsSelect & SELFLAG_REMOVESELECTION )
+        if( flagsSelect&SELFLAG_TAKEFOCUS )
         {
-            pRParentSelection->deselectAccessibleChild( pRContext->getAccessibleIndexInParent() );
-        }
+            union {
+                XAccessible* pTempUNO;
+                hyper nHyper = 0;
+            };
+            pSelectAcc->GetUNOInterface(&nHyper);
 
-        if( flagsSelect & SELFLAG_EXTENDSELECTION  )
-        {
-            long indexInParrent = pRContext->getAccessibleIndexInParent();
+            if( pTempUNO == nullptr )
+                return NULL;
 
-            if( pRParentSelection->isAccessibleChildSelected( indexInParrent + 1 ) ||
-                pRParentSelection->isAccessibleChildSelected( indexInParrent - 1 ) )
+            Reference<XAccessibleContext> pRContext = pTempUNO->getAccessibleContext();
+            Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
+            Reference< XAccessible > pRParentXAcc = pRContext->getAccessibleParent();
+            Reference< XAccessibleContext > pRParentContext = pRParentXAcc->getAccessibleContext();
+            Reference< XAccessibleComponent > pRParentComponent(pRParentContext,UNO_QUERY);
+            Reference< XAccessibleSelection > pRParentSelection(pRParentContext,UNO_QUERY);
+
+
+            pRComponent->grabFocus();
+
+            if( flagsSelect & SELFLAG_TAKESELECTION )
             {
-                pRParentSelection->selectAccessibleChild( indexInParrent );
+                pRParentSelection->clearAccessibleSelection();
+                pRParentSelection->selectAccessibleChild( pRContext->getAccessibleIndexInParent() );
             }
+
+            if( flagsSelect & SELFLAG_ADDSELECTION  )
+            {
+                pRParentSelection->selectAccessibleChild( pRContext->getAccessibleIndexInParent() );
+            }
+
+            if( flagsSelect & SELFLAG_REMOVESELECTION )
+            {
+                pRParentSelection->deselectAccessibleChild( pRContext->getAccessibleIndexInParent() );
+            }
+
+            if( flagsSelect & SELFLAG_EXTENDSELECTION  )
+            {
+                long indexInParrent = pRContext->getAccessibleIndexInParent();
+
+                if( pRParentSelection->isAccessibleChildSelected( indexInParrent + 1 ) ||
+                    pRParentSelection->isAccessibleChildSelected( indexInParrent - 1 ) )
+                {
+                    pRParentSelection->selectAccessibleChild( indexInParrent );
+                }
+            }
+
         }
 
-    }
-
-    pSelectAcc->Release();
-    return S_OK;
+        pSelectAcc->Release();
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -2448,24 +2448,24 @@ HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
         ISDESTROY()
         if( varChild.vt != VT_I4 )
             return E_INVALIDARG;
-    if (!m_xAction.is())
-        return E_FAIL;
-    if (m_xAction->getAccessibleActionCount() == 0)
-        return E_FAIL;
+        if (!m_xAction.is())
+            return E_FAIL;
+        if (m_xAction->getAccessibleActionCount() == 0)
+            return E_FAIL;
 
-    if(varChild.lVal==CHILDID_SELF)
-    {
-        if (m_xAction->getAccessibleActionCount() > 0)
-            m_xAction->doAccessibleAction(0);
-        return S_OK;
-    }
+        if(varChild.lVal==CHILDID_SELF)
+        {
+            if (m_xAction->getAccessibleActionCount() > 0)
+                m_xAction->doAccessibleAction(0);
+            return S_OK;
+        }
 
-    long lVal = varChild.lVal;
-    varChild.lVal = CHILDID_SELF;
-    IMAccessible *pChild = this->GetChildInterface(lVal);
-    if(!pChild)
-        return E_FAIL;
-    return pChild->accDoDefaultAction( varChild );
+        long lVal = varChild.lVal;
+        varChild.lVal = CHILDID_SELF;
+        IMAccessible *pChild = this->GetChildInterface(lVal);
+        if(!pChild)
+            return E_FAIL;
+        return pChild->accDoDefaultAction( varChild );
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -3091,37 +3091,37 @@ STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *_
 
 STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 {
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
         if(accParentIndex == nullptr)
             return E_INVALIDARG;
 
-    if (!m_xContext.is())
-        return E_FAIL;
+        if (!m_xContext.is())
+            return E_FAIL;
 
-    *accParentIndex = m_xContext.get()->getAccessibleIndexInParent();
-    return S_OK;
+        *accParentIndex = m_xContext.get()->getAccessibleIndexInParent();
+        return S_OK;
 
 
     LEAVE_PROTECTED_BLOCK
 }
 STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
 {
-        ENTER_PROTECTED_BLOCK
+    ENTER_PROTECTED_BLOCK
         ISDESTROY()
         if(locale == nullptr)
             return E_INVALIDARG;
 
-    if (!m_xContext.is())
-        return E_FAIL;
+        if (!m_xContext.is())
+            return E_FAIL;
 
-    css::lang::Locale unoLoc = m_xContext.get()->getLocale();
-    locale->language = SysAllocString(o3tl::toW(unoLoc.Language.getStr()));
-    locale->country = SysAllocString(o3tl::toW(unoLoc.Country.getStr()));
-    locale->variant = SysAllocString(o3tl::toW(unoLoc.Variant.getStr()));
+        css::lang::Locale unoLoc = m_xContext.get()->getLocale();
+        locale->language = SysAllocString(o3tl::toW(unoLoc.Language.getStr()));
+        locale->country = SysAllocString(o3tl::toW(unoLoc.Country.getStr()));
+        locale->variant = SysAllocString(o3tl::toW(unoLoc.Variant.getStr()));
 
-    return S_OK;
+        return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -3135,8 +3135,8 @@ STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
         if(name == nullptr)
             return E_INVALIDARG;
 
-    *name = SysAllocString(OLESTR("Hannover"));
-    return S_OK;
+        *name = SysAllocString(OLESTR("Hannover"));
+        return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
 STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
@@ -3147,8 +3147,8 @@ STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
         ISDESTROY()
         if(version == nullptr)
             return E_INVALIDARG;
-    *version=SysAllocString(OLESTR("3.0"));
-    return S_OK;
+        *version=SysAllocString(OLESTR("3.0"));
+        return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
 STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
@@ -3159,8 +3159,8 @@ STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
         ISDESTROY()
         if(name == nullptr)
             return E_INVALIDARG;
-    *name = SysAllocString(OLESTR(" "));
-    return S_OK;
+        *name = SysAllocString(OLESTR(" "));
+        return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
 STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
@@ -3171,8 +3171,8 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
         ISDESTROY()
         if(version == nullptr)
             return E_INVALIDARG;
-    *version = SysAllocString(OLESTR(" "));
-    return S_OK;
+        *version = SysAllocString(OLESTR(" "));
+        return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
 

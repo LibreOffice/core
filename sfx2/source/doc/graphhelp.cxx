@@ -131,10 +131,10 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
                     if ( hMemory )
                     {
-                           METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( hMemory ));
+                        METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( hMemory ));
 
-                           pMF->hMF = hMeta;
-                           pMF->mm = MM_ANISOTROPIC;
+                        pMF->hMF = hMeta;
+                        pMF->mm = MM_ANISOTROPIC;
 
                         MapMode aMetaMode = pGDIMeta->GetPrefMapMode();
                         MapMode aWinMode( MapUnit::Map100thMM );

@@ -118,7 +118,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  )
 
 void OPreparedStatement::disposing()
 {
-m_xMetaData.clear();
+    m_xMetaData.clear();
     if (m_pParameters)
     {
         m_pParameters->Release();

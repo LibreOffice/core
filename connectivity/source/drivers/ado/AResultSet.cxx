@@ -120,8 +120,8 @@ void OResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-m_xStatement.clear();
-m_xMetaData.clear();
+    m_xStatement.clear();
+    m_xMetaData.clear();
 }
 
 Any SAL_CALL OResultSet::queryInterface( const Type & rType )

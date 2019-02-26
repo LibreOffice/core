@@ -36,38 +36,38 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 {
     HBITMAP hBitmap;
 
-     if ( nBitCount == 1 )
-     {
-         hBitmap = CreateBitmap( static_cast<int>(nDX), static_cast<int>(nDY), 1, 1, nullptr );
-         SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << WindowsErrorString( GetLastError() ) );
-         ppData = nullptr;
-     }
-     else
-     {
-         if (nBitCount == 0)
-             nBitCount = static_cast<WORD>(GetDeviceCaps(hDC, BITSPIXEL));
+    if ( nBitCount == 1 )
+    {
+        hBitmap = CreateBitmap( static_cast<int>(nDX), static_cast<int>(nDY), 1, 1, nullptr );
+        SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << WindowsErrorString( GetLastError() ) );
+        ppData = nullptr;
+    }
+    else
+    {
+        if (nBitCount == 0)
+            nBitCount = static_cast<WORD>(GetDeviceCaps(hDC, BITSPIXEL));
 
         // #146839# Don't use CreateCompatibleBitmap() - there seem to
         // be built-in limits for those HBITMAPs, at least this fails
         // rather often on large displays/multi-monitor setups.
-         BITMAPINFO aBitmapInfo;
-         aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
-         aBitmapInfo.bmiHeader.biWidth = nDX;
-         aBitmapInfo.bmiHeader.biHeight = nDY;
-         aBitmapInfo.bmiHeader.biPlanes = 1;
-         aBitmapInfo.bmiHeader.biBitCount = nBitCount;
-         aBitmapInfo.bmiHeader.biCompression = BI_RGB;
-         aBitmapInfo.bmiHeader.biSizeImage = 0;
-         aBitmapInfo.bmiHeader.biXPelsPerMeter = 0;
-         aBitmapInfo.bmiHeader.biYPelsPerMeter = 0;
-         aBitmapInfo.bmiHeader.biClrUsed = 0;
-         aBitmapInfo.bmiHeader.biClrImportant = 0;
+        BITMAPINFO aBitmapInfo;
+        aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+        aBitmapInfo.bmiHeader.biWidth = nDX;
+        aBitmapInfo.bmiHeader.biHeight = nDY;
+        aBitmapInfo.bmiHeader.biPlanes = 1;
+        aBitmapInfo.bmiHeader.biBitCount = nBitCount;
+        aBitmapInfo.bmiHeader.biCompression = BI_RGB;
+        aBitmapInfo.bmiHeader.biSizeImage = 0;
+        aBitmapInfo.bmiHeader.biXPelsPerMeter = 0;
+        aBitmapInfo.bmiHeader.biYPelsPerMeter = 0;
+        aBitmapInfo.bmiHeader.biClrUsed = 0;
+        aBitmapInfo.bmiHeader.biClrImportant = 0;
 
-         hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
-                                     DIB_RGB_COLORS, ppData, nullptr,
-                                     0 );
-         SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << WindowsErrorString( GetLastError() ) );
-     }
+        hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
+                                    DIB_RGB_COLORS, ppData, nullptr,
+                                    0 );
+        SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << WindowsErrorString( GetLastError() ) );
+    }
 
     return hBitmap;
 }

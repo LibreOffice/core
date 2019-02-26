@@ -1425,7 +1425,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                         aBoxRect.SetRight( aBoxRect.Left() + aRect.GetWidth() );
                     rNativeContentRegion = aBoxRect;
                     rNativeBoundingRegion = rNativeContentRegion;
-                        bRet = TRUE;
+                    bRet = TRUE;
                 }
             }
         }

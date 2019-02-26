@@ -684,12 +684,12 @@ css::uno::Any OLEVariant::makeAny() const
          {
              Currency cy(cyVal.int64);
              aValue <<= cy;
-            break;
+             break;
          }
         case VT_DATE:
          {
              aValue <<= getDate();
-            break;
+             break;
          }
         case VT_BSTR:
         {

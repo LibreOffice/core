@@ -181,7 +181,7 @@ void SAL_CALL AsyncRequests::run()
         if ( ! m_lRequests.empty())
         {
             rRequest = m_lRequests.front();
-                       m_lRequests.pop();
+            m_lRequests.pop();
         }
         bFinished = m_bFinish;
 

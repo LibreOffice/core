@@ -130,7 +130,7 @@ static size_t work_dir_len;
 #else
 static int clz(unsigned int value)
 {
-int result = 32;
+    int result = 32;
 
     while(value)
     {

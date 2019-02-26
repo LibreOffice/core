@@ -88,7 +88,7 @@ void ODatabaseMetaDataResultSet::disposing()
     if(m_pRecordSet)
         m_pRecordSet->Close();
     m_aStatement    = nullptr;
-m_xMetaData.clear();
+    m_xMetaData.clear();
 }
 
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType )

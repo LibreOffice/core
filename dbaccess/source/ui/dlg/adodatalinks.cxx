@@ -41,11 +41,11 @@ OUString PromptNew(long hWnd)
     ADOConnection* piTmpConnection = nullptr;
     BSTR _result=nullptr;
 
-     // Initialize COM
-     ::CoInitialize( nullptr );
+    // Initialize COM
+    ::CoInitialize( nullptr );
 
     // Instantiate DataLinks object.
-      hr = CoCreateInstance(
+    hr = CoCreateInstance(
                     CLSID_DataLinks,                //clsid -- Data Links UI
                     nullptr,                        //pUnkOuter
                     CLSCTX_INPROC_SERVER,           //dwClsContext
@@ -95,10 +95,10 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     ADOConnection* piTmpConnection = nullptr;
     BSTR _result=nullptr;
 
-     // Initialize COM
-     ::CoInitialize( nullptr );
+    // Initialize COM
+    ::CoInitialize( nullptr );
 
-     hr = CoCreateInstance(CLSID_CADOConnection,
+    hr = CoCreateInstance(CLSID_CADOConnection,
                 nullptr,
                 CLSCTX_INPROC_SERVER,
                 IID_IADOConnection,
@@ -119,7 +119,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     }
 
     // Instantiate DataLinks object.
-      hr = CoCreateInstance(
+    hr = CoCreateInstance(
                     CLSID_DataLinks,                //clsid -- Data Links UI
                     nullptr,                        //pUnkOuter
                     CLSCTX_INPROC_SERVER,           //dwClsContext

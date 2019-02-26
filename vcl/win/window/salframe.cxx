@@ -3395,19 +3395,19 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
         return nRet;
     }
-     // #i11583#, MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition begins
+    // #i11583#, MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition begins
     else if( nMsg == WM_UNICHAR )
-     {
-         // If Windows is asking if we accept WM_UNICHAR, return TRUE
-         if(wParam == UNICODE_NOCHAR)
+    {
+        // If Windows is asking if we accept WM_UNICHAR, return TRUE
+        if(wParam == UNICODE_NOCHAR)
         {
             rResult = TRUE; // ssa: this will actually return TRUE to windows
             return true;    // ...but this will only avoid calling the defwindowproc
         }
 
-         SalKeyEvent aKeyEvt;
-         aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
-         aKeyEvt.mnRepeat   = 0;
+        SalKeyEvent aKeyEvt;
+        aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
+        aKeyEvt.mnRepeat   = 0;
 
         if( wParam >= Uni_SupplementaryPlanesStart )
         {
@@ -3417,19 +3417,19 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
              nLastVKChar = 0;
              pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
              pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
-            wParam = static_cast<sal_Unicode>(Uni_UTF32ToSurrogate2( wParam ));
-         }
+             wParam = static_cast<sal_Unicode>(Uni_UTF32ToSurrogate2( wParam ));
+        }
 
-         aKeyEvt.mnCharCode = static_cast<sal_Unicode>(wParam);
+        aKeyEvt.mnCharCode = static_cast<sal_Unicode>(wParam);
 
-         nLastChar = 0;
-         nLastVKChar = 0;
-         bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
-         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
+        nLastChar = 0;
+        nLastVKChar = 0;
+        bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+        pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
 
-         return nRet;
-     }
-     // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition ends
+        return nRet;
+    }
+    // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition ends
     else
     {
         // for shift, control and menu we issue a KeyModChange event
@@ -3898,32 +3898,32 @@ static void ImplCallClosePopupsHdl( HWND hWnd )
 static void ImplHandleMoveMsg( HWND hWnd )
 {
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTMOVE );
-        if ( pFrame )
+    if ( pFrame )
+    {
+        UpdateFrameGeometry( hWnd, pFrame );
+
+        if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
+            pFrame->mbDefPos = false;
+
+        // protect against recursion
+        if ( !pFrame->mbInMoveMsg )
         {
-            UpdateFrameGeometry( hWnd, pFrame );
-
-            if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
-                pFrame->mbDefPos = false;
-
-            // protect against recursion
-            if ( !pFrame->mbInMoveMsg )
-            {
-                // adjust window again for FullScreenMode
-                pFrame->mbInMoveMsg = true;
-                if ( pFrame->mbFullScreen )
-                    ImplSalFrameFullScreenPos( pFrame );
-                pFrame->mbInMoveMsg = false;
-            }
-
-            // save state
-            ImplSaveFrameState( pFrame );
-
-            // Call Hdl
-            //#93851 if we call this handler, VCL floating windows are not updated correctly
-            ImplCallMoveHdl( hWnd );
-
-            ImplSalYieldMutexRelease();
+            // adjust window again for FullScreenMode
+            pFrame->mbInMoveMsg = true;
+            if ( pFrame->mbFullScreen )
+                ImplSalFrameFullScreenPos( pFrame );
+            pFrame->mbInMoveMsg = false;
         }
+
+        // save state
+        ImplSaveFrameState( pFrame );
+
+        // Call Hdl
+        //#93851 if we call this handler, VCL floating windows are not updated correctly
+        ImplCallMoveHdl( hWnd );
+
+        ImplSalYieldMutexRelease();
+    }
 }
 
 static void ImplCallSizeHdl( HWND hWnd )
@@ -3931,15 +3931,15 @@ static void ImplCallSizeHdl( HWND hWnd )
     // as Windows can send these messages also, we have to use
     // the Solar semaphore
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTCALLSIZE );
-        if ( pFrame )
-        {
-            pFrame->CallCallback( SalEvent::Resize, nullptr );
-            // to avoid double Paints by VCL and SAL
-            if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
-                UpdateWindow( hWnd );
+    if ( pFrame )
+    {
+        pFrame->CallCallback( SalEvent::Resize, nullptr );
+        // to avoid double Paints by VCL and SAL
+        if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
+            UpdateWindow( hWnd );
 
-            ImplSalYieldMutexRelease();
-        }
+        ImplSalYieldMutexRelease();
+    }
 }
 
 static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
@@ -3997,11 +3997,11 @@ static void ImplHandleFocusMsg( HWND hWnd )
 static void ImplHandleCloseMsg( HWND hWnd )
 {
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, WM_CLOSE );
-        if ( pFrame )
-        {
-            pFrame->CallCallback( SalEvent::Close, nullptr );
-            ImplSalYieldMutexRelease();
-        }
+    if ( pFrame )
+    {
+        pFrame->CallCallback( SalEvent::Close, nullptr );
+        ImplSalYieldMutexRelease();
+    }
 }
 
 static bool ImplHandleShutDownMsg( HWND hWnd )

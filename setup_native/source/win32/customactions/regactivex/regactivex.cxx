@@ -99,12 +99,12 @@ static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
     DWORD sz = 0;
     if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
     {
-           sz++;
-           DWORD nbytes = sz * sizeof( wchar_t );
-           wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
-           ZeroMemory( buff, nbytes );
-           MsiGetPropertyW( hMSI, pPropName, buff, &sz );
-           *ppValue = buff;
+        sz++;
+        DWORD nbytes = sz * sizeof( wchar_t );
+        wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
+        ZeroMemory( buff, nbytes );
+        MsiGetPropertyW( hMSI, pPropName, buff, &sz );
+        *ppValue = buff;
 
         return TRUE;
     }

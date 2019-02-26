@@ -159,8 +159,8 @@ static OUString lcl_AdjustFilterName(const OUString& sName)
 static ::std::vector<COMDLG_FILTERSPEC> lcl_buildFilterList(CFilterContainer& rContainer,
                                                             std::vector<OUString>& rvStrings)
 {
-          ::std::vector< COMDLG_FILTERSPEC > lList  ;
-          CFilterContainer::FILTER_ENTRY_T   aFilter;
+    ::std::vector< COMDLG_FILTERSPEC > lList  ;
+    CFilterContainer::FILTER_ENTRY_T   aFilter;
 
     rContainer.beginEnumFilter( );
     while( rContainer.getNextFilter(aFilter) )
@@ -1133,7 +1133,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
             {
                 bool bValue   = false;
-                           aValue >>= bValue;
+                aValue >>= bValue;
                 iCustom->SetCheckButtonState(nId, bValue);
             }
             break;
@@ -1168,7 +1168,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
                     case css::ui::dialogs::ControlActions::SET_SELECT_ITEM :
                         {
                             ::sal_Int32 nItem    = 0;
-                                        aValue >>= nItem;
+                            aValue >>= nItem;
                             hResult = iCustom->SetSelectedControlItem(nId, nItem);
                         }
                         break;
@@ -1301,7 +1301,7 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     const OUString sFilter = m_lFilters.getCurrentFilter ();
-          OUString sExt    ;
+    OUString sExt    ;
     if (!m_lFilters.getFilterByName(sFilter, sExt))
         return;
 

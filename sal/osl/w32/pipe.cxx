@@ -425,7 +425,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
         else
             nBytes = DWORD(-1);
 
-         pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
+        pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
     }
 
     return nBytes;
