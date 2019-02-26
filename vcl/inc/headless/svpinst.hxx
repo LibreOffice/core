@@ -52,7 +52,7 @@ public:
     virtual ~SvpSalTimer() override;
 
     // override all pure virtual methods
-    virtual void Start( sal_uLong nMS ) override;
+    virtual void Start( sal_uInt64 nMS ) override;
     virtual void Stop() override;
 };
 
