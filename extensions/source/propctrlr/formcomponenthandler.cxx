@@ -21,6 +21,7 @@
 #include "controltype.hxx"
 #include "pcrservices.hxx"
 #include <propctrlr.h>
+#include <helpids.h>
 #include "fontdialog.hxx"
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"
@@ -998,6 +999,13 @@ namespace pcr
         case PROPERTY_ID_FILLCOLOR:
         case PROPERTY_ID_SYMBOLCOLOR:
         case PROPERTY_ID_BORDERCOLOR:
+        case PROPERTY_ID_GRIDLINECOLOR:
+        case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
+        case PROPERTY_ID_HEADERTEXTCOLOR:
+        case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
+        case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
+        case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
+        case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
             nControlType = PropertyControlType::ColorListBox;
 
             switch( nPropId )
@@ -1010,6 +1018,20 @@ namespace pcr
                 aDescriptor.PrimaryButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
             case PROPERTY_ID_BORDERCOLOR:
                 aDescriptor.PrimaryButtonId = UID_PROP_DLG_BORDERCOLOR; break;
+            case PROPERTY_ID_GRIDLINECOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_GRIDLINECOLOR; break;
+            case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_HEADERBACKGROUNDCOLOR; break;
+            case PROPERTY_ID_HEADERTEXTCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_HEADERTEXTCOLOR; break;
+            case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_ACTIVESELECTIONBACKGROUNDCOLOR; break;
+            case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_ACTIVESELECTIONTEXTCOLOR; break;
+            case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_INACTIVESELECTIONBACKGROUNDCOLOR; break;
+            case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
+                aDescriptor.PrimaryButtonId = HID_PROP_INACTIVESELECTIONTEXTCOLOR; break;
             }
             break;
 
@@ -1405,6 +1427,13 @@ namespace pcr
         case PROPERTY_ID_FILLCOLOR:
         case PROPERTY_ID_SYMBOLCOLOR:
         case PROPERTY_ID_BORDERCOLOR:
+        case PROPERTY_ID_GRIDLINECOLOR:
+        case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
+        case PROPERTY_ID_HEADERTEXTCOLOR:
+        case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
+        case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
+        case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
+        case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
             if ( impl_dialogColorChooser_throw( nPropId, _rData, aGuard ) )
                 eResult = InteractiveSelectionResult_ObtainedValue;
             break;

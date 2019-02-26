@@ -275,6 +275,17 @@ namespace pcr
     #define PROPERTY_TEXTTYPE               "TextType"
     #define PROPERTY_RICHTEXT               "RichText"
     #define PROPERTY_ROWSET                 "RowSet"
+    #define PROPERTY_SELECTIONMODEL         "SelectionModel"
+    #define PROPERTY_USEGRIDLINE            "UseGridLines"
+    #define PROPERTY_GRIDLINECOLOR          "GridLineColor"
+    #define PROPERTY_SHOWCOLUMNHEADER       "ShowColumnHeader"
+    #define PROPERTY_SHOWROWHEADER          "ShowRowHeader"
+    #define PROPERTY_HEADERBACKGROUNDCOLOR  "HeaderBackgroundColor"
+    #define PROPERTY_HEADERTEXTCOLOR        "HeaderTextColor"
+    #define PROPERTY_ACTIVESELECTIONBACKGROUNDCOLOR "ActiveSelectionBackgroundColor"
+    #define PROPERTY_ACTIVESELECTIONTEXTCOLOR "ActiveSelectionTextColor"
+    #define PROPERTY_INACTIVESELECTIONBACKGROUNDCOLOR "InactiveSelectionBackgroundColor"
+    #define PROPERTY_INACTIVESELECTIONTEXTCOLOR "InactiveSelectionTextColor"
 
     // services
     #define SERVICE_COMPONENT_GROUPBOX      "com.sun.star.form.component.GroupBox"
