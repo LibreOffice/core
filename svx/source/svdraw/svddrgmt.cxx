@@ -1082,7 +1082,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                     nNewAngle/=nSA;
                     nNewAngle*=nSA;
                     nNewAngle=NormAngle36000(nNewAngle);
-                    double a=(nNewAngle-nAngle)*nPi180;
+                    double a=(nNewAngle-nAngle)*F_PI18000;
                     double nSin=sin(a);
                     double nCos=cos(a);
                     RotatePoint(aPnt,aRef,nSin,nCos);
@@ -2058,7 +2058,7 @@ PointerStyle SdrDragResize::GetSdrDragPointer() const
 
 void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Rotate(DragStat().GetRef1(), nAngle, sin(nAngle*nPi180), cos(nAngle*nPi180));
+    rTarget.Rotate(DragStat().GetRef1(), nAngle, sin(nAngle * F_PI18000), cos(nAngle * F_PI18000));
 }
 
 SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
@@ -2158,7 +2158,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
                 bRight=false;
 
             nAngle=nNewAngle;
-            double a=nAngle*nPi180;
+            double a = nAngle * F_PI18000;
             double nSin1=sin(a); // calculate now, so as little time as possible
             double nCos1=cos(a); // passes between Hide() and Show()
             Hide();
@@ -2374,7 +2374,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bUpSideDown) nNewAngle-=18000;
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
-        aNewFract = cos(nTmpAngle*nPi180);
+        aNewFract = cos(nTmpAngle * F_PI18000);
         aFact.ReduceInaccurate(10); // three decimals should be enough
     }
 
@@ -2388,7 +2388,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     {
         nAngle=nNewAngle;
         aFact=aNewFract;
-        double a=nAngle*nPi180;
+        double a = nAngle * F_PI18000;
         double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
         Hide();
         nTan=nTan1;
@@ -2413,7 +2413,7 @@ void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
     if (nAngle!=0)
     {
-        rTarget.Shear(DragStat().GetRef1(),nAngle,tan(nAngle*nPi180),bVertical);
+        rTarget.Shear(DragStat().GetRef1(), nAngle, tan(nAngle * F_PI18000), bVertical);
     }
 }
 
@@ -3187,7 +3187,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             nPntWink = std::abs(nPntWink);
         }
 
-        double nUmfang = 2 * std::abs(nNewRad)*nPi;
+        double nUmfang = 2 * std::abs(nNewRad) * M_PI;
 
         if (bResize)
         {

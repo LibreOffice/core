@@ -417,7 +417,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nArrow2Len=nArrow2Len;
 
     rPol.nLineAngle=GetAngle(aDelt);
-    double a=rPol.nLineAngle*nPi180;
+    double a = rPol.nLineAngle * F_PI18000;
     double nLineSin=sin(a);
     double nLineCos=cos(a);
     rPol.nLineSin=nLineSin;
@@ -879,7 +879,7 @@ OUString SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) cons
 void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const
 {
     long nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
-    double a=nLineAngle*nPi180;
+    double a = nLineAngle * F_PI18000;
     double nSin=sin(a);
     double nCos=cos(a);
 

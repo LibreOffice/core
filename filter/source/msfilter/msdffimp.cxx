@@ -4133,7 +4133,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
 
             if ( nGroupRotateAngle )
             {
-                double a = nGroupRotateAngle * nPi180;
+                double a = nGroupRotateAngle * F_PI18000;
                 pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
             }
             if ( nSpFlags & ShapeFlag::FlipV )
@@ -4710,7 +4710,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     {
                         if( nObjectRotation )
                         {
-                            double a = nObjectRotation * nPi180;
+                            double a = nObjectRotation * F_PI18000;
                             pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                         }
                         // mirrored horizontally?
@@ -4749,7 +4749,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // pay attention to the rotations
                         if ( nObjectRotation )
                         {
-                            double a = nObjectRotation * nPi180;
+                            double a = nObjectRotation * F_PI18000;
                             Point aCenter( aObjData.aBoundRect.Center() );
                             double ss = sin(a);
                             double cc = cos(a);
@@ -4821,7 +4821,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             {
                 if( nObjectRotation )
                 {
-                    double a = nObjectRotation * nPi180;
+                    double a = nObjectRotation * F_PI18000;
                     pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                 }
                 // mirrored horizontally?
@@ -5423,14 +5423,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 Point aPivot(rTextRect.TopLeft());
                 aPivot.AdjustX(nMinWH );
                 aPivot.AdjustY(nMinWH );
-                double a = nTextRotationAngle * nPi180;
+                double a = nTextRotationAngle * F_PI18000;
                 pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
             }
 
             // rotate text with shape?
             if ( mnFix16Angle )
             {
-                double a = mnFix16Angle * nPi180;
+                double a = mnFix16Angle * F_PI18000;
                 pTextObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                     sin( a ), cos( a ) );
             }

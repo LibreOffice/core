@@ -126,7 +126,7 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         rPnt-=rRef1;
         long nPntWink=GetAngle(rPnt);
         long nAngle=2*(nRefWink-nPntWink);
-        double a=nAngle*nPi180;
+        double a = nAngle * F_PI18000;
         double nSin=sin(a);
         double nCos=cos(a);
         RotatePoint(rPnt,Point(),nSin,nCos);
@@ -391,7 +391,8 @@ long GetAngle(const Point& rPnt)
         if (rPnt.Y()>0) a=-9000;
         else a=9000;
     } else {
-        a=FRound(atan2(static_cast<double>(-rPnt.Y()),static_cast<double>(rPnt.X()))/nPi180);
+        a = FRound(atan2(static_cast<double>(-rPnt.Y()), static_cast<double>(rPnt.X()))
+                   / F_PI18000);
     }
     return a;
 }
@@ -452,7 +453,7 @@ void GeoStat::RecalcSinCos()
         nSin=0.0;
         nCos=1.0;
     } else {
-        double a=nRotationAngle*nPi180;
+        double a = nRotationAngle * F_PI18000;
         nSin=sin(a);
         nCos=cos(a);
     }
@@ -463,7 +464,7 @@ void GeoStat::RecalcTan()
     if (nShearAngle==0) {
         nTan=0.0;
     } else {
-        double a=nShearAngle*nPi180;
+        double a = nShearAngle * F_PI18000;
         nTan=tan(a);
     }
 }

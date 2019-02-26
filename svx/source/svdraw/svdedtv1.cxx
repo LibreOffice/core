@@ -311,8 +311,8 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
     if (bCopy)
         CopyMarkedObj();
 
-    double nSin=sin(nAngle*nPi180);
-    double nCos=cos(nAngle*nPi180);
+    double nSin = sin(nAngle * F_PI18000);
+    double nCos = cos(nAngle * F_PI18000);
     const size_t nMarkCount(GetMarkedObjectCount());
 
     if(nMarkCount)
@@ -467,7 +467,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
     if (bCopy)
         CopyMarkedObj();
 
-    double nTan=tan(nAngle*nPi180);
+    double nTan = tan(nAngle * F_PI18000);
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
@@ -557,7 +557,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         aCtr1 -= aCtr0;
 
         if(bRotOk)
-            pO->Rotate(aCtr0, FRound(nAngle/nPi180), nSin, nCos);
+            pO->Rotate(aCtr0, FRound(nAngle / F_PI18000), nSin, nCos);
 
         pO->Move(Size(aCtr1.X(),aCtr1.Y()));
     }
@@ -1559,10 +1559,10 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             } else {
                 if (nNewShearAngle!=0 && nOldShearAngle!=0) {
                     // bug fix
-                    double nOld=tan(static_cast<double>(nOldShearAngle)*nPi180);
-                    double nNew=tan(static_cast<double>(nNewShearAngle)*nPi180);
+                    double nOld = tan(static_cast<double>(nOldShearAngle) * F_PI18000);
+                    double nNew = tan(static_cast<double>(nNewShearAngle) * F_PI18000);
                     nNew-=nOld;
-                    nNew=atan(nNew)/nPi180;
+                    nNew = atan(nNew) / F_PI18000;
                     nShearAngle=FRound(nNew);
                 } else {
                     nShearAngle=nNewShearAngle-nOldShearAngle;
