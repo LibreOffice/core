@@ -14,7 +14,6 @@
 #define RID_BMP_LOCKED              "desktop/res/lock_16.png"
 #define RID_BMP_SHARED              "desktop/res/shared_16.png"
 #define RID_BMP_EXTENSION           "desktop/res/extension_32.png"
-#define RID_DLG_UPDATE_NORMALALERT  "desktop/res/caution_12.png"
 
 #endif
 

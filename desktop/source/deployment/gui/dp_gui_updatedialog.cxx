@@ -127,9 +127,6 @@ namespace {
 
 static sal_Unicode const LF = 0x000A;
 static sal_Unicode const CR = 0x000D;
-static const sal_uInt16 CMD_ENABLE_UPDATE = 1;
-static const sal_uInt16 CMD_IGNORE_UPDATE = 2;
-static const sal_uInt16 CMD_IGNORE_ALL_UPDATES = 3;
 
 #define IGNORED_UPDATES     OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates")
 #define PROPERTY_VERSION    "Version"
@@ -244,7 +241,7 @@ UpdateDialog::Thread::Thread(
     if( m_context.is() )
     {
         m_xInteractionHdl.set(
-            task::InteractionHandler::createWithParent(m_context, nullptr),
+            task::InteractionHandler::createWithParent(m_context, dialog.getDialog()->GetXWindow()),
             uno::UNO_QUERY );
         m_updateInformation->setInteractionHandler( m_xInteractionHdl );
     }
@@ -463,57 +460,51 @@ bool UpdateDialog::Thread::update(
     return ret;
 }
 
-
 // UpdateDialog ----------------------------------------------------------
 UpdateDialog::UpdateDialog(
     uno::Reference< uno::XComponentContext > const & context,
-    vcl::Window * parent,
-                           const std::vector<uno::Reference< deployment::XPackage > > &vExtensionList,
-    std::vector< dp_gui::UpdateData > * updateData):
-    ModalDialog(parent, "UpdateDialog", "desktop/ui/updatedialog.ui"),
-    m_context(context),
-    m_none(DpResId(RID_DLG_UPDATE_NONE)),
-    m_noInstallable(DpResId(RID_DLG_UPDATE_NOINSTALLABLE)),
-    m_failure(DpResId(RID_DLG_UPDATE_FAILURE)),
-    m_unknownError(DpResId(RID_DLG_UPDATE_UNKNOWNERROR)),
-    m_noDescription(DpResId(RID_DLG_UPDATE_NODESCRIPTION)),
-    m_noInstall(DpResId(RID_DLG_UPDATE_NOINSTALL)),
-    m_noDependency(DpResId(RID_DLG_UPDATE_NODEPENDENCY)),
-    m_noDependencyCurVer(DpResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
-    m_browserbased(DpResId(RID_DLG_UPDATE_BROWSERBASED)),
-    m_version(DpResId(RID_DLG_UPDATE_VERSION)),
-    m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE)),
-    m_updateData(*updateData),
-    m_thread(
-        new UpdateDialog::Thread(
-            context, *this, vExtensionList)),
-    m_bModified( false )
-    // TODO: check!
-//    ,
-//    m_extensionManagerDialog(extensionManagerDialog)
+    weld::Window * parent, const std::vector<uno::Reference< deployment::XPackage > > &vExtensionList,
+    std::vector< dp_gui::UpdateData > * updateData)
+    : GenericDialogController(parent, "desktop/ui/updatedialog.ui", "UpdateDialog")
+    , m_context(context)
+    , m_none(DpResId(RID_DLG_UPDATE_NONE))
+    , m_noInstallable(DpResId(RID_DLG_UPDATE_NOINSTALLABLE))
+    , m_failure(DpResId(RID_DLG_UPDATE_FAILURE))
+    , m_unknownError(DpResId(RID_DLG_UPDATE_UNKNOWNERROR))
+    , m_noDescription(DpResId(RID_DLG_UPDATE_NODESCRIPTION))
+    , m_noInstall(DpResId(RID_DLG_UPDATE_NOINSTALL))
+    , m_noDependency(DpResId(RID_DLG_UPDATE_NODEPENDENCY))
+    , m_noDependencyCurVer(DpResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER))
+    , m_browserbased(DpResId(RID_DLG_UPDATE_BROWSERBASED))
+    , m_version(DpResId(RID_DLG_UPDATE_VERSION))
+    , m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE))
+    , m_updateData(*updateData)
+    , m_thread(new UpdateDialog::Thread(context, *this, vExtensionList))
+    , m_bModified( false )
+    , m_xChecking(m_xBuilder->weld_label("UPDATE_CHECKING"))
+    , m_xThrobber(m_xBuilder->weld_spinner("THROBBER"))
+    , m_xUpdate(m_xBuilder->weld_label("UPDATE_LABEL"))
+    , m_xUpdates(m_xBuilder->weld_tree_view("checklist"))
+    , m_xAll(m_xBuilder->weld_check_button("UPDATE_ALL"))
+    , m_xDescription(m_xBuilder->weld_label("DESCRIPTION_LABEL"))
+    , m_xPublisherLabel(m_xBuilder->weld_label("PUBLISHER_LABEL"))
+    , m_xPublisherLink(m_xBuilder->weld_link_button("PUBLISHER_LINK"))
+    , m_xReleaseNotesLabel(m_xBuilder->weld_label("RELEASE_NOTES_LABEL"))
+    , m_xReleaseNotesLink(m_xBuilder->weld_link_button("RELEASE_NOTES_LINK"))
+    , m_xDescriptions(m_xBuilder->weld_text_view("DESCRIPTIONS"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xClose(m_xBuilder->weld_button("close"))
+    , m_xHelp(m_xBuilder->weld_button("help"))
 {
-    get(m_pchecking, "UPDATE_CHECKING");
-    get(m_pthrobber, "THROBBER");
-    get(m_pUpdate, "UPDATE_LABEL");
-    get(m_pContainer, "UPDATES_CONTAINER");
-    m_pUpdates = VclPtr<UpdateDialog::CheckListBox>::Create(m_pContainer, *this);
-    Size aSize(LogicToPixel(Size(240, 51), MapMode(MapUnit::MapAppFont)));
-    m_pUpdates->set_width_request(aSize.Width());
-    m_pUpdates->set_height_request(aSize.Height());
-    m_pUpdates->Show();
-    get(m_pAll, "UPDATE_ALL");
-    get(m_pDescription, "DESCRIPTION_LABEL");
-    get(m_pPublisherLabel, "PUBLISHER_LABEL");
-    get(m_pPublisherLink, "PUBLISHER_LINK");
-    get(m_pReleaseNotesLabel, "RELEASE_NOTES_LABEL");
-    get(m_pReleaseNotesLink, "RELEASE_NOTES_LINK");
-    get(m_pDescriptions, "DESCRIPTIONS");
-    aSize = LogicToPixel(Size(240, 59), MapMode(MapUnit::MapAppFont));
-    m_pDescriptions->set_width_request(aSize.Width());
-    m_pDescriptions->set_height_request(aSize.Height());
-    get(m_pOk, "INSTALL");
-    get(m_pClose, "close");
-    get(m_pHelp, "help");
+    auto nWidth = m_xDescriptions->get_approximate_digit_width() * 62;
+    auto nHeight = m_xDescriptions->get_height_rows(8);
+    m_xDescriptions->set_size_request(nWidth, nHeight);
+    m_xUpdates->set_size_request(nWidth, nHeight);
+
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xUpdates->get_checkbox_column_width());
+    m_xUpdates->set_column_fixed_widths(aWidths);
+
     OSL_ASSERT(updateData != nullptr);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
@@ -528,163 +519,55 @@ UpdateDialog::UpdateDialog(
         throw css::lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }
-    m_pUpdates->SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
-    m_pAll->SetToggleHdl(LINK(this, UpdateDialog, allHandler));
-    m_pOk->SetClickHdl(LINK(this, UpdateDialog, okHandler));
-    m_pClose->SetClickHdl(LINK(this, UpdateDialog, closeHandler));
-    if ( ! dp_misc::office_is_running())
-        m_pHelp->Disable();
+    m_xUpdates->connect_changed(LINK(this, UpdateDialog, selectionHandler));
+    m_xUpdates->connect_toggled(LINK(this, UpdateDialog, entryToggled));
+    m_xAll->connect_toggled(LINK(this, UpdateDialog, allHandler));
+    m_xOk->connect_clicked(LINK(this, UpdateDialog, okHandler));
+    m_xClose->connect_clicked(LINK(this, UpdateDialog, closeHandler));
+    if (!dp_misc::office_is_running())
+        m_xHelp->set_sensitive(false);
 
     initDescription();
     getIgnoredUpdates();
 }
 
-
 UpdateDialog::~UpdateDialog()
 {
-    disposeOnce();
-}
-
-void UpdateDialog::dispose()
-{
     storeIgnoredUpdates();
-
-    m_ListboxEntries.clear();
-    m_ignoredUpdates.clear();
-    m_pUpdates.disposeAndClear();
-    m_pchecking.clear();
-    m_pthrobber.clear();
-    m_pUpdate.clear();
-    m_pContainer.clear();
-    m_pAll.clear();
-    m_pDescription.clear();
-    m_pPublisherLabel.clear();
-    m_pPublisherLink.clear();
-    m_pReleaseNotesLabel.clear();
-    m_pReleaseNotesLink.clear();
-    m_pDescriptions.clear();
-    m_pHelp.clear();
-    m_pOk.clear();
-    m_pClose.clear();
-    ModalDialog::dispose();
 }
 
-
-bool UpdateDialog::Close() {
-    m_thread->stop();
-    return ModalDialog::Close();
-}
-
-short UpdateDialog::Execute() {
-    m_pthrobber->start();
+short UpdateDialog::run() {
+    m_xThrobber->start();
     m_thread->launch();
-    return ModalDialog::Execute();
+    short nRet = GenericDialogController::run();
+    m_thread->stop();
+    return nRet;
 }
 
-UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & dialog):
-    SvxCheckListBox( pParent, WinBits(WB_BORDER) ),
-    m_ignoreUpdate( DpResId( RID_DLG_UPDATE_IGNORE ) ),
-    m_ignoreAllUpdates( DpResId( RID_DLG_UPDATE_IGNORE_ALL ) ),
-    m_enableUpdate( DpResId( RID_DLG_UPDATE_ENABLE ) ),
-    m_dialog(dialog)
+IMPL_LINK(UpdateDialog, entryToggled, const row_col&, rRowCol, void)
 {
-    SetNormalStaticImage(Image(StockImage::Yes, RID_DLG_UPDATE_NORMALALERT));
+    int nRow = rRowCol.first;
+
+    // error's can't be enabled
+    const UpdateDialog::Index* p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first).toInt64());
+    if (p->m_eKind == SPECIFIC_ERROR)
+        m_xUpdates->set_toggle(nRow, false, 0);
+
+    enableOk();
 }
 
-sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
-    sal_uLong i = GetEntryCount();
-    OSL_ASSERT(i <= std::numeric_limits< sal_uInt16 >::max());
-    return sal::static_int_cast< sal_uInt16 >(i);
-}
-
-
-void UpdateDialog::CheckListBox::MouseButtonDown( MouseEvent const & event )
+sal_uInt16 UpdateDialog::insertItem(UpdateDialog::Index *pEntry, bool bEnabledCheckBox)
 {
-    // When clicking on a selected entry in an SvxCheckListBox, the entry's
-    // checkbox is toggled on mouse button down:
-    SvxCheckListBox::MouseButtonDown( event );
+    int nEntry = m_xUpdates->n_children();
+    m_xUpdates->append();
+    m_xUpdates->set_toggle(nEntry, bEnabledCheckBox, 0);
+    m_xUpdates->set_text(nEntry, pEntry->m_aName, 1);
+    m_xUpdates->set_id(nEntry, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
 
-    if ( event.IsRight() )
-    {
-        handlePopupMenu( event.GetPosPixel() );
-    }
-
-    m_dialog.enableOk();
-}
-
-
-void UpdateDialog::CheckListBox::MouseButtonUp(MouseEvent const & event) {
-    // When clicking on an entry's checkbox in an SvxCheckListBox, the entry's
-    // checkbox is toggled on mouse button up:
-    SvxCheckListBox::MouseButtonUp(event);
-    m_dialog.enableOk();
-}
-
-void UpdateDialog::CheckListBox::KeyInput(KeyEvent const & event) {
-    SvxCheckListBox::KeyInput(event);
-    m_dialog.enableOk();
-}
-
-
-void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
-{
-    SvTreeListEntry *pData = GetEntry( rPos );
-
-    if ( pData )
-    {
-        sal_uLong nEntryPos = GetSelectedEntryPos();
-        UpdateDialog::Index * p = static_cast< UpdateDialog::Index * >( GetEntryData( nEntryPos ) );
-
-        if ( ( p->m_eKind == ENABLED_UPDATE ) || ( p->m_eKind == DISABLED_UPDATE ) )
-        {
-            ScopedVclPtrInstance<PopupMenu> aPopup;
-
-            if ( p->m_bIgnored )
-                aPopup->InsertItem( CMD_ENABLE_UPDATE, m_enableUpdate );
-            else
-            {
-                aPopup->InsertItem( CMD_IGNORE_UPDATE, m_ignoreUpdate );
-                aPopup->InsertItem( CMD_IGNORE_ALL_UPDATES, m_ignoreAllUpdates );
-            }
-
-            sal_uInt16 aCmd = aPopup->Execute( this, rPos );
-            if ( ( aCmd == CMD_IGNORE_UPDATE ) || ( aCmd == CMD_IGNORE_ALL_UPDATES ) )
-            {
-                p->m_bIgnored = true;
-                if ( p->m_eKind == ENABLED_UPDATE )
-                {
-                    RemoveEntry( nEntryPos );
-                    m_dialog.addAdditional( p, SvLBoxButtonKind::DisabledCheckbox );
-                }
-                if ( aCmd == CMD_IGNORE_UPDATE )
-                    m_dialog.setIgnoredUpdate( p, true, false );
-                else
-                    m_dialog.setIgnoredUpdate( p, true, true );
-                // TODO: reselect entry to display new description!
-            }
-            else if ( aCmd == CMD_ENABLE_UPDATE )
-            {
-                p->m_bIgnored = false;
-                if ( p->m_eKind == ENABLED_UPDATE )
-                {
-                    RemoveEntry( nEntryPos );
-                    m_dialog.insertItem( p, SvLBoxButtonKind::EnabledCheckbox );
-                }
-                m_dialog.setIgnoredUpdate( p, false, false );
-            }
-        }
-    }
-}
-
-
-sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
-{
-    m_pUpdates->InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
-
-    for ( sal_uInt16 i = m_pUpdates->getItemCount(); i != 0 ; )
+    for (sal_uInt16 i = nEntry; i != 0 ;)
     {
         i -= 1;
-        UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_pUpdates->GetEntryData( i ) );
+        UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >(m_xUpdates->get_id(i).toInt64());
         if ( p == pEntry )
             return i;
     }
@@ -692,20 +575,18 @@ sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKi
     return 0;
 }
 
-
-void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind kind )
+void UpdateDialog::addAdditional(UpdateDialog::Index * index, bool bEnabledCheckBox)
 {
-    m_pAll->Enable();
-    if (m_pAll->IsChecked())
+    m_xAll->set_sensitive(true);
+    if (m_xAll->get_active())
     {
-        insertItem( index, kind );
-        m_pUpdate->Enable();
-        m_pUpdates->Enable();
-        m_pDescription->Enable();
-        m_pDescriptions->Enable();
+        insertItem(index, bEnabledCheckBox);
+        m_xUpdate->set_sensitive(true);
+        m_xUpdates->set_sensitive(true);
+        m_xDescription->set_sensitive(true);
+        m_xDescriptions->set_sensitive(true);
     }
 }
-
 
 void UpdateDialog::addEnabledUpdate( OUString const & name,
                                      dp_gui::UpdateData const & data )
@@ -716,20 +597,18 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     m_enabledUpdates.push_back( data );
     m_ListboxEntries.emplace_back( pEntry );
 
-    if ( ! isIgnoredUpdate( pEntry ) )
+    if (!isIgnoredUpdate(pEntry))
     {
-        sal_uInt16 nPos = insertItem( pEntry, SvLBoxButtonKind::EnabledCheckbox );
-        m_pUpdates->CheckEntryPos( nPos );
+        insertItem(pEntry, true);
     }
     else
-        addAdditional( pEntry, SvLBoxButtonKind::DisabledCheckbox );
+        addAdditional(pEntry, false);
 
-    m_pUpdate->Enable();
-    m_pUpdates->Enable();
-    m_pDescription->Enable();
-    m_pDescriptions->Enable();
+    m_xUpdate->set_sensitive(true);
+    m_xUpdates->set_sensitive(true);
+    m_xDescription->set_sensitive(true);
+    m_xDescriptions->set_sensitive(true);
 }
-
 
 void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate const & data )
 {
@@ -740,9 +619,8 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate const & data 
     m_ListboxEntries.emplace_back( pEntry );
 
     isIgnoredUpdate( pEntry );
-    addAdditional( pEntry, SvLBoxButtonKind::DisabledCheckbox );
+    addAdditional(pEntry, false);
 }
-
 
 void UpdateDialog::addSpecificError( UpdateDialog::SpecificError const & data )
 {
@@ -752,18 +630,18 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError const & data )
     m_specificErrors.push_back( data );
     m_ListboxEntries.emplace_back( pEntry );
 
-    addAdditional( pEntry, SvLBoxButtonKind::StaticImage);
+    addAdditional(pEntry, false);
 }
 
 void UpdateDialog::checkingDone() {
-    m_pchecking->Hide();
-    m_pthrobber->stop();
-    m_pthrobber->Hide();
-    if (m_pUpdates->getItemCount() == 0)
+    m_xChecking->hide();
+    m_xThrobber->stop();
+    m_xThrobber->hide();
+    if (m_xUpdates->n_children() == 0)
     {
         clearDescription();
-        m_pDescription->Enable();
-        m_pDescriptions->Enable();
+        m_xDescription->set_sensitive(true);
+        m_xDescriptions->set_sensitive(true);
 
         if ( m_disabledUpdates.empty() && m_specificErrors.empty() && m_ignoredUpdates.empty() )
             showDescription( m_none );
@@ -775,8 +653,13 @@ void UpdateDialog::checkingDone() {
 }
 
 void UpdateDialog::enableOk() {
-    if (!m_pchecking->IsVisible()) {
-        m_pOk->Enable(m_pUpdates->GetCheckedEntryCount() != 0);
+    if (!m_xChecking->get_visible()) {
+        int nChecked = 0;
+        for (int i = 0, nCount = m_xUpdates->n_children(); i < nCount; ++i) {
+            if (m_xUpdates->get_toggle(i, 0))
+                ++nChecked;
+        }
+        m_xOk->set_sensitive(nChecked != 0);
     }
 }
 
@@ -850,11 +733,11 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
     if ( ! bRecheckOnly )
     {
         sal_Int32 nCount = 0;
-        for ( sal_uInt16 i = 0; i < m_pUpdates->getItemCount(); ++i )
+        for (sal_uInt16 i = 0, nItemCount = m_xUpdates->n_children(); i < nItemCount; ++i)
         {
             uno::Sequence< OUString > aItem(2);
 
-            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_pUpdates->GetEntryData(i));
+            UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >(m_xUpdates->get_id(i).toInt64());
 
             if ( p->m_eKind == ENABLED_UPDATE )
             {
@@ -881,22 +764,22 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
 
 void UpdateDialog::initDescription()
 {
-    m_pPublisherLabel->Hide();
-    m_pPublisherLink->Hide();
-    m_pReleaseNotesLabel->Hide();
-    m_pReleaseNotesLink->Hide();
+    m_xPublisherLabel->hide();
+    m_xPublisherLink->hide();
+    m_xReleaseNotesLabel->hide();
+    m_xReleaseNotesLink->hide();
 }
 
 void UpdateDialog::clearDescription()
 {
-    m_pPublisherLabel->Hide();
-    m_pPublisherLink->Hide();
-    m_pPublisherLink->SetText( "" );
-    m_pPublisherLink->SetURL( "" );
-    m_pReleaseNotesLabel->Hide();
-    m_pReleaseNotesLink->Hide();
-    m_pReleaseNotesLink->SetURL( "" );
-    m_pDescriptions->SetText("");
+    m_xPublisherLabel->hide();
+    m_xPublisherLink->hide();
+    m_xPublisherLink->set_label("");
+    m_xPublisherLink->set_uri("");
+    m_xReleaseNotesLabel->hide();
+    m_xReleaseNotesLink->hide();
+    m_xReleaseNotesLink->set_uri( "" );
+    m_xDescriptions->set_text("");
 }
 
 bool UpdateDialog::showDescription(uno::Reference< xml::dom::XNode > const & aUpdateInfo)
@@ -926,17 +809,17 @@ bool UpdateDialog::showDescription(std::pair< OUString, OUString > const & pairP
 
     if ( !sPub.isEmpty() )
     {
-        m_pPublisherLabel->Show();
-        m_pPublisherLink->Show();
-        m_pPublisherLink->SetText( sPub );
-        m_pPublisherLink->SetURL( sURL );
+        m_xPublisherLabel->show();
+        m_xPublisherLink->show();
+        m_xPublisherLink->set_label(sPub);
+        m_xPublisherLink->set_uri(sURL);
     }
 
     if ( !sReleaseNotes.isEmpty() )
     {
-        m_pReleaseNotesLabel->Show();
-        m_pReleaseNotesLink->Show();
-        m_pReleaseNotesLink->SetURL( sReleaseNotes );
+        m_xReleaseNotesLabel->show();
+        m_xReleaseNotesLink->show();
+        m_xReleaseNotesLink->set_uri( sReleaseNotes );
     }
     return true;
 }
@@ -947,10 +830,9 @@ bool UpdateDialog::showDescription( const OUString& rDescription)
         // nothing to show
         return false;
 
-    m_pDescriptions->SetText( rDescription );
+    m_xDescriptions->set_text(rDescription);
     return true;
 }
-
 
 void UpdateDialog::getIgnoredUpdates()
 {
@@ -1107,14 +989,16 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIg
 }
 
 
-IMPL_LINK_NOARG(UpdateDialog, selectionHandler, SvTreeListBox*, void)
+IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
 {
     OUStringBuffer b;
-    UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
-        m_pUpdates->GetSelectedEntryData());
+    int nSelectedPos = m_xUpdates->get_selected_index();
     clearDescription();
 
-    if ( p != nullptr )
+    const UpdateDialog::Index* p = nullptr;
+    if (nSelectedPos != -1)
+        p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(nSelectedPos).toInt64());
+    if (p != nullptr)
     {
         sal_uInt16 pos = p->m_nIndex;
 
@@ -1205,48 +1089,47 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, SvTreeListBox*, void)
     showDescription( b.makeStringAndClear() );
 }
 
-IMPL_LINK_NOARG(UpdateDialog, allHandler, CheckBox&, void)
+IMPL_LINK_NOARG(UpdateDialog, allHandler, weld::ToggleButton&, void)
 {
-    if (m_pAll->IsChecked())
+    if (m_xAll->get_active())
     {
-        m_pUpdate->Enable();
-        m_pUpdates->Enable();
-        m_pDescription->Enable();
-        m_pDescriptions->Enable();
+        m_xUpdate->set_sensitive(true);
+        m_xUpdates->set_sensitive(true);
+        m_xDescription->set_sensitive(true);
+        m_xDescriptions->set_sensitive(true);
 
         for (auto const& listboxEntry : m_ListboxEntries)
         {
             if ( listboxEntry->m_bIgnored || ( listboxEntry->m_eKind != ENABLED_UPDATE ) )
-                insertItem( listboxEntry.get(), SvLBoxButtonKind::DisabledCheckbox );
+                insertItem(listboxEntry.get(), false);
         }
     }
     else
     {
-        for ( sal_uInt16 i = 0; i < m_pUpdates->getItemCount(); )
+        for (sal_uInt16 i = m_xUpdates->n_children(); i != 0 ;)
         {
-            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_pUpdates->GetEntryData(i) );
+            i -= 1;
+            UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >( m_xUpdates->get_id(i).toInt64() );
             if ( p->m_bIgnored || ( p->m_eKind != ENABLED_UPDATE ) )
             {
-                m_pUpdates->RemoveEntry(i);
-            } else {
-                ++i;
+                m_xUpdates->remove(i);
             }
         }
 
-        if (m_pUpdates->getItemCount() == 0)
+        if (m_xUpdates->n_children() == 0)
         {
             clearDescription();
-            m_pUpdate->Disable();
-            m_pUpdates->Disable();
-            if (m_pchecking->IsVisible())
-                m_pDescription->Disable();
+            m_xUpdate->set_sensitive(false);
+            m_xUpdates->set_sensitive(false);
+            if (m_xChecking->get_visible())
+                m_xDescription->set_sensitive(false);
             else
                 showDescription(m_noInstallable);
         }
     }
 }
 
-IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
+IMPL_LINK_NOARG(UpdateDialog, okHandler, weld::Button&, void)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1258,22 +1141,23 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
     }
 
 
-    for (sal_uInt16 i = 0; i < m_pUpdates->getItemCount(); ++i) {
+    for (sal_uInt16 i = 0, nCount = m_xUpdates->n_children(); i < nCount; ++i)
+    {
         UpdateDialog::Index const * p =
-            static_cast< UpdateDialog::Index const * >(
-                m_pUpdates->GetEntryData(i));
-        if (p->m_eKind == ENABLED_UPDATE && m_pUpdates->IsChecked(i)) {
+            reinterpret_cast< UpdateDialog::Index const * >(
+                m_xUpdates->get_id(i).toInt64());
+        if (p->m_eKind == ENABLED_UPDATE && m_xUpdates->get_toggle(i, 0)) {
             m_updateData.push_back( m_enabledUpdates[ p->m_nIndex ] );
         }
     }
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(UpdateDialog, closeHandler, Button*, void)
+IMPL_LINK_NOARG(UpdateDialog, closeHandler, weld::Button&, void)
 {
     m_thread->stop();
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
