@@ -595,7 +595,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     {
         pOld = GetOldItem( *rSet, SID_ATTR_LRSPACE );
 
-        if ( !pOld || !( *static_cast<const SvxLRSpaceItem*>(pOld) == aMargin ) )
+        if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin )
             rSet->Put( aMargin );
         else
             bModified = false;
@@ -621,7 +621,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     {
         pOld = GetOldItem( *rSet, SID_ATTR_ULSPACE );
 
-        if ( !pOld || !( *static_cast<const SvxULSpaceItem*>(pOld) == aTopMargin ) )
+        if ( !pOld || *static_cast<const SvxULSpaceItem*>(pOld) != aTopMargin )
         {
             bModified = true;
             rSet->Put( aTopMargin );
@@ -706,7 +706,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     {
         pOld = GetOldItem( *rSet, SID_ATTR_PAGE );
 
-        if ( !pOld || !( *static_cast<const SvxPageItem*>(pOld) == aPage ) )
+        if ( !pOld || *static_cast<const SvxPageItem*>(pOld) != aPage )
         {
             rSet->Put( aPage );
             bModified = true;

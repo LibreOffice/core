@@ -8,8 +8,10 @@
  */
 
 #include <cassert>
+#include <iostream>
 
 #include "plugin.hxx"
+#include "clang/AST/CXXInheritance.h"
 
 namespace {
 
@@ -53,50 +55,102 @@ Expr const * getSubExprOfLogicalNegation(Expr const * expr) {
         ? nullptr : e->getSubExpr();
 }
 
-// Search for an operator with matching parameter types; while this may miss some operators with
-// odd parameter types that would actually be used by the compiler, it is overall better to have too
-// many false negatives (i.e., miss valid loplugin:simplifybool warnings) than false positives here:
-FunctionDecl const * findOperator(CompilerInstance& compiler, clang::RecordType const * recordType, BinaryOperator::Opcode opcode, QualType lhs, QualType rhs) {
-    auto const clhs = lhs.isNull() ? nullptr : lhs.getCanonicalType().getTypePtr();
-    auto const crhs = rhs.getCanonicalType().getTypePtr();
-    OverloadedOperatorKind over = BinaryOperator::getOverloadedOperator(opcode);
-    CXXRecordDecl const * recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
-    if (!recordDecl)
-        return nullptr;
-    // search for member overloads
+clang::Type const * stripConstRef(clang::Type const * type) {
+    auto lvalueType = dyn_cast<LValueReferenceType>(type);
+    if (!lvalueType)
+        return type;
+    return lvalueType->getPointeeType()->getUnqualifiedDesugaredType();
+}
+
+bool isCompatibleTypeForOperator(clang::Type const * paramType, CXXRecordDecl const * argRecordDecl) {
+    paramType = stripConstRef(paramType);
+    auto paramRecordType = dyn_cast<RecordType>(paramType);
+    if (!paramRecordType)
+        return false;
+    CXXRecordDecl const * paramRecordDecl = dyn_cast<CXXRecordDecl>(paramRecordType->getDecl());
+    if (!paramRecordDecl)
+        return false;
+    return argRecordDecl == paramRecordDecl || argRecordDecl->isDerivedFrom(paramRecordDecl);
+}
+
+FunctionDecl const * findMemberOperator(CXXRecordDecl const * recordDecl, OverloadedOperatorKind ooOpcode, CXXRecordDecl const * rhs) {
     for (auto it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it) {
-        if (it->getOverloadedOperator() == over) {
-            assert(it->getNumParams() == 1);
-            if (it->getParamDecl(0)->getType().getCanonicalType().getTypePtr() == crhs)
+        if (it->getOverloadedOperator() == ooOpcode) {
+            if (it->getNumParams() == 1 && isCompatibleTypeForOperator(it->getParamDecl(0)->getType().getTypePtr(), rhs))
                 return *it;
         }
     }
+    return nullptr;
+}
+
+// Magic value to indicate we assume this operator exists
+static FunctionDecl const * const ASSUME_OPERATOR_EXISTS = reinterpret_cast<FunctionDecl const *>(-1);
+
+// Search for an operator with matching parameter types; while this may miss some operators with
+// odd parameter types that would actually be used by the compiler, it is overall better to have too
+// many false negatives (i.e., miss valid loplugin:simplifybool warnings) than false positives here:
+FunctionDecl const * findOperator(CompilerInstance& compiler, BinaryOperator::Opcode opcode, clang::Type const * lhsType, clang::Type const * rhsType) {
+    auto lhsRecordType = dyn_cast<RecordType>(lhsType);
+    if (!lhsRecordType)
+        return nullptr;
+    auto rhsRecordType = dyn_cast<RecordType>(rhsType);
+    if (!rhsRecordType)
+        return nullptr;
+    CXXRecordDecl const * lhsRecordDecl = dyn_cast<CXXRecordDecl>(lhsRecordType->getDecl());
+    if (!lhsRecordDecl)
+        return nullptr;
+    CXXRecordDecl const * rhsRecordDecl = dyn_cast<CXXRecordDecl>(rhsRecordType->getDecl());
+    if (!rhsRecordDecl)
+        return nullptr;
+
+    auto ctx = lhsRecordDecl->getCanonicalDecl()->getDeclContext();
+
+    /*
+        It looks the clang Sema::LookupOverloadedOperatorName is the chunk of functionality I need,
+        but I have no idea how to call it from here.
+        Actually finding the right standard library operators requires doing conversions and other funky stuff.
+        For now, just assume that standard library operators are well-behaved, and have negated operators.
+    */
+    if (ctx->isStdNamespace())
+        return ASSUME_OPERATOR_EXISTS;
+    if (auto namespaceDecl = dyn_cast<NamespaceDecl>(ctx)) {
+        // because, of course, half the standard library is not "in the standard namespace"
+        if (namespaceDecl->getName() == "__gnu_debug")
+            return ASSUME_OPERATOR_EXISTS;
+    }
+
+    // search for member overloads
+    // (using the hard way here because DeclContext::lookup does not work for member operators)
+    auto ooOpcode = BinaryOperator::getOverloadedOperator(opcode);
+    FunctionDecl const * foundFunction = findMemberOperator(lhsRecordDecl, ooOpcode, rhsRecordDecl);
+    if (foundFunction)
+        return foundFunction;
+    auto ForallBasesCallback = [&](const CXXRecordDecl *baseCXXRecordDecl)
+    {
+        if (baseCXXRecordDecl->isInvalidDecl())
+            return false;
+        foundFunction = findMemberOperator(baseCXXRecordDecl, ooOpcode, rhsRecordDecl);
+        return false;
+    };
+
+    lhsRecordDecl->forallBases(ForallBasesCallback, /*AllowShortCircuit*/true);
+    if (foundFunction)
+        return foundFunction;
+
     // search for free function overloads
-    auto ctx = recordDecl->getDeclContext();
     if (ctx->getDeclKind() == Decl::LinkageSpec) {
         ctx = ctx->getParent();
     }
-    auto declName = compiler.getASTContext().DeclarationNames.getCXXOperatorName(over);
-    auto res = ctx->lookup(declName);
+    auto operatorDeclName = compiler.getASTContext().DeclarationNames.getCXXOperatorName(ooOpcode);
+    auto res = ctx->lookup(operatorDeclName);
     for (auto d = res.begin(); d != res.end(); ++d) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (!f || f->getNumParams() != 2)
             continue;
-        if (f->getParamDecl(1)->getType().getCanonicalType().getTypePtr() != crhs)
+        if (!isCompatibleTypeForOperator(f->getParamDecl(0)->getType().getTypePtr(), lhsRecordDecl))
             continue;
-        auto const p0 = f->getParamDecl(0)->getType().getCanonicalType().getTypePtr();
-        if (clhs) {
-            if (p0 != clhs)
-                continue;
-        } else {
-            if (p0 != recordType) {
-                auto lvalue = dyn_cast<LValueReferenceType>(p0);
-                if (!lvalue)
-                    continue;
-                if (lvalue->getPointeeType().getTypePtr() != recordType)
-                    continue;
-            }
-        }
+        if (!isCompatibleTypeForOperator(f->getParamDecl(1)->getType().getTypePtr(), rhsRecordDecl))
+            continue;
         return f;
     }
     return nullptr;
@@ -248,32 +302,15 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (!(op == OO_EqualEqual || op == OO_ExclaimEqual))
             return true;
         BinaryOperator::Opcode negatedOpcode = BinaryOperator::negateComparisonOp(BinaryOperator::getOverloadedOpcode(op));
-        auto t = binaryOp->getArg(0)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
-        // we need to verify that a negated operator actually existed
-        if (!t->isRecordType())
-            return true;
-        auto recordType = dyn_cast<RecordType>(t);
-        auto const fdecl = binaryOp->getDirectCallee();
-        if (!fdecl) // e.g. CXXOperatorCallExpr with UnresolvedLookupExpr
-            return true;
-        QualType lhs;
-        QualType rhs;
-        if (auto const mdecl = dyn_cast<CXXMethodDecl>(fdecl)) {
-            assert(fdecl->getNumParams() == 1);
-            rhs = fdecl->getParamDecl(0)->getType();
-        } else {
-            assert(fdecl->getNumParams() == 2);
-            lhs = fdecl->getParamDecl(0)->getType();
-            rhs = fdecl->getParamDecl(1)->getType();
-        }
-        auto const negOp = findOperator(compiler, recordType, negatedOpcode, lhs, rhs);
+        auto lhs = binaryOp->getArg(0)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        auto rhs = binaryOp->getArg(1)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        auto const negOp = findOperator(compiler, negatedOpcode, lhs, rhs);
         if (!negOp)
             return true;
         // if we are inside a similar operator, ignore, eg. operator!= is often defined by calling !operator==
         if (m_insideFunctionDecl && m_insideFunctionDecl->getNumParams() >= 1) {
-            auto qt = m_insideFunctionDecl->getParamDecl(0)->getType();
-            auto lvalue = dyn_cast<LValueReferenceType>(qt.getTypePtr());
-            if (lvalue && lvalue->getPointeeType()->getUnqualifiedDesugaredType() == recordType)
+            auto t = stripConstRef(m_insideFunctionDecl->getParamDecl(0)->getType().getTypePtr());
+            if (t == lhs)
                 return true;
         }
         // QA code
@@ -285,10 +322,11 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
             ("logical negation of comparison operator, can be simplified by inverting operator"),
             compat::getBeginLoc(expr))
             << expr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note, "the presumed corresponding negated operator is declared here",
-            negOp->getLocation())
-            << negOp->getSourceRange();
+        if (negOp != ASSUME_OPERATOR_EXISTS)
+            report(
+                DiagnosticsEngine::Note, "the presumed corresponding negated operator is declared here",
+                negOp->getLocation())
+                << negOp->getSourceRange();
     }
     return true;
 }

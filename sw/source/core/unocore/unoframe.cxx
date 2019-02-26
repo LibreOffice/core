@@ -1773,7 +1773,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
                 aChangedBrushItem.PutValue(aValue, nMemberId);
 
-                if(!(aChangedBrushItem == aOriginalBrushItem))
+                if(aChangedBrushItem != aOriginalBrushItem)
                 {
                     setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
                     pFormat->GetDoc()->SetFlyFrameAttr( *pFormat, aSet );

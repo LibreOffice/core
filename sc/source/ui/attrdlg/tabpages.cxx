@@ -127,7 +127,7 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet* rCoreAttrs )
         if ( bTriEnabled )
             bAttrsChanged = true;                   // DontCare -> properly value
         else
-            bAttrsChanged = !pOldItem || !( aProtAttr == *static_cast<const ScProtectionAttr*>(pOldItem) );
+            bAttrsChanged = !pOldItem || aProtAttr != *static_cast<const ScProtectionAttr*>(pOldItem);
     }
 
     if ( bAttrsChanged )

@@ -1316,17 +1316,17 @@ public:
                     const sal_uInt32 nIndex(maPoints.count() - 1);
                     bRemove = (maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex));
 
-                    if(bRemove && mpBColors && !(mpBColors->getBColor(0) == mpBColors->getBColor(nIndex)))
+                    if(bRemove && mpBColors && mpBColors->getBColor(0) != mpBColors->getBColor(nIndex))
                     {
                         bRemove = false;
                     }
 
-                    if(bRemove && mpNormals && !(mpNormals->getNormal(0) == mpNormals->getNormal(nIndex)))
+                    if(bRemove && mpNormals && mpNormals->getNormal(0) != mpNormals->getNormal(nIndex))
                     {
                         bRemove = false;
                     }
 
-                    if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(0) == mpTextureCoordinates->getTextureCoordinate(nIndex)))
+                    if(bRemove && mpTextureCoordinates && mpTextureCoordinates->getTextureCoordinate(0) != mpTextureCoordinates->getTextureCoordinate(nIndex))
                     {
                         bRemove = false;
                     }
@@ -1352,17 +1352,17 @@ public:
             const sal_uInt32 nNextIndex(nIndex + 1);
             bool bRemove(maPoints.getCoordinate(nIndex) == maPoints.getCoordinate(nNextIndex));
 
-            if(bRemove && mpBColors && !(mpBColors->getBColor(nIndex) == mpBColors->getBColor(nNextIndex)))
+            if(bRemove && mpBColors && mpBColors->getBColor(nIndex) != mpBColors->getBColor(nNextIndex))
             {
                 bRemove = false;
             }
 
-            if(bRemove && mpNormals && !(mpNormals->getNormal(nIndex) == mpNormals->getNormal(nNextIndex)))
+            if(bRemove && mpNormals && mpNormals->getNormal(nIndex) != mpNormals->getNormal(nNextIndex))
             {
                 bRemove = false;
             }
 
-            if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(nIndex) == mpTextureCoordinates->getTextureCoordinate(nNextIndex)))
+            if(bRemove && mpTextureCoordinates && mpTextureCoordinates->getTextureCoordinate(nIndex) != mpTextureCoordinates->getTextureCoordinate(nNextIndex))
             {
                 bRemove = false;
             }

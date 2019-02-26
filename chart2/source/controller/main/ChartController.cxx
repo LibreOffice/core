@@ -889,7 +889,7 @@ void SAL_CALL ChartController::queryClosing(
     if( !aModelRef.is() )
         return;
 
-    if( !(aModelRef->getModel() == rSource.Source) )
+    if( aModelRef->getModel() != rSource.Source )
     {
         OSL_FAIL( "queryClosing was called on a controller from an unknown source" );
         return;

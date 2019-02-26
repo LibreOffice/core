@@ -304,7 +304,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aMargin.SetContextValue(m_xContextualCB->get_active());
         eState = GetItemSet().GetItemState( nWhich );
 
-        if ( !pOld || !( *static_cast<const SvxULSpaceItem*>(pOld) == aMargin ) ||
+        if ( !pOld || *static_cast<const SvxULSpaceItem*>(pOld) != aMargin ||
              SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aMargin );
@@ -359,7 +359,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             bNullTab = true;
         eState = GetItemSet().GetItemState( nWhich );
 
-        if ( !pOld || !( *static_cast<const SvxLRSpaceItem*>(pOld) == aMargin ) ||
+        if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin ||
              SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aMargin );
@@ -1376,7 +1376,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aHyphen.GetMaxHyphens() = static_cast<sal_uInt8>(m_xMaxHyphenEdit->get_value());
 
         if ( !pOld ||
-            !( *static_cast<const SvxHyphenZoneItem*>(pOld) == aHyphen ) ||
+            *static_cast<const SvxHyphenZoneItem*>(pOld) != aHyphen ||
                 m_xHyphenBox->get_state_changed_from_saved())
         {
             rOutSet->Put( aHyphen );

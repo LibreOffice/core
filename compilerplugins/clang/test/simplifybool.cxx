@@ -9,6 +9,12 @@
 
 #include <rtl/ustring.hxx>
 // expected-note@rtl/ustring.hxx:* 2 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+#include <rtl/string.hxx>
+// expected-note@rtl/string.hxx:* {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+#include <basegfx/vector/b3dvector.hxx>
+// expected-note@basegfx/tuple/b3dtuple.hxx:* {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+
+#include <map>
 
 namespace group1
 {
@@ -105,6 +111,16 @@ void testRecord()
     OUString d2;
     v = !(d1 == d2);
     // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+    OString e1;
+    OString e2;
+    v = !(e1 == e2);
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
+
+    // the operator != is in a base-class, and the param is a base-type
+    basegfx::B3DVector f1;
+    basegfx::B3DVector f2;
+    v = !(f1 == f2);
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
 }
 
 struct Record4
@@ -140,6 +156,17 @@ bool foo3(int a, bool b)
 {
     // no warning expected
     return !(a != 1 && b);
+}
+};
+
+namespace group5
+{
+bool foo1(std::map<int, int>* pActions, int aKey)
+{
+    auto aIter = pActions->find(aKey);
+    //TODO this doesn't work yet because I'd need to implement conversion operators during method/func lookup
+    return !(aIter == pActions->end());
+    // expected-error@-1 {{logical negation of comparison operator, can be simplified by inverting operator [loplugin:simplifybool]}}
 }
 };
 
