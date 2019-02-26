@@ -1413,7 +1413,6 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pMedium(nullptr)
     , m_pOwnMedium(nullptr)
     , m_bLinkableSelected(false)
-    , m_bShowAllShapes(false)
 {
     m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
     m_xTreeView->connect_changed(LINK(this, SdPageObjsTLV, SelectHdl));
@@ -1431,28 +1430,17 @@ IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
     m_aChangeHdl.Call(*m_xTreeView);
 }
 
-OUString SdPageObjsTLV::GetObjectName(
-    const SdrObject* pObject,
-    const bool bCreate) const
+OUString SdPageObjsTLV::GetObjectName(const SdrObject* pObject)
 {
-    OUString aRet;
+    if ( !pObject )
+        return OUString();
 
-    if ( pObject )
-    {
-        aRet = pObject->GetName();
+    OUString aRet = pObject->GetName();
+    if (!aRet.isEmpty())
+        return aRet;
 
-        if (aRet.isEmpty() && dynamic_cast<const SdrOle2Obj* >(pObject) !=  nullptr)
-            aRet = static_cast< const SdrOle2Obj* >( pObject )->GetPersistName();
-    }
-
-    if (bCreate
-        && m_bShowAllShapes
-        && aRet.isEmpty()
-        && pObject!=nullptr)
-    {
-        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
-        aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
-    }
+    if (auto pOle = dynamic_cast<const SdrOle2Obj* >(pObject))
+        aRet = pOle->GetPersistName();
 
     return aRet;
 }

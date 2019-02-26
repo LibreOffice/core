@@ -301,7 +301,6 @@ private:
     SfxMedium* m_pMedium;
     SfxMedium* m_pOwnMedium;
     bool m_bLinkableSelected;
-    bool m_bShowAllShapes;
     OUString m_aDocName;
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
     Link<weld::TreeView&, void> m_aChangeHdl;
@@ -314,14 +313,8 @@ private:
         @param pObject
             When this is NULL then an empty string is returned, regardless
             of the value of bCreate.
-        @param bCreate
-            This flag controls for objects without user supplied name
-            whether a name is created.  When a name is created then this
-            name is not stored in the object.
     */
-    OUString GetObjectName (
-        const SdrObject* pObject,
-        const bool bCreate = true) const;
+    static OUString GetObjectName (const SdrObject* pObject);
 
     void CloseBookmarkDoc();
 
