@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <semantics>
+    <mrow>
+      <mi>f</mi>
+      <mrow>
+        <mrow>
+          <mo fence="true" stretchy="false">(</mo>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+          <mo fence="true" stretchy="false">)</mo>
+        </mrow>
+        <mo stretchy="false">=</mo>
+        <mrow>
+          <munderover>
+            <mo stretchy="false">∑</mo>
+            <mrow>
+              <mi>i</mi>
+              <mo stretchy="false">=</mo>
+              <mn>0</mn>
+            </mrow>
+            <mi mathvariant="normal">∞</mi>
+          </munderover>
+          <mrow>
+            <mfrac>
+              <mrow>
+                <msup>
+                  <mi>f</mi>
+                  <mrow>
+                    <mo fence="true" stretchy="false">(</mo>
+                    <mrow>
+                      <mi>i</mi>
+                    </mrow>
+                    <mo fence="true" stretchy="false">)</mo>
+                  </mrow>
+                </msup>
+                <mrow>
+                  <mo fence="true" stretchy="false">(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                  </mrow>
+                  <mo fence="true" stretchy="false">)</mo>
+                </mrow>
+              </mrow>
+              <mrow>
+                <mi>i</mi>
+                <mi>!</mi>
+              </mrow>
+            </mfrac>
+            <msup>
+              <mi>x</mi>
+              <mi>i</mi>
+            </msup>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mrow>
+    <annotation encoding="StarMath 5.0">f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}</annotation>
+  </semantics>
+</math>
