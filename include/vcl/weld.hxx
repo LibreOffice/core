@@ -832,6 +832,13 @@ public:
     void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
 };
 
+class VCL_DLLPUBLIC Spinner : virtual public Widget
+{
+public:
+    virtual void start() = 0;
+    virtual void stop() = 0;
+};
+
 class VCL_DLLPUBLIC ProgressBar : virtual public Widget
 {
 public:
@@ -1532,6 +1539,8 @@ public:
     virtual std::unique_ptr<Scale> weld_scale(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<ProgressBar> weld_progress_bar(const OString& id,
                                                            bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Spinner> weld_spinner(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Image> weld_image(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Calendar> weld_calendar(const OString& id, bool bTakeOwnership = false)
