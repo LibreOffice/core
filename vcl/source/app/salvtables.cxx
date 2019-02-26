@@ -53,6 +53,7 @@
 #include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/throbber.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
@@ -1866,6 +1867,29 @@ IMPL_LINK_NOARG(SalInstanceScale, SlideHdl, Slider*, void)
 {
     signal_value_changed();
 }
+
+class SalInstanceSpinner : public SalInstanceWidget, public virtual weld::Spinner
+{
+private:
+    VclPtr<Throbber> m_xThrobber;
+
+public:
+    SalInstanceSpinner(Throbber* pThrobber, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pThrobber, pBuilder, bTakeOwnership)
+        , m_xThrobber(pThrobber)
+    {
+    }
+
+    virtual void start() override
+    {
+        m_xThrobber->start();
+    }
+
+    virtual void stop() override
+    {
+        m_xThrobber->stop();
+    }
+};
 
 class SalInstanceProgressBar : public SalInstanceWidget, public virtual weld::ProgressBar
 {
@@ -4207,6 +4231,12 @@ public:
     {
         ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
         return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id, bool bTakeOwnership) override
+    {
+        Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
+        return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override
