@@ -594,7 +594,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
             const bool assignmentOp = op == OO_Equal || op == OO_StarEqual ||
                     op == OO_SlashEqual || op == OO_PercentEqual ||
                     op == OO_PlusEqual || op == OO_MinusEqual ||
-                    op == OO_LessLessEqual || op == OO_GreaterGreaterEqual ||
+                    op == OO_LessLessEqual ||
                     op == OO_AmpEqual || op == OO_CaretEqual ||
                     op == OO_PipeEqual;
             if (operatorCallExpr->getArg(0) == child && assignmentOp)
