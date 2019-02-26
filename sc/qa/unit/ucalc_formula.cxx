@@ -8774,6 +8774,33 @@ void Test::testFuncJumpMatrixArrayIF()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#123477 OFFSET() returns the matrix result instead of the reference list
+// array if result is not used as ReferenceOrRefArray.
+void Test::testFuncJumpMatrixArrayOFFSET()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    std::vector<std::vector<const char*>> aData = {
+        { "abc" },
+        { "bcd" },
+        { "cde" }
+    };
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);   // A1:A3
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Matrix in C5:C7, COLUMN()-3 here offsets by 0 but the entire expression
+    // is in array/matrix context.
+    m_pDoc->InsertMatrixFormula( 2,4, 2,6, aMark, "=FIND(\"c\";OFFSET(A1:A3;0;COLUMN()-3))");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula C5 failed", 3.0, m_pDoc->GetValue(ScAddress(2,4,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula C6 failed", 2.0, m_pDoc->GetValue(ScAddress(2,5,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula C7 failed", 1.0, m_pDoc->GetValue(ScAddress(2,6,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test iterations with circular chain of references.
 void Test::testIterations()
 {
