@@ -541,6 +541,12 @@ shell basctl_Shell
         StateMethod     = GetState;
     ]
 
+    SID_INSERT_GRIDCONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
     SID_EXPORT_DIALOG
     [
         ExecMethod      = ExecuteDialog;
