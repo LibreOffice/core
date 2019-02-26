@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
 #define INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
 
-#include <sal/types.h>
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <memory>

@@ -23,24 +23,15 @@
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
 #include <cppcanvas/spritecanvas.hxx>
-#include <cppcanvas/polypolygon.hxx>
 #include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/renderer.hxx>
-#include <cppcanvas/sprite.hxx>
 
 #include <cppcanvas/cppcanvasdllapi.h>
 
 namespace vcl { class Window; }
-class Bitmap;
 class BitmapEx;
-namespace tools {
-    class Polygon;
-    class PolyPolygon;
-}
-class Size;
-class Graphic;
+
 class GDIMetaFile;
-class Animation;
 
 namespace com { namespace sun { namespace star { namespace rendering
 {

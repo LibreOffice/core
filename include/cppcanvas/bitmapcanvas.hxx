@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_BITMAPCANVAS_HXX
 #define INCLUDED_CPPCANVAS_BITMAPCANVAS_HXX
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
 #include <basegfx/vector/b2isize.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <memory>
