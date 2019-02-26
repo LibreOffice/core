@@ -1028,6 +1028,24 @@ public:
         {}
 };
 
+//==============================================================================
+class GridControlElement
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid,::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
+    virtual void SAL_CALL endElement() override;
+
+    GridControlElement(OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+
 }
 
 #endif // INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_IMP_SHARE_HXX

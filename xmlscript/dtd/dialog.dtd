@@ -59,7 +59,8 @@
                      dlg:formattedfield|
                      dlg:fixedline|
                      dlg:progressmeter|
-                     dlg:scrollbar
+                     dlg:scrollbar|
+                     dlg:table
                     )">
 
 <!ELEMENT dlg:window (dlg:styles*, (%event;)*, dlg:bulletinboard*)>
@@ -395,3 +396,20 @@
                             dlg:value-min %numeric; #IMPLIED
                             dlg:value-max %numeric; #IMPLIED
                             >
+
+<!ELEMENT dlg:table ((%event;)*)>
+<!ATTLIST dlg:table %default-attributes;
+                    dlg:showcolumnheader %boolean; #IMPLIED
+                    dlg:showrowheader %boolean; #IMPLIED
+                    dlg:gridline-color %numeric; #IMPLIED
+                    dlg:usegridlines %boolean; #IMPLIED
+                    dlg:headerbackground-color %numeric; #IMPLIED
+                    dlg:headertext-color %numeric; #IMPLIED
+                    dlg:activeselectionbackground-color %numeric; #IMPLIED
+                    dlg:activeselectiontext-color %numeric; #IMPLIED
+                    dlg:inactiveselectionbackground-color %numeric; #IMPLIED
+                    dlg:inactiveselectiontext-color %numeric; #IMPLIED
+                    dlg:selectiontype CDATA #IMPLIED
+                    dlg:valign (top|center|bottom) #IMPLIED
+                    dlg:tabstop %boolean; #IMPLIED
+                    >

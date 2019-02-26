@@ -60,6 +60,7 @@ enum
     OBJ_DLG_FORMSPIN        = 30,
     OBJ_DLG_FORMVSCROLL     = 31,
     OBJ_DLG_FORMHSCROLL     = 32,
+    OBJ_DLG_GRIDCONTROL     = 33,
 };
 
 // control properties
