@@ -337,7 +337,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
     DWORD BytesWritten=0;
     BOOL bRet;
 
-    if ( !( pFile != nullptr && pFile->m_Handle != INVALID_HANDLE_VALUE ) || ( pFile->m_pWriteBuf == nullptr ) )
+    if ( pFile == nullptr || pFile->m_Handle == INVALID_HANDLE_VALUE || ( pFile->m_pWriteBuf == nullptr ) )
     {
         return false;
     }
