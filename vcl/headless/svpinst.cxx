@@ -576,7 +576,7 @@ void SvpSalTimer::Stop()
     m_pInstance->StopTimer();
 }
 
-void SvpSalTimer::Start( sal_uLong nMS )
+void SvpSalTimer::Start( sal_uInt64 nMS )
 {
     m_pInstance->StartTimer( nMS );
 }
