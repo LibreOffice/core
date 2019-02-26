@@ -575,3 +575,6 @@ blacklist:
     include/linguistic/misc.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XTerminateListener.hpp
+    include/cppcanvas/renderer.hxx:
+    # Used in boost::optional type
+    - basegfx/matrix/b2dhommatrix.hxx

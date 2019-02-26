@@ -29,6 +29,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <cppuhelper/exc_hlp.hxx>
 

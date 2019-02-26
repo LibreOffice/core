@@ -21,8 +21,6 @@
 #define INCLUDED_CPPCANVAS_CANVAS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppcanvas/font.hxx>
-#include <cppcanvas/color.hxx>
 #include <memory>
 
 namespace basegfx

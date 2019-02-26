@@ -21,12 +21,8 @@
 #define INCLUDED_CPPCANVAS_BASEGFXFACTORY_HXX
 
 #include <cppcanvas/canvas.hxx>
-#include <cppcanvas/bitmapcanvas.hxx>
-#include <cppcanvas/spritecanvas.hxx>
 #include <cppcanvas/polypolygon.hxx>
 #include <cppcanvas/bitmap.hxx>
-#include <cppcanvas/renderer.hxx>
-#include <cppcanvas/sprite.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
 #include <cppcanvas/cppcanvasdllapi.h>
@@ -34,7 +30,6 @@
 namespace basegfx
 {
     class B2DPolygon;
-    class B2DPolyPolygon;
 }
 
 

@@ -20,11 +20,8 @@
 #ifndef INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
 #define INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
 #include <basegfx/vector/b2dsize.hxx>
 #include <cppcanvas/canvas.hxx>
-#include <cppcanvas/sprite.hxx>
 #include <cppcanvas/customsprite.hxx>
 #include <memory>
 

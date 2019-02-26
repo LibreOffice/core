@@ -20,8 +20,7 @@
 #ifndef INCLUDED_CPPCANVAS_COLOR_HXX
 #define INCLUDED_CPPCANVAS_COLOR_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <memory>
+#include <sal/types.h>
 
 /* Definition of Color class */
 

@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/customsprite.hxx>
 
 #include "slidechangebase.hxx"
 #include <tools.hxx>

@@ -22,13 +22,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
+#include <cppcanvas/color.hxx>
 #include <memory>
-
-namespace basegfx
-{
-    class B2DPolygon;
-    class B2DPolyPolygon;
-}
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
