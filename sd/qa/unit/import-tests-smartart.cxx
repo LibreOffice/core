@@ -955,6 +955,16 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT_GREATER(xFirstImageShape->getPosition().Y, xSecondImageShape->getPosition().Y);
     CPPUNIT_ASSERT_GREATER(xSecondImageShape->getPosition().Y, xThirdImageShape->getPosition().Y);
 
+    // Make sure that the title shape doesn't overlap with the diagram.
+    // Note that real "no overlap" is asserted here, though in fact what we want is a less strict
+    // condition: that no text part of the title shape and the diagram overlaps.
+    uno::Reference<drawing::XShape> xTitle(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTitle.is());
+    // Without the accompanying fix in place, this test would have failed with 'Expected greater
+    // than: 2873; Actual  : 2320', i.e. the title shape and the diagram overlapped.
+    CPPUNIT_ASSERT_GREATER(xTitle->getPosition().Y + xTitle->getSize().Height,
+                           xGroup->getPosition().Y);
+
     xDocShRef->DoClose();
 }
 
