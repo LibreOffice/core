@@ -17,17 +17,17 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">999.99000000000001</property>
+    <property name="upper">99999.990000000005</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="upper">999.99000000000001</property>
+    <property name="upper">99999.990000000005</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">999.99000000000001</property>
+    <property name="upper">99999</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
