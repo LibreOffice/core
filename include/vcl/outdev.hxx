@@ -391,6 +391,9 @@ private:
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
+
+    mutable std::array<bool, 2 >   mbFontEsc;
+
     /** @name Initialization and accessor functions
      */
     ///@{
@@ -1145,6 +1148,8 @@ public:
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
+    void                        SetFontEscType( bool type );
+    void                        SetFontEscValue( short nEsc );
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Int32 nIndex, sal_Int32 nLen = -1,
                                               long nCharExtra = 0,
@@ -1332,6 +1337,8 @@ public:
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
     virtual void                EnableRTL( bool bEnable = true);
     bool                        IsRTLEnabled() const { return mbEnableRTL; }
+    // it's true when the DrawStretchText method is used on a text with superscript or subscript
+    bool                   GetFontEsc() const { return ( mbFontEsc[0] && mbFontEsc[1] ) ; }
 
     bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
