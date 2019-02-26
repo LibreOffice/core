@@ -259,6 +259,17 @@ namespace drawinglayer
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
                     OUString aText( rTextCandidate.getText() );
+
+                    // With "StarSymbol" or with "OpenSymbol" symbol font, a really small bullets appear
+                    // to be very large (wrongly scaled) in preview and/or in main slide view.
+                    if (aText.getLength() == 1 &&
+                        aFontScaling.getLength() < 2.5 &&
+                        (aText[0] == (sal_Unicode)0x2022 || aText[0] == (sal_Unicode)0x25cf) &&
+                        (aFont.GetFamilyName().equalsIgnoreAsciiCase("starsymbol") || aFont.GetFamilyName().equalsIgnoreAsciiCase("opensymbol")))
+                    {
+                        aText = OUString((sal_Unicode)'*');
+                    }
+
                     sal_Int32 nPos = rTextCandidate.getTextPosition();
                     sal_Int32 nLen = rTextCandidate.getTextLength();
 
