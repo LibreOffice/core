@@ -541,7 +541,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
     if(aGeo.nRotationAngle)
     {
         // Unrotate!
-        aMatrix.rotate(-aGeo.nRotationAngle * nPi180);
+        aMatrix.rotate(-aGeo.nRotationAngle * F_PI18000);
     }
 
     aXorPolyPolygon.transform(aMatrix);

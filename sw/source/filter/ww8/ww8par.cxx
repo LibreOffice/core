@@ -916,7 +916,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         Point aPivot(rTextRect.TopLeft());
                         aPivot.AdjustX(nMinWH );
                         aPivot.AdjustY(nMinWH );
-                        double a = nTextRotationAngle * nPi180;
+                        double a = nTextRotationAngle * F_PI18000;
                         pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
                     }
                 }
@@ -952,7 +952,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 else if ( mnFix16Angle )
                 {
                     // rotate text with shape ?
-                    double a = mnFix16Angle * nPi180;
+                    double a = mnFix16Angle * F_PI18000;
                     pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                                      sin( a ), cos( a ) );
                 }

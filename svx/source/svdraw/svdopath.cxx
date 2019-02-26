@@ -320,20 +320,20 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     bool bRet=nTmpAngle!=9000 && nTmpAngle!=27000;
     long nRad=0;
     if (bRet) {
-        double cs=cos(nTmpAngle*nPi180);
+        double cs = cos(nTmpAngle * F_PI18000);
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
         nRad=std::abs(FRound(nR));
     }
     if (dAngle<18000) {
         nCircStAngle=NormAngle36000(nTangAngle-9000);
         nCircRelAngle=NormAngle36000(2*dAngle);
-        aCircCenter.AdjustX(FRound(nRad*cos((nTangAngle+9000)*nPi180)) );
-        aCircCenter.AdjustY( -(FRound(nRad*sin((nTangAngle+9000)*nPi180))) );
+        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle + 9000) * F_PI18000)));
+        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle + 9000) * F_PI18000))));
     } else {
         nCircStAngle=NormAngle36000(nTangAngle+9000);
         nCircRelAngle=-NormAngle36000(36000-2*dAngle);
-        aCircCenter.AdjustX(FRound(nRad*cos((nTangAngle-9000)*nPi180)) );
-        aCircCenter.AdjustY( -(FRound(nRad*sin((nTangAngle-9000)*nPi180))) );
+        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle - 9000) * F_PI18000)));
+        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle - 9000) * F_PI18000))));
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
@@ -451,7 +451,7 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         long nHypLen=aTmpPt.Y()-y;
         long nTangAngle=-GetAngle(rDir);
         // sin=g/h, g=h*sin
-        double a=nTangAngle*nPi180;
+        double a = nTangAngle * F_PI18000;
         double sn=sin(a);
         double cs=cos(a);
         double nGKathLen=nHypLen*sn;
@@ -2285,7 +2285,8 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
-    const basegfx::B2DHomMatrix aTrans(basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * nPi180));
+    const basegfx::B2DHomMatrix aTrans(
+        basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * F_PI18000));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
