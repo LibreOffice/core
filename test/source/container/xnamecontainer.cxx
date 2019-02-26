@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -8,47 +8,86 @@
  */
 
 #include <test/container/xnamecontainer.hxx>
+
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <cppunit/extensions/HelperMacros.h>
+
 #include <iostream>
 
 using namespace css;
-using namespace css::uno;
 
-namespace apitest {
-
-XNameContainer::XNameContainer(): maNameToRemove("XNameContainer")
+namespace apitest
 {
+void XNameContainer::testInsertByName()
+{
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(!xNameContainer->hasByName(m_aName + "Insert"));
+    xNameContainer->insertByName(m_aName + "Insert", m_aElement);
+    CPPUNIT_ASSERT(xNameContainer->hasByName(m_aName + "Insert"));
 }
 
-XNameContainer::XNameContainer(const OUString& rNameToRemove):
-        maNameToRemove(rNameToRemove)
+void XNameContainer::testInsertByNameEmptyName()
 {
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    uno::Any aAny;
+    CPPUNIT_ASSERT_THROW(xNameContainer->insertByName("", aAny), lang::IllegalArgumentException);
+}
+
+void XNameContainer::testInsertByNameInvalidElement()
+{
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    // TODO: Find a way to create an invalid element.
+    // CPPUNIT_ASSERT_THROW(xNameContainer->insertByName("Dummy", nullptr),
+    //                      lang::IllegalArgumentException);
+}
+
+void XNameContainer::testInsertByNameDuplicate()
+{
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    uno::Any aAny;
+    CPPUNIT_ASSERT(!xNameContainer->hasByName(m_aName));
+    xNameContainer->insertByName(m_aName, aAny);
+    CPPUNIT_ASSERT(xNameContainer->hasByName(m_aName));
+
+    CPPUNIT_ASSERT_THROW(xNameContainer->insertByName(m_aName, aAny),
+                         container::ElementExistException);
 }
 
 void XNameContainer::testRemoveByName()
 {
-    uno::Reference< container::XNameContainer > xNameContainer(init(),UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xNameContainer->hasByName(maNameToRemove));
-    xNameContainer->removeByName(maNameToRemove);
-    CPPUNIT_ASSERT(!xNameContainer->hasByName(maNameToRemove));
-
-    bool bExceptionThrown = false;
-    try
-    {
-        xNameContainer->removeByName(maNameToRemove);
-    }
-    catch( const container::NoSuchElementException& )
-    {
-        std::cout << "Exception Caught" << std::endl;
-        bExceptionThrown = true;
-    }
-
-    CPPUNIT_ASSERT_MESSAGE("no exception thrown", bExceptionThrown);
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xNameContainer->hasByName(m_aName));
+    xNameContainer->removeByName(m_aName);
+    CPPUNIT_ASSERT(!xNameContainer->hasByName(m_aName));
 }
 
+void XNameContainer::testRemoveByNameEmptyName()
+{
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName(""), lang::IllegalArgumentException);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+void XNameContainer::testRemoveByNameNoneExistingElement()
+{
+    uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName("UnitTest"),
+                         container::NoSuchElementException);
+}
+
+} // namespace apitest
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
