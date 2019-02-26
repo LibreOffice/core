@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:scripts/>
+  <office:font-face-decls>
+    <style:font-face style:name="DejaVu Serif" svg:font-family="'DejaVu Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans1" svg:font-family="'DejaVu Sans'" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans Devanagari" svg:font-family="'Noto Sans Devanagari'" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table" style:master-page-name="">
+      <style:table-properties style:width="6.925in" style:page-number="auto" fo:break-before="auto" fo:break-after="auto" table:align="margins" style:shadow="none" fo:keep-with-next="auto" style:may-break-between-rows="true" table:border-model="collapsing"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="1.3847in" style:rel-column-width="13107*"/>
+    </style:style>
+    <style:style style:name="Table1.1" style:family="table-row">
+      <style:table-row-properties fo:keep-together="auto"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0in" fo:border-left="none" fo:border-right="none" fo:border-top="2pt solid #000000" fo:border-bottom="0.75pt solid #000000" style:writing-mode="page">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table1.A2" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="#eeeeee" fo:padding="0in" fo:border-left="none" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.75pt solid #999999" style:writing-mode="page">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table1.B2" style:family="table-cell" style:data-style-name="N0">
+      <style:table-cell-properties fo:background-color="#eeeeee" fo:padding="0in" fo:border-left="none" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.75pt solid #999999" style:writing-mode="page">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table1.A5" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0in" fo:border-left="none" fo:border-right="none" fo:border-top="0.75pt solid #999999" fo:border-bottom="2pt solid #000000" style:writing-mode="page">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table1.E5" style:family="table-cell" style:data-style-name="N0">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0in" fo:border-left="none" fo:border-right="none" fo:border-top="0.75pt solid #999999" fo:border-bottom="2pt solid #000000" style:writing-mode="page">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="P12" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" fo:line-height="100%" fo:text-align="start" fo:text-indent="0in" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:writing-mode="lr-tb">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:hyphenate="false"/>
+    </style:style>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties fo:background-color="#fff000" loext:char-shading-value="0"/>
+    </style:style>
+    <style:style style:name="T2" style:family="text">
+      <style:text-properties fo:color="#c9211e"/>
+    </style:style>
+    <style:style style:name="T3" style:family="text">
+      <style:text-properties text:display="none"/>
+    </style:style>
+    <style:style style:name="T4" style:family="text">
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="DejaVu Serif" fo:font-size="10pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" fo:background-color="transparent" style:font-name-asian="DejaVu Sans1" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Noto Sans Devanagari" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="left" style:horizontal-rel="paragraph" fo:padding="0in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties fo:margin-left="0.0791in" fo:margin-right="0.0791in" fo:margin-top="0in" fo:margin-bottom="0in" style:run-through="foreground" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="from-top" style:horizontal-pos="from-left" style:horizontal-rel="paragraph-content" fo:padding="0in" fo:border="none" style:shadow="none" draw:shadow-opacity="100%"/>
+    </style:style>
+    <style:style style:name="fr3" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph" fo:padding="0in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="fr4" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties style:run-through="foreground" style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+    </style:style>
+    <style:style style:name="fr5" style:family="graphic" style:parent-style-name="Graphics">
+      <style:graphic-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0in" fo:border="none" style:shadow="none" draw:shadow-opacity="100%" style:mirror="none" fo:clip="rect(0in, 0in, 0in, 0in)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" loext:rel-width-rel="paragraph"/>
+    </style:style>
+    <style:style style:name="fr6" style:family="graphic" style:parent-style-name="OLE">
+      <style:graphic-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0in" fo:border="none" style:shadow="none" draw:shadow-opacity="100%" loext:rel-width-rel="paragraph" draw:ole-draw-aspect="1"/>
+    </style:style>
+    <style:style style:name="fr7" style:family="graphic" style:parent-style-name="Formula">
+      <style:graphic-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0in" fo:border="none" style:shadow="none" draw:shadow-opacity="100%" draw:ole-draw-aspect="1"/>
+    </style:style>
+    <number:number-style style:name="N0">
+      <number:number number:min-integer-digits="1"/>
+    </number:number-style>
+  </office:automatic-styles>
+  <office:body>
+      <text:sequence-decls>
+        <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Formula"/>
+      </text:sequence-decls>
+      <text:h text:style-name="Heading 1" text:outline-level="1">First chapter</text:h>
+      <text:p text:style-name="Text body">He heard quiet steps behind him. That didn't bode well. Who could be following him this late at night and in this deadbeat part of town? And at this <office:annotation><dc:creator>LibreOffice Design Team</dc:creator><dc:date>2019-03-01T00:00:00</dc:date><text:p text:style-name="P12"><text:span text:style-name="T4">Character Style: Emphasis</text:span></text:p></office:annotation><text:span text:style-name="Emphasis">particular moment</text:span>, just after he pulled off the <office:annotation><dc:creator>LibreOffice Design Team</dc:creator><dc:date>2019-03-01T00:00:00</dc:date><text:p text:style-name="P12"><text:span text:style-name="T4">Character Style: Strong Emphasis</text:span></text:p></office:annotation><text:span text:style-name="Strong Emphasis">big time</text:span> and was making off with the greenbacks. Was there another crook who'd had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labor?</text:p>
+      <text:p text:style-name="Caption">Or did the steps behind him mean that one of many law officers in town was on to him and just waiting to pounce and snap those cuffs on his wrists?</text:p>
+      <text:p text:style-name="Text body"><draw:frame draw:style-name="fr4" draw:name="Frame3" text:anchor-type="paragraph" svg:y="0.6693in" svg:width="5.4264in" draw:z-index="6"><draw:text-box fo:min-height="1.4181in"><text:p text:style-name="Frame contents">He tried to nervously tap his way along in the inky darkness and suddenly stiffened: it was a dead-end, he would have to go back the way he had come. The steps got louder and louder, he saw the black outline of a figure coming around the corner. Is this the end of the line? he thought pressing himself back against the wall trying to make himself invisible in the dark, was all that planning and energy wasted?</text:p></draw:text-box></draw:frame>He nervously looked all around. Suddenly he saw the alley. Like lightning he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the middle of the sidewalk. </text:p>
+      <text:p text:style-name="Text body">He was dripping with sweat now, cold and wet, he could smell the fear coming off his clothes. Suddenly next to him, with a barely noticeable squeak, a door swung quietly to and fro in the night's breeze. Could this be the haven he'd prayed for? <office:annotation><dc:creator>LibreOffice Design Team</dc:creator><dc:date>2019-03-01T00:00:00</dc:date><text:p text:style-name="P12"><text:span text:style-name="T4">Direct formatting: highlighting=yellow, font color=dark red</text:span></text:p></office:annotation><text:span text:style-name="T1">Slowly</text:span> he slid <text:span text:style-name="T2">toward</text:span> the door, pressing himself more and more into the wall, into the dark, away from his enemy. Would this door save his hide?</text:p>
+      <text:h text:style-name="Heading 1" text:outline-level="1">Second Chapter</text:h>
+      <text:h text:style-name="Heading 2" text:outline-level="2">Image</text:h>
+      <text:p text:style-name="Standard"><draw:frame draw:style-name="fr3" draw:name="Frame1" text:anchor-type="paragraph" svg:width="4.4425in" draw:z-index="4"><draw:text-box fo:min-height="1.3484in"><text:p text:style-name="Figure"><draw:frame draw:style-name="fr5" draw:name="Image1" text:anchor-type="as-char" svg:width="6.9252in" style:rel-width="100%" svg:height="1.889in" style:rel-height="scale" draw:z-index="5"><draw:image xlink:href="Pictures/LibreOffice.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/png"/></draw:frame><text:span text:style-name="T3"><text:line-break/></text:span>Figure <text:sequence text:ref-name="refFigure0" text:name="Figure" text:formula="ooow:Figure+1" style:num-format="1">1</text:sequence>: Love LibreOffice sticker</text:p></draw:text-box></draw:frame>A picture is worth a thousand words.</text:p>
+      <text:h text:style-name="Heading 2" text:outline-level="2">Table</text:h>
+      <text:p text:style-name="Table">Table <text:sequence text:ref-name="refTable0" text:name="Table" text:formula="ooow:Table+1" style:num-format="1">1</text:sequence>: Table with style and formula.</text:p>
+      <table:table table:name="Table1" table:style-name="Table1" table:template-name="Elegant">
+        <table:table-column table:style-name="Table1.A" table:number-columns-repeated="5"/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Table Heading">Column A</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Table Heading">Column B</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Table Heading">Column C</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Table Heading">Column D</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Table Heading">Value</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="Table Contents">Cell A1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell B1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell C1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell D1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" table:formula="1.23" office:value-type="float" office:value="1.23">
+            <text:p text:style-name="Table Contents">1.23</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="Table Contents">Cell A2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell B2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell C2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell D2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" table:formula="2.34" office:value-type="float" office:value="2.34">
+            <text:p text:style-name="Table Contents">2.34</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="Table Contents">Cell A3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell B3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell C3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table Contents">Cell D3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B2" table:formula="3.45" office:value-type="float" office:value="3.45">
+            <text:p text:style-name="Table Contents">3.45</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A5" table:number-columns-spanned="4" office:value-type="string">
+            <text:p text:style-name="Table Contents">Sum: </text:p>
+          </table:table-cell>
+          <table:covered-table-cell/>
+          <table:covered-table-cell/>
+          <table:covered-table-cell/>
+          <table:table-cell table:style-name="Table1.E5" table:formula="sum(&lt;E2:E4&gt;)" office:value-type="float" office:value="7.02">
+            <text:p text:style-name="Table Contents">7.02</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:h text:style-name="Heading 2" text:outline-level="2">Chart</text:h>
+      <text:p text:style-name="Text body">If a picture is worth a thousand words, charts are golden as silence.</text:p>
+      <text:p text:style-name="Text body">
+        <draw:frame draw:style-name="fr1" draw:name="Frame2" text:anchor-type="as-char" svg:width="3.7957in" draw:z-index="0">
+          <draw:text-box fo:min-height="1.5429in">
+            <text:p text:style-name="Illustration"><draw:frame draw:style-name="fr6" draw:name="Object1" text:anchor-type="as-char" svg:width="3.7957in" style:rel-width="100%" svg:height="1.1256in" style:rel-height="scale" draw:z-index="1"><draw:object xlink:href="./Object_1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><draw:image xlink:href="./ObjectReplacements/Object_1.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><svg:desc>chart</svg:desc></draw:frame><text:span text:style-name="T3"><text:line-break/></text:span>Illustration <text:sequence text:ref-name="refIllustration0" text:name="Illustration" text:formula="ooow:Illustration+1" style:num-format="1">1</text:sequence>: Everybody loves charts.</text:p>
+          </draw:text-box>
+        </draw:frame>
+      </text:p>
+      <text:h text:style-name="Heading 2" text:outline-level="2">Formula</text:h>
+      <text:p text:style-name="Text body">
+        <draw:frame draw:style-name="fr2" draw:name="Frame4" text:anchor-type="as-char" svg:y="-0.2835in" svg:width="1.4327in" draw:z-index="2">
+          <draw:text-box fo:min-height="0.4575in">
+            <text:p text:style-name="Formula"><draw:frame draw:style-name="fr7" draw:name="Object2" text:anchor-type="as-char" svg:width="1.4327in" svg:height="0.4575in" style:rel-height="scale" draw:z-index="3"><draw:object xlink:href="./Object_2" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><draw:image xlink:href="./ObjectReplacements/Object_2.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><svg:desc>formula</svg:desc></draw:frame><text:span text:style-name="T3"><text:line-break/></text:span>Formula <text:sequence text:ref-name="refFormula0" text:name="Formula" text:formula="ooow:Formula+1" style:num-format="1">1</text:sequence>: The sum of all fears.</text:p>
+          </draw:text-box>
+        </draw:frame>
+      </text:p>
+      <text:p text:style-name="P7"/>
+  </office:body>
+</office:document-content>
