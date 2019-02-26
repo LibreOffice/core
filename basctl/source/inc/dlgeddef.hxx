@@ -52,14 +52,16 @@ enum
     OBJ_DLG_FILECONTROL     = 23,
     OBJ_DLG_TREECONTROL     = 24,
     OBJ_DLG_SPINBUTTON      = 25,
+    OBJ_DLG_GRIDCONTROL     = 26,
 
-    OBJ_DLG_FORMRADIO       = 26,
-    OBJ_DLG_FORMCHECK       = 27,
-    OBJ_DLG_FORMLIST        = 28,
-    OBJ_DLG_FORMCOMBO       = 29,
-    OBJ_DLG_FORMSPIN        = 30,
-    OBJ_DLG_FORMVSCROLL     = 31,
-    OBJ_DLG_FORMHSCROLL     = 32,
+    OBJ_DLG_FORMRADIO       = 27,
+    OBJ_DLG_FORMCHECK       = 28,
+    OBJ_DLG_FORMLIST        = 29,
+    OBJ_DLG_FORMCOMBO       = 30,
+    OBJ_DLG_FORMSPIN        = 31,
+    OBJ_DLG_FORMVSCROLL     = 32,
+    OBJ_DLG_FORMHSCROLL     = 33,
+
 };
 
 // control properties

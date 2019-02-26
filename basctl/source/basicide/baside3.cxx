@@ -356,6 +356,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_INSERT_PATTERNFIELD:
             case SID_INSERT_FILECONTROL:
             case SID_INSERT_SPINBUTTON:
+            case SID_INSERT_GRIDCONTROL:
             case SID_INSERT_TREECONTROL:
             {
                 if ( IsReadOnly() )
@@ -503,6 +504,9 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             break;
         case SID_INSERT_SPINBUTTON:
             nInsertObj = OBJ_DLG_SPINBUTTON;
+            break;
+        case SID_INSERT_GRIDCONTROL:
+            nInsertObj = OBJ_DLG_GRIDCONTROL;
             break;
         case SID_INSERT_TREECONTROL:
             nInsertObj = OBJ_DLG_TREECONTROL;

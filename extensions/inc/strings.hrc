@@ -241,7 +241,17 @@
 // To translators: That's the 'Bold' as used for a font style, so please use a consistent translation."
 #define RID_STR_FONTSTYLE_BOLD                  NC_("RID_STR_FONTSTYLE_BOLD", "Bold")
 #define RID_STR_FONT_DEFAULT                    NC_("RID_STR_FONT_DEFAULT", "(Default)")
-
+#define RID_STR_SELECTIONMODEL                  NC_("RID_STR_SELECTIONMODEL", "Selection Type")
+#define RID_STR_USEGRIDLINE                     NC_("RID_STR_USEGRIDLINE", "Use grid line")
+#define RID_STR_GRIDLINECOLOR                   NC_("RID_STR_GRIDLINECOLOR", "Grid line color")
+#define RID_STR_SHOWCOLUMNHEADER                NC_("RID_STR_SHOWCOLUMNHEADER", "Show column header")
+#define RID_STR_SHOWROWHEADER                   NC_("RID_STR_SHOWROWHEADER", "Show row header")
+#define RID_STR_HEADERBACKGROUNDCOLOR           NC_("RID_STR_HEADERBACKGROUNDCOLOR", "Header background color")
+#define RID_STR_HEADERTEXTCOLOR                 NC_("RID_STR_HEADERTEXTCOLOR", "Header text color")
+#define RID_STR_ACTIVESELECTIONBACKGROUNDCOLOR  NC_("RID_STR_ACTIVESELECTIONBACKGROUNDCOLOR", "Active selection background color")
+#define RID_STR_ACTIVESELECTIONTEXTCOLOR        NC_("ID_STR_ACTIVESELECTIONTEXTCOLOR", "Active selection text color")
+#define RID_STR_INACTIVESELECTIONBACKGROUNDCOLOR    NC_("RID_STR_INACTIVESELECTIONBACKGROUNDCOLOR", "Inactive selection background color")
+#define RID_STR_INACTIVESELECTIONTEXTCOLOR      NC_("RID_STR_INACTIVESELECTIONTEXTCOLOR", "Inactive selection text color")
 #define RID_STR_STANDARD                        NC_("RID_STR_STANDARD", "Default")
 #define RID_STR_PROPPAGE_DEFAULT                NC_("RID_STR_PROPPAGE_DEFAULT", "General")
 #define RID_STR_PROPPAGE_DATA                   NC_("RID_STR_PROPPAGE_DATA", "Data")

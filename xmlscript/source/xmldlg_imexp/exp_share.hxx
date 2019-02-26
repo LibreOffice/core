@@ -201,6 +201,7 @@ public:
     void readScrollBarModel( StyleBag * all_styles );
     void readSpinButtonModel( StyleBag * all_styles );
     void readFixedHyperLinkModel( StyleBag * all_styles );
+    void readGridControlModel( StyleBag * all_styles );
 };
 
 template<typename T>

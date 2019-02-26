@@ -403,6 +403,10 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
         {
             sResId = RID_STR_CLASS_TREECONTROL;
         }
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ) )
+        {
+            sResId = RID_STR_CLASS_GRIDCONTROL;
+        }
         else
         {
             sResId = RID_STR_CLASS_CONTROL;

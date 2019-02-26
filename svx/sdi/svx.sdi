@@ -6379,6 +6379,23 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxBoolItem InsertGridControl SID_INSERT_GRIDCONTROL
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Controls;
+]
 
 SfxBoolItem Pie SID_DRAW_PIE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)

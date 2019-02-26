@@ -719,6 +719,10 @@ OUString DlgEdObj::GetDefaultName() const
     {
         sResId = RID_STR_CLASS_TREECONTROL;
     }
+    else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ) )
+    {
+        sResId = RID_STR_CLASS_GRIDCONTROL;
+    }
     else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
     {
         sResId = RID_STR_CLASS_SPINCONTROL;
@@ -843,6 +847,10 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ))
     {
         return OBJ_DLG_TREECONTROL;
+    }
+    else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ))
+    {
+        return OBJ_DLG_GRIDCONTROL;
     }
     else
     {

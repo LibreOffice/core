@@ -892,6 +892,7 @@ void Shell::InvalidateControlSlots()
             pBindings->Invalidate( SID_INSERT_PATTERNFIELD );
             pBindings->Invalidate( SID_INSERT_FILECONTROL );
             pBindings->Invalidate( SID_INSERT_SPINBUTTON );
+            pBindings->Invalidate( SID_INSERT_GRIDCONTROL );
             pBindings->Invalidate( SID_INSERT_TREECONTROL );
             pBindings->Invalidate( SID_CHOOSE_CONTROLS );
         }

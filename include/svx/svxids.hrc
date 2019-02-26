@@ -634,7 +634,7 @@ class SfxStringItem;
 #define SID_FM_CONVERTTO_IMAGECONTROL                   ( SID_SVX_START + 750 )
 #define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
 #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
-//FREE
+#define SID_INSERT_GRIDCONTROL                          ( SID_SVX_START + 753 )
 //FREE
 //FREE
 //FREE
