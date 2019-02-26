@@ -446,6 +446,10 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                                      bool bRequireForName) const
 {
+    // The snake algorithm do want a space constraint even without a name.
+    if (bRequireForName && maConstraint.mnType == XML_sp)
+        bRequireForName = false;
+
     if (bRequireForName && maConstraint.msForName.isEmpty())
         return;
 
@@ -890,6 +894,18 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;
 
+            // Parse constraints, only self spacing from height as a start.
+            double fSpaceFromConstraint = 0;
+            for (const auto& rConstr : rConstraints)
+            {
+                if (rConstr.mnRefType == XML_h)
+                {
+                    if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
+                        fSpaceFromConstraint = rConstr.mfFactor;
+                }
+            }
+            bool bSpaceFromConstraints = fSpaceFromConstraint != 0;
+
             const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
             sal_Int32 nIncX = 1;
             sal_Int32 nIncY = 1;
@@ -901,9 +917,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 case XML_bR: nIncX = -1; nIncY = -1; break;
             }
 
-            // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
-            double fSpace = 0.3;
+            // Defaults in case not provided by constraints.
+            double fSpace = bSpaceFromConstraints ? fSpaceFromConstraint : 0.3;
             double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
 
             sal_Int32 nCol = 1;
@@ -933,7 +949,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 // We have a single column, so count the height based on the parent height, not
                 // based on width.
-                sal_Int32 nHeight = rShape->getSize().Height / (nRow + (nRow - 1) * fSpace);
+                // Space occurs inside children; also double amount of space is needed outside (on
+                // both sides), if the factor comes from a constraint.
+                sal_Int32 nNumSpaces = -1;
+                if (bSpaceFromConstraints)
+                    nNumSpaces += 4;
+                sal_Int32 nHeight
+                    = rShape->getSize().Height / (nRow + (nRow + nNumSpaces) * fSpace);
                 aChildSize = awt::Size(rShape->getSize().Width, nHeight);
             }
 
@@ -942,6 +964,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
+            else if (bSpaceFromConstraints)
+                // Initial vertical offset to have upper spacing (outside, so double amount).
+                aCurrPos.Y = aChildSize.Height * fSpace * 2;
 
             sal_Int32 nStartX = aCurrPos.X;
             sal_Int32 nColIdx = 0,index = 0;
