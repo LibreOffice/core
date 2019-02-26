@@ -111,6 +111,7 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
+#include <shellres.hxx>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -2695,8 +2696,14 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
                     rSh.GetTableFormat()->SetName( aTableName );
 
-                if( pTAFormat != nullptr && aAutoName != SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() ) )
-                    rSh.SetTableStyle( aAutoName );
+                if( pTAFormat != nullptr && !aAutoName.isEmpty()
+                        && aAutoName != SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() )
+                        && aAutoName != SwViewShell::GetShellRes()->aStrNone )
+                {
+                    SwTableNode* pTableNode = const_cast<SwTableNode*>( rSh.IsCursorInTable() );
+                    if ( pTableNode )
+                        pTableNode->GetTable().SetTableStyleName( aAutoName );
+                }
 
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
