@@ -3915,7 +3915,8 @@ if test "$enable_ld" != "no"; then
         else
             check_use_ld gold
         fi
-        ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c - $CFLAGS $LDFLAGS 2>/dev/null)
+        ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c -o conftest.out - $CFLAGS $LDFLAGS 2>/dev/null)
+        rm conftest.out
         ld_used=$(echo "$ld_output" | grep -E '(^GNU gold|^GNU ld|^LLD)')
         if test -z "$ld_used"; then
             ld_used="unknown"
