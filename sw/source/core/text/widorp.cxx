@@ -440,20 +440,19 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     }
 
     // Master to Follow
-    // If the Follow contains fewer rows than Widows after formatting,
-    // we still can cut off some rows from the Master. If the Orphans
-    // rule of the Master hereby comes into effect, we need to enlarge
-    // the Frame in CalcPrep() of the Master Frame, as it won't fit into
-    // the original page anymore.
-    // If the Master Frame can still miss a few more rows, we need to
-    // do a Shrink() in the CalcPrep(): the Follow with the Widows then
+    // If the Follow contains fewer lines than Widows after formatting,
+    // we still can move over some lines from the Master. If this triggers
+    // the Orphans rule of the Master, the Master frame must be Grow()n
+    // in its CalcPreps(), such that it won't fit onto its page anymore.
+    // But if the Master Frame can still lose a few lines, we need to
+    // do a Shrink() in the CalcPreps(); the Follow with the Widows then
     // moves onto the page of the Master, but remains unsplit, so that
     // it (finally) moves onto the next page. So much for the theory!
     //
-    // We only request one row at a time for now, because a Master's row could
-    // result in multiple lines for us.
+    // We only request one line at a time for now, because a Master's line
+    // could result in multiple lines for us.
     // Therefore, the CalcFollow() remains in control until the Follow got all
-    // necessary rows.
+    // necessary lines.
     sal_uInt16 nNeed = 1; // was: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow

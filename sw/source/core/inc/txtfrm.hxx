@@ -211,8 +211,8 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     void ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew );
 
     bool mbLocked        : 1;        // In the Format?
-    bool mbWidow         : 1;        // Are we a Widow?
-    bool mbJustWidow     : 1;        // Did we just request to be a Widow?
+    bool mbWidow         : 1;        // Is our follow a Widow?
+    bool mbJustWidow     : 1;        // Did we just request Widow flag on master?
     bool mbEmpty         : 1;        // Are we an empty paragraph?
     bool mbInFootnoteConnect  : 1;        // Is in Connect at the moment
     bool mbFootnote           : 1;        // Has at least one footnote
