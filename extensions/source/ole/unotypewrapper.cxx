@@ -140,7 +140,7 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
 STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
 {
      Lock();
-    m_sName = val;
+     m_sName = val;
      Unlock();
      return S_OK;
 }
@@ -151,7 +151,7 @@ STDMETHODIMP UnoTypeWrapper::get_Name(BSTR  *pVal)
      Lock();
      if( !pVal)
          return E_POINTER;
-    *pVal = m_sName.Copy();
+     *pVal = m_sName.Copy();
      Unlock();
      return S_OK;
 }

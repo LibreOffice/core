@@ -90,7 +90,7 @@ xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
      */
     if (xmlSecMSCngKeysMngrInit(keyMngr) < 0)
     {
-         xmlSecError(XMLSEC_ERRORS_HERE,
+        xmlSecError(XMLSEC_ERRORS_HERE,
                     nullptr,
                     "xmlSecMSCngKeysMngrInit",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,

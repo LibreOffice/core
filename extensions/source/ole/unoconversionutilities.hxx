@@ -1029,7 +1029,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
         for( sal_Int32 i=0; i < dims; i++)
         {
             //prgsabound[0] is the right most dimension
-             prgsabound[dims - i - 1].lLbound = 0;
+            prgsabound[dims - i - 1].lLbound = 0;
             prgsabound[dims - i - 1].cElements = seqElementCounts[i];
         }
 
@@ -1682,7 +1682,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     }
 
     // COM pointer are NULL, no wrapper required
-     if (spUnknown == nullptr)
+    if (spUnknown == nullptr)
     {
         Reference<XInterface> xInt;
         if( aType.getTypeClass() == TypeClass_INTERFACE)
@@ -1701,7 +1701,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     CComQIPtr<IUnoObjectWrapper> spUno( spUnknown);
     if( spUno)
     {   // it is a wrapper
-         Reference<XInterface> xInt;
+        Reference<XInterface> xInt;
         if( SUCCEEDED( spUno->getOriginalUnoObject( &xInt)))
         {
             ret <<= xInt;
@@ -1801,17 +1801,17 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     // we have a wrapper object
     //The wrapper implements already XInvocation and XInterface. If
     //param aType is void then the object is supposed to have XInvocation.
-     if (aType == cppu::UnoType<XInvocation>::get()||
-         (aType == VOID_TYPE && seqTypes.getLength() == 0 ))
-     {
-         ret = xIntNewProxy->queryInterface(desiredType);
-     }
-     else
-     {
-         Reference<XInterface> xIntAdapter =
-             createAdapter(seqTypes, xIntNewProxy);
-         ret = xIntAdapter->queryInterface(desiredType);
-     }
+    if (aType == cppu::UnoType<XInvocation>::get()||
+        (aType == VOID_TYPE && seqTypes.getLength() == 0 ))
+    {
+        ret = xIntNewProxy->queryInterface(desiredType);
+    }
+    else
+    {
+        Reference<XInterface> xIntAdapter =
+            createAdapter(seqTypes, xIntNewProxy);
+        ret = xIntAdapter->queryInterface(desiredType);
+    }
     return ret;
 }
 template<class T>
@@ -1970,10 +1970,10 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         Type elemType( pSeqElemDescRef);
         _typelib_TypeDescription* pSeqElemDesc=nullptr;
         TYPELIB_DANGER_GET( &pSeqElemDesc, pSeqElemDescRef);
-            sal_uInt32 nelementSize= pSeqElemDesc->nSize;
+        sal_uInt32 nelementSize= pSeqElemDesc->nSize;
         TYPELIB_DANGER_RELEASE( pSeqElemDesc);
 
-            uno_Sequence *p_uno_Seq;
+        uno_Sequence *p_uno_Seq;
         uno_sequence_construct( &p_uno_Seq, pDesc, nullptr, length, cpp_acquire);
 
         typelib_TypeClass typeElement= pSeqDesc->pType->eTypeClass;

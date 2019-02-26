@@ -351,32 +351,32 @@ sal_Int32 OAdoGroup::MapRight(RightsEnum _eNum)
 RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 {
     sal_Int32 nRight = adRightNone;
-        if(_eNum & Privilege::SELECT)
-            nRight |= adRightRead;
+    if(_eNum & Privilege::SELECT)
+        nRight |= adRightRead;
 
-        if(_eNum & Privilege::INSERT)
-            nRight |= adRightInsert;
+    if(_eNum & Privilege::INSERT)
+        nRight |= adRightInsert;
 
-        if(_eNum & Privilege::UPDATE)
-            nRight |= adRightUpdate;
+    if(_eNum & Privilege::UPDATE)
+        nRight |= adRightUpdate;
 
-        if(_eNum & Privilege::DELETE)
-            nRight |= adRightDelete;
+    if(_eNum & Privilege::DELETE)
+        nRight |= adRightDelete;
 
-        if(_eNum & Privilege::READ)
-            nRight |= adRightReadDesign;
+    if(_eNum & Privilege::READ)
+        nRight |= adRightReadDesign;
 
-        if(_eNum & Privilege::CREATE)
-            nRight |= adRightCreate;
+    if(_eNum & Privilege::CREATE)
+        nRight |= adRightCreate;
 
-        if(_eNum & Privilege::ALTER)
-            nRight |= adRightWriteDesign;
+    if(_eNum & Privilege::ALTER)
+        nRight |= adRightWriteDesign;
 
-        if(_eNum & Privilege::REFERENCE)
-            nRight |= adRightReference;
+    if(_eNum & Privilege::REFERENCE)
+        nRight |= adRightReference;
 
-        if(_eNum & Privilege::DROP)
-            nRight |= adRightDrop;
+    if(_eNum & Privilege::DROP)
+        nRight |= adRightDrop;
 
     return static_cast<RightsEnum>(nRight);
 }
@@ -440,7 +440,7 @@ void OAdoKey::fillPropertyValues()
 
 sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum)
 {
-        sal_Int32 eNum = KeyRule::NO_ACTION;
+    sal_Int32 eNum = KeyRule::NO_ACTION;
     switch(_eNum)
     {
         case adRICascade:

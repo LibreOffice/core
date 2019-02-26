@@ -683,7 +683,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
             pChainContext = nullptr;
 
         //Close the additional store
-       CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
+        CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
 
     if(bChain &&  pChainContext != nullptr && pChainContext->cChain > 0 )

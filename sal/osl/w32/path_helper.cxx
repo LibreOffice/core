@@ -33,7 +33,7 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
     OSL_PRECOND(ppustrPath && (nullptr != *ppustrPath),
                 "osl_systemPathEnsureSeparator: Invalid parameter");
 
-     OUString path(*ppustrPath);
+    OUString path(*ppustrPath);
     sal_Int32     i = std::max<sal_Int32>(path.lastIndexOf(BACKSLASH), path.lastIndexOf(SLASH));
 
     if (i < (path.getLength()-1))

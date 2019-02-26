@@ -268,7 +268,7 @@ void VistaFilePicker::ensureInit()
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::PROCESS_MESSAGES);
 
     const bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, false );
-                     m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< OUString >());
+    m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< OUString >());
 
     ::sal_Int16 nResult = css::ui::dialogs::ExecutableDialogResults::CANCEL;
     if (bOK)

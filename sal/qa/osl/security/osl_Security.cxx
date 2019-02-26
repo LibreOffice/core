@@ -405,7 +405,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// Get user Security ID:
 
     // Create buffers that may be large enough. If a buffer is too small, the count parameter will be set to the size needed.
-     const DWORD INITIAL_SIZE = 32;
+    const DWORD INITIAL_SIZE = 32;
     DWORD cbSid = 0;
     DWORD dwSidBufferSize = INITIAL_SIZE;
     DWORD cchDomainName = 0;

@@ -1300,7 +1300,7 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 
 STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )
 {
-   if ( CheckDefHandler() )
+    if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, reinterpret_cast<void**>(&pIRunObj) );
@@ -1316,7 +1316,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlock
 
 STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 {
-   if ( CheckDefHandler() )
+    if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, reinterpret_cast<void**>(&pIRunObj) );

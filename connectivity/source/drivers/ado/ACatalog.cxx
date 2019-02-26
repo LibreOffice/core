@@ -48,23 +48,23 @@ void OCatalog::refreshTables()
     ::std::vector< OUString> aVector;
 
     WpADOTables aTables(m_aCatalog.get_Tables());
-  if ( aTables.IsValid() )
-  {
-    aTables.Refresh();
-    sal_Int32 nCount = aTables.GetItemCount();
-    aVector.reserve(nCount);
-    for(sal_Int32 i=0;i< nCount;++i)
+    if ( aTables.IsValid() )
     {
-        WpADOTable aElement = aTables.GetItem(i);
-          if ( aElement.IsValid() )
-          {
-              OUString sTypeName = aElement.get_Type();
-                  if ( !sTypeName.equalsIgnoreAsciiCase("SYSTEM TABLE")
-                    && !sTypeName.equalsIgnoreAsciiCase("ACCESS TABLE") )
-                     aVector.push_back(aElement.get_Name());
-               }
-         }
-     }
+        aTables.Refresh();
+        sal_Int32 nCount = aTables.GetItemCount();
+        aVector.reserve(nCount);
+        for(sal_Int32 i=0;i< nCount;++i)
+        {
+            WpADOTable aElement = aTables.GetItem(i);
+            if ( aElement.IsValid() )
+            {
+                OUString sTypeName = aElement.get_Type();
+                if ( !sTypeName.equalsIgnoreAsciiCase("SYSTEM TABLE")
+                     && !sTypeName.equalsIgnoreAsciiCase("ACCESS TABLE") )
+                    aVector.push_back(aElement.get_Name());
+            }
+        }
+    }
 
     if(m_pTables)
         m_pTables->reFill(aVector);

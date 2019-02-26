@@ -154,7 +154,7 @@ void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
     if( pSalMenuItem )
     {
-    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         if( nPos == MENU_APPEND )
         {
             nPos = ::GetMenuItemCount( mhMenu );
@@ -269,7 +269,7 @@ void WinSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, con
 {
     if( pSalMenuItem )
     {
-    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         if( !!rImage )
             pWItem->maBitmap = rImage.GetBitmapEx().GetBitmap();
         else
@@ -281,7 +281,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
 {
     if( pSalMenuItem )
     {
-    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         pWItem->mText = rText;
         // 'translate' mnemonics
         pWItem->mText = pWItem->mText.replaceAll( "~", "&" );
@@ -308,7 +308,7 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 {
     if( pSalMenuItem )
     {
-    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         pWItem->mAccelText = rKeyName;
         pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
         pWItem->mInfo.fType = MFT_STRING;

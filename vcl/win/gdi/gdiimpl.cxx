@@ -976,7 +976,7 @@ void WinSalGraphicsImpl::ResetClipRegion()
         mrParent.mhRegion = nullptr;
     }
 
-     SelectClipRgn( mrParent.getHDC(), nullptr );
+    SelectClipRgn( mrParent.getHDC(), nullptr );
 }
 
 static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolygon& rCandidate)

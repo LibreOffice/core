@@ -1969,7 +1969,7 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
         OUString message= "InterfaceOleWrapper::Invoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
-         ret = DISP_E_EXCEPTION;
+        ret = DISP_E_EXCEPTION;
     }
 
     return ret;
@@ -2062,7 +2062,7 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
         OUString message= "InterfaceOleWrapper::doInvoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
-         ret = DISP_E_EXCEPTION;
+        ret = DISP_E_EXCEPTION;
      }
     return ret;
 }
@@ -2100,7 +2100,7 @@ HRESULT InterfaceOleWrapper::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
         OUString message= "InterfaceOleWrapper::doInvoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
-         ret = DISP_E_EXCEPTION;
+        ret = DISP_E_EXCEPTION;
     }
     return  ret;
 }
@@ -2886,7 +2886,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
         OUString message= "InterfaceOleWrapper::InvokeGeneral : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
-         ret = DISP_E_EXCEPTION;
+        ret = DISP_E_EXCEPTION;
      }
     return ret;
 }
@@ -3347,8 +3347,8 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
     {
         OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n" +
             e.Message;
-            writeExcepinfo(pexcepinfo, message);
-            ret = DISP_E_EXCEPTION;
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
     }
     catch(...)
     {
