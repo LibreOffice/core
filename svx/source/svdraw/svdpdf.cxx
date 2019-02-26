@@ -938,7 +938,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     if (nAngle)
     {
         nAngle *= 10;
-        double a = nAngle * nPi180;
+        double a = nAngle * F_PI18000;
         double nSin = sin(a);
         double nCos = cos(a);
         pText->NbcRotate(aPos, nAngle, nSin, nCos);

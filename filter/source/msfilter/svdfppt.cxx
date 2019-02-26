@@ -1191,14 +1191,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     {
                         if ( rObjData.nSpFlags & ShapeFlag::FlipV )
                         {
-                            double a = 18000 * nPi180;
+                            double a = 18000 * F_PI18000;
                             pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
                         }
                         if ( rObjData.nSpFlags & ShapeFlag::FlipH )
                             nAngle = 36000 - nAngle;
                         if ( nAngle )
                         {
-                            double a = nAngle * nPi180;
+                            double a = nAngle * F_PI18000;
                             pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle, sin( a ), cos( a ) );
                         }
                     }

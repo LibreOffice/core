@@ -1055,7 +1055,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     if ( nAngle )
     {
         nAngle*=10;
-        double a=nAngle*nPi180;
+        double a = nAngle * F_PI18000;
         double nSin=sin(a);
         double nCos=cos(a);
         pText->NbcRotate(aPos,nAngle,nSin,nCos);
