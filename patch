@@ -1,0 +1,614 @@
+diff --git a/basctl/inc/strings.hxx b/basctl/inc/strings.hxx
+index ec06daaef937..506886afc3e3 100644
+--- a/basctl/inc/strings.hxx
++++ b/basctl/inc/strings.hxx
+@@ -34,6 +34,7 @@
+ #define RID_STR_CLASS_PATTERNFIELD      "PatternField"
+ #define RID_STR_CLASS_FILECONTROL       "FileControl"
+ #define RID_STR_CLASS_TREECONTROL       "TreeControl"
++#define RID_STR_CLASS_GRIDCONTROL       "GridControl"
+ #define RID_STR_CLASS_SPINCONTROL       "SpinButton"
+ 
+ #endif
+diff --git a/basctl/sdi/baside.sdi b/basctl/sdi/baside.sdi
+index 5c413f89e6c4..61ecb19cf6df 100644
+--- a/basctl/sdi/baside.sdi
++++ b/basctl/sdi/baside.sdi
+@@ -541,6 +541,12 @@ shell basctl_Shell
+         StateMethod     = GetState;
+     ]
+ 
++    SID_INSERT_GRIDCONTROL
++    [
++        ExecMethod      = ExecuteDialog;
++        StateMethod     = GetState;
++    ]
++
+     SID_EXPORT_DIALOG
+     [
+         ExecMethod      = ExecuteDialog;
+diff --git a/basctl/source/basicide/baside3.cxx b/basctl/source/basicide/baside3.cxx
+index 8a88185516b7..a19b395c0388 100644
+--- a/basctl/source/basicide/baside3.cxx
++++ b/basctl/source/basicide/baside3.cxx
+@@ -355,6 +355,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
+             case SID_INSERT_PATTERNFIELD:
+             case SID_INSERT_FILECONTROL:
+             case SID_INSERT_SPINBUTTON:
++            case SID_INSERT_GRIDCONTROL:
+             case SID_INSERT_TREECONTROL:
+             {
+                 if ( IsReadOnly() )
+@@ -503,6 +504,9 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
+         case SID_INSERT_SPINBUTTON:
+             nInsertObj = OBJ_DLG_SPINBUTTON;
+             break;
++        case SID_INSERT_GRIDCONTROL:
++            nInsertObj = OBJ_DLG_GRIDCONTROL;
++            break;
+         case SID_INSERT_TREECONTROL:
+             nInsertObj = OBJ_DLG_TREECONTROL;
+             break;
+diff --git a/basctl/source/basicide/basides1.cxx b/basctl/source/basicide/basides1.cxx
+index 7cc498490af6..0cf8cdb415ca 100644
+--- a/basctl/source/basicide/basides1.cxx
++++ b/basctl/source/basicide/basides1.cxx
+@@ -895,6 +895,7 @@ void Shell::GetState(SfxItemSet &rSet)
+             case SID_INSERT_PATTERNFIELD:
+             case SID_INSERT_FILECONTROL:
+             case SID_INSERT_SPINBUTTON:
++            case SID_INSERT_GRIDCONTROL:
+             case SID_INSERT_TREECONTROL:
+             case SID_INSERT_FORM_RADIO:
+             case SID_INSERT_FORM_CHECK:
+diff --git a/basctl/source/basicide/basidesh.cxx b/basctl/source/basicide/basidesh.cxx
+index 2c7049a5ddfa..4fd29d359337 100644
+--- a/basctl/source/basicide/basidesh.cxx
++++ b/basctl/source/basicide/basidesh.cxx
+@@ -892,6 +892,7 @@ void Shell::InvalidateControlSlots()
+             pBindings->Invalidate( SID_INSERT_PATTERNFIELD );
+             pBindings->Invalidate( SID_INSERT_FILECONTROL );
+             pBindings->Invalidate( SID_INSERT_SPINBUTTON );
++            pBindings->Invalidate( SID_INSERT_GRIDCONTROL );
+             pBindings->Invalidate( SID_INSERT_TREECONTROL );
+             pBindings->Invalidate( SID_CHOOSE_CONTROLS );
+         }
+diff --git a/basctl/source/dlged/dlgedfac.cxx b/basctl/source/dlged/dlgedfac.cxx
+index 513fdc707b1f..69a65cd9f7ab 100644
+--- a/basctl/source/dlged/dlgedfac.cxx
++++ b/basctl/source/dlged/dlgedfac.cxx
+@@ -216,6 +216,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+             case OBJ_DLG_TREECONTROL:
+                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.tree.TreeControlModel", xDialogSFact );
+                  break;
++            case OBJ_DLG_GRIDCONTROL:
++                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlGridModel", xDialogSFact );
++                 break;
++
+         }
+     }
+     return pNewObj;
+diff --git a/basctl/source/dlged/dlgedobj.cxx b/basctl/source/dlged/dlgedobj.cxx
+index 2ef4ff99a78f..e0150fb24434 100644
+--- a/basctl/source/dlged/dlgedobj.cxx
++++ b/basctl/source/dlged/dlgedobj.cxx
+@@ -721,6 +721,10 @@ OUString DlgEdObj::GetDefaultName() const
+     {
+         sResId = RID_STR_CLASS_TREECONTROL;
+     }
++    else if ( supportsService( "com.sun.star.awt.UnoControlGridModel" ) )
++    {
++        sResId = RID_STR_CLASS_GRIDCONTROL;
++    }
+     else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
+     {
+         sResId = RID_STR_CLASS_SPINCONTROL;
+@@ -846,6 +850,10 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
+     {
+         return OBJ_DLG_TREECONTROL;
+     }
++    else if ( supportsService( "com.sun.star.awt.UnoControlGridModel" ))
++    {
++        return OBJ_DLG_GRIDCONTROL;
++    }
+     else
+     {
+         return OBJ_DLG_CONTROL;
+diff --git a/basctl/source/dlged/propbrw.cxx b/basctl/source/dlged/propbrw.cxx
+index 357f05255ee0..a38018f7a220 100644
+--- a/basctl/source/dlged/propbrw.cxx
++++ b/basctl/source/dlged/propbrw.cxx
+@@ -403,6 +403,10 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
+         {
+             sResId = RID_STR_CLASS_TREECONTROL;
+         }
++        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlGridModel" ) )
++        {
++            sResId = RID_STR_CLASS_GRIDCONTROL;
++        }
+         else
+         {
+             sResId = RID_STR_CLASS_CONTROL;
+diff --git a/basctl/source/inc/dlgeddef.hxx b/basctl/source/inc/dlgeddef.hxx
+index e14bc28dd0f2..831bd5b05f75 100644
+--- a/basctl/source/inc/dlgeddef.hxx
++++ b/basctl/source/inc/dlgeddef.hxx
+@@ -60,6 +60,7 @@ enum
+     OBJ_DLG_FORMSPIN        = 30,
+     OBJ_DLG_FORMVSCROLL     = 31,
+     OBJ_DLG_FORMHSCROLL     = 32,
++    OBJ_DLG_GRIDCONTROL     = 33,
+ };
+ 
+ // control properties
+diff --git a/basctl/uiconfig/basicide/toolbar/insertcontrolsbar.xml b/basctl/uiconfig/basicide/toolbar/insertcontrolsbar.xml
+index 9d3303f8be8d..9ad39ef9da64 100644
+--- a/basctl/uiconfig/basicide/toolbar/insertcontrolsbar.xml
++++ b/basctl/uiconfig/basicide/toolbar/insertcontrolsbar.xml
+@@ -57,5 +57,6 @@
+  <toolbar:toolbaritem xlink:href=".uno:InsertFileControl"/>
+  <toolbar:toolbaritem xlink:href=".uno:InsertTreeControl"/>
+  <toolbar:toolbarbreak/>
++ <toolbar:toolbaritem xlink:href=".uno:InsertGridControl"/>
+  <toolbar:toolbaritem xlink:href=".uno:SpinButton"/>
+ </toolbar:toolbar>
+diff --git a/extensions/inc/helpids.h b/extensions/inc/helpids.h
+index 813bd3b502fd..f135ffcd507d 100644
+--- a/extensions/inc/helpids.h
++++ b/extensions/inc/helpids.h
+@@ -308,6 +308,18 @@
+ #define HID_FM_PROPDLG_TAB_EVT                          "EXTENSIONS_HID_FM_PROPDLG_TAB_EVT"
+ #define HID_PROP_GROUP_NAME                             "EXTENSIONS_HID_PROP_GROUP_NAME"
+ 
++#define HID_PROP_SELECTIONMODEL                         "EXTENSIONS_HID_PROP_SELECTIONMODEL"
++#define HID_PROP_USEGRIDLINE                            "EXTENSIONS_HID_PROP_USEGRIDLINE"
++#define HID_PROP_GRIDLINECOLOR                          "EXTENSIONS_HID_PROP_GRIDLINECOLOR"
++#define HID_PROP_SHOWCOLUMNHEADER                       "EXTENSIONS_HID_PROP_SHOWCOLUMNHEADER"
++#define HID_PROP_SHOWROWHEADER                          "EXTENSIONS_HID_PROP_SHOWROWHEADER"
++#define HID_PROP_HEADERBACKGROUNDCOLOR                  "EXTENSIONS_HID_PROP_HEADERBACKGROUNDCOLOR"
++#define HID_PROP_HEADERTEXTCOLOR                        "EXTENSIONS_HID_PROP_HEADERTEXTCOLOR"
++#define HID_PROP_ACTIVESELECTIONBACKGROUNDCOLOR         "EXTENSIONS_HID_PROP_ACTIVESELECTIONBACKGROUNDCOLOR"
++#define HID_PROP_ACTIVESELECTIONTEXTCOLOR               "EXTENSIONS_HID_PROP_ACTIVESELECTIONTEXTCOLOR"
++#define HID_PROP_INACTIVESELECTIONBACKGROUNDCOLOR       "EXTENSIONS_HID_PROP_INACTIVESELECTIONBACKGROUNDCOLOR"
++#define HID_PROP_INACTIVESELECTIONTEXTCOLOR             "EXTENSIONS_HID_PROP_INACTIVESELECTIONTEXTCOLOR"
++
+ #define HID_CHECK_FOR_UPD_DLG                           "EXTENSIONS_HID_CHECK_FOR_UPD_DLG"
+ #define HID_CHECK_FOR_UPD_CLOSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_CLOSE"
+ #define HID_CHECK_FOR_UPD_PAUSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_PAUSE"
+diff --git a/extensions/inc/strings.hrc b/extensions/inc/strings.hrc
+index 0e6853ccfb81..0173ac03d035 100644
+--- a/extensions/inc/strings.hrc
++++ b/extensions/inc/strings.hrc
+@@ -241,7 +241,17 @@
+ // To translators: That's the 'Bold' as used for a font style, so please use a consistent translation."
+ #define RID_STR_FONTSTYLE_BOLD                  NC_("RID_STR_FONTSTYLE_BOLD", "Bold")
+ #define RID_STR_FONT_DEFAULT                    NC_("RID_STR_FONT_DEFAULT", "(Default)")
+-
++#define RID_STR_SELECTIONMODEL                  NC_("RID_STR_SELECTIONMODEL", "Selection Type")
++#define RID_STR_USEGRIDLINE                     NC_("RID_STR_USEGRIDLINE", "Use grid line")
++#define RID_STR_GRIDLINECOLOR                   NC_("RID_STR_GRIDLINECOLOR", "Grid line color")
++#define RID_STR_SHOWCOLUMNHEADER                NC_("RID_STR_SHOWCOLUMNHEADER", "Show column header")
++#define RID_STR_SHOWROWHEADER                   NC_("RID_STR_SHOWROWHEADER", "Show row header")
++#define RID_STR_HEADERBACKGROUNDCOLOR           NC_("RID_STR_HEADERBACKGROUNDCOLOR", "Header background color")
++#define RID_STR_HEADERTEXTCOLOR                 NC_("RID_STR_HEADERTEXTCOLOR", "Header text color")
++#define RID_STR_ACTIVESELECTIONBACKGROUNDCOLOR  NC_("RID_STR_ACTIVESELECTIONBACKGROUNDCOLOR", "Active selection background color")
++#define RID_STR_ACTIVESELECTIONTEXTCOLOR        NC_("ID_STR_ACTIVESELECTIONTEXTCOLOR", "Active selection text color")
++#define RID_STR_INACTIVESELECTIONBACKGROUNDCOLOR    NC_("RID_STR_INACTIVESELECTIONBACKGROUNDCOLOR", "Inactive selection background color")
++#define RID_STR_INACTIVESELECTIONTEXTCOLOR      NC_("RID_STR_INACTIVESELECTIONTEXTCOLOR", "Inactive selection text color")
+ #define RID_STR_STANDARD                        NC_("RID_STR_STANDARD", "Default")
+ #define RID_STR_PROPPAGE_DEFAULT                NC_("RID_STR_PROPPAGE_DEFAULT", "General")
+ #define RID_STR_PROPPAGE_DATA                   NC_("RID_STR_PROPPAGE_DATA", "Data")
+diff --git a/extensions/source/propctrlr/formcomponenthandler.cxx b/extensions/source/propctrlr/formcomponenthandler.cxx
+index 99ef87995ebc..abe8404585a3 100644
+--- a/extensions/source/propctrlr/formcomponenthandler.cxx
++++ b/extensions/source/propctrlr/formcomponenthandler.cxx
+@@ -998,6 +998,13 @@ namespace pcr
+         case PROPERTY_ID_FILLCOLOR:
+         case PROPERTY_ID_SYMBOLCOLOR:
+         case PROPERTY_ID_BORDERCOLOR:
++        case PROPERTY_ID_GRIDLINECOLOR:
++        case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
++        case PROPERTY_ID_HEADERTEXTCOLOR:
++        case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
++        case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
++        case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
++        case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
+             nControlType = PropertyControlType::ColorListBox;
+ 
+             switch( nPropId )
+@@ -1010,6 +1017,20 @@ namespace pcr
+                 aDescriptor.PrimaryButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
+             case PROPERTY_ID_BORDERCOLOR:
+                 aDescriptor.PrimaryButtonId = UID_PROP_DLG_BORDERCOLOR; break;
++            case PROPERTY_ID_GRIDLINECOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_GRIDLINECOLOR); break;
++            case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_HEADERBACKGROUNDCOLOR); break;
++            case PROPERTY_ID_HEADERTEXTCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_HEADERTEXTCOLOR); break;
++            case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_ACTIVESELECTIONBACKGROUNDCOLOR); break;
++            case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_ACTIVESELECTIONTEXTCOLOR); break;
++            case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_INACTIVESELECTIONBACKGROUNDCOLOR); break;
++            case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
++                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(HID_PROP_INACTIVESELECTIONTEXTCOLOR); break;
+             }
+             break;
+ 
+@@ -1405,6 +1426,13 @@ namespace pcr
+         case PROPERTY_ID_FILLCOLOR:
+         case PROPERTY_ID_SYMBOLCOLOR:
+         case PROPERTY_ID_BORDERCOLOR:
++        case PROPERTY_ID_GRIDLINECOLOR:
++        case PROPERTY_ID_HEADERBACKGROUNDCOLOR:
++        case PROPERTY_ID_HEADERTEXTCOLOR:
++        case PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR:
++        case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
++        case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
++        case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
+             if ( impl_dialogColorChooser_throw( nPropId, _rData, aGuard ) )
+                 eResult = InteractiveSelectionResult_ObtainedValue;
+             break;
+diff --git a/extensions/source/propctrlr/formmetadata.cxx b/extensions/source/propctrlr/formmetadata.cxx
+index 0c6a3a36f2ae..4b727c29083b 100644
+--- a/extensions/source/propctrlr/formmetadata.cxx
++++ b/extensions/source/propctrlr/formmetadata.cxx
+@@ -338,7 +338,18 @@ namespace pcr
+         DEF_INFO_2( EDITABLE,          EDITABLE,           199, EDITABLE,                        DIALOG_VISIBLE, COMPOSEABLE ),
+         DEF_INFO_2( INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, 200, INVOKES_STOP_NOT_EDITING, DIALOG_VISIBLE, COMPOSEABLE ),
+         DEF_INFO_2( DECORATION,        DECORATION,         201, DECORATION,                      DIALOG_VISIBLE, COMPOSEABLE ),
+-        DEF_INFO_2( NOLABEL,           NOLABEL,            202, NOLABEL,                         DIALOG_VISIBLE, COMPOSEABLE )
++        DEF_INFO_2( NOLABEL,           NOLABEL,            202, NOLABEL,                         DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_3( SELECTIONMODEL,    SELECTIONMODEL,     203, SELECTIONMODEL,                  DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
++        DEF_INFO_2( USEGRIDLINE,       USEGRIDLINE,        204, USEGRIDLINE,                     DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( GRIDLINECOLOR,     GRIDLINECOLOR,      205, GRIDLINECOLOR,                   DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( SHOWCOLUMNHEADER,  SHOWCOLUMNHEADER,   206, SHOWCOLUMNHEADER,                DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( SHOWROWHEADER,     SHOWROWHEADER,      207, SHOWROWHEADER,                   DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( HEADERBACKGROUNDCOLOR, HEADERBACKGROUNDCOLOR, 208, HEADERBACKGROUNDCOLOR,    DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( HEADERTEXTCOLOR,   HEADERTEXTCOLOR,    209, HEADERTEXTCOLOR,                 DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( ACTIVESELECTIONBACKGROUNDCOLOR, ACTIVESELECTIONBACKGROUNDCOLOR, 210, ACTIVESELECTIONBACKGROUNDCOLOR, DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( ACTIVESELECTIONTEXTCOLOR, ACTIVESELECTIONTEXTCOLOR, 211, ACTIVESELECTIONTEXTCOLOR, DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( INACTIVESELECTIONBACKGROUNDCOLOR, INACTIVESELECTIONBACKGROUNDCOLOR, 212, INACTIVESELECTIONBACKGROUNDCOLOR, DIALOG_VISIBLE, COMPOSEABLE ),
++        DEF_INFO_2( INACTIVESELECTIONTEXTCOLOR, INACTIVESELECTIONTEXTCOLOR, 213, INACTIVESELECTIONTEXTCOLOR, DIALOG_VISIBLE, COMPOSEABLE )
+         };
+ 
+         s_pPropertyInfos = aPropertyInfos;
+@@ -496,6 +507,7 @@ namespace pcr
+                 nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_WHITESPACE_HANDLING);
+                 break;
+             case PROPERTY_ID_SELECTION_TYPE:
++            case PROPERTY_ID_SELECTIONMODEL:
+                 pStringItemsResId = RID_RSC_ENUM_SELECTION_TYPE;
+                 nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SELECTION_TYPE);
+                 break;
+diff --git a/extensions/source/propctrlr/formmetadata.hxx b/extensions/source/propctrlr/formmetadata.hxx
+index 2cc6f5dbb399..feba2f780639 100644
+--- a/extensions/source/propctrlr/formmetadata.hxx
++++ b/extensions/source/propctrlr/formmetadata.hxx
+@@ -326,6 +326,17 @@ namespace pcr
+     #define PROPERTY_ID_SCROLL_TOP                  205
+     #define PROPERTY_ID_SCROLL_LEFT                 206
+     #define PROPERTY_ID_TYPEDITEMLIST               207
++    #define PROPERTY_ID_SELECTIONMODEL              208
++    #define PROPERTY_ID_USEGRIDLINE                 209
++    #define PROPERTY_ID_GRIDLINECOLOR               210
++    #define PROPERTY_ID_SHOWCOLUMNHEADER            211
++    #define PROPERTY_ID_SHOWROWHEADER               212
++    #define PROPERTY_ID_HEADERBACKGROUNDCOLOR       213
++    #define PROPERTY_ID_HEADERTEXTCOLOR             214
++    #define PROPERTY_ID_ACTIVESELECTIONBACKGROUNDCOLOR 215
++    #define PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR    216
++    #define PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR 217
++    #define PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR  218
+ 
+ 
+ } // namespace pcr
+diff --git a/extensions/source/propctrlr/formstrings.hxx b/extensions/source/propctrlr/formstrings.hxx
+index ad06d8989b32..341cc2d5c8cf 100644
+--- a/extensions/source/propctrlr/formstrings.hxx
++++ b/extensions/source/propctrlr/formstrings.hxx
+@@ -275,6 +275,17 @@ namespace pcr
+     #define PROPERTY_TEXTTYPE               "TextType"
+     #define PROPERTY_RICHTEXT               "RichText"
+     #define PROPERTY_ROWSET                 "RowSet"
++    #define PROPERTY_SELECTIONMODEL         "SelectionModel"
++    #define PROPERTY_USEGRIDLINE            "UseGridLines"
++    #define PROPERTY_GRIDLINECOLOR          "GridLineColor"
++    #define PROPERTY_SHOWCOLUMNHEADER       "ShowColumnHeader"
++    #define PROPERTY_SHOWROWHEADER          "ShowRowHeader"
++    #define PROPERTY_HEADERBACKGROUNDCOLOR  "HeaderBackgroundColor"
++    #define PROPERTY_HEADERTEXTCOLOR        "HeaderTextColor"
++    #define PROPERTY_ACTIVESELECTIONBACKGROUNDCOLOR "ActiveSelectionBackgroundColor"
++    #define PROPERTY_ACTIVESELECTIONTEXTCOLOR "ActiveSelectionTextColor"
++    #define PROPERTY_INACTIVESELECTIONBACKGROUNDCOLOR "InactiveSelectionBackgroundColor"
++    #define PROPERTY_INACTIVESELECTIONTEXTCOLOR "InactiveSelectionTextColor"
+ 
+     // services
+     #define SERVICE_COMPONENT_GROUPBOX      "com.sun.star.form.component.GroupBox"
+diff --git a/include/svx/svxcommands.h b/include/svx/svxcommands.h
+index 1f5f7c02c491..6c8fedb8f43b 100644
+--- a/include/svx/svxcommands.h
++++ b/include/svx/svxcommands.h
+@@ -130,6 +130,7 @@
+ #define CMD_SID_TABLE_INSERT_COL_DLG                ".uno:InsertColumnDialog"
+ #define CMD_SID_TABLE_INSERT_ROW_DLG                ".uno:InsertRowDialog"
+ #define CMD_SID_GALLERY_BG_BRUSH                    ".uno:BackgroundImage"
++#define CMD_SID_INSERT_GRIDCONTROL                  ".uno:InsertGridControl"
+ 
+ #endif
+ 
+diff --git a/include/svx/svxids.hrc b/include/svx/svxids.hrc
+index da6e743e272e..cd3fcb52065e 100644
+--- a/include/svx/svxids.hrc
++++ b/include/svx/svxids.hrc
+@@ -631,7 +631,7 @@ class SfxStringItem;
+ #define SID_FM_CONVERTTO_IMAGECONTROL                   ( SID_SVX_START + 750 )
+ #define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
+ #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
+-//FREE
++#define SID_INSERT_GRIDCONTROL                          ( SID_SVX_START + 753 )
+ //FREE
+ //FREE
+ //FREE
+diff --git a/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu b/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
+index 9df09104437e..5c3012bef08f 100644
+--- a/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
++++ b/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
+@@ -6541,6 +6541,14 @@
+           <value>1</value>
+         </prop>
+       </node>
++      <node oor:name=".uno:InsertGridControl" oor:op="replace">
++        <prop oor:name="Label" oor:type="xs:string">
++          <value xml:lang="en-US">Table Control</value>
++        </prop>
++        <prop oor:name="Properties" oor:type="xs:int">
++          <value>1</value>
++        </prop>
++      </node>
+       <node oor:name=".uno:Addons" oor:op="replace">
+         <prop oor:name="Label" oor:type="xs:string">
+           <value xml:lang="en-US">Add-Ons</value>
+diff --git a/svx/sdi/svx.sdi b/svx/sdi/svx.sdi
+index d3aa1537be8f..9ce926b3a634 100644
+--- a/svx/sdi/svx.sdi
++++ b/svx/sdi/svx.sdi
+@@ -6360,6 +6360,23 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
+     GroupId = SfxGroupId::Controls;
+ ]
+ 
++SfxBoolItem InsertGridControl SID_INSERT_GRIDCONTROL
++
++[
++    AutoUpdate = TRUE,
++    FastCall = FALSE,
++    ReadOnlyDoc = FALSE,
++    Toggle = FALSE,
++    Container = FALSE,
++    RecordAbsolute = FALSE,
++    RecordPerSet;
++
++
++    AccelConfig = TRUE,
++    MenuConfig = TRUE,
++    ToolBoxConfig = TRUE,
++    GroupId = SfxGroupId::Controls;
++]
+ 
+ SfxBoolItem Pie SID_DRAW_PIE
+ (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
+diff --git a/xmlscript/dtd/dialog.dtd b/xmlscript/dtd/dialog.dtd
+index 4d9b93355c86..364517311405 100644
+--- a/xmlscript/dtd/dialog.dtd
++++ b/xmlscript/dtd/dialog.dtd
+@@ -59,7 +59,8 @@
+                      dlg:formattedfield|
+                      dlg:fixedline|
+                      dlg:progressmeter|
+-                     dlg:scrollbar
++                     dlg:scrollbar|
++                     dlg:table
+                     )">
+ 
+ <!ELEMENT dlg:window (dlg:styles*, (%event;)*, dlg:bulletinboard*)>
+@@ -395,3 +396,20 @@
+                             dlg:value-min %numeric; #IMPLIED
+                             dlg:value-max %numeric; #IMPLIED
+                             >
++
++<!ELEMENT dlg:table ((%event;)*)>
++<!ATTLIST dlg:table %default-attributes;
++                    dlg:showcolumnheader %boolean; #IMPLIED
++                    dlg:showrowheader %boolean; #IMPLIED
++                    dlg:gridline-color %numeric; #IMPLIED
++                    dlg:usegridlines %boolean; #IMPLIED
++                    dlg:headerbackground-color %numeric; #IMPLIED
++                    dlg:headertext-color %numeric; #IMPLIED
++                    dlg:activeselectionbackground-color %numeric; #IMPLIED
++                    dlg:activeselectiontext-color %numeric; #IMPLIED
++                    dlg:inactiveselectionbackground-color %numeric; #IMPLIED
++                    dlg:inactiveselectiontext-color %numeric; #IMPLIED
++                    dlg:selectiontype CDATA #IMPLIED
++                    dlg:valign (top|center|bottom) #IMPLIED
++                    dlg:tabstop %boolean; #IMPLIED
++                    >
+diff --git a/xmlscript/source/xmldlg_imexp/exp_share.hxx b/xmlscript/source/xmldlg_imexp/exp_share.hxx
+index 39dc1fc3b9ef..f167f5320d43 100644
+--- a/xmlscript/source/xmldlg_imexp/exp_share.hxx
++++ b/xmlscript/source/xmldlg_imexp/exp_share.hxx
+@@ -201,6 +201,7 @@ public:
+     void readScrollBarModel( StyleBag * all_styles );
+     void readSpinButtonModel( StyleBag * all_styles );
+     void readFixedHyperLinkModel( StyleBag * all_styles );
++    void readGridControlModel( StyleBag * all_styles );
+ };
+ 
+ template<typename T>
+diff --git a/xmlscript/source/xmldlg_imexp/imp_share.hxx b/xmlscript/source/xmldlg_imexp/imp_share.hxx
+index 2108c340cfbe..a798dfb301f6 100644
+--- a/xmlscript/source/xmldlg_imexp/imp_share.hxx
++++ b/xmlscript/source/xmldlg_imexp/imp_share.hxx
+@@ -1028,6 +1028,24 @@ public:
+         {}
+ };
+ 
++//==============================================================================
++class GridControlElement
++    : public ControlElement
++{
++public:
++    virtual css::uno::Reference< css::xml::input::XElement >
++    SAL_CALL startChildElement(
++        sal_Int32 nUid,::rtl::OUString const & rLocalName,
++        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
++    virtual void SAL_CALL endElement() override;
++
++    GridControlElement(OUString const & rLocalName,
++        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
++        ElementBase * pParent, DialogImport * pImport )
++        : ControlElement( rLocalName, xAttributes, pParent, pImport )
++        {}
++};
++
+ }
+ 
+ #endif // INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_IMP_SHARE_HXX
+diff --git a/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx b/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx
+index 0fde594f8921..714bbc5b89c8 100644
+--- a/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx
++++ b/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx
+@@ -1009,6 +1009,42 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
+     readEvents();
+ }
+ 
++void ElementDescriptor::readGridControlModel( StyleBag * all_styles )
++{
++    // collect styles
++    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
++    if (readProp("BackgroundColor") >>= aStyle._backgroundColor)
++        aStyle._set |= 0x1;
++    if (readBorderProps( this, aStyle ))
++        aStyle._set |= 0x4;
++    if (readProp("TextColor") >>= aStyle._textColor)
++        aStyle._set |= 0x2;
++    if (readProp("TextLineColor") >>= aStyle._textLineColor)
++        aStyle._set |= 0x20;
++    if (readFontProps( this, aStyle ))
++        aStyle._set |= 0x8;
++    if (aStyle._set)
++    {
++        addAttribute( XMLNS_DIALOGS_PREFIX ":style-id",all_styles->getStyleId( aStyle ) );
++    }
++    // collect elements
++    readDefaults();
++    readBoolAttr("Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop");
++    readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign");
++    readSelectionTypeAttr( "SelectionModel", XMLNS_DIALOGS_PREFIX ":selectiontype");
++    readBoolAttr( "ShowColumnHeader", XMLNS_DIALOGS_PREFIX ":showcolumnheader");
++    readBoolAttr( "ShowRowHeader", XMLNS_DIALOGS_PREFIX ":showrowheader");
++    readHexLongAttr( "GridLineColor", XMLNS_DIALOGS_PREFIX ":gridline-color");
++    readBoolAttr( "UseGridLines", XMLNS_DIALOGS_PREFIX ":usegridlines" );
++    readHexLongAttr( "HeaderBackgroundColor", XMLNS_DIALOGS_PREFIX ":headerbackground-color");
++    readHexLongAttr( "HeaderTextColor", XMLNS_DIALOGS_PREFIX ":headertext-color");
++    readHexLongAttr( "ActiveSelectionBackgroundColor", XMLNS_DIALOGS_PREFIX ":activeselectionbackground-color");
++    readHexLongAttr( "ActiveSelectionTextColor", XMLNS_DIALOGS_PREFIX ":activeselectiontext-color");
++    readHexLongAttr( "InactiveSelectionBackgroundColor", XMLNS_DIALOGS_PREFIX ":inactiveselectionbackground-color");
++    readHexLongAttr( "InactiveSelectionTextColor", XMLNS_DIALOGS_PREFIX ":inactiveselectiontext-color");
++    readEvents();
++}
++
+ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
+ {
+     // collect elements
+@@ -1216,6 +1252,11 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
+                 pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":progressmeter", _xDocument );
+                 pElem->readProgressBarModel( all_styles );
+             }
++            else if (xServiceInfo->supportsService( "com.sun.star.awt.UnoControlGridModel" ) )
++            {
++                pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":table", _xDocument );
++                pElem->readGridControlModel( all_styles );
++            }
+ 
+             if (pElem)
+             {
+diff --git a/xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx b/xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx
+index 239f795e426a..bd4eeeaa464b 100644
+--- a/xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx
++++ b/xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx
+@@ -1700,6 +1700,11 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
+     {
+         return new ProgressBarElement( rLocalName, xAttributes, this, m_xImport.get() );
+     }
++    // table
++    else if (rLocalName == "table")
++    {
++        return new GridControlElement( rLocalName, xAttributes, this, m_xImport.get() );
++    }
+     else if ( rLocalName == "multipage" )
+     {
+         return new MultiPage( rLocalName, xAttributes, this, m_xImport.get() );
+@@ -1840,6 +1845,61 @@ void WindowElement::endElement()
+     _events.clear();
+ }
+ 
++// table
++Reference< xml::input::XElement > GridControlElement::startChildElement(
++    sal_Int32 nUid, OUString const & rLocalName,
++    Reference< xml::input::XAttributes > const & xAttributes )
++{
++    // event
++    if (m_xImport->isEventElement( nUid, rLocalName ))
++    {
++        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
++    }
++    else
++    {
++        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
++    }
++}
++
++void GridControlElement::endElement()
++{
++    ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlGridModel");
++
++    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
++    if (xStyle.is())
++    {
++        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
++            Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
++            pStyle->importBackgroundColorStyle( xControlModel );
++            pStyle->importBorderStyle( xControlModel );
++            pStyle->importTextColorStyle( xControlModel );
++            pStyle->importTextLineColorStyle( xControlModel );
++            pStyle->importFontStyle( xControlModel );
++    }
++    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
++    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
++    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
++    ctx.importSelectionTypeProperty( "SelectionModel", "selectiontype", _xAttributes );
++    ctx.importBooleanProperty( "ShowColumnHeader", "showcolumnheader", _xAttributes );
++    ctx.importBooleanProperty( "ShowRowHeader", "showrowheader", _xAttributes );
++    ctx.importHexLongProperty( "GridLineColor", "gridline-color", _xAttributes );
++    ctx.importBooleanProperty( "UseGridLines", "usegridlines", _xAttributes );
++    ctx.importHexLongProperty( "HeaderBackgroundColor", "headerbackground-color", _xAttributes );
++    ctx.importHexLongProperty( "HeaderTextColor", "headertext-color", _xAttributes );
++    ctx.importHexLongProperty( "ActiveSelectionBackgroundColor", "activeselectionbackground-color", _xAttributes );
++    ctx.importHexLongProperty( "ActiveSelectionTextColor", "activeselectiontext-color", _xAttributes );
++    ctx.importHexLongProperty( "InactiveSelectionBackgroundColor", "inactiveselectionbackground-color", _xAttributes );
++    ctx.importHexLongProperty( "InactiveSelectionTextColor", "inactiveselectiontext-color", _xAttributes );
++    ctx.importEvents( _events );
++    // avoid ring-reference:
++    // vector< event elements > holding event elements holding this (via _pParent)
++    _events.clear();
++
++    ctx.finish();
++}
++
++//##################################################################################################
++
+ }
+ 
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
