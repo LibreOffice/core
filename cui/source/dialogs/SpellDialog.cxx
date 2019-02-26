@@ -1851,7 +1851,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             aRet.push_back(aPortion1);
 
         }
-        else if(!aBreakPositions.empty())
+        else
         {
             LanguagePositions_Impl::iterator aStart = aBreakPositions.begin();
             //start should always be Null
