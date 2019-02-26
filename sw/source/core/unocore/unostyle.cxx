@@ -3645,7 +3645,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
                     aChangedBrushItem.PutValue(aValue, nMemberId);
 
-                    if(!(aChangedBrushItem == aOriginalBrushItem))
+                    if(aChangedBrushItem != aOriginalBrushItem)
                     {
                         setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
                     }

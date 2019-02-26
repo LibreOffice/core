@@ -325,7 +325,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
     }
 
     if( xNewFormComps.is() &&
-        (!mxFormComps.is() || !(xNewFormComps == mxFormComps)) )
+        (!mxFormComps.is() || xNewFormComps != mxFormComps) )
     {
         // A form should be opened ...
         if( mxFormComps.is() )

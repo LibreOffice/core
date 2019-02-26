@@ -983,14 +983,14 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     if ( bPut )
     {
-        if ( !pOldBoxItem || !( *pOldBoxItem == aBoxItem ) )
+        if ( !pOldBoxItem || *pOldBoxItem != aBoxItem )
         {
             rCoreAttrs->Put( aBoxItem );
             bAttrsChanged = true;
         }
         const SfxPoolItem* pOld = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER, false );
 
-        if ( !pOld || !( *static_cast<const SvxBoxInfoItem*>(pOld) == aBoxInfoItem ) )
+        if ( !pOld || *static_cast<const SvxBoxInfoItem*>(pOld) != aBoxInfoItem )
         {
             rCoreAttrs->Put( aBoxInfoItem );
             bAttrsChanged = true;

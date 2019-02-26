@@ -677,7 +677,7 @@ namespace pcr
                         Reference< xforms::XModel > xElementsModel;
                         xElement->getPropertyValue( PROPERTY_MODEL ) >>= xElementsModel;
                         OSL_ENSURE( xElementsModel == xModel, "EFormsHelper::getAllElementUINames: inconsistency in the model-element relationship!" );
-                        if ( !( xElementsModel == xModel ) )
+                        if ( xElementsModel != xModel )
                             xElement->setPropertyValue( PROPERTY_MODEL, makeAny( xModel ) );
                     }
 #endif

@@ -201,13 +201,13 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
             aTmp.Insert(aTmpStop);
         }
 
-        if (!pOld || !(*static_cast<const SvxTabStopItem*>(pOld) == aTmp))
+        if (!pOld || *static_cast<const SvxTabStopItem*>(pOld) != aTmp)
         {
             rSet->Put(aTmp);
             bModified = true;
         }
     }
-    else if (!pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aNewTabs))
+    else if (!pOld || *static_cast<const SvxTabStopItem*>(pOld) != aNewTabs)
     {
         rSet->Put(aNewTabs);
         bModified = true;

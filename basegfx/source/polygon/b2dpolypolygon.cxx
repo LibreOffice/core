@@ -81,15 +81,7 @@ public:
 
     bool operator==(const ImplB2DPolyPolygon& rPolygonList) const
     {
-        // same polygon count?
-        if(maPolygons.size() != rPolygonList.maPolygons.size())
-            return false;
-
-        // compare polygon content
-        if(!(maPolygons == rPolygonList.maPolygons))
-            return false;
-
-        return true;
+        return maPolygons == rPolygonList.maPolygons;
     }
 
     const basegfx::B2DPolygon& getB2DPolygon(sal_uInt32 nIndex) const
