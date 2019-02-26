@@ -14,6 +14,7 @@
 #include <tabfrm.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
+#include <cellfrm.hxx>
 #include <hffrm.hxx>
 #include <rootfrm.hxx>
 #include <editsh.hxx>
@@ -358,6 +359,12 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                 }
                 xmlTextWriterEndElement( writer );
             }
+        }
+
+        if (IsCellFrame())
+        {
+            SwCellFrame const* pCellFrame(static_cast<SwCellFrame const*>(this));
+            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rowspan" ), "%ld", pCellFrame->GetLayoutRowSpan() );
         }
 
         xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
