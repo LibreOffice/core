@@ -908,19 +908,34 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
-            for ( ; nRow<nCount; nRow++)
+            double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
+            if (nCount <= fChildAspectRatio)
+                // Child aspect ratio request (width/height) is N, and we have at most N shapes.
+                // This means we don't need multiple columns.
+                nRow = nCount;
+            else
             {
-                nCol = (nCount+nRow-1) / nRow;
-                const double fShapeHeight = rShape->getSize().Height;
-                const double fShapeWidth = rShape->getSize().Width;
-                if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
-                    break;
+                for ( ; nRow<nCount; nRow++)
+                {
+                    nCol = (nCount+nRow-1) / nRow;
+                    const double fShapeHeight = rShape->getSize().Height;
+                    const double fShapeWidth = rShape->getSize().Width;
+                    if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
+                        break;
+                }
             }
 
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
 
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
-            const awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+            awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+            if (nCol == 1 && nRow > 1)
+            {
+                // We have a single column, so count the height based on the parent height, not
+                // based on width.
+                sal_Int32 nHeight = rShape->getSize().Height / (nRow + (nRow - 1) * fSpace);
+                aChildSize = awt::Size(rShape->getSize().Width, nHeight);
+            }
 
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
