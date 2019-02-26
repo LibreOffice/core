@@ -584,7 +584,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
             sTitle, css::ucb::NameClash::OVERWRITE );
 
     {
-        //the user may have cancelled the dialog because downloading took to long
+        //the user may have cancelled the dialog because downloading took too long
         SolarMutexGuard g;
         if (m_stop) {
             return m_stop;
