@@ -4818,6 +4818,29 @@ public:
     }
 };
 
+class GtkInstanceSpinner : public GtkInstanceWidget, public virtual weld::Spinner
+{
+private:
+    GtkSpinner* m_pSpinner;
+
+public:
+    GtkInstanceSpinner(GtkSpinner* pSpinner, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pSpinner), pBuilder, bTakeOwnership)
+        , m_pSpinner(pSpinner)
+    {
+    }
+
+    virtual void start() override
+    {
+        gtk_spinner_start(m_pSpinner);
+    }
+
+    virtual void stop() override
+    {
+        gtk_spinner_stop(m_pSpinner);
+    }
+};
+
 class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
 {
 private:
@@ -8611,6 +8634,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
         return std::make_unique<GtkInstanceProgressBar>(pProgressBar, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id, bool bTakeOwnership) override
+    {
+        GtkSpinner* pSpinner = GTK_SPINNER(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pSpinner)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinner));
+        return std::make_unique<GtkInstanceSpinner>(pSpinner, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override

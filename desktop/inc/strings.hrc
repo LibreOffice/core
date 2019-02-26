@@ -150,9 +150,6 @@
 #define RID_DLG_UPDATE_NODEPENDENCY_CUR_VER                 NC_("RID_DLG_UPDATE_NODEPENDENCY_CUR_VER", "You have %PRODUCTNAME %VERSION")
 #define RID_DLG_UPDATE_BROWSERBASED                         NC_("RID_DLG_UPDATE_BROWSERBASED", "browser based update")
 #define RID_DLG_UPDATE_VERSION                              NC_("RID_DLG_UPDATE_VERSION", "Version")
-#define RID_DLG_UPDATE_IGNORE                               NC_("RID_DLG_UPDATE_IGNORE", "Ignore this Update")
-#define RID_DLG_UPDATE_IGNORE_ALL                           NC_("RID_DLG_UPDATE_IGNORE_ALL", "Ignore all Updates")
-#define RID_DLG_UPDATE_ENABLE                               NC_("RID_DLG_UPDATE_ENABLE", "Enable Updates")
 #define RID_DLG_UPDATE_IGNORED_UPDATE                       NC_("RID_DLG_UPDATE_IGNORED_UPDATE", "This update will be ignored.\n")
 
 #define STR_BOOTSTRAP_ERR_CANNOT_START                      NC_("STR_BOOTSTRAP_ERR_CANNOT_START", "The application cannot be started. ")

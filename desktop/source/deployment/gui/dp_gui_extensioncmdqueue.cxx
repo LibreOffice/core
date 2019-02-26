@@ -896,11 +896,11 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     const SolarMutexGuard guard;
 
     std::vector< UpdateData > vData;
-    ScopedVclPtrInstance<UpdateDialog> pUpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, vExtensionList, &vData );
+    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper? m_pDialogHelper->getFrameWeld() : nullptr, vExtensionList, &vData);
 
-    pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
+    aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
-    if ( ( pUpdateDialog->Execute() == RET_OK ) && !vData.empty() )
+    if (aUpdateDialog.run() == RET_OK && !vData.empty())
     {
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
@@ -917,10 +917,10 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         {
             UpdateInstallDialog aDlg(m_pDialogHelper? m_pDialogHelper->getFrameWeld() : nullptr, dataDownload, m_xContext);
             nDialogResult = aDlg.run();
-            pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
+            aUpdateDialog.notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else
-            pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
+            aUpdateDialog.notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
 
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
@@ -933,9 +933,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         }
     }
     else
-        pUpdateDialog->notifyMenubar( false, false ); // check if there updates to be notified via menu bar icon
-
-    pUpdateDialog.disposeAndClear();
+        aUpdateDialog.notifyMenubar( false, false ); // check if there updates to be notified via menu bar icon
 }
 
 
