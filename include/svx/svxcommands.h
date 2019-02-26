@@ -130,6 +130,7 @@
 #define CMD_SID_TABLE_INSERT_COL_DLG                ".uno:InsertColumnDialog"
 #define CMD_SID_TABLE_INSERT_ROW_DLG                ".uno:InsertRowDialog"
 #define CMD_SID_GALLERY_BG_BRUSH                    ".uno:BackgroundImage"
+#define CMD_SID_INSERT_GRIDCONTROL                  ".uno:InsertGridControl"
 
 #endif
 

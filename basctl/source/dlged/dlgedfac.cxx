@@ -216,6 +216,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
             case OBJ_DLG_TREECONTROL:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.tree.TreeControlModel", xDialogSFact );
                  break;
+            case OBJ_DLG_GRIDCONTROL:
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.grid.UnoControlGridModel", xDialogSFact );
+                 break;
+
         }
     }
     return pNewObj;
