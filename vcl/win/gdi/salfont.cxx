@@ -1347,6 +1347,14 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
                 rLogFont.lfFaceName[nNameLen] = '\0';
         }
     }
+
+    // With "StarSymbol" or with "OpenSymbol" symbol font, a really small bullets appear
+    // to be very large (wrongly scaled) in preview and/or in main slide view.
+    if ((rLogFont.lfHeight == -1) &&
+        (aName.equalsIgnoreAsciiCase("starsymbol") || aName.equalsIgnoreAsciiCase("opensymbol")) )
+    {
+        rLogFont.lfHeight = -2;
+    }
 }
 
 HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont )
