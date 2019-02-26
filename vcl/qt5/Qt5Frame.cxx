@@ -612,9 +612,19 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     if (!isWindow())
         m_pTopLevel->show();
 
-    // do that before going fullscreen
-    SetScreenNumber(nScreen);
-    m_bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
+    if (m_bFullScreen)
+    {
+        m_aRestoreGeometry = m_pTopLevel->geometry();
+        // do that before going fullscreen
+        SetScreenNumber(nScreen);
+        windowHandle()->showFullScreen();
+    }
+    else
+    {
+        windowHandle()->showNormal();
+        m_pTopLevel->setGeometry(m_aRestoreGeometry);
+        m_aRestoreGeometry = QRect();
+    }
 }
 
 void Qt5Frame::StartPresentation(bool)
