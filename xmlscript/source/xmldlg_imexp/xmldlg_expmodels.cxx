@@ -1009,6 +1009,42 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
     readEvents();
 }
 
+void ElementDescriptor::readGridControlModel( StyleBag * all_styles )
+{
+    // collect styles
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
+    if (readProp("BackgroundColor") >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readBorderProps( this, aStyle ))
+        aStyle._set |= 0x4;
+    if (readProp("TextColor") >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp("TextLineColor") >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( XMLNS_DIALOGS_PREFIX ":style-id",all_styles->getStyleId( aStyle ) );
+    }
+    // collect elements
+    readDefaults();
+    readBoolAttr("Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop");
+    readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign");
+    readSelectionTypeAttr( "SelectionModel", XMLNS_DIALOGS_PREFIX ":selectiontype");
+    readBoolAttr( "ShowColumnHeader", XMLNS_DIALOGS_PREFIX ":showcolumnheader");
+    readBoolAttr( "ShowRowHeader", XMLNS_DIALOGS_PREFIX ":showrowheader");
+    readHexLongAttr( "GridLineColor", XMLNS_DIALOGS_PREFIX ":gridline-color");
+    readBoolAttr( "UseGridLines", XMLNS_DIALOGS_PREFIX ":usegridlines" );
+    readHexLongAttr( "HeaderBackgroundColor", XMLNS_DIALOGS_PREFIX ":headerbackground-color");
+    readHexLongAttr( "HeaderTextColor", XMLNS_DIALOGS_PREFIX ":headertext-color");
+    readHexLongAttr( "ActiveSelectionBackgroundColor", XMLNS_DIALOGS_PREFIX ":activeselectionbackground-color");
+    readHexLongAttr( "ActiveSelectionTextColor", XMLNS_DIALOGS_PREFIX ":activeselectiontext-color");
+    readHexLongAttr( "InactiveSelectionBackgroundColor", XMLNS_DIALOGS_PREFIX ":inactiveselectionbackground-color");
+    readHexLongAttr( "InactiveSelectionTextColor", XMLNS_DIALOGS_PREFIX ":inactiveselectiontext-color");
+    readEvents();
+}
+
 void ElementDescriptor::readDialogModel( StyleBag * all_styles )
 {
     // collect elements
@@ -1215,6 +1251,11 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             {
                 pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":progressmeter", _xDocument );
                 pElem->readProgressBarModel( all_styles );
+            }
+            else if (xServiceInfo->supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ) )
+            {
+                pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":table", _xDocument );
+                pElem->readGridControlModel( all_styles );
             }
 
             if (pElem)
