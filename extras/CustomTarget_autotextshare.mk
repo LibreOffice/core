@@ -1101,6 +1101,15 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	en-US/standard/DMS/styles.xml \
 	en-US/standard/DT/atevent.xml \
 	en-US/standard/DT/DT.xml \
+	en-US/standard/DTF/content.xml \
+	en-US/standard/DTF/manifest.rdf \
+	en-US/standard/DTF/styles.xml \
+	en-US/standard/DTF/Object_1/content.xml \
+	en-US/standard/DTF/Object_2/content.xml \
+	en-US/standard/DTF/Object_2/settings.xml \
+	en-US/standard/DTF/ObjectReplacements/Object_1.rdf \
+	en-US/standard/DTF/ObjectReplacements/Object_2.rdf \
+	en-US/standard/DTF/Pictures/100002010000031F000000DA568EC73AA1D06EF8.png \
 	en-US/standard/E/E.xml \
 	en-US/standard/FN/content.xml \
 	en-US/standard/FN/manifest.rdf \

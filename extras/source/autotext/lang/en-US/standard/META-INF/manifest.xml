@@ -78,6 +78,14 @@
  <manifest:file-entry manifest:full-path="CD/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DT/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DT/DT.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/manifest.rdf" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/Object_1/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/Object_2/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/Object_2/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="DTF/ObjectReplacements/Object_1.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="DTF/ObjectReplacements/Object_2.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/atevent.xml" manifest:media-type="text/xml"/>
