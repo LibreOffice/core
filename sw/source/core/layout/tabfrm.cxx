@@ -1290,16 +1290,16 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         // recalculate the split line
         bRet = lcl_RecalcSplitLine( *pLastRow, *pFollowRow, nRemainingSpaceForLastRow, nShrink );
 
+        // RecalcSplitLine did not work. In this case we conceal the split error:
+        if (!bRet && !bSplitRowAllowed)
+        {
+            bRet = true;
+        }
+
         // NEW TABLES
         // check if each cell in the row span line has a good height
         if ( bRet && pFollowRow->IsRowSpanLine() )
             lcl_AdjustRowSpanCells( pFollowRow );
-
-        // We The RowSplitLine stuff did not work. In this case we conceal the split error:
-        if ( !bRet && !bSplitRowAllowed )
-        {
-            bRet = true;
-        }
     }
 
     return bRet;
