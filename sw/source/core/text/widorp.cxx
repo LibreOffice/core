@@ -459,6 +459,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     // i#91421
     if ( !pMaster->GetIndPrev() )
     {
+        pMaster->ChgThisLines();
         sal_uLong nLines = pMaster->GetThisLines();
         if(nLines == 0 && pMaster->HasPara())
         {

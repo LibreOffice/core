@@ -2601,7 +2601,6 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
         return;
-    pPara->SetPrepWidows();
 
     sal_uInt16 nHave = nNeed;
 
@@ -2633,6 +2632,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
 
         if( bSplit )
         {
+            pPara->SetPrepWidows();
             GetFollow()->SetOfst( aLine.GetEnd() );
             aLine.TruncLines( true );
             if( pPara->IsFollowField() )
