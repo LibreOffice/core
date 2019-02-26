@@ -582,7 +582,8 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
             pBBSet.reset( new SfxItemSet(
                 *GetItemSet().GetPool(),
-                {{nBrush, nBrush},
+                {{XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                {nBrush, nBrush},
                 {nOuter, nOuter},
                 {nInner, nInner},
                 {nShadow, nShadow}}) );
