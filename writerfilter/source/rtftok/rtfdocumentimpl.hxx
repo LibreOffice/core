@@ -296,22 +296,61 @@ class RTFDrawingObject : public RTFShape
 {
 public:
     RTFDrawingObject();
-    css::uno::Reference<css::drawing::XShape> xShape;
-    css::uno::Reference<css::beans::XPropertySet> xPropertySet;
-    std::vector<css::beans::PropertyValue> aPendingProperties;
-    sal_uInt8 nLineColorR = 0;
-    sal_uInt8 nLineColorG = 0;
-    sal_uInt8 nLineColorB = 0;
-    bool bHasLineColor = false;
-    sal_uInt8 nFillColorR = 0;
-    sal_uInt8 nFillColorG = 0;
-    sal_uInt8 nFillColorB = 0;
-    bool bHasFillColor = false;
-    sal_Int32 nDhgt = 0;
-    sal_Int32 nFLine = -1;
-    sal_Int32 nPolyLineCount = 0;
-    std::vector<css::awt::Point> aPolyLinePoints;
-    bool bHadShapeText = false;
+
+    void setShape(const css::uno::Reference<css::drawing::XShape>& xShape) { m_xShape = xShape; }
+    const css::uno::Reference<css::drawing::XShape>& getShape() const { return m_xShape; }
+    void setPropertySet(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet)
+    {
+        m_xPropertySet = xPropertySet;
+    }
+    const css::uno::Reference<css::beans::XPropertySet>& getPropertySet() const
+    {
+        return m_xPropertySet;
+    }
+    std::vector<css::beans::PropertyValue>& getPendingProperties() { return m_aPendingProperties; }
+    void setLineColorR(sal_uInt8 nLineColorR) { m_nLineColorR = nLineColorR; }
+    sal_uInt8 getLineColorR() const { return m_nLineColorR; }
+    void setLineColorG(sal_uInt8 nLineColorG) { m_nLineColorG = nLineColorG; }
+    sal_uInt8 getLineColorG() const { return m_nLineColorG; }
+    void setLineColorB(sal_uInt8 nLineColorB) { m_nLineColorB = nLineColorB; }
+    sal_uInt8 getLineColorB() const { return m_nLineColorB; }
+    void setHasLineColor(bool bHasLineColor) { m_bHasLineColor = bHasLineColor; }
+    bool getHasLineColor() const { return m_bHasLineColor; }
+    void setFillColorR(sal_uInt8 nFillColorR) { m_nFillColorR = nFillColorR; }
+    sal_uInt8 getFillColorR() const { return m_nFillColorR; }
+    void setFillColorG(sal_uInt8 nFillColorG) { m_nFillColorG = nFillColorG; }
+    sal_uInt8 getFillColorG() const { return m_nFillColorG; }
+    void setFillColorB(sal_uInt8 nFillColorB) { m_nFillColorB = nFillColorB; }
+    sal_uInt8 getFillColorB() const { return m_nFillColorB; }
+    void setHasFillColor(bool bHasFillColor) { m_bHasFillColor = bHasFillColor; }
+    bool getHasFillColor() const { return m_bHasFillColor; }
+    void setDhgt(sal_Int32 nDhgt) { m_nDhgt = nDhgt; }
+    sal_Int32 getDhgt() const { return m_nDhgt; }
+    void setFLine(sal_Int32 nFLine) { m_nFLine = nFLine; }
+    sal_Int32 getFLine() const { return m_nFLine; }
+    void setPolyLineCount(sal_Int32 nPolyLineCount) { m_nPolyLineCount = nPolyLineCount; }
+    sal_Int32 getPolyLineCount() const { return m_nPolyLineCount; }
+    std::vector<css::awt::Point>& getPolyLinePoints() { return m_aPolyLinePoints; }
+    void setHadShapeText(bool bHadShapeText) { m_bHadShapeText = bHadShapeText; }
+    bool getHadShapeText() const { return m_bHadShapeText; }
+
+private:
+    css::uno::Reference<css::drawing::XShape> m_xShape;
+    css::uno::Reference<css::beans::XPropertySet> m_xPropertySet;
+    std::vector<css::beans::PropertyValue> m_aPendingProperties;
+    sal_uInt8 m_nLineColorR = 0;
+    sal_uInt8 m_nLineColorG = 0;
+    sal_uInt8 m_nLineColorB = 0;
+    bool m_bHasLineColor = false;
+    sal_uInt8 m_nFillColorR = 0;
+    sal_uInt8 m_nFillColorG = 0;
+    sal_uInt8 m_nFillColorB = 0;
+    bool m_bHasFillColor = false;
+    sal_Int32 m_nDhgt = 0;
+    sal_Int32 m_nFLine = -1;
+    sal_Int32 m_nPolyLineCount = 0;
+    std::vector<css::awt::Point> m_aPolyLinePoints;
+    bool m_bHadShapeText = false;
 };
 
 /// Stores the properties of a picture.

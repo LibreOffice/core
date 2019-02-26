@@ -1237,28 +1237,28 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_DPLINECOR:
-            m_aStates.top().aDrawingObject.nLineColorR = nParam;
-            m_aStates.top().aDrawingObject.bHasLineColor = true;
+            m_aStates.top().aDrawingObject.setLineColorR(nParam);
+            m_aStates.top().aDrawingObject.setHasLineColor(true);
             break;
         case RTF_DPLINECOG:
-            m_aStates.top().aDrawingObject.nLineColorG = nParam;
-            m_aStates.top().aDrawingObject.bHasLineColor = true;
+            m_aStates.top().aDrawingObject.setLineColorG(nParam);
+            m_aStates.top().aDrawingObject.setHasLineColor(true);
             break;
         case RTF_DPLINECOB:
-            m_aStates.top().aDrawingObject.nLineColorB = nParam;
-            m_aStates.top().aDrawingObject.bHasLineColor = true;
+            m_aStates.top().aDrawingObject.setLineColorB(nParam);
+            m_aStates.top().aDrawingObject.setHasLineColor(true);
             break;
         case RTF_DPFILLBGCR:
-            m_aStates.top().aDrawingObject.nFillColorR = nParam;
-            m_aStates.top().aDrawingObject.bHasFillColor = true;
+            m_aStates.top().aDrawingObject.setFillColorR(nParam);
+            m_aStates.top().aDrawingObject.setHasFillColor(true);
             break;
         case RTF_DPFILLBGCG:
-            m_aStates.top().aDrawingObject.nFillColorG = nParam;
-            m_aStates.top().aDrawingObject.bHasFillColor = true;
+            m_aStates.top().aDrawingObject.setFillColorG(nParam);
+            m_aStates.top().aDrawingObject.setHasFillColor(true);
             break;
         case RTF_DPFILLBGCB:
-            m_aStates.top().aDrawingObject.nFillColorB = nParam;
-            m_aStates.top().aDrawingObject.bHasFillColor = true;
+            m_aStates.top().aDrawingObject.setFillColorB(nParam);
+            m_aStates.top().aDrawingObject.setHasFillColor(true);
             break;
         case RTF_CLSHDNG:
         {
@@ -1343,37 +1343,38 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_DODHGT:
-            m_aStates.top().aDrawingObject.nDhgt = nParam;
+            m_aStates.top().aDrawingObject.setDhgt(nParam);
             break;
         case RTF_DPPOLYCOUNT:
             if (nParam >= 0)
             {
-                m_aStates.top().aDrawingObject.nPolyLineCount = nParam;
+                m_aStates.top().aDrawingObject.setPolyLineCount(nParam);
             }
             break;
         case RTF_DPPTX:
         {
             RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
 
-            if (rDrawingObject.aPolyLinePoints.empty())
+            if (rDrawingObject.getPolyLinePoints().empty())
                 dispatchValue(RTF_DPPOLYCOUNT, 2);
 
-            rDrawingObject.aPolyLinePoints.emplace_back(awt::Point(convertTwipToMm100(nParam), 0));
+            rDrawingObject.getPolyLinePoints().emplace_back(
+                awt::Point(convertTwipToMm100(nParam), 0));
         }
         break;
         case RTF_DPPTY:
         {
             RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
-            if (!rDrawingObject.aPolyLinePoints.empty())
+            if (!rDrawingObject.getPolyLinePoints().empty())
             {
-                rDrawingObject.aPolyLinePoints.back().Y = convertTwipToMm100(nParam);
-                rDrawingObject.nPolyLineCount--;
-                if (rDrawingObject.nPolyLineCount == 0 && rDrawingObject.xPropertySet.is())
+                rDrawingObject.getPolyLinePoints().back().Y = convertTwipToMm100(nParam);
+                rDrawingObject.setPolyLineCount(rDrawingObject.getPolyLineCount() - 1);
+                if (rDrawingObject.getPolyLineCount() == 0 && rDrawingObject.getPropertySet().is())
                 {
                     uno::Sequence<uno::Sequence<awt::Point>> aPointSequenceSequence
-                        = { comphelper::containerToSequence(rDrawingObject.aPolyLinePoints) };
-                    rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon",
-                                                                  uno::Any(aPointSequenceSequence));
+                        = { comphelper::containerToSequence(rDrawingObject.getPolyLinePoints()) };
+                    rDrawingObject.getPropertySet()->setPropertyValue(
+                        "PolyPolygon", uno::Any(aPointSequenceSequence));
                 }
             }
         }
