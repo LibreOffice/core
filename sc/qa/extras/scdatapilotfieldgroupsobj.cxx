@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -80,7 +80,11 @@ public:
     CPPUNIT_TEST(testHasByName);
 
     // XNameContainer
+    CPPUNIT_TEST(testInsertByName);
+    CPPUNIT_TEST(testInsertByNameEmptyName);
     CPPUNIT_TEST(testRemoveByName);
+    CPPUNIT_TEST(testRemoveByNameEmptyName);
+    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
@@ -199,6 +203,10 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
         }
     }
 
+    // set element for testing XNameContainer::insertByName()
+    uno::Any aElement;
+    setElement(aElement);
+
     return aDPFGI.Groups;
 }
 
@@ -221,4 +229,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldGroupItemObj);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
