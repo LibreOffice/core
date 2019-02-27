@@ -240,7 +240,7 @@ static void parseLineAndFile(sal_Char* pBuf)
     for (; *r != '"'; r++) ;
     *r = 0;
     if (*h == '\0')
-        idlc()->setFileName(OString("standard input"));
+        idlc()->setFileName("standard input");
     else
         idlc()->setFileName(OString(h));
 
