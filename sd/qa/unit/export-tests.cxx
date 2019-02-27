@@ -1171,7 +1171,7 @@ void SdExportTest::testTdf123557()
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
 
-    // Contians 2 interactive sequence and 3 triggered effects.
+    // Contains 2 interactive sequence and 3 triggered effects.
     assertXPath(pXmlDoc, "//draw:page", 1);
     assertXPath(pXmlDoc, "//draw:page/anim:par", 1);
     assertXPath(pXmlDoc, "//draw:page"
