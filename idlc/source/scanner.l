@@ -227,7 +227,7 @@ static void parseLineAndFile(sal_Char* pBuf)
     h = r;
     for (; *r != '\0' && *r != ' ' && *r != '\t'; r++) ;
     *r++ = 0;
-    idlc()->setLineNumber((sal_uInt32)atol(h));
+    idlc()->setLineNumber(sal_uInt32(atol(h)));
     yylineno = atol(h);
 
     /* Find file name, if present */
