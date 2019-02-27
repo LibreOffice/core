@@ -83,6 +83,7 @@ namespace slideshow
 
             bool startPlayback();
             bool stopPlayback();
+            bool isPlaying() const;
 
             void setPlaybackLoop( bool bLoop );
 
