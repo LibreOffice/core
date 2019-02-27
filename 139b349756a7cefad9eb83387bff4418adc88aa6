@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_8ccd305f",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-27T08:45:15Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/68423\u003e \"Fix GenericSolarThreadExecutor\u003c...,void\u003e specialization\"",
+      "parentUuid": "1f485f77_accb4c51",
+      "revId": "139b349756a7cefad9eb83387bff4418adc88aa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_2cb87cc6",
         "filename": "sfx2/source/doc/sfxbasemodel.cxx",
         "patchSetId": 1
