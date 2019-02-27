@@ -2323,10 +2323,7 @@ SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
 SwTableNode::~SwTableNode()
 {
     // Notify UNO wrappers
-    SwFrameFormat* pTableFormat = GetTable().GetFrameFormat();
-    SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-                                pTableFormat );
-    pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
+    GetTable().GetFrameFormat()->GetNotifier().Broadcast(SfxHint(SfxHintId::Dying));
     DelFrames();
     m_pTable->SetTableNode(this); // set this so that ~SwDDETable can read it!
     m_pTable.reset();
