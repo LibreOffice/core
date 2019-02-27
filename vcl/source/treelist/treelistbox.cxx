@@ -3089,6 +3089,10 @@ Size SvTreeListBox::GetOptimalSize() const
     }
     long nMinWidth = nMinWidthInChars * approximate_char_width();
     aRet.setWidth( std::max(aRet.Width(), nMinWidth) );
+
+    if (GetStyle() & WB_VSCROLL)
+        aRet.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize());
+
     return aRet;
 }
 
