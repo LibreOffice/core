@@ -40,8 +40,6 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
     OUString aText = mpVCLMenu->GetItemText(nId);
     NativeItemText(aText);
     vcl::KeyCode nAccelKey = mpVCLMenu->GetAccelKey(nId);
-    bool bChecked = mpVCLMenu->IsItemChecked(nId);
-    MenuItemBits itemBits = mpVCLMenu->GetItemBits(nId);
 
     pSalMenuItem->mpAction.reset();
     pSalMenuItem->mpMenu.reset();
@@ -138,24 +136,9 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
 
                 ReinitializeActionGroup(nPos);
 
+                UpdateActionGroupItem(pSalMenuItem);
+
                 pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
-
-                if (itemBits & MenuItemBits::CHECKABLE)
-                {
-                    pAction->setCheckable(true);
-                    pAction->setChecked(bChecked);
-                }
-                else if (itemBits & MenuItemBits::RADIOCHECK)
-                {
-                    pAction->setCheckable(true);
-
-                    if (pSalMenuItem->mpActionGroup)
-                    {
-                        pSalMenuItem->mpActionGroup->addAction(pAction);
-                    }
-
-                    pAction->setChecked(bChecked);
-                }
 
                 connect(pAction, &QAction::triggered, this,
                         [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
@@ -297,6 +280,43 @@ void Qt5Menu::ResetAllActionGroups()
     }
 }
 
+void Qt5Menu::UpdateActionGroupItem(Qt5MenuItem* pSalMenuItem)
+{
+    QAction* pAction = pSalMenuItem->getAction();
+    if (!pAction)
+        return;
+
+    bool bChecked = mpVCLMenu->IsItemChecked(pSalMenuItem->mnId);
+    MenuItemBits itemBits = mpVCLMenu->GetItemBits(pSalMenuItem->mnId);
+
+    if (itemBits & MenuItemBits::RADIOCHECK)
+    {
+        pAction->setCheckable(true);
+
+        if (pSalMenuItem->mpActionGroup)
+        {
+            pSalMenuItem->mpActionGroup->addAction(pAction);
+        }
+
+        pAction->setChecked(bChecked);
+    }
+    else
+    {
+        pAction->setActionGroup(nullptr);
+
+        if (itemBits & MenuItemBits::CHECKABLE)
+        {
+            pAction->setCheckable(true);
+            pAction->setChecked(bChecked);
+        }
+        else
+        {
+            pAction->setChecked(false);
+            pAction->setCheckable(false);
+        }
+    }
+}
+
 void Qt5Menu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
 {
     SolarMutexGuard aGuard;
@@ -334,17 +354,34 @@ void Qt5Menu::RemoveItem(unsigned nPos)
     }
 }
 
-void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned)
+void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos)
 {
     SolarMutexGuard aGuard;
     Qt5MenuItem* pItem = static_cast<Qt5MenuItem*>(pSalMenuItem);
     Qt5Menu* pQSubMenu = static_cast<Qt5Menu*>(pSubMenu);
 
-    if (pQSubMenu == nullptr)
-        return;
-
-    pQSubMenu->mpParentSalMenu = this;
     pItem->mpSubMenu = pQSubMenu;
+    // at this point the pointer to parent menu may be outdated, update it too
+    pItem->mpParentMenu = this;
+
+    if (pQSubMenu != nullptr)
+    {
+        pQSubMenu->mpParentSalMenu = this;
+        pQSubMenu->mpQMenu = pItem->mpMenu.get();
+    }
+
+    // if it's not a menu bar item, then convert it to corresponding item if type if necessary.
+    // If submenu is present and it's an action, convert it to menu.
+    // If submenu is not present and it's a menu, convert it to action.
+    // It may be fine to proceed in any case, but by skipping other cases
+    // amount of unneeded actions taken should be reduced.
+    if (pItem->mpParentMenu->mbMenuBar || (pQSubMenu && pItem->mpMenu)
+        || ((!pQSubMenu) && pItem->mpAction))
+    {
+        return;
+    }
+
+    InsertMenuItem(pItem, nPos);
 }
 
 void Qt5Menu::SetFrame(const SalFrame* pFrame)
@@ -406,6 +443,15 @@ void Qt5Menu::ShowItem(unsigned nPos, bool bShow)
         if (pAction)
             pAction->setVisible(bShow);
         pSalMenuItem->mbVisible = bShow;
+    }
+}
+
+void Qt5Menu::SetItemBits(unsigned nPos, MenuItemBits)
+{
+    if (nPos < maItems.size())
+    {
+        Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
+        UpdateActionGroupItem(pSalMenuItem);
     }
 }
 

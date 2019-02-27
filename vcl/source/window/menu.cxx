@@ -695,9 +695,17 @@ OString Menu::GetItemIdent(sal_uInt16 nId) const
 
 void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 {
-    MenuItemData* pData = pItemList->GetData( nItemId );
-    if ( pData )
+    size_t        nPos;
+    MenuItemData* pData = pItemList->GetData(nItemId, nPos);
+
+    if (pData && (pData->nBits != nBits))
+    {
         pData->nBits = nBits;
+
+        // update native menu
+        if (ImplGetSalMenu())
+            ImplGetSalMenu()->SetItemBits(nPos, nBits);
+    }
 }
 
 MenuItemBits Menu::GetItemBits( sal_uInt16 nItemId ) const
