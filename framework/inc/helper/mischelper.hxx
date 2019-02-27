@@ -90,27 +90,19 @@ inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUStr
     static const char      RESOURCEURL_PREFIX[] = "private:resource/";
     static const sal_Int32 RESOURCEURL_PREFIX_SIZE = strlen(RESOURCEURL_PREFIX);
 
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
-        ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
+    if (aResourceURL.startsWith( RESOURCEURL_PREFIX ))
     {
-        OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
-        sal_Int32 nToken = 0;
-        sal_Int32 nPart  = 0;
-        do
-        {
-            OUString sToken = aTmpStr.getToken( 0, '/', nToken);
-            if ( !sToken.isEmpty() )
-            {
-                if ( nPart == 0 )
-                    aType = sToken;
-                else if ( nPart == 1 )
-                    aName = sToken;
-                else
-                    break;
-                nPart++;
-            }
-        }
-        while( nToken >=0 );
+        sal_Int32 nIdx{ RESOURCEURL_PREFIX_SIZE };
+        while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
+        if (nIdx>=aResourceURL.getLength())
+            return;
+        aType = aResourceURL.getToken(0, '/', nIdx);
+        if (nIdx<0)
+            return;
+        while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
+        if (nIdx>=aResourceURL.getLength())
+            return;
+        aName = aResourceURL.getToken(0, '/', nIdx);
     }
 }
 
