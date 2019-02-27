@@ -116,9 +116,8 @@ private:
 /** This function will execute the passed functor synchronously in the
     solar thread, thus the calling thread will (eventually) be blocked until
     the functor has been called.
-    Any UNO exception that came up calling the functor in the solar thread
-    will be caught and rethrown in the calling thread.  Any non-UNO
-    exception needs to be handled by the called functor.
+    Any exception that came up calling the functor in the solar thread
+    will be caught and rethrown in the calling thread.
     The result type of this function needs to be default constructable.
     Please keep in mind not to pass addresses to stack variables
     (e.g. for out parameters) to foreign threads, use inout_by_ref()
