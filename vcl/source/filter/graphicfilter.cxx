@@ -2513,6 +2513,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
 
     sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
     OString aShortName;
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
     switch( rData.mnFormat )
     {
         case ConvertDataFormat::BMP: aShortName = BMP_SHORTNAME; break;
@@ -2540,8 +2541,17 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     else if( !aShortName.isEmpty() )
     {
         // Export
+#ifdef IOS
+        if (aShortName == PNG_SHORTNAME)
+        {
+            aFilterData.realloc(aFilterData.getLength() + 1);
+            aFilterData[aFilterData.getLength() - 1].Name = "Compression";
+            // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
+            aFilterData[aFilterData.getLength() - 1].Value <<= 1;
+        }
+#endif
         nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
-        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == ERRCODE_NONE;
+        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat, &aFilterData ) == ERRCODE_NONE;
     }
 
     return bRet;
