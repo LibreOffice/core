@@ -192,7 +192,7 @@ void Qt5Widget::startDrag(sal_Int8 nSourceActions)
 {
     // internal drag source
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(m_InternalMimeType, nullptr);
+    mimeData->setData(sInternalMimeType, nullptr);
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
@@ -201,7 +201,7 @@ void Qt5Widget::startDrag(sal_Int8 nSourceActions)
 
 void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasFormat(m_InternalMimeType))
+    if (event->mimeData()->hasFormat(sInternalMimeType))
         event->accept();
     else
         event->acceptProposedAction();
