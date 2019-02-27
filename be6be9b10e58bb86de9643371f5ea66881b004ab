@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_8794eb8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-27T13:57:47Z",
+      "side": 1,
+      "message": "that the types are \"exactly the same\" is already guaranteed by the compiler; I\u0027d rather call it something like \"use the exact same typedef-names (if any)\"",
+      "revId": "be6be9b10e58bb86de9643371f5ea66881b004ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_e77ddf6e",
+        "filename": "cppu/source/uno/any.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-27T13:57:47Z",
+      "side": 1,
+      "message": "no need for these \"struct\" elaborations in C++\n\n(and maybe the plugin could be taught not to warn for those T vs. S differences for the\n\n  typedef struct S {...} T;\n\nidiom?)",
+      "revId": "be6be9b10e58bb86de9643371f5ea66881b004ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_c782e34f",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-27T13:57:47Z",
+      "side": 1,
+      "message": "makes sense to drop the \"enum\" elaboration here, too",
+      "revId": "be6be9b10e58bb86de9643371f5ea66881b004ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
