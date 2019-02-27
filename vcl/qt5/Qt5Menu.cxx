@@ -33,9 +33,8 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
 
 bool Qt5Menu::VisibleMenuBar() { return true; }
 
-QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
+void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
 {
-    QMenu* pQMenu = mpQMenu;
     sal_uInt16 nId = pSalMenuItem->mnId;
     OUString aText = mpVCLMenu->GetItemText(nId);
     NativeItemText(aText);
@@ -49,7 +48,7 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         // top-level menu
         if (mpQMenuBar)
         {
-            pQMenu = new QMenu(toQString(aText), nullptr);
+            QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
@@ -62,31 +61,38 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 mpQMenuBar->addMenu(pQMenu);
             }
 
+            // correct parent menu for generated menu
+            if (pSalMenuItem->mpSubMenu)
+            {
+                pSalMenuItem->mpSubMenu->mpQMenu = pQMenu;
+            }
+
             connect(pQMenu, &QMenu::aboutToShow, this,
                     [pSalMenuItem] { slotMenuAboutToShow(pSalMenuItem); });
             connect(pQMenu, &QMenu::aboutToHide, this,
                     [pSalMenuItem] { slotMenuAboutToHide(pSalMenuItem); });
         }
     }
-    else if (pQMenu)
+    else if (mpQMenu)
     {
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
-            QMenu* pTempQMenu = new QMenu(toQString(aText), nullptr);
-            pSalMenuItem->mpMenu.reset(pTempQMenu);
+            QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
+            pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
-                && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
+                && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
             {
-                pQMenu->insertMenu(pQMenu->actions()[nPos], pTempQMenu);
+                mpQMenu->insertMenu(mpQMenu->actions()[nPos], pQMenu);
             }
             else
             {
-                pQMenu->addMenu(pTempQMenu);
+                mpQMenu->addMenu(pQMenu);
             }
 
-            pQMenu = pTempQMenu;
+            // correct parent menu for generated menu
+            pSalMenuItem->mpSubMenu->mpQMenu = pQMenu;
 
             ReinitializeActionGroup(nPos);
 
@@ -107,13 +113,13 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 pAction->setSeparator(true);
 
                 if ((nPos != MENU_APPEND)
-                    && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
+                    && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
                 {
-                    pQMenu->insertAction(pQMenu->actions()[nPos], pAction);
+                    mpQMenu->insertAction(mpQMenu->actions()[nPos], pAction);
                 }
                 else
                 {
-                    pQMenu->addAction(pAction);
+                    mpQMenu->addAction(pAction);
                 }
 
                 ReinitializeActionGroup(nPos);
@@ -125,13 +131,13 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
-                    && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
+                    && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
                 {
-                    pQMenu->insertAction(pQMenu->actions()[nPos], pAction);
+                    mpQMenu->insertAction(mpQMenu->actions()[nPos], pAction);
                 }
                 else
                 {
-                    pQMenu->addAction(pAction);
+                    mpQMenu->addAction(pAction);
                 }
 
                 ReinitializeActionGroup(nPos);
@@ -152,8 +158,6 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         pAction->setEnabled(pSalMenuItem->mbEnabled);
         pAction->setVisible(pSalMenuItem->mbVisible);
     }
-
-    return pQMenu;
 }
 
 void Qt5Menu::ReinitializeActionGroup(unsigned nPos)
@@ -419,14 +423,11 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
-        QMenu* pQMenu = InsertMenuItem(pSalMenuItem, nItem);
+        InsertMenuItem(pSalMenuItem, nItem);
         SetItemImage(nItem, pSalMenuItem, pSalMenuItem->maImage);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
-            // correct parent menu before calling HandleMenuActivateEvent
-            pSalMenuItem->mpSubMenu->mpQMenu = pQMenu;
-
             pMenuBar->HandleMenuActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
             pSalMenuItem->mpSubMenu->DoFullMenuUpdate(pMenuBar);
             pMenuBar->HandleMenuDeActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
