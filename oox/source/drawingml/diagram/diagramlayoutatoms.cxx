@@ -66,6 +66,24 @@ bool isFontUnit(sal_Int32 nUnit)
     return nUnit == oox::XML_primFontSz || nUnit == oox::XML_secFontSz;
 }
 
+/// Determines which UNO property should be set for a given constraint type.
+sal_Int32 getPropertyFromConstraint(sal_Int32 nConstraint)
+{
+    switch (nConstraint)
+    {
+        case oox::XML_lMarg:
+            return oox::PROP_TextLeftDistance;
+        case oox::XML_rMarg:
+            return oox::PROP_TextRightDistance;
+        case oox::XML_tMarg:
+            return oox::PROP_TextUpperDistance;
+        case oox::XML_bMarg:
+            return oox::PROP_TextLowerDistance;
+    }
+
+    return 0;
+}
+
 /// Determines the connector shape type from a linear alg.
 sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
 {
@@ -446,9 +464,20 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                                      bool bRequireForName) const
 {
-    // The snake algorithm do want a space constraint even without a name.
-    if (bRequireForName && maConstraint.mnType == XML_sp)
-        bRequireForName = false;
+    // Whitelist for cases where empty forName is handled.
+    if (bRequireForName)
+    {
+        switch (maConstraint.mnType)
+        {
+            case XML_sp:
+            case XML_lMarg:
+            case XML_rMarg:
+            case XML_tMarg:
+            case XML_bMarg:
+                bRequireForName = false;
+                break;
+        }
+    }
 
     if (bRequireForName && maConstraint.msForName.isEmpty())
         return;
@@ -1065,6 +1094,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         case XML_tx:
         {
             // adjust text alignment
+
+            // Parse constraints, only self margins as a start.
+            for (const auto& rConstr : rConstraints)
+            {
+                if (rConstr.mnRefType == XML_w)
+                {
+                    if (!rConstr.msForName.isEmpty())
+                        continue;
+
+                    sal_Int32 nProperty = getPropertyFromConstraint(rConstr.mnType);
+                    if (!nProperty)
+                        continue;
+
+                    // PowerPoint takes size as points, but gives margin as MMs.
+                    double fFactor = convertPointToMms(rConstr.mfFactor);
+
+                    // DrawingML works in EMUs, UNO API works in MM100s.
+                    sal_Int32 nValue = rShape->getSize().Width * fFactor / EMU_PER_HMM;
+
+                    rShape->getShapeProperties().setProperty(nProperty, nValue);
+                }
+            }
+
             // TODO: adjust text size to fit shape
             TextBodyPtr pTextBody = rShape->getTextBody();
             if (!pTextBody ||

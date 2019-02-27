@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 using namespace ::com::sun::star;
 
@@ -964,6 +965,20 @@ void SdImportTestSmartArt::testPictureStrip()
     // than: 2873; Actual  : 2320', i.e. the title shape and the diagram overlapped.
     CPPUNIT_ASSERT_GREATER(xTitle->getPosition().Y + xTitle->getSize().Height,
                            xGroup->getPosition().Y);
+
+    // Make sure that left margin is 60% of width (if you count width in points and margin in mms).
+    uno::Reference<beans::XPropertySet> xFirstText(getChildShape(getChildShape(xGroup, 0), 0),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstText.is());
+    sal_Int32 nTextLeftDistance = 0;
+    xFirstText->getPropertyValue("TextLeftDistance") >>= nTextLeftDistance;
+    uno::Reference<drawing::XShape> xFirstTextShape(xFirstText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstTextShape.is());
+    sal_Int32 nWidth = xFirstTextShape->getSize().Width;
+    double fFactor = oox::drawingml::convertPointToMms(0.6);
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 3440,
+    // Actual  : 263', i.e. the left margin was too small.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nWidth * fFactor), nTextLeftDistance);
 
     xDocShRef->DoClose();
 }
