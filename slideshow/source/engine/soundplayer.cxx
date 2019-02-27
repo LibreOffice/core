@@ -170,6 +170,11 @@ namespace slideshow
             if( mxPlayer.is() )
                 mxPlayer->setPlaybackLoop( bLoop );
         }
+
+        bool SoundPlayer::isPlaying() const
+        {
+            return mxPlayer->isPlaying();
+        }
     }
 }
 
