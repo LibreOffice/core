@@ -130,6 +130,7 @@ uno::Reference<frame::XDispatch> MyInterceptor::queryDispatch(const util::URL& r
 /// Tests how InterceptionHelper invokes a registered interceptor.
 class DispatchTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues);
@@ -137,11 +138,6 @@ class DispatchTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
-    void testInterception();
-
-    CPPUNIT_TEST_SUITE(DispatchTest);
-    CPPUNIT_TEST(testInterception);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void DispatchTest::setUp()
@@ -174,7 +170,7 @@ void DispatchTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComp
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
-void DispatchTest::testInterception()
+CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -195,8 +191,6 @@ void DispatchTest::testInterception()
     // This was 1: MyInterceptor::queryDispatch() was called for .uno:Italic.
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(DispatchTest);
 
 }
 
