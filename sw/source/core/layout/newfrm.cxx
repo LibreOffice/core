@@ -275,9 +275,9 @@ static SwRectFnCollection aVerticalLeftToRightBottomToTop = {
 
     /*.fnSetPos =*/&SwRect::SetLowerLeftCorner,
     /*.fnMakePos =*/&SwFrame::MakeRightPos,
-    /*.fnXDiff =*/&FirstMinusSecond,
+    /*.fnXDiff =*/&SecondMinusFirst,
     /*.fnYDiff =*/&FirstMinusSecond,
-    /*.fnXInc =*/&SwIncrement,
+    /*.fnXInc =*/&SwDecrement,
     /*.fnYInc =*/&SwIncrement,
 
     /*.fnSetLeftAndWidth =*/&SwRect::SetBottomAndHeight,

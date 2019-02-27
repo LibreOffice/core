@@ -2841,6 +2841,7 @@ void SwLayoutWriter::testBtlrCell()
     CPPUNIT_ASSERT_LESS(nFirstParaBottom, rCharRect.Top());
 
     // Test that pressing "up" at the start of the cell goes to the next character position.
+    sal_uLong nNodeIndex = pWrtShell->GetCursor()->Start()->nNode.GetIndex();
     sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
     KeyEvent aKeyEvent(0, KEY_UP);
     SwEditWin& rEditWin = pShell->GetView()->GetEditWin();
@@ -2849,6 +2850,14 @@ void SwLayoutWriter::testBtlrCell()
     // Without the accompanying fix in place, this test would have failed: "up" was interpreted as
     // logical "left", which does nothing if you're at the start of the text anyway.
     CPPUNIT_ASSERT_EQUAL(nIndex + 1, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
+
+    // Test that pressing "right" goes to the next paragraph (logical "down").
+    aKeyEvent = KeyEvent(0, KEY_RIGHT);
+    rEditWin.KeyInput(aKeyEvent);
+    Scheduler::ProcessEventsToIdle();
+    // Without the accompanying fix in place, this test would have failed: the cursor went to the
+    // paragraph after the table.
+    CPPUNIT_ASSERT_EQUAL(nNodeIndex + 1, pWrtShell->GetCursor()->Start()->nNode.GetIndex());
 #endif
 }
 
