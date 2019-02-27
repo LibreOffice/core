@@ -34,8 +34,6 @@
 #include <cfgmerge.hxx>
 #include <tokens.h>
 
-void yyerror(char const *);
-
 namespace {
 
 namespace global {

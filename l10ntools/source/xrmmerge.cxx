@@ -37,8 +37,6 @@
 
 using namespace std;
 
-void yyerror( const char * );
-
 // set of global variables
 static bool bMergeMode;
 static bool bDisplayName;

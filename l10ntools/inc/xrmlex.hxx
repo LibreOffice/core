@@ -33,6 +33,8 @@ extern "C" bool GetOutputFile( int argc, char* argv[]);
 extern "C" FILE *GetXrmFile();
 extern "C" const char* getFilename();
 
+void yyerror( const char * );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
