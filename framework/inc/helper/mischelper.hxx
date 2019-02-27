@@ -93,24 +93,13 @@ inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUStr
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
-        OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
-        sal_Int32 nToken = 0;
-        sal_Int32 nPart  = 0;
-        do
-        {
-            OUString sToken = aTmpStr.getToken( 0, '/', nToken);
-            if ( !sToken.isEmpty() )
-            {
-                if ( nPart == 0 )
-                    aType = sToken;
-                else if ( nPart == 1 )
-                    aName = sToken;
-                else
-                    break;
-                nPart++;
-            }
-        }
-        while( nToken >=0 );
+        sal_Int32 nIdx{ RESOURCEURL_PREFIX_SIZE };
+        OUString sToken = aResourceURL.getToken( 0, '/', nIdx);
+        if (!sToken.isEmpty())
+            aType = sToken;
+        sToken = aResourceURL.getToken( 0, '/', nIdx);
+        if (!sToken.isEmpty())
+            aName = sToken;
     }
 }
 
