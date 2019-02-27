@@ -40,9 +40,6 @@ public:
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
 
-    // css::awt::XDevice,
-    css::awt::DeviceInfo SAL_CALL getInfo() override;
-
     // css::awt::grid::XTabPageContainer
     virtual ::sal_Int16 SAL_CALL getActiveTabPageID() override;
     virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;

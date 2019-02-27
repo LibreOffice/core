@@ -406,12 +406,6 @@ sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
 }
 
 
-sal_uInt16 OReportStylesContext::GetFamily( const OUString& rFamily ) const
-{
-    sal_uInt16 nFamily = SvXMLStylesContext::GetFamily(rFamily);
-    return nFamily;
-}
-
 } // rptxml
 
 

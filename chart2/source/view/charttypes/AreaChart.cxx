@@ -90,12 +90,6 @@ AreaChart::~AreaChart()
 {
 }
 
-double AreaChart::getMaximumX()
-{
-    double fMax = VSeriesPlotter::getMaximumX();
-    return fMax;
-}
-
 bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
 {
     // no separate stacking in all types of line/area charts

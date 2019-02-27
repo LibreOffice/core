@@ -78,12 +78,6 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY )
     VCLXWindow::draw( nX, nY );
 }
 
-css::awt::DeviceInfo VCLXTabPageContainer::getInfo()
-{
-    css::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
-    return aInfo;
-}
-
 void SAL_CALL VCLXTabPageContainer::setProperty(const OUString& PropertyName,   const Any& Value )
 {
     SolarMutexGuard aGuard;

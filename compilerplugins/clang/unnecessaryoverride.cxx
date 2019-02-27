@@ -101,6 +101,7 @@ public:
 private:
     const CXXMethodDecl * findOverriddenOrSimilarMethodInSuperclasses(const CXXMethodDecl *);
     bool BaseCheckCallback(const CXXRecordDecl *BaseDefinition);
+    CXXMemberCallExpr const * extractCallExpr(Expr const *);
 };
 
 bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
@@ -280,66 +281,58 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     //TODO: check for identical exception specifications
 
     const CompoundStmt* compoundStmt = dyn_cast<CompoundStmt>(methodDecl->getBody());
-    if (!compoundStmt || compoundStmt->size() != 1)
+    if (!compoundStmt || compoundStmt->size() > 2)
         return true;
 
     const CXXMemberCallExpr* callExpr = nullptr;
-    if (methodDecl->getReturnType().getCanonicalType()->isVoidType())
+    if (compoundStmt->size() == 1)
     {
-        if (auto const e = dyn_cast<Expr>(*compoundStmt->body_begin())) {
-            callExpr = dyn_cast<CXXMemberCallExpr>(e->IgnoreImplicit()->IgnoreParens());
-        }
-    }
-    else
-    {
-        auto returnStmt = dyn_cast<ReturnStmt>(*compoundStmt->body_begin());
-        if (returnStmt == nullptr) {
-            return true;
-        }
-        auto returnExpr = returnStmt->getRetValue();
-        if (returnExpr == nullptr) {
-            return true;
-        }
-        returnExpr = returnExpr->IgnoreImplicit();
-
-        // In something like
-        //
-        //  Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(
-        //      const rtl::OUString& sql)
-        //      throw(SQLException, RuntimeException, std::exception)
-        //  {
-        //      return OCommonStatement::executeQuery( sql );
-        //  }
-        //
-        // look down through all the
-        //
-        //   ReturnStmt
-        //   `-ExprWithCleanups
-        //     `-CXXConstructExpr
-        //      `-MaterializeTemporaryExpr
-        //       `-ImplicitCastExpr
-        //        `-CXXBindTemporaryExpr
-        //         `-CXXMemberCallExpr
-        //
-        // where the fact that the overriding and overridden function have identical
-        // return types makes us confident that all we need to check here is whether
-        // there's an (arbitrary, one-argument) CXXConstructorExpr and
-        // CXXBindTemporaryExpr in between:
-        if (auto ctorExpr = dyn_cast<CXXConstructExpr>(returnExpr)) {
-            if (ctorExpr->getNumArgs() == 1) {
-                auto tempExpr1 = ctorExpr->getArg(0)->IgnoreImplicit();
-                if (auto tempExpr2 = dyn_cast<CXXBindTemporaryExpr>(tempExpr1))
-                {
-                    returnExpr = tempExpr2->getSubExpr();
-                }
-                else if (auto tempExpr2 = dyn_cast<CXXMemberCallExpr>(tempExpr1))
-                {
-                    returnExpr = tempExpr2;
-                }
+        if (methodDecl->getReturnType().getCanonicalType()->isVoidType())
+        {
+            if (auto const e = dyn_cast<Expr>(*compoundStmt->body_begin())) {
+                callExpr = dyn_cast<CXXMemberCallExpr>(e->IgnoreImplicit()->IgnoreParens());
             }
         }
-
-        callExpr = dyn_cast<CXXMemberCallExpr>(returnExpr->IgnoreParenImpCasts());
+        else
+        {
+            auto returnStmt = dyn_cast<ReturnStmt>(*compoundStmt->body_begin());
+            if (returnStmt == nullptr) {
+                return true;
+            }
+            auto returnExpr = returnStmt->getRetValue();
+            if (returnExpr == nullptr) {
+                return true;
+            }
+            callExpr = extractCallExpr(returnExpr);
+        }
+    }
+    else if (!methodDecl->getReturnType().getCanonicalType()->isVoidType())
+    {
+        /** handle constructions like
+               bool foo() {
+                bool ret = Base::foo();
+                return ret;
+            }
+        */
+        auto bodyIt = compoundStmt->body_begin();
+        auto declStmt = dyn_cast<DeclStmt>(*bodyIt);
+        if (!declStmt || !declStmt->isSingleDecl())
+            return true;
+        auto varDecl = dyn_cast<VarDecl>(declStmt->getSingleDecl());
+        ++bodyIt;
+        auto returnStmt = dyn_cast<ReturnStmt>(*bodyIt);
+        if (!varDecl || !returnStmt)
+            return true;
+        Expr const * retValue = returnStmt->getRetValue()->IgnoreParenImpCasts();
+        if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(retValue))
+            retValue = exprWithCleanups->getSubExpr()->IgnoreParenImpCasts();
+        if (auto constructExpr = dyn_cast<CXXConstructExpr>(retValue)) {
+            if (constructExpr->getNumArgs() == 1)
+                retValue = constructExpr->getArg(0)->IgnoreParenImpCasts();
+        }
+        if (!isa<DeclRefExpr>(retValue))
+            return true;
+        callExpr = extractCallExpr(varDecl->getInit());
     }
 
     if (!callExpr || callExpr->getMethodDecl() != overriddenMethodDecl)
@@ -359,6 +352,18 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         }
         const DeclRefExpr * declRefExpr = dyn_cast<DeclRefExpr>(e);
         if (!declRefExpr || declRefExpr->getDecl() != methodDecl->getParamDecl(i))
+            return true;
+    }
+
+    const CXXMethodDecl* pOther = nullptr;
+    if (methodDecl->getCanonicalDecl()->getLocation() != methodDecl->getLocation())
+        pOther = methodDecl->getCanonicalDecl();
+
+    if (pOther) {
+        StringRef aFileName = getFileNameOfSpellingLoc(
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(pOther)));
+        // SFX_DECL_CHILDWINDOW_WITHID macro
+        if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/childwin.hxx"))
             return true;
     }
 
@@ -466,6 +471,49 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
     return similarMethod;
 }
 
+CXXMemberCallExpr const * UnnecessaryOverride::extractCallExpr(Expr const *returnExpr)
+{
+    returnExpr = returnExpr->IgnoreImplicit();
+
+    // In something like
+    //
+    //  Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(
+    //      const rtl::OUString& sql)
+    //      throw(SQLException, RuntimeException, std::exception)
+    //  {
+    //      return OCommonStatement::executeQuery( sql );
+    //  }
+    //
+    // look down through all the
+    //
+    //   ReturnStmt
+    //   `-ExprWithCleanups
+    //     `-CXXConstructExpr
+    //      `-MaterializeTemporaryExpr
+    //       `-ImplicitCastExpr
+    //        `-CXXBindTemporaryExpr
+    //         `-CXXMemberCallExpr
+    //
+    // where the fact that the overriding and overridden function have identical
+    // return types makes us confident that all we need to check here is whether
+    // there's an (arbitrary, one-argument) CXXConstructorExpr and
+    // CXXBindTemporaryExpr in between:
+    if (auto ctorExpr = dyn_cast<CXXConstructExpr>(returnExpr)) {
+        if (ctorExpr->getNumArgs() == 1) {
+            auto tempExpr1 = ctorExpr->getArg(0)->IgnoreImplicit();
+            if (auto tempExpr2 = dyn_cast<CXXBindTemporaryExpr>(tempExpr1))
+            {
+                returnExpr = tempExpr2->getSubExpr();
+            }
+            else if (auto tempExpr2 = dyn_cast<CXXMemberCallExpr>(tempExpr1))
+            {
+                returnExpr = tempExpr2;
+            }
+        }
+    }
+
+    return dyn_cast<CXXMemberCallExpr>(returnExpr->IgnoreParenImpCasts());
+}
 
 loplugin::Plugin::Registration< UnnecessaryOverride > X("unnecessaryoverride", true);
 

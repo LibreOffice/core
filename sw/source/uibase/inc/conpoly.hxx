@@ -28,7 +28,6 @@ public:
     ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
     // Mouse- & Key-Events
-    virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
 
     virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function

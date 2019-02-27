@@ -44,7 +44,6 @@ public:
                             SfxChildWindow* pChildWin ,
                             vcl::Window* pParent );
     virtual             ~SfxRecordingFloat_Impl() override;
-    virtual bool        Close() override;
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
 };

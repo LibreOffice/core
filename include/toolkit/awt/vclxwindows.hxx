@@ -344,9 +344,6 @@ public:
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
 
-    // css::awt::XDevice,
-    css::awt::DeviceInfo SAL_CALL getInfo() override;
-
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
@@ -416,9 +413,6 @@ public:
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
 
-    // css::awt::XDevice,
-    css::awt::DeviceInfo SAL_CALL getInfo() override;
-
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
@@ -452,9 +446,6 @@ public:
 
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
-
-    // css::awt::XDevice,
-    css::awt::DeviceInfo SAL_CALL getInfo() override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;

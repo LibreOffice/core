@@ -33,13 +33,6 @@ ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* p
 {
 }
 
-bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
-{
-    bool bReturn = SwDrawBase::MouseMove(rMEvt);
-
-    return bReturn;
-}
-
 bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     bool bReturn = false;
