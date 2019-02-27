@@ -30,15 +30,15 @@
 
 %{
 
-#include "rtl/math.h"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/textenc.h"
-#include "sal/types.h"
+#include <rtl/math.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/textenc.h>
+#include <sal/types.h>
 #include <unoidl/unoidl.hxx>
 
 #include "sourceprovider-parser-requires.hxx"
-#include "sourceprovider-parser.hxx"
+#include <sourceprovider-parser.hxx>
 #include "sourceprovider-scanner.hxx"
 
 namespace unoidl { namespace detail {
