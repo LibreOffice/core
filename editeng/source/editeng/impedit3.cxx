@@ -22,7 +22,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/settings.hxx>
-
+#include <sal/log.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -2919,6 +2919,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
 
 void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, short nOrientation )
 {
+    pOutDev->SetFontEscValue(0);
     if ( !GetUpdateMode() && !bStripOnly )
         return;
 
@@ -2933,6 +2934,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
+
     vcl::Font aOldFont( pOutDev->GetFont() );
     vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
 
@@ -3252,7 +3254,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                         else
                                                             aSlashPos.setY( aTopLeftRectPos.Y() - nAddX );
                                                     }
-
                                                     aTmpFont.QuickDrawText( pOutDev, aSlashPos, aSlash, 0, 1 );
 
                                                     aTmpFont.SetEscapement( nOldEscapement );
@@ -3506,50 +3507,97 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     if ( nOrientation || ( !IsVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
                                             || ( IsVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
                                     {
-                                        if ( nEsc && ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) )
+                                        if ( nEsc )
                                         {
-                                            // Paint the high/low without underline,
-                                            // Display the Underline on the
-                                            // base line of the original font height...
-                                            // But only if there was something underlined before!
-                                            bool bSpecialUnderline = false;
-                                            EditCharAttrib* pPrev = pPortion->GetNode()->GetCharAttribs().FindAttrib( EE_CHAR_ESCAPEMENT, nIndex );
-                                            if ( pPrev )
+                                            if ( aTmpFont.GetUnderline() != LINESTYLE_NONE )
                                             {
-                                                SvxFont aDummy;
-                                                // Underscore in front?
-                                                if ( pPrev->GetStart() )
+                                                // Paint the high/low without underline,
+                                                // Display the Underline on the
+                                                // base line of the original font height...
+                                                // But only if there was something underlined before!
+                                                bool bSpecialUnderline = false;
+                                                EditCharAttrib* pPrev = pPortion->GetNode()->GetCharAttribs().FindAttrib( EE_CHAR_ESCAPEMENT, nIndex );
+                                                if ( pPrev )
                                                 {
-                                                    SeekCursor( pPortion->GetNode(), pPrev->GetStart(), aDummy );
-                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
-                                                        bSpecialUnderline = true;
+                                                    SvxFont aDummy;
+                                                    // Underscore in front?
+                                                    if ( pPrev->GetStart() )
+                                                    {
+                                                        SeekCursor( pPortion->GetNode(), pPrev->GetStart(), aDummy );
+                                                        if ( aDummy.GetUnderline() != LINESTYLE_NONE )
+                                                            bSpecialUnderline = true;
+                                                    }
+                                                    if ( !bSpecialUnderline && ( pPrev->GetEnd() < pPortion->GetNode()->Len() ) )
+                                                    {
+                                                        SeekCursor( pPortion->GetNode(), pPrev->GetEnd()+1, aDummy );
+                                                        if ( aDummy.GetUnderline() != LINESTYLE_NONE )
+                                                            bSpecialUnderline = true;
+                                                    }
                                                 }
-                                                if ( !bSpecialUnderline && ( pPrev->GetEnd() < pPortion->GetNode()->Len() ) )
+                                                if ( bSpecialUnderline )
                                                 {
-                                                    SeekCursor( pPortion->GetNode(), pPrev->GetEnd()+1, aDummy );
-                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
-                                                        bSpecialUnderline = true;
+                                                    Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
+                                                    sal_uInt8 nProp = aTmpFont.GetPropr();
+                                                    aTmpFont.SetEscapement( 0 );
+                                                    aTmpFont.SetPropr( 100 );
+                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                    OUStringBuffer aBlanks;
+                                                    comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
+                                                    Point aUnderlinePos( aOutPos );
+                                                    if ( nOrientation )
+                                                        aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
+                                                    pOutDev->SetFontEscValue( aTmpFont.GetEscapement() );
+                                                    pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
+
+                                                    aTmpFont.SetUnderline( LINESTYLE_NONE );
+                                                    if ( !nOrientation )
+                                                    aTmpFont.SetEscapement( nEsc );
+                                                    aTmpFont.SetPropr( nProp );
+                                                    aTmpFont.SetPhysFont( pOutDev );
                                                 }
                                             }
-                                            if ( bSpecialUnderline )
+                                            // We have to make the same for the overline
+                                            if ( aTmpFont.GetOverline() != LINESTYLE_NONE )
                                             {
-                                                Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
-                                                sal_uInt8 nProp = aTmpFont.GetPropr();
-                                                aTmpFont.SetEscapement( 0 );
-                                                aTmpFont.SetPropr( 100 );
-                                                aTmpFont.SetPhysFont( pOutDev );
-                                                OUStringBuffer aBlanks;
-                                                comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
-                                                Point aUnderlinePos( aOutPos );
-                                                if ( nOrientation )
-                                                    aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
-                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
+                                                bool bSpecialOverline = false;
+                                                EditCharAttrib* pPrev = pPortion->GetNode()->GetCharAttribs().FindAttrib( EE_CHAR_ESCAPEMENT, nIndex );
+                                                if ( pPrev )
+                                                {
+                                                    SvxFont aDummy;
+                                                    if ( pPrev->GetStart() )
+                                                    {
+                                                        SeekCursor( pPortion->GetNode(), pPrev->GetStart(), aDummy );
+                                                        if ( aDummy.GetOverline() != LINESTYLE_NONE )
+                                                            bSpecialOverline = true;
+                                                    }
+                                                    if ( !bSpecialOverline && ( pPrev->GetEnd() < pPortion->GetNode()->Len() ) )
+                                                    {
+                                                        SeekCursor( pPortion->GetNode(), pPrev->GetEnd()+1, aDummy );
+                                                        if ( aDummy.GetOverline() != LINESTYLE_NONE )
+                                                            bSpecialOverline = true;
+                                                    }
+                                                }
+                                                if ( bSpecialOverline )
+                                                {
+                                                    Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
+                                                    sal_uInt8 nProp = aTmpFont.GetPropr();
+                                                    aTmpFont.SetEscapement( 0 );
+                                                    aTmpFont.SetPropr( 100 );
+                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                    OUStringBuffer aBlanks;
+                                                    comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
+                                                    Point aOverLinePos( aOutPos );
+                                                    if ( nOrientation )
+                                                        aOverLinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
+                                                    pOutDev->SetFontEscValue( aTmpFont.GetEscapement() );
+                                                    pOutDev->DrawStretchText( aOverLinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
 
-                                                aTmpFont.SetUnderline( LINESTYLE_NONE );
-                                                if ( !nOrientation )
-                                                    aTmpFont.SetEscapement( nEsc );
-                                                aTmpFont.SetPropr( nProp );
-                                                aTmpFont.SetPhysFont( pOutDev );
+                                                    aTmpFont.SetOverline( LINESTYLE_NONE );
+                                                    if ( !nOrientation )
+                                                        aTmpFont.SetEscapement( nEsc );
+                                                    aTmpFont.SetPropr( nProp );
+                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                }
                                             }
                                         }
                                         Point aRealOutPos( aOutPos );
@@ -3681,6 +3729,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
                                     aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.getLength() );
+                                    pOutDev->SetFontEscValue( aTmpFont.GetEscapement() );
                                     pOutDev->DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
 
                                     if ( bStripOnly )
@@ -3820,6 +3869,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
 void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
+
     DBG_ASSERT( pView, "No View - No Paint!" );
 
     if ( !GetUpdateMode() || IsInUndo() )
