@@ -117,8 +117,11 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     m_xBtnPattern->connect_toggled(aLink);
 
     SetExchangeSupport();
+}
 
-    TabPageParent aFillTab(m_xFillTab.get(), pParent.pController);
+void SvxAreaTabPage::SetOptimalSize()
+{
+    TabPageParent aFillTab(m_xFillTab.get(), GetDialogController());
     // TEMP
     if (!aFillTab.pController)
         aFillTab.pParent = GetParentDialog();
@@ -126,21 +129,34 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     // Calculate optimal size of all pages..
     m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
     m_aColorSize = m_xFillTab->get_preferred_size();
-    m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
-    Size aGradientSize = m_xFillTab->get_preferred_size();
-    m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
-    Size aBitmapSize = m_xFillTab->get_preferred_size();
-    m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
-    Size aHatchSize = m_xFillTab->get_preferred_size();
-    m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(aFillTab, &m_rXFSet));
-    Size aPatternSize = m_xFillTab->get_preferred_size();
+    Size aSize(m_aColorSize);
+
+    if (m_xBtnGradient->get_visible())
+    {
+        m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
+        Size aGradientSize = m_xFillTab->get_preferred_size();
+        lclExtendSize(aSize, aGradientSize);
+    }
+    if (m_xBtnBitmap->get_visible())
+    {
+        m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
+        Size aBitmapSize = m_xFillTab->get_preferred_size();
+        lclExtendSize(aSize, aBitmapSize);
+    }
+    if (m_xBtnHatch->get_visible())
+    {
+        m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
+        Size aHatchSize = m_xFillTab->get_preferred_size();
+        lclExtendSize(aSize, aHatchSize);
+    }
+    if (m_xBtnPattern->get_visible())
+    {
+        m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(aFillTab, &m_rXFSet));
+        Size aPatternSize = m_xFillTab->get_preferred_size();
+        lclExtendSize(aSize, aPatternSize);
+    }
     m_pFillTabPage.disposeAndClear();
 
-    Size aSize(m_aColorSize);
-    lclExtendSize(aSize, aGradientSize);
-    lclExtendSize(aSize, aBitmapSize);
-    lclExtendSize(aSize, aHatchSize);
-    lclExtendSize(aSize, aPatternSize);
     m_xFillTab->set_size_request(aSize.Width(), aSize.Height());
 }
 
@@ -326,7 +342,9 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
 VclPtr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxAreaTabPage>::Create(pParent, *rAttrs);
+    auto xRet = VclPtr<SvxAreaTabPage>::Create(pParent, *rAttrs);
+    xRet->SetOptimalSize();
+    return xRet;
 }
 
 namespace {
