@@ -89,6 +89,22 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     return aResult;
 }
 
+bool lclNeedsMoveWithRotation(const SdrObject* pObj)
+{
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(),
+                                           uno::UNO_QUERY);
+    if (xShape)
+    {
+        static const char* exceptList[] = { "com.sun.star.drawing.LineShape" };
+        auto listEnd = exceptList + SAL_N_ELEMENTS(exceptList);
+        const OUString sShapeType = xShape->getShapeType();
+        return std::find_if(exceptList, listEnd,
+                            [&sShapeType](const char* el) { return sShapeType.equalsAscii(el); })
+               == listEnd;
+    }
+    return true;
+}
+
 void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 nRotation)
 {
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
@@ -463,7 +479,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                                     ->getIDocumentDrawModelAccess()
                                     .GetInvisibleHellId();
 
-            lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
+            if (lclNeedsMoveWithRotation(pObj))
+                lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         // The type of dist* attributes is unsigned, so make sure no negative value is written.

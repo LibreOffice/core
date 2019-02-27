@@ -762,7 +762,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // would use GetObjectRotation(), which is not what
                             // we want.
                             if (SdrObject* pShape = GetSdrObjectFromXShape(m_xShape))
-                                nRotation = pShape->GetRotateAngle();
+                            {
+                                if (pShape->GetObjInventor() == SdrInventor::Default
+                                    && pShape->GetObjIdentifier() == OBJ_LINE)
+                                    bKeepRotation = false;
+                                else
+                                    nRotation = pShape->GetRotateAngle();
+                            }
                         }
                         m_xShape->setSize(aSize);
                         if (bKeepRotation)
