@@ -40,6 +40,8 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <comphelper/sequence.hxx>
+
 #include <memory>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
@@ -232,14 +234,7 @@ Any ComponentContext::getByName( OUString const & name )
 Sequence<OUString> ComponentContext::getElementNames()
 {
     MutexGuard guard( m_mutex );
-    Sequence<OUString> ret( m_map.size() );
-    OUString * pret = ret.getArray();
-    sal_Int32 pos = 0;
-    t_map::const_iterator iPos( m_map.begin() );
-    t_map::const_iterator const iEnd( m_map.end() );
-    for ( ; iPos != iEnd; ++iPos )
-        pret[pos++] = iPos->first;
-    return ret;
+    return comphelper::mapKeysToSequence(m_map);
 }
 
 
@@ -393,16 +388,12 @@ void ComponentContext::disposing()
     Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
     // dispose all context objects
-    t_map::iterator iPos( m_map.begin() );
-    t_map::iterator const iEnd( m_map.end() );
-    for ( ; iPos != iEnd; ++iPos )
+    for ( auto& [rName, rEntry] : m_map )
     {
         // service manager disposed separately
         if (!m_xSMgr.is() ||
-            !iPos->first.startsWith( SMGR_SINGLETON ))
+            !rName.startsWith( SMGR_SINGLETON ))
         {
-            ContextEntry& rEntry = iPos->second;
-
             if (rEntry.lateInit)
             {
                 // late init
@@ -419,11 +410,11 @@ void ComponentContext::disposing()
             rEntry.value >>= xComp;
             if (xComp.is())
             {
-                if ( iPos->first == TDMGR_SINGLETON )
+                if ( rName == TDMGR_SINGLETON )
                 {
                     xTDMgr = xComp;
                 }
-                else if ( iPos->first == AC_SINGLETON )
+                else if ( rName == AC_SINGLETON )
                 {
                     xAC = xComp;
                 }

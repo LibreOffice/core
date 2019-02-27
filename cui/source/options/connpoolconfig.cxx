@@ -107,13 +107,8 @@ namespace offapp
 
             // look if we (resp. the driver manager) know this driver
             // doing O(n) search here, which is expensive, but this doesn't matter in this small case ...
-            DriverPoolingSettings::iterator aLookup;
-            for    (   aLookup = aSettings.begin();
-                    aLookup != aSettings.end();
-                    ++aLookup
-                )
-                if (sThisDriverName == aLookup->sName)
-                    break;
+            DriverPoolingSettings::iterator aLookup = std::find_if(aSettings.begin(), aSettings.end(),
+                [&sThisDriverName](const DriverPooling& rSetting) { return sThisDriverName == rSetting.sName; });
 
             if (aLookup == aSettings.end())
             {   // do not know the driver - add it

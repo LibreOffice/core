@@ -83,13 +83,9 @@ namespace svx
                     comphelper::getProcessComponentContext()));
 
             const DatabaseRegistrations& rNewRegistrations = pRegistrations->getRegistrations();
-            for (   DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();
-                    reg != rNewRegistrations.end();
-                    ++reg
-                )
+            for ( const auto& [sName, reg] : rNewRegistrations )
             {
-                const OUString sName = reg->first;
-                const OUString sLocation = reg->second.sLocation;
+                const OUString sLocation = reg.sLocation;
 
                 if ( xRegistrations->hasRegisteredDatabase( sName ) )
                 {

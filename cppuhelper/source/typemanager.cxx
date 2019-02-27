@@ -494,14 +494,10 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
     for (sal_Int32 i = 0; i != n; ++i) {
         OUString type(entity_->getMembers()[i].type);
         if (entity_->getMembers()[i].parameterized) {
-            for (std::vector< OUString >::const_iterator j(
-                     entity_->getTypeParameters().begin());
-                 j != entity_->getTypeParameters().end(); ++j)
-            {
-                if (*j == type) {
-                    type = arguments_[j - entity_->getTypeParameters().begin()];
-                    goto found;
-                }
+            auto j = std::find(entity_->getTypeParameters().begin(), entity_->getTypeParameters().end(), type);
+            if (j != entity_->getTypeParameters().end()) {
+                type = arguments_[j - entity_->getTypeParameters().begin()];
+                goto found;
             }
             assert(false); // this cannot happen                         //TODO!
         found:;
@@ -2247,14 +2243,10 @@ css::uno::Any cppuhelper::TypeManager::getEnumMember(
     rtl::Reference< unoidl::EnumTypeEntity > const & entity,
     OUString const & member)
 {
-    for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
-             entity->getMembers().begin());
-         i != entity->getMembers().end(); ++i)
-    {
-        if (i->name == member) {
-            return css::uno::makeAny(i->value);
-        }
-    }
+    auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
+        [&member](const unoidl::EnumTypeEntity::Member& rMember) { return rMember.name == member; });
+    if (i != entity->getMembers().end())
+        return css::uno::makeAny(i->value);
     return css::uno::Any();
 }
 
@@ -2263,16 +2255,12 @@ css::uno::Any cppuhelper::TypeManager::getConstant(
     rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
     OUString const & member)
 {
-    for (std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator i(
-             entity->getMembers().begin());
-         i != entity->getMembers().end(); ++i)
-    {
-        if (i->name == member) {
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ConstantDescription(constantGroupName, *i));
-        }
-    }
+    auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
+        [&member](const unoidl::ConstantGroupEntity::Member& rMember) { return rMember.name == member; });
+    if (i != entity->getMembers().end())
+        return css::uno::makeAny<
+            css::uno::Reference< css::reflection::XTypeDescription > >(
+                new ConstantDescription(constantGroupName, *i));
     return css::uno::Any();
 }
 

@@ -56,19 +56,7 @@ namespace offapp
         if (!pItem)
             return false;
 
-        if (m_aSettings.size() != pItem->m_aSettings.size())
-            return false;
-
-        DriverPoolingSettings::const_iterator aForeign = pItem->m_aSettings.begin();
-        for (auto const& ownSetting : m_aSettings)
-        {
-            if (ownSetting != *aForeign)
-                return false;
-
-            ++aForeign;
-        }
-
-        return true;
+        return std::equal(m_aSettings.begin(), m_aSettings.end(), pItem->m_aSettings.begin(), pItem->m_aSettings.end());
     }
 
 

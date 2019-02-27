@@ -2025,13 +2025,11 @@ namespace cppcanvas
                 aMapModeTransform.set(0,2, 0.0);
                 aMapModeTransform.set(1,2, 0.0);
 
-                PolyPolyVector::const_iterator       aIter( aVCLPolyPolyVector.begin() );
-                const PolyPolyVector::const_iterator aEnd( aVCLPolyPolyVector.end() );
-                for( ; aIter!= aEnd; ++aIter )
+                for( const auto& rVCLPolyPolygon : aVCLPolyPolyVector )
                 {
                     ::basegfx::B2DPolyPolygon aPolyPolygon;
 
-                    aPolyPolygon = aIter->getB2DPolyPolygon();
+                    aPolyPolygon = rVCLPolyPolygon.getB2DPolyPolygon();
                     aPolyPolygon.transform( aMapModeTransform );
 
                     // append result to collecting polypoly

@@ -608,10 +608,9 @@ void SAL_CALL uno_getMapping(
     if (! aRet.is()) // try callback chain
     {
         MutexGuard aGuard( rData.aCallbacksMutex );
-        for ( t_CallbackSet::const_iterator iPos( rData.aCallbacks.begin() );
-              iPos != rData.aCallbacks.end(); ++iPos )
+        for ( const auto& rCallback : rData.aCallbacks )
         {
-            (**iPos)( ppMapping, pFrom, pTo, aAddPurpose.pData );
+            (*rCallback)( ppMapping, pFrom, pTo, aAddPurpose.pData );
             if (*ppMapping)
                 return;
         }
