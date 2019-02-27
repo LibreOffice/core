@@ -23,7 +23,7 @@
  * lexer for parsing cfg source files
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
@@ -38,13 +38,13 @@
 #endif
 
 /* table of possible token ids */
-#include "tokens.h"
+#include <tokens.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "cfglex.hxx"
+#include <cfglex.hxx>
 
 #define YY_NO_UNISTD_H
 
