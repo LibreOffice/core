@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -58,15 +59,13 @@ void insertImplementationMap(
     cppuhelper::ServiceManager::Data::ImplementationMap const & source)
 {
     assert(destination != nullptr);
-    for (cppuhelper::ServiceManager::Data::ImplementationMap::const_iterator i(
-             source.begin());
-         i != source.end(); ++i)
+    for (const auto& [rName, rImpls] : source)
     {
         std::vector<
             std::shared_ptr<
                 cppuhelper::ServiceManager::Data::Implementation > > & impls
-            = (*destination)[i->first];
-        impls.insert(impls.end(), i->second.begin(), i->second.end());
+            = (*destination)[rName];
+        impls.insert(impls.end(), rImpls.begin(), rImpls.end());
     }
 }
 
@@ -79,11 +78,10 @@ void removeFromImplementationMap(
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
     assert(map != nullptr);
-    for (std::vector< OUString >::const_iterator i(elements.begin());
-         i != elements.end(); ++i)
+    for (const auto& rElement : elements)
     {
         cppuhelper::ServiceManager::Data::ImplementationMap::iterator j(
-            map->find(*i));
+            map->find(rElement));
         assert(j != map->end());
         std::vector<
             std::shared_ptr<
@@ -637,16 +635,7 @@ ImplementationWrapper::getSupportedServiceNames()
              + " supports too many services"),
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Sequence< OUString > names(
-        static_cast< sal_Int32 >(impl->info->services.size()));
-    sal_Int32 i = 0;
-    for (std::vector< OUString >::const_iterator j(
-             impl->info->services.begin());
-         j != impl->info->services.end(); ++j)
-    {
-        names[i++] = *j;
-    }
-    return names;
+    return comphelper::containerToSequence(impl->info->services);
 }
 
 }
@@ -730,21 +719,20 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
     std::vector< cppu::ContextEntry_Init > * entries)
 {
     assert(entries != nullptr);
-    for (Data::ImplementationMap::const_iterator i(data_.singletons.begin());
-         i != data_.singletons.end(); ++i)
+    for (const auto& [rName, rImpls] : data_.singletons)
     {
-        assert(!i->second.empty());
-        assert(i->second[0].get() != nullptr);
+        assert(!rImpls.empty());
+        assert(rImpls[0].get() != nullptr);
         SAL_INFO_IF(
-            i->second.size() > 1, "cppuhelper",
-            "Arbitrarily choosing " << i->second[0]->info->name
-                << " among multiple implementations for " << i->first);
+            rImpls.size() > 1, "cppuhelper",
+            "Arbitrarily choosing " << rImpls[0]->info->name
+                << " among multiple implementations for " << rName);
         entries->push_back(
             cppu::ContextEntry_Init(
-                "/singletons/" + i->first,
+                "/singletons/" + rName,
                 css::uno::makeAny<
                     css::uno::Reference<css::lang::XSingleComponentFactory> >(
-                        new SingletonFactory(this, i->second[0])),
+                        new SingletonFactory(this, rImpls[0])),
                 true));
     }
 }
@@ -848,31 +836,27 @@ void cppuhelper::ServiceManager::disposing() {
     Data clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
-        for (Data::NamedImplementations::const_iterator i(
-                 data_.namedImplementations.begin());
-             i != data_.namedImplementations.end(); ++i)
+        for (const auto& rEntry : data_.namedImplementations)
         {
-            assert(i->second.get() != nullptr);
-            if (!i->second->info->singletons.empty()) {
-                osl::MutexGuard g2(i->second->mutex);
-                if (i->second->disposeSingleton.is()) {
-                    sngls.push_back(i->second->disposeSingleton);
+            assert(rEntry.second.get() != nullptr);
+            if (!rEntry.second->info->singletons.empty()) {
+                osl::MutexGuard g2(rEntry.second->mutex);
+                if (rEntry.second->disposeSingleton.is()) {
+                    sngls.push_back(rEntry.second->disposeSingleton);
                 }
             }
         }
-        for (Data::DynamicImplementations::const_iterator i(
-                 data_.dynamicImplementations.begin());
-             i != data_.dynamicImplementations.end(); ++i)
+        for (const auto& rEntry : data_.dynamicImplementations)
         {
-            assert(i->second.get() != nullptr);
-            if (!i->second->info->singletons.empty()) {
-                osl::MutexGuard g2(i->second->mutex);
-                if (i->second->disposeSingleton.is()) {
-                    sngls.push_back(i->second->disposeSingleton);
+            assert(rEntry.second.get() != nullptr);
+            if (!rEntry.second->info->singletons.empty()) {
+                osl::MutexGuard g2(rEntry.second->mutex);
+                if (rEntry.second->disposeSingleton.is()) {
+                    sngls.push_back(rEntry.second->disposeSingleton);
                 }
             }
-            if (i->second->component.is()) {
-                comps.push_back(i->second->component);
+            if (rEntry.second->component.is()) {
+                comps.push_back(rEntry.second->component);
             }
         }
         data_.namedImplementations.swap(clear.namedImplementations);
@@ -880,23 +864,17 @@ void cppuhelper::ServiceManager::disposing() {
         data_.services.swap(clear.services);
         data_.singletons.swap(clear.singletons);
     }
-    for (std::vector<
-             css::uno::Reference<css::lang::XComponent> >::const_iterator i(
-                 sngls.begin());
-         i != sngls.end(); ++i)
+    for (const auto& rxSngl : sngls)
     {
         try {
-            (*i)->dispose();
+            rxSngl->dispose();
         } catch (css::uno::RuntimeException & e) {
             SAL_WARN("cppuhelper", "Ignoring " << e << " while disposing singleton");
         }
     }
-    for (std::vector<
-             css::uno::Reference< css::lang::XComponent > >::const_iterator i(
-                 comps.begin());
-         i != comps.end(); ++i)
+    for (const auto& rxComp : comps)
     {
-        removeEventListenerFromComponent(*i);
+        removeEventListenerFromComponent(rxComp);
     }
 }
 
@@ -960,21 +938,12 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
     if (isDisposed()) {
         return css::uno::Sequence< OUString >();
     }
-    Data::ImplementationMap::size_type n = data_.services.size();
-    if (n > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
+    if (data_.services.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
         throw css::uno::RuntimeException(
             "getAvailableServiceNames: too many services",
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
-    sal_Int32 i = 0;
-    for (Data::ImplementationMap::const_iterator j(data_.services.begin());
-         j != data_.services.end(); ++j)
-    {
-        names[i++] = j->first;
-    }
-    assert(i == names.getLength());
-    return names;
+    return comphelper::mapKeysToSequence(data_.services);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -1146,12 +1115,9 @@ cppuhelper::ServiceManager::createContentEnumeration(
         }
     }
     std::vector< css::uno::Any > factories;
-    for (std::vector<
-             std::shared_ptr< Data::Implementation > >::const_iterator i(
-                 impls.begin());
-         i != impls.end(); ++i)
+    for (const auto& rxImpl : impls)
     {
-        Data::Implementation * impl = i->get();
+        Data::Implementation * impl = rxImpl.get();
         assert(impl != nullptr);
         {
             osl::MutexGuard g(rBHelper.rMutex);
@@ -1166,11 +1132,11 @@ cppuhelper::ServiceManager::createContentEnumeration(
                 // synchronous error dialog when no JVM is specified, and
                 // showing the dialog while hovering over a menu can cause
                 // trouble):
-                impl->factory1 = new ImplementationWrapper(this, *i);
+                impl->factory1 = new ImplementationWrapper(this, rxImpl);
                 impl->status = Data::Implementation::STATUS_WRAPPER;
             }
             if (impl->constructor != nullptr && !impl->factory1.is()) {
-                impl->factory1 = new ImplementationWrapper(this, *i);
+                impl->factory1 = new ImplementationWrapper(this, rxImpl);
             }
         }
         if (impl->factory1.is()) {
@@ -1440,19 +1406,15 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
         }
         readLegacyRdbStrings(
             uri, implKey, "UNO/SERVICES", &impl->info->services);
-        for (std::vector< OUString >::const_iterator j(
-                 impl->info->services.begin());
-             j != impl->info->services.end(); ++j)
+        for (const auto& rService : impl->info->services)
         {
-            data_.services[*j].push_back(impl);
+            data_.services[rService].push_back(impl);
         }
         readLegacyRdbStrings(
             uri, implKey, "UNO/SINGLETONS", &impl->info->singletons);
-        for (std::vector< OUString >::const_iterator j(
-                 impl->info->singletons.begin());
-             j != impl->info->singletons.end(); ++j)
+        for (const auto& rSingleton : impl->info->singletons)
         {
-            data_.singletons[*j].push_back(impl);
+            data_.singletons[rSingleton].push_back(impl);
         }
     }
     return true;
@@ -1525,14 +1487,13 @@ void cppuhelper::ServiceManager::insertRdbFiles(
     css::uno::Reference< css::uno::XComponentContext > const & alienContext)
 {
     Data extra;
-    for (std::vector< OUString >::const_iterator i(uris.begin());
-         i != uris.end(); ++i)
+    for (const auto& rUri : uris)
     {
         try {
-            Parser(*i, alienContext, &extra);
+            Parser(rUri, alienContext, &extra);
         } catch (css::container::NoSuchElementException &) {
             throw css::lang::IllegalArgumentException(
-                *i + ": no such file", static_cast< cppu::OWeakObject * >(this),
+                rUri + ": no such file", static_cast< cppu::OWeakObject * >(this),
                 0);
         } catch (css::registry::InvalidRegistryException & e) {
             throw css::lang::IllegalArgumentException(
@@ -1586,29 +1547,23 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
         if (isDisposed()) {
             return false;
         }
-        for (Data::NamedImplementations::const_iterator i(
-                 extra.namedImplementations.begin());
-             i != extra.namedImplementations.end(); ++i)
+        auto i = std::find_if(extra.namedImplementations.begin(), extra.namedImplementations.end(),
+            [this](const Data::NamedImplementations::value_type& rEntry) {
+                return data_.namedImplementations.find(rEntry.first) != data_.namedImplementations.end(); });
+        if (i != extra.namedImplementations.end())
         {
-            if (data_.namedImplementations.find(i->first)
-                != data_.namedImplementations.end())
-            {
-                throw css::lang::IllegalArgumentException(
-                    "Insert duplicate implementation name " + i->first,
-                    static_cast< cppu::OWeakObject * >(this), 0);
-            }
+            throw css::lang::IllegalArgumentException(
+                "Insert duplicate implementation name " + i->first,
+                static_cast< cppu::OWeakObject * >(this), 0);
         }
-        for (Data::DynamicImplementations::const_iterator i(
-                 extra.dynamicImplementations.begin());
-             i != extra.dynamicImplementations.end(); ++i)
+        bool bDuplicate = std::any_of(extra.dynamicImplementations.begin(), extra.dynamicImplementations.end(),
+            [this](const Data::DynamicImplementations::value_type& rEntry) {
+                return data_.dynamicImplementations.find(rEntry.first) != data_.dynamicImplementations.end(); });
+        if (bDuplicate)
         {
-            if (data_.dynamicImplementations.find(i->first)
-                != data_.dynamicImplementations.end())
-            {
-                throw css::lang::IllegalArgumentException(
-                    "Insert duplicate factory object",
-                    static_cast< cppu::OWeakObject * >(this), 0);
-            }
+            throw css::lang::IllegalArgumentException(
+                "Insert duplicate factory object",
+                static_cast< cppu::OWeakObject * >(this), 0);
         }
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:
         data_.namedImplementations.insert(
@@ -1626,33 +1581,31 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
         assert(context_.is());
         css::uno::Reference< css::container::XNameContainer > cont(
             context_, css::uno::UNO_QUERY_THROW);
-        for (Data::ImplementationMap::const_iterator i(
-                 extra.singletons.begin());
-             i != extra.singletons.end(); ++i)
+        for (const auto& [rName, rImpls] : extra.singletons)
         {
-            OUString name("/singletons/" + i->first);
+            OUString name("/singletons/" + rName);
             //TODO: Update should be atomic:
             try {
                 cont->removeByName(name + "/arguments");
             } catch (const css::container::NoSuchElementException &) {}
-            assert(!i->second.empty());
-            assert(i->second[0].get() != nullptr);
+            assert(!rImpls.empty());
+            assert(rImpls[0].get() != nullptr);
             SAL_INFO_IF(
-                i->second.size() > 1, "cppuhelper",
-                "Arbitrarily choosing " << i->second[0]->info->name
+                rImpls.size() > 1, "cppuhelper",
+                "Arbitrarily choosing " << rImpls[0]->info->name
                     << " among multiple implementations for singleton "
-                    << i->first);
+                    << rName);
             try {
                 cont->insertByName(
-                    name + "/service", css::uno::Any(i->second[0]->info->name));
+                    name + "/service", css::uno::Any(rImpls[0]->info->name));
             } catch (css::container::ElementExistException &) {
                 cont->replaceByName(
-                    name + "/service", css::uno::Any(i->second[0]->info->name));
+                    name + "/service", css::uno::Any(rImpls[0]->info->name));
             }
             try {
                 cont->insertByName(name, css::uno::Any());
             } catch (css::container::ElementExistException &) {
-                SAL_INFO("cppuhelper", "Overwriting singleton " << i->first);
+                SAL_INFO("cppuhelper", "Overwriting singleton " << rName);
                 cont->replaceByName(name, css::uno::Any());
             }
         }
@@ -1669,15 +1622,14 @@ void cppuhelper::ServiceManager::removeRdbFiles(
     std::vector< std::shared_ptr< Data::Implementation > > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
-        for (std::vector< OUString >::const_iterator i(uris.begin());
-             i != uris.end(); ++i)
+        for (const auto& rUri : uris)
         {
             for (Data::NamedImplementations::iterator j(
                      data_.namedImplementations.begin());
                  j != data_.namedImplementations.end();)
             {
                 assert(j->second.get() != nullptr);
-                if (j->second->info->rdbFile == *i) {
+                if (j->second->info->rdbFile == rUri) {
                     clear.push_back(j->second);
                     //TODO: The below leaves data_ in an inconsistent state upon
                     // exceptions:
@@ -1754,15 +1706,10 @@ void cppuhelper::ServiceManager::removeImplementation(const OUString & name) {
             &data_.services, i->second->info->services, i->second);
         removeFromImplementationMap(
             &data_.singletons, i->second->info->singletons, i->second);
-        for (Data::DynamicImplementations::iterator j(
-                 data_.dynamicImplementations.begin());
-             j != data_.dynamicImplementations.end(); ++j)
-        {
-            if (j->second == i->second) {
-                data_.dynamicImplementations.erase(j);
-                break;
-            }
-        }
+        auto j = std::find_if(data_.dynamicImplementations.begin(), data_.dynamicImplementations.end(),
+            [&i](const Data::DynamicImplementations::value_type& rEntry) { return rEntry.second == i->second; });
+        if (j != data_.dynamicImplementations.end())
+            data_.dynamicImplementations.erase(j);
         data_.namedImplementations.erase(i);
     }
 }
@@ -1844,13 +1791,11 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     std::vector<OUString> aReported;
 
     // loop all implementations
-    for (Data::NamedImplementations::const_iterator iterator(
-            data_.namedImplementations.begin());
-            iterator != data_.namedImplementations.end(); ++iterator)
+    for (const auto& rEntry : data_.namedImplementations)
     {
         try
         {
-            const OUString &aLibrary = iterator->second->info->uri;
+            const OUString &aLibrary = rEntry.second->info->uri;
 
             if (aLibrary.isEmpty())
                 continue;
@@ -1868,12 +1813,12 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         catch (css::lang::IllegalArgumentException& aError)
         {
             throw css::uno::DeploymentException(
-                "Cannot expand URI" + iterator->second->info->uri + ": " + aError.Message,
+                "Cannot expand URI" + rEntry.second->info->uri + ": " + aError.Message,
                 static_cast< cppu::OWeakObject * >(this));
         }
 
-        if (iterator->second->info->loader == "com.sun.star.loader.SharedLibrary" &&
-            iterator->second->status != Data::Implementation::STATUS_LOADED)
+        if (rEntry.second->info->loader == "com.sun.star.loader.SharedLibrary" &&
+            rEntry.second->status != Data::Implementation::STATUS_LOADED)
         {
             // load component library
             osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
@@ -1885,20 +1830,20 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             }
 
             if (aModule.is() &&
-                !iterator->second->info->environment.isEmpty())
+                !rEntry.second->info->environment.isEmpty())
             {
                 OUString aSymFactory;
                 oslGenericFunction fpFactory;
                 css::uno::Environment aTargetEnv;
                 css::uno::Reference<css::uno::XInterface> xFactory;
 
-                if(iterator->second->info->constructor.isEmpty())
+                if(rEntry.second->info->constructor.isEmpty())
                 {
                     // expand full name component factory symbol
-                    if (iterator->second->info->prefix == "direct")
-                        aSymFactory = iterator->second->info->name.replace('.', '_') + "_" COMPONENT_GETFACTORY;
-                    else if (!iterator->second->info->prefix.isEmpty())
-                        aSymFactory = iterator->second->info->prefix + "_" COMPONENT_GETFACTORY;
+                    if (rEntry.second->info->prefix == "direct")
+                        aSymFactory = rEntry.second->info->name.replace('.', '_') + "_" COMPONENT_GETFACTORY;
+                    else if (!rEntry.second->info->prefix.isEmpty())
+                        aSymFactory = rEntry.second->info->prefix + "_" COMPONENT_GETFACTORY;
                     else
                         aSymFactory = COMPONENT_GETFACTORY;
 
@@ -1911,13 +1856,13 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                             css::uno::Reference<css::uno::XInterface>());
                     }
 
-                    aTargetEnv = cppuhelper::detail::getEnvironment(iterator->second->info->environment, iterator->second->info->name);
+                    aTargetEnv = cppuhelper::detail::getEnvironment(rEntry.second->info->environment, rEntry.second->info->name);
                     component_getFactoryFunc fpComponentFactory = reinterpret_cast<component_getFactoryFunc>(fpFactory);
 
                     if (aSourceEnv.get() == aTargetEnv.get())
                     {
                         // invoke function component factory
-                        OString aImpl(OUStringToOString(iterator->second->info->name, RTL_TEXTENCODING_ASCII_US));
+                        OString aImpl(OUStringToOString(rEntry.second->info->name, RTL_TEXTENCODING_ASCII_US));
                         xFactory.set(css::uno::Reference<css::uno::XInterface>(static_cast<css::uno::XInterface *>(
                             (*fpComponentFactory)(aImpl.getStr(), this, nullptr)), SAL_NO_ACQUIRE));
                     }
@@ -1925,10 +1870,10 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 else
                 {
                     // get function symbol component factory
-                    aTargetEnv = cppuhelper::detail::getEnvironment(iterator->second->info->environment, iterator->second->info->name);
+                    aTargetEnv = cppuhelper::detail::getEnvironment(rEntry.second->info->environment, rEntry.second->info->name);
                     if (aSourceEnv.get() == aTargetEnv.get())
                     {
-                        fpFactory = aModule.getFunctionSymbol(iterator->second->info->constructor);
+                        fpFactory = aModule.getFunctionSymbol(rEntry.second->info->constructor);
                     }
                     else
                     {
@@ -1949,19 +1894,19 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                         if (!xSSFactory.is())
                         {
                             throw css::uno::DeploymentException(
-                                ("Implementation " + iterator->second->info->name
+                                ("Implementation " + rEntry.second->info->name
                                   + " does not provide a constructor or factory"),
                                 static_cast< cppu::OWeakObject * >(this));
                         }
                     }
                 }
 
-                if (!iterator->second->info->constructor.isEmpty() && fpFactory)
-                    iterator->second->constructor = WrapperConstructorFn(reinterpret_cast<ImplementationConstructorFn *>(fpFactory));
+                if (!rEntry.second->info->constructor.isEmpty() && fpFactory)
+                    rEntry.second->constructor = WrapperConstructorFn(reinterpret_cast<ImplementationConstructorFn *>(fpFactory));
 
-                iterator->second->factory1 = xSCFactory;
-                iterator->second->factory2 = xSSFactory;
-                iterator->second->status = Data::Implementation::STATUS_LOADED;
+                rEntry.second->factory1 = xSCFactory;
+                rEntry.second->factory2 = xSSFactory;
+                rEntry.second->status = Data::Implementation::STATUS_LOADED;
 
             }
 

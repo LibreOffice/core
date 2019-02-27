@@ -1674,22 +1674,16 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
         SvxConfigEntry* pEntryData =
             static_cast<SvxConfigEntry*>(pCurEntry->GetUserData());
 
-        SvxEntries::iterator iter = pEntries->begin();
-        SvxEntries::const_iterator end = pEntries->end();
-
         // Advance the iterator to the data for currently selected entry
-        sal_uInt16 nPos = 0;
-        while (*iter != pEntryData && ++iter != end)
-        {
-            ++nPos;
-        }
+        SvxEntries::iterator iter = std::find(pEntries->begin(), pEntries->end(), pEntryData);
+        sal_uInt16 nPos = static_cast<sal_uInt16>(std::distance(pEntries->begin(), iter));
 
         // Now step past it to the entry after the currently selected one
         ++iter;
         ++nPos;
 
         // Now add the new entry to the UI and to the parent's list
-        if ( iter != end )
+        if ( iter != pEntries->end() )
         {
             pEntries->insert( iter, pNewEntryData );
             pNewEntry = InsertEntryIntoUI( pNewEntryData, nPos );
@@ -1872,11 +1866,8 @@ bool SvxConfigPage::MoveEntryData(
         // remove the source entry from our list
         SvxConfigPageHelper::RemoveEntry( pEntries, pSourceData );
 
-        SvxEntries::iterator iter = pEntries->begin();
-        SvxEntries::const_iterator end = pEntries->end();
-
         // advance the iterator to the position of the target entry
-        while (*iter != pTargetData && ++iter != end) ;
+        SvxEntries::iterator iter = std::find(pEntries->begin(), pEntries->end(), pTargetData);
 
         // insert the source entry at the position after the target
         pEntries->insert( ++iter, pSourceData );

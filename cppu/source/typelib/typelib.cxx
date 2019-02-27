@@ -18,6 +18,7 @@
  */
 
 
+#include <algorithm>
 #include <unordered_map>
 #include <cassert>
 #include <list>
@@ -223,14 +224,11 @@ inline void TypeDescriptor_Init_Impl::callChain(
     assert(*ppRet == nullptr);
     if (pCallbacks)
     {
-        CallbackSet_Impl::const_iterator aIt = pCallbacks->begin();
-        while( aIt != pCallbacks->end() )
+        for( const CallbackEntry & rEntry : *pCallbacks )
         {
-            const CallbackEntry & rEntry = *aIt;
             (*rEntry.second)( rEntry.first, ppRet, pName );
             if( *ppRet )
                 return;
-            ++aIt;
         }
     }
 }
@@ -240,11 +238,9 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
 {
     if( pCache )
     {
-        TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
-        while( aIt != pCache->end() )
+        for( typelib_TypeDescription* pItem : *pCache )
         {
-            typelib_typedescription_release( *aIt );
-            ++aIt;
+            typelib_typedescription_release( pItem );
         }
     }
 
@@ -254,19 +250,14 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
         ppTDR.reserve( pWeakMap->size() );
 
         // save all weak references
-        WeakMap_Impl::const_iterator aIt = pWeakMap->begin();
-        while( aIt != pWeakMap->end() )
+        for( const auto& rEntry : *pWeakMap )
         {
-            ppTDR.push_back( (*aIt).second );
+            ppTDR.push_back( rEntry.second );
             typelib_typedescriptionreference_acquire( ppTDR.back() );
-            ++aIt;
         }
 
-        for( std::vector< typelib_TypeDescriptionReference * >::iterator i(
-                 ppTDR.begin() );
-             i != ppTDR.end(); ++i )
+        for( typelib_TypeDescriptionReference * pTDR : ppTDR )
         {
-            typelib_TypeDescriptionReference * pTDR = *i;
             OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
@@ -278,11 +269,10 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             typelib_typedescriptionreference_release( pTDR );
         }
 
-        aIt = pWeakMap->begin();
 #if defined SAL_LOG_INFO
-        while( aIt != pWeakMap->end() )
+        for( const auto& rEntry : *pWeakMap )
         {
-            typelib_TypeDescriptionReference * pTDR = (*aIt).second;
+            typelib_TypeDescriptionReference * pTDR = rEntry.second;
             if (pTDR)
             {
                 OString aTypeName( OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
@@ -292,7 +282,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             {
                 SAL_INFO("cppu.typelib", "remaining null type entry!?");
             }
-            ++aIt;
         }
 #endif
     }
@@ -336,18 +325,8 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
         // todo mt safe: guard is no solution, can not acquire while calling callback!
 //          OslGuard aGuard( rInit.getMutex() );
         CallbackEntry aEntry( pContext, pCallback );
-        CallbackSet_Impl::iterator iPos( rInit.pCallbacks->begin() );
-        while (iPos != rInit.pCallbacks->end())
-        {
-            if (*iPos == aEntry)
-            {
-                iPos = rInit.pCallbacks->erase(iPos);
-            }
-            else
-            {
-                ++iPos;
-            }
-        }
+        rInit.pCallbacks->erase(std::remove(rInit.pCallbacks->begin(), rInit.pCallbacks->end(), aEntry),
+                                rInit.pCallbacks->end());
     }
 }
 
@@ -1018,21 +997,20 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
         sal_Int32 n = 0;
 
         BaseList::List const & rList = aBaseList.getList();
-        for (BaseList::List::const_iterator i(rList.begin()); i != rList.end();
-             ++i)
+        for (const auto& rEntry : rList)
         {
-            typelib_InterfaceTypeDescription const * pBase = i->base;
+            typelib_InterfaceTypeDescription const * pBase = rEntry.base;
             typelib_InterfaceTypeDescription const * pDirectBase
-                = pITD->ppBaseTypes[i->directBaseIndex];
+                = pITD->ppBaseTypes[rEntry.directBaseIndex];
             OSL_ASSERT(pBase->ppAllMembers != nullptr);
             for (sal_Int32 j = 0; j < pBase->nMembers; ++j) {
                 typelib_TypeDescriptionReference const * pDirectBaseMember
-                    = pDirectBase->ppAllMembers[i->directBaseMemberOffset + j];
+                    = pDirectBase->ppAllMembers[rEntry.directBaseMemberOffset + j];
                 OUStringBuffer aBuf(pDirectBaseMember->pTypeName);
                 aBuf.append(":@");
-                aBuf.append(i->directBaseIndex);
+                aBuf.append(rEntry.directBaseIndex);
                 aBuf.append(',');
-                aBuf.append(i->memberOffset + j);
+                aBuf.append(rEntry.memberOffset + j);
                 aBuf.append(':');
                 aBuf.append(pITD->aBase.pTypeName);
                 OUString aName(aBuf.makeStringAndClear());
