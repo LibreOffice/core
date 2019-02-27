@@ -107,18 +107,7 @@ namespace offapp
 
     bool DriverListControl::isModified() const
     {
-        if (m_aSettings.size() != m_aSavedSettings.size())
-            return true;
-
-        DriverPoolingSettings::const_iterator aSaved = m_aSavedSettings.begin();
-        for (auto const& currentSetting : m_aSettings)
-        {
-            if (currentSetting != *aSaved)
-                return true;
-            ++aSaved;
-        }
-
-        return false;
+        return !std::equal(m_aSettings.begin(), m_aSettings.end(), m_aSavedSettings.begin(), m_aSavedSettings.end());
     }
 
 

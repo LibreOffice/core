@@ -238,13 +238,12 @@ void CuiAboutConfigTabPage::Reset()
 
 void CuiAboutConfigTabPage::FillItemSet()
 {
-    std::vector< std::shared_ptr< Prop_Impl > >::iterator pIter;
-    for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
+    for( const auto& rxProp : m_vectorOfModified )
     {
-        Reference< XNameAccess > xUpdateAccess = getConfigAccess( (*pIter)->Name , true );
+        Reference< XNameAccess > xUpdateAccess = getConfigAccess( rxProp->Name , true );
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
-        xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
+        xNameReplace->replaceByName( rxProp->Property, rxProp->Value );
 
         Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
         xChangesBatch->commitChanges();

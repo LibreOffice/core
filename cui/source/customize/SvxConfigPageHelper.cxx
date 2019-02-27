@@ -30,17 +30,10 @@ static sal_Int16 theImageType =
 
 void SvxConfigPageHelper::RemoveEntry( SvxEntries* pEntries, SvxConfigEntry const * pChildEntry )
 {
-    SvxEntries::iterator iter = pEntries->begin();
+    SvxEntries::iterator iter = std::find(pEntries->begin(), pEntries->end(), pChildEntry);
 
-    while ( iter != pEntries->end() )
-    {
-        if ( pChildEntry == *iter )
-        {
-            pEntries->erase( iter );
-            break;
-        }
-        ++iter;
-    }
+    if (iter != pEntries->end())
+        pEntries->erase( iter );
 }
 
 OUString SvxConfigPageHelper::replaceSaveInName( const OUString& rMessage, const OUString& rSaveInName )

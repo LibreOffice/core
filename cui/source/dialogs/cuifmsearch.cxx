@@ -121,13 +121,10 @@ FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialTe
     }
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
-    for (   std::vector< OUString >::const_iterator context = _rContexts.begin();
-            context != _rContexts.end();
-            ++context
-        )
+    for (const auto& rContext : _rContexts)
     {
         m_arrContextFields.emplace_back();
-        m_plbForm->append_text(*context);
+        m_plbForm->append_text(rContext);
     }
     m_plbForm->set_active(nInitialContext);
 

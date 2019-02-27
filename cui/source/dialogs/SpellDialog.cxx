@@ -1781,24 +1781,21 @@ typedef std::vector<LanguagePosition_Impl> LanguagePositions_Impl;
 static void lcl_InsertBreakPosition_Impl(
         LanguagePositions_Impl& rBreakPositions, sal_Int32 nInsert, LanguageType eLanguage)
 {
-    LanguagePositions_Impl::iterator aStart = rBreakPositions.begin();
-    while(aStart != rBreakPositions.end())
+    LanguagePositions_Impl::iterator aStart = std::find_if(rBreakPositions.begin(), rBreakPositions.end(),
+        [&nInsert](const LanguagePosition_Impl& rPos) { return rPos.nPosition >= nInsert; });
+    if (aStart != rBreakPositions.end())
     {
         if(aStart->nPosition == nInsert)
         {
             //the language of following starts has to overwrite
             //the one of previous ends
             aStart->eLanguage = eLanguage;
-            return;
-        }
-        else if(aStart->nPosition > nInsert)
-        {
-
-            rBreakPositions.insert(aStart, LanguagePosition_Impl(nInsert, eLanguage));
-            return;
         }
         else
-            ++aStart;
+        {
+            rBreakPositions.insert(aStart, LanguagePosition_Impl(nInsert, eLanguage));
+        }
+        return;
     }
     rBreakPositions.emplace_back(nInsert, eLanguage);
 }

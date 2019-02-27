@@ -1939,14 +1939,12 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
         for ( auto const & i: pModule->m_aNodeList )
         {
             OUString sNodeId = i->m_sId;
-            for ( auto j = aNodeList.begin(); j != aNodeList.end(); ++j )
+            auto j = std::find_if(aNodeList.begin(), aNodeList.end(),
+                [&sNodeId](const std::unique_ptr<OptionsNode>& rxNode) { return rxNode->m_sId == sNodeId; });
+            if (j != aNodeList.end())
             {
-                if ( (*j)->m_sId == sNodeId )
-                {
-                    aOutNodeList.push_back( std::move(*j) );
-                    aNodeList.erase( j );
-                    break;
-                }
+                aOutNodeList.push_back( std::move(*j) );
+                aNodeList.erase( j );
             }
         }
 
