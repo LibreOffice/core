@@ -27,6 +27,8 @@
 extern "C" void workOnTokenSet( int, char* );
 extern "C" FILE * init(int, char **);
 
+void yyerror(char const *);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
