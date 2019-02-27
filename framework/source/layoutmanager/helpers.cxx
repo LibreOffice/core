@@ -197,11 +197,8 @@ OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
     OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.startsWith( aUIResourceURL ) )
     {
-        sal_Int32       nIndex = 0;
-        OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
-        aPathPart.getToken( 0, '/', nIndex );
-
-        return aPathPart.getToken( 0, '/', nIndex );
+        sal_Int32 nIndex{ aUIResourceURL.getLength() };
+        return aResourceURL.getToken( 1, '/', nIndex );
     }
 
     return OUString();
@@ -212,12 +209,9 @@ void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUS
     OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.startsWith( aUIResourceURL ) )
     {
-        sal_Int32       nIndex = 0;
-        OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
-        aPathPart.getToken( 0, '/', nIndex );
-
-        aElementType = aPathPart.getToken( 0, '/', nIndex );
-        aElementName = aPathPart.getToken( 0, '/', nIndex );
+        sal_Int32 nIndex{ aUIResourceURL.getLength() };
+        aElementType = aResourceURL.getToken( 1, '/', nIndex );
+        aElementName = aResourceURL.getToken( 0, '/', nIndex );
     }
 }
 
