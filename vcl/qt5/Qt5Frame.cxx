@@ -161,6 +161,8 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     //m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+
+    SetIcon(SV_ICON_ID_OFFICE);
 }
 
 Qt5Frame::~Qt5Frame()
