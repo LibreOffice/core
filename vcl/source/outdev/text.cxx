@@ -911,11 +911,25 @@ float OutputDevice::approximate_digit_width() const
     return GetTextWidth("0123456789") / 10.0;
 }
 
+void OutputDevice::SetFontEscType( bool type )
+{
+    // true when DrawStretchText, false when DrawTextArray
+    mbFontEscType = type;
+}
+
+void OutputDevice::SetFontEscValue( short nEsc )
+{
+    // true when its not in superscript or subscript
+    mbFontEscValue = ( nEsc == 0 );
+}
+
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const long* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
+    SetFontEscType( false );
+
     assert(!is_double_buffered_window());
 
     if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
@@ -1112,6 +1126,8 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     const OUString& rStr,
                                     sal_Int32 nIndex, sal_Int32 nLen)
 {
+    SetFontEscType( true );
+
     assert(!is_double_buffered_window());
 
     if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
