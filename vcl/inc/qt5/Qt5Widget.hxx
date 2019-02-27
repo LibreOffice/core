@@ -66,8 +66,6 @@ class Qt5Widget : public QWidget
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
 
-    const QString m_InternalMimeType = "application/x-libreoffice-dnditem";
-
 public slots:
     static void showTooltip(const OUString& rTip);
 
