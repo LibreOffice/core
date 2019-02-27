@@ -184,20 +184,20 @@ public:
 };
 
 typedef cppu::WeakImplHelper<
-                                css::text::XTextTableCursor,
-                                css::lang::XServiceInfo,
-                                css::beans::XPropertySet
-                            > SwXTextTableCursor_Base;
-class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
-    ,public SwClient
-    ,public OTextCursorHelper
+    css::text::XTextTableCursor,
+    css::lang::XServiceInfo,
+    css::beans::XPropertySet> SwXTextTableCursor_Base;
+class SW_DLLPUBLIC SwXTextTableCursor
+    : public SwXTextTableCursor_Base
+    , public SvtListener
+    , public OTextCursorHelper
 {
-    const SfxItemPropertySet*   m_pPropSet;
+    SwFrameFormat* m_pFrameFormat;
+    const SfxItemPropertySet* m_pPropSet;
 
 public:
-    SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const * pBox);
-    SwXTextTableCursor(SwFrameFormat& rTableFormat,
-                        const SwTableCursor* pTableSelection);
+    SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const* pBox);
+    SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTableCursor* pTableSelection);
     DECLARE_XINTERFACE()
 
     //XTextTableCursor
@@ -226,8 +226,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const override;
@@ -235,10 +233,12 @@ public:
     virtual const SwDoc*        GetDoc() const override;
     virtual SwDoc*              GetDoc() override;
 
+    virtual void Notify( const SfxHint& ) override;
+
     const SwUnoCursor&            GetCursor() const;
     SwUnoCursor&                  GetCursor();
     sw::UnoCursorPointer m_pUnoCursor;
-    SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwFrameFormat* GetFrameFormat() const { return m_pFrameFormat; }
 };
 
 struct SwRangeDescriptor
