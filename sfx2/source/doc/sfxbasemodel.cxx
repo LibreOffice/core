@@ -91,6 +91,7 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <vcl/threadex.hxx>
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/viewfac.hxx>
@@ -1416,9 +1417,10 @@ void SAL_CALL SfxBaseModel::print(const Sequence< beans::PropertyValue >& rOptio
     SfxModelGuard aGuard( *this );
 
     impl_getPrintHelper();
-    m_pData->m_xPrintable->print( rOptions );
-}
 
+    // tdf#123728 Always print on main thread to avoid deadlocks
+    vcl::solarthread::syncExecute([this, &rOptions]() { m_pData->m_xPrintable->print(rOptions); });
+}
 
 //  XStorable
 
