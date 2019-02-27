@@ -46,7 +46,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     }
     // this is the bison/flex C API, it has to be defined this way
     std::string functionName = functionDecl->getNameAsString();
-    if (functionName == "yyerror" || functionName == "YYWarning" || functionName == "yyparse" || functionName == "yylex") {
+    if (functionName == "yyerror" || functionName == "yyparse" || functionName == "yylex") {
         return true;
     }
     // see vcl/unx/gtk/app/gtksys.cxx, typename conflicts prevent using the right include
