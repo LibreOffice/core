@@ -133,6 +133,13 @@ inline css::uno::Any DbgGetCaughtException()
 */
 TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 
+/**
+  Enhance the normal SAL_WARN macro with nice exception printing facility
+*/
+#define SAL_WARN_EX(area) \
+    css::uno::Any caughtEx( ::cppu::getCaughtException() ); \
+    SAL_WARN(area, SAL_WHERE " " << exceptionToString(caughtEx));
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -846,7 +846,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (const Exception &)
                         {
-                            SAL_WARN( "desktop", exceptionToString( cppu::getCaughtException() ) );
+                            SAL_WARN_EX( "desktop" );
                             // ignore any errors of rollback
                         }
                     }
@@ -933,7 +933,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( const css::deployment::DeploymentException& )
         {
-            SAL_WARN( "desktop", exceptionToString( cppu::getCaughtException() ) );
+            SAL_WARN_EX( "desktop" );
         }
     }
 
@@ -1055,7 +1055,7 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (const deployment::DeploymentException &) {
-            SAL_WARN( "desktop", exceptionToString( cppu::getCaughtException() ) );
+            SAL_WARN_EX( "desktop" );
         }
         catch (const lang::IllegalArgumentException & exc) {
             SAL_WARN( "desktop", exc );

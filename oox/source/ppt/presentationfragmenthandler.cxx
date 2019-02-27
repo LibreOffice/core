@@ -442,8 +442,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument(), "
-                  "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
+        SAL_WARN_EX( "oox" );
     }
 }
 
