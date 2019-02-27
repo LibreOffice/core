@@ -73,7 +73,7 @@
 
 # English (en_AU, en_CA, en_GB, en_US, en_ZA) dictionary
 [ language=en.* || language=de || language=it ]
-	2cbbc79431794a0a00527e122d460743 https://sourceforge.net/projects/aoo-extensions/files/17102/45/dict-en-20190101.oxt/download "dict-en.oxt"
+	1e8d1fa844c4771a6ef91afe80d77c81 https://sourceforge.net/projects/aoo-extensions/files/17102/46/dict-en-20190301.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
@@ -144,7 +144,7 @@
 [ language=ru ]
 	93921f14809a22770f1bd89af65015bc https://sourceforge.net/projects/aoo-extensions/files/3233/3/dict_ru_ru-0.3.7.oxt/download "dict-ru.oxt"
 
-# Slovakian dictionary
+# Slovak dictionary
 [ language=sk ]
 	5a7cec122a215c9f6a906ecb8ad46ee6 https://sourceforge.net/projects/aoo-extensions/files/1143/11/dict-sk.oxt/download "dict-sk.oxt"
 
