@@ -62,7 +62,7 @@ public:
 
 typedef cppu::WeakImplHelper<css::container::XEnumerationAccess> SwXRedlineBaseClass;
 
-class SwXRedline
+class SwXRedline final
     : public SwXRedlineBaseClass
     , public SwXText
     , public SvtListener
