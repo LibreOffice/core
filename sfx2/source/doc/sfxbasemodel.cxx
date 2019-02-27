@@ -1425,6 +1425,16 @@ void SAL_CALL SfxBaseModel::removeCloseListener( const Reference< util::XCloseLi
     m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
+/**
+ * Proxy around m_xPrintable->print(), as vcl::solarthread::syncExecute()
+ * does not accept void functions.
+ */
+static bool ImplPrintStatic(const Reference<view::XPrintable> m_xPrintable,
+                            const Sequence<beans::PropertyValue>& rOptions)
+{
+    m_xPrintable->print(rOptions);
+    return true;
+}
 
 //  XPrintable
 
@@ -1450,7 +1460,9 @@ void SAL_CALL SfxBaseModel::print(const Sequence< beans::PropertyValue >& rOptio
     SfxModelGuard aGuard( *this );
 
     impl_getPrintHelper();
-    m_pData->m_xPrintable->print( rOptions );
+
+    // tdf#123728 Always print on main thread to avoid deadlocks
+    vcl::solarthread::syncExecute(std::bind(&ImplPrintStatic, m_pData->m_xPrintable, rOptions));
 }
 
 
