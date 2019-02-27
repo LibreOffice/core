@@ -50,7 +50,7 @@
 /* forwards */
 void YYWarning();
 
-int bText=0;
+static int bText=0;
 %}
 
 %option yylineno

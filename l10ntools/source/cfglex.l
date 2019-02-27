@@ -48,10 +48,10 @@
 
 #define YY_NO_UNISTD_H
 
-int yycolumn = 1;
+static int yycolumn = 1;
 #define YY_USER_ACTION yycolumn += yyleng;
 
-int bText=0;
+static int bText=0;
 %}
 
 %option yylineno

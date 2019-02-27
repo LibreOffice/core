@@ -53,13 +53,13 @@ class AstMember;
 #include <parser.hxx>
 
 /* handle locations */
-int yycolumn = 1;
+static int yycolumn = 1;
 
 #define YY_USER_ACTION idlc()->setOffset(yycolumn, yycolumn+yyleng-1); \
     yycolumn += yyleng;
 
-sal_Int32       beginLine = 0;
-OString docu;
+static sal_Int32       beginLine = 0;
+static OString docu;
 
 static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) {
     bool neg = false;
