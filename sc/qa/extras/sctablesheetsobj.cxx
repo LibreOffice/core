@@ -57,6 +57,7 @@ public:
 
     // XNameContainer
     CPPUNIT_TEST(testRemoveByName);
+    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
 
     CPPUNIT_TEST_SUITE_END();
 
