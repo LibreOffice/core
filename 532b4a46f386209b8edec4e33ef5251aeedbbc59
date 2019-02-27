@@ -34,6 +34,24 @@
       "revId": "532b4a46f386209b8edec4e33ef5251aeedbbc59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_27289784",
+        "filename": "extras/source/autotext/lang/en-US/standard/META-INF/manifest.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-27T12:35:53Z",
+      "side": 1,
+      "message": "the makefile appears to have a rule for %.svm though",
+      "parentUuid": "1f485f77_870f4b2d",
+      "revId": "532b4a46f386209b8edec4e33ef5251aeedbbc59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
