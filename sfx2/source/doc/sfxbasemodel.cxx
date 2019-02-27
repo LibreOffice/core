@@ -84,6 +84,7 @@
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <vcl/threadex.hxx>
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/viewfac.hxx>
@@ -1426,13 +1427,23 @@ void SAL_CALL SfxBaseModel::setPrinter(const Sequence< beans::PropertyValue >& r
         m_pData->m_xPrintable->setPrinter( rPrinter );
 }
 
+static bool ImplPrintStatic(const Reference<view::XPrintable>& m_xPrintable,
+                            const Sequence<beans::PropertyValue>& rOptions)
+{
+    m_xPrintable->print(rOptions);
+    return true;
+}
+
 void SAL_CALL SfxBaseModel::print(const Sequence< beans::PropertyValue >& rOptions)
         throw (lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SfxModelGuard aGuard( *this );
 
     if ( impl_getPrintHelper() )
-        m_pData->m_xPrintable->print( rOptions );
+    {
+        // tdf#123728 Always print on main thread to avoid deadlocks
+        vcl::solarthread::syncExecute(std::bind(&ImplPrintStatic, m_pData->m_xPrintable, rOptions));
+    }
 }
 
 
