@@ -120,7 +120,7 @@ public:
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);
 
-    void                    StartTimer( sal_uLong nMS );
+    void                    StartTimer( sal_uInt64 nMS );
     void                    StopTimer();
 
     inline void             registerFrame( SalFrame* pFrame );

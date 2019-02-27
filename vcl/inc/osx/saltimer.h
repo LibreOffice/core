@@ -53,7 +53,7 @@ public:
     AquaSalTimer();
     virtual ~AquaSalTimer() override;
 
-    void Start( sal_uLong nMS ) override;
+    void Start( sal_uInt64 nMS ) override;
     void Stop() override;
 
     void handleStartTimerEvent( NSEvent* pEvent );

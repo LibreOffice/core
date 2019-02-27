@@ -88,7 +88,7 @@ class GtkSalTimer : public SalTimer
 public:
     GtkSalTimer();
     virtual ~GtkSalTimer() override;
-    virtual void Start( sal_uLong nMS ) override;
+    virtual void Start( sal_uInt64 nMS ) override;
     virtual void Stop() override;
     bool         Expired();
 

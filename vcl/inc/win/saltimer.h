@@ -41,7 +41,7 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
     bool         m_bForceRealTimer;   ///< enforce using a real timer for 0ms
     bool         m_bSetTimerRunning;  ///< true, if a SetTimer is running
 
-    void ImplStart( sal_uIntPtr nMS );
+    void ImplStart( sal_uInt64 nMS );
     void ImplStop();
     void ImplHandleTimerEvent( WPARAM aWPARAM );
     void ImplHandleElapsedTimer();

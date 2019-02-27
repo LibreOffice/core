@@ -795,7 +795,7 @@ bool GtkSalTimer::Expired()
     return !!sal_gtk_timeout_expired( m_pTimeout, &nDummy, &aTimeNow);
 }
 
-void GtkSalTimer::Start( sal_uLong nMS )
+void GtkSalTimer::Start( sal_uInt64 nMS )
 {
     // glib is not 64bit safe in this regard.
     assert( nMS <= G_MAXINT );
