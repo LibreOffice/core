@@ -29,6 +29,7 @@
 #include <Qt5Menu.hxx>
 #include <Qt5DragAndDrop.hxx>
 
+#include <QtCore/QMimeData>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtGui/QIcon>
@@ -1110,7 +1111,7 @@ void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eAction
     aEvent.SourceActions = toVclDropActions(eActions);
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (pQMimeData)
+    if (!pQMimeData->hasFormat(sInternalMimeType))
         xTransferable = new Qt5DnDTransferable(pQMimeData);
     else
         xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
@@ -1142,7 +1143,7 @@ void Qt5Frame::dropping(const int x, const int y, const QMimeData* pQMimeData)
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (pQMimeData)
+    if (!pQMimeData->hasFormat(sInternalMimeType))
         xTransferable = new Qt5DnDTransferable(pQMimeData);
     else
         xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
