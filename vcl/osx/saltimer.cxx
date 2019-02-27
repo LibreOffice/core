@@ -76,7 +76,7 @@ void AquaSalTimer::queueDispatchTimerEvent( bool bAtStart )
                         bAtStart, GetNextEventVersion() );
 }
 
-void AquaSalTimer::Start( sal_uLong nMS )
+void AquaSalTimer::Start( sal_uInt64 nMS )
 {
     SalData* pSalData = GetSalData();
 
