@@ -8,7 +8,6 @@
  */
 
 #include <cassert>
-#include <iostream>
 
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
