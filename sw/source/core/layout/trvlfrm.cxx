@@ -757,8 +757,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             while ( pCell && !pCell->IsCellFrame() )
                 pCell = pCell->GetUpper();
             OSL_ENSURE( pCell, "could not find the cell" );
-            nX =  aRectFnSet.GetLeft(pCell->getFrameArea()) +
-                  aRectFnSet.GetWidth(pCell->getFrameArea()) / 2;
+            nX = aRectFnSet.XInc(aRectFnSet.GetLeft(pCell->getFrameArea()),
+                                 aRectFnSet.GetWidth(pCell->getFrameArea()) / 2);
 
             //The flow leads from one table to the next. The X-value needs to be
             //corrected based on the middle of the starting cell by the amount
@@ -778,14 +778,14 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             const long nPrtLeft = bRTL ?
                                 aRectFnSet.GetPrtRight(*pTable) :
                                 aRectFnSet.GetPrtLeft(*pTable);
-            if ( bRTL != (nX < nPrtLeft) )
+            if (bRTL != (aRectFnSet.XDiff(nPrtLeft, nX) > 0))
                 nX = nPrtLeft;
             else
             {
                 const long nPrtRight = bRTL ?
                                     aRectFnSet.GetPrtLeft(*pTable) :
                                     aRectFnSet.GetPrtRight(*pTable);
-                if ( bRTL != (nX > nPrtRight) )
+                if (bRTL != (aRectFnSet.XDiff(nX, nPrtRight) > 0))
                     nX = nPrtRight;
             }
         }
@@ -884,7 +884,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                         if ( aRectFnSet.IsVert() )
                         {
                             if ( nTmpTop )
-                                --nTmpTop;
+                                nTmpTop = aRectFnSet.XInc(nTmpTop, -1);
 
                             aInsideCell = Point( nTmpTop, nX );
                         }
@@ -896,7 +896,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     if ( aRectFnSet.IsVert() )
                     {
                         if ( nTmpTop )
-                            --nTmpTop;
+                            nTmpTop = aRectFnSet.XInc(nTmpTop, -1);
 
                         aInsideCnt = Point( nTmpTop, nX );
                     }
