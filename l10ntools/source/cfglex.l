@@ -1,4 +1,4 @@
-%{
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+%{
 
 /*
  * lexer for parsing cfg source files
@@ -167,3 +169,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     yylex();
     return EXIT_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
