@@ -1473,8 +1473,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                                 bCompress = true;
                             }
-                            delete pNewRedl;
-                            pNewRedl = nullptr;
+                            if( *pEnd == *pREnd )
+                                pRedl->SetEnd( *pStt, pREnd );
+                            else
+                            {
+                                delete pNewRedl;
+                                pNewRedl = nullptr;
+                            }
                             break;
 
                         case SwComparePosition::Outside:
