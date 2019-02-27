@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <osl/diagnose.h>
@@ -34,7 +38,28 @@ void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth)
     for(sal_uInt16 i = 0; i < nCount; ++i)
     {
         const sal_uInt16 nTmp = rCol.CalcColWidth(i, nWidth);
-        rCol.GetColumns()[i].SetWishWidth(nTmp);
+        auto & col = rCol.GetColumns()[i];
+        col.SetWishWidth(nTmp);
+        // If necessary, shrink borders (as equally as possible) to keep up the invariant that
+        // GetWishWidth() >= GetLeft() + GetRight():
+        sal_uInt32 const borders = col.GetLeft() + col.GetRight();
+        if (borders > nTmp)
+        {
+            auto const shrink =  borders - nTmp;
+            auto const half = shrink / 2; // rounds down
+            if (col.GetLeft() < col.GetRight())
+            {
+                auto const shrinkLeft = std::min(sal_uInt32(col.GetLeft()), half);
+                col.SetLeft(col.GetLeft() - shrinkLeft);
+                col.SetRight(col.GetRight() - (shrink - shrinkLeft));
+            }
+            else
+            {
+                auto const shrinkRight = std::min(sal_uInt32(col.GetRight()), half);
+                col.SetLeft(col.GetLeft() - (shrink - shrinkRight));
+                col.SetRight(col.GetRight() - shrinkRight);
+            }
+        }
     }
     rCol.SetWishWidth(nWidth);
 }
