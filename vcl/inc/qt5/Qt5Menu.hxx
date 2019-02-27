@@ -38,7 +38,7 @@ private:
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);
 
-    QMenu* InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos);
+    void InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos);
 
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
