@@ -42,6 +42,7 @@ private:
 
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
+    void UpdateActionGroupItem(Qt5MenuItem* pSalMenuItem);
 
 public:
     Qt5Menu(bool bMenuBar);
@@ -54,6 +55,7 @@ public:
     virtual void SetFrame(const SalFrame* pFrame) override;
     const Qt5Frame* GetFrame() const;
     Qt5Menu* GetTopLevel();
+    virtual void SetItemBits(unsigned nPos, MenuItemBits nBits) override;
     virtual void CheckItem(unsigned nPos, bool bCheck) override;
     virtual void EnableItem(unsigned nPos, bool bEnable) override;
     virtual void ShowItem(unsigned nPos, bool bShow) override;
