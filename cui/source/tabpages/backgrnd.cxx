@@ -1478,7 +1478,9 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
 VclPtr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxBkgTabPage>::Create(pWindow, *rAttrs);
+    auto xRet = VclPtr<SvxBkgTabPage>::Create(pWindow, *rAttrs);
+    xRet->SetOptimalSize();
+    return xRet;
 }
 
 void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
