@@ -16,6 +16,24 @@
       "revId": "532b4a46f386209b8edec4e33ef5251aeedbbc59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_870f4b2d",
+        "filename": "extras/source/autotext/lang/en-US/standard/META-INF/manifest.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-02-27T12:27:44Z",
+      "side": 1,
+      "message": "Just to have an accepted extension. Without it\u0027s not accepted by the make file and xml is checked for validity. Removing these files didn\u0027t help.\n\nWhat do you suggest to continue regarding the filter?",
+      "parentUuid": "1f485f77_e7083f29",
+      "revId": "532b4a46f386209b8edec4e33ef5251aeedbbc59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
