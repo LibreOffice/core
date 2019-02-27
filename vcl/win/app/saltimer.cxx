@@ -60,7 +60,7 @@ void WinSalTimer::ImplStop()
     InvalidateEvent();
 }
 
-void WinSalTimer::ImplStart( sal_uLong nMS )
+void WinSalTimer::ImplStart( sal_uInt64 nMS )
 {
     SalData* pSalData = GetSalData();
     assert( !pSalData->mpInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );

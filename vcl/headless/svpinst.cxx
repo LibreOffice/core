@@ -518,7 +518,7 @@ void SvpSalInstance::StopTimer()
     m_nTimeoutMS        = 0;
 }
 
-void SvpSalInstance::StartTimer( sal_uLong nMS )
+void SvpSalInstance::StartTimer( sal_uInt64 nMS )
 {
     timeval aPrevTimeout (m_aTimeout);
     gettimeofday (&m_aTimeout, nullptr);

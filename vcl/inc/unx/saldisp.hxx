@@ -195,7 +195,7 @@ public:
                             YieldFunc   handle );
     virtual void    Remove( int fd );
 
-    virtual void    StartTimer( sal_uLong nMS );
+    virtual void    StartTimer( sal_uInt64 nMS );
     virtual void    StopTimer();
 
     virtual bool    CheckTimeout( bool bExecuteTimers = true );
