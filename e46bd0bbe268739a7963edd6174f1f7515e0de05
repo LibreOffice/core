@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_ec5b8484",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-27T10:09:46Z",
+      "side": 1,
+      "message": "please use \"tdf#43017\"",
+      "revId": "e46bd0bbe268739a7963edd6174f1f7515e0de05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
