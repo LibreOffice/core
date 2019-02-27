@@ -673,6 +673,8 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     bool bStrikeoutDone = false;
     bool bUnderlineDone = false;
     bool bOverlineDone  = false;
+    bool FontEsc = false;
+    FontEsc = ( GetFontEscType() && GetFontEscValue() );
 
     if ( IsRTLEnabled() )
     {
@@ -682,6 +684,12 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 
         nX += nXAdd - 1;
     }
+
+    /* sometimes the lines have a break or a hole, because the text has superscript or subscript attributes
+       the size of the hole is exactly the height of the line, so we have to add the height to the width.    */
+    long nTempWidth = nWidth;
+    if( FontEsc )
+        nTempWidth *= 1.8;
 
     if ( !IsTextLineColor() )
         aUnderlineColor = GetTextColor();
@@ -694,7 +702,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
          (eUnderline == LINESTYLE_DOUBLEWAVE) ||
          (eUnderline == LINESTYLE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nTempWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
         bUnderlineDone = true;
     }
     if ( (eOverline == LINESTYLE_SMALLWAVE) ||
@@ -702,24 +710,24 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
          (eOverline == LINESTYLE_DOUBLEWAVE) ||
          (eOverline == LINESTYLE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nTempWidth, eOverline, aOverlineColor, true );
         bOverlineDone = true;
     }
 
-    if ( (eStrikeout == STRIKEOUT_SLASH) ||
-         (eStrikeout == STRIKEOUT_X) )
+    if ( ( (eStrikeout == STRIKEOUT_SLASH) ||
+         (eStrikeout == STRIKEOUT_X) ) )
     {
         ImplDrawStrikeoutChar( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
         bStrikeoutDone = true;
     }
 
-    if ( !bUnderlineDone )
-        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+    if ( !bUnderlineDone && eUnderline != LINESTYLE_NONE)
+        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nTempWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
 
-    if ( !bOverlineDone )
-        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
+    if ( !bOverlineDone && eOverline != LINESTYLE_NONE)
+        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nTempWidth, eOverline, aOverlineColor, true );
 
-    if ( !bStrikeoutDone )
+    if ( !FontEsc && !bStrikeoutDone )
         ImplDrawStrikeoutLine( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
 }
 
