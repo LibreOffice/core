@@ -125,7 +125,7 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
     return true;
 }
 
-void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxUndoAction::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoAction"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
@@ -1143,7 +1143,7 @@ void SfxUndoManager::RemoveOldestUndoAction()
     ImplCheckEmptyActions();
 }
 
-void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxUndoManager::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     UndoManagerGuard aGuard(*m_xData);
 
@@ -1367,7 +1367,7 @@ bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
     return !maUndoActions.empty() && maUndoActions[maUndoActions.size()-1].pAction->Merge( pNextAction );
 }
 
-void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxListUndoAction::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxListUndoAction"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(maUndoActions.size()).getStr()));

@@ -935,7 +935,7 @@ void SdrObjList::RemoveObjectFromContainer (
     mbObjOrdNumsDirty=true;
 }
 
-void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SdrObjList::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObjList"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);

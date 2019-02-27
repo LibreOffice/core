@@ -99,7 +99,7 @@ sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
     return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
 }
 
-void SvxB3DVectorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxB3DVectorItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxB3DVectorItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));

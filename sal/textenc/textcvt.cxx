@@ -155,7 +155,7 @@ void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConvert
 
 sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverter,
                                             rtl_TextToUnicodeContext hContext,
-                                            const char* pSrcBuf, sal_Size nSrcBytes,
+                                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
                                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtBytes )
@@ -251,7 +251,7 @@ void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConvert
 sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverter,
                                             rtl_UnicodeToTextContext hContext,
                                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                            char* pDestBuf, sal_Size nDestBytes,
+                                            sal_Char* pDestBuf, sal_Size nDestBytes,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtChars )
 {

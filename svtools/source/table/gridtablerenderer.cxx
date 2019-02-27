@@ -61,7 +61,7 @@ namespace svt { namespace table
         {
         }
 
-        BitmapEx const & getBitmapFor(OutputDevice const & i_device, long const i_headerHeight,
+        BitmapEx const & getBitmapFor(vcl::RenderContext const & i_device, long const i_headerHeight,
                                       StyleSettings const & i_style, bool const i_sortAscending);
 
     private:

@@ -378,7 +378,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
 }
 
 bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
-    short nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
+    sal_Int16 nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
 {
     bool bRet=false;
     UnmarkAllObj();

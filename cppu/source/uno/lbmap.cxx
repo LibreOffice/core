@@ -562,7 +562,7 @@ extern "C"
 {
 
 void SAL_CALL uno_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
+    struct _uno_Mapping ** ppMapping, struct _uno_Environment * pFrom, struct _uno_Environment * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
@@ -632,7 +632,7 @@ void SAL_CALL uno_getMapping(
 }
 
 void SAL_CALL uno_getMappingByName(
-    uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
+    struct _uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
@@ -662,8 +662,8 @@ void SAL_CALL uno_getMappingByName(
 
 
 void SAL_CALL uno_registerMapping(
-    uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
-    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    struct _uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
+    struct _uno_Environment * pFrom, struct _uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
     MappingsData & rData = getMappingsData();
@@ -697,7 +697,7 @@ void SAL_CALL uno_registerMapping(
 }
 
 void SAL_CALL uno_revokeMapping(
-    uno_Mapping * pMapping )
+    struct _uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
 {
     MappingsData & rData = getMappingsData();

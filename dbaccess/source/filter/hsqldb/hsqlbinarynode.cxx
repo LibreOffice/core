@@ -48,7 +48,7 @@ void HsqlBinaryNode::readChildren(HsqlRowInputStream const& input)
 }
 
 std::vector<css::uno::Any> HsqlBinaryNode::readRow(HsqlRowInputStream& input,
-                                                   const ColumnTypeVector& aColTypes,
+                                                   const std::vector<ColumnDefinition>& aColTypes,
                                                    sal_Int32 nIndexCount)
 {
     // skip first 4 bytes (size), and index nodes, 16 bytes each

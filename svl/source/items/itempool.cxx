@@ -964,7 +964,7 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
     return pItemInfos[nWhich - pImpl->mnStart]._nSID;
 }
 
-void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxItemPool::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemPool"));
     for (auto const & rArrayPtr : pImpl->maPoolItems)

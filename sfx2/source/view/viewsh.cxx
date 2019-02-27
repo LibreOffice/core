@@ -1537,7 +1537,7 @@ void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const O
     SfxLokHelper::notifyOtherView(this, pOtherShell, nType, rKey, rPayload);
 }
 
-void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxViewShell::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxViewShell"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);

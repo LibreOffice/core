@@ -695,7 +695,7 @@ void SvxTabStop::fillDecimal() const
         m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep()[0];
 }
 
-void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxTabStop::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStop"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTabPos"),
@@ -970,7 +970,7 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
     }
 }
 
-void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxTabStopItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStopItem"));
     for (const auto& rTabStop : maTabStops)

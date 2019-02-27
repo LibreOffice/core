@@ -1714,7 +1714,7 @@ bool SdrObject::Equals(const SdrObject& rOtherObj) const
             mnLayerID == rOtherObj.mnLayerID && GetMergedItemSet().Equals(rOtherObj.GetMergedItemSet(), false) );
 }
 
-void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SdrObject::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObject"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);

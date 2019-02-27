@@ -401,7 +401,7 @@ bool SvxFontItem::GetPresentation
 }
 
 
-void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxFontItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFontItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -534,7 +534,7 @@ void SvxPostureItem::SetBoolValue( bool bVal )
     SetValue( bVal ? ITALIC_NORMAL : ITALIC_NONE );
 }
 
-void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxPostureItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxPostureItem"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
@@ -671,7 +671,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxWeightItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxWeightItem"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
@@ -1064,7 +1064,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
     ePropUnit = eMetric;
 }
 
-void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxFontHeightItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFontHeightItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -1736,7 +1736,7 @@ bool SvxColorItem::GetPresentation
     return true;
 }
 
-void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxColorItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxColorItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -2538,7 +2538,7 @@ bool SvxTextRotateItem::operator==(const SfxPoolItem& rItem) const
     return SfxUInt16Item::operator==(rItem);
 }
 
-void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxTextRotateItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTextRotateItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -2633,7 +2633,7 @@ bool SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
            IsFitToLine() == static_cast<const SvxCharRotateItem&>(rItem).IsFitToLine();
 }
 
-void SvxCharRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxCharRotateItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxCharRotateItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -3031,7 +3031,7 @@ bool SvxRsidItem::GetPresentation
     return false;
 }
 
-void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxRsidItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxRsidItem"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());

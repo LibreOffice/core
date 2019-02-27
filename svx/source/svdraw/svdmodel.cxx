@@ -1982,7 +1982,7 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
     }
 }
 
-void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SdrModel::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrModel"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);

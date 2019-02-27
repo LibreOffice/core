@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 
 
 namespace vcl { class Region; }
@@ -167,7 +168,7 @@ public:
 
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
                    const tools::Rectangle& rRect = tools::Rectangle(),
-                   basegfx::B2IRange const* pPageFrame = nullptr);
+                   basegfx::B2IRectangle const* pPageFrame = nullptr);
     void DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor = COL_BLACK );
 
     tools::Rectangle GetPageRect() const;

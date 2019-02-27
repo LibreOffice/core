@@ -81,7 +81,7 @@ private:
 
     void loadToleranceFile(xmlDocPtr xmlTolerance);
     bool compareAttributes(xmlNodePtr node1, xmlNodePtr node2);
-    bool compareElements(xmlNodePtr node1, xmlNodePtr node2);
+    bool compareElements(xmlNode* node1, xmlNode* node2);
 
     /// Error message for cppunit that prints out when expected and found are not equal.
     void cppunitAssertEqual(const xmlChar *expected, const xmlChar *found);

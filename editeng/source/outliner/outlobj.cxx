@@ -229,7 +229,7 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewN
     }
 }
 
-void OutlinerParaObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+void OutlinerParaObject::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("OutlinerParaObject"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);

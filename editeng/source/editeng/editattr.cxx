@@ -64,7 +64,7 @@ void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 {
 }
 
-void EditCharAttrib::dumpAsXml(xmlTextWriterPtr pWriter) const
+void EditCharAttrib::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("EditCharAttrib"));
     xmlTextWriterWriteFormatAttribute(

@@ -1467,7 +1467,7 @@ void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
     }
 }
 
-void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxItemSet::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemSet"));
     SfxItemIter aIter(*this);

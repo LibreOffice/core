@@ -29,7 +29,7 @@ extern "C"
 
 void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
@@ -46,7 +46,7 @@ void SAL_CALL uno_type_any_assign(
 
 void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
@@ -63,7 +63,7 @@ void SAL_CALL uno_any_assign(
 
 void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
@@ -79,7 +79,7 @@ void SAL_CALL uno_type_any_construct(
 
 void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
@@ -95,8 +95,8 @@ void SAL_CALL uno_any_construct(
 
 void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
-    uno_Mapping * mapping )
+    struct _typelib_TypeDescriptionReference * pType,
+    struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
     if (pType)
@@ -111,8 +111,8 @@ void SAL_CALL uno_type_any_constructAndConvert(
 
 void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
-    uno_Mapping * mapping )
+    struct _typelib_TypeDescription * pTypeDescr,
+    struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
     if (pTypeDescr)

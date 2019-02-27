@@ -121,7 +121,7 @@ SfxPoolItem* SfxUInt16Item::CreateDefault()
     return new SfxUInt16Item();
 };
 
-void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxUInt16Item::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt16Item"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -138,7 +138,7 @@ SfxPoolItem* SfxInt32Item::CreateDefault()
     return new SfxInt32Item();
 };
 
-void SfxInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxInt32Item::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxInt32Item"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -155,7 +155,7 @@ SfxPoolItem* SfxUInt32Item::CreateDefault()
     return new SfxUInt32Item();
 };
 
-void SfxUInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SfxUInt32Item::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt32Item"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));

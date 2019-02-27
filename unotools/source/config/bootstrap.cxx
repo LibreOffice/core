@@ -582,7 +582,7 @@ Bootstrap::PathStatus Bootstrap::locateBaseInstallation(OUString& _rURL)
     return aPathData.status;
 }
 
-PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
+Bootstrap::PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
 {
     Impl::PathData const& aPathData = data().aUserInstall_;
 
@@ -590,7 +590,7 @@ PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
     return aPathData.status;
 }
 
-PathStatus Bootstrap::locateUserData(OUString& _rURL)
+Bootstrap::PathStatus Bootstrap::locateUserData(OUString& _rURL)
 {
     OUString const csUserDirItem(BOOTSTRAP_ITEM_USERDIR);
 
@@ -607,7 +607,7 @@ PathStatus Bootstrap::locateUserData(OUString& _rURL)
     }
 }
 
-PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
+Bootstrap::PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
 {
     Impl::PathData const& aPathData = data().aBootstrapINI_;
 
@@ -615,7 +615,7 @@ PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
     return aPathData.status;
 }
 
-PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
+Bootstrap::PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
 {
     Impl::PathData const& aPathData = data().aVersionINI_;
 

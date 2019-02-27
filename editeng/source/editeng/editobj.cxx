@@ -162,7 +162,7 @@ void ContentInfo::SetText( const OUString& rStr )
     maText = svl::SharedString(rStr.pData, nullptr);
 }
 
-void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
+void ContentInfo::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
@@ -420,7 +420,7 @@ void EditTextObject::Dump() const
 }
 #endif
 
-void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+void EditTextObject::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     bool bOwns = false;
     if (!pWriter)

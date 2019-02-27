@@ -668,7 +668,7 @@ bool SvxLRSpaceItem::HasMetrics() const
 }
 
 
-void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxLRSpaceItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -900,7 +900,7 @@ bool SvxULSpaceItem::HasMetrics() const
 }
 
 
-void SvxULSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxULSpaceItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxULSpaceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -1039,7 +1039,7 @@ bool SvxProtectItem::GetPresentation
 }
 
 
-void SvxProtectItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxProtectItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxProtectItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -1329,7 +1329,7 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
     SetLocation( static_cast<SvxShadowLocation>(nVal) );
 }
 
-void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxShadowItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxShadowItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -3778,7 +3778,7 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
     }
 }
 
-void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxBrushItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
@@ -3923,7 +3923,7 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
     return bRet;
 }
 
-void SvxFrameDirectionItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SvxFrameDirectionItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFrameDirectionItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nWhich"),
