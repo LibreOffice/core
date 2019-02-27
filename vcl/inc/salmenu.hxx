@@ -68,6 +68,7 @@ public:
     virtual void RemoveItem( unsigned nPos ) = 0;
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) = 0;
     virtual void SetFrame( const SalFrame* pFrame ) = 0;
+    virtual void SetItemBits( unsigned /*nPos*/, MenuItemBits /*nBits*/ ) {}
     virtual void CheckItem( unsigned nPos, bool bCheck ) = 0;
     virtual void EnableItem( unsigned nPos, bool bEnable ) = 0;
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )= 0;
