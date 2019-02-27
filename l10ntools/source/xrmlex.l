@@ -30,9 +30,9 @@
 #define YYLMAX 64000
 
 /* to enable debug output define LEXDEBUG */
-#define LEXDEBUG		1
+#define LEXDEBUG        1
 #ifdef LEXDEBUG
-#define OUTPUT	fprintf
+#define OUTPUT  fprintf
 #else
 #define OUTPUT(Par1,Par2);
 #endif
@@ -63,167 +63,167 @@ int bText=0;
 %%
 
 "<p "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</p>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 
 "<h1 "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</h1>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 "<h2 "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</h2>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 "<h3 "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</h3>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 "<h4 "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</h4>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 "<h5 "[^\>]*xml:lang[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START , yytext );
+    WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
 "</h5>" {
-	WorkOnTokenSet( XRM_TEXT_END, yytext );
+    WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 
 "<display-name>" {
-	WorkOnTokenSet( DESC_DISPLAY_NAME_START , yytext );
+    WorkOnTokenSet( DESC_DISPLAY_NAME_START , yytext );
 }
 
 "</display-name>" {
-	WorkOnTokenSet( DESC_DISPLAY_NAME_END, yytext );
+    WorkOnTokenSet( DESC_DISPLAY_NAME_END, yytext );
 }
 
 "<name "[^\>]*lang[^\>]*\> {
-	WorkOnTokenSet( DESC_TEXT_START , yytext );
+    WorkOnTokenSet( DESC_TEXT_START , yytext );
 }
 
 "</name>" {
-	WorkOnTokenSet( DESC_TEXT_END, yytext );
+    WorkOnTokenSet( DESC_TEXT_END, yytext );
 }
 
 "<extension-description>" {
-	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_START , yytext );
+    WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_START , yytext );
 }
 
 "</extension-description>" {
-	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_END , yytext );
+    WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_END , yytext );
 }
 
 "<src "[^\>]*lang[^\>]*\> {
-	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_SRC , yytext );
+    WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_SRC , yytext );
 }
 
 
 
-"<!--"	{
-	char c1 = 0, c2 = 0;
-	int c3 = yyinput();
-	char pChar[2];
-	pChar[1] = 0x00;
-	pChar[0] = c3;
+"<!--"  {
+    char c1 = 0, c2 = 0;
+    int c3 = yyinput();
+    char pChar[2];
+    pChar[1] = 0x00;
+    pChar[0] = c3;
 
-	WorkOnTokenSet( COMMENT, yytext );
-	WorkOnTokenSet( COMMENT, pChar );
+    WorkOnTokenSet( COMMENT, yytext );
+    WorkOnTokenSet( COMMENT, pChar );
 
-	for(;;) {
-		if ( c3 == EOF )
-			break;
-		if ( c1 == '-' && c2 == '-' && c3 == '>' )
-			break;
-		c1 = c2;
-		c2 = c3;
-		c3 = yyinput();
-		pChar[0] = c3;
-		WorkOnTokenSet( COMMENT, pChar );
-	}
+    for(;;) {
+        if ( c3 == EOF )
+            break;
+        if ( c1 == '-' && c2 == '-' && c3 == '>' )
+            break;
+        c1 = c2;
+        c2 = c3;
+        c3 = yyinput();
+        pChar[0] = c3;
+        WorkOnTokenSet( COMMENT, pChar );
+    }
 }
 
 .|\n {
-	if ( bText == 1 )
-		WorkOnTokenSet( XML_TEXTCHAR, yytext );
-	else
-		WorkOnTokenSet( UNKNOWNCHAR, yytext );
+    if ( bText == 1 )
+        WorkOnTokenSet( XML_TEXTCHAR, yytext );
+    else
+        WorkOnTokenSet( UNKNOWNCHAR, yytext );
 }
 
 
 %%
 
 /*****************************************************************************/
-int	yywrap(void)
+int yywrap(void)
 /*****************************************************************************/
 {
-	return 1;
+    return 1;
 }
 
 /*****************************************************************************/
 void YYWarning( const char *s )
 /*****************************************************************************/
 {
-	/* write warning to stderr */
-	fprintf( stderr,
-		"Warning: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
+    /* write warning to stderr */
+    fprintf( stderr,
+        "Warning: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
 }
 
 /*****************************************************************************/
 void yyerror ( const char *s )
 /*****************************************************************************/
 {
-	/* write error to stderr */
-	fprintf( stderr,
-		"Error: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
-	SetError();
+    /* write error to stderr */
+    fprintf( stderr,
+        "Error: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
+    SetError();
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
-	/* error level */
-	int nRetValue = 0;
-	FILE *pFile;
+    /* error level */
+    int nRetValue = 0;
+    FILE *pFile;
 
-	if ( !GetOutputFile( argc, argv ) )
-	{
-		return 1;
-	}
-	pFile = GetXrmFile();
-	InitXrmExport( getFilename() );
+    if ( !GetOutputFile( argc, argv ) )
+    {
+        return 1;
+    }
+    pFile = GetXrmFile();
+    InitXrmExport( getFilename() );
 
     if ( !pFile )
-		return 1;
+        return 1;
 
-   	yyin = pFile;
+    yyin = pFile;
 
-	/* create global instance of class XmlExport */
-	//InitXrmExport( pOutput );
+    /* create global instance of class XmlExport */
+    //InitXrmExport( pOutput );
 
-	/* start parser */
-   	yylex();
+    /* start parser */
+    yylex();
 
-	/* get error info. and end export */
-	nRetValue = GetError();
-	EndXrmExport();
+    /* get error info. and end export */
+    nRetValue = GetError();
+    EndXrmExport();
 
-	/* return error level */
-	return nRetValue;
+    /* return error level */
+    return nRetValue;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

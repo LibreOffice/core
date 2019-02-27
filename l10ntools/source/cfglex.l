@@ -30,9 +30,9 @@
 #define YYLMAX 64000
 
 /* to enable debug output define LEXDEBUG */
-#define LEXDEBUG		1
+#define LEXDEBUG        1
 #ifdef LEXDEBUG
-#define OUTPUT	fprintf
+#define OUTPUT  fprintf
 #else
 #define OUTPUT(Par1,Par2);
 #endif
@@ -63,105 +63,105 @@ int bText=0;
 
 %%
 
-\<[^\>]*"xml:lang="\""x-no-translate"\"[^\<]*\/\>	{
-	bText = 0;
-	workOnTokenSet( CFG_TOKEN_NO_TRANSLATE, yytext );
+\<[^\>]*"xml:lang="\""x-no-translate"\"[^\<]*\/\>   {
+    bText = 0;
+    workOnTokenSet( CFG_TOKEN_NO_TRANSLATE, yytext );
 }
 
 \<.*\/\> {
-	bText = 0;
-	workOnTokenSet( ANYTOKEN, yytext );
+    bText = 0;
+    workOnTokenSet( ANYTOKEN, yytext );
 }
 
-\<[^\>]*"xml:lang="\".*\"[^\<]*\>	{
-	bText = 1;
-	workOnTokenSet( CFG_TEXT_START, yytext );
-}
-
-
-\<[^\/\!][^\>]*\>	{
-	bText = 0;
-	workOnTokenSet( CFG_TAG, yytext );
-}
-
-"<!"DOCTYPE[^\>]*\>	{
-	bText = 0;
-	workOnTokenSet( CFG_TAG, yytext );
+\<[^\>]*"xml:lang="\".*\"[^\<]*\>   {
+    bText = 1;
+    workOnTokenSet( CFG_TEXT_START, yytext );
 }
 
 
-\<\!\-\-	{
-	char c1 = 0, c2 = 0;
-	int c3 = yyinput();
-	char pChar[2];
-	pChar[1] = 0x00;
-	pChar[0] = c3;
+\<[^\/\!][^\>]*\>   {
+    bText = 0;
+    workOnTokenSet( CFG_TAG, yytext );
+}
 
-	workOnTokenSet( COMMENT, yytext );
-	workOnTokenSet( COMMENT, pChar );
+"<!"DOCTYPE[^\>]*\> {
+    bText = 0;
+    workOnTokenSet( CFG_TAG, yytext );
+}
 
-	for(;;) {
-		if ( c3 == EOF )
-			break;
-		if ( c1 == '-' && c2 == '-' && c3 == '>' )
-			break;
-		c1 = c2;
-		c2 = c3;
-		c3 = yyinput();
 
-		pChar[0] = c3;
-		workOnTokenSet( COMMENT, pChar );
-	}
+\<\!\-\-    {
+    char c1 = 0, c2 = 0;
+    int c3 = yyinput();
+    char pChar[2];
+    pChar[1] = 0x00;
+    pChar[0] = c3;
+
+    workOnTokenSet( COMMENT, yytext );
+    workOnTokenSet( COMMENT, pChar );
+
+    for(;;) {
+        if ( c3 == EOF )
+            break;
+        if ( c1 == '-' && c2 == '-' && c3 == '>' )
+            break;
+        c1 = c2;
+        c2 = c3;
+        c3 = yyinput();
+
+        pChar[0] = c3;
+        workOnTokenSet( COMMENT, pChar );
+    }
 }
 
 \<\/[^\>]*\> {
-	bText = 0;
-	workOnTokenSet( CFG_CLOSETAG, yytext );
+    bText = 0;
+    workOnTokenSet( CFG_CLOSETAG, yytext );
 }
 
 \<[^\>\!]*\> {
-	bText = 0;
-	if ( yytext[ 1 ] == '!' && yytext[ 2 ] == '-' && yytext[ 3 ] == '-' )
-		workOnTokenSet( COMMENT, yytext );
-	else
-		workOnTokenSet( CFG_UNKNOWNTAG, yytext );
+    bText = 0;
+    if ( yytext[ 1 ] == '!' && yytext[ 2 ] == '-' && yytext[ 3 ] == '-' )
+        workOnTokenSet( COMMENT, yytext );
+    else
+        workOnTokenSet( CFG_UNKNOWNTAG, yytext );
 }
 
 .|\n {
     yycolumn = 1;
-	if ( bText == 1 )
-		workOnTokenSet( CFG_TEXTCHAR, yytext );
-	else
-		workOnTokenSet( UNKNOWNCHAR, yytext );
+    if ( bText == 1 )
+        workOnTokenSet( CFG_TEXTCHAR, yytext );
+    else
+        workOnTokenSet( UNKNOWNCHAR, yytext );
 }
 
 
 %%
 
 /*****************************************************************************/
-int	yywrap(void)
+int yywrap(void)
 /*****************************************************************************/
 {
-	return 1;
+    return 1;
 }
 
 /*****************************************************************************/
 void YYWarning( const char *s )
 /*****************************************************************************/
 {
-	/* write warning to stderr */
-	fprintf( stderr,
-		"Warning: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
+    /* write warning to stderr */
+    fprintf( stderr,
+        "Warning: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
 }
 
 /*****************************************************************************/
 void yyerror ( const char *s )
 /*****************************************************************************/
 {
-	/* write error to stderr */
-	fprintf( stderr,
-		"Error: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
-	exit(EXIT_FAILURE);
+    /* write error to stderr */
+    fprintf( stderr,
+        "Error: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
+    exit(EXIT_FAILURE);
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
