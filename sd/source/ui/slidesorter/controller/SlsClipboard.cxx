@@ -825,17 +825,6 @@ sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
         return 0;
 }
 
-sal_uInt16 Clipboard::InsertSlides (
-    const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
-{
-    sal_uInt16 nInsertedPageCount = ViewClipboard::InsertSlides (
-        rTransferable,
-        nInsertPosition);
-
-    return nInsertedPageCount;
-}
-
 Clipboard::DropType Clipboard::IsDropAccepted() const
 {
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;

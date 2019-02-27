@@ -22,8 +22,6 @@ class SvxShowCharSetUIObject : public WindowUIObject
 public:
     SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet);
 
-    virtual StringMap get_state() override;
-
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 

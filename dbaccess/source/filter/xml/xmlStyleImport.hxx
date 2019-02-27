@@ -103,9 +103,6 @@ namespace dbaxml
 
         virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                             sal_uInt16 nFamily ) const override;
-        virtual css::uno::Reference <
-                        css::container::XNameContainer >
-            GetStylesContainer( sal_uInt16 nFamily ) const override;
         virtual OUString GetServiceName( sal_uInt16 nFamily ) const override;
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);

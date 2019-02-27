@@ -220,13 +220,6 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     return pStyle;
 }
 
-Reference < XNameContainer >
-        OTableStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
-{
-    Reference < XNameContainer > xStyles = SvXMLStylesContext::GetStylesContainer(nFamily);
-    return xStyles;
-}
-
 OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);

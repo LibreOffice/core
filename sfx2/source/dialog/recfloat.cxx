@@ -93,12 +93,6 @@ SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
     disposeOnce();
 }
 
-bool SfxRecordingFloat_Impl::Close()
-{
-    bool bRet = SfxFloatingWindow::Close();
-    return bRet;
-}
-
 void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxFloatingWindow::FillInfo( rInfo );

@@ -18,13 +18,6 @@ SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharS
 {
 }
 
-StringMap SvxShowCharSetUIObject::get_state()
-{
-    StringMap aMap = WindowUIObject::get_state();
-
-    return aMap;
-}
-
 void SvxShowCharSetUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {

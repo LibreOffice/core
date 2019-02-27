@@ -177,4 +177,17 @@ struct Derived5 : public Base5_1, public Base5_2
     void f1() { Base5_1::f1(); } // no warning expected
 };
 
+struct Base6_1
+{
+    bool f1();
+};
+struct Derived6 : public Base6_1
+{
+    bool
+    f1() // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+    {
+        bool ret = Base6_1::f1();
+        return ret;
+    }
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

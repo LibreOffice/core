@@ -2486,13 +2486,6 @@ void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-// css::awt::XDevice,
-css::awt::DeviceInfo SAL_CALL VCLXMultiPage::getInfo()
-{
-    css::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
-    return aInfo;
-}
-
 uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName )
 {
     SAL_INFO("toolkit", " **** VCLXMultiPage::getProperty " << PropertyName );
@@ -2742,13 +2735,6 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 
         pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
-}
-
-// css::awt::XDevice,
-css::awt::DeviceInfo SAL_CALL VCLXTabPage::getInfo()
-{
-    css::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
-    return aInfo;
 }
 
 void SAL_CALL VCLXTabPage::setProperty(
@@ -6553,13 +6539,6 @@ void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 
         pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
-}
-
-// css::awt::XDevice,
-css::awt::DeviceInfo SAL_CALL VCLXFrame::getInfo()
-{
-    css::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
-    return aInfo;
 }
 
 void SAL_CALL VCLXFrame::setProperty(

@@ -45,7 +45,6 @@ public:
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
     // MinimumAndMaximumSupplier
-    virtual double getMaximumX() override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
