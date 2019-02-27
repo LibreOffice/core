@@ -941,6 +941,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, Color(getProperty<sal_uInt32>(xCell, "BackColor")));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf116084, "tdf116084.docx")
+{
+    // tracked line is not a single text portion: w:del is recognized within w:ins
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "There " ), getRun( getParagraph( 1 ), 2 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 4 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 5 )->getString());
+}
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
