@@ -577,9 +577,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                     rNodes))
                         {
                             SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
-                            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-                                                        pTableFormat );
-                            pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
+                            pTableFormat->GetNotifier().Broadcast(SfxHint(SfxHintId::Dying));
                         }
                     }
                     if( bNewFrames )

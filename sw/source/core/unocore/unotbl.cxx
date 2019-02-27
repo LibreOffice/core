@@ -1916,9 +1916,10 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
 }
 
 class SwXTextTable::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
+    SwFrameFormat* m_pFrameFormat;
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
@@ -1939,8 +1940,8 @@ public:
     unsigned short m_nRows;
     unsigned short m_nColumns;
 
-    explicit Impl(SwFrameFormat *const pFrameFormat)
-        : SwClient(pFrameFormat)
+    explicit Impl(SwFrameFormat* const pFrameFormat)
+        : m_pFrameFormat(pFrameFormat)
         , m_Listeners(m_Mutex)
         , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE))
         , m_bFirstRowAsLabel(false)
@@ -1949,17 +1950,19 @@ public:
         , m_nRows(pFrameFormat ? 0 : 2)
         , m_nColumns(pFrameFormat ? 0 : 2)
     {
+        if(m_pFrameFormat)
+            StartListening(m_pFrameFormat->GetNotifier());
     }
 
-    SwFrameFormat * GetFrameFormat()
+    SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
+    void SetFrameFormat(SwFrameFormat& rFrameFormat)
     {
-        return static_cast<SwFrameFormat*>(GetRegisteredIn());
+        EndListeningAll();
+        m_pFrameFormat = &rFrameFormat;
+        StartListening(m_pFrameFormat->GetNotifier());
     }
 
-    bool IsDescriptor()
-    {
-        return m_pTableProps != nullptr;
-    }
+    bool IsDescriptor() { return m_pTableProps != nullptr; }
 
     // note: lock mutex before calling this to avoid concurrent update
     static std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
@@ -1977,8 +1980,7 @@ public:
     sal_uInt16 GetRowCount();
     sal_uInt16 GetColumnCount();
 
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 };
 
@@ -2158,7 +2160,8 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
             SwFrameFormat* pTableFormat(pTable->GetFrameFormat());
             lcl_FormatTable(pTableFormat);
 
-            pTableFormat->Add(m_pImpl.get());
+            m_pImpl->SetFrameFormat(*pTableFormat);
+
             if (!m_pImpl->m_sTableName.isEmpty())
             {
                 sal_uInt16 nIndex = 1;
@@ -3094,27 +3097,25 @@ sal_uInt16 SwXTextTable::Impl::GetColumnCount()
     return nRet;
 }
 
-void SwXTextTable::Impl::Modify(
-        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
+void SwXTextTable::Impl::Notify(const SfxHint& rHint)
 {
-    if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
-        static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            EndListeningAll();
-    else
-        ClientModify(this, pOld, pNew);
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pFrameFormat = nullptr;
+        EndListeningAll();
+    }
     uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
+    if (xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
-    }
-    if (!GetRegisteredIn())
-    {
-        lang::EventObject const ev(xThis);
-        m_Listeners.disposeAndClear(ev);
-    }
-    else
-    {
-        lcl_SendChartEvent(xThis.get(), m_Listeners);
+        if(!m_pFrameFormat)
+        {
+            lang::EventObject const ev(xThis);
+            m_Listeners.disposeAndClear(ev);
+        }
+        else
+        {
+            lcl_SendChartEvent(xThis.get(), m_Listeners);
+        }
     }
 }
 
