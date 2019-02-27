@@ -118,6 +118,8 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
     }
 }
 
+static const QString sInternalMimeType = "application/x-libreoffice-dnditem";
+
 typedef struct _cairo_surface cairo_surface_t;
 struct CairoDeleter
 {
