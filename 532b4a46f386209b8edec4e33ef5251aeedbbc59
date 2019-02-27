@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_e7083f29",
+        "filename": "extras/source/autotext/lang/en-US/standard/META-INF/manifest.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-02-27T12:24:36Z",
+      "side": 1,
+      "message": "this is most likely a SVM file, why is it entered as rdf+xml here?",
+      "revId": "532b4a46f386209b8edec4e33ef5251aeedbbc59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
