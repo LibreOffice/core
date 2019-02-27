@@ -92,6 +92,16 @@ private:
 template <typename FuncT>
 class GenericSolarThreadExecutor<FuncT, void> : public SolarThreadExecutor
 {
+public:
+    static void exec( FuncT const& func )
+    {
+        typedef GenericSolarThreadExecutor<FuncT, void> ExecutorT;
+        ::std::unique_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
+        pExecutor->execute();
+        if (pExecutor->m_exc)
+            std::rethrow_exception(pExecutor->m_exc);
+    }
+
 private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
         : m_func(func) {}
