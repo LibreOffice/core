@@ -59,6 +59,7 @@ private:
 
     void createPlayer() const;
     void resetPlayer() const;
+    void checkPlayingStatus();
 };
 
 } // namespace internal

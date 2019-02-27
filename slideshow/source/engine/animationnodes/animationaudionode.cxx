@@ -76,12 +76,14 @@ void AnimationAudioNode::activate_st()
         }
         else
         {
-            // no node duration. Take inherent media time, then
+            // no node duration. Take inherent media time. We have to recheck
+            // if the player is playing in case the duration isn't accurate
+            // or the progress fall behind.
             auto self(getSelf());
             scheduleDeactivationEvent(
-                makeDelay( [self] () { self->deactivate(); },
+                makeDelay( [this] () { this->checkPlayingStatus(); },
                            mpPlayer->getDuration(),
-                           "AnimationAudioNode::deactivate with delay") );
+                           "AnimationAudioNode::check if sitll playing with delay") );
         }
     }
     else
@@ -180,6 +182,19 @@ bool AnimationAudioNode::handleAnimationEvent(
     // TODO(F2): for now we support only STOPAUDIO events.
     deactivate();
     return true;
+}
+
+void AnimationAudioNode::checkPlayingStatus()
+{
+    auto self(getSelf());
+    double nDuration = mpPlayer->getDuration();
+    if (!mpPlayer->isPlaying() || nDuration < 0.0)
+        nDuration = 0.0;
+
+    scheduleDeactivationEvent(
+        makeDelay( [self] () { self->deactivate(); },
+            nDuration,
+            "AnimationAudioNode::deactivate with delay") );
 }
 
 } // namespace internal
