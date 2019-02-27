@@ -1479,11 +1479,12 @@ SwUnoCursor&          SwXTextTableCursor::GetCursor()       { return *m_pUnoCurs
 uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames()
     { return {"com.sun.star.text.TextTableCursor"}; }
 
-SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const * pBox) :
-    SwClient(pFormat),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
+SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFrameFormat, SwTableBox const* pBox)
+    : m_pFrameFormat(pFrameFormat)
+    , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
-    SwDoc* pDoc = pFormat->GetDoc();
+    StartListening(m_pFrameFormat->GetNotifier());
+    SwDoc* pDoc = m_pFrameFormat->GetDoc();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     m_pUnoCursor = pDoc->CreateUnoCursor(aPos, true);
@@ -1492,10 +1493,11 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const 
     rTableCursor.MakeBoxSels();
 }
 
-SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTableCursor* pTableSelection) :
-    SwClient(&rTableFormat),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
+SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTableCursor* pTableSelection)
+    : m_pFrameFormat(&rTableFormat)
+    , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
+    StartListening(m_pFrameFormat->GetNotifier());
     m_pUnoCursor = pTableSelection->GetDoc()->CreateUnoCursor(*pTableSelection->GetPoint(), true);
     if(pTableSelection->HasMark())
     {
@@ -1768,8 +1770,11 @@ void SwXTextTableCursor::addVetoableChangeListener(const OUString& /*rPropertyNa
 void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
-void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-    { ClientModify(this, pOld, pNew); }
+void SwXTextTableCursor::Notify( const SfxHint& rHint )
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
+}
 
 
 // SwXTextTable ===========================================================
