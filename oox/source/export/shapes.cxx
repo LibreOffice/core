@@ -1313,6 +1313,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
 {
     bool bFlipH = false;
     bool bFlipV = false;
+    bool bSuppressRotation = true;
 
     SAL_INFO("oox.shape", "write line shape");
 
@@ -1323,6 +1324,11 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
     {
+//        SdrObject* pShape = GetSdrObjectFromXShape(xShape);
+//        long nRotation = pShape ? pShape->GetRotateAngle() : 0;
+//        if (nRotation % 9000 != 0)
+//            bSuppressRotation = false;
+
         const tools::Polygon& rPoly = aPolyPolygon[ 0 ];
 
         bFlipH = ( rPoly[ 0 ].X() > rPoly[ 1 ].X() );
@@ -1347,7 +1353,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, true);
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, bSuppressRotation);
     WritePresetShape( "line" );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( xShapeProps.is() )

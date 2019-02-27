@@ -735,6 +735,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
 
+                        // The plan is to avoid all transformations here when all the data is
+                        // available at drawingml level. For now, let's exclude objects that are
+                        // considered to be safe for this.
+                        SdrObject* pShape = GetSdrObjectFromXShape(m_xShape);
+                        bool bSkipResize = false;
+                        if (pShape && pShape->GetObjInventor() == SdrInventor::Default
+                            && pShape->GetObjIdentifier() == OBJ_LINE)
+                            bSkipResize = true;
+
                         // TextFrames can't be rotated. But for anything else,
                         // make sure that setting size doesn't affect rotation,
                         // that would not match Word's definition of rotation.
@@ -748,25 +757,28 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                  (m_pImpl->rDomainMapper.GetCurrentTextRange()));
                         }
 
-                        awt::Size aSize(m_xShape->getSize());
-
-                        if (m_pImpl->isXSizeValid())
-                            aSize.Width = m_pImpl->getXSize();
-                        if (m_pImpl->isYSizeValis())
-                            aSize.Height = m_pImpl->getYSize();
-
-                        sal_Int32 nRotation = 0;
-                        if (bKeepRotation)
+                        if (!bSkipResize)
                         {
-                            // Use internal API, getPropertyValue(RotateAngle)
-                            // would use GetObjectRotation(), which is not what
-                            // we want.
-                            if (SdrObject* pShape = GetSdrObjectFromXShape(m_xShape))
-                                nRotation = pShape->GetRotateAngle();
+                            awt::Size aSize(m_xShape->getSize());
+
+                            if (m_pImpl->isXSizeValid())
+                                aSize.Width = m_pImpl->getXSize();
+                            if (m_pImpl->isYSizeValis())
+                                aSize.Height = m_pImpl->getYSize();
+
+                            sal_Int32 nRotation = 0;
+                            if (bKeepRotation)
+                            {
+                                // Use internal API, getPropertyValue(RotateAngle)
+                                // would use GetObjectRotation(), which is not what
+                                // we want.
+                                if (pShape)
+                                    nRotation = pShape->GetRotateAngle();
+                            }
+                            m_xShape->setSize(aSize);
+                            if (bKeepRotation)
+                                xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
                         }
-                        m_xShape->setSize(aSize);
-                        if (bKeepRotation)
-                            xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
 
                         m_pImpl->bIsGraphic = true;
 
