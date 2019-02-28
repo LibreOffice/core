@@ -96,10 +96,11 @@ SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::
         rxArgs[i] >>= aPropValue;
         if ( aPropValue.Name == "Value" )
         {
+            sal_Int32 nIdx{ 0 };
             OUString aValue;
             aPropValue.Value >>= aValue;
-            m_aSubTbName = aValue.getToken(0, ';');
-            m_aLastCommand = aValue.getToken(1, ';');
+            m_aSubTbName = aValue.getToken(0, ';', nIdx);
+            m_aLastCommand = aValue.getToken(0, ';', nIdx);
             break;
         }
     }

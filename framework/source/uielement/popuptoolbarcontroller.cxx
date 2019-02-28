@@ -289,10 +289,11 @@ GenericPopupToolbarController::GenericPopupToolbarController(
     {
         if ( ( arg >>= aPropValue ) && aPropValue.Name == "Value" )
         {
+            sal_Int32 nIdx{ 0 };
             OUString aValue;
             aPropValue.Value >>= aValue;
-            m_aPopupCommand = aValue.getToken(0, ';');
-            m_bReplaceWithLast = aValue.getToken(1, ';').toBoolean();
+            m_aPopupCommand = aValue.getToken(0, ';', nIdx);
+            m_bReplaceWithLast = aValue.getToken(0, ';', nIdx).toBoolean();
             break;
         }
     }
