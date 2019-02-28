@@ -1107,7 +1107,8 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
     m_pDropTarget = nullptr;
 }
 
-void Qt5Frame::draggingStarted(const int x, const int y, const QMimeData* pQMimeData)
+void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eActions,
+                               const QMimeData* pQMimeData)
 {
     assert(m_pDropTarget);
 
@@ -1116,8 +1117,8 @@ void Qt5Frame::draggingStarted(const int x, const int y, const QMimeData* pQMime
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
-    aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    aEvent.DropAction = getPreferredDropAction(eActions);
+    aEvent.SourceActions = toVclDropActions(eActions);
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     if (!pQMimeData->hasFormat(sInternalMimeType))

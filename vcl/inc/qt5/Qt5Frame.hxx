@@ -139,7 +139,8 @@ public:
     virtual void deregisterDragSource(Qt5DragSource const* pDragSource);
     virtual void registerDropTarget(Qt5DropTarget* pDropTarget);
     virtual void deregisterDropTarget(Qt5DropTarget const* pDropTarget);
-    void draggingStarted(const int x, const int y, const QMimeData* pQMimeData);
+    void draggingStarted(const int x, const int y, Qt::DropActions eActions,
+                         const QMimeData* pQMimeData);
     void dropping(const int x, const int y, const QMimeData* pQMimeData);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
