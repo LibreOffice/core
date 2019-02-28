@@ -336,11 +336,11 @@ void sal_detail_log(
             *logFile << s.str() << std::endl;
         }
         else {
+            s << '\n';
 #ifdef _WIN32
             // write to Windows debugger console, too
             OutputDebugStringA(s.str().c_str());
 #endif
-            s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
