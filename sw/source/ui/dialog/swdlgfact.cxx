@@ -789,8 +789,7 @@ VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    VclPtr<Dialog> pDlg = VclPtr<SwChangeDBDlg>::Create(rVw);
-    return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwChangeDBDlg>(rVw));
 #else
     (void) rVw;
     return nullptr;
