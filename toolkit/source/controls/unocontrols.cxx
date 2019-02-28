@@ -1607,12 +1607,19 @@ uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoFixedHyperlinkControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoFixedHyperlinkControl )
-    cppu::UnoType<awt::XFixedHyperlink>::get(),
-    cppu::UnoType<awt::XLayoutConstrains>::get(),
-    UnoControlBase::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoFixedHyperlinkControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XFixedHyperlink>::get(),
+        cppu::UnoType<awt::XLayoutConstrains>::get(),
+        UnoControlBase::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 sal_Bool UnoFixedHyperlinkControl::isTransparent()
 {
@@ -1803,12 +1810,19 @@ uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoFixedTextControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoFixedTextControl )
-    cppu::UnoType<awt::XFixedText>::get(),
-    cppu::UnoType<awt::XLayoutConstrains>::get(),
-    UnoControlBase::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoFixedTextControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XFixedText>::get(),
+        cppu::UnoType<awt::XLayoutConstrains>::get(),
+        UnoControlBase::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 sal_Bool UnoFixedTextControl::isTransparent()
 {
@@ -3114,13 +3128,20 @@ uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
     }
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
+
+IMPL_IMPLEMENTATION_ID( UnoComboBoxControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoComboBoxControl )
-    cppu::UnoType<awt::XComboBox>::get(),
-    cppu::UnoType<awt::XItemListener>::get(),
-    cppu::UnoType<awt::XItemListListener>::get(),
-    UnoEditControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoComboBoxControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<awt::XComboBox>::get(),
+        cppu::UnoType<awt::XItemListener>::get(),
+        cppu::UnoType<awt::XItemListListener>::get(),
+        UnoEditControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoComboBoxControl::updateFromModel()
 {
@@ -3398,11 +3419,18 @@ uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoSpinFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoSpinFieldControl )
-    cppu::UnoType<awt::XSpinField>::get(),
-    UnoEditControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoSpinFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XSpinField>::get(),
+        UnoEditControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer )
 {
@@ -3556,11 +3584,18 @@ uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoDateFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoDateFieldControl )
-    cppu::UnoType<awt::XDateField>::get(),
-    UnoSpinFieldControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoDateFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XDateField>::get(),
+        UnoSpinFieldControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer )
 {
@@ -3825,11 +3860,18 @@ uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoTimeFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoTimeFieldControl )
-    cppu::UnoType<awt::XTimeField>::get(),
-    UnoSpinFieldControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoTimeFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XTimeField>::get(),
+        UnoSpinFieldControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer )
 {
@@ -4054,11 +4096,18 @@ uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoNumericFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoNumericFieldControl )
-    cppu::UnoType<awt::XNumericField>::get(),
-    UnoSpinFieldControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoNumericFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XNumericField>::get(),
+        UnoSpinFieldControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer )
 {
@@ -4278,11 +4327,18 @@ uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoCurrencyFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoCurrencyFieldControl )
-    cppu::UnoType<awt::XCurrencyField>::get(),
-    UnoSpinFieldControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoCurrencyFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XCurrencyField>::get(),
+        UnoSpinFieldControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer )
 {
@@ -4520,11 +4576,18 @@ uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoPatternFieldControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoPatternFieldControl )
-    cppu::UnoType<awt::XPatternField>::get(),
-    UnoSpinFieldControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoPatternFieldControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XPatternField>::get(),
+        UnoSpinFieldControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void UnoPatternFieldControl::setString( const OUString& rString )
 {
@@ -4673,11 +4736,18 @@ uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( UnoProgressBarControl )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoProgressBarControl )
-    cppu::UnoType<awt::XProgressBar>::get(),
-    UnoControlBase::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > UnoProgressBarControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XProgressBar>::get(),
+        UnoControlBase::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 // css::awt::XProgressBar
 void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor )

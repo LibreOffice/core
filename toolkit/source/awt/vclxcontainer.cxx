@@ -57,12 +57,19 @@ css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXContainer )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXContainer )
-    cppu::UnoType<css::awt::XVclContainer>::get(),
-    cppu::UnoType<css::awt::XVclContainerPeer>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXContainer::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XVclContainer>::get(),
+        cppu::UnoType<css::awt::XVclContainerPeer>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 
 // css::awt::XVclContainer

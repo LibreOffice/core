@@ -50,10 +50,17 @@ css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType )
 // css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXRegion )
 
+IMPL_IMPLEMENTATION_ID( VCLXRegion )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXRegion )
-    cppu::UnoType<css::awt::XRegion>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXRegion::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XRegion>::get()
+    };
+    return aTypeList;
+}
 
 
 css::awt::Rectangle VCLXRegion::getBounds()

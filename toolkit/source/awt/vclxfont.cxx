@@ -84,10 +84,17 @@ css::uno::Any VCLXFont::queryInterface( const css::uno::Type & rType )
 // css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXFont )
 
+IMPL_IMPLEMENTATION_ID( VCLXFont )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFont )
-    cppu::UnoType<css::awt::XFont2>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXFont::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XFont2>::get()
+    };
+    return aTypeList;
+}
 
 
 css::awt::FontDescriptor VCLXFont::getFontDescriptor(  )

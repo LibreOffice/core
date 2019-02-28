@@ -56,18 +56,6 @@ css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
     return css::uno::Sequence<sal_Int8>(); \
 }
 
-#define IMPL_XTYPEPROVIDER_START( ClassName )   \
-IMPL_IMPLEMENTATION_ID( ClassName ) \
-css::uno::Sequence< css::uno::Type > ClassName::getTypes() \
-{ \
-    static ::cppu::OTypeCollection collection( \
-            cppu::UnoType<css::lang::XTypeProvider>::get(),
-
-#define IMPL_XTYPEPROVIDER_END \
-            ); \
-    return collection.getTypes(); \
-}
-
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
 class ClassName : public ListenerMultiplexerBase, public InterfaceName \

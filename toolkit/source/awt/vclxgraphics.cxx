@@ -54,10 +54,17 @@ uno::Any VCLXGraphics::queryInterface( const uno::Type & rType )
 // lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXGraphics )
 
+IMPL_IMPLEMENTATION_ID( VCLXGraphics )
+
 // lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXGraphics )
-    cppu::UnoType<awt::XGraphics>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXGraphics::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<awt::XGraphics>::get()
+    };
+    return aTypeList;
+}
 
 VCLXGraphics::VCLXGraphics()
     : mpOutputDevice(nullptr)
