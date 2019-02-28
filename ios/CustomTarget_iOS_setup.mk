@@ -56,7 +56,9 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
 	cp $(INSTDIR)/program/services/services.rdb $(IOSRES)/services
 	cp $(INSTDIR)/program/services.rdb          $(IOSRES)
-	cp -R $(INSTDIR)/program/resource $(IOSRES)/program
+	if test -d $(INSTDIR)/program/resource; then \
+		cp -R $(INSTDIR)/program/resource $(IOSRES)/program; \
+	fi
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
 	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/filter

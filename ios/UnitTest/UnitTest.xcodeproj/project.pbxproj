@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BE39ADD7215D5470000B0244 /* test.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADD6215D5470000B0244 /* test.odt */; };
-		BE39ADEF215D5AA4000B0244 /* icudt62l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE0215D5AA3000B0244 /* icudt62l.dat */; };
+		BE39ADEF215D5AA4000B0244 /* icudt63l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE0215D5AA3000B0244 /* icudt63l.dat */; };
 		BE39ADF0215D5AA4000B0244 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE1215D5AA3000B0244 /* fundamentalrc */; };
 		BE39ADF1215D5AA4000B0244 /* services in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE2215D5AA3000B0244 /* services */; };
 		BE39ADF2215D5AA4000B0244 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE3215D5AA3000B0244 /* share */; };
@@ -36,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		BE39ADD6215D5470000B0244 /* test.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.odt; path = ../../../../odk/examples/cpp/DocumentLoader/test.odt; sourceTree = "<group>"; };
-		BE39ADE0215D5AA3000B0244 /* icudt62l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt62l.dat; path = ../../../../workdir/CustomTarget/ios/resources/icudt62l.dat; sourceTree = "<group>"; };
+		BE39ADE0215D5AA3000B0244 /* icudt63l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt63l.dat; path = ../../../../workdir/CustomTarget/ios/resources/icudt63l.dat; sourceTree = "<group>"; };
 		BE39ADE1215D5AA3000B0244 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../../../../workdir/CustomTarget/ios/resources/fundamentalrc; sourceTree = "<group>"; };
 		BE39ADE2215D5AA3000B0244 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../../../workdir/CustomTarget/ios/resources/services; sourceTree = "<group>"; };
 		BE39ADE3215D5AA3000B0244 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../../../workdir/CustomTarget/ios/resources/share; sourceTree = "<group>"; };
@@ -216,7 +216,7 @@
 				BE39ADE6215D5AA3000B0244 /* config */,
 				BE39ADEC215D5AA3000B0244 /* filter */,
 				BE39ADE1215D5AA3000B0244 /* fundamentalrc */,
-				BE39ADE0215D5AA3000B0244 /* icudt62l.dat */,
+				BE39ADE0215D5AA3000B0244 /* icudt63l.dat */,
 				BE39ADE9215D5AA3000B0244 /* offapi.rdb */,
 				BE39ADE4215D5AA3000B0244 /* oovbaapi.rdb */,
 				BE39ADE5215D5AA3000B0244 /* program */,
@@ -544,7 +544,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE39ADEF215D5AA4000B0244 /* icudt62l.dat in Resources */,
+				BE39ADEF215D5AA4000B0244 /* icudt63l.dat in Resources */,
 				BE39ADF7215D5AA4000B0244 /* registry in Resources */,
 				BE39ADF6215D5AA4000B0244 /* services.rdb in Resources */,
 				BE39ADF3215D5AA4000B0244 /* oovbaapi.rdb in Resources */,
