@@ -188,7 +188,7 @@ public:
     static bool                     IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
 
-    void                            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void                            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;

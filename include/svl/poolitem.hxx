@@ -111,6 +111,7 @@ enum class SfxItemState {
 
 class SfxItemPool;
 class SfxItemSet;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
@@ -177,7 +178,7 @@ public:
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
     SfxItemKind       GetKind() const { return m_nKind; }
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     /** Only SfxVoidItem shall and must return true for this.
 
@@ -261,7 +262,7 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper& ) const override;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

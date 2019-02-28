@@ -95,7 +95,7 @@ public:
 
     MapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

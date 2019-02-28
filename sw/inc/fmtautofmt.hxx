@@ -47,7 +47,7 @@ public:
     void SetStyleHandle( const std::shared_ptr<SfxItemSet>& pHandle ) { mpHandle = pHandle; }
     const std::shared_ptr<SfxItemSet>& GetStyleHandle() const { return mpHandle; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

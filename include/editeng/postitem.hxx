@@ -69,7 +69,7 @@ public:
     FontItalic              GetPosture() const
                                 { return GetValue(); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_EDITENG_POSTITEM_HXX

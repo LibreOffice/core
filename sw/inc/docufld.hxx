@@ -493,7 +493,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
     virtual OUString    GetDescription() const override;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwDocInfoFieldType : public SwValueFieldType

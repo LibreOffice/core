@@ -606,7 +606,7 @@ public:
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 

@@ -276,7 +276,7 @@ public:
     OUString GetDescr();
 
     bool operator<( const SwRangeRedline& ) const;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void MaybeNotifyRedlinePositionModification(long nTop);
 };

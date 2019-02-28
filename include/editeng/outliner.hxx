@@ -167,7 +167,7 @@ private:
     bool                HasFlag( ParaFlag nFlag ) const { return bool(nFlags & nFlag); }
 public:
                         ~Paragraph();
-    void                dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void                dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 struct ParaRange
@@ -663,7 +663,7 @@ public:
                     Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
     virtual         ~Outliner() override;
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void            Init( OutlinerMode nOutlinerMode );
     OutlinerMode    GetMode() const { return nOutlinerMode; }

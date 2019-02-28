@@ -143,7 +143,7 @@ SfxStyleSheet* SdrText::GetStyleSheet() const
     return mrObject.GetStyleSheet();
 }
 
-void SdrText::dumpAsXml(struct _xmlTextWriter * pWriter) const
+void SdrText::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrText"));
     mpOutlinerParaObject->dumpAsXml(pWriter);

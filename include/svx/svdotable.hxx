@@ -259,7 +259,7 @@ public:
     static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
     static void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );

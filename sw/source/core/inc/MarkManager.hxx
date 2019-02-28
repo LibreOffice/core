@@ -85,7 +85,7 @@ namespace sw {
             virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
             virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
 
-            void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+            void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
             // Annotation Marks
             virtual const_iterator_t getAnnotationMarksBegin() const override;

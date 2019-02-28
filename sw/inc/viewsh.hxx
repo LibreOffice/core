@@ -79,6 +79,8 @@ namespace vcl
 #define VSHELLFLAG_SHARELAYOUT          (long(0x2))
 typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
@@ -571,7 +573,7 @@ public:
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // manages global ShellPointer

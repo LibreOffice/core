@@ -107,7 +107,7 @@ public:
     SvxFontItem& operator=(const SvxFontItem& rFont);
     SvxFontItem(SvxFontItem const &) = default; // SfxPoolItem copy function dichotomy
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 EDITENG_DLLPUBLIC void GetDefaultFonts(SvxFontItem& rLatin,

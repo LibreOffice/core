@@ -1692,7 +1692,7 @@ void SAL_CALL Cell::disposing( const EventObject& /*Source*/ )
     dispose();
 }
 
-void Cell::dumpAsXml(struct _xmlTextWriter * pWriter, sal_Int32 nRow, sal_Int32 nCol) const
+void Cell::dumpAsXml(xmlTextWriterPtr pWriter, sal_Int32 nRow, sal_Int32 nCol) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("Cell"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("row"), "%" SAL_PRIdINT32, nRow);

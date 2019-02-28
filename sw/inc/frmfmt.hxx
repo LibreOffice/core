@@ -175,7 +175,7 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) override;
 };

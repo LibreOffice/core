@@ -865,7 +865,7 @@ public:
 
     bool Equals(const SdrObject&) const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     /// Is this a textbox of a drawinglayer shape?
     virtual bool IsTextBox() const;

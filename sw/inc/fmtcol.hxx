@@ -132,7 +132,7 @@ public:
 
     bool AreListLevelIndentsApplicable() const;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwGrfFormatColl final : public SwFormatColl

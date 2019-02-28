@@ -70,7 +70,7 @@ public:
     void ChgDefinedIn( const SwModify* pNew ) { m_pDefinedIn = const_cast<SwModify*>(pNew); }
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatPageDesc &SwAttrSet::GetPageDesc(bool bInP) const

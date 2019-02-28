@@ -887,7 +887,7 @@ const EditDoc& EditEngine::GetEditDoc() const
     return pImpEditEngine->GetEditDoc();
 }
 
-void EditEngine::dumpAsXmlEditDoc(struct _xmlTextWriter* pWriter) const
+void EditEngine::dumpAsXmlEditDoc(xmlTextWriterPtr pWriter) const
 {
     pImpEditEngine->GetEditDoc().dumpAsXml(pWriter);
 }

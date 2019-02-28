@@ -1616,7 +1616,7 @@ public:
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      */
-    void dumpAsXml(struct _xmlTextWriter* = nullptr) const;
+    void dumpAsXml(xmlTextWriterPtr = nullptr) const;
 
     std::set<Color> GetDocColors();
     std::vector< std::weak_ptr<SwUnoCursor> > mvUnoCursorTable;

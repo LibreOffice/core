@@ -232,7 +232,7 @@ public:
     void connectTableStyle();
     void disconnectTableStyle();
     virtual bool isInUse() override;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 private:
     static SdrTableObjImpl* lastLayoutTable;
     static tools::Rectangle lastLayoutInputRectangle;

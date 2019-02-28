@@ -329,7 +329,7 @@ public:
     void setTiledSearching(bool bTiledSearching);
     /// See lok::Document::getPart().
     virtual int getPart() const;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;
     /// See OutlinerViewShell::NotifyOtherViews().

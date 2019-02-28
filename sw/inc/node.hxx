@@ -292,7 +292,7 @@ public:
     /**
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
      */
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
     SwNode( const SwNode & rNodes ) = delete;
@@ -322,7 +322,7 @@ public:
     /// Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
     SwStartNode( const SwStartNode & rNode ) = delete;

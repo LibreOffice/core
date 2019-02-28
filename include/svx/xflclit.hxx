@@ -48,7 +48,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

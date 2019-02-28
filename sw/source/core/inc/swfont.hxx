@@ -37,7 +37,6 @@ class SwDrawTextInfo;   // DrawText_
 class SwScriptInfo;     // GetTextSize_
 class SwViewShell;
 class IDocumentSettingAccess;
-typedef struct _xmlTextWriter *xmlTextWriterPtr;
 enum class SvxShadowItemSide;
 
 const sal_Unicode CH_BLANK = ' ';   // ' ' blank spaces

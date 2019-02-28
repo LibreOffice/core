@@ -230,7 +230,7 @@ namespace sdr
         {
         }
 
-        void DefaultProperties::dumpAsXml(struct _xmlTextWriter * pWriter) const
+        void DefaultProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             xmlTextWriterStartElement(pWriter, BAD_CAST("DefaultProperties"));
             mpItemSet->dumpAsXml(pWriter);

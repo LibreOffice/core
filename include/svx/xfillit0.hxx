@@ -49,7 +49,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual sal_uInt16          GetValueCount() const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

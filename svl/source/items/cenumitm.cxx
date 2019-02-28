@@ -114,7 +114,7 @@ bool SfxBoolItem::GetPresentation(SfxItemPresentation,
     return true;
 }
 
-void SfxBoolItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void SfxBoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxBoolItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));

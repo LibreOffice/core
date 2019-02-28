@@ -227,7 +227,7 @@ public:
      */
     bool                        Equals(const SfxItemSet &, bool bComparePool) const;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )

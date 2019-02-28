@@ -51,7 +51,7 @@ public:
     sal_uInt16 GetLeft () const { return m_nLeft; }
     sal_uInt16 GetRight() const { return m_nRight; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 typedef std::vector<SwColumn> SwColumns;
@@ -159,7 +159,7 @@ public:
      that corresponds to what constitutes the column for the user. */
     sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatCol &SwAttrSet::GetCol(bool bInP) const

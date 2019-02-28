@@ -1788,7 +1788,7 @@ void ContentNode::DestroyWrongList()
     mpWrongList.reset();
 }
 
-void ContentNode::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("ContentNode"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
@@ -1863,7 +1863,7 @@ bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
     return bHasItem;
 }
 
-void ContentAttribs::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void ContentAttribs::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("ContentAttribs"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", pStyle->GetName().toUtf8().getStr());
@@ -2659,7 +2659,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
     }
 }
 
-void EditDoc::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void EditDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     bool bOwns = false;
     if (!pWriter)
@@ -2980,7 +2980,7 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 }
 #endif
 
-void CharAttribList::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void CharAttribList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("CharAttribList"));
     for (auto const & i : aAttribs) {

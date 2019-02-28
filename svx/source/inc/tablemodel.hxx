@@ -30,6 +30,7 @@
 #include "celltypes.hxx"
 
 struct _xmlTextWriter;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sdr { namespace table {
 
@@ -84,7 +85,7 @@ public:
     /// Get the width of all columns in this table.
     std::vector<sal_Int32> getColumnWidths();
 
-    void dumpAsXml(struct _xmlTextWriter * pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     // ICellRange
     virtual sal_Int32 getLeft() override;

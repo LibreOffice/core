@@ -28,6 +28,7 @@
 #include <vector>
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
@@ -64,7 +65,7 @@ public:
     virtual ViewShellId GetViewShellId() const;
     /// Timestamp when this undo item was created.
     const DateTime& GetDateTime() const;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
     SfxUndoAction( const SfxUndoAction& ) = delete;
@@ -146,7 +147,7 @@ public:
     sal_uInt16              GetId() const;
 
     void SetComment(const OUString& rComment);
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 
@@ -291,7 +292,7 @@ public:
     */
     void            RemoveOldestUndoAction();
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 protected:
     bool    UndoWithContext( SfxUndoContext& i_context );

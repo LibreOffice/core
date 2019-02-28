@@ -789,7 +789,7 @@ public:
 
     bool IsCollapse() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     sal_uInt32 GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const;
     sal_uInt32 GetParRsid() const;

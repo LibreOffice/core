@@ -42,7 +42,7 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 };
 

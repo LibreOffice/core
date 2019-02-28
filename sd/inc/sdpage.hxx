@@ -374,7 +374,7 @@ public:
     void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     bool Equals(const SdPage&) const;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     sal_uInt16 getPageId() { return mnPageId; }
 
     static sal_uInt16 mnLastPageId;

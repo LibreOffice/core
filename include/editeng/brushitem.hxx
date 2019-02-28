@@ -123,7 +123,7 @@ public:
 
     static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_EDITENG_BRUSHITEM_HXX
