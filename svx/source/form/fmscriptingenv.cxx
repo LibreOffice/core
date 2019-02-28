@@ -59,7 +59,6 @@ namespace svxform
     using ::com::sun::star::script::XScriptListener;
     using ::com::sun::star::script::ScriptEvent;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::reflection::InvocationTargetException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::DisposedException;

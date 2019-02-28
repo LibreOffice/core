@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASIC_SBXFAC_HXX
 #define INCLUDED_BASIC_SBXFAC_HXX
 
-#include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
 

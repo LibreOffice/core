@@ -67,6 +67,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sberrors.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <vcl/help.hxx>

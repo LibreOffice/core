@@ -33,6 +33,7 @@
 #include <managelang.hxx>
 
 #include <basic/basmgr.hxx>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>

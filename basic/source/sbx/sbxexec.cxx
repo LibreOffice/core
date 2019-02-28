@@ -22,6 +22,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include <rtl/character.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 static SbxVariableRef Element

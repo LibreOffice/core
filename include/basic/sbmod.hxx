@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASIC_SBMOD_HXX
 #define INCLUDED_BASIC_SBMOD_HXX
 
-#include <com/sun/star/script/XInvocation.hpp>
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
@@ -30,15 +29,16 @@
 #include <deque>
 #include <memory>
 #include <basic/basicdllapi.h>
-#include <basic/codecompletecache.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::script { class XInvocation; }
 
 class SbMethod;
 class SbProperty;
-class SbiRuntime;
 typedef std::deque< sal_uInt16 > SbiBreakpoints;
 class SbiImage;
-class SbIfaceMapperMethod;
 class SbClassModuleObject;
+class CodeCompleteDataCache;
 
 
 class ModuleInitDependencyMap;

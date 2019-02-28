@@ -39,6 +39,8 @@
 #include <global.hxx>
 #include <sbunoobj.hxx>
 #include <sbintern.hxx>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 
 #include <memory>
 #include <vector>

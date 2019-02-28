@@ -20,6 +20,7 @@
 
 #include <propacc.hxx>
 
+#include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <sbunoobj.hxx>

@@ -77,6 +77,7 @@
 #include <sfx2/templdlg.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
+#include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>
 
 using namespace ::com::sun::star;

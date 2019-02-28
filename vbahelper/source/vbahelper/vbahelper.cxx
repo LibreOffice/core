@@ -60,6 +60,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
+#include <basic/sberrors.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/viewsh.hxx>
 #include <math.h>

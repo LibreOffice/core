@@ -23,6 +23,7 @@
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
+#include <vcl/errcode.hxx>
 
 #include <memory>
 #include <vector>

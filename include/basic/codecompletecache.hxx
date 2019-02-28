@@ -20,13 +20,10 @@
 #ifndef INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 #define INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 
-#include <basic/sbdef.hxx>
-#include <basic/sbxobj.hxx>
-#include <basic/sbxdef.hxx>
+#include <basic/basicdllapi.h>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
 #include <unordered_map>
-#include <vector>
 
 typedef std::unordered_map< OUString, OUString > CodeCompleteVarTypes;
 /* variable name, type */

@@ -19,14 +19,18 @@
 #ifndef INCLUDED_BASIC_BASMGR_HXX
 #define INCLUDED_BASIC_BASMGR_HXX
 
-#include <vcl/errinf.hxx>
+#include <vcl/errcode.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/sbstar.hxx>
-#include <com/sun/star/script/XPersistentLibraryContainer.hpp>
-#include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <basic/basicdllapi.h>
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::script { class XLibraryContainer; }
+namespace com::sun::star::script { class XPersistentLibraryContainer; }
+namespace com::sun::star::script { class XStarBasicAccess; }
+
+class BasicManager;
 
 // Basic XML Import/Export
 BASIC_DLLPUBLIC css::uno::Reference< css::script::XStarBasicAccess >
@@ -58,7 +62,6 @@ public:
     ErrCode const & GetErrorId() const                  { return nErrorId; }
 };
 
-class ErrorManager;
 class BasicLibInfo;
 
 namespace basic { class ImplRepository; }

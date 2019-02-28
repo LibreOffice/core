@@ -75,6 +75,7 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>

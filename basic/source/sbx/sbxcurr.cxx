@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <rtl/ustrbuf.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/svapp.hxx>
 

@@ -23,8 +23,9 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
-#include <svtools/ehdl.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+class ErrCode;
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx

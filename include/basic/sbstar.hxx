@@ -27,25 +27,19 @@
 #include <tools/link.hxx>
 
 #include <basic/sbdef.hxx>
-#include <basic/sberrors.hxx>
-#include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <basic/basicdllapi.h>
 
-class SbiInstance;                  // runtime instance
-class SbiRuntime;                   // currently running procedure
-class SbiImage;                     // compiled image
-class BasicLibInfo;                 // info block for basic manager
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::script { struct ModuleInfo; }
+
 class SbMethod;
-class BasicManager;
-class DocBasicItem;
 
 class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 {
     friend class SbiScanner;
     friend class SbiExpression; // Access to RTL
-    friend class SbiInstance;
-    friend class SbiRuntime;
+    friend class SbiInstance;   // runtime instance
+    friend class SbiRuntime;    // currently running procedure
     friend class DocBasicItem;
 
     SbModules       pModules;               // List of all modules

@@ -21,7 +21,6 @@
 #define INCLUDED_BASIC_SBXVAR_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
 
@@ -29,6 +28,10 @@
 #include <cstring>
 #include <memory>
 
+
+namespace com::sun::star::bridge::oleautomation { struct Decimal; }
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SbxDecimal;
 enum class SfxHintId;

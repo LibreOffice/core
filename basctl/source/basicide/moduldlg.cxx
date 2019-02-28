@@ -28,6 +28,7 @@
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

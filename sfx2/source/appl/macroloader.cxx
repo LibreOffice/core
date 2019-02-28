@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
+#include <basic/sberrors.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>

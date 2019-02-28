@@ -22,27 +22,15 @@
 
 #include <tools/ref.hxx>
 #include <svl/hint.hxx>
-#include <svl/lstner.hxx>
 
 #include <basic/sbxdef.hxx>
-#include <basic/sbxform.hxx>
 #include <basic/sbxobj.hxx>
-#include <basic/sbxprop.hxx>
-#include <basic/sbxmeth.hxx>
 #include <basic/basicdllapi.h>
 
 #include <vector>
 #include <memory>
 
 class SvStream;
-class SbxBase;
-class SbxVariable;
-class SbxProperty;
-class SbxMethod;
-class SbxObject;
-class SbxArray;
-class SbxDimArray;
-class SbxFactory;
 
 class SfxBroadcaster;
 

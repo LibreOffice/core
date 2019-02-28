@@ -578,3 +578,9 @@ blacklist:
     include/cppcanvas/renderer.hxx:
     # Used in boost::optional type
     - basegfx/matrix/b2dhommatrix.hxx
+    include/basic/modsizeexceeded.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionRequest.hpp
+    include/basic/sberrors.hxx:
+    # Needed for macro defines
+    - vcl/errcode.hxx
