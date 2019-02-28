@@ -90,8 +90,6 @@ public:
             ::Color& rColor) const;
 };
 
-typedef std::shared_ptr< ClrScheme > ClrSchemePtr;
-
 } }
 
 #endif // INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX

@@ -429,8 +429,6 @@ css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
     return aDateTime;
 }
 
-typedef vector< OUString* > StringList_Impl;
-
 Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders )
 {
     // SfxContentHelper::GetFolderContents

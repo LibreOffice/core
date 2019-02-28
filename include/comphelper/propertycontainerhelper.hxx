@@ -72,7 +72,6 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
     typedef ::std::vector< css::uno::Any >              PropertyContainer;
-    typedef PropertyContainer::const_iterator           ConstPropertyContainerIterator;
     PropertyContainer   m_aHoldProperties;
         // the properties which are hold by this class' instance, not the derived one's
 

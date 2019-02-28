@@ -68,8 +68,6 @@ struct SfxObjectUI_Impl
     }
 };
 
-typedef std::vector<SfxObjectUI_Impl*> SfxObjectUIArr_Impl;
-
 struct SfxInterface_Impl
 {
     std::vector<std::unique_ptr<SfxObjectUI_Impl>>
