@@ -28,6 +28,7 @@
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/fixed.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
@@ -550,14 +551,14 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if(nTables > 1 && bWidthDialog)
             {
                 //now call the table select dialog - if more than one table exists
-                VclPtrInstance<SwSelectDBTableDialog> pDlg(this, pUserData->xConnection);
+                SwSelectDBTableDialog aDlg(GetFrameWeld(), pUserData->xConnection);
                 const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
-                    pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
-                if(RET_OK == pDlg->Execute())
+                    aDlg.SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
+                if(RET_OK == aDlg.run())
                 {
                     bool bIsTable;
-                    m_aDBData.sCommand = pDlg->GetSelectedTable(bIsTable);
+                    m_aDBData.sCommand = aDlg.GetSelectedTable(bIsTable);
                     m_aDBData.nCommandType = bIsTable ? CommandType::TABLE : CommandType::QUERY;
                     pUserData->nCommandType = m_aDBData.nCommandType;
                 }

@@ -829,8 +829,6 @@
 #define ST_FINISH                               NC_("ST_FINISH", "~Finish")
 #define ST_MMWTITLE                             NC_("ST_MMWTITLE", "Mail Merge Wizard")
 
-#define ST_NAME                                 NC_("ST_NAME", "Name")
-#define ST_TYPE                                 NC_("ST_TYPE", "Type")
 #define ST_TABLE                                NC_("ST_TABLE", "Table")
 #define ST_QUERY                                NC_("ST_QUERY", "Query")
 
