@@ -795,12 +795,19 @@ css::uno::Any VCLXCheckBox::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXCheckBox )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
-    cppu::UnoType<css::awt::XButton>::get(),
-    cppu::UnoType<css::awt::XCheckBox>::get(),
-    VCLXGraphicControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXCheckBox::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XButton>::get(),
+        cppu::UnoType<css::awt::XCheckBox>::get(),
+        VCLXGraphicControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
 {
@@ -1096,12 +1103,19 @@ css::uno::Any VCLXRadioButton::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXRadioButton )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
-    cppu::UnoType<css::awt::XRadioButton>::get(),
-    cppu::UnoType<css::awt::XButton>::get(),
-    VCLXGraphicControl::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXRadioButton::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XRadioButton>::get(),
+        cppu::UnoType<css::awt::XButton>::get(),
+        VCLXGraphicControl::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
 {
@@ -1356,11 +1370,18 @@ css::uno::Any VCLXSpinField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXEdit::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXSpinField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXSpinField )
-    cppu::UnoType<css::awt::XSpinField>::get(),
-    VCLXEdit::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXSpinField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XSpinField>::get(),
+        VCLXEdit::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXSpinField::addSpinListener( const css::uno::Reference< css::awt::XSpinListener > & l )
 {
@@ -2177,11 +2198,18 @@ css::uno::Any VCLXMessageBox::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXMessageBox )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXMessageBox )
-    cppu::UnoType<css::awt::XMessageBox>::get(),
-    VCLXTopWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXMessageBox::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XMessageBox>::get(),
+        VCLXTopWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXMessageBox::setCaptionText( const OUString& rText )
 {
@@ -2261,12 +2289,19 @@ css::uno::Any VCLXDialog::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXDialog )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXDialog )
-    cppu::UnoType<css::awt::XDialog2>::get(),
-    cppu::UnoType<css::awt::XDialog>::get(),
-    VCLXTopWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXDialog::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XDialog2>::get(),
+        cppu::UnoType<css::awt::XDialog>::get(),
+        VCLXTopWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )
 {
@@ -2461,12 +2496,7 @@ css::uno::Any SAL_CALL VCLXMultiPage::queryInterface(const css::uno::Type & rTyp
 
     return ( aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ) );
 }
-
-// css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXMultiPage )
-    VCLXContainer::getTypes()
-IMPL_XTYPEPROVIDER_END
-
+IMPL_IMPLEMENTATION_ID( VCLXMultiPage )
 // css::awt::XView
 void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
 {
@@ -2713,10 +2743,7 @@ VCLXTabPage::~VCLXTabPage()
 {
 }
 
-// css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXTabPage )
-    VCLXContainer::getTypes()
-IMPL_XTYPEPROVIDER_END
+IMPL_IMPLEMENTATION_ID( VCLXTabPage )
 
 // css::awt::XView
 void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
@@ -2831,11 +2858,18 @@ void VCLXFixedHyperlink::dispose()
         VCLXWindow::dispose();
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXFixedHyperlink )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFixedHyperlink )
-    cppu::UnoType<css::awt::XFixedHyperlink>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXFixedHyperlink::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XFixedHyperlink>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -3132,11 +3166,18 @@ css::uno::Any VCLXFixedText::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXFixedText )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFixedText )
-    cppu::UnoType<css::awt::XFixedText>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXFixedText::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XFixedText>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
 {
@@ -3274,11 +3315,18 @@ css::uno::Any VCLXScrollBar::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXScrollBar )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
-    cppu::UnoType<css::awt::XScrollBar>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXScrollBar::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XScrollBar>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
 {
@@ -3759,13 +3807,20 @@ css::uno::Any VCLXEdit::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXEdit )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXEdit )
-    cppu::UnoType<css::awt::XTextComponent>::get(),
-    cppu::UnoType<css::awt::XTextEditField>::get(),
-    cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXEdit::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTextComponent>::get(),
+        cppu::UnoType<css::awt::XTextEditField>::get(),
+        cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
 {
@@ -4751,11 +4806,18 @@ css::uno::Any VCLXDateField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXDateField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXDateField )
-    cppu::UnoType<css::awt::XDateField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXDateField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XDateField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
@@ -5098,11 +5160,18 @@ css::uno::Any VCLXTimeField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXTimeField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXTimeField )
-    cppu::UnoType<css::awt::XTimeField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXTimeField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTimeField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXTimeField::setTime( const util::Time& aTime )
 {
@@ -5397,11 +5466,18 @@ css::uno::Any VCLXNumericField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXNumericField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXNumericField )
-    cppu::UnoType<css::awt::XNumericField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXNumericField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XNumericField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXNumericField::setValue( double Value )
 {
@@ -5753,11 +5829,18 @@ css::uno::Any VCLXMetricField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXMetricField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXMetricField )
-    cppu::UnoType<css::awt::XMetricField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXMetricField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XMetricField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 // FIXME: later ...
 #define MetricUnitUnoToVcl(a) (static_cast<FieldUnit>(a))
@@ -5991,11 +6074,18 @@ css::uno::Any VCLXCurrencyField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXCurrencyField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXCurrencyField )
-    cppu::UnoType<css::awt::XCurrencyField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXCurrencyField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XCurrencyField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXCurrencyField::setValue( double Value )
 {
@@ -6340,11 +6430,18 @@ css::uno::Any VCLXPatternField::queryInterface( const css::uno::Type & rType )
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
+IMPL_IMPLEMENTATION_ID( VCLXPatternField )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXPatternField )
-    cppu::UnoType<css::awt::XPatternField>::get(),
-    VCLXFormattedSpinField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXPatternField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XPatternField>::get(),
+        VCLXFormattedSpinField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXPatternField::setMasks( const OUString& EditMask, const OUString& LiteralMask )
 {
@@ -6517,10 +6614,7 @@ VCLXFrame::~VCLXFrame()
 {
 }
 
-// css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFrame )
-    VCLXContainer::getTypes()
-IMPL_XTYPEPROVIDER_END
+IMPL_IMPLEMENTATION_ID( VCLXFrame )
 
 // css::awt::XView
 void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )

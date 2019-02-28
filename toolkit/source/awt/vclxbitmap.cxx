@@ -44,11 +44,18 @@ css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType )
 // css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXBitmap )
 
+IMPL_IMPLEMENTATION_ID( VCLXBitmap )
+
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXBitmap )
-    cppu::UnoType<css::awt::XBitmap>::get(),
-    cppu::UnoType<css::awt::XDisplayBitmap>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXBitmap::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XBitmap>::get(),
+        cppu::UnoType<css::awt::XDisplayBitmap>::get()
+    };
+    return aTypeList;
+}
 
 
 // css::awt::XBitmap

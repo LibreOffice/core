@@ -158,7 +158,7 @@ public:
 
         @return type collection
     */
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+    css::uno::Sequence< css::uno::Type > const & SAL_CALL getTypes() const
         { return _aTypes; }
 };
 

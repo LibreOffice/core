@@ -116,12 +116,19 @@ namespace toolkit
         return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
     }
 
+    IMPL_IMPLEMENTATION_ID( UnoScrollBarControl )
+
     // css::lang::XTypeProvider
-    IMPL_XTYPEPROVIDER_START( UnoScrollBarControl )
-        cppu::UnoType<awt::XAdjustmentListener>::get(),
-        cppu::UnoType<awt::XScrollBar>::get(),
-        UnoControlBase::getTypes()
-    IMPL_XTYPEPROVIDER_END
+    css::uno::Sequence< css::uno::Type > UnoScrollBarControl::getTypes()
+    {
+        static const ::cppu::OTypeCollection aTypeList(
+            cppu::UnoType<css::lang::XTypeProvider>::get(),
+            cppu::UnoType<awt::XAdjustmentListener>::get(),
+            cppu::UnoType<awt::XScrollBar>::get(),
+            UnoControlBase::getTypes()
+        );
+        return aTypeList.getTypes();
+    }
 
     void UnoScrollBarControl::dispose()
     {
