@@ -62,9 +62,6 @@
 // ID of tabpages implemented in SVX, but used in CUI
 #define RID_SVXPAGE_GRID                    (RID_SVX_START + 152)
 
-// factory IDs of dialogs implemented in CUI
-#define RID_SVXDLG_CHARMAP                  ( RID_SVX_START +  10 )
-
 // IDs of options pages of applications
 #define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
 #define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
