@@ -69,6 +69,7 @@
   <menu:menuitem menu:id=".uno:FormatUngroup"/>
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
+  <menu:menuitem menu:id=".uno:Break"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:NameGroup"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
