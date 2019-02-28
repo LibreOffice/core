@@ -51,4 +51,42 @@ sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons)
     return nCode;
 }
 
+Qt::DropActions toQtDropActions(sal_Int8 dragOperation)
+{
+    Qt::DropActions eRet = Qt::IgnoreAction;
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+        eRet |= Qt::CopyAction;
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+        eRet |= Qt::MoveAction;
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+        eRet |= Qt::LinkAction;
+    return eRet;
+}
+
+sal_Int8 toVclDropActions(Qt::DropActions dragOperation)
+{
+    sal_Int8 nRet(0);
+    if (dragOperation & Qt::CopyAction)
+        nRet |= css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+    if (dragOperation & Qt::MoveAction)
+        nRet |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    if (dragOperation & Qt::LinkAction)
+        nRet |= css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+    return nRet;
+}
+
+Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation)
+{
+    Qt::DropAction eAct = Qt::IgnoreAction;
+
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+        eAct = Qt::MoveAction;
+    else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+        eAct = Qt::CopyAction;
+    else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+        eAct = Qt::LinkAction;
+
+    return eAct;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
