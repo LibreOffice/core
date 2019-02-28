@@ -276,18 +276,11 @@ public:
     ScColumn& CreateColumnIfNotExists( const SCCOL nScCol )
     {
         if ( nScCol >= aCol.size() )
-        {
-            const SCCOL aOldColSize = aCol.size();
-            bool bUseEmptyAttrArray = false;
-            if ( aOldColSize == 0 )
-                bUseEmptyAttrArray = true;
-            aCol.resize( static_cast< size_t >( nScCol + 1 ) );
-            for (SCCOL i = aOldColSize; i <= nScCol; i++)
-                aCol[i].Init( i, nTab, pDocument, bUseEmptyAttrArray );
-
-        }
+            CreateColumnIfNotExistsImpl(nScCol);
         return aCol[nScCol];
     }
+    // out-of-line the cold part of the function
+    void CreateColumnIfNotExistsImpl( const SCCOL nScCol );
     sal_uLong       GetCellCount() const;
     sal_uLong       GetWeightedCount() const;
     sal_uLong       GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
