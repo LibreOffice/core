@@ -249,7 +249,7 @@ protected:
     std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
     std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
 
-    void SetOptimalSize();
+    void SetOptimalSize(weld::DialogController* pController);
 
 private:
     DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);

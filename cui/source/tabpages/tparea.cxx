@@ -119,9 +119,9 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     SetExchangeSupport();
 }
 
-void SvxAreaTabPage::SetOptimalSize()
+void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
 {
-    TabPageParent aFillTab(m_xFillTab.get(), GetDialogController());
+    TabPageParent aFillTab(m_xFillTab.get(), pController);
     // TEMP
     if (!aFillTab.pController)
         aFillTab.pParent = GetParentDialog();
@@ -343,7 +343,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 VclPtr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
     auto xRet = VclPtr<SvxAreaTabPage>::Create(pParent, *rAttrs);
-    xRet->SetOptimalSize();
+    xRet->SetOptimalSize(pParent.pController);
     return xRet;
 }
 
