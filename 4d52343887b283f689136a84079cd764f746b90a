@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_8bf3d573",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-02-28T09:59:22Z",
+      "side": 1,
+      "message": "Could you fix the indentation problems in your commit, please?",
+      "range": {
+        "startLine": 690,
+        "startChar": 0,
+        "endLine": 690,
+        "endChar": 8
+      },
+      "revId": "4d52343887b283f689136a84079cd764f746b90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
