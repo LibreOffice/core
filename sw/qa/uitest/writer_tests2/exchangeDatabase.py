@@ -42,7 +42,7 @@ class exchangeDB(UITestCase):
         xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
         xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
 
-        xDefineBtn = xExDBDlg.getChild("define")
+        xDefineBtn = xExDBDlg.getChild("ok")
         xDefineBtn.executeAction("CLICK", tuple())
 
         self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField")
