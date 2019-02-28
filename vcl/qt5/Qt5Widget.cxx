@@ -189,7 +189,7 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::startDrag()
+void Qt5Widget::startDrag(sal_Int8 nSourceActions)
 {
     // internal drag source
     QMimeData* mimeData = new QMimeData;
@@ -197,7 +197,7 @@ void Qt5Widget::startDrag()
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    drag->exec(toQtDropActions(nSourceActions), Qt::MoveAction);
 }
 
 void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
@@ -212,7 +212,7 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
     QPoint point = event->pos();
 
-    m_pFrame->draggingStarted(point.x(), point.y(), event->mimeData());
+    m_pFrame->draggingStarted(point.x(), point.y(), event->possibleActions(), event->mimeData());
     QWidget::dragMoveEvent(event);
 }
 

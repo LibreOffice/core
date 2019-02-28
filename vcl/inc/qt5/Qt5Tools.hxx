@@ -30,6 +30,7 @@
 #include <tools/gen.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include <memory>
 
@@ -63,6 +64,10 @@ inline QColor toQColor(const Color& rColor)
     return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(),
                   255 - rColor.GetTransparency());
 }
+
+Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
+sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
+Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
 {
