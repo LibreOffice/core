@@ -19,11 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CHANGEDB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CHANGEDB_HXX
 
-#include <vcl/bitmap.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/treelistbox.hxx>
 #include <svx/stddlg.hxx>
+#include <vcl/weld.hxx>
 #include "dbtree.hxx"
 
 class SwFieldMgr;
@@ -32,30 +29,31 @@ class SwWrtShell;
 struct SwDBData;
 
 // exchange database at fields
-class SwChangeDBDlg: public SvxStandardDialog
+class SwChangeDBDlg : public SfxDialogController
 {
-    VclPtr<SvTreeListBox>  m_pUsedDBTLB;
-    VclPtr<SwDBTreeList>   m_pAvailDBTLB;
-    VclPtr<PushButton>     m_pAddDBPB;
-    VclPtr<FixedText>      m_pDocDBNameFT;
-    VclPtr<PushButton>     m_pDefineBT;
-
     SwWrtShell      *pSh;
 
-    DECL_LINK(TreeSelectHdl, SvTreeListBox*, void);
-    DECL_LINK(ButtonHdl, Button*, void);
-    DECL_LINK(AddDBHdl, Button*, void);
+    std::unique_ptr<weld::TreeView> m_xUsedDBTLB;
+    std::unique_ptr<DBTreeList> m_xAvailDBTLB;
+    std::unique_ptr<weld::Button> m_xAddDBPB;
+    std::unique_ptr<weld::Label> m_xDocDBNameFT;
+    std::unique_ptr<weld::Button> m_xDefineBT;
 
-    virtual void    Apply() override;
+    void TreeSelect();
+
+    DECL_LINK(TreeSelectHdl, weld::TreeView&, void);
+    DECL_LINK(ButtonHdl, weld::Button&, void);
+    DECL_LINK(AddDBHdl, weld::Button&, void);
+
     void            UpdateFields();
     void            FillDBPopup();
-    SvTreeListEntry*    Insert(const OUString& rDBName);
+    std::unique_ptr<weld::TreeIter> Insert(const OUString& rDBName);
     void            ShowDBName(const SwDBData& rDBData);
 
 public:
     SwChangeDBDlg(SwView const & rVw);
+    virtual short run() override;
     virtual ~SwChangeDBDlg() override;
-    virtual void dispose() override;
 };
 
 #endif
