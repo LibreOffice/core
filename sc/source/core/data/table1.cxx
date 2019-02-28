@@ -2533,4 +2533,12 @@ ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
                            ScColumnsRange::Iterator( aCol.begin() + nEffEnd));
 }
 
+// out-of-line the cold part of the CreateColumnIfNotExists function
+void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol )
+{
+    const SCCOL aOldColSize = aCol.size();
+    aCol.resize( static_cast< size_t >( nScCol + 1 ) );
+    for (SCCOL i = aOldColSize; i <= nScCol; i++)
+        aCol[i].Init( i, nTab, pDocument, false );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
