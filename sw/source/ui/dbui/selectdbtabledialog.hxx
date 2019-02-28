@@ -21,30 +21,24 @@
 
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
     }
 }}}
 
-class SwAddressTable;
-
-class SwSelectDBTableDialog : public SfxModalDialog
+class SwSelectDBTableDialog : public SfxDialogController
 {
-    VclPtr<SwAddressTable> m_pTable;
-    VclPtr<PushButton>     m_pPreviewPB;
     css::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
-    DECL_LINK(PreviewHdl, Button*, void);
+    std::unique_ptr<weld::TreeView> m_xTable;
+    std::unique_ptr<weld::Button> m_xPreviewPB;
+
+    DECL_LINK(PreviewHdl, weld::Button&, void);
 public:
-    SwSelectDBTableDialog(vcl::Window* pParent,
+    SwSelectDBTableDialog(weld::Window* pParent,
         const css::uno::Reference<css::sdbc::XConnection>& xConnection);
     virtual ~SwSelectDBTableDialog() override;
-    virtual void dispose() override;
 
     OUString    GetSelectedTable(bool& bIsTable);
     void        SetSelectedTable(const OUString& rTable, bool bIsTable);
