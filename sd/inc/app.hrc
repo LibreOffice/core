@@ -88,7 +88,7 @@
 #define SID_TOGGLE_TABBAR_VISIBILITY        (SID_SD_START+13)
 #define SID_INSERTPAGE                      (SID_SD_START+14)
 #define SID_INSERTFILE                      (SID_SD_START+15)
-#define SID_INSERTSYMBOL                    (SID_SD_START+16)
+    // FREE
 #define SID_ZOOM_PANNING                    (SID_SD_START+17)
 #define SID_PRESENTATION_END                (SID_SD_START+18)
     // FREE

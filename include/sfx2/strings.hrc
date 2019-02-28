@@ -138,7 +138,6 @@
 #define STR_QUICKSTART_FILEOPEN                 NC_("STR_QUICKSTART_FILEOPEN", "Open Document...")
 #define STR_QUICKSTART_FROMTEMPLATE             NC_("STR_QUICKSTART_FROMTEMPLATE", "From Template...")
 #define STR_QUICKSTART_PRELAUNCH                NC_("STR_QUICKSTART_PRELAUNCH", "Load %PRODUCTNAME During System Start-Up")
-#define STR_QUICKSTART_PRELAUNCH_UNX            NC_("STR_QUICKSTART_PRELAUNCH_UNX", "Disable systray Quickstarter")
 #define STR_QUICKSTART_LNKNAME                  NC_("STR_QUICKSTART_LNKNAME", "%PRODUCTNAME %PRODUCTVERSION")
 #define STR_QUICKSTART_FILE                     NC_("STR_QUICKSTART_FILE", "File")
 #define STR_QUICKSTART_STARTCENTER              NC_("STR_QUICKSTART_STARTCENTER", "Startcenter")
