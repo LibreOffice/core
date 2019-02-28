@@ -985,7 +985,14 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     nNumSpaces += 4;
                 sal_Int32 nHeight
                     = rShape->getSize().Height / (nRow + (nRow + nNumSpaces) * fSpace);
-                aChildSize = awt::Size(rShape->getSize().Width, nHeight);
+
+                if (fChildAspectRatio > 1)
+                {
+                    // Shrink width if the aspect ratio requires it.
+                    nWidth = std::min(rShape->getSize().Width,
+                                      static_cast<sal_Int32>(nHeight * fChildAspectRatio));
+                    aChildSize = awt::Size(nWidth, nHeight);
+                }
             }
 
             awt::Point aCurrPos(0, 0);
