@@ -552,6 +552,10 @@ public:
     {
         insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
     }
+    void append(weld::TreeIter* pParent, const OUString& rStr)
+    {
+        insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
+    }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
         insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false, nullptr);
