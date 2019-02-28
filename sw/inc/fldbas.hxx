@@ -33,6 +33,8 @@ class SvNumberFormatter;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 enum class SwFieldIds : sal_uInt16 {
 /// For old documents the Field-Which IDs must be preserved !!!
     Database,
@@ -263,7 +265,7 @@ public:
     SwFieldIds              Which() const { return m_nWhich; }
 
     inline  void            UpdateFields() const;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline void SwFieldType::UpdateFields() const
@@ -374,7 +376,7 @@ public:
     virtual OUString    GetDescription() const;
     /// Is this field clickable?
     bool IsClickable() const;
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline SwFieldType* SwField::GetTyp() const
@@ -450,7 +452,7 @@ public:
     }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SW_DLLPUBLIC SwFormulaField : public SwValueField

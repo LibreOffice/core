@@ -29,6 +29,7 @@
 #include <tools/link.hxx>
 
 class Paragraph;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class ParagraphList
 {
@@ -69,7 +70,7 @@ public:
 
     void            SetVisibleStateChangedHdl( const Link<Paragraph&,void>& rLink ) { aVisibleStateChangedHdl = rLink; }
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
 

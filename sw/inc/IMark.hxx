@@ -72,7 +72,7 @@ namespace sw { namespace mark
                 { return GetMarkEnd() < rPos; }
 
             virtual OUString ToString( ) const =0;
-            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const = 0;
+            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
         private:
             IMark(IMark const &) = delete;
             IMark &operator =(IMark const&) = delete;

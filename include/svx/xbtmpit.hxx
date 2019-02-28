@@ -61,7 +61,7 @@ public:
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillBitmapItem> checkForUniqueItem( SdrModel* pModel ) const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

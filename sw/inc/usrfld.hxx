@@ -68,7 +68,7 @@ public:
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
@@ -124,7 +124,7 @@ public:
     virtual void            SetPar2(const OUString& rStr) override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SW_INC_USRFLD_HXX

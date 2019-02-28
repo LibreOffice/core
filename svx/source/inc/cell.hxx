@@ -182,7 +182,7 @@ public:
 
     SVX_DLLPRIVATE void notifyModified();
 
-    void dumpAsXml(struct _xmlTextWriter * pWriter, sal_Int32 nRow, sal_Int32 nCol) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter, sal_Int32 nRow, sal_Int32 nCol) const;
 
 protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;

@@ -66,7 +66,7 @@ public:
     /** returns the current OutlinerParaObject and removes it from this instance */
     std::unique_ptr<OutlinerParaObject> RemoveOutlinerParaObject();
 
-    void dumpAsXml(struct _xmlTextWriter * pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 protected:
     virtual const SfxItemSet& GetObjectItemSet();

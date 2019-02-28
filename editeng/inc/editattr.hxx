@@ -81,7 +81,7 @@ public:
     EditCharAttrib(const EditCharAttrib&) = delete;
     EditCharAttrib& operator=(const EditCharAttrib&) = delete;
 
-    void                dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void                dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     sal_uInt16          Which() const   { return pItem->Which(); }
     const SfxPoolItem*  GetItem() const { return pItem; }

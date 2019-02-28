@@ -544,7 +544,7 @@ public:
 
     EditDoc& GetEditDoc();
     const EditDoc& GetEditDoc() const;
-    void dumpAsXmlEditDoc(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXmlEditDoc(xmlTextWriterPtr pWriter) const;
 
     ParaPortionList& GetParaPortions();
     const ParaPortionList& GetParaPortions() const;

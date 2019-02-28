@@ -46,7 +46,7 @@ public:
     const SwNodeIndex *GetContentIdx() const { return m_pStartNode.get(); }
     void SetNewContentIdx( const SwNodeIndex *pIdx );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatContent &SwAttrSet::GetContent(bool bInP) const

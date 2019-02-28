@@ -2148,7 +2148,7 @@ void Outliner::ClearOverflowingParaNum()
     pEditEngine->ClearOverflowingParaNum();
 }
 
-void Outliner::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void Outliner::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     bool bOwns = false;
     if (!pWriter)

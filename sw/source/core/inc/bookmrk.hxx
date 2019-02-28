@@ -88,7 +88,7 @@ namespace sw {
                 { m_pPos2.reset(); }
 
             virtual OUString ToString( ) const override;
-            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
             void Swap()
             {
@@ -228,7 +228,7 @@ namespace sw {
 
             virtual void Invalidate() override;
             virtual OUString ToString() const override;
-            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
         private:
             OUString m_aFieldname;

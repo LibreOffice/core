@@ -1069,7 +1069,7 @@ bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
     return true;
 }
 
-void SdrTextVertAdjustItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void SdrTextVertAdjustItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTextVertAdjustItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));

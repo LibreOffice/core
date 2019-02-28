@@ -77,7 +77,7 @@ public:
     bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // class SvxTabStopItem --------------------------------------------------
@@ -143,7 +143,7 @@ public:
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

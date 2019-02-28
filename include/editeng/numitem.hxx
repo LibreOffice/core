@@ -269,7 +269,7 @@ public:
     SvxNumRule&             operator=( const SvxNumRule&  );
 
     void                    Store(SvStream &rStream);
-    void                    dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void                    dumpAsXml(xmlTextWriterPtr pWriter) const;
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, bool bIsValid = true);
@@ -310,7 +310,7 @@ public:
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual void            dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void            dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SvxNodeNum
