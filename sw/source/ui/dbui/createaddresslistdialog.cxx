@@ -84,7 +84,8 @@ public:
     void        SetData(SwCSVData& rDBData);
 
     void        SetCurrentDataSet(sal_uInt32 nSet);
-    sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet;}
+    void        CurrentDataSetInvalidated() { m_nCurrentDataSet = std::numeric_limits<sal_uInt32>::max(); }
+    sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet; }
     void        SetCursorTo(std::size_t nElement);
     virtual void Resize() override;
 };
@@ -543,6 +544,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), OUString());
         m_pDeletePB->Enable(false);
     }
+    m_pAddressControl->CurrentDataSetInvalidated();
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     UpdateButtons();
