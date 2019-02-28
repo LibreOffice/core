@@ -86,6 +86,7 @@
 #include <preview.hxx>
 #include <dragdata.hxx>
 #include <markdata.hxx>
+#include <transobj.hxx>
 
 #define ShellClass_ScModule
 #include <scslots.hxx>
