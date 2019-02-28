@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwCharFormat : public SwFormat
 
 public:
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 namespace CharFormat

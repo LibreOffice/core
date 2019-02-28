@@ -163,7 +163,7 @@ private:
 public:
                     ContentAttribs( SfxItemPool& rItemPool );
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     SvxTabStop      FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
@@ -198,7 +198,7 @@ public:
                     CharAttribList();
                     ~CharAttribList();
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
 
@@ -254,7 +254,7 @@ public:
                     ContentNode(const ContentNode&) = delete;
     ContentNode&    operator=(const ContentNode&) = delete;
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
     const ContentAttribs& GetContentAttribs() const { return aContentAttribs; }
@@ -755,7 +755,7 @@ public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
     void            ClearSpellErrors();
 
     bool            IsModified() const      { return bModified; }

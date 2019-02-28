@@ -143,7 +143,7 @@ public:
     bool IsAlive(typename std::remove_pointer<Value>::type const*const p) const
         { return std::find(begin(), end(), p) != end(); }
 
-    static void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) {};
+    static void dumpAsXml(xmlTextWriterPtr /*pWriter*/) {};
 };
 
 template<typename Value>
@@ -256,7 +256,7 @@ public:
     const_iterator begin() const { return m_PosIndex.begin(); }
     const_iterator end() const { return m_PosIndex.end(); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const;
 
     virtual size_t GetFormatCount() const override { return m_Array.size(); }
     virtual SwFormat* GetFormat(size_t idx) const override { return operator[]( idx ); }
@@ -284,33 +284,33 @@ public:
 class SwCharFormats : public SwFormatsModifyBase<SwCharFormat*>
 {
 public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwTextFormatColls : public SwFormatsModifyBase<SwTextFormatColl*>
 {
 public:
     SwTextFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /// Array of Undo-history.
 class SW_DLLPUBLIC SwSectionFormats : public SwFormatsModifyBase<SwSectionFormat*>
 {
 public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwFieldTypes : public SwVectorModifyBase<SwFieldType*> {
 public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwTOXTypes : public SwVectorModifyBase<SwTOXType*> {};
 
 class SW_DLLPUBLIC SwNumRuleTable : public SwVectorModifyBase<SwNumRule*> {
 public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 struct CompareSwRedlineTable
@@ -347,7 +347,7 @@ public:
     void DeleteAndDestroy(size_type nPos);
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     size_type FindNextOfSeqNo( size_type nSttPos ) const;
     size_type FindPrevOfSeqNo( size_type nSttPos ) const;
@@ -391,7 +391,7 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos);
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }

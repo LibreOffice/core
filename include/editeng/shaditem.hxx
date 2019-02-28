@@ -79,7 +79,7 @@ public:
     virtual sal_uInt16      GetValueCount() const override;
     virtual sal_uInt16      GetEnumValue() const override;
     virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )

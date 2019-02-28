@@ -100,7 +100,7 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt16Item(*this); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 
@@ -121,7 +121,7 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxInt32Item(*this); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 
@@ -142,7 +142,7 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SVL_INTITEM_HXX

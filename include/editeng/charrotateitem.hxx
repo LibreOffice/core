@@ -57,7 +57,7 @@ public:
     bool IsBottomToTop() const { return  900 == GetValue(); }
     bool IsVertical() const     { return IsTopToBottom() || IsBottomToTop(); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 
@@ -99,7 +99,7 @@ public:
     bool IsFitToLine() const                { return bFitToLine; }
     void SetFitToLine( bool b )             { bFitToLine = b; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

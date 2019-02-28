@@ -77,7 +77,7 @@ public:
                 return *this;
             }
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
@@ -107,7 +107,7 @@ public:
     bool    HasPivotButton() const;
     bool    HasPivotPopupButton() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
@@ -275,7 +275,7 @@ public:
     void AddCondFormatData( sal_uInt32 nIndex );
     void SetCondFormatData( const std::vector<sal_uInt32>& aIndex );
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
     std::vector<sal_uInt32> maIndex;

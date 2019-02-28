@@ -45,7 +45,7 @@ public:
 
     virtual sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

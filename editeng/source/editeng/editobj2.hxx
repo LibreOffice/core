@@ -147,7 +147,7 @@ public:
     OUString GetText() const;
     void SetText( const OUString& rStr );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     const XEditAttributesType& GetCharAttribs() const { return maCharAttribs; }
     XEditAttributesType& GetCharAttribs() { return maCharAttribs; }

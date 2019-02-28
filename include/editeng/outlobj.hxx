@@ -105,7 +105,7 @@ public:
     void SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
         const SfxStyleFamily& rNewFamily);
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 #endif

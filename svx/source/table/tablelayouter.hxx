@@ -105,7 +105,7 @@ public:
                          sal_Int32 nLastRow,
                          const bool bOptimize,
                          const bool bMinimize );
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
     CellRef getCell( const CellPos& rPos ) const;
@@ -135,7 +135,7 @@ private:
 
         Layout() : mnPos( 0 ), mnSize( 0 ), mnMinSize( 0 ) {}
         void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; }
-        void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+        void dumpAsXml(xmlTextWriterPtr pWriter) const;
     };
     typedef std::vector< Layout > LayoutVector;
 

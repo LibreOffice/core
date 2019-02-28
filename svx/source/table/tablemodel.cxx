@@ -1101,7 +1101,7 @@ void TableModel::updateColumns()
     }
 }
 
-void TableModel::dumpAsXml(struct _xmlTextWriter * pWriter) const
+void TableModel::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("TableModel"));
     for (sal_Int32 nRow = 0; nRow < getRowCountImpl(); ++nRow)

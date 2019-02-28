@@ -72,7 +72,7 @@ public:
     void SetPageNum( sal_uInt16 nNew ) { m_nPageNumber = nNew; }
     void SetAnchor( const SwPosition *pPos );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatAnchor &SwAttrSet::GetAnchor(bool bInP) const

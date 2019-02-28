@@ -39,7 +39,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const

@@ -22,6 +22,8 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 // contains the description of a data source
 struct SwDBData
 {
@@ -30,7 +32,7 @@ struct SwDBData
     sal_Int32    nCommandType; //css::sdb::CommandType
     SwDBData() :
         nCommandType(0){}
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     bool operator !=(const SwDBData& rCmp) const
         {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType;}

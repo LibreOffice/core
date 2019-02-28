@@ -62,7 +62,6 @@ class SwFormat;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
-typedef struct _xmlTextWriter *xmlTextWriterPtr;
 enum class SvxFrameDirection;
 
 // Each FrameType is represented here as a bit.

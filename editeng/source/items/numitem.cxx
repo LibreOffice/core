@@ -691,7 +691,7 @@ void SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
 }
 
-void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void SvxNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumRule"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OUString::number(nLevelCount).getStr()));
@@ -973,7 +973,7 @@ bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
     return false;
 }
 
-void SvxNumBulletItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+void SvxNumBulletItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumBulletItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));

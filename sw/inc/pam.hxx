@@ -55,7 +55,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     bool operator >=(const SwPosition &) const;
     bool operator ==(const SwPosition &) const;
     bool operator !=(const SwPosition &) const;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
@@ -272,7 +272,7 @@ public:
     bool IsMultiSelection() const
         { return !unique(); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPaM& pam);

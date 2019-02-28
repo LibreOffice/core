@@ -105,7 +105,7 @@ public:
             { return m_wXTextField; }
     SAL_DLLPRIVATE void SetXTextField(css::uno::Reference<css::text::XTextField> const& xTextField)
             { m_wXTextField = xTextField; }
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 enum class SwFormatFieldHintWhich

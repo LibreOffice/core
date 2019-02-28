@@ -28,6 +28,7 @@
 #include <svx/svxdllapi.h>
 
 struct _xmlTextWriter;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sdr
 {
@@ -67,7 +68,7 @@ namespace sdr
             // destructor
             virtual ~DefaultProperties() override;
 
-            void dumpAsXml(struct _xmlTextWriter * pWriter) const;
+            void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
