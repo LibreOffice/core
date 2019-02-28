@@ -51,6 +51,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/evntconf.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/dialogs.hrc>

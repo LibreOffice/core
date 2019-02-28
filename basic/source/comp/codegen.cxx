@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <string_view>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 
 // nInc is the increment size of the buffers

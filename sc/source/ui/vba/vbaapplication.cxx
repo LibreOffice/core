@@ -82,6 +82,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
+#include <basic/sberrors.hxx>
 
 #include <convuno.hxx>
 #include <cellsuno.hxx>

@@ -26,6 +26,8 @@
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>

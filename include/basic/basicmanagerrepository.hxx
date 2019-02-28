@@ -20,9 +20,10 @@
 #ifndef INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 #define INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <basic/basicdllapi.h>
+
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class BasicManager;
 

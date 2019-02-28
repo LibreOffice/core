@@ -20,9 +20,11 @@
 #ifndef INCLUDED_BASIC_VBAHELPER_HXX
 #define INCLUDED_BASIC_VBAHELPER_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
+
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace basic {
 namespace vba {

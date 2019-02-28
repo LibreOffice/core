@@ -35,6 +35,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sal/log.hxx>
+#include <svtools/ehdl.hxx>
 
 namespace basctl
 {

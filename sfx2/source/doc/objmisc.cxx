@@ -63,6 +63,7 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
+#include <basic/sberrors.hxx>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>

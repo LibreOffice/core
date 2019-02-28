@@ -46,6 +46,7 @@
 #include <sot/storage.hxx>
 #include <svl/whiter.hxx>
 #include <basic/sbstar.hxx>
+#include <basic/sberrors.hxx>
 
 #include <sfx2/viewfrm.hxx>
 

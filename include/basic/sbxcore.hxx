@@ -24,9 +24,9 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
-#include <vcl/errcode.hxx>
 
 class SvStream;
+class ErrCode;
 
 // The following Macro defines four (five) necessary methods within a
 // SBX object. LoadPrivateData() and StorePrivateData() must be implemented.

@@ -48,6 +48,7 @@
 #include <svl/aeitem.hxx>
 #include <svx/imapdlg.hxx>
 #include <basic/sbstar.hxx>
+#include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <undo/undoobjects.hxx>

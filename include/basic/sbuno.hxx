@@ -20,13 +20,14 @@
 #ifndef INCLUDED_BASIC_SBUNO_HXX
 #define INCLUDED_BASIC_SBUNO_HXX
 
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <basic/sbxobj.hxx>
+#include <basic/sbxvar.hxx>
 #include <basic/basicdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::beans { struct Property; }
+
+class SbxObject;
 
 // Returns a SbxObject that wraps an Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx

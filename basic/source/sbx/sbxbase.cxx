@@ -24,6 +24,9 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxfac.hxx>
+#include <basic/sbxform.hxx>
+#include <basic/sbxmeth.hxx>
+#include <basic/sbxprop.hxx>
 #include <sbxbase.hxx>
 
 #include <rtl/instance.hxx>

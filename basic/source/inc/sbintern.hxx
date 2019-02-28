@@ -35,6 +35,7 @@ class SbOLEFactory;
 class SbFormFactory;
 class SbiInstance;
 class SbModule;
+class BasicManager;
 
 class SbiFactory : public SbxFactory
 {
