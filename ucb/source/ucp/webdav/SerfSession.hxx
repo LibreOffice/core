@@ -236,7 +236,7 @@ private:
     /// @throws DAVException
     void HandleError( std::shared_ptr<SerfRequestProcessor> rReqProc );
 
-    const ucbhelper::InternetProxyServer & getProxySettings() const;
+    const ucbhelper::InternetProxyServer getProxySettings() const;
 
     static bool removeExpiredLocktoken( const OUString & inURL,
                                  const DAVRequestEnvironment & rEnv );
