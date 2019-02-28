@@ -21,6 +21,7 @@
 
 #include <dmapper/DomainMapperFactory.hxx>
 #include "LoggedResources.hxx"
+#include "PropertyMap.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 
@@ -64,6 +65,8 @@ class StyleSheetTable;
 class GraphicZOrderHelper;
 class GraphicNamingHelper;
 
+typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
+
 class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {
@@ -86,9 +89,9 @@ public:
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref) override;
 
-    void sprmWithProps( Sprm& sprm, const ::tools::SvRef<PropertyMap>& pContext );
+    void sprmWithProps( Sprm& sprm, const PropertyMapPtr& pContext );
 
-    void PushStyleSheetProperties( const ::tools::SvRef<PropertyMap>& pStyleProperties, bool bAffectTableMngr = false );
+    void PushStyleSheetProperties( const PropertyMapPtr& pStyleProperties, bool bAffectTableMngr = false );
     void PopStyleSheetProperties( bool bAffectTableMngr = false );
 
     void PushListProperties( const ::tools::SvRef<PropertyMap>& pListProperties );
@@ -100,7 +103,7 @@ public:
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
-    tools::SvRef< StyleSheetTable > const & GetStyleSheetTable( );
+    StyleSheetTablePtr const & GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
     GraphicNamingHelper& GetGraphicNamingHelper();
 

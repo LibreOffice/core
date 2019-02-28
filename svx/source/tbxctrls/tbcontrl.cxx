@@ -1268,7 +1268,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
                                const Reference< XFrame >& rFrame,
                                vcl::Window*               pParentWindow,
                                bool                       bReuseParentForPicker,
-                               std::function<void(const OUString&, const NamedColor&)> const & aFunction):
+                               ColorSelectFunction const & aFunction):
 
     ToolbarPopup( rFrame, pParentWindow, "palette_popup_window", "svx/ui/oldcolorwindow.ui" ),
     theSlotId( nSlotId ),
@@ -1382,7 +1382,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
                          weld::Window*              pParentWindow,
                          weld::MenuButton*          pMenuButton,
                          bool                       bInterimBuilder,
-                         std::function<void(const OUString&, const NamedColor&)> const & aFunction)
+                         ColorSelectFunction const & aFunction)
     : ToolbarPopupBase(rFrame)
     , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(pMenuButton, "svx/ui/colorwindow.ui")
                                  : Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))

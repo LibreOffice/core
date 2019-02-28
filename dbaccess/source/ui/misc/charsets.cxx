@@ -86,7 +86,7 @@ namespace dbaui
     {
     }
 
-    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const OUString& _rDisplayName)
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName)
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {

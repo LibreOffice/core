@@ -116,7 +116,7 @@ public:
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
 
-    void            OnLOKShowHideColRow(bool bColumns, SCROW nStartRow);
+    void            OnLOKShowHideColRow(bool bColumns, SCCOLROW nStartRow);
 };
 
 #endif

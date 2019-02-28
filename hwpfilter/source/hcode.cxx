@@ -1206,7 +1206,7 @@ hchar_string hstr2ucsstr(hchar const* hstr)
  * Convert strings of kchar type, which can contain Korean, English and others
  * to strings of hchar type of Hangul Word Processor
  */
-hchar_string kstr2hstr(unsigned char const* src)
+hchar_string kstr2hstr(uchar const* src)
 {
     hchar_string ret;
     if (!src)

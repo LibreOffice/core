@@ -216,13 +216,9 @@ namespace comphelper
     /** is a specialization of OListenerContainer which saves you some additional type casts,
         by making the required listener and event types template arguments.
     */
-    template< class LISTENER, class EVENT >
+    template< class ListenerClass, class EventClass >
     class OListenerContainerBase : public OListenerContainer
     {
-    public:
-        typedef LISTENER    ListenerClass;
-        typedef EVENT       EventClass;
-
     public:
         OListenerContainerBase( ::osl::Mutex& _rMutex ) : OListenerContainer( _rMutex )
         {

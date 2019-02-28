@@ -57,7 +57,7 @@ public:
     explicit GIFLZWDecompressor( sal_uInt8 cDataSize );
                         ~GIFLZWDecompressor();
 
-    sal_uInt8*          DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );
+    Scanline            DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );
 };
 
 #endif

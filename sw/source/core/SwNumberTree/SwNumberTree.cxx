@@ -297,7 +297,7 @@ void SwNumberTreeNode::Validate(const SwNumberTreeNode * pNode) const
     }
 }
 
-void SwNumberTreeNode::GetNumberVector_(vector<SwNumberTree::tSwNumTreeNumber> & rVector,
+void SwNumberTreeNode::GetNumberVector_(SwNumberTree::tNumberVector & rVector,
                                         bool bValidate) const
 {
     if (mpParent)
@@ -675,7 +675,7 @@ SwNumberTree::tSwNumTreeNumber SwNumberTreeNode::GetNumber(bool bValidate)
 }
 
 
-vector<SwNumberTree::tSwNumTreeNumber> SwNumberTreeNode::GetNumberVector() const
+SwNumberTree::tNumberVector SwNumberTreeNode::GetNumberVector() const
 {
     vector<SwNumberTree::tSwNumTreeNumber> aResult;
 
