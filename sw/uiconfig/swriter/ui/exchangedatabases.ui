@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="ExchangeDatabasesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="exchangedatabases|ExchangeDatabasesDialog">Exchange Databases</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -17,7 +40,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="define">
+              <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="exchangedatabases|define">Define</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -57,6 +80,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -102,32 +126,28 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="exchangedatabases|label5">Databases in Use</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">inuselb:border</property>
+                            <property name="mnemonic_widget">inuselb</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="exchangedatabases|label6">_Available Databases</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">availablelb:border</property>
+                            <property name="mnemonic_widget">availablelb</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -142,8 +162,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -152,45 +170,113 @@
                             <property name="can_focus">False</property>
                             <property name="margin_top">12</property>
                             <property name="margin_bottom">12</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="exchangedatabases|label7">Use this dialog to replace the databases you access in your document via database fields, with other databases. You can only make one change at a time. Multiple selection is possible in the list on the left.
 Use the browse button to select a database file.</property>
                             <property name="wrap">True</property>
+                            <property name="width_chars">72</property>
                             <property name="max_width_chars">72</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">3</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="vcllo-SvTreeListBox" id="inuselb:border">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="inuselb">
+                                <property name="width_request">-1</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="show_expanders">True</property>
+                                <property name="search_column">1</property>
+                                <property name="enable_tree_lines">True</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                                      <attributes>
+                                        <attribute name="pixbuf">0</attribute>
+                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="swlo-SwDBTreeList" id="availablelb:border">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="availablelb">
+                                <property name="width_request">-1</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore2</property>
+                                <property name="headers_visible">False</property>
+                                <property name="show_expanders">True</property>
+                                <property name="search_column">1</property>
+                                <property name="enable_tree_lines">True</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn8">
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                                      <attributes>
+                                        <attribute name="pixbuf">0</attribute>
+                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -238,7 +324,7 @@ Use the browse button to select a database file.</property>
                   <object class="GtkLabel" id="dbnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no">DataSource.Command</property>
+                    <property name="label">DataSource.Command</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -263,7 +349,7 @@ Use the browse button to select a database file.</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">define</action-widget>
+      <action-widget response="-5">ok</action-widget>
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
