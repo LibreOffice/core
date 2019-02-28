@@ -128,7 +128,7 @@ void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgumen
 }
 
 void Qt5DragSource::startDrag(
-    const datatransfer::dnd::DragGestureEvent& /*rEvent*/, sal_Int8 /*sourceActions*/,
+    const datatransfer::dnd::DragGestureEvent& /*rEvent*/, sal_Int8 sourceActions,
     sal_Int32 /*cursor*/, sal_Int32 /*image*/,
     const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
@@ -140,7 +140,7 @@ void Qt5DragSource::startDrag(
     {
         Qt5Widget* qw = static_cast<Qt5Widget*>(m_pFrame->GetQWidget());
         m_ActiveDragSource = this;
-        qw->startDrag();
+        qw->startDrag(sourceActions);
     }
     else
         dragFailed();
