@@ -2025,16 +2025,19 @@ bool SVGFilter::implCreateObjects()
             // - tiled bitmap: an image element is exported for each tile,
             //   this is really too expensive!
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
-            Reference< XPropertySet > xBackground;
-            xPropSet->getPropertyValue( "Background" ) >>= xBackground;
-            if( xBackground.is() )
+            if( xPropSet.is() )
             {
-                drawing::FillStyle aFillStyle;
-                bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
-                if( assigned && aFillStyle != drawing::FillStyle_NONE
-                             && aFillStyle != drawing::FillStyle_BITMAP )
+                Reference< XPropertySet > xBackground;
+                xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+                if( xBackground.is() )
                 {
-                    implCreateObjectsFromBackground( xDrawPage );
+                    drawing::FillStyle aFillStyle;
+                    bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
+                    if( assigned && aFillStyle != drawing::FillStyle_NONE
+                                 && aFillStyle != drawing::FillStyle_BITMAP )
+                    {
+                        implCreateObjectsFromBackground( xDrawPage );
+                    }
                 }
             }
             implCreateObjectsFromShapes( xDrawPage, xDrawPage );
