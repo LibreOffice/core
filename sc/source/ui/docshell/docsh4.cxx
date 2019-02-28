@@ -985,7 +985,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 vcl::Window* pWin = GetActiveDialogParent();
                                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                VclMessageType::Question, VclButtonsType::YesNo,
-                                                                               ScResId(STR_REIMPORT_AFTER_LOAD)));
+                                                                               ScResId(STR_DOC_WILLBESAVED)));
                                 xQueryBox->set_default_response(RET_YES);
                                 if (xQueryBox->run() == RET_NO)
                                 {
