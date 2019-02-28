@@ -980,6 +980,13 @@ void SdImportTestSmartArt::testPictureStrip()
     // Actual  : 263', i.e. the left margin was too small.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nWidth * fFactor), nTextLeftDistance);
 
+    // Make sure that aspect ratio is not ignored, i.e. width is not larger than height 3 times.
+    uno::Reference<drawing::XShape> xFirstPair = getChildShape(xGroup, 0);
+    awt::Size aFirstPairSize = xFirstPair->getSize();
+    // Without the accompanying fix in place, this test would have failed: bad width was 16932, good
+    // width is 12540, but let's accept 12541 as well.
+    CPPUNIT_ASSERT_LESSEQUAL(aFirstPairSize.Height * 3 + 1, aFirstPairSize.Width);
+
     xDocShRef->DoClose();
 }
 
