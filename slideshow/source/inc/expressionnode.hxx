@@ -53,8 +53,6 @@ namespace slideshow
 
         };
 
-        typedef ::std::shared_ptr< AnimationFunction > AnimationFunctionSharedPtr;
-
         /** Refinement of AnimationFunction
 
             This interface is used by the SMIL function parser, to

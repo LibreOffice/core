@@ -315,12 +315,6 @@ namespace std
     };
 }
 
-namespace svgi
-{
-typedef std::unordered_set<State> StatePool;
-typedef std::unordered_map<sal_Int32, State> StateMap;
-} // namespace svgi
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

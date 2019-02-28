@@ -75,8 +75,6 @@ namespace cppcanvas
         virtual bool draw() const = 0;
 
     };
-
-    typedef std::shared_ptr< ::cppcanvas::CanvasGraphic > CanvasGraphicSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_CANVASGRAPHIC_HXX

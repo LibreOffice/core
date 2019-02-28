@@ -61,7 +61,6 @@ namespace internal
     };
 
     typedef std::map< sal_Int32, OPropertyAccessor >  PropertyAccessorMap;
-    typedef PropertyAccessorMap::iterator           PropertyAccessorMapIterator;
     typedef PropertyAccessorMap::const_iterator     ConstPropertyAccessorMapIterator;
 }
 

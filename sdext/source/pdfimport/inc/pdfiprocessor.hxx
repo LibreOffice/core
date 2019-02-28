@@ -169,8 +169,6 @@ namespace pdfi
         typedef std::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef std::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef std::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
         typedef boost::bimaps::bimap<
                              boost::bimaps::unordered_set_of<GraphicsContext, GraphicsContextHash>,
                              boost::bimaps::unordered_set_of<sal_Int32>

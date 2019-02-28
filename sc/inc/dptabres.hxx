@@ -483,8 +483,6 @@ public:
     ScDPDataDimension*          GetChildDimension()         { return pChildDimension.get(); }
 };
 
-typedef std::vector<ScDPDataMember*> ScDPDataMembers;
-
 //  result dimension contains only members
 
 class ScDPResultDimension

@@ -182,8 +182,6 @@ public:
 };
 
 
-typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
-
 class FmEntryDataList final
 {
 private:

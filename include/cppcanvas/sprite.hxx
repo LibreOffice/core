@@ -97,8 +97,6 @@ namespace cppcanvas
          */
         virtual void setPriority( double fPriority ) = 0;
     };
-
-    typedef std::shared_ptr< ::cppcanvas::Sprite > SpriteSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_SPRITE_HXX
