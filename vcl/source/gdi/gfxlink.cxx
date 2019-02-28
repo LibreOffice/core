@@ -27,7 +27,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
-#include <o3tl/make_shared.hxx>
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)

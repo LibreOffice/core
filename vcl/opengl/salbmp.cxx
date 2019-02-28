@@ -34,8 +34,6 @@
 #include <vcleventlisteners.hxx>
 #include <vcl/lazydelete.hxx>
 
-#include <o3tl/make_shared.hxx>
-
 #include <opengl/zone.hxx>
 #include <opengl/program.hxx>
 #include <opengl/salbmp.hxx>
