@@ -346,7 +346,7 @@ long ScColumn::GetNeededSize(
                 long nDocPixel = static_cast<long>( ( pDocument->GetColWidth( nCol,nTab ) -
                                     pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
                                     nIndent )
-                                    * nPPT );
+                                    * nPPTX );
                 nDocPixel = (nDocPixel * 9) / 10;           // for safety
                 if ( aSize.Width() > nDocPixel )
                     bEditEngine = true;
