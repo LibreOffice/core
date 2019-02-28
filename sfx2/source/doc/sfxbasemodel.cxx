@@ -1496,16 +1496,6 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly()
     return !m_pData->m_pObjectShell.is() || m_pData->m_pObjectShell->IsReadOnly();
 }
 
-/**
- * Proxy around SfxObjectShell::Save_Impl(), as vcl::solarthread::syncExecute()
- * does not seem to accept lambdas.
- */
-static bool SaveImplStatic(SfxObjectShell* pThis, const SfxItemSet* pParams)
-{
-    return pThis->Save_Impl(pParams);
-}
-
-
 //  XStorable2
 
 
@@ -1596,7 +1586,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
         if (bOnMainThread)
             bRet = vcl::solarthread::syncExecute(
-                std::bind(&SaveImplStatic, m_pData->m_pObjectShell.get(), pParams.get()));
+                [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(pParams.get()); });
         else
             bRet = m_pData->m_pObjectShell->Save_Impl(pParams.get());
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
