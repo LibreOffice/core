@@ -26,8 +26,8 @@ namespace oglcanvas
     void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
     void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
     void setupState( const ::basegfx::B2DHomMatrix&                rTransform,
-                     unsigned int                                  eSrcBlend,
-                     unsigned int                                  eDstBlend,
+                     GLenum                                        eSrcBlend,
+                     GLenum                                        eDstBlend,
                      const com::sun::star::rendering::ARGBColor&              rColor );
 
     void renderOSD( const std::vector<double>& rNumbers, double scale );

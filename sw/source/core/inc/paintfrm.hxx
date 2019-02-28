@@ -25,8 +25,11 @@
 extern Color aGlobalRetoucheColor;
 
 class OutputDevice;
+namespace vcl {
+    typedef OutputDevice RenderContext;
+};
 
-void SwCalcPixStatics( OutputDevice const *pOut );
+void SwCalcPixStatics( vcl::RenderContext const *pOut );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
 

@@ -98,7 +98,7 @@ void SAL_CALL LazyMathBufferingContext::characters(OUString const& rChars)
 
 } // namespace formulaimport
 
-core::ContextHandlerRef CreateLazyMathBufferingContext(
+rtl::Reference<core::ContextHandler> CreateLazyMathBufferingContext(
         core::ContextHandler const& rParent, drawingml::TextParagraph & rPara)
 {
     return new formulaimport::LazyMathBufferingContext(rParent, rPara);

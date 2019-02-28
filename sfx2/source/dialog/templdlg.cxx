@@ -437,7 +437,7 @@ bool StyleTreeListBox_Impl::EventNotify( NotifyEvent& rNEvt )
 TriState StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
                                          SvTreeListEntry*  pEntry,
                                          SvTreeListEntry*& rpNewParent,
-                                         sal_uIntPtr& lPos)
+                                         sal_uLong& lPos)
 {
     if(!pTarget || !pEntry)
         return TRISTATE_FALSE;

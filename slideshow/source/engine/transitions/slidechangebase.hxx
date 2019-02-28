@@ -132,7 +132,7 @@ protected:
      */
     virtual void prepareForRun(
             const ViewEntry& rViewEntry,
-            const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
+            const std::shared_ptr<cppcanvas::Canvas>& rDestinationCanvas );
 
     /** Called on derived classes to implement actual slide change.
 

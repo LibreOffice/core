@@ -101,7 +101,7 @@ namespace svx
         const OUString& getSecondaryText() const { return m_sSecondaryText; }
 
     public:
-        void Paint( OutputDevice& _rDevice, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
+        void Paint( vcl::RenderContext& _rDevice, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
             ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation );
     };
 
