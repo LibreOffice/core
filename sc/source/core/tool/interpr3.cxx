@@ -4756,134 +4756,44 @@ static SCSIZE lcl_bitReverse(SCSIZE nIn, SCSIZE nBound)
     return nOut;
 }
 
-class ScFFT2
+// Computes and stores twiddle factors for computing DFT later.
+struct ScTwiddleFactors
 {
-public:
-    ScFFT2(ScMatrixRef& pMat, SCSIZE nPoints, bool bRealInput, bool bInverse, bool bPolar) :
-        mpMat(pMat),
-        mnPoints(nPoints),
-        mnStages(0),
-        mbRealInput(bRealInput),
-        mbInverse(bInverse),
-        mbPolar(bPolar)
+    ScTwiddleFactors(SCSIZE nN, bool bInverse) :
+        mfWReal(nN),
+        mfWImag(nN),
+        mnN(nN),
+        mbInverse(bInverse)
     {}
 
     void Compute();
-private:
 
-    void prepare();
-    void computeTFactors();
-    void normalize();
-    void convertToPolar();
-
-    double getReal(SCSIZE nIdx)
+    void Conjugate()
     {
-        return mpMat->GetDouble(0, nIdx);
+        mbInverse = !mbInverse;
+        for (SCSIZE nIdx = 0; nIdx < mnN; ++nIdx)
+            mfWImag[nIdx] = -mfWImag[nIdx];
     }
 
-    void setReal(double fVal, SCSIZE nIdx)
-    {
-        mpMat->PutDouble(fVal, 0, nIdx);
-    }
-
-    double getImag(SCSIZE nIdx)
-    {
-        return mpMat->GetDouble(1, nIdx);
-    }
-
-    void setImag(double fVal, SCSIZE nIdx)
-    {
-        mpMat->PutDouble(fVal, 1, nIdx);
-    }
-
-    SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScaleBits)
-    {
-        return ( ( nPtIndex << nTfIdxScaleBits ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
-    }
-
-    void computeFly(SCSIZE nTopIdx, SCSIZE nBottomIdx, SCSIZE nWIdx1, SCSIZE nWIdx2, SCSIZE nStage)
-    {
-        const double x1r = getReal(nTopIdx);
-
-        const double& w1r = mfWReal[nWIdx1];
-        const double& w1i = mfWImag[nWIdx1];
-
-        const double x2r = getReal(nBottomIdx);
-
-        const double& w2r = mfWReal[nWIdx2];
-        const double& w2i = mfWImag[nWIdx2];
-
-        // Optimization for real input in stage #0
-        if (nStage == 0 && mbRealInput)
-        {
-            setReal(x1r + x2r*w1r, nTopIdx);
-            setImag(x2r*w1i, nTopIdx);
-
-            setReal(x1r + x2r*w2r, nBottomIdx);
-            setImag(x2r*w2i, nBottomIdx);
-
-            return;
-        }
-
-        const double x1i = getImag(nTopIdx);
-        const double x2i = getImag(nBottomIdx);
-
-        setReal(x1r + x2r*w1r - x2i*w1i, nTopIdx);
-        setImag(x1i + x2i*w1r + x2r*w1i, nTopIdx);
-
-        setReal(x1r + x2r*w2r - x2i*w2i, nBottomIdx);
-        setImag(x1i + x2i*w2r + x2r*w2i, nBottomIdx);
-    }
-
-    ScMatrixRef& mpMat;
     std::vector<double> mfWReal;
     std::vector<double> mfWImag;
-    SCSIZE mnPoints;
-    SCSIZE mnStages;
-    bool mbRealInput:1;
-    bool mbInverse:1;
-    bool mbPolar:1;
+    SCSIZE mnN;
+    bool mbInverse;
 };
 
-void ScFFT2::prepare()
+void ScTwiddleFactors::Compute()
 {
-    lcl_roundUpNearestPow2(mnPoints, mnStages);
+    mfWReal.resize(mnN);
+    mfWImag.resize(mnN);
 
-    mpMat->Resize(2, mnPoints, 0.0);
+    double nW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnN);
 
-    // Reorder array by bit-reversed indices.
-    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
-    {
-        SCSIZE nRevIdx = lcl_bitReverse(nIdx, mnPoints);
-        if (nIdx < nRevIdx)
-        {
-            double fTmp = getReal(nIdx);
-            setReal(getReal(nRevIdx), nIdx);
-            setReal(fTmp, nRevIdx);
-
-            if (!mbRealInput)
-            {
-                fTmp = getImag(nIdx);
-                setImag(getImag(nRevIdx), nIdx);
-                setImag(fTmp, nRevIdx);
-            }
-        }
-    }
-}
-
-void ScFFT2::computeTFactors()
-{
-    mfWReal.resize(mnPoints);
-    mfWImag.resize(mnPoints);
-
-    double nW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnPoints);
-
-    if (mnPoints == 1)
+    if (mnN == 1)
     {
         mfWReal[0] = 1.0;
         mfWImag[0] = 0.0;
     }
-    else if (mnPoints == 2)
+    else if (mnN == 2)
     {
         mfWReal[0] = 1;
         mfWImag[0] = 0;
@@ -4891,7 +4801,7 @@ void ScFFT2::computeTFactors()
         mfWReal[1] = -1;
         mfWImag[1] = 0;
     }
-    else if (mnPoints == 4)
+    else if (mnN == 4)
     {
         mfWReal[0] = 1;
         mfWImag[0] = 0;
@@ -4905,9 +4815,9 @@ void ScFFT2::computeTFactors()
         mfWReal[3] = 0;
         mfWImag[3] = (mbInverse ? -1.0 : 1.0);
     }
-    else
+    else if ((mnN % 4) == 0)
     {
-        const SCSIZE nQSize = mnPoints >> 2;
+        const SCSIZE nQSize = mnN >> 2;
         // Compute cos of the start quadrant.
         // This is the first quadrant if mbInverse == true, else it is the fourth quadrant.
         for (SCSIZE nIdx = 0; nIdx <= nQSize; ++nIdx)
@@ -4937,10 +4847,10 @@ void ScFFT2::computeTFactors()
             }
 
             // Fourth Quadrant
-            for (SCSIZE nIdx = nQ3End+1; nIdx < mnPoints; ++nIdx)
+            for (SCSIZE nIdx = nQ3End+1; nIdx < mnN; ++nIdx)
             {
-                mfWReal[nIdx] =  mfWReal[mnPoints - nIdx];
-                mfWImag[nIdx] = -mfWImag[mnPoints - nIdx];
+                mfWReal[nIdx] =  mfWReal[mnN - nIdx];
+                mfWImag[nIdx] = -mfWImag[mnN - nIdx];
             }
         }
         else
@@ -4968,48 +4878,170 @@ void ScFFT2::computeTFactors()
             }
 
             // First quadrant.
-            for (SCSIZE nIdx = nQ2End+1; nIdx < mnPoints; ++nIdx)
+            for (SCSIZE nIdx = nQ2End+1; nIdx < mnN; ++nIdx)
             {
-                mfWReal[nIdx] =  mfWReal[mnPoints - nIdx];
-                mfWImag[nIdx] = -mfWImag[mnPoints - nIdx];
+                mfWReal[nIdx] =  mfWReal[mnN - nIdx];
+                mfWImag[nIdx] = -mfWImag[mnN - nIdx];
             }
+        }
+    }
+    else
+    {
+        for (SCSIZE nIdx = 0; nIdx < mnN; ++nIdx)
+        {
+            double fAngle = nW*static_cast<double>(nIdx);
+            mfWReal[nIdx] = cos(fAngle);
+            mfWImag[nIdx] = sin(fAngle);
         }
     }
 }
 
-void ScFFT2::normalize()
+// A radix-2 decimation in time FFT algorithm for complex valued input.
+class ScComplexFFT2
 {
-    const double fScale = 1.0/static_cast<double>(mnPoints);
+public:
+    // rfArray.size() would always be even and a power of 2. (asserted in prepare())
+    // rfArray's first half contains the real parts and the later half contains the imaginary parts.
+    ScComplexFFT2(std::vector<double>& raArray, bool bInverse, bool bPolar, ScTwiddleFactors& rTF, bool bSubSampleTFs = false, bool bDisableNormalize = false) :
+        mrArray(raArray),
+        mfWReal(rTF.mfWReal),
+        mfWImag(rTF.mfWImag),
+        mnPoints(raArray.size()/2),
+        mnStages(0),
+        mbInverse(bInverse),
+        mbPolar(bPolar),
+        mbDisableNormalize(bDisableNormalize),
+        mbSubSampleTFs(bSubSampleTFs)
+    {}
 
-    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
-        setReal(getReal(nIdx)*fScale, nIdx);
+    void Compute();
 
-    // If already in polar coordinates, we should only scale the magnitude part
-    // which is stored where "real" part was stored before.
-    if (!mbPolar)
-        for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
-            setImag(getImag(nIdx)*fScale, nIdx);
-}
+private:
 
-void ScFFT2::convertToPolar()
+    void prepare();
+
+    double getReal(SCSIZE nIdx)
+    {
+        return mrArray[nIdx];
+    }
+
+    void setReal(double fVal, SCSIZE nIdx)
+    {
+        mrArray[nIdx] = fVal;
+    }
+
+    double getImag(SCSIZE nIdx)
+    {
+        return mrArray[mnPoints + nIdx];
+    }
+
+    void setImag(double fVal, SCSIZE nIdx)
+    {
+        mrArray[mnPoints + nIdx] = fVal;
+    }
+
+    SCSIZE getTFactorIndex(SCSIZE nPtIndex, SCSIZE nTfIdxScaleBits)
+    {
+        return ( ( nPtIndex << nTfIdxScaleBits ) & ( mnPoints - 1 ) ); // (x & (N-1)) is same as (x % N) but faster.
+    }
+
+    void computeFly(SCSIZE nTopIdx, SCSIZE nBottomIdx, SCSIZE nWIdx1, SCSIZE nWIdx2)
+    {
+        if (mbSubSampleTFs)
+        {
+            nWIdx1 <<= 1;
+            nWIdx2 <<= 1;
+        }
+
+        const double x1r = getReal(nTopIdx);
+        const double x2r = getReal(nBottomIdx);
+
+        const double& w1r = mfWReal[nWIdx1];
+        const double& w1i = mfWImag[nWIdx1];
+
+        const double& w2r = mfWReal[nWIdx2];
+        const double& w2i = mfWImag[nWIdx2];
+
+        const double x1i = getImag(nTopIdx);
+        const double x2i = getImag(nBottomIdx);
+
+        setReal(x1r + x2r*w1r - x2i*w1i, nTopIdx);
+        setImag(x1i + x2i*w1r + x2r*w1i, nTopIdx);
+
+        setReal(x1r + x2r*w2r - x2i*w2i, nBottomIdx);
+        setImag(x1i + x2i*w2r + x2r*w2i, nBottomIdx);
+    }
+
+    std::vector<double>& mrArray;
+    std::vector<double>& mfWReal;
+    std::vector<double>& mfWImag;
+    SCSIZE mnPoints;
+    SCSIZE mnStages;
+    bool mbInverse:1;
+    bool mbPolar:1;
+    bool mbDisableNormalize:1;
+    bool mbSubSampleTFs:1;
+};
+
+void ScComplexFFT2::prepare()
 {
-    double fMag, fPhase, fR, fI;
+    SCSIZE nPoints = mnPoints;
+    lcl_roundUpNearestPow2(nPoints, mnStages);
+    assert(nPoints == mnPoints);
+
+    // Reorder array by bit-reversed indices.
     for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
     {
-        fR = getReal(nIdx);
-        fI = getImag(nIdx);
-        fPhase = atan2(fI, fR);
-        fMag = sqrt(fR*fR + fI*fI);
+        SCSIZE nRevIdx = lcl_bitReverse(nIdx, mnPoints);
+        if (nIdx < nRevIdx)
+        {
+            double fTmp = getReal(nIdx);
+            setReal(getReal(nRevIdx), nIdx);
+            setReal(fTmp, nRevIdx);
 
-        setReal(fMag, nIdx);
-        setImag(fPhase, nIdx);
+            fTmp = getImag(nIdx);
+            setImag(getImag(nRevIdx), nIdx);
+            setImag(fTmp, nRevIdx);
+        }
     }
 }
 
-void ScFFT2::Compute()
+static void lcl_normalize(std::vector<double>& rCmplxArray, bool bScaleOnlyReal)
+{
+    const SCSIZE nPoints = rCmplxArray.size()/2;
+    const double fScale = 1.0/static_cast<double>(nPoints);
+
+    // Scale the real part
+    for (SCSIZE nIdx = 0; nIdx < nPoints; ++nIdx)
+        rCmplxArray[nIdx] *= fScale;
+
+    if (!bScaleOnlyReal)
+    {
+        const SCSIZE nLen = nPoints*2;
+        for (SCSIZE nIdx = nPoints; nIdx < nLen; ++nIdx)
+            rCmplxArray[nIdx] *= fScale;
+    }
+}
+
+static void lcl_convertToPolar(std::vector<double>& rCmplxArray)
+{
+    const SCSIZE nPoints = rCmplxArray.size()/2;
+    double fMag, fPhase, fR, fI;
+    for (SCSIZE nIdx = 0; nIdx < nPoints; ++nIdx)
+    {
+        fR = rCmplxArray[nIdx];
+        fI = rCmplxArray[nPoints+nIdx];
+        fPhase = atan2(fI, fR);
+        fMag = sqrt(fR*fR + fI*fI);
+
+        rCmplxArray[nIdx] = fMag;
+        rCmplxArray[nPoints+nIdx] = fPhase;
+    }
+}
+
+void ScComplexFFT2::Compute()
 {
     prepare();
-    computeTFactors();
 
     const SCSIZE nFliesInStage = mnPoints/2;
     for (SCSIZE nStage = 0; nStage < mnStages; ++nStage)
@@ -5026,7 +5058,7 @@ void ScFFT2::Compute()
                 SCSIZE nWIdx1 = getTFactorIndex(nFlyTopIdx, nTFIdxScaleBits);
                 SCSIZE nWIdx2 = getTFactorIndex(nFlyBottomIdx, nTFIdxScaleBits);
 
-                computeFly(nFlyTopIdx, nFlyBottomIdx, nWIdx1, nWIdx2, nStage);
+                computeFly(nFlyTopIdx, nFlyBottomIdx, nWIdx1, nWIdx2);
             }
 
             nFlyTopIdx += nFlyWidth;
@@ -5034,12 +5066,306 @@ void ScFFT2::Compute()
     }
 
     if (mbPolar)
-        convertToPolar();
+        lcl_convertToPolar(mrArray);
+
+    // Normalize after converting to polar, so we have a chance to
+    // save O(mnPoints) flops.
+    if (mbInverse && !mbDisableNormalize)
+        lcl_normalize(mrArray, mbPolar);
+}
+
+// Bluestein's algorithm or chirp z-transform algorithm that can be used to
+// compute DFT of a complex valued input of any length N in O(N lgN) time.
+class ScComplexBluesteinFFT
+{
+public:
+
+    ScComplexBluesteinFFT(std::vector<double>& rArray, bool bReal, bool bInverse, bool bPolar, bool bDisableNormalize = false) :
+        mrArray(rArray),
+        mnPoints(rArray.size()/2), // rArray should have space for imaginary parts even if real input.
+        mbReal(bReal),
+        mbInverse(bInverse),
+        mbPolar(bPolar),
+        mbDisableNormalize(bDisableNormalize)
+    {}
+
+    void Compute();
+
+private:
+    std::vector<double>& mrArray;
+    const SCSIZE mnPoints;
+    bool mbReal:1;
+    bool mbInverse:1;
+    bool mbPolar:1;
+    bool mbDisableNormalize:1;
+};
+
+void ScComplexBluesteinFFT::Compute()
+{
+    std::vector<double> aRealScalars(mnPoints);
+    std::vector<double> aImagScalars(mnPoints);
+    double fW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnPoints);
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        double fAngle = 0.5*fW*static_cast<double>(nIdx*nIdx);
+        aRealScalars[nIdx] = cos(fAngle);
+        aImagScalars[nIdx] = sin(fAngle);
+    }
+
+    SCSIZE nMinSize = mnPoints*2 - 1;
+    SCSIZE nExtendedLength = nMinSize, nTmp = 0;
+    lcl_roundUpNearestPow2(nExtendedLength, nTmp);
+    std::vector<double> aASignal(nExtendedLength*2); // complex valued
+    std::vector<double> aBSignal(nExtendedLength*2); // complex valued
+
+    double fReal, fImag;
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        // Real part of A signal.
+        aASignal[nIdx] = mrArray[nIdx]*aRealScalars[nIdx] + (mbReal ? 0.0 : -mrArray[mnPoints+nIdx]*aImagScalars[nIdx]);
+        // Imaginary part of A signal.
+        aASignal[nExtendedLength + nIdx] = mrArray[nIdx]*aImagScalars[nIdx] + (mbReal ? 0.0 : mrArray[mnPoints+nIdx]*aRealScalars[nIdx]);
+
+        // Real part of B signal.
+        aBSignal[nIdx] = fReal = aRealScalars[nIdx];
+        // Imaginary part of B signal.
+        aBSignal[nExtendedLength + nIdx] = fImag = -aImagScalars[nIdx]; // negative sign because B signal is the conjugation of the scalars.
+
+        if (nIdx)
+        {
+            // B signal needs a mirror of its part in 0 < n < mnPoints at the tail end.
+            aBSignal[nExtendedLength - nIdx] = fReal;
+            aBSignal[(nExtendedLength<<1) - nIdx] = fImag;
+        }
+    }
+
+    {
+        ScTwiddleFactors aTF(nExtendedLength, false /*not inverse*/);
+        aTF.Compute();
+
+        // Do complex-FFT2 of both A and B signal.
+        ScComplexFFT2 aFFT2A(aASignal, false /*not inverse*/, false /*no polar*/, aTF, false /*no subsample*/, true /* disable normalize */);
+        aFFT2A.Compute();
+
+        ScComplexFFT2 aFFT2B(aBSignal, false /*not inverse*/, false /*no polar*/, aTF, false /*no subsample*/, true /* disable normalize */);
+        aFFT2B.Compute();
+
+        double fAR, fAI, fBR, fBI;
+        for (SCSIZE nIdx = 0; nIdx < nExtendedLength; ++nIdx)
+        {
+            fAR = aASignal[nIdx];
+            fAI = aASignal[nExtendedLength + nIdx];
+            fBR = aBSignal[nIdx];
+            fBI = aBSignal[nExtendedLength + nIdx];
+
+            // Do point-wise product inplace in A signal.
+            aASignal[nIdx] = fAR*fBR - fAI*fBI;
+            aASignal[nExtendedLength + nIdx] = fAR*fBI + fAI*fBR;
+        }
+
+        // Do complex-inverse-FFT2 of aASignal.
+        aTF.Conjugate();
+        ScComplexFFT2 aFFT2AI(aASignal, true /*inverse*/, false /*no polar*/, aTF); // Need normalization here.
+        aFFT2AI.Compute();
+    }
+
+    // Point-wise multiply with scalars.
+    for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
+    {
+        fReal = aASignal[nIdx];
+        fImag = aASignal[nExtendedLength + nIdx];
+        mrArray[nIdx] = fReal*aRealScalars[nIdx] - fImag*aImagScalars[nIdx]; // no conjugation needed here.
+        mrArray[mnPoints + nIdx] = fReal*aImagScalars[nIdx] + fImag*aRealScalars[nIdx];
+    }
+
+    // Normalize/Polar operations
+    if (mbPolar)
+        lcl_convertToPolar(mrArray);
+
+    // Normalize after converting to polar, so we have a chance to
+    // save O(mnPoints) flops.
+    if (mbInverse && !mbDisableNormalize)
+        lcl_normalize(mrArray, mbPolar);
+}
+
+// Computes DFT of an even length(N) real-valued input by using a
+// ScComplexFFT2 if N == 2^k for some k or else by using a ScComplexBluesteinFFT
+// with an complex valued input of length = N/2.
+class ScRealFFT
+{
+public:
+
+    ScRealFFT(std::vector<double>& rInArray, std::vector<double>& rOutArray, bool bInverse, bool bPolar) :
+        mrInArray(rInArray),
+        mrOutArray(rOutArray),
+        mbInverse(bInverse),
+        mbPolar(bPolar)
+    {}
+
+    void Compute();
+
+private:
+    std::vector<double>& mrInArray;
+    std::vector<double>& mrOutArray;
+    bool mbInverse:1;
+    bool mbPolar:1;
+};
+
+void ScRealFFT::Compute()
+{
+    // input length has to be even to do this optimization.
+    assert(mrInArray.size() % 2 == 0);
+    assert(mrInArray.size()*2 == mrOutArray.size());
+    // nN is the number of points in the complex-fft input
+    // which will be half of the number of points in real array.
+    const SCSIZE nN = mrInArray.size()/2;
+    if (nN == 0)
+    {
+        mrOutArray[0] = mrInArray[0];
+        mrOutArray[1] = 0.0;
+        return;
+    }
+
+    // work array should be the same length as mrInArray
+    std::vector<double> aWorkArray(nN*2);
+    for (SCSIZE nIdx = 0; nIdx < nN; ++nIdx)
+    {
+        SCSIZE nDoubleIdx = 2*nIdx;
+        // Use even elements as real part
+        aWorkArray[nIdx] = mrInArray[nDoubleIdx];
+        // and odd elements as imaginary part of the contrived complex sequence.
+        aWorkArray[nN+nIdx] = mrInArray[nDoubleIdx+1];
+    }
+
+    ScTwiddleFactors aTFs(nN*2, mbInverse);
+    aTFs.Compute();
+    SCSIZE nNextPow2 = nN, nTmp = 0;
+    lcl_roundUpNearestPow2(nNextPow2, nTmp);
+
+    if (nNextPow2 == nN)
+    {
+        ScComplexFFT2 aFFT2(aWorkArray, mbInverse, false /*disable polar*/,
+                            aTFs, true /*subsample tf*/, true /*disable normalize*/);
+        aFFT2.Compute();
+    }
+    else
+    {
+        ScComplexBluesteinFFT aFFT(aWorkArray, false /*complex input*/, mbInverse, false /*disable polar*/,
+                                   true /*disable normalize*/);
+        aFFT.Compute();
+    }
+
+    // Post process aWorkArray to populate mrOutArray
+
+    const SCSIZE nTwoN = 2*nN, nThreeN = 3*nN;
+    double fY1R, fY2R, fY1I, fY2I, fResR, fResI, fWR, fWI;
+    for (SCSIZE nIdx = 0; nIdx < nN; ++nIdx)
+    {
+        const SCSIZE nIdxRev = nIdx ? (nN - nIdx) : 0;
+        fY1R = aWorkArray[nIdx];
+        fY2R = aWorkArray[nIdxRev];
+        fY1I = aWorkArray[nN + nIdx];
+        fY2I = aWorkArray[nN + nIdxRev];
+        fWR  = aTFs.mfWReal[nIdx];
+        fWI  = aTFs.mfWImag[nIdx];
+
+        // mrOutArray has length = 4*nN
+        // Real part of the final output (only half of the symmetry around Nyquist frequency)
+        // Fills the first quarter.
+        mrOutArray[nIdx] = fResR = 0.5*(
+            fY1R + fY2R +
+            fWR * (fY1I + fY2I) +
+            fWI * (fY1R - fY2R) );
+        // Imaginary part of the final output (only half of the symmetry around Nyquist frequency)
+        // Fills the third quarter.
+        mrOutArray[nTwoN + nIdx] = fResI = 0.5*(
+            fY1I - fY2I +
+            fWI * (fY1I + fY2I) -
+            fWR * (fY1R - fY2R) );
+
+        // Fill the missing 2 quarters using symmetry argument.
+        if (nIdx)
+        {
+            // Fills the 2nd quarter.
+            mrOutArray[nN + nIdxRev] = fResR;
+            // Fills the 4th quarter.
+            mrOutArray[nThreeN + nIdxRev] = -fResI;
+        }
+        else
+        {
+            mrOutArray[nN] = fY1R - fY1I;
+            mrOutArray[nThreeN] = 0.0;
+        }
+    }
+
+    // Normalize/Polar operations
+    if (mbPolar)
+        lcl_convertToPolar(mrOutArray);
 
     // Normalize after converting to polar, so we have a chance to
     // save O(mnPoints) flops.
     if (mbInverse)
-        normalize();
+        lcl_normalize(mrOutArray, mbPolar);
+}
+
+using ScMatrixGenerator = ScMatrixRef(SCSIZE, SCSIZE, std::vector<double>&);
+
+// Generic FFT class that decides which FFT implementation to use.
+class ScFFT
+{
+public:
+
+    ScFFT(ScMatrixRef& pMat, bool bReal, bool bInverse, bool bPolar) :
+        mpInputMat(pMat),
+        mbReal(bReal),
+        mbInverse(bInverse),
+        mbPolar(bPolar)
+    {}
+
+    ScMatrixRef Compute(std::function<ScMatrixGenerator>& rMatGenFunc);
+
+private:
+    ScMatrixRef& mpInputMat;
+    bool mbReal:1;
+    bool mbInverse:1;
+    bool mbPolar:1;
+};
+
+ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
+{
+    std::vector<double> aArray;
+    mpInputMat->GetDoubleArray(aArray);
+    SCSIZE nPoints = mbReal ? aArray.size() : (aArray.size()/2);
+    if (nPoints == 1)
+    {
+        mpInputMat->Resize(2, 1, 0.0);
+        return mpInputMat;
+    }
+
+    if (mbReal && (nPoints % 2) == 0)
+    {
+        std::vector<double> aOutArray(nPoints*2);
+        ScRealFFT aFFT(aArray, aOutArray, mbInverse, mbPolar);
+        aFFT.Compute();
+        return rMatGenFunc(2, nPoints, aOutArray);
+    }
+
+    SCSIZE nNextPow2 = nPoints, nTmp = 0;
+    lcl_roundUpNearestPow2(nNextPow2, nTmp);
+    if (nNextPow2 == nPoints && !mbReal)
+    {
+        ScTwiddleFactors aTF(nPoints, mbInverse);
+        aTF.Compute();
+        ScComplexFFT2 aFFT2(aArray, mbInverse, mbPolar, aTF);
+        aFFT2.Compute();
+        return rMatGenFunc(2, nPoints, aArray);
+    }
+
+    if (mbReal)
+        aArray.resize(nPoints*2, 0.0);
+    ScComplexBluesteinFFT aFFT(aArray, mbReal, mbInverse, mbPolar);
+    aFFT.Compute();
+    return rMatGenFunc(2, nPoints, aArray);
 }
 
 void ScInterpreter::ScFourier()
@@ -5088,24 +5414,24 @@ void ScInterpreter::ScFourier()
         return;
     }
 
-    SCSIZE nNumPoints;
     bool bRealInput = true;
     if (!bGroupedByColumn)
     {
         pInputMat->MatTrans(*pInputMat);
-        nNumPoints = nC;
         bRealInput = (nR == 1);
     }
     else
     {
-        nNumPoints = nR;
         bRealInput = (nC == 1);
     }
 
-    ScFFT2 aFFT2(pInputMat, nNumPoints, bRealInput, bInverse, bPolar);
-    aFFT2.Compute();
-
-    PushMatrix(pInputMat);
+    ScFFT aFFT(pInputMat, bRealInput, bInverse, bPolar);
+    std::function<ScMatrixGenerator> aFunc = [this](SCSIZE nCol, SCSIZE nRow, std::vector<double>& rVec) -> ScMatrixRef
+    {
+        return this->GetNewMat(nCol, nRow, rVec);
+    };
+    ScMatrixRef pOut = aFFT.Compute(aFunc);
+    PushMatrix(pOut);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
