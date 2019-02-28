@@ -224,11 +224,16 @@ css::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rT
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( StdTabControllerModel )
-    cppu::UnoType<css::awt::XTabControllerModel>::get(),
-    cppu::UnoType<css::lang::XServiceInfo>::get(),
-    cppu::UnoType<css::io::XPersistObject>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > StdTabControllerModel::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTabControllerModel>::get(),
+        cppu::UnoType<css::lang::XServiceInfo>::get(),
+        cppu::UnoType<css::io::XPersistObject>::get()
+    };
+    return aTypeList;
+}
 
 sal_Bool StdTabControllerModel::getGroupControl(  )
 {

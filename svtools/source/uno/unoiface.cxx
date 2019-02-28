@@ -195,12 +195,17 @@ css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXMultiLineEdit )
-    cppu::UnoType<css::awt::XTextComponent>::get(),
-    cppu::UnoType<css::awt::XTextArea>::get(),
-    cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXMultiLineEdit::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTextComponent>::get(),
+        cppu::UnoType<css::awt::XTextArea>::get(),
+        cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void VCLXMultiLineEdit::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
 {
@@ -557,11 +562,16 @@ css::uno::Any VCLXFileControl::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFileControl )
-    cppu::UnoType<css::awt::XTextComponent>::get(),
-    cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXFileControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTextComponent>::get(),
+        cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
@@ -1654,10 +1664,15 @@ css::uno::Any SVTXNumericField::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( SVTXNumericField )
-    cppu::UnoType<css::awt::XNumericField>::get(),
-    SVTXFormattedField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > SVTXNumericField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XNumericField>::get(),
+        SVTXFormattedField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 
 void SVTXNumericField::setValue( double Value )
@@ -1821,10 +1836,15 @@ css::uno::Any SVTXCurrencyField::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( SVTXCurrencyField )
-    cppu::UnoType<css::awt::XCurrencyField>::get(),
-    SVTXFormattedField::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > SVTXCurrencyField::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XCurrencyField>::get(),
+        SVTXFormattedField::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 void SVTXCurrencyField::setValue( double Value )
 {
@@ -2109,10 +2129,15 @@ css::uno::Any VCLXProgressBar::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXProgressBar )
-    cppu::UnoType<css::awt::XProgressBar>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXProgressBar::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XProgressBar>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 // css::awt::XProgressBar
 void VCLXProgressBar::setForegroundColor( sal_Int32 nColor )

@@ -69,10 +69,15 @@ css::uno::Any VCLXDevice::queryInterface( const css::uno::Type & rType )
 IMPL_XUNOTUNNEL( VCLXDevice )
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXDevice )
-    cppu::UnoType<css::awt::XDevice>::get(),
-    cppu::UnoType<css::awt::XUnitConversion>::get()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXDevice::getTypes()
+{
+    static const css::uno::Sequence< css::uno::Type > aTypeList {
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XDevice>::get(),
+        cppu::UnoType<css::awt::XUnitConversion>::get()
+    };
+    return aTypeList;
+}
 
 
 // css::awt::XDevice,

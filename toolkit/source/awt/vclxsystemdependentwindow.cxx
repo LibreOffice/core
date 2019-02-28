@@ -58,10 +58,15 @@ css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & 
 }
 
 // css::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXSystemDependentWindow )
-    cppu::UnoType<css::awt::XSystemDependentWindowPeer>::get(),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
+css::uno::Sequence< css::uno::Type > VCLXSystemDependentWindow::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XSystemDependentWindowPeer>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
 
 css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {

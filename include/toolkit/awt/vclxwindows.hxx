@@ -338,7 +338,6 @@ public:
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XView
@@ -407,7 +406,6 @@ public:
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XView
@@ -438,7 +436,6 @@ public:
     void SAL_CALL release() throw() override { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::lang::XComponent
