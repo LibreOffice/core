@@ -2978,7 +2978,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     bool bCalendarSet = false;
-    double fNumberOrig = fNumber;
+    const double fNumberOrig = fNumber;
     bool bRes = false;
     bool bSign = false;
     if (fNumber < 0.0)
@@ -2998,10 +2998,6 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             return false;
         }
     }
-    else
-    {
-        fNumber -= floor(fNumber); // Else truncate date
-    }
     bool bInputLine;
     sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
@@ -3015,10 +3011,6 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         bInputLine = false;
         nCntPost = rInfo.nCntPost;
     }
-    if (bSign && !rInfo.bThousand) // No [] format
-    {
-        fNumber = 1.0 - fNumber; // "Inverse"
-    }
 
     OUStringBuffer sSecStr;
     sal_Int32 nSecPos = 0; // For figure by figure processing
@@ -3027,7 +3019,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         sal_uInt16 nCHour, nCMinute, nCSecond;
         double fFractionOfSecond;
-        tools::Time::GetClock( fNumber, nCHour, nCMinute, nCSecond, fFractionOfSecond, nCntPost);
+        tools::Time::GetClock( fNumberOrig, nCHour, nCMinute, nCSecond, fFractionOfSecond, nCntPost);
         nHour = nCHour;
         nMin = nCMinute;
         nSec = nCSecond;
