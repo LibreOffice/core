@@ -1458,7 +1458,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     Authors::const_iterator aAuthorsBegin = aAuthors.begin();
     for( size_t i = 0; i < nNotes; ++i )
     {
-        XclExpNoteList::RecordRefType xNote = mrNotes.GetRecord( i );
+        XclExpRecordList< XclExpNote >::RecordRefType xNote = mrNotes.GetRecord( i );
         Authors::const_iterator aAuthor = aAuthors.find(
                 XclXmlUtils::ToOUString( xNote->GetAuthor() ) );
         sal_Int32 nAuthorId = distance( aAuthorsBegin, aAuthor );

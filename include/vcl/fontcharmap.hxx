@@ -139,7 +139,7 @@ private:
 
     friend class ::OutputDevice;
 
-    int                 findRangeIndex( sal_uInt32 ) const;
+    int                 findRangeIndex( sal_UCS4 ) const;
 
                         FontCharMap( ImplFontCharMapRef const & pIFCMap );
 
@@ -153,9 +153,9 @@ class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
     explicit            CmapResult( bool bSymbolic = false,
-                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0 );
+                            const sal_UCS4* pRangeCodes = nullptr, int nRangeCount = 0 );
 
-    const sal_uInt32*   mpRangeCodes;
+    const sal_UCS4*     mpRangeCodes;
     const int*          mpStartGlyphs;
     const sal_uInt16*   mpGlyphIds;
     int                 mnRangeCount;

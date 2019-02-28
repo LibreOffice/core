@@ -222,7 +222,7 @@ namespace svt
         }
     }
 
-    void EditBrowseBox::PaintField( OutputDevice& rDev, const tools::Rectangle& rRect,
+    void EditBrowseBox::PaintField( vcl::RenderContext& rDev, const tools::Rectangle& rRect,
                                     sal_uInt16 nColumnId ) const
     {
         if (nColumnId == HandleColumnId)

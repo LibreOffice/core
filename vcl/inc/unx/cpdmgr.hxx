@@ -73,8 +73,8 @@ class CPDManager : public PrinterInfoManager
     virtual void initialize() override;
 
 #if ENABLE_DBUS && ENABLE_GIO
-    static void onNameAcquired(GDBusConnection *connection, const char* name, void* user_data);
-    static void onNameLost (GDBusConnection *, const char *name, void*);
+    static void onNameAcquired(GDBusConnection *connection, const gchar* name, gpointer user_data);
+    static void onNameLost (GDBusConnection *, const gchar *name, gpointer);
     static void printerAdded (GDBusConnection *connection,
                               const gchar     *sender_name,
                               const gchar     *object_path,

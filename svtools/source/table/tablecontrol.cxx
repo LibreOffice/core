@@ -220,7 +220,7 @@ namespace svt { namespace table
     }
 
 
-    void TableControl::SelectRow( RowPos const i_rowIndex, bool const i_select )
+    void TableControl::SelectRow( sal_Int32 const i_rowIndex, bool const i_select )
     {
         ENSURE_OR_RETURN_VOID( ( i_rowIndex >= 0 ) && ( i_rowIndex < m_pImpl->getModel()->getRowCount() ),
             "TableControl::SelectRow: invalid row index!" );

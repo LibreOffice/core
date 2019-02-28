@@ -71,7 +71,7 @@ public:
 
     virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
-    void                    SelectCharacter( sal_uInt32 cNew );
+    void                    SelectCharacter( sal_UCS4 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
     void                    createContextMenu();
 

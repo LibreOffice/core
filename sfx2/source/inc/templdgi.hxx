@@ -104,7 +104,7 @@ protected:
     virtual void ExpandedHdl() override;
     virtual TriState NotifyMoving(
                 SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                SvTreeListEntry*& rpNewParent, sal_uIntPtr& rNewChildPos) override;
+                SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) override;
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle);
 

@@ -53,7 +53,7 @@ public:
     void removeSegment(SCCOLROW nPos1, SCCOLROW nPos2);
     void insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary);
 
-    SCROW findLastTrue(ValueType nValue) const;
+    SCCOLROW findLastTrue(ValueType nValue) const;
 
     // range iteration
     bool getFirst(RangeData& rData);

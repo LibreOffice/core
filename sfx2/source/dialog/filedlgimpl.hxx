@@ -167,7 +167,7 @@ namespace sfx2
         // Own methods
                                 FileDialogHelper_Impl(
                                     FileDialogHelper* _pAntiImpl,
-                                    const short nDialogType,
+                                    const sal_Int16 nDialogType,
                                     FileDialogFlags nFlags,
                                     sal_Int16 nDialog,
                                     weld::Window* pFrameWeld,

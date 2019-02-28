@@ -728,7 +728,7 @@ inline ConvertDataClass ConvertData::Class() const
     return eClass;
 }
 
-inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,
+inline ConvertDataLinear::ConvertDataLinear( const sal_Char p[], double fC, double fO, ConvertDataClass e,
         bool bPrefSupport ) :
     ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )

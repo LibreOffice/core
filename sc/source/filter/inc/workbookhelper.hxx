@@ -125,7 +125,7 @@ public:
     /** Sets the VBA project storage used to import VBA source code and forms. */
     void                setVbaProjectStorage( const StorageRef& rxVbaPrjStrg );
     /** Sets the index of the current Calc sheet, if filter currently processes a sheet. */
-    void                setCurrentSheetIndex( sal_Int16 nSheet );
+    void                setCurrentSheetIndex( SCTAB nSheet );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
     void                useInternalChartDataTable( bool bInternal );

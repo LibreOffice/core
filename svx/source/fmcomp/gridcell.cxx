@@ -3897,7 +3897,7 @@ void SAL_CALL FmXCheckBoxCell::removeItemListener( const Reference< css::awt::XI
 }
 
 
-void SAL_CALL FmXCheckBoxCell::setState( short n )
+void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3909,14 +3909,14 @@ void SAL_CALL FmXCheckBoxCell::setState( short n )
 }
 
 
-short SAL_CALL FmXCheckBoxCell::getState()
+sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if (m_pBox)
     {
         UpdateFromColumn();
-        return static_cast<short>(m_pBox->GetState());
+        return static_cast<sal_Int16>(m_pBox->GetState());
     }
     return TRISTATE_INDET;
 }

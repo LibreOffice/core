@@ -114,6 +114,9 @@ public:
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
 };
 
+class PropertyMap;
+typedef tools::SvRef< PropertyMap > PropertyMapPtr;
+
 class PropertyMap : public virtual SvRefBase
 {
 private:
@@ -142,7 +145,7 @@ public:
     void Erase( PropertyIds eId);
 
     // Imports properties from pMap
-    void InsertProps( const tools::SvRef< PropertyMap >& rMap, const bool bOverwrite = true );
+    void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional< Property > getProperty( PropertyIds eId ) const;
@@ -175,8 +178,6 @@ protected:
             m_aValues.clear();
     }
 };
-
-typedef tools::SvRef< PropertyMap > PropertyMapPtr;
 
 class SectionPropertyMap : public PropertyMap
 {

@@ -2074,7 +2074,7 @@ SwFrameFormats::~SwFrameFormats()
     DeleteAndDestroyAll();
 }
 
-SwFrameFormats::iterator SwFrameFormats::find( const value_type& x ) const
+SwFrameFormats::const_iterator SwFrameFormats::find( const value_type& x ) const
 {
     ByTypeAndName::iterator it = m_TypeAndNameIndex.find(
         boost::make_tuple(x->Which(), x->GetName(), x) );
