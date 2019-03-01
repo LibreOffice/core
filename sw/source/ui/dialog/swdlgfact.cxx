@@ -96,7 +96,11 @@ short AbstractSwWordCountFloatDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
+short AbstractSwInsertAbstractDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
 
 short SwAbstractSfxController_Impl::Execute()
@@ -297,12 +301,12 @@ void AbstractApplyTabController_Impl::SetApplyHdl( const Link<LinkParamNone*,voi
 
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetLevel() const
 {
-    return pDlg->GetLevel();
+    return m_xDlg->GetLevel();
 }
 
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetPara() const
 {
-    return pDlg->GetPara();
+    return m_xDlg->GetPara();
 }
 
 const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
@@ -740,10 +744,9 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
     return pDlg->GetRestartPage();
 }
 
-VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg()
+VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(weld::Window* pParent)
 {
-    VclPtr<SwInsertAbstractDlg> pDlg = VclPtr<SwInsertAbstractDlg>::Create(nullptr);
-    return VclPtr<AbstractSwInsertAbstractDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwInsertAbstractDlg_Impl>::Create(std::make_unique<SwInsertAbstractDlg>(pParent));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAddressAbstractDlg(vcl::Window* pParent,
