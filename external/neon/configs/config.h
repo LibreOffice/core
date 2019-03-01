@@ -183,7 +183,7 @@
 
 #ifndef DISABLE_OPENSSL
 /* Define if NTLM is supported */
-#ifndef WIN32
+#ifndef _WIN32
 #define HAVE_NTLM 1
 #endif
 
@@ -216,7 +216,7 @@
 #define HAVE_SETLOCALE 1
 
 /* Define to 1 if you have the `setsockopt' function. */
-#if defined (LINUX) || defined (WIN32)
+#if defined (LINUX) || defined (_WIN32)
 #define HAVE_SETSOCKOPT 1
 #endif
 

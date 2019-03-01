@@ -41,7 +41,7 @@
 
 #endif /* defined _MSC_VER */
 
-#endif /* defined WIN32 */
+#endif /* defined _WIN32 */
 
 #if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID) || \

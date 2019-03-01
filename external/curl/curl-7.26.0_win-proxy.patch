@@ -107,7 +107,7 @@
 +    GlobalFree(ieProxyConfig->lpszProxyBypass);
 +  }
 +  free(no_proxy);
-+#else /* !WIN32 */
++#else /* !_WIN32 */
    char proxy_env[128];
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
@@ -115,7 +115,7 @@
    }
    if(proxy)
      infof(conn->data, "Uses proxy env variable %s == '%s'\n", envp, proxy);
-+#endif /* WIN32 */
++#endif /* _WIN32 */
  
    return proxy;
  }
