@@ -704,8 +704,6 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
         uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
         uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
-        css::awt::Rectangle aBoundRect (aPos.X(), aPos.Y(), aSize.Width(), aSize.Height());
-        xShapePropSet->setPropertyValue("BoundRect", uno::Any(aBoundRect));
         xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
 
         maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
