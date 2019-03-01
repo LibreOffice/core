@@ -166,7 +166,10 @@ short AbstractSwConvertTableDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
+short AbstractSwInsertDBColAutoPilot_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractDropDownFieldDialog_Impl::Execute()
 {
@@ -359,7 +362,7 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
         uno::Reference< sdbc::XResultSet > xResultSet)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
+    m_xDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 #else
     (void) rSelection;
     (void) rxSource;
@@ -762,7 +765,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBackgroundDialog
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwBackgroundDlg>(pParent, rSet));
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rSet)
 {
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwNumFormatDlg>(pParent, rSet));
 }
@@ -818,8 +821,7 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
         const SwDBData& rData)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    VclPtr<SwInsertDBColAutoPilot> pDlg = VclPtr<SwInsertDBColAutoPilot>::Create( rView, rxSource, xColSupp, rData );
-    return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create(std::make_unique<SwInsertDBColAutoPilot>(rView, rxSource, xColSupp, rData));
 #else
     (void) rView;
     (void) rxSource;
