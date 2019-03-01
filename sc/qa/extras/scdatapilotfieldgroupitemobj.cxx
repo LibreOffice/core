@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
+#include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -41,7 +42,9 @@ namespace sc_apitest
 {
 const auto nMaxFieldIndex = 6;
 
-class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest, public apitest::XNamed
+class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest,
+                                     public apitest::XNamed,
+                                     public apitest::XServiceInfo
 {
 public:
     ScDataPilotFieldGroupItemObj();
@@ -56,6 +59,11 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -64,7 +72,8 @@ private:
 
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
-    , apitest::XNamed("aName")
+    , XNamed("aName")
+    , XServiceInfo("ScDataPilotFieldGroupItemObj", "com.sun.star.sheet.DataPilotFieldGroupItem")
 {
 }
 
