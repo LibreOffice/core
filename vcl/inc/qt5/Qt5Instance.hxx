@@ -52,9 +52,11 @@ public:
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
+    void ImplRunInMain();
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
+    void ImplRunInMainSignal();
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);

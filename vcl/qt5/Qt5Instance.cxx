@@ -184,12 +184,19 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
         pMutex->m_InMainCondition.notify_all();
     }
     // wake up main thread in case it is blocked on event queue
-    TriggerUserEventProcessing(); // TODO sufficient or need extra event type?
+    // TriggerUserEventProcessing() appears to be insufficient in case the
+    // main thread does QEventLoop::WaitForMoreEvents
+    Q_EMIT ImplRunInMainSignal();
     {
         std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
         pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
         pMutex->m_isResultReady = false;
     }
+}
+
+void Qt5Instance::ImplRunInMain()
+{
+    SolarMutexGuard g; // trigger the dispatch code in Qt5YieldMutex::doAcquire
 }
 
 Qt5Instance::Qt5Instance(bool bUseCairo)
@@ -209,6 +216,8 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
     // is processed before the thread emitting the signal continues
     connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
             Qt::BlockingQueuedConnection);
+    connect(this, &Qt5Instance::ImplRunInMainSignal, this, &Qt5Instance::ImplRunInMain,
+            Qt::QueuedConnection); // no Blocking!
 }
 
 Qt5Instance::~Qt5Instance()
