@@ -203,7 +203,10 @@ SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& 
     catch(const SQLContext& e) { aInfo = SQLExceptionInfo(e); }
     catch(const SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
     catch(const SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(const Exception&) { SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+    catch(const Exception&) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception! " << exceptionToString(ex));
+    }
 
     return aInfo;
 }

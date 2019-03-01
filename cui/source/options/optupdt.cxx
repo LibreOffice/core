@@ -40,6 +40,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::css;
 
@@ -193,7 +194,8 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
             }
         }
     } catch (const uno::Exception &) {
-        SAL_WARN( "cui.options", "Unexpected exception fetching User Agent" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "cui.options", "Unexpected exception fetching User Agent " << exceptionToString(ex) );
     }
 }
 
@@ -410,9 +412,10 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
 
         UpdateLastCheckedText();
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e);
+         css::uno::Any ex( cppu::getCaughtException() );
+         SAL_WARN("cui.options", "Caught exception, thread terminated. " << exceptionToString(ex));
     }
 }
 

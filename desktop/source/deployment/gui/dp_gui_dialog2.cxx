@@ -56,6 +56,7 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/configmgr.hxx>
@@ -738,9 +739,10 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         {
             xFilePicker->appendFilter( elem.first, elem.second );
         }
-        catch (const lang::IllegalArgumentException & exc)
+        catch (const lang::IllegalArgumentException &)
         {
-            SAL_WARN( "desktop", exc );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "desktop", exceptionToString(ex) );
         }
     }
     xFilePicker->setCurrentFilter( sDefaultFilter );
@@ -1388,8 +1390,9 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
             bRegistered = false;
     }
     catch ( const uno::RuntimeException & ) { throw; }
-    catch (const uno::Exception & exc) {
-        SAL_WARN( "desktop", exc );
+    catch (const uno::Exception & ) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "desktop", exceptionToString(ex) );
         bRegistered = false;
     }
 

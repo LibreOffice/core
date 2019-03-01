@@ -230,7 +230,8 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     }
     catch (const Exception&)
     {
-        SAL_WARN("sd.fwk", "caught exception while creating factory.");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sd.fwk", "caught exception while creating factory. " << exceptionToString(ex));
     }
 
     // Remember that this factory has been instanced.

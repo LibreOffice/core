@@ -32,6 +32,7 @@
 #include <file/FDriver.hxx>
 #include <file/FTable.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::ucb;
@@ -147,7 +148,8 @@ namespace
         }
         catch( const Exception& )
         {
-            SAL_WARN( "connectivity.drivers", "isCaseSensitiveParentFolder: caught an unexpected exception!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "connectivity.drivers", "isCaseSensitiveParentFolder: caught an unexpected exception! " << exceptionToString(ex) );
         }
 
         return nIsCS;

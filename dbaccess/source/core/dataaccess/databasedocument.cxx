@@ -1671,9 +1671,10 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         {
             xProp->setPropertyValue("Version" , uno::makeAny(aVersion));
         }
-        catch (const uno::Exception& e)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("dbaccess", "exception setting Version: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("dbaccess", "exception setting Version: " << exceptionToString(ex));
         }
     }
 
