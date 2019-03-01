@@ -76,6 +76,9 @@ public:
 
     sal_Int32 GetShapeID(const css::uno::Reference<css::drawing::XShape>& rXShape);
     sal_Int32 GetNextAnimationNodeID();
+
+    void embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName);
+
 private:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,

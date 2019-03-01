@@ -41,6 +41,7 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -393,6 +394,9 @@ sal_Int32 extractNodeType(const Reference<XAnimationNode>& rXNode)
         case AnimationNodeType::COMMAND:
             xmlNodeType = XML_cmd;
             break;
+        case AnimationNodeType::AUDIO:
+            xmlNodeType = XML_audio;
+            break;
         default:
             SAL_WARN("sd.eppt", "unhandled animation node: " << nType);
             break;
@@ -615,6 +619,7 @@ class PPTXAnimationExport
     void WriteAnimationNodeSeq();
     void WriteAnimationNodeEffect();
     void WriteAnimationNodeCommand();
+    void WriteAnimationNodeAudio();
     void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
     void WriteAnimationCondList(const Any& rAny, sal_Int32 nToken);
@@ -1144,6 +1149,39 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
     mpFS->endElementNS(XML_p, XML_cmd);
 }
 
+void PPTXAnimationExport::WriteAnimationNodeAudio()
+{
+    SAL_INFO("sd.eppt", "write animation node audio");
+    Reference<XAudio> xAudio(getCurrentNode(), UNO_QUERY);
+
+    OUString sUrl;
+    OUString sRelId;
+    OUString sName;
+
+    if (!(xAudio.is() && (xAudio->getSource() >>= sUrl) && !sUrl.isEmpty()
+          && sUrl.endsWithIgnoreAsciiCase(".wav")))
+        return;
+
+    mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
+
+    mpFS->startElementNS(XML_p, XML_audio, FSEND);
+    mpFS->startElementNS(XML_p, XML_cMediaNode, FSEND);
+
+    mpFS->startElementNS(XML_p, XML_cTn, FSEND);
+    WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
+    WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
+    mpFS->endElementNS(XML_p, XML_cTn);
+
+    mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
+    mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
+                          sRelId.isEmpty() ? nullptr : USS(sRelId), XML_name,
+                          sUrl.isEmpty() ? nullptr : USS(sName), FSEND);
+    mpFS->endElementNS(XML_p, XML_tgtEl);
+
+    mpFS->endElementNS(XML_p, XML_cMediaNode);
+    mpFS->endElementNS(XML_p, XML_audio);
+}
+
 void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
 {
     const NodeContext* pSavedContext = mpContext;
@@ -1177,6 +1215,9 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
             break;
         case XML_cmd:
             WriteAnimationNodeCommand();
+            break;
+        case XML_audio:
+            WriteAnimationNodeAudio();
             break;
         default:
             SAL_WARN("sd.eppt", "export ooxml node type: " << xmlNodeType);
@@ -1278,8 +1319,10 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
     }
     else if (nType == AnimationNodeType::AUDIO)
     {
-        SAL_WARN("sd.eppt", "Export AUDIO node is not supported yet.");
-        mbValid = false;
+        Reference<XAudio> xAudio(mxNode, UNO_QUERY);
+        OUString sURL;
+        mbValid
+            = xAudio.is() && (xAudio->getSource() >>= sURL) && sURL.endsWithIgnoreAsciiCase(".wav");
     }
     else
     {

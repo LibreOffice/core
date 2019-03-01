@@ -44,8 +44,6 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
@@ -194,7 +192,6 @@ public:
     void testTdf123090();
     void testTdf120028();
     void testTdf120028b();
-    void testTdf44223();
     void testDescriptionImport();
     void testTdf83247();
     void testTdf47365();
@@ -282,7 +279,6 @@ public:
     CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
-    CPPUNIT_TEST(testTdf44223);
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
     CPPUNIT_TEST(testTdf47365);
@@ -2628,29 +2624,6 @@ void SdImportTest::testTdf120028b()
     // This was 0x1f497d, not white: text list style from placeholder shape
     // from slide layout was ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf44223()
-{
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf44223.pptx"), PPTX);
-    uno::Reference<document::XStorageBasedDocument> xSBD(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xSBD.is());
-
-    uno::Reference<embed::XStorage> xStorage = xSBD->getDocumentStorage();
-    CPPUNIT_ASSERT(xStorage.is());
-
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xNameAccess.is());
-
-    uno::Reference<embed::XStorage> xStorage_2(xNameAccess->getByName("Media"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xStorage_2.is());
-    uno::Reference< container::XNameAccess > xNameAccess_2(xStorage_2, uno::UNO_QUERY);
-
-    CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio1.wav"));
-    CPPUNIT_ASSERT(xNameAccess_2->hasByName("audio2.wav"));
 
     xDocShRef->DoClose();
 }
