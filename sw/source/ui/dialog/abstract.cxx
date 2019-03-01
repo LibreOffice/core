@@ -22,34 +22,25 @@
 
 #include <abstract.hxx>
 
-SwInsertAbstractDlg::SwInsertAbstractDlg(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "AbstractDialog",
-        "modules/swriter/ui/abstractdialog.ui")
+SwInsertAbstractDlg::SwInsertAbstractDlg(weld::Window* pParent)
+    : SfxDialogController(pParent, "modules/swriter/ui/abstractdialog.ui", "AbstractDialog")
+    , m_xLevelNF(m_xBuilder->weld_spin_button("outlines"))
+    , m_xParaNF(m_xBuilder->weld_spin_button("paras"))
 {
-    get(m_pLevelNF, "outlines");
-    get(m_pParaNF, "paras");
 }
 
 SwInsertAbstractDlg::~SwInsertAbstractDlg()
 {
-    disposeOnce();
-}
-
-void SwInsertAbstractDlg::dispose()
-{
-    m_pLevelNF.clear();
-    m_pParaNF.clear();
-    SfxModalDialog::dispose();
 }
 
 sal_uInt8 SwInsertAbstractDlg::GetLevel() const
 {
-    return static_cast<sal_uInt8>(m_pLevelNF->GetValue() - 1);
+    return static_cast<sal_uInt8>(m_xLevelNF->get_value() - 1);
 }
 
 sal_uInt8 SwInsertAbstractDlg::GetPara() const
 {
-    return static_cast<sal_uInt8>(m_pParaNF->GetValue());
+    return static_cast<sal_uInt8>(m_xParaNF->get_value());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

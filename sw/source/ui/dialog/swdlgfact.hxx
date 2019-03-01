@@ -89,7 +89,13 @@ public:
 
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl,SwInsertAbstractDlg)
+    std::unique_ptr<SwInsertAbstractDlg> m_xDlg;
+public:
+    explicit AbstractSwInsertAbstractDlg_Impl(std::unique_ptr<SwInsertAbstractDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual sal_uInt8   GetLevel() const override ;
     virtual sal_uInt8   GetPara() const override ;
 };
@@ -587,7 +593,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,
         SfxChildWindow* pChild, weld::Window *pParent, SfxChildWinInfo* pInfo) override;
-    virtual VclPtr<AbstractSwInsertAbstractDlg> CreateSwInsertAbstractDlg() override;
+    virtual VclPtr<AbstractSwInsertAbstractDlg> CreateSwInsertAbstractDlg(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwAddressAbstractDlg(vcl::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwAsciiFilterDlg>  CreateSwAsciiFilterDlg(weld::Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream) override;

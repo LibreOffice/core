@@ -21,17 +21,14 @@
 
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/field.hxx>
-
-class SwInsertAbstractDlg : public SfxModalDialog
+class SwInsertAbstractDlg : public SfxDialogController
 {
-    VclPtr<NumericField> m_pLevelNF;
-    VclPtr<NumericField> m_pParaNF;
+    std::unique_ptr<weld::SpinButton> m_xLevelNF;
+    std::unique_ptr<weld::SpinButton> m_xParaNF;
 
 public:
-    SwInsertAbstractDlg( vcl::Window* pParent );
+    SwInsertAbstractDlg(weld::Window* pParent);
     virtual ~SwInsertAbstractDlg() override;
-    virtual void dispose() override;
 
     sal_uInt8   GetLevel() const;
     sal_uInt8   GetPara() const;
