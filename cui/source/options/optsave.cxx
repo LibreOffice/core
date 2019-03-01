@@ -37,6 +37,7 @@
 #include <unotools/optionsdlg.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -445,9 +446,10 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
             aDocTypeLB->SelectEntryPos(0);
             FilterHdl_Impl(*aDocTypeLB);
         }
-        catch(Exception& e)
+        catch(Exception const &)
         {
-            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "cui.options", "exception in FilterFactory access: " << exceptionToString(ex) );
         }
 
         pImpl->bInitialized = true;

@@ -520,9 +520,10 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
             nOldTokPos = nTokPos;
         } // while ( pIter != pEnd )
     }
-    catch ( const uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("formula.ui", "FormulaDlg_Impl::GetFunctionPos exception! " << e.Message);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("formula.ui", "FormulaDlg_Impl::GetFunctionPos exception! " << exceptionToString(ex));
     }
 
     return nFuncPos;
@@ -1018,9 +1019,10 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
 
         }
     }
-    catch ( const uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("formula.ui", "FormulaDlg_Impl::RepairFormula exception! " << e.Message);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("formula.ui", "FormulaDlg_Impl::RepairFormula exception! " << exceptionToString(ex));
     }
     return aResult;
 }

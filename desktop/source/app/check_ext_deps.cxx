@@ -31,6 +31,7 @@
 #include <vcl/timer.hxx>
 
 #include <unotools/configmgr.hxx>
+#include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <comphelper/lok.hxx>
@@ -293,8 +294,9 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                         bRegistered = false;
                 }
                 catch ( const uno::RuntimeException & ) { throw; }
-                catch (const uno::Exception & exc) {
-                   SAL_WARN( "desktop.app", exc );
+                catch (const uno::Exception & ) {
+                   css::uno::Any ex( cppu::getCaughtException() );
+                   SAL_WARN( "desktop.app", exceptionToString(ex) );
                 }
 
                 if ( bRegistered )

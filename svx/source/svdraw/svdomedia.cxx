@@ -39,6 +39,7 @@
 #include <svx/strings.hrc>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -300,9 +301,10 @@ static bool lcl_HandlePackageURL(
         SAL_INFO("svx", "not found: '" << rURL << "'");
         return false;
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("svx", "exception: '" << e << "'");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("svx", "exception: " << exceptionToString(ex));
         return false;
     }
     if (!xInStream.is())

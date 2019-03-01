@@ -20,7 +20,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-
+#include <tools/diagnose_ex.h>
 #include <xmloff/nmspmap.hxx>
 #include <format.hxx>
 #include <fmtcol.hxx>
@@ -343,9 +343,10 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         {
             xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, uno::makeAny(aSeq));
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << exceptionToString(ex));
         }
     }
     XMLTextStyleContext::Finish( bOverwrite );

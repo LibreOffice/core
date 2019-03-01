@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <tools/diagnose_ex.h>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
@@ -906,7 +907,8 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                 }
                 catch (const Exception&)
                 {
-                    SAL_WARN( "ucb", "caught exception!" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "ucb", "caught exception! " << exceptionToString(ex) );
                 }
             }
         }
