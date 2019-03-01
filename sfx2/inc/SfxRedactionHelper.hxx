@@ -14,6 +14,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -87,6 +88,25 @@ public:
      * pages inserted into Draw for redaction.
      * */
     static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
+
+    static void searchInMetaFile(const OUString& sSearchTerm, const GDIMetaFile& rMtf,
+                                 std::vector<tools::Rectangle>& aRedactionRectangles,
+                                 uno::Reference<XComponent>& xComponent);
+
+    /*
+     * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
+     * */
+    static void addRedactionRectToPage(uno::Reference<XComponent>& xComponent,
+                                       uno::Reference<drawing::XDrawPage>& xPage,
+                                       const std::vector<tools::Rectangle>& aNewRectangles);
+
+    /*
+     * Search for the given term through the gdimetafile, which has the whole content of a draw page,
+     * and draw redaction rectangles to the appropriate positions with suitable sizes.
+     * */
+    static void autoRedactPage(const OUString& sRedactionTerm, const GDIMetaFile& rGDIMetaFile,
+                               uno::Reference<drawing::XDrawPage>& xPage,
+                               uno::Reference<XComponent>& xComponent);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
