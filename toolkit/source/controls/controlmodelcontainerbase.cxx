@@ -97,7 +97,8 @@ struct DisposeControlModel
         }
         catch (const Exception&)
         {
-            SAL_WARN("toolkit", "caught an exception while disposing a component!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("toolkit", "caught an exception while disposing a component! " << exceptionToString(ex) );
         }
     }
 };
@@ -816,7 +817,8 @@ namespace
         }
         catch (const Exception&)
         {
-            SAL_WARN("toolkit", "caught an exception while determining the dialog page!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("toolkit", "caught an exception while determining the dialog page! " << exceptionToString(ex) );
         }
         return nStep;
     }

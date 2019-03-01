@@ -40,6 +40,7 @@
 #include <osl/file.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #ifdef _WIN32
 #include <objbase.h>
@@ -523,9 +524,10 @@ UpdateCheckThread::run()
         }
     }
 
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
+        css::uno::Any ex( cppu::getCaughtException() );
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << exceptionToString(ex) );
     }
 }
 
@@ -538,9 +540,10 @@ ManualUpdateCheckThread::run()
         runCheck( bExtensionsChecked );
         m_aCondition.reset();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << exceptionToString(ex) );
     }
 }
 

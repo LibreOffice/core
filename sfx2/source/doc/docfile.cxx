@@ -130,6 +130,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/weld.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -1311,7 +1312,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
         }
         catch ( const uno::Exception& )
         {
-            SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file " << exceptionToString(ex) );
         }
         return eResult;
     }
@@ -1539,7 +1541,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
     }
     catch( const uno::Exception& )
     {
-        SAL_WARN( "sfx.doc", "Locking exception: high probability, that the content has not been created" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.doc", "Locking exception: high probability, that the content has not been created " << exceptionToString(ex) );
     }
 
     return eResult;
@@ -3001,7 +3004,8 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
             }
             catch ( uno::Exception& )
             {
-                SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file " << exceptionToString(ex) );
             }
         }
         return;

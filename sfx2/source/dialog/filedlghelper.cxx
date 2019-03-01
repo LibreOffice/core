@@ -93,6 +93,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 #ifdef UNX
 #include <errno.h>
@@ -486,7 +487,8 @@ void FileDialogHelper_Impl::updateExportButton()
         }
         catch( const IllegalArgumentException& )
         {
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updateExportButton: caught an exception " << exceptionToString(ex) );
         }
     }
 }
@@ -594,7 +596,8 @@ void FileDialogHelper_Impl::updatePreviewState( bool _bUpdatePreviewWindow )
     }
     catch( const Exception& )
     {
-        SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updatePreviewState: caught an exception " << exceptionToString(ex) );
     }
 }
 
@@ -1295,7 +1298,8 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         }
         catch( const Exception& )
         {
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception " << exceptionToString(ex) );
         }
     }
 
@@ -1323,7 +1327,8 @@ void FileDialogHelper_Impl::implStartExecute()
         }
         catch( const Exception& )
         {
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception " << exceptionToString(ex) );
         }
     }
 }

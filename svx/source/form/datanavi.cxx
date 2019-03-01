@@ -502,9 +502,10 @@ namespace svxform
                         m_pItemList->Select( pEntry );
                         bIsDocModified = true;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while adding submission" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while adding submission " << exceptionToString(ex) );
                     }
                 }
             }
@@ -538,9 +539,10 @@ namespace svxform
                             pResId = RID_STR_DATANAV_ADD_ELEMENT;
                             xNewNode = m_xUIHelper->createElement( xParentNode, NEW_ELEMENT );
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while create element" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while create element " << exceptionToString(ex) );
                         }
                     }
                     else
@@ -552,9 +554,10 @@ namespace svxform
                         {
                             xNewNode = m_xUIHelper->createAttribute( xParentNode, NEW_ATTRIBUTE );
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while create attribute" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while create attribute " << exceptionToString(ex) );
                         }
                     }
 
@@ -566,13 +569,15 @@ namespace svxform
                     {
                         if ( e.Code == css::xml::dom::DOMExceptionType_DOMSTRING_SIZE_ERR )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): domexception: size error" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): domexception: size error " << exceptionToString(ex) );
                         }
                         SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): domexception while append child" );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while append child" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while append child " << exceptionToString(ex) );
                     }
 
                     try
@@ -584,18 +589,20 @@ namespace svxform
                         DBG_ASSERT( m_nAddAttributeId == _nToolBoxID
                                     || xPNode.is(), "XFormsPage::DoToolboxAction(): node not added" );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                     }
 
                     try
                     {
                         m_xUIHelper->getBindingForNode( xNewNode, true );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while get binding for node" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while get binding for node " << exceptionToString(ex) );
                     }
                     pNode.reset(new ItemNode( xNewNode ));
                 }
@@ -610,9 +617,10 @@ namespace svxform
                         pNode.reset(new ItemNode( xNewBinding ));
                         eType = DITBinding;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while adding binding" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while adding binding " << exceptionToString(ex) );
                     }
                 }
 
@@ -640,9 +648,10 @@ namespace svxform
                                 xPNode = xNode->getParentNode();
                             DBG_ASSERT( !xPNode.is(), "XFormsPage::RemoveEntry(): node not removed" );
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                         }
                     }
                 }
@@ -661,9 +670,10 @@ namespace svxform
                             Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
                             xBindings->remove( makeAny( xNewBinding ) );
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                         }
                     }
                 }
@@ -701,9 +711,10 @@ namespace svxform
                                 eType = DITAttribute;
                             }
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                         }
                     }
                     else if ( DGTBinding == m_eGroup )
@@ -724,9 +735,10 @@ namespace svxform
                                 sNewName = m_xUIHelper->getNodeDisplayName(
                                     pNode->m_xNode, m_pNaviWin->IsShowDetails() );
                             }
-                            catch ( Exception& )
+                            catch ( Exception const & )
                             {
-                                SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                                css::uno::Any ex( cppu::getCaughtException() );
+                                SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                             }
                         }
                         else if (pNode)
@@ -740,9 +752,10 @@ namespace svxform
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sNewName += sTemp;
                             }
-                            catch ( Exception& )
+                            catch ( Exception const & )
                             {
-                                SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
+                                css::uno::Any ex( cppu::getCaughtException() );
+                                SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught " << exceptionToString(ex) );
                             }
                         }
 
@@ -844,9 +857,10 @@ namespace svxform
                 sEntry += m_aReplaceString.toUI( sTemp );
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "XFormsPage::AddEntry(Ref): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "XFormsPage::AddEntry(Ref): exception caught " << exceptionToString(ex) );
             }
         }
         else // then Binding Page
@@ -862,9 +876,10 @@ namespace svxform
                 pEntry = m_pItemList->InsertEntry(
                     sName, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "XFormsPage::AddEntry(Ref): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "XFormsPage::AddEntry(Ref): exception caught " << exceptionToString(ex) );
             }
         }
 
@@ -920,9 +935,10 @@ namespace svxform
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "XFormsPage::EditEntry(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "XFormsPage::EditEntry(): exception caught " << exceptionToString(ex) );
             }
         }
     }
@@ -972,9 +988,10 @@ namespace svxform
                         bRet = true;
                     }
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught " << exceptionToString(ex) );
                 }
             }
             else
@@ -989,9 +1006,10 @@ namespace svxform
                 {
                     pNode->m_xPropSet->getPropertyValue( sProperty ) >>= sName;
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught " << exceptionToString(ex) );
                 }
                 std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                          VclMessageType::Question, VclButtonsType::YesNo,
@@ -1009,9 +1027,10 @@ namespace svxform
                             xModel->getBindings()->remove( makeAny( pNode->m_xPropSet ) );
                         bRet = true;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught " << exceptionToString(ex) );
                     }
                 }
             }
@@ -1103,9 +1122,10 @@ namespace svxform
                         }
                     }
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught " << exceptionToString(ex) );
                 }
                 break;
             }
@@ -1135,9 +1155,10 @@ namespace svxform
                         }
                     }
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught " << exceptionToString(ex) );
                 }
                 break;
             }
@@ -1180,9 +1201,10 @@ namespace svxform
                         }
                     }
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "XFormsPage::SetModel(): exception caught " << exceptionToString(ex) );
                 }
                 break;
             }
@@ -1231,9 +1253,10 @@ namespace svxform
                         if ( xRoot->hasChildNodes() )
                             AddChildren(nullptr, xRoot);
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "XFormsPage::LoadInstance(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "XFormsPage::LoadInstance(): exception caught " << exceptionToString(ex) );
                     }
                 }
             }
@@ -1287,9 +1310,10 @@ namespace svxform
                             bEnableAdd = false;
                         }
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                       SAL_WARN( "svx.form", "XFormsPage::EnableMenuItems(): exception caught" );
+                       css::uno::Any ex( cppu::getCaughtException() );
+                       SAL_WARN( "svx.form", "XFormsPage::EnableMenuItems(): exception caught " << exceptionToString(ex) );
                     }
                 }
             }
@@ -1329,9 +1353,10 @@ namespace svxform
                             pResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
                         }
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                       SAL_WARN( "svx.form", "XFormsPage::EnableMenuItems(): exception caught" );
+                       css::uno::Any ex( cppu::getCaughtException() );
+                       SAL_WARN( "svx.form", "XFormsPage::EnableMenuItems(): exception caught " << exceptionToString(ex) );
                     }
                 }
             }
@@ -1470,9 +1495,10 @@ namespace svxform
             if ( aAny >>= xModel )
                 xUIHelper.set( xModel, UNO_QUERY );
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
         }
         DBG_ASSERT( xUIHelper.is(), "DataNavigatorWindow::MenuSelectHdl(): no UIHelper" );
 
@@ -1519,9 +1545,10 @@ namespace svxform
                                 ModelSelectHdl(m_pModelsBox);
                                 bIsDocModified = true;
                             }
-                            catch ( Exception& )
+                            catch ( Exception const & )
                             {
-                                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                css::uno::Any ex( cppu::getCaughtException() );
+                                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                             }
                         }
                     }
@@ -1579,9 +1606,10 @@ namespace svxform
                             m_pModelsBox->SelectEntryPos( nSelectedPos );
                             bIsDocModified = true;
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                         }
                     }
                 }
@@ -1600,9 +1628,10 @@ namespace svxform
                     {
                         xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                     }
                     m_pModelsBox->RemoveEntry( nSelectedPos );
                     if ( m_pModelsBox->GetEntryCount() <= nSelectedPos )
@@ -1633,9 +1662,10 @@ namespace svxform
                     {
                         xUIHelper->newInstance( sName, sURL, !bLinkOnce );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                     }
                     ModelSelectHdl( nullptr );
                     m_pTabCtrl->SetCurPageId( nInst );
@@ -1670,9 +1700,10 @@ namespace svxform
                                                        sURL,
                                                        !bLinkOnce );
                         }
-                        catch ( Exception& )
+                        catch ( Exception const & )
                         {
-                            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                         }
                         pPage->SetInstanceName(sNewName);
                         pPage->SetInstanceURL(sURL);
@@ -1723,7 +1754,8 @@ namespace svxform
                             }
                             catch (const Exception&)
                             {
-                                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                css::uno::Any ex( cppu::getCaughtException() );
+                                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught " << exceptionToString(ex) );
                             }
                             m_pTabCtrl->RemovePage( nId );
                             m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("instance"));
@@ -1854,9 +1886,10 @@ namespace svxform
                 {
                     m_xFrameModel = xCtrl->getModel();
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "DataNavigatorWindow::LoadModels(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "DataNavigatorWindow::LoadModels(): exception caught " << exceptionToString(ex) );
                 }
             }
         }
@@ -1885,9 +1918,10 @@ namespace svxform
                     }
                 }
             }
-            catch( Exception& )
+            catch( Exception const & )
             {
-                SAL_WARN( "svx.form", "DataNavigatorWindow::LoadModels(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "DataNavigatorWindow::LoadModels(): exception caught " << exceptionToString(ex) );
             }
         }
 
@@ -1927,9 +1961,10 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): no such element" );
         }
-        catch( Exception& )
+        catch( Exception const & )
         {
-            SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception " << exceptionToString(ex) );
         }
     }
 
@@ -1976,9 +2011,10 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): no such element" );
         }
-        catch( Exception& )
+        catch( Exception const & )
         {
-            SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception " << exceptionToString(ex) );
         }
     }
 
@@ -2281,7 +2317,8 @@ namespace svxform
                 }
                 catch (const Exception&)
                 {
-                    SAL_WARN( "svx.form", "AddDataItemDialog::Dtor(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddDataItemDialog::Dtor(): exception caught " << exceptionToString(ex) );
                 }
             }
         }
@@ -2400,9 +2437,10 @@ namespace svxform
                 // else: no property? then ignore.
             }
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "copyPropSet(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "copyPropSet(): exception caught " << exceptionToString(ex) );
         }
     }
 
@@ -2438,9 +2476,10 @@ namespace svxform
                 sValue = m_xDefaultED->get_text();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddDataDialog::OKHdl(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddDataDialog::OKHdl(): exception caught " << exceptionToString(ex) );
             }
         }
         else
@@ -2459,9 +2498,10 @@ namespace svxform
                     m_pItemNode->m_xNode = xNewNode;
                 }
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddDataDialog::OKHdl(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddDataDialog::OKHdl(): exception caught " << exceptionToString(ex) );
             }
         }
         // then close the dialog
@@ -2542,9 +2582,10 @@ namespace svxform
                     }
                     m_xDefaultED->set_text( m_pItemNode->m_xNode->getNodeValue() );
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught " << exceptionToString(ex) );
                 }
             }
             else if ( m_pItemNode->m_xPropSet.is() )
@@ -2560,9 +2601,10 @@ namespace svxform
                         if ( xBindings.is() )
                             xBindings->insert( makeAny( m_xTempBinding ) );
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught " << exceptionToString(ex) );
                     }
                 }
                 OUString sTemp;
@@ -2582,9 +2624,10 @@ namespace svxform
                         m_xNameED->set_text( sTemp );
                     }
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught " << exceptionToString(ex) );
                 }
 
                 m_xDefaultBtn->show();
@@ -2613,7 +2656,8 @@ namespace svxform
                 }
                 catch (const Exception&)
                 {
-                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught " << exceptionToString(ex) );
                 }
             }
         }
@@ -2661,9 +2705,10 @@ namespace svxform
                         }
                     }
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "AddDataItemDialog::InitDataTypeBox(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddDataItemDialog::InitDataTypeBox(): exception caught " << exceptionToString(ex) );
                 }
             }
         }
@@ -2743,7 +2788,8 @@ namespace svxform
             }
             catch (const Exception&)
             {
-                SAL_WARN( "svx.form", "AddConditionDialog::Ctor(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddConditionDialog::Ctor(): exception caught " << exceptionToString(ex) );
             }
         }
 
@@ -2762,9 +2808,10 @@ namespace svxform
         {
             m_xBinding->getPropertyValue( PN_BINDING_NAMESPACES ) >>= xNameContnr;
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught " << exceptionToString(ex) );
         }
         NamespaceItemDialog aDlg(this, xNameContnr);
         aDlg.run();
@@ -2772,25 +2819,15 @@ namespace svxform
         {
             m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, makeAny( xNameContnr ) );
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught " << exceptionToString(ex) );
         }
     }
 
     IMPL_LINK_NOARG(AddConditionDialog, OKHdl, weld::Button&, void)
     {
-/*!!!
-        try
-        {
-            if ( m_xBinding.is() )
-                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( OUString( m_pConditionED->GetText() ) ) );
-        }
-        catch( const Exception& )
-        {
-            SAL_WARN( "svx.form", "AddConditionDialog, OKHdl: caught an exception!" );
-        }
-*/
         m_xDialog->response(RET_OK);
     }
 
@@ -2809,9 +2846,10 @@ namespace svxform
             {
                 sResult = m_xUIHelper->getResultForExpression( m_xBinding, ( m_sPropertyName == PN_BINDING_EXPR ), sCondition );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddConditionDialog::ResultHdl(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddConditionDialog::ResultHdl(): exception caught " << exceptionToString(ex) );
             }
         }
         m_xResultWin->set_text(sResult);
@@ -2922,9 +2960,10 @@ namespace svxform
                     m_rNamespaces->insertByName( sPrefix, makeAny( sURL ) );
             }
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "NamespaceItemDialog::OKHdl(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "NamespaceItemDialog::OKHdl(): exception caught " << exceptionToString(ex) );
         }
         // and close the dialog
         m_xDialog->response(RET_OK);
@@ -2954,9 +2993,10 @@ namespace svxform
                 }
             }
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "NamespaceItemDialog::LoadNamespaces(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "NamespaceItemDialog::LoadNamespaces(): exception caught " << exceptionToString(ex) );
         }
     }
 
@@ -2994,9 +3034,10 @@ namespace svxform
                 return;
             }
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "svx.form", "ManageNamespacesDialog::OKHdl(): exception caught" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svx.form", "ManageNamespacesDialog::OKHdl(): exception caught " << exceptionToString(ex) );
         }
 
         // no error so close the dialog
@@ -3066,9 +3107,10 @@ namespace svxform
                     m_xNewSubmission = xModel->createSubmission();
                     m_xSubmission.set( m_xNewSubmission, UNO_QUERY );
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    SAL_WARN( "svx.form", "AddSubmissionDialog::OKHdl(): exception caught" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svx.form", "AddSubmissionDialog::OKHdl(): exception caught " << exceptionToString(ex) );
                 }
             }
         }
@@ -3094,9 +3136,10 @@ namespace svxform
                 sTemp = m_aReplaceString.toAPI( m_xReplaceLB->get_active_text() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddSubmissionDialog::OKHdl(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddSubmissionDialog::OKHdl(): exception caught " << exceptionToString(ex) );
             }
         }
 
@@ -3145,9 +3188,10 @@ namespace svxform
                     }
                 }
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddSubmissionDialog::FillAllBoxes(): exception caught " << exceptionToString(ex) );
             }
         }
 
@@ -3214,9 +3258,10 @@ namespace svxform
                 }
                 m_xReplaceLB->set_active(nPos);
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.form", "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.form", "AddSubmissionDialog::FillAllBoxes(): exception caught " << exceptionToString(ex) );
             }
         }
 

@@ -45,6 +45,7 @@
 #include <vcl/treelistentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/inputdlg.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -354,9 +355,10 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
-    catch ( Exception& )
+    catch ( Exception const & )
     {
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception " << exceptionToString(ex) );
     }
 }
 

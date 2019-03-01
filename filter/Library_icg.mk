@@ -24,7 +24,8 @@ $(eval $(call gb_Library_use_external,icg,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,icg))
 
 $(eval $(call gb_Library_use_libraries,icg,\
-        comphelper \
+    comphelper \
+    cppuhelper \
 	tk \
 	vcl \
 	utl \

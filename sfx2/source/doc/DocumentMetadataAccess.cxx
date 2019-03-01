@@ -51,6 +51,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <libxml/tree.h>
 
@@ -571,7 +572,8 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
             o_rFiles.insert(styles);
         }
     } catch (const uno::Exception &) {
-        SAL_WARN("sfx", "collectFilesFromStorage: exception?");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sfx", "collectFilesFromStorage: " << exceptionToString(ex));
     }
 }
 

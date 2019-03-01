@@ -18,6 +18,7 @@ $(eval $(call gb_Library_use_libraries,ucpexpand1,\
 	cppu \
 	cppuhelper \
 	sal \
+	tl \
 	ucbhelper \
 ))
 

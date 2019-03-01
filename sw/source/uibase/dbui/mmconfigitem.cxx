@@ -36,6 +36,7 @@
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>
+#include <tools/diagnose_ex.h>
 #include <mailmergehelper.hxx>
 #include <swunohelper.hxx>
 #include <dbmgr.hxx>
@@ -885,18 +886,20 @@ Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
                 xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->m_sFilter.isEmpty()));
                 xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->m_sFilter));
             }
-            catch (const Exception& e)
+            catch (const Exception&)
             {
-                SAL_WARN("sw.ui", "exception caught: " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sw.ui", "exception caught: " << exceptionToString(ex));
             }
             xRowSet->execute();
             m_pImpl->m_xResultSet = xRowSet.get();
             m_pImpl->m_xResultSet->first();
             m_pImpl->m_nResultSetCursorPos = 1;
         }
-        catch (const Exception& e)
+        catch (const Exception&)
         {
-            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << exceptionToString(ex));
         }
     }
     return m_pImpl->m_xResultSet;
@@ -932,9 +935,10 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
                 uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
                 xRowSet->execute();
             }
-            catch (const Exception& e)
+            catch (const Exception&)
             {
-                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << exceptionToString(ex));
             }
         }
     }

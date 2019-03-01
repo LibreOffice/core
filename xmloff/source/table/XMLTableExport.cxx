@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlprmap.hxx>
@@ -593,7 +594,8 @@ void XMLTableExport::exportTableTemplates()
                     }
                     catch(const Exception&)
                     {
-                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific attributes, exception caught!");
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific attributes, exception caught! " << exceptionToString(ex));
                     }
                     pElements++;
                 }
@@ -650,7 +652,8 @@ void XMLTableExport::exportTableTemplates()
                     }
                     catch(const Exception&)
                     {
-                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific styles, exception caught!");
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific styles, exception caught!" << exceptionToString(ex));
                     }
                     pElements++;
                 }
@@ -658,12 +661,14 @@ void XMLTableExport::exportTableTemplates()
         }
         catch(const Exception&)
         {
-            OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("xmloff", "XMLTableExport::exportTableDesigns(), exception caught while exporting a table design! " << exceptionToString(ex));
         }
     }
     catch(const Exception&)
     {
-        OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("xmloff", "XMLTableExport::exportTableDesigns(), exception caught! " << exceptionToString(ex));
     }
 }
 
