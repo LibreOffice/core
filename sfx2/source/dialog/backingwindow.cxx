@@ -44,6 +44,7 @@
 #include <comphelper/propertysequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -130,9 +131,10 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     {
         mxContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << exceptionToString(ex) );
     }
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,

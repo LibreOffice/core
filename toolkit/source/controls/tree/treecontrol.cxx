@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -466,9 +467,9 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNo
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch( const RuntimeException& e )
+        catch( const RuntimeException& )
         {
-            DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEditing, e )
+            DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEditing )
         }
     }
 }
@@ -489,9 +490,9 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch( const RuntimeException& e )
+        catch( const RuntimeException& )
         {
-            DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEdited, e )
+            DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEdited )
         }
     }
 }

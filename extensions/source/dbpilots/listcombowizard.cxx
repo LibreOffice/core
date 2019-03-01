@@ -25,6 +25,7 @@
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
 #include <sal/log.hxx>
@@ -253,7 +254,8 @@ namespace dbp
             }
             catch(const Exception&)
             {
-                SAL_WARN( "extensions.dbpilots", "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns!");
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "extensions.dbpilots", "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns! " << exceptionToString(ex));
             }
         }
         return aColumnNames;

@@ -42,6 +42,7 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
+#include <tools/diagnose_ex.h>
 #include <stlsheet.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
@@ -700,9 +701,10 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
     {
         dispose();
     }
-    catch (RuntimeException const& exc)
+    catch (RuntimeException const&)
     { // don't break throw ()
-        SAL_WARN( "sd", exc );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sd", exceptionToString(ex) );
     }
     OSL_ASSERT( mrBHelper.bDisposed );
     SdStyleSheetBase::release();

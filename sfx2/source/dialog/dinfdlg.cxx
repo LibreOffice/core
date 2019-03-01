@@ -76,6 +76,7 @@
 #include <bitmaps.hlst>
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -413,15 +414,17 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
                 xContainer->addProperty( pProp->m_sName,
                     beans::PropertyAttribute::REMOVABLE, pProp->m_aValue );
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties " << exceptionToString(ex) );
             }
         }
     }
-    catch ( Exception& )
+    catch ( Exception const & )
     {
-        SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties " << exceptionToString(ex) );
     }
 }
 

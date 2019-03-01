@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 
 namespace svx
@@ -51,9 +52,10 @@ namespace svx
                 if ( xFrameProps.is() )
                     xFrameProps->getPropertyValue( PROPNAME_LAYOUTMANAGER ) >>= m_xLayouter;
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                SAL_WARN( "svx.tbxcrtls", "ToolboxAccess::Ctor(): exception" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "svx.tbxcrtls", "ToolboxAccess::Ctor(): exception " << exceptionToString(ex) );
             }
         }
     }

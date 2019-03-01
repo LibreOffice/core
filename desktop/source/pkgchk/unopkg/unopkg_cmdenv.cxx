@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -120,8 +121,9 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
         if (xComp.is())
             xComp->dispose();
     }
-    catch (const RuntimeException & exc) {
-        SAL_WARN( "desktop", exc );
+    catch (const RuntimeException &) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "desktop", exceptionToString(ex) );
     }
 }
 

@@ -775,13 +775,10 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
             bCreatedFolder = true;
         }
-        catch( RuntimeException& )
+        catch( Exception const & )
         {
-            SAL_WARN( "sfx.doc", "createFolder(): got runtime exception" );
-        }
-        catch( Exception& )
-        {
-            SAL_WARN( "sfx.doc", "createFolder(): Could not create new folder" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.doc", "createFolder(): Could not create new folder " << exceptionToString(ex) );
         }
     }
     else if ( bCreateParent )

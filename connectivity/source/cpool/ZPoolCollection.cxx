@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -364,7 +365,8 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
     }
     catch(Exception&)
     {
-        SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node!");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node! " << exceptionToString(ex));
     }
     return xNode;
 }
