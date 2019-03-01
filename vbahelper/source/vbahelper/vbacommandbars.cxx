@@ -208,7 +208,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
     }
 
     // hardcode if "aIndex = 1" that would return "main menu".
-    sal_Int16 nIndex = 0;
+    sal_Int32 nIndex = 0;
     aIndex >>= nIndex;
     if( nIndex == 1 )
     {
