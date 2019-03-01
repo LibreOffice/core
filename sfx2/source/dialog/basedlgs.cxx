@@ -844,7 +844,7 @@ IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::I
     return SfxViewShell::Current();
 }
 
-SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Window *pParent, const SfxItemSet& rSet,
+SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet& rSet,
     const OUString& rUIXMLDescription, const OString& rID)
     : SfxDialogController(pParent, rUIXMLDescription, rID)
     , m_pInputSet(&rSet)

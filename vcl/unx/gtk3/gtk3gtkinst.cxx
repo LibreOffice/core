@@ -6965,6 +6965,22 @@ public:
         return gtk_adjustment_get_page_size(m_pVAdjustment);
     }
 
+    virtual void show() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_show(pParent);
+        gtk_widget_show(m_pWidget);
+    }
+
+    virtual void hide() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_hide(pParent);
+        gtk_widget_hide(m_pWidget);
+    }
+
     virtual ~GtkInstanceTextView() override
     {
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
