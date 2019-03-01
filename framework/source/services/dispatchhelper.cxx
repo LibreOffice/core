@@ -21,39 +21,36 @@
 #include <macros/xserviceinfo.hxx>
 #include <services.h>
 
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
 #include <comphelper/profilezone.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/threadex.hxx>
 
-namespace framework{
-
+namespace framework
+{
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
-                                 ::cppu::OWeakObject              ,
-                                 "com.sun.star.frame.DispatchHelper",
-                                 IMPLEMENTATIONNAME_DISPATCHHELPER)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper, ::cppu::OWeakObject,
+                                   "com.sun.star.frame.DispatchHelper",
+                                   IMPLEMENTATIONNAME_DISPATCHHELPER)
 
-DEFINE_INIT_SERVICE( DispatchHelper, {} )
+DEFINE_INIT_SERVICE(DispatchHelper, {})
 
 /** ctor.
 
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
-DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   m_xContext    (xContext)
+DispatchHelper::DispatchHelper(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    : m_xContext(xContext)
 {
 }
 
 /** dtor.
 */
-DispatchHelper::~DispatchHelper()
-{
-}
+DispatchHelper::~DispatchHelper() {}
 
 /** capsulate all steps of a dispatch request and provide so an easy way for dispatches.
 
@@ -75,18 +72,12 @@ DispatchHelper::~DispatchHelper()
     @return An Any which capsulate a possible result of the internal wrapped dispatch.
  */
 css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
-                                const css::uno::Reference< css::frame::XDispatchProvider >& xDispatchProvider ,
-                                const OUString&                                      sURL              ,
-                                const OUString&                                      sTargetFrameName  ,
-                                      sal_Int32                                             nSearchFlags      ,
-                                const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
+    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
+    const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
+    const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     // check for valid parameters
-    if (
-        (!xDispatchProvider.is()) ||
-        (!m_xContext.is())        ||
-        (sURL.isEmpty()         )
-       )
+    if ((!xDispatchProvider.is()) || (!m_xContext.is()) || (sURL.isEmpty()))
     {
         return css::uno::Any();
     }
@@ -94,7 +85,8 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // parse given URL
     /* SAFE { */
     osl::ClearableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
+    css::uno::Reference<css::util::XURLTransformer> xParser
+        = css::util::URLTransformer::create(m_xContext);
     aReadLock.clear();
     /* } SAFE */
 
@@ -103,7 +95,8 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     xParser->parseStrict(aURL);
 
     // search dispatcher
-    css::uno::Reference< css::frame::XDispatch >          xDispatch       = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
+    css::uno::Reference<css::frame::XDispatch> xDispatch
+        = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
 
     utl::MediaDescriptor aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
@@ -116,34 +109,35 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         return executeDispatch(xDispatch, aURL, true, lArguments);
 }
 
-
-css::uno::Any DispatchHelper::executeDispatch(
-                                 const css::uno::Reference< css::frame::XDispatch >&  xDispatch     ,
-                                 const  css::util::URL&                                 aURL        ,
-                                 bool                                                   SyncronFlag ,
-                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments  )
+css::uno::Any
+DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
+                                const css::util::URL& aURL, bool SyncronFlag,
+                                const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     comphelper::ProfileZone aZone("executeDispatch");
-    css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference<css::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
+                                                    css::uno::UNO_QUERY);
     m_aResult.clear();
 
     // check for valid parameters
-    if (xDispatch.is() )
+    if (xDispatch.is())
     {
-        css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyDispatch (xDispatch, css::uno::UNO_QUERY);
+        css::uno::Reference<css::frame::XNotifyingDispatch> xNotifyDispatch(xDispatch,
+                                                                            css::uno::UNO_QUERY);
 
         // make sure that synchronous execution is used (if possible)
-        css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
+        css::uno::Sequence<css::beans::PropertyValue> aArguments(lArguments);
         sal_Int32 nLength = lArguments.getLength();
-        aArguments.realloc( nLength + 1 );
-        aArguments[ nLength ].Name = "SynchronMode";
-        aArguments[ nLength ].Value <<= SyncronFlag;
+        aArguments.realloc(nLength + 1);
+        aArguments[nLength].Name = "SynchronMode";
+        aArguments[nLength].Value <<= SyncronFlag;
 
         if (xNotifyDispatch.is())
         {
             // dispatch it with guaranteed notification
             // Here we can hope for a result ... instead of the normal dispatch.
-            css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
+            css::uno::Reference<css::frame::XDispatchResultListener> xListener(xTHIS,
+                                                                               css::uno::UNO_QUERY);
             /* SAFE { */
             osl::ClearableMutexGuard aWriteLock(m_mutex);
             m_xBroadcaster.set(xNotifyDispatch, css::uno::UNO_QUERY);
@@ -154,12 +148,12 @@ css::uno::Any DispatchHelper::executeDispatch(
             // dispatch it and wait for a notification
             // TODO/MBA: waiting in main thread?!
             xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
-            m_aBlock.wait();        // wait for result
+            m_aBlock.wait(); // wait for result
         }
         else
         {
             // dispatch it without any chance to get a result
-            xDispatch->dispatch( aURL, aArguments );
+            xDispatch->dispatch(aURL, aArguments);
         }
     }
 
@@ -175,7 +169,7 @@ css::uno::Any DispatchHelper::executeDispatch(
     @param  aResult
                 describes the result of the dispatch operation
  */
-void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResultEvent& aResult )
+void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultEvent& aResult)
 {
     osl::MutexGuard g(m_mutex);
     m_aResult <<= aResult;
@@ -188,14 +182,13 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     @param aEvent
                 describe the source of this event and MUST be our save broadcaster!
  */
-void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& )
+void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
 {
     osl::MutexGuard g(m_mutex);
     m_aResult.clear();
     m_aBlock.set();
     m_xBroadcaster.clear();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

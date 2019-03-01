@@ -5380,7 +5380,6 @@ framework/source/register/registertemp.cxx
 framework/source/services/ContextChangeEventMultiplexer.cxx
 framework/source/services/autorecovery.cxx
 framework/source/services/desktop.cxx
-framework/source/services/dispatchhelper.cxx
 framework/source/services/frame.cxx
 framework/source/services/mediatypedetectionhelper.cxx
 framework/source/services/modulemanager.cxx
@@ -6448,7 +6447,6 @@ include/framework/actiontriggerhelper.hxx
 include/framework/addonmenu.hxx
 include/framework/addonsoptions.hxx
 include/framework/configimporter.hxx
-include/framework/dispatchhelper.hxx
 include/framework/documentundoguard.hxx
 include/framework/framelistanalyzer.hxx
 include/framework/fwedllapi.h
