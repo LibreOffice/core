@@ -15,7 +15,7 @@ diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
  #include <rasqal_config.h>
  #endif
  
-+#ifdef WIN32
++#ifdef _WIN32
 +#include <win32_rasqal_config.h>
 +#endif
 +
@@ -28,7 +28,7 @@ diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
  extern "C" {
  #endif
  
-+#ifdef WIN32
++#ifdef _WIN32
 +#include <win32_rasqal_config.h>
 +#else
  #include <rasqal_config.h>

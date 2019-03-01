@@ -1076,7 +1076,7 @@ void SbModule::Run( SbMethod* pMeth )
           // Empiric value, 1650 = needed bytes/Basic call level
           // for Solaris including 10% safety margin
           nMaxCallLevel = rl.rlim_cur / 1650;
-#elif defined WIN32
+#elif defined _WIN32
           nMaxCallLevel = 5800;
 #else
           nMaxCallLevel = MAXRECURSION;
