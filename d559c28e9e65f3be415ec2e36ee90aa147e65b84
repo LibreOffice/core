@@ -16,6 +16,24 @@
       "revId": "d559c28e9e65f3be415ec2e36ee90aa147e65b84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_7146487f",
+        "filename": "include/cppuhelper/typeprovider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-01T12:37:08Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/68549",
+      "parentUuid": "1f485f77_3177b0d7",
+      "revId": "d559c28e9e65f3be415ec2e36ee90aa147e65b84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
