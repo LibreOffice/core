@@ -283,7 +283,7 @@ bool SbxDecimal::getDouble( double& rVal )
 }
 
 #else
-// !WIN32
+// !_WIN32
 
 bool SbxDecimal::operator -= ( const SbxDecimal & )
 {

@@ -36,7 +36,7 @@ using namespace std;
 /* @Man: change the hwp formula to LaTeX */
 #ifdef _WIN32
 # define ENDL  "\r\n"
-#else /* !WIN32 */
+#else /* !_WIN32 */
 # define ENDL  "\n"
 #endif
 
