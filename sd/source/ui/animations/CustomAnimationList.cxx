@@ -29,7 +29,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "CustomAnimationList.hxx"
 #include <CustomAnimationPreset.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/commandevent.hxx>

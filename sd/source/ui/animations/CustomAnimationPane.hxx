@@ -22,9 +22,12 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
 #include "CategoryListBox.hxx"
+#include "motionpathtag.hxx"
 #include <misc/scopelock.hxx>
 
 #include <vector>
@@ -32,9 +35,7 @@
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
 namespace sd { class CustomAnimationPresets; }
-namespace sd { class MotionPathTag; }
 
-class FixedText;
 namespace weld { class ComboBox; }
 
 enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
@@ -49,7 +50,6 @@ class EventMultiplexerEvent;
 
 namespace sd {
 
-class PropertyControl;
 class STLPropertySet;
 class ViewShellBase;
 

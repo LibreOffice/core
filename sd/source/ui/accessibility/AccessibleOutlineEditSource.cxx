@@ -20,10 +20,9 @@
 #include <memory>
 #include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdview.hxx>
 
 #include <AccessibleOutlineEditSource.hxx>
-#include <OutlineView.hxx>
-#include <svx/sdrpaintwindow.hxx>
 
 namespace accessibility
 {

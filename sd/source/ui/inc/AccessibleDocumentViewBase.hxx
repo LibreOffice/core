@@ -35,6 +35,8 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 
+#include "Window.hxx"
+
 namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
@@ -43,7 +45,6 @@ class VclWindowEvent;
 
 namespace sd {
 class ViewShell;
-class Window;
 }
 
 namespace accessibility {

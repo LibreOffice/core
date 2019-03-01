@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sddll.hxx>
-
-#include <boost/property_tree/json_parser.hpp>
-
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -36,9 +31,7 @@
 #include <vcl/weld.hxx>
 
 #include <sal/macros.h>
-#include <svl/style.hxx>
 #include <svl/itempool.hxx>
-#include <unotools/datetime.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
@@ -48,10 +41,8 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/objface.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
@@ -64,7 +55,6 @@
 #include <editeng/crossedoutitem.hxx>
 
 #include <svx/postattr.hxx>
-#include <svx/svdetc.hxx>
 
 #include <annotationmanager.hxx>
 #include "annotationmanagerimpl.hxx"
@@ -72,14 +62,11 @@
 #include <strings.hrc>
 
 #include <Annotation.hxx>
-#include <ToolBarManager.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
-#include <DrawController.hxx>
 #include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
-#include <ViewShellManager.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
 #include <textapi.hxx>

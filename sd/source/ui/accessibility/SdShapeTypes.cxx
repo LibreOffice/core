@@ -22,7 +22,6 @@
 #include <AccessiblePresentationShape.hxx>
 #include <AccessiblePresentationGraphicShape.hxx>
 #include <AccessiblePresentationOLEShape.hxx>
-#include <rtl/ustring.hxx>
 
 namespace accessibility {
 

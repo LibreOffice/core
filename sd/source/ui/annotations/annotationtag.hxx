@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
 
 #include <smarttag.hxx>
+#include "annotationwindow.hxx"
 
 namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
 
@@ -28,7 +29,6 @@ namespace sd {
 
 class View;
 class AnnotationManagerImpl;
-class AnnotationWindow;
 
 class AnnotationTag final : public SmartTag
 {

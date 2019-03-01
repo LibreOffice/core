@@ -25,10 +25,11 @@
 #include <memory>
 
 #include <vcl/treelistbox.hxx>
-#include <vcl/builder.hxx>
 #include <CustomAnimationEffect.hxx>
 
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+
+class VclBuilder;
 
 namespace sd {
 

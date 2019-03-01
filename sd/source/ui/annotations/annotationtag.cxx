@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/office/XAnnotation.hpp>
 
-#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
-
-#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <svx/svdpagv.hxx>
@@ -41,9 +36,7 @@
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"
-#include <sdpage.hxx>
 #include <ViewShell.hxx>
-#include <app.hrc>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 

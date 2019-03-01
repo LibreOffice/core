@@ -22,6 +22,8 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
+#include <svtools/svmedit.hxx>
+#include <vcl/scrbar.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -29,8 +31,6 @@ namespace com { namespace sun { namespace star { namespace office { class XAnnot
 
 class OutlinerView;
 class Outliner;
-class ScrollBar;
-class MultiLineEdit;
 class SvxLanguageItem;
 class SdDrawDocument;
 

@@ -23,7 +23,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <smarttag.hxx>
-#include <CustomAnimationEffect.hxx>
+#include "CustomAnimationList.hxx"
 
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 class SdrPathObj;

@@ -18,20 +18,13 @@
  */
 
 #include <unotools/pathoptions.hxx>
-#include <svl/languageoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/status.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/request.hxx>
-#include <svx/pszctrl.hxx>
-#include <svx/zoomctrl.hxx>
-#include <svx/modctrl.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/ehdl.hxx>
@@ -40,17 +33,13 @@
 #include <svl/srchitem.hxx>
 #include <svx/svxerr.hxx>
 
-#include <svx/xmlsecctrl.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <sderror.hxx>
 #include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <optsitem.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
-#include <app.hrc>
-#include <strings.hrc>
 #include <errhdl.hrc>
 
 #define ShellClass_SdModule

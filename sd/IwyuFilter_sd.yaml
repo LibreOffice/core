@@ -69,10 +69,25 @@ blacklist:
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
+    sd/source/ui/animations/CustomAnimationPane.hxx:
+    # Needed for typedef
+    - motionpathtag.hxx
+    sd/source/ui/animations/SlideTransitionPane.cxx:
+    # Avoid loplugin:unreffun error
+    - /createslidetransitionpanel.hxx
+    sd/source/ui/animations/CustomAnimationPane.cxx:
+    # Avoid loplugin:unreffun error
+    - createcustomanimationpanel.hxx
     sd/source/ui/annotations/annotationmanagerimpl.hxx:
     # base class has to be a complete type
     - annotationtag.hxx
     - com/sun/star/document/XEventListener.hpp
+    sd/source/ui/annotations/annotationmanager.cxx:
+    # Needed for unique_ptr type
+    - editeng/outlobj.hxx
+    sd/source/ui/app/sdmod.cxx:
+    # Needed to inherit linker visibility from SdResId declaration
+    - sdresid.hxx
     sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
     # Needed for css shortcut
     - sal/types.h
