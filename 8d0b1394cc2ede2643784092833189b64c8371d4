@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_5138ec3b",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-01T10:00:26Z",
+      "side": 1,
+      "message": "An idea - don\u0027t know if all our compilers support the c++17 fold expressions yet:\n\n    template \u003cclass T, class ... Seqs\u003e\n        inline css::uno::Sequence\u003cT\u003e concatSequences(const css::uno::Sequence\u003cT\u003e\u0026 rS1, const Seqs\u0026... args)\n        {\n            css::uno::Sequence\u003cT\u003e aReturn(rS1.getLength() + (args.getLength() + ...));\n            T* pReturn \u003d aReturn.getArray();\n            internal::implCopySequence(rS1.getConstArray(), pReturn, rS1.getLength());\n            (internal::implCopySequence(args.getConstArray(), pReturn, args.getLength()), ...);\n            return aReturn;\n        }",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 5
+      },
+      "revId": "8d0b1394cc2ede2643784092833189b64c8371d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
