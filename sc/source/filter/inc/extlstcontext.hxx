@@ -53,6 +53,11 @@ private:
     OUString aChars;
     std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
     std::unique_ptr<IconSetRule> mpCurrentRule;
+    ScConditionMode eOperator;
+    OUString expr;
+    ScAddress rPos;
+    OUString rStyle;
+
 };
 
 /**
