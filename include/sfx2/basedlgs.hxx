@@ -230,7 +230,7 @@ private:
     const SfxItemSet* m_pInputSet;
 
 public:
-    SfxSingleTabDialogController(weld::Window *pParent, const SfxItemSet& rOptionsSet,
+    SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet& rOptionsSet,
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
         const OString& rID = OString("SingleTabDialog"));
 

@@ -39,7 +39,6 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 
     DECL_DLLPRIVATE_LINK( SelectHdl, ListBox&, void );
 
-    SAL_DLLPRIVATE static double   GetDefValue(const SvNumFormatType nFormatType);
     SAL_DLLPRIVATE void            Init();
 
 public:
@@ -64,6 +63,53 @@ public:
 
     void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
 
+    SAL_DLLPRIVATE static double   GetDefValue(const SvNumFormatType nFormatType);
+};
+
+class SW_DLLPUBLIC SwNumFormatListBox
+{
+    SvNumFormatType     nCurrFormatType;
+    bool                mbCurrFormatTypeNeedsInit;
+    sal_Int32           nStdEntry;
+    bool                bOneArea;
+    sal_uInt32          nDefFormat;
+    LanguageType        eCurLanguage;
+    bool                bShowLanguageControl; //determine whether the language control has
+                                              //to be shown in the number format dialog
+    bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
+
+    std::unique_ptr<weld::ComboBox> mxControl;
+
+    DECL_DLLPRIVATE_LINK( SelectHdl, weld::ComboBox&, void );
+
+    SAL_DLLPRIVATE void            Init();
+
+public:
+    SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl);
+
+    ~SwNumFormatListBox();
+
+    void            clear();
+
+    void            SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
+
+    void            SetFormatType(const SvNumFormatType nFormatType);
+    SvNumFormatType GetFormatType() const { return nCurrFormatType; }
+    void            SetDefFormat(const sal_uInt32 nDefFormat);
+    sal_uInt32      GetFormat() const;
+
+    LanguageType    GetCurLanguage() const { return eCurLanguage;}
+    void            SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
+
+    void            SetAutomaticLanguage(bool bSet){bUseAutomaticLanguage = bSet;}
+    bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
+
+    void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
+
+    void            CallSelectHdl();
+
+    void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
+    void            connect_changed(const Link<weld::ComboBox&, void>& rLink) { mxControl->connect_changed(rLink); }
 };
 
 #endif
