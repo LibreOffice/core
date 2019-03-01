@@ -62,6 +62,8 @@ public:
      * for redaction purposes.
      * */
     static void showRedactionToolbar(SfxViewFrame* pViewFrame);
+
+    static bool searchInMetaFile(const OUString& sSearchTerm, const GDIMetaFile& rMtf);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
