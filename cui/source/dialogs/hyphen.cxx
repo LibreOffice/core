@@ -99,7 +99,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
     // "line-ed", thus because of 2) we now need to discard all possible hyphenation
     // positions to the left of that as well. Thus in the end leaving us with just
     // 'multi-line-ed=itor' as return value for this function. (Just one valid hyphenation
-    // position for the user too choose from. However ALL the '-' characters in the word
+    // position for the user to choose from. However ALL the '-' characters in the word
     // will ALWAYS be valid implicit hyphenation positions for the core to choose from!
     // And thus even if this word is skipped in the hyphenation dialog it will still be broken
     // right after 'multi-line-' (actually it might already be broken up that way before
