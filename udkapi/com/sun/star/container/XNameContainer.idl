@@ -52,7 +52,8 @@ published interface XNameContainer: com::sun::star::container::XNameReplace
     /** removes the element with the specified name.
      */
     void removeByName( [in] string Name )
-            raises( com::sun::star::container::NoSuchElementException,
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 
 };
