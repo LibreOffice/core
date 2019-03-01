@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_7183e8cd",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T10:28:59Z",
+      "side": 1,
+      "message": "do you remember why this hasn\u0027t also been changed from WIN32 to _WIN32?",
+      "revId": "ce43d0ae9279edbf1ad108fe0d8325327a038d49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5186acdd",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T10:28:59Z",
+      "side": 1,
+      "message": "do you remember why this hasn\u0027t also been changed from WIN32 to _WIN32?",
+      "revId": "ce43d0ae9279edbf1ad108fe0d8325327a038d49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
