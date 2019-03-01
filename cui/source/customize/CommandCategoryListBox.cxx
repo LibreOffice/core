@@ -35,6 +35,7 @@
 // include search util
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <tools/diagnose_ex.h>
 #include <unotools/textsearch.hxx>
 
 #include <dialmgr.hxx>
@@ -331,9 +332,10 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                     = css::script::browse::theBrowseNodeFactory::get( m_xContext );
                 rootNode.set( xFac->createView( css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
             }
-            catch( css::uno::Exception& e )
+            catch( css::uno::Exception const & )
             {
-                SAL_WARN("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << exceptionToString(ex));
                 // TODO exception handling
             }
 

@@ -408,9 +408,10 @@ namespace basctl
 
             return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
         }
-        catch (const css::ucb::ContentCreationException& e)
+        catch (const css::ucb::ContentCreationException&)
         {
-            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << exceptionToString(ex) );
         }
         return nullptr;
     }

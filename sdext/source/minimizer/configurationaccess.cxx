@@ -28,6 +28,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -328,10 +329,11 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
             }
         }
     }
-    catch (const Exception& rException)
+    catch (const Exception&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("sdext.minimizer", "caught exception while getting configuration node "
-                  << sPathToNode << " : " << rException);
+                  << sPathToNode << " : " << exceptionToString(ex));
     }
     return xNode;
 }

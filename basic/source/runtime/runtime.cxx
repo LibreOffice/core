@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 
 #include <tools/wldcrd.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -343,7 +344,8 @@ SbiInstance::~SbiInstance()
     }
     catch( const Exception& )
     {
-        SAL_WARN("basic", "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("basic", "SbiInstance::~SbiInstance: caught an exception while disposing the components! " << exceptionToString(ex) );
     }
 }
 

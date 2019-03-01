@@ -20,6 +20,7 @@
 #include <AccessiblePageShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <sal/log.hxx>
 
@@ -201,7 +202,8 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
     }
     catch (const css::beans::UnknownPropertyException&)
     {
-        SAL_WARN("sd", "caught exception due to unknown property");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sd", "caught exception due to unknown property " << exceptionToString(ex));
         // Ignore exception and return default color.
     }
     return nColor;

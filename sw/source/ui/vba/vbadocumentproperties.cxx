@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <ooo/vba/word/WdBuiltInProperty.hpp>
 #include <ooo/vba/office/MsoDocProperties.hpp>
+#include <tools/diagnose_ex.h>
 #include <memory>
 #include "wordvbahelper.hxx"
 #include <fesh.hxx>
@@ -301,7 +302,8 @@ public:
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("sw.vba", "Got exception");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.vba", "Got exception " << exceptionToString(ex));
         }
         uno::Any aReturn;
         if ( rPropName == "LineCount" ) // special processing needed

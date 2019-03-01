@@ -62,6 +62,7 @@
 #include <oox/ole/axbinarywriter.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace oox {
 namespace ole {
@@ -2742,9 +2743,10 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         rnCtrlIndex = xFormIC->getCount();
         xFormIC->insertByIndex( rnCtrlIndex, Any( xFormComp ) );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox", "exception creating Control: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", "exception creating Control: " << exceptionToString(ex));
     }
     return xRet;
 }
@@ -2768,9 +2770,10 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }
         }
-        catch (const Exception& e)
+        catch (const Exception&)
         {
-            SAL_WARN("oox", "exception creating Form: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("oox", "exception creating Form: " << exceptionToString(ex));
         }
         // always clear the forms supplier to not try to create the form again
         mxFormsSupp.clear();

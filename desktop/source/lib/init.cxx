@@ -133,6 +133,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/abstdlg.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <app.hxx>
 
@@ -2800,9 +2801,10 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
     }
     catch (const uno::Exception& exception)
     {
+        css::uno::Any exAny( cppu::getCaughtException() );
         if (gImpl)
             gImpl->maLastExceptionMsg = exception.Message;
-        SAL_WARN("lok", "Failed to render shape selection: " << exception);
+        SAL_WARN("lok", "Failed to render shape selection: " << exceptionToString(exAny));
     }
 
     return 0;
