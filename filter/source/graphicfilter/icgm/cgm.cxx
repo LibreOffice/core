@@ -29,6 +29,7 @@
 #include "outact.hxx"
 #include <memory>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -730,9 +731,10 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                     aXStatInd->end();
             }
         }
-        catch (const css::uno::Exception& exc)
+        catch (const css::uno::Exception&)
         {
-            SAL_WARN("filter.icgm", exc);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("filter.icgm", exceptionToString(ex));
             nStatus = 0;
         }
     }

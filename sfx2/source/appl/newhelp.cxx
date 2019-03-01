@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
@@ -2030,9 +2031,10 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
                 Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, KEY_UI_NAME );
                 aAny >>= sTemp;
             }
-            catch( Exception& )
+            catch( Exception const & )
             {
-                SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception " << exceptionToString(ex) );
             }
             sModuleName = sTemp;
         }
@@ -2283,9 +2285,10 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
             xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
         ConfigurationHelper::flush( xConfiguration );
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception " << exceptionToString(ex) );
     }
 }
 
@@ -2439,9 +2442,10 @@ void SfxHelpTextWindow_Impl::GetFocus()
                 xWindow->setFocus();
         }
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception " << exceptionToString(ex) );
     }
 }
 
@@ -2526,9 +2530,10 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
             }
         }
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception " << exceptionToString(ex) );
     }
 
     SAL_WARN_IF( !bSetOff, "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
@@ -3098,9 +3103,10 @@ void SfxHelpWindow_Impl::CloseWindow()
                 xCloser->close( false );
         }
     }
-    catch( Exception& )
+    catch( Exception const & )
     {
-        SAL_WARN( "sfx.appl", "SfxHelpWindow_Impl::CloseWindow(): caught an exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.appl", "SfxHelpWindow_Impl::CloseWindow(): caught an exception " << exceptionToString(ex) );
     }
 }
 

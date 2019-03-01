@@ -94,6 +94,7 @@
 #include <svx/xpool.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/misccfg.hxx>
@@ -1410,9 +1411,10 @@ static OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
         {
             SAL_INFO( "cui.options", "unknown module" );
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "cui.options", "getActiveModule_Impl(): exception of XModuleManager::identify()" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "cui.options", "getActiveModule_Impl(): exception of XModuleManager::identify() " << exceptionToString(ex) );
         }
     }
 
@@ -1753,9 +1755,10 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
         {
             SAL_INFO( "cui.options", "unknown module" );
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "cui.options", "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify()" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "cui.options", "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify() " << exceptionToString(ex));
         }
     }
     return sModule;
@@ -2111,13 +2114,10 @@ void ExtensionsTabPage::CreateDialogWithHandler()
             }
         }
     }
-    catch (const css::lang::IllegalArgumentException& e)
+    catch (const Exception&)
     {
-        SAL_WARN("cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument:" << e);
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << exceptionToString(ex));
     }
 }
 
@@ -2131,9 +2131,10 @@ bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
         {
             bRet = m_xEventHdl->callHandlerMethod( m_xPage, Any( rAction ), "external_event" );
         }
-        catch ( Exception& )
+        catch ( Exception const & )
         {
-            SAL_WARN( "cui.options", "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod()" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "cui.options", "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod() " << exceptionToString(ex) );
         }
     }
     return bRet;

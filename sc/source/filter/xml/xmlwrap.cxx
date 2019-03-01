@@ -58,6 +58,7 @@
 #include <svx/xmleohlp.hxx>
 #include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <document.hxx>
 #include <xmlwrap.hxx>
@@ -193,6 +194,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     }
     catch( const xml::sax::SAXParseException& r )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException const *>(&r);
@@ -214,7 +216,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
-            SAL_WARN("sc.filter", "SAX parse exception caught while importing: " << r);
+            SAL_WARN("sc.filter", "SAX parse exception caught while importing: " << exceptionToString(ex));
 
             OUString sErr = OUString::number( r.LineNumber ) +
                           "," +
@@ -238,6 +240,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     }
     catch( const xml::sax::SAXException& r )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
@@ -245,26 +248,29 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
-            SAL_WARN("sc.filter", "SAX exception caught while importing: " << r);
+            SAL_WARN("sc.filter", "SAX exception caught while importing: " << exceptionToString(ex));
 
             nReturn = SCERR_IMPORT_FORMAT;
         }
     }
-    catch( const packages::zip::ZipIOException& r )
+    catch( const packages::zip::ZipIOException& )
     {
-        SAL_WARN("sc.filter", "Zip exception caught while importing: " << r);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sc.filter", "Zip exception caught while importing: " << exceptionToString(ex));
 
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( const io::IOException& r )
+    catch( const io::IOException& )
     {
-        SAL_WARN("sc.filter", "IO exception caught while importing: " << r);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sc.filter", "IO exception caught while importing: " << exceptionToString(ex));
 
         nReturn = SCERR_IMPORT_OPEN;
     }
-    catch( const uno::Exception& r )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("sc.filter", "uno exception caught while importing: " << r);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sc.filter", "uno exception caught while importing: " << exceptionToString(ex));
 
         nReturn = SCERR_IMPORT_UNKNOWN;
     }

@@ -34,6 +34,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#include <tools/diagnose_ex.h>
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
 
@@ -199,9 +200,10 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
         OUString uri2( expandUri( xId2 ) );
         return uri1.compareTo( uri2 );
     }
-    catch (const ucb::IllegalIdentifierException & exc)
+    catch (const ucb::IllegalIdentifierException &)
     {
-        SAL_WARN( "ucb", exc );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "ucb", exceptionToString(ex) );
         return -1;
     }
 }

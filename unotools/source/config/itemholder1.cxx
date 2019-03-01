@@ -47,6 +47,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
@@ -60,13 +61,14 @@ ItemHolder1::ItemHolder1()
         xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
 #ifdef DBG_UTIL
-    catch(const css::uno::Exception& rEx)
+    catch(const css::uno::Exception&)
     {
         static bool bMessage = true;
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "unotools", "CreateInstance with arguments exception: " << rEx);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "unotools", "CreateInstance with arguments exception: " << exceptionToString(ex));
         }
     }
 #else

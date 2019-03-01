@@ -33,6 +33,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -334,8 +335,9 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     catch ( const uno::RuntimeException & ) {
         throw;
     }
-    catch (const uno::Exception & exc) {
-        SAL_WARN( "desktop", exc );
+    catch (const uno::Exception &) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "desktop", exceptionToString(ex) );
         return NOT_AVAILABLE;
     }
 }

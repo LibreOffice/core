@@ -93,21 +93,10 @@ namespace
             ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             bRet = aCnt.isDocument();
         }
-        catch( const ucb::CommandAbortedException& )
-        {
-            SAL_INFO( "sfx.appl", "CommandAbortedException" );
-        }
-        catch( const ucb::IllegalIdentifierException& )
-        {
-            SAL_INFO( "sfx.appl", "IllegalIdentifierException" );
-        }
-        catch( const ucb::ContentCreationException& )
-        {
-            SAL_INFO( "sfx.appl", "IllegalIdentifierException" );
-        }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "sfx.appl", "Any other exception" );
+            css::uno::Any ex = cppu::getCaughtException();
+            SAL_WARN( "sfx.appl", exceptionToString(ex) );
         }
 
         return bRet;

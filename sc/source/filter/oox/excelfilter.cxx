@@ -38,6 +38,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace oox {
 namespace xls {
@@ -94,9 +95,10 @@ bool ExcelFilter::importDocument()
         {
             importDocumentProperties();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            SAL_WARN("sc", "exception when importing document properties " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sc", "exception when importing document properties " << exceptionToString(ex));
         }
         catch( ... )
         {

@@ -30,6 +30,7 @@
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1658,7 +1659,8 @@ void SfxDocTemplate_Impl::Rescan()
     }
     catch( const Exception& )
     {
-        SAL_WARN( "sfx.doc", "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update!" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.doc", "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update! " << exceptionToString(ex) );
     }
 }
 

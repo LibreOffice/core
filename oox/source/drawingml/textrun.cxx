@@ -32,6 +32,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -175,7 +176,8 @@ sal_Int32 TextRun::insertAt(
     }
     catch( const Exception&  )
     {
-        SAL_WARN("oox", "OOX:  TextRun::insertAt() exception");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", "OOX: TextRun::insertAt() exception " << exceptionToString(ex));
     }
 
     return nCharHeight;

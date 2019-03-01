@@ -32,6 +32,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "itemholder1.hxx"
 
@@ -57,9 +58,6 @@
                     fclose( pFile );                                                                                                        \
                 }
 #endif // DEBUG_VIEWOPTIONS
-
-#define SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)            \
-        SAL_WARN("unotools", "Unexpected exception caught. Original message was: " << ex.Message);
 
 //  initialization!
 
@@ -160,12 +158,13 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         if (m_xRoot.is())
             m_xRoot->getByName(sList) >>= m_xSet;
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             m_xRoot.clear();
             m_xSet.clear();
 
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -214,10 +213,11 @@ bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
         if (m_xSet.is())
             bExists = m_xSet->hasByName(sName);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             bExists = false;
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return bExists;
@@ -245,9 +245,10 @@ void SvtViewOptionsBase_Impl::Delete( const OUString& sName )
     }
     catch(const css::container::NoSuchElementException&)
         { }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -272,10 +273,11 @@ OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_WINDOWSTATE) >>= sWindowState;
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             sWindowState.clear();
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return sWindowState;
@@ -296,9 +298,10 @@ void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
         xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -333,9 +336,10 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
             return lUserData;
         }
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return css::uno::Sequence< css::beans::NamedValue >();
@@ -370,9 +374,10 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
         }
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -397,10 +402,11 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
     }
     catch(const css::container::NoSuchElementException&)
         { aItem.clear(); }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             aItem.clear();
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return aItem;
@@ -430,9 +436,10 @@ void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
         }
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -451,9 +458,10 @@ OString SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_PAGEID) >>= sID;
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return sID.toUtf8();
@@ -474,9 +482,10 @@ void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
         xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(OUString::fromUtf8(sID)));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -501,9 +510,10 @@ SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUStri
             }
         }
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return eState;
@@ -524,9 +534,10 @@ void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
         xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 }
 
@@ -556,10 +567,11 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
     }
     catch(const css::container::NoSuchElementException&)
         { xNode.clear(); }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             xNode.clear();
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+            SAL_WARN("unotools", "Unexpected exception caught. " << exceptionToString(ex));
         }
 
     return xNode;

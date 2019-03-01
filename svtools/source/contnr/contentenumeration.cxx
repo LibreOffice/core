@@ -34,6 +34,7 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 namespace svt
 {
@@ -282,9 +283,10 @@ namespace svt
                 {
                     SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException while enumerating!" );
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException while enumerating!" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException while enumerating! " << exceptionToString(ex));
                 }
             }
         }
@@ -292,9 +294,10 @@ namespace svt
         {
             SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException!" );
         }
-        catch( Exception& )
+        catch( Exception const & )
         {
-            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException! " << exceptionToString(ex) );
         }
 
         IEnumerationResultHandler* pHandler = nullptr;
