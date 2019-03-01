@@ -77,13 +77,11 @@ struct UserData
     {}
 };
 
-VCL_BUILDER_FACTORY_ARGS(CuiCustomMultilineEdit,WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
-
-void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
+IMPL_LINK(CuiAboutConfigValueDialog, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
     bool bValid = false;
     bool bNonSpace = rKeyEvent.GetKeyCode().GetCode() != KEY_SPACE;
-    if( bNumericOnly && bNonSpace )
+    if (m_bNumericOnly && bNonSpace )
     {
         const vcl::KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
         sal_uInt16 nGroup = rKeyCode.GetGroup();
@@ -132,13 +130,9 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
     }
     else
         bValid = true;
-    if( bValid )
-        Edit::KeyInput( rKeyEvent );
-}
 
-Size CuiCustomMultilineEdit::GetOptimalSize() const
-{
-    return LogicToPixel(Size(150, GetTextHeight()), MapMode(MapUnit::MapAppFont));
+    //if value return true to claim that it has been handled
+    return !bValid;
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
@@ -540,27 +534,21 @@ std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUSt
     return tempVector;
 }
 
-CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( vcl::Window* pWindow,
-                                                      const OUString& rValue,
-                                                      int limit ) :
-    ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" ),
-    m_pEDValue( get<CuiCustomMultilineEdit>("valuebox") )
+CuiAboutConfigValueDialog::CuiAboutConfigValueDialog(weld::Window* pWindow,
+                                                     const OUString& rValue,
+                                                     int limit)
+    : GenericDialogController(pWindow, "cui/ui/aboutconfigvaluedialog.ui", "AboutConfigValueDialog")
+    , m_bNumericOnly(limit != 0)
+    , m_xEDValue(m_xBuilder->weld_entry("valuebox"))
 {
-    m_pEDValue->bNumericOnly = ( limit !=0 );
-    m_pEDValue->SetMaxTextLen( limit == 0 ? EDIT_NOLIMIT : limit);
-    m_pEDValue->SetText( rValue );
-
+    if (limit)
+        m_xEDValue->set_max_length(limit);
+    m_xEDValue->set_text(rValue);
+    m_xEDValue->connect_key_press(LINK(this, CuiAboutConfigValueDialog, KeyInputHdl));
 }
 
 CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
 {
-    disposeOnce();
-}
-
-void CuiAboutConfigValueDialog::dispose()
-{
-    m_pEDValue.clear();
-    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl, Button*, void )
@@ -636,11 +624,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                 else if( sPropertyType == "hyper" )
                     limit = HYPER_LEN_LIMIT;
 
-                VclPtrInstance<CuiAboutConfigValueDialog> pValueDialog(nullptr, sDialogValue, limit);
+                CuiAboutConfigValueDialog aValueDialog(GetFrameWeld(), sDialogValue, limit);
 
-                if( pValueDialog->Execute() == RET_OK )
+                if (aValueDialog.run() == RET_OK )
                 {
-                    sNewValue = pValueDialog->getValue();
+                    sNewValue = aValueDialog.getValue();
                     bSaveChanges = true;
                     if ( sPropertyType == "short")
                     {

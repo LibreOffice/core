@@ -434,7 +434,6 @@ custom_widgets = [
     'ConditionEdit',
     'ContentListBox',
     'ContextVBox',
-    'CuiCustomMultilineEdit',
     'CustomAnimationList',
     'CustomPropertiesControl',
     'DataTreeListBox',
