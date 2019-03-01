@@ -53,6 +53,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/svdview.hxx>
+#include <tools/diagnose_ex.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "AccessibleEmptyEditSource.hxx"
@@ -963,7 +964,8 @@ void SAL_CALL
     }
     catch (uno::RuntimeException const&)
     {
-        SAL_WARN("svx", "caught exception while disposing");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("svx", "caught exception while disposing " << exceptionToString(ex));
     }
 }
 

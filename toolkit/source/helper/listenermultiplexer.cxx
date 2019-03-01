@@ -20,6 +20,7 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <tools/diagnose_ex.h>
 
 //  class ListenerMultiplexerBase
 
@@ -179,9 +180,9 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< c
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch(const css::uno::RuntimeException& e)
+        catch(const css::uno::RuntimeException&)
         {
-            DISPLAY_EXCEPTION( TabListenerMultiplexer, changed, e )
+            DISPLAY_EXCEPTION( TabListenerMultiplexer, changed )
         }
     }
 }
