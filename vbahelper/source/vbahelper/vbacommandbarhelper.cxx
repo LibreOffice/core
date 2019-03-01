@@ -109,12 +109,13 @@ void VbaCommandBarHelper::Init( )
         throw uno::RuntimeException( "Not implemented" );
     }
 
+    css::uno::Reference< css::uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
-        css::ui::theModuleUIConfigurationManagerSupplier::get(mxContext) );
+        css::ui::theModuleUIConfigurationManagerSupplier::get( xContext ) );
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( mxContext );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( xContext );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }
