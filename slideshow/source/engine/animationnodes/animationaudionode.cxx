@@ -83,7 +83,7 @@ void AnimationAudioNode::activate_st()
             scheduleDeactivationEvent(
                 makeDelay( [this] () { this->checkPlayingStatus(); },
                            mpPlayer->getDuration(),
-                           "AnimationAudioNode::check if sitll playing with delay") );
+                           "AnimationAudioNode::check if still playing with delay") );
         }
     }
     else
