@@ -10,6 +10,7 @@
 #include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -31,11 +32,16 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
+#include <tools/gen.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vcllayout.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -104,7 +110,65 @@ void setPageMargins(uno::Reference<beans::XPropertySet>& xPageProperySet,
     xPageProperySet->setPropertyValue("BorderLeft", css::uno::makeAny(aPageMargins.nLeft));
     xPageProperySet->setPropertyValue("BorderRight", css::uno::makeAny(aPageMargins.nRight));
 }
+
+// #i10613# Extracted from ImplCheckRect::ImplCreate
+tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice& rOut,
+                                      const OUString& sSubString, const sal_Int32& nStrPos)
+{
+    tools::Rectangle aActionBounds;
+
+    switch (rAct.GetType())
+    {
+        case MetaActionType::TEXTARRAY:
+        {
+            const MetaTextArrayAction& rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
+            const OUString aString(rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()));
+
+            if (!aString.isEmpty())
+            {
+                // #105987# ImplLayout takes everything in logical coordinates
+                std::unique_ptr<SalLayout> pSalLayout1 = rOut.ImplLayout(
+                    aString, 0, nStrPos, rTextAct.GetPoint(), 0, rTextAct.GetDXArray());
+                std::unique_ptr<SalLayout> pSalLayout2
+                    = rOut.ImplLayout(aString, 0, nStrPos + sSubString.getLength(),
+                                      rTextAct.GetPoint(), 0, rTextAct.GetDXArray());
+                if (pSalLayout2)
+                {
+                    tools::Rectangle aBoundRect2(
+                        const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect(*pSalLayout2));
+                    aActionBounds = rOut.PixelToLogic(aBoundRect2);
+                }
+                if (pSalLayout1 && nStrPos > 0)
+                {
+                    tools::Rectangle aBoundRect1(
+                        const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect(*pSalLayout1));
+                    aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).getX()
+                                          + rOut.PixelToLogic(aBoundRect1).getWidth());
+                }
+
+                // FIXME: Is this really needed?
+                aActionBounds.SetTop(aActionBounds.getY() + 100);
+            }
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    if (!aActionBounds.IsEmpty())
+    {
+        // fdo#40421 limit current action's output to clipped area
+        if (rOut.IsClipRegion())
+            return rOut.GetClipRegion().GetBoundRect().Intersection(aActionBounds);
+        else
+            return aActionBounds;
+    }
+    else
+        return aActionBounds;
 }
+
+} // End of anon namespace
 
 void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
                                                  std::vector<::Size>& aPageSizes,
@@ -183,6 +247,8 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
             awt::Size(rGDIMetaFile.GetPrefSize().Width(), rGDIMetaFile.GetPrefSize().Height()));
 
         xPage->add(xShape);
+
+        //autoRedactPage("deployment", rGDIMetaFile, xPage, xComponent);
     }
 
     // Remove the extra page at the beginning
@@ -331,6 +397,88 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
     xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
 
     return aPageMargins;
+}
+
+void SfxRedactionHelper::searchInMetaFile(const rtl::OUString& sSearchTerm, const GDIMetaFile& rMtf,
+                                          std::vector<::tools::Rectangle>& aRedactionRectangles,
+                                          uno::Reference<XComponent>& xComponent)
+{
+    MetaAction* pCurrAct;
+
+    // Watch for TEXTARRAY actions.
+    // They contain the text of paragraphes.
+    for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
+         pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
+    {
+        if (pCurrAct->GetType() == MetaActionType::TEXTARRAY)
+        {
+            MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pCurrAct);
+
+            //sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
+            //sal_Int32 aLength = pMetaTextArrayAction->GetLen();
+            //Point aPoint = pMetaTextArrayAction->GetPoint();
+            OUString sText = pMetaTextArrayAction->GetText();
+            sal_Int32 nFoundIndex = sText.indexOf(sSearchTerm);
+
+            // If found the string, add the corresponding rectangle to the collection
+            if (nFoundIndex >= 0)
+            {
+                OutputDevice* pOutputDevice
+                    = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
+                tools::Rectangle aNewRect(ImplCalcActionBounds(
+                    *pMetaTextArrayAction, *pOutputDevice, sSearchTerm, nFoundIndex));
+
+                if (!aNewRect.IsEmpty())
+                    aRedactionRectangles.push_back(aNewRect);
+            }
+        }
+    }
+}
+
+void SfxRedactionHelper::addRedactionRectToPage(
+    uno::Reference<XComponent>& xComponent, uno::Reference<drawing::XDrawPage>& xPage,
+    const std::vector<::tools::Rectangle>& aNewRectangles)
+{
+    if (!xComponent.is() || !xPage.is())
+        return;
+
+    if (aNewRectangles.empty())
+        return;
+
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+
+    for (auto const& aNewRectangle : aNewRectangles)
+    {
+        uno::Reference<drawing::XShape> xRectShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRectShapeProperySet(xRectShape, uno::UNO_QUERY);
+
+        xRectShapeProperySet->setPropertyValue("Name",
+                                               uno::Any(OUString("RectangleRedactionShape")));
+        xRectShapeProperySet->setPropertyValue("FillTransparence",
+                                               css::uno::makeAny(static_cast<sal_Int16>(50)));
+        xRectShapeProperySet->setPropertyValue("FillColor", css::uno::makeAny(COL_GRAY7));
+        xRectShapeProperySet->setPropertyValue(
+            "LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_NONE));
+
+        xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));
+        xRectShape->setPosition(awt::Point(aNewRectangle.getX(), aNewRectangle.getY()));
+
+        xPage->add(xRectShape);
+    }
+}
+
+void SfxRedactionHelper::autoRedactPage(const OUString& sRedactionTerm,
+                                        const GDIMetaFile& rGDIMetaFile,
+                                        uno::Reference<drawing::XDrawPage>& xPage,
+                                        uno::Reference<XComponent>& xComponent)
+{
+    // Search for the redaction strings, and get the rectangle coordinates
+    std::vector<::tools::Rectangle> aRedactionRectangles;
+    searchInMetaFile(sRedactionTerm, rGDIMetaFile, aRedactionRectangles, xComponent);
+
+    // Add the redaction rectangles to the page
+    addRedactionRectToPage(xComponent, xPage, aRedactionRectangles);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
