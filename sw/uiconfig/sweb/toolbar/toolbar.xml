@@ -20,9 +20,11 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:InsertCtrl"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShadowCursor"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Hyphenate"/>
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ShowGraphics"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:BrowseView"/>
 </toolbar:toolbar>

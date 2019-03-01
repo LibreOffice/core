@@ -23,6 +23,9 @@
       <menu:menuitem menu:id=".uno:Strikeout"/>
       <menu:menuitem menu:id=".uno:Shadowed"/>
       <menu:menuitem menu:id=".uno:OutlineFont"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SuperScript"/>
+      <menu:menuitem menu:id=".uno:SubScript"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:TextAlign">

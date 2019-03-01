@@ -140,6 +140,7 @@
       <menu:menuitem menu:id=".uno:Fieldnames"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
+      <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuseparator/>
@@ -192,7 +193,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertFrame"/>
-      <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertAnchor"/>
@@ -606,6 +606,8 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
       <menu:menuitem menu:id=".uno:AddressBookSource"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:MailMergeWizard"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:UpdateMenu">
         <menu:menupopup>

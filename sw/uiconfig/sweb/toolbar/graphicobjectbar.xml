@@ -18,26 +18,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapLeft"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rotate180" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateReset" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
- <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
- <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
 </toolbar:toolbar>
