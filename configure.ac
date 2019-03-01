@@ -1620,6 +1620,11 @@ AC_ARG_WITH(system-openldap,
         [Use the OpenLDAP LDAP SDK already on system.]),,
     [with_system_openldap="$with_system_libs"])
 
+AC_ARG_WITH(poppler,
+    AS_HELP_STRING([--without-poppler],
+        [Disable poppler.]),,
+    [without_poppler=no])
+
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
         [Use system poppler (only needed for PDF import).]),,
@@ -10039,6 +10044,19 @@ AC_SUBST([DCONF_CFLAGS])
 AC_SUBST([DCONF_LIBS])
 AC_SUBST([ENABLE_DCONF])
 
+ENABLE_POPPLER=
+dnl ===================================================================
+dnl Check for poppler
+dnl ===================================================================
+AC_MSG_CHECKING([enable poppler])
+if test "$without_poppler" == no; then
+    ENABLE_POPPLER=TRUE
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+    enable_pdfium=yes
+fi
+
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
@@ -10046,7 +10064,11 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
     AC_DEFINE(HAVE_FEATURE_PDFIMPORT)
+else
+    AC_MSG_RESULT([no])
+fi
 
+if test $ENABLE_PDFIMPORT == TRUE -a $ENABLE_POPPLER == TRUE; then
     dnl ===================================================================
     dnl Check for system poppler
     dnl ===================================================================
@@ -10077,8 +10099,6 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)
     fi
     AC_DEFINE([ENABLE_PDFIMPORT],1)
-else
-    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)

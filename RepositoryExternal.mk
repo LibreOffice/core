@@ -2717,6 +2717,8 @@ endef
 
 endif # ENABLE_VALGRIND
 
+ifeq ($(ENABLE_POPPLER),TRUE)
+
 ifneq ($(SYSTEM_POPPLER),)
 
 define gb_LinkTarget__use_poppler
@@ -2765,6 +2767,8 @@ endif
 endef
 
 endif # SYSTEM_POPPLER
+
+endif # DISABLE_POPPLER
 
 
 ifneq ($(SYSTEM_CLUCENE),)
