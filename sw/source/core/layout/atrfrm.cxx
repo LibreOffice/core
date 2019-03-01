@@ -1088,10 +1088,10 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
                     SwColumn aCol;
-                    aCol.SetWishWidth(static_cast<sal_uInt16>(pArray[i].Width) );
-                    nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
-                    aCol.SetLeft (static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].LeftMargin)));
-                    aCol.SetRight(static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].RightMargin)));
+                    aCol.SetWishWidth(pArray[i].Width );
+                    nWidthSum = nWidthSum + pArray[i].Width;
+                    aCol.SetLeft (convertMm100ToTwip(pArray[i].LeftMargin));
+                    aCol.SetRight(convertMm100ToTwip(pArray[i].RightMargin));
                     m_aColumns.insert(m_aColumns.begin() + i, aCol);
                 }
             bRet = true;
