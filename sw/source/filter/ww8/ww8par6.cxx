@@ -3900,7 +3900,7 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
     else
     {
         // Font-Size in half points e.g. 10 = 1440 / ( 72 * 2 )
-        sal_uInt16 nFSize = eVersion <= ww::eWW2 ? *pData : SVBT16ToShort(pData);
+        sal_uLong nFSize = eVersion <= ww::eWW2 ? *pData : SVBT16ToShort(pData);
         nFSize*= 10;
 
         SvxFontHeightItem aSz( nFSize, 100, nId );
