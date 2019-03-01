@@ -604,7 +604,8 @@ namespace frm
         }
         catch( const Exception& )
         {
-            SAL_WARN( "forms.component", "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "forms.component", "OComboBoxModel::read: caught an exception while examining the aggregate's string item list! " << exceptionToString(ex) );
         }
 
         // Version

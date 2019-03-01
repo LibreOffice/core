@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -425,9 +426,10 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 
         mpCurrentPage.reset(pNewCurrentPage);
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << exceptionToString(ex));
     }
 }
 

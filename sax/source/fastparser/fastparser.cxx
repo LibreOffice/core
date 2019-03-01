@@ -39,6 +39,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <queue>
 #include <memory>
@@ -610,8 +611,7 @@ void Entity::saveException( const Any & e )
     // fdo#81214 - allow the parser to run on after an exception,
     // unexpectedly some 'startElements' produce an UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
-    SAL_WARN("sax", "Unexpected exception from XML parser "
-            << e.get<Exception>());
+    SAL_WARN("sax", "Unexpected exception from XML parser " << exceptionToString(e));
     osl::MutexGuard g(maSavedExceptionMutex);
     if (maSavedException.hasValue())
     {
