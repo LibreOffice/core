@@ -10,6 +10,7 @@
 #include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -31,12 +32,15 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
+#include <tools/gen.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/metaact.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -184,6 +188,10 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
             awt::Size(rGDIMetaFile.GetPrefSize().Width(), rGDIMetaFile.GetPrefSize().Height()));
 
         xPage->add(xShape);
+
+        ::tools::Rectangle aNewRect = searchInMetaFile("deployments", rGDIMetaFile);
+        // Add rectangle
+        addRedactionRectToPage(xComponent, xPage, aNewRect);
     }
 
     // Remove the extra page at the beginning
@@ -332,6 +340,64 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
     xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
 
     return aPageMargins;
+}
+
+::tools::Rectangle SfxRedactionHelper::searchInMetaFile(const rtl::OUString& sSearchTerm,
+                                                        const GDIMetaFile& rMtf)
+{
+    MetaAction* pCurrAct;
+    bool bStrFound(false);
+
+    // Watch for TEXTARRAY actions.
+    // They contain the text of paragraphes.
+    for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct && !bStrFound;
+         pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
+    {
+        if (pCurrAct->GetType() == MetaActionType::TEXTARRAY)
+        {
+            MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pCurrAct);
+
+            //sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
+            //sal_Int32 aLength = pMetaTextArrayAction->GetLen();
+            Point aPoint = pMetaTextArrayAction->GetPoint();
+            OUString sText = pMetaTextArrayAction->GetText();
+            sal_Int32 nFoundIndex = sText.indexOf(sSearchTerm);
+
+            // We break here, but we will be eventually traversing through
+            // the whole metafile for all occurences
+            if (nFoundIndex >= 0)
+            {
+                bStrFound = true;
+
+                return ::tools::Rectangle(aPoint.getX(), aPoint.getY() - 500, aPoint.getX() + 500,
+                                          aPoint.getY());
+            }
+        }
+    }
+
+    return ::tools::Rectangle(0, 0, 2000, 2000);
+}
+
+void SfxRedactionHelper::addRedactionRectToPage(uno::Reference<XComponent>& xComponent,
+                                                uno::Reference<drawing::XDrawPage>& xPage,
+                                                const ::tools::Rectangle& aNewRectangle)
+{
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xRectShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRectShapeProperySet(xRectShape, uno::UNO_QUERY);
+
+    xRectShapeProperySet->setPropertyValue("Name", uno::Any(OUString("RectangleRedactionShape")));
+    xRectShapeProperySet->setPropertyValue("FillTransparence",
+                                           css::uno::makeAny(static_cast<sal_Int16>(50)));
+    xRectShapeProperySet->setPropertyValue("FillColor", css::uno::makeAny(COL_GRAY7));
+    xRectShapeProperySet->setPropertyValue(
+        "LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_NONE));
+
+    xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));
+    xRectShape->setPosition(awt::Point(aNewRectangle.getX(), aNewRectangle.getY()));
+
+    xPage->add(xRectShape);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
