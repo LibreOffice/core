@@ -29,6 +29,4 @@
  <toolbar:toolbaritem xlink:href=".uno:GrafContrast"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:GrafGamma"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
 </toolbar:toolbar>

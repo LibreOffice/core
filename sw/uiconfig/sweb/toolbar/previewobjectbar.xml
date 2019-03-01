@@ -18,23 +18,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:PageUp"/>
- <toolbar:toolbaritem xlink:href=".uno:PageDown"/>
-<toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc"/>
- <toolbar:toolbaritem xlink:href=".uno:GoToEndOfDoc"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ShowSinglePage"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages"/>
- <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowBookview"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc"/>
+ <toolbar:toolbaritem xlink:href=".uno:PageUp"/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpToSpecificPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:PageDown"/>
+ <toolbar:toolbaritem xlink:href=".uno:GoToEndOfDoc"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMinus"/>
  <toolbar:toolbaritem xlink:href=".uno:PreviewZoom"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomPlus"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen"/>
- <toolbar:toolbaritem xlink:href=".uno:PrintPagePreview"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ClosePreview"/>
+ <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:style="image text"/>
 </toolbar:toolbar>
