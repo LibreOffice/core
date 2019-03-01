@@ -28,6 +28,7 @@
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 #include <comphelper/interaction.hxx>
@@ -402,8 +403,9 @@ namespace XSLT
                     }
                 catch( const Exception& exc)
                     {
+                        css::uno::Any ex( cppu::getCaughtException() );
                         // something went wrong
-                        SAL_WARN("filter.xslt", exc);
+                        SAL_WARN("filter.xslt", exceptionToString(ex));
                         return false;
                     }
             }

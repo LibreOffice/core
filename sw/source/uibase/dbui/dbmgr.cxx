@@ -113,6 +113,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
@@ -2074,9 +2075,10 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
                     }
                 }
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("sw.mailmerge", "exception caught: " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sw.mailmerge", "exception caught: " << exceptionToString(ex));
             }
 
         }
@@ -3171,9 +3173,10 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
         {
             pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
         }
-        catch (const uno::Exception& e)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("sw.mailmerge", "exception caught: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.mailmerge", "exception caught: " << exceptionToString(ex));
         }
     }
 }
@@ -3189,9 +3192,10 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
         if ( !xSource.is() )
             xSource = dbtools::getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << exceptionToString(ex));
     }
     return xSource;
 }
@@ -3229,9 +3233,10 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
             }
         }
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << exceptionToString(ex));
     }
     return xResultSet;
 }

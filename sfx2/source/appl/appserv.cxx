@@ -1393,7 +1393,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             catch( const css::uno::Exception& )
             {
-                SAL_WARN( "sfx.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception " << exceptionToString(ex) );
             }
             break;
         }

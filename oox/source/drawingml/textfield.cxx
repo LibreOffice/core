@@ -33,6 +33,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textcharacterproperties.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -234,7 +235,8 @@ sal_Int32 TextField::insertAt(
     }
     catch( const Exception&  )
     {
-        SAL_WARN("oox", "OOX:  TextField::insertAt() exception");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", "OOX:  TextField::insertAt() exception " << exceptionToString(ex));
     }
 
     return nCharHeight;
