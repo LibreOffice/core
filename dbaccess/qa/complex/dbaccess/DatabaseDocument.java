@@ -595,7 +595,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         assertTrue( "The test case marker did not survive re-retrieval of the doc from the data source.",
             impl_hasMarker( databaseDoc.getArgs() ) );
 
-        // on the other hand, closing and regulary re-loading the doc *without* the marker should indeed
+        // on the other hand, closing and regularly re-loading the doc *without* the marker should indeed
         // lose it
         impl_closeDocument( databaseDoc );
         databaseDoc = impl_loadDocument( documentURL, impl_getDefaultLoadArgs() );
