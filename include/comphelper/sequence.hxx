@@ -43,21 +43,15 @@ namespace comphelper
         }
     }
 
-    /// concat two sequences
-    template <class T>
-    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft, const css::uno::Sequence<T>& _rRight)
+    /// concat several sequences
+    template <class T, class... Ss>
+    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& rS1, const Ss&... rSn)
     {
-        sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
-        const T* pLeft = _rLeft.getConstArray();
-        const T* pRight = _rRight.getConstArray();
-
-        sal_Int32 nReturnLen(nLeft + nRight);
-        css::uno::Sequence<T> aReturn(nReturnLen);
+        // unary fold to disallow empty parameter pack: at least have one sequence in rSn
+        css::uno::Sequence<T> aReturn(rS1.getLength() + (... + rSn.getLength()));
         T* pReturn = aReturn.getArray();
-
-        internal::implCopySequence(pLeft, pReturn, nLeft);
-        internal::implCopySequence(pRight, pReturn, nRight);
-
+        (internal::implCopySequence(rS1.getConstArray(), pReturn, rS1.getLength()), ...,
+         internal::implCopySequence(rSn.getConstArray(), pReturn, rSn.getLength()));
         return aReturn;
     }
 
@@ -88,27 +82,6 @@ namespace comphelper
         ret.realloc(n2);
         return ret;
     }
-
-    /// concat three sequences
-    template <class T>
-    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft, const css::uno::Sequence<T>& _rMiddle, const css::uno::Sequence<T>& _rRight)
-    {
-        sal_Int32 nLeft(_rLeft.getLength()), nMiddle(_rMiddle.getLength()), nRight(_rRight.getLength());
-        const T* pLeft = _rLeft.getConstArray();
-        const T* pMiddle = _rMiddle.getConstArray();
-        const T* pRight = _rRight.getConstArray();
-
-        sal_Int32 nReturnLen(nLeft + nMiddle + nRight);
-        css::uno::Sequence<T> aReturn(nReturnLen);
-        T* pReturn = aReturn.getArray();
-
-        internal::implCopySequence(pLeft, pReturn, nLeft);
-        internal::implCopySequence(pMiddle, pReturn, nMiddle);
-        internal::implCopySequence(pRight, pReturn, nRight);
-
-        return aReturn;
-    }
-
 
     /// remove a specified element from a sequences
     template<class T>
