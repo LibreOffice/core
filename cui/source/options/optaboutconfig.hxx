@@ -26,19 +26,6 @@ class CuiAboutConfigValueDialog;
 struct Prop_Impl;
 struct UserData;
 
-class CuiCustomMultilineEdit : public Edit
-{
-public:
-    bool bNumericOnly;
-    CuiCustomMultilineEdit( vcl::Window* pParent, WinBits nStyle )
-        : Edit( pParent, nStyle )
-        , bNumericOnly(false)
-    {}
-
-    virtual void KeyInput( const KeyEvent& rKeyEvent ) override;
-    virtual Size GetOptimalSize() const override;
-};
-
 class CuiAboutConfigTabPage : public ModalDialog
 {
 private:
@@ -80,19 +67,21 @@ public:
    void FillItemSet();
 };
 
-class CuiAboutConfigValueDialog : public ModalDialog
+class CuiAboutConfigValueDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<CuiCustomMultilineEdit> m_pEDValue;
+    bool m_bNumericOnly;
+    std::unique_ptr<weld::Entry> m_xEDValue;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    CuiAboutConfigValueDialog( vcl::Window* pWindow, const OUString& rValue , int limit);
+    CuiAboutConfigValueDialog(weld::Window* pWindow, const OUString& rValue , int limit);
     virtual ~CuiAboutConfigValueDialog() override;
-    virtual void dispose() override;
 
     OUString getValue()
     {
-        return m_pEDValue->GetText();
+        return m_xEDValue->get_text();
     }
 };
 
