@@ -73,6 +73,7 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <calbck.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -192,9 +193,10 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         {
             xListener->notifyEvent( aEvent );
         }
-        catch( uno::RuntimeException const & r )
+        catch( uno::RuntimeException const & )
         {
-            SAL_WARN("sw.a11y", "Runtime exception caught while notifying shape: " << r);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.a11y", "Runtime exception caught while notifying shape: " << exceptionToString(ex));
         }
     }
 }

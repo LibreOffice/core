@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using com::sun::star::uno::RuntimeException;
 using sd::SimpleReferenceComponent;
@@ -51,9 +52,10 @@ void SimpleReferenceComponent::release()
         {
             Dispose();
         }
-        catch (RuntimeException & exc ) // don't break throw ()
+        catch (RuntimeException const &) // don't break throw ()
         {
-            SAL_WARN( "sd", exc );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sd", exceptionToString(ex) );
         }
     }
 

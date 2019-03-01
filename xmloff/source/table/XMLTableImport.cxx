@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -291,9 +292,10 @@ void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOver
                 }
             }
         }
-        catch (Exception&)
+        catch (Exception const &)
         {
-            SAL_WARN("xmloff.table", "XMLTableImport::insertTabletemplate(), exception caught!");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("xmloff.table", "XMLTableImport::insertTabletemplate(), exception caught!" << exceptionToString(ex));
         }
 
         if (xTemplate.is())
@@ -306,7 +308,8 @@ void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOver
     }
     catch (Exception&)
     {
-        SAL_WARN("xmloff.table", "XMLTableImport::insertTabletemplate(), exception caught!");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("xmloff.table", "XMLTableImport::insertTabletemplate(), exception caught!" << exceptionToString(ex));
     }
 }
 

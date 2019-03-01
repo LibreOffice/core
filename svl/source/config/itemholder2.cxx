@@ -29,6 +29,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/languageoptions.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/options.hxx>
 
 ItemHolder2::ItemHolder2()
@@ -45,13 +46,14 @@ ItemHolder2::ItemHolder2()
         throw;
     }
 #ifdef DBG_UTIL
-    catch(const css::uno::Exception& rEx)
+    catch(const css::uno::Exception&)
     {
         static bool bMessage = true;
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svl", "CreateInstance with arguments exception: " << rEx);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svl", "CreateInstance with arguments exception: " << exceptionToString(ex));
         }
     }
 #else

@@ -691,7 +691,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         }
         catch( const Exception& )
         {
-            SAL_WARN("dbaccess",  "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("dbaccess",  "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error! " << exceptionToString(ex) );
         }
         if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
         {

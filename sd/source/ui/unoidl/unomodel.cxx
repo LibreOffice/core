@@ -125,6 +125,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <tools/diagnose_ex.h>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -326,9 +327,10 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
         {
             dispose();
         }
-        catch (const uno::RuntimeException& exc)
+        catch (const uno::RuntimeException&)
         { // don't break throw ()
-            SAL_WARN( "sd", exc );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sd", exceptionToString(ex) );
         }
     }
     SfxBaseModel::release();

@@ -58,6 +58,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <deque>
 #include <map>
@@ -936,10 +937,11 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
         {
              throw;
         }
-        catch (const ::uno::Exception &rE)
+        catch (const ::uno::Exception &)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             // ignore
-            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE);
+            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << exceptionToString(ex));
         }
     }
 }
@@ -1099,9 +1101,10 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
             }
         }
     }
-    catch (uno::Exception &)
+    catch (uno::Exception const &)
     {
-        SAL_WARN( "linguistic", "exception caught. Failed to get configured services" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "linguistic", "exception caught. Failed to get configured services " << exceptionToString(ex) );
     }
 
     {

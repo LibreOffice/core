@@ -149,9 +149,10 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
             return rxNode->getByHierarchicalName(sPathToNode);
         }
     }
-    catch (const Exception& rException)
+    catch (const Exception&)
     {
-        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << rException);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << exceptionToString(ex));
     }
 
     return Any();

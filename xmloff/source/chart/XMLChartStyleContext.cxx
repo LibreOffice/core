@@ -27,6 +27,7 @@
 
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/diagnose_ex.h>
 
 #include "XMLChartPropertyContext.hxx"
 
@@ -102,7 +103,8 @@ void XMLChartStyleContext::FillPropertySet(
     }
     catch( beans::UnknownPropertyException&  )
     {
-        SAL_WARN( "xmloff", "unknown property exception -> shape style not completely imported for chart style" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "xmloff", "unknown property exception -> shape style not completely imported for chart style " << exceptionToString(ex) );
     }
 
     lcl_NumberFormatStyleToProperty( msDataStyleName, "NumberFormat", mrStyles, rPropSet );

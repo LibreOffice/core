@@ -55,6 +55,7 @@
 #include <svtools/imagemgr.hxx>
 #include <vcl/treelistentry.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <vector>
 #include <algorithm>
 
@@ -659,9 +660,10 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
                     // ISSUE need code to run script here
                     xInv->invoke( "Editable", args, outIndex, outArgs );
                 }
-                catch( Exception& e )
+                catch( Exception const & )
                 {
-                    SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << exceptionToString(ex) );
                 }
             }
         }
@@ -828,9 +830,10 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
             aChildNode = newNode;
 
         }
-        catch( Exception& e )
+        catch( Exception const & )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << exceptionToString(ex) );
         }
     }
     if ( aChildNode.is() )
@@ -912,9 +915,10 @@ void SvxScriptOrgDialog::renameEntry(weld::TreeIter& rEntry)
             aChildNode = newNode;
 
         }
-        catch( Exception& e )
+        catch( Exception const & )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << exceptionToString(ex) );
         }
     }
     if ( aChildNode.is() )
@@ -961,9 +965,10 @@ void SvxScriptOrgDialog::deleteEntry(weld::TreeIter& rEntry)
             aResult = xInv->invoke( "Deletable", args, outIndex, outArgs );
             aResult >>= result; // or do we just assume true if no exception ?
         }
-        catch( Exception& e )
+        catch( Exception const & )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << exceptionToString(ex) );
         }
     }
 
