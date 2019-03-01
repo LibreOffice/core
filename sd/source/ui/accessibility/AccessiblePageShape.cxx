@@ -24,12 +24,7 @@
 #include <tools/gen.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 

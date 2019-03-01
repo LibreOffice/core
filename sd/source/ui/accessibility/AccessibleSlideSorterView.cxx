@@ -28,8 +28,8 @@
 #include <view/SlideSorterView.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
-#include <SlideSorterViewShell.hxx>
 
+#include <ViewShell.hxx>
 #include <ViewShellHint.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
@@ -45,6 +45,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

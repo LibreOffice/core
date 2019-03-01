@@ -25,7 +25,6 @@
 #include <sdresid.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <svx/ShapeTypeHandler.hxx>
-#include <rtl/ustring.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/animations/XAnimationNode.hpp>
-
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <SlideTransitionPane.hxx>
 #include <createslidetransitionpanel.hxx>
 
@@ -32,24 +31,17 @@
 #include <sdpage.hxx>
 #include <filedlg.hxx>
 #include <strings.hrc>
-#include <DrawController.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <EventMultiplexer.hxx>
 
 #include <sal/log.hxx>
-#include <svtools/controldims.hxx>
 #include <svx/gallery.hxx>
-#include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
-#include <DrawViewShell.hxx>
 #include <slideshow.hxx>
-#include <drawview.hxx>
 #include <sdundogr.hxx>
 #include <undoanim.hxx>
 #include <optsitem.hxx>
-#include <sddll.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
 

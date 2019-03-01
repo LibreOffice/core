@@ -29,10 +29,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <memory>
-
-namespace vcl { class Window; }
 
 namespace sd { namespace slidesorter {
 class SlideSorter;

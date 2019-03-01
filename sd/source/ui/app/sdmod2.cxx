@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
 #include <sfx2/printer.hxx>
@@ -29,42 +28,35 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/request.hxx>
 
 #include <editeng/measfld.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/editeng.hxx>
 
+#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/svdotext.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdopage.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-
-#include <svx/sdr/contact/displayinfo.hxx>
 
 #include <sdmod.hxx>
 #include <app.hrc>
 #include <family.hrc>
 #include <strings.hrc>
+#include <sdattr.hrc>
 
 #include <bitmaps.hlst>
 #include <ViewShell.hxx>
 #include <FrameView.hxx>
-#include <sdattr.hxx>
 #include <optsitem.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <Outliner.hxx>
 #include <sdresid.hxx>
 #include <pres.hxx>
-#include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <OutlineView.hxx>
 #include <ViewShellBase.hxx>
 #include <sdpage.hxx>
-#include <sdxfer.hxx>
 #include <sdabstdlg.hxx>
 #include <svl/intitem.hxx>
 

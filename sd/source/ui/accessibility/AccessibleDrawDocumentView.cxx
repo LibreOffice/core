@@ -19,29 +19,21 @@
 
 #include <AccessibleDrawDocumentView.hxx>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <rtl/ustring.h>
 #include <sal/log.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <svx/AccessibleShape.hxx>
 #include <svx/ChildrenManager.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
-#include <Window.hxx>
 #include <vcl/svapp.hxx>
 
 #include <ViewShell.hxx>
@@ -49,7 +41,6 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <algorithm>
-#include <sdpage.hxx>
 #include <slideshow.hxx>
 #include <anminfo.hxx>
 #include <AccessiblePageShape.hxx>

@@ -23,47 +23,30 @@
 #include <unotools/moduleoptions.hxx>
 #include <framework/FrameworkHelper.hxx>
 
-#include <svx/dialogs.hrc>
 #include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/editdata.hxx>
 #include <vcl/weld.hxx>
-#include <editeng/svxenum.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/templatedlg.hxx>
-#include <editeng/paperinf.hxx>
 #include <editeng/eeitem.hxx>
-#include <unotools/useroptions.hxx>
-#include <com/sun/star/uno/Sequence.h>
 
-#include <app.hrc>
+#include <svx/svxids.hrc>
 #include <strings.hrc>
 
 #include <sdmod.hxx>
 #include <pres.hxx>
 #include <optsitem.hxx>
 #include <ViewShell.hxx>
-#include <sdattr.hxx>
-#include <sdpage.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
-#include <assclass.hxx>
-#include <sdenumdef.hxx>
 #include <sdresid.hxx>
 #include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <FrameView.hxx>
 #include <FactoryIds.hxx>
-#include <sdabstdlg.hxx>
 #include <memory>
 #include <slideshow.hxx>
-
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::Reference;
