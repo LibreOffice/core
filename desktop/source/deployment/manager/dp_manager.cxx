@@ -33,6 +33,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
@@ -600,7 +601,8 @@ OUString PackageManagerImpl::detectMediaType(
         catch (const lang::IllegalArgumentException & exc) {
             if (throw_exc)
                 throw;
-            SAL_WARN( "desktop", exc );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "desktop", exceptionToString(ex) );
         }
     }
     return mediaType;
@@ -1038,12 +1040,14 @@ PackageManagerImpl::getDeployedPackages_(
                             ignore other platforms than the current one */ ) );
         }
         catch (const lang::IllegalArgumentException & exc) {
+            css::uno::Any ex( cppu::getCaughtException() );
             // ignore
-            SAL_WARN( "desktop", exc );
+            SAL_WARN( "desktop", exceptionToString(ex) );
         }
         catch (const deployment::DeploymentException& exc) {
+            css::uno::Any ex( cppu::getCaughtException() );
             // ignore
-            SAL_WARN( "desktop", exc );
+            SAL_WARN( "desktop", exceptionToString(ex) );
         }
     }
     return comphelper::containerToSequence(packages);

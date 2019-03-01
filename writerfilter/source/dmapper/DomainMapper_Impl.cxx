@@ -2038,9 +2038,10 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         CheckRedline( xFootnote->getAnchor( ) );
 
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: " << e);
+        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: "
+            << exceptionToString( cppu::getCaughtException() ));
     }
 }
 

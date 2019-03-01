@@ -31,6 +31,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 #include <functional>
@@ -147,8 +148,9 @@ namespace pcr
         }
         catch( const Exception& )
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_WARN( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught an exception!"
-                "\n(have been asked for the \"" <<_rPropertyName << "\" property.)");
+                "\n(have been asked for the \"" <<_rPropertyName << "\" property.) " << exceptionToString(ex));
         }
         return aReturn;
     }

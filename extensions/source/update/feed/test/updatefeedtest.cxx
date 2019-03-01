@@ -70,9 +70,9 @@ SAL_IMPLEMENT_MAIN()
         uno::Sequence< uno::Reference< xml::dom::XElement > > theUpdateInfo =
             rUpdateInformationProvider->getUpdateInformation( theURLs, aExtension );
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("extensions.update", "exception caught: " << e);
+        SAL_WARN("extensions.update", "exception caught: " << exceptionToString(ex));
     }
     catch( ... )
     {

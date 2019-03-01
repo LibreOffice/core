@@ -39,6 +39,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <mediamisc.hxx>
 #include <osl/file.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -506,9 +507,10 @@ bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
                 comphelper::getProcessComponentContext());
         tempContent.writeStream(xInStream, true); // copy stream to file
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("avmedia", "exception: '" << e << "'");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("avmedia", "exception: " << exceptionToString(ex));
         return false;
     }
     o_rTempFileURL = tempFileURL;

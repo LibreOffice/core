@@ -39,6 +39,7 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -1061,7 +1062,8 @@ PresenterTextCaret::~PresenterTextCaret()
     }
     catch (uno::Exception const&)
     {
-        SAL_WARN("sdext.presenter", "unexpected exception in ~PresenterTextCaret");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sdext.presenter", "unexpected exception in ~PresenterTextCaret " << exceptionToString(ex));
     }
 }
 

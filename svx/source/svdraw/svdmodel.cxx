@@ -82,6 +82,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/enumrange.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -824,9 +825,10 @@ SdrModel::GetDocumentStream( OUString const& rURL,
     {
         SAL_INFO("svx", "not found");
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("svx", "exception: '" << e << "'");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("svx", "exception: " << exceptionToString(ex));
     }
     return nullptr;
 }

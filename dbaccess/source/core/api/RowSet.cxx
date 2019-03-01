@@ -1472,9 +1472,10 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     {
         throw;
     }
-    catch(Exception&)
+    catch(Exception const &)
     {
-        SAL_WARN("dbaccess", "ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("dbaccess", "ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters! " << exceptionToString(ex));
     }
 
     // we're done with the parameters, now for the real execution
