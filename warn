@@ -1,0 +1,2 @@
+*************************************
+*[1;33;40m WARNING [0m: Unable to find the default value for jdk.net.URLClassPath.ClassPathURLCheck - java tests might fail!
