@@ -29,6 +29,7 @@
 #include <vcl/treelistbox.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
+#include <svtools/valueset.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -583,15 +584,9 @@ public:
     }
 };
 
-class SvxIconSelectorDialog : public ModalDialog
+class SvxIconSelectorDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<ToolBox>        pTbSymbol;
-    VclPtr<FixedText>      pFtNote;
-    VclPtr<PushButton>     pBtnImport;
-    VclPtr<PushButton>     pBtnDelete;
-    sal_uInt16      m_nNextId;
-
     sal_Int32       m_nExpectedSize;
 
     css::uno::Reference<
@@ -606,6 +601,14 @@ private:
     css::uno::Reference<
         css::graphic::XGraphicProvider > m_xGraphProvider;
 
+    std::vector<css::uno::Reference<css::graphic::XGraphic>> m_aGraphics;
+
+    std::unique_ptr<SvtValueSet> m_xTbSymbol;
+    std::unique_ptr<weld::CustomWeld> m_xTbSymbolWin;
+    std::unique_ptr<weld::Label>      m_xFtNote;
+    std::unique_ptr<weld::Button>     m_xBtnImport;
+    std::unique_ptr<weld::Button>     m_xBtnDelete;
+
     bool ReplaceGraphicItem( const OUString& aURL );
 
     bool ImportGraphic( const OUString& aURL );
@@ -615,20 +618,18 @@ private:
 public:
 
     SvxIconSelectorDialog(
-        vcl::Window *pWindow,
+        weld::Window *pWindow,
         const css::uno::Reference< css::ui::XImageManager >& rXImageManager,
-        const css::uno::Reference< css::ui::XImageManager >& rXParentImageManager
-            );
+        const css::uno::Reference< css::ui::XImageManager >& rXParentImageManager);
 
     virtual ~SvxIconSelectorDialog() override;
-    virtual void dispose() override;
 
     css::uno::Reference< css::graphic::XGraphic >
         GetSelectedIcon();
 
-    DECL_LINK( SelectHdl, ToolBox *, void );
-    DECL_LINK( ImportHdl, Button *, void );
-    DECL_LINK( DeleteHdl, Button *, void );
+    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(ImportHdl, weld::Button&, void);
+    DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 //added for issue83555

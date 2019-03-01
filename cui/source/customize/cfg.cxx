@@ -2841,29 +2841,19 @@ SvxNewToolbarDialog::~SvxNewToolbarDialog()
 * The SvxIconSelectorDialog class
 *
 *******************************************************************************/
-SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
+SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     const uno::Reference< css::ui::XImageManager >& rXImageManager,
-    const uno::Reference< css::ui::XImageManager >& rXParentImageManager )
-    :
-    ModalDialog          ( pWindow, "IconSelector", "cui/ui/iconselectordialog.ui" ),
-    m_nNextId            ( 0 ),
-    m_xImageManager      ( rXImageManager ),
-    m_xParentImageManager( rXParentImageManager )
+    const uno::Reference< css::ui::XImageManager >& rXParentImageManager)
+    : GenericDialogController(pWindow, "cui/ui/iconselectordialog.ui", "IconSelector")
+    , m_xImageManager(rXImageManager)
+    , m_xParentImageManager(rXParentImageManager)
+    , m_xTbSymbol(new SvtValueSet(m_xBuilder->weld_scrolled_window("symbolswin")))
+    , m_xTbSymbolWin(new weld::CustomWeld(*m_xBuilder, "symbolsToolbar", *m_xTbSymbol))
+    , m_xFtNote(m_xBuilder->weld_label("noteLabel"))
+    , m_xBtnImport(m_xBuilder->weld_button("importButton"))
+    , m_xBtnDelete(m_xBuilder->weld_button("deleteButton"))
 {
-    get(pTbSymbol, "symbolsToolbar");
-    get(pFtNote, "noteLabel");
-    get(pBtnImport, "importButton");
-    get(pBtnDelete, "deleteButton");
-
-    Size aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MapUnit::MapAppFont));
-    pTbSymbol->set_width_request(aTbSize.Width());
-    pTbSymbol->set_height_request(aTbSize.Height());
-    pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL);
-    pTbSymbol->SetLineSpacing(true);
-
     typedef std::unordered_map< OUString, bool > ImageInfo;
-
-    pTbSymbol->SetPageScroll( true );
 
     m_nExpectedSize = 16;
     if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
@@ -2873,8 +2863,17 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
     if ( m_nExpectedSize != 16 )
     {
-        pFtNote->SetText( SvxConfigPageHelper::replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
+        m_xFtNote->set_label(SvxConfigPageHelper::replaceSixteen(m_xFtNote->get_label(), m_nExpectedSize));
     }
+
+    m_xTbSymbol->SetStyle(m_xTbSymbol->GetStyle() | WB_VSCROLL);
+    m_xTbSymbol->SetColCount(11);
+    m_xTbSymbol->SetLineCount(5);
+    m_xTbSymbol->SetItemWidth(m_nExpectedSize);
+    m_xTbSymbol->SetItemHeight(m_nExpectedSize);
+    m_xTbSymbol->SetExtraSpacing(6);
+    Size aSize(m_xTbSymbol->CalcWindowSizePixel(Size(m_nExpectedSize, m_nExpectedSize), 11, 5));
+    m_xTbSymbol->set_size_request(aSize.Width(), aSize.Height());
 
     uno::Reference< uno::XComponentContext > xComponentContext =
         ::comphelper::getProcessComponentContext();
@@ -2899,7 +2898,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     }
     else
     {
-        pBtnImport->Enable( false );
+        m_xBtnImport->set_sensitive(false);
     }
 
     aDirectory += "soffice.cfg/import";
@@ -2930,7 +2929,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             aImageInfo1.emplace( names[n], false );
     }
-    sal_uInt16 nId = 1;
+
     uno::Sequence< OUString > name( 1 );
     for (auto const& elem : aImageInfo1)
     {
@@ -2938,15 +2937,9 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         if ( graphics.getLength() > 0 )
         {
-            Image img = Image( graphics[ 0 ] );
-            pTbSymbol->InsertItem( nId, img, elem.first );
-
-            graphics[ 0 ]->acquire();
-
-            pTbSymbol->SetItemData(
-                nId, static_cast< void * > ( graphics[ 0 ].get() ) );
-
-            ++nId;
+            m_aGraphics.push_back(graphics[0]);
+            Image img = Image(graphics[0]);
+            m_xTbSymbol->InsertItem(m_aGraphics.size(), img, elem.first);
         }
     }
 
@@ -2990,113 +2983,65 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
         if ( graphics.getLength() > 0 )
         {
-            Image img = Image( graphics[ 0 ] );
-            if ( !img.GetBitmapEx().IsEmpty() )
+            Image img = Image(graphics[0]);
+            if (!img.GetBitmapEx().IsEmpty())
             {
-                pTbSymbol->InsertItem( nId, img, elem.first );
-
-                uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
-
-                if ( xGraphic.is() )
-                    xGraphic->acquire();
-
-                pTbSymbol->SetItemData(
-                    nId, static_cast< void * > ( xGraphic.get() ) );
-
-                ++nId;
+                m_aGraphics.push_back(graphics[0]);
+                m_xTbSymbol->InsertItem(m_aGraphics.size(), img, elem.first);
             }
         }
     }
 
-    pBtnDelete->Enable( false );
-    pTbSymbol->SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
-    pBtnImport->SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
-    pBtnDelete->SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
-
-    m_nNextId = pTbSymbol->GetItemCount()+1;
-        //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
+    m_xBtnDelete->set_sensitive( false );
+    m_xTbSymbol->SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
+    m_xBtnImport->connect_clicked( LINK(this, SvxIconSelectorDialog, ImportHdl) );
+    m_xBtnDelete->connect_clicked( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
 }
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
-    disposeOnce();
-}
-
-void SvxIconSelectorDialog::dispose()
-{
-    if (pTbSymbol)
-    {
-        ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
-
-        for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
-        {
-            sal_uInt16 nId = pTbSymbol->GetItemId(n);
-
-            uno::XInterface* xi = static_cast< uno::XInterface* >(
-                pTbSymbol->GetItemData( nId ) );
-
-            if ( xi != nullptr )
-            xi->release();
-        }
-    }
-
-    pTbSymbol.clear();
-    pFtNote.clear();
-    pBtnImport.clear();
-    pBtnDelete.clear();
-    ModalDialog::dispose();
 }
 
 uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
 {
-    uno::Reference< graphic::XGraphic > result;
+    uno::Reference<graphic::XGraphic> result;
 
-    sal_uInt16 nId;
-    for ( ToolBox::ImplToolItems::size_type n = 0; n < pTbSymbol->GetItemCount(); ++n )
+    sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
+
+    if (nId)
     {
-        nId = pTbSymbol->GetItemId( n );
-        if ( pTbSymbol->IsItemChecked( nId ) )
-        {
-            result.set( static_cast< graphic::XGraphic* >( pTbSymbol->GetItemData( nId ) ) );
-        }
+        result = m_aGraphics[nId - 1];
     }
 
     return result;
 }
 
-IMPL_LINK_NOARG( SvxIconSelectorDialog, SelectHdl, ToolBox *, void )
+IMPL_LINK_NOARG(SvxIconSelectorDialog, SelectHdl, SvtValueSet*, void)
 {
-    ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
+    sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
 
-    for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
+    if (!nId)
     {
-        sal_uInt16 nId = pTbSymbol->GetItemId( n );
-
-        if ( pTbSymbol->IsItemChecked( nId ) )
-        {
-            pTbSymbol->CheckItem( nId, false );
-        }
+        m_xBtnDelete->set_sensitive(false);
+        return;
     }
 
-    sal_uInt16 nId = pTbSymbol->GetCurItemId();
-    pTbSymbol->CheckItem( nId );
-
-    OUString aSelImageText = pTbSymbol->GetItemText( nId );
-    if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), aSelImageText ) )
+    OUString aSelImageText = m_xTbSymbol->GetItemText(nId);
+    if (m_xImportedImageManager->hasImage(SvxConfigPageHelper::GetImageType(), aSelImageText))
     {
-        pBtnDelete->Enable();
+        m_xBtnDelete->set_sensitive(true);
     }
     else
     {
-        pBtnDelete->Enable( false );
+        m_xBtnDelete->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
+IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aImportDialog(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, GetFrameWeld());
+        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, m_xDialog.get());
 
     // disable the link checkbox in the dialog
     uno::Reference< css::ui::dialogs::XFilePickerControlAccess >
@@ -3118,35 +3063,26 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
     }
 }
 
-IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
+IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
 {
     OUString message = CuiResId( RID_SVXSTR_DELETE_ICON_CONFIRM );
 
-    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                VclMessageType::Warning, VclButtonsType::OkCancel,
                                                message));
     if (xWarn->run() == RET_OK)
     {
-        ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
+        sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
 
-        for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
+        OUString aSelImageText = m_xTbSymbol->GetItemText( nId );
+        uno::Sequence< OUString > URLs { aSelImageText };
+        m_xTbSymbol->RemoveItem(nId);
+        m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
+        uno::Reference< css::ui::XUIConfigurationPersistence >
+            xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
+        if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
         {
-            sal_uInt16 nId = pTbSymbol->GetItemId( n );
-
-            if ( pTbSymbol->IsItemChecked( nId ) )
-            {
-                OUString aSelImageText = pTbSymbol->GetItemText( nId );
-                uno::Sequence< OUString > URLs { aSelImageText };
-                pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
-                m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
-                uno::Reference< css::ui::XUIConfigurationPersistence >
-                    xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
-                if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
-                {
-                    xConfigPersistence->store();
-                }
-                break;
-            }
+            xConfigPersistence->store();
         }
     }
 }
@@ -3185,17 +3121,19 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     }
 
     bool   bResult( false );
-    ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
-    for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
+    size_t nCount = m_xTbSymbol->GetItemCount();
+    for (size_t n = 0; n < nCount; ++n)
     {
-        sal_uInt16 nId = pTbSymbol->GetItemId( n );
+        sal_uInt16 nId = m_xTbSymbol->GetItemId( n );
 
-        if ( pTbSymbol->GetItemText( nId ) == aURL )
+        if ( m_xTbSymbol->GetItemText( nId ) == aURL )
         {
             try
             {
                 // replace/insert image with provided URL
-                pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
+                size_t nPos = nId - 1;
+                assert(nPos == m_xTbSymbol->GetItemPos(nId));
+                m_xTbSymbol->RemoveItem(nId);
                 aMediaProps[0].Value <<= aURL;
 
                 Image aImage( xGraphic );
@@ -3205,9 +3143,9 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                     BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
-                pTbSymbol->InsertItem( nId,aImage, aURL, ToolBoxItemBits::NONE, 0 ); //modify
+                m_xTbSymbol->InsertItem(nId, aImage, aURL, nPos); //modify
 
-                xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
+                m_aGraphics[nPos] = Graphic(aImage.GetBitmapEx()).GetXGraphic();
 
                 URLs[0] = aURL;
                 aImportGraph[ 0 ] = xGraphic;
@@ -3279,7 +3217,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         {
             aIndex = rPaths[0].lastIndexOf( '/' );
             aIconName = rPaths[0].copy( aIndex+1 );
-            SvxIconReplacementDialog aDlg(GetFrameWeld(), aIconName, false);
+            SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, false);
             ret = aDlg.run();
             if ( ret == 2 )
             {
@@ -3308,7 +3246,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
                 aIconName = rPaths[i].copy( aIndex+1 );
-                SvxIconReplacementDialog aDlg(GetFrameWeld(), aIconName, true);
+                SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, true);
                 ret = aDlg.run();
                 if ( ret == 2 )
                 {
@@ -3357,17 +3295,14 @@ void SvxIconSelectorDialog::ImportGraphics(
             message.append(fPath).append(rejected[i]).append("\n");
         }
 
-        SvxIconChangeDialog aDialog(GetFrameWeld(), message.makeStringAndClear());
-        (void)aDialog.run();
+        SvxIconChangeDialog aDialog(m_xDialog.get(), message.makeStringAndClear());
+        aDialog.run();
     }
 }
 
 bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
     bool result = false;
-
-    sal_uInt16 nId = m_nNextId;
-    ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
     aMediaProps[0].Name = "URL";
@@ -3385,47 +3320,43 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
         if ( xGraphic.is() )
         {
-                bool bOK = true;
+            bool bOK = true;
 
-                a >>= aSize;
-                if ( 0 == aSize.Width || 0 == aSize.Height )
-                    bOK = false;
+            a >>= aSize;
+            if ( 0 == aSize.Width || 0 == aSize.Height )
+                bOK = false;
 
-                Image aImage( xGraphic );
+            Image aImage( xGraphic );
 
-                if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
+            if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
+            {
+                BitmapEx aBitmap = aImage.GetBitmapEx();
+                BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                aImage = Image( aBitmapex);
+            }
+            if ( bOK && !!aImage )
+            {
+                m_aGraphics.push_back(Graphic(aImage.GetBitmapEx()).GetXGraphic());
+                m_xTbSymbol->InsertItem(m_aGraphics.size(), aImage, aURL);
+
+                uno::Sequence<OUString> aImportURL { aURL };
+                uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
+                aImportGraph[ 0 ] = xGraphic;
+                m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
+                uno::Reference< css::ui::XUIConfigurationPersistence >
+                xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
+
+                if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
                 {
-                    BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
-                    aImage = Image( aBitmapex);
+                    xConfigPersistence->store();
                 }
-                if ( bOK && !!aImage )
-                {
-                    pTbSymbol->InsertItem( nId, aImage, aURL, ToolBoxItemBits::NONE, 0 );
 
-                    xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
-                    xGraphic->acquire();
-
-                    pTbSymbol->SetItemData(
-                        nId, static_cast< void * > ( xGraphic.get() ) );
-                    uno::Sequence<OUString> aImportURL { aURL };
-                    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
-                    aImportGraph[ 0 ] = xGraphic;
-                    m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
-                    uno::Reference< css::ui::XUIConfigurationPersistence >
-                    xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
-
-                    if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
-                    {
-                        xConfigPersistence->store();
-                    }
-
-                    result = true;
-                }
-                else
-                {
-                    SAL_WARN("cui.customize", "could not create Image from XGraphic");
-                }
+                result = true;
+            }
+            else
+            {
+                SAL_WARN("cui.customize", "could not create Image from XGraphic");
+            }
         }
         else
         {
