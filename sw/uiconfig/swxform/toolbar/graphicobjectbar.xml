@@ -22,17 +22,20 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
+ <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
  <toolbar:toolbaritem xlink:href=".uno:Rotate180" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateReset" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

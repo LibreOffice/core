@@ -19,28 +19,29 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSection"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFrameInteract"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertDoc"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSection"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex"/>
- <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDoc" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
+ <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry"/>
 </toolbar:toolbar>
+
