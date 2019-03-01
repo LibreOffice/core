@@ -49,8 +49,8 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 protected:
     SvStream&           rInput;
     OUString            aToken;             // scanned token
-    sal_uLong           nlLineNr;           // current line number
-    sal_uLong           nlLinePos;          // current column number
+    sal_uInt64          nlLineNr;           // current line number
+    sal_uInt64          nlLinePos;          // current column number
 
     std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
     long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
@@ -110,7 +110,7 @@ public:
     sal_uLong    GetLineNr() const;
     sal_uLong    GetLinePos() const;
     void         IncLineNr();
-    sal_uLong    IncLinePos();
+    sal_uInt64   IncLinePos();
     void         SetLineNr( sal_uLong nlNum );
     void         SetLinePos( sal_uLong nlPos );
 
