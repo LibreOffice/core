@@ -33,7 +33,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <comphelper/processfactory.hxx>
@@ -49,7 +48,6 @@
 #include <vcl/fixed.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/scrbar.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
@@ -66,7 +64,6 @@
 #include <slideshow.hxx>
 #include <undoanim.hxx>
 #include <optsitem.hxx>
-#include <sddll.hxx>
 #include <sdmod.hxx>
 #include <framework/FrameworkHelper.hxx>
 
@@ -74,14 +71,10 @@
 
 #include <strings.hrc>
 #include <sdpage.hxx>
-#include <drawdoc.hxx>
 #include <app.hrc>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drange.hxx>
 
 #include <algorithm>
 #include <memory>

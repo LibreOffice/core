@@ -29,23 +29,16 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
 #include <memory>
 
 #include <i18nutil/unicode.hxx>
-#include <unotools/pathoptions.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
@@ -54,15 +47,12 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <svx/svxids.hrc>
 #include <editeng/flstitem.hxx>
-#include <svx/drawitem.hxx>
 
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 
-#include <svx/dialogs.hrc>
+#include <editeng/editids.hrc>
 #include <sdresid.hxx>
 
 #include "CustomAnimationDialog.hxx"
