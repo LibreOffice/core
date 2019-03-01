@@ -19,6 +19,7 @@
 
 #include <svx/svdview.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <editsh.hxx>
 #include <fesh.hxx>
@@ -132,8 +133,9 @@ void SwEditShell::Undo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
             }
-        } catch (const css::uno::Exception & e) {
-            SAL_WARN("sw.core", "SwEditShell::Undo(): exception caught: " << e);
+        } catch (const css::uno::Exception &) {
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.core", "SwEditShell::Undo(): exception caught: " << exceptionToString(ex));
         }
 
         if (bRestoreCursor)
@@ -185,8 +187,9 @@ void SwEditShell::Redo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
             }
-        } catch (const css::uno::Exception & e) {
-            SAL_WARN("sw.core", "SwEditShell::Redo(): exception caught: " << e);
+        } catch (const css::uno::Exception &) {
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sw.core", "SwEditShell::Redo(): exception caught: " << exceptionToString(ex));
         }
 
         Pop(bRestoreCursor ? PopMode::DeleteCurrent : PopMode::DeleteStack);
@@ -210,8 +213,9 @@ void SwEditShell::Repeat(sal_uInt16 const nCount)
     try {
         ::sw::RepeatContext context(*GetDoc(), *GetCursor());
         GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount );
-    } catch (const css::uno::Exception & e) {
-        SAL_WARN("sw.core", "SwEditShell::Repeat(): exception caught: " << e);
+    } catch (const css::uno::Exception &) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sw.core", "SwEditShell::Repeat(): exception caught: " << exceptionToString(ex));
     }
 
     EndAllAction();

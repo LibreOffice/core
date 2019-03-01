@@ -1989,7 +1989,8 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 }
             }
         } catch (uno::Exception &) {
-            SAL_WARN("xmloff.core","SvXMLImport::SetXmlId: exception?");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("xmloff.core","SvXMLImport::SetXmlId: exception " << exceptionToString(ex));
         }
     }
 }

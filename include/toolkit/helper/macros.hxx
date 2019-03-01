@@ -103,10 +103,11 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 
 
 #if OSL_DEBUG_LEVEL > 0
-    #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
-        SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << e);
+    #define DISPLAY_EXCEPTION( ClassName, MethodName )    \
+        css::uno::Any ex( cppu::getCaughtException() ); \
+        SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << exceptionToString(ex));
 #else
-    #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
+    #define DISPLAY_EXCEPTION( ClassName, MethodName )
 #endif
 
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
@@ -127,9 +128,9 @@ void ClassName::disposing( const css::lang::EventObject& ) \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
         } \
-        catch(const css::uno::RuntimeException& e) \
+        catch(const css::uno::RuntimeException&) \
         { \
-            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+            DISPLAY_EXCEPTION( ClassName, MethodName ) \
         } \
     } \
 }
@@ -153,9 +154,9 @@ void ClassName::disposing( const css::lang::EventObject& ) \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
         } \
-        catch(const css::uno::RuntimeException& e) \
+        catch(const css::uno::RuntimeException&) \
         { \
-            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+            DISPLAY_EXCEPTION( ClassName, MethodName ) \
         } \
     } \
 }

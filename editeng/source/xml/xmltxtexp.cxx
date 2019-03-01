@@ -38,6 +38,7 @@
 #include <xmloff/xmlmetae.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <editeng/unoedsrc.hxx>
@@ -336,9 +337,10 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         }
         while( false );
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("editeng", "exception during xml export: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("editeng", "exception during xml export: " << exceptionToString(ex));
     }
 }
 

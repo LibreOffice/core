@@ -1058,7 +1058,7 @@ void BackendImpl::PackageImpl::exportTo(
             SAL_WARN( "desktop", exceptionToString( cppu::getCaughtException() ) );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            SAL_WARN( "desktop", exc );
+            SAL_WARN( "desktop", exceptionToString(Any(exc)) );
         }
 
         std::vector< Sequence<beans::PropertyValue> > manifest;

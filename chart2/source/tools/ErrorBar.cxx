@@ -209,11 +209,18 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
                 }
             }
         }
+        catch (uno::Exception const &)
+        {
+            css::uno::Any ex( cppu::getCaughtException() );
+            // we can't be sure that this is 100% safe and we don't want to kill the export
+            // we should at least check why the exception is thrown
+            SAL_WARN("chart2", "unexpected exception! " << exceptionToString(ex));
+        }
         catch (...)
         {
             // we can't be sure that this is 100% safe and we don't want to kill the export
             // we should at least check why the exception is thrown
-            SAL_WARN("chart2", "unexpected exception!");
+            SAL_WARN("chart2", "unexpected exception! ");
         }
     }
 

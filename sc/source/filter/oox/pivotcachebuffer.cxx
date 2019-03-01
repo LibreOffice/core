@@ -35,6 +35,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/diagnose_ex.h>
 #include <defnamesbuffer.hxx>
 #include <pivotcachefragment.hxx>
 #include <sheetdatabuffer.hxx>
@@ -734,9 +735,10 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                         aAutoName = xGroupName->getName();
                     }
                 }
-                catch( Exception& )
+                catch( Exception const & )
                 {
-                    SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown" );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown " << exceptionToString(ex) );
                 }
                 SAL_WARN_IF( aAutoName.isEmpty(), "sc", "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
 
@@ -762,9 +764,10 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                             pName->maGroupName = aGroupName;
                 }
             }
-            catch( Exception& )
+            catch( Exception const & )
             {
-                SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown " << exceptionToString(ex) );
             }
         }
         ++nIndex;

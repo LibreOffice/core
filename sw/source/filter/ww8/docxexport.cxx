@@ -85,6 +85,7 @@
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -1440,7 +1441,8 @@ void DocxExport::WriteEmbeddings()
             }
             catch(const uno::Exception&)
             {
-                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught!");
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught! " << exceptionToString(ex));
             }
             xOutStream->closeOutput();
         }

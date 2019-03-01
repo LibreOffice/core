@@ -42,7 +42,7 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-
+#include <tools/diagnose_ex.h>
 
 #include <unordered_map>
 #include <algorithm>
@@ -1142,9 +1142,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     SC_UNO_DP_ROWGRAND, static_cast<bool>(nRowGrandMode) );
         }
     }
-    catch(uno::Exception&)
+    catch(uno::Exception const &)
     {
-        SAL_WARN("sc.core", "exception in WriteToSource");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sc.core", "exception in WriteToSource " << exceptionToString(ex));
     }
 }
 
