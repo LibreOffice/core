@@ -43,21 +43,13 @@ namespace comphelper
         }
     }
 
-    /// concat two sequences
-    template <class T>
-    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft, const css::uno::Sequence<T>& _rRight)
+    template <class T, class... Ss>
+    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& rS1, const Ss&... rS)
     {
-        sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
-        const T* pLeft = _rLeft.getConstArray();
-        const T* pRight = _rRight.getConstArray();
-
-        sal_Int32 nReturnLen(nLeft + nRight);
-        css::uno::Sequence<T> aReturn(nReturnLen);
+        css::uno::Sequence<T> aReturn((rS1.getLength() + ... + rS.getLength()));
         T* pReturn = aReturn.getArray();
-
-        internal::implCopySequence(pLeft, pReturn, nLeft);
-        internal::implCopySequence(pRight, pReturn, nRight);
-
+        (internal::implCopySequence(rS1.getConstArray(), pReturn, rS1.getLength()), ...,
+         internal::implCopySequence(rS.getConstArray(), pReturn, rS.getLength()));
         return aReturn;
     }
 
