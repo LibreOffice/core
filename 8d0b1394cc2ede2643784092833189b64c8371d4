@@ -46,6 +46,29 @@
       "revId": "8d0b1394cc2ede2643784092833189b64c8371d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_51d46cbd",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-01T10:49:54Z",
+      "side": 1,
+      "message": "I remember a recent commit by sberg, which seemed to prove that the template parameter might be unnecessary (or that could be only relevant to that Reference use case?)",
+      "range": {
+        "startLine": 392,
+        "startChar": 20,
+        "endLine": 392,
+        "endChar": 33
+      },
+      "revId": "8d0b1394cc2ede2643784092833189b64c8371d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
