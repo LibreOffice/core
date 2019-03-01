@@ -49,19 +49,6 @@ DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentC
 {
 }
 
-/**
- * Proxy around DispatchHelper::executeDispatch(), as
- * vcl::solarthread::syncExecute() does not seem to accept lambdas.
- */
-static css::uno::Any
-executeDispatchStatic(DispatchHelper* pThis,
-                      const css::uno::Reference<css::frame::XDispatch>& xDispatch,
-                      const css::util::URL& aURL, bool SyncronFlag,
-                      const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
-{
-    return pThis->executeDispatch(xDispatch, aURL, SyncronFlag, lArguments);
-}
-
 /** dtor.
 */
 DispatchHelper::~DispatchHelper()
@@ -122,8 +109,9 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
 
     if (bOnMainThread)
-        return vcl::solarthread::syncExecute(
-            std::bind(&executeDispatchStatic, this, xDispatch, aURL, true, lArguments));
+        return vcl::solarthread::syncExecute([this, &xDispatch, &aURL, &lArguments]() {
+            return executeDispatch(xDispatch, aURL, true, lArguments);
+        });
     else
         return executeDispatch(xDispatch, aURL, true, lArguments);
 }
