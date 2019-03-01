@@ -18,38 +18,29 @@
  */
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <svl/languageoptions.hxx>
 
-#include <svtools/ctrltool.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 
 #include <xmloff/autolayout.hxx>
 
-#include <app.hrc>
-#include <facreg.hxx>
 #include <strings.hrc>
 
 #include <bitmaps.hlst>
 #include <sdresid.hxx>
-#include <pres.hxx>
 #include "slidelayoutcontroller.hxx"
-#include <ViewShellBase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
