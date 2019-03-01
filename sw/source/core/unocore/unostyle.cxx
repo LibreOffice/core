@@ -3324,11 +3324,11 @@ const SfxPoolItem* SwXFrameStyle::GetItem(sal_uInt16 eAtr)
 
 uno::Sequence<uno::Type> SwXFrameStyle::getTypes()
 {
-    uno::Sequence<uno::Type> aTypes = SwXStyle::getTypes();
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 1);
-    aTypes[nLen] = cppu::UnoType<XEventsSupplier>::get();
-    return aTypes;
+    static const cppu::OTypeCollection aTypes(
+        cppu::UnoType<XEventsSupplier>::get(),
+        SwXStyle::getTypes()
+    );
+    return aTypes.getTypes();
 }
 
 uno::Any SwXFrameStyle::queryInterface(const uno::Type& rType)

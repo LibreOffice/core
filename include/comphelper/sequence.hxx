@@ -109,6 +109,20 @@ namespace comphelper
         return aReturn;
     }
 
+    /// concat four sequences
+    template <class T>
+    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rSeq1, const css::uno::Sequence<T>& _rSeq2, const css::uno::Sequence<T>& _rSeq3, const css::uno::Sequence<T>& _rSeq4)
+    {
+        css::uno::Sequence<T> aReturn(_rSeq1.getLength() + _rSeq2.getLength() + _rSeq3.getLength() + _rSeq4.getLength());
+        T* pReturn = aReturn.getArray();
+
+        internal::implCopySequence(_rSeq1.getConstArray(), pReturn, _rSeq1.getLength());
+        internal::implCopySequence(_rSeq2.getConstArray(), pReturn, _rSeq2.getLength());
+        internal::implCopySequence(_rSeq3.getConstArray(), pReturn, _rSeq3.getLength());
+        internal::implCopySequence(_rSeq4.getConstArray(), pReturn, _rSeq4.getLength());
+
+        return aReturn;
+    }
 
     /// remove a specified element from a sequences
     template<class T>
