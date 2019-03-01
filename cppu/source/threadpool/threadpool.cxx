@@ -417,7 +417,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
 extern "C" void SAL_CALL
 uno_threadpool_detach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
 {
-    // we might do here some tiding up in case a thread called attach but never detach
+    // we might do here some tidying up in case a thread called attach but never detach
 }
 
 extern "C" void SAL_CALL
