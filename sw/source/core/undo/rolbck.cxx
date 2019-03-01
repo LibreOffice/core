@@ -54,6 +54,7 @@
 #include <charfmt.hxx>
 #include <strings.hrc>
 #include <bookmrk.hxx>
+#include <crossrefbookmark.hxx>
 #include <memory>
 
 OUString SwHistoryHint::GetDescription() const
@@ -669,9 +670,11 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
 bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 {
-    return m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
-        && m_nContent == rBkmk.GetMarkPos().nContent.GetIndex()
-        && m_aName == rBkmk.GetName();
+    return m_aName == rBkmk.GetName()
+        && (   (   m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
+                && m_nContent == rBkmk.GetMarkPos().nContent.GetIndex())
+            // tdf#123313 these are created in middle of ToX update
+            || dynamic_cast<sw::mark::CrossRefHeadingBookmark const*>(&rBkmk));
 }
 
 
