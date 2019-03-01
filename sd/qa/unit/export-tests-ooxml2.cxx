@@ -198,6 +198,7 @@ public:
     void testTdf119118();
     void testTdf99213();
     void testPotxExport();
+    void testTdf44223();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -278,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf119118);
     CPPUNIT_TEST(testTdf99213);
     CPPUNIT_TEST(testPotxExport);
+    CPPUNIT_TEST(testTdf44223);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -297,6 +299,7 @@ public:
             { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
             { "p", "http://schemas.openxmlformats.org/presentationml/2006/main" },
             { "p14", "http://schemas.microsoft.com/office/powerpoint/2010/main" },
+            { "r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships" },
             { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
             { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
@@ -2066,6 +2069,40 @@ void SdOOXMLExportTest2::testPotxExport()
     assertXPath(pContentTypes, "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
         "ContentType", "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml");
 }
+
+void SdOOXMLExportTest2::testTdf44223()
+{
+    utl::TempFile tempFile;
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf44223.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    std::shared_ptr<SvStream> const pStream1(parseExportStream(tempFile, "media/audio1.wav"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(11140), pStream1->remainingSize());
+
+    std::shared_ptr<SvStream> const pStream2(parseExportStream(tempFile, "media/audio2.wav"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(28074), pStream2->remainingSize());
+
+    xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/media/audio1.wav']",
+                "ContentType",
+                "audio/x-wav");
+
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/media/audio2.wav']",
+                "ContentType",
+                "audio/x-wav");
+
+    xmlDocPtr pDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:tgtEl/p:sndTgt[@r:embed]", 1);
+
+    xmlDocPtr pDoc2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    assertXPath(pDoc2 , "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);
+
+    xDocShRef->DoClose();
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
