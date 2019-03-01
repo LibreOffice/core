@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_3441de3a",
+        "filename": "compilerplugins/clang/test/typedefparam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T13:15:36Z",
+      "side": 1,
+      "message": "there\u0027s a \"typedef\" missing from that comment",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_143ca2bd",
+        "filename": "compilerplugins/clang/typedefparam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T13:15:36Z",
+      "side": 1,
+      "message": "there\u0027s a \"typedef\" missing from that comment",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_f44a2653",
+        "filename": "compilerplugins/clang/typedefparam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T13:15:36Z",
+      "side": 1,
+      "message": "elaborated-ness should probably be irrelevant here; why keep warning for \"S\" vs. \"T\" when suppressing warnings for \"struct S\" vs. \"T\"?",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b476eea3",
+        "filename": "include/comphelper/listenernotification.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-01T13:15:36Z",
+      "side": 1,
+      "message": "what does this change have to do here?",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
