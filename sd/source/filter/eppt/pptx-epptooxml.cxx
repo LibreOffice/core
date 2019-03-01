@@ -115,6 +115,21 @@ public:
     bool WritePlaceholder(const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster);
 };
 
+
+namespace
+{
+void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUString& sSoundName)
+{
+        pFS->startElementNS(XML_p, XML_sndAc, FSEND);
+        pFS->startElementNS(XML_p, XML_stSnd, FSEND);
+        pFS->singleElementNS(XML_p, XML_snd,
+                FSNS(XML_r, XML_embed), sSoundRelId.isEmpty() ? nullptr : USS(sSoundRelId),
+                XML_name, sSoundName.isEmpty() ? nullptr : USS(sSoundName), FSEND);
+        pFS->endElement(FSNS(XML_p, XML_stSnd));
+        pFS->endElement(FSNS(XML_p, XML_sndAc));
+}
+}
+
 }
 }
 
@@ -546,12 +561,19 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     sal_Int8 nPPTTransitionType = 0;
     sal_uInt8 nDirection = 0;
 
+    OUString sSoundUrl;
+    OUString sSoundRelId;
+    OUString sSoundName;
+
     if (ImplGetPropertyValue(mXPagePropSet, "TransitionType") && (mAny >>= nTransitionType) &&
             ImplGetPropertyValue(mXPagePropSet, "TransitionSubtype") && (mAny >>= nTransitionSubtype))
         nPPTTransitionType = GetTransition(nTransitionType, nTransitionSubtype, eFadeEffect, nDirection);
 
     if (!nPPTTransitionType && eFadeEffect != FadeEffect_NONE)
         nPPTTransitionType = GetTransition(eFadeEffect, nDirection);
+
+    if (ImplGetPropertyValue(mXPagePropSet, "Sound") && (mAny >>= sSoundUrl))
+        embedEffectAudio(pFS, sSoundUrl, sSoundRelId, sSoundName);
 
     bool bOOXmlSpecificTransition = false;
 
@@ -866,6 +888,9 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 FSEND);
         }
 
+        if (!sSoundRelId.isEmpty())
+            WriteSndAc(pFS, sSoundRelId, sSoundName);
+
         pFS->endElement(FSNS(XML_p, XML_transition));
 
         pFS->endElement(FSNS(XML_mc, XML_Choice));
@@ -886,6 +911,9 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                              XML_thruBlk, pThruBlk,
                              FSEND);
     }
+
+    if (!sSoundRelId.isEmpty())
+        WriteSndAc(pFS, sSoundRelId, sSoundName);
 
     pFS->endElementNS(XML_p, XML_transition);
 
@@ -1933,6 +1961,51 @@ void PowerPointExport::WriteNotesMaster()
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
+}
+
+void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName)
+{
+    comphelper::LifecycleProxy aProxy;
+
+    if (!sUrl.endsWithIgnoreAsciiCase(".wav"))
+        return;
+
+    uno::Reference<io::XInputStream> xAudioStream;
+    if (sUrl.startsWith("vnd.sun.star.Package:"))
+    {
+        uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
+        if (!xStorageBasedDocument.is())
+            return;
+
+        uno::Reference<embed::XStorage> xDocumentStorage(xStorageBasedDocument->getDocumentStorage(), uno::UNO_QUERY);
+        if (!xDocumentStorage.is())
+            return;
+
+        uno::Reference<io::XStream> xStream = comphelper::OStorageHelper::GetStreamAtPackageURL(xDocumentStorage, sUrl,
+                                                    css::embed::ElementModes::READ, aProxy);
+
+        if (xStream.is())
+            xAudioStream = xStream->getInputStream();
+    }
+    else
+        xAudioStream = comphelper::OStorageHelper::GetInputStreamFromURL(sUrl, getComponentContext());
+
+    if (!xAudioStream.is())
+        return;
+
+    int nLastSlash = sUrl.lastIndexOf('/');
+    sName = sUrl.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
+
+    OUString sPath = OUStringBuffer().append("/media/")
+                                     .append(sName)
+                                     .makeStringAndClear();
+
+    sRelId = addRelation(pFS->getOutputStream(),
+                        oox::getRelationship(Relationship::AUDIO), sPath);
+
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath, "audio/x-wav");
+
+    comphelper::OStorageHelper::CopyInputToOutput(xAudioStream, xOutputStream);
 }
 
 sal_Int32 PowerPointExport::GetShapeID(const Reference<XShape>& rXShape)
