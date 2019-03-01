@@ -31,12 +31,15 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
+#include <tools/gen.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/metaact.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -332,6 +335,37 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
     xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
 
     return aPageMargins;
+}
+
+bool SfxRedactionHelper::searchInMetaFile(const rtl::OUString& sSearchTerm, const GDIMetaFile& rMtf)
+{
+    MetaAction* pCurrAct;
+    bool bStrFound(false);
+
+    // Watch for TEXTARRAY actions.
+    // They contain the text of paragraphes.
+    for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct && !bStrFound;
+         pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
+    {
+        if (pCurrAct->GetType() == MetaActionType::TEXTARRAY)
+        {
+            MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pCurrAct);
+
+            sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
+            sal_Int32 aLength = pMetaTextArrayAction->GetLen();
+            Point aPoint = pMetaTextArrayAction->GetPoint();
+            OUString sText = pMetaTextArrayAction->GetText();
+
+            // We break here, but we will be eventually traversing through
+            // the whole metafile for all occurences
+            if (sText.indexOf(sSearchTerm) >= 0)
+            {
+                bStrFound = true;
+            }
+        }
+    }
+
+    return bStrFound;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

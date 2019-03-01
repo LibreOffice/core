@@ -87,6 +87,8 @@ public:
      * pages inserted into Draw for redaction.
      * */
     static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
+
+    static bool searchInMetaFile(const OUString& sSearchTerm, const GDIMetaFile& rMtf);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
