@@ -1822,7 +1822,10 @@ void Window::LoseFocus()
 
 void Window::SetHelpHdl(const Link<vcl::Window&, bool>& rLink)
 {
-    mpWindowImpl->maHelpRequestHdl = rLink;
+    if (mpWindowImpl) // may be called after dispose
+    {
+        mpWindowImpl->maHelpRequestHdl = rLink;
+    }
 }
 
 void Window::RequestHelp( const HelpEvent& rHEvt )
