@@ -1668,11 +1668,8 @@ void SdrPathObj::ImpForceLineAngle()
         return;
 
     const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
-    const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
-    const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
-    const Point aDelt(aPoint1 - aPoint0);
+    const basegfx::B2DPoint aB2DDelt(aPoly.getB2DPoint(1) - aPoly.getB2DPoint(0));
+    const Point aDelt(FRound(aB2DDelt.getX()), FRound(aB2DDelt.getY()));
 
     aGeo.nRotationAngle=GetAngle(aDelt);
     aGeo.nShearAngle=0;
