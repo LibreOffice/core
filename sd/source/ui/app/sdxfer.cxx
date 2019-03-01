@@ -24,22 +24,18 @@
 #include <comphelper/fileformat.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdpagv.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <sot/storage.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
-#include <editeng/outliner.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -56,7 +52,6 @@
 #include <View.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <stlpool.hxx>
 #include <imapinfo.hxx>

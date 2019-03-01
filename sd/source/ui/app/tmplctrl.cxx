@@ -19,7 +19,6 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/status.hxx>
-#include <svl/style.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 

@@ -17,28 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <rtl/ustring.h>
+
 #include <sal/log.hxx>
-#include <sfx2/viewfrm.hxx>
-
-#include <svx/AccessibleShape.hxx>
-
-#include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/unoapi.hxx>
 #include <vcl/svapp.hxx>
 #include <Window.hxx>
-#include <ViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <OutlineView.hxx>
