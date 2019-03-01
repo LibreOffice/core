@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1f485f77_74a51604",
+        "filename": "compilerplugins/clang/typedefparam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-01T13:28:40Z",
+      "side": 1,
+      "message": "I\u0027m already unwrapping elaborated on both sides before comparing? (see 7 lines below)",
+      "parentUuid": "1f485f77_f44a2653",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_b476eea3",
         "filename": "include/comphelper/listenernotification.hxx",
         "patchSetId": 2
@@ -64,6 +82,24 @@
       "writtenOn": "2019-03-01T13:15:36Z",
       "side": 1,
       "message": "what does this change have to do here?",
+      "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_949e52b6",
+        "filename": "include/comphelper/listenernotification.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-01T13:28:40Z",
+      "side": 1,
+      "message": "note the typedef\u0027s below that I also removed - without this change, there is a place that extends this template where I end up warning because the template uses typedefs to the underlying types, and the overrides use the original types",
+      "parentUuid": "1f485f77_b476eea3",
       "revId": "87d03ae4f3ec8b3e29924e18e85908971189c129",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
