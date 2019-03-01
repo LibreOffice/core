@@ -46,22 +46,22 @@ namespace sc_apitest
 {
 const auto nMaxFieldIndex = 6;
 
-class ScDataPilotFieldGroupItemObj : public CalcUnoApiTest,
-                                     public apitest::XElementAccess,
-                                     public apitest::XEnumerationAccess,
-                                     public apitest::XIndexAccess,
-                                     public apitest::XNameAccess,
-                                     public apitest::XNameContainer,
-                                     public apitest::XServiceInfo
+class ScDataPilotFieldGroupsObj : public CalcUnoApiTest,
+                                  public apitest::XElementAccess,
+                                  public apitest::XEnumerationAccess,
+                                  public apitest::XIndexAccess,
+                                  public apitest::XNameAccess,
+                                  public apitest::XNameContainer,
+                                  public apitest::XServiceInfo
 {
 public:
-    ScDataPilotFieldGroupItemObj();
+    ScDataPilotFieldGroupsObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupItemObj);
+    CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupsObj);
 
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
@@ -97,7 +97,7 @@ private:
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
-ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
+ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<container::XNameAccess>::get())
     , XIndexAccess(1)
@@ -107,7 +107,7 @@ ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
+uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
 {
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, nMaxFieldIndex - 1, nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);
@@ -210,20 +210,20 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
     return aDPFGI.Groups;
 }
 
-void ScDataPilotFieldGroupItemObj::setUp()
+void ScDataPilotFieldGroupsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScDataPilotFieldGroupItemObj::tearDown()
+void ScDataPilotFieldGroupsObj::tearDown()
 {
     closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldGroupItemObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldGroupsObj);
 
 } // namespace sc_apitest
 
