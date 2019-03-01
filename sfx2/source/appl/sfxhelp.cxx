@@ -83,6 +83,7 @@
 #include <sfx2/frame.hxx>
 #include <rtl/string.hxx>
 #include <svtools/langtab.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -399,7 +400,8 @@ static OUString getCurrentModuleIdentifier_Impl()
         }
         catch (const Exception&)
         {
-            SAL_WARN( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify() " << exceptionToString(ex) );
         }
     }
 
@@ -480,7 +482,8 @@ OUString SfxHelp::GetHelpModuleName_Impl(const OUString& rHelpID)
             }
             catch (const Exception&)
             {
-                SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): " << exceptionToString(ex) );
             }
         }
     }

@@ -32,6 +32,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -135,7 +136,8 @@ static bool KillFile_Impl( const OUString& rURL )
     }
     catch( ... )
     {
-        SAL_WARN( "cui.options", "KillFile: Any other exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "cui.options", "KillFile: Any other exception " << exceptionToString(ex) );
         bRet = false;
     }
 

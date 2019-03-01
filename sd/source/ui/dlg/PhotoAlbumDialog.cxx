@@ -32,6 +32,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfillit.hxx>
+#include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>
 
 #include "PhotoAlbumDialog.hxx"
@@ -166,9 +167,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     if (bCreateCaptions)
                         createCaption( aPageSize );
                 }
-                catch (const css::uno::Exception& exc)
+                catch (const css::uno::Exception&)
                 {
-                    SAL_WARN( "sd", exc );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "sd", exceptionToString(ex) );
                 }
             }
         }
@@ -230,9 +232,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
 
@@ -277,9 +280,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         if(bCreateCaptions)
                             createCaption( aPageSize );
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
             }
@@ -349,9 +353,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
                 if( !sUrl2.isEmpty() )
@@ -392,9 +397,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
                 if( !sUrl3.isEmpty() )
@@ -435,9 +441,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
                 if( !sUrl4.isEmpty() )
@@ -480,9 +487,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         if(bCreateCaptions)
                             createCaption( aPageSize );
                     }
-                    catch (const css::uno::Exception& exc)
+                    catch (const css::uno::Exception&)
                     {
-                        SAL_WARN( "sd", exc );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN( "sd", exceptionToString(ex) );
                     }
                 }
             }

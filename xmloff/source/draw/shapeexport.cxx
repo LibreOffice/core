@@ -628,7 +628,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     catch(const uno::Exception&)
     {
-        SAL_WARN("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export " << exceptionToString(ex));
     }
 
     if( xSet.is() )

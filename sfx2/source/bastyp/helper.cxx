@@ -38,7 +38,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
@@ -76,13 +76,10 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( const ucb::CommandAbortedException& )
-        {
-            SAL_WARN( "sfx.bastyp", "GetResultSet: CommandAbortedException" );
-        }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "sfx.bastyp", "GetResultSet: Any other exception" );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "sfx.bastyp", "GetResultSet: " << exceptionToString(ex) );
         }
 
 
@@ -105,13 +102,10 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
                     aList.push_back( aRow );
                 }
             }
-            catch( const ucb::CommandAbortedException& )
-            {
-                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): CommandAbortedException" );
-            }
             catch( const uno::Exception& )
             {
-                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): Any other exception" );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): " << exceptionToString(ex) );
             }
         }
     }
@@ -251,13 +245,10 @@ sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.getPropertyValue( "Size" ) >>= nSize;
     }
-    catch( const ucb::CommandAbortedException& )
-    {
-        SAL_WARN( "sfx.bastyp", "CommandAbortedException" );
-    }
     catch( const uno::Exception& )
     {
-        SAL_WARN( "sfx.bastyp", "Any other exception" );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "sfx.bastyp", exceptionToString(ex) );
     }
     return nSize;
 }

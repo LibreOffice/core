@@ -182,10 +182,11 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
     {
         cStream = OOXMLDocumentFactory::createStream(pStream, nType);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("writerfilter.ooxml", "importSubStreamRelations: exception while "
-            "importing stream " << nType << " : " << e);
+            "importing stream " << nType << " : " << exceptionToString(ex));
         return;
     }
 
@@ -202,10 +203,11 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
                  uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
                  xRelation = xDomBuilder->parse(xcpInputStream);
             }
-            catch (uno::Exception const& e)
+            catch (uno::Exception const&)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_WARN("writerfilter.ooxml", "importSubStream: exception while "
-                         "parsing stream " << nType << " : " << e);
+                         "parsing stream " << nType << " : " << exceptionToString(ex));
                 mxCustomXmlProsDom = xRelation;
             }
 
