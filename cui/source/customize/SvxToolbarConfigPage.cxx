@@ -557,15 +557,14 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         // TODO: Add a GetSelectionPos() method to the SvTreeListBox class
         sal_uInt16 nSelectionPos = m_pContentsListBox->GetModel()->GetAbsPos( pActEntry );
 
-        ScopedVclPtr<SvxIconSelectorDialog> pIconDialog(
-            VclPtr<SvxIconSelectorDialog>::Create( nullptr,
+        SvxIconSelectorDialog aIconDialog(GetDialogFrameWeld(),
                 GetSaveInData()->GetImageManager(),
-                GetSaveInData()->GetParentImageManager() ));
+                GetSaveInData()->GetParentImageManager());
 
-        if ( pIconDialog->Execute() == RET_OK )
+        if (aIconDialog.run() == RET_OK)
         {
             css::uno::Reference< css::graphic::XGraphic > newgraphic =
-                pIconDialog->GetSelectedIcon();
+                aIconDialog.GetSelectedIcon();
 
             if ( newgraphic.is() )
             {
