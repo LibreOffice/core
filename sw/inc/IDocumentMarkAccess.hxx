@@ -47,6 +47,7 @@ class IDocumentMarkAccess
             ANNOTATIONMARK,
             TEXT_FIELDMARK,
             CHECKBOX_FIELDMARK,
+            DROPDOWN_FIELDMARK,
             NAVIGATOR_REMINDER
         };
 
@@ -255,6 +256,7 @@ class IDocumentMarkAccess
         virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const=0;
 
         virtual void deleteFieldmarkAt(const SwPosition& rPos) = 0;
+        virtual ::sw::mark::IFieldmark* changeNonTextFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) = 0;
 
         // Annotation Marks
         virtual const_iterator_t getAnnotationMarksBegin() const = 0;
