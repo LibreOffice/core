@@ -67,8 +67,4 @@ namespace dbaui
     }
 }
 
-using namespace dbaui;
-
-VCL_BUILDER_FACTORY(OSQLNameEdit)
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
