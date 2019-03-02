@@ -245,6 +245,7 @@ namespace sw {
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
+        /// Fieldmark representing a checkbox form field.
         class CheckboxFieldmark
             : virtual public ICheckboxFieldmark
             , public Fieldmark
@@ -255,6 +256,17 @@ namespace sw {
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
             bool IsChecked() const override;
             void SetChecked(bool checked) override;
+        };
+
+        /// Fieldmark representing a drop-down form field.
+        class DropDownFieldmark
+            : public Fieldmark
+        {
+        public:
+            DropDownFieldmark(const SwPaM& rPaM);
+            virtual ~DropDownFieldmark() override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
     }
 }

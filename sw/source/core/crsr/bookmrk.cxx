@@ -478,6 +478,39 @@ namespace sw { namespace mark
             pResult->second >>= bResult;
         return bResult;
     }
+
+    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
+        : Fieldmark(rPaM)
+    {
+    }
+
+    DropDownFieldmark::~DropDownFieldmark()
+    {
+    }
+
+    void DropDownFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
+    {
+        if (eMode == sw::mark::InsertMode::New)
+        {
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+
+            // For some reason the end mark is moved from 1 by the Insert:
+            // we don't want this for checkboxes
+            SwPosition aNewEndPos = GetMarkEnd();
+            aNewEndPos.nContent--;
+            SetMarkEndPos( aNewEndPos );
+        }
+        else
+        {
+            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+        }
+    }
+
+    void DropDownFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    {
+        lcl_RemoveFieldMarks(this, pDoc,
+                CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+    }
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
