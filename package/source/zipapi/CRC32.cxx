@@ -41,7 +41,7 @@ void CRC32::reset()
 }
 sal_Int32 CRC32::getValue()
 {
-    return nCRC & 0xFFFFFFFFL;
+    return nCRC;
 }
 /** Update CRC32 with specified sequence of bytes
  */
