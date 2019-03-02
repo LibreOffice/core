@@ -65,24 +65,10 @@ namespace dbaui
         }
         Edit::Modify();
     }
-    void OSQLNameComboBox::Modify()
-    {
-        OUString sCorrected;
-        if ( checkString( GetText(),sCorrected ) )
-        {
-            Selection aSel = GetSelection();
-            aSel.setMax( aSel.getMin() );
-            SetText( sCorrected );
-
-            SaveValue();
-        }
-        ComboBox::Modify();
-    }
 }
 
 using namespace dbaui;
 
 VCL_BUILDER_FACTORY(OSQLNameEdit)
-VCL_BUILDER_FACTORY(OSQLNameComboBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
