@@ -96,7 +96,9 @@ public:
     /** Write a string property to the stream, the respective flag
         in the property mask is set. */
     void                writeStringProperty( OUString& orValue );
-
+    /** Write a picture property to the stream, the respective flag
+        in the property mask is set. */
+    void                writePictureProperty( StreamDataSequence& orPicData );
     /** Skips the next property clears the respective
         flag in the property mask. */
     void                skipProperty() { startNextProperty( true ); }
@@ -140,6 +142,10 @@ private:
     /** Stream property for a picture or mouse icon. */
     struct PictureProperty : public ComplexProperty
     {
+        StreamDataSequence& mrPicData;
+
+        explicit            PictureProperty( StreamDataSequence& rPicData ) :
+                                mrPicData( rPicData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 

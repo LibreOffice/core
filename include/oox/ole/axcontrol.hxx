@@ -309,6 +309,12 @@ public:
                             const StreamDataSequence& rPicData,
                             sal_Int32 nPicSizeMode ) const;
 
+    /**/
+    void               convertFromAxPicture(
+                            PropertySet& rPropSet,
+                            const StreamDataSequence& rPicData,
+                            sal_uInt32 nPicPos) const;
+
     /** Converts the Forms 2.0 value for checked/unchecked/dontknow to UNO
         properties. */
     static void         convertAxState(
