@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
 
 using namespace svt;
@@ -114,12 +114,10 @@ namespace {
         return xInfo;
     }
 
-
     ::cppu::IPropertyArrayHelper& OAddressBookSourceDialogUno::getInfoHelper()
     {
         return *getArrayHelper();
     }
-
 
     ::cppu::IPropertyArrayHelper* OAddressBookSourceDialogUno::createArrayHelper( ) const
     {
@@ -128,13 +126,12 @@ namespace {
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-
     void OAddressBookSourceDialogUno::executedDialog(sal_Int16 _nExecutionResult)
     {
         OGenericUnoDialog::executedDialog(_nExecutionResult);
 
         if ( _nExecutionResult && m_aDialog )
-            static_cast< AddressBookSourceDialog* >( m_aDialog.m_xVclDialog.get() )->getFieldMapping( m_aAliases );
+            static_cast<AddressBookSourceDialog*>(m_aDialog.m_xWeldDialog.get())->getFieldMapping(m_aAliases);
     }
 
     void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments)
@@ -199,16 +196,14 @@ namespace {
         OGenericUnoDialog::implInitialize( _rValue );
     }
 
-
     svt::OGenericUnoDialog::Dialog OAddressBookSourceDialogUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        auto _pParent = VCLUnoHelper::GetWindow(rParent);
+        weld::Window* pParent = Application::GetFrameWeld(rParent);
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )
-            return svt::OGenericUnoDialog::Dialog(VclPtr<AddressBookSourceDialog>::Create(_pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases));
+            return svt::OGenericUnoDialog::Dialog(std::make_unique<AddressBookSourceDialog>(pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases));
         else
-            return svt::OGenericUnoDialog::Dialog(VclPtr<AddressBookSourceDialog>::Create(_pParent, m_aContext));
+            return svt::OGenericUnoDialog::Dialog(std::make_unique<AddressBookSourceDialog>(pParent, m_aContext));
     }
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
