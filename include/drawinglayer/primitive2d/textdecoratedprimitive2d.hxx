@@ -29,10 +29,6 @@ namespace basegfx { namespace utils {
     class B2DHomMatrixBufferedOnDemandDecompose;
 }}
 
-namespace com { namespace sun { namespace star { namespace i18n {
-    struct Boundary;
-}}}}
-
 namespace drawinglayer
 {
     namespace primitive2d

@@ -23,7 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 
@@ -31,6 +30,8 @@
 namespace drawinglayer { namespace animation {
     class AnimationEntry;
 }}
+
+namespace basegfx { class B2DHomMatrix; }
 
 
 namespace drawinglayer

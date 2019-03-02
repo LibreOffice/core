@@ -44,6 +44,7 @@
 #include <vcl/hatch.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <cstdio>

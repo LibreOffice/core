@@ -23,8 +23,9 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+namespace com::sun::star::drawing { class XDrawPage; }
 
 
 namespace drawinglayer

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <memory>
 
@@ -29,6 +28,8 @@ class OutputDevice;
 namespace drawinglayer { namespace processor2d {
     class BaseProcessor2D;
 }}
+
+namespace drawinglayer { namespace geometry { class ViewInformation2D; } }
 
 namespace drawinglayer
 {

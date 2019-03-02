@@ -21,9 +21,11 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTBREAKUPHELPER_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+namespace drawinglayer { namespace primitive2d { class TextSimplePortionPrimitive2D; } }
 
 
 namespace drawinglayer

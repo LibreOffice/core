@@ -25,6 +25,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdmodel.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 #include <tools/debug.hxx>

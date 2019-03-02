@@ -27,7 +27,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>

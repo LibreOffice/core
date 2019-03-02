@@ -60,6 +60,7 @@
 #include <svx/sdrundomanager.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
