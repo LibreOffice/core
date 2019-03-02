@@ -84,14 +84,15 @@ void Test::test()
 
     uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
-    DrawRoot* pDrawRoot = reinterpret_cast<DrawRoot*>(aAny.get<sal_uInt64>());
+    gfx::DrawRoot* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawRoot->maChildren.size());
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(0, 0, 120, 120), pDrawRoot->maRectangle);
 
-    CPPUNIT_ASSERT_EQUAL(DrawCommandType::Rectangle, pDrawRoot->maChildren[0]->getType());
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(10, 10, 110, 110),
-                         static_cast<DrawRectangle*>(pDrawRoot->maChildren[0].get())->maRectangle);
+    CPPUNIT_ASSERT_EQUAL(gfx::DrawCommandType::Rectangle, pDrawRoot->maChildren[0]->getType());
+    CPPUNIT_ASSERT_EQUAL(
+        basegfx::B2DRange(10, 10, 110, 110),
+        static_cast<gfx::DrawRectangle*>(pDrawRoot->maChildren[0].get())->maRectangle);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
