@@ -24,7 +24,6 @@
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 

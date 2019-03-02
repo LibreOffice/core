@@ -11,35 +11,11 @@
 #define INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <rtl/ustring.hxx>
 
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/LineJoint.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-
-#include <com/sun/star/drawing/PolygonKind.hpp>
-
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/TextAnimationDirection.hpp>
-#include <com/sun/star/drawing/TextAnimationKind.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
-
-#include <com/sun/star/drawing/HomogenMatrixLine3.hpp>
-#include <com/sun/star/drawing/HomogenMatrix3.hpp>
-
-#include <com/sun/star/beans/PropertyValue.hpp>
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {

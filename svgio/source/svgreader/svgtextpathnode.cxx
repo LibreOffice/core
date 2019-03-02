@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>

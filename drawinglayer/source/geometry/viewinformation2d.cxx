@@ -21,6 +21,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <rtl/instance.hxx>

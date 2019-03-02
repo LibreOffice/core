@@ -25,7 +25,6 @@
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
 

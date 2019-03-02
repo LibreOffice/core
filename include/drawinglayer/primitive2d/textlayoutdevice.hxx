@@ -24,23 +24,20 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
-#include <com/sun/star/lang/Locale.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/svapp.hxx>
 
 // predefines
 class VirtualDevice;
 namespace vcl { class Font; }
-namespace rtl {
-   class OUString;
-};
-class OutputDevice;
 class GDIMetaFile;
 namespace tools { class Rectangle; }
 enum class DrawTextFlags;
 namespace drawinglayer { namespace attribute {
     class FontAttribute;
 }}
+
+namespace com::sun::star::lang { struct Locale; }
 
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive
 

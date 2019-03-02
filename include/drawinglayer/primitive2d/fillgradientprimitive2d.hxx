@@ -24,12 +24,12 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <drawinglayer/texture/texture.hxx>
 
 
 // predefines
 
 namespace basegfx { class B2DPolygon; }
+namespace drawinglayer { namespace texture { struct B2DHomMatrixAndBColor; } }
 
 
 // FillGradientPrimitive2D class
