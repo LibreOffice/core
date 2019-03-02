@@ -60,22 +60,6 @@ namespace dbaui
         // Edit
         virtual void Modify() override;
     };
-
-    class OSQLNameComboBox : public ComboBox
-                            ,public OSQLNameChecker
-    {
-    public:
-        OSQLNameComboBox(vcl::Window* _pParent)
-            : ComboBox(_pParent, WB_BORDER)
-            , OSQLNameChecker(OUString())
-        {
-        }
-
-        // Window overrides
-        // Edit
-        virtual void Modify() override;
-    };
-
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
