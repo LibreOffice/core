@@ -19,25 +19,22 @@ namespace svgio
 {
 namespace svgreader
 {
-
 class SvgDrawVisitor : public Visitor
 {
 private:
-    std::shared_ptr<DrawRoot> mpDrawRoot;
-    std::shared_ptr<DrawBase> mpCurrent;
+    std::shared_ptr<gfx::DrawRoot> mpDrawRoot;
+    std::shared_ptr<gfx::DrawBase> mpCurrent;
+
 public:
     SvgDrawVisitor();
 
-    virtual void visit(svgio::svgreader::SvgNode const & rNode);
-    void goToChildren(svgio::svgreader::SvgNode const & rNode);
+    virtual void visit(svgio::svgreader::SvgNode const& rNode);
+    void goToChildren(svgio::svgreader::SvgNode const& rNode);
 
-    std::shared_ptr<DrawRoot> const & getDrawRoot()
-    {
-        return mpDrawRoot;
-    }
+    std::shared_ptr<gfx::DrawRoot> const& getDrawRoot() { return mpDrawRoot; }
 };
-
-}}
+}
+}
 
 #endif // INCLUDED_SVGIO_INC_SVGVISITOR_HXX
 
