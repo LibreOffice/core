@@ -312,11 +312,11 @@ OString PDFString::getFilteredString() const
         {
             sal_Char rResult = 0;
             if( *pRun >= '0' && *pRun <= '9' )
-                rResult = sal_Char( *pRun-'0' ) << 4;
+                rResult = sal_Char( ( *pRun-'0' ) << 4 );
             else if( *pRun >= 'a' && *pRun <= 'f' )
-                rResult = sal_Char( *pRun-'a' + 10 ) << 4;
+                rResult = sal_Char( ( *pRun-'a' + 10 ) << 4 );
             else if( *pRun >= 'A' && *pRun <= 'F' )
-                rResult = sal_Char( *pRun-'A' + 10 ) << 4;
+                rResult = sal_Char( ( *pRun-'A' + 10 ) << 4 );
             pRun++;
             if( *pRun != '>' && pRun - pStr < nLen )
             {
