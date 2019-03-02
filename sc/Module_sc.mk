@@ -130,6 +130,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_datapilotfieldobj \
 	CppunitTest_sc_datapilotfieldsobj \
 	CppunitTest_sc_datapilotitemobj \
+	CppunitTest_sc_datapilotitemsobj \
 	CppunitTest_sc_datapilottableobj \
 	CppunitTest_sc_datapilottablesobj \
 	CppunitTest_sc_ddelinkobj \
