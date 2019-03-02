@@ -18,6 +18,7 @@
 #include <svgpathnode.hxx>
 
 #include <svgvisitor.hxx>
+#include <tools/color.hxx>
 
 namespace svgio
 {
@@ -37,13 +38,9 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
         {
             auto const& rSvgNode = static_cast<svgio::svgreader::SvgSvgNode const&>(rNode);
 
-            double x = rSvgNode.getX().getNumber();
-            double y = rSvgNode.getY().getNumber();
-            double w = rSvgNode.getWidth().getNumber();
-            double h = rSvgNode.getHeight().getNumber();
+            basegfx::B2DRange aRange = rSvgNode.getCurrentViewPort();
 
-            static_cast<gfx::DrawRoot*>(mpCurrent.get())->maRectangle
-                = basegfx::B2DRange(x, y, x + w, y + h);
+            static_cast<gfx::DrawRoot*>(mpCurrent.get())->maRectangle = aRange;
         }
         break;
         case svgio::svgreader::SVGTokenG:
@@ -71,16 +68,44 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
 
             auto pRectangle
                 = std::make_shared<gfx::DrawRectangle>(basegfx::B2DRange(x, y, x + w, y + h));
+            pRectangle->mnRx = rRectNode.getRx().getNumber();
+            pRectangle->mnRy = rRectNode.getRy().getNumber();
+
+            pRectangle->mnStrokeWidth
+                = rRectNode.getSvgStyleAttributes()->getStrokeWidth().getNumber();
+
+            const basegfx::BColor* pFillColor = rRectNode.getSvgStyleAttributes()->getFill();
+            if (pFillColor)
+                pRectangle->mpFillColor = std::make_shared<basegfx::BColor>(*pFillColor);
+
+            const basegfx::BColor* pStrokeColor = rRectNode.getSvgStyleAttributes()->getStroke();
+            if (pStrokeColor)
+                pRectangle->mpStrokeColor = std::make_shared<basegfx::BColor>(*pStrokeColor);
+
             mpCurrent->maChildren.push_back(pRectangle);
         }
         break;
         case svgio::svgreader::SVGTokenPath:
         {
             auto const& rPathNode = static_cast<svgio::svgreader::SvgPathNode const&>(rNode);
+
             auto pPath = rPathNode.getPath();
             if (pPath)
             {
                 auto pDrawPath = std::make_shared<gfx::DrawPath>(*pPath);
+
+                pDrawPath->mnStrokeWidth
+                    = rPathNode.getSvgStyleAttributes()->getStrokeWidth().getNumber();
+
+                const basegfx::BColor* pFillColor = rPathNode.getSvgStyleAttributes()->getFill();
+                if (pFillColor)
+                    pDrawPath->mpFillColor = std::make_shared<basegfx::BColor>(*pFillColor);
+
+                const basegfx::BColor* pStrokeColor
+                    = rPathNode.getSvgStyleAttributes()->getStroke();
+                if (pStrokeColor)
+                    pDrawPath->mpStrokeColor = std::make_shared<basegfx::BColor>(*pStrokeColor);
+
                 mpCurrent->maChildren.push_back(pDrawPath);
             }
         }
