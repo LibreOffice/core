@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,6 +44,7 @@ const auto nMaxFieldIndex = 6;
 class ScDataPilotItemsObj : public CalcUnoApiTest,
                             public apitest::XElementAccess,
                             public apitest::XEnumerationAccess,
+                            public apitest::XIndexAccess,
                             public apitest::XServiceInfo
 {
 public:
@@ -61,6 +63,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
@@ -75,6 +81,7 @@ private:
 ScDataPilotItemsObj::ScDataPilotItemsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
+    , XIndexAccess(5)
     , XServiceInfo("ScDataPilotItemsObj", "com.sun.star.sheet.DataPilotItems")
 {
 }
