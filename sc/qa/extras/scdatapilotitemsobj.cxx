@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -45,6 +46,7 @@ class ScDataPilotItemsObj : public CalcUnoApiTest,
                             public apitest::XElementAccess,
                             public apitest::XEnumerationAccess,
                             public apitest::XIndexAccess,
+                            public apitest::XNameAccess,
                             public apitest::XServiceInfo
 {
 public:
@@ -67,6 +69,11 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
@@ -82,6 +89,7 @@ ScDataPilotItemsObj::ScDataPilotItemsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(5)
+    , XNameAccess("2")
     , XServiceInfo("ScDataPilotItemsObj", "com.sun.star.sheet.DataPilotItems")
 {
 }
