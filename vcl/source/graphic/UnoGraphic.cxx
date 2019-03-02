@@ -26,6 +26,7 @@
 #include <vcl/dibtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <string.h>
 
 using namespace com::sun::star;
@@ -108,14 +109,11 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 
 uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 {
-    uno::Sequence< uno::Type >  aRet( ::unographic::GraphicDescriptor::getTypes() );
-    sal_Int32                   nOldCount = aRet.getLength();
-
-    aRet.realloc( nOldCount + 2 );
-    aRet[ nOldCount ] = cppu::UnoType<graphic::XGraphic>::get();
-    aRet[ nOldCount+1 ] = cppu::UnoType<awt::XBitmap>::get();
-
-    return aRet;
+    return cppu::OTypeCollection(
+            cppu::UnoType<graphic::XGraphic>::get(),
+            cppu::UnoType<awt::XBitmap>::get(),
+            ::unographic::GraphicDescriptor::getTypes()
+        ).getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()

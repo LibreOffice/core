@@ -710,9 +710,8 @@ OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName()
 
 Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes()
 {
-    Sequence< css::uno::Type > aSeq( 1 );
-    aSeq[ 0 ] = cppu::UnoType<XAccessibleText>::get();
-    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
+    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(),
+        Sequence { cppu::UnoType<XAccessibleText>::get() });
 }
 
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId()
@@ -1194,10 +1193,10 @@ OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName()
 
 Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
 {
-    Sequence< css::uno::Type > aSeq( 2 );
-    aSeq[ 0 ] = cppu::UnoType<XAccessibleTable>::get();
-    aSeq[ 1 ] = cppu::UnoType<XAccessibleSelection>::get();
-    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
+    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(),
+        Sequence {
+            cppu::UnoType<XAccessibleTable>::get(),
+            cppu::UnoType<XAccessibleSelection>::get() });
 }
 
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId()

@@ -3135,27 +3135,11 @@ void SAL_CALL SwXTextFrame::release(  )throw()
 
 uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
 {
-    uno::Sequence< uno::Type > aTextFrameTypes = SwXTextFrameBaseClass::getTypes();
-    uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
-    uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
-
-    long nIndex = aTextFrameTypes.getLength();
-    aTextFrameTypes.realloc(
-        aTextFrameTypes.getLength() +
-        aFrameTypes.getLength() +
-        aTextTypes.getLength());
-
-    uno::Type* pTextFrameTypes = aTextFrameTypes.getArray();
-    const uno::Type* pFrameTypes = aFrameTypes.getConstArray();
-    long nPos;
-    for(nPos = 0; nPos <aFrameTypes.getLength(); nPos++)
-        pTextFrameTypes[nIndex++] = pFrameTypes[nPos];
-
-    const uno::Type* pTextTypes = aTextTypes.getConstArray();
-    for(nPos = 0; nPos <aTextTypes.getLength(); nPos++)
-        pTextFrameTypes[nIndex++] = pTextTypes[nPos];
-
-    return aTextFrameTypes;
+    return comphelper::concatSequences(
+        SwXTextFrameBaseClass::getTypes(),
+        SwXFrame::getTypes(),
+        SwXText::getTypes()
+    );
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  )

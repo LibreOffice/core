@@ -82,15 +82,10 @@ uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
 
 uno::Sequence<uno::Type> SwXRedlineText::getTypes()
 {
-    // SwXText::getTypes()
-    uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
-
-    // add container::XEnumerationAccess
-    sal_Int32 nLength = aTypes.getLength();
-    aTypes.realloc(nLength + 1);
-    aTypes[nLength] = cppu::UnoType<container::XEnumerationAccess>::get();
-
-    return aTypes;
+    return cppu::OTypeCollection(
+            cppu::UnoType<container::XEnumerationAccess>::get(),
+            SwXText::getTypes()
+        ).getTypes();
 }
 
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
@@ -583,15 +578,10 @@ uno::Any SwXRedline::queryInterface( const uno::Type& rType )
 
 uno::Sequence<uno::Type> SwXRedline::getTypes()
 {
-    uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
-    uno::Sequence<uno::Type> aBaseTypes = SwXRedlineBaseClass::getTypes();
-    const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-    sal_Int32 nCurType = aTypes.getLength();
-    aTypes.realloc(aTypes.getLength() + aBaseTypes.getLength());
-    uno::Type* pTypes = aTypes.getArray();
-    for(sal_Int32 nType = 0; nType < aBaseTypes.getLength(); nType++)
-        pTypes[nCurType++] = pBaseTypes[nType];
-    return aTypes;
+    return comphelper::concatSequences(
+            SwXText::getTypes(),
+            SwXRedlineBaseClass::getTypes()
+        );
 }
 
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()

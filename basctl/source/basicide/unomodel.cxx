@@ -21,6 +21,7 @@
 #include "basdoc.hxx"
 #include <iderdll.hxx>
 #include <com/sun/star/io/IOException.hpp>
+#include <comphelper/sequence.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
@@ -70,13 +71,9 @@ void SAL_CALL SIDEModel::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  )
 {
-    uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 1);
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nLen++] = cppu::UnoType<XServiceInfo>::get();
-
-    return aTypes;
+    return comphelper::concatSequences(
+            SfxBaseModel::getTypes(),
+            uno::Sequence {  cppu::UnoType<XServiceInfo>::get() });
 }
 
 OUString SIDEModel::getImplementationName()

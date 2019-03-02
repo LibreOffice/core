@@ -149,14 +149,8 @@ void SAL_CALL ToolboxController::release() throw ()
 
 css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
 {
-    css::uno::Sequence<css::uno::Type> s1(ToolboxController_Base::getTypes());
-    css::uno::Sequence<css::uno::Type> s2(getBaseTypes());
-    sal_Int32 n = s1.getLength();
-    s1.realloc(n + s2.getLength());
-    for (sal_Int32 i = 0; i != s2.getLength(); ++i) {
-        s1[n + i] = s2[i];
-    }
-    return s1;
+    return comphelper::concatSequences(ToolboxController_Base::getTypes(),
+                getBaseTypes());
 }
 
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )

@@ -512,21 +512,10 @@ uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
 
 uno::Sequence< uno::Type > SwXDrawPage::getTypes()
 {
-    uno::Sequence< uno::Type > aPageTypes = SwXDrawPageBaseClass::getTypes();
-    uno::Sequence< uno::Type > aSvxTypes = GetSvxPage()->getTypes();
-
-    long nIndex = aPageTypes.getLength();
-    aPageTypes.realloc(aPageTypes.getLength() + aSvxTypes.getLength() + 1);
-
-    uno::Type* pPageTypes = aPageTypes.getArray();
-    const uno::Type* pSvxTypes = aSvxTypes.getConstArray();
-    long nPos;
-    for(nPos = 0; nPos < aSvxTypes.getLength(); nPos++)
-    {
-        pPageTypes[nIndex++] = pSvxTypes[nPos];
-    }
-    pPageTypes[nIndex] = cppu::UnoType<form::XFormsSupplier2>::get();
-    return aPageTypes;
+    return comphelper::concatSequences(
+                SwXDrawPageBaseClass::getTypes(),
+                GetSvxPage()->getTypes(),
+                uno::Sequence { cppu::UnoType<form::XFormsSupplier2>::get() });
 }
 
 sal_Int32 SwXDrawPage::getCount()
@@ -1015,15 +1004,7 @@ uno::Sequence< uno::Type > SwXShape::getTypes(  )
         {
             uno::Reference< XTypeProvider > xAggProv;
             aProv >>= xAggProv;
-            uno::Sequence< uno::Type > aAggTypes = xAggProv->getTypes();
-            const uno::Type* pAggTypes = aAggTypes.getConstArray();
-            long nIndex = aRet.getLength();
-
-            aRet.realloc(nIndex + aAggTypes.getLength());
-            uno::Type* pBaseTypes = aRet.getArray();
-
-            for(long i = 0; i < aAggTypes.getLength(); i++)
-                pBaseTypes[nIndex++] = pAggTypes[i];
+            return comphelper::concatSequences(aRet, xAggProv->getTypes());
         }
     }
     return aRet;

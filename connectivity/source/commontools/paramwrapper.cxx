@@ -115,13 +115,13 @@ namespace param
 
     Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   )
     {
-        Sequence< Type > aTypes( 5 );
-        aTypes[ 0 ] = cppu::UnoType<XWeak>::get();
-        aTypes[ 1 ] = cppu::UnoType<XTypeProvider>::get();
-        aTypes[ 2 ] = cppu::UnoType<XPropertySet>::get();
-        aTypes[ 3 ] = cppu::UnoType<XFastPropertySet>::get();
-        aTypes[ 4 ] = cppu::UnoType<XMultiPropertySet>::get();
-        return aTypes;
+        return Sequence< Type > {
+                cppu::UnoType<XWeak>::get(),
+                cppu::UnoType<XTypeProvider>::get(),
+                cppu::UnoType<XPropertySet>::get(),
+                cppu::UnoType<XFastPropertySet>::get(),
+                cppu::UnoType<XMultiPropertySet>::get()
+            };
     }
 
 

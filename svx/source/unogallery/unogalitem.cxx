@@ -131,16 +131,13 @@ uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
 
 uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
 {
-    uno::Sequence< uno::Type >  aTypes( 6 );
-    uno::Type*                  pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<gallery::XGalleryItem>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-
+    static const uno::Sequence aTypes {
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<gallery::XGalleryItem>::get(),
+        cppu::UnoType<beans::XPropertySet>::get(),
+        cppu::UnoType<beans::XPropertyState>::get(),
+        cppu::UnoType<beans::XMultiPropertySet>::get() };
     return aTypes;
 }
 

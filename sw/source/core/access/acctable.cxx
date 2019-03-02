@@ -52,6 +52,7 @@
 #include <frmatr.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -775,16 +776,10 @@ uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
-
-    sal_Int32 nIndex = aTypes.getLength();
-    aTypes.realloc( nIndex + 2 );
-
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = cppu::UnoType<XAccessibleSelection>::get();
-    pTypes[nIndex++] = cppu::UnoType<XAccessibleTable>::get();
-
-    return aTypes;
+    return cppu::OTypeCollection(
+        cppu::UnoType<XAccessibleSelection>::get(),
+        cppu::UnoType<XAccessibleTable>::get(),
+        SwAccessibleContext::getTypes() ).getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()

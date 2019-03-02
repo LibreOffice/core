@@ -68,15 +68,10 @@ using namespace ::com::sun::star;
 struct FSStorage_Impl
 {
     OUString const m_aURL;
-
     ::ucbhelper::Content m_aContent;
     sal_Int32 const m_nMode;
-
     std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
-    std::unique_ptr<::cppu::OTypeCollection> m_pTypeCollection;
-
     uno::Reference< uno::XComponentContext > m_xContext;
-
 
     FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > const & xContext )
     : m_aURL( aContent.getURL() )
@@ -259,21 +254,12 @@ void SAL_CALL FSStorage::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
 {
-    if ( m_pImpl->m_pTypeCollection == nullptr )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        if ( m_pImpl->m_pTypeCollection == nullptr )
-        {
-            m_pImpl->m_pTypeCollection.reset(new ::cppu::OTypeCollection
-                                (   cppu::UnoType<lang::XTypeProvider>::get()
-                                ,   cppu::UnoType<embed::XStorage>::get()
-                                ,   cppu::UnoType<embed::XHierarchicalStorageAccess>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get()) );
-        }
-    }
-
-    return m_pImpl->m_pTypeCollection->getTypes() ;
+    static const uno::Sequence<uno::Type> aTypes {
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<embed::XStorage>::get(),
+        cppu::UnoType<embed::XHierarchicalStorageAccess>::get(),
+        cppu::UnoType<beans::XPropertySet>::get() };
+    return aTypes;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()

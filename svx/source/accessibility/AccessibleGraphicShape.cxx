@@ -25,6 +25,7 @@
 #include <svx/svdmodel.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace ::accessibility;
@@ -120,15 +121,8 @@ uno::Sequence<uno::Type> SAL_CALL
     AccessibleGraphicShape::getTypes()
 {
     // Get list of types from the context base implementation...
-    uno::Sequence<uno::Type> aTypeList (AccessibleShape::getTypes());
-    // ...and add the additional type for the component.
-    long nTypeCount = aTypeList.getLength();
-    aTypeList.realloc (nTypeCount + 1);
-    const uno::Type aImageType =
-        cppu::UnoType<XAccessibleImage>::get();
-    aTypeList[nTypeCount] = aImageType;
-
-    return aTypeList;
+    return comphelper::concatSequences(AccessibleShape::getTypes(),
+            uno::Sequence { cppu::UnoType<XAccessibleImage>::get() });
 }
 
 

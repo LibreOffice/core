@@ -309,15 +309,9 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
-
-    sal_Int32 nIndex = aTypes.getLength();
-    aTypes.realloc( nIndex + 1 );
-
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::cppu::UnoType<XAccessibleValue>::get();
-
-    return aTypes;
+    return cppu::OTypeCollection(
+        ::cppu::UnoType<XAccessibleValue>::get(),
+        SwAccessibleContext::getTypes() ).getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()

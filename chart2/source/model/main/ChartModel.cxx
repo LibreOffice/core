@@ -631,15 +631,9 @@ uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
     if( (m_xOldModelAgg->queryAggregation( cppu::UnoType<decltype(xAggTypeProvider)>::get()) >>= xAggTypeProvider)
         && xAggTypeProvider.is())
     {
-        uno::Sequence< uno::Type > aOwnTypes( impl::ChartModel_Base::getTypes());
-        uno::Sequence< uno::Type > aAggTypes( xAggTypeProvider->getTypes());
-        uno::Sequence< uno::Type > aResult( aOwnTypes.getLength() + aAggTypes.getLength());
-        sal_Int32 i=0;
-        for( ;i<aOwnTypes.getLength(); ++i )
-            aResult[i] = aOwnTypes[i];
-        for( sal_Int32 j=0; i<aResult.getLength(); ++j, ++i)
-            aResult[i] = aAggTypes[j];
-        return aResult;
+        return comphelper::concatSequences(
+            impl::ChartModel_Base::getTypes(),
+            xAggTypeProvider->getTypes());
     }
 
     return impl::ChartModel_Base::getTypes();

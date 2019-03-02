@@ -187,12 +187,10 @@ namespace comphelper
 
     Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes()
     {
-        Sequence< Type > aOwnTypes( 2 );
-        aOwnTypes[0] = cppu::UnoType<XWeak>::get();
-        aOwnTypes[1] = cppu::UnoType<XTypeProvider>::get();
-
         return concatSequences(
-            aOwnTypes,
+            Sequence {
+                cppu::UnoType<XWeak>::get(),
+                cppu::UnoType<XTypeProvider>::get() },
             OPropertyStateHelper::getTypes()
         );
     }

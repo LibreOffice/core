@@ -157,7 +157,7 @@ uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
 
 uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes
+    static const uno::Sequence<uno::Type> aTypes
     {
         cppu::UnoType<sheet::XViewPane>::get(),
         cppu::UnoType<sheet::XCellRangeReferrer>::get(),
@@ -576,7 +576,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
 
 uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
+    return comphelper::concatSequences(
         ScViewPaneBase::getTypes(),
         SfxBaseController::getTypes(),
         uno::Sequence<uno::Type>
@@ -594,7 +594,6 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
             cppu::UnoType<sheet::XActivationBroadcaster>::get(),
             cppu::UnoType<datatransfer::XTransferableSupplier>::get()
         } );
-    return aTypes;
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()

@@ -214,16 +214,12 @@ void SAL_CALL GenericPropertySet::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( 5 );
-    uno::Type* pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<XAggregation>::get();
-    *pTypes++ = cppu::UnoType<XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<XPropertySet>::get();
-    *pTypes++ = cppu::UnoType<XMultiPropertySet>::get();
-
-    return aTypes;
+    return uno::Sequence {
+        cppu::UnoType<XAggregation>::get(),
+        cppu::UnoType<XServiceInfo>::get(),
+        cppu::UnoType<XTypeProvider>::get(),
+        cppu::UnoType<XPropertySet>::get(),
+        cppu::UnoType<XMultiPropertySet>::get() };
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()

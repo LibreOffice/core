@@ -67,7 +67,7 @@ void SAL_CALL ScCellCursorObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
+    return comphelper::concatSequences(
         ScCellRangeObj::getTypes(),
         uno::Sequence<uno::Type>
         {
@@ -75,7 +75,6 @@ uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
             cppu::UnoType<sheet::XUsedAreaCursor>::get(),
             cppu::UnoType<table::XCellCursor>::get()
         } );
-    return aTypes;
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId()

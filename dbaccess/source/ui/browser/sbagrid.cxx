@@ -185,13 +185,9 @@ Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType)
 
 Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  )
 {
-    Sequence< Type > aTypes = FmXGridControl::getTypes();
-
-    sal_Int32 nTypes = aTypes.getLength();
-    aTypes.realloc(nTypes + 1);
-    aTypes[nTypes] = cppu::UnoType<css::frame::XDispatch>::get();
-
-    return aTypes;
+    return comphelper::concatSequences(
+        FmXGridControl::getTypes(),
+        Sequence { cppu::UnoType<css::frame::XDispatch>::get() });
 }
 
 Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  )
@@ -521,12 +517,9 @@ const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
 
 Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
 {
-    Sequence< Type > aTypes = FmXGridPeer::getTypes();
-    sal_Int32 nOldLen = aTypes.getLength();
-    aTypes.realloc(nOldLen + 1);
-    aTypes.getArray()[nOldLen] = cppu::UnoType<css::frame::XDispatch>::get();
-
-    return aTypes;
+    return comphelper::concatSequences(
+        FmXGridPeer::getTypes(),
+        Sequence { cppu::UnoType<css::frame::XDispatch>::get() });
 }
 
 // return implementation specific data

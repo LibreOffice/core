@@ -469,15 +469,9 @@ uno::Any SwAccessibleDocument::queryInterface(
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( SwAccessibleDocumentBase::getTypes() );
-
-    sal_Int32 nIndex = aTypes.getLength();
-    //Reset types memory alloc
-    aTypes.realloc( nIndex + 1 );
-
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = cppu::UnoType<XAccessibleSelection>::get();
-    return aTypes;
+    return cppu::OTypeCollection(
+            cppu::UnoType<XAccessibleSelection>::get(),
+            SwAccessibleDocumentBase::getTypes() ).getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()

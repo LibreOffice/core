@@ -103,15 +103,13 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceName
 
 uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 {
-    uno::Sequence< uno::Type >  aTypes( 6 );
-    uno::Type*                  pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<lang::XInitialization>::get();
-    *pTypes++ = cppu::UnoType<container::XElementAccess>::get();
-    *pTypes++ = cppu::UnoType<container::XNameAccess>::get();
-    *pTypes++ = cppu::UnoType<gallery::XGalleryThemeProvider>::get();
+    static const uno::Sequence aTypes {
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<lang::XInitialization>::get(),
+        cppu::UnoType<container::XElementAccess>::get(),
+        cppu::UnoType<container::XNameAccess>::get(),
+        cppu::UnoType<gallery::XGalleryThemeProvider>::get() };
 
     return aTypes;
 }

@@ -216,15 +216,9 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
 
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( SwAccessibleFrameBase::getTypes() );
-
-    sal_Int32 nIndex = aTypes.getLength();
-    aTypes.realloc( nIndex + 1 );
-
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::cppu::UnoType<XAccessibleImage>::get();
-
-    return aTypes;
+    return cppu::OTypeCollection(
+        ::cppu::UnoType<XAccessibleImage>::get(),
+        SwAccessibleFrameBase::getTypes() ).getTypes();
 }
 
 /// XAccessibleImage

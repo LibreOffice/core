@@ -58,7 +58,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     bool m_bOutputClosed;
 
     std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
-    ::cppu::OTypeCollection* m_pTypeCollection;
+    css::uno::Sequence<css::uno::Type> m_aTypes;
 
 public:
     explicit OFSStreamContainer( const css::uno::Reference < css::io::XStream >& xStream );

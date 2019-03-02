@@ -1091,14 +1091,13 @@ void SAL_CALL ScDataPilotTableObj::release() throw()
 
 Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes()
 {
-    static const Sequence< uno::Type > aTypes = comphelper::concatSequences(
+    return comphelper::concatSequences(
         ScDataPilotDescriptorBase::getTypes(),
         Sequence< uno::Type >
         {
             cppu::UnoType<XDataPilotTable2>::get(),
             cppu::UnoType<XModifyBroadcaster>::get()
         } );
-    return aTypes;
 }
 
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()

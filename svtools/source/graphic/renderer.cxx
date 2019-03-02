@@ -158,17 +158,14 @@ uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames(
 
 uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
 {
-    uno::Sequence< uno::Type >  aTypes( 7 );
-    uno::Type*                  pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<uno::XAggregation>::get();
-    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-    *pTypes++ = cppu::UnoType<graphic::XGraphicRenderer>::get();
-
+    static const uno::Sequence< uno::Type >  aTypes {
+        cppu::UnoType<uno::XAggregation>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<beans::XPropertySet>::get(),
+        cppu::UnoType<beans::XPropertyState>::get(),
+        cppu::UnoType<beans::XMultiPropertySet>::get(),
+        cppu::UnoType<graphic::XGraphicRenderer>::get() };
     return aTypes;
 }
 

@@ -38,6 +38,7 @@
 #include <basic/basrdll.hxx>
 #include <sbobjmod.hxx>
 #include <basic/vbahelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventcfg.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -175,19 +176,8 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
         {
             sTypes = m_xAggregateTypeProv->getTypes();
         }
-        m_Types.realloc( sTypes.getLength() + 1 );
-        Type* pPtr = m_Types.getArray();
-        for ( int i=0; i<m_Types.getLength(); ++i, ++pPtr )
-        {
-            if ( i == 0 )
-            {
-                *pPtr = cppu::UnoType<XInvocation>::get();
-            }
-            else
-            {
-                *pPtr = sTypes[ i - 1 ];
-            }
-        }
+        m_Types = comphelper::concatSequences(sTypes,
+            Sequence { cppu::UnoType<XInvocation>::get() });
     }
     return m_Types;
 }
