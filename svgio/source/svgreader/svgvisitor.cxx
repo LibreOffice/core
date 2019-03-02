@@ -24,7 +24,7 @@ namespace svgio
 namespace svgreader
 {
 SvgDrawVisitor::SvgDrawVisitor()
-    : mpDrawRoot(std::make_shared<DrawRoot>())
+    : mpDrawRoot(std::make_shared<gfx::DrawRoot>())
     , mpCurrent(mpDrawRoot)
 {
 }
@@ -42,7 +42,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             double w = rSvgNode.getWidth().getNumber();
             double h = rSvgNode.getHeight().getNumber();
 
-            static_cast<DrawRoot*>(mpCurrent.get())->maRectangle
+            static_cast<gfx::DrawRoot*>(mpCurrent.get())->maRectangle
                 = basegfx::B2DRange(x, y, x + w, y + h);
         }
         break;
@@ -70,7 +70,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             double h = rRectNode.getHeight().getNumber();
 
             auto pRectangle
-                = std::make_shared<DrawRectangle>(basegfx::B2DRange(x, y, x + w, y + h));
+                = std::make_shared<gfx::DrawRectangle>(basegfx::B2DRange(x, y, x + w, y + h));
             mpCurrent->maChildren.push_back(pRectangle);
         }
         break;
@@ -80,7 +80,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             auto pPath = rPathNode.getPath();
             if (pPath)
             {
-                auto pDrawPath = std::make_shared<DrawPath>(*pPath);
+                auto pDrawPath = std::make_shared<gfx::DrawPath>(*pPath);
                 mpCurrent->maChildren.push_back(pDrawPath);
             }
         }

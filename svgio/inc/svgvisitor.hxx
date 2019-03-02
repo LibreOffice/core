@@ -22,8 +22,8 @@ namespace svgreader
 class SvgDrawVisitor : public Visitor
 {
 private:
-    std::shared_ptr<DrawRoot> mpDrawRoot;
-    std::shared_ptr<DrawBase> mpCurrent;
+    std::shared_ptr<gfx::DrawRoot> mpDrawRoot;
+    std::shared_ptr<gfx::DrawBase> mpCurrent;
 
 public:
     SvgDrawVisitor();
@@ -31,7 +31,7 @@ public:
     void visit(svgio::svgreader::SvgNode const& rNode) override;
     void goToChildren(svgio::svgreader::SvgNode const& rNode);
 
-    std::shared_ptr<DrawRoot> const& getDrawRoot() { return mpDrawRoot; }
+    std::shared_ptr<gfx::DrawRoot> const& getDrawRoot() { return mpDrawRoot; }
 };
 }
 }
