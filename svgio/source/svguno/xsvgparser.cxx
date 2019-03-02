@@ -63,7 +63,7 @@ namespace svgio
 
             virtual uno::Any SAL_CALL getDrawCommands(
                 uno::Reference<io::XInputStream> const & xSvgStream,
-                const OUString& aAbsolutePath);
+                const OUString& aAbsolutePath) override;
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
@@ -194,7 +194,7 @@ namespace svgio
                 {
                     mpVisitor = std::make_shared<SvgDrawVisitor>();
                     pCandidate->accept(*mpVisitor);
-                    std::shared_ptr<DrawRoot> pDrawRoot(mpVisitor->getDrawRoot());
+                    std::shared_ptr<gfx::DrawRoot> pDrawRoot(mpVisitor->getDrawRoot());
                     sal_uInt64 nPointer = reinterpret_cast<sal_uInt64>(pDrawRoot.get());
                     aAnyResult = uno::makeAny<sal_uInt64>(nPointer);
                 }

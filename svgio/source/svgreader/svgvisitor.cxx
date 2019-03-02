@@ -24,76 +24,81 @@ namespace svgio
 namespace svgreader
 {
 SvgDrawVisitor::SvgDrawVisitor()
-    : mpDrawRoot(std::make_shared<DrawRoot>())
+    : mpDrawRoot(std::make_shared<gfx::DrawRoot>())
     , mpCurrent(mpDrawRoot)
-{}
-
-void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const & rNode)
 {
-    switch(rNode.getType())
+}
+
+void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
+{
+    switch (rNode.getType())
     {
         case svgio::svgreader::SVGTokenSvg:
-            {
-                auto const & rSvgNode = static_cast<svgio::svgreader::SvgSvgNode const&>(rNode);
+        {
+            auto const& rSvgNode = static_cast<svgio::svgreader::SvgSvgNode const&>(rNode);
 
-                double x = rSvgNode.getX().getNumber();
-                double y = rSvgNode.getY().getNumber();
-                double w = rSvgNode.getWidth().getNumber();
-                double h = rSvgNode.getHeight().getNumber();
+            double x = rSvgNode.getX().getNumber();
+            double y = rSvgNode.getY().getNumber();
+            double w = rSvgNode.getWidth().getNumber();
+            double h = rSvgNode.getHeight().getNumber();
 
-                static_cast<DrawRoot*>(mpCurrent.get())->maRectangle = basegfx::B2DRange(x, y, x + w, y + h);
-            }
-            break;
+            static_cast<gfx::DrawRoot*>(mpCurrent.get())->maRectangle
+                = basegfx::B2DRange(x, y, x + w, y + h);
+        }
+        break;
         case svgio::svgreader::SVGTokenG:
+        {
+            auto const& rGNode = static_cast<svgio::svgreader::SvgGNode const&>(rNode);
+
+            if (rGNode.getTransform() != nullptr)
             {
-                auto const & rGNode = static_cast<svgio::svgreader::SvgGNode const&>(rNode);
+                basegfx::B2DHomMatrix rMatrix = *rGNode.getTransform();
 
-                if (rGNode.getTransform() != nullptr)
-                {
-                    basegfx::B2DHomMatrix rMatrix = *rGNode.getTransform();
-
-                    printf ("G [%f %f %f - %f %f %f - %f %f %f]\n", rMatrix.get(0,0), rMatrix.get(0,1), rMatrix.get(0,2), rMatrix.get(1,0), rMatrix.get(1,1), rMatrix.get(1,2), rMatrix.get(2,0), rMatrix.get(2,1), rMatrix.get(2,2));
-                }
+                printf("G [%f %f %f - %f %f %f - %f %f %f]\n", rMatrix.get(0, 0), rMatrix.get(0, 1),
+                       rMatrix.get(0, 2), rMatrix.get(1, 0), rMatrix.get(1, 1), rMatrix.get(1, 2),
+                       rMatrix.get(2, 0), rMatrix.get(2, 1), rMatrix.get(2, 2));
             }
-            break;
+        }
+        break;
         case svgio::svgreader::SVGTokenRect:
-            {
-                auto const & rRectNode = static_cast<svgio::svgreader::SvgRectNode const&>(rNode);
+        {
+            auto const& rRectNode = static_cast<svgio::svgreader::SvgRectNode const&>(rNode);
 
-                double x = rRectNode.getX().getNumber();
-                double y = rRectNode.getY().getNumber();
-                double w = rRectNode.getWidth().getNumber();
-                double h = rRectNode.getHeight().getNumber();
+            double x = rRectNode.getX().getNumber();
+            double y = rRectNode.getY().getNumber();
+            double w = rRectNode.getWidth().getNumber();
+            double h = rRectNode.getHeight().getNumber();
 
-                auto pRectangle = std::make_shared<DrawRectangle>(basegfx::B2DRange(x, y, x + w, y + h));
-                mpCurrent->maChildren.push_back(pRectangle);
-            }
-            break;
+            auto pRectangle
+                = std::make_shared<gfx::DrawRectangle>(basegfx::B2DRange(x, y, x + w, y + h));
+            mpCurrent->maChildren.push_back(pRectangle);
+        }
+        break;
         case svgio::svgreader::SVGTokenPath:
+        {
+            auto const& rPathNode = static_cast<svgio::svgreader::SvgPathNode const&>(rNode);
+            auto pPath = rPathNode.getPath();
+            if (pPath)
             {
-                auto const & rPathNode = static_cast<svgio::svgreader::SvgPathNode const&>(rNode);
-                auto pPath = rPathNode.getPath();
-                if (pPath)
-                {
-                    auto pDrawPath = std::make_shared<DrawPath>(*pPath);
-                    mpCurrent->maChildren.push_back(pDrawPath);
-                }
+                auto pDrawPath = std::make_shared<gfx::DrawPath>(*pPath);
+                mpCurrent->maChildren.push_back(pDrawPath);
             }
-            break;
+        }
+        break;
         default:
             break;
     }
     goToChildren(rNode);
 }
 
-void SvgDrawVisitor::goToChildren(svgio::svgreader::SvgNode const & rNode)
+void SvgDrawVisitor::goToChildren(svgio::svgreader::SvgNode const& rNode)
 {
-    for (auto & rChild : rNode.getChildren())
+    for (auto& rChild : rNode.getChildren())
     {
         rChild->accept(*this);
     }
 }
-
-}} // end of namespace svgio::svgreader
+}
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

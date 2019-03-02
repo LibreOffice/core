@@ -7,10 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_BASEGFX_DRAWCOMMANDS_H
+#define INCLUDED_BASEGFX_DRAWCOMMANDS_H
+
+#include <memory>
+
+namespace gfx
+{
 class DrawBase;
 
-template <typename T>
-class DrawCommand
+template <typename T> class DrawCommand
 {
 public:
     std::vector<std::shared_ptr<DrawBase>> maChildren;
@@ -31,12 +37,10 @@ private:
 public:
     DrawBase(DrawCommandType eType)
         : meType(eType)
-    {}
-
-    DrawCommandType getType()
     {
-        return meType;
     }
+
+    DrawCommandType getType() { return meType; }
 };
 
 class DrawRoot : public DrawBase
@@ -44,9 +48,10 @@ class DrawRoot : public DrawBase
 public:
     basegfx::B2DRange maRectangle;
 
-    DrawRoot() :
-        DrawBase(DrawCommandType::Root)
-    {}
+    DrawRoot()
+        : DrawBase(DrawCommandType::Root)
+    {
+    }
 };
 
 class DrawRectangle : public DrawBase
@@ -54,10 +59,11 @@ class DrawRectangle : public DrawBase
 public:
     basegfx::B2DRange maRectangle;
 
-    DrawRectangle(basegfx::B2DRange const & rRectangle)
+    DrawRectangle(basegfx::B2DRange const& rRectangle)
         : DrawBase(DrawCommandType::Rectangle)
         , maRectangle(rRectangle)
-    {}
+    {
+    }
 };
 
 class DrawPath : public DrawBase
@@ -65,10 +71,15 @@ class DrawPath : public DrawBase
 public:
     basegfx::B2DPolyPolygon maPolyPolygon;
 
-    DrawPath(basegfx::B2DPolyPolygon const & rPolyPolygon)
+    DrawPath(basegfx::B2DPolyPolygon const& rPolyPolygon)
         : DrawBase(DrawCommandType::Path)
         , maPolyPolygon(rPolyPolygon)
-    {}
+    {
+    }
 };
+
+} // end namespace gfx
+
+#endif // INCLUDED_BASEGFX_DRAWCOMMANDS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
