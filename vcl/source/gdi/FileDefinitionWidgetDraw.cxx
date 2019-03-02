@@ -99,8 +99,10 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::IntroProgress:
             return true;
         case ControlType::Tooltip:
+            return false;
         case ControlType::WindowBackground:
         case ControlType::Frame:
+            return true;
         case ControlType::ListNode:
         case ControlType::ListNet:
         case ControlType::ListHeader:
@@ -391,6 +393,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
             break;
         case ControlType::WindowBackground:
         case ControlType::Frame:
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::ListNode:
         case ControlType::ListNet:
         case ControlType::ListHeader:
