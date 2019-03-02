@@ -503,6 +503,33 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
     rPropMap.setProperty( PROP_ScaleMode, nScaleMode );
 }
 
+void ControlConverter::convertFromAxPicture( PropertySet& rPropSet, const StreamDataSequence& rPicData, sal_uInt32 nPicPos ) const
+{
+    uno::Reference<graphic::XGraphic> xGraphic = mrGraphicHelper.importGraphic(rPicData);
+    if ( xGraphic.is() )
+    rPropSet.getProperty( xGraphic , PROP_Graphic );
+
+    sal_Int16 nImagePos = ImagePosition::LeftCenter;
+    switch( nPicPos )
+    {
+    case AX_PICPOS_LEFTTOP:     nImagePos = ImagePosition::LeftTop;     break;
+    case AX_PICPOS_LEFTCENTER:  nImagePos = ImagePosition::LeftCenter;  break;
+    case AX_PICPOS_LEFTBOTTOM:  nImagePos = ImagePosition::LeftBottom;  break;
+    case AX_PICPOS_RIGHTTOP:    nImagePos = ImagePosition::RightTop;    break;
+    case AX_PICPOS_RIGHTCENTER: nImagePos = ImagePosition::RightCenter; break;
+    case AX_PICPOS_RIGHTBOTTOM: nImagePos = ImagePosition::RightBottom; break;
+    case AX_PICPOS_ABOVELEFT:   nImagePos = ImagePosition::AboveLeft;   break;
+    case AX_PICPOS_ABOVECENTER: nImagePos = ImagePosition::AboveCenter; break;
+    case AX_PICPOS_ABOVERIGHT:  nImagePos = ImagePosition::AboveRight;  break;
+    case AX_PICPOS_BELOWLEFT:   nImagePos = ImagePosition::BelowLeft;   break;
+    case AX_PICPOS_BELOWCENTER: nImagePos = ImagePosition::BelowCenter; break;
+    case AX_PICPOS_BELOWRIGHT:  nImagePos = ImagePosition::BelowRight;  break;
+    case AX_PICPOS_CENTER:      nImagePos = ImagePosition::Centered;    break;
+    default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture position" );
+    }
+    rPropSet.getProperty( nImagePos, PROP_ImagePosition );
+}
+
 void ControlConverter::convertAxState( PropertyMap& rPropMap,
         const OUString& rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel )
 {
@@ -1020,10 +1047,10 @@ void AxCommandButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
         aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     aWriter.writeStringProperty( maCaption );
-    aWriter.skipProperty(); // pict pos
+    aWriter.writeIntProperty< sal_uInt32 >( mnPicturePos ); // pict pos
     aWriter.writePairProperty( maSize );
     aWriter.skipProperty(); // mouse pointer
-    aWriter.skipProperty(); // picture data
+    aWriter.writePictureProperty( maPictureData ); // picture data
     aWriter.skipProperty(); // accelerator
     aWriter.writeBoolProperty( mbFocusOnClick ); // binary flag means "do not take focus"
     aWriter.skipProperty(); // mouse icon
@@ -1084,8 +1111,13 @@ void AxCommandButtonModel::convertFromProperties( PropertySet& rPropSet, const C
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
     (void)rPropSet.getProperty(mbFocusOnClick, PROP_FocusOnClick);
 
+    (void)rPropSet.getProperty(maPictureData, PROP_Graphic );
+
     ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+
+    rConv.convertFromAxPicture( rPropSet, maPictureData, mnPicturePos );
 
     AxFontDataModel::convertFromProperties( rPropSet, rConv );
 }
@@ -1294,7 +1326,7 @@ void AxImageModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.writeIntProperty< sal_uInt8 >( mnPicSizeMode );
     aWriter.writeIntProperty< sal_uInt8 >( mnSpecialEffect );
     aWriter.writePairProperty( maSize );
-    aWriter.skipProperty(); //maPictureData );
+    aWriter.skipProperty(); //maPictureData
     aWriter.writeIntProperty< sal_uInt8 >( mnPicAlign );
     aWriter.writeBoolProperty( mbPicTiling );
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
