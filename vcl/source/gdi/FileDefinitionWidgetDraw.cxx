@@ -69,7 +69,9 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::MultilineEditbox:
             return true;
         case ControlType::Listbox:
-            return false;
+            if (ePart == ControlPart::HasBackgroundTexture)
+                return false;
+            return true;
         case ControlType::Spinbox:
             if (ePart == ControlPart::AllButtons)
                 return false;
@@ -290,7 +292,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Listbox:
-            break;
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::Spinbox:
         {
             if (rValue.getType() == ControlType::SpinButtons)
