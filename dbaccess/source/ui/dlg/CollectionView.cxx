@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click, Button*, void)
     try
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
-        if ( dbaui::insertHierachyElement(this,m_xContext,xNameContainer,OUString(),m_bCreateForm) )
+        if ( dbaui::insertHierachyElement(GetFrameWeld(),m_xContext,xNameContainer,OUString(),m_bCreateForm) )
             m_pView->Initialize(m_xContent);
     }
     catch( const SQLException& )

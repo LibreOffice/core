@@ -377,7 +377,7 @@ namespace dbaui
             <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
     */
     bool insertHierachyElement(
-                vcl::Window* _pParent,
+                weld::Window* pParent,
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
                 const OUString& _sParentFolder,
