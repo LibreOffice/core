@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,7 +39,9 @@ namespace sc_apitest
 {
 const auto nMaxFieldIndex = 6;
 
-class ScDataPilotItemsObj : public CalcUnoApiTest, public apitest::XServiceInfo
+class ScDataPilotItemsObj : public CalcUnoApiTest,
+                            public apitest::XElementAccess,
+                            public apitest::XServiceInfo
 {
 public:
     ScDataPilotItemsObj();
@@ -48,6 +51,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotItemsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
@@ -62,6 +69,7 @@ private:
 
 ScDataPilotItemsObj::ScDataPilotItemsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XServiceInfo("ScDataPilotItemsObj", "com.sun.star.sheet.DataPilotItems")
 {
 }
