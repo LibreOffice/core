@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,scripting_ScriptsPython,$(SRCDIR)/scripting/exa
 $(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsPython,$(LIBO_SHARE_FOLDER)/Scripts,\
 	python/Capitalise.py \
 	python/HelloWorld.py \
+	python/InsertText.py \
 	python/NamedRanges.py \
 	python/SetCellColor.py \
 	python/pythonSamples/TableSample.py \
