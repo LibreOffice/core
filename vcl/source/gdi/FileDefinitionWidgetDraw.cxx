@@ -106,7 +106,7 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::ListNode:
         case ControlType::ListNet:
         case ControlType::ListHeader:
-            return false;
+            return true;
     }
 
     return false;
@@ -404,6 +404,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::ListNode:
         case ControlType::ListNet:
         case ControlType::ListHeader:
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         default:
             break;
     }
