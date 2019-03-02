@@ -135,11 +135,12 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
     static std::unordered_map<OString, ControlType> aPartMap
         = { { "pushbutton", ControlType::Pushbutton }, { "radiobutton", ControlType::Radiobutton },
             { "checkbox", ControlType::Checkbox },     { "combobox", ControlType::Combobox },
-            { "editbox", ControlType::Editbox },       { "scrollbar", ControlType::Scrollbar },
-            { "spinbox", ControlType::Spinbox },       { "slider", ControlType::Slider },
-            { "fixedline", ControlType::Fixedline },   { "progress", ControlType::Progress },
-            { "tabitem", ControlType::TabItem },       { "tabheader", ControlType::TabHeader },
-            { "tabpane", ControlType::TabPane },       { "tabbody", ControlType::TabBody } };
+            { "editbox", ControlType::Editbox },       { "listbox", ControlType::Listbox },
+            { "scrollbar", ControlType::Scrollbar },   { "spinbox", ControlType::Spinbox },
+            { "slider", ControlType::Slider },         { "fixedline", ControlType::Fixedline },
+            { "progress", ControlType::Progress },     { "tabitem", ControlType::TabItem },
+            { "tabheader", ControlType::TabHeader },   { "tabpane", ControlType::TabPane },
+            { "tabbody", ControlType::TabBody } };
 
     auto const& rIterator = aPartMap.find(rString);
     if (rIterator != aPartMap.end())
