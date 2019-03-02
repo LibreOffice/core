@@ -335,4 +335,49 @@
             </state>
         </part>
     </frame>
+
+    <toolbar>
+        <part value="DrawBackgroundHorz">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="DrawBackgroundVert">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="ThumbHorz">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="ThumbVert">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="SeparatorVert">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="SeparatorHorz">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+
+        <part value="Button">
+             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+    </toolbar>
+
 </widgets>

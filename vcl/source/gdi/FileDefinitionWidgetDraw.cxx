@@ -90,8 +90,8 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
             return true;
         case ControlType::Slider:
         case ControlType::Fixedline:
-            return true;
         case ControlType::Toolbar:
+            return true;
         case ControlType::Menubar:
         case ControlType::MenuPopup:
             return false;
@@ -379,6 +379,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Toolbar:
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::Menubar:
             break;
         case ControlType::MenuPopup:
