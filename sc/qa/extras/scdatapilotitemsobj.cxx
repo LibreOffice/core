@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -41,6 +42,7 @@ const auto nMaxFieldIndex = 6;
 
 class ScDataPilotItemsObj : public CalcUnoApiTest,
                             public apitest::XElementAccess,
+                            public apitest::XEnumerationAccess,
                             public apitest::XServiceInfo
 {
 public:
@@ -55,6 +57,9 @@ public:
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XServiceInfo
     CPPUNIT_TEST(testGetImplementationName);
