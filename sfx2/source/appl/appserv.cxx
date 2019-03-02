@@ -666,8 +666,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TEMPLATE_ADDRESSBOKSOURCE:
         {
-            ScopedVclPtrInstance< svt::AddressBookSourceDialog > aDialog(GetTopWindow(), ::comphelper::getProcessComponentContext());
-            aDialog->Execute();
+            svt::AddressBookSourceDialog aDialog(rReq.GetFrameWeld(), ::comphelper::getProcessComponentContext());
+            aDialog.run();
             bDone = true;
             break;
         }
